@@ -15,11 +15,17 @@ class BrandColors {
   /// ![](https://www.colorhexa.com/fafafa.png)
   static const Color gray3 = Color(0xFFFAFAFA);
 
+  /// ![](https://www.colorhexa.com/DDDDDD.png)
+  static const Color gray4 = Color(0xFFDDDDDD);
+
   static const primary = blue;
   static const headlineColor = black;
-  static const textColor = gray1;
   static const inactive = gray2;
   static const scaffoldBackground = gray3;
+  static const inputInactive = gray4;
+
+  static const textColor1 = black;
+  static const textColor2 = gray1;
 
   static get navBackground => white.withOpacity(0.8);
 }

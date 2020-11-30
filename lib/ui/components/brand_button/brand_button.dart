@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 
-enum BrandButtonTypes { rised }
+enum BrandButtonTypes { rised, text }
 
 class BrandButton extends StatelessWidget {
   const BrandButton({
@@ -19,14 +19,26 @@ class BrandButton extends StatelessWidget {
 
   static rised({
     Key key,
-    VoidCallback onPressed,
-    String title,
+    @required VoidCallback onPressed,
+    @required String title,
   }) =>
       BrandButton(
         key: key,
         onPressed: onPressed,
         title: title,
         type: BrandButtonTypes.rised,
+      );
+
+  static text({
+    Key key,
+    @required VoidCallback onPressed,
+    @required String title,
+  }) =>
+      BrandButton(
+        key: key,
+        onPressed: onPressed,
+        title: title,
+        type: BrandButtonTypes.text,
       );
 
   @override
@@ -37,6 +49,12 @@ class BrandButton extends StatelessWidget {
           title: title,
           onPressed: onPressed,
         );
+      case BrandButtonTypes.text:
+        return _TextButton(
+          title: title,
+          onPressed: onPressed,
+        );
+        break;
     }
 
     return null;
@@ -73,11 +91,44 @@ class _RisedButton extends StatelessWidget {
                 style: TextStyle(
                   color: BrandColors.white,
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.bold,
                   height: 1.5,
                 ),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TextButton extends StatelessWidget {
+  const _TextButton({
+    Key key,
+    this.onPressed,
+    this.title,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: 48,
+        width: double.infinity,
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(12),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: BrandColors.blue,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            height: 1.5,
           ),
         ),
       ),

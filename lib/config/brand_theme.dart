@@ -4,7 +4,7 @@ import 'package:selfprivacy/config/text_themes.dart';
 
 import 'brand_colors.dart';
 
-var theme = ThemeData(
+final theme = ThemeData(
   primaryColor: BrandColors.primary,
   brightness: Brightness.light,
   scaffoldBackgroundColor: BrandColors.scaffoldBackground,
@@ -13,7 +13,9 @@ var theme = ThemeData(
       headline1: headline1Style,
       headline2: headline2Style,
       caption: captionStyle,
-      bodyText1: bodyText1Style,
+      bodyText1: body1Style,
     ),
   ),
 );
+
+final brandPagePadding = EdgeInsets.symmetric(horizontal: 15, vertical: 30);

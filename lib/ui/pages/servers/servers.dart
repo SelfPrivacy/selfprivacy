@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
+import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_span_button/brand_span_button.dart';
 import 'package:selfprivacy/utils/extensions/text_extension.dart';
+export 'package:bloc/bloc.dart';
 
 class ServersPage extends StatelessWidget {
   const ServersPage({Key key}) : super(key: key);
@@ -13,71 +15,70 @@ class ServersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-          children: [
-            Text('Начало').caption,
-            Text('SelfPrivacy').h1,
-            SizedBox(
-              height: 10,
+      body: ListView(
+        padding: brandPagePadding,
+        children: [
+          Text('Начало').caption,
+          Text('SelfPrivacy').h1,
+          SizedBox(
+            height: 10,
+          ),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text:
+                      'Для устойчивости и приватности требует много учёток. Полная инструкция на ',
+                  style: body2Style,
+                ),
+                BrandSpanButton.link(
+                  text: 'selfprivacy.org/start',
+                  urlString: 'https://selfprivacy.org/start',
+                ),
+              ],
             ),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text:
-                        'Для устойчивости и приватности требует много учёток. Полная инструкция на ',
-                    style: body2TextStyle,
-                  ),
-                  BrandSpanButton.link(
-                    text: 'selfprivacy.org/start',
-                    urlString: 'https://selfprivacy.org/start',
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 50),
-            BrandCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset('assets/images/logos/hetzner.png'),
-                  SizedBox(height: 10),
-                  Text('1. Подключите сервер Hetzner').h2,
-                  SizedBox(height: 10),
-                  Text('Здесь будут жить наши данные и SelfPrivacy-сервисы')
-                      .body2,
-                  _MockForm(
-                    hintText: 'Hetzner API Token',
-                  ),
-                  SizedBox(height: 20),
-                  BrandButton.text(
-                    onPressed: () => showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (BuildContext context) {
-                        return BrandModalSheet(
-                          child: Column(
-                            children: [
-                              Text('Как получить Hetzner API Token').h2,
-                              SizedBox(height: 20),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: '1 Переходим по ссылке ',
-                                      style: bodyText1Style,
-                                    ),
-                                    BrandSpanButton.link(
-                                      text: 'hetzner.com/sdfsdfsdfsdf',
-                                      urlString:
-                                          'https://hetzner.com/sdfsdfsdfsdf',
-                                    ),
-                                    TextSpan(
-                                      text: '''
-                                      
+          ),
+          SizedBox(height: 50),
+          BrandCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset('assets/images/logos/hetzner.png'),
+                SizedBox(height: 10),
+                Text('1. Подключите сервер Hetzner').h2,
+                SizedBox(height: 10),
+                Text('Здесь будут жить наши данные и SelfPrivacy-сервисы')
+                    .body2,
+                _MockForm(
+                  hintText: 'Hetzner API Token',
+                ),
+                SizedBox(height: 20),
+                BrandButton.text(
+                  onPressed: () => showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (BuildContext context) {
+                      return BrandModalSheet(
+                        child: Column(
+                          children: [
+                            Text('Как получить Hetzner API Token').h2,
+                            SizedBox(height: 20),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '1 Переходим по ссылке ',
+                                    style: body1Style,
+                                  ),
+                                  BrandSpanButton.link(
+                                    text: 'hetzner.com/sdfsdfsdfsdf',
+                                    urlString:
+                                        'https://hetzner.com/sdfsdfsdfsdf',
+                                  ),
+                                  TextSpan(
+                                    text: '''
+                                    
 2 Заходим в созданный нами проект. Если такового - нет, значит создаём.
 
 3 Наводим мышкой на боковую панель. Она должна раскрыться, показав нам пункты меню. Нас интересует последний — Security (с иконкой ключика).
@@ -88,104 +89,103 @@ class ServersPage extends StatelessWidget {
 
 6 В поле Description, даём нашему токену название (это может быть любое название, которые вам нравиться. Сути оно не меняет.
 
-                                      ''',
-                                      style: bodyText1Style,
-                                    ),
-                                  ],
-                                ),
+                                    ''',
+                                    style: body1Style,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                    title: 'Как получить API Token',
-                  ),
-                ],
-              ),
-            ),
-            BrandCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset('assets/images/logos/namecheap.png'),
-                  SizedBox(height: 10),
-                  Text('2. Настройте домен ').h2,
-                  SizedBox(height: 10),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Зарегистрируйте домен в ',
-                          style: body2TextStyle,
+                            ),
+                          ],
                         ),
-                        BrandSpanButton.link(
-                          text: 'NameCheap',
-                          urlString: 'https://www.namecheap.com',
-                        ),
-                        TextSpan(
-                          text:
-                              ' или у любого другого регистратора. После этого настройте его на DNS-сервер CloudFlare',
-                          style: body2TextStyle,
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                  _MockForm(
-                    hintText: 'Домен, например, selfprivacy.org',
-                    submitButtonText: 'Проверить DNS',
-                  ),
-                  SizedBox(height: 20),
-                  BrandButton.text(
-                    onPressed: () {},
-                    title: 'Как настроить DNS CloudFlare',
-                  ),
-                ],
-              ),
+                  title: 'Как получить API Token',
+                ),
+              ],
             ),
-            BrandCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset('assets/images/logos/cloudflare.png'),
-                  SizedBox(height: 10),
-                  Text('3. Подключите CloudFlare DNS').h2,
-                  SizedBox(height: 10),
-                  Text('Для управления DNS вашего домена').body2,
-                  _MockForm(
-                    hintText: 'CloudFlare API Token',
+          ),
+          BrandCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset('assets/images/logos/namecheap.png'),
+                SizedBox(height: 10),
+                Text('2. Настройте домен ').h2,
+                SizedBox(height: 10),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Зарегистрируйте домен в ',
+                        style: body2Style,
+                      ),
+                      BrandSpanButton.link(
+                        text: 'NameCheap',
+                        urlString: 'https://www.namecheap.com',
+                      ),
+                      TextSpan(
+                        text:
+                            ' или у любого другого регистратора. После этого настройте его на DNS-сервер CloudFlare',
+                        style: body2Style,
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 20),
-                  BrandButton.text(
-                    onPressed: () {},
-                    title: 'Как получить API Token',
-                  ),
-                ],
-              ),
+                ),
+                _MockForm(
+                  hintText: 'Домен, например, selfprivacy.org',
+                  submitButtonText: 'Проверить DNS',
+                ),
+                SizedBox(height: 20),
+                BrandButton.text(
+                  onPressed: () {},
+                  title: 'Как настроить DNS CloudFlare',
+                ),
+              ],
             ),
-            BrandCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset('assets/images/logos/aws.png'),
-                  SizedBox(height: 10),
-                  Text('4. Подключите Amazon AWS для бекапа').h2,
-                  SizedBox(height: 10),
-                  Text('IaaS-провайдер, для бесплатного хранения резервных копии ваших данных в зашифрованном виде')
-                      .body2,
-                  _MockForm(
-                    hintText: 'Amazon AWS Access Key',
-                  ),
-                  SizedBox(height: 20),
-                  BrandButton.text(
-                    onPressed: () {},
-                    title: 'Как получить API Token',
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+          ),
+          BrandCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset('assets/images/logos/cloudflare.png'),
+                SizedBox(height: 10),
+                Text('3. Подключите CloudFlare DNS').h2,
+                SizedBox(height: 10),
+                Text('Для управления DNS вашего домена').body2,
+                _MockForm(
+                  hintText: 'CloudFlare API Token',
+                ),
+                SizedBox(height: 20),
+                BrandButton.text(
+                  onPressed: () {},
+                  title: 'Как получить API Token',
+                ),
+              ],
+            ),
+          ),
+          BrandCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset('assets/images/logos/aws.png'),
+                SizedBox(height: 10),
+                Text('4. Подключите Amazon AWS для бекапа').h2,
+                SizedBox(height: 10),
+                Text('IaaS-провайдер, для бесплатного хранения резервных копии ваших данных в зашифрованном виде')
+                    .body2,
+                _MockForm(
+                  hintText: 'Amazon AWS Access Key',
+                ),
+                SizedBox(height: 20),
+                BrandButton.text(
+                  onPressed: () {},
+                  title: 'Как получить API Token',
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

@@ -9,7 +9,8 @@ extension TextExtension on Text {
   Text get h2 => copyWith(style: headline2Style);
   Text get caption => copyWith(style: captionStyle);
 
-  Text get body2 => copyWith(style: body2TextStyle);
+  Text get body1 => copyWith(style: body1Style);
+  Text get body2 => copyWith(style: body2Style);
 
   Text setKey(Key key) => copyWith(key: key);
 

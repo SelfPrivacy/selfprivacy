@@ -29,7 +29,7 @@ final captionStyle = GoogleFonts.inter(
   color: BrandColors.headlineColor,
 );
 
-final bodyText1Style = defaultTextStyle;
-final body2TextStyle = defaultTextStyle.copyWith(
+final body1Style = defaultTextStyle;
+final body2Style = defaultTextStyle.copyWith(
   color: BrandColors.textColor2,
 );

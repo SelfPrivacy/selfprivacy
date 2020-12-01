@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_tab_bar/brand_tab_bar.dart';
 import 'package:selfprivacy/ui/pages/servers/servers.dart';
+import 'package:selfprivacy/ui/pages/services/services.dart';
 
 class RootPage extends StatefulWidget {
   const RootPage({Key key}) : super(key: key);
@@ -34,7 +35,7 @@ class _RootPageState extends State<RootPage>
           controller: tabController,
           children: [
             ServersPage(),
-            Text('services'),
+            ServicesPage(),
             Text('users'),
             Text('more'),
           ],

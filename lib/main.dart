@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import 'config/bloc_config.dart';
 import 'config/brand_theme.dart';
 import 'config/localization.dart';
 
@@ -11,7 +12,9 @@ void main() {
 
   runApp(
     Localization(
-      child: MyApp(),
+      child: BlocAndProviderConfig(
+        child: MyApp(),
+      ),
     ),
   );
 }

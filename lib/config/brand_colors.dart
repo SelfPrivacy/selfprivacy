@@ -28,4 +28,17 @@ class BrandColors {
   static const textColor2 = gray1;
 
   static get navBackground => white.withOpacity(0.8);
+
+  static const List<Color> uninitializedGradientColors = [
+    Color(0xFF555555),
+    Color(0xFFABABAB),
+  ];
+  static const List<Color> stableGradientColors = [
+    Color(0xFF093CEF),
+    Color(0xFF14A1CB),
+  ];
+  static const List<Color> warningGradientColors = [
+    Color(0xFFEF4E09),
+    Color(0xFFEFD135),
+  ];
 }

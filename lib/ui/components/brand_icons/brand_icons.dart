@@ -23,32 +23,26 @@ class BrandIcons {
 
   static const IconData connection =
       IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData envelope =
+      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData document =
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData envelope =
+  static const IconData key =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData github =
+  static const IconData save =
       IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData globe =
       IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData help =
       IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData key =
-      IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData messenger =
-      IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData refresh =
       IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData save =
-      IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData settings =
       IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData share =
       IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData triangle =
       IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData upload =
-      IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData server =
       IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData box =
@@ -57,4 +51,10 @@ class BrandIcons {
       IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData users =
       IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData messanger =
+      IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData upload =
+      IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData github =
+      IconData(0xe817, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

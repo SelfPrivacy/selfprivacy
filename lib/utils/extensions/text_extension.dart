@@ -7,6 +7,8 @@ import 'package:selfprivacy/config/text_themes.dart';
 extension TextExtension on Text {
   Text get h1 => copyWith(style: headline1Style);
   Text get h2 => copyWith(style: headline2Style);
+    Text get h3 => copyWith(style: headline3Style);
+
   Text get caption => copyWith(style: captionStyle);
 
   Text get body1 => copyWith(style: body1Style);

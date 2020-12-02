@@ -23,6 +23,12 @@ final headline2Style = GoogleFonts.inter(
   color: BrandColors.headlineColor,
 );
 
+final headline3Style = GoogleFonts.inter(
+  fontSize: 20,
+  fontWeight: NamedFontWeight.extraBold,
+  color: BrandColors.headlineColor,
+);
+
 final captionStyle = GoogleFonts.inter(
   fontSize: 18,
   fontWeight: NamedFontWeight.medium,

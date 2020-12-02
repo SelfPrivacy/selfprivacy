@@ -39,7 +39,8 @@ class OnboardingPage extends StatelessWidget {
               ),
               BrandButton.rised(
                 onPressed: () {
-                  Navigator.of(context).push(materialRoute(RootPage()));
+                  Navigator.of(context)
+                      .pushReplacement(materialRoute(RootPage()));
                 },
                 title: 'Приступим!',
               )

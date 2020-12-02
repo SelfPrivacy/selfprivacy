@@ -18,4 +18,6 @@ final theme = ThemeData(
   ),
 );
 
-final brandPagePadding = EdgeInsets.symmetric(horizontal: 15, vertical: 30);
+final brandPagePadding1 = EdgeInsets.symmetric(horizontal: 15, vertical: 30);
+
+final brandPagePadding2 = EdgeInsets.symmetric(horizontal: 15);

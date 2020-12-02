@@ -57,4 +57,6 @@ class BrandIcons {
       IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData github =
       IconData(0xe817, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData arrow_left =
+      IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

@@ -18,6 +18,18 @@ class BrandColors {
   /// ![](https://www.colorhexa.com/DDDDDD.png)
   static const Color gray4 = Color(0xFFDDDDDD);
 
+  /// ![](https://www.colorhexa.com/EDEEF1.png)
+  static const Color gray5 = Color(0xFFEDEEF1);
+
+  /// ![](https://www.colorhexa.com/FA0E0E.png)
+  static const Color red = Color(0xFFFA0E0E);
+
+  /// ![](https://www.colorhexa.com/00AF54.png)
+  static const Color green1 = Color(0xFF00AF54);
+
+  /// ![](https://www.colorhexa.com/0F8849.png)
+  static const Color green2 = Color(0xFF0F8849);
+
   static const primary = blue;
   static const headlineColor = black;
   static const inactive = gray2;
@@ -26,6 +38,8 @@ class BrandColors {
 
   static const textColor1 = black;
   static const textColor2 = gray1;
+  static const dividerColor = gray5;
+  static const warning = red;
 
   static get navBackground => white.withOpacity(0.8);
 

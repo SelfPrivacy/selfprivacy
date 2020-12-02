@@ -23,7 +23,7 @@ class _ServicesPageState extends State<ServicesPage> {
     final uninitialized = serviceCubit.state.uninitialized;
     return Scaffold(
       body: ListView(
-        padding: brandPagePadding,
+        padding: brandPagePadding1,
         children: [
           Text('Сервисы').caption,
           SizedBox(height: 24),

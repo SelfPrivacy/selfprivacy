@@ -16,7 +16,7 @@ class ServersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        padding: brandPagePadding,
+        padding: brandPagePadding1,
         children: [
           Text('Начало').caption,
           Text('SelfPrivacy').h1,

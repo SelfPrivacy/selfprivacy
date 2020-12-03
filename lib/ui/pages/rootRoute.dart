@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_tab_bar/brand_tab_bar.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
-import 'package:selfprivacy/ui/pages/servers/servers.dart';
+import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
+import 'package:selfprivacy/ui/pages/users/users.dart';
 
 class RootPage extends StatefulWidget {
   const RootPage({Key key}) : super(key: key);
@@ -35,9 +36,9 @@ class _RootPageState extends State<RootPage>
         body: TabBarView(
           controller: tabController,
           children: [
-            ServersPage(),
+            ProvidersPage(),
             ServicesPage(),
-            Text('users'),
+            UsersPage(),
             MorePage(),
           ],
         ),

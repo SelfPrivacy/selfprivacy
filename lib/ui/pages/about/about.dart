@@ -11,43 +11,37 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: PreferredSize(
+          child: BrandHeader(title: 'О проекте', hasBackButton: true),
+          preferredSize: Size.fromHeight(52),
+        ),
         body: ListView(
+          padding: brandPagePadding2,
           children: [
-            BrandHeader(title: 'О проекте', hasBackButton: true),
-            Padding(
-              padding: brandPagePadding2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BrandDivider(),
-                  SizedBox(height: 20),
-                  Text('О проекте').h3,
-                  SizedBox(height: 10),
-                  Text('Всё больше организаций хотят владеть нашими данными')
-                      .body1,
-                  SizedBox(height: 10),
-                  Text('А мы сами хотим распоряжаться своими данными на своем сервере.')
-                      .body1,
-                  SizedBox(height: 20),
-                  BrandDivider(),
-                  SizedBox(height: 10),
-                  Text('Миссия проекта').h3,
-                  SizedBox(height: 10),
-                  Text(
-                      'Цифровая независимость и приватность доступная каждому'),
-                  SizedBox(height: 20),
-                  BrandDivider(),
-                  SizedBox(height: 10),
-                  Text('Цель').h3,
-                  SizedBox(height: 10),
-                  Text(
-                      'Развивать программу, которая позволит каждому создавать приватные сервисы для себя и своих близких'),
-                  SizedBox(height: 10),
-                  Text(
-                      'Развивать программу, которая позволит каждому создавать приватные сервисы для себя и своих близких'),
-                ],
-              ),
-            ),
+            BrandDivider(),
+            SizedBox(height: 20),
+            Text('О проекте').h3,
+            SizedBox(height: 10),
+            Text('Всё больше организаций хотят владеть нашими данными').body1,
+            SizedBox(height: 10),
+            Text('А мы сами хотим распоряжаться своими данными на своем сервере.')
+                .body1,
+            SizedBox(height: 20),
+            BrandDivider(),
+            SizedBox(height: 10),
+            Text('Миссия проекта').h3,
+            SizedBox(height: 10),
+            Text('Цифровая независимость и приватность доступная каждому'),
+            SizedBox(height: 20),
+            BrandDivider(),
+            SizedBox(height: 10),
+            Text('Цель').h3,
+            SizedBox(height: 10),
+            Text(
+                'Развивать программу, которая позволит каждому создавать приватные сервисы для себя и своих близких'),
+            SizedBox(height: 10),
+            Text(
+                'Развивать программу, которая позволит каждому создавать приватные сервисы для себя и своих близких'),
           ],
         ),
       ),

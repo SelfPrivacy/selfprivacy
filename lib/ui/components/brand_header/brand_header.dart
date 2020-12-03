@@ -15,9 +15,9 @@ class BrandHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 52,
+      alignment: Alignment.centerLeft,
       padding: EdgeInsets.only(
-        top: hasBackButton ? 4 : 17,
-        bottom: hasBackButton ? 7 : 20,
         left: hasBackButton ? 1 : 15,
       ),
       child: Container(

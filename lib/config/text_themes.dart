@@ -39,3 +39,5 @@ final body1Style = defaultTextStyle;
 final body2Style = defaultTextStyle.copyWith(
   color: BrandColors.textColor2,
 );
+
+final smallStyle = defaultTextStyle.copyWith(fontSize: 11, height: 1.45);

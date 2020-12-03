@@ -12,52 +12,48 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: PreferredSize(
+          child: BrandHeader(title: 'Настройки', hasBackButton: true),
+          preferredSize: Size.fromHeight(52),
+        ),
         body: ListView(
+          padding: brandPagePadding2,
           children: [
-            BrandHeader(title: 'Настройки', hasBackButton: true),
-            Padding(
-              padding: brandPagePadding2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  BrandDivider(),
-                  _SwitcherBlock(
-                    child: _TextColumn(
-                      title: 'Allow Auto-upgrade',
-                      value: 'Wether to allow automatic packages upgrades',
-                    ),
-                    isActive: true,
-                  ),
-                  _SwitcherBlock(
-                    child: _TextColumn(
-                      title: 'Reboot after upgrade',
-                      value: 'Reboot without prompt after applying updates',
-                    ),
-                    isActive: false,
-                  ),
-                  _Button(
-                    onTap: () {},
-                    child: _TextColumn(
-                      title: 'Server Timezone',
-                      value: 'Europe/Kyiv',
-                    ),
-                  ),
-                  _Button(
-                    onTap: () {},
-                    child: _TextColumn(
-                      title: 'Server Locale',
-                      value: 'Default',
-                    ),
-                  ),
-                  _Button(
-                    onTap: () {},
-                    child: _TextColumn(
-                      hasWarning: true,
-                      title: 'Factory Reset',
-                      value: 'Restore default settings on your server',
-                    ),
-                  )
-                ],
+            BrandDivider(),
+            _SwitcherBlock(
+              child: _TextColumn(
+                title: 'Allow Auto-upgrade',
+                value: 'Wether to allow automatic packages upgrades',
+              ),
+              isActive: true,
+            ),
+            _SwitcherBlock(
+              child: _TextColumn(
+                title: 'Reboot after upgrade',
+                value: 'Reboot without prompt after applying updates',
+              ),
+              isActive: false,
+            ),
+            _Button(
+              onTap: () {},
+              child: _TextColumn(
+                title: 'Server Timezone',
+                value: 'Europe/Kyiv',
+              ),
+            ),
+            _Button(
+              onTap: () {},
+              child: _TextColumn(
+                title: 'Server Locale',
+                value: 'Default',
+              ),
+            ),
+            _Button(
+              onTap: () {},
+              child: _TextColumn(
+                hasWarning: true,
+                title: 'Factory Reset',
+                value: 'Restore default settings on your server',
               ),
             )
           ],

@@ -13,6 +13,7 @@ extension TextExtension on Text {
 
   Text get body1 => copyWith(style: body1Style);
   Text get body2 => copyWith(style: body2Style);
+  Text get small => copyWith(style: smallStyle);
 
   Text setKey(Key key) => copyWith(key: key);
 

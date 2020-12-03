@@ -15,33 +15,38 @@ class MorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        BrandHeader(title: 'Еще'),
-        Padding(
-          padding: brandPagePadding2,
-          child: Column(
-            children: [
-              BrandDivider(),
-              _NavItem(
-                title: 'Настройки',
-                iconData: BrandIcons.settings,
-                goTo: SettingsPage(),
-              ),
-              _NavItem(
-                title: 'О проекте Selfprivacy',
-                iconData: BrandIcons.triangle,
-                goTo: AboutPage(),
-              ),
-              _NavItem(
-                title: 'О приложении',
-                iconData: BrandIcons.help,
-                goTo: InfoPage(),
-              ),
-            ],
-          ),
-        )
-      ],
+    return Scaffold(
+      appBar: PreferredSize(
+        child: BrandHeader(title: 'Еще'),
+        preferredSize: Size.fromHeight(52),
+      ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: brandPagePadding2,
+            child: Column(
+              children: [
+                BrandDivider(),
+                _NavItem(
+                  title: 'Настройки',
+                  iconData: BrandIcons.settings,
+                  goTo: SettingsPage(),
+                ),
+                _NavItem(
+                  title: 'О проекте Selfprivacy',
+                  iconData: BrandIcons.triangle,
+                  goTo: AboutPage(),
+                ),
+                _NavItem(
+                  title: 'О приложении',
+                  iconData: BrandIcons.help,
+                  goTo: InfoPage(),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -76,8 +81,10 @@ class _NavItem extends StatelessWidget {
           children: [
             Text(title).body1,
             Spacer(),
-            Icon(iconData, size: 20),
-            SizedBox(width: 18),
+            SizedBox(
+              width: 56,
+              child: Icon(iconData, size: 20),
+            ),
           ],
         ),
       ),

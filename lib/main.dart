@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/ui/pages/rootRoute.dart';
 
 import 'config/bloc_config.dart';
 import 'config/brand_theme.dart';
@@ -19,6 +20,8 @@ void main() {
   );
 }
 
+var _showOnbording = false;
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'SelfPrivacy',
         theme: theme,
-        home: OnboardingPage(),
+        home: _showOnbording ? OnboardingPage() : RootPage(),
       ),
     );
   }

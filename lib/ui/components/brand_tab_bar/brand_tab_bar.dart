@@ -39,7 +39,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _getIconButton('Серверы', BrandIcons.server, 0),
+            _getIconButton('Провайдеры', BrandIcons.server, 0),
             _getIconButton('Сервисы', BrandIcons.box, 1),
             _getIconButton('Пользователи', BrandIcons.users, 2),
             _getIconButton('Еще', BrandIcons.menu, 3),

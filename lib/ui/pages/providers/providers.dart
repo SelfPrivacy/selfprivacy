@@ -9,14 +9,14 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/utils/extensions/text_extension.dart';
 
-class ServicesPage extends StatefulWidget {
-  ServicesPage({Key key}) : super(key: key);
+class ProvidersPage extends StatefulWidget {
+  ProvidersPage({Key key}) : super(key: key);
 
   @override
-  _ServicesPageState createState() => _ServicesPageState();
+  _ProvidersPageState createState() => _ProvidersPageState();
 }
 
-class _ServicesPageState extends State<ServicesPage> {
+class _ProvidersPageState extends State<ProvidersPage> {
   @override
   Widget build(BuildContext context) {
     final serviceCubit = context.watch<ServicesCubit>();
@@ -24,7 +24,7 @@ class _ServicesPageState extends State<ServicesPage> {
     final uninitialized = serviceCubit.state.uninitialized;
     return Scaffold(
       appBar: PreferredSize(
-        child: BrandHeader(title: 'Сервисы'),
+        child: BrandHeader(title: 'Провайдеры'),
         preferredSize: Size.fromHeight(52),
       ),
       body: ListView(

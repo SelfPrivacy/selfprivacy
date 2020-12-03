@@ -12,27 +12,22 @@ class InfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: PreferredSize(
+          child: BrandHeader(title: 'О приложении', hasBackButton: true),
+          preferredSize: Size.fromHeight(52),
+        ),
         body: ListView(
+          padding: brandPagePadding2,
           children: [
-            BrandHeader(title: 'О приложении', hasBackButton: true),
-            Padding(
-              padding: brandPagePadding2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  BrandDivider(),
-                  SizedBox(height: 10),
-                  FutureBuilder(
-                      future: _version(),
-                      builder: (context, snapshot) {
-                        return Text(
-                                'Тут любая служебная информация, v.${snapshot.data}')
-                            .body1;
-                      }),
-                ],
-              ),
-            ),
+            BrandDivider(),
+            SizedBox(height: 10),
+            FutureBuilder(
+                future: _version(),
+                builder: (context, snapshot) {
+                  return Text(
+                          'Тут любая служебная информация, v.${snapshot.data}')
+                      .body1;
+                }),
           ],
         ),
       ),

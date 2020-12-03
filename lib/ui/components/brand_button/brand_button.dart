@@ -2,8 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
+import 'package:selfprivacy/utils/extensions/text_extension.dart';
 
-enum BrandButtonTypes { rised, text }
+enum BrandButtonTypes { rised, text, iconText }
 
 class BrandButton extends StatelessWidget {
   const BrandButton({
@@ -11,11 +12,13 @@ class BrandButton extends StatelessWidget {
     this.onPressed,
     this.type,
     this.title,
+    this.icon,
   }) : super(key: key);
 
   final VoidCallback onPressed;
   final BrandButtonTypes type;
   final String title;
+  final Icon icon;
 
   static rised({
     Key key,
@@ -41,6 +44,19 @@ class BrandButton extends StatelessWidget {
         type: BrandButtonTypes.text,
       );
 
+  static iconText({
+    Key key,
+    @required VoidCallback onPressed,
+    @required String title,
+    @required Icon icon,
+  }) =>
+      BrandButton(
+        key: key,
+        onPressed: onPressed,
+        title: title,
+        type: BrandButtonTypes.iconText,
+        icon: icon,
+      );
   @override
   Widget build(BuildContext context) {
     switch (type) {
@@ -53,6 +69,13 @@ class BrandButton extends StatelessWidget {
         return _TextButton(
           title: title,
           onPressed: onPressed,
+        );
+        break;
+      case BrandButtonTypes.iconText:
+        return _IconTextButton(
+          title: title,
+          onPressed: onPressed,
+          icon: icon,
         );
         break;
     }
@@ -129,6 +152,42 @@ class _TextButton extends StatelessWidget {
             fontSize: 16,
             fontWeight: FontWeight.bold,
             height: 1.5,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _IconTextButton extends StatelessWidget {
+  const _IconTextButton({Key key, this.onPressed, this.title, this.icon})
+      : super(key: key);
+
+  final VoidCallback onPressed;
+  final String title;
+  final Icon icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        child: Container(
+          height: 48,
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+              ).body1,
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: icon,
+              )
+            ],
           ),
         ),
       ),

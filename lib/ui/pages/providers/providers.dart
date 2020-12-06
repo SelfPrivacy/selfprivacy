@@ -6,7 +6,7 @@ import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
-import 'package:selfprivacy/ui/pages/settings/setting.dart';
+import 'package:selfprivacy/ui/pages/providers/settings/setting.dart';
 import 'package:selfprivacy/utils/extensions/text_extension.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 

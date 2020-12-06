@@ -4,11 +4,12 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/pages/about/about.dart';
-import 'package:selfprivacy/ui/pages/info/info.dart';
-import 'package:selfprivacy/ui/pages/settings/setting.dart';
 import 'package:selfprivacy/utils/extensions/text_extension.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
+
+import 'about/about.dart';
+import 'app_settings/app_setting.dart';
+import 'info/info.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({Key key}) : super(key: key);
@@ -28,9 +29,9 @@ class MorePage extends StatelessWidget {
               children: [
                 BrandDivider(),
                 _NavItem(
-                  title: 'Настройки',
+                  title: 'Настройки приложения',
                   iconData: BrandIcons.settings,
-                  goTo: SettingsPage(),
+                  goTo: AppSettingsPage(),
                 ),
                 _NavItem(
                   title: 'О проекте Selfprivacy',

@@ -3,6 +3,7 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
 import 'package:selfprivacy/utils/extensions/text_extension.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -20,14 +21,14 @@ class SettingsPage extends StatelessWidget {
           padding: brandPagePadding2,
           children: [
             BrandDivider(),
-            _SwitcherBlock(
+            SwitcherBlock(
               child: _TextColumn(
                 title: 'Allow Auto-upgrade',
                 value: 'Wether to allow automatic packages upgrades',
               ),
               isActive: true,
             ),
-            _SwitcherBlock(
+            SwitcherBlock(
               child: _TextColumn(
                 title: 'Reboot after upgrade',
                 value: 'Reboot without prompt after applying updates',
@@ -58,41 +59,6 @@ class SettingsPage extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SwitcherBlock extends StatelessWidget {
-  const _SwitcherBlock({
-    Key key,
-    @required this.child,
-    @required this.isActive,
-  }) : super(key: key);
-
-  final Widget child;
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 5),
-      decoration: BoxDecoration(
-          border: Border(
-        bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-      )),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(child: child),
-          SizedBox(width: 5),
-          Switch(
-            activeColor: BrandColors.green1,
-            activeTrackColor: BrandColors.green2,
-            onChanged: (v) {},
-            value: isActive,
-          ),
-        ],
       ),
     );
   }

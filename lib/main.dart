@@ -20,7 +20,7 @@ void main() {
   );
 }
 
-var _showOnbording = true;
+var _showOnbording = false;
 
 class MyApp extends StatelessWidget {
   @override

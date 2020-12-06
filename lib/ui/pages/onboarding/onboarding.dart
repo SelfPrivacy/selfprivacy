@@ -5,7 +5,7 @@ import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_span_button/brand_span_button.dart';
-import 'package:selfprivacy/ui/pages/dots_indicator/dots_indicator.dart';
+import 'package:selfprivacy/ui/components/dots_indicator/dots_indicator.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:selfprivacy/utils/extensions/text_extension.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';

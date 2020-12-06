@@ -75,11 +75,7 @@ class _Card extends StatelessWidget {
         title = 'Git сервер';
         description = 'Сервис для приватного хранения своих разработок';
         break;
-      case ServiceTypes.backup:
-        iconData = BrandIcons.save;
-        title = 'Резервное копирование';
-        description = 'Обеспеченье целосности и сохранности ваших данных';
-        break;
+
       case ServiceTypes.cloud:
         iconData = BrandIcons.upload;
         title = 'Файловое Облако';

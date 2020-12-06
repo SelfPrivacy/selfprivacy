@@ -5,7 +5,6 @@ enum ServiceTypes {
   messanger,
   mail,
   passwordManager,
-  backup,
   github,
   cloud,
 }

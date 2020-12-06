@@ -99,7 +99,9 @@ class _RisedButton extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: ColoredBox(
-        color: Theme.of(context).primaryColor,
+        color: onPressed == null
+            ? BrandColors.gray2
+            : Theme.of(context).primaryColor,
         child: Material(
           color: Colors.transparent,
           child: InkWell(

@@ -199,26 +199,60 @@ class _UserDetails extends StatelessWidget {
                       vertical: 4,
                       horizontal: 2,
                     ),
-                    child: PopupMenuButton<int>(
+                    child: PopupMenuButton<PopupMenuItemType>(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      // onSelected: (WhyFarther result) {
-                      //   setState(() {
-                      //     _selection = result;
-                      //   });
-                      // },
+                      onSelected: (PopupMenuItemType result) {
+                        switch (result) {
+                          case PopupMenuItemType.reset:
+                            break;
+                          case PopupMenuItemType.delete:
+                            showDialog(
+                                context: context,
+                                child: AlertDialog(
+                                  title: Text('Подтверждение '),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: <Widget>[
+                                        Text('удалить учетную запись?'),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('Отменить'),
+                                      onPressed: () {
+                                        Navigator.of(context)..pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text(
+                                        'Удалить',
+                                        style: TextStyle(
+                                          color: BrandColors.red,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context)..pop()..pop();
+                                      },
+                                    ),
+                                  ],
+                                ));
+                            break;
+                        }
+                      },
                       icon: Icon(Icons.more_vert),
                       itemBuilder: (BuildContext context) => [
-                        PopupMenuItem<int>(
-                          value: 1,
+                        PopupMenuItem<PopupMenuItemType>(
+                          value: PopupMenuItemType.reset,
                           child: Container(
                             padding: EdgeInsets.only(left: 5),
                             child: Text('Сбросить пароль'),
                           ),
                         ),
-                        PopupMenuItem<int>(
-                          value: 2,
+                        PopupMenuItem<PopupMenuItemType>(
+                          value: PopupMenuItemType.delete,
                           child: Container(
                             padding: EdgeInsets.only(left: 5),
                             child: Text(
@@ -277,7 +311,7 @@ class _UserDetails extends StatelessWidget {
                 BrandDivider(),
                 SizedBox(height: 20),
                 Text(
-                    'Вам был создан доступ к сервисам с логином <login> и паролем <password> к сервисам: -  E-mail с адресом <username@domain.com> -  Менеджер паролей: <pass.domain.com> - Файловое облако: <cloud.mydomain.com> - Видеоконференция <meet.domain.com> - Git сервер <git.mydomain.com>'),
+                    'Вам был создан доступ к сервисам с логином <login> и паролем <password> к сервисам:-  E-mail с адресом <username@domain.com>-  Менеджер паролей: <pass.domain.com>- Файловое облако: <cloud.mydomain.com>- Видеоконференция <meet.domain.com>- Git сервер <git.mydomain.com>'),
               ],
             ),
           )
@@ -285,4 +319,9 @@ class _UserDetails extends StatelessWidget {
       ),
     );
   }
+}
+
+enum PopupMenuItemType {
+  reset,
+  delete,
 }

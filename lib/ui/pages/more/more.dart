@@ -4,7 +4,7 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/utils/extensions/text_extension.dart';
+import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 import 'about/about.dart';
@@ -80,11 +80,14 @@ class _NavItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(title).body1,
+            BrandText.body1(title),
             Spacer(),
             SizedBox(
               width: 56,
-              child: Icon(iconData, size: 20),
+              child: Icon(
+                iconData,
+                size: 20,
+              ),
             ),
           ],
         ),

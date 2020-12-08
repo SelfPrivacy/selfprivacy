@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/utils/extensions/text_extension.dart';
+import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class BrandHeader extends StatelessWidget {
   const BrandHeader({
@@ -30,7 +30,7 @@ class BrandHeader extends StatelessWidget {
               ),
               SizedBox(width: 10),
             ],
-            Text(title).caption,
+            BrandText.h4(title),
           ],
         ),
       ),

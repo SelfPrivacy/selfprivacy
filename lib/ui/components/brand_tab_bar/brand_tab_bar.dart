@@ -4,15 +4,15 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
 final _kBottomTabBarHeight = 51;
 
-class BottomTabBar extends StatefulWidget {
-  BottomTabBar({Key key, this.controller}) : super(key: key);
+class BrandTabBar extends StatefulWidget {
+  BrandTabBar({Key key, this.controller}) : super(key: key);
 
   final TabController controller;
   @override
-  _BottomTabBarState createState() => _BottomTabBarState();
+  _BrandTabBarState createState() => _BrandTabBarState();
 }
 
-class _BottomTabBarState extends State<BottomTabBar> {
+class _BrandTabBarState extends State<BrandTabBar> {
   int currentIndex;
   @override
   void initState() {
@@ -30,11 +30,14 @@ class _BottomTabBarState extends State<BottomTabBar> {
   @override
   Widget build(BuildContext context) {
     final paddingBottom = MediaQuery.of(context).padding.bottom;
+
     return SizedBox(
       height: paddingBottom + _kBottomTabBarHeight,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),
-        color: BrandColors.navBackground,
+        color: Theme.of(context).brightness == Brightness.dark
+            ? BrandColors.navBackgroundDark
+            : BrandColors.navBackgroundLight,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,8 +53,10 @@ class _BottomTabBarState extends State<BottomTabBar> {
   }
 
   _getIconButton(String label, IconData iconData, int index) {
-    var color =
-        currentIndex == index ? BrandColors.black : BrandColors.inactive;
+    var acitivColor = Theme.of(context).brightness == Brightness.dark
+        ? BrandColors.white
+        : BrandColors.black;
+    var color = currentIndex == index ? acitivColor : BrandColors.inactive;
     return InkWell(
       onTap: () => widget.controller.animateTo(index),
       child: Padding(

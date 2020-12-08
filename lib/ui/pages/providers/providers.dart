@@ -5,9 +5,9 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
+import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/pages/providers/settings/setting.dart';
-import 'package:selfprivacy/utils/extensions/text_extension.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class ProvidersPage extends StatefulWidget {
@@ -85,14 +85,14 @@ class _Card extends StatelessWidget {
               child: Icon(provider.icon, size: 30, color: Colors.white),
             ),
             SizedBox(height: 10),
-            Text(title).h2,
+            BrandText.h2(title),
             SizedBox(height: 10),
             if (message != null) ...[
-              Text(message).body2,
+              BrandText.body2(message),
               SizedBox(height: 10),
             ],
             if (provider.state == ServiceStateType.stable)
-              Text(stableText).body2,
+              BrandText.body2(stableText),
           ],
         ),
       ),
@@ -173,9 +173,9 @@ class _ProviderDetails extends StatelessWidget {
                   child: Icon(provider.icon, size: 40, color: Colors.white),
                 ),
                 SizedBox(height: 10),
-                Text(title).h1,
+                BrandText.h1(title),
                 SizedBox(height: 10),
-                Text(statusText).body1,
+                BrandText.body1(statusText),
                 SizedBox(
                   height: 20,
                 ),

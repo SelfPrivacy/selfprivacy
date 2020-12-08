@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
-import 'package:selfprivacy/utils/extensions/text_extension.dart';
+import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 enum BrandButtonTypes { rised, text, iconText }
 
@@ -182,9 +182,7 @@ class _IconTextButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title,
-              ).body1,
+              BrandText.body1(title),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: icon,

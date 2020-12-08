@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 
 class BrandModalSheet extends StatelessWidget {
   const BrandModalSheet({
@@ -39,7 +38,7 @@ class BrandModalSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(20)),
-                      color: BrandColors.white,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     width: double.infinity,
                     child: child,

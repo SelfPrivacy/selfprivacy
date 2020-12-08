@@ -42,7 +42,7 @@ class _RootPageState extends State<RootPage>
             MorePage(),
           ],
         ),
-        bottomNavigationBar: BottomTabBar(
+        bottomNavigationBar: BrandTabBar(
           controller: tabController,
         ),
       ),

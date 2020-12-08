@@ -8,7 +8,7 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
-import 'package:selfprivacy/utils/extensions/text_extension.dart';
+import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class UsersPage extends StatelessWidget {
@@ -88,7 +88,7 @@ class _User extends StatelessWidget {
               ),
             ),
             SizedBox(width: 20),
-            Text(user.login).caption,
+            BrandText.h4(user.login),
           ],
         ),
       ),
@@ -267,16 +267,15 @@ class _UserDetails extends StatelessWidget {
                 ),
                 Spacer(),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 15,
-                  ),
-                  child: Text(
-                    user.login,
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                  ).h1,
-                ),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 20,
+                      horizontal: 15,
+                    ),
+                    child: BrandText.h1(
+                      user.login,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    )),
               ],
             ),
           ),
@@ -286,18 +285,18 @@ class _UserDetails extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Учетная запись').small,
+                BrandText.small('Учетная запись'),
                 Container(
                   height: 40,
                   alignment: Alignment.centerLeft,
-                  child: Text('${user.login}@example.com').caption,
+                  child: BrandText.h4('${user.login}@example.com'),
                 ),
                 SizedBox(height: 14),
-                Text('Пароль').small,
+                BrandText.small('Пароль'),
                 Container(
                   height: 40,
                   alignment: Alignment.centerLeft,
-                  child: Text(user.password).caption,
+                  child: BrandText.h4(user.password),
                 ),
                 SizedBox(height: 24),
                 BrandDivider(),

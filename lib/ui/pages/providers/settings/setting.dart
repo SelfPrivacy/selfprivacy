@@ -3,8 +3,8 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
-import 'package:selfprivacy/utils/extensions/text_extension.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key key}) : super(key: key);
@@ -22,6 +22,7 @@ class SettingsPage extends StatelessWidget {
           children: [
             BrandDivider(),
             SwitcherBlock(
+              onChange: (_) {},
               child: _TextColumn(
                 title: 'Allow Auto-upgrade',
                 value: 'Wether to allow automatic packages upgrades',
@@ -29,6 +30,7 @@ class SettingsPage extends StatelessWidget {
               isActive: true,
             ),
             SwitcherBlock(
+              onChange: (_) {},
               child: _TextColumn(
                 title: 'Reboot after upgrade',
                 value: 'Reboot without prompt after applying updates',
@@ -106,21 +108,19 @@ class _TextColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title).body1.copyWith(
-            style: TextStyle(color: hasWarning ? BrandColors.warning : null)),
+        BrandText.body1(
+          title,
+          style: TextStyle(color: hasWarning ? BrandColors.warning : null),
+        ),
         SizedBox(height: 5),
-        Text(value)
-            .body1
-            .copyWith(
-              style: TextStyle(
-                fontSize: 13,
-                height: 1.53,
-                color: BrandColors.gray1,
-              ),
-            )
-            .copyWith(
-                style:
-                    TextStyle(color: hasWarning ? BrandColors.warning : null)),
+        BrandText.body1(
+          value,
+          style: TextStyle(
+            fontSize: 13,
+            height: 1.53,
+            color: hasWarning ? BrandColors.warning : BrandColors.gray1,
+          ),
+        ),
       ],
     );
   }

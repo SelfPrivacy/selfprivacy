@@ -5,7 +5,7 @@ import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_span_button/brand_span_button.dart';
-import 'package:selfprivacy/utils/extensions/text_extension.dart';
+import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({Key key}) : super(key: key);
@@ -16,8 +16,8 @@ class OnboardingPage extends StatelessWidget {
       body: ListView(
         padding: brandPagePadding1,
         children: [
-          Text('Начало').caption,
-          Text('SelfPrivacy').h1,
+          BrandText.h4('Начало'),
+          BrandText.h1('SelfPrivacy'),
           SizedBox(
             height: 10,
           ),
@@ -43,10 +43,10 @@ class OnboardingPage extends StatelessWidget {
               children: [
                 Image.asset('assets/images/logos/hetzner.png'),
                 SizedBox(height: 10),
-                Text('1. Подключите сервер Hetzner').h2,
+                BrandText.h2('1. Подключите сервер Hetzner'),
                 SizedBox(height: 10),
-                Text('Здесь будут жить наши данные и SelfPrivacy-сервисы')
-                    .body2,
+                BrandText.body2(
+                    'Здесь будут жить наши данные и SelfPrivacy-сервисы'),
                 _MockForm(
                   hintText: 'Hetzner API Token',
                 ),
@@ -64,7 +64,7 @@ class OnboardingPage extends StatelessWidget {
               children: [
                 Image.asset('assets/images/logos/namecheap.png'),
                 SizedBox(height: 10),
-                Text('2. Настройте домен ').h2,
+                BrandText.h2('2. Настройте домен'),
                 SizedBox(height: 10),
                 RichText(
                   text: TextSpan(
@@ -103,9 +103,9 @@ class OnboardingPage extends StatelessWidget {
               children: [
                 Image.asset('assets/images/logos/cloudflare.png'),
                 SizedBox(height: 10),
-                Text('3. Подключите CloudFlare DNS').h2,
+                BrandText.h2('3. Подключите CloudFlare DNS'),
                 SizedBox(height: 10),
-                Text('Для управления DNS вашего домена').body2,
+                BrandText.body2('Для управления DNS вашего домена'),
                 _MockForm(
                   hintText: 'CloudFlare API Token',
                 ),
@@ -123,10 +123,10 @@ class OnboardingPage extends StatelessWidget {
               children: [
                 Image.asset('assets/images/logos/aws.png'),
                 SizedBox(height: 10),
-                Text('4. Подключите Amazon AWS для бекапа').h2,
+                BrandText.h2('4. Подключите Amazon AWS для бекапа'),
                 SizedBox(height: 10),
-                Text('IaaS-провайдер, для бесплатного хранения резервных копии ваших данных в зашифрованном виде')
-                    .body2,
+                BrandText.body2(
+                    'IaaS-провайдер, для бесплатного хранения резервных копии ваших данных в зашифрованном виде'),
                 _MockForm(
                   hintText: 'Amazon AWS Access Key',
                 ),
@@ -163,25 +163,27 @@ class _HowHetzner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BrandModalSheet(
-      child: Column(
-        children: [
-          SizedBox(height: 40),
-          Text('Как получить Hetzner API Token').h2,
-          SizedBox(height: 20),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: '1 Переходим по ссылке ',
-                  style: body1Style,
-                ),
-                BrandSpanButton.link(
-                  text: 'hetzner.com/sdfsdfsdfsdf',
-                  urlString: 'https://hetzner.com/sdfsdfsdfsdf',
-                ),
-                TextSpan(
-                  text: '''
-                                
+      child: Padding(
+        padding: brandPagePadding2,
+        child: Column(
+          children: [
+            SizedBox(height: 40),
+            BrandText.h2('Как получить Hetzner API Token'),
+            SizedBox(height: 20),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: '1 Переходим по ссылке ',
+                    style: body1Style,
+                  ),
+                  BrandSpanButton.link(
+                    text: 'hetzner.com/sdfsdfsdfsdf',
+                    urlString: 'https://hetzner.com/sdfsdfsdfsdf',
+                  ),
+                  TextSpan(
+                    text: '''
+                                  
 2 Заходим в созданный нами проект. Если такового - нет, значит создаём.
 
 3 Наводим мышкой на боковую панель. Она должна раскрыться, показав нам пункты меню. Нас интересует последний — Security (с иконкой ключика).
@@ -192,13 +194,14 @@ class _HowHetzner extends StatelessWidget {
 
 6 В поле Description, даём нашему токену название (это может быть любое название, которые вам нравиться. Сути оно не меняет.
 
-                                ''',
-                  style: body1Style,
-                ),
-              ],
+                                  ''',
+                    style: body1Style,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

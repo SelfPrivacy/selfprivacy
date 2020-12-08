@@ -41,7 +41,8 @@ class BrandColors {
   static const dividerColor = gray5;
   static const warning = red;
 
-  static get navBackground => white.withOpacity(0.8);
+  static get navBackgroundLight => white.withOpacity(0.8);
+  static get navBackgroundDark => black.withOpacity(0.8);
 
   static const List<Color> uninitializedGradientColors = [
     Color(0xFF555555),

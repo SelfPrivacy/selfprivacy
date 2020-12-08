@@ -7,6 +7,7 @@ import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'config/bloc_config.dart';
 import 'config/brand_theme.dart';
 import 'config/localization.dart';
+import 'logic/cubit/app_settings/app_settings_cubit.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,21 +21,22 @@ void main() {
   );
 }
 
-var _showOnbording = false;
+var _showOnbording = true;
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light, // Manually changnig appbar color
-
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         debugShowCheckedModeBanner: false,
         title: 'SelfPrivacy',
-        theme: theme,
+        theme: context.watch<AppSettingsCubit>().state.isDarkModeOn
+            ? darkTheme
+            : ligtTheme,
         home: _showOnbording ? OnboardingPage() : RootPage(),
       ),
     );

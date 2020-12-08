@@ -6,8 +6,8 @@ import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
+import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
-import 'package:selfprivacy/utils/extensions/text_extension.dart';
 
 class ServicesPage extends StatefulWidget {
   ServicesPage({Key key}) : super(key: key);
@@ -33,7 +33,7 @@ class _ServicesPageState extends State<ServicesPage> {
           SizedBox(height: 24),
           ...connected.map((service) => _Card(service: service)).toList(),
           if (uninitialized.isNotEmpty) ...[
-            Text('не подключены').body1,
+            BrandText.body1('не подключены'),
             SizedBox(height: 30),
           ],
           ...uninitialized.map((service) => _Card(service: service)).toList()
@@ -91,10 +91,10 @@ class _Card extends StatelessWidget {
             child: Icon(iconData, size: 30, color: Colors.white),
           ),
           SizedBox(height: 10),
-          Text(title).h2,
+          BrandText.h2(title),
           SizedBox(height: 10),
           if (service.state == ServiceStateType.uninitialized) ...[
-            Text(description).body1,
+            BrandText.body1(description),
             SizedBox(height: 10),
             BrandButton.text(
                 title: 'Подключить',
@@ -102,7 +102,8 @@ class _Card extends StatelessWidget {
                   context.read<ServicesCubit>().connect(service);
                 })
           ],
-          if (service.state == ServiceStateType.stable) Text('Подключен').body1,
+          if (service.state == ServiceStateType.stable)
+            BrandText.body2('Подключен'),
         ],
       ),
     );

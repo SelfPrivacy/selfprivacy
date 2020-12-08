@@ -29,7 +29,7 @@ final headline3Style = GoogleFonts.inter(
   color: BrandColors.headlineColor,
 );
 
-final captionStyle = GoogleFonts.inter(
+final headline4Style = GoogleFonts.inter(
   fontSize: 18,
   fontWeight: NamedFontWeight.medium,
   color: BrandColors.headlineColor,

@@ -6,10 +6,12 @@ class SwitcherBlock extends StatelessWidget {
     Key key,
     @required this.child,
     @required this.isActive,
+    @required this.onChange,
   }) : super(key: key);
 
   final Widget child;
   final bool isActive;
+  final ValueChanged<bool> onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class SwitcherBlock extends StatelessWidget {
           Switch(
             activeColor: BrandColors.green1,
             activeTrackColor: BrandColors.green2,
-            onChanged: (v) {},
+            onChanged: onChange,
             value: isActive,
           ),
         ],

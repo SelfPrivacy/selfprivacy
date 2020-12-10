@@ -10,14 +10,14 @@
 // import 'package:selfprivacy/ui/pages/rootRoute.dart';
 // import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
-// class OnboardingPage extends StatefulWidget {
-//   const OnboardingPage({Key key}) : super(key: key);
+// class InitializingPage extends StatefulWidget {
+//   const InitializingPage({Key key}) : super(key: key);
 
 //   @override
-//   _OnboardingPageState createState() => _OnboardingPageState();
+//   _InitializingPageState createState() => _InitializingPageState();
 // }
 
-// class _OnboardingPageState extends State<OnboardingPage> {
+// class _InitializingPageState extends State<InitializingPage> {
 //   PageController controller;
 //   var currentPage = 0;
 
@@ -113,9 +113,10 @@
 //             children: [
 //               Image.asset('assets/images/logos/hetzner.png'),
 //               SizedBox(height: 10),
-//               Text('1. Подключите сервер Hetzner').h2,
+//               BrandText.h2('1. Подключите сервер Hetzner'),
 //               SizedBox(height: 10),
-//               Text('Здесь будут жить наши данные и SelfPrivacy-сервисы').body2,
+//               BrandText.body2(
+//                   'Здесь будут жить наши данные и SelfPrivacy-сервисы'),
 //               _MockForm(
 //                 onPressed: _nextPage,
 //                 hintText: 'Hetzner API Token',
@@ -137,7 +138,7 @@
 //             children: [
 //               Image.asset('assets/images/logos/namecheap.png'),
 //               SizedBox(height: 10),
-//               Text('2. Настройте домен ').h2,
+//               BrandText.h2('2. Настройте домен'),
 //               SizedBox(height: 10),
 //               RichText(
 //                 text: TextSpan(
@@ -179,9 +180,9 @@
 //             children: [
 //               Image.asset('assets/images/logos/cloudflare.png'),
 //               SizedBox(height: 10),
-//               Text('3. Подключите CloudFlare DNS').h2,
+//               BrandText.h2('3. Подключите CloudFlare DNS'),
 //               SizedBox(height: 10),
-//               Text('Для управления DNS вашего домена').body2,
+//               BrandText.body2('Для управления DNS вашего домена'),
 //               _MockForm(
 //                 onPressed: _nextPage,
 //                 hintText: 'CloudFlare API Token',
@@ -202,10 +203,10 @@
 //             children: [
 //               Image.asset('assets/images/logos/aws.png'),
 //               SizedBox(height: 10),
-//               Text('4. Подключите Amazon AWS для бекапа').h2,
+//               BrandText.h2('4. Подключите Amazon AWS для бекапа'),
 //               SizedBox(height: 10),
-//               Text('IaaS-провайдер, для бесплатного хранения резервных копии ваших данных в зашифрованном виде')
-//                   .body2,
+//               BrandText.body2(
+//                   'IaaS-провайдер, для бесплатного хранения резервных копии ваших данных в зашифрованном виде'),
 //               _MockForm(
 //                 onPressed: () {
 //                   Navigator.of(context)
@@ -254,7 +255,7 @@
 //         child: Column(
 //           children: [
 //             SizedBox(height: 40),
-//             Text('Как получить Hetzner API Token').h2,
+//             BrandText.h2('Как получить Hetzner API Token'),
 //             SizedBox(height: 20),
 //             RichText(
 //               text: TextSpan(

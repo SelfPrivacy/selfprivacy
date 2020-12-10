@@ -19,6 +19,26 @@ final ligtTheme = ThemeData(
       borderRadius: BorderRadius.all(Radius.circular(4)),
       borderSide: BorderSide(color: BrandColors.blue),
     ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(4)),
+      borderSide: BorderSide(
+        width: 1,
+        color: BrandColors.red,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(4)),
+      borderSide: BorderSide(
+        width: 1,
+        color: BrandColors.red,
+      ),
+    ),
+    errorStyle: GoogleFonts.inter(
+      textStyle: TextStyle(
+        fontSize: 12,
+        color: BrandColors.red,
+      ),
+    ),
   ),
   textTheme: GoogleFonts.interTextTheme(
     TextTheme(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/models/provider.dart';
-import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
@@ -20,10 +21,9 @@ class ProvidersPage extends StatefulWidget {
 class _ProvidersPageState extends State<ProvidersPage> {
   @override
   Widget build(BuildContext context) {
-    final cards = ProviderTypes.values
-        .map((type) => _Card(
-            provider:
-                ProviderModel(state: ServiceStateType.stable, type: type)))
+    final cards = ProviderType.values
+        .map((type) =>
+            _Card(provider: ProviderModel(state: StateType.stable, type: type)))
         .toList();
     return Scaffold(
       appBar: PreferredSize(
@@ -49,16 +49,16 @@ class _Card extends StatelessWidget {
     String stableText;
 
     switch (provider.type) {
-      case ProviderTypes.server:
+      case ProviderType.server:
         title = 'Сервер';
         stableText = 'В норме';
         break;
-      case ProviderTypes.domain:
+      case ProviderType.domain:
         title = 'Домен';
         message = 'example.com';
         stableText = 'Домен настроен';
         break;
-      case ProviderTypes.backup:
+      case ProviderType.backup:
         message = '22 янв 2021 14:30';
         title = 'Резервное копирование';
         stableText = 'В норме';
@@ -91,8 +91,7 @@ class _Card extends StatelessWidget {
               BrandText.body2(message),
               SizedBox(height: 10),
             ],
-            if (provider.state == ServiceStateType.stable)
-              BrandText.body2(stableText),
+            if (provider.state == StateType.stable) BrandText.body2(stableText),
           ],
         ),
       ),
@@ -115,75 +114,84 @@ class _ProviderDetails extends StatelessWidget {
     String title;
 
     switch (provider.type) {
-      case ProviderTypes.server:
+      case ProviderType.server:
         title = 'Сервер';
         break;
-      case ProviderTypes.domain:
+      case ProviderType.domain:
         title = 'Домен';
 
         break;
-      case ProviderTypes.backup:
+      case ProviderType.backup:
         title = 'Резервное копирование';
         break;
     }
     return BrandModalSheet(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 4,
-                horizontal: 2,
-              ),
-              child: PopupMenuButton<_PopupMenuItemType>(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                onSelected: (_PopupMenuItemType result) {
-                  switch (result) {
-                    case _PopupMenuItemType.setting:
-                      Navigator.of(context)
-                          .pushReplacement(materialRoute(SettingsPage()));
-                      break;
-                  }
-                },
-                icon: Icon(Icons.more_vert),
-                itemBuilder: (BuildContext context) => [
-                  PopupMenuItem<_PopupMenuItemType>(
-                    value: _PopupMenuItemType.setting,
-                    child: Container(
-                      padding: EdgeInsets.only(left: 5),
-                      child: Text('Настройки'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: brandPagePadding1,
-            child: Column(
+      child: Navigator(
+        key: navigatorKey,
+        initialRoute: '/',
+        onGenerateRoute: (_) {
+          return materialRoute(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 13),
-                IconStatusMaks(
-                  status: provider.state,
-                  child: Icon(provider.icon, size: 40, color: Colors.white),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 2,
+                    ),
+                    child: PopupMenuButton<_PopupMenuItemType>(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      onSelected: (_PopupMenuItemType result) {
+                        switch (result) {
+                          case _PopupMenuItemType.setting:
+                            navigatorKey.currentState
+                                .push(materialRoute(SettingsPage()));
+                            break;
+                        }
+                      },
+                      icon: Icon(Icons.more_vert),
+                      itemBuilder: (BuildContext context) => [
+                        PopupMenuItem<_PopupMenuItemType>(
+                          value: _PopupMenuItemType.setting,
+                          child: Container(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Text('Настройки'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                SizedBox(height: 10),
-                BrandText.h1(title),
-                SizedBox(height: 10),
-                BrandText.body1(statusText),
-                SizedBox(
-                  height: 20,
-                ),
-                Text('Статусы сервера и сервис провайдера и т.д.')
+                Padding(
+                  padding: brandPagePadding1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 13),
+                      IconStatusMaks(
+                        status: provider.state,
+                        child:
+                            Icon(provider.icon, size: 40, color: Colors.white),
+                      ),
+                      SizedBox(height: 10),
+                      BrandText.h1(title),
+                      SizedBox(height: 10),
+                      BrandText.body1(statusText),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text('Статусы сервера и сервис провайдера и т.д.')
+                    ],
+                  ),
+                )
               ],
             ),
-          )
-        ],
+          );
+        },
       ),
     );
   }

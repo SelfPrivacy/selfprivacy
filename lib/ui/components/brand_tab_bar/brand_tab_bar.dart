@@ -17,14 +17,22 @@ class _BrandTabBarState extends State<BrandTabBar> {
   @override
   void initState() {
     currentIndex = widget.controller.index;
-    widget.controller.addListener(() {
-      if (currentIndex != widget.controller.index) {
-        setState(() {
-          currentIndex = widget.controller.index;
-        });
-      }
-    });
+    widget.controller.addListener(_listener);
     super.initState();
+  }
+
+  _listener() {
+    if (currentIndex != widget.controller.index) {
+      setState(() {
+        currentIndex = widget.controller.index;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller ?? widget.controller.removeListener(_listener);
+    super.dispose();
   }
 
   @override

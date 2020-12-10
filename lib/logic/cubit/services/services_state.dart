@@ -1,12 +1,12 @@
 part of 'services_cubit.dart';
 
 @immutable
-class ServicesState {
+class ServicesState extends Equatable{
   ServicesState(this.all);
 
   final List<Service> all;
 
-  ServicesState updateElement(Service service, ServiceStateType newState) {
+  ServicesState updateElement(Service service, StateType newState) {
     var newList = [...all];
     var index = newList.indexOf(service);
     newList[index] = service.updateState(newState);
@@ -14,10 +14,13 @@ class ServicesState {
   }
 
   List<Service> get connected => all
-      .where((service) => service.state != ServiceStateType.uninitialized)
+      .where((service) => service.state != StateType.uninitialized)
       .toList();
 
   List<Service> get uninitialized => all
-      .where((service) => service.state == ServiceStateType.uninitialized)
+      .where((service) => service.state == StateType.uninitialized)
       .toList();
+
+  @override
+  List<Object> get props => all;
 }

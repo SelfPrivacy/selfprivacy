@@ -11,57 +11,51 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          child: BrandHeader(title: 'Настройки', hasBackButton: true),
-          preferredSize: Size.fromHeight(52),
+    return ListView(
+      padding: brandPagePadding2,
+      children: [
+        SizedBox(height: 10),
+        BrandHeader(title: 'Настройки', hasBackButton: true),
+        BrandDivider(),
+        SwitcherBlock(
+          onChange: (_) {},
+          child: _TextColumn(
+            title: 'Allow Auto-upgrade',
+            value: 'Wether to allow automatic packages upgrades',
+          ),
+          isActive: true,
         ),
-        body: ListView(
-          padding: brandPagePadding2,
-          children: [
-            BrandDivider(),
-            SwitcherBlock(
-              onChange: (_) {},
-              child: _TextColumn(
-                title: 'Allow Auto-upgrade',
-                value: 'Wether to allow automatic packages upgrades',
-              ),
-              isActive: true,
-            ),
-            SwitcherBlock(
-              onChange: (_) {},
-              child: _TextColumn(
-                title: 'Reboot after upgrade',
-                value: 'Reboot without prompt after applying updates',
-              ),
-              isActive: false,
-            ),
-            _Button(
-              onTap: () {},
-              child: _TextColumn(
-                title: 'Server Timezone',
-                value: 'Europe/Kyiv',
-              ),
-            ),
-            _Button(
-              onTap: () {},
-              child: _TextColumn(
-                title: 'Server Locale',
-                value: 'Default',
-              ),
-            ),
-            _Button(
-              onTap: () {},
-              child: _TextColumn(
-                hasWarning: true,
-                title: 'Factory Reset',
-                value: 'Restore default settings on your server',
-              ),
-            )
-          ],
+        SwitcherBlock(
+          onChange: (_) {},
+          child: _TextColumn(
+            title: 'Reboot after upgrade',
+            value: 'Reboot without prompt after applying updates',
+          ),
+          isActive: false,
         ),
-      ),
+        _Button(
+          onTap: () {},
+          child: _TextColumn(
+            title: 'Server Timezone',
+            value: 'Europe/Kyiv',
+          ),
+        ),
+        _Button(
+          onTap: () {},
+          child: _TextColumn(
+            title: 'Server Locale',
+            value: 'Default',
+          ),
+        ),
+        _Button(
+          onTap: () {},
+          child: _TextColumn(
+            hasWarning: true,
+            title: 'Factory Reset',
+            value: 'Restore default settings on your server',
+          ),
+        )
+      ],
     );
   }
 }

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
-import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/models/state_types.dart';
 
 class IconStatusMaks extends StatelessWidget {
   IconStatusMaks({this.child, this.status});
   final Icon child;
 
-  final ServiceStateType status;
+  final StateType status;
 
   @override
   Widget build(BuildContext context) {
     List<Color> colors;
     switch (status) {
-      case ServiceStateType.uninitialized:
+      case StateType.uninitialized:
         colors = BrandColors.uninitializedGradientColors;
         break;
-      case ServiceStateType.stable:
+      case StateType.stable:
         colors = BrandColors.stableGradientColors;
         break;
-      case ServiceStateType.warning:
+      case StateType.warning:
         colors = BrandColors.warningGradientColors;
         break;
     }

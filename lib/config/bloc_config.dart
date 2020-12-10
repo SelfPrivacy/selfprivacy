@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
+import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 
@@ -14,19 +15,14 @@ class BlocAndProviderConfig extends StatelessWidget {
   Widget build(BuildContext context) {
     var platformBrightness =
         SchedulerBinding.instance.window.platformBrightness;
+    var isDark = platformBrightness == Brightness.dark;
     // var platformBrightness = Brightness.dark;
     return MultiProvider(
       providers: [
-        BlocProvider<AppSettingsCubit>(
-          create: (BuildContext context) => AppSettingsCubit(
-              isDarkModeOn: platformBrightness == Brightness.dark),
-        ),
-        BlocProvider<ServicesCubit>(
-          create: (BuildContext context) => ServicesCubit(),
-        ),
-        BlocProvider<UsersCubit>(
-          create: (BuildContext context) => UsersCubit(),
-        ),
+        BlocProvider(create: (_) => AppSettingsCubit(isDarkModeOn: isDark)),
+        BlocProvider(create: (_) => ServicesCubit()),
+        BlocProvider(create: (_) => ProvidersCubit()),
+        BlocProvider(create: (_) => UsersCubit()),
       ],
       child: child,
     );

@@ -93,7 +93,7 @@ class _Card extends StatelessWidget {
           SizedBox(height: 10),
           BrandText.h2(title),
           SizedBox(height: 10),
-          if (service.state == ServiceStateType.uninitialized) ...[
+          if (service.state == StateType.uninitialized) ...[
             BrandText.body1(description),
             SizedBox(height: 10),
             BrandButton.text(
@@ -102,7 +102,7 @@ class _Card extends StatelessWidget {
                   context.read<ServicesCubit>().connect(service);
                 })
           ],
-          if (service.state == ServiceStateType.stable)
+          if (service.state == StateType.stable)
             BrandText.body2('Подключен'),
         ],
       ),

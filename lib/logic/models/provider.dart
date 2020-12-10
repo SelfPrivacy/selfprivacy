@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
-import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
-enum ProviderTypes {
+enum ProviderType {
   server,
   domain,
   backup,
@@ -12,10 +12,10 @@ enum ProviderTypes {
 class ProviderModel extends Equatable {
   const ProviderModel({this.state, this.type});
 
-  final ServiceStateType state;
-  final ProviderTypes type;
+  final StateType state;
+  final ProviderType type;
 
-  ProviderModel updateState(ServiceStateType newState) => ProviderModel(
+  ProviderModel updateState(StateType newState) => ProviderModel(
         state: newState,
         type: type,
       );
@@ -25,14 +25,14 @@ class ProviderModel extends Equatable {
 
   IconData get icon {
     switch (type) {
-      case ProviderTypes.server:
+      case ProviderType.server:
         return BrandIcons.server;
 
-      case ProviderTypes.domain:
+      case ProviderType.domain:
         return BrandIcons.globe;
 
         break;
-      case ProviderTypes.backup:
+      case ProviderType.backup:
         return BrandIcons.save;
     }
     return null;

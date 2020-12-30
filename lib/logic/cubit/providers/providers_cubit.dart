@@ -9,7 +9,7 @@ export 'package:provider/provider.dart';
 part 'providers_state.dart';
 
 class ProvidersCubit extends Cubit<ProvidersState> {
-  ProvidersCubit() : super(ProvidersState(all));
+  ProvidersCubit() : super(InitialProviderState());
 
   void connect(ProviderModel provider) {
     var newState = state.updateElement(provider, StateType.stable);
@@ -17,11 +17,4 @@ class ProvidersCubit extends Cubit<ProvidersState> {
   }
 }
 
-final all = ProviderType.values
-    .map(
-      (type) => ProviderModel(
-        state: StateType.uninitialized,
-        type: type,
-      ),
-    )
-    .toList();
+

@@ -18,7 +18,7 @@ final headline1Style = GoogleFonts.inter(
 );
 
 final headline2Style = GoogleFonts.inter(
-  fontSize: 24,
+  fontSize: 30,
   fontWeight: NamedFontWeight.extraBold,
   color: BrandColors.headlineColor,
 );
@@ -41,3 +41,19 @@ final body2Style = defaultTextStyle.copyWith(
 );
 
 final smallStyle = defaultTextStyle.copyWith(fontSize: 11, height: 1.45);
+
+final linkStyle = defaultTextStyle.copyWith(color: BrandColors.blue);
+
+final progressTextStyleLight = GoogleFonts.inter(
+  textStyle: TextStyle(
+    fontSize: 13,
+    color: BrandColors.textColor1,
+  ),
+);
+
+final progressTextStyleDark = GoogleFonts.inter(
+  textStyle: TextStyle(
+    fontSize: 13,
+    color: BrandColors.white,
+  ),
+);

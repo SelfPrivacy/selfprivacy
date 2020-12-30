@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/initializing/initializing_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -52,6 +53,7 @@ class _Card extends StatelessWidget {
     String title;
     IconData iconData;
     String description;
+    var isFullyInitilized = context.watch<InitializingCubit>().state.isFullyInitilized;
 
     switch (service.type) {
       case ServiceTypes.messanger:
@@ -83,6 +85,7 @@ class _Card extends StatelessWidget {
         break;
     }
     return BrandCard(
+      isBlocked: !isFullyInitilized,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -102,8 +105,7 @@ class _Card extends StatelessWidget {
                   context.read<ServicesCubit>().connect(service);
                 })
           ],
-          if (service.state == StateType.stable)
-            BrandText.body2('Подключен'),
+          if (service.state == StateType.stable) BrandText.body2('Подключен'),
         ],
       ),
     );

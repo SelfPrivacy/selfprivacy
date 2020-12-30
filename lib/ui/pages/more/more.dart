@@ -5,6 +5,7 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 import 'about/about.dart';
@@ -28,6 +29,11 @@ class MorePage extends StatelessWidget {
             child: Column(
               children: [
                 BrandDivider(),
+                _NavItem(
+                  title: 'Мастер Подключения',
+                  iconData: BrandIcons.settings,
+                  goTo: InitializingPage(),
+                ),
                 _NavItem(
                   title: 'Настройки приложения',
                   iconData: BrandIcons.settings,

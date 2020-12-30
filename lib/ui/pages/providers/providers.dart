@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/initializing/initializing_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/models/provider.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
@@ -8,7 +9,7 @@ import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
-import 'package:selfprivacy/ui/pages/providers/settings/setting.dart';
+import 'package:selfprivacy/ui/pages/providers/settings/settings.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class ProvidersPage extends StatefulWidget {
@@ -47,6 +48,8 @@ class _Card extends StatelessWidget {
     String title;
     String message;
     String stableText;
+    var isFullyInitilized =
+        context.watch<InitializingCubit>().state.isFullyInitilized;
 
     switch (provider.type) {
       case ProviderType.server:
@@ -77,6 +80,7 @@ class _Card extends StatelessWidget {
         },
       ),
       child: BrandCard(
+        isBlocked: !isFullyInitilized,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

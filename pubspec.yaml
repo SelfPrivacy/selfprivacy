@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cubit_form: ^0.0.14
   cupertino_icons: ^1.0.0
   easy_localization: ^2.3.3
   equatable: ^1.2.5
@@ -31,6 +32,8 @@ flutter_icons:
 flutter:
   uses-material-design: true
   assets:
+    - assets/images/
+    - assets/images/onboarding/
     - assets/images/logos/
     - assets/translations/
   fonts:

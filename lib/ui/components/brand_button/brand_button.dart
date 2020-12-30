@@ -117,7 +117,7 @@ class _RisedButton extends StatelessWidget {
                   color: BrandColors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  height: 1.5,
+                  height: 1,
                 ),
               ),
             ),

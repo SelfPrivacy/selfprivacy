@@ -37,6 +37,8 @@ class BrandIcons {
       IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData refresh_1 =
       IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData check =
+      IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData refresh =
       IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData settings =

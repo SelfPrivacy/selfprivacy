@@ -30,7 +30,6 @@ class BrandColors {
   /// ![](https://www.colorhexa.com/0F8849.png)
   static const Color green2 = Color(0xFF0F8849);
 
-
   static get navBackgroundLight => white.withOpacity(0.8);
   static get navBackgroundDark => black.withOpacity(0.8);
 
@@ -42,11 +41,15 @@ class BrandColors {
     Color(0xFF093CEF),
     Color(0xFF14A1CB),
   ];
+
+  static const List<Color> progressGradientColors = [
+    Color(0xFF093CEF),
+    Color(0xFF14A1CB),
+  ];
   static const List<Color> warningGradientColors = [
     Color(0xFFEF4E09),
     Color(0xFFEFD135),
   ];
-
 
   static const primary = blue;
   static const headlineColor = black;
@@ -58,6 +61,4 @@ class BrandColors {
   static const textColor2 = gray1;
   static const dividerColor = gray5;
   static const warning = red;
-
-
 }

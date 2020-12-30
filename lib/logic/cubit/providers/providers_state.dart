@@ -23,3 +23,17 @@ class ProvidersState extends Equatable {
   @override
   List<Object> get props => all;
 }
+
+class InitialProviderState extends ProvidersState {
+  InitialProviderState()
+      : super(
+          ProviderType.values
+              .map(
+                (type) => ProviderModel(
+                  state: StateType.uninitialized,
+                  type: type,
+                ),
+              )
+              .toList(),
+        );
+}

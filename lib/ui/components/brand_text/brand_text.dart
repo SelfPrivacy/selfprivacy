@@ -8,24 +8,27 @@ enum TextType {
   h4, // caption
   body1, // normal
   body2, // with opacity
-  small
+  medium,
+  small,
+  onboardingTitle
 }
 
 class BrandText extends StatelessWidget {
-  const BrandText(
-    this.text, {
-    Key key,
-    this.style,
-    @required this.type,
-    this.overflow,
-    this.softWrap,
-  }) : super(key: key);
+  const BrandText(this.text,
+      {Key key,
+      this.style,
+      @required this.type,
+      this.overflow,
+      this.softWrap,
+      this.textAlign})
+      : super(key: key);
 
   final String text;
   final TextStyle style;
   final TextType type;
   final TextOverflow overflow;
   final bool softWrap;
+  final TextAlign textAlign;
 
   factory BrandText.h1(
     String text, {
@@ -36,6 +39,13 @@ class BrandText extends StatelessWidget {
       BrandText(
         text,
         type: TextType.h1,
+        style: style,
+      );
+
+  factory BrandText.onboardingTitle(String text, {TextStyle style}) =>
+      BrandText(
+        text,
+        type: TextType.onboardingTitle,
         style: style,
       );
   factory BrandText.h2(String text, {TextStyle style}) => BrandText(
@@ -63,6 +73,10 @@ class BrandText extends StatelessWidget {
         type: TextType.body2,
         style: style,
       );
+  factory BrandText.medium(String text,
+          {TextStyle style, TextAlign textAlign}) =>
+      BrandText(text,
+          type: TextType.medium, style: style, textAlign: textAlign);
   factory BrandText.small(String text, {TextStyle style}) => BrandText(
         text,
         type: TextType.small,
@@ -105,6 +119,15 @@ class BrandText extends StatelessWidget {
       case TextType.small:
         style = isDark ? smallStyle.copyWith(color: Colors.white) : smallStyle;
         break;
+      case TextType.onboardingTitle:
+        style = isDark
+            ? onboardingTitle.copyWith(color: Colors.white)
+            : onboardingTitle;
+        break;
+      case TextType.medium:
+        style =
+            isDark ? mediumStyle.copyWith(color: Colors.white) : mediumStyle;
+        break;
     }
     if (this.style != null) {
       style = style.merge(this.style);
@@ -114,6 +137,7 @@ class BrandText extends StatelessWidget {
       style: style,
       overflow: overflow,
       softWrap: softWrap,
+      textAlign: textAlign,
     );
   }
 }

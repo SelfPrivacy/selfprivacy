@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
-import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({Key key}) : super(key: key);
+  const OnboardingPage({Key key, @required this.nextPage}) : super(key: key);
 
+  final Widget nextPage;
   @override
   _OnboardingPageState createState() => _OnboardingPageState();
 }
@@ -107,8 +108,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
           ),
           BrandButton.rised(
             onPressed: () {
+              context.read<AppSettingsCubit>().turnOffOnboarding();
               Navigator.of(context)
-                  .pushReplacement(materialRoute(InitializingPage()));
+                  .pushReplacement(materialRoute(widget.nextPage));
             },
             title: 'Понял',
           ),

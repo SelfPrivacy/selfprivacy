@@ -7,4 +7,6 @@ class UsersState extends Equatable {
 
   @override
   List<Object> get props => users;
+
+  bool get isEmpty => users.isEmpty;
 }

@@ -1,18 +1,22 @@
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/cubit/initializing/initializing_cubit.dart';
+import 'package:selfprivacy/logic/api_maps/hetzner.dart';
+import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
+import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 
 class HetznerFormCubit extends FormCubit {
+  HetznerApi apiClient = HetznerApi();
+
   HetznerFormCubit(this.initializingCubit) {
-    var regExp = RegExp(r"\s+|[-!$%^&*()_@+|~=`{}\[\]:" ";<>?,.\/]");
+    var regExp = RegExp(r"\s+|[-!$%^&*()_@+|~=`{}\[\]:<>?,.\/]");
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
         RequiredStringValidation('required'),
         ValidationModel<String>(
             (s) => regExp.hasMatch(s), 'invalid key format'),
-        LegnthStringValidation(11, 'length is [] shoud be 11')
+        LegnthStringValidationWithLenghShowing(64, 'length is [] shoud be 64')
       ],
     );
 
@@ -21,24 +25,28 @@ class HetznerFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    print(apiKey.state.value);
-    await Future.delayed(const Duration(milliseconds: 300));
-    // initializingCubit.setHetznerKey(apiKey.state.value);
+    initializingCubit.setHetznerKey(apiKey.state.value);
   }
 
-  final InitializingCubit initializingCubit;
+  final AppConfigCubit initializingCubit;
 
   FieldCubit<String> apiKey;
-}
-
-class LegnthStringValidation extends ValidationModel<String> {
-  LegnthStringValidation(int length, String errorText)
-      : super((n) => n.length != length, errorText);
 
   @override
-  String check(String val) {
-    var length = val.length;
-    var errorMassage = this.errorMassage.replaceAll("[]", length.toString());
-    return test(val) ? errorMassage : null;
+  FutureOr<bool> asyncValidation() async {
+    var isKeyValid = await apiClient.isValid(apiKey.state.value);
+
+    if (!isKeyValid) {
+      apiKey.setError('bad key');
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Future<void> close() async {
+    apiClient.close();
+
+    return super.close();
   }
 }

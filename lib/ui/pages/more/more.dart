@@ -6,6 +6,8 @@ import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
+import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
+import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 import 'about/about.dart';
@@ -48,6 +50,11 @@ class MorePage extends StatelessWidget {
                   title: 'О приложении',
                   iconData: BrandIcons.help,
                   goTo: InfoPage(),
+                ),
+                _NavItem(
+                  title: 'Onboarding',
+                  iconData: BrandIcons.triangle,
+                  goTo: OnboardingPage(nextPage: RootPage()),
                 ),
               ],
             ),

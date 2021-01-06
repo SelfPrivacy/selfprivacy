@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
+import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/utils/named_font_weight.dart';
 
 class AppSettingsPage extends StatefulWidget {
   const AppSettingsPage({Key key}) : super(key: key);
@@ -53,9 +55,73 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       activeColor: BrandColors.green1,
                       activeTrackColor: BrandColors.green2,
                       value: Theme.of(context).brightness == Brightness.dark,
-                      onChanged: (value) =>
-                          appSettings.update(isDarkModeOn: !isDarkModeOn),
+                      onChanged: (value) => appSettings.updateDarkMode(
+                          isDarkModeOn: !isDarkModeOn),
                     ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 20, bottom: 5),
+                decoration: BoxDecoration(
+                    border: Border(
+                  bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
+                )),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: _TextColumn(
+                        title: 'Reset app config',
+                        value: 'Reset api keys and root user',
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    RaisedButton(
+                      color: BrandColors.red1,
+                      child: Text(
+                        'Reset',
+                        style: TextStyle(
+                          color: BrandColors.white,
+                          fontWeight: NamedFontWeight.demiBold,
+                        ),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            child: AlertDialog(
+                              title: Text('Are you sure?'),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: <Widget>[
+                                    Text('Reset all keys?'),
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text(
+                                    'Reset',
+                                    style: TextStyle(
+                                      color: BrandColors.red1,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    context.read<AppConfigCubit>().reset();
+                                    Navigator.of(context)..pop()..pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context)..pop();
+                                  },
+                                ),
+                              ],
+                            ));
+                      },
+                    )
                   ],
                 ),
               )
@@ -88,10 +154,6 @@ class _TextColumn extends StatelessWidget {
           style: TextStyle(color: hasWarning ? BrandColors.warning : null),
         ),
         SizedBox(height: 5),
-        BrandText.body1(
-          title,
-          style: TextStyle(color: hasWarning ? BrandColors.warning : null),
-        ),
         BrandText.body1(value,
             style: TextStyle(
               fontSize: 13,

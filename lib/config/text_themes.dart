@@ -18,6 +18,12 @@ final headline1Style = GoogleFonts.inter(
 );
 
 final headline2Style = GoogleFonts.inter(
+  fontSize: 24,
+  fontWeight: NamedFontWeight.extraBold,
+  color: BrandColors.headlineColor,
+);
+
+final onboardingTitle = GoogleFonts.inter(
   fontSize: 30,
   fontWeight: NamedFontWeight.extraBold,
   color: BrandColors.headlineColor,
@@ -39,6 +45,8 @@ final body1Style = defaultTextStyle;
 final body2Style = defaultTextStyle.copyWith(
   color: BrandColors.textColor2,
 );
+
+final mediumStyle = defaultTextStyle.copyWith(fontSize: 13, height: 1.53);
 
 final smallStyle = defaultTextStyle.copyWith(fontSize: 11, height: 1.45);
 

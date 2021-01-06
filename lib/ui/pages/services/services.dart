@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/initializing/initializing_cubit.dart';
+import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -9,6 +9,7 @@ import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
+import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 
 class ServicesPage extends StatefulWidget {
   ServicesPage({Key key}) : super(key: key);
@@ -23,6 +24,8 @@ class _ServicesPageState extends State<ServicesPage> {
     final serviceCubit = context.watch<ServicesCubit>();
     final connected = serviceCubit.state.connected;
     final uninitialized = serviceCubit.state.uninitialized;
+    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+
     return Scaffold(
       appBar: PreferredSize(
         child: BrandHeader(title: 'Сервисы'),
@@ -31,6 +34,7 @@ class _ServicesPageState extends State<ServicesPage> {
       body: ListView(
         padding: brandPagePadding2,
         children: [
+          if (!isReady) NotReadyCard(),
           SizedBox(height: 24),
           ...connected.map((service) => _Card(service: service)).toList(),
           if (uninitialized.isNotEmpty) ...[
@@ -53,7 +57,6 @@ class _Card extends StatelessWidget {
     String title;
     IconData iconData;
     String description;
-    var isFullyInitilized = context.watch<InitializingCubit>().state.isFullyInitilized;
 
     switch (service.type) {
       case ServiceTypes.messanger:
@@ -85,11 +88,10 @@ class _Card extends StatelessWidget {
         break;
     }
     return BrandCard(
-      isBlocked: !isFullyInitilized,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconStatusMaks(
+          IconStatusMask(
             status: service.state,
             child: Icon(iconData, size: 30, color: Colors.white),
           ),

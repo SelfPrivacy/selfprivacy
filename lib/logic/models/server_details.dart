@@ -1,0 +1,24 @@
+import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
+
+part 'server_details.g.dart';
+
+@HiveType(typeId: 2)
+class HetznerServerDetails {
+  HetznerServerDetails({
+    @required this.ip4,
+    @required this.id,
+    @required this.serverInitializaionDateTime,
+  });
+
+  @HiveField(0)
+  final String ip4;
+
+  @HiveField(1)
+  final int id;
+
+  @HiveField(2)
+  final DateTime serverInitializaionDateTime;
+
+  String toString() => id.toString();
+}

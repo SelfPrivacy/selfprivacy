@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 
-class IconStatusMaks extends StatelessWidget {
-  IconStatusMaks({this.child, this.status});
+class IconStatusMask extends StatelessWidget {
+  IconStatusMask({this.child, this.status});
   final Icon child;
 
   final StateType status;

@@ -64,7 +64,9 @@ class _BrandTabBarState extends State<BrandTabBar> {
     var acitivColor = Theme.of(context).brightness == Brightness.dark
         ? BrandColors.white
         : BrandColors.black;
-    var color = currentIndex == index ? acitivColor : BrandColors.inactive;
+
+    var isActive = currentIndex == index;
+    var color = isActive ? acitivColor : BrandColors.inactive;
     return InkWell(
       onTap: () => widget.controller.animateTo(index),
       child: Padding(
@@ -75,7 +77,22 @@ class _BrandTabBarState extends State<BrandTabBar> {
             children: [
               Icon(iconData, color: color),
               SizedBox(height: 3),
-              Text(label, style: TextStyle(fontSize: 9, color: color))
+              Row(
+                children: [
+                  if (isActive) ...[
+                    Container(
+                      height: 5,
+                      width: 5,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: BrandColors.red2,
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                  ],
+                  Text(label, style: TextStyle(fontSize: 9, color: color)),
+                ],
+              )
             ],
           ),
         ),

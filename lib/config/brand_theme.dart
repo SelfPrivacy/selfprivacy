@@ -23,20 +23,20 @@ final ligtTheme = ThemeData(
       borderRadius: BorderRadius.all(Radius.circular(4)),
       borderSide: BorderSide(
         width: 1,
-        color: BrandColors.red,
+        color: BrandColors.red1,
       ),
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(4)),
       borderSide: BorderSide(
         width: 1,
-        color: BrandColors.red,
+        color: BrandColors.red1,
       ),
     ),
     errorStyle: GoogleFonts.inter(
       textStyle: TextStyle(
         fontSize: 12,
-        color: BrandColors.red,
+        color: BrandColors.red1,
       ),
     ),
   ),

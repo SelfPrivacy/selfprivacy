@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cubit_form/cubit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
@@ -14,6 +17,7 @@ import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_span_button/brand_span_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
@@ -22,12 +26,14 @@ class InitializingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = context.watch<AppConfigCubit>();
+    print(cubit.state.error);
     var actualPage = [
       _stepHetzner(cubit),
       _stepCloudflare(cubit),
       _stepDomain(cubit),
       _stepUser(cubit),
       _stepServer(cubit),
+      _stepCheck(cubit),
       Container(child: Text('Everythigng is initialized'))
     ][cubit.state.progress];
     return BlocListener<AppConfigCubit, AppConfigState>(
@@ -273,6 +279,51 @@ class InitializingPage extends StatelessWidget {
           BrandButton.rised(
             onPressed: isLoading ? null : appConfigCubit.createServer,
             title: isLoading ? 'loading' : 'Создать сервер',
+          ),
+          Spacer(
+            flex: 2,
+          ),
+          BrandButton.text(
+            onPressed: () => _showModal(context, _HowHetzner()),
+            title: 'Что это значит?',
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget _stepCheck(AppConfigCubit appConfigCubit) {
+    var state = appConfigCubit.state;
+    var error = state.error;
+    print(error);
+    return Builder(builder: (context) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Spacer(flex: 2),
+          BrandText.h2(error == null ? 'Создание началось' : 'Error'),
+          SizedBox(height: 10),
+          error == null
+              ? BrandText.body2(
+                  'Мы начали процесс инциализации сервера, через 10 минут, мы проверим правильность DNS записей, и закончим инциализацию',
+                )
+              : BrandText.body2(
+                  error.toString(),
+                  style: TextStyle(color: BrandColors.red1),
+                ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              BrandText.body2('Времени прошло: '),
+              BrandTimer(
+                startDateTime: state.server.startTime,
+                duration: Duration(minutes: 10),
+                callback: () {
+                  appConfigCubit.checkDns();
+                  // print(state.server.ip4);
+                },
+              ),
+            ],
           ),
           Spacer(
             flex: 2,

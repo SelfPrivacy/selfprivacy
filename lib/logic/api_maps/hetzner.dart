@@ -58,7 +58,7 @@ class HetznerApi extends ApiMap {
     return HetznerServerDetails(
       id: response.data['server']['id'],
       ip4: response.data['server']['public_net']['ipv4']['ip'],
-      serverInitializaionDateTime: DateTime.now(),
+      startTime: DateTime.now(),
     );
   }
 }

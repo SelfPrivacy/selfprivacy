@@ -8,7 +8,7 @@ class HetznerServerDetails {
   HetznerServerDetails({
     @required this.ip4,
     @required this.id,
-    @required this.serverInitializaionDateTime,
+    @required this.startTime,
   });
 
   @HiveField(0)
@@ -18,7 +18,7 @@ class HetznerServerDetails {
   final int id;
 
   @HiveField(2)
-  final DateTime serverInitializaionDateTime;
+  final DateTime startTime;
 
   String toString() => id.toString();
 }

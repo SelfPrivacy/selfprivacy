@@ -9,6 +9,7 @@ class AppConfigState extends Equatable {
     this.server,
     this.isDnsCheckedAndDkimSet = false,
     this.isLoading = false,
+    this.error,
   });
 
   @override
@@ -20,6 +21,7 @@ class AppConfigState extends Equatable {
         server,
         isDnsCheckedAndDkimSet,
         isLoading,
+        error
       ];
 
   final String hetznerKey;
@@ -29,7 +31,8 @@ class AppConfigState extends Equatable {
   final HetznerServerDetails server;
   final bool isDnsCheckedAndDkimSet;
 
-  final isLoading;
+  final bool isLoading;
+  final Exception error;
 
   AppConfigState copyWith({
     String hetznerKey,
@@ -40,6 +43,7 @@ class AppConfigState extends Equatable {
     bool isDnsCheckedAndDkimSet,
     bool isLoading,
     DateTime serverInitStart,
+    Exception error,
   }) =>
       AppConfigState(
         hetznerKey: hetznerKey ?? this.hetznerKey,
@@ -47,8 +51,10 @@ class AppConfigState extends Equatable {
         cloudFlareDomain: domain ?? this.cloudFlareDomain,
         rootUser: rootUser ?? this.rootUser,
         server: hetznerServer ?? this.server,
-        isDnsCheckedAndDkimSet: isDnsCheckedAndDkimSet ?? this.isDnsCheckedAndDkimSet,
+        isDnsCheckedAndDkimSet:
+            isDnsCheckedAndDkimSet ?? this.isDnsCheckedAndDkimSet,
         isLoading: isLoading ?? this.isLoading,
+        error: error ?? this.error,
       );
 
   bool get isHetznerFilled => hetznerKey != null;
@@ -56,7 +62,7 @@ class AppConfigState extends Equatable {
   bool get isDomainFilled => cloudFlareDomain != null;
   bool get isUserFilled => rootUser != null;
   bool get isServerFilled => server != null;
-  
+
   bool get isFullyInitilized => _fulfilementList.every((el) => el);
 
   int get progress => _fulfilementList.where((el) => el).length;

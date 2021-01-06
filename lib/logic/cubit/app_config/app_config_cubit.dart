@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
@@ -22,7 +24,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         cloudFlareKey: box.get(BNames.cloudFlareKey),
         domain: box.get(BNames.domain),
         rootUser: box.get(BNames.rootUser),
-        hetznerServer: box.get(BNames.server),
+        hetznerServer: box.get(BNames.hetznerServer),
         isDnsCheckedAndDkimSet: box.get(BNames.isDnsCheckedAndDkimSet),
       ),
     );
@@ -53,9 +55,27 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     emit(state.copyWith(rootUser: rootUser));
   }
 
-  void setIsDnsCheckedAndDkimSet() {
-    box.put(BNames.isDnsCheckedAndDkimSet, true);
-    emit(state.copyWith(isDnsCheckedAndDkimSet: true));
+  Future<void> checkDns() async {
+    var ip4 = state.server.ip4;
+    var domainName = state.cloudFlareDomain.name;
+    var addresses = <String>[
+      '$domainName',
+      'api.$domainName',
+      'cloud.$domainName',
+      'meet.$domainName',
+      'password.$domainName'
+    ];
+    var hasError = false;
+    for (var address in addresses) {
+      var res = await InternetAddress.lookup(address);
+      if (res.isEmpty || res[0].address != ip4) {
+        hasError = true;
+        break;
+      }
+    }
+    if (hasError) {
+      emit(state.copyWith(error: Exception('dns checking error')));
+    }
   }
 
   void createServer() async {
@@ -74,7 +94,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
           cloudFlareDomain: state.cloudFlareDomain,
         )
         .then((_) => cloudflareApi.close());
-    await box.put(BNames.server, serverDetails);
+    await box.put(BNames.hetznerServer, serverDetails);
 
     hetznerApi.close();
 

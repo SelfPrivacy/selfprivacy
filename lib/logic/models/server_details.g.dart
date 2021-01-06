@@ -19,7 +19,7 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
     return HetznerServerDetails(
       ip4: fields[0] as String,
       id: fields[1] as int,
-      serverInitializaionDateTime: fields[2] as DateTime,
+      startTime: fields[2] as DateTime,
     );
   }
 
@@ -32,7 +32,7 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
-      ..write(obj.serverInitializaionDateTime);
+      ..write(obj.startTime);
   }
 
   @override

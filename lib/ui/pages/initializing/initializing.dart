@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cubit_form/cubit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +24,6 @@ class InitializingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = context.watch<AppConfigCubit>();
-    print(cubit.state.error);
     var actualPage = [
       _stepHetzner(cubit),
       _stepCloudflare(cubit),
@@ -269,9 +266,7 @@ class InitializingPage extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Spacer(
-            flex: 2,
-          ),
+          Spacer(flex: 2),
           BrandText.h2('Создать сервер'),
           SizedBox(height: 10),
           BrandText.body2('Создать сервер'),
@@ -280,9 +275,7 @@ class InitializingPage extends StatelessWidget {
             onPressed: isLoading ? null : appConfigCubit.createServer,
             title: isLoading ? 'loading' : 'Создать сервер',
           ),
-          Spacer(
-            flex: 2,
-          ),
+          Spacer(flex: 2),
           BrandButton.text(
             onPressed: () => _showModal(context, _HowHetzner()),
             title: 'Что это значит?',
@@ -295,7 +288,6 @@ class InitializingPage extends StatelessWidget {
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
     var state = appConfigCubit.state;
     var error = state.error;
-    print(error);
     return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,7 +312,6 @@ class InitializingPage extends StatelessWidget {
                 duration: Duration(minutes: 10),
                 callback: () {
                   appConfigCubit.checkDns();
-                  // print(state.server.ip4);
                 },
               ),
             ],
@@ -341,9 +332,7 @@ class InitializingPage extends StatelessWidget {
     return Container(
       height: 500,
       padding: brandPagePadding2,
-      child: BrandCard(
-        child: child,
-      ),
+      child: BrandCard(child: child),
     );
   }
 }

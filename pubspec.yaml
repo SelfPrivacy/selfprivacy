@@ -28,6 +28,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  basic_utils: ^2.6.3
   build_runner: ^1.10.11
   flutter_launcher_icons: ^0.8.1
   hive_generator: ^0.8.2

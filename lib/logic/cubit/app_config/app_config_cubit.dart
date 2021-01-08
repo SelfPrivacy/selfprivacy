@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
@@ -9,6 +7,7 @@ import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
+import 'package:basic_utils/basic_utils.dart';
 
 part 'app_config_state.dart';
 
@@ -67,14 +66,20 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     ];
     var hasError = false;
     for (var address in addresses) {
-      var res = await InternetAddress.lookup(address);
-      if (res.isEmpty || res[0].address != ip4) {
+      var res = await DnsUtils.lookupRecord(
+        address,
+        RRecordType.A,
+        provider: DnsApiProvider.CLOUDFLARE,
+      );
+      if (res.isEmpty || res[0].data != ip4) {
         hasError = true;
         break;
       }
     }
     if (hasError) {
-      emit(state.copyWith(error: Exception('dns checking error')));
+      emit(state.copyWith(error: Exception('dns cloudflare checking error')));
+    } else {
+      print('check complete');
     }
   }
 

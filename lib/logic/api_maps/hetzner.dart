@@ -14,7 +14,7 @@ class HetznerApi extends ApiMap {
   }
 
   @override
-  String rootAddress = 'https://api.hetzner.cloud/v1/servers';
+  String rootAddress = 'http://api.hetzner.cloud/v1/servers';
 
   Future<bool> isValid(String token) async {
     var options = Options(
@@ -31,7 +31,7 @@ class HetznerApi extends ApiMap {
     } else if (response.statusCode == HttpStatus.unauthorized) {
       return false;
     } else {
-      throw Exception('something bad happend');
+      throw Exception('code: ${response.statusCode}');
     }
   }
 
@@ -44,7 +44,7 @@ class HetznerApi extends ApiMap {
       "server_type": "cx11",
       "start_after_create": true,
       "image": "ubuntu-20.04",
-      "ssh_keys": [],
+      "ssh_keys": ["ilchub"],
       "volumes": [],
       "networks": [],
       'user-data':

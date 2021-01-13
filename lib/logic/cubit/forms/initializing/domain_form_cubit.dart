@@ -41,7 +41,13 @@ class DomainFormCubit extends FormCubit {
   FutureOr<bool> asyncValidation() async {
     var key = initializingCubit.state.cloudFlareKey;
 
-    var zoneId = await apiClient.getZoneId(key, domainName.state.value);
+    String zoneId;
+
+    try {
+      zoneId = await apiClient.getZoneId(key, domainName.state.value);
+    } catch (e) {
+      addError(e);
+    }
 
     if (zoneId == null) {
       domainName.setError('Domain not in the list');

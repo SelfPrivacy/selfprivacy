@@ -23,7 +23,6 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
   void load() {
     bool isDarkModeOn = box.get(BNames.isDarkModeOn);
     bool isOnbordingShowing = box.get(BNames.isOnbordingShowing);
-
     emit(state.copyWith(
       isDarkModeOn: isDarkModeOn,
       isOnbordingShowing: isOnbordingShowing,

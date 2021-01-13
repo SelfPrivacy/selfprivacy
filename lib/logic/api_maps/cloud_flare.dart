@@ -30,7 +30,7 @@ class CloudflareApi extends ApiMap {
     } else if (response.statusCode == HttpStatus.unauthorized) {
       return false;
     } else {
-      throw Exception('something bad happend');
+      throw Exception('code: ${response.statusCode}');
     }
   }
 

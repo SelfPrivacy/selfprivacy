@@ -34,7 +34,13 @@ class CloudFlareFormCubit extends FormCubit {
 
   @override
   FutureOr<bool> asyncValidation() async {
-    var isKeyValid = await apiClient.isValid(apiKey.state.value);
+    bool isKeyValid;
+
+    try {
+      isKeyValid = await apiClient.isValid(apiKey.state.value);
+    } catch (e) {
+      addError(e);
+    }
 
     if (!isKeyValid) {
       apiKey.setError('bad key');

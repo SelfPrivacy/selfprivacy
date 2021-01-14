@@ -1,13 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/cloud_flare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
+import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
+import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 import 'package:basic_utils/basic_utils.dart';
+import 'package:dio/dio.dart';
 
 part 'app_config_state.dart';
 
@@ -71,6 +75,18 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         RRecordType.A,
         provider: DnsApiProvider.CLOUDFLARE,
       );
+      getIt.get<ConsoleModel>().addMessage(
+            Message(
+              text:
+                  'DnsLookup: address:$address, $RRecordType, provider: CLOUDFLARE',
+            ),
+          );
+      getIt.get<ConsoleModel>().addMessage(
+            Message(
+              text:
+                  'DnsLookup: address:$address, $RRecordType, provider: CLOUDFLARE',
+            ),
+          );
       if (res.isEmpty || res[0].data != ip4) {
         hasError = true;
         break;
@@ -88,17 +104,28 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     var hetznerApi = HetznerApi(state.hetznerKey);
     var cloudflareApi = CloudflareApi(state.cloudFlareKey);
 
-    var serverDetails = await hetznerApi.createServer(
-      rootUser: state.rootUser,
-      domainName: state.cloudFlareDomain.name,
-    );
+    HetznerServerDetails serverDetails;
 
-    cloudflareApi
-        .createMultipleDnsRecords(
-          ip4: serverDetails.ip4,
-          cloudFlareDomain: state.cloudFlareDomain,
-        )
-        .then((_) => cloudflareApi.close());
+    try {
+      serverDetails = await hetznerApi.createServer(
+        rootUser: state.rootUser,
+        domainName: state.cloudFlareDomain.name,
+      );
+    } catch (e) {
+      addError(e);
+    }
+
+    try {
+      cloudflareApi
+          .createMultipleDnsRecords(
+            ip4: serverDetails.ip4,
+            cloudFlareDomain: state.cloudFlareDomain,
+          )
+          .then((_) => cloudflareApi.close());
+    } catch (e) {
+      addError(e);
+    }
+
     await box.put(BNames.hetznerServer, serverDetails);
 
     hetznerApi.close();

@@ -12,6 +12,7 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 import 'about/about.dart';
 import 'app_settings/app_setting.dart';
+import 'console/console.dart';
 import 'info/info.dart';
 
 class MorePage extends StatelessWidget {
@@ -55,6 +56,11 @@ class MorePage extends StatelessWidget {
                   title: 'Onboarding',
                   iconData: BrandIcons.triangle,
                   goTo: OnboardingPage(nextPage: RootPage()),
+                ),
+                _NavItem(
+                  title: 'Console',
+                  iconData: BrandIcons.triangle,
+                  goTo: Console(),
                 ),
               ],
             ),

@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/models/dns_records.dart';
 class CloudflareApi extends ApiMap {
   CloudflareApi([String token]) {
     if (token != null) {
-      client.options = BaseOptions(headers: {'Authorization': 'Bearer $token'});
+      loggedClient.options = BaseOptions(headers: {'Authorization': 'Bearer $token'});
     }
   }
 
@@ -23,7 +23,7 @@ class CloudflareApi extends ApiMap {
       },
     );
 
-    Response response = await client.get(url, options: options);
+    Response response = await loggedClient.get(url, options: options);
 
     if (response.statusCode == HttpStatus.ok) {
       return true;
@@ -44,7 +44,7 @@ class CloudflareApi extends ApiMap {
       },
     );
 
-    Response response = await client.get(
+    Response response = await loggedClient.get(
       url,
       options: options,
       queryParameters: {'name': domain},
@@ -106,7 +106,7 @@ class CloudflareApi extends ApiMap {
       var url = '$rootAddress/zones/$domainZoneId/dns_records';
 
       allFutures.add(
-        client.post(
+        loggedClient.post(
           url,
           data: record.toJson(),
         ),

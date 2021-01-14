@@ -9,12 +9,13 @@ import 'package:selfprivacy/logic/models/user.dart';
 class HetznerApi extends ApiMap {
   HetznerApi([String token]) {
     if (token != null) {
-      client.options = BaseOptions(headers: {'Authorization': 'Bearer $token'});
+      loggedClient.options =
+          BaseOptions(headers: {'Authorization': 'Bearer $token'});
     }
   }
 
   @override
-  String rootAddress = 'http://api.hetzner.cloud/v1/servers';
+  String rootAddress = 'https://api.hetzner.cloud/v1/servers';
 
   Future<bool> isValid(String token) async {
     var options = Options(
@@ -24,7 +25,7 @@ class HetznerApi extends ApiMap {
       },
     );
 
-    Response response = await client.get(rootAddress, options: options);
+    Response response = await loggedClient.get(rootAddress, options: options);
 
     if (response.statusCode == HttpStatus.ok) {
       return true;
@@ -50,7 +51,7 @@ class HetznerApi extends ApiMap {
       'user-data':
           '#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-20.09 DOMAIN=$domainName USER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword} bash 2>&1 | tee /tmp/infect.log'
     };
-    Response response = await client.post(
+    Response response = await loggedClient.post(
       rootAddress,
       data: data,
     );

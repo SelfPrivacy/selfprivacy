@@ -17,6 +17,7 @@ dependencies:
   equatable: ^1.2.5
   flutter_bloc: ^6.1.1
   flutter_secure_storage: ^3.3.5
+  get_it: ^5.0.4
   google_fonts: ^1.1.1
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1

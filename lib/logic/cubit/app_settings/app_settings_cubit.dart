@@ -31,7 +31,6 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
 
   void updateDarkMode({@required bool isDarkModeOn}) {
     box.put(BNames.isDarkModeOn, isDarkModeOn);
-
     emit(state.copyWith(isDarkModeOn: isDarkModeOn));
   }
 

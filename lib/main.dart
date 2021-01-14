@@ -9,6 +9,7 @@ import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'config/bloc_config.dart';
 import 'config/bloc_observer.dart';
 import 'config/brand_theme.dart';
+import 'config/get_it_config.dart';
 import 'config/localization.dart';
 import 'logic/cubit/app_settings/app_settings_cubit.dart';
 
@@ -17,7 +18,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   await HiveConfig.init();
   Bloc.observer = SimpleBlocObserver(navigatorKey: navigatorKey);
-
+  getItSetup();
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(

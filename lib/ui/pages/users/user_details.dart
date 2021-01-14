@@ -67,6 +67,7 @@ class _UserDetails extends StatelessWidget {
                                         ),
                                       ),
                                       onPressed: () {
+                                        context.read<UsersCubit>().remove(user);
                                         Navigator.of(context)..pop()..pop();
                                       },
                                     ),

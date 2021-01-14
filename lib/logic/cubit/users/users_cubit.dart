@@ -9,14 +9,14 @@ class UsersCubit extends Cubit<UsersState> {
   UsersCubit() : super(UsersState([]));
 
   void add(User user) {
-    var users = state.users;
+    var users = [...state.users];
     users.add(user);
 
     emit(UsersState(users));
   }
 
   void remove(User user) {
-    var users = state.users;
+    var users = [...state.users];
     users.remove(user);
 
     emit(UsersState(users));

@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   crypto: ^2.1.5
-  cubit_form: ^0.0.15
+  cubit_form: ^0.0.16
   cupertino_icons: ^1.0.0
   dio: ^3.0.10
   easy_localization: ^2.3.3

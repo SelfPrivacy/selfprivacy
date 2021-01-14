@@ -182,7 +182,7 @@ packages:
       name: cubit_form
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.15"
+    version: "0.0.16"
   cupertino_icons:
     dependency: "direct main"
     description:

@@ -1,7 +1,9 @@
+import 'package:cubit_form/cubit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -11,7 +13,6 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
-import 'package:selfprivacy/utils/password_generator.dart';
 
 part 'fab.dart';
 part 'new_user.dart';

@@ -7,7 +7,7 @@ import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/domain_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/hetzner_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/initializing/user_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -217,9 +217,9 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepUser(AppConfigCubit initializingCubit) {
     return BlocProvider(
-      create: (context) => UserFormCubit(initializingCubit),
+      create: (context) => RootUserFormCubit(initializingCubit),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<UserFormCubit>();
+        var formCubit = context.watch<RootUserFormCubit>();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

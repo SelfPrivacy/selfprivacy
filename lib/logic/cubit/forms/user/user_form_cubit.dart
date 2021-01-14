@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/utils/password_generator.dart';
 
-class CloudFlareFormCubit extends FormCubit {
-  CloudFlareFormCubit({
-    this.userCubit,
+class UserFormCubit extends FormCubit {
+  UserFormCubit({
+    this.usersCubit,
     User user,
   }) {
     var isEdit = user != null;
@@ -24,7 +25,7 @@ class CloudFlareFormCubit extends FormCubit {
     );
 
     password = FieldCubit(
-      initalValue: isEdit ? user.password : '',
+      initalValue: isEdit ? user.password : genPass(),
       validations: [
         RequiredStringValidation('required'),
         ValidationModel<String>(
@@ -41,11 +42,15 @@ class CloudFlareFormCubit extends FormCubit {
       login: login.state.value,
       password: password.state.value,
     );
-    userCubit.add(user);
+    usersCubit.add(user);
   }
 
   FieldCubit<String> login;
   FieldCubit<String> password;
 
-  UsersCubit userCubit;
+  void genNewPassword() {
+    password.externalSetValue(genPass());
+  }
+
+  UsersCubit usersCubit;
 }

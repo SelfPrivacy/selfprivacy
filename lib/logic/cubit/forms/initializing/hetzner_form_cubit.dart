@@ -9,7 +9,7 @@ class HetznerFormCubit extends FormCubit {
   HetznerApi apiClient = HetznerApi();
 
   HetznerFormCubit(this.initializingCubit) {
-    var regExp = RegExp(r"\s+|[-!$%^&*()_@+|~=`{}\[\]:<>?,.\/]");
+    var regExp = RegExp(r"\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]");
     apiKey = FieldCubit(
       initalValue: '',
       validations: [

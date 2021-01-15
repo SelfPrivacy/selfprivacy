@@ -49,7 +49,7 @@ class HetznerApi extends ApiMap {
       "volumes": [],
       "networks": [],
       'user-data':
-          '#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-20.09 DOMAIN=$domainName USER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword} bash 2>&1 | tee /tmp/infect.log'
+          '#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-20.09 DOMAIN=$domainName USER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword} bash 2>&1 | tee /tmp/infect.log'
     };
     Response response = await loggedClient.post(
       rootAddress,

@@ -9,7 +9,7 @@ class CloudFlareFormCubit extends FormCubit {
   CloudflareApi apiClient = CloudflareApi();
 
   CloudFlareFormCubit(this.initializingCubit) {
-    var regExp = RegExp(r"\s+|[!$%^&*()_@+|~=`{}\[\]:<>?,.\/]");
+    var regExp = RegExp(r"\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]");
     apiKey = FieldCubit(
       initalValue: '',
       validations: [

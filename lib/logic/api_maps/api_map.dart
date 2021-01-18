@@ -36,7 +36,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     addMessage(
       Message(
         text:
-            'response-uri: ${response.request.uri}\ncode: ${response.statusCode}\ndata: ${response.data.toString()}\n',
+            'response-uri: ${response.request.uri}\ncode: ${response.statusCode}\ndata: ${response.toString()}\n',
       ),
     );
     return super.onResponse(response);
@@ -44,6 +44,14 @@ class ConsoleInterceptor extends InterceptorsWrapper {
 
   @override
   Future onError(DioError err) async {
+    var response = err.response;
+
+    addMessage(
+      Message.warn(
+        text:
+            'response-uri: ${response?.request?.uri}\ncode: ${response?.statusCode}\ndata: ${response?.toString()}\n',
+      ),
+    );
     return super.onError(err);
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/get_it/console.dart';
+import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 
@@ -54,21 +56,27 @@ class _ConsoleState extends State<Console> {
                 children: [
                   SizedBox(height: 20),
                   ...UnmodifiableListView(messages
-                      .map((message) => Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: RichText(
-                              text: TextSpan(
-                                style: DefaultTextStyle.of(context).style,
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '${message.timeString}: ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(text: message.text),
-                                ],
-                              ),
+                      .map((message) {
+                        var isError = message.type == MessageType.warning;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: RichText(
+                            text: TextSpan(
+                              style: DefaultTextStyle.of(context).style,
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text:
+                                        '${message.timeString}${isError ? '(Error)' : ''}: \n',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            isError ? BrandColors.red1 : null)),
+                                TextSpan(text: message.text),
+                              ],
                             ),
-                          ))
+                          ),
+                        );
+                      })
                       .toList()
                       .reversed),
                 ],

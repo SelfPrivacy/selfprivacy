@@ -36,7 +36,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     addMessage(
       Message(
         text:
-            'response-uri: ${response.request.uri}\ncode: ${response.statusCode}\ndata: ${response.data}\n',
+            'response-uri: ${response.request.uri}\ncode: ${response.statusCode}\ndata: ${response.data.toString}\n',
       ),
     );
     return super.onResponse(response);

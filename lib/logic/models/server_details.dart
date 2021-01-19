@@ -8,7 +8,8 @@ class HetznerServerDetails {
   HetznerServerDetails({
     @required this.ip4,
     @required this.id,
-    @required this.startTime,
+    @required this.createTime,
+    this.startTime,
   });
 
   @HiveField(0)
@@ -19,6 +20,18 @@ class HetznerServerDetails {
 
   @HiveField(2)
   final DateTime startTime;
+
+  @HiveField(3)
+  final DateTime createTime;
+
+  HetznerServerDetails copyWith({DateTime startTime}) {
+    return HetznerServerDetails(
+      startTime: startTime ?? this.startTime,
+      createTime: createTime,
+      id: id,
+      ip4: ip4,
+    );
+  }
 
   String toString() => id.toString();
 }

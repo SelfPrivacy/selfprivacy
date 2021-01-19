@@ -287,33 +287,27 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
     var state = appConfigCubit.state;
-    var error = state.error;
     return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Spacer(flex: 2),
-          BrandText.h2(error == null ? 'Создание началось' : 'Error'),
           SizedBox(height: 10),
-          error == null
-              ? BrandText.body2(
-                  'Мы начали процесс инциализации сервера, через 10 минут, мы проверим правильность DNS записей, и закончим инциализацию',
-                )
-              : BrandText.body2(
-                  error.toString(),
-                  style: TextStyle(color: BrandColors.red1),
-                ),
+          BrandText.body2(
+            'Мы начали процесс инциализации сервера, раз в минуты мы будем проверять наличие DNS записей, как только они вступят в силу мы закончим инциализацию',
+          ),
           SizedBox(height: 10),
           Row(
             children: [
-              BrandText.body2('Времени прошло: '),
+              BrandText.body2('До следующей проверки: '),
               BrandTimer(
-                startDateTime: state.server.startTime,
-                duration: Duration(minutes: 10),
+                startDateTime:
+                    state.lastDnsCheckTime ?? state.server.createTime,
+                duration: Duration(seconds: 10),
                 callback: () {
                   appConfigCubit.checkDns();
                 },
-              ),
+              )
             ],
           ),
           Spacer(

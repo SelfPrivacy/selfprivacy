@@ -6,6 +6,8 @@ import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
+import 'package:wakelock/wakelock.dart';
+
 import 'config/bloc_config.dart';
 import 'config/bloc_observer.dart';
 import 'config/brand_theme.dart';
@@ -18,6 +20,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   await HiveConfig.init();
   Bloc.observer = SimpleBlocObserver(navigatorKey: navigatorKey);
+  Wakelock.enable();
   getItSetup();
   WidgetsFlutterBinding.ensureInitialized();
 

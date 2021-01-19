@@ -7,9 +7,10 @@ class AppConfigState extends Equatable {
     this.cloudFlareDomain,
     this.rootUser,
     this.server,
-    this.isDnsCheckedAndDkimSet = false,
+    this.isDnsChecked = false,
     this.isLoading = false,
     this.error,
+    this.lastDnsCheckTime,
   });
 
   @override
@@ -19,9 +20,10 @@ class AppConfigState extends Equatable {
         cloudFlareDomain,
         rootUser,
         server,
-        isDnsCheckedAndDkimSet,
+        isDnsChecked,
         isLoading,
-        error
+        error,
+        lastDnsCheckTime
       ];
 
   final String hetznerKey;
@@ -29,7 +31,8 @@ class AppConfigState extends Equatable {
   final CloudFlareDomain cloudFlareDomain;
   final User rootUser;
   final HetznerServerDetails server;
-  final bool isDnsCheckedAndDkimSet;
+  final bool isDnsChecked;
+  final DateTime lastDnsCheckTime;
 
   final bool isLoading;
   final Exception error;
@@ -40,10 +43,10 @@ class AppConfigState extends Equatable {
     CloudFlareDomain domain,
     User rootUser,
     HetznerServerDetails hetznerServer,
-    bool isDnsCheckedAndDkimSet,
+    bool serverStarted,
     bool isLoading,
-    DateTime serverInitStart,
     Exception error,
+    DateTime lastDnsCheckTime,
   }) =>
       AppConfigState(
         hetznerKey: hetznerKey ?? this.hetznerKey,
@@ -51,10 +54,10 @@ class AppConfigState extends Equatable {
         cloudFlareDomain: domain ?? this.cloudFlareDomain,
         rootUser: rootUser ?? this.rootUser,
         server: hetznerServer ?? this.server,
-        isDnsCheckedAndDkimSet:
-            isDnsCheckedAndDkimSet ?? this.isDnsCheckedAndDkimSet,
+        isDnsChecked: serverStarted ?? this.isDnsChecked,
         isLoading: isLoading ?? this.isLoading,
         error: error ?? this.error,
+        lastDnsCheckTime: lastDnsCheckTime ?? this.lastDnsCheckTime,
       );
 
   bool get isHetznerFilled => hetznerKey != null;
@@ -73,7 +76,7 @@ class AppConfigState extends Equatable {
         isDomainFilled,
         isUserFilled,
         isServerFilled,
-        isDnsCheckedAndDkimSet,
+        isDnsChecked,
       ];
 }
 

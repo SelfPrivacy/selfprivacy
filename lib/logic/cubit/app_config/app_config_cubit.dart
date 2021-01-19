@@ -11,6 +11,7 @@ import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 import 'package:basic_utils/basic_utils.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 
 part 'app_config_state.dart';
 
@@ -27,7 +28,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         domain: box.get(BNames.domain),
         rootUser: box.get(BNames.rootUser),
         hetznerServer: box.get(BNames.hetznerServer),
-        isDnsCheckedAndDkimSet: box.get(BNames.isDnsCheckedAndDkimSet),
+        serverStarted: box.get(BNames.isDnsCheckedAndDkimSet),
       ),
     );
   }
@@ -77,13 +78,13 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       getIt.get<ConsoleModel>().addMessage(
             Message(
               text:
-                  'DnsLookup: address:$address, $RRecordType, provider: CLOUDFLARE',
+                  'DnsLookup: address: $address, $RRecordType, provider: CLOUDFLARE, ip4: $ip4',
             ),
           );
       getIt.get<ConsoleModel>().addMessage(
             Message(
               text:
-                  'DnsLookup: address:$address, $RRecordType, provider: CLOUDFLARE',
+                  'DnsLookup: ${res.isEmpty ? (res[0].data != ip4 ? 'wrong ip4' : 'right ip4') : 'empty'}',
             ),
           );
       if (res.isEmpty || res[0].data != ip4) {
@@ -92,10 +93,26 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       }
     }
     if (hasError) {
-      emit(state.copyWith(error: Exception('dns cloudflare checking error')));
+      emit(state.copyWith(lastDnsCheckTime: DateTime.now()));
     } else {
-      print('check complete');
+      var hetznerApi = HetznerApi(state.hetznerKey);
+
+      var serverDetails = await hetznerApi.startServer(server: state.server);
+
+      await box.put(BNames.hetznerServer, serverDetails);
+
+      hetznerApi.close();
+
+      emit(
+        state.copyWith(
+          serverStarted: true,
+          isLoading: false,
+          hetznerServer: serverDetails,
+        ),
+      );
     }
+
+    print('check complete: $hasError, time:' + DateTime.now().toString());
   }
 
   void createServer() async {

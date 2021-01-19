@@ -26,6 +26,11 @@ class _BrandTimerState extends State<BrandTimer> {
 
   @override
   void initState() {
+    _timerStart();
+    super.initState();
+  }
+
+  _timerStart() {
     _timeString = diffenceFromStart;
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       var timePassed = DateTime.now().difference(widget.startDateTime);
@@ -36,7 +41,15 @@ class _BrandTimerState extends State<BrandTimer> {
         _getTime();
       }
     });
-    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(BrandTimer oldWidget) {
+    if (timer.isActive) {
+      timer.cancel();
+    }
+    _timerStart();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -60,10 +73,9 @@ class _BrandTimerState extends State<BrandTimer> {
 
   String _durationToString(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    String twoDigitSeconds = twoDigits(60 - duration.inSeconds.remainder(60));
 
-    return "$twoDigitMinutes:$twoDigitSeconds";
+    return "$twoDigitSeconds cек";
   }
 
   @override

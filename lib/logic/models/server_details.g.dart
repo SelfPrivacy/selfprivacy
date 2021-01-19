@@ -19,6 +19,7 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
     return HetznerServerDetails(
       ip4: fields[0] as String,
       id: fields[1] as int,
+      createTime: fields[3] as DateTime,
       startTime: fields[2] as DateTime,
     );
   }
@@ -26,13 +27,15 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
   @override
   void write(BinaryWriter writer, HetznerServerDetails obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.ip4)
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
-      ..write(obj.startTime);
+      ..write(obj.startTime)
+      ..writeByte(3)
+      ..write(obj.createTime);
   }
 
   @override

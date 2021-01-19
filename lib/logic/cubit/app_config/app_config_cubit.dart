@@ -11,7 +11,6 @@ import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 import 'package:basic_utils/basic_utils.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 
 part 'app_config_state.dart';
 

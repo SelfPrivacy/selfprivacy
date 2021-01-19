@@ -302,7 +302,7 @@ class InitializingPage extends StatelessWidget {
               BrandTimer(
                 startDateTime:
                     state.lastDnsCheckTime ?? state.server.createTime,
-                duration: Duration(seconds: 10),
+                duration: Duration(minutes: 1),
                 callback: () {
                   appConfigCubit.checkDns();
                 },

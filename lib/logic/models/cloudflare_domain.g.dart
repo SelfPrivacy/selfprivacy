@@ -17,7 +17,7 @@ class CloudFlareDomainAdapter extends TypeAdapter<CloudFlareDomain> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CloudFlareDomain(
-      name: fields[0] as String,
+      domainName: fields[0] as String,
       zoneId: fields[1] as String,
     );
   }
@@ -27,7 +27,7 @@ class CloudFlareDomainAdapter extends TypeAdapter<CloudFlareDomain> {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.domainName)
       ..writeByte(1)
       ..write(obj.zoneId);
   }

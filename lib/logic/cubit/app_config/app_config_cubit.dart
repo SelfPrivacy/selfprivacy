@@ -1,153 +1,97 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/logic/api_maps/cloud_flare.dart';
-import 'package:selfprivacy/logic/api_maps/hetzner.dart';
-import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
-import 'package:selfprivacy/logic/models/message.dart';
+
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
-import 'package:basic_utils/basic_utils.dart';
+
+import 'app_config_repository.dart';
 
 part 'app_config_state.dart';
 
 class AppConfigCubit extends Cubit<AppConfigState> {
   AppConfigCubit() : super(InitialAppConfigState());
 
-  Box box = Hive.box(BNames.appConfig);
+  final repository = AppConfigRepository();
 
   void load() {
-    emit(
-      state.copyWith(
-        hetznerKey: box.get(BNames.hetznerKey),
-        cloudFlareKey: box.get(BNames.cloudFlareKey),
-        domain: box.get(BNames.domain),
-        rootUser: box.get(BNames.rootUser),
-        hetznerServer: box.get(BNames.hetznerServer),
-        serverStarted: box.get(BNames.isDnsCheckedAndDkimSet),
-      ),
-    );
+    var state = repository.load();
+    emit(state);
   }
 
   void reset() {
-    box.clear();
+    repository.reset();
     emit(InitialAppConfigState());
   }
 
-  void setHetznerKey(String key) {
-    box.put(BNames.hetznerKey, key);
-    emit(state.copyWith(hetznerKey: key));
+  void setHetznerKey(String hetznerKey) {
+    repository.saveHetznerKey(hetznerKey);
+    emit(state.copyWith(hetznerKey: hetznerKey));
   }
 
   void setCloudFlare(String cloudFlareKey) {
-    box.put(BNames.cloudFlareKey, cloudFlareKey);
+    repository.saveCloudFlare(cloudFlareKey);
     emit(state.copyWith(cloudFlareKey: cloudFlareKey));
   }
 
-  void setDomain(CloudFlareDomain domain) {
-    box.put(BNames.domain, domain);
-    emit(state.copyWith(domain: domain));
+  void setDomain(CloudFlareDomain cloudFlareDomain) {
+    repository.saveDomain(cloudFlareDomain);
+    emit(state.copyWith(cloudFlareDomain: cloudFlareDomain));
   }
 
   void setRootUser(User rootUser) {
-    box.put(BNames.rootUser, rootUser);
+    repository.saveRootUser(rootUser);
     emit(state.copyWith(rootUser: rootUser));
   }
 
   Future<void> checkDns() async {
-    var ip4 = state.server.ip4;
-    var domainName = state.cloudFlareDomain.name;
-    var addresses = <String>[
-      '$domainName',
-      'api.$domainName',
-      'cloud.$domainName',
-      'meet.$domainName',
-      'password.$domainName'
-    ];
-    var hasError = false;
-    for (var address in addresses) {
-      var res = await DnsUtils.lookupRecord(
-        address,
-        RRecordType.A,
-        provider: DnsApiProvider.CLOUDFLARE,
+    var ip4 = state.hetznerServer.ip4;
+    var domainName = state.cloudFlareDomain.domainName;
+
+    var isMatch = await repository.isDnsAddressesMatch(domainName, ip4);
+
+    if (isMatch) {
+      var server = await repository.startServer(
+        state.hetznerKey,
+        state.hetznerServer,
       );
-      getIt.get<ConsoleModel>().addMessage(
-            Message(
-              text:
-                  'DnsLookup: address: $address, $RRecordType, provider: CLOUDFLARE, ip4: $ip4',
-            ),
-          );
-      getIt.get<ConsoleModel>().addMessage(
-            Message(
-              text:
-                  'DnsLookup: ${res.isEmpty ? (res[0].data != ip4 ? 'wrong ip4' : 'right ip4') : 'empty'}',
-            ),
-          );
-      if (res.isEmpty || res[0].data != ip4) {
-        hasError = true;
-        break;
-      }
-    }
-    if (hasError) {
-      emit(state.copyWith(lastDnsCheckTime: DateTime.now()));
-    } else {
-      var hetznerApi = HetznerApi(state.hetznerKey);
-
-      var serverDetails = await hetznerApi.startServer(server: state.server);
-
-      await box.put(BNames.hetznerServer, serverDetails);
-
-      hetznerApi.close();
-
+      repository.saveServerDetails(server);
       emit(
         state.copyWith(
-          serverStarted: true,
+          isDnsCheckedAndServerStarted: true,
           isLoading: false,
-          hetznerServer: serverDetails,
+          hetznerServer: server,
         ),
       );
+    } else {
+      emit(state.copyWith(lastDnsCheckTime: DateTime.now()));
     }
-
-    print('check complete: $hasError, time:' + DateTime.now().toString());
   }
 
   void createServer() async {
     emit(state.copyWith(isLoading: true));
-    var hetznerApi = HetznerApi(state.hetznerKey);
-    var cloudflareApi = CloudflareApi(state.cloudFlareKey);
-
-    HetznerServerDetails serverDetails;
 
     try {
-      serverDetails = await hetznerApi.createServer(
-        rootUser: state.rootUser,
-        domainName: state.cloudFlareDomain.name,
+      var serverDetails = await repository.createServer(
+        state.hetznerKey,
+        state.rootUser,
+        state.cloudFlareDomain.domainName,
       );
+
+      await repository.createDnsRecords(
+        state.cloudFlareKey,
+        serverDetails.ip4,
+        state.cloudFlareDomain,
+      );
+
+      emit(state.copyWith(
+        isLoading: false,
+        hetznerServer: serverDetails,
+      ));
     } catch (e) {
       addError(e);
+
+      emit(state.copyWith(isLoading: false));
     }
-
-    try {
-      cloudflareApi
-          .createMultipleDnsRecords(
-            ip4: serverDetails.ip4,
-            cloudFlareDomain: state.cloudFlareDomain,
-          )
-          .then((_) => cloudflareApi.close());
-    } catch (e) {
-      addError(e);
-    }
-
-    await box.put(BNames.hetznerServer, serverDetails);
-
-    hetznerApi.close();
-
-    emit(state.copyWith(
-      isLoading: false,
-      hetznerServer: serverDetails,
-    ));
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/api_maps/cloud_flare.dart';
+import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 

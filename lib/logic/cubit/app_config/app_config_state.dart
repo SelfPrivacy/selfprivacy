@@ -6,11 +6,12 @@ class AppConfigState extends Equatable {
     this.cloudFlareKey,
     this.cloudFlareDomain,
     this.rootUser,
-    this.server,
-    this.isDnsChecked = false,
+    this.hetznerServer,
+    this.isDnsCheckedAndServerStarted = false,
     this.isLoading = false,
     this.error,
     this.lastDnsCheckTime,
+    this.isDkimSetted = false,
   });
 
   @override
@@ -19,19 +20,21 @@ class AppConfigState extends Equatable {
         cloudFlareKey,
         cloudFlareDomain,
         rootUser,
-        server,
-        isDnsChecked,
+        hetznerServer,
+        isDnsCheckedAndServerStarted,
         isLoading,
         error,
-        lastDnsCheckTime
+        lastDnsCheckTime,
+        isDkimSetted,
       ];
 
   final String hetznerKey;
   final String cloudFlareKey;
   final CloudFlareDomain cloudFlareDomain;
   final User rootUser;
-  final HetznerServerDetails server;
-  final bool isDnsChecked;
+  final HetznerServerDetails hetznerServer;
+  final bool isDnsCheckedAndServerStarted;
+  final bool isDkimSetted;
   final DateTime lastDnsCheckTime;
 
   final bool isLoading;
@@ -40,31 +43,35 @@ class AppConfigState extends Equatable {
   AppConfigState copyWith({
     String hetznerKey,
     String cloudFlareKey,
-    CloudFlareDomain domain,
+    CloudFlareDomain cloudFlareDomain,
     User rootUser,
     HetznerServerDetails hetznerServer,
-    bool serverStarted,
+    bool isDnsCheckedAndServerStarted,
     bool isLoading,
     Exception error,
     DateTime lastDnsCheckTime,
+    bool isDkimSetted,
   }) =>
       AppConfigState(
         hetznerKey: hetznerKey ?? this.hetznerKey,
         cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
-        cloudFlareDomain: domain ?? this.cloudFlareDomain,
+        cloudFlareDomain: cloudFlareDomain ?? this.cloudFlareDomain,
         rootUser: rootUser ?? this.rootUser,
-        server: hetznerServer ?? this.server,
-        isDnsChecked: serverStarted ?? this.isDnsChecked,
+        hetznerServer: hetznerServer ?? this.hetznerServer,
+        isDnsCheckedAndServerStarted:
+            isDnsCheckedAndServerStarted ?? this.isDnsCheckedAndServerStarted,
         isLoading: isLoading ?? this.isLoading,
         error: error ?? this.error,
         lastDnsCheckTime: lastDnsCheckTime ?? this.lastDnsCheckTime,
+        isDkimSetted: isDkimSetted,
       );
 
   bool get isHetznerFilled => hetznerKey != null;
   bool get isCloudFlareFilled => cloudFlareKey != null;
   bool get isDomainFilled => cloudFlareDomain != null;
   bool get isUserFilled => rootUser != null;
-  bool get isServerFilled => server != null;
+  bool get isServerFilled => hetznerServer != null;
+  bool get hasFinalChecked => isDnsCheckedAndServerStarted && isDkimSetted;
 
   bool get isFullyInitilized => _fulfilementList.every((el) => el);
 
@@ -76,7 +83,7 @@ class AppConfigState extends Equatable {
         isDomainFilled,
         isUserFilled,
         isServerFilled,
-        isDnsChecked,
+        hasFinalChecked,
       ];
 }
 

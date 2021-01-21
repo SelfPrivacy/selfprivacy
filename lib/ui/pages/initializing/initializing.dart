@@ -181,7 +181,6 @@ class InitializingPage extends StatelessWidget {
       create: (context) => DomainFormCubit(initializingCubit),
       child: Builder(builder: (context) {
         var formCubit = context.watch<DomainFormCubit>();
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -286,6 +285,7 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
     var state = appConfigCubit.state;
+    var isDnsChecked = appConfigCubit.state.isDnsCheckedAndServerStarted;
     return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,20 +293,31 @@ class InitializingPage extends StatelessWidget {
           Spacer(flex: 2),
           SizedBox(height: 10),
           BrandText.body2(
-            'Мы начали процесс инциализации сервера, раз в минуты мы будем проверять наличие DNS записей, как только они вступят в силу мы закончим инциализацию',
+            isDnsChecked
+                ? 'Dns сервера вступили в силу, мы стартанули сервер, как только он поднимиться, мы закончим инициализацию.'
+                : 'Мы начали процесс инциализации сервера, раз в минуты мы будем проверять наличие DNS записей, как только они вступят в силу мы продолжим инциализацию',
           ),
           SizedBox(height: 10),
           Row(
             children: [
               BrandText.body2('До следующей проверки: '),
-              BrandTimer(
-                startDateTime:
-                    state.lastDnsCheckTime ?? state.server.createTime,
-                duration: Duration(minutes: 1),
-                callback: () {
-                  appConfigCubit.checkDns();
-                },
-              )
+              isDnsChecked
+                  ? BrandTimer(
+                      startDateTime:
+                          state.lastDnsCheckTime ?? state.hetznerServer.createTime,
+                      duration: Duration(minutes: 1),
+                      callback: () {
+                        appConfigCubit.checkDns();
+                      },
+                    )
+                  : BrandTimer(
+                      startDateTime:
+                          state.lastDnsCheckTime ?? state.hetznerServer.createTime,
+                      duration: Duration(minutes: 1),
+                      callback: () {
+                        appConfigCubit.checkDns();
+                      },
+                    )
             ],
           ),
           Spacer(

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/api_maps/cloud_flare.dart';
+import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 
@@ -16,7 +16,9 @@ class DomainFormCubit extends FormCubit {
       validations: [
         RequiredStringValidation('required'),
         ValidationModel<String>(
-            (s) => !regExp.hasMatch(s), 'invalid domain format'),
+          (s) => !regExp.hasMatch(s),
+          'invalid domain format',
+        ),
       ],
     );
 
@@ -26,7 +28,7 @@ class DomainFormCubit extends FormCubit {
   @override
   FutureOr<void> onSubmit() async {
     var domain = CloudFlareDomain(
-      name: domainName.state.value,
+      domainName: domainName.state.value,
       zoneId: zoneId,
     );
     initializingCubit.setDomain(domain);

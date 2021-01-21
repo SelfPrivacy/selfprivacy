@@ -61,7 +61,7 @@ class CloudflareApi extends ApiMap {
     String ip4,
     CloudFlareDomain cloudFlareDomain,
   }) async {
-    var domainName = cloudFlareDomain.name;
+    var domainName = cloudFlareDomain.domainName;
     var domainZoneId = cloudFlareDomain.zoneId;
 
     var domainA = DnsRecords(type: 'A', name: domainName, content: ip4);
@@ -82,7 +82,7 @@ class CloudflareApi extends ApiMap {
 
     var txt2 = DnsRecords(
       type: 'TXT',
-      name: cloudFlareDomain.name,
+      name: cloudFlareDomain.domainName,
       content: 'v=spf1 a mx ip4:$ip4 -all',
       ttl: 18000,
     );

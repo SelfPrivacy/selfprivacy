@@ -43,11 +43,11 @@ class BNames {
 
   static String key = 'key';
 
-  static String domain = 'domain';
+  static String cloudFlareDomain = 'cloudFlareDomain';
   static String hetznerKey = 'hetznerKey';
   static String cloudFlareKey = 'cloudFlareKey';
   static String rootUser = 'rootUser';
   static String hetznerServer = 'server';
-  static String isDnsCheckedAndDkimSet = 'isDnsCheckedAndDkimSet';
+  static String isDnsChecked = 'isDnsChecked';
   static String serverInitStart = 'serverInitStart';
 }

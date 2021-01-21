@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
+import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
@@ -21,7 +22,9 @@ class AppConfigRepository {
       cloudFlareDomain: box.get(BNames.cloudFlareDomain),
       rootUser: box.get(BNames.rootUser),
       hetznerServer: box.get(BNames.hetznerServer),
-      isDnsCheckedAndServerStarted: box.get(BNames.isDnsChecked),
+      isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
+      isDnsChecked: box.get(BNames.isDnsChecked, defaultValue: false),
+      isDkimSetted: box.get(BNames.isDkimSetted, defaultValue: false),
     );
   }
 
@@ -52,6 +55,7 @@ class AppConfigRepository {
     var hetznerApi = HetznerApi(hetznerKey);
     var serverDetails = await hetznerApi.startServer(server: hetznerServer);
     hetznerApi.close();
+    box.put(BNames.isServerStarted, true);
 
     return serverDetails;
   }
@@ -92,6 +96,8 @@ class AppConfigRepository {
       }
     }
 
+    box.put(BNames.isDnsChecked, true);
+
     return true;
   }
 
@@ -117,14 +123,36 @@ class AppConfigRepository {
     String ip4,
     CloudFlareDomain cloudFlareDomain,
   ) async {
-
     var cloudflareApi = CloudflareApi(cloudFlareKey);
 
     await cloudflareApi.createMultipleDnsRecords(
       ip4: ip4,
       cloudFlareDomain: cloudFlareDomain,
     );
-    
+
+    cloudflareApi.close();
+  }
+
+  Future<bool> isHttpServerWorking(String domainName) async {
+    var api = ServerApi(domainName);
+    var isHttpServerWorking = await api.isHttpServerWorking();
+    print('isHttpServerWorking: $isHttpServerWorking');
+    api.close();
+    return isHttpServerWorking;
+  }
+
+  Future<void> setDkim(
+    String domainName,
+    String cloudFlareKey,
+    String zoneId,
+  ) async {
+    var api = ServerApi(domainName);
+    var dkimRecordString = await api.getDkim(domainName);
+    var cloudflareApi = CloudflareApi(cloudFlareKey);
+
+    await cloudflareApi.setDkim(dkimRecordString, zoneId);
+    box.put(BNames.isDkimSetted, true);
+
     cloudflareApi.close();
   }
 }

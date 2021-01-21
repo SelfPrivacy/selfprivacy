@@ -25,7 +25,7 @@ class CloudFlareFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    initializingCubit.setCloudFlare(apiKey.state.value);
+    initializingCubit.setCloudflareKey(apiKey.state.value);
   }
 
   final AppConfigCubit initializingCubit;

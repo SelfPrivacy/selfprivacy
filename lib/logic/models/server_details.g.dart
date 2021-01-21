@@ -19,8 +19,8 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
     return HetznerServerDetails(
       ip4: fields[0] as String,
       id: fields[1] as int,
-      createTime: fields[3] as DateTime,
       startTime: fields[2] as DateTime,
+      createTime: fields[3] as DateTime,
     );
   }
 

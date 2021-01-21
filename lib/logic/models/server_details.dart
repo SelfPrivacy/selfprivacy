@@ -18,11 +18,11 @@ class HetznerServerDetails {
   @HiveField(1)
   final int id;
 
-  @HiveField(2)
-  final DateTime startTime;
-
   @HiveField(3)
   final DateTime createTime;
+
+  @HiveField(2)
+  final DateTime startTime;
 
   HetznerServerDetails copyWith({DateTime startTime}) {
     return HetznerServerDetails(

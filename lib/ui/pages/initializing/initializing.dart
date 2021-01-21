@@ -270,7 +270,8 @@ class InitializingPage extends StatelessWidget {
           BrandText.body2('Создать сервер'),
           Spacer(),
           BrandButton.rised(
-            onPressed: isLoading ? null : appConfigCubit.createServer,
+            onPressed:
+                isLoading ? null : appConfigCubit.createServerAndSetDnsRecords,
             title: isLoading ? 'loading' : 'Создать сервер',
           ),
           Spacer(flex: 2),
@@ -285,7 +286,7 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
     var state = appConfigCubit.state;
-    var isDnsChecked = appConfigCubit.state.isDnsCheckedAndServerStarted;
+    var isDnsChecked = state.isDnsCheckedAndServerStarted;
     return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,19 +304,19 @@ class InitializingPage extends StatelessWidget {
               BrandText.body2('До следующей проверки: '),
               isDnsChecked
                   ? BrandTimer(
-                      startDateTime:
-                          state.lastDnsCheckTime ?? state.hetznerServer.createTime,
+                      startDateTime: state.lastServerStatusCheckTime ??
+                          state.hetznerServer.startTime,
                       duration: Duration(minutes: 1),
                       callback: () {
-                        appConfigCubit.checkDns();
+                        appConfigCubit.setDkim();
                       },
                     )
                   : BrandTimer(
-                      startDateTime:
-                          state.lastDnsCheckTime ?? state.hetznerServer.createTime,
+                      startDateTime: state.lastDnsCheckTime ??
+                          state.hetznerServer.createTime,
                       duration: Duration(minutes: 1),
                       callback: () {
-                        appConfigCubit.checkDns();
+                        appConfigCubit.checkDnsAndStartServer();
                       },
                     )
             ],

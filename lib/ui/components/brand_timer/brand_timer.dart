@@ -73,7 +73,8 @@ class _BrandTimerState extends State<BrandTimer> {
 
   String _durationToString(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitSeconds = twoDigits(60 - duration.inSeconds.remainder(60));
+    String twoDigitSeconds =
+        twoDigits(widget.duration.inSeconds - duration.inSeconds.remainder(60));
 
     return "$twoDigitSeconds cек";
   }

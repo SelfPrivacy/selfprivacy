@@ -7,7 +7,8 @@ import 'package:selfprivacy/logic/models/dns_records.dart';
 class CloudflareApi extends ApiMap {
   CloudflareApi([String token]) {
     if (token != null) {
-      loggedClient.options = BaseOptions(headers: {'Authorization': 'Bearer $token'});
+      loggedClient.options =
+          BaseOptions(headers: {'Authorization': 'Bearer $token'});
     }
   }
 
@@ -116,12 +117,18 @@ class CloudflareApi extends ApiMap {
     await Future.wait(allFutures);
   }
 
-  // createSDKIM(String dkim) {
-  //   var txt3 = DnsRecords(
-  //     type: 'TXT',
-  //     name: 'selector._domainkey',
-  //     content: dkim,
-  //     ttl: 18000,
-  //   );
-  // }
+  setDkim(String dkimRecordString, String domainZoneId) {
+    var txt3 = DnsRecords(
+      type: 'TXT',
+      name: 'selector._domainkey',
+      content: dkimRecordString,
+      ttl: 18000,
+    );
+
+    var url = '$rootAddress/zones/$domainZoneId/dns_records';
+    loggedClient.post(
+      url,
+      data: txt3.toJson(),
+    );
+  }
 }

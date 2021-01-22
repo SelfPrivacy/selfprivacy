@@ -12,8 +12,8 @@ import 'app_config_repository.dart';
 
 part 'app_config_state.dart';
 
-/// initializeing steps:                        |setHetznerKey
-/// 1. Hetzner key                              |setCloudFlare
+/// initializeing steps:                        
+/// 1. Hetzner key                              |setHetznerKey
 /// 2. Cloudflare key                           |setCloudflareKey
 /// 3. Set Domain address                       |setDomain
 /// 4. Set Root user name password              |setRootUser
@@ -115,11 +115,11 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         state.cloudFlareDomain.domainName,
       );
 
-      // await repository.createDnsRecords(
-      //   state.cloudFlareKey,
-      //   serverDetails.ip4,
-      //   state.cloudFlareDomain,
-      // );
+      await repository.createDnsRecords(
+        state.cloudFlareKey,
+        serverDetails.ip4,
+        state.cloudFlareDomain,
+      );
 
       emit(state.copyWith(
         isLoading: false,

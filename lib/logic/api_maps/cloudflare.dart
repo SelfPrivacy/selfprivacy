@@ -58,57 +58,43 @@ class CloudflareApi extends ApiMap {
     }
   }
 
-  Future<void> createMultipleDnsRecords({
+  Future<void> removeSimilarRecords({
     String ip4,
     CloudFlareDomain cloudFlareDomain,
   }) async {
     var domainName = cloudFlareDomain.domainName;
     var domainZoneId = cloudFlareDomain.zoneId;
 
-    var domainA = DnsRecords(type: 'A', name: domainName, content: ip4);
-    var apiA = DnsRecords(type: 'A', name: 'api', content: ip4);
-    var cloudA = DnsRecords(type: 'A', name: 'cloud', content: ip4);
-    var gitA = DnsRecords(type: 'A', name: 'git', content: ip4);
-    var meetA = DnsRecords(type: 'A', name: 'meet', content: ip4);
-    var passwordA = DnsRecords(type: 'A', name: 'password', content: ip4);
-    var socialA = DnsRecords(type: 'A', name: 'social', content: ip4);
-    var mx = DnsRecords(type: 'MX', name: '@', content: domainName);
-    var vpn = DnsRecords(type: 'A', name: 'vpn', content: ip4);
+    var url = '$rootAddress/zones/$domainZoneId/dns_records';
 
-    var txt1 = DnsRecords(
-      type: 'TXT',
-      name: '_dmarc',
-      content: 'v=DMARC1; p=none',
-      ttl: 18000,
-    );
+    var response = await loggedClient.get(url);
+    List records = response.data['result'] ?? [];
+    var allDeleteFutures = <Future>[];
 
-    var txt2 = DnsRecords(
-      type: 'TXT',
-      name: cloudFlareDomain.domainName,
-      content: 'v=spf1 a mx ip4:$ip4 -all',
-      ttl: 18000,
-    );
+    for (var record in records) {
+      if (record['zone_name'] == domainName) {
+        allDeleteFutures.add(
+          loggedClient.delete('$url/${record["id"]}'),
+        );
+      }
+    }
+    await Future.wait(allDeleteFutures);
+  }
 
-    var listDnsRecords = <DnsRecords>[
-      domainA,
-      apiA,
-      cloudA,
-      gitA,
-      meetA,
-      passwordA,
-      socialA,
-      mx,
-      txt1,
-      txt2,
-      vpn
-    ];
+  Future<void> createMultipleDnsRecords({
+    String ip4,
+    CloudFlareDomain cloudFlareDomain,
+  }) async {
+    var domainName = cloudFlareDomain.domainName;
+    var domainZoneId = cloudFlareDomain.zoneId;
+    var listDnsRecords = projectDnsRecords(domainName, ip4);
 
-    var allFutures = <Future>[];
+    var url = '$rootAddress/zones/$domainZoneId/dns_records';
+
+    var allCreateFutures = <Future>[];
 
     for (var record in listDnsRecords) {
-      var url = '$rootAddress/zones/$domainZoneId/dns_records';
-
-      allFutures.add(
+      allCreateFutures.add(
         loggedClient.post(
           url,
           data: record.toJson(),
@@ -116,7 +102,7 @@ class CloudflareApi extends ApiMap {
       );
     }
 
-    await Future.wait(allFutures);
+    await Future.wait(allCreateFutures);
   }
 
   setDkim(String dkimRecordString, String domainZoneId) {
@@ -132,5 +118,46 @@ class CloudflareApi extends ApiMap {
       url,
       data: txt3.toJson(),
     );
+  }
+
+  List<DnsRecords> projectDnsRecords(String domainName, String ip4) {
+    var domainA = DnsRecords(type: 'A', name: domainName, content: ip4);
+
+    var mx = DnsRecords(type: 'MX', name: '@', content: domainName);
+    var apiA = DnsRecords(type: 'A', name: 'api', content: ip4);
+    var cloudA = DnsRecords(type: 'A', name: 'cloud', content: ip4);
+    var gitA = DnsRecords(type: 'A', name: 'git', content: ip4);
+    var meetA = DnsRecords(type: 'A', name: 'meet', content: ip4);
+    var passwordA = DnsRecords(type: 'A', name: 'password', content: ip4);
+    var socialA = DnsRecords(type: 'A', name: 'social', content: ip4);
+    var vpn = DnsRecords(type: 'A', name: 'vpn', content: ip4);
+
+    var txt1 = DnsRecords(
+      type: 'TXT',
+      name: '_dmarc',
+      content: 'v=DMARC1; p=none',
+      ttl: 18000,
+    );
+
+    var txt2 = DnsRecords(
+      type: 'TXT',
+      name: domainName,
+      content: 'v=spf1 a mx ip4:$ip4 -all',
+      ttl: 18000,
+    );
+
+    return <DnsRecords>[
+      domainA,
+      apiA,
+      cloudA,
+      gitA,
+      meetA,
+      passwordA,
+      socialA,
+      mx,
+      txt1,
+      txt2,
+      vpn
+    ];
   }
 }

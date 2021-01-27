@@ -1,6 +1,7 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
@@ -349,6 +350,8 @@ class _HowHetzner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isDark = Theme.of(context).brightness == Brightness.dark;
+
     return BrandModalSheet(
       child: Padding(
         padding: brandPagePadding2,
@@ -362,7 +365,9 @@ class _HowHetzner extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: '1 Переходим по ссылке ',
-                    style: body1Style,
+                    style: body1Style.copyWith(
+                      color: isDark ? BrandColors.white : BrandColors.black,
+                    ),
                   ),
                   BrandSpanButton.link(
                     text: 'hetzner.com/sdfsdfsdfsdf',
@@ -382,7 +387,9 @@ class _HowHetzner extends StatelessWidget {
 6 В поле Description, даём нашему токену название (это может быть любое название, которые вам нравиться. Сути оно не меняет.
 
                                   ''',
-                    style: body1Style,
+                    style: body1Style.copyWith(
+                      color: isDark ? BrandColors.white : BrandColors.black,
+                    ),
                   ),
                 ],
               ),

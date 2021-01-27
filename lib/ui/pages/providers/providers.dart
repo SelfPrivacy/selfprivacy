@@ -58,6 +58,10 @@ class _Card extends StatelessWidget {
     String title;
     String message;
     String stableText;
+    var appConfig = context.watch<AppConfigCubit>().state;
+
+    var domainName =
+        appConfig.isDomainFilled ? appConfig.cloudFlareDomain.domainName : '';
 
     switch (provider.type) {
       case ProviderType.server:
@@ -66,11 +70,11 @@ class _Card extends StatelessWidget {
         break;
       case ProviderType.domain:
         title = 'Домен';
-        message = 'example.com';
+        message = domainName;
         stableText = 'Домен настроен';
         break;
       case ProviderType.backup:
-        message = '22 янв 2021 14:30';
+        // message = '22 янв 2021 14:30';
         title = 'Резервное копирование';
         stableText = 'В норме';
         break;

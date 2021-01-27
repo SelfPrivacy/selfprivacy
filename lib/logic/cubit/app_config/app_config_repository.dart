@@ -65,6 +65,7 @@ class AppConfigRepository {
   }
 
   Future<bool> isDnsAddressesMatch(String domainName, String ip4) async {
+    print(domainName);
     var addresses = <String>[
       '$domainName',
       'api.$domainName',
@@ -88,10 +89,12 @@ class AppConfigRepository {
       getIt.get<ConsoleModel>().addMessage(
             Message(
               text:
-                  'DnsLookup: ${lookupRecordRes.isEmpty ? (lookupRecordRes[0].data != ip4 ? 'wrong ip4' : 'right ip4') : 'empty'}',
+                  'DnsLookup: ${lookupRecordRes == null ? 'empty' : (lookupRecordRes[0].data != ip4 ? 'wrong ip4' : 'right ip4')}',
             ),
           );
-      if (lookupRecordRes.isEmpty || lookupRecordRes[0].data != ip4) {
+      if (lookupRecordRes == null ||
+          lookupRecordRes.isEmpty ||
+          lookupRecordRes[0].data != ip4) {
         return false;
       }
     }
@@ -125,6 +128,11 @@ class AppConfigRepository {
   ) async {
     var cloudflareApi = CloudflareApi(cloudFlareKey);
 
+    await cloudflareApi.removeSimilarRecords(
+      ip4: ip4,
+      cloudFlareDomain: cloudFlareDomain,
+    );
+
     await cloudflareApi.createMultipleDnsRecords(
       ip4: ip4,
       cloudFlareDomain: cloudFlareDomain,
@@ -136,7 +144,6 @@ class AppConfigRepository {
   Future<bool> isHttpServerWorking(String domainName) async {
     var api = ServerApi(domainName);
     var isHttpServerWorking = await api.isHttpServerWorking();
-    print('isHttpServerWorking: $isHttpServerWorking');
     api.close();
     return isHttpServerWorking;
   }

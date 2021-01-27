@@ -63,7 +63,7 @@ class _Card extends StatelessWidget {
         iconData = BrandIcons.messanger;
         title = 'Мессенджер';
         description =
-            'Delta Chat срфеТекст-текст описание. Если бы мне надо было обсудить что-то от чего зависит жизнь. Я бы выбрал Delta.Chat + свой почтовый сервер.';
+            'Delta Chat. Если бы мне надо было обсудить что-то от чего зависит жизнь. Я бы выбрал Delta.Chat + свой почтовый сервер.';
         break;
       case ServiceTypes.mail:
         iconData = BrandIcons.envelope;

@@ -370,8 +370,8 @@ class _HowHetzner extends StatelessWidget {
                     ),
                   ),
                   BrandSpanButton.link(
-                    text: 'hetzner.com/sdfsdfsdfsdf',
-                    urlString: 'https://hetzner.com/sdfsdfsdfsdf',
+                    text: 'hetzner.com',
+                    urlString: 'https://hetzner.com',
                   ),
                   TextSpan(
                     text: '''

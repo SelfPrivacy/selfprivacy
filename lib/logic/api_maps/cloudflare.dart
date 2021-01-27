@@ -73,6 +73,7 @@ class CloudflareApi extends ApiMap {
     var passwordA = DnsRecords(type: 'A', name: 'password', content: ip4);
     var socialA = DnsRecords(type: 'A', name: 'social', content: ip4);
     var mx = DnsRecords(type: 'MX', name: '@', content: domainName);
+    var vpn = DnsRecords(type: 'A', name: 'vpn', content: ip4);
 
     var txt1 = DnsRecords(
       type: 'TXT',
@@ -98,7 +99,8 @@ class CloudflareApi extends ApiMap {
       socialA,
       mx,
       txt1,
-      txt2
+      txt2,
+      vpn
     ];
 
     var allFutures = <Future>[];

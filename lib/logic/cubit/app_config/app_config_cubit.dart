@@ -113,6 +113,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         state.hetznerKey,
         state.rootUser,
         state.cloudFlareDomain.domainName,
+        state.cloudFlareKey,
       );
 
       await repository.createDnsRecords(

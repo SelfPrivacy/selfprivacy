@@ -108,9 +108,11 @@ class AppConfigRepository {
     String hetznerKey,
     User rootUser,
     String domainName,
+    String cloudFlareKey
   ) async {
     var hetznerApi = HetznerApi(hetznerKey);
     var serverDetails = await hetznerApi.createServer(
+      cloudFlareKey: cloudFlareKey,
       rootUser: rootUser,
       domainName: domainName,
     );

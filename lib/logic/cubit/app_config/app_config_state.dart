@@ -4,7 +4,7 @@ class AppConfigState extends Equatable {
   const AppConfigState({
     this.hetznerKey,
     this.cloudFlareKey,
-    this.backblazeKey,
+    this.backblazeCredential,
     this.cloudFlareDomain,
     this.rootUser,
     this.hetznerServer,
@@ -21,7 +21,7 @@ class AppConfigState extends Equatable {
   List<Object> get props => [
         hetznerKey,
         cloudFlareKey,
-        backblazeKey,
+        backblazeCredential,
         cloudFlareDomain,
         rootUser,
         hetznerServer,
@@ -35,7 +35,7 @@ class AppConfigState extends Equatable {
 
   final String hetznerKey;
   final String cloudFlareKey;
-  final String backblazeKey;
+  final BackblazeCredential backblazeCredential;
   final CloudFlareDomain cloudFlareDomain;
   final User rootUser;
   final HetznerServerDetails hetznerServer;
@@ -50,7 +50,7 @@ class AppConfigState extends Equatable {
   AppConfigState copyWith({
     String hetznerKey,
     String cloudFlareKey,
-    String backblazeKey,
+    BackblazeCredential backblazeCredential,
     CloudFlareDomain cloudFlareDomain,
     User rootUser,
     HetznerServerDetails hetznerServer,
@@ -65,7 +65,7 @@ class AppConfigState extends Equatable {
       AppConfigState(
         hetznerKey: hetznerKey ?? this.hetznerKey,
         cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
-        backblazeKey: backblazeKey ?? this.backblazeKey,
+        backblazeCredential: backblazeCredential ?? this.backblazeCredential,
         cloudFlareDomain: cloudFlareDomain ?? this.cloudFlareDomain,
         rootUser: rootUser ?? this.rootUser,
         hetznerServer: hetznerServer ?? this.hetznerServer,
@@ -81,7 +81,7 @@ class AppConfigState extends Equatable {
 
   bool get isHetznerFilled => hetznerKey != null;
   bool get isCloudFlareFilled => cloudFlareKey != null;
-  bool get isBackblazeFilled => backblazeKey != null;
+  bool get isBackblazeFilled => backblazeCredential != null;
   bool get isDomainFilled => cloudFlareDomain != null;
   bool get isUserFilled => rootUser != null;
   bool get isServerFilled => hetznerServer != null;

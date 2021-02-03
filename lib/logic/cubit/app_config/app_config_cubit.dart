@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 
 import 'package:selfprivacy/logic/models/server_details.dart';
@@ -12,17 +13,23 @@ import 'app_config_repository.dart';
 
 part 'app_config_state.dart';
 
-/// initializeing steps:
+/// Initializing steps:
 /// 1. Hetzner key                              |setHetznerKey
 /// 2. Cloudflare key                           |setCloudflareKey
-/// 3. Set Domain address                       |setDomain
-/// 4. Set Root user name password              |setRootUser
-/// 5. Set Create server ans set DNS-Records    |createServerAndSetDnsRecords
+/// 3. Backblaze Id + Key                       |setBackblazeKey
+
+/// 4. Set Domain address                       |setDomain
+/// 5. Set Root user name password              |setRootUser
+/// 6. Set Create server ans set DNS-Records    |createServerAndSetDnsRecords
 ///    (without start)
-/// 6. ChecksAndSets:
-///   6.1 checkDnsAndStartServer                |checkDnsAndStartServer
-///   6.2 setDkim                               |setDkim
-///       (checkServer + getDkim + Set DKIM)
+/// 7. ChecksAndSets:
+///   7.1 checkDnsAndStartServer                |checkDnsAndStartServer
+///   7.2 setDkim                               |setDkim
+///       a. checkServer
+///       b. getDkim
+///       c. Set DKIM
+///       d. server restart                              
+
 
 class AppConfigCubit extends Cubit<AppConfigState> {
   AppConfigCubit() : super(InitialAppConfigState());
@@ -76,7 +83,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         state.cloudFlareKey,
         state.cloudFlareDomain.zoneId,
       );
-      var hetznerServerDetails = await repository.reset(
+
+      var hetznerServerDetails = await repository.restart(
         state.hetznerKey,
         state.hetznerServer,
       );
@@ -153,8 +161,12 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     }
   }
 
-  void setBackblazeKey(String backblazeKey) {
-    repository.saveBackblazeKey(backblazeKey);
-    emit(state.copyWith(backblazeKey: backblazeKey));
+  void setBackblazeKey(String keyId, String applicationKey) {
+    var backblazeCredential = BackblazeCredential(
+      keyId: keyId,
+      applicationKey: applicationKey,
+    );
+    repository.saveBackblazeKey(backblazeCredential);
+    emit(state.copyWith(backblazeCredential: backblazeCredential));
   }
 }

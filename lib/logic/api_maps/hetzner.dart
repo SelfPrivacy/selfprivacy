@@ -70,7 +70,7 @@ class HetznerApi extends ApiMap {
     );
   }
 
-  Future<HetznerServerDetails> reset({
+  Future<HetznerServerDetails> restart({
     HetznerServerDetails server,
   }) async {
     await loggedClient.post('/${server.id}/actions/poweron');

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
@@ -14,6 +15,7 @@ class HiveConfig {
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(HetznerServerDetailsAdapter());
     Hive.registerAdapter(CloudFlareDomainAdapter());
+    Hive.registerAdapter(BackblazeCredentialAdapter());
 
     await Hive.openBox(BNames.appSettings);
     var cipher = HiveAesCipher(await getEncriptedKey());

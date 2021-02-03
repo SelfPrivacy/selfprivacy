@@ -1,41 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'server_details.dart';
+part of 'backblaze_credential.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
+class BackblazeCredentialAdapter extends TypeAdapter<BackblazeCredential> {
   @override
-  final int typeId = 2;
+  final int typeId = 4;
 
   @override
-  HetznerServerDetails read(BinaryReader reader) {
+  BackblazeCredential read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return HetznerServerDetails(
-      ip4: fields[0] as String,
-      id: fields[1] as int,
-      createTime: fields[3] as DateTime,
-      startTime: fields[2] as DateTime,
+    return BackblazeCredential(
+      keyId: fields[0] as String,
+      applicationKey: fields[1] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, HetznerServerDetails obj) {
+  void write(BinaryWriter writer, BackblazeCredential obj) {
     writer
-      ..writeByte(4)
-      ..writeByte(0)
-      ..write(obj.ip4)
-      ..writeByte(1)
-      ..write(obj.id)
-      ..writeByte(3)
-      ..write(obj.createTime)
       ..writeByte(2)
-      ..write(obj.startTime);
+      ..writeByte(0)
+      ..write(obj.keyId)
+      ..writeByte(1)
+      ..write(obj.applicationKey);
   }
 
   @override
@@ -44,7 +38,7 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is HetznerServerDetailsAdapter &&
+      other is BackblazeCredentialAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

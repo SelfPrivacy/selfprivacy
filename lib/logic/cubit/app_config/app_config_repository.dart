@@ -3,6 +3,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
@@ -20,7 +21,7 @@ class AppConfigRepository {
       hetznerKey: box.get(BNames.hetznerKey),
       cloudFlareKey: box.get(BNames.cloudFlareKey),
       cloudFlareDomain: box.get(BNames.cloudFlareDomain),
-      backblazeKey: box.get(BNames.backblazeKey),
+      backblazeCredential: box.get(BNames.backblazeKey),
       rootUser: box.get(BNames.rootUser),
       hetznerServer: box.get(BNames.hetznerServer),
       isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
@@ -37,8 +38,8 @@ class AppConfigRepository {
     box.put(BNames.hetznerKey, key);
   }
 
-  void saveBackblazeKey(String key) {
-    box.put(BNames.backblazeKey, key);
+  void saveBackblazeKey(BackblazeCredential backblazeCredential) {
+    box.put(BNames.backblazeKey, backblazeCredential);
   }
 
   void saveCloudFlare(String key) {
@@ -166,11 +167,11 @@ class AppConfigRepository {
     cloudflareApi.close();
   }
 
-  Future<HetznerServerDetails> reset(
+  Future<HetznerServerDetails> restart(
     String hetznerKey,
     HetznerServerDetails server,
   ) async {
     var hetznerApi = HetznerApi(hetznerKey);
-    return await hetznerApi.reset(server: server);
+    return await hetznerApi.restart(server: server);
   }
 }

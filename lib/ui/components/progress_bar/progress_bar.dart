@@ -44,10 +44,23 @@ class _ProgressBarState extends State<ProgressBar> {
       } else {
         odd.add(step);
       }
-      i++;  
+      i++;
     }
-    even.add(Spacer());
-    odd.insert(0, Spacer());
+    // even.add(SizedBox(
+    //   width: 0,
+    // ));
+    odd
+      ..insert(
+        0,
+        SizedBox(
+          width: 50,
+        ),
+      )
+      ..add(
+        SizedBox(
+          width: 50,
+        ),
+      );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

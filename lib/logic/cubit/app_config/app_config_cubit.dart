@@ -12,7 +12,7 @@ import 'app_config_repository.dart';
 
 part 'app_config_state.dart';
 
-/// initializeing steps:                        
+/// initializeing steps:
 /// 1. Hetzner key                              |setHetznerKey
 /// 2. Cloudflare key                           |setCloudflareKey
 /// 3. Set Domain address                       |setDomain
@@ -34,8 +34,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     emit(state);
   }
 
-  void reset() {
-    repository.reset();
+  void clearAppConfig() {
+    repository.clearAppConfig();
     emit(InitialAppConfigState());
   }
 
@@ -76,7 +76,16 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         state.cloudFlareKey,
         state.cloudFlareDomain.zoneId,
       );
-      emit(state.copyWith(isDkimSetted: true));
+      var hetznerServerDetails = await repository.reset(
+        state.hetznerKey,
+        state.hetznerServer,
+      );
+      emit(
+        state.copyWith(
+          isDkimSetted: true,
+          hetznerServer: hetznerServerDetails,
+        ),
+      );
     };
 
     _tryOrAddError(state, callBack);
@@ -142,5 +151,10 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       addError(e);
       emit(state);
     }
+  }
+
+  void setBackblazeKey(String backblazeKey) {
+    repository.saveBackblazeKey(backblazeKey);
+    emit(state.copyWith(backblazeKey: backblazeKey));
   }
 }

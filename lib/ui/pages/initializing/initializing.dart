@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
+import 'package:selfprivacy/logic/cubit/forms/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/domain_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/hetzner_form_cubit.dart';
@@ -27,12 +28,13 @@ class InitializingPage extends StatelessWidget {
     var actualPage = [
       _stepHetzner(cubit),
       _stepCloudflare(cubit),
+      _stepBackblaze(cubit),
       _stepDomain(cubit),
       _stepUser(cubit),
       _stepServer(cubit),
       _stepCheck(cubit),
       Container(child: Text('Everythigng is initialized'))
-    ][cubit.state.progress];
+    ][2];
     return BlocListener<AppConfigCubit, AppConfigState>(
       listener: (context, state) {
         if (state.isFullyInitilized) {
@@ -46,12 +48,13 @@ class InitializingPage extends StatelessWidget {
               Padding(
                 padding: brandPagePadding1,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ProgressBar(
                       steps: [
                         'Hetzner',
                         'CloudFlare',
+                        'Backblaze',
                         'Domain',
                         'User',
                         'Server',
@@ -169,6 +172,55 @@ class InitializingPage extends StatelessWidget {
             SizedBox(height: 10),
             BrandButton.text(
               onPressed: () {},
+              title: 'Как получить API Token',
+            ),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget _stepBackblaze(AppConfigCubit initializingCubit) {
+    return BlocProvider(
+      create: (context) => BackblazeFormCubit(initializingCubit),
+      child: Builder(builder: (context) {
+        var formCubit = context.watch<BackblazeFormCubit>();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Spacer(),
+            Image.asset('assets/images/logos/backblaze.png'),
+            SizedBox(height: 10),
+            BrandText.h2('Подключите облачное хранилище Backblaze'),
+            SizedBox(height: 10),
+            BrandText.body2('Здесь будут храниться данные'),
+            Spacer(),
+            CubitFormTextField(
+              formFieldCubit: formCubit.keyId,
+              textAlign: TextAlign.center,
+              scrollPadding: EdgeInsets.only(bottom: 70),
+              decoration: InputDecoration(
+                hintText: 'KeyID',
+              ),
+            ),
+            Spacer(),
+            CubitFormTextField(
+              formFieldCubit: formCubit.applicationKey,
+              textAlign: TextAlign.center,
+              scrollPadding: EdgeInsets.only(bottom: 70),
+              decoration: InputDecoration(
+                hintText: 'Master Application Key',
+              ),
+            ),
+            Spacer(),
+            BrandButton.rised(
+              onPressed:
+                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
+              title: 'Подключить',
+            ),
+            SizedBox(height: 10),
+            BrandButton.text(
+              onPressed: () => _showModal(context, _HowHetzner()),
               title: 'Как получить API Token',
             ),
           ],
@@ -296,8 +348,8 @@ class InitializingPage extends StatelessWidget {
           SizedBox(height: 10),
           BrandText.body2(
             isDnsChecked
-                ? 'Dns сервера вступили в силу, мы стартанули сервер, как только он поднимиться, мы закончим инициализацию.'
-                : 'Мы начали процесс инциализации сервера, раз в минуты мы будем проверять наличие DNS записей, как только они вступят в силу мы продолжим инциализацию',
+                ? 'Dns сервера вступили в силу, мы стартанули сервер, как только он поднимется, мы закончим инициализацию.'
+                : 'Мы начали процесс инциализации сервера, раз в минуту мы будем проверять наличие DNS записей, как только они вступят в силу мы продолжим инциализацию',
           ),
           SizedBox(height: 10),
           Row(

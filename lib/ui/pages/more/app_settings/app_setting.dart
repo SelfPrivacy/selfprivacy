@@ -108,7 +108,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    context.read<AppConfigCubit>().reset();
+                                    context.read<AppConfigCubit>().clearAppConfig();
                                     Navigator.of(context)..pop()..pop();
                                   },
                                 ),

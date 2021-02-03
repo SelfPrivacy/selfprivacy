@@ -4,6 +4,7 @@ class AppConfigState extends Equatable {
   const AppConfigState({
     this.hetznerKey,
     this.cloudFlareKey,
+    this.backblazeKey,
     this.cloudFlareDomain,
     this.rootUser,
     this.hetznerServer,
@@ -20,6 +21,7 @@ class AppConfigState extends Equatable {
   List<Object> get props => [
         hetznerKey,
         cloudFlareKey,
+        backblazeKey,
         cloudFlareDomain,
         rootUser,
         hetznerServer,
@@ -33,6 +35,7 @@ class AppConfigState extends Equatable {
 
   final String hetznerKey;
   final String cloudFlareKey;
+  final String backblazeKey;
   final CloudFlareDomain cloudFlareDomain;
   final User rootUser;
   final HetznerServerDetails hetznerServer;
@@ -47,6 +50,7 @@ class AppConfigState extends Equatable {
   AppConfigState copyWith({
     String hetznerKey,
     String cloudFlareKey,
+    String backblazeKey,
     CloudFlareDomain cloudFlareDomain,
     User rootUser,
     HetznerServerDetails hetznerServer,
@@ -61,6 +65,7 @@ class AppConfigState extends Equatable {
       AppConfigState(
         hetznerKey: hetznerKey ?? this.hetznerKey,
         cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
+        backblazeKey: backblazeKey ?? this.backblazeKey,
         cloudFlareDomain: cloudFlareDomain ?? this.cloudFlareDomain,
         rootUser: rootUser ?? this.rootUser,
         hetznerServer: hetznerServer ?? this.hetznerServer,
@@ -76,6 +81,7 @@ class AppConfigState extends Equatable {
 
   bool get isHetznerFilled => hetznerKey != null;
   bool get isCloudFlareFilled => cloudFlareKey != null;
+  bool get isBackblazeFilled => backblazeKey != null;
   bool get isDomainFilled => cloudFlareDomain != null;
   bool get isUserFilled => rootUser != null;
   bool get isServerFilled => hetznerServer != null;
@@ -90,6 +96,7 @@ class AppConfigState extends Equatable {
   List<bool> get _fulfilementList => [
         isHetznerFilled,
         isCloudFlareFilled,
+        isBackblazeFilled,
         isDomainFilled,
         isUserFilled,
         isServerFilled,

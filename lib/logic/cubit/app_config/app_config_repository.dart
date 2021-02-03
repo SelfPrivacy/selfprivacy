@@ -20,6 +20,7 @@ class AppConfigRepository {
       hetznerKey: box.get(BNames.hetznerKey),
       cloudFlareKey: box.get(BNames.cloudFlareKey),
       cloudFlareDomain: box.get(BNames.cloudFlareDomain),
+      backblazeKey: box.get(BNames.backblazeKey),
       rootUser: box.get(BNames.rootUser),
       hetznerServer: box.get(BNames.hetznerServer),
       isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
@@ -28,12 +29,16 @@ class AppConfigRepository {
     );
   }
 
-  void reset() {
+  void clearAppConfig() {
     box.clear();
   }
 
   void saveHetznerKey(String key) {
     box.put(BNames.hetznerKey, key);
+  }
+
+  void saveBackblazeKey(String key) {
+    box.put(BNames.backblazeKey, key);
   }
 
   void saveCloudFlare(String key) {
@@ -104,12 +109,8 @@ class AppConfigRepository {
     return true;
   }
 
-  Future<HetznerServerDetails> createServer(
-    String hetznerKey,
-    User rootUser,
-    String domainName,
-    String cloudFlareKey
-  ) async {
+  Future<HetznerServerDetails> createServer(String hetznerKey, User rootUser,
+      String domainName, String cloudFlareKey) async {
     var hetznerApi = HetznerApi(hetznerKey);
     var serverDetails = await hetznerApi.createServer(
       cloudFlareKey: cloudFlareKey,
@@ -163,5 +164,13 @@ class AppConfigRepository {
     box.put(BNames.isDkimSetted, true);
 
     cloudflareApi.close();
+  }
+
+  Future<HetznerServerDetails> reset(
+    String hetznerKey,
+    HetznerServerDetails server,
+  ) async {
+    var hetznerApi = HetznerApi(hetznerKey);
+    return await hetznerApi.reset(server: server);
   }
 }

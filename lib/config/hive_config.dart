@@ -50,6 +50,6 @@ class BNames {
   static String hetznerServer = 'hetznerServer';
   static String isDkimSetted = 'isDkimSetted';
   static String isDnsChecked = 'isDnsChecked';
-
   static String isServerStarted = 'isServerStarted';
+  static String backblazeKey = 'backblazeKey';
 }

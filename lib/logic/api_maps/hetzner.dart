@@ -69,4 +69,14 @@ class HetznerApi extends ApiMap {
       startTime: DateTime.now(),
     );
   }
+
+  Future<HetznerServerDetails> reset({
+    HetznerServerDetails server,
+  }) async {
+    await loggedClient.post('/${server.id}/actions/poweron');
+
+    return server.copyWith(
+      startTime: DateTime.now(),
+    );
+  }
 }

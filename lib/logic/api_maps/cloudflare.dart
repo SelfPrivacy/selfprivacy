@@ -105,20 +105,20 @@ class CloudflareApi extends ApiMap {
     await Future.wait(allCreateFutures);
   }
 
-  setDkim(String dkimRecordString, String domainZoneId) {
-    var txt3 = DnsRecords(
-      type: 'TXT',
-      name: 'selector._domainkey',
-      content: dkimRecordString,
-      ttl: 18000,
-    );
+  // setDkim(String dkimRecordString, String domainZoneId) {
+  //   var txt3 = DnsRecords(
+  //     type: 'TXT',
+  //     name: 'selector._domainkey',
+  //     content: dkimRecordString,
+  //     ttl: 18000,
+  //   );
 
-    var url = '$rootAddress/zones/$domainZoneId/dns_records';
-    loggedClient.post(
-      url,
-      data: txt3.toJson(),
-    );
-  }
+  //   var url = '$rootAddress/zones/$domainZoneId/dns_records';
+  //   loggedClient.post(
+  //     url,
+  //     data: txt3.toJson(),
+  //   );
+  // }
 
   List<DnsRecords> projectDnsRecords(String domainName, String ip4) {
     var domainA = DnsRecords(type: 'A', name: domainName, content: ip4);
@@ -159,5 +159,17 @@ class CloudflareApi extends ApiMap {
       txt2,
       vpn
     ];
+  }
+
+  Future<List<String>> domainList() async {
+    var url = '$rootAddress/zones?per_page=50';
+    var response = await loggedClient.get(
+      url,
+      queryParameters: {'per_page': 50},
+    );
+
+    return response.data['result']
+        .map<String>((el) => el['name'] as String)
+        .toList();
   }
 }

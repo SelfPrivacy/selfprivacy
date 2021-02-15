@@ -10,18 +10,20 @@ enum TextType {
   body2, // with opacity
   medium,
   small,
-  onboardingTitle
+  onboardingTitle,
+  buttonTitleText // risen button title text,
 }
 
 class BrandText extends StatelessWidget {
-  const BrandText(this.text,
-      {Key key,
-      this.style,
-      @required this.type,
-      this.overflow,
-      this.softWrap,
-      this.textAlign})
-      : super(key: key);
+  const BrandText(
+    this.text, {
+    Key key,
+    this.style,
+    @required this.type,
+    this.overflow,
+    this.softWrap,
+    this.textAlign,
+  }) : super(key: key);
 
   final String text;
   final TextStyle style;
@@ -53,10 +55,13 @@ class BrandText extends StatelessWidget {
         type: TextType.h2,
         style: style,
       );
-  factory BrandText.h3(String text, {TextStyle style}) => BrandText(
+  factory BrandText.h3(String text, {TextStyle style, TextAlign textAlign}) =>
+      BrandText(
         text,
         type: TextType.h3,
         style: style,
+        textAlign: textAlign,
+        overflow: TextOverflow.ellipsis,
       );
   factory BrandText.h4(String text, {TextStyle style}) => BrandText(
         text,
@@ -75,11 +80,21 @@ class BrandText extends StatelessWidget {
       );
   factory BrandText.medium(String text,
           {TextStyle style, TextAlign textAlign}) =>
-      BrandText(text,
-          type: TextType.medium, style: style, textAlign: textAlign);
+      BrandText(
+        text,
+        type: TextType.medium,
+        style: style,
+        textAlign: textAlign,
+      );
   factory BrandText.small(String text, {TextStyle style}) => BrandText(
         text,
         type: TextType.small,
+        style: style,
+      );
+  factory BrandText.buttonTitleText(String text, {TextStyle style}) =>
+      BrandText(
+        text,
+        type: TextType.buttonTitleText,
         style: style,
       );
   @override
@@ -127,6 +142,11 @@ class BrandText extends StatelessWidget {
       case TextType.medium:
         style =
             isDark ? mediumStyle.copyWith(color: Colors.white) : mediumStyle;
+        break;
+      case TextType.buttonTitleText:
+        style = !isDark
+            ? buttonTitleText.copyWith(color: Colors.white)
+            : buttonTitleText;
         break;
     }
     if (this.style != null) {

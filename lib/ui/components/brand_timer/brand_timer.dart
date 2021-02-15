@@ -9,12 +9,10 @@ class BrandTimer extends StatefulWidget {
     Key key,
     @required this.startDateTime,
     @required this.duration,
-    @required this.callback,
   }) : super(key: key);
 
   final DateTime startDateTime;
   final Duration duration;
-  final VoidCallback callback;
 
   @override
   _BrandTimerState createState() => _BrandTimerState();
@@ -36,7 +34,6 @@ class _BrandTimerState extends State<BrandTimer> {
       var timePassed = DateTime.now().difference(widget.startDateTime);
       if (timePassed > widget.duration) {
         t.cancel();
-        widget.callback();
       } else {
         _getTime();
       }

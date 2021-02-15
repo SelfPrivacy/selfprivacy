@@ -14,22 +14,30 @@ import 'app_config_repository.dart';
 part 'app_config_state.dart';
 
 /// Initializing steps:
-/// 1. Hetzner key                              |setHetznerKey
-/// 2. Cloudflare key                           |setCloudflareKey
-/// 3. Backblaze Id + Key                       |setBackblazeKey
-
-/// 4. Set Domain address                       |setDomain
-/// 5. Set Root user name password              |setRootUser
-/// 6. Set Create server ans set DNS-Records    |createServerAndSetDnsRecords
+///
+/// The set phase.
+/// 1.1. Hetzner key                              |setHetznerKey
+/// 1.2. Cloudflare key                           |setCloudflareKey
+/// 1.3. Backblaze Id + Key                       |setBackblazeKey
+/// 1.4. Set Domain address                       |setDomain
+/// 1.5. Set Root user name password              |setRootUser
+/// 1.6. Set Create server ans set DNS-Records    |createServerAndSetDnsRecords
 ///    (without start)
-/// 7. ChecksAndSets:
-///   7.1 checkDnsAndStartServer                |checkDnsAndStartServer
-///   7.2 setDkim                               |setDkim
-///       a. checkServer
-///       b. getDkim
-///       c. Set DKIM
-///       d. server restart                              
-
+///
+/// The check phase.
+///
+/// 2.1. a. wait 60sec checkDnsAndStartServer               |startServerIfDnsIsOkay
+///      b. checkDns
+///      c. if dns is okay start server
+///
+/// 2.2. a. wait 60sec                                      |resetServerIfServerIsOkay
+///      b. checkServer
+///      c. if server is ok wait 30 sec
+///      d. reset server
+///
+/// 2.3. a. wait 60sec                                      |finishCheckIfServerIsOkay
+///      b. checkServer
+///      c. if server is okay set that fully checked
 
 class AppConfigCubit extends Cubit<AppConfigState> {
   AppConfigCubit() : super(InitialAppConfigState());
@@ -66,34 +74,22 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     emit(state.copyWith(rootUser: rootUser));
   }
 
-  void setDkim() async {
+  void serverReset() async {
     var callBack = () async {
       var isServerWorking = await repository.isHttpServerWorking(
         state.cloudFlareDomain.domainName,
       );
       if (!isServerWorking) {
         var last = DateTime.now();
-        print(last);
         emit(state.copyWith(lastServerStatusCheckTime: last));
         return;
       }
-
-      await repository.setDkim(
-        state.cloudFlareDomain.domainName,
-        state.cloudFlareKey,
-        state.cloudFlareDomain.zoneId,
-      );
 
       var hetznerServerDetails = await repository.restart(
         state.hetznerKey,
         state.hetznerServer,
       );
-      emit(
-        state.copyWith(
-          isDkimSetted: true,
-          hetznerServer: hetznerServerDetails,
-        ),
-      );
+      emit(state.copyWith(hetznerServer: hetznerServerDetails));
     };
 
     _tryOrAddError(state, callBack);
@@ -125,14 +121,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
   }
 
   void createServerAndSetDnsRecords() async {
-    var callback = () async {
-      var serverDetails = await repository.createServer(
-        state.hetznerKey,
-        state.rootUser,
-        state.cloudFlareDomain.domainName,
-        state.cloudFlareKey,
-      );
-
+    var onSuccess = (serverDetails) async {
       await repository.createDnsRecords(
         state.cloudFlareKey,
         serverDetails.ip4,
@@ -143,6 +132,19 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         isLoading: false,
         hetznerServer: serverDetails,
       ));
+    };
+
+    var onCancel = () => emit(state.copyWith(isLoading: false));
+
+    var callback = () async {
+      await repository.createServer(
+        state.hetznerKey,
+        state.rootUser,
+        state.cloudFlareDomain.domainName,
+        state.cloudFlareKey,
+        onCancel: onCancel,
+        onSuccess: onSuccess,
+      );
     };
     _tryOrAddError(state, callback);
   }

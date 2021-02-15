@@ -10,11 +10,10 @@ class AppConfigState extends Equatable {
     this.hetznerServer,
     this.isLoading = false,
     this.error,
-    this.lastDnsCheckTime,
-    this.lastServerStatusCheckTime,
+    // this.lastDnsCheckTime,
+    // this.lastServerStatusCheckTime,
     this.isDnsChecked = false,
     this.isServerStarted = false,
-    this.isDkimSetted = false,
   });
 
   @override
@@ -28,9 +27,8 @@ class AppConfigState extends Equatable {
         isDnsCheckedAndServerStarted,
         isLoading,
         error,
-        lastDnsCheckTime,
-        lastServerStatusCheckTime,
-        isDkimSetted,
+        // lastDnsCheckTime,
+        // lastServerStatusCheckTime,
       ];
 
   final String hetznerKey;
@@ -39,11 +37,10 @@ class AppConfigState extends Equatable {
   final CloudFlareDomain cloudFlareDomain;
   final User rootUser;
   final HetznerServerDetails hetznerServer;
-  final bool isDkimSetted;
   final bool isServerStarted;
   final bool isDnsChecked;
-  final DateTime lastDnsCheckTime;
-  final DateTime lastServerStatusCheckTime;
+  // final DateTime lastDnsCheckTime;
+  // final DateTime lastServerStatusCheckTime;
   final bool isLoading;
   final Exception error;
 
@@ -58,7 +55,6 @@ class AppConfigState extends Equatable {
     Exception error,
     DateTime lastDnsCheckTime,
     DateTime lastServerStatusCheckTime,
-    bool isDkimSetted,
     bool isServerStarted,
     bool isDnsChecked,
   }) =>
@@ -73,10 +69,9 @@ class AppConfigState extends Equatable {
         isDnsChecked: isDnsChecked ?? this.isDnsChecked,
         isLoading: isLoading ?? this.isLoading,
         error: error ?? this.error,
-        lastDnsCheckTime: lastDnsCheckTime ?? this.lastDnsCheckTime,
-        lastServerStatusCheckTime:
-            lastServerStatusCheckTime ?? this.lastServerStatusCheckTime,
-        isDkimSetted: isDkimSetted ?? this.isDkimSetted,
+        // lastDnsCheckTime: lastDnsCheckTime ?? this.lastDnsCheckTime,
+        // lastServerStatusCheckTime:
+        //     lastServerStatusCheckTime ?? this.lastServerStatusCheckTime,
       );
 
   bool get isHetznerFilled => hetznerKey != null;
@@ -85,7 +80,7 @@ class AppConfigState extends Equatable {
   bool get isDomainFilled => cloudFlareDomain != null;
   bool get isUserFilled => rootUser != null;
   bool get isServerFilled => hetznerServer != null;
-  bool get hasFinalChecked => isDnsCheckedAndServerStarted && isDkimSetted;
+  bool get hasFinalChecked => isDnsCheckedAndServerStarted;
 
   bool get isDnsCheckedAndServerStarted => isDnsChecked && isServerStarted;
 
@@ -106,4 +101,23 @@ class AppConfigState extends Equatable {
 
 class InitialAppConfigState extends AppConfigState {
   InitialAppConfigState() : super();
+}
+
+class TimerState extends AppConfigState {
+  TimerState({
+    this.dataState,
+    this.timerStart,
+    this.duration,
+  }) : super();
+
+  final AppConfigState dataState;
+  final DateTime timerStart;
+  final Duration duration;
+
+  @override
+  List<Object> get props => [
+        dataState,
+        timerStart,
+        duration,
+      ];
 }

@@ -30,7 +30,9 @@ class RootUserFormCubit extends FormCubit {
       ],
     );
 
-    super.setFields([userName, password]);
+    isVisible = FieldCubit(initalValue: false);
+
+    super.setFields([userName, password, isVisible]);
   }
 
   @override
@@ -46,6 +48,7 @@ class RootUserFormCubit extends FormCubit {
 
   FieldCubit<String> userName;
   FieldCubit<String> password;
+  FieldCubit<bool> isVisible;
 
   @override
   Future<void> close() async {

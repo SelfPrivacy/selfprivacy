@@ -6,42 +6,32 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 enum BrandButtonTypes { rised, text, iconText }
 
-class BrandButton extends StatelessWidget {
-  const BrandButton({
-    Key key,
-    this.onPressed,
-    this.type,
-    this.title,
-    this.icon,
-  }) : super(key: key);
-
-  final VoidCallback onPressed;
-  final BrandButtonTypes type;
-  final String title;
-  final Icon icon;
-
+class BrandButton {
   static rised({
     Key key,
     @required VoidCallback onPressed,
-    @required String title,
-  }) =>
-      BrandButton(
-        key: key,
-        onPressed: onPressed,
-        title: title,
-        type: BrandButtonTypes.rised,
-      );
+    String title,
+    Widget child,
+  }) {
+    assert(title == null || child == null, 'required title or child');
+    assert(title != null || child != null, 'required title or child');
+    return _RisedButton(
+      key: key,
+      title: title,
+      onPressed: onPressed,
+      child: child,
+    );
+  }
 
   static text({
     Key key,
     @required VoidCallback onPressed,
     @required String title,
   }) =>
-      BrandButton(
+      _TextButton(
         key: key,
-        onPressed: onPressed,
         title: title,
-        type: BrandButtonTypes.text,
+        onPressed: onPressed,
       );
 
   static iconText({
@@ -50,38 +40,12 @@ class BrandButton extends StatelessWidget {
     @required String title,
     @required Icon icon,
   }) =>
-      BrandButton(
+      _IconTextButton(
         key: key,
-        onPressed: onPressed,
         title: title,
-        type: BrandButtonTypes.iconText,
+        onPressed: onPressed,
         icon: icon,
       );
-  @override
-  Widget build(BuildContext context) {
-    switch (type) {
-      case BrandButtonTypes.rised:
-        return _RisedButton(
-          title: title,
-          onPressed: onPressed,
-        );
-      case BrandButtonTypes.text:
-        return _TextButton(
-          title: title,
-          onPressed: onPressed,
-        );
-        break;
-      case BrandButtonTypes.iconText:
-        return _IconTextButton(
-          title: title,
-          onPressed: onPressed,
-          icon: icon,
-        );
-        break;
-    }
-
-    return null;
-  }
 }
 
 class _RisedButton extends StatelessWidget {
@@ -89,10 +53,12 @@ class _RisedButton extends StatelessWidget {
     Key key,
     this.onPressed,
     this.title,
+    this.child,
   }) : super(key: key);
 
   final VoidCallback onPressed;
   final String title;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -111,15 +77,7 @@ class _RisedButton extends StatelessWidget {
               width: double.infinity,
               alignment: Alignment.center,
               padding: EdgeInsets.all(12),
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: BrandColors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  height: 1,
-                ),
-              ),
+              child: child ?? BrandText.buttonTitleText(title),
             ),
           ),
         ),

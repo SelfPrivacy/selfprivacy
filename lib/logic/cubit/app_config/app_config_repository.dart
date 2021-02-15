@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
@@ -11,6 +12,8 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:basic_utils/basic_utils.dart';
+import 'package:selfprivacy/ui/components/action_button/action_button.dart';
+import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'app_config_cubit.dart';
 
 class AppConfigRepository {
@@ -26,7 +29,6 @@ class AppConfigRepository {
       hetznerServer: box.get(BNames.hetznerServer),
       isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
       isDnsChecked: box.get(BNames.isDnsChecked, defaultValue: false),
-      isDkimSetted: box.get(BNames.isDkimSetted, defaultValue: false),
     );
   }
 
@@ -110,19 +112,64 @@ class AppConfigRepository {
     return true;
   }
 
-  Future<HetznerServerDetails> createServer(String hetznerKey, User rootUser,
-      String domainName, String cloudFlareKey) async {
+  Future<void> createServer(
+    String hetznerKey,
+    User rootUser,
+    String domainName,
+    String cloudFlareKey, {
+    void Function() onCancel,
+    Future<void> Function(HetznerServerDetails serverDetails) onSuccess,
+  }) async {
     var hetznerApi = HetznerApi(hetznerKey);
-    var serverDetails = await hetznerApi.createServer(
-      cloudFlareKey: cloudFlareKey,
-      rootUser: rootUser,
-      domainName: domainName,
-    );
-    await box.put(BNames.hetznerServer, serverDetails);
 
-    hetznerApi.close();
+    try {
+      var serverDetails = await hetznerApi.createServer(
+        cloudFlareKey: cloudFlareKey,
+        rootUser: rootUser,
+        domainName: domainName,
+      );
+      await box.put(BNames.hetznerServer, serverDetails);
+      hetznerApi.close();
+      onSuccess(serverDetails);
+    } on DioError catch (e) {
+      if (e.response.data['error']['code'] == 'uniqueness_error') {
+        var nav = getIt.get<NavigationService>();
+        nav.showPopUpDialog(
+          BrandAlert(
+            title: 'Сервер с таким именем уже существует',
+            contentText: 'Уничтожить сервер и создать новый?',
+            acitons: [
+              ActionButton(
+                text: 'Удалить',
+                isRed: true,
+                onPressed: () async {
+                  await hetznerApi.deleteSelfprivacyServer(
+                    cloudFlareKey: cloudFlareKey,
+                  );
 
-    return serverDetails;
+                  var serverDetails = await hetznerApi.createServer(
+                    cloudFlareKey: cloudFlareKey,
+                    rootUser: rootUser,
+                    domainName: domainName,
+                  );
+                  hetznerApi.close();
+
+                  await box.put(BNames.hetznerServer, serverDetails);
+                  onSuccess(serverDetails);
+                },
+              ),
+              ActionButton(
+                text: 'Отменить',
+                onPressed: () {
+                  hetznerApi.close();
+                  onCancel();
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    }
   }
 
   Future<void> createDnsRecords(
@@ -150,21 +197,6 @@ class AppConfigRepository {
     var isHttpServerWorking = await api.isHttpServerWorking();
     api.close();
     return isHttpServerWorking;
-  }
-
-  Future<void> setDkim(
-    String domainName,
-    String cloudFlareKey,
-    String zoneId,
-  ) async {
-    var api = ServerApi(domainName);
-    var dkimRecordString = await api.getDkim(domainName);
-    var cloudflareApi = CloudflareApi(cloudFlareKey);
-
-    await cloudflareApi.setDkim(dkimRecordString, zoneId);
-    box.put(BNames.isDkimSetted, true);
-
-    cloudflareApi.close();
   }
 
   Future<HetznerServerDetails> restart(

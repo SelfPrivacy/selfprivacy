@@ -50,7 +50,7 @@ class BNames {
   static String cloudFlareKey = 'cloudFlareKey';
   static String rootUser = 'rootUser';
   static String hetznerServer = 'hetznerServer';
-  static String isDkimSetted = 'isDkimSetted';
+  // static String isDkimSetted = 'isDkimSetted';
   static String isDnsChecked = 'isDnsChecked';
   static String isServerStarted = 'isServerStarted';
   static String backblazeKey = 'backblazeKey';

@@ -15,11 +15,10 @@ import 'config/get_it_config.dart';
 import 'config/localization.dart';
 import 'logic/cubit/app_settings/app_settings_cubit.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   await HiveConfig.init();
-  Bloc.observer = SimpleBlocObserver(navigatorKey: navigatorKey);
+  Bloc.observer = SimpleBlocObserver();
   Wakelock.enable();
   getItSetup();
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light, // Manually changnig appbar color
       child: MaterialApp(
-        navigatorKey: navigatorKey,
+        navigatorKey: getIt.get<NavigationService>().navigatorKey,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,

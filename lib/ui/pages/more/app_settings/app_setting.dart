@@ -3,6 +3,8 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/ui/components/action_button/action_button.dart';
+import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
@@ -89,37 +91,26 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       ),
                       onPressed: () {
                         showDialog(
-                            context: context,
-                            child: AlertDialog(
-                              title: Text('Are you sure?'),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: <Widget>[
-                                    Text('Reset all keys?'),
-                                  ],
-                                ),
+                          context: context,
+                          child: BrandAlert(
+                            title: 'Вы уверенны',
+                            contentText: 'Сбросить все ключи?',
+                            acitons: [
+                              ActionButton(
+                                  text: 'Да, сбросить',
+                                  isRed: true,
+                                  onPressed: () {
+                                    context
+                                        .read<AppConfigCubit>()
+                                        .clearAppConfig();
+                                    Navigator.of(context).pop();
+                                  }),
+                              ActionButton(
+                                text: 'Отмена',
                               ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(
-                                    'Reset',
-                                    style: TextStyle(
-                                      color: BrandColors.red1,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    context.read<AppConfigCubit>().clearAppConfig();
-                                    Navigator.of(context)..pop()..pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: Text('Cancel'),
-                                  onPressed: () {
-                                    Navigator.of(context)..pop();
-                                  },
-                                ),
-                              ],
-                            ));
+                            ],
+                          ),
+                        );
                       },
                     )
                   ],

@@ -1,68 +1,68 @@
-import 'dart:async';
+// import 'dart:async';
 
-import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
-import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
+// import 'package:cubit_form/cubit_form.dart';
+// import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
+// import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+// import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 
-class DomainFormCubit extends FormCubit {
-  CloudflareApi apiClient = CloudflareApi();
+// class DomainFormCubit extends FormCubit {
+//   CloudflareApi apiClient = CloudflareApi();
 
-  DomainFormCubit(this.initializingCubit) {
-    var regExp =
-        RegExp(r"^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}");
-    domainName = FieldCubit(
-      initalValue: '',
-      validations: [
-        RequiredStringValidation('required'),
-        ValidationModel<String>(
-          (s) => !regExp.hasMatch(s),
-          'invalid domain format',
-        ),
-      ],
-    );
+//   DomainFormCubit(this.initializingCubit) {
+//     var regExp =
+//         RegExp(r"^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}");
+//     domainName = FieldCubit(
+//       initalValue: '',
+//       validations: [
+//         RequiredStringValidation('required'),
+//         ValidationModel<String>(
+//           (s) => !regExp.hasMatch(s),
+//           'invalid domain format',
+//         ),
+//       ],
+//     );
 
-    super.setFields([domainName]);
-  }
+//     super.setFields([domainName]);
+//   }
 
-  @override
-  FutureOr<void> onSubmit() async {
-    var domain = CloudFlareDomain(
-      domainName: domainName.state.value,
-      zoneId: zoneId,
-    );
-    initializingCubit.setDomain(domain);
-  }
+//   @override
+//   FutureOr<void> onSubmit() async {
+//     var domain = CloudFlareDomain(
+//       domainName: domainName.state.value,
+//       zoneId: zoneId,
+//     );
+//     initializingCubit.setDomain(domain);
+//   }
 
-  final AppConfigCubit initializingCubit;
+//   final AppConfigCubit initializingCubit;
 
-  FieldCubit<String> domainName;
-  String zoneId;
+//   FieldCubit<String> domainName;
+//   String zoneId;
 
-  @override
-  FutureOr<bool> asyncValidation() async {
-    var key = initializingCubit.state.cloudFlareKey;
+//   @override
+//   FutureOr<bool> asyncValidation() async {
+//     var key = initializingCubit.state.cloudFlareKey;
 
-    String zoneId;
+//     String zoneId;
 
-    try {
-      zoneId = await apiClient.getZoneId(key, domainName.state.value);
-    } catch (e) {
-      addError(e);
-    }
+//     try {
+//       zoneId = await apiClient.getZoneId(key, domainName.state.value);
+//     } catch (e) {
+//       addError(e);
+//     }
 
-    if (zoneId == null) {
-      domainName.setError('Domain not in the list');
-      return false;
-    }
-    this.zoneId = zoneId;
-    return true;
-  }
+//     if (zoneId == null) {
+//       domainName.setError('Domain not in the list');
+//       return false;
+//     }
+//     this.zoneId = zoneId;
+//     return true;
+//   }
 
-  @override
-  Future<void> close() async {
-    apiClient.close();
+//   @override
+//   Future<void> close() async {
+//     apiClient.close();
 
-    return super.close();
-  }
-}
+//     return super.close();
+//   }
+// }

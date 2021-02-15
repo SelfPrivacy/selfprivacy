@@ -27,7 +27,6 @@ class BackblazeApi extends ApiMap {
     Response response = await loggedClient.get(rootAddress, options: options);
 
     if (response.statusCode == HttpStatus.ok) {
-      print(response);
       return true;
     } else if (response.statusCode == HttpStatus.unauthorized) {
       return false;

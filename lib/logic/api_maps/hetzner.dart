@@ -60,6 +60,16 @@ class HetznerApi extends ApiMap {
     );
   }
 
+  Future<void> deleteSelfprivacyServer({
+    @required String cloudFlareKey,
+  }) async {
+    Response response = await loggedClient.get(rootAddress);
+
+    List list = response.data['servers'];
+    var server = list.firstWhere((el) => el['name'] == 'selfprivacy-server');
+    return await loggedClient.delete('$rootAddress/${server['id']}');
+  }
+
   Future<HetznerServerDetails> startServer({
     HetznerServerDetails server,
   }) async {

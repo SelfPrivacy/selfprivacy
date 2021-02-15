@@ -56,6 +56,7 @@ var darkTheme = ligtTheme.copyWith(
   scaffoldBackgroundColor: Color(0xFF202120),
   iconTheme: IconThemeData(color: BrandColors.gray3),
   cardColor: BrandColors.gray1,
+  dialogBackgroundColor: Color(0xFF202120),
   textTheme: GoogleFonts.interTextTheme(
     TextTheme(
       headline1: headline1Style.copyWith(color: BrandColors.white),

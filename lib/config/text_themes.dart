@@ -46,6 +46,13 @@ final body2Style = defaultTextStyle.copyWith(
   color: BrandColors.textColor2,
 );
 
+final buttonTitleText = defaultTextStyle.copyWith(
+  color: BrandColors.white,
+  fontSize: 16,
+  fontWeight: FontWeight.bold,
+  height: 1,
+);
+
 final mediumStyle = defaultTextStyle.copyWith(fontSize: 13, height: 1.53);
 
 final smallStyle = defaultTextStyle.copyWith(fontSize: 11, height: 1.45);

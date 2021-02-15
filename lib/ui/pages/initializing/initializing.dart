@@ -6,7 +6,7 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/initializing/domain_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/initializing/domain_cloudflare.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/hetzner_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
@@ -16,7 +16,6 @@ import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_span_button/brand_span_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
-import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
@@ -34,7 +33,8 @@ class InitializingPage extends StatelessWidget {
       _stepServer(cubit),
       _stepCheck(cubit),
       Container(child: Text('Everythigng is initialized'))
-    ][2];
+    ][cubit.state.progress];
+
     return BlocListener<AppConfigCubit, AppConfigState>(
       listener: (context, state) {
         if (state.isFullyInitilized) {
@@ -96,8 +96,10 @@ class InitializingPage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Spacer(),
-            Image.asset('assets/images/logos/hetzner.png'),
+            Image.asset(
+              'assets/images/logos/hetzner.png',
+              width: 150,
+            ),
             SizedBox(height: 10),
             BrandText.h2('Подключите сервер Hetzner'),
             SizedBox(height: 10),
@@ -149,8 +151,11 @@ class InitializingPage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Spacer(),
-            Image.asset('assets/images/logos/cloudflare.png'),
+            Image.asset(
+              'assets/images/logos/cloudflare.png',
+              width: 150,
+            ),
+            SizedBox(height: 10),
             BrandText.h2('Подключите CloudFlare'),
             SizedBox(height: 10),
             BrandText.body2('Для управления DNS вашего домена'),
@@ -188,12 +193,13 @@ class InitializingPage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Spacer(),
-            Image.asset('assets/images/logos/backblaze.png'),
+            Image.asset(
+              'assets/images/logos/backblaze.png',
+              height: 50,
+            ),
             SizedBox(height: 10),
             BrandText.h2('Подключите облачное хранилище Backblaze'),
             SizedBox(height: 10),
-            BrandText.body2('Здесь будут храниться данные'),
             Spacer(),
             CubitFormTextField(
               formFieldCubit: formCubit.keyId,
@@ -231,30 +237,90 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepDomain(AppConfigCubit initializingCubit) {
     return BlocProvider(
-      create: (context) => DomainFormCubit(initializingCubit),
+      create: (context) => DomainSetupCubit(initializingCubit)..load(),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<DomainFormCubit>();
+        var domainSetup = context.watch<DomainSetupCubit>();
+        var state = domainSetup.state;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Spacer(),
-            BrandText.h2('Введите домен:'),
+            Image.asset(
+              'assets/images/logos/cloudflare.png',
+              width: 150,
+            ),
+            SizedBox(height: 30),
+            BrandText.h2('Домен'),
             SizedBox(height: 10),
-            CubitFormTextField(
-              keyboardType: TextInputType.emailAddress,
-              formFieldCubit: formCubit.domainName,
-              textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
-              decoration: InputDecoration(
-                hintText: 'Домен',
+            if (state is Empty)
+              BrandText.body2('На данный момент подлюченных доменов нет'),
+            if (state is Loading)
+              BrandText.body2(
+                state.type == LoadingTypes.loadingDomain
+                    ? 'Загружаем список доменов'
+                    : 'Сохранение..',
               ),
-            ),
+            if (state is MoreThenOne)
+              BrandText.body2(
+                'Найдено больше одного домена, для вашей безопастности, просим вам удалить не нужные домены',
+              ),
+            if (state is Loaded) ...[
+              SizedBox(height: 10),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: BrandText.h3(
+                      '${state.domain}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Container(
+                    width: 50,
+                    child: BrandButton.rised(
+                      onPressed: () => domainSetup.load(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.refresh,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+            if (state is Empty) ...[
+              SizedBox(height: 30),
+              BrandButton.rised(
+                onPressed: () => domainSetup.load(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.refresh,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 10),
+                    BrandText.buttonTitleText('Обновить cписок'),
+                  ],
+                ),
+              ),
+            ],
+            if (state is Loaded) ...[
+              SizedBox(height: 30),
+              BrandButton.rised(
+                onPressed: () => domainSetup.saveDomain(),
+                title: 'Сохранить домен',
+              ),
+            ],
+            SizedBox(height: 10),
             Spacer(),
-            BrandButton.rised(
-              onPressed:
-                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
-              title: 'Подключить',
-            ),
             SizedBox(height: 10),
             BrandButton.text(
               onPressed: () => _showModal(context, _HowHetzner()),
@@ -286,13 +352,29 @@ class InitializingPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-            CubitFormTextField(
-              formFieldCubit: formCubit.password,
-              textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
-              decoration: InputDecoration(
-                hintText: 'Пароль',
-              ),
+            BlocBuilder<FieldCubit<bool>, FieldCubitState<bool>>(
+              cubit: formCubit.isVisible,
+              builder: (context, state) {
+                var isVisible = state.value;
+                return CubitFormTextField(
+                  obscureText: !isVisible,
+                  formFieldCubit: formCubit.password,
+                  textAlign: TextAlign.center,
+                  scrollPadding: EdgeInsets.only(bottom: 70),
+                  decoration: InputDecoration(
+                    hintText: 'Пароль',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        isVisible ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () => formCubit.isVisible.setValue(!isVisible),
+                    ),
+                    suffixIconConstraints: BoxConstraints(minWidth: 60),
+                    prefixIconConstraints: BoxConstraints(maxWidth: 85),
+                    prefixIcon: Container(),
+                  ),
+                );
+              },
             ),
             Spacer(),
             BrandButton.rised(
@@ -338,52 +420,40 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
-    var state = appConfigCubit.state;
-    var isDnsChecked = state.isDnsCheckedAndServerStarted;
-    return Builder(builder: (context) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Spacer(flex: 2),
-          SizedBox(height: 10),
-          BrandText.body2(
-            isDnsChecked
-                ? 'Dns сервера вступили в силу, мы стартанули сервер, как только он поднимется, мы закончим инициализацию.'
-                : 'Мы начали процесс инциализации сервера, раз в минуту мы будем проверять наличие DNS записей, как только они вступят в силу мы продолжим инциализацию',
-          ),
-          SizedBox(height: 10),
-          Row(
-            children: [
-              BrandText.body2('До следующей проверки: '),
-              isDnsChecked
-                  ? BrandTimer(
-                      startDateTime: state.lastServerStatusCheckTime ??
-                          state.hetznerServer.startTime,
-                      duration: Duration(minutes: 1),
-                      callback: () {
-                        appConfigCubit.setDkim();
-                      },
-                    )
-                  : BrandTimer(
-                      startDateTime: state.lastDnsCheckTime ??
-                          state.hetznerServer.createTime,
-                      duration: Duration(minutes: 1),
-                      callback: () {
-                        appConfigCubit.checkDnsAndStartServer();
-                      },
-                    )
-            ],
-          ),
-          Spacer(
-            flex: 2,
-          ),
-          BrandButton.text(
-            onPressed: () => _showModal(context, _HowHetzner()),
-            title: 'Что это значит?',
-          ),
-        ],
-      );
-    });
+    return Text('step check');
+    // var state = appConfigCubit.state as TimerState;
+    // var isDnsChecked = state.dataState.isDnsChecked;
+    // return Builder(builder: (context) {
+    //   return Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Spacer(flex: 2),
+    //       SizedBox(height: 10),
+    //       BrandText.body2(
+    //         isDnsChecked
+    //             ? 'Dns сервера вступили в силу, мы стартанули сервер, как только он поднимется, мы закончим инициализацию.'
+    //             : 'Мы начали процесс инциализации сервера, раз в минуту мы будем проверять наличие DNS записей, как только они вступят в силу мы продолжим инциализацию',
+    //       ),
+    //       SizedBox(height: 10),
+    //       Row(
+    //         children: [
+    //           BrandText.body2('До следующей проверки: '),
+    //           BrandTimer(
+    //             startDateTime: state.timerStart,
+    //             duration: state.duration,
+    //           )
+    //         ],
+    //       ),
+    //       Spacer(
+    //         flex: 2,
+    //       ),
+    //       BrandButton.text(
+    //         onPressed: () => _showModal(context, _HowHetzner()),
+    //         title: 'Что это значит?',
+    //       ),
+    //     ],
+    //   );
+    // });
   }
 
   Widget _addCard(Widget child) {

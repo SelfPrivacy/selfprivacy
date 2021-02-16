@@ -27,6 +27,7 @@ class BlocAndProviderConfig extends StatelessWidget {
           )..load(),
         ),
         BlocProvider(
+          lazy: false,
           create: (_) => AppConfigCubit()..load(),
         ),
         BlocProvider(create: (_) => ServicesCubit()),

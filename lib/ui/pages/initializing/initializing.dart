@@ -16,6 +16,7 @@ import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_span_button/brand_span_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
@@ -25,16 +26,17 @@ class InitializingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var cubit = context.watch<AppConfigCubit>();
     var actualPage = [
-      _stepHetzner(cubit),
-      _stepCloudflare(cubit),
-      _stepBackblaze(cubit),
-      _stepDomain(cubit),
-      _stepUser(cubit),
-      _stepServer(cubit),
-      _stepCheck(cubit),
-      Container(child: Text('Everythigng is initialized'))
-    ][cubit.state.progress];
-
+      () => _stepHetzner(cubit),
+      () => _stepCloudflare(cubit),
+      () => _stepBackblaze(cubit),
+      () => _stepDomain(cubit),
+      () => _stepUser(cubit),
+      () => _stepServer(cubit),
+      () => _stepCheck(cubit),
+      () => _stepCheck(cubit),
+      () => _stepCheck(cubit),
+      () => Container(child: Text('Everythigng is initialized'))
+    ][cubit.state.progress]();
     return BlocListener<AppConfigCubit, AppConfigState>(
       listener: (context, state) {
         if (state.isFullyInitilized) {
@@ -420,40 +422,46 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
-    return Text('step check');
-    // var state = appConfigCubit.state as TimerState;
-    // var isDnsChecked = state.dataState.isDnsChecked;
-    // return Builder(builder: (context) {
-    //   return Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Spacer(flex: 2),
-    //       SizedBox(height: 10),
-    //       BrandText.body2(
-    //         isDnsChecked
-    //             ? 'Dns сервера вступили в силу, мы стартанули сервер, как только он поднимется, мы закончим инициализацию.'
-    //             : 'Мы начали процесс инциализации сервера, раз в минуту мы будем проверять наличие DNS записей, как только они вступят в силу мы продолжим инциализацию',
-    //       ),
-    //       SizedBox(height: 10),
-    //       Row(
-    //         children: [
-    //           BrandText.body2('До следующей проверки: '),
-    //           BrandTimer(
-    //             startDateTime: state.timerStart,
-    //             duration: state.duration,
-    //           )
-    //         ],
-    //       ),
-    //       Spacer(
-    //         flex: 2,
-    //       ),
-    //       BrandButton.text(
-    //         onPressed: () => _showModal(context, _HowHetzner()),
-    //         title: 'Что это значит?',
-    //       ),
-    //     ],
-    //   );
-    // });
+    assert(appConfigCubit.state is TimerState, 'wronge state');
+    var state = appConfigCubit.state as TimerState;
+
+    String text;
+    if (state.isServerReseted) {
+      text = 'Сервер презагружен, ждем последнюю проверку';
+    } else if (state.isServerStarted) {
+      text = 'Cервер запушен, сейчас он будет проверен и перезагружен';
+    } else if (state.isServerCreated) {
+      text = 'Cервер создан, идет проверка ДНС адресов и запуск сервера';
+    }
+    return Builder(builder: (context) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Spacer(flex: 2),
+          SizedBox(height: 10),
+          BrandText.body2(text),
+          SizedBox(height: 10),
+          if (!state.isLoading)
+            Row(
+              children: [
+                BrandText.body2('До следующей проверки: '),
+                BrandTimer(
+                  startDateTime: state.timerStart,
+                  duration: state.duration,
+                )
+              ],
+            ),
+          if (state.isLoading) BrandText.body2('Проверка'),
+          Spacer(
+            flex: 2,
+          ),
+          BrandButton.text(
+            onPressed: () => _showModal(context, _HowHetzner()),
+            title: 'Что это значит?',
+          ),
+        ],
+      );
+    });
   }
 
   Widget _addCard(Widget child) {

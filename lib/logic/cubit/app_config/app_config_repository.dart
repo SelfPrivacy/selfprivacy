@@ -28,7 +28,10 @@ class AppConfigRepository {
       rootUser: box.get(BNames.rootUser),
       hetznerServer: box.get(BNames.hetznerServer),
       isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
-      isDnsChecked: box.get(BNames.isDnsChecked, defaultValue: false),
+      error: null,
+      hasFinalChecked: box.get(BNames.hasFinalChecked, defaultValue: false),
+      isLoading: box.get(BNames.isLoading, defaultValue: false),
+      isServerReseted: box.get(BNames.isServerReseted, defaultValue: false),
     );
   }
 
@@ -107,7 +110,7 @@ class AppConfigRepository {
       }
     }
 
-    box.put(BNames.isDnsChecked, true);
+    box.put(BNames.hasFinalChecked, true);
 
     return true;
   }

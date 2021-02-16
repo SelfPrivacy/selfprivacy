@@ -53,12 +53,12 @@ class _ProgressBarState extends State<ProgressBar> {
       ..insert(
         0,
         SizedBox(
-          width: 50,
+          width: 40,
         ),
       )
       ..add(
         SizedBox(
-          width: 50,
+          width: 10,
         ),
       );
 

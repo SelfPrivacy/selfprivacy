@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/utils/password_generator2.dart';
 
 class HetznerApi extends ApiMap {
   HetznerApi([String token]) {
@@ -43,8 +44,9 @@ class HetznerApi extends ApiMap {
     @required String cloudFlareKey,
     @required User rootUser,
     @required String domainName,
-    @required String dbPassword,
   }) async {
+    var dbPassword = getRandomString(40);
+
     var data = jsonDecode(
       '''{"name":"selfprivacy-server","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[],"networks":[],"user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-20.09 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":false}''',
     );

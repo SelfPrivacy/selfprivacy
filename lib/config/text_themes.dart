@@ -61,14 +61,14 @@ final linkStyle = defaultTextStyle.copyWith(color: BrandColors.blue);
 
 final progressTextStyleLight = GoogleFonts.inter(
   textStyle: TextStyle(
-    fontSize: 13,
+    fontSize: 11,
     color: BrandColors.textColor1,
   ),
 );
 
 final progressTextStyleDark = GoogleFonts.inter(
   textStyle: TextStyle(
-    fontSize: 13,
+    fontSize: 11,
     color: BrandColors.white,
   ),
 );

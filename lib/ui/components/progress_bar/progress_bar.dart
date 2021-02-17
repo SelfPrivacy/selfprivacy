@@ -46,14 +46,12 @@ class _ProgressBarState extends State<ProgressBar> {
       }
       i++;
     }
-    // even.add(SizedBox(
-    //   width: 0,
-    // ));
+
     odd
       ..insert(
         0,
         SizedBox(
-          width: 40,
+          width: 20,
         ),
       )
       ..add(
@@ -68,7 +66,7 @@ class _ProgressBarState extends State<ProgressBar> {
         BrandText.h2('Progress'),
         SizedBox(height: 10),
         Row(children: even),
-        SizedBox(height: 3),
+        SizedBox(height: 7),
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
@@ -95,7 +93,7 @@ class _ProgressBarState extends State<ProgressBar> {
             },
           ),
         ),
-        SizedBox(height: 3),
+        SizedBox(height: 5),
         Row(
           children: odd,
         ),
@@ -122,8 +120,8 @@ class _ProgressBarState extends State<ProgressBar> {
             checked
                 ? WidgetSpan(
                     child: Padding(
-                    padding: const EdgeInsets.only(bottom: 1, right: 2),
-                    child: Icon(BrandIcons.check, size: 14),
+                    padding: const EdgeInsets.only(bottom: 0, right: 2),
+                    child: Icon(BrandIcons.check, size: 11),
                   ))
                 : TextSpan(text: '${index + 1}.', style: style),
             TextSpan(text: step, style: style)

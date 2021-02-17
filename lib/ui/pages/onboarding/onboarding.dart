@@ -61,7 +61,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
           Flexible(
             child: Center(
               child: Image.asset(
-                'assets/images/onboarding/onboarding1.png',
+                _fileName(
+                  context: context,
+                  path: 'assets/images/onboarding',
+                  fileExtention: 'png',
+                  fileName: 'onboarding1',
+                ),
               ),
             ),
           ),
@@ -96,13 +101,23 @@ class _OnboardingPageState extends State<OnboardingPage> {
           SizedBox(height: 20),
           Center(
             child: Image.asset(
-              'assets/images/onboarding/logos_line.png',
+              _fileName(
+                context: context,
+                path: 'assets/images/onboarding',
+                fileExtention: 'png',
+                fileName: 'logos_line',
+              ),
             ),
           ),
           Flexible(
             child: Center(
               child: Image.asset(
-                'assets/images/onboarding/onboarding2.png',
+                _fileName(
+                  context: context,
+                  path: 'assets/images/onboarding',
+                  fileExtention: 'png',
+                  fileName: 'onboarding2',
+                ),
               ),
             ),
           ),
@@ -119,4 +134,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
     );
   }
+}
+
+String _fileName({
+  @required BuildContext context,
+  @required String path,
+  @required String fileName,
+  @required String fileExtention,
+}) {
+  var theme = Theme.of(context);
+  var isDark = theme.brightness == Brightness.dark;
+  return '$path/$fileName${isDark ? '-dark' : '-light'}.$fileExtention';
 }

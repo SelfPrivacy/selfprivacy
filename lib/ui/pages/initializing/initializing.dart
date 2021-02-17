@@ -60,7 +60,9 @@ class InitializingPage extends StatelessWidget {
                         'Domain',
                         'User',
                         'Server',
-                        'Check'
+                        'Check1',
+                        'Check2',
+                        'Check3'
                       ],
                       activeIndex: cubit.state.progress,
                     ),

@@ -42,8 +42,9 @@ class _UserDetails extends StatelessWidget {
                             break;
                           case PopupMenuItemType.delete:
                             showDialog(
-                                context: context,
-                                child: AlertDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
                                   title: Text('Подтверждение '),
                                   content: SingleChildScrollView(
                                     child: ListBody(
@@ -72,7 +73,9 @@ class _UserDetails extends StatelessWidget {
                                       },
                                     ),
                                   ],
-                                ));
+                                );
+                              },
+                            );
                             break;
                         }
                       },

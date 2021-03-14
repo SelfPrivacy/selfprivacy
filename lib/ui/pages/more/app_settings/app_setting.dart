@@ -80,8 +80,10 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       ),
                     ),
                     SizedBox(width: 5),
-                    RaisedButton(
-                      color: BrandColors.red1,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: BrandColors.red1,
+                      ),
                       child: Text(
                         'Reset',
                         style: TextStyle(
@@ -92,24 +94,26 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          child: BrandAlert(
-                            title: 'Вы уверенны',
-                            contentText: 'Сбросить все ключи?',
-                            acitons: [
-                              ActionButton(
-                                  text: 'Да, сбросить',
-                                  isRed: true,
-                                  onPressed: () {
-                                    context
-                                        .read<AppConfigCubit>()
-                                        .clearAppConfig();
-                                    Navigator.of(context).pop();
-                                  }),
-                              ActionButton(
-                                text: 'Отмена',
-                              ),
-                            ],
-                          ),
+                          builder: (_) {
+                            return BrandAlert(
+                              title: 'Вы уверенны',
+                              contentText: 'Сбросить все ключи?',
+                              acitons: [
+                                ActionButton(
+                                    text: 'Да, сбросить',
+                                    isRed: true,
+                                    onPressed: () {
+                                      context
+                                          .read<AppConfigCubit>()
+                                          .clearAppConfig();
+                                      Navigator.of(context).pop();
+                                    }),
+                                ActionButton(
+                                  text: 'Отмена',
+                                ),
+                              ],
+                            );
+                          },
                         );
                       },
                     )

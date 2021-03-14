@@ -78,7 +78,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 curve: Curves.easeIn,
               );
             },
-            title: 'Далее',
+            title: 'Далее'.tr(),
           ),
           SizedBox(height: 30),
         ],

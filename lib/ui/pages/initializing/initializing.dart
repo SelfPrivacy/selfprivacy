@@ -357,7 +357,7 @@ class InitializingPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             BlocBuilder<FieldCubit<bool>, FieldCubitState<bool>>(
-              cubit: formCubit.isVisible,
+              bloc: formCubit.isVisible,
               builder: (context, state) {
                 var isVisible = state.value;
                 return CubitFormTextField(

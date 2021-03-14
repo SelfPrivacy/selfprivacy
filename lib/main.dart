@@ -22,6 +22,7 @@ void main() async {
   Wakelock.enable();
   getItSetup();
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   runApp(
     Localization(

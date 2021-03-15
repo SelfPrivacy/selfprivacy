@@ -21,14 +21,14 @@ part 'user.dart';
 part 'empty.dart';
 
 class UsersPage extends StatelessWidget {
-  const UsersPage({Key key}) : super(key: key);
+  const UsersPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final usersCubit = context.watch<UsersCubit>();
+    final usersCubitState = context.watch<UsersCubit>().state;
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
-    final users = usersCubit.state.users;
-    final isEmpty = usersCubit.state.isEmpty;
+    final users = usersCubitState.users;
+    final isEmpty = usersCubitState.isEmpty;
 
     Widget child;
 

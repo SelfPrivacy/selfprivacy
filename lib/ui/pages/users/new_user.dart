@@ -3,13 +3,12 @@ part of 'users.dart';
 class _NewUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final usersCubit = context.watch<UsersCubit>();
-
     return BrandModalSheet(
       child: BlocProvider(
-        create: (context) => UserFormCubit(usersCubit: usersCubit),
+        create: (context) =>
+            UserFormCubit(usersCubit: context.watch<UsersCubit>()),
         child: Builder(builder: (context) {
-          var formCubit = context.watch<UserFormCubit>();
+          var formCubitState = context.watch<UserFormCubit>().state;
 
           return BlocListener<UserFormCubit, FormCubitState>(
             listener: (context, state) {
@@ -27,7 +26,7 @@ class _NewUser extends StatelessWidget {
                   child: Column(
                     children: [
                       CubitFormTextField(
-                        formFieldCubit: formCubit.login,
+                        formFieldCubit: context.read<UserFormCubit>().login,
                         decoration: InputDecoration(
                           labelText: 'Логин',
                           suffixText: '@example',
@@ -35,7 +34,7 @@ class _NewUser extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       CubitFormTextField(
-                        formFieldCubit: formCubit.password,
+                        formFieldCubit: context.read<UserFormCubit>().password,
                         decoration: InputDecoration(
                           alignLabelWithHint: false,
                           labelText: 'Пароль',
@@ -46,18 +45,17 @@ class _NewUser extends StatelessWidget {
                                 BrandIcons.refresh,
                                 color: BrandColors.blue,
                               ),
-                              onPressed: formCubit.genNewPassword,
+                              onPressed:
+                                  context.read<UserFormCubit>().genNewPassword,
                             ),
                           ),
                         ),
                       ),
                       SizedBox(height: 30),
                       BrandButton.rised(
-                        onPressed: formCubit.state.isSubmitting
+                        onPressed: formCubitState.isSubmitting
                             ? null
-                            : () {
-                                formCubit.trySubmit();
-                              },
+                            : () => context.read<UserFormCubit>().trySubmit(),
                         title: 'Создать',
                       ),
                       SizedBox(height: 40),

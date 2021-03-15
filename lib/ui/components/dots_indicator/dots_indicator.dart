@@ -3,9 +3,9 @@ import 'package:selfprivacy/config/brand_colors.dart';
 
 class DotsIndicator extends StatelessWidget {
   const DotsIndicator({
-    Key key,
-    @required this.activeIndex,
-    @required this.count,
+    Key? key,
+    required this.activeIndex,
+    required this.count,
   }) : super(key: key);
 
   final int activeIndex;

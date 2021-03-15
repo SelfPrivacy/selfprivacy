@@ -12,9 +12,10 @@ import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/pages/providers/settings/settings.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProvidersPage extends StatefulWidget {
-  ProvidersPage({Key key}) : super(key: key);
+  ProvidersPage({Key? key}) : super(key: key);
 
   @override
   _ProvidersPageState createState() => _ProvidersPageState();
@@ -23,7 +24,8 @@ class ProvidersPage extends StatefulWidget {
 class _ProvidersPageState extends State<ProvidersPage> {
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+    // var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+    var isReady = true;
 
     final cards = ProviderType.values
         .map((type) => _Card(
@@ -32,7 +34,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
         .toList();
     return Scaffold(
       appBar: PreferredSize(
-        child: BrandHeader(title: 'Провайдеры'),
+        child: BrandHeader(title: 'providers.page_title'.tr()),
         preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
@@ -50,32 +52,31 @@ class _ProvidersPageState extends State<ProvidersPage> {
 }
 
 class _Card extends StatelessWidget {
-  const _Card({Key key, @required this.provider}) : super(key: key);
+  const _Card({Key? key, required this.provider}) : super(key: key);
 
   final ProviderModel provider;
   @override
   Widget build(BuildContext context) {
-    String title;
-    String message;
-    String stableText;
-    var appConfig = context.watch<AppConfigCubit>().state;
+    String? title;
+    String? message;
+    String? stableText;
+    AppConfigState appConfig = context.watch<AppConfigCubit>().state;
 
     var domainName =
-        appConfig.isDomainFilled ? appConfig.cloudFlareDomain.domainName : '';
+        appConfig.isDomainFilled ? appConfig.cloudFlareDomain!.domainName : '';
 
     switch (provider.type) {
       case ProviderType.server:
-        title = 'Сервер';
+        title = 'providers.server.card_title'.tr();
         stableText = 'В норме';
         break;
       case ProviderType.domain:
-        title = 'Домен';
+        title = 'providers.domain.card_title'.tr();
         message = domainName;
         stableText = 'Домен настроен';
         break;
       case ProviderType.backup:
-        // message = '22 янв 2021 14:30';
-        title = 'Резервное копирование';
+        title = 'providers.backup.card_title'.tr();
         stableText = 'В норме';
         break;
     }
@@ -116,28 +117,29 @@ class _Card extends StatelessWidget {
 
 class _ProviderDetails extends StatelessWidget {
   const _ProviderDetails({
-    Key key,
-    @required this.provider,
-    @required this.statusText,
+    Key? key,
+    required this.provider,
+    required this.statusText,
   }) : super(key: key);
 
   final ProviderModel provider;
-  final String statusText;
+  final String? statusText;
 
   @override
   Widget build(BuildContext context) {
-    String title;
+    late String title;
 
     switch (provider.type) {
       case ProviderType.server:
-        title = 'Сервер';
+        title = 'providers.server.card_title'.tr();
         break;
       case ProviderType.domain:
-        title = 'Домен';
+        title = 'providers.domain.card_title'.tr();
 
         break;
       case ProviderType.backup:
-        title = 'Резервное копирование';
+        title = 'providers.backup.card_title'.tr();
+
         break;
     }
     return BrandModalSheet(
@@ -163,7 +165,7 @@ class _ProviderDetails extends StatelessWidget {
                       onSelected: (_PopupMenuItemType result) {
                         switch (result) {
                           case _PopupMenuItemType.setting:
-                            navigatorKey.currentState
+                            navigatorKey.currentState!
                                 .push(materialRoute(SettingsPage()));
                             break;
                         }

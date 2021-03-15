@@ -19,7 +19,7 @@ class BrandIcons {
   BrandIcons._();
 
   static const _kFontFam = 'BrandIcons';
-  static const _kFontPkg = null;
+  static const dynamic _kFontPkg = null;
 
   static const IconData connection =
       IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);

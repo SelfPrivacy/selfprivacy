@@ -2,11 +2,11 @@ part of 'users.dart';
 
 class _UserDetails extends StatelessWidget {
   const _UserDetails({
-    Key key,
+    Key? key,
     this.user,
   }) : super(key: key);
 
-  final User user;
+  final User? user;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class _UserDetails extends StatelessWidget {
           Container(
             height: 200,
             decoration: BoxDecoration(
-              color: user.color,
+              color: user!.color,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(20),
               ),
@@ -109,7 +109,7 @@ class _UserDetails extends StatelessWidget {
                       horizontal: 15,
                     ),
                     child: BrandText.h1(
-                      user.login,
+                      user!.login,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                     )),
@@ -126,14 +126,14 @@ class _UserDetails extends StatelessWidget {
                 Container(
                   height: 40,
                   alignment: Alignment.centerLeft,
-                  child: BrandText.h4('${user.login}@example.com'),
+                  child: BrandText.h4('${user!.login}@example.com'),
                 ),
                 SizedBox(height: 14),
                 BrandText.small('Пароль'),
                 Container(
                   height: 40,
                   alignment: Alignment.centerLeft,
-                  child: BrandText.h4(user.password),
+                  child: BrandText.h4(user!.password),
                 ),
                 SizedBox(height: 24),
                 BrandDivider(),

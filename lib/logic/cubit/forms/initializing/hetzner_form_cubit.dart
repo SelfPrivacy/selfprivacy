@@ -30,11 +30,12 @@ class HetznerFormCubit extends FormCubit {
 
   final AppConfigCubit initializingCubit;
 
-  FieldCubit<String> apiKey;
+  // ignore: close_sinks
+  late final FieldCubit<String> apiKey;
 
   @override
   FutureOr<bool> asyncValidation() async {
-    bool isKeyValid;
+    late bool isKeyValid;
     try {
       isKeyValid = await apiClient.isValid(apiKey.state.value);
     } catch (e) {

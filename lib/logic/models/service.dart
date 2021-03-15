@@ -10,7 +10,7 @@ enum ServiceTypes {
 }
 
 class Service extends Equatable {
-  const Service({this.state, this.type});
+  const Service({required this.state, required this.type});
 
   final StateType state;
   final ServiceTypes type;
@@ -21,5 +21,5 @@ class Service extends Equatable {
       );
 
   @override
-  List<Object> get props => [state, type];
+  List<Object?> get props => [state, type];
 }

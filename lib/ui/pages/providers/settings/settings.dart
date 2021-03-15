@@ -7,7 +7,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key key}) : super(key: key);
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +62,9 @@ class SettingsPage extends StatelessWidget {
 
 class _Button extends StatelessWidget {
   const _Button({
-    Key key,
-    @required this.onTap,
-    @required this.child,
+    Key? key,
+    required this.onTap,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -88,9 +88,9 @@ class _Button extends StatelessWidget {
 
 class _TextColumn extends StatelessWidget {
   const _TextColumn({
-    Key key,
-    @required this.title,
-    @required this.value,
+    Key? key,
+    required this.title,
+    required this.value,
     this.hasWarning = false,
   }) : super(key: key);
 

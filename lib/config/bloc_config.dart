@@ -7,9 +7,9 @@ import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 
 class BlocAndProviderConfig extends StatelessWidget {
-  const BlocAndProviderConfig({Key key, this.child}) : super(key: key);
+  const BlocAndProviderConfig({Key? key, this.child}) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {

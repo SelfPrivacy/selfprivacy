@@ -46,9 +46,12 @@ class RootUserFormCubit extends FormCubit {
 
   final AppConfigCubit initializingCubit;
 
-  FieldCubit<String> userName;
-  FieldCubit<String> password;
-  FieldCubit<bool> isVisible;
+  // ignore: close_sinks
+  late final FieldCubit<String> userName;
+  // ignore: close_sinks
+  late final FieldCubit<String> password;
+  // ignore: close_sinks
+  late final FieldCubit<bool> isVisible;
 
   @override
   Future<void> close() async {

@@ -12,7 +12,7 @@ import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 
 class ServicesPage extends StatefulWidget {
-  ServicesPage({Key key}) : super(key: key);
+  ServicesPage({Key? key}) : super(key: key);
 
   @override
   _ServicesPageState createState() => _ServicesPageState();
@@ -21,9 +21,10 @@ class ServicesPage extends StatefulWidget {
 class _ServicesPageState extends State<ServicesPage> {
   @override
   Widget build(BuildContext context) {
-    final serviceCubit = context.watch<ServicesCubit>();
-    final connected = serviceCubit.state.connected;
-    final uninitialized = serviceCubit.state.uninitialized;
+    final serviceCubitState = context.watch<ServicesCubit>().state;
+
+    final connected = serviceCubitState.connected;
+    final uninitialized = serviceCubitState.uninitialized;
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
 
     return Scaffold(
@@ -49,14 +50,14 @@ class _ServicesPageState extends State<ServicesPage> {
 }
 
 class _Card extends StatelessWidget {
-  const _Card({Key key, @required this.service}) : super(key: key);
+  const _Card({Key? key, required this.service}) : super(key: key);
 
   final Service service;
   @override
   Widget build(BuildContext context) {
-    String title;
-    IconData iconData;
-    String description;
+    String? title;
+    IconData? iconData;
+    String? description;
 
     switch (service.type) {
       case ServiceTypes.messanger:

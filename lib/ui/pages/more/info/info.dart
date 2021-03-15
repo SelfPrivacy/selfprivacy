@@ -6,7 +6,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:package_info/package_info.dart';
 
 class InfoPage extends StatelessWidget {
-  const InfoPage({Key key}) : super(key: key);
+  const InfoPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

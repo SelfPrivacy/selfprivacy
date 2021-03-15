@@ -1,3 +1,46 @@
 {
-  "test": "en-test"
+  "test": "en-test",
+  "basis": {
+    "_comment": "базовые элементы интерфейса",
+    "providers": "Провайдеры",
+    "services": "Сервисы",
+    "users": "Пользователи",
+    "more": "Еще",
+    "next": "Далее",
+    "got_it": "Понял"
+  },
+  "more": {
+    "_comment": "Элементы на странице еще",
+    "configuration_wizard": "Мастер Подключения",
+    "settings": "Настройки приложения",
+    "about_project": "О проекте SelfPrivacy",
+    "about_app": "О приложении",
+    "onboarding": "Onboarding",
+    "console": "Console"
+  },
+  "onboarding": {
+    "_comment": "страницы онбординга",
+    "page1_title": "Digital independence, available to all of us.",
+    "page1_text": "Mail, VPN, Messenger, social network and much more on your private server, under your control.",
+    "page2_title": "SelfPrivacy is not a cloud, but your personal datacenter.",
+    "page2_text": "SelfPrivacy works only with your provider accounts: Hetzner, Cloudflare, Backblaze. If you do not own those, we'll help you to create them."
+  },
+  "providers": {
+    "_comment": "вкладка провайдеры",
+    "page_title": "Your Data Center",
+    "server": {
+      "card_title": "Сервер"
+    },
+    "domain": {
+      "card_title": "Домен"
+    },
+    "backup": {
+      "card_title": "Резервное копирование"
+    }
+  },
+  "not_ready_card": {
+    "1": "Завершите настройку приложения используя ",
+    "2": "@:more.configuration_wizard",
+    "3": " для продолжения работы"
+  }
 }

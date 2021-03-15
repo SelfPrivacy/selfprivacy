@@ -11,7 +11,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
 
 class AppSettingsPage extends StatefulWidget {
-  const AppSettingsPage({Key key}) : super(key: key);
+  const AppSettingsPage({Key? key}) : super(key: key);
 
   @override
   _AppSettingsPageState createState() => _AppSettingsPageState();
@@ -20,9 +20,7 @@ class AppSettingsPage extends StatefulWidget {
 class _AppSettingsPageState extends State<AppSettingsPage> {
   @override
   Widget build(BuildContext context) {
-    var appSettings = context.watch<AppSettingsCubit>();
-
-    var isDarkModeOn = appSettings.state.isDarkModeOn;
+    var isDarkModeOn = context.watch<AppSettingsCubit>().state.isDarkModeOn;
 
     return SafeArea(
       child: Builder(builder: (context) {
@@ -57,8 +55,9 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       activeColor: BrandColors.green1,
                       activeTrackColor: BrandColors.green2,
                       value: Theme.of(context).brightness == Brightness.dark,
-                      onChanged: (value) => appSettings.updateDarkMode(
-                          isDarkModeOn: !isDarkModeOn),
+                      onChanged: (value) => context
+                          .read<AppSettingsCubit>()
+                          .updateDarkMode(isDarkModeOn: !isDarkModeOn),
                     ),
                   ],
                 ),
@@ -130,9 +129,9 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
 
 class _TextColumn extends StatelessWidget {
   const _TextColumn({
-    Key key,
-    @required this.title,
-    @required this.value,
+    Key? key,
+    required this.title,
+    required this.value,
     this.hasWarning = false,
   }) : super(key: key);
 

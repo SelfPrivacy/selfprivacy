@@ -4,11 +4,11 @@ import 'package:selfprivacy/utils/extensions/elevation_extension.dart';
 
 class BrandCard extends StatelessWidget {
   const BrandCard({
-    Key key,
+    Key? key,
     this.child,
   }) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {

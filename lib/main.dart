@@ -36,7 +36,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appSettings = context.watch<AppSettingsCubit>().state;
+    AppSettingsState appSettings = context.watch<AppSettingsCubit>().state;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light, // Manually changnig appbar color
@@ -51,12 +51,12 @@ class MyApp extends StatelessWidget {
         home: appSettings.isOnbordingShowing
             ? OnboardingPage(nextPage: InitializingPage())
             : RootPage(),
-        builder: (BuildContext context, Widget widget) {
+        builder: (BuildContext context, Widget? widget) {
           Widget error = Text('...rendering error...');
           if (widget is Scaffold || widget is Navigator)
             error = Scaffold(body: Center(child: error));
           ErrorWidget.builder = (FlutterErrorDetails errorDetails) => error;
-          return widget;
+          return widget!;
         },
       ),
     );

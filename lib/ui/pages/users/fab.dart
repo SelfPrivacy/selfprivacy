@@ -1,7 +1,7 @@
 part of 'users.dart';
 
 class _Fab extends StatelessWidget {
-  const _Fab({Key key}) : super(key: key);
+  const _Fab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -7,10 +7,10 @@ class CloudFlareDomain {
   CloudFlareDomain({this.domainName, this.zoneId});
 
   @HiveField(0)
-  final String domainName;
+  final String? domainName;
 
   @HiveField(1)
-  final String zoneId;
+  final String? zoneId;
 
   @override
   String toString() {

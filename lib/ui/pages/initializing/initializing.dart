@@ -81,7 +81,7 @@ class InitializingPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                       materialRoute(RootPage()),
-                      (predicate) => predicate == null,
+                      (predicate) => false,
                     );
                   }),
               SizedBox(height: 30),
@@ -96,7 +96,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => HetznerFormCubit(initializingCubit),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<HetznerFormCubit>();
+        var formCubitState = context.watch<HetznerFormCubit>().state;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -111,7 +111,7 @@ class InitializingPage extends StatelessWidget {
                 'Здесь будут жить наши данные и SelfPrivacy-сервисы'),
             Spacer(),
             CubitFormTextField(
-              formFieldCubit: formCubit.apiKey,
+              formFieldCubit: context.read<HetznerFormCubit>().apiKey,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
@@ -120,8 +120,9 @@ class InitializingPage extends StatelessWidget {
             ),
             Spacer(),
             BrandButton.rised(
-              onPressed:
-                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
+              onPressed: formCubitState.isSubmitting
+                  ? null
+                  : () => context.read<HetznerFormCubit>().trySubmit(),
               title: 'Подключить',
             ),
             SizedBox(height: 10),
@@ -150,7 +151,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => CloudFlareFormCubit(initializingCubit),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<CloudFlareFormCubit>();
+        var formCubitState = context.watch<CloudFlareFormCubit>().state;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +166,7 @@ class InitializingPage extends StatelessWidget {
             BrandText.body2('Для управления DNS вашего домена'),
             Spacer(),
             CubitFormTextField(
-              formFieldCubit: formCubit.apiKey,
+              formFieldCubit: context.read<CloudFlareFormCubit>().apiKey,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
@@ -174,8 +175,9 @@ class InitializingPage extends StatelessWidget {
             ),
             Spacer(),
             BrandButton.rised(
-              onPressed:
-                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
+              onPressed: formCubitState.isSubmitting
+                  ? null
+                  : () => context.read<CloudFlareFormCubit>().trySubmit(),
               title: 'Подключить',
             ),
             SizedBox(height: 10),
@@ -193,7 +195,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => BackblazeFormCubit(initializingCubit),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<BackblazeFormCubit>();
+        var formCubitState = context.watch<BackblazeFormCubit>().state;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -206,7 +208,7 @@ class InitializingPage extends StatelessWidget {
             SizedBox(height: 10),
             Spacer(),
             CubitFormTextField(
-              formFieldCubit: formCubit.keyId,
+              formFieldCubit: context.read<BackblazeFormCubit>().keyId,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
@@ -215,7 +217,7 @@ class InitializingPage extends StatelessWidget {
             ),
             Spacer(),
             CubitFormTextField(
-              formFieldCubit: formCubit.applicationKey,
+              formFieldCubit: context.read<BackblazeFormCubit>().applicationKey,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
@@ -224,8 +226,9 @@ class InitializingPage extends StatelessWidget {
             ),
             Spacer(),
             BrandButton.rised(
-              onPressed:
-                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
+              onPressed: formCubitState.isSubmitting
+                  ? null
+                  : () => context.read<BackblazeFormCubit>().trySubmit(),
               title: 'Подключить',
             ),
             SizedBox(height: 10),
@@ -243,8 +246,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => DomainSetupCubit(initializingCubit)..load(),
       child: Builder(builder: (context) {
-        var domainSetup = context.watch<DomainSetupCubit>();
-        var state = domainSetup.state;
+        DomainSetupState state = context.watch<DomainSetupCubit>().state;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -283,7 +285,7 @@ class InitializingPage extends StatelessWidget {
                   Container(
                     width: 50,
                     child: BrandButton.rised(
-                      onPressed: () => domainSetup.load(),
+                      onPressed: () => context.read<DomainSetupCubit>().load(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
@@ -302,7 +304,7 @@ class InitializingPage extends StatelessWidget {
             if (state is Empty) ...[
               SizedBox(height: 30),
               BrandButton.rised(
-                onPressed: () => domainSetup.load(),
+                onPressed: () => context.read<DomainSetupCubit>().load(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -319,7 +321,7 @@ class InitializingPage extends StatelessWidget {
             if (state is Loaded) ...[
               SizedBox(height: 30),
               BrandButton.rised(
-                onPressed: () => domainSetup.saveDomain(),
+                onPressed: () => context.read<DomainSetupCubit>().saveDomain(),
                 title: 'Сохранить домен',
               ),
             ],
@@ -340,7 +342,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => RootUserFormCubit(initializingCubit),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<RootUserFormCubit>();
+        var formCubitState = context.watch<RootUserFormCubit>().state;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,7 +350,7 @@ class InitializingPage extends StatelessWidget {
             Spacer(),
             SizedBox(height: 10),
             CubitFormTextField(
-              formFieldCubit: formCubit.userName,
+              formFieldCubit: context.read<RootUserFormCubit>().userName,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
@@ -357,12 +359,12 @@ class InitializingPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             BlocBuilder<FieldCubit<bool>, FieldCubitState<bool>>(
-              bloc: formCubit.isVisible,
+              bloc: context.read<RootUserFormCubit>().isVisible,
               builder: (context, state) {
                 var isVisible = state.value;
                 return CubitFormTextField(
                   obscureText: !isVisible,
-                  formFieldCubit: formCubit.password,
+                  formFieldCubit: context.read<RootUserFormCubit>().password,
                   textAlign: TextAlign.center,
                   scrollPadding: EdgeInsets.only(bottom: 70),
                   decoration: InputDecoration(
@@ -371,7 +373,10 @@ class InitializingPage extends StatelessWidget {
                       icon: Icon(
                         isVisible ? Icons.visibility : Icons.visibility_off,
                       ),
-                      onPressed: () => formCubit.isVisible.setValue(!isVisible),
+                      onPressed: () => context
+                          .read<RootUserFormCubit>()
+                          .isVisible
+                          .setValue(!isVisible),
                     ),
                     suffixIconConstraints: BoxConstraints(minWidth: 60),
                     prefixIconConstraints: BoxConstraints(maxWidth: 85),
@@ -382,8 +387,9 @@ class InitializingPage extends StatelessWidget {
             ),
             Spacer(),
             BrandButton.rised(
-              onPressed:
-                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
+              onPressed: formCubitState.isSubmitting
+                  ? null
+                  : () => context.read<RootUserFormCubit>().trySubmit(),
               title: 'Подключить',
             ),
             SizedBox(height: 10),
@@ -410,7 +416,7 @@ class InitializingPage extends StatelessWidget {
           Spacer(),
           BrandButton.rised(
             onPressed:
-                isLoading ? null : appConfigCubit.createServerAndSetDnsRecords,
+                isLoading! ? null : appConfigCubit.createServerAndSetDnsRecords,
             title: isLoading ? 'loading' : 'Создать сервер',
           ),
           Spacer(flex: 2),
@@ -427,10 +433,10 @@ class InitializingPage extends StatelessWidget {
     assert(appConfigCubit.state is TimerState, 'wronge state');
     var state = appConfigCubit.state as TimerState;
 
-    String text;
-    if (state.isServerReseted) {
+    String? text;
+    if (state.isServerReseted!) {
       text = 'Сервер презагружен, ждем последнюю проверку';
-    } else if (state.isServerStarted) {
+    } else if (state.isServerStarted!) {
       text = 'Cервер запушен, сейчас он будет проверен и перезагружен';
     } else if (state.isServerCreated) {
       text = 'Cервер создан, идет проверка ДНС адресов и запуск сервера';
@@ -443,7 +449,7 @@ class InitializingPage extends StatelessWidget {
           SizedBox(height: 10),
           BrandText.body2(text),
           SizedBox(height: 10),
-          if (!state.isLoading)
+          if (!state.isLoading!)
             Row(
               children: [
                 BrandText.body2('До следующей проверки: '),
@@ -453,7 +459,7 @@ class InitializingPage extends StatelessWidget {
                 )
               ],
             ),
-          if (state.isLoading) BrandText.body2('Проверка'),
+          if (state.isLoading!) BrandText.body2('Проверка'),
           Spacer(
             flex: 2,
           ),
@@ -477,7 +483,7 @@ class InitializingPage extends StatelessWidget {
 
 class _HowHetzner extends StatelessWidget {
   const _HowHetzner({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

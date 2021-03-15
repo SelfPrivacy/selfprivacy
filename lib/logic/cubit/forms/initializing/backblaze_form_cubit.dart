@@ -42,13 +42,14 @@ class BackblazeFormCubit extends FormCubit {
 
   final AppConfigCubit initializingCubit;
 
-  FieldCubit<String> keyId;
-
-  FieldCubit<String> applicationKey;
+  // ignore: close_sinks
+  late final FieldCubit<String> keyId;
+  // ignore: close_sinks
+  late final FieldCubit<String> applicationKey;
 
   @override
   FutureOr<bool> asyncValidation() async {
-    bool isKeyValid;
+    late bool isKeyValid;
     try {
       String encodedApiKey = encodedBackblazeKey(
         keyId.state.value,

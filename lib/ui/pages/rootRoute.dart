@@ -7,7 +7,7 @@ import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
 
 class RootPage extends StatefulWidget {
-  const RootPage({Key key}) : super(key: key);
+  const RootPage({Key? key}) : super(key: key);
 
   @override
   _RootPageState createState() => _RootPageState();
@@ -15,7 +15,7 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage>
     with SingleTickerProviderStateMixin {
-  TabController tabController;
+  TabController? tabController;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _RootPageState extends State<RootPage>
   @override
   void dispose() {
     super.dispose();
-    tabController.dispose();
+    tabController!.dispose();
   }
 
   @override

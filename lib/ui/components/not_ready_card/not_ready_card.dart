@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class NotReadyCard extends StatelessWidget {
-  const NotReadyCard({Key key}) : super(key: key);
+  const NotReadyCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +17,13 @@ class NotReadyCard extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-              text: 'Завершите настройку приложения используя ',
+              text: 'not_ready_card.1'.tr(),
               style: TextStyle(color: BrandColors.white),
             ),
             WidgetSpan(
               child: GestureDetector(
                 child: Text(
-                  'Мастер подключения',
+                  'not_ready_card.2'.tr(),
                   style: TextStyle(
                       color: Theme.of(context).brightness == Brightness.dark
                           ? Colors.blueAccent
@@ -38,7 +39,7 @@ class NotReadyCard extends StatelessWidget {
               ),
             ),
             TextSpan(
-              text: ' для продолжения работы',
+              text: 'not_ready_card.3'.tr(),
               style: TextStyle(color: BrandColors.white),
             ),
           ],

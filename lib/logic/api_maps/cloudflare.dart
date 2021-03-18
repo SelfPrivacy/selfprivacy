@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/dns_records.dart';
 
 class CloudflareApi extends ApiMap {
-  CloudflareApi([String token]) {
+  CloudflareApi([String? token]) {
     if (token != null) {
       loggedClient.options =
           BaseOptions(headers: {'Authorization': 'Bearer $token'});
@@ -13,7 +13,7 @@ class CloudflareApi extends ApiMap {
   }
 
   @override
-  String rootAddress = 'https://api.cloudflare.com/client/v4';
+  String? rootAddress = 'https://api.cloudflare.com/client/v4';
 
   Future<bool> isValid(String token) async {
     var url = '$rootAddress/user/tokens/verify';
@@ -35,7 +35,7 @@ class CloudflareApi extends ApiMap {
     }
   }
 
-  Future<String> getZoneId(String token, String domain) async {
+  Future<String?> getZoneId(String? token, String domain) async {
     var url = '$rootAddress/zones';
 
     var options = Options(
@@ -59,8 +59,8 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<void> removeSimilarRecords({
-    String ip4,
-    CloudFlareDomain cloudFlareDomain,
+    String? ip4,
+    required CloudFlareDomain cloudFlareDomain,
   }) async {
     var domainName = cloudFlareDomain.domainName;
     var domainZoneId = cloudFlareDomain.zoneId;
@@ -82,8 +82,8 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<void> createMultipleDnsRecords({
-    String ip4,
-    CloudFlareDomain cloudFlareDomain,
+    String? ip4,
+    required CloudFlareDomain cloudFlareDomain,
   }) async {
     var domainName = cloudFlareDomain.domainName;
     var domainZoneId = cloudFlareDomain.zoneId;
@@ -120,7 +120,7 @@ class CloudflareApi extends ApiMap {
   //   );
   // }
 
-  List<DnsRecords> projectDnsRecords(String domainName, String ip4) {
+  List<DnsRecords> projectDnsRecords(String? domainName, String? ip4) {
     var domainA = DnsRecords(type: 'A', name: domainName, content: ip4);
 
     var mx = DnsRecords(type: 'MX', name: '@', content: domainName);
@@ -161,7 +161,7 @@ class CloudflareApi extends ApiMap {
     ];
   }
 
-  Future<List<String>> domainList() async {
+  Future<List<String>?> domainList() async {
     var url = '$rootAddress/zones?per_page=50';
     var response = await loggedClient.get(
       url,
@@ -169,7 +169,7 @@ class CloudflareApi extends ApiMap {
     );
 
     return response.data['result']
-        .map<String>((el) => el['name'] as String)
+        .map<String>((el) => el['name'] as String?)
         .toList();
   }
 }

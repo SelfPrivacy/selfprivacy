@@ -2,8 +2,8 @@ part of 'app_settings_cubit.dart';
 
 class AppSettingsState extends Equatable {
   const AppSettingsState({
-    @required this.isDarkModeOn,
-    @required this.isOnbordingShowing,
+    required this.isDarkModeOn,
+    required this.isOnbordingShowing,
   });
 
   final bool isDarkModeOn;

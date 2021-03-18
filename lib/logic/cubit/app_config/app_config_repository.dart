@@ -60,7 +60,7 @@ class AppConfigRepository {
   }
 
   Future<HetznerServerDetails> startServer(
-    String hetznerKey,
+    String? hetznerKey,
     HetznerServerDetails hetznerServer,
   ) async {
     var hetznerApi = HetznerApi(hetznerKey);
@@ -75,7 +75,7 @@ class AppConfigRepository {
     await box.put(BNames.hetznerServer, serverDetails);
   }
 
-  Future<bool> isDnsAddressesMatch(String domainName, String ip4) async {
+  Future<bool> isDnsAddressesMatch(String? domainName, String? ip4) async {
     print(domainName);
     var addresses = <String>[
       '$domainName',
@@ -116,12 +116,12 @@ class AppConfigRepository {
   }
 
   Future<void> createServer(
-    String hetznerKey,
+    String? hetznerKey,
     User rootUser,
-    String domainName,
-    String cloudFlareKey, {
-    void Function() onCancel,
-    Future<void> Function(HetznerServerDetails serverDetails) onSuccess,
+    String? domainName,
+    String? cloudFlareKey, {
+    void Function()? onCancel,
+    required Future<void> Function(HetznerServerDetails serverDetails) onSuccess,
   }) async {
     var hetznerApi = HetznerApi(hetznerKey);
 
@@ -135,7 +135,7 @@ class AppConfigRepository {
       hetznerApi.close();
       onSuccess(serverDetails);
     } on DioError catch (e) {
-      if (e.response.data['error']['code'] == 'uniqueness_error') {
+      if (e.response!.data['error']['code'] == 'uniqueness_error') {
         var nav = getIt.get<NavigationService>();
         nav.showPopUpDialog(
           BrandAlert(
@@ -165,7 +165,7 @@ class AppConfigRepository {
                 text: 'Отменить',
                 onPressed: () {
                   hetznerApi.close();
-                  onCancel();
+                  onCancel!();
                 },
               ),
             ],
@@ -176,8 +176,8 @@ class AppConfigRepository {
   }
 
   Future<void> createDnsRecords(
-    String cloudFlareKey,
-    String ip4,
+    String? cloudFlareKey,
+    String? ip4,
     CloudFlareDomain cloudFlareDomain,
   ) async {
     var cloudflareApi = CloudflareApi(cloudFlareKey);
@@ -195,7 +195,7 @@ class AppConfigRepository {
     cloudflareApi.close();
   }
 
-  Future<bool> isHttpServerWorking(String domainName) async {
+  Future<bool> isHttpServerWorking(String? domainName) async {
     var api = ServerApi(domainName);
     var isHttpServerWorking = await api.isHttpServerWorking();
     api.close();
@@ -203,7 +203,7 @@ class AppConfigRepository {
   }
 
   Future<HetznerServerDetails> restart(
-    String hetznerKey,
+    String? hetznerKey,
     HetznerServerDetails server,
   ) async {
     var hetznerApi = HetznerApi(hetznerKey);

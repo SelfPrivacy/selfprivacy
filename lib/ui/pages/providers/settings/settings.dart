@@ -5,9 +5,10 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key key}) : super(key: key);
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class SettingsPage extends StatelessWidget {
       padding: brandPagePadding2,
       children: [
         SizedBox(height: 10),
-        BrandHeader(title: 'Настройки', hasBackButton: true),
+        BrandHeader(title: 'basis.settings'.tr(), hasBackButton: true),
         BrandDivider(),
         SwitcherBlock(
           onChange: (_) {},
@@ -62,9 +63,9 @@ class SettingsPage extends StatelessWidget {
 
 class _Button extends StatelessWidget {
   const _Button({
-    Key key,
-    @required this.onTap,
-    @required this.child,
+    Key? key,
+    required this.onTap,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -88,9 +89,9 @@ class _Button extends StatelessWidget {
 
 class _TextColumn extends StatelessWidget {
   const _TextColumn({
-    Key key,
-    @required this.title,
-    @required this.value,
+    Key? key,
+    required this.title,
+    required this.value,
     this.hasWarning = false,
   }) : super(key: key);
 

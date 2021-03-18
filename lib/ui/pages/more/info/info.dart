@@ -4,16 +4,17 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:package_info/package_info.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class InfoPage extends StatelessWidget {
-  const InfoPage({Key key}) : super(key: key);
+  const InfoPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
-          child: BrandHeader(title: 'О приложении', hasBackButton: true),
+          child: BrandHeader(title: 'more.about_app'.tr(), hasBackButton: true),
           preferredSize: Size.fromHeight(52),
         ),
         body: ListView(
@@ -24,8 +25,8 @@ class InfoPage extends StatelessWidget {
             FutureBuilder(
                 future: _version(),
                 builder: (context, snapshot) {
-                  return BrandText.body1(
-                      'Тут любая служебная информация, v.${snapshot.data}');
+                  return BrandText.body1('more.about_app_page.text'
+                      .tr(args: [snapshot.data.toString()]));
                 }),
           ],
         ),

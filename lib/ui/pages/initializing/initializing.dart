@@ -1,9 +1,7 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/domain_cloudflare.dart';
@@ -13,13 +11,14 @@ import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
+import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_span_button/brand_span_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class InitializingPage extends StatelessWidget {
   @override
@@ -60,9 +59,9 @@ class InitializingPage extends StatelessWidget {
                         'Domain',
                         'User',
                         'Server',
-                        'Check1',
-                        'Check2',
-                        'Check3'
+                        ' ✅',
+                        ' ✅',
+                        ' ✅'
                       ],
                       activeIndex: cubit.state.progress,
                     ),
@@ -76,12 +75,13 @@ class InitializingPage extends StatelessWidget {
                 ),
               ),
               BrandButton.text(
-                  title:
-                      cubit.state.isFullyInitilized ? 'Close' : 'Настрою потом',
+                  title: cubit.state.isFullyInitilized
+                      ? 'basis.close'.tr()
+                      : 'Настрою потом',
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                       materialRoute(RootPage()),
-                      (predicate) => predicate == null,
+                      (predicate) => false,
                     );
                   }),
               SizedBox(height: 30),
@@ -96,7 +96,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => HetznerFormCubit(initializingCubit),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<HetznerFormCubit>();
+        var formCubitState = context.watch<HetznerFormCubit>().state;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -105,13 +105,12 @@ class InitializingPage extends StatelessWidget {
               width: 150,
             ),
             SizedBox(height: 10),
-            BrandText.h2('Подключите сервер Hetzner'),
+            BrandText.h2('initializing.1'.tr()),
             SizedBox(height: 10),
-            BrandText.body2(
-                'Здесь будут жить наши данные и SelfPrivacy-сервисы'),
+            BrandText.body2('initializing.2'.tr()),
             Spacer(),
             CubitFormTextField(
-              formFieldCubit: formCubit.apiKey,
+              formFieldCubit: context.read<HetznerFormCubit>().apiKey,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
@@ -120,14 +119,15 @@ class InitializingPage extends StatelessWidget {
             ),
             Spacer(),
             BrandButton.rised(
-              onPressed:
-                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
-              title: 'Подключить',
+              onPressed: formCubitState.isSubmitting
+                  ? null
+                  : () => context.read<HetznerFormCubit>().trySubmit(),
+              title: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
               onPressed: () => _showModal(context, _HowHetzner()),
-              title: 'Как получить API Token',
+              title: 'initializing.how'.tr(),
             ),
           ],
         );
@@ -150,7 +150,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => CloudFlareFormCubit(initializingCubit),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<CloudFlareFormCubit>();
+        var formCubitState = context.watch<CloudFlareFormCubit>().state;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,28 +160,29 @@ class InitializingPage extends StatelessWidget {
               width: 150,
             ),
             SizedBox(height: 10),
-            BrandText.h2('Подключите CloudFlare'),
+            BrandText.h2('initializing.3'.tr()),
             SizedBox(height: 10),
-            BrandText.body2('Для управления DNS вашего домена'),
+            BrandText.body2('initializing.4'.tr()),
             Spacer(),
             CubitFormTextField(
-              formFieldCubit: formCubit.apiKey,
+              formFieldCubit: context.read<CloudFlareFormCubit>().apiKey,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
-                hintText: 'CloudFlare API Token',
+                hintText: 'initializing.5'.tr(),
               ),
             ),
             Spacer(),
             BrandButton.rised(
-              onPressed:
-                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
-              title: 'Подключить',
+              onPressed: formCubitState.isSubmitting
+                  ? null
+                  : () => context.read<CloudFlareFormCubit>().trySubmit(),
+              title: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
-              onPressed: () {},
-              title: 'Как получить API Token',
+              onPressed: () => _showModal(context, _HowHetzner()),
+              title: 'initializing.how'.tr(),
             ),
           ],
         );
@@ -193,7 +194,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => BackblazeFormCubit(initializingCubit),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<BackblazeFormCubit>();
+        var formCubitState = context.watch<BackblazeFormCubit>().state;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -202,11 +203,11 @@ class InitializingPage extends StatelessWidget {
               height: 50,
             ),
             SizedBox(height: 10),
-            BrandText.h2('Подключите облачное хранилище Backblaze'),
+            BrandText.h2('initializing.6'.tr()),
             SizedBox(height: 10),
             Spacer(),
             CubitFormTextField(
-              formFieldCubit: formCubit.keyId,
+              formFieldCubit: context.read<BackblazeFormCubit>().keyId,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
@@ -215,7 +216,7 @@ class InitializingPage extends StatelessWidget {
             ),
             Spacer(),
             CubitFormTextField(
-              formFieldCubit: formCubit.applicationKey,
+              formFieldCubit: context.read<BackblazeFormCubit>().applicationKey,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
@@ -224,14 +225,15 @@ class InitializingPage extends StatelessWidget {
             ),
             Spacer(),
             BrandButton.rised(
-              onPressed:
-                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
-              title: 'Подключить',
+              onPressed: formCubitState.isSubmitting
+                  ? null
+                  : () => context.read<BackblazeFormCubit>().trySubmit(),
+              title: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
               onPressed: () => _showModal(context, _HowHetzner()),
-              title: 'Как получить API Token',
+              title: 'initializing.how'.tr(),
             ),
           ],
         );
@@ -243,8 +245,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => DomainSetupCubit(initializingCubit)..load(),
       child: Builder(builder: (context) {
-        var domainSetup = context.watch<DomainSetupCubit>();
-        var state = domainSetup.state;
+        DomainSetupState state = context.watch<DomainSetupCubit>().state;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -253,19 +254,18 @@ class InitializingPage extends StatelessWidget {
               width: 150,
             ),
             SizedBox(height: 30),
-            BrandText.h2('Домен'),
+            BrandText.h2('basis.domain'.tr()),
             SizedBox(height: 10),
-            if (state is Empty)
-              BrandText.body2('На данный момент подлюченных доменов нет'),
+            if (state is Empty) BrandText.body2('initializing.7'.tr()),
             if (state is Loading)
               BrandText.body2(
                 state.type == LoadingTypes.loadingDomain
-                    ? 'Загружаем список доменов'
-                    : 'Сохранение..',
+                    ? 'initializing.8'.tr()
+                    : 'basis.saving'.tr(),
               ),
             if (state is MoreThenOne)
               BrandText.body2(
-                'Найдено больше одного домена, для вашей безопастности, просим вам удалить не нужные домены',
+                'initializing.9'.tr(),
               ),
             if (state is Loaded) ...[
               SizedBox(height: 10),
@@ -283,7 +283,7 @@ class InitializingPage extends StatelessWidget {
                   Container(
                     width: 50,
                     child: BrandButton.rised(
-                      onPressed: () => domainSetup.load(),
+                      onPressed: () => context.read<DomainSetupCubit>().load(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
@@ -302,7 +302,7 @@ class InitializingPage extends StatelessWidget {
             if (state is Empty) ...[
               SizedBox(height: 30),
               BrandButton.rised(
-                onPressed: () => domainSetup.load(),
+                onPressed: () => context.read<DomainSetupCubit>().load(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -319,8 +319,8 @@ class InitializingPage extends StatelessWidget {
             if (state is Loaded) ...[
               SizedBox(height: 30),
               BrandButton.rised(
-                onPressed: () => domainSetup.saveDomain(),
-                title: 'Сохранить домен',
+                onPressed: () => context.read<DomainSetupCubit>().saveDomain(),
+                title: 'initializing.10'.tr(),
               ),
             ],
             SizedBox(height: 10),
@@ -328,7 +328,7 @@ class InitializingPage extends StatelessWidget {
             SizedBox(height: 10),
             BrandButton.text(
               onPressed: () => _showModal(context, _HowHetzner()),
-              title: 'Как получить API Token',
+              title: 'initializing.how'.tr(),
             ),
           ],
         );
@@ -340,7 +340,7 @@ class InitializingPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => RootUserFormCubit(initializingCubit),
       child: Builder(builder: (context) {
-        var formCubit = context.watch<RootUserFormCubit>();
+        var formCubitState = context.watch<RootUserFormCubit>().state;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,30 +348,33 @@ class InitializingPage extends StatelessWidget {
             Spacer(),
             SizedBox(height: 10),
             CubitFormTextField(
-              formFieldCubit: formCubit.userName,
+              formFieldCubit: context.read<RootUserFormCubit>().userName,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
-                hintText: 'Никнейм',
+                hintText: 'basis.nickname'.tr(),
               ),
             ),
             SizedBox(height: 10),
             BlocBuilder<FieldCubit<bool>, FieldCubitState<bool>>(
-              cubit: formCubit.isVisible,
+              bloc: context.read<RootUserFormCubit>().isVisible,
               builder: (context, state) {
                 var isVisible = state.value;
                 return CubitFormTextField(
                   obscureText: !isVisible,
-                  formFieldCubit: formCubit.password,
+                  formFieldCubit: context.read<RootUserFormCubit>().password,
                   textAlign: TextAlign.center,
                   scrollPadding: EdgeInsets.only(bottom: 70),
                   decoration: InputDecoration(
-                    hintText: 'Пароль',
+                    hintText: 'basis.password'.tr(),
                     suffixIcon: IconButton(
                       icon: Icon(
                         isVisible ? Icons.visibility : Icons.visibility_off,
                       ),
-                      onPressed: () => formCubit.isVisible.setValue(!isVisible),
+                      onPressed: () => context
+                          .read<RootUserFormCubit>()
+                          .isVisible
+                          .setValue(!isVisible),
                     ),
                     suffixIconConstraints: BoxConstraints(minWidth: 60),
                     prefixIconConstraints: BoxConstraints(maxWidth: 85),
@@ -382,14 +385,15 @@ class InitializingPage extends StatelessWidget {
             ),
             Spacer(),
             BrandButton.rised(
-              onPressed:
-                  formCubit.state.isSubmitting ? null : formCubit.trySubmit,
-              title: 'Подключить',
+              onPressed: formCubitState.isSubmitting
+                  ? null
+                  : () => context.read<RootUserFormCubit>().trySubmit(),
+              title: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
               onPressed: () => _showModal(context, _HowHetzner()),
-              title: 'Как получить API Token',
+              title: 'initializing.how'.tr(),
             ),
           ],
         );
@@ -404,19 +408,19 @@ class InitializingPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Spacer(flex: 2),
-          BrandText.h2('Создать сервер'),
+          BrandText.h2('initializing.how'.tr()),
           SizedBox(height: 10),
-          BrandText.body2('Создать сервер'),
+          BrandText.body2('initializing.11'.tr()),
           Spacer(),
           BrandButton.rised(
             onPressed:
-                isLoading ? null : appConfigCubit.createServerAndSetDnsRecords,
-            title: isLoading ? 'loading' : 'Создать сервер',
+                isLoading! ? null : appConfigCubit.createServerAndSetDnsRecords,
+            title: isLoading ? 'loading' : 'initializing.11'.tr(),
           ),
           Spacer(flex: 2),
           BrandButton.text(
             onPressed: () => _showModal(context, _HowHetzner()),
-            title: 'Что это значит?',
+            title: 'initializing.what'.tr(),
           ),
         ],
       );
@@ -427,13 +431,13 @@ class InitializingPage extends StatelessWidget {
     assert(appConfigCubit.state is TimerState, 'wronge state');
     var state = appConfigCubit.state as TimerState;
 
-    String text;
-    if (state.isServerReseted) {
-      text = 'Сервер презагружен, ждем последнюю проверку';
-    } else if (state.isServerStarted) {
-      text = 'Cервер запушен, сейчас он будет проверен и перезагружен';
+    String? text;
+    if (state.isServerReseted!) {
+      text = 'initializing.13'.tr();
+    } else if (state.isServerStarted!) {
+      text = 'initializing.14'.tr();
     } else if (state.isServerCreated) {
-      text = 'Cервер создан, идет проверка ДНС адресов и запуск сервера';
+      text = 'initializing.15'.tr();
     }
     return Builder(builder: (context) {
       return Column(
@@ -443,23 +447,23 @@ class InitializingPage extends StatelessWidget {
           SizedBox(height: 10),
           BrandText.body2(text),
           SizedBox(height: 10),
-          if (!state.isLoading)
+          if (!state.isLoading!)
             Row(
               children: [
-                BrandText.body2('До следующей проверки: '),
+                BrandText.body2('initializing.16'.tr()),
                 BrandTimer(
                   startDateTime: state.timerStart,
                   duration: state.duration,
                 )
               ],
             ),
-          if (state.isLoading) BrandText.body2('Проверка'),
+          if (state.isLoading!) BrandText.body2('initializing.17'.tr()),
           Spacer(
             flex: 2,
           ),
           BrandButton.text(
             onPressed: () => _showModal(context, _HowHetzner()),
-            title: 'Что это значит?',
+            title: 'initializing.what'.tr(),
           ),
         ],
       );
@@ -477,58 +481,17 @@ class InitializingPage extends StatelessWidget {
 
 class _HowHetzner extends StatelessWidget {
   const _HowHetzner({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Theme.of(context).brightness == Brightness.dark;
-
     return BrandModalSheet(
       child: Padding(
-        padding: brandPagePadding2,
-        child: Column(
-          children: [
-            SizedBox(height: 40),
-            BrandText.h2('Как получить Hetzner API Token'),
-            SizedBox(height: 20),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: '1 Переходим по ссылке ',
-                    style: body1Style.copyWith(
-                      color: isDark ? BrandColors.white : BrandColors.black,
-                    ),
-                  ),
-                  BrandSpanButton.link(
-                    text: 'hetzner.com',
-                    urlString: 'https://hetzner.com',
-                  ),
-                  TextSpan(
-                    text: '''
-                                  
-2 Заходим в созданный нами проект. Если такового - нет, значит создаём.
-
-3 Наводим мышкой на боковую панель. Она должна раскрыться, показав нам пункты меню. Нас интересует последний — Security (с иконкой ключика).
-
-4 Далее, в верхней части интерфейса видим примерно такой список: SSH Keys, API Tokens, Certificates, Members. Нам нужен API Tokens. Переходим по нему.
-
-5 В правой части интерфейса, нас будет ожидать кнопка Generate API token. Если же вы используете мобильную версию сайта, в нижнем правом углу вы увидите красный плюсик. Нажимаем на эту кнопку.
-
-6 В поле Description, даём нашему токену название (это может быть любое название, которые вам нравиться. Сути оно не меняет.
-
-                                  ''',
-                    style: body1Style.copyWith(
-                      color: isDark ? BrandColors.white : BrandColors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+          padding: brandPagePadding2.copyWith(top: 25),
+          child: BrandMarkdown(
+            fileName: 'how_hetzner',
+          )),
     );
   }
 }

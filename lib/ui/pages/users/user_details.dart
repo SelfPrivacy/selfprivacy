@@ -2,14 +2,20 @@ part of 'users.dart';
 
 class _UserDetails extends StatelessWidget {
   const _UserDetails({
-    Key key,
+    Key? key,
     this.user,
   }) : super(key: key);
 
-  final User user;
+  final User? user;
 
   @override
   Widget build(BuildContext context) {
+    var config = context.watch<AppConfigCubit>().state;
+
+    var domainName = config.isDomainFilled
+        ? config.cloudFlareDomain!.domainName!
+        : 'example.com';
+
     return BrandModalSheet(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -17,7 +23,7 @@ class _UserDetails extends StatelessWidget {
           Container(
             height: 200,
             decoration: BoxDecoration(
-              color: user.color,
+              color: user!.color,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(20),
               ),
@@ -42,26 +48,28 @@ class _UserDetails extends StatelessWidget {
                             break;
                           case PopupMenuItemType.delete:
                             showDialog(
-                                context: context,
-                                child: AlertDialog(
-                                  title: Text('Подтверждение '),
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('basis.confirmation'.tr()),
                                   content: SingleChildScrollView(
                                     child: ListBody(
                                       children: <Widget>[
-                                        Text('удалить учетную запись?'),
+                                        Text('users.delete_confirm_question'
+                                            .tr()),
                                       ],
                                     ),
                                   ),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: Text('Отменить'),
+                                      child: Text('basis.cancel'.tr()),
                                       onPressed: () {
                                         Navigator.of(context)..pop();
                                       },
                                     ),
                                     TextButton(
                                       child: Text(
-                                        'Удалить',
+                                        'basis.delete'.tr(),
                                         style: TextStyle(
                                           color: BrandColors.red1,
                                         ),
@@ -72,7 +80,9 @@ class _UserDetails extends StatelessWidget {
                                       },
                                     ),
                                   ],
-                                ));
+                                );
+                              },
+                            );
                             break;
                         }
                       },
@@ -82,7 +92,7 @@ class _UserDetails extends StatelessWidget {
                           value: PopupMenuItemType.reset,
                           child: Container(
                             padding: EdgeInsets.only(left: 5),
-                            child: Text('Сбросить пароль'),
+                            child: Text('users.reset_password'.tr()),
                           ),
                         ),
                         PopupMenuItem<PopupMenuItemType>(
@@ -90,7 +100,7 @@ class _UserDetails extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.only(left: 5),
                             child: Text(
-                              'Удалить',
+                              'basis.delete'.tr(),
                               style: TextStyle(color: BrandColors.red1),
                             ),
                           ),
@@ -106,7 +116,7 @@ class _UserDetails extends StatelessWidget {
                       horizontal: 15,
                     ),
                     child: BrandText.h1(
-                      user.login,
+                      user!.login,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                     )),
@@ -119,32 +129,28 @@ class _UserDetails extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BrandText.small('Учетная запись'),
+                BrandText.small('users.account'.tr()),
                 Container(
                   height: 40,
                   alignment: Alignment.centerLeft,
-                  child: BrandText.h4('${user.login}@example.com'),
+                  child: BrandText.h4('${user!.login}@$domainName'),
                 ),
                 SizedBox(height: 14),
-                BrandText.small('Пароль'),
+                BrandText.small('basis.password'.tr()),
                 Container(
                   height: 40,
                   alignment: Alignment.centerLeft,
-                  child: BrandText.h4(user.password),
+                  child: BrandText.h4(user!.password),
                 ),
                 SizedBox(height: 24),
                 BrandDivider(),
                 SizedBox(height: 20),
                 BrandButton.iconText(
-                  title: 'Отправить реквизиты для входа',
+                  title: 'users.send_regisration_data'.tr(),
                   icon: Icon(BrandIcons.share),
                   onPressed: () {},
                 ),
                 SizedBox(height: 20),
-                BrandDivider(),
-                SizedBox(height: 20),
-                Text(
-                    'Вам был создан доступ к сервисам с логином <login> и паролем <password> к сервисам:-  E-mail с адресом <username@domain.com>-  Менеджер паролей: <pass.domain.com>- Файловое облако: <cloud.mydomain.com>- Видеоконференция <meet.domain.com>- Git сервер <git.mydomain.com>'),
               ],
             ),
           )

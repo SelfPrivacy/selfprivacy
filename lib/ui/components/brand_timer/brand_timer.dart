@@ -6,21 +6,21 @@ import 'package:selfprivacy/utils/named_font_weight.dart';
 
 class BrandTimer extends StatefulWidget {
   const BrandTimer({
-    Key key,
-    @required this.startDateTime,
-    @required this.duration,
+    Key? key,
+    required this.startDateTime,
+    required this.duration,
   }) : super(key: key);
 
-  final DateTime startDateTime;
-  final Duration duration;
+  final DateTime? startDateTime;
+  final Duration? duration;
 
   @override
   _BrandTimerState createState() => _BrandTimerState();
 }
 
 class _BrandTimerState extends State<BrandTimer> {
-  String _timeString;
-  Timer timer;
+  String? _timeString;
+  late Timer timer;
 
   @override
   void initState() {
@@ -31,8 +31,8 @@ class _BrandTimerState extends State<BrandTimer> {
   _timerStart() {
     _timeString = diffenceFromStart;
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-      var timePassed = DateTime.now().difference(widget.startDateTime);
-      if (timePassed > widget.duration) {
+      var timePassed = DateTime.now().difference(widget.startDateTime!);
+      if (timePassed > widget.duration!) {
         t.cancel();
       } else {
         _getTime();
@@ -66,12 +66,12 @@ class _BrandTimerState extends State<BrandTimer> {
   }
 
   String get diffenceFromStart =>
-      _durationToString(DateTime.now().difference(widget.startDateTime));
+      _durationToString(DateTime.now().difference(widget.startDateTime!));
 
   String _durationToString(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitSeconds =
-        twoDigits(widget.duration.inSeconds - duration.inSeconds.remainder(60));
+        twoDigits(widget.duration!.inSeconds - duration.inSeconds.remainder(60));
 
     return "$twoDigitSeconds cек";
   }

@@ -8,14 +8,14 @@ extension ElevationExtension on BoxDecoration {
   BoxDecoration get ev8 => copyWith(boxShadow: [shadow8]);
 
   BoxDecoration copyWith({
-    Color color,
-    DecorationImage image,
-    BoxBorder border,
-    BorderRadiusGeometry borderRadius,
-    List<BoxShadow> boxShadow,
-    Gradient gradient,
-    BlendMode backgroundBlendMode,
-    BoxShape shape,
+    Color? color,
+    DecorationImage? image,
+    BoxBorder? border,
+    BorderRadiusGeometry? borderRadius,
+    List<BoxShadow>? boxShadow,
+    Gradient? gradient,
+    BlendMode? backgroundBlendMode,
+    BoxShape? shape,
   }) {
     return BoxDecoration(
       color: color ?? this.color,

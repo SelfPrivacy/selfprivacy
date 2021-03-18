@@ -8,14 +8,14 @@ part 'users_state.dart';
 class UsersCubit extends Cubit<UsersState> {
   UsersCubit() : super(UsersState([]));
 
-  void add(User user) {
+  void addUser(User user) {
     var users = [...state.users];
     users.add(user);
 
     emit(UsersState(users));
   }
 
-  void remove(User user) {
+  void remove(User? user) {
     var users = [...state.users];
     users.remove(user);
 

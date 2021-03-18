@@ -12,10 +12,10 @@ String genPass() {
 ///The password [_generatedValue] is of a specified length, including letters [_letterGen] of mixed cases,
 ///numbers [_numGen], and symbols[_symGen] depending on user choice.
 class PasswordGenerator {
-  bool _letterGen;
-  bool _numGen;
-  bool _symGen;
-  String _generatedValue;
+  late bool _letterGen;
+  late bool _numGen;
+  late bool _symGen;
+  late String _generatedValue;
 
   ///Constructor.
   ///
@@ -43,7 +43,7 @@ class PasswordGenerator {
     ///'Randomly' selectes caracter type to generate and append [toAppend] to [_generatedValue]
     // ignore: unnecessary_statements
     for (n; n > 0; n--) {
-      String toAppend;
+      String? toAppend;
       var random = new Random();
 
       ///loops until a valid character is generated, meaning the user has to check the character value
@@ -67,7 +67,7 @@ class PasswordGenerator {
 
   ///Generates a letter when called.
   String _generateLetter() {
-    if (!_letterGen) return null;
+    if (!_letterGen) return '';
 
     ///Finds the integer value for the range between a-z and A-Z, with [base] UTF-16 value for lowercase letters and
     ///[baseUpper] UTF-16 value for uppercase letters
@@ -87,7 +87,7 @@ class PasswordGenerator {
   }
 
   ///Generates a number when called
-  String _generateNumber() {
+  String? _generateNumber() {
     if (!_numGen) return null;
 
     ///Finds the integer value for the range between 0-9
@@ -101,7 +101,7 @@ class PasswordGenerator {
   }
 
   ///Generates a symbol when called
-  String _generateSymbol() {
+  String? _generateSymbol() {
     if (!_symGen) return null;
 
     ///Finds the integer value for the range between symbols !-.

@@ -1,12 +1,10 @@
-import 'package:flutter/foundation.dart';
-
 class ServerStatus {
   final StatusTypes http;
   final StatusTypes imap;
   final StatusTypes smtp;
 
   ServerStatus({
-    @required this.http,
+    required this.http,
     this.imap = StatusTypes.nodata,
     this.smtp = StatusTypes.nodata,
   });
@@ -20,7 +18,7 @@ class ServerStatus {
   }
 }
 
-StatusTypes statusTypeFromNumber(int number) {
+StatusTypes statusTypeFromNumber(int? number) {
   if (number == 0) {
     return StatusTypes.ok;
   } else if (number == 1) {

@@ -4,11 +4,11 @@ var navigatorKey = GlobalKey<NavigatorState>();
 
 class BrandModalSheet extends StatelessWidget {
   const BrandModalSheet({
-    Key key,
+    Key? key,
     this.child,
   }) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -43,18 +43,17 @@ class BrandModalSheet extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height - 32 - 4,
-                      maxHeight: MediaQuery.of(context).size.height,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20)),
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                    ),
-                    width: double.infinity,
-                    child: child
-                  ),
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height - 132,
+                        maxHeight: MediaQuery.of(context).size.height - 132,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                      ),
+                      width: double.infinity,
+                      child: child),
                 ],
               ),
             ),

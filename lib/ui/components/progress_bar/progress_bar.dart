@@ -7,9 +7,9 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class ProgressBar extends StatefulWidget {
   ProgressBar({
-    Key key,
-    @required this.steps,
-    @required this.activeIndex,
+    Key? key,
+    required this.steps,
+    required this.activeIndex,
   }) : super(key: key);
 
   final int activeIndex;
@@ -102,14 +102,14 @@ class _ProgressBarState extends State<ProgressBar> {
   }
 
   Expanded _stepTitle({
-    int index,
-    TextStyle style,
-    String step,
+    required int index,
+    TextStyle? style,
+    String? step,
   }) {
     var isActive = index == widget.activeIndex;
     var checked = index < widget.activeIndex;
 
-    style = isActive ? style.copyWith(fontWeight: FontWeight.w700) : style;
+    style = isActive ? style!.copyWith(fontWeight: FontWeight.w700) : style;
     return Expanded(
       flex: 2,
       child: RichText(

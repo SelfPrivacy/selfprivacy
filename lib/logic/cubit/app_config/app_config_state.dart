@@ -2,21 +2,21 @@ part of 'app_config_cubit.dart';
 
 class AppConfigState extends Equatable {
   const AppConfigState({
-    @required this.hetznerKey,
-    @required this.cloudFlareKey,
-    @required this.backblazeCredential,
-    @required this.cloudFlareDomain,
-    @required this.rootUser,
-    @required this.hetznerServer,
-    @required this.isServerStarted,
-    @required this.isServerReseted,
-    @required this.hasFinalChecked,
-    @required this.isLoading,
-    @required this.error,
+    required this.hetznerKey,
+    required this.cloudFlareKey,
+    required this.backblazeCredential,
+    required this.cloudFlareDomain,
+    required this.rootUser,
+    required this.hetznerServer,
+    required this.isServerStarted,
+    required this.isServerReseted,
+    required this.hasFinalChecked,
+    required this.isLoading,
+    required this.error,
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         hetznerKey,
         cloudFlareKey,
         backblazeCredential,
@@ -30,31 +30,31 @@ class AppConfigState extends Equatable {
         error,
       ];
 
-  final String hetznerKey;
-  final String cloudFlareKey;
-  final BackblazeCredential backblazeCredential;
-  final CloudFlareDomain cloudFlareDomain;
-  final User rootUser;
-  final HetznerServerDetails hetznerServer;
-  final bool isServerStarted;
-  final bool isServerReseted;
-  final bool hasFinalChecked;
+  final String? hetznerKey;
+  final String? cloudFlareKey;
+  final BackblazeCredential? backblazeCredential;
+  final CloudFlareDomain? cloudFlareDomain;
+  final User? rootUser;
+  final HetznerServerDetails? hetznerServer;
+  final bool? isServerStarted;
+  final bool? isServerReseted;
+  final bool? hasFinalChecked;
 
-  final bool isLoading;
-  final Exception error;
+  final bool? isLoading;
+  final Exception? error;
 
   AppConfigState copyWith({
-    String hetznerKey,
-    String cloudFlareKey,
-    BackblazeCredential backblazeCredential,
-    CloudFlareDomain cloudFlareDomain,
-    User rootUser,
-    HetznerServerDetails hetznerServer,
-    bool isServerStarted,
-    bool isServerReseted,
-    bool hasFinalChecked,
-    bool isLoading,
-    Exception error,
+    String? hetznerKey,
+    String? cloudFlareKey,
+    BackblazeCredential? backblazeCredential,
+    CloudFlareDomain? cloudFlareDomain,
+    User? rootUser,
+    HetznerServerDetails? hetznerServer,
+    bool? isServerStarted,
+    bool? isServerReseted,
+    bool? hasFinalChecked,
+    bool? isLoading,
+    Exception? error,
   }) =>
       AppConfigState(
         hetznerKey: hetznerKey ?? this.hetznerKey,
@@ -77,10 +77,10 @@ class AppConfigState extends Equatable {
   bool get isUserFilled => rootUser != null;
   bool get isServerCreated => hetznerServer != null;
 
-  bool get isFullyInitilized => _fulfilementList.every((el) => el);
-  int get progress => _fulfilementList.where((el) => el).length;
+  bool get isFullyInitilized => _fulfilementList.every((el) => el!);
+  int get progress => _fulfilementList.where((el) => el!).length;
 
-  List<bool> get _fulfilementList => [
+  List<bool?> get _fulfilementList => [
         isHetznerFilled,
         isCloudFlareFilled,
         isBackblazeFilled,
@@ -112,10 +112,10 @@ class InitialAppConfigState extends AppConfigState {
 
 class TimerState extends AppConfigState {
   TimerState({
-    @required this.dataState,
+    required this.dataState,
     this.timerStart,
     this.duration,
-    @required bool isLoading,
+    required bool isLoading,
   }) : super(
           hetznerKey: dataState.hetznerKey,
           cloudFlareKey: dataState.cloudFlareKey,
@@ -131,11 +131,11 @@ class TimerState extends AppConfigState {
         );
 
   final AppConfigState dataState;
-  final DateTime timerStart;
-  final Duration duration;
+  final DateTime? timerStart;
+  final Duration? duration;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         dataState,
         timerStart,
         duration,

@@ -3,10 +3,10 @@ import 'package:selfprivacy/config/brand_colors.dart';
 
 class SwitcherBlock extends StatelessWidget {
   const SwitcherBlock({
-    Key key,
-    @required this.child,
-    @required this.isActive,
-    @required this.onChange,
+    Key? key,
+    required this.child,
+    required this.isActive,
+    required this.onChange,
   }) : super(key: key);
 
   final Widget child;

@@ -1,41 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
 
 import 'brand_colors.dart';
 
-final defaultTextStyle = GoogleFonts.inter(
-  textStyle: TextStyle(
-    fontSize: 15,
-    color: BrandColors.textColor1,
-  ),
+final defaultTextStyle = TextStyle(
+  fontSize: 15,
+  color: BrandColors.textColor1,
 );
 
-final headline1Style = GoogleFonts.inter(
+final headline1Style = defaultTextStyle.copyWith(
   fontSize: 40,
   fontWeight: NamedFontWeight.extraBold,
   color: BrandColors.headlineColor,
 );
 
-final headline2Style = GoogleFonts.inter(
+final headline2Style = defaultTextStyle.copyWith(
   fontSize: 24,
   fontWeight: NamedFontWeight.extraBold,
   color: BrandColors.headlineColor,
 );
 
-final onboardingTitle = GoogleFonts.inter(
+final onboardingTitle = defaultTextStyle.copyWith(
   fontSize: 30,
   fontWeight: NamedFontWeight.extraBold,
   color: BrandColors.headlineColor,
 );
 
-final headline3Style = GoogleFonts.inter(
+final headline3Style = defaultTextStyle.copyWith(
   fontSize: 20,
   fontWeight: NamedFontWeight.extraBold,
   color: BrandColors.headlineColor,
 );
 
-final headline4Style = GoogleFonts.inter(
+final headline4Style = defaultTextStyle.copyWith(
   fontSize: 18,
   fontWeight: NamedFontWeight.medium,
   color: BrandColors.headlineColor,
@@ -59,16 +56,12 @@ final smallStyle = defaultTextStyle.copyWith(fontSize: 11, height: 1.45);
 
 final linkStyle = defaultTextStyle.copyWith(color: BrandColors.blue);
 
-final progressTextStyleLight = GoogleFonts.inter(
-  textStyle: TextStyle(
-    fontSize: 11,
-    color: BrandColors.textColor1,
-  ),
+final progressTextStyleLight = TextStyle(
+  fontSize: 11,
+  color: BrandColors.textColor1,
 );
 
-final progressTextStyleDark = GoogleFonts.inter(
-  textStyle: TextStyle(
-    fontSize: 11,
-    color: BrandColors.white,
-  ),
+final progressTextStyleDark = TextStyle(
+  fontSize: 11,
+  color: BrandColors.white,
 );

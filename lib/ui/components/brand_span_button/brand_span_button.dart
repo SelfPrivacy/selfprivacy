@@ -5,21 +5,19 @@ import 'package:url_launcher/url_launcher.dart';
 
 class BrandSpanButton extends TextSpan {
   BrandSpanButton({
-    @required String text,
-    @required VoidCallback onTap,
-    TextStyle style,
-  })  : assert(text != null),
-        assert(onTap != null),
-        super(
+    required String text,
+    required VoidCallback onTap,
+    TextStyle? style,
+  }) : super(
           recognizer: TapGestureRecognizer()..onTap = onTap,
           text: text,
           style: (style ?? TextStyle()).copyWith(color: BrandColors.blue),
         );
 
   static link({
-    @required String text,
-    String urlString,
-    TextStyle style,
+    required String text,
+    String? urlString,
+    TextStyle? style,
   }) =>
       BrandSpanButton(
         text: text,

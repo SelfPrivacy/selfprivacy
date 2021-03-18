@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'api_map.dart';
 
 class ServerApi extends ApiMap {
-  ServerApi(String domainName) {
+  ServerApi(String? domainName) {
     loggedClient.options = BaseOptions(
       baseUrl: 'https://api.$domainName',
     );

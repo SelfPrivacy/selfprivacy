@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 final _kBottomTabBarHeight = 51;
 
 class BrandTabBar extends StatefulWidget {
-  BrandTabBar({Key key, this.controller}) : super(key: key);
+  BrandTabBar({Key? key, this.controller}) : super(key: key);
 
-  final TabController controller;
+  final TabController? controller;
   @override
   _BrandTabBarState createState() => _BrandTabBarState();
 }
 
 class _BrandTabBarState extends State<BrandTabBar> {
-  int currentIndex;
+  int? currentIndex;
   @override
   void initState() {
-    currentIndex = widget.controller.index;
-    widget.controller.addListener(_listener);
+    currentIndex = widget.controller!.index;
+    widget.controller!.addListener(_listener);
     super.initState();
   }
 
   _listener() {
-    if (currentIndex != widget.controller.index) {
+    if (currentIndex != widget.controller!.index) {
       setState(() {
-        currentIndex = widget.controller.index;
+        currentIndex = widget.controller!.index;
       });
     }
   }
 
   @override
   void dispose() {
-    widget.controller ?? widget.controller.removeListener(_listener);
+    widget.controller ?? widget.controller!.removeListener(_listener);
     super.dispose();
   }
 
@@ -50,10 +51,10 @@ class _BrandTabBarState extends State<BrandTabBar> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _getIconButton('Провайдеры', BrandIcons.server, 0),
-            _getIconButton('Сервисы', BrandIcons.box, 1),
-            _getIconButton('Пользователи', BrandIcons.users, 2),
-            _getIconButton('Еще', BrandIcons.menu, 3),
+            _getIconButton('basis.providers'.tr(), BrandIcons.server, 0),
+            _getIconButton('basis.services'.tr(), BrandIcons.box, 1),
+            _getIconButton('basis.users'.tr(), BrandIcons.users, 2),
+            _getIconButton('basis.more'.tr(), BrandIcons.menu, 3),
           ],
         ),
       ),
@@ -68,7 +69,7 @@ class _BrandTabBarState extends State<BrandTabBar> {
     var isActive = currentIndex == index;
     var color = isActive ? acitivColor : BrandColors.inactive;
     return InkWell(
-      onTap: () => widget.controller.animateTo(index),
+      onTap: () => widget.controller!.animateTo(index),
       child: Padding(
         padding: EdgeInsets.all(6),
         child: ConstrainedBox(

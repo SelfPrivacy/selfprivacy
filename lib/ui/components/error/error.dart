@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BrandError extends StatelessWidget {
-  const BrandError({Key key, this.error, this.stackTrace}) : super(key: key);
+  const BrandError({Key? key, this.error, this.stackTrace}) : super(key: key);
 
-  final Object error;
-  final StackTrace stackTrace;
+  final Object? error;
+  final StackTrace? stackTrace;
 
   @override
   Widget build(BuildContext context) {

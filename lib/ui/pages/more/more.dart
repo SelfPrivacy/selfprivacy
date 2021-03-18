@@ -9,6 +9,7 @@ import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'about/about.dart';
 import 'app_settings/app_setting.dart';
@@ -16,13 +17,13 @@ import 'console/console.dart';
 import 'info/info.dart';
 
 class MorePage extends StatelessWidget {
-  const MorePage({Key key}) : super(key: key);
+  const MorePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        child: BrandHeader(title: 'Еще'),
+        child: BrandHeader(title: 'basis.more'.tr()),
         preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
@@ -33,33 +34,33 @@ class MorePage extends StatelessWidget {
               children: [
                 BrandDivider(),
                 _NavItem(
-                  title: 'Мастер Подключения',
-                  iconData: BrandIcons.settings,
+                  title: 'more.configuration_wizard'.tr(),
+                  iconData: BrandIcons.triangle,
                   goTo: InitializingPage(),
                 ),
                 _NavItem(
-                  title: 'Настройки приложения',
+                  title: 'more.settings'.tr(),
                   iconData: BrandIcons.settings,
                   goTo: AppSettingsPage(),
                 ),
                 _NavItem(
-                  title: 'О проекте Selfprivacy',
-                  iconData: BrandIcons.triangle,
+                  title: 'more.about_project'.tr(),
+                  iconData: BrandIcons.engineer,
                   goTo: AboutPage(),
                 ),
                 _NavItem(
-                  title: 'О приложении',
-                  iconData: BrandIcons.help,
+                  title: 'more.about_app'.tr(),
+                  iconData: BrandIcons.fire,
                   goTo: InfoPage(),
                 ),
                 _NavItem(
-                  title: 'Onboarding',
-                  iconData: BrandIcons.triangle,
+                  title: 'more.onboarding'.tr(),
+                  iconData: BrandIcons.start,
                   goTo: OnboardingPage(nextPage: RootPage()),
                 ),
                 _NavItem(
-                  title: 'Console',
-                  iconData: BrandIcons.triangle,
+                  title: 'more.console'.tr(),
+                  iconData: BrandIcons.terminal,
                   goTo: Console(),
                 ),
               ],
@@ -73,10 +74,10 @@ class MorePage extends StatelessWidget {
 
 class _NavItem extends StatelessWidget {
   const _NavItem({
-    Key key,
-    @required this.iconData,
-    @required this.goTo,
-    @required this.title,
+    Key? key,
+    required this.iconData,
+    required this.goTo,
+    required this.title,
   }) : super(key: key);
 
   final IconData iconData;

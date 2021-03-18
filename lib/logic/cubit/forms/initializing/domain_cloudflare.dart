@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 
 class DomainSetupCubit extends Cubit<DomainSetupState> {
   DomainSetupCubit(this.initializingCubit) : super(Initial()) {
-    var token = (initializingCubit.state.cloudFlareKey);
+    var token = initializingCubit.state.cloudFlareKey;
 
     assert(token != null, 'no cloudflare token');
 
@@ -13,11 +13,11 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
   }
 
   AppConfigCubit initializingCubit;
-  CloudflareApi api;
+  late CloudflareApi api;
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));
-    var list = await api.domainList();
+    var list = await (api.domainList() as Future<List<String>>);
     if (list.isEmpty) {
       emit(Empty());
     } else if (list.length == 1) {

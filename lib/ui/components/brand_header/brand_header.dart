@@ -4,8 +4,8 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class BrandHeader extends StatelessWidget {
   const BrandHeader({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
     this.hasBackButton = false,
   }) : super(key: key);
 

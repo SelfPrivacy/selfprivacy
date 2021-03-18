@@ -5,6 +5,7 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class SettingsPage extends StatelessWidget {
       padding: brandPagePadding2,
       children: [
         SizedBox(height: 10),
-        BrandHeader(title: 'Настройки', hasBackButton: true),
+        BrandHeader(title: 'basis.settings'.tr(), hasBackButton: true),
         BrandDivider(),
         SwitcherBlock(
           onChange: (_) {},

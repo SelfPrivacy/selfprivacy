@@ -15,7 +15,7 @@ class _NoUsers extends StatelessWidget {
           Icon(BrandIcons.users, size: 50, color: BrandColors.grey7),
           SizedBox(height: 20),
           BrandText.h2(
-            'Здесь пока никого',
+            'users.nobody_here'.tr(),
             style: TextStyle(
               color: BrandColors.grey7,
             ),

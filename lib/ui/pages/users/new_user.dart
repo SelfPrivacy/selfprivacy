@@ -3,6 +3,12 @@ part of 'users.dart';
 class _NewUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var config = context.watch<AppConfigCubit>().state;
+
+    var domainName = config.isDomainFilled
+        ? config.cloudFlareDomain!.domainName!
+        : 'example.com';
+
     return BrandModalSheet(
       child: BlocProvider(
         create: (context) =>
@@ -19,7 +25,9 @@ class _NewUser extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BrandHeader(title: 'Новый пользователь'),
+                BrandHeader(
+                  title: 'users.new_user'.tr(),
+                ),
                 SizedBox(width: 14),
                 Padding(
                   padding: brandPagePadding2,
@@ -28,8 +36,8 @@ class _NewUser extends StatelessWidget {
                       CubitFormTextField(
                         formFieldCubit: context.read<UserFormCubit>().login,
                         decoration: InputDecoration(
-                          labelText: 'Логин',
-                          suffixText: '@example',
+                          labelText: 'users.login'.tr(),
+                          suffixText: '@$domainName',
                         ),
                       ),
                       SizedBox(height: 20),
@@ -37,7 +45,7 @@ class _NewUser extends StatelessWidget {
                         formFieldCubit: context.read<UserFormCubit>().password,
                         decoration: InputDecoration(
                           alignLabelWithHint: false,
-                          labelText: 'Пароль',
+                          labelText: 'basis.password'.tr(),
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: IconButton(
@@ -56,11 +64,10 @@ class _NewUser extends StatelessWidget {
                         onPressed: formCubitState.isSubmitting
                             ? null
                             : () => context.read<UserFormCubit>().trySubmit(),
-                        title: 'Создать',
+                        title: 'basis.create'.tr(),
                       ),
                       SizedBox(height: 40),
-                      Text(
-                          'Новый пользователь автоматически получит доступ ко всем сервисам. Ещё какое-то описание.'),
+                      Text('users.new_user_info_note'.tr()),
                       SizedBox(height: 30),
                     ],
                   ),

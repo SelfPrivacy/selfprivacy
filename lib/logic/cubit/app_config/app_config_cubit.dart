@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 
 import 'app_config_repository.dart';
+export 'package:provider/provider.dart';
 
 part 'app_config_state.dart';
 
@@ -281,49 +282,3 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     }
   }
 }
-
-// void checkDnsAndStartServer() async {
-//   var ip4 = state.hetznerServer.ip4;
-//   var domainName = state.cloudFlareDomain.domainName;
-
-//   var isMatch = await repository.isDnsAddressesMatch(domainName, ip4);
-
-//   if (isMatch) {
-//     var server = await repository.startServer(
-//       state.hetznerKey,
-//       state.hetznerServer,
-//     );
-//     repository.saveServerDetails(server);
-//     emit(
-//       state.copyWith(
-//         hasFinalChecked: true,
-//         isServerStarted: true,
-//         isLoading: false,
-//         hetznerServer: server,
-//       ),
-//     );
-//   } else {
-//     emit(state.copyWith(lastDnsCheckTime: DateTime.now()));
-//   }
-// }
-
-// void serverReset() async {
-//   var callBack = () async {
-//     var isServerWorking = await repository.isHttpServerWorking(
-//       state.cloudFlareDomain.domainName,
-//     );
-//     if (!isServerWorking) {
-//       var last = DateTime.now();
-//       // emit(state.copyWith(lastServerStatusCheckTime: last));
-//       return;
-//     }
-
-//     var hetznerServerDetails = await repository.restart(
-//       state.hetznerKey,
-//       state.hetznerServer,
-//     );
-//     emit(state.copyWith(hetznerServer: hetznerServerDetails));
-//   };
-
-//   _tryOrAddError(state, callBack);
-// }

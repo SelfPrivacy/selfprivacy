@@ -99,7 +99,7 @@ class BrandText extends StatelessWidget {
       );
   @override
   Text build(BuildContext context) {
-    TextStyle? style;
+    TextStyle style;
     var isDark = Theme.of(context).brightness == Brightness.dark;
 
     switch (type) {

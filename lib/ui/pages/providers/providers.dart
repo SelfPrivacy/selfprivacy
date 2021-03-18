@@ -24,8 +24,7 @@ class ProvidersPage extends StatefulWidget {
 class _ProvidersPageState extends State<ProvidersPage> {
   @override
   Widget build(BuildContext context) {
-    // var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
-    var isReady = true;
+    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
 
     final cards = ProviderType.values
         .map((type) => _Card(
@@ -128,18 +127,45 @@ class _ProviderDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late String title;
+    late List<Widget> children;
 
+    var config = context.watch<AppConfigCubit>().state;
+
+    var domainName = config.isDomainFilled
+        ? config.cloudFlareDomain!.domainName!
+        : 'example.com';
     switch (provider.type) {
       case ProviderType.server:
         title = 'providers.server.card_title'.tr();
+        children = [
+          BrandText.body1('providers.server.bottom_sheet.1'.tr()),
+          SizedBox(height: 10),
+          BrandText.body1('providers.server.bottom_sheet.2'.tr()),
+          SizedBox(height: 10),
+          BrandText.body1('providers.server.bottom_sheet.3'.tr()),
+        ];
         break;
       case ProviderType.domain:
         title = 'providers.domain.card_title'.tr();
-
+        children = [
+          BrandText.body1('providers.domain.bottom_sheet.1'.tr()),
+          SizedBox(height: 10),
+          BrandText.body1(
+              'providers.domain.bottom_sheet.2'.tr(args: [domainName, 'Date'])),
+          SizedBox(height: 10),
+          BrandText.body1('providers.domain.bottom_sheet.3'.tr()),
+        ];
         break;
       case ProviderType.backup:
         title = 'providers.backup.card_title'.tr();
-
+        children = [
+          BrandText.body1('providers.backup.bottom_sheet.1'.tr()),
+          SizedBox(height: 10),
+          BrandText.body1(
+              'providers.backup.bottom_sheet.2'.tr(args: [domainName, 'Time'])),
+          SizedBox(height: 10),
+          BrandText.body1('providers.backup.bottom_sheet.3'.tr()),
+        ];
         break;
     }
     return BrandModalSheet(
@@ -176,7 +202,7 @@ class _ProviderDetails extends StatelessWidget {
                           value: _PopupMenuItemType.setting,
                           child: Container(
                             padding: EdgeInsets.only(left: 5),
-                            child: Text('Настройки'),
+                            child: Text('basis.settings'.tr()),
                           ),
                         ),
                       ],
@@ -184,11 +210,10 @@ class _ProviderDetails extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: brandPagePadding1,
+                  padding: brandPagePadding2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 13),
                       IconStatusMask(
                         status: provider.state,
                         child:
@@ -197,11 +222,7 @@ class _ProviderDetails extends StatelessWidget {
                       SizedBox(height: 10),
                       BrandText.h1(title),
                       SizedBox(height: 10),
-                      BrandText.body1(statusText),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text('Статусы сервера и сервис провайдера и т.д.')
+                      ...children
                     ],
                   ),
                 )

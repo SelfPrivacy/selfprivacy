@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
+import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -21,19 +22,24 @@ class NotReadyCard extends StatelessWidget {
               style: TextStyle(color: BrandColors.white),
             ),
             WidgetSpan(
-              child: GestureDetector(
-                child: Text(
-                  'not_ready_card.2'.tr(),
-                  style: TextStyle(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 0.5),
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    materialRoute(
+                      InitializingPage(),
+                    ),
+                  ),
+                  child: Text(
+                    'not_ready_card.2'.tr(),
+                    style: body1Style.copyWith(
                       color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.blueAccent
+                          ? Colors.black
                           : BrandColors.white,
                       fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline),
-                ),
-                onTap: () => Navigator.of(context).push(
-                  materialRoute(
-                    InitializingPage(),
+                      decoration: TextDecoration.underline,
+                      // height: 1.1,
+                    ),
                   ),
                 ),
               ),

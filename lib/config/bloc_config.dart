@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 
 class BlocAndProviderConfig extends StatelessWidget {
@@ -30,7 +29,6 @@ class BlocAndProviderConfig extends StatelessWidget {
           lazy: false,
           create: (_) => AppConfigCubit()..load(),
         ),
-        BlocProvider(create: (_) => ServicesCubit()),
         BlocProvider(create: (_) => ProvidersCubit()),
         BlocProvider(create: (_) => UsersCubit()),
       ],

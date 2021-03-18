@@ -8,7 +8,7 @@ class SimpleBlocObserver extends BlocObserver {
   SimpleBlocObserver();
 
   @override
-  void onError(Bloc cubit, Object error, StackTrace stackTrace) {
+  void onError(BlocBase cubit, Object error, StackTrace stackTrace) {
     final navigator = getIt.get<NavigationService>().navigator!;
 
     navigator.push(

@@ -33,37 +33,46 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  Future onRequest(RequestOptions options) async {
+  Future onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler requestInterceptorHandler,
+  ) async {
     addMessage(
       Message(
         text:
             'request-uri: ${options.uri}\nheaders: ${options.headers}\ndata: ${options.data}',
       ),
     );
-    return super.onRequest(options);
+    return super.onRequest(options, requestInterceptorHandler);
   }
 
   @override
-  Future onResponse(Response response) async {
+  Future onResponse(
+    Response response,
+    ResponseInterceptorHandler requestInterceptorHandler,
+  ) async {
     addMessage(
       Message(
         text:
-            'response-uri: ${response.request.uri}\ncode: ${response.statusCode}\ndata: ${response.toString()}\n',
+            'response-uri: ${response.realUri}\ncode: ${response.statusCode}\ndata: ${response.toString()}\n',
       ),
     );
-    return super.onResponse(response);
+    return super.onResponse(
+      response,
+      requestInterceptorHandler,
+    );
   }
 
   @override
-  Future onError(DioError err) async {
+  Future onError(DioError err, ErrorInterceptorHandler handler) async {
     var response = err.response;
     log(err.toString());
     addMessage(
       Message.warn(
         text:
-            'response-uri: ${response?.request.uri}\ncode: ${response?.statusCode}\ndata: ${response?.toString()}\n',
+            'response-uri: ${response?.realUri}\ncode: ${response?.statusCode}\ndata: ${response?.toString()}\n',
       ),
     );
-    return super.onError(err);
+    return super.onError(err, handler);
   }
 }

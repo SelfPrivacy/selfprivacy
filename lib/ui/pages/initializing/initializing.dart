@@ -181,7 +181,7 @@ class InitializingPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             BrandButton.text(
-              onPressed: () {},
+              onPressed: () => _showModal(context, _HowHetzner()),
               title: 'initializing.how'.tr(),
             ),
           ],
@@ -488,7 +488,7 @@ class _HowHetzner extends StatelessWidget {
   Widget build(BuildContext context) {
     return BrandModalSheet(
       child: Padding(
-          padding: brandPagePadding1,
+          padding: brandPagePadding2.copyWith(top: 25),
           child: BrandMarkdown(
             fileName: 'how_hetzner',
           )),

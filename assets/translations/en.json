@@ -134,7 +134,7 @@
     "add_new_user": "Add a first user",
     "new_user": "New user",
     "not_ready": "Please connect server, domain and DNS in the Providers tab, to be able to add a first user",
-    "nobody_here": "'Здесь пока никого'",
+    "nobody_here": "Здесь пока никого",
     "login": "Login",
     "onboarding": "Onboarding",
     "console": "Console",
@@ -149,7 +149,7 @@
     "1": "Connect Hetzner server",
     "2": "Here,  your data and SelfPrivacy services wiil reside",
     "how": "How to obtain API token",
-    "3": "'Connect CloudFlare'",
+    "3": "Connect CloudFlare",
     "4": "To manage your domain's DNS",
     "5": "CloudFlare API Token",
     "6": "Connect Backblaze storage",
@@ -164,7 +164,7 @@
     "15": "Server created. DNS checks and server boot in progress...",
     "16": "Until the next check: ",
     "17": "Check",
-    "18": "How to obtain Hetzner API Token'",
+    "18": "How to obtain Hetzner API Token",
     "19": "1 Go via this link ",
     "20": "\n"
   }

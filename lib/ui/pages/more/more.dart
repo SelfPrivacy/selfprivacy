@@ -35,7 +35,7 @@ class MorePage extends StatelessWidget {
                 BrandDivider(),
                 _NavItem(
                   title: 'more.configuration_wizard'.tr(),
-                  iconData: BrandIcons.settings,
+                  iconData: BrandIcons.triangle,
                   goTo: InitializingPage(),
                 ),
                 _NavItem(
@@ -45,22 +45,22 @@ class MorePage extends StatelessWidget {
                 ),
                 _NavItem(
                   title: 'more.about_project'.tr(),
-                  iconData: BrandIcons.triangle,
+                  iconData: BrandIcons.engineer,
                   goTo: AboutPage(),
                 ),
                 _NavItem(
                   title: 'more.about_app'.tr(),
-                  iconData: BrandIcons.help,
+                  iconData: BrandIcons.fire,
                   goTo: InfoPage(),
                 ),
                 _NavItem(
                   title: 'more.onboarding'.tr(),
-                  iconData: BrandIcons.triangle,
+                  iconData: BrandIcons.start,
                   goTo: OnboardingPage(nextPage: RootPage()),
                 ),
                 _NavItem(
                   title: 'more.console'.tr(),
-                  iconData: BrandIcons.triangle,
+                  iconData: BrandIcons.terminal,
                   goTo: Console(),
                 ),
               ],

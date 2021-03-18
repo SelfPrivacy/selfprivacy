@@ -1,5 +1,6 @@
 {
   "test": "ru-test",
+  "locale": "ru",
   "basis": {
     "_comment": "базовые элементы интерфейса",
     "providers": "Провайдеры",
@@ -28,7 +29,10 @@
     "about_project": "О проекте SelfPrivacy",
     "about_app": "О приложении",
     "onboarding": "Onboarding",
-    "console": "Console"
+    "console": "Console",
+    "about_app_page": {
+      "text": "Тут любая служебная информация, v.{}"
+    }
   },
   "onboarding": {
     "_comment": "страницы онбординга",

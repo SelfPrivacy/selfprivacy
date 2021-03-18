@@ -58,7 +58,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             'onboarding.page1_title'.tr(),
           ),
           SizedBox(height: 20),
-          BrandText.body2('services.page1_text'.tr()),
+          BrandText.body2('onboarding.page1_text'.tr()),
           Flexible(
             child: Center(
               child: Image.asset(

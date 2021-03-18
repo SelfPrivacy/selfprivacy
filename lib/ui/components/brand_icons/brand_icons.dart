@@ -53,6 +53,8 @@ class BrandIcons {
       IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData triangle =
       IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData engineer =
+      IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData server =
       IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData box =
@@ -67,4 +69,14 @@ class BrandIcons {
       IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData arrow_left =
       IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData shape =
+      IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData keyhole =
+      IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData terminal =
+      IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData fire =
+      IconData(0xe81c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData start =
+      IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

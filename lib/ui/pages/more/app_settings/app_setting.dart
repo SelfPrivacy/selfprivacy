@@ -9,6 +9,7 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AppSettingsPage extends StatefulWidget {
   const AppSettingsPage({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
         return Scaffold(
           appBar: PreferredSize(
             child:
-                BrandHeader(title: 'Настройки приложения', hasBackButton: true),
+                BrandHeader(title: 'more.settings'.tr(), hasBackButton: true),
             preferredSize: Size.fromHeight(52),
           ),
           body: ListView(

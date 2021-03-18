@@ -1,9 +1,7 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/domain_cloudflare.dart';
@@ -13,8 +11,8 @@ import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
+import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_span_button/brand_span_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
@@ -488,41 +486,12 @@ class _HowHetzner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Theme.of(context).brightness == Brightness.dark;
-
     return BrandModalSheet(
       child: Padding(
-        padding: brandPagePadding2,
-        child: Column(
-          children: [
-            SizedBox(height: 40),
-            BrandText.h2('initializing.18'.tr()),
-            SizedBox(height: 20),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'initializing.19'.tr(),
-                    style: body1Style.copyWith(
-                      color: isDark ? BrandColors.white : BrandColors.black,
-                    ),
-                  ),
-                  BrandSpanButton.link(
-                    text: 'hetzner.com',
-                    urlString: 'https://hetzner.com',
-                  ),
-                  TextSpan(
-                    text: 'initializing.20'.tr(),
-                    style: body1Style.copyWith(
-                      color: isDark ? BrandColors.white : BrandColors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+          padding: brandPagePadding1,
+          child: BrandMarkdown(
+            fileName: 'how_hetzner',
+          )),
     );
   }
 }

@@ -13,7 +13,7 @@ class Localization extends StatelessWidget {
     return EasyLocalization(
       supportedLocales: [Locale('ru'), Locale('en')],
       path: 'assets/translations',
-      fallbackLocale: Locale('ru'),
+      fallbackLocale: Locale('en'),
       saveLocale: false,
       useOnlyLangCode: true,
       child: child!,

@@ -1,9 +1,7 @@
 part of 'users.dart';
 
 class _NoUsers extends StatelessWidget {
-  const _NoUsers({Key key, @required this.text})
-      : assert(text != null),
-        super(key: key);
+  const _NoUsers({Key? key, required this.text}) : super(key: key);
 
   final String text;
 
@@ -17,7 +15,7 @@ class _NoUsers extends StatelessWidget {
           Icon(BrandIcons.users, size: 50, color: BrandColors.grey7),
           SizedBox(height: 20),
           BrandText.h2(
-            'Здесь пока никого',
+            'users.nobody_here'.tr(),
             style: TextStyle(
               color: BrandColors.grey7,
             ),

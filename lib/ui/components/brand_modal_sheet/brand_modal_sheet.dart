@@ -4,11 +4,11 @@ var navigatorKey = GlobalKey<NavigatorState>();
 
 class BrandModalSheet extends StatelessWidget {
   const BrandModalSheet({
-    Key key,
+    Key? key,
     this.child,
   }) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(

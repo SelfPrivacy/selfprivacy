@@ -3,17 +3,17 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
 
 class BackblazeApi extends ApiMap {
-  BackblazeApi([String token]) {
+  BackblazeApi([String? token]) {
     if (token != null) {
       loggedClient.options = BaseOptions(
         headers: {'Authorization': 'Basic $token'},
-        baseUrl: rootAddress,
+        baseUrl: rootAddress!,
       );
     }
   }
 
   @override
-  String rootAddress =
+  String? rootAddress =
       'https://api.backblazeb2.com/b2api/v2/b2_authorize_account';
 
   Future<bool> isValid(String token) async {
@@ -24,7 +24,7 @@ class BackblazeApi extends ApiMap {
       },
     );
 
-    Response response = await loggedClient.get(rootAddress, options: options);
+    Response response = await loggedClient.get(rootAddress!, options: options);
 
     if (response.statusCode == HttpStatus.ok) {
       return true;

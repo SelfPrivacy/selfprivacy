@@ -9,7 +9,7 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 
 class Console extends StatefulWidget {
-  const Console({Key key}) : super(key: key);
+  const Console({Key? key}) : super(key: key);
 
   @override
   _ConsoleState createState() => _ConsoleState();

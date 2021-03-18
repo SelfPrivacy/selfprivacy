@@ -18,9 +18,9 @@ abstract class ApiMap {
     };
     loggedClient = client;
   }
-  String rootAddress;
+  String? rootAddress;
 
-  Dio loggedClient;
+  late Dio loggedClient;
 
   void close() {
     loggedClient.close();
@@ -61,7 +61,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     addMessage(
       Message.warn(
         text:
-            'response-uri: ${response?.request?.uri}\ncode: ${response?.statusCode}\ndata: ${response?.toString()}\n',
+            'response-uri: ${response?.request.uri}\ncode: ${response?.statusCode}\ndata: ${response?.toString()}\n',
       ),
     );
     return super.onError(err);

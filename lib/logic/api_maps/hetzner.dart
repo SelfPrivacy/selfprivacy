@@ -2,24 +2,23 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 import 'package:selfprivacy/utils/password_generator2.dart';
 
 class HetznerApi extends ApiMap {
-  HetznerApi([String token]) {
+  HetznerApi([String? token]) {
     if (token != null) {
       loggedClient.options = BaseOptions(
         headers: {'Authorization': 'Bearer $token'},
-        baseUrl: rootAddress,
+        baseUrl: rootAddress!,
       );
     }
   }
 
   @override
-  String rootAddress = 'https://api.hetzner.cloud/v1/servers';
+  String? rootAddress = 'https://api.hetzner.cloud/v1/servers';
 
   Future<bool> isValid(String token) async {
     var options = Options(
@@ -29,7 +28,7 @@ class HetznerApi extends ApiMap {
       },
     );
 
-    Response response = await loggedClient.get(rootAddress, options: options);
+    Response response = await loggedClient.get(rootAddress!, options: options);
 
     if (response.statusCode == HttpStatus.ok) {
       return true;
@@ -41,9 +40,9 @@ class HetznerApi extends ApiMap {
   }
 
   Future<HetznerServerDetails> createServer({
-    @required String cloudFlareKey,
-    @required User rootUser,
-    @required String domainName,
+    required String? cloudFlareKey,
+    required User rootUser,
+    required String? domainName,
   }) async {
     var dbPassword = getRandomString(40);
 
@@ -52,7 +51,7 @@ class HetznerApi extends ApiMap {
     );
 
     Response response = await loggedClient.post(
-      rootAddress,
+      rootAddress!,
       data: data,
     );
 
@@ -64,17 +63,17 @@ class HetznerApi extends ApiMap {
   }
 
   Future<void> deleteSelfprivacyServer({
-    @required String cloudFlareKey,
+    required String? cloudFlareKey,
   }) async {
-    Response response = await loggedClient.get(rootAddress);
+    Response response = await loggedClient.get(rootAddress!);
 
     List list = response.data['servers'];
     var server = list.firstWhere((el) => el['name'] == 'selfprivacy-server');
-    return await loggedClient.delete('$rootAddress/${server['id']}');
+    await loggedClient.delete('$rootAddress/${server['id']}');
   }
 
   Future<HetznerServerDetails> startServer({
-    HetznerServerDetails server,
+    required HetznerServerDetails server,
   }) async {
     await loggedClient.post('/${server.id}/actions/poweron');
 
@@ -84,7 +83,7 @@ class HetznerApi extends ApiMap {
   }
 
   Future<HetznerServerDetails> restart({
-    HetznerServerDetails server,
+    required HetznerServerDetails server,
   }) async {
     await loggedClient.post('/${server.id}/actions/poweron');
 

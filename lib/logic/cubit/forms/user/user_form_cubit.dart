@@ -7,8 +7,8 @@ import 'package:selfprivacy/utils/password_generator.dart';
 
 class UserFormCubit extends FormCubit {
   UserFormCubit({
-    this.usersCubit,
-    User user,
+    required this.usersCubit,
+    User? user,
   }) {
     var isEdit = user != null;
 
@@ -16,7 +16,7 @@ class UserFormCubit extends FormCubit {
     var passwordRegExp = RegExp(r"[\n\r\s]+");
 
     login = FieldCubit(
-      initalValue: isEdit ? user.login : '',
+      initalValue: isEdit ? user!.login : '',
       validations: [
         RequiredStringValidation('required'),
         ValidationModel<String>(
@@ -25,7 +25,7 @@ class UserFormCubit extends FormCubit {
     );
 
     password = FieldCubit(
-      initalValue: isEdit ? user.password : genPass(),
+      initalValue: isEdit ? user!.password : genPass(),
       validations: [
         RequiredStringValidation('required'),
         ValidationModel<String>(
@@ -42,15 +42,16 @@ class UserFormCubit extends FormCubit {
       login: login.state.value,
       password: password.state.value,
     );
-    usersCubit.add(user);
+    usersCubit.addUser(user);
   }
 
-  FieldCubit<String> login;
-  FieldCubit<String> password;
+  // ignore: close_sinks
+  late FieldCubit<String> login;
+  late FieldCubit<String> password;
 
   void genNewPassword() {
     password.externalSetValue(genPass());
   }
 
-  UsersCubit usersCubit;
+  late UsersCubit usersCubit;
 }

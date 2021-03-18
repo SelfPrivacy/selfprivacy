@@ -13,6 +13,7 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 part 'fab.dart';
 part 'new_user.dart';
@@ -21,14 +22,14 @@ part 'user.dart';
 part 'empty.dart';
 
 class UsersPage extends StatelessWidget {
-  const UsersPage({Key key}) : super(key: key);
+  const UsersPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final usersCubit = context.watch<UsersCubit>();
+    final usersCubitState = context.watch<UsersCubit>().state;
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
-    final users = usersCubit.state.users;
-    final isEmpty = usersCubit.state.isEmpty;
+    final users = usersCubitState.users;
+    final isEmpty = usersCubitState.isEmpty;
 
     Widget child;
 
@@ -39,7 +40,7 @@ class UsersPage extends StatelessWidget {
           ? Container(
               alignment: Alignment.center,
               child: _NoUsers(
-                text: 'Добавьте первого пользователя',
+                text: 'users.add_new_user'.tr(),
               ),
             )
           : ListView(
@@ -51,7 +52,7 @@ class UsersPage extends StatelessWidget {
 
     return Scaffold(
       appBar: PreferredSize(
-        child: BrandHeader(title: 'Пользователи'),
+        child: BrandHeader(title: 'basis.users'.tr()),
         preferredSize: Size.fromHeight(52),
       ),
       floatingActionButton: isReady ? _Fab() : null,
@@ -72,8 +73,7 @@ class UsersPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Center(
               child: _NoUsers(
-                text:
-                    'Подключите сервер, домен и DNS в разеде Провайдеры, чтобы добавить первого пользователя',
+                text: 'users.not_ready'.tr(),
               ),
             ),
           ),

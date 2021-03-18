@@ -1,3 +1,171 @@
 {
-  "test": "en-test"
+  "test": "en-test",
+  "locale": "en",
+  "basis": {
+    "_comment": "Basic interface elements",
+    "providers": "Providers",
+    "services": "Services",
+    "users": "Users",
+    "more": "More",
+    "next": "Next",
+    "got_it": "Got it",
+    "settings": "Settings",
+    "password": "Password",
+    "create": "Add new",
+    "confirmation": "Confirmation",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "close": "Close",
+    "connect": "Connect",
+    "domain": "Domain",
+    "saving": "Saving..",
+    "nickname": "nickname",
+    "loading": "loading"
+  },
+  "more": {
+    "_comment": "'More' tab",
+    "configuration_wizard": "Setup wizard",
+    "settings": "Application settings",
+    "about_project": "About us",
+    "about_app": "About application",
+    "onboarding": "Onboarding",
+    "console": "Console",
+    "about_app_page": {
+      "text": "Тут любая служебная информация, v.{}"
+    }
+  },
+  "onboarding": {
+    "_comment": "Onboarding pages",
+    "page1_title": "Digital independence, available to all of us",
+    "page1_text": "Mail, VPN, Messenger, social network and much more on your private server, under your control.",
+    "page2_title": "SelfPrivacy — it's not a cloud, but your personal datacenter",
+    "page2_text": "SelfPrivacy works only with your provider accounts: Hetzner, Cloudflare, Backblaze. If you do not own those, we'll help you to create them"
+  },
+  "providers": {
+    "_comment": "'Providers' tab",
+    "page_title": "Your Data Center",
+    "server": {
+      "card_title": "Server",
+      "bottom_sheet": {
+        "1": "It's a virtual computer, where all your services live.",
+        "2": "1 CPU, RAM 4Gb, 40Gb — $5 per month",
+        "3": "Status — Good"
+      }
+    },
+    "domain": {
+      "card_title": "Domain",
+      "bottom_sheet": {
+        "1": "It's your personal internet address that will point to the server and other services of yours.",
+        "2": "{} — expires on {}",
+        "3": "Status — Good"
+      }
+    },
+    "backup": {
+      "card_title": "Backup",
+      "bottom_sheet": {
+        "1": "Will save your day in case of incident: hackers attack, server deletion, etc.",
+        "2": "3Gb/10Gb, last backup was yesterday {}",
+        "3": "Status — Good"
+      }
+    }
+  },
+  "not_ready_card": {
+    "_comment": "Card shown when user skips initial setup",
+    "1": "Please finish application setup using ",
+    "2": "@:more.configuration_wizard",
+    "3": " for further work"
+  },
+  "services": {
+    "_comment": "Вкладка сервисы",
+    "title": "Your personal, private and independent services.",
+    "mail": {
+      "title": "E-Mail",
+      "subtitle": "E-Mail for company and family.",
+      "bottom_sheet": {
+        "1": "To connect to the mailserver, please use {} domain alongside with username and password, that you created. Also feel free to invite",
+        "2": "new users"
+      }
+    },
+    "messenger": {
+      "title": "Messenger",
+      "subtitle": "Telegram or Signal not so private as Delta.Chat that uses your private server.",
+      "bottom_sheet": {
+        "1": "For connection, please use {} domain and credentials that you created."
+      }
+    },
+    "password_manager": {
+      "title": "Password Manager",
+      "subtitle": "Base of your security. Bitwarden will help you to create, store and move passwords between devices, as well as input them, when requested using autocompletion.",
+      "bottom_sheet": {
+        "1": "You can connect to the service and create a user via this link:"
+      }
+    },
+    "video": {
+      "title": "Videomeet",
+      "subtitle": "Zoom and Google Meet are good, but Jitsi Meet is a worth alternative that also gives you confidence that you're not being listened.",
+      "bottom_sheet": {
+        "1": "Using Jitsi as simple as just visiting this link:"
+      }
+    },
+    "cloud": {
+      "title": "Cloud Storage",
+      "subtitle": "Do not allow cloud services to read your data by using NextCloud.",
+      "bottom_sheet": {
+        "1": "You can connect and create a new user here:"
+      }
+    },
+    "social_network": {
+      "title": "Social Network",
+      "subtitle": "It's hard to believe, but it became possible to create your own social network, with your own rules and target audience.",
+      "bottom_sheet": {
+        "1": "You can connect and create new social user here:"
+      }
+    },
+    "git": {
+      "title": "Git-server",
+      "subtitle": "Private alternative to the Github, that belongs to you, but not a Microsoft.",
+      "bottom_sheet": {
+        "1": "You can connect and create a new user here:"
+      }
+    }
+  },
+  "users": {
+    "_comment": "'Users' tab",
+    "add_new_user": "Добавьте первого пользователя",
+    "new_user": "Новый пользователь",
+    "not_ready": "Подключите сервер, домен и DNS в разделу Провайдеры, чтобы добавить первого пользователя",
+    "nobody_here": "'Здесь пока никого'",
+    "login": "Логин",
+    "onboarding": "Onboarding",
+    "console": "Console",
+    "new_user_info_note": "Новый пользователь автоматически получит доступ ко всем сервисам. Ещё какое-то описание.",
+    "delete_confirm_question": "удалить учетную запись?",
+    "reset_password": "Сбросить пароль",
+    "account": "Учетная запись",
+    "send_regisration_data": "Отправить реквизиты для входа"
+  },
+  "initializing": {
+    "_comment": "initializing page",
+    "1": "Подключите сервер Hetzner",
+    "2": "Здесь будут жить наши данные и SelfPrivacy-сервисы",
+    "how": "Как получить API Token",
+    "3": "'Подключите CloudFlare'",
+    "4": "Для управления DNS вашего домена",
+    "5": "CloudFlare API Token",
+    "6": "Подключите облачное хранилище Backblaze",
+    "7": "На данный момент подлюченных доменов нет",
+    "8": "Загружаем список доменов",
+    "9": "Найдено больше одного домена, для вашей безопастности, просим вам удалить не нужные домены",
+    "10": "Сохранить домен",
+    "11": "Создать сервер",
+    "what": "Что это значит?",
+    "13": "Сервер презагружен, ждем последнюю проверку",
+    "14": "Cервер запушен, сейчас он будет проверен и перезагружен",
+    "15": "Cервер создан, идет проверка ДНС адресов и запуск сервера",
+    "16": "До следующей проверки: ",
+    "17": "Проверка",
+    "18": "Как получить Hetzner API Token'",
+    "19": "1 Переходим по ссылке ",
+    "20": "\n"
+  }
 }

@@ -9,9 +9,10 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AppSettingsPage extends StatefulWidget {
-  const AppSettingsPage({Key key}) : super(key: key);
+  const AppSettingsPage({Key? key}) : super(key: key);
 
   @override
   _AppSettingsPageState createState() => _AppSettingsPageState();
@@ -20,16 +21,14 @@ class AppSettingsPage extends StatefulWidget {
 class _AppSettingsPageState extends State<AppSettingsPage> {
   @override
   Widget build(BuildContext context) {
-    var appSettings = context.watch<AppSettingsCubit>();
-
-    var isDarkModeOn = appSettings.state.isDarkModeOn;
+    var isDarkModeOn = context.watch<AppSettingsCubit>().state.isDarkModeOn;
 
     return SafeArea(
       child: Builder(builder: (context) {
         return Scaffold(
           appBar: PreferredSize(
             child:
-                BrandHeader(title: 'Настройки приложения', hasBackButton: true),
+                BrandHeader(title: 'more.settings'.tr(), hasBackButton: true),
             preferredSize: Size.fromHeight(52),
           ),
           body: ListView(
@@ -57,8 +56,9 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       activeColor: BrandColors.green1,
                       activeTrackColor: BrandColors.green2,
                       value: Theme.of(context).brightness == Brightness.dark,
-                      onChanged: (value) => appSettings.updateDarkMode(
-                          isDarkModeOn: !isDarkModeOn),
+                      onChanged: (value) => context
+                          .read<AppSettingsCubit>()
+                          .updateDarkMode(isDarkModeOn: !isDarkModeOn),
                     ),
                   ],
                 ),
@@ -80,8 +80,10 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       ),
                     ),
                     SizedBox(width: 5),
-                    RaisedButton(
-                      color: BrandColors.red1,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: BrandColors.red1,
+                      ),
                       child: Text(
                         'Reset',
                         style: TextStyle(
@@ -92,24 +94,26 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          child: BrandAlert(
-                            title: 'Вы уверенны',
-                            contentText: 'Сбросить все ключи?',
-                            acitons: [
-                              ActionButton(
-                                  text: 'Да, сбросить',
-                                  isRed: true,
-                                  onPressed: () {
-                                    context
-                                        .read<AppConfigCubit>()
-                                        .clearAppConfig();
-                                    Navigator.of(context).pop();
-                                  }),
-                              ActionButton(
-                                text: 'Отмена',
-                              ),
-                            ],
-                          ),
+                          builder: (_) {
+                            return BrandAlert(
+                              title: 'Вы уверенны',
+                              contentText: 'Сбросить все ключи?',
+                              acitons: [
+                                ActionButton(
+                                    text: 'Да, сбросить',
+                                    isRed: true,
+                                    onPressed: () {
+                                      context
+                                          .read<AppConfigCubit>()
+                                          .clearAppConfig();
+                                      Navigator.of(context).pop();
+                                    }),
+                                ActionButton(
+                                  text: 'Отмена',
+                                ),
+                              ],
+                            );
+                          },
                         );
                       },
                     )
@@ -126,9 +130,9 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
 
 class _TextColumn extends StatelessWidget {
   const _TextColumn({
-    Key key,
-    @required this.title,
-    @required this.value,
+    Key? key,
+    required this.title,
+    required this.value,
     this.hasWarning = false,
   }) : super(key: key);
 

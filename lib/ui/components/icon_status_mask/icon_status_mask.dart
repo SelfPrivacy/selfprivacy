@@ -3,14 +3,14 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 
 class IconStatusMask extends StatelessWidget {
-  IconStatusMask({this.child, this.status});
+  IconStatusMask({required this.child, required this.status});
   final Icon child;
 
   final StateType status;
 
   @override
   Widget build(BuildContext context) {
-    List<Color> colors;
+    late List<Color> colors;
     switch (status) {
       case StateType.uninitialized:
         colors = BrandColors.uninitializedGradientColors;

@@ -9,10 +9,10 @@ class BackblazeCredential {
   BackblazeCredential({this.keyId, this.applicationKey});
 
   @HiveField(0)
-  final String keyId;
+  final String? keyId;
 
   @HiveField(1)
-  final String applicationKey;
+  final String? applicationKey;
 
   get encodedApiKey => encodedBackblazeKey(keyId, applicationKey);
 
@@ -22,7 +22,7 @@ class BackblazeCredential {
   }
 }
 
-String encodedBackblazeKey(String keyId, String applicationKey) {
+String encodedBackblazeKey(String? keyId, String? applicationKey) {
   String _apiKey = '$keyId:$applicationKey';
   String encodedApiKey = base64.encode(utf8.encode(_apiKey));
   return encodedApiKey;

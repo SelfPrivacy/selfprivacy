@@ -8,10 +8,10 @@ enum BrandButtonTypes { rised, text, iconText }
 
 class BrandButton {
   static rised({
-    Key key,
-    @required VoidCallback onPressed,
-    String title,
-    Widget child,
+    Key? key,
+    required VoidCallback? onPressed,
+    String? title,
+    Widget? child,
   }) {
     assert(title == null || child == null, 'required title or child');
     assert(title != null || child != null, 'required title or child');
@@ -24,9 +24,9 @@ class BrandButton {
   }
 
   static text({
-    Key key,
-    @required VoidCallback onPressed,
-    @required String title,
+    Key? key,
+    required VoidCallback onPressed,
+    required String title,
   }) =>
       _TextButton(
         key: key,
@@ -35,10 +35,10 @@ class BrandButton {
       );
 
   static iconText({
-    Key key,
-    @required VoidCallback onPressed,
-    @required String title,
-    @required Icon icon,
+    Key? key,
+    required VoidCallback onPressed,
+    required String title,
+    required Icon icon,
   }) =>
       _IconTextButton(
         key: key,
@@ -50,15 +50,15 @@ class BrandButton {
 
 class _RisedButton extends StatelessWidget {
   const _RisedButton({
-    Key key,
+    Key? key,
     this.onPressed,
     this.title,
     this.child,
   }) : super(key: key);
 
-  final VoidCallback onPressed;
-  final String title;
-  final Widget child;
+  final VoidCallback? onPressed;
+  final String? title;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -88,13 +88,13 @@ class _RisedButton extends StatelessWidget {
 
 class _TextButton extends StatelessWidget {
   const _TextButton({
-    Key key,
+    Key? key,
     this.onPressed,
     this.title,
   }) : super(key: key);
 
-  final VoidCallback onPressed;
-  final String title;
+  final VoidCallback? onPressed;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +106,7 @@ class _TextButton extends StatelessWidget {
         alignment: Alignment.center,
         padding: EdgeInsets.all(12),
         child: Text(
-          title,
+          title!,
           style: TextStyle(
             color: BrandColors.blue,
             fontSize: 16,
@@ -120,12 +120,12 @@ class _TextButton extends StatelessWidget {
 }
 
 class _IconTextButton extends StatelessWidget {
-  const _IconTextButton({Key key, this.onPressed, this.title, this.icon})
+  const _IconTextButton({Key? key, this.onPressed, this.title, this.icon})
       : super(key: key);
 
-  final VoidCallback onPressed;
-  final String title;
-  final Icon icon;
+  final VoidCallback? onPressed;
+  final String? title;
+  final Icon? icon;
 
   @override
   Widget build(BuildContext context) {

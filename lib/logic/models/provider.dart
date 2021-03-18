@@ -10,7 +10,7 @@ enum ProviderType {
 }
 
 class ProviderModel extends Equatable {
-  const ProviderModel({this.state, this.type});
+  const ProviderModel({required this.state, required this.type});
 
   final StateType state;
   final ProviderType type;
@@ -21,7 +21,7 @@ class ProviderModel extends Equatable {
       );
 
   @override
-  List<Object> get props => [state, type];
+  List<Object?> get props => [state, type];
 
   IconData get icon {
     switch (type) {
@@ -31,10 +31,8 @@ class ProviderModel extends Equatable {
       case ProviderType.domain:
         return BrandIcons.globe;
 
-        break;
       case ProviderType.backup:
         return BrandIcons.save;
     }
-    return null;
   }
 }

@@ -17,10 +17,10 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return HetznerServerDetails(
-      ip4: fields[0] as String,
-      id: fields[1] as int,
-      createTime: fields[3] as DateTime,
-      startTime: fields[2] as DateTime,
+      ip4: fields[0] as String?,
+      id: fields[1] as int?,
+      createTime: fields[3] as DateTime?,
+      startTime: fields[2] as DateTime?,
     );
   }
 

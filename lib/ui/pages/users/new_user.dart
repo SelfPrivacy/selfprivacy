@@ -3,13 +3,18 @@ part of 'users.dart';
 class _NewUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final usersCubit = context.watch<UsersCubit>();
+    var config = context.watch<AppConfigCubit>().state;
+
+    var domainName = config.isDomainFilled
+        ? config.cloudFlareDomain!.domainName!
+        : 'example.com';
 
     return BrandModalSheet(
       child: BlocProvider(
-        create: (context) => UserFormCubit(usersCubit: usersCubit),
+        create: (context) =>
+            UserFormCubit(usersCubit: context.watch<UsersCubit>()),
         child: Builder(builder: (context) {
-          var formCubit = context.watch<UserFormCubit>();
+          var formCubitState = context.watch<UserFormCubit>().state;
 
           return BlocListener<UserFormCubit, FormCubitState>(
             listener: (context, state) {
@@ -20,25 +25,27 @@ class _NewUser extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BrandHeader(title: 'Новый пользователь'),
+                BrandHeader(
+                  title: 'users.new_user'.tr(),
+                ),
                 SizedBox(width: 14),
                 Padding(
                   padding: brandPagePadding2,
                   child: Column(
                     children: [
                       CubitFormTextField(
-                        formFieldCubit: formCubit.login,
+                        formFieldCubit: context.read<UserFormCubit>().login,
                         decoration: InputDecoration(
-                          labelText: 'Логин',
-                          suffixText: '@example',
+                          labelText: 'users.login'.tr(),
+                          suffixText: '@$domainName',
                         ),
                       ),
                       SizedBox(height: 20),
                       CubitFormTextField(
-                        formFieldCubit: formCubit.password,
+                        formFieldCubit: context.read<UserFormCubit>().password,
                         decoration: InputDecoration(
                           alignLabelWithHint: false,
-                          labelText: 'Пароль',
+                          labelText: 'basis.password'.tr(),
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: IconButton(
@@ -46,23 +53,21 @@ class _NewUser extends StatelessWidget {
                                 BrandIcons.refresh,
                                 color: BrandColors.blue,
                               ),
-                              onPressed: formCubit.genNewPassword,
+                              onPressed:
+                                  context.read<UserFormCubit>().genNewPassword,
                             ),
                           ),
                         ),
                       ),
                       SizedBox(height: 30),
                       BrandButton.rised(
-                        onPressed: formCubit.state.isSubmitting
+                        onPressed: formCubitState.isSubmitting
                             ? null
-                            : () {
-                                formCubit.trySubmit();
-                              },
-                        title: 'Создать',
+                            : () => context.read<UserFormCubit>().trySubmit(),
+                        title: 'basis.create'.tr(),
                       ),
                       SizedBox(height: 40),
-                      Text(
-                          'Новый пользователь автоматически получит доступ ко всем сервисам. Ещё какое-то описание.'),
+                      Text('users.new_user_info_note'.tr()),
                       SizedBox(height: 30),
                     ],
                   ),

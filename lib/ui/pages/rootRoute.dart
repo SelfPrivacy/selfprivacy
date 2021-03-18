@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:selfprivacy/ui/components/brand_tab_bar/brand_tab_bar.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
@@ -7,7 +8,7 @@ import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
 
 class RootPage extends StatefulWidget {
-  const RootPage({Key key}) : super(key: key);
+  const RootPage({Key? key}) : super(key: key);
 
   @override
   _RootPageState createState() => _RootPageState();
@@ -15,7 +16,7 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage>
     with SingleTickerProviderStateMixin {
-  TabController tabController;
+  late TabController tabController;
 
   @override
   void initState() {
@@ -33,14 +34,17 @@ class _RootPageState extends State<RootPage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            ProvidersPage(),
-            ServicesPage(),
-            UsersPage(),
-            MorePage(),
-          ],
+        body: Provider<ChangeTab>(
+          create: (_) => ChangeTab(tabController.animateTo),
+          child: TabBarView(
+            controller: tabController,
+            children: [
+              ProvidersPage(),
+              ServicesPage(),
+              UsersPage(),
+              MorePage(),
+            ],
+          ),
         ),
         bottomNavigationBar: BrandTabBar(
           controller: tabController,
@@ -48,4 +52,10 @@ class _RootPageState extends State<RootPage>
       ),
     );
   }
+}
+
+class ChangeTab {
+  final ValueChanged<int> onPress;
+
+  ChangeTab(this.onPress);
 }

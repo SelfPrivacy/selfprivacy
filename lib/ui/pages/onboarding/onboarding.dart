@@ -3,9 +3,10 @@ import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({Key key, @required this.nextPage}) : super(key: key);
+  const OnboardingPage({Key? key, required this.nextPage}) : super(key: key);
 
   final Widget nextPage;
   @override
@@ -54,10 +55,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
         children: [
           SizedBox(height: 30),
           BrandText.h2(
-              'Цифровая независимость и приватность, доступная каждому'),
+            'onboarding.page1_title'.tr(),
+          ),
           SizedBox(height: 20),
-          BrandText.body2(
-              'Почта и мессенджер с открытым исходным кодом на вашем личном сервере под вашим полным контролем.'),
+          BrandText.body2('onboarding.page1_text'.tr()),
           Flexible(
             child: Center(
               child: Image.asset(
@@ -78,7 +79,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 curve: Curves.easeIn,
               );
             },
-            title: 'Далее',
+            title: 'basis.next'.tr(),
           ),
           SizedBox(height: 30),
         ],
@@ -94,10 +95,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
       child: Column(
         children: [
           SizedBox(height: 30),
-          BrandText.h2('Для работы понадобятся ваши аккаунты'),
+          BrandText.h2('onboarding.page2_title'.tr()),
           SizedBox(height: 20),
-          BrandText.body2(
-              'Для максимальноей приватности и независимости SelfPrivacy не использует свои серверы. \n \n Если у вас нет домена, аккаунтов на Hetzner, AWS и Clouflare, мы поможем их создать и подключить.'),
+          BrandText.body2('onboarding.page2_text'.tr()),
           SizedBox(height: 20),
           Center(
             child: Image.asset(
@@ -127,7 +127,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               Navigator.of(context)
                   .pushReplacement(materialRoute(widget.nextPage));
             },
-            title: 'Понял',
+            title: 'basis.got_it'.tr(),
           ),
           SizedBox(height: 30),
         ],
@@ -137,10 +137,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
 }
 
 String _fileName({
-  @required BuildContext context,
-  @required String path,
-  @required String fileName,
-  @required String fileExtention,
+  required BuildContext context,
+  required String path,
+  required String fileName,
+  required String fileExtention,
 }) {
   var theme = Theme.of(context);
   var isDark = theme.brightness == Brightness.dark;

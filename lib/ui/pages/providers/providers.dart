@@ -12,9 +12,10 @@ import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/pages/providers/settings/settings.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProvidersPage extends StatefulWidget {
-  ProvidersPage({Key key}) : super(key: key);
+  ProvidersPage({Key? key}) : super(key: key);
 
   @override
   _ProvidersPageState createState() => _ProvidersPageState();
@@ -32,7 +33,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
         .toList();
     return Scaffold(
       appBar: PreferredSize(
-        child: BrandHeader(title: 'Провайдеры'),
+        child: BrandHeader(title: 'providers.page_title'.tr()),
         preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
@@ -50,32 +51,31 @@ class _ProvidersPageState extends State<ProvidersPage> {
 }
 
 class _Card extends StatelessWidget {
-  const _Card({Key key, @required this.provider}) : super(key: key);
+  const _Card({Key? key, required this.provider}) : super(key: key);
 
   final ProviderModel provider;
   @override
   Widget build(BuildContext context) {
-    String title;
-    String message;
-    String stableText;
-    var appConfig = context.watch<AppConfigCubit>().state;
+    String? title;
+    String? message;
+    String? stableText;
+    AppConfigState appConfig = context.watch<AppConfigCubit>().state;
 
     var domainName =
-        appConfig.isDomainFilled ? appConfig.cloudFlareDomain.domainName : '';
+        appConfig.isDomainFilled ? appConfig.cloudFlareDomain!.domainName : '';
 
     switch (provider.type) {
       case ProviderType.server:
-        title = 'Сервер';
+        title = 'providers.server.card_title'.tr();
         stableText = 'В норме';
         break;
       case ProviderType.domain:
-        title = 'Домен';
+        title = 'providers.domain.card_title'.tr();
         message = domainName;
         stableText = 'Домен настроен';
         break;
       case ProviderType.backup:
-        // message = '22 янв 2021 14:30';
-        title = 'Резервное копирование';
+        title = 'providers.backup.card_title'.tr();
         stableText = 'В норме';
         break;
     }
@@ -116,28 +116,56 @@ class _Card extends StatelessWidget {
 
 class _ProviderDetails extends StatelessWidget {
   const _ProviderDetails({
-    Key key,
-    @required this.provider,
-    @required this.statusText,
+    Key? key,
+    required this.provider,
+    required this.statusText,
   }) : super(key: key);
 
   final ProviderModel provider;
-  final String statusText;
+  final String? statusText;
 
   @override
   Widget build(BuildContext context) {
-    String title;
+    late String title;
+    late List<Widget> children;
 
+    var config = context.watch<AppConfigCubit>().state;
+
+    var domainName = config.isDomainFilled
+        ? config.cloudFlareDomain!.domainName!
+        : 'example.com';
     switch (provider.type) {
       case ProviderType.server:
-        title = 'Сервер';
+        title = 'providers.server.card_title'.tr();
+        children = [
+          BrandText.body1('providers.server.bottom_sheet.1'.tr()),
+          SizedBox(height: 10),
+          BrandText.body1('providers.server.bottom_sheet.2'.tr()),
+          SizedBox(height: 10),
+          BrandText.body1('providers.server.bottom_sheet.3'.tr()),
+        ];
         break;
       case ProviderType.domain:
-        title = 'Домен';
-
+        title = 'providers.domain.card_title'.tr();
+        children = [
+          BrandText.body1('providers.domain.bottom_sheet.1'.tr()),
+          SizedBox(height: 10),
+          BrandText.body1(
+              'providers.domain.bottom_sheet.2'.tr(args: [domainName, 'Date'])),
+          SizedBox(height: 10),
+          BrandText.body1('providers.domain.bottom_sheet.3'.tr()),
+        ];
         break;
       case ProviderType.backup:
-        title = 'Резервное копирование';
+        title = 'providers.backup.card_title'.tr();
+        children = [
+          BrandText.body1('providers.backup.bottom_sheet.1'.tr()),
+          SizedBox(height: 10),
+          BrandText.body1(
+              'providers.backup.bottom_sheet.2'.tr(args: [domainName, 'Time'])),
+          SizedBox(height: 10),
+          BrandText.body1('providers.backup.bottom_sheet.3'.tr()),
+        ];
         break;
     }
     return BrandModalSheet(
@@ -163,7 +191,7 @@ class _ProviderDetails extends StatelessWidget {
                       onSelected: (_PopupMenuItemType result) {
                         switch (result) {
                           case _PopupMenuItemType.setting:
-                            navigatorKey.currentState
+                            navigatorKey.currentState!
                                 .push(materialRoute(SettingsPage()));
                             break;
                         }
@@ -174,7 +202,7 @@ class _ProviderDetails extends StatelessWidget {
                           value: _PopupMenuItemType.setting,
                           child: Container(
                             padding: EdgeInsets.only(left: 5),
-                            child: Text('Настройки'),
+                            child: Text('basis.settings'.tr()),
                           ),
                         ),
                       ],
@@ -182,11 +210,10 @@ class _ProviderDetails extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: brandPagePadding1,
+                  padding: brandPagePadding2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 13),
                       IconStatusMask(
                         status: provider.state,
                         child:
@@ -195,11 +222,7 @@ class _ProviderDetails extends StatelessWidget {
                       SizedBox(height: 10),
                       BrandText.h1(title),
                       SizedBox(height: 10),
-                      BrandText.body1(statusText),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text('Статусы сервера и сервис провайдера и т.д.')
+                      ...children
                     ],
                   ),
                 )

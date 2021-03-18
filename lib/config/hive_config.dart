@@ -32,7 +32,8 @@ class HiveConfig {
       await secureStorage.write(key: BNames.key, value: base64UrlEncode(key));
     }
 
-    return base64Url.decode(await secureStorage.read(key: BNames.key));
+    String? string = await secureStorage.read(key: BNames.key);
+    return base64Url.decode(string!);
   }
 }
 

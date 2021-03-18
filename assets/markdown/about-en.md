@@ -1,12 +1,12 @@
-### О проекте
+### About us
 
-Всё больше организаций хотят владеть нашими данными
-А мы сами хотим распоряжаться своими **данными** на своем сервере.
+More and more corporations want to control our data.
+We want to have full control of our **data** on our own.
 
-### Миссия проекта
+### Our mission
 
-Цифровая независимость и приватность доступная каждому
+Digital independence and privacy, available to everyone
 
-### Цель
+### Target
 
-Развивать программу, которая позволит каждому создавать приватные сервисы для себя и своих близких
+Develop the program, which will allow everyone to deploy their private services for themselves and their neighbours.

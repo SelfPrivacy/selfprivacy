@@ -36,9 +36,9 @@ class AppConfigState extends Equatable {
   final CloudFlareDomain? cloudFlareDomain;
   final User? rootUser;
   final HetznerServerDetails? hetznerServer;
-  final bool? isServerStarted;
-  final bool? isServerReseted;
-  final bool? hasFinalChecked;
+  final bool isServerStarted;
+  final bool isServerReseted;
+  final bool hasFinalChecked;
 
   final bool? isLoading;
   final Exception? error;

@@ -431,10 +431,10 @@ class InitializingPage extends StatelessWidget {
     assert(appConfigCubit.state is TimerState, 'wronge state');
     var state = appConfigCubit.state as TimerState;
 
-    String? text;
-    if (state.isServerReseted!) {
+    late String? text;
+    if (state.isServerReseted) {
       text = 'initializing.13'.tr();
-    } else if (state.isServerStarted!) {
+    } else if (state.isServerStarted) {
       text = 'initializing.14'.tr();
     } else if (state.isServerCreated) {
       text = 'initializing.15'.tr();
@@ -452,8 +452,8 @@ class InitializingPage extends StatelessWidget {
               children: [
                 BrandText.body2('initializing.16'.tr()),
                 BrandTimer(
-                  startDateTime: state.timerStart,
-                  duration: state.duration,
+                  startDateTime: state.timerStart!,
+                  duration: state.duration!,
                 )
               ],
             ),

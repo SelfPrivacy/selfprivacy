@@ -32,7 +32,7 @@ class RootUserFormCubit extends FormCubit {
 
     isVisible = FieldCubit(initalValue: false);
 
-    super.setFields([userName, password, isVisible]);
+    super.addFields([userName, password, isVisible]);
   }
 
   @override

@@ -20,7 +20,7 @@ class CloudFlareFormCubit extends FormCubit {
       ],
     );
 
-    super.setFields([apiKey]);
+    super.addFields([apiKey]);
   }
 
   @override

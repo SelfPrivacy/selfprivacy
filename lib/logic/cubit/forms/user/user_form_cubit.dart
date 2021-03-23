@@ -33,7 +33,7 @@ class UserFormCubit extends FormCubit {
       ],
     );
 
-    super.setFields([login, password]);
+    super.addFields([login, password]);
   }
 
   @override

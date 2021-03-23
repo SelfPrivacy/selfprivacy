@@ -96,11 +96,11 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                           context: context,
                           builder: (_) {
                             return BrandAlert(
-                              title: 'Вы уверенны',
-                              contentText: 'Сбросить все ключи?',
+                              title: 'modals.3'.tr(),
+                              contentText: 'modals.4'.tr(),
                               acitons: [
                                 ActionButton(
-                                    text: 'Да, сбросить',
+                                    text: 'modals.5'.tr(),
                                     isRed: true,
                                     onPressed: () {
                                       context
@@ -109,7 +109,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                                       Navigator.of(context).pop();
                                     }),
                                 ActionButton(
-                                  text: 'Отмена',
+                                  text: 'basis.cancel'.tr(),
                                 ),
                               ],
                             );

@@ -17,7 +17,7 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));
-    var list = await (api.domainList() as Future<List<String>>);
+    var list = await api.domainList();
     if (list.isEmpty) {
       emit(Empty());
     } else if (list.length == 1) {

@@ -167,5 +167,10 @@
     "18": "How to obtain Hetzner API Token",
     "19": "1 Go via this link ",
     "20": "\n"
+  },
+  "modals": {
+    "_comment": "messages in modals",
+    "1": "Сервер с таким именем уже существует",
+    "2": "Уничтожить сервер и создать новый?"
   }
 }

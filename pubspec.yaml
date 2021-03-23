@@ -17,7 +17,7 @@ dependencies:
   easy_localization: ^3.0.0
   either_option: ^2.0.1-dev.1
   equatable: ^2.0.0
-  flutter_bloc: ^7.0.0-nullsafety.5
+  flutter_bloc: ^7.0.0
   flutter_markdown: ^0.6.0
   flutter_secure_storage: ^4.1.0
   get_it: ^6.0.0

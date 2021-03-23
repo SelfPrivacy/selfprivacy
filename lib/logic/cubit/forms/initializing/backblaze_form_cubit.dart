@@ -29,7 +29,7 @@ class BackblazeFormCubit extends FormCubit {
       ],
     );
 
-    super.setFields([keyId, applicationKey]);
+    super.addFields([keyId, applicationKey]);
   }
 
   @override

@@ -161,7 +161,7 @@ class CloudflareApi extends ApiMap {
     ];
   }
 
-  Future<List<String>?> domainList() async {
+  Future<List<String>> domainList() async {
     var url = '$rootAddress/zones?per_page=50';
     var response = await loggedClient.get(
       url,
@@ -169,7 +169,7 @@ class CloudflareApi extends ApiMap {
     );
 
     return response.data['result']
-        .map<String>((el) => el['name'] as String?)
+        .map<String>((el) => el['name'] as String)
         .toList();
   }
 }

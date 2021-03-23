@@ -15,6 +15,7 @@ import 'package:basic_utils/basic_utils.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'app_config_cubit.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
@@ -121,7 +122,8 @@ class AppConfigRepository {
     String? domainName,
     String? cloudFlareKey, {
     void Function()? onCancel,
-    required Future<void> Function(HetznerServerDetails serverDetails) onSuccess,
+    required Future<void> Function(HetznerServerDetails serverDetails)
+        onSuccess,
   }) async {
     var hetznerApi = HetznerApi(hetznerKey);
 
@@ -139,8 +141,8 @@ class AppConfigRepository {
         var nav = getIt.get<NavigationService>();
         nav.showPopUpDialog(
           BrandAlert(
-            title: 'Сервер с таким именем уже существует',
-            contentText: 'Уничтожить сервер и создать новый?',
+            title: 'modals.1'.tr(),
+            contentText: 'modals.2'.tr(),
             acitons: [
               ActionButton(
                 text: 'Удалить',

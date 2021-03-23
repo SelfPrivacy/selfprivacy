@@ -145,7 +145,7 @@ class AppConfigRepository {
             contentText: 'modals.2'.tr(),
             acitons: [
               ActionButton(
-                text: 'Удалить',
+                text: 'basis.delete'.tr(),
                 isRed: true,
                 onPressed: () async {
                   await hetznerApi.deleteSelfprivacyServer(
@@ -164,7 +164,7 @@ class AppConfigRepository {
                 },
               ),
               ActionButton(
-                text: 'Отменить',
+                text: 'basis.cancel'.tr(),
                 onPressed: () {
                   hetznerApi.close();
                   onCancel!();

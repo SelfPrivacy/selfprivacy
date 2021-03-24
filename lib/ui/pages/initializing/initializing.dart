@@ -77,7 +77,7 @@ class InitializingPage extends StatelessWidget {
               BrandButton.text(
                   title: cubit.state.isFullyInitilized
                       ? 'basis.close'.tr()
-                      : 'Настрою потом',
+                      : 'basis.later'.tr(),
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                       materialRoute(RootPage()),
@@ -408,7 +408,7 @@ class InitializingPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Spacer(flex: 2),
-          BrandText.h2('initializing.how'.tr()),
+          BrandText.h2('initializing.final'.tr()),
           SizedBox(height: 10),
           BrandText.body2('initializing.11'.tr()),
           Spacer(),

@@ -20,7 +20,8 @@
     "domain": "Domain",
     "saving": "Saving..",
     "nickname": "nickname",
-    "loading": "loading"
+    "loading": "loading",
+    "later": "Настрою потом"
   },
   "more": {
     "_comment": "'More' tab",
@@ -157,6 +158,7 @@
     "8": "Loading domains list",
     "9": "Found more than one domain. For your own security, please be asked to delete unnecessary domains",
     "10": "Save domain",
+    "final": "Final step",
     "11": "Create server",
     "what": "What does it mean?",
     "13": "Server rebooted. Waiting for the last verification...",

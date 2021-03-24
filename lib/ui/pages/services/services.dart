@@ -303,7 +303,7 @@ class _ServiceDetails extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(bottom: 0.8, left: 5),
                 child: GestureDetector(
-                  onTap: () => _launchURL('https://social_network.$domainName'),
+                  onTap: () => _launchURL('https://social.$domainName'),
                   child: Text(
                     'social.$domainName',
                     style: linksStyle,

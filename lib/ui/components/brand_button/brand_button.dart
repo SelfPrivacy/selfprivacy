@@ -100,6 +100,7 @@ class _TextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
+      behavior: HitTestBehavior.opaque,
       child: Container(
         height: 48,
         width: double.infinity,

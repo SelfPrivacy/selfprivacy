@@ -21,10 +21,6 @@ class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
 
   AppConfigState load() {
-    // saveIsServerStarted(false);
-    // saveIsServerReseted(false);
-    // saveHasFinalChecked(false);
-
     return AppConfigState(
       hetznerKey: box.get(BNames.hetznerKey),
       cloudFlareKey: box.get(BNames.cloudFlareKey),

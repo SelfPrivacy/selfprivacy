@@ -47,25 +47,20 @@ class InitializingPage extends StatelessWidget {
           body: ListView(
             children: [
               Padding(
-                padding: brandPagePadding1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ProgressBar(
-                      steps: [
-                        'Hetzner',
-                        'CloudFlare',
-                        'Backblaze',
-                        'Domain',
-                        'User',
-                        'Server',
-                        ' ✅',
-                        ' ✅',
-                        ' ✅'
-                      ],
-                      activeIndex: cubit.state.progress,
-                    ),
+                padding: brandPagePadding2.copyWith(top: 10, bottom: 10),
+                child: ProgressBar(
+                  steps: [
+                    'Hetzner',
+                    'CloudFlare',
+                    'Backblaze',
+                    'Domain',
+                    'User',
+                    'Server',
+                    ' ✅',
+                    ' ✅',
+                    ' ✅'
                   ],
+                  activeIndex: cubit.state.progress,
                 ),
               ),
               _addCard(
@@ -84,7 +79,6 @@ class InitializingPage extends StatelessWidget {
                       (predicate) => false,
                     );
                   }),
-              SizedBox(height: 30),
             ],
           ),
         ),
@@ -415,7 +409,7 @@ class InitializingPage extends StatelessWidget {
           BrandButton.rised(
             onPressed:
                 isLoading! ? null : appConfigCubit.createServerAndSetDnsRecords,
-            title: isLoading ? 'loading' : 'initializing.11'.tr(),
+            title: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
           ),
           Spacer(flex: 2),
           BrandButton.text(
@@ -472,7 +466,7 @@ class InitializingPage extends StatelessWidget {
 
   Widget _addCard(Widget child) {
     return Container(
-      height: 500,
+      height: 450,
       padding: brandPagePadding2,
       child: BrandCard(child: child),
     );

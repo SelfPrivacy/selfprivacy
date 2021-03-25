@@ -366,6 +366,7 @@ class _ServiceDetails extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       BrandText.h1(title),
+                      SizedBox(height: 10),
                       child,
                     ],
                   ),

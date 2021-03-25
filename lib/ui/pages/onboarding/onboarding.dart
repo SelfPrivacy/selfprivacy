@@ -124,8 +124,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
           BrandButton.rised(
             onPressed: () {
               context.read<AppSettingsCubit>().turnOffOnboarding();
-              Navigator.of(context)
-                  .pushReplacement(materialRoute(widget.nextPage));
+              Navigator.of(context).pushAndRemoveUntil(
+                materialRoute(widget.nextPage),
+                (route) => false,
+              );
             },
             title: 'basis.got_it'.tr(),
           ),

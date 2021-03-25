@@ -74,7 +74,6 @@ class AppConfigCubit extends Cubit<AppConfigState> {
 
       if (isMatch) {
         var server = await repository.startServer(
-          state.hetznerKey,
           state.hetznerServer!,
         );
         repository.saveServerDetails(server);
@@ -111,33 +110,30 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     AppConfigState? state,
     bool isImmediate = false,
   }) async {
-    state = state ?? this.state;
+    var dataState = state ?? this.state;
 
     var work = () async {
-      emit(TimerState(dataState: state!, isLoading: true));
+      emit(TimerState(dataState: dataState, isLoading: true));
 
-      var isServerWorking = await repository.isHttpServerWorking(
-        state.cloudFlareDomain!.domainName,
-      );
+      var isServerWorking = await repository.isHttpServerWorking();
 
       if (isServerWorking) {
         var pauseDuration = Duration(seconds: 30);
         emit(TimerState(
-          dataState: state,
+          dataState: dataState,
           timerStart: DateTime.now(),
           isLoading: false,
           duration: pauseDuration,
         ));
         timer = Timer(pauseDuration, () async {
           var hetznerServerDetails = await repository.restart(
-            state!.hetznerKey,
-            state.hetznerServer!,
+            dataState.hetznerServer!,
           );
           repository.saveIsServerReseted(true);
           repository.saveServerDetails(hetznerServerDetails);
 
           emit(
-            state.copyWith(
+            dataState.copyWith(
               isServerReseted: true,
               hetznerServer: hetznerServerDetails,
               isLoading: false,
@@ -155,7 +151,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       var pauseDuration = Duration(seconds: 60);
       emit(
         TimerState(
-          dataState: state,
+          dataState: dataState,
           timerStart: DateTime.now(),
           duration: pauseDuration,
           isLoading: false,
@@ -176,9 +172,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     var work = () async {
       emit(TimerState(dataState: state!, isLoading: true));
 
-      var isServerWorking = await repository.isHttpServerWorking(
-        state.cloudFlareDomain!.domainName,
-      );
+      var isServerWorking = await repository.isHttpServerWorking();
 
       if (isServerWorking) {
         repository.saveHasFinalChecked(true);
@@ -246,7 +240,6 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     AppConfigState _stateCopy = state;
     var onSuccess = (serverDetails) async {
       await repository.createDnsRecords(
-        state.cloudFlareKey,
         serverDetails.ip4,
         state.cloudFlareDomain!,
       );
@@ -263,10 +256,9 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     try {
       emit(state.copyWith(isLoading: true));
       await repository.createServer(
-        state.hetznerKey,
         state.rootUser!,
-        state.cloudFlareDomain!.domainName,
-        state.cloudFlareKey,
+        state.cloudFlareDomain!.domainName!,
+        state.cloudFlareKey!,
         onCancel: onCancel,
         onSuccess: onSuccess,
       );

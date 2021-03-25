@@ -1,30 +1,43 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/dns_records.dart';
 
-class CloudflareApi extends ApiMapOld {
-  CloudflareApi([String? token]) {
-    if (token != null) {
-      loggedClient.options =
-          BaseOptions(headers: {'Authorization': 'Bearer $token'});
+class CloudflareApi extends ApiMap {
+  CloudflareApi({this.hasLoger = false, this.isWithToken = true});
+
+  BaseOptions get options {
+    var options = BaseOptions(baseUrl: rootAddress);
+    if (isWithToken) {
+      var token = getIt<ApiConfigModel>().cloudFlareKey;
+      assert(token != null);
+      options.headers = {'Authorization': 'Bearer $token'};
     }
+
+    if (validateStatus != null) {
+      options.validateStatus = validateStatus!;
+    }
+    return options;
   }
 
+  ValidateStatus? validateStatus;
+
   @override
-  String? rootAddress = 'https://api.cloudflare.com/client/v4';
+  String rootAddress = 'https://api.cloudflare.com/client/v4';
 
   Future<bool> isValid(String token) async {
-    var url = '$rootAddress/user/tokens/verify';
-    var options = Options(
-      headers: {'Authorization': 'Bearer $token'},
-      validateStatus: (status) {
-        return status == HttpStatus.ok || status == HttpStatus.unauthorized;
-      },
-    );
+    validateStatus = (status) {
+      return status == HttpStatus.ok || status == HttpStatus.unauthorized;
+    };
 
-    Response response = await loggedClient.get(url, options: options);
+    var client = await getClient();
+    Response response = await client.get('/user/tokens/verify',
+        options: Options(headers: {'Authorization': 'Bearer $token'}));
+
+    client.close();
+    validateStatus = null;
 
     if (response.statusCode == HttpStatus.ok) {
       return true;
@@ -35,21 +48,18 @@ class CloudflareApi extends ApiMapOld {
     }
   }
 
-  Future<String?> getZoneId(String? token, String domain) async {
-    var url = '$rootAddress/zones';
-
-    var options = Options(
-      headers: {'Authorization': 'Bearer $token'},
-      validateStatus: (status) {
-        return status == HttpStatus.ok || status == HttpStatus.forbidden;
-      },
-    );
-
-    Response response = await loggedClient.get(
-      url,
-      options: options,
+  Future<String?> getZoneId(String domain) async {
+    validateStatus = (status) {
+      return status == HttpStatus.ok || status == HttpStatus.forbidden;
+    };
+    var client = await getClient();
+    Response response = await client.get(
+      '/zones',
       queryParameters: {'name': domain},
     );
+
+    client.close();
+    validateStatus = null;
 
     try {
       return response.data['result'][0]['id'];
@@ -65,20 +75,24 @@ class CloudflareApi extends ApiMapOld {
     var domainName = cloudFlareDomain.domainName;
     var domainZoneId = cloudFlareDomain.zoneId;
 
-    var url = '$rootAddress/zones/$domainZoneId/dns_records';
+    var url = '/zones/$domainZoneId/dns_records';
 
-    var response = await loggedClient.get(url);
+    var client = await getClient();
+    Response response = await client.get(url);
+
     List records = response.data['result'] ?? [];
     var allDeleteFutures = <Future>[];
 
     for (var record in records) {
       if (record['zone_name'] == domainName) {
         allDeleteFutures.add(
-          loggedClient.delete('$url/${record["id"]}'),
+          client.delete('$url/${record["id"]}'),
         );
       }
     }
+
     await Future.wait(allDeleteFutures);
+    client.close();
   }
 
   Future<void> createMultipleDnsRecords({
@@ -92,10 +106,11 @@ class CloudflareApi extends ApiMapOld {
     var url = '$rootAddress/zones/$domainZoneId/dns_records';
 
     var allCreateFutures = <Future>[];
+    var client = await getClient();
 
     for (var record in listDnsRecords) {
       allCreateFutures.add(
-        loggedClient.post(
+        client.post(
           url,
           data: record.toJson(),
         ),
@@ -103,22 +118,8 @@ class CloudflareApi extends ApiMapOld {
     }
 
     await Future.wait(allCreateFutures);
+    client.close();
   }
-
-  // setDkim(String dkimRecordString, String domainZoneId) {
-  //   var txt3 = DnsRecords(
-  //     type: 'TXT',
-  //     name: 'selector._domainkey',
-  //     content: dkimRecordString,
-  //     ttl: 18000,
-  //   );
-
-  //   var url = '$rootAddress/zones/$domainZoneId/dns_records';
-  //   loggedClient.post(
-  //     url,
-  //     data: txt3.toJson(),
-  //   );
-  // }
 
   List<DnsRecords> projectDnsRecords(String? domainName, String? ip4) {
     var domainA = DnsRecords(type: 'A', name: domainName, content: ip4);
@@ -163,13 +164,22 @@ class CloudflareApi extends ApiMapOld {
 
   Future<List<String>> domainList() async {
     var url = '$rootAddress/zones?per_page=50';
-    var response = await loggedClient.get(
+    var client = await getClient();
+
+    var response = await client.get(
       url,
       queryParameters: {'per_page': 50},
     );
 
+    client.close();
     return response.data['result']
         .map<String>((el) => el['name'] as String)
         .toList();
   }
+
+  @override
+  final bool hasLoger;
+
+  @override
+  final bool isWithToken;
 }

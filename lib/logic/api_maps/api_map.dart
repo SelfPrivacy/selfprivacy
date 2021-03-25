@@ -1,31 +1,57 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 
-abstract class ApiMapOld {
-  ApiMapOld() {
-    var client = Dio()..interceptors.add(ConsoleInterceptor());
-    (client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+abstract class ApiMap {
+  
+  Future<Dio> getClient() async {
+    var dio = Dio(await options);
+    if (hasLoger) {
+      dio.interceptors.add(PrettyDioLogger());
+    }
+    dio..interceptors.add(ConsoleInterceptor());
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
       client.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
       return client;
     };
-    loggedClient = client;
+    return dio;
   }
-  String? rootAddress;
 
-  late Dio loggedClient;
+  FutureOr<BaseOptions> get options;
 
-  void close() {
-    loggedClient.close();
-  }
+  abstract final String rootAddress;
+  abstract final bool hasLoger;
+  abstract final bool isWithToken;
 }
+
+// abstract class ApiMapOld {
+//   ApiMapOld() {
+//     var client = Dio()..interceptors.add(ConsoleInterceptor());
+//     (client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+//         (HttpClient client) {
+//       client.badCertificateCallback =
+//           (X509Certificate cert, String host, int port) => true;
+//       return client;
+//     };
+//     loggedClient = client;
+//   }
+//   String? rootAddress;
+
+//   late Dio loggedClient;
+
+//   void close() {
+//     loggedClient.close();
+//   }
+// }
 
 class ConsoleInterceptor extends InterceptorsWrapper {
   void addMessage(Message message) {

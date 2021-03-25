@@ -22,7 +22,7 @@ class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
 
   AppConfigState load() {
-    return AppConfigState(
+    var res = AppConfigState(
       hetznerKey: getIt<ApiConfigModel>().hetznerKey,
       cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey,
       cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain,
@@ -35,6 +35,8 @@ class AppConfigRepository {
       error: null,
       isLoading: box.get(BNames.isLoading, defaultValue: false),
     );
+
+    return res;
   }
 
   void clearAppConfig() {
@@ -42,12 +44,10 @@ class AppConfigRepository {
   }
 
   Future<HetznerServerDetails> startServer(
-    String? hetznerKey,
     HetznerServerDetails hetznerServer,
   ) async {
-    var hetznerApi = HetznerApi(hetznerKey);
+    var hetznerApi = HetznerApi();
     var serverDetails = await hetznerApi.startServer(server: hetznerServer);
-    hetznerApi.close();
 
     return serverDetails;
   }
@@ -90,15 +90,14 @@ class AppConfigRepository {
   }
 
   Future<void> createServer(
-    String? hetznerKey,
     User rootUser,
-    String? domainName,
-    String? cloudFlareKey, {
-    void Function()? onCancel,
+    String domainName,
+    String cloudFlareKey, {
+    required void Function() onCancel,
     required Future<void> Function(HetznerServerDetails serverDetails)
         onSuccess,
   }) async {
-    var hetznerApi = HetznerApi(hetznerKey);
+    var hetznerApi = HetznerApi();
 
     try {
       var serverDetails = await hetznerApi.createServer(
@@ -106,7 +105,6 @@ class AppConfigRepository {
         rootUser: rootUser,
         domainName: domainName,
       );
-      hetznerApi.close();
       saveServerDetails(serverDetails);
       onSuccess(serverDetails);
     } on DioError catch (e) {
@@ -121,16 +119,13 @@ class AppConfigRepository {
                 text: 'basis.delete'.tr(),
                 isRed: true,
                 onPressed: () async {
-                  await hetznerApi.deleteSelfprivacyServer(
-                    cloudFlareKey: cloudFlareKey,
-                  );
+                  await hetznerApi.deleteSelfprivacyServer();
 
                   var serverDetails = await hetznerApi.createServer(
                     cloudFlareKey: cloudFlareKey,
                     rootUser: rootUser,
                     domainName: domainName,
                   );
-                  hetznerApi.close();
 
                   await saveServerDetails(serverDetails);
                   onSuccess(serverDetails);
@@ -139,8 +134,7 @@ class AppConfigRepository {
               ActionButton(
                 text: 'basis.cancel'.tr(),
                 onPressed: () {
-                  hetznerApi.close();
-                  onCancel!();
+                  onCancel();
                 },
               ),
             ],
@@ -151,11 +145,10 @@ class AppConfigRepository {
   }
 
   Future<void> createDnsRecords(
-    String? cloudFlareKey,
     String? ip4,
     CloudFlareDomain cloudFlareDomain,
   ) async {
-    var cloudflareApi = CloudflareApi(cloudFlareKey);
+    var cloudflareApi = CloudflareApi();
 
     await cloudflareApi.removeSimilarRecords(
       ip4: ip4,
@@ -166,22 +159,18 @@ class AppConfigRepository {
       ip4: ip4,
       cloudFlareDomain: cloudFlareDomain,
     );
-
-    cloudflareApi.close();
   }
 
-  Future<bool> isHttpServerWorking(String? domainName) async {
-    var api = ServerApi(domainName);
+  Future<bool> isHttpServerWorking() async {
+    var api = ServerApi();
     var isHttpServerWorking = await api.isHttpServerWorking();
-    api.close();
     return isHttpServerWorking;
   }
 
   Future<HetznerServerDetails> restart(
-    String? hetznerKey,
     HetznerServerDetails server,
   ) async {
-    var hetznerApi = HetznerApi(hetznerKey);
+    var hetznerApi = HetznerApi();
     return await hetznerApi.restart(server: server);
   }
 

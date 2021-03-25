@@ -1,31 +1,38 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
 
-class BackblazeApi extends ApiMapOld {
-  BackblazeApi([String? token]) {
-    if (token != null) {
-      loggedClient.options = BaseOptions(
-        headers: {'Authorization': 'Basic $token'},
-        baseUrl: rootAddress!,
-      );
+class BackblazeApi extends ApiMap {
+  BackblazeApi({this.hasLoger = false, this.isWithToken = true});
+
+  BaseOptions get options {
+    var options = BaseOptions(baseUrl: rootAddress);
+    if (isWithToken) {
+      var backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
+      var token = backblazeCredential!.applicationKey;
+      assert(token != null);
+      options.headers = {'Authorization': 'Basic $token'};
     }
+
+    if (validateStatus != null) {
+      options.validateStatus = validateStatus!;
+    }
+
+    return options;
   }
 
+  ValidateStatus? validateStatus;
   @override
-  String? rootAddress =
-      'https://api.backblazeb2.com/b2api/v2/b2_authorize_account';
+  String rootAddress = 'https://api.backblazeb2.com/b2api/v2/';
 
-  Future<bool> isValid(String token) async {
-    var options = Options(
-      headers: {'Authorization': 'Basic $token'},
-      validateStatus: (status) {
-        return status == HttpStatus.ok || status == HttpStatus.unauthorized;
-      },
+  Future<bool> isValid(String encodedApiKey) async {
+    var client = await getClient();
+    Response response = await client.get(
+      'b2_authorize_account',
+      options: Options(headers: {'Authorization': 'Basic $encodedApiKey'}),
     );
-
-    Response response = await loggedClient.get(rootAddress!, options: options);
-
+    client.close();
     if (response.statusCode == HttpStatus.ok) {
       return true;
     } else if (response.statusCode == HttpStatus.unauthorized) {
@@ -34,4 +41,10 @@ class BackblazeApi extends ApiMapOld {
       throw Exception('code: ${response.statusCode}');
     }
   }
+
+  @override
+  bool hasLoger;
+
+  @override
+  bool isWithToken;
 }

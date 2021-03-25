@@ -80,17 +80,21 @@ class AppConfigState extends Equatable {
   bool get isFullyInitilized => _fulfilementList.every((el) => el!);
   int get progress => _fulfilementList.where((el) => el!).length;
 
-  List<bool?> get _fulfilementList => [
-        isHetznerFilled,
-        isCloudFlareFilled,
-        isBackblazeFilled,
-        isDomainFilled,
-        isUserFilled,
-        isServerCreated,
-        isServerStarted,
-        isServerReseted,
-        hasFinalChecked,
-      ];
+  List<bool?> get _fulfilementList {
+    var res = [
+      isHetznerFilled,
+      isCloudFlareFilled,
+      isBackblazeFilled,
+      isDomainFilled,
+      isUserFilled,
+      isServerCreated,
+      isServerStarted,
+      isServerReseted,
+      hasFinalChecked,
+    ];
+    print('progress: $res');
+    return res;
+  }
 }
 
 class InitialAppConfigState extends AppConfigState {

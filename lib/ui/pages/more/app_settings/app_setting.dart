@@ -28,7 +28,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
         return Scaffold(
           appBar: PreferredSize(
             child:
-                BrandHeader(title: 'more.settings'.tr(), hasBackButton: true),
+                BrandHeader(title: 'more.settings.title'.tr(), hasBackButton: true),
             preferredSize: Size.fromHeight(52),
           ),
           body: ListView(
@@ -47,8 +47,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   children: [
                     Flexible(
                       child: _TextColumn(
-                        title: 'Dark Theme',
-                        value: 'Change your the app theme',
+                        title: 'more.settings.1'.tr(),
+                        value: 'more.settings.2'.tr(),
                       ),
                     ),
                     SizedBox(width: 5),
@@ -75,8 +75,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   children: [
                     Flexible(
                       child: _TextColumn(
-                        title: 'Reset app config',
-                        value: 'Reset api keys and root user',
+                        title: 'more.settings.3'.tr(),
+                        value: 'more.settings.4'.tr(),
                       ),
                     ),
                     SizedBox(width: 5),
@@ -85,7 +85,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                         primary: BrandColors.red1,
                       ),
                       child: Text(
-                        'Reset',
+                        'basis.reset'.tr(),
                         style: TextStyle(
                           color: BrandColors.white,
                           fontWeight: NamedFontWeight.demiBold,

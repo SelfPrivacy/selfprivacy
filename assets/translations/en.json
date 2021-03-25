@@ -21,18 +21,25 @@
     "saving": "Saving..",
     "nickname": "nickname",
     "loading": "loading",
-    "later": "Настрою потом"
+    "later": "Настрою потом",
+    "reset": "Reset"
   },
   "more": {
     "_comment": "'More' tab",
     "configuration_wizard": "Setup wizard",
-    "settings": "Application settings",
     "about_project": "About us",
     "about_app": "About application",
     "onboarding": "Onboarding",
     "console": "Console",
     "about_app_page": {
       "text": "Тут любая служебная информация, v.{}"
+    },
+    "settings": {
+      "title": "Application settings",
+      "1": "Dark Theme",
+      "2": "Change your the app theme",
+      "3": "Reset app config",
+      "4": "Reset api keys and root user"
     }
   },
   "onboarding": {

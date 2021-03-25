@@ -50,15 +50,10 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     if (state.progress < 6 || state.isFullyInitilized) {
       emit(state);
     } else if (state.progress == 6) {
-      print('startServerIfDnsIsOkay');
-
       startServerIfDnsIsOkay(state: state, isImmediate: true);
     } else if (state.progress == 7) {
-      print('resetServerIfServerIsOkay');
-
       resetServerIfServerIsOkay(state: state, isImmediate: true);
     } else if (state.progress == 8) {
-      print('finishCheckIfServerIsOkay');
       finishCheckIfServerIsOkay(state: state, isImmediate: true);
     }
   }
@@ -83,6 +78,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
           state.hetznerServer!,
         );
         repository.saveServerDetails(server);
+        repository.saveIsServerStarted(true);
+
         emit(
           state.copyWith(
             isServerStarted: true,
@@ -136,6 +133,9 @@ class AppConfigCubit extends Cubit<AppConfigState> {
             state!.hetznerKey,
             state.hetznerServer!,
           );
+          repository.saveIsServerReseted(true);
+          repository.saveServerDetails(hetznerServerDetails);
+
           emit(
             state.copyWith(
               isServerReseted: true,
@@ -181,7 +181,12 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       );
 
       if (isServerWorking) {
-        emit(state.copyWith(hasFinalChecked: true, isLoading: false));
+        repository.saveHasFinalChecked(true);
+
+        emit(state.copyWith(
+          hasFinalChecked: true,
+          isLoading: false,
+        ));
       } else {
         finishCheckIfServerIsOkay();
       }

@@ -13,11 +13,9 @@ class ServerApi extends ApiMap {
 
   Future<bool> isHttpServerWorking() async {
     bool res;
-    print('start');
     Response response;
     try {
       response = await loggedClient.get('/serviceStatus');
-      print(response);
       res = response.statusCode == HttpStatus.ok;
     } catch (e) {
       res = false;

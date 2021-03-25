@@ -39,7 +39,7 @@ class MorePage extends StatelessWidget {
                   goTo: InitializingPage(),
                 ),
                 _NavItem(
-                  title: 'more.settings'.tr(),
+                  title: 'more.settings.title'.tr(),
                   iconData: BrandIcons.settings,
                   goTo: AppSettingsPage(),
                 ),

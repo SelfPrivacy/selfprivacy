@@ -21,18 +21,25 @@
     "saving": "Сохранение..",
     "nickname": "Никнейм",
     "loading": "Загрузка",
-    "later": "Настрою потом"
+    "later": "Настрою потом",
+    "reset": "Reset"
   },
   "more": {
     "_comment": "вкладка еще",
     "configuration_wizard": "Мастер Подключения",
-    "settings": "Настройки приложения",
     "about_project": "О проекте SelfPrivacy",
     "about_app": "О приложении",
     "onboarding": "Onboarding",
     "console": "Console",
     "about_app_page": {
       "text": "Тут любая служебная информация, v.{}"
+    },
+    "settings": {
+      "title": "Настройки приложения",
+      "1": "Темная тема",
+      "2": "Сменить цветовую тему",
+      "3": "Сброс настроек",
+      "4": "Сбросить API ключи а так же root пользвателя"
     }
   },
   "onboarding": {

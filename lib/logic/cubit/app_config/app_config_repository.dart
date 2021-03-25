@@ -21,6 +21,10 @@ class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
 
   AppConfigState load() {
+    // saveIsServerStarted(false);
+    // saveIsServerReseted(false);
+    // saveHasFinalChecked(false);
+
     return AppConfigState(
       hetznerKey: box.get(BNames.hetznerKey),
       cloudFlareKey: box.get(BNames.cloudFlareKey),
@@ -29,35 +33,15 @@ class AppConfigRepository {
       rootUser: box.get(BNames.rootUser),
       hetznerServer: box.get(BNames.hetznerServer),
       isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
-      error: null,
-      hasFinalChecked: box.get(BNames.hasFinalChecked, defaultValue: false),
-      isLoading: box.get(BNames.isLoading, defaultValue: false),
       isServerReseted: box.get(BNames.isServerReseted, defaultValue: false),
+      hasFinalChecked: box.get(BNames.hasFinalChecked, defaultValue: false),
+      error: null,
+      isLoading: box.get(BNames.isLoading, defaultValue: false),
     );
   }
 
   void clearAppConfig() {
     box.clear();
-  }
-
-  void saveHetznerKey(String key) {
-    box.put(BNames.hetznerKey, key);
-  }
-
-  void saveBackblazeKey(BackblazeCredential backblazeCredential) {
-    box.put(BNames.backblazeKey, backblazeCredential);
-  }
-
-  void saveCloudFlare(String key) {
-    box.put(BNames.cloudFlareKey, key);
-  }
-
-  void saveDomain(CloudFlareDomain cloudFlareDomain) {
-    box.put(BNames.cloudFlareDomain, cloudFlareDomain);
-  }
-
-  void saveRootUser(User rootUser) {
-    box.put(BNames.rootUser, rootUser);
   }
 
   Future<HetznerServerDetails> startServer(
@@ -67,17 +51,11 @@ class AppConfigRepository {
     var hetznerApi = HetznerApi(hetznerKey);
     var serverDetails = await hetznerApi.startServer(server: hetznerServer);
     hetznerApi.close();
-    box.put(BNames.isServerStarted, true);
 
     return serverDetails;
   }
 
-  Future<void> saveServerDetails(HetznerServerDetails serverDetails) async {
-    await box.put(BNames.hetznerServer, serverDetails);
-  }
-
   Future<bool> isDnsAddressesMatch(String? domainName, String? ip4) async {
-    print(domainName);
     var addresses = <String>[
       '$domainName',
       'api.$domainName',
@@ -111,8 +89,6 @@ class AppConfigRepository {
       }
     }
 
-    box.put(BNames.hasFinalChecked, true);
-
     return true;
   }
 
@@ -133,8 +109,8 @@ class AppConfigRepository {
         rootUser: rootUser,
         domainName: domainName,
       );
-      await box.put(BNames.hetznerServer, serverDetails);
       hetznerApi.close();
+      saveServerDetails(serverDetails);
       onSuccess(serverDetails);
     } on DioError catch (e) {
       if (e.response!.data['error']['code'] == 'uniqueness_error') {
@@ -159,7 +135,7 @@ class AppConfigRepository {
                   );
                   hetznerApi.close();
 
-                  await box.put(BNames.hetznerServer, serverDetails);
+                  await saveServerDetails(serverDetails);
                   onSuccess(serverDetails);
                 },
               ),
@@ -210,5 +186,41 @@ class AppConfigRepository {
   ) async {
     var hetznerApi = HetznerApi(hetznerKey);
     return await hetznerApi.restart(server: server);
+  }
+
+  Future<void> saveServerDetails(HetznerServerDetails serverDetails) async {
+    await box.put(BNames.hetznerServer, serverDetails);
+  }
+
+  Future<void> saveIsServerStarted(bool value) async {
+    await box.put(BNames.isServerStarted, value);
+  }
+
+  Future<void> saveHetznerKey(String key) async {
+    await box.put(BNames.hetznerKey, key);
+  }
+
+  Future<void> saveIsServerReseted(bool value) async {
+    await box.put(BNames.isServerReseted, value);
+  }
+
+  Future<void> saveBackblazeKey(BackblazeCredential backblazeCredential) async {
+    await box.put(BNames.backblazeKey, backblazeCredential);
+  }
+
+  Future<void> saveCloudFlare(String key) async {
+    await box.put(BNames.cloudFlareKey, key);
+  }
+
+  void saveDomain(CloudFlareDomain cloudFlareDomain) async {
+    await box.put(BNames.cloudFlareDomain, cloudFlareDomain);
+  }
+
+  void saveRootUser(User rootUser) async {
+    await box.put(BNames.rootUser, rootUser);
+  }
+
+  void saveHasFinalChecked(bool value) async {
+    await box.put(BNames.hasFinalChecked, value);
   }
 }

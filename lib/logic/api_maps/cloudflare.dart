@@ -4,7 +4,7 @@ import 'package:selfprivacy/logic/api_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/dns_records.dart';
 
-class CloudflareApi extends ApiMap {
+class CloudflareApi extends ApiMapOld {
   CloudflareApi([String? token]) {
     if (token != null) {
       loggedClient.options =

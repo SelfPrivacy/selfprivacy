@@ -378,6 +378,21 @@ class _ServiceDetails extends StatelessWidget {
     );
   }
 
-  void _launchURL(url) async =>
-      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  void _launchURL(url) async {
+    var _possible = await canLaunch(url);
+
+    if (_possible) {
+      try {
+        await launch(
+          url,
+          forceSafariVC: true,
+          enableJavaScript: true,
+        );
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }

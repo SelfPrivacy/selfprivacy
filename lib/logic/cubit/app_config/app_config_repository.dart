@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/get_it/api_config.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
@@ -22,12 +23,12 @@ class AppConfigRepository {
 
   AppConfigState load() {
     return AppConfigState(
-      hetznerKey: box.get(BNames.hetznerKey),
-      cloudFlareKey: box.get(BNames.cloudFlareKey),
-      cloudFlareDomain: box.get(BNames.cloudFlareDomain),
-      backblazeCredential: box.get(BNames.backblazeKey),
+      hetznerKey: getIt<ApiConfigModel>().hetznerKey,
+      cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey,
+      cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain,
+      backblazeCredential: getIt<ApiConfigModel>().backblazeCredential,
+      hetznerServer: getIt<ApiConfigModel>().hetznerServer,
       rootUser: box.get(BNames.rootUser),
-      hetznerServer: box.get(BNames.hetznerServer),
       isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
       isServerReseted: box.get(BNames.isServerReseted, defaultValue: false),
       hasFinalChecked: box.get(BNames.hasFinalChecked, defaultValue: false),
@@ -185,31 +186,31 @@ class AppConfigRepository {
   }
 
   Future<void> saveServerDetails(HetznerServerDetails serverDetails) async {
-    await box.put(BNames.hetznerServer, serverDetails);
+    await getIt<ApiConfigModel>().storeServerDetails(serverDetails);
+  }
+
+  Future<void> saveHetznerKey(String key) async {
+    await getIt<ApiConfigModel>().storeHetznerKey(key);
+  }
+
+  Future<void> saveBackblazeKey(BackblazeCredential backblazeCredential) async {
+    await getIt<ApiConfigModel>().storeBackblazeCredential(backblazeCredential);
+  }
+
+  Future<void> saveCloudFlareKey(String key) async {
+    await getIt<ApiConfigModel>().storeCloudFlareKey(key);
+  }
+
+  Future<void> saveDomain(CloudFlareDomain cloudFlareDomain) async {
+    await getIt<ApiConfigModel>().storeCloudFlareDomain(cloudFlareDomain);
   }
 
   Future<void> saveIsServerStarted(bool value) async {
     await box.put(BNames.isServerStarted, value);
   }
 
-  Future<void> saveHetznerKey(String key) async {
-    await box.put(BNames.hetznerKey, key);
-  }
-
   Future<void> saveIsServerReseted(bool value) async {
     await box.put(BNames.isServerReseted, value);
-  }
-
-  Future<void> saveBackblazeKey(BackblazeCredential backblazeCredential) async {
-    await box.put(BNames.backblazeKey, backblazeCredential);
-  }
-
-  Future<void> saveCloudFlare(String key) async {
-    await box.put(BNames.cloudFlareKey, key);
-  }
-
-  void saveDomain(CloudFlareDomain cloudFlareDomain) async {
-    await box.put(BNames.cloudFlareDomain, cloudFlareDomain);
   }
 
   void saveRootUser(User rootUser) async {

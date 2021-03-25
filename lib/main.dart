@@ -15,12 +15,11 @@ import 'config/get_it_config.dart';
 import 'config/localization.dart';
 import 'logic/cubit/app_settings/app_settings_cubit.dart';
 
-
 void main() async {
   await HiveConfig.init();
   Bloc.observer = SimpleBlocObserver();
   Wakelock.enable();
-  getItSetup();
+  await getItSetup();
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
 
-class BackblazeApi extends ApiMap {
+class BackblazeApi extends ApiMapOld {
   BackblazeApi([String? token]) {
     if (token != null) {
       loggedClient.options = BaseOptions(

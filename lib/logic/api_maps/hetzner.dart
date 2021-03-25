@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 import 'package:selfprivacy/utils/password_generator2.dart';
 
-class HetznerApi extends ApiMap {
+class HetznerApi extends ApiMapOld {
   HetznerApi([String? token]) {
     if (token != null) {
       loggedClient.options = BaseOptions(

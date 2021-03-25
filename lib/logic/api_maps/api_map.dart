@@ -7,8 +7,8 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 
-abstract class ApiMap {
-  ApiMap() {
+abstract class ApiMapOld {
+  ApiMapOld() {
     var client = Dio()..interceptors.add(ConsoleInterceptor());
     (client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {

@@ -219,7 +219,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
   }
 
   void setCloudflareKey(String cloudFlareKey) {
-    repository.saveCloudFlare(cloudFlareKey);
+    repository.saveCloudFlareKey(cloudFlareKey);
     emit(state.copyWith(cloudFlareKey: cloudFlareKey));
   }
 

@@ -40,7 +40,14 @@ class _ServicesPageState extends State<ServicesPage> {
           BrandText.body1('services.title'.tr()),
           SizedBox(height: 24),
           if (!isReady) ...[NotReadyCard(), SizedBox(height: 24)],
-          ...ServiceTypes.values.map((t) => _Card(serviceType: t)).toList()
+          ...ServiceTypes.values
+              .map((t) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: 30,
+                    ),
+                    child: _Card(serviceType: t),
+                  ))
+              .toList()
         ],
       ),
     );

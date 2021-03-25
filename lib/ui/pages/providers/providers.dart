@@ -27,9 +27,17 @@ class _ProvidersPageState extends State<ProvidersPage> {
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
 
     final cards = ProviderType.values
-        .map((type) => _Card(
-            provider:
-                ProviderModel(state: StateType.uninitialized, type: type)))
+        .map(
+          (type) => Padding(
+            padding: EdgeInsets.only(bottom: 30),
+            child: _Card(
+              provider: ProviderModel(
+                state: isReady ? StateType.stable : StateType.uninitialized,
+                type: type,
+              ),
+            ),
+          ),
+        )
         .toList();
     return Scaffold(
       appBar: PreferredSize(

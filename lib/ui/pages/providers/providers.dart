@@ -11,7 +11,6 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/components/one_page/one_page.dart';
-import 'package:selfprivacy/ui/pages/providers/settings/settings.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -195,7 +194,7 @@ class _ProviderDetails extends StatelessWidget {
           BrandText.body1(
               'providers.backup.bottom_sheet.2'.tr(args: [domainName, 'Time'])),
           SizedBox(height: 10),
-          BrandText.body1('providers.backup.bottom_sheet.3'.tr()),
+          BrandText.body1('providers.backup.status'.tr()),
         ];
         break;
     }

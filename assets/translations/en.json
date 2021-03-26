@@ -58,7 +58,9 @@
       "card_title": "Server",
       "status": "Status — Good",
       "bottom_sheet": {
-        "1": "It's a virtual computer, where all your services live."
+        "1": "It's a virtual computer, where all your services live.",
+        "2": "General information",
+        "3": "Location"
       }
     },
     "domain": {

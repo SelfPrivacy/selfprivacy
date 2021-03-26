@@ -121,7 +121,7 @@ class _ServerDetailsState extends State<ServerDetails>
                         SizedBox(height: 10),
                         BrandText.body1('providers.server.bottom_sheet.1'.tr()),
                         SizedBox(height: 30),
-                        Center(child: BrandText.h2('General information')),
+                        Center(child: BrandText.h2('providers.server.2'.tr())),
                         SizedBox(height: 10),
                         Table(
                           columnWidths: {
@@ -195,7 +195,7 @@ class _ServerDetailsState extends State<ServerDetails>
                           ],
                         ),
                         SizedBox(height: 30),
-                        Center(child: BrandText.h2('Location')),
+                        Center(child: BrandText.h2('providers.server.3'.tr())),
                         SizedBox(height: 10),
                         Table(
                           columnWidths: {
@@ -227,9 +227,6 @@ class _ServerDetailsState extends State<ServerDetails>
                             ),
                           ],
                         ),
-                        // BrandText.body1('providers.server.bottom_sheet.2'.tr()),
-                        // SizedBox(height: 10),
-                        // BrandText.body1('providers.server.bottom_sheet.3'.tr()),
                       ],
                     ),
                   ),

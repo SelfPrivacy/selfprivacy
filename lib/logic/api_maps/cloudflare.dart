@@ -22,8 +22,6 @@ class CloudflareApi extends ApiMap {
     return options;
   }
 
-  ValidateStatus? validateStatus;
-
   @override
   String rootAddress = 'https://api.cloudflare.com/client/v4';
 
@@ -36,8 +34,7 @@ class CloudflareApi extends ApiMap {
     Response response = await client.get('/user/tokens/verify',
         options: Options(headers: {'Authorization': 'Bearer $token'}));
 
-    client.close();
-    validateStatus = null;
+    close(client);
 
     if (response.statusCode == HttpStatus.ok) {
       return true;
@@ -48,7 +45,7 @@ class CloudflareApi extends ApiMap {
     }
   }
 
-  Future<String?> getZoneId(String domain) async {
+  Future<String> getZoneId(String domain) async {
     validateStatus = (status) {
       return status == HttpStatus.ok || status == HttpStatus.forbidden;
     };
@@ -58,14 +55,9 @@ class CloudflareApi extends ApiMap {
       queryParameters: {'name': domain},
     );
 
-    client.close();
-    validateStatus = null;
+    close(client);
 
-    try {
-      return response.data['result'][0]['id'];
-    } catch (error) {
-      return null;
-    }
+    return response.data['result'][0]['id'];
   }
 
   Future<void> removeSimilarRecords({
@@ -92,7 +84,7 @@ class CloudflareApi extends ApiMap {
     }
 
     await Future.wait(allDeleteFutures);
-    client.close();
+    close(client);
   }
 
   Future<void> createMultipleDnsRecords({
@@ -118,7 +110,7 @@ class CloudflareApi extends ApiMap {
     }
 
     await Future.wait(allCreateFutures);
-    client.close();
+    close(client);
   }
 
   List<DnsRecords> projectDnsRecords(String? domainName, String? ip4) {
@@ -171,7 +163,7 @@ class CloudflareApi extends ApiMap {
       queryParameters: {'per_page': 50},
     );
 
-    client.close();
+    close(client);
     return response.data['result']
         .map<String>((el) => el['name'] as String)
         .toList();

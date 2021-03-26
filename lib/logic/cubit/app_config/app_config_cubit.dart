@@ -257,7 +257,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       emit(state.copyWith(isLoading: true));
       await repository.createServer(
         state.rootUser!,
-        state.cloudFlareDomain!.domainName!,
+        state.cloudFlareDomain!.domainName,
         state.cloudFlareKey!,
         onCancel: onCancel,
         onSuccess: onSuccess,

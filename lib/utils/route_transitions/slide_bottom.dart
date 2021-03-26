@@ -36,8 +36,10 @@ Function transitionsBuilder = (
 class SlideBottomRoute extends PageRouteBuilder {
   SlideBottomRoute(this.widget)
       : super(
+          transitionDuration: Duration(milliseconds: 150),
           pageBuilder: pageBuilder(widget),
-          transitionsBuilder: transitionsBuilder as Widget Function(BuildContext, Animation<double>, Animation<double>, Widget),
+          transitionsBuilder: transitionsBuilder as Widget Function(
+              BuildContext, Animation<double>, Animation<double>, Widget),
         );
 
   final Widget widget;

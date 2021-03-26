@@ -20,9 +20,11 @@
     "domain": "Domain",
     "saving": "Saving..",
     "nickname": "nickname",
-    "loading": "loading",
+    "loading": "Loading...",
     "later": "Настрою потом",
-    "reset": "Reset"
+    "reset": "Reset",
+    "details": "Details",
+    "no_data": "No data"
   },
   "more": {
     "_comment": "'More' tab",
@@ -54,26 +56,25 @@
     "page_title": "Your Data Center",
     "server": {
       "card_title": "Server",
+      "status": "Status — Good",
       "bottom_sheet": {
-        "1": "It's a virtual computer, where all your services live.",
-        "2": "1 CPU, RAM 4Gb, 40Gb — $5 per month",
-        "3": "Status — Good"
+        "1": "It's a virtual computer, where all your services live."
       }
     },
     "domain": {
       "card_title": "Domain",
+      "status": "Status — Good",
       "bottom_sheet": {
         "1": "It's your personal internet address that will point to the server and other services of yours.",
-        "2": "{} — expires on {}",
-        "3": "Status — Good"
+        "2": "{} — expires on {}"
       }
     },
     "backup": {
       "card_title": "Backup",
+      "status": "Status — Good",
       "bottom_sheet": {
         "1": "Will save your day in case of incident: hackers attack, server deletion, etc.",
-        "2": "3Gb/10Gb, last backup was yesterday {}",
-        "3": "Status — Good"
+        "2": "3Gb/10Gb, last backup was yesterday {}"
       }
     }
   },

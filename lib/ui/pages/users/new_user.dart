@@ -5,14 +5,12 @@ class _NewUser extends StatelessWidget {
   Widget build(BuildContext context) {
     var config = context.watch<AppConfigCubit>().state;
 
-    var domainName = config.isDomainFilled
-        ? config.cloudFlareDomain!.domainName!
-        : 'example.com';
+    var domainName = UiHelpers.getDomainName(config);
 
     return BrandModalSheet(
       child: BlocProvider(
         create: (context) =>
-            UserFormCubit(usersCubit: context.watch<UsersCubit>()),
+            UserFormCubit(usersCubit: context.read<UsersCubit>()),
         child: Builder(builder: (context) {
           var formCubitState = context.watch<UserFormCubit>().state;
 

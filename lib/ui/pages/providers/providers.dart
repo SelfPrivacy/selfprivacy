@@ -10,9 +10,15 @@ import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.da
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
+import 'package:selfprivacy/ui/components/one_page/one_page.dart';
 import 'package:selfprivacy/ui/pages/providers/settings/settings.dart';
+import 'package:selfprivacy/ui/pages/server_details/server_details.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/utils/route_transitions/slide_bottom.dart';
+import 'package:selfprivacy/utils/ui_helpers.dart';
+
+var navigatorKey = GlobalKey<NavigatorState>();
 
 class ProvidersPage extends StatefulWidget {
   ProvidersPage({Key? key}) : super(key: key);
@@ -64,9 +70,11 @@ class _Card extends StatelessWidget {
   final ProviderModel provider;
   @override
   Widget build(BuildContext context) {
-    String? title;
+    late String title;
     String? message;
-    String? stableText;
+    late String stableText;
+    late VoidCallback onTap;
+
     AppConfigState appConfig = context.watch<AppConfigCubit>().state;
 
     var domainName =
@@ -75,30 +83,54 @@ class _Card extends StatelessWidget {
     switch (provider.type) {
       case ProviderType.server:
         title = 'providers.server.card_title'.tr();
-        stableText = 'В норме';
+        stableText = 'providers.domain.status'.tr();
+
+        stableText = 'providers.server.status'.tr();
+        onTap = () => Navigator.of(context).push(
+              SlideBottomRoute(
+                OnePage(
+                  title: title,
+                  child: ServerDetails(),
+                ),
+              ),
+            );
         break;
       case ProviderType.domain:
         title = 'providers.domain.card_title'.tr();
         message = domainName;
-        stableText = 'Домен настроен';
+        stableText = 'providers.domain.status'.tr();
+
+        onTap = () => showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) {
+                return _ProviderDetails(
+                  provider: provider,
+                  statusText: stableText,
+                );
+              },
+            );
         break;
       case ProviderType.backup:
         title = 'providers.backup.card_title'.tr();
-        stableText = 'В норме';
+        stableText = 'providers.backup.status'.tr();
+
+        onTap = () => showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) {
+                return _ProviderDetails(
+                  provider: provider,
+                  statusText: stableText,
+                );
+              },
+            );
         break;
     }
     return GestureDetector(
-      onTap: () => showModalBottomSheet<void>(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (BuildContext context) {
-          return _ProviderDetails(
-            provider: provider,
-            statusText: stableText,
-          );
-        },
-      ),
+      onTap: onTap,
       child: BrandCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,20 +171,11 @@ class _ProviderDetails extends StatelessWidget {
 
     var config = context.watch<AppConfigCubit>().state;
 
-    var domainName = config.isDomainFilled
-        ? config.cloudFlareDomain!.domainName!
-        : 'example.com';
+    var domainName = UiHelpers.getDomainName(config);
+
     switch (provider.type) {
       case ProviderType.server:
-        title = 'providers.server.card_title'.tr();
-        children = [
-          BrandText.body1('providers.server.bottom_sheet.1'.tr()),
-          SizedBox(height: 10),
-          BrandText.body1('providers.server.bottom_sheet.2'.tr()),
-          SizedBox(height: 10),
-          BrandText.body1('providers.server.bottom_sheet.3'.tr()),
-        ];
-        break;
+        throw ('wrong type');
       case ProviderType.domain:
         title = 'providers.domain.card_title'.tr();
         children = [
@@ -161,7 +184,7 @@ class _ProviderDetails extends StatelessWidget {
           BrandText.body1(
               'providers.domain.bottom_sheet.2'.tr(args: [domainName, 'Date'])),
           SizedBox(height: 10),
-          BrandText.body1('providers.domain.bottom_sheet.3'.tr()),
+          BrandText.body1('providers.domain.status'.tr()),
         ];
         break;
       case ProviderType.backup:
@@ -185,38 +208,7 @@ class _ProviderDetails extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 4,
-                      horizontal: 2,
-                    ),
-                    child: PopupMenuButton<_PopupMenuItemType>(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      onSelected: (_PopupMenuItemType result) {
-                        switch (result) {
-                          case _PopupMenuItemType.setting:
-                            navigatorKey.currentState!
-                                .push(materialRoute(SettingsPage()));
-                            break;
-                        }
-                      },
-                      icon: Icon(Icons.more_vert),
-                      itemBuilder: (BuildContext context) => [
-                        PopupMenuItem<_PopupMenuItemType>(
-                          value: _PopupMenuItemType.setting,
-                          child: Container(
-                            padding: EdgeInsets.only(left: 5),
-                            child: Text('basis.settings'.tr()),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                SizedBox(height: 40),
                 Padding(
                   padding: brandPagePadding2,
                   child: Column(
@@ -242,5 +234,3 @@ class _ProviderDetails extends StatelessWidget {
     );
   }
 }
-
-enum _PopupMenuItemType { setting }

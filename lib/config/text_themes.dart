@@ -38,6 +38,12 @@ final headline4Style = defaultTextStyle.copyWith(
   color: BrandColors.headlineColor,
 );
 
+final headline5Style = defaultTextStyle.copyWith(
+  fontSize: 15,
+  fontWeight: NamedFontWeight.medium,
+  color: BrandColors.headlineColor.withOpacity(0.8),
+);
+
 final body1Style = defaultTextStyle;
 final body2Style = defaultTextStyle.copyWith(
   color: BrandColors.textColor2,

@@ -6,6 +6,7 @@ enum TextType {
   h2, // cards titles
   h3, // titles in about page
   h4, // caption
+  h5, // Table data
   body1, // normal
   body2, // with opacity
   medium,
@@ -63,10 +64,28 @@ class BrandText extends StatelessWidget {
         textAlign: textAlign,
         overflow: TextOverflow.ellipsis,
       );
-  factory BrandText.h4(String? text, {TextStyle? style}) => BrandText(
+  factory BrandText.h4(
+    String? text, {
+    TextStyle? style,
+    TextAlign? textAlign,
+  }) =>
+      BrandText(
         text,
         type: TextType.h4,
         style: style,
+        textAlign: textAlign,
+      );
+
+  factory BrandText.h5(
+    String? text, {
+    TextStyle? style,
+    TextAlign? textAlign,
+  }) =>
+      BrandText(
+        text,
+        type: TextType.h5,
+        style: style,
+        textAlign: textAlign,
       );
   factory BrandText.body1(String? text, {TextStyle? style}) => BrandText(
         text,
@@ -122,6 +141,11 @@ class BrandText extends StatelessWidget {
         style = isDark
             ? headline4Style.copyWith(color: Colors.white)
             : headline4Style;
+        break;
+      case TextType.h5:
+        style = isDark
+            ? headline5Style.copyWith(color: Colors.white)
+            : headline5Style;
         break;
       case TextType.body1:
         style = isDark ? body1Style.copyWith(color: Colors.white) : body1Style;

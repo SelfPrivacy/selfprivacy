@@ -6,13 +6,13 @@ part 'backblaze_credential.g.dart';
 
 @HiveType(typeId: 4)
 class BackblazeCredential {
-  BackblazeCredential({this.keyId, this.applicationKey});
+  BackblazeCredential({required this.keyId, required this.applicationKey});
 
   @HiveField(0)
-  final String? keyId;
+  final String keyId;
 
   @HiveField(1)
-  final String? applicationKey;
+  final String applicationKey;
 
   get encodedApiKey => encodedBackblazeKey(keyId, applicationKey);
 

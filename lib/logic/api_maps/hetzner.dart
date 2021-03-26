@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
+import 'package:selfprivacy/logic/models/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 import 'package:selfprivacy/utils/password_generator2.dart';
@@ -29,8 +30,6 @@ class HetznerApi extends ApiMap {
     return options;
   }
 
-  ValidateStatus? validateStatus;
-
   @override
   String rootAddress = 'https://api.hetzner.cloud/v1';
 
@@ -45,7 +44,7 @@ class HetznerApi extends ApiMap {
         headers: {'Authorization': 'Bearer $token'},
       ),
     );
-    client.close();
+    close(client);
 
     if (response.statusCode == HttpStatus.ok) {
       return true;
@@ -87,7 +86,7 @@ class HetznerApi extends ApiMap {
     List list = response.data['servers'];
     var server = list.firstWhere((el) => el['name'] == 'selfprivacy-server');
     await client.delete('/servers/${server['id']}');
-    client.close();
+    close(client);
   }
 
   Future<HetznerServerDetails> startServer({
@@ -96,7 +95,7 @@ class HetznerApi extends ApiMap {
     var client = await getClient();
 
     await client.post('/servers/${server.id}/actions/poweron');
-    client.close();
+    close(client);
 
     return server.copyWith(
       startTime: DateTime.now(),
@@ -108,7 +107,7 @@ class HetznerApi extends ApiMap {
   }) async {
     var client = await getClient();
     await client.post('/servers/${server.id}/actions/poweron');
-    client.close();
+    close(client);
     return server.copyWith(
       startTime: DateTime.now(),
     );
@@ -118,13 +117,15 @@ class HetznerApi extends ApiMap {
     var hetznerServer = getIt<ApiConfigModel>().hetznerServer;
     var client = await getClient();
     await client.post('/servers/${hetznerServer!.id}/metrics');
-    client.close();
+    close(client);
   }
 
-  getInfo() async {
+  Future<HetznerServerInfo> getInfo() async {
     var hetznerServer = getIt<ApiConfigModel>().hetznerServer;
     var client = await getClient();
-    await client.post('/servers/${hetznerServer!.id}');
-    client.close();
+    Response response = await client.get('/servers/${hetznerServer!.id}');
+    close(client);
+
+    return HetznerServerInfo.fromJson(response.data!['server']);
   }
 }

@@ -37,8 +37,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AppSettingsState appSettings = context.watch<AppSettingsCubit>().state;
 
-    var a = DateTime.parse('2021-03-23T20:00:06+00:00');
-    print(a);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light, // Manually changnig appbar color
       child: MaterialApp(

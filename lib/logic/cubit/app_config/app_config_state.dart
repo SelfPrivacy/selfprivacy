@@ -92,7 +92,6 @@ class AppConfigState extends Equatable {
       isServerReseted,
       hasFinalChecked,
     ];
-    print('progress: $res');
     return res;
   }
 }

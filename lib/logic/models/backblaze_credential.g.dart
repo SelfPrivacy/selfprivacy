@@ -17,8 +17,8 @@ class BackblazeCredentialAdapter extends TypeAdapter<BackblazeCredential> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return BackblazeCredential(
-      keyId: fields[0] as String?,
-      applicationKey: fields[1] as String?,
+      keyId: fields[0] as String,
+      applicationKey: fields[1] as String,
     );
   }
 

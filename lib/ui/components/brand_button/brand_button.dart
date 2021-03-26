@@ -34,7 +34,7 @@ class BrandButton {
         onPressed: onPressed,
       );
 
-  static iconText({
+  static emptyWithIconText({
     Key? key,
     required VoidCallback onPressed,
     required String title,

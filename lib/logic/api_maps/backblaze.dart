@@ -11,7 +11,6 @@ class BackblazeApi extends ApiMap {
     if (isWithToken) {
       var backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
       var token = backblazeCredential!.applicationKey;
-      assert(token != null);
       options.headers = {'Authorization': 'Basic $token'};
     }
 
@@ -22,7 +21,6 @@ class BackblazeApi extends ApiMap {
     return options;
   }
 
-  ValidateStatus? validateStatus;
   @override
   String rootAddress = 'https://api.backblazeb2.com/b2api/v2/';
 
@@ -32,7 +30,7 @@ class BackblazeApi extends ApiMap {
       'b2_authorize_account',
       options: Options(headers: {'Authorization': 'Basic $encodedApiKey'}),
     );
-    client.close();
+    close(client);
     if (response.statusCode == HttpStatus.ok) {
       return true;
     } else if (response.statusCode == HttpStatus.unauthorized) {

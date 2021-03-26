@@ -4,13 +4,16 @@ part 'cloudflare_domain.g.dart';
 
 @HiveType(typeId: 3)
 class CloudFlareDomain {
-  CloudFlareDomain({this.domainName, this.zoneId});
+  CloudFlareDomain({
+    required this.domainName,
+    required this.zoneId,
+  });
 
   @HiveField(0)
-  final String? domainName;
+  final String domainName;
 
   @HiveField(1)
-  final String? zoneId;
+  final String zoneId;
 
   @override
   String toString() {

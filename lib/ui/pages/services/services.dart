@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
@@ -13,6 +14,7 @@ import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:selfprivacy/utils/ui_helpers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../rootRoute.dart';
@@ -105,10 +107,10 @@ class _Card extends StatelessWidget {
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
     var changeTab = context.read<ChangeTab>().onPress;
     return GestureDetector(
-      onTap: () => showModalBottomSheet<void>(
+      onTap: () => showDialog<void>(
         context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
+        // isScrollControlled: true,
+        // backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
           return _ServiceDetails(
             serviceType: serviceType,
@@ -170,9 +172,7 @@ class _ServiceDetails extends StatelessWidget {
     late Widget child;
 
     var config = context.watch<AppConfigCubit>().state;
-    var domainName = config.isDomainFilled
-        ? config.cloudFlareDomain!.domainName!
-        : 'example.com';
+    var domainName = UiHelpers.getDomainName(config);
 
     var linksStyle = body1Style.copyWith(
       fontSize: 15,
@@ -181,7 +181,6 @@ class _ServiceDetails extends StatelessWidget {
           : BrandColors.black,
       fontWeight: FontWeight.bold,
       decoration: TextDecoration.underline,
-      // height: 1.1,
     );
 
     var textStyle = body1Style.copyWith(
@@ -198,9 +197,10 @@ class _ServiceDetails extends StatelessWidget {
               text: 'services.mail.bottom_sheet.1'.tr(args: [domainName]),
               style: textStyle,
             ),
+            WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8, left: 5),
+                padding: EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   child: Text(
                     'services.mail.bottom_sheet.2'.tr(),
@@ -236,9 +236,10 @@ class _ServiceDetails extends StatelessWidget {
                   .tr(args: [domainName]),
               style: textStyle,
             ),
+            WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8, left: 5),
+                padding: EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://password.$domainName'),
                   child: Text(
@@ -259,9 +260,10 @@ class _ServiceDetails extends StatelessWidget {
               text: 'services.video.bottom_sheet.1'.tr(args: [domainName]),
               style: textStyle,
             ),
+            WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8, left: 5),
+                padding: EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://meet.$domainName'),
                   child: Text(
@@ -282,9 +284,10 @@ class _ServiceDetails extends StatelessWidget {
               text: 'services.cloud.bottom_sheet.1'.tr(args: [domainName]),
               style: textStyle,
             ),
+            WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8, left: 5),
+                padding: EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://cloud.$domainName'),
                   child: Text(
@@ -306,9 +309,10 @@ class _ServiceDetails extends StatelessWidget {
                   .tr(args: [domainName]),
               style: textStyle,
             ),
+            WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8, left: 5),
+                padding: EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://social.$domainName'),
                   child: Text(
@@ -329,9 +333,10 @@ class _ServiceDetails extends StatelessWidget {
               text: 'services.git.bottom_sheet.1'.tr(args: [domainName]),
               style: textStyle,
             ),
+            WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8, left: 5),
+                padding: EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://git.$domainName'),
                   child: Text(
@@ -345,36 +350,44 @@ class _ServiceDetails extends StatelessWidget {
         ));
         break;
     }
-    return BrandModalSheet(
-      child: Navigator(
-        key: navigatorKey,
-        initialRoute: '/',
-        onGenerateRoute: (_) {
-          return materialRoute(
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: brandPagePadding1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 13),
-                      IconStatusMask(
-                        status: status,
-                        child: Icon(icon, size: 40, color: Colors.white),
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: SingleChildScrollView(
+        child: Container(
+          width: 350,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: brandPagePadding1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconStatusMask(
+                      status: status,
+                      child: Icon(icon, size: 40, color: Colors.white),
+                    ),
+                    SizedBox(height: 10),
+                    BrandText.h2(title),
+                    SizedBox(height: 10),
+                    child,
+                    SizedBox(height: 40),
+                    Center(
+                      child: Container(
+                        child: BrandButton.rised(
+                          onPressed: () => Navigator.of(context).pop(),
+                          title: 'basis.close'.tr(),
+                        ),
                       ),
-                      SizedBox(height: 10),
-                      BrandText.h1(title),
-                      SizedBox(height: 10),
-                      child,
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -397,3 +410,252 @@ class _ServiceDetails extends StatelessWidget {
     }
   }
 }
+
+
+// class _ServiceDetails extends StatelessWidget {
+//   const _ServiceDetails({
+//     Key? key,
+//     required this.serviceType,
+//     required this.icon,
+//     required this.status,
+//     required this.title,
+//     required this.changeTab,
+//   }) : super(key: key);
+
+//   final ServiceTypes serviceType;
+//   final IconData icon;
+//   final StateType status;
+//   final String title;
+//   final ValueChanged<int> changeTab;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     late Widget child;
+
+//     var config = context.watch<AppConfigCubit>().state;
+//     var domainName = UiHelpers.getDomainName(config);
+
+//     var linksStyle = body1Style.copyWith(
+//       fontSize: 15,
+//       color: Theme.of(context).brightness == Brightness.dark
+//           ? Colors.white
+//           : BrandColors.black,
+//       fontWeight: FontWeight.bold,
+//       decoration: TextDecoration.underline,
+//       // height: 1.1,
+//     );
+
+//     var textStyle = body1Style.copyWith(
+//       color: Theme.of(context).brightness == Brightness.dark
+//           ? Colors.white
+//           : BrandColors.black,
+//     );
+//     switch (serviceType) {
+//       case ServiceTypes.mail:
+//         child = RichText(
+//             text: TextSpan(
+//           children: [
+//             TextSpan(
+//               text: 'services.mail.bottom_sheet.1'.tr(args: [domainName]),
+//               style: textStyle,
+//             ),
+//             WidgetSpan(
+//               child: Padding(
+//                 padding: EdgeInsets.only(bottom: 0.8, left: 5),
+//                 child: GestureDetector(
+//                   child: Text(
+//                     'services.mail.bottom_sheet.2'.tr(),
+//                     style: linksStyle,
+//                   ),
+//                   onTap: () {
+//                     Navigator.of(context).pop();
+//                     changeTab(2);
+//                   },
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ));
+//         break;
+//       case ServiceTypes.messenger:
+//         child = RichText(
+//             text: TextSpan(
+//           children: [
+//             TextSpan(
+//               text: 'services.messenger.bottom_sheet.1'.tr(args: [domainName]),
+//               style: textStyle,
+//             )
+//           ],
+//         ));
+//         break;
+//       case ServiceTypes.passwordManager:
+//         child = RichText(
+//             text: TextSpan(
+//           children: [
+//             TextSpan(
+//               text: 'services.password_manager.bottom_sheet.1'
+//                   .tr(args: [domainName]),
+//               style: textStyle,
+//             ),
+//             WidgetSpan(
+//               child: Padding(
+//                 padding: EdgeInsets.only(bottom: 0.8, left: 5),
+//                 child: GestureDetector(
+//                   onTap: () => _launchURL('https://password.$domainName'),
+//                   child: Text(
+//                     'password.$domainName',
+//                     style: linksStyle,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ));
+//         break;
+//       case ServiceTypes.video:
+//         child = RichText(
+//             text: TextSpan(
+//           children: [
+//             TextSpan(
+//               text: 'services.video.bottom_sheet.1'.tr(args: [domainName]),
+//               style: textStyle,
+//             ),
+//             WidgetSpan(
+//               child: Padding(
+//                 padding: EdgeInsets.only(bottom: 0.8, left: 5),
+//                 child: GestureDetector(
+//                   onTap: () => _launchURL('https://meet.$domainName'),
+//                   child: Text(
+//                     'meet.$domainName',
+//                     style: linksStyle,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ));
+//         break;
+//       case ServiceTypes.cloud:
+//         child = RichText(
+//             text: TextSpan(
+//           children: [
+//             TextSpan(
+//               text: 'services.cloud.bottom_sheet.1'.tr(args: [domainName]),
+//               style: textStyle,
+//             ),
+//             WidgetSpan(
+//               child: Padding(
+//                 padding: EdgeInsets.only(bottom: 0.8, left: 5),
+//                 child: GestureDetector(
+//                   onTap: () => _launchURL('https://cloud.$domainName'),
+//                   child: Text(
+//                     'cloud.$domainName',
+//                     style: linksStyle,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ));
+//         break;
+//       case ServiceTypes.socialNetwork:
+//         child = RichText(
+//             text: TextSpan(
+//           children: [
+//             TextSpan(
+//               text: 'services.social_network.bottom_sheet.1'
+//                   .tr(args: [domainName]),
+//               style: textStyle,
+//             ),
+//             WidgetSpan(
+//               child: Padding(
+//                 padding: EdgeInsets.only(bottom: 0.8, left: 5),
+//                 child: GestureDetector(
+//                   onTap: () => _launchURL('https://social.$domainName'),
+//                   child: Text(
+//                     'social.$domainName',
+//                     style: linksStyle,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ));
+//         break;
+//       case ServiceTypes.git:
+//         child = RichText(
+//             text: TextSpan(
+//           children: [
+//             TextSpan(
+//               text: 'services.git.bottom_sheet.1'.tr(args: [domainName]),
+//               style: textStyle,
+//             ),
+//             WidgetSpan(
+//               child: Padding(
+//                 padding: EdgeInsets.only(bottom: 0.8, left: 5),
+//                 child: GestureDetector(
+//                   onTap: () => _launchURL('https://git.$domainName'),
+//                   child: Text(
+//                     'git.$domainName',
+//                     style: linksStyle,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ));
+//         break;
+//     }
+//     return BrandModalSheet(
+      // child: Navigator(
+      //   key: navigatorKey,
+      //   initialRoute: '/',
+      //   onGenerateRoute: (_) {
+      //     return materialRoute(
+//             Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Padding(
+//                   padding: brandPagePadding1,
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       SizedBox(height: 13),
+//                       IconStatusMask(
+//                         status: status,
+//                         child: Icon(icon, size: 40, color: Colors.white),
+//                       ),
+//                       SizedBox(height: 10),
+//                       BrandText.h1(title),
+//                       SizedBox(height: 10),
+//                       child,
+//                     ],
+//                   ),
+//                 )
+//               ],
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+
+//   void _launchURL(url) async {
+//     var _possible = await canLaunch(url);
+
+//     if (_possible) {
+//       try {
+//         await launch(
+//           url,
+//           forceSafariVC: true,
+//           enableJavaScript: true,
+//         );
+//       } catch (e) {
+//         print(e);
+//       }
+//     } else {
+//       throw 'Could not launch $url';
+//     }
+//   }
+// }
+

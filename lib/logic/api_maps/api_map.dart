@@ -10,7 +10,6 @@ import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 
 abstract class ApiMap {
-  
   Future<Dio> getClient() async {
     var dio = Dio(await options);
     if (hasLoger) {
@@ -31,27 +30,14 @@ abstract class ApiMap {
   abstract final String rootAddress;
   abstract final bool hasLoger;
   abstract final bool isWithToken;
+
+  ValidateStatus? validateStatus;
+
+  void close(Dio client) {
+    client.close();
+    validateStatus = null;
+  }
 }
-
-// abstract class ApiMapOld {
-//   ApiMapOld() {
-//     var client = Dio()..interceptors.add(ConsoleInterceptor());
-//     (client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-//         (HttpClient client) {
-//       client.badCertificateCallback =
-//           (X509Certificate cert, String host, int port) => true;
-//       return client;
-//     };
-//     loggedClient = client;
-//   }
-//   String? rootAddress;
-
-//   late Dio loggedClient;
-
-//   void close() {
-//     loggedClient.close();
-//   }
-// }
 
 class ConsoleInterceptor extends InterceptorsWrapper {
   void addMessage(Message message) {

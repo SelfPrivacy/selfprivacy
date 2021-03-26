@@ -18,7 +18,6 @@ class ServerApi extends ApiMap {
     if (isWithToken) {
       var cloudFlareDomain = getIt<ApiConfigModel>().cloudFlareDomain;
       var domainName = cloudFlareDomain!.domainName;
-      assert(domainName != null);
 
       options = BaseOptions(baseUrl: 'https://api.$domainName');
     }
@@ -37,7 +36,7 @@ class ServerApi extends ApiMap {
     } catch (e) {
       res = false;
     }
-    client.close();
+    close(client);
     return res;
   }
 

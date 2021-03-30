@@ -21,7 +21,7 @@
     "saving": "Saving..",
     "nickname": "nickname",
     "loading": "Loading...",
-    "later": "Настрою потом",
+    "later": "I will setup it later",
     "reset": "Reset",
     "details": "Details",
     "no_data": "No data"
@@ -133,7 +133,7 @@
       }
     },
     "git": {
-      "title": "Git-server",
+      "title": "Git Server",
       "subtitle": "Private alternative to the Github, that belongs to you, but not a Microsoft.",
       "bottom_sheet": {
         "1": "You can connect and create a new user here:"
@@ -158,7 +158,7 @@
   "initializing": {
     "_comment": "initializing page",
     "1": "Connect Hetzner server",
-    "2": "Here,  your data and SelfPrivacy services wiil reside",
+    "2": "Here, your data and SelfPrivacy services wiil reside",
     "how": "How to obtain API token",
     "3": "Connect CloudFlare",
     "4": "To manage your domain's DNS",
@@ -182,11 +182,11 @@
   },
   "modals": {
     "_comment": "messages in modals",
-    "1": "Сервер с таким именем уже существует",
-    "2": "Уничтожить сервер и создать новый?",
-    "3": "Вы уверенны",
-    "4": "Сбросить все ключи?",
-    "5": "Да, сбросить"
+    "1": "Server with such name, already exist",
+    "2": "Destroy server and create a new one?",
+    "3": "Are you sure?",
+    "4": "Purge all authentication keys?",
+    "5": "Yes, purge all my tokens"
   },
   "timer": {
     "sec": "{} sec"

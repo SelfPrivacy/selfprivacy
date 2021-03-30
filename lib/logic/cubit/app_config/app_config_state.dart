@@ -92,6 +92,8 @@ class AppConfigState extends Equatable {
       isServerReseted,
       hasFinalChecked,
     ];
+
+    print(res);
     return res;
   }
 }

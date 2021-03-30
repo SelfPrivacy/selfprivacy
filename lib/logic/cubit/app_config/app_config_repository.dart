@@ -119,7 +119,7 @@ class AppConfigRepository {
                 text: 'basis.delete'.tr(),
                 isRed: true,
                 onPressed: () async {
-                  await hetznerApi.deleteSelfprivacyServer();
+                  await hetznerApi.deleteSelfprivacyServerAndAllVolumes();
 
                   var serverDetails = await hetznerApi.createServer(
                     cloudFlareKey: cloudFlareKey,

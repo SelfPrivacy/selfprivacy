@@ -16,6 +16,7 @@ class HiveConfig {
     Hive.registerAdapter(HetznerServerDetailsAdapter());
     Hive.registerAdapter(CloudFlareDomainAdapter());
     Hive.registerAdapter(BackblazeCredentialAdapter());
+    Hive.registerAdapter(HetznerDataBaseAdapter());
 
     await Hive.openBox(BNames.appSettings);
     var cipher = HiveAesCipher(await getEncriptedKey());

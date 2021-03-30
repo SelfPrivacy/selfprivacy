@@ -55,6 +55,19 @@ class HetznerApi extends ApiMap {
     }
   }
 
+  Future<bool> isFreeToCreate() async {
+    var client = await getClient();
+
+    Response serversReponse = await client.get('/servers');
+    List servers = serversReponse.data['servers'];
+    var server = servers.firstWhere(
+      (el) => el['name'] == 'selfprivacy-server',
+      orElse: null,
+    );
+    client.close();
+    return server == null;
+  }
+
   Future<HetznerServerDetails> createServer({
     required String cloudFlareKey,
     required User rootUser,
@@ -62,31 +75,71 @@ class HetznerApi extends ApiMap {
   }) async {
     var dbPassword = getRandomString(40);
 
+    const chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+
+    var dbStorageName = getRandomString(6, chars);
+    var client = await getClient();
+
+    Response dbCreateResponse = await client.post(
+      '/volumes',
+      data: {
+        "size": 10,
+        "name": dbStorageName,
+        "labels": {"labelkey": "value"},
+        "location": "fsn1",
+        "automount": false,
+        "format": "ext4"
+      },
+    );
+    var dbId = dbCreateResponse.data['volume']['id'];
     var data = jsonDecode(
-      '''{"name":"selfprivacy-server","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[],"networks":[],"user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-20.09 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":false}''',
+      '''{"name":"selfprivacy-server","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId],"networks":[],"user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-20.09 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''',
     );
 
-    var client = await getClient();
-    Response response = await client.post(
+    Response serverCreateResponse = await client.post(
       '/servers',
       data: data,
     );
     client.close();
     return HetznerServerDetails(
-      id: response.data['server']['id'],
-      ip4: response.data['server']['public_net']['ipv4']['ip'],
+      id: serverCreateResponse.data['server']['id'],
+      ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
       createTime: DateTime.now(),
+      dataBase: HetznerDataBase(
+        id: dbId,
+        name: dbCreateResponse.data['volume']['name'],
+      ),
     );
   }
 
-  Future<void> deleteSelfprivacyServer() async {
+  Future<void> deleteSelfprivacyServerAndAllVolumes() async {
     var client = await getClient();
-    Response response = await client.get('/servers');
 
-    List list = response.data['servers'];
-    var server = list.firstWhere((el) => el['name'] == 'selfprivacy-server');
+    Response serversReponse = await client.get('/servers');
+    List servers = serversReponse.data['servers'];
+    var server = servers.firstWhere((el) => el['name'] == 'selfprivacy-server');
     await client.delete('/servers/${server['id']}');
-    close(client);
+
+    Response volumesReponse = await client.get('/volumes');
+    List volumes = volumesReponse.data['volumes'];
+
+    var laterFutures = <Future>[];
+    for (var volume in volumes) {
+      if (volume['server'] == null) {
+        await client.delete('/volumes/${volume['id']}');
+      } else {
+        laterFutures.add(Future.delayed(Duration(seconds: 60)).then(
+          (_) => client.delete('/volumes/${volume['id']}'),
+        ));
+      }
+    }
+
+    if (laterFutures.isEmpty) {
+      close(client);
+    } else {
+      Future.wait(laterFutures).then((value) => close(client));
+    }
   }
 
   Future<HetznerServerDetails> startServer({

@@ -202,7 +202,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
   }
 
   void clearAppConfig() {
-    _closeTimer();
+    closeTimer();
     repository.clearAppConfig();
     emit(InitialAppConfigState());
   }
@@ -263,17 +263,16 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         onSuccess: onSuccess,
       );
     } catch (e) {
-      addError(e);
       emit(_stateCopy);
     }
   }
 
   close() {
-    _closeTimer();
+    closeTimer();
     return super.close();
   }
 
-  void _closeTimer() {
+  void closeTimer() {
     if (timer != null && timer!.isActive) {
       timer!.cancel();
     }

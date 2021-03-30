@@ -407,8 +407,9 @@ class InitializingPage extends StatelessWidget {
           BrandText.body2('initializing.11'.tr()),
           Spacer(),
           BrandButton.rised(
-            onPressed:
-                isLoading! ? null : () => appConfigCubit.createServerAndSetDnsRecords(),
+            onPressed: isLoading!
+                ? null
+                : () => appConfigCubit.createServerAndSetDnsRecords(),
             title: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
           ),
           Spacer(flex: 2),

@@ -47,8 +47,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
 
   final repository = AppConfigRepository();
 
-  void load() {
-    var state = repository.load();
+  Future<void> load() async {
+    var state = await repository.load();
 
     if (state.progress < 6 || state.isFullyInitilized) {
       emit(state);
@@ -81,8 +81,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         var server = await repository.startServer(
           state.hetznerServer!,
         );
-        repository.saveServerDetails(server);
-        repository.saveIsServerStarted(true);
+        await repository.saveServerDetails(server);
+        await repository.saveIsServerStarted(true);
 
         emit(
           state.copyWith(
@@ -131,11 +131,9 @@ class AppConfigCubit extends Cubit<AppConfigState> {
           duration: pauseDuration,
         ));
         timer = Timer(pauseDuration, () async {
-          var hetznerServerDetails = await repository.restart(
-            dataState.hetznerServer!,
-          );
-          repository.saveIsServerResetedSecondTime(true);
-          repository.saveServerDetails(hetznerServerDetails);
+          var hetznerServerDetails = await repository.restart();
+          await repository.saveIsServerResetedSecondTime(true);
+          await repository.saveServerDetails(hetznerServerDetails);
 
           emit(
             dataState.copyWith(
@@ -186,11 +184,9 @@ class AppConfigCubit extends Cubit<AppConfigState> {
           duration: pauseDuration,
         ));
         timer = Timer(pauseDuration, () async {
-          var hetznerServerDetails = await repository.restart(
-            dataState.hetznerServer!,
-          );
-          repository.saveIsServerResetedFirstTime(true);
-          repository.saveServerDetails(hetznerServerDetails);
+          var hetznerServerDetails = await repository.restart();
+          await repository.saveIsServerResetedFirstTime(true);
+          await repository.saveServerDetails(hetznerServerDetails);
 
           emit(
             dataState.copyWith(
@@ -235,7 +231,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       var isServerWorking = await repository.isHttpServerWorking();
 
       if (isServerWorking) {
-        repository.saveHasFinalChecked(true);
+        await repository.saveHasFinalChecked(true);
 
         emit(state.copyWith(
           hasFinalChecked: true,
@@ -267,32 +263,32 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     emit(InitialAppConfigState());
   }
 
-  void setHetznerKey(String hetznerKey) {
-    repository.saveHetznerKey(hetznerKey);
+  void setHetznerKey(String hetznerKey) async {
+    await repository.saveHetznerKey(hetznerKey);
     emit(state.copyWith(hetznerKey: hetznerKey));
   }
 
-  void setCloudflareKey(String cloudFlareKey) {
-    repository.saveCloudFlareKey(cloudFlareKey);
+  void setCloudflareKey(String cloudFlareKey) async {
+    await repository.saveCloudFlareKey(cloudFlareKey);
     emit(state.copyWith(cloudFlareKey: cloudFlareKey));
   }
 
-  void setBackblazeKey(String keyId, String applicationKey) {
+  void setBackblazeKey(String keyId, String applicationKey) async {
     var backblazeCredential = BackblazeCredential(
       keyId: keyId,
       applicationKey: applicationKey,
     );
-    repository.saveBackblazeKey(backblazeCredential);
+    await repository.saveBackblazeKey(backblazeCredential);
     emit(state.copyWith(backblazeCredential: backblazeCredential));
   }
 
-  void setDomain(CloudFlareDomain cloudFlareDomain) {
-    repository.saveDomain(cloudFlareDomain);
+  void setDomain(CloudFlareDomain cloudFlareDomain) async {
+    await repository.saveDomain(cloudFlareDomain);
     emit(state.copyWith(cloudFlareDomain: cloudFlareDomain));
   }
 
-  void setRootUser(User rootUser) {
-    repository.saveRootUser(rootUser);
+  void setRootUser(User rootUser) async {
+    await repository.saveRootUser(rootUser);
     emit(state.copyWith(rootUser: rootUser));
   }
 

@@ -21,7 +21,7 @@ import 'package:easy_localization/easy_localization.dart';
 class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
 
-  AppConfigState load() {
+  Future<AppConfigState> load() async {
     var res = AppConfigState(
       hetznerKey: getIt<ApiConfigModel>().hetznerKey,
       cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey,
@@ -39,8 +39,6 @@ class AppConfigRepository {
       isLoading: box.get(BNames.isLoading, defaultValue: false),
     );
 
-
-
     return res;
   }
 
@@ -52,7 +50,7 @@ class AppConfigRepository {
     HetznerServerDetails hetznerServer,
   ) async {
     var hetznerApi = HetznerApi();
-    var serverDetails = await hetznerApi.startServer(server: hetznerServer);
+    var serverDetails = await hetznerApi.powerOn();
 
     return serverDetails;
   }
@@ -173,11 +171,14 @@ class AppConfigRepository {
     return isHttpServerWorking;
   }
 
-  Future<HetznerServerDetails> restart(
-    HetznerServerDetails server,
-  ) async {
+  Future<HetznerServerDetails> restart() async {
     var hetznerApi = HetznerApi();
-    return await hetznerApi.restart(server: server);
+    return await hetznerApi.reset();
+  }
+
+  Future<HetznerServerDetails> powerOn() async {
+    var hetznerApi = HetznerApi();
+    return await hetznerApi.powerOn();
   }
 
   Future<void> saveServerDetails(HetznerServerDetails serverDetails) async {
@@ -212,11 +213,11 @@ class AppConfigRepository {
     await box.put(BNames.isServerResetedSecondTime, value);
   }
 
-  void saveRootUser(User rootUser) async {
+  Future<void> saveRootUser(User rootUser) async {
     await box.put(BNames.rootUser, rootUser);
   }
 
-  void saveHasFinalChecked(bool value) async {
+  Future<void> saveHasFinalChecked(bool value) async {
     await box.put(BNames.hasFinalChecked, value);
   }
 }

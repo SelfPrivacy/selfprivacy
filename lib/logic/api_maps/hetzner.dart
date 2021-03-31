@@ -144,28 +144,24 @@ class HetznerApi extends ApiMap {
     }
   }
 
-  Future<HetznerServerDetails> startServer({
-    required HetznerServerDetails server,
-  }) async {
-    var client = await getClient();
+  Future<HetznerServerDetails> reset() async {
+    var server = getIt<ApiConfigModel>().hetznerServer!;
 
-    await client.post('/servers/${server.id}/actions/poweron');
+    var client = await getClient();
+    await client.post('/servers/${server.id}/actions/reset');
     close(client);
 
-    return server.copyWith(
-      startTime: DateTime.now(),
-    );
+    return server.copyWith(startTime: DateTime.now());
   }
 
-  Future<HetznerServerDetails> restart({
-    required HetznerServerDetails server,
-  }) async {
+  Future<HetznerServerDetails> powerOn() async {
+    var server = getIt<ApiConfigModel>().hetznerServer!;
+
     var client = await getClient();
     await client.post('/servers/${server.id}/actions/poweron');
     close(client);
-    return server.copyWith(
-      startTime: DateTime.now(),
-    );
+
+    return server.copyWith(startTime: DateTime.now());
   }
 
   metrics() async {

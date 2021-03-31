@@ -47,25 +47,27 @@ class _ProgressBarState extends State<ProgressBar> {
       i++;
     }
 
-    odd
-      ..insert(
-        0,
-        SizedBox(
-          width: 20,
-        ),
-      )
-      ..add(
-        SizedBox(
-          width: 10,
-        ),
-      );
+    odd.insert(
+      0,
+      SizedBox(
+        width: 10,
+      ),
+    );
+    even.add(
+      SizedBox(
+        width: 10,
+      ),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BrandText.h2('Progress'),
         SizedBox(height: 10),
-        Row(children: even),
+        Row(
+          children: even,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ),
         SizedBox(height: 7),
         Container(
           alignment: Alignment.centerLeft,
@@ -96,12 +98,13 @@ class _ProgressBarState extends State<ProgressBar> {
         SizedBox(height: 5),
         Row(
           children: odd,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
       ],
     );
   }
 
-  Expanded _stepTitle({
+  Container _stepTitle({
     required int index,
     TextStyle? style,
     String? step,
@@ -110,17 +113,19 @@ class _ProgressBarState extends State<ProgressBar> {
     var checked = index < widget.activeIndex;
 
     style = isActive ? style!.copyWith(fontWeight: FontWeight.w700) : style;
-    return Expanded(
-      flex: 2,
+    return Container(
+      padding: EdgeInsets.only(left: 10),
+      height: 20,
+      alignment: Alignment.center,
       child: RichText(
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.justify,
         text: TextSpan(
           style: progressTextStyleLight,
           children: [
             checked
                 ? WidgetSpan(
                     child: Padding(
-                    padding: const EdgeInsets.only(bottom: 0, right: 2),
+                    padding: const EdgeInsets.only(bottom: 2, right: 2),
                     child: Icon(BrandIcons.check, size: 11),
                   ))
                 : TextSpan(text: '${index + 1}.', style: style),

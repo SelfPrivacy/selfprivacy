@@ -34,6 +34,7 @@ class InitializingPage extends StatelessWidget {
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
+      () => _stepCheck(cubit),
       () => Container(child: Text('Everythigng is initialized'))
     ][cubit.state.progress]();
     return BlocListener<AppConfigCubit, AppConfigState>(
@@ -58,7 +59,8 @@ class InitializingPage extends StatelessWidget {
                     'Server',
                     ' ✅',
                     ' ✅',
-                    ' ✅'
+                    ' ✅',
+                    ' ✅',
                   ],
                   activeIndex: cubit.state.progress,
                 ),
@@ -427,8 +429,10 @@ class InitializingPage extends StatelessWidget {
     var state = appConfigCubit.state as TimerState;
 
     late String? text;
-    if (state.isServerReseted) {
+    if (state.isServerResetedSecondTime) {
       text = 'initializing.13'.tr();
+    } else if (state.isServerResetedFirstTime) {
+      text = 'initializing.21'.tr();
     } else if (state.isServerStarted) {
       text = 'initializing.14'.tr();
     } else if (state.isServerCreated) {

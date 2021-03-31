@@ -178,7 +178,8 @@
     "17": "Check",
     "18": "How to obtain Hetzner API Token",
     "19": "1 Go via this link ",
-    "20": "\n"
+    "20": "\n",
+    "21": "One more restart to apply your security certificates."
   },
   "modals": {
     "_comment": "messages in modals",

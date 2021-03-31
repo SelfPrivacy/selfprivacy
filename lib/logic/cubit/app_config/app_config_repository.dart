@@ -30,11 +30,16 @@ class AppConfigRepository {
       hetznerServer: getIt<ApiConfigModel>().hetznerServer,
       rootUser: box.get(BNames.rootUser),
       isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
-      isServerReseted: box.get(BNames.isServerReseted, defaultValue: false),
+      isServerResetedFirstTime:
+          box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+      isServerResetedSecondTime:
+          box.get(BNames.isServerResetedSecondTime, defaultValue: false),
       hasFinalChecked: box.get(BNames.hasFinalChecked, defaultValue: false),
       error: null,
       isLoading: box.get(BNames.isLoading, defaultValue: false),
     );
+
+
 
     return res;
   }
@@ -119,7 +124,8 @@ class AppConfigRepository {
                 text: 'basis.delete'.tr(),
                 isRed: true,
                 onPressed: () async {
-                  await hetznerApi.deleteSelfprivacyServerAndAllVolumes();
+                  await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
+                      domainName: domainName);
 
                   var serverDetails = await hetznerApi.createServer(
                     cloudFlareKey: cloudFlareKey,
@@ -198,8 +204,12 @@ class AppConfigRepository {
     await box.put(BNames.isServerStarted, value);
   }
 
-  Future<void> saveIsServerReseted(bool value) async {
-    await box.put(BNames.isServerReseted, value);
+  Future<void> saveIsServerResetedFirstTime(bool value) async {
+    await box.put(BNames.isServerResetedFirstTime, value);
+  }
+
+  Future<void> saveIsServerResetedSecondTime(bool value) async {
+    await box.put(BNames.isServerResetedSecondTime, value);
   }
 
   void saveRootUser(User rootUser) async {

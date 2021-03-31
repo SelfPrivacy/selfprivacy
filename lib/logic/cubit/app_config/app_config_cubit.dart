@@ -35,7 +35,10 @@ part 'app_config_state.dart';
 ///      c. if server is ok wait 30 sec
 ///      d. reset server
 ///
-/// 2.3. a. wait 60sec                                      |finishCheckIfServerIsOkay
+/// 2.3. a. wait 60sec                                      |oneMoreReset()
+///      d. reset server
+///
+/// 2.4. a. wait 30sec                                      |finishCheckIfServerIsOkay
 ///      b. checkServer
 ///      c. if server is okay set that fully checked
 
@@ -54,6 +57,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     } else if (state.progress == 7) {
       resetServerIfServerIsOkay(state: state, isImmediate: true);
     } else if (state.progress == 8) {
+      oneMoreReset(state: state, isImmediate: true);
+    } else if (state.progress == 9) {
       finishCheckIfServerIsOkay(state: state, isImmediate: true);
     }
   }
@@ -106,6 +111,61 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     }
   }
 
+  void oneMoreReset({
+    AppConfigState? state,
+    bool isImmediate = false,
+  }) async {
+    var dataState = state ?? this.state;
+
+    var work = () async {
+      emit(TimerState(dataState: dataState, isLoading: true));
+
+      var isServerWorking = await repository.isHttpServerWorking();
+
+      if (isServerWorking) {
+        var pauseDuration = Duration(seconds: 30);
+        emit(TimerState(
+          dataState: dataState,
+          timerStart: DateTime.now(),
+          isLoading: false,
+          duration: pauseDuration,
+        ));
+        timer = Timer(pauseDuration, () async {
+          var hetznerServerDetails = await repository.restart(
+            dataState.hetznerServer!,
+          );
+          repository.saveIsServerResetedSecondTime(true);
+          repository.saveServerDetails(hetznerServerDetails);
+
+          emit(
+            dataState.copyWith(
+              isServerResetedSecondTime: true,
+              hetznerServer: hetznerServerDetails,
+              isLoading: false,
+            ),
+          );
+          finishCheckIfServerIsOkay();
+        });
+      } else {
+        oneMoreReset();
+      }
+    };
+    if (isImmediate) {
+      work();
+    } else {
+      var pauseDuration = Duration(seconds: 60);
+      emit(
+        TimerState(
+          dataState: dataState,
+          timerStart: DateTime.now(),
+          duration: pauseDuration,
+          isLoading: false,
+        ),
+      );
+      timer = Timer(pauseDuration, work);
+    }
+  }
+
   void resetServerIfServerIsOkay({
     AppConfigState? state,
     bool isImmediate = false,
@@ -129,17 +189,17 @@ class AppConfigCubit extends Cubit<AppConfigState> {
           var hetznerServerDetails = await repository.restart(
             dataState.hetznerServer!,
           );
-          repository.saveIsServerReseted(true);
+          repository.saveIsServerResetedFirstTime(true);
           repository.saveServerDetails(hetznerServerDetails);
 
           emit(
             dataState.copyWith(
-              isServerReseted: true,
+              isServerResetedFirstTime: true,
               hetznerServer: hetznerServerDetails,
               isLoading: false,
             ),
           );
-          finishCheckIfServerIsOkay();
+          oneMoreReset();
         });
       } else {
         resetServerIfServerIsOkay();

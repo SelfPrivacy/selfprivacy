@@ -65,9 +65,9 @@ final linkStyle = defaultTextStyle.copyWith(color: BrandColors.blue);
 final progressTextStyleLight = TextStyle(
   fontSize: 11,
   color: BrandColors.textColor1,
+  height: 1.7,
 );
 
-final progressTextStyleDark = TextStyle(
-  fontSize: 11,
+final progressTextStyleDark = progressTextStyleLight.copyWith(
   color: BrandColors.white,
 );

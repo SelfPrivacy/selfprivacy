@@ -1,0 +1,4 @@
+- Fixed English translations
+- Added additonal reboot for SSL certificate recache
+- Added volume attachment during server creation
+- Backend configuration, to use volume as a /var filesystem

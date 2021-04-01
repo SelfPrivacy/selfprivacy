@@ -33,7 +33,7 @@ class UserFormCubit extends FormCubit {
       ],
     );
 
-    super.setFields([login, password]);
+    super.addFields([login, password]);
   }
 
   @override
@@ -45,7 +45,6 @@ class UserFormCubit extends FormCubit {
     usersCubit.addUser(user);
   }
 
-  // ignore: close_sinks
   late FieldCubit<String> login;
   late FieldCubit<String> password;
 

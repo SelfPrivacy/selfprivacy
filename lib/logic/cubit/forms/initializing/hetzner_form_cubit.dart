@@ -6,8 +6,6 @@ import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 
 class HetznerFormCubit extends FormCubit {
-  HetznerApi apiClient = HetznerApi();
-
   HetznerFormCubit(this.initializingCubit) {
     var regExp = RegExp(r"\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]");
     apiKey = FieldCubit(
@@ -20,7 +18,7 @@ class HetznerFormCubit extends FormCubit {
       ],
     );
 
-    super.setFields([apiKey]);
+    super.addFields([apiKey]);
   }
 
   @override
@@ -30,12 +28,13 @@ class HetznerFormCubit extends FormCubit {
 
   final AppConfigCubit initializingCubit;
 
-  // ignore: close_sinks
   late final FieldCubit<String> apiKey;
 
   @override
   FutureOr<bool> asyncValidation() async {
     late bool isKeyValid;
+    HetznerApi apiClient = HetznerApi(isWithToken: false);
+
     try {
       isKeyValid = await apiClient.isValid(apiKey.state.value);
     } catch (e) {
@@ -47,12 +46,5 @@ class HetznerFormCubit extends FormCubit {
       return false;
     }
     return true;
-  }
-
-  @override
-  Future<void> close() async {
-    apiClient.close();
-
-    return super.close();
   }
 }

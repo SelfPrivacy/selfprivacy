@@ -38,6 +38,12 @@ final headline4Style = defaultTextStyle.copyWith(
   color: BrandColors.headlineColor,
 );
 
+final headline5Style = defaultTextStyle.copyWith(
+  fontSize: 15,
+  fontWeight: NamedFontWeight.medium,
+  color: BrandColors.headlineColor.withOpacity(0.8),
+);
+
 final body1Style = defaultTextStyle;
 final body2Style = defaultTextStyle.copyWith(
   color: BrandColors.textColor2,
@@ -59,9 +65,9 @@ final linkStyle = defaultTextStyle.copyWith(color: BrandColors.blue);
 final progressTextStyleLight = TextStyle(
   fontSize: 11,
   color: BrandColors.textColor1,
+  height: 1.7,
 );
 
-final progressTextStyleDark = TextStyle(
-  fontSize: 11,
+final progressTextStyleDark = progressTextStyleLight.copyWith(
   color: BrandColors.white,
 );

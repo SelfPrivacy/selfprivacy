@@ -9,7 +9,8 @@ class AppConfigState extends Equatable {
     required this.rootUser,
     required this.hetznerServer,
     required this.isServerStarted,
-    required this.isServerReseted,
+    required this.isServerResetedFirstTime,
+    required this.isServerResetedSecondTime,
     required this.hasFinalChecked,
     required this.isLoading,
     required this.error,
@@ -24,7 +25,7 @@ class AppConfigState extends Equatable {
         rootUser,
         hetznerServer,
         isServerStarted,
-        isServerReseted,
+        isServerResetedFirstTime,
         hasFinalChecked,
         isLoading,
         error,
@@ -36,9 +37,11 @@ class AppConfigState extends Equatable {
   final CloudFlareDomain? cloudFlareDomain;
   final User? rootUser;
   final HetznerServerDetails? hetznerServer;
-  final bool? isServerStarted;
-  final bool? isServerReseted;
-  final bool? hasFinalChecked;
+  final bool isServerStarted;
+  final bool isServerResetedFirstTime;
+  final bool isServerResetedSecondTime;
+
+  final bool hasFinalChecked;
 
   final bool? isLoading;
   final Exception? error;
@@ -51,7 +54,8 @@ class AppConfigState extends Equatable {
     User? rootUser,
     HetznerServerDetails? hetznerServer,
     bool? isServerStarted,
-    bool? isServerReseted,
+    bool? isServerResetedFirstTime,
+    bool? isServerResetedSecondTime,
     bool? hasFinalChecked,
     bool? isLoading,
     Exception? error,
@@ -64,7 +68,10 @@ class AppConfigState extends Equatable {
         rootUser: rootUser ?? this.rootUser,
         hetznerServer: hetznerServer ?? this.hetznerServer,
         isServerStarted: isServerStarted ?? this.isServerStarted,
-        isServerReseted: isServerReseted ?? this.isServerReseted,
+        isServerResetedFirstTime:
+            isServerResetedFirstTime ?? this.isServerResetedFirstTime,
+        isServerResetedSecondTime:
+            isServerResetedSecondTime ?? this.isServerResetedSecondTime,
         hasFinalChecked: hasFinalChecked ?? this.hasFinalChecked,
         isLoading: isLoading ?? this.isLoading,
         error: error ?? this.error,
@@ -80,17 +87,22 @@ class AppConfigState extends Equatable {
   bool get isFullyInitilized => _fulfilementList.every((el) => el!);
   int get progress => _fulfilementList.where((el) => el!).length;
 
-  List<bool?> get _fulfilementList => [
-        isHetznerFilled,
-        isCloudFlareFilled,
-        isBackblazeFilled,
-        isDomainFilled,
-        isUserFilled,
-        isServerCreated,
-        isServerStarted,
-        isServerReseted,
-        hasFinalChecked,
-      ];
+  List<bool?> get _fulfilementList {
+    var res = [
+      isHetznerFilled,
+      isCloudFlareFilled,
+      isBackblazeFilled,
+      isDomainFilled,
+      isUserFilled,
+      isServerCreated,
+      isServerStarted,
+      isServerResetedFirstTime,
+      isServerResetedSecondTime,
+      hasFinalChecked,
+    ];
+
+    return res;
+  }
 }
 
 class InitialAppConfigState extends AppConfigState {
@@ -103,7 +115,8 @@ class InitialAppConfigState extends AppConfigState {
           rootUser: null,
           hetznerServer: null,
           isServerStarted: false,
-          isServerReseted: false,
+          isServerResetedFirstTime: false,
+          isServerResetedSecondTime: false,
           hasFinalChecked: false,
           isLoading: false,
           error: null,
@@ -124,7 +137,8 @@ class TimerState extends AppConfigState {
           rootUser: dataState.rootUser,
           hetznerServer: dataState.hetznerServer,
           isServerStarted: dataState.isServerStarted,
-          isServerReseted: dataState.isServerReseted,
+          isServerResetedFirstTime: dataState.isServerResetedFirstTime,
+          isServerResetedSecondTime: dataState.isServerResetedSecondTime,
           hasFinalChecked: dataState.hasFinalChecked,
           isLoading: isLoading,
           error: dataState.error,

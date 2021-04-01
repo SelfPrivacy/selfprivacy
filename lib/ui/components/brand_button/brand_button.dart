@@ -34,7 +34,7 @@ class BrandButton {
         onPressed: onPressed,
       );
 
-  static iconText({
+  static emptyWithIconText({
     Key? key,
     required VoidCallback onPressed,
     required String title,
@@ -100,6 +100,7 @@ class _TextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
+      behavior: HitTestBehavior.opaque,
       child: Container(
         height: 48,
         width: double.infinity,

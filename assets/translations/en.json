@@ -20,18 +20,28 @@
     "domain": "Domain",
     "saving": "Saving..",
     "nickname": "nickname",
-    "loading": "loading"
+    "loading": "Loading...",
+    "later": "I will setup it later",
+    "reset": "Reset",
+    "details": "Details",
+    "no_data": "No data"
   },
   "more": {
     "_comment": "'More' tab",
     "configuration_wizard": "Setup wizard",
-    "settings": "Application settings",
     "about_project": "About us",
     "about_app": "About application",
     "onboarding": "Onboarding",
     "console": "Console",
     "about_app_page": {
       "text": "Тут любая служебная информация, v.{}"
+    },
+    "settings": {
+      "title": "Application settings",
+      "1": "Dark Theme",
+      "2": "Change your the app theme",
+      "3": "Reset app config",
+      "4": "Reset api keys and root user"
     }
   },
   "onboarding": {
@@ -46,26 +56,27 @@
     "page_title": "Your Data Center",
     "server": {
       "card_title": "Server",
+      "status": "Status — Good",
       "bottom_sheet": {
         "1": "It's a virtual computer, where all your services live.",
-        "2": "1 CPU, RAM 4Gb, 40Gb — $5 per month",
-        "3": "Status — Good"
+        "2": "General information",
+        "3": "Location"
       }
     },
     "domain": {
       "card_title": "Domain",
+      "status": "Status — Good",
       "bottom_sheet": {
         "1": "It's your personal internet address that will point to the server and other services of yours.",
-        "2": "{} — expires on {}",
-        "3": "Status — Good"
+        "2": "{} — expires on {}"
       }
     },
     "backup": {
       "card_title": "Backup",
+      "status": "Status — Good",
       "bottom_sheet": {
         "1": "Will save your day in case of incident: hackers attack, server deletion, etc.",
-        "2": "3Gb/10Gb, last backup was yesterday {}",
-        "3": "Status — Good"
+        "2": "3Gb/10Gb, last backup was yesterday {}"
       }
     }
   },
@@ -122,7 +133,7 @@
       }
     },
     "git": {
-      "title": "Git-server",
+      "title": "Git Server",
       "subtitle": "Private alternative to the Github, that belongs to you, but not a Microsoft.",
       "bottom_sheet": {
         "1": "You can connect and create a new user here:"
@@ -147,7 +158,7 @@
   "initializing": {
     "_comment": "initializing page",
     "1": "Connect Hetzner server",
-    "2": "Here,  your data and SelfPrivacy services wiil reside",
+    "2": "Here, your data and SelfPrivacy services wiil reside",
     "how": "How to obtain API token",
     "3": "Connect CloudFlare",
     "4": "To manage your domain's DNS",
@@ -157,6 +168,7 @@
     "8": "Loading domains list",
     "9": "Found more than one domain. For your own security, please be asked to delete unnecessary domains",
     "10": "Save domain",
+    "final": "Final step",
     "11": "Create server",
     "what": "What does it mean?",
     "13": "Server rebooted. Waiting for the last verification...",
@@ -166,6 +178,18 @@
     "17": "Check",
     "18": "How to obtain Hetzner API Token",
     "19": "1 Go via this link ",
-    "20": "\n"
+    "20": "\n",
+    "21": "One more restart to apply your security certificates."
+  },
+  "modals": {
+    "_comment": "messages in modals",
+    "1": "Server with such name, already exist",
+    "2": "Destroy server and create a new one?",
+    "3": "Are you sure?",
+    "4": "Purge all authentication keys?",
+    "5": "Yes, purge all my tokens"
+  },
+  "timer": {
+    "sec": "{} sec"
   }
 }

@@ -16,6 +16,7 @@ class HiveConfig {
     Hive.registerAdapter(HetznerServerDetailsAdapter());
     Hive.registerAdapter(CloudFlareDomainAdapter());
     Hive.registerAdapter(BackblazeCredentialAdapter());
+    Hive.registerAdapter(HetznerDataBaseAdapter());
 
     await Hive.openBox(BNames.appSettings);
     var cipher = HiveAesCipher(await getEncriptedKey());
@@ -55,5 +56,6 @@ class BNames {
   static String isServerStarted = 'isServerStarted';
   static String backblazeKey = 'backblazeKey';
   static String isLoading = 'isLoading';
-  static String isServerReseted = 'isServerReseted';
+  static String isServerResetedFirstTime = 'isServerResetedFirstTime';
+  static String isServerResetedSecondTime = 'isServerResetedSecondTime';
 }

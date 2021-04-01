@@ -12,9 +12,7 @@ class _UserDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     var config = context.watch<AppConfigCubit>().state;
 
-    var domainName = config.isDomainFilled
-        ? config.cloudFlareDomain!.domainName!
-        : 'example.com';
+    var domainName = UiHelpers.getDomainName(config);
 
     return BrandModalSheet(
       child: Column(
@@ -44,8 +42,8 @@ class _UserDetails extends StatelessWidget {
                       ),
                       onSelected: (PopupMenuItemType result) {
                         switch (result) {
-                          case PopupMenuItemType.reset:
-                            break;
+                          // case PopupMenuItemType.reset:
+                          //   break;
                           case PopupMenuItemType.delete:
                             showDialog(
                               context: context,
@@ -88,13 +86,13 @@ class _UserDetails extends StatelessWidget {
                       },
                       icon: Icon(Icons.more_vert),
                       itemBuilder: (BuildContext context) => [
-                        PopupMenuItem<PopupMenuItemType>(
-                          value: PopupMenuItemType.reset,
-                          child: Container(
-                            padding: EdgeInsets.only(left: 5),
-                            child: Text('users.reset_password'.tr()),
-                          ),
-                        ),
+                        // PopupMenuItem<PopupMenuItemType>(
+                        //   value: PopupMenuItemType.reset,
+                        //   child: Container(
+                        //     padding: EdgeInsets.only(left: 5),
+                        //     child: Text('users.reset_password'.tr()),
+                        //   ),
+                        // ),
                         PopupMenuItem<PopupMenuItemType>(
                           value: PopupMenuItemType.delete,
                           child: Container(
@@ -145,7 +143,7 @@ class _UserDetails extends StatelessWidget {
                 SizedBox(height: 24),
                 BrandDivider(),
                 SizedBox(height: 20),
-                BrandButton.iconText(
+                BrandButton.emptyWithIconText(
                   title: 'users.send_regisration_data'.tr(),
                   icon: Icon(BrandIcons.share),
                   onPressed: () {},
@@ -161,6 +159,6 @@ class _UserDetails extends StatelessWidget {
 }
 
 enum PopupMenuItemType {
-  reset,
+  // reset,
   delete,
 }

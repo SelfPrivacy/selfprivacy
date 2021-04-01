@@ -34,6 +34,7 @@ class InitializingPage extends StatelessWidget {
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
+      () => _stepCheck(cubit),
       () => Container(child: Text('Everythigng is initialized'))
     ][cubit.state.progress]();
     return BlocListener<AppConfigCubit, AppConfigState>(
@@ -47,25 +48,21 @@ class InitializingPage extends StatelessWidget {
           body: ListView(
             children: [
               Padding(
-                padding: brandPagePadding1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ProgressBar(
-                      steps: [
-                        'Hetzner',
-                        'CloudFlare',
-                        'Backblaze',
-                        'Domain',
-                        'User',
-                        'Server',
-                        ' ✅',
-                        ' ✅',
-                        ' ✅'
-                      ],
-                      activeIndex: cubit.state.progress,
-                    ),
+                padding: brandPagePadding2.copyWith(top: 10, bottom: 10),
+                child: ProgressBar(
+                  steps: [
+                    'Hetzner',
+                    'CloudFlare',
+                    'Backblaze',
+                    'Domain',
+                    'User',
+                    'Server',
+                    ' ✅',
+                    ' ✅',
+                    ' ✅',
+                    ' ✅',
                   ],
+                  activeIndex: cubit.state.progress,
                 ),
               ),
               _addCard(
@@ -77,14 +74,13 @@ class InitializingPage extends StatelessWidget {
               BrandButton.text(
                   title: cubit.state.isFullyInitilized
                       ? 'basis.close'.tr()
-                      : 'Настрою потом',
+                      : 'basis.later'.tr(),
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                       materialRoute(RootPage()),
                       (predicate) => false,
                     );
                   }),
-              SizedBox(height: 30),
             ],
           ),
         ),
@@ -408,14 +404,15 @@ class InitializingPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Spacer(flex: 2),
-          BrandText.h2('initializing.how'.tr()),
+          BrandText.h2('initializing.final'.tr()),
           SizedBox(height: 10),
           BrandText.body2('initializing.11'.tr()),
           Spacer(),
           BrandButton.rised(
-            onPressed:
-                isLoading! ? null : appConfigCubit.createServerAndSetDnsRecords,
-            title: isLoading ? 'loading' : 'initializing.11'.tr(),
+            onPressed: isLoading!
+                ? null
+                : () => appConfigCubit.createServerAndSetDnsRecords(),
+            title: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
           ),
           Spacer(flex: 2),
           BrandButton.text(
@@ -431,10 +428,12 @@ class InitializingPage extends StatelessWidget {
     assert(appConfigCubit.state is TimerState, 'wronge state');
     var state = appConfigCubit.state as TimerState;
 
-    String? text;
-    if (state.isServerReseted!) {
+    late String? text;
+    if (state.isServerResetedSecondTime) {
       text = 'initializing.13'.tr();
-    } else if (state.isServerStarted!) {
+    } else if (state.isServerResetedFirstTime) {
+      text = 'initializing.21'.tr();
+    } else if (state.isServerStarted) {
       text = 'initializing.14'.tr();
     } else if (state.isServerCreated) {
       text = 'initializing.15'.tr();
@@ -452,8 +451,8 @@ class InitializingPage extends StatelessWidget {
               children: [
                 BrandText.body2('initializing.16'.tr()),
                 BrandTimer(
-                  startDateTime: state.timerStart,
-                  duration: state.duration,
+                  startDateTime: state.timerStart!,
+                  duration: state.duration!,
                 )
               ],
             ),
@@ -472,7 +471,7 @@ class InitializingPage extends StatelessWidget {
 
   Widget _addCard(Widget child) {
     return Container(
-      height: 500,
+      height: 450,
       padding: brandPagePadding2,
       child: BrandCard(child: child),
     );

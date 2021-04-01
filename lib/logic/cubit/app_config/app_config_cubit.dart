@@ -35,7 +35,10 @@ part 'app_config_state.dart';
 ///      c. if server is ok wait 30 sec
 ///      d. reset server
 ///
-/// 2.3. a. wait 60sec                                      |finishCheckIfServerIsOkay
+/// 2.3. a. wait 60sec                                      |oneMoreReset()
+///      d. reset server
+///
+/// 2.4. a. wait 30sec                                      |finishCheckIfServerIsOkay
 ///      b. checkServer
 ///      c. if server is okay set that fully checked
 
@@ -44,21 +47,18 @@ class AppConfigCubit extends Cubit<AppConfigState> {
 
   final repository = AppConfigRepository();
 
-  void load() {
-    var state = repository.load();
+  Future<void> load() async {
+    var state = await repository.load();
 
     if (state.progress < 6 || state.isFullyInitilized) {
       emit(state);
     } else if (state.progress == 6) {
-      print('startServerIfDnsIsOkay');
-
       startServerIfDnsIsOkay(state: state, isImmediate: true);
     } else if (state.progress == 7) {
-      print('resetServerIfServerIsOkay');
-
       resetServerIfServerIsOkay(state: state, isImmediate: true);
     } else if (state.progress == 8) {
-      print('finishCheckIfServerIsOkay');
+      oneMoreReset(state: state, isImmediate: true);
+    } else if (state.progress == 9) {
       finishCheckIfServerIsOkay(state: state, isImmediate: true);
     }
   }
@@ -79,10 +79,11 @@ class AppConfigCubit extends Cubit<AppConfigState> {
 
       if (isMatch) {
         var server = await repository.startServer(
-          state.hetznerKey,
           state.hetznerServer!,
         );
-        repository.saveServerDetails(server);
+        await repository.saveServerDetails(server);
+        await repository.saveIsServerStarted(true);
+
         emit(
           state.copyWith(
             isServerStarted: true,
@@ -110,40 +111,91 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     }
   }
 
-  void resetServerIfServerIsOkay({
+  void oneMoreReset({
     AppConfigState? state,
     bool isImmediate = false,
   }) async {
-    state = state ?? this.state;
+    var dataState = state ?? this.state;
 
     var work = () async {
-      emit(TimerState(dataState: state!, isLoading: true));
+      emit(TimerState(dataState: dataState, isLoading: true));
 
-      var isServerWorking = await repository.isHttpServerWorking(
-        state.cloudFlareDomain!.domainName,
-      );
+      var isServerWorking = await repository.isHttpServerWorking();
 
       if (isServerWorking) {
         var pauseDuration = Duration(seconds: 30);
         emit(TimerState(
-          dataState: state,
+          dataState: dataState,
           timerStart: DateTime.now(),
           isLoading: false,
           duration: pauseDuration,
         ));
         timer = Timer(pauseDuration, () async {
-          var hetznerServerDetails = await repository.restart(
-            state!.hetznerKey,
-            state.hetznerServer!,
-          );
+          var hetznerServerDetails = await repository.restart();
+          await repository.saveIsServerResetedSecondTime(true);
+          await repository.saveServerDetails(hetznerServerDetails);
+
           emit(
-            state.copyWith(
-              isServerReseted: true,
+            dataState.copyWith(
+              isServerResetedSecondTime: true,
               hetznerServer: hetznerServerDetails,
               isLoading: false,
             ),
           );
           finishCheckIfServerIsOkay();
+        });
+      } else {
+        oneMoreReset();
+      }
+    };
+    if (isImmediate) {
+      work();
+    } else {
+      var pauseDuration = Duration(seconds: 60);
+      emit(
+        TimerState(
+          dataState: dataState,
+          timerStart: DateTime.now(),
+          duration: pauseDuration,
+          isLoading: false,
+        ),
+      );
+      timer = Timer(pauseDuration, work);
+    }
+  }
+
+  void resetServerIfServerIsOkay({
+    AppConfigState? state,
+    bool isImmediate = false,
+  }) async {
+    var dataState = state ?? this.state;
+
+    var work = () async {
+      emit(TimerState(dataState: dataState, isLoading: true));
+
+      var isServerWorking = await repository.isHttpServerWorking();
+
+      if (isServerWorking) {
+        var pauseDuration = Duration(seconds: 30);
+        emit(TimerState(
+          dataState: dataState,
+          timerStart: DateTime.now(),
+          isLoading: false,
+          duration: pauseDuration,
+        ));
+        timer = Timer(pauseDuration, () async {
+          var hetznerServerDetails = await repository.restart();
+          await repository.saveIsServerResetedFirstTime(true);
+          await repository.saveServerDetails(hetznerServerDetails);
+
+          emit(
+            dataState.copyWith(
+              isServerResetedFirstTime: true,
+              hetznerServer: hetznerServerDetails,
+              isLoading: false,
+            ),
+          );
+          oneMoreReset();
         });
       } else {
         resetServerIfServerIsOkay();
@@ -155,7 +207,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       var pauseDuration = Duration(seconds: 60);
       emit(
         TimerState(
-          dataState: state,
+          dataState: dataState,
           timerStart: DateTime.now(),
           duration: pauseDuration,
           isLoading: false,
@@ -176,12 +228,15 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     var work = () async {
       emit(TimerState(dataState: state!, isLoading: true));
 
-      var isServerWorking = await repository.isHttpServerWorking(
-        state.cloudFlareDomain!.domainName,
-      );
+      var isServerWorking = await repository.isHttpServerWorking();
 
       if (isServerWorking) {
-        emit(state.copyWith(hasFinalChecked: true, isLoading: false));
+        await repository.saveHasFinalChecked(true);
+
+        emit(state.copyWith(
+          hasFinalChecked: true,
+          isLoading: false,
+        ));
       } else {
         finishCheckIfServerIsOkay();
       }
@@ -203,37 +258,37 @@ class AppConfigCubit extends Cubit<AppConfigState> {
   }
 
   void clearAppConfig() {
-    _closeTimer();
+    closeTimer();
     repository.clearAppConfig();
     emit(InitialAppConfigState());
   }
 
-  void setHetznerKey(String hetznerKey) {
-    repository.saveHetznerKey(hetznerKey);
+  void setHetznerKey(String hetznerKey) async {
+    await repository.saveHetznerKey(hetznerKey);
     emit(state.copyWith(hetznerKey: hetznerKey));
   }
 
-  void setCloudflareKey(String cloudFlareKey) {
-    repository.saveCloudFlare(cloudFlareKey);
+  void setCloudflareKey(String cloudFlareKey) async {
+    await repository.saveCloudFlareKey(cloudFlareKey);
     emit(state.copyWith(cloudFlareKey: cloudFlareKey));
   }
 
-  void setBackblazeKey(String keyId, String applicationKey) {
+  void setBackblazeKey(String keyId, String applicationKey) async {
     var backblazeCredential = BackblazeCredential(
       keyId: keyId,
       applicationKey: applicationKey,
     );
-    repository.saveBackblazeKey(backblazeCredential);
+    await repository.saveBackblazeKey(backblazeCredential);
     emit(state.copyWith(backblazeCredential: backblazeCredential));
   }
 
-  void setDomain(CloudFlareDomain cloudFlareDomain) {
-    repository.saveDomain(cloudFlareDomain);
+  void setDomain(CloudFlareDomain cloudFlareDomain) async {
+    await repository.saveDomain(cloudFlareDomain);
     emit(state.copyWith(cloudFlareDomain: cloudFlareDomain));
   }
 
-  void setRootUser(User rootUser) {
-    repository.saveRootUser(rootUser);
+  void setRootUser(User rootUser) async {
+    await repository.saveRootUser(rootUser);
     emit(state.copyWith(rootUser: rootUser));
   }
 
@@ -241,7 +296,6 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     AppConfigState _stateCopy = state;
     var onSuccess = (serverDetails) async {
       await repository.createDnsRecords(
-        state.cloudFlareKey,
         serverDetails.ip4,
         state.cloudFlareDomain!,
       );
@@ -258,25 +312,23 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     try {
       emit(state.copyWith(isLoading: true));
       await repository.createServer(
-        state.hetznerKey,
         state.rootUser!,
         state.cloudFlareDomain!.domainName,
-        state.cloudFlareKey,
+        state.cloudFlareKey!,
         onCancel: onCancel,
         onSuccess: onSuccess,
       );
     } catch (e) {
-      addError(e);
       emit(_stateCopy);
     }
   }
 
   close() {
-    _closeTimer();
+    closeTimer();
     return super.close();
   }
 
-  void _closeTimer() {
+  void closeTimer() {
     if (timer != null && timer!.isActive) {
       timer!.cancel();
     }

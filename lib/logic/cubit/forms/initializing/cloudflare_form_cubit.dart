@@ -6,8 +6,6 @@ import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class CloudFlareFormCubit extends FormCubit {
-  CloudflareApi apiClient = CloudflareApi();
-
   CloudFlareFormCubit(this.initializingCubit) {
     var regExp = RegExp(r"\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]");
     apiKey = FieldCubit(
@@ -20,7 +18,7 @@ class CloudFlareFormCubit extends FormCubit {
       ],
     );
 
-    super.setFields([apiKey]);
+    super.addFields([apiKey]);
   }
 
   @override
@@ -35,6 +33,7 @@ class CloudFlareFormCubit extends FormCubit {
   @override
   FutureOr<bool> asyncValidation() async {
     late bool isKeyValid;
+    CloudflareApi apiClient = CloudflareApi(isWithToken: false);
 
     try {
       isKeyValid = await apiClient.isValid(apiKey.state.value);
@@ -51,8 +50,6 @@ class CloudFlareFormCubit extends FormCubit {
 
   @override
   Future<void> close() async {
-    apiClient.close();
-
     return super.close();
   }
 }

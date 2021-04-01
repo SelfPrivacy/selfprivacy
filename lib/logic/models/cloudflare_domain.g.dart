@@ -17,8 +17,8 @@ class CloudFlareDomainAdapter extends TypeAdapter<CloudFlareDomain> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CloudFlareDomain(
-      domainName: fields[0] as String?,
-      zoneId: fields[1] as String?,
+      domainName: fields[0] as String,
+      zoneId: fields[1] as String,
     );
   }
 

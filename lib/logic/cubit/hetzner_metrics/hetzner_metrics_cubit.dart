@@ -38,7 +38,7 @@ class HetznerMetricsCubit extends Cubit<HetznerMetricsState> {
   }
 
   void load(Period period) async {
-    var newState = await repository.getMetrics(state.period);
+    var newState = await repository.getMetrics(period);
     timer = Timer(
       Duration(seconds: newState.stepInSeconds.toInt()),
       () => load(newState.period),

@@ -70,9 +70,9 @@ class _BrandTimerState extends State<BrandTimer> {
       _durationToString(DateTime.now().difference(widget.startDateTime));
 
   String _durationToString(Duration duration) {
+    var timeLeft = widget.duration - duration;
     String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitSeconds =
-        twoDigits(widget.duration.inSeconds - duration.inSeconds.remainder(60));
+    String twoDigitSeconds = twoDigits(timeLeft.inSeconds);
 
     return "timer.sec".tr(args: [twoDigitSeconds]);
   }

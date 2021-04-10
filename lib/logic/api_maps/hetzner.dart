@@ -164,11 +164,21 @@ class HetznerApi extends ApiMap {
     return server.copyWith(startTime: DateTime.now());
   }
 
-  metrics() async {
+  Future<Map<String, dynamic>> getMetrics(DateTime start, DateTime end, String type) async {
     var hetznerServer = getIt<ApiConfigModel>().hetznerServer;
     var client = await getClient();
-    await client.post('/servers/${hetznerServer!.id}/metrics');
+
+    Map<String, dynamic> queryParameters = {
+      "start": start.toUtc().toIso8601String(),
+      "end": end.toUtc().toIso8601String(),
+      "type": type
+    };
+    var res = await client.get(
+      '/servers/${hetznerServer!.id}/metrics',
+      queryParameters: queryParameters,
+    );
     close(client);
+    return res.data;
   }
 
   Future<HetznerServerInfo> getInfo() async {

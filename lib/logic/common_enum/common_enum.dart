@@ -8,3 +8,5 @@ enum InitializingSteps {
   startServer,
   checkSystemDnsAndDkimSet,
 }
+enum Period { hour, day, month }
+

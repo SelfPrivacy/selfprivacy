@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
+import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 import 'package:intl/intl.dart';
@@ -85,6 +87,11 @@ class NetworkChart extends StatelessWidget {
                   ].reduce(max) *
                   1.2 /
                   10,
+              getTextStyles: (value) => progressTextStyleLight.copyWith(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? BrandColors.gray4
+                    : null,
+              ),
               showTitles: true,
             ),
           ),

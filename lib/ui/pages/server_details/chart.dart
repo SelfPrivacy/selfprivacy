@@ -5,6 +5,7 @@ class _Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     var cubit = context.watch<HetznerMetricsCubit>();
     var period = cubit.state.period;
     var state = cubit.state;

@@ -25,7 +25,7 @@ class User extends Equatable {
 
   Color get color => stringToColor(login);
 
-  String get hashPassword => Crypt.sha512(password).toString();
+  Crypt get hashPassword => Crypt.sha512(password);
 
   String toString() {
     return login;

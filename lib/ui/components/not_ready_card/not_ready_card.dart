@@ -33,9 +33,7 @@ class NotReadyCard extends StatelessWidget {
                   child: Text(
                     'not_ready_card.2'.tr(),
                     style: body1Style.copyWith(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.black
-                          : BrandColors.white,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline,
                       // height: 1.1,

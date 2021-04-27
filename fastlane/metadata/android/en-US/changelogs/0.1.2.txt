@@ -1,0 +1,6 @@
+- Updated Pleroma OTP to v2.3.0
+- Updated Nextcloud to v21
+- Fixed Bad Gateway HTTP response on social.$DOMAIN
+- Fixed broken initial reboot chain
+- Fixed password generation for PAM
+- Various translation fixes

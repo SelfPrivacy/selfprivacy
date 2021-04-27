@@ -43,7 +43,7 @@ class AppConfigState extends Equatable {
 
   final bool hasFinalChecked;
 
-  final bool? isLoading;
+  final bool isLoading;
   final Exception? error;
 
   AppConfigState copyWith({

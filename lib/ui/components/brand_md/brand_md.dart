@@ -39,7 +39,9 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
   Widget build(BuildContext context) {
     var isDark = Theme.of(context).brightness == Brightness.dark;
     var markdown = MarkdownStyleSheet(
-      p: defaultTextStyle,
+      p: defaultTextStyle.copyWith(
+        color: isDark ? BrandColors.white : null,
+      ),
       h1: headline1Style.copyWith(
         color: isDark ? BrandColors.white : null,
       ),

@@ -1,5 +1,6 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/backblaze_form_cubit.dart';
@@ -45,43 +46,56 @@ class InitializingPage extends StatelessWidget {
       },
       child: SafeArea(
         child: Scaffold(
-          body: ListView(
-            children: [
-              Padding(
-                padding: brandPagePadding2.copyWith(top: 10, bottom: 10),
-                child: ProgressBar(
-                  steps: [
-                    'Hetzner',
-                    'CloudFlare',
-                    'Backblaze',
-                    'Domain',
-                    'User',
-                    'Server',
-                    ' ✅',
-                    ' ✅',
-                    ' ✅',
-                    ' ✅',
-                  ],
-                  activeIndex: cubit.state.progress,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: brandPagePadding2.copyWith(top: 10, bottom: 10),
+                  child: ProgressBar(
+                    steps: [
+                      'Hetzner',
+                      'CloudFlare',
+                      'Backblaze',
+                      'Domain',
+                      'User',
+                      'Server',
+                      ' ✅',
+                      ' ✅',
+                      ' ✅',
+                      ' ✅',
+                    ],
+                    activeIndex: cubit.state.progress,
+                  ),
                 ),
-              ),
-              _addCard(
-                AnimatedSwitcher(
-                  duration: Duration(milliseconds: 300),
-                  child: actualPage,
+                _addCard(
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: actualPage,
+                  ),
                 ),
-              ),
-              BrandButton.text(
-                  title: cubit.state.isFullyInitilized
-                      ? 'basis.close'.tr()
-                      : 'basis.later'.tr(),
-                  onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      materialRoute(RootPage()),
-                      (predicate) => false,
-                    );
-                  }),
-            ],
+                ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height -
+                          MediaQuery.of(context).padding.top -
+                          MediaQuery.of(context).padding.bottom -
+                          566,
+                    ),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: BrandButton.text(
+                        title: cubit.state.isFullyInitilized
+                            ? 'basis.close'.tr()
+                            : 'basis.later'.tr(),
+                        onPressed: () {
+                          Navigator.of(context).pushAndRemoveUntil(
+                            materialRoute(RootPage()),
+                            (predicate) => false,
+                          );
+                        },
+                      ),
+                    )),
+              ],
+            ),
           ),
         ),
       ),
@@ -341,8 +355,10 @@ class InitializingPage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Spacer(),
+            BrandText.h2('initializing.22'.tr()),
             SizedBox(height: 10),
+            BrandText.body2('initializing.23'.tr()),
+            Spacer(),
             CubitFormTextField(
               formFieldCubit: context.read<RootUserFormCubit>().userName,
               textAlign: TextAlign.center,
@@ -409,7 +425,7 @@ class InitializingPage extends StatelessWidget {
           BrandText.body2('initializing.11'.tr()),
           Spacer(),
           BrandButton.rised(
-            onPressed: isLoading!
+            onPressed: isLoading
                 ? null
                 : () => appConfigCubit.createServerAndSetDnsRecords(),
             title: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
@@ -446,7 +462,7 @@ class InitializingPage extends StatelessWidget {
           SizedBox(height: 10),
           BrandText.body2(text),
           SizedBox(height: 10),
-          if (!state.isLoading!)
+          if (!state.isLoading)
             Row(
               children: [
                 BrandText.body2('initializing.16'.tr()),
@@ -456,7 +472,7 @@ class InitializingPage extends StatelessWidget {
                 )
               ],
             ),
-          if (state.isLoading!) BrandText.body2('initializing.17'.tr()),
+          if (state.isLoading) BrandText.body2('initializing.17'.tr()),
           Spacer(
             flex: 2,
           ),

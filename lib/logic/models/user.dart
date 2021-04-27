@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:crypt/crypt.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/utils/color_utils.dart';
 import 'package:hive/hive.dart';
-import 'package:selfprivacy/utils/crypto.dart';
 
 part 'user.g.dart';
 
@@ -25,7 +25,7 @@ class User extends Equatable {
 
   Color get color => stringToColor(login);
 
-  String get hashPassword => convertToSha512Hash(password);
+  Crypt get hashPassword => Crypt.sha512(password);
 
   String toString() {
     return login;

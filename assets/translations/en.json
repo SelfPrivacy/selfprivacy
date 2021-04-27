@@ -41,7 +41,9 @@
       "1": "Dark Theme",
       "2": "Change your the app theme",
       "3": "Reset app config",
-      "4": "Reset api keys and root user"
+      "4": "Reset api keys and root user",
+      "5": "Delete Server",
+      "6": "This removes the Server. It will be no longer accessible"
     }
   },
   "onboarding": {
@@ -61,6 +63,11 @@
         "1": "It's a virtual computer, where all your services live.",
         "2": "General information",
         "3": "Location"
+      },
+      "chart": {
+        "month": "Month",
+        "day": "Day",
+        "hour": "Hour"
       }
     },
     "domain": {
@@ -157,7 +164,7 @@
   },
   "initializing": {
     "_comment": "initializing page",
-    "1": "Connect Hetzner server",
+    "1": "Connect a server",
     "2": "Here, your data and SelfPrivacy services wiil reside",
     "how": "How to obtain API token",
     "3": "Connect CloudFlare",
@@ -179,7 +186,10 @@
     "18": "How to obtain Hetzner API Token",
     "19": "1 Go via this link ",
     "20": "\n",
-    "21": "One more restart to apply your security certificates."
+    "21": "One more restart to apply your security certificates.",
+    "22": "Create master account",
+    "23": "Enter a nickname and strong password"
+
   },
   "modals": {
     "_comment": "messages in modals",
@@ -187,7 +197,9 @@
     "2": "Destroy server and create a new one?",
     "3": "Are you sure?",
     "4": "Purge all authentication keys?",
-    "5": "Yes, purge all my tokens"
+    "5": "Yes, purge all my tokens",
+    "6": "Delete the server and volume?",
+    "7": "Yes"
   },
   "timer": {
     "sec": "{} sec"

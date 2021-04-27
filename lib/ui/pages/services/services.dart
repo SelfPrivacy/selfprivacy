@@ -397,7 +397,6 @@ class _ServiceDetails extends StatelessWidget {
       try {
         await launch(
           url,
-          forceSafariVC: true,
           enableJavaScript: true,
         );
       } catch (e) {

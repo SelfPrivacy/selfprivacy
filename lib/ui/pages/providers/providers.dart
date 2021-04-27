@@ -82,8 +82,6 @@ class _Card extends StatelessWidget {
     switch (provider.type) {
       case ProviderType.server:
         title = 'providers.server.card_title'.tr();
-        stableText = 'providers.domain.status'.tr();
-
         stableText = 'providers.server.status'.tr();
         onTap = () => Navigator.of(context).push(
               SlideBottomRoute(

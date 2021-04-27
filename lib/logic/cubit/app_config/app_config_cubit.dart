@@ -263,6 +263,28 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     emit(InitialAppConfigState());
   }
 
+  Future<void> serverDelete() async {
+    closeTimer();
+    if (state.hetznerServer != null) {
+      await repository.deleteServer(state.cloudFlareDomain!);
+    }
+    await repository.deleteRecords();
+    emit(AppConfigState(
+      hetznerKey: state.hetznerKey,
+      cloudFlareKey: state.cloudFlareKey,
+      backblazeCredential: state.backblazeCredential,
+      cloudFlareDomain: state.cloudFlareDomain,
+      rootUser: state.rootUser,
+      hetznerServer: null,
+      isServerStarted: false,
+      isServerResetedFirstTime: false,
+      isServerResetedSecondTime: false,
+      hasFinalChecked: false,
+      isLoading: false,
+      error: null,
+    ));
+  }
+
   void setHetznerKey(String hetznerKey) async {
     await repository.saveHetznerKey(hetznerKey);
     emit(state.copyWith(hetznerKey: hetznerKey));

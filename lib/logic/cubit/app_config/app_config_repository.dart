@@ -220,4 +220,26 @@ class AppConfigRepository {
   Future<void> saveHasFinalChecked(bool value) async {
     await box.put(BNames.hasFinalChecked, value);
   }
+
+  Future<void> deleteServer(CloudFlareDomain cloudFlareDomain) async {
+    var hetznerApi = HetznerApi();
+    var cloudFlare = CloudflareApi();
+
+    hetznerApi.deleteSelfprivacyServerAndAllVolumes(
+      domainName: cloudFlareDomain.domainName,
+    );
+    cloudFlare.removeSimilarRecords(cloudFlareDomain: cloudFlareDomain);
+  }
+
+  Future<void> deleteRecords() async {
+    await box.deleteAll([
+      BNames.hetznerServer,
+      BNames.isServerStarted,
+      BNames.isServerResetedFirstTime,
+      BNames.isServerResetedSecondTime,
+      BNames.hasFinalChecked,
+      BNames.isLoading,
+    ]);
+    getIt<ApiConfigModel>().init();
+  }
 }

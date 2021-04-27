@@ -93,14 +93,16 @@ class HetznerApi extends ApiMap {
       },
     );
     var dbId = dbCreateResponse.data['volume']['id'];
+
     var data = jsonDecode(
-      '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[],"user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/preproduction/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-20.09 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''',
+      '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[],"user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-20.09 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword.hash} SALT=${rootUser.hashPassword.salt} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''',
     );
 
     Response serverCreateResponse = await client.post(
       '/servers',
       data: data,
     );
+
     client.close();
     return HetznerServerDetails(
       id: serverCreateResponse.data['server']['id'],
@@ -164,11 +166,22 @@ class HetznerApi extends ApiMap {
     return server.copyWith(startTime: DateTime.now());
   }
 
-  metrics() async {
+  Future<Map<String, dynamic>> getMetrics(
+      DateTime start, DateTime end, String type) async {
     var hetznerServer = getIt<ApiConfigModel>().hetznerServer;
     var client = await getClient();
-    await client.post('/servers/${hetznerServer!.id}/metrics');
+
+    Map<String, dynamic> queryParameters = {
+      "start": start.toUtc().toIso8601String(),
+      "end": end.toUtc().toIso8601String(),
+      "type": type
+    };
+    var res = await client.get(
+      '/servers/${hetznerServer!.id}/metrics',
+      queryParameters: queryParameters,
+    );
     close(client);
+    return res.data;
   }
 
   Future<HetznerServerInfo> getInfo() async {

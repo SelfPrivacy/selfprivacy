@@ -166,7 +166,7 @@ class AppConfigRepository {
 
     await HetznerApi().createReverseDns(
       ip4: ip4,
-      cloudFlareDomain: cloudFlareDomain.domainName,
+      domainName: cloudFlareDomain.domainName,
     );
   }
 

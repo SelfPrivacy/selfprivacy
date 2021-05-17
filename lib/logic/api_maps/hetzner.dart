@@ -195,7 +195,7 @@ class HetznerApi extends ApiMap {
 
   Future<void> createReverseDns({
     required String ip4,
-    required String cloudFlareDomain,
+    required String domainName,
   }) async {
     var hetznerServer = getIt<ApiConfigModel>().hetznerServer;
     var client = await getClient();
@@ -203,7 +203,7 @@ class HetznerApi extends ApiMap {
       '/servers/${hetznerServer!.id}/actions/change_dns_ptr',
       data: {
         "ip": ip4,
-        "dns_ptr": cloudFlareDomain,
+        "dns_ptr": domainName,
       },
     );
     close(client);

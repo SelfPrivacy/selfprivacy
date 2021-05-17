@@ -149,7 +149,7 @@ class AppConfigRepository {
   }
 
   Future<void> createDnsRecords(
-    String? ip4,
+    String ip4,
     CloudFlareDomain cloudFlareDomain,
   ) async {
     var cloudflareApi = CloudflareApi();
@@ -162,6 +162,11 @@ class AppConfigRepository {
     await cloudflareApi.createMultipleDnsRecords(
       ip4: ip4,
       cloudFlareDomain: cloudFlareDomain,
+    );
+
+    await HetznerApi().createReverseDns(
+      ip4: ip4,
+      domainName: cloudFlareDomain.domainName,
     );
   }
 

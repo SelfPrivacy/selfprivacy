@@ -316,7 +316,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
 
   void createServerAndSetDnsRecords() async {
     AppConfigState _stateCopy = state;
-    var onSuccess = (serverDetails) async {
+    var onSuccess = (HetznerServerDetails serverDetails) async {
       await repository.createDnsRecords(
         serverDetails.ip4,
         state.cloudFlareDomain!,

@@ -32,7 +32,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             preferredSize: Size.fromHeight(52),
           ),
           body: ListView(
-            padding: brandPagePadding2,
+            padding: paddingH15V0,
             children: [
               BrandDivider(),
               Container(

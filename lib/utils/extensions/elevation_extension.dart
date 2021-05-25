@@ -2,10 +2,8 @@ library elevation_extension;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:selfprivacy/config/brand_shadow.dart';
 
 extension ElevationExtension on BoxDecoration {
-  BoxDecoration get ev8 => copyWith(boxShadow: [shadow8]);
 
   BoxDecoration copyWith({
     Color? color,

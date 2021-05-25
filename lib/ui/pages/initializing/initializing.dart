@@ -11,7 +11,7 @@ import 'package:selfprivacy/logic/cubit/forms/initializing/root_user_form_cubit.
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
+import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
@@ -50,7 +50,7 @@ class InitializingPage extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: brandPagePadding2.copyWith(top: 10, bottom: 10),
+                  padding: paddingH15V0.copyWith(top: 10, bottom: 10),
                   child: ProgressBar(
                     steps: [
                       'Hetzner',
@@ -132,7 +132,7 @@ class InitializingPage extends StatelessWidget {
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<HetznerFormCubit>().trySubmit(),
-              title: 'basis.connect'.tr(),
+              text: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
@@ -187,7 +187,7 @@ class InitializingPage extends StatelessWidget {
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<CloudFlareFormCubit>().trySubmit(),
-              title: 'basis.connect'.tr(),
+              text: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
@@ -238,7 +238,7 @@ class InitializingPage extends StatelessWidget {
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<BackblazeFormCubit>().trySubmit(),
-              title: 'basis.connect'.tr(),
+              text: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
@@ -330,7 +330,7 @@ class InitializingPage extends StatelessWidget {
               SizedBox(height: 30),
               BrandButton.rised(
                 onPressed: () => context.read<DomainSetupCubit>().saveDomain(),
-                title: 'initializing.10'.tr(),
+                text: 'initializing.10'.tr(),
               ),
             ],
             SizedBox(height: 10),
@@ -400,7 +400,7 @@ class InitializingPage extends StatelessWidget {
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<RootUserFormCubit>().trySubmit(),
-              title: 'basis.connect'.tr(),
+              text: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
@@ -428,7 +428,7 @@ class InitializingPage extends StatelessWidget {
             onPressed: isLoading
                 ? null
                 : () => appConfigCubit.createServerAndSetDnsRecords(),
-            title: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
+            text: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
           ),
           Spacer(flex: 2),
           BrandButton.text(
@@ -488,8 +488,8 @@ class InitializingPage extends StatelessWidget {
   Widget _addCard(Widget child) {
     return Container(
       height: 450,
-      padding: brandPagePadding2,
-      child: BrandCard(child: child),
+      padding: paddingH15V0,
+      child: BrandCards.big(child: child),
     );
   }
 }
@@ -503,7 +503,7 @@ class _HowHetzner extends StatelessWidget {
   Widget build(BuildContext context) {
     return BrandModalSheet(
       child: Padding(
-          padding: brandPagePadding2.copyWith(top: 25),
+          padding: paddingH15V0.copyWith(top: 25),
           child: BrandMarkdown(
             fileName: 'how_hetzner',
           )),

@@ -29,7 +29,7 @@ class MorePage extends StatelessWidget {
       body: ListView(
         children: [
           Padding(
-            padding: brandPagePadding2,
+            padding: paddingH15V0,
             child: Column(
               children: [
                 BrandDivider(),

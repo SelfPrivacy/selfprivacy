@@ -123,7 +123,7 @@ class _UserDetails extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Padding(
-            padding: brandPagePadding2.copyWith(bottom: 20),
+            padding: paddingH15V0.copyWith(bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

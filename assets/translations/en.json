@@ -189,7 +189,6 @@
     "21": "One more restart to apply your security certificates.",
     "22": "Create master account",
     "23": "Enter a nickname and strong password"
-
   },
   "modals": {
     "_comment": "messages in modals",
@@ -203,5 +202,11 @@
   },
   "timer": {
     "sec": "{} sec"
+  },
+  "jobs": {
+    "_comment": "Jobs list",
+    "title": "Jobs list",
+    "start": "Start",
+    "empty": "No jobs"
   }
 }

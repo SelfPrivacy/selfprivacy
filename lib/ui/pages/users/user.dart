@@ -18,7 +18,7 @@ class _User extends StatelessWidget {
         );
       },
       child: Container(
-        padding: brandPagePadding2,
+        padding: paddingH15V0,
         height: 48,
         child: Row(
           children: [

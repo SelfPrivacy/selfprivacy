@@ -65,7 +65,7 @@ class _ServerDetailsState extends State<ServerDetails>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: brandPagePadding2,
+                padding: paddingH15V0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

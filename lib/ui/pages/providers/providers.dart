@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
+import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/provider.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
-import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
+import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
@@ -46,11 +49,14 @@ class _ProvidersPageState extends State<ProvidersPage> {
         .toList();
     return Scaffold(
       appBar: PreferredSize(
-        child: BrandHeader(title: 'providers.page_title'.tr()),
+        child: BrandHeader(
+          title: 'providers.page_title'.tr(),
+          hasFlashButton: true,
+        ),
         preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
-        padding: brandPagePadding2,
+        padding: paddingH15V0,
         children: [
           if (!isReady) ...[
             NotReadyCard(),
@@ -128,7 +134,7 @@ class _Card extends StatelessWidget {
     }
     return GestureDetector(
       onTap: onTap,
-      child: BrandCard(
+      child: BrandCards.big(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -193,6 +199,11 @@ class _ProviderDetails extends StatelessWidget {
               'providers.backup.bottom_sheet.2'.tr(args: [domainName, 'Time'])),
           SizedBox(height: 10),
           BrandText.body1('providers.backup.status'.tr()),
+          BrandButton.rised(
+            onPressed: () =>
+                context.read<JobsCubit>().addJob(Job(title: 'text')),
+            text: 'add job',
+          )
         ];
         break;
     }
@@ -207,7 +218,7 @@ class _ProviderDetails extends StatelessWidget {
               children: [
                 SizedBox(height: 40),
                 Padding(
-                  padding: brandPagePadding2,
+                  padding: paddingH15V0,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

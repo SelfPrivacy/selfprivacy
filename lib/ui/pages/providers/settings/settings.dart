@@ -13,7 +13,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: brandPagePadding2,
+      padding: paddingH15V0,
       children: [
         SizedBox(height: 10),
         BrandHeader(title: 'basis.settings'.tr(), hasBackButton: true),

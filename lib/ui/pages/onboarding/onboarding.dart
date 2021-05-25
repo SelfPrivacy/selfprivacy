@@ -79,7 +79,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 curve: Curves.easeIn,
               );
             },
-            title: 'basis.next'.tr(),
+            text: 'basis.next'.tr(),
           ),
           SizedBox(height: 30),
         ],
@@ -129,7 +129,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 (route) => false,
               );
             },
-            title: 'basis.got_it'.tr(),
+            text: 'basis.got_it'.tr(),
           ),
           SizedBox(height: 30),
         ],

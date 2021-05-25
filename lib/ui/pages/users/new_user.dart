@@ -28,7 +28,7 @@ class _NewUser extends StatelessWidget {
                 ),
                 SizedBox(width: 14),
                 Padding(
-                  padding: brandPagePadding2,
+                  padding: paddingH15V0,
                   child: Column(
                     children: [
                       CubitFormTextField(
@@ -62,7 +62,7 @@ class _NewUser extends StatelessWidget {
                         onPressed: formCubitState.isSubmitting
                             ? null
                             : () => context.read<UserFormCubit>().trySubmit(),
-                        title: 'basis.create'.tr(),
+                        text: 'basis.create'.tr(),
                       ),
                       SizedBox(height: 40),
                       Text('users.new_user_info_note'.tr()),

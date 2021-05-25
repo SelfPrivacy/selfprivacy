@@ -53,7 +53,10 @@ class UsersPage extends StatelessWidget {
 
     return Scaffold(
       appBar: PreferredSize(
-        child: BrandHeader(title: 'basis.users'.tr()),
+        child: BrandHeader(
+          title: 'basis.users'.tr(),
+          hasFlashButton: true,
+        ),
         preferredSize: Size.fromHeight(52),
       ),
       floatingActionButton: isReady ? _Fab() : null,

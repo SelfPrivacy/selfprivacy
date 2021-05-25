@@ -5,7 +5,7 @@ import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
+import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
@@ -31,11 +31,14 @@ class _ServicesPageState extends State<ServicesPage> {
 
     return Scaffold(
       appBar: PreferredSize(
-        child: BrandHeader(title: 'basis.services'.tr()),
+        child: BrandHeader(
+          title: 'basis.services'.tr(),
+          hasFlashButton: true,
+        ),
         preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
-        padding: brandPagePadding2,
+        padding: paddingH15V0,
         children: [
           BrandText.body1('services.title'.tr()),
           SizedBox(height: 24),
@@ -119,7 +122,7 @@ class _Card extends StatelessWidget {
           );
         },
       ),
-      child: BrandCard(
+      child: BrandCards.big(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -359,7 +362,7 @@ class _ServiceDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: brandPagePadding1,
+                padding: paddingH15V30,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -376,7 +379,7 @@ class _ServiceDetails extends StatelessWidget {
                       child: Container(
                         child: BrandButton.rised(
                           onPressed: () => Navigator.of(context).pop(),
-                          title: 'basis.close'.tr(),
+                          text: 'basis.close'.tr(),
                         ),
                       ),
                     ),

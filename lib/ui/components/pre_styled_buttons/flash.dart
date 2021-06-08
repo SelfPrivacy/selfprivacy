@@ -49,8 +49,11 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
       child: IconButton(
         onPressed: () {
           showCupertinoModalBottomSheet(
+            barrierColor: Colors.black45,
             expand: false,
             context: context,
+            shadow: BoxShadow(color: Colors.transparent),
+            backgroundColor: Colors.transparent,
             builder: (context) => BrandBottomSheet(
               child: JobsContent(),
             ),

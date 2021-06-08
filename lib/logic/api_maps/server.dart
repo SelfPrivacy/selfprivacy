@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/models/user.dart';
 
 import 'api_map.dart';
 
@@ -32,6 +33,21 @@ class ServerApi extends ApiMap {
     var client = await getClient();
     try {
       response = await client.get('/serviceStatus');
+      res = response.statusCode == HttpStatus.ok;
+    } catch (e) {
+      res = false;
+    }
+    close(client);
+    return res;
+  }
+
+  Future<bool> createUser(User user) async {
+    bool res;
+    Response response;
+
+    var client = await getClient();
+    try {
+      response = await client.get('/createUser');
       res = response.statusCode == HttpStatus.ok;
     } catch (e) {
       res = false;

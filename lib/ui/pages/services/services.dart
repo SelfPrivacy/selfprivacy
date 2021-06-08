@@ -108,20 +108,23 @@ class _Card extends StatelessWidget {
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
     var changeTab = context.read<ChangeTab>().onPress;
     return GestureDetector(
-      onTap: () => showDialog<void>(
-        context: context,
-        // isScrollControlled: true,
-        // backgroundColor: Colors.transparent,
-        builder: (BuildContext context) {
-          return _ServiceDetails(
-            serviceType: serviceType,
-            status: isReady ? StateType.stable : StateType.uninitialized,
-            title: title,
-            icon: iconData,
-            changeTab: changeTab,
-          );
-        },
-      ),
+      onTap: isReady
+          ? () => showDialog<void>(
+                context: context,
+                // isScrollControlled: true,
+                // backgroundColor: Colors.transparent,
+                builder: (BuildContext context) {
+                  return _ServiceDetails(
+                    serviceType: serviceType,
+                    status:
+                        isReady ? StateType.stable : StateType.uninitialized,
+                    title: title,
+                    icon: iconData,
+                    changeTab: changeTab,
+                  );
+                },
+              )
+          : null,
       child: BrandCards.big(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

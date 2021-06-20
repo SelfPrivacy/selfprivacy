@@ -85,7 +85,17 @@ class AppConfigState extends Equatable {
   bool get isServerCreated => hetznerServer != null;
 
   bool get isFullyInitilized => _fulfilementList.every((el) => el!);
-  int get progress => _fulfilementList.where((el) => el!).length;
+  int get progress => _fulfilementList.where((el) => el!).length ;
+
+  int get porgressBar {
+    if (progress < 6) {
+      return progress;
+    } else if (progress < 10) {
+      return 6;
+    } else {
+      return 7;
+    }
+  }
 
   List<bool?> get _fulfilementList {
     var res = [

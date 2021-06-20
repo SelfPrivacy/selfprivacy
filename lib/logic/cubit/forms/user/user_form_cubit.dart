@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
+import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
+import 'package:selfprivacy/logic/models/jobs/job.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class UserFormCubit extends FormCubit {
   UserFormCubit({
@@ -18,18 +20,18 @@ class UserFormCubit extends FormCubit {
     login = FieldCubit(
       initalValue: isEdit ? user!.login : '',
       validations: [
-        RequiredStringValidation('required'),
+        RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
-            (s) => userRegExp.hasMatch(s), 'invalid format'),
+            (s) => userRegExp.hasMatch(s), 'validations.invalid_format'.tr()),
       ],
     );
 
     password = FieldCubit(
       initalValue: isEdit ? user!.password : genPass(),
       validations: [
-        RequiredStringValidation('required'),
-        ValidationModel<String>(
-            (s) => passwordRegExp.hasMatch(s), 'invalid format'),
+        RequiredStringValidation('validations.required'.tr()),
+        ValidationModel<String>((s) => passwordRegExp.hasMatch(s),
+            'validations.invalid_format'.tr()),
       ],
     );
 
@@ -42,7 +44,7 @@ class UserFormCubit extends FormCubit {
       login: login.state.value,
       password: password.state.value,
     );
-    usersCubit.addUser(user);
+    usersCubit.addJob(CreateUserJob(user: user));
   }
 
   late FieldCubit<String> login;
@@ -52,5 +54,5 @@ class UserFormCubit extends FormCubit {
     password.externalSetValue(genPass());
   }
 
-  late UsersCubit usersCubit;
+  late JobsCubit usersCubit;
 }

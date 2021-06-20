@@ -24,7 +24,7 @@ class JobsCubit extends Cubit<JobsState> {
   Future<void> applyAll() async {
     for (var job in state.jobList) {
       if (job is CreateUserJob) {
-        await api.createUser(job.user);
+        // await api.createUser(job.user);
       }
     }
     emit(JobsState.emtpy());

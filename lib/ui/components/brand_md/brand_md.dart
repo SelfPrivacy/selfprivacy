@@ -56,6 +56,7 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
       ),
     );
     return Markdown(
+      shrinkWrap: true,
       styleSheet: markdown,
       onTapLink: (String text, String? href, String title) {
         if (href != null) {

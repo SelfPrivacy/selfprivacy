@@ -34,7 +34,7 @@
     "onboarding": "Onboarding",
     "console": "Console",
     "about_app_page": {
-      "text": "Тут любая служебная информация, v.{}"
+      "text": "Application version v.{}"
     },
     "settings": {
       "title": "Application settings",
@@ -188,7 +188,10 @@
     "20": "\n",
     "21": "One more restart to apply your security certificates.",
     "22": "Create master account",
-    "23": "Enter a nickname and strong password"
+    "23": "Enter a nickname and strong password",
+    "finish": "Everything is initialized",
+    "checks": "Checks have been completed \n{} ouf of {}"
+    
   },
   "modals": {
     "_comment": "messages in modals",
@@ -208,5 +211,12 @@
     "title": "Jobs list",
     "start": "Start",
     "empty": "No jobs"
+  },
+  "validations": {
+    "required": "required",
+    "invalid_format": "invalid format",
+    "root_name": "User name cannot be 'root'",
+    "key_format": "invalid key format",
+    "length": "length is [] shoud be {}"
   }
 }

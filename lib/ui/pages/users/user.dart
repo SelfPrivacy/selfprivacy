@@ -8,10 +8,8 @@ class _User extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        showModalBottomSheet<void>(
+        showBrandBottomSheet<void>(
           context: context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
           builder: (BuildContext context) {
             return _UserDetails(user: user);
           },

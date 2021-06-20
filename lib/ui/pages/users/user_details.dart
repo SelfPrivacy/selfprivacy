@@ -14,9 +14,11 @@ class _UserDetails extends StatelessWidget {
 
     var domainName = UiHelpers.getDomainName(config);
 
-    return BrandModalSheet(
+    return BrandBottomSheet(
+      isExpended: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             height: 200,

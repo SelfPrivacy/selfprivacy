@@ -47,11 +47,21 @@ class ServerApi extends ApiMap {
 
     var client = await getClient();
     try {
-      response = await client.get('/createUser');
+      response = await client.post(
+        '/createUser',
+        options: Options(
+          headers: {
+            "X-Username": user.login,
+            "X-Password": user.password,
+          },
+        ),
+      );
       res = response.statusCode == HttpStatus.ok;
     } catch (e) {
+      print(e);
       res = false;
     }
+
     close(client);
     return res;
   }

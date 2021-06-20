@@ -10,10 +10,10 @@ import 'package:selfprivacy/logic/cubit/forms/initializing/hetzner_form_cubit.da
 import 'package:selfprivacy/logic/cubit/forms/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
+import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
-import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
@@ -36,7 +36,7 @@ class InitializingPage extends StatelessWidget {
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
-      () => Container(child: Text('Everythigng is initialized'))
+      () => Container(child: Center(child: Text('initializing.finish'.tr())))
     ][cubit.state.progress]();
     return BlocListener<AppConfigCubit, AppConfigState>(
       listener: (context, state) {
@@ -59,12 +59,9 @@ class InitializingPage extends StatelessWidget {
                       'Domain',
                       'User',
                       'Server',
-                      ' ✅',
-                      ' ✅',
-                      ' ✅',
-                      ' ✅',
+                      '✅ Check',
                     ],
-                    activeIndex: cubit.state.progress,
+                    activeIndex: cubit.state.porgressBar,
                   ),
                 ),
                 _addCard(
@@ -443,21 +440,29 @@ class InitializingPage extends StatelessWidget {
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
     assert(appConfigCubit.state is TimerState, 'wronge state');
     var state = appConfigCubit.state as TimerState;
-
+    late int doneCount;
     late String? text;
     if (state.isServerResetedSecondTime) {
       text = 'initializing.13'.tr();
+      doneCount = 3;
     } else if (state.isServerResetedFirstTime) {
       text = 'initializing.21'.tr();
+      doneCount = 2;
     } else if (state.isServerStarted) {
       text = 'initializing.14'.tr();
+      doneCount = 1;
     } else if (state.isServerCreated) {
       text = 'initializing.15'.tr();
+      doneCount = 0;
     }
     return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 15),
+          BrandText.h4(
+            'initializing.checks'.tr(args: [doneCount.toString(), "4"]),
+          ),
           Spacer(flex: 2),
           SizedBox(height: 10),
           BrandText.body2(text),
@@ -501,12 +506,14 @@ class _HowHetzner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BrandModalSheet(
+    return BrandBottomSheet(
+      isExpended: true,
       child: Padding(
-          padding: paddingH15V0.copyWith(top: 25),
-          child: BrandMarkdown(
-            fileName: 'how_hetzner',
-          )),
+        padding: paddingH15V0,
+        child: BrandMarkdown(
+          fileName: 'how_hetzner',
+        ),
+      ),
     );
   }
 }

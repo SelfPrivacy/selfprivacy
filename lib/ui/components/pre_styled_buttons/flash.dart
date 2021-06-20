@@ -15,12 +15,25 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 600));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
     _colorTween = ColorTween(
       begin: BrandColors.black,
       end: BrandColors.primary,
     ).animate(_animationController);
+
     super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback(_afterLayout);
+  }
+
+  void _afterLayout(_) {
+    if (Theme.of(context).brightness == Brightness.dark) {
+      setState(() {
+        _colorTween = ColorTween(
+          begin: BrandColors.white,
+          end: BrandColors.primary,
+        ).animate(_animationController);
+      });
+    }
   }
 
   @override
@@ -48,13 +61,10 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
       },
       child: IconButton(
         onPressed: () {
-          showCupertinoModalBottomSheet(
-            barrierColor: Colors.black45,
-            expand: false,
+          showBrandBottomSheet(
             context: context,
-            shadow: BoxShadow(color: Colors.transparent),
-            backgroundColor: Colors.transparent,
             builder: (context) => BrandBottomSheet(
+              isExpended: true,
               child: JobsContent(),
             ),
           );
@@ -62,9 +72,13 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
         icon: AnimatedBuilder(
             animation: _colorTween,
             builder: (context, child) {
-              return Icon(
-                icon,
-                color: _colorTween.value,
+              var v = _animationController.value;
+              return Transform.scale(
+                scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
+                child: Icon(
+                  icon,
+                  color: _colorTween.value,
+                ),
               );
             }),
       ),

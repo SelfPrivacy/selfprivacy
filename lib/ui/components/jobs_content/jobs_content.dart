@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
+import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
@@ -12,7 +13,8 @@ class JobsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var jobs = context.watch<JobsCubit>().state;
-    return Column(
+    return ListView(
+      padding: paddingH15V0,
       children: [
         SizedBox(height: 15),
         Center(
@@ -20,11 +22,8 @@ class JobsContent extends StatelessWidget {
             'jobs.title'.tr(),
           ),
         ),
-        if (jobs.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 50),
-            child: BrandText.body1('jobs.empty'.tr()),
-          ),
+        SizedBox(height: 20),
+        if (jobs.isEmpty) BrandText.body1('jobs.empty'.tr()),
         if (!jobs.isEmpty) ...[
           ...jobs.jobList
               .map(

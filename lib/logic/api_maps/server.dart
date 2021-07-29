@@ -51,8 +51,9 @@ class ServerApi extends ApiMap {
         '/createUser',
         options: Options(
           headers: {
-            "X-Username": user.login,
-            "X-Password": user.password,
+            "X-User": user.login,
+            "X-Password":
+                '\$6\$${user.hashPassword.salt}\$${user.hashPassword.hash}',
           },
         ),
       );
@@ -68,4 +69,24 @@ class ServerApi extends ApiMap {
 
   String get rootAddress =>
       throw UnimplementedError('not used in with implementation');
+
+  Future<bool> apply() async {
+    bool res;
+    Response response;
+
+    var client = await getClient();
+    try {
+      response = await client.get(
+        '/apply',
+      );
+
+      res = response.statusCode == HttpStatus.ok;
+    } catch (e) {
+      print(e);
+      res = false;
+    }
+
+    close(client);
+    return res;
+  }
 }

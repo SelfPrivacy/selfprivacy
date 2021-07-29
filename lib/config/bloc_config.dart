@@ -17,7 +17,7 @@ class BlocAndProviderConfig extends StatelessWidget {
     //     SchedulerBinding.instance.window.platformBrightness;
     // var isDark = platformBrightness == Brightness.dark;
     var isDark = false;
-
+    var usersCubit = UsersCubit();
     return MultiProvider(
       providers: [
         BlocProvider(
@@ -31,8 +31,8 @@ class BlocAndProviderConfig extends StatelessWidget {
           create: (_) => AppConfigCubit()..load(),
         ),
         BlocProvider(create: (_) => ProvidersCubit()),
-        BlocProvider(create: (_) => UsersCubit()),
-        BlocProvider(create: (_) => JobsCubit()),
+        BlocProvider(create: (_) => usersCubit..load(), lazy: false),
+        BlocProvider(create: (_) => JobsCubit(usersCubit)),
       ],
       child: child,
     );

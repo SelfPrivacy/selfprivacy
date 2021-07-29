@@ -42,20 +42,18 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
     super.dispose();
   }
 
-  late bool wasPrevStateIsEmpty;
+  bool wasPrevStateIsEmpty = true;
 
   @override
   Widget build(BuildContext context) {
-    var hasNoJobs = context.watch<JobsCubit>().state.isEmpty;
-    wasPrevStateIsEmpty = hasNoJobs;
-    var icon = hasNoJobs ? Ionicons.flash_outline : Ionicons.flash;
-
     return BlocListener<JobsCubit, JobsState>(
       listener: (context, state) {
-        if (wasPrevStateIsEmpty && state.jobList.isNotEmpty) {
+        if (wasPrevStateIsEmpty && state is! JobsStateEmpty) {
           wasPrevStateIsEmpty = false;
           _animationController.forward();
-        } else if (!wasPrevStateIsEmpty && state.jobList.isEmpty) {
+        } else if (!wasPrevStateIsEmpty && state is JobsStateEmpty) {
+          wasPrevStateIsEmpty = true;
+
           _animationController.reverse();
         }
       },
@@ -73,6 +71,7 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
             animation: _colorTween,
             builder: (context, child) {
               var v = _animationController.value;
+              var icon = v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
               return Transform.scale(
                 scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
                 child: Icon(

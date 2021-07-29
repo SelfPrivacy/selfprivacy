@@ -19,12 +19,14 @@
     "connect": "Connect",
     "domain": "Domain",
     "saving": "Saving..",
-    "nickname": "nickname",
+    "nickname": "Nickname",
     "loading": "Loading...",
     "later": "I will setup it later",
     "reset": "Reset",
     "details": "Details",
-    "no_data": "No data"
+    "no_data": "No data",
+    "wait": "Wait",
+    "remove": "Remove"
   },
   "more": {
     "_comment": "'More' tab",
@@ -191,7 +193,6 @@
     "23": "Enter a nickname and strong password",
     "finish": "Everything is initialized",
     "checks": "Checks have been completed \n{} ouf of {}"
-    
   },
   "modals": {
     "_comment": "messages in modals",

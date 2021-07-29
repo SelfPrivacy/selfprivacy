@@ -17,6 +17,7 @@ import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
+import 'package:share_plus/share_plus.dart';
 
 part 'fab.dart';
 part 'new_user.dart';
@@ -33,7 +34,6 @@ class UsersPage extends StatelessWidget {
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
     final users = usersCubitState.users;
     final isEmpty = usersCubitState.isEmpty;
-
     Widget child;
 
     if (!isReady) {
@@ -48,7 +48,7 @@ class UsersPage extends StatelessWidget {
             )
           : ListView(
               children: [
-                ...users.map((user) => _User(user: user)),
+                ...users.map((user) => _User(user: user)).toList(),
               ],
             );
     }

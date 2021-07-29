@@ -1,25 +1,27 @@
 part of 'jobs_cubit.dart';
 
-class JobsState extends Equatable {
-  const JobsState(this.jobList);
+abstract class JobsState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
+class JobsStateLoading extends JobsState {}
+
+class JobsStateEmpty extends JobsState {}
+
+class JobsStateWithJobs extends JobsState {
+  JobsStateWithJobs(this.jobList);
   final List<Job> jobList;
-
-  static JobsState emtpy() => JobsState([]);
-
-  bool get isEmpty => jobList.isEmpty;
-
-  JobsState addJob(Job job) {
-    var newJobsList = [...jobList];
-    newJobsList.add(job);
-    return JobsState(newJobsList);
-  }
 
   JobsState removeById(String id) {
     var newJobsList = jobList.where((element) => element.id != id).toList();
-    return JobsState(newJobsList);
+
+    if (newJobsList.isEmpty) {
+      return JobsStateEmpty();
+    }
+    return JobsStateWithJobs(newJobsList);
   }
 
   @override
-  List<Object> get props => jobList;
+  List<Object?> get props => jobList;
 }

@@ -37,6 +37,7 @@ class JobsCubit extends Cubit<JobsState> {
       var newUsers = <User>[];
       for (var job in jobs) {
         if (job is CreateUserJob) {
+          print('a');
           newUsers.add(job.user);
           await api.createUser(job.user);
         }

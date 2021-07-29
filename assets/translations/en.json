@@ -202,7 +202,9 @@
     "4": "Purge all authentication keys?",
     "5": "Yes, purge all my tokens",
     "6": "Delete the server and volume?",
-    "7": "Yes"
+    "7": "Yes",
+    "8": "Remove task"
+
   },
   "timer": {
     "sec": "{} sec"

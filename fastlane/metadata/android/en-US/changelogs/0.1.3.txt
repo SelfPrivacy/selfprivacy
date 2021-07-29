@@ -1,0 +1,7 @@
+- Added users creation possibility 
+- Fixed reverse DNS issue during server creation 
+- Updated NixOS to 21.05 
+- Defined application users as system ones 
+- Minor bugfixes 
+- Translation fixes 
+- en_GB is now a separate locale

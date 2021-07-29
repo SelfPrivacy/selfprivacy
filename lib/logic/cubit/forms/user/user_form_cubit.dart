@@ -9,7 +9,8 @@ import 'package:easy_localization/easy_localization.dart';
 
 class UserFormCubit extends FormCubit {
   UserFormCubit({
-    required this.usersCubit,
+    required this.jobsCubit,
+    required List<User> users,
     User? user,
   }) {
     var isEdit = user != null;
@@ -20,6 +21,10 @@ class UserFormCubit extends FormCubit {
     login = FieldCubit(
       initalValue: isEdit ? user!.login : '',
       validations: [
+        ValidationModel(
+          (login) => users.any((user) => user.login == login),
+          'validations.user_alredy_exist'.tr(),
+        ),
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
             (s) => userRegExp.hasMatch(s), 'validations.invalid_format'.tr()),
@@ -44,7 +49,7 @@ class UserFormCubit extends FormCubit {
       login: login.state.value,
       password: password.state.value,
     );
-    usersCubit.addJob(CreateUserJob(user: user));
+    jobsCubit.addJob(CreateUserJob(user: user));
   }
 
   late FieldCubit<String> login;
@@ -54,5 +59,5 @@ class UserFormCubit extends FormCubit {
     password.externalSetValue(genPass());
   }
 
-  late JobsCubit usersCubit;
+  final JobsCubit jobsCubit;
 }

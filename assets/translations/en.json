@@ -204,7 +204,6 @@
     "6": "Delete the server and volume?",
     "7": "Yes",
     "8": "Remove task"
-
   },
   "timer": {
     "sec": "{} sec"
@@ -216,10 +215,11 @@
     "empty": "No jobs"
   },
   "validations": {
-    "required": "required",
-    "invalid_format": "invalid format",
+    "required": "Required",
+    "invalid_format": "Invalid format",
     "root_name": "User name cannot be 'root'",
-    "key_format": "invalid key format",
-    "length": "length is [] shoud be {}"
+    "key_format": "Invalid key format",
+    "length": "Length is [] shoud be {}",
+    "user_alredy_exist": "Already exists"
   }
 }

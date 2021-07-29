@@ -9,8 +9,24 @@ class _NewUser extends StatelessWidget {
 
     return BrandBottomSheet(
       child: BlocProvider(
-        create: (context) =>
-            UserFormCubit(usersCubit: context.read<JobsCubit>()),
+        create: (context) {
+          var jobCubit = context.read<JobsCubit>();
+          var jobState = jobCubit.state;
+          var users = <User>[];
+          users.addAll(context.read<UsersCubit>().state.users);
+          if (jobState is JobsStateWithJobs) {
+            var jobs = jobState.jobList;
+            jobs.forEach((job) {
+              if (job is CreateUserJob) {
+                users.add(job.user);
+              }
+            });
+          }
+          return UserFormCubit(
+            jobsCubit: jobCubit,
+            users: users,
+          );
+        },
         child: Builder(builder: (context) {
           var formCubitState = context.watch<UserFormCubit>().state;
 

@@ -164,10 +164,10 @@ class AppConfigRepository {
       cloudFlareDomain: cloudFlareDomain,
     );
 
-    // await HetznerApi().createReverseDns(
-    //   ip4: ip4,
-    //   domainName: cloudFlareDomain.domainName,
-    // );
+    await HetznerApi().createReverseDns(
+      ip4: ip4,
+      domainName: cloudFlareDomain.domainName,
+    );
   }
 
   Future<bool> isHttpServerWorking() async {

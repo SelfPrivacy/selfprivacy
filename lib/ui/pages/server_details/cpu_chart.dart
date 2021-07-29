@@ -82,7 +82,6 @@ class CpuChart extends StatelessWidget {
     double appliedInterval,
     double value,
   ) {
-    print(value);
     if (value < 0) {
       return false;
     } else if (value == 0) {

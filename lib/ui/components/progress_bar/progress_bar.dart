@@ -53,9 +53,9 @@ class _ProgressBarState extends State<ProgressBar> {
         width: 10,
       ),
     );
-    even.add(
+    odd.add(
       SizedBox(
-        width: 10,
+        width: 20,
       ),
     );
 

@@ -3,6 +3,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/api_maps/backblaze.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BackblazeFormCubit extends FormCubit {
   BackblazeFormCubit(this.initializingCubit) {
@@ -10,7 +11,7 @@ class BackblazeFormCubit extends FormCubit {
     keyId = FieldCubit(
       initalValue: '',
       validations: [
-        RequiredStringValidation('required'),
+        RequiredStringValidation('validations.required'.tr()),
         //ValidationModel<String>(
         //(s) => regExp.hasMatch(s), 'invalid key format'),
         //LegnthStringValidationWithLenghShowing(64, 'length is [] shoud be 64')

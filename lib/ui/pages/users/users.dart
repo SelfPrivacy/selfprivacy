@@ -4,17 +4,21 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
+import 'package:selfprivacy/logic/models/jobs/job.dart';
 import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
+import 'package:share_plus/share_plus.dart';
 
 part 'fab.dart';
 part 'new_user.dart';
@@ -31,7 +35,6 @@ class UsersPage extends StatelessWidget {
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
     final users = usersCubitState.users;
     final isEmpty = usersCubitState.isEmpty;
-
     Widget child;
 
     if (!isReady) {
@@ -46,7 +49,7 @@ class UsersPage extends StatelessWidget {
             )
           : ListView(
               children: [
-                ...users.map((user) => _User(user: user)),
+                ...users.map((user) => _User(user: user)).toList(),
               ],
             );
     }

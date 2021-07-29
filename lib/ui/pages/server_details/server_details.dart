@@ -56,41 +56,58 @@ class _ServerDetailsState extends State<ServerDetails>
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
     var providerState = isReady ? StateType.stable : StateType.uninitialized;
 
-    return TabBarView(
-      physics: NeverScrollableScrollPhysics(),
-      controller: tabController,
-      children: [
-        SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: paddingH15V0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _Header(
-                        providerState: providerState,
-                        tabController: tabController),
-                    BrandText.body1('providers.server.bottom_sheet.1'.tr()),
-                    SizedBox(height: 10),
-                    BlocProvider(
-                      create: (context) => HetznerMetricsCubit()..restart(),
-                      child: _Chart(),
-                    ),
-                    SizedBox(height: 20),
-                    BlocProvider(
-                      create: (context) => ServerDetailsCubit()..check(),
-                      child: _TextDetails(),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: PreferredSize(
+        child: Column(
+          children: [
+            Container(
+              height: 51,
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: BrandText.h4('basis.details'.tr()),
+            ),
+            BrandDivider(),
+          ],
         ),
-        _ServerSettings(tabController: tabController),
-      ],
+        preferredSize: Size.fromHeight(52),
+      ),
+      body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: tabController,
+        children: [
+          SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: paddingH15V0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _Header(
+                          providerState: providerState,
+                          tabController: tabController),
+                      BrandText.body1('providers.server.bottom_sheet.1'.tr()),
+                      SizedBox(height: 10),
+                      BlocProvider(
+                        create: (context) => HetznerMetricsCubit()..restart(),
+                        child: _Chart(),
+                      ),
+                      SizedBox(height: 20),
+                      BlocProvider(
+                        create: (context) => ServerDetailsCubit()..check(),
+                        child: _TextDetails(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _ServerSettings(tabController: tabController),
+        ],
+      ),
     );
   }
 }

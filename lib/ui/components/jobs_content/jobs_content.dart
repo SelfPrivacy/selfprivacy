@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
+import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class JobsContent extends StatelessWidget {
@@ -11,57 +15,71 @@ class JobsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var jobs = context.watch<JobsCubit>().state;
-    return Column(
-      children: [
-        SizedBox(height: 15),
-        Center(
-          child: BrandText.h2(
-            'jobs.title'.tr(),
-          ),
-        ),
-        if (jobs.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 50),
-            child: BrandText.body1('jobs.empty'.tr()),
-          ),
-        if (!jobs.isEmpty) ...[
-          ...jobs.jobList
-              .map(
-                (j) => Row(
-                  children: [
-                    Expanded(
-                      child: BrandCards.small(
-                        child: Row(
-                          children: [
-                            BrandText.body1(j.title),
-                          ],
+    return BlocBuilder<JobsCubit, JobsState>(
+      builder: (context, state) {
+        late final List<Widget> widgets;
+        if (state is JobsStateEmpty) {
+          widgets = [
+            SizedBox(height: 80),
+            Center(child: BrandText.body1('jobs.empty'.tr())),
+          ];
+        } else if (state is JobsStateLoading) {
+          widgets = [
+            SizedBox(height: 80),
+            BrandLoader.horizontal(),
+          ];
+        } else if (state is JobsStateWithJobs) {
+          widgets = [
+            ...state.jobList
+                .map(
+                  (j) => Row(
+                    children: [
+                      Expanded(
+                        child: BrandCards.small(
+                          child: Row(
+                            children: [
+                              BrandText.body1(j.title),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: BrandColors.red1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: BrandColors.red1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
+                        onPressed: () =>
+                            context.read<JobsCubit>().removeJob(j.id),
+                        child: Text('basis.remove'.tr()),
                       ),
-                      onPressed: () =>
-                          context.read<JobsCubit>().removeJob(j.id),
-                      child: Text('Remove'),
-                    ),
-                  ],
-                ),
-              )
-              .toList(),
-          SizedBox(height: 20),
-          BrandButton.rised(
-            onPressed: () => context.read<JobsCubit>().applyAll(),
-            text: 'jobs.start'.tr(),
-          ),
-        ],
-      ],
+                    ],
+                  ),
+                )
+                .toList(),
+            SizedBox(height: 20),
+            BrandButton.rised(
+              onPressed: () => context.read<JobsCubit>().applyAll(),
+              text: 'jobs.start'.tr(),
+            ),
+          ];
+        }
+        return ListView(
+          padding: paddingH15V0,
+          children: [
+            SizedBox(height: 15),
+            Center(
+              child: BrandText.h2(
+                'jobs.title'.tr(),
+              ),
+            ),
+            SizedBox(height: 20),
+            ...widgets
+          ],
+        );
+      },
     );
   }
 }

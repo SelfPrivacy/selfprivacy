@@ -7,10 +7,26 @@ class _NewUser extends StatelessWidget {
 
     var domainName = UiHelpers.getDomainName(config);
 
-    return BrandModalSheet(
+    return BrandBottomSheet(
       child: BlocProvider(
-        create: (context) =>
-            UserFormCubit(usersCubit: context.read<UsersCubit>()),
+        create: (context) {
+          var jobCubit = context.read<JobsCubit>();
+          var jobState = jobCubit.state;
+          var users = <User>[];
+          users.addAll(context.read<UsersCubit>().state.users);
+          if (jobState is JobsStateWithJobs) {
+            var jobs = jobState.jobList;
+            jobs.forEach((job) {
+              if (job is CreateUserJob) {
+                users.add(job.user);
+              }
+            });
+          }
+          return UserFormCubit(
+            jobsCubit: jobCubit,
+            users: users,
+          );
+        },
         child: Builder(builder: (context) {
           var formCubitState = context.watch<UserFormCubit>().state;
 
@@ -22,6 +38,7 @@ class _NewUser extends StatelessWidget {
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 BrandHeader(
                   title: 'users.new_user'.tr(),
@@ -30,12 +47,15 @@ class _NewUser extends StatelessWidget {
                 Padding(
                   padding: paddingH15V0,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      CubitFormTextField(
-                        formFieldCubit: context.read<UserFormCubit>().login,
-                        decoration: InputDecoration(
-                          labelText: 'users.login'.tr(),
-                          suffixText: '@$domainName',
+                      IntrinsicHeight(
+                        child: CubitFormTextField(
+                          formFieldCubit: context.read<UserFormCubit>().login,
+                          decoration: InputDecoration(
+                            labelText: 'users.login'.tr(),
+                            suffixText: '@$domainName',
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),

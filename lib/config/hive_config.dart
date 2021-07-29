@@ -19,6 +19,8 @@ class HiveConfig {
     Hive.registerAdapter(HetznerDataBaseAdapter());
 
     await Hive.openBox(BNames.appSettings);
+    await Hive.openBox<User>(BNames.users);
+
     var cipher = HiveAesCipher(await getEncriptedKey());
 
     await Hive.openBox(BNames.appConfig, encryptionCipher: cipher);
@@ -42,6 +44,7 @@ class BNames {
   static String appConfig = 'appConfig';
   static String isDarkModeOn = 'isDarkModeOn';
   static String isOnbordingShowing = 'isOnbordingShowing';
+  static String users = 'users';
 
   static String appSettings = 'appSettings';
 

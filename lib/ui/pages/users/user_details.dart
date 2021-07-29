@@ -3,10 +3,10 @@ part of 'users.dart';
 class _UserDetails extends StatelessWidget {
   const _UserDetails({
     Key? key,
-    this.user,
+    required this.user,
   }) : super(key: key);
 
-  final User? user;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,16 @@ class _UserDetails extends StatelessWidget {
 
     var domainName = UiHelpers.getDomainName(config);
 
-    return BrandModalSheet(
+    return BrandBottomSheet(
+      isExpended: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             height: 200,
             decoration: BoxDecoration(
-              color: user!.color,
+              color: user.color,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(20),
               ),
@@ -114,7 +116,7 @@ class _UserDetails extends StatelessWidget {
                       horizontal: 15,
                     ),
                     child: BrandText.h1(
-                      user!.login,
+                      user.login,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                     )),
@@ -131,14 +133,14 @@ class _UserDetails extends StatelessWidget {
                 Container(
                   height: 40,
                   alignment: Alignment.centerLeft,
-                  child: BrandText.h4('${user!.login}@$domainName'),
+                  child: BrandText.h4('${user.login}@$domainName'),
                 ),
                 SizedBox(height: 14),
                 BrandText.small('basis.password'.tr()),
                 Container(
                   height: 40,
                   alignment: Alignment.centerLeft,
-                  child: BrandText.h4(user!.password),
+                  child: BrandText.h4(user.password),
                 ),
                 SizedBox(height: 24),
                 BrandDivider(),
@@ -146,7 +148,10 @@ class _UserDetails extends StatelessWidget {
                 BrandButton.emptyWithIconText(
                   title: 'users.send_regisration_data'.tr(),
                   icon: Icon(BrandIcons.share),
-                  onPressed: () {},
+                  onPressed: () {
+                    Share.share(
+                        'login: ${user.login}, password: ${user.password}');
+                  },
                 ),
                 SizedBox(height: 20),
               ],

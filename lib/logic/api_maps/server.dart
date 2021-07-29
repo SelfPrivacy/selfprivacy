@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/models/user.dart';
 
 import 'api_map.dart';
 
@@ -40,6 +41,52 @@ class ServerApi extends ApiMap {
     return res;
   }
 
+  Future<bool> createUser(User user) async {
+    bool res;
+    Response response;
+
+    var client = await getClient();
+    try {
+      response = await client.post(
+        '/createUser',
+        options: Options(
+          headers: {
+            "X-User": user.login,
+            "X-Password":
+                '\$6\$${user.hashPassword.salt}\$${user.hashPassword.hash}',
+          },
+        ),
+      );
+      res = response.statusCode == HttpStatus.ok;
+    } catch (e) {
+      print(e);
+      res = false;
+    }
+
+    close(client);
+    return res;
+  }
+
   String get rootAddress =>
       throw UnimplementedError('not used in with implementation');
+
+  Future<bool> apply() async {
+    bool res;
+    Response response;
+
+    var client = await getClient();
+    try {
+      response = await client.get(
+        '/apply',
+      );
+
+      res = response.statusCode == HttpStatus.ok;
+    } catch (e) {
+      print(e);
+      res = false;
+    }
+
+    close(client);
+    return res;
+  }
 }

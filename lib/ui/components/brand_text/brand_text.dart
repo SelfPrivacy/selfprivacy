@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/text_themes.dart';
+export 'package:selfprivacy/utils/extensions/text_extensions.dart';
 
 enum TextType {
   h1, // right now only at onboarding and opened providers

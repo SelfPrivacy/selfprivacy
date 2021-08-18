@@ -4,6 +4,7 @@ import 'package:crypt/crypt.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/utils/color_utils.dart';
 import 'package:hive/hive.dart';
+import 'package:selfprivacy/utils/password_generator.dart';
 
 part 'user.g.dart';
 
@@ -25,7 +26,10 @@ class User extends Equatable {
 
   Color get color => stringToColor(login);
 
-  Crypt get hashPassword => Crypt.sha512(password);
+  Crypt get hashPassword => Crypt.sha512(
+        password,
+        salt: StringGenerators.passwordSalt(),
+      );
 
   String toString() {
     return login;

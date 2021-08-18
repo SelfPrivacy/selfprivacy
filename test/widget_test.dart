@@ -1,30 +1,122 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:selfprivacy/main.dart';
+import 'package:selfprivacy/utils/password_generator.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  group('StringGenerators', () {
+    group('Basic', () {
+      test('assert chart empty', () {
+        expect(() {
+          StringGenerators.getRandomString(8);
+        }, throwsAssertionError);
+      });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      test('only lowercase string', () {
+        var length = 8;
+        var generatedString =
+            StringGenerators.getRandomString(length, hasLowercaseLetters: true);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+        expect(generatedString, isNot(matches(regExpNewLines)));
+        expect(generatedString, isNot(matches(regExpWhiteSpaces)));
+        expect(generatedString, isNot(matches(regExpNumbers)));
+        expect(generatedString, isNot(matches(regExpUppercaseLetters)));
+        expect(generatedString, isNot(matches(regExpSymbols)));
+        expect(generatedString.length, equals(length));
+        expect(generatedString, matches(regExpLowercaseLetters));
+      });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      test('only uppercase string', () {
+        var length = 8;
+        var generatedString = StringGenerators.getRandomString(length,
+            hasLowercaseLetters: false, hasUppercaseLetters: true);
+
+        expect(generatedString, isNot(matches(regExpNewLines)));
+        expect(generatedString, isNot(matches(regExpWhiteSpaces)));
+        expect(generatedString, isNot(matches(regExpNumbers)));
+        expect(generatedString, isNot(matches(regExpLowercaseLetters)));
+        expect(generatedString, isNot(matches(regExpSymbols)));
+        expect(generatedString.length, equals(length));
+        expect(generatedString, matches(regExpUppercaseLetters));
+      });
+
+      test('only numbers string', () {
+        var length = 8;
+        var generatedString = StringGenerators.getRandomString(length,
+            hasLowercaseLetters: false,
+            hasUppercaseLetters: false,
+            hasNumbers: true);
+
+        expect(generatedString, isNot(matches(regExpNewLines)));
+        expect(generatedString, isNot(matches(regExpWhiteSpaces)));
+        expect(generatedString, isNot(matches(regExpUppercaseLetters)));
+        expect(generatedString, isNot(matches(regExpLowercaseLetters)));
+        expect(generatedString, isNot(matches(regExpSymbols)));
+        expect(generatedString.length, equals(length));
+        expect(generatedString, matches(regExpNumbers));
+      });
+
+      test('only symbols string', () {
+        var length = 8;
+        var generatedString = StringGenerators.getRandomString(
+          length,
+          hasLowercaseLetters: false,
+          hasUppercaseLetters: false,
+          hasNumbers: false,
+          hasSymbols: true,
+        );
+
+        expect(generatedString, isNot(matches(regExpNewLines)));
+        expect(generatedString, isNot(matches(regExpWhiteSpaces)));
+        expect(generatedString, isNot(matches(regExpUppercaseLetters)));
+        expect(generatedString, isNot(matches(regExpLowercaseLetters)));
+        expect(generatedString, isNot(matches(regExpNumbers)));
+        expect(generatedString.length, equals(length));
+        expect(generatedString, matches(regExpSymbols));
+      });
+    });
+
+    group('Strict mode', () {
+      test('All', () {
+        var length = 5;
+        var generatedString = StringGenerators.getRandomString(length,
+            hasLowercaseLetters: true,
+            hasUppercaseLetters: true,
+            hasNumbers: true,
+            hasSymbols: true,
+            isStrict: true);
+
+        expect(generatedString, isNot(matches(regExpNewLines)));
+        expect(generatedString, isNot(matches(regExpWhiteSpaces)));
+        expect(generatedString, matches(regExpLowercaseLetters));
+        expect(generatedString, matches(regExpUppercaseLetters));
+        expect(generatedString, matches(regExpNumbers));
+        expect(generatedString, matches(regExpSymbols));
+        expect(generatedString.length, equals(length));
+      });
+      test('Lowercase letters and numbers', () {
+        var length = 3;
+        var generatedString = StringGenerators.getRandomString(length,
+            hasLowercaseLetters: true,
+            hasUppercaseLetters: false,
+            hasNumbers: true,
+            hasSymbols: false,
+            isStrict: true);
+
+        expect(generatedString, isNot(matches(regExpNewLines)));
+        expect(generatedString, isNot(matches(regExpWhiteSpaces)));
+        expect(generatedString, isNot(matches(regExpUppercaseLetters)));
+        expect(generatedString, isNot(matches(regExpSymbols)));
+        expect(generatedString, matches(regExpLowercaseLetters));
+        expect(generatedString, matches(regExpNumbers));
+        expect(generatedString.length, equals(length));
+      });
+    });
   });
 }
+
+var regExpNewLines = RegExp(r"[\n\r]+");
+var regExpWhiteSpaces = RegExp(r"[\s]+");
+var regExpUppercaseLetters = RegExp(r"[A-Z]");
+var regExpLowercaseLetters = RegExp(r"[a-z]");
+var regExpNumbers = RegExp(r"[0-9]");
+var regExpSymbols = RegExp(r'(?:_|[^\w\s])+');

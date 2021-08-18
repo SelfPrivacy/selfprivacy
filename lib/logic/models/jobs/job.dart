@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/utils/password_generator2.dart';
+import 'package:selfprivacy/utils/password_generator.dart';
 
 import '../user.dart';
 
@@ -9,7 +9,7 @@ class Job extends Equatable {
   Job({
     String? id,
     required this.title,
-  }) : id = id ?? getRandomString(5);
+  }) : id = id ?? StringGenerators.simpleId();
 
   final String title;
   final String id;

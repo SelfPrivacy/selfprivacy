@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/api_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
-import 'package:selfprivacy/utils/password_generator2.dart';
+import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ApiMap {
   bool hasLoger;
@@ -73,30 +73,26 @@ class HetznerApi extends ApiMap {
     required User rootUser,
     required String domainName,
   }) async {
-    var dbPassword = getRandomString(40);
 
-    const chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-
-    var dbStorageName = getRandomString(6, chars);
     var client = await getClient();
 
     Response dbCreateResponse = await client.post(
       '/volumes',
       data: {
         "size": 10,
-        "name": dbStorageName,
+        "name": StringGenerators.dbStorageName(),
         "labels": {"labelkey": "value"},
         "location": "fsn1",
         "automount": false,
         "format": "ext4"
       },
     );
+    
+    var dbPassword = StringGenerators.dbPassword();
     var dbId = dbCreateResponse.data['volume']['id'];
 
     var data = jsonDecode(
-      '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword.hash} SALT=${rootUser.hashPassword.salt} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}'''
-    );
+        '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword.hash} SALT=${rootUser.hashPassword.salt} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
 
     Response serverCreateResponse = await client.post(
       '/servers',

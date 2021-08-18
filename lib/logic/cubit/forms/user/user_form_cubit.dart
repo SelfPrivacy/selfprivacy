@@ -4,8 +4,8 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/jobs/job.dart';
 import 'package:selfprivacy/logic/models/user.dart';
-import 'package:selfprivacy/utils/password_generator.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/utils/password_generator.dart';
 
 class UserFormCubit extends FormCubit {
   UserFormCubit({
@@ -32,7 +32,7 @@ class UserFormCubit extends FormCubit {
     );
 
     password = FieldCubit(
-      initalValue: isEdit ? user!.password : genPass(),
+      initalValue: isEdit ? user!.password : StringGenerators.userPassword(),
       validations: [
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>((s) => passwordRegExp.hasMatch(s),
@@ -56,7 +56,7 @@ class UserFormCubit extends FormCubit {
   late FieldCubit<String> password;
 
   void genNewPassword() {
-    password.externalSetValue(genPass());
+    password.externalSetValue(StringGenerators.userPassword());
   }
 
   final JobsCubit jobsCubit;

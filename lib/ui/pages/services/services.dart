@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
+import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -67,44 +68,6 @@ class _Card extends StatelessWidget {
     IconData iconData;
     String subtitle;
 
-    switch (serviceType) {
-      case ServiceTypes.mail:
-        iconData = BrandIcons.envelope;
-        title = 'services.mail.title'.tr();
-        subtitle = 'services.mail.subtitle'.tr();
-        break;
-      case ServiceTypes.messenger:
-        iconData = BrandIcons.messanger;
-        title = 'services.messenger.title'.tr();
-        subtitle = 'services.messenger.subtitle'.tr();
-        break;
-      case ServiceTypes.passwordManager:
-        iconData = BrandIcons.key;
-        title = 'services.password_manager.title'.tr();
-        subtitle = 'services.password_manager.subtitle'.tr();
-        break;
-      case ServiceTypes.video:
-        iconData = BrandIcons.webcam;
-        title = 'services.video.title'.tr();
-        subtitle = 'services.video.subtitle'.tr();
-        break;
-      case ServiceTypes.cloud:
-        iconData = BrandIcons.upload;
-        title = 'services.cloud.title'.tr();
-        subtitle = 'services.cloud.subtitle'.tr();
-        break;
-      case ServiceTypes.socialNetwork:
-        iconData = BrandIcons.social;
-        title = 'services.social_network.title'.tr();
-        subtitle = 'services.social_network.subtitle'.tr();
-        break;
-      case ServiceTypes.git:
-        iconData = BrandIcons.git;
-        title = 'services.git.title'.tr();
-        subtitle = 'services.git.subtitle'.tr();
-        break;
-    }
-
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
     var changeTab = context.read<ChangeTab>().onPress;
     return GestureDetector(
@@ -118,8 +81,8 @@ class _Card extends StatelessWidget {
                     serviceType: serviceType,
                     status:
                         isReady ? StateType.stable : StateType.uninitialized,
-                    title: title,
-                    icon: iconData,
+                    title: serviceType.title,
+                    icon: serviceType.icon,
                     changeTab: changeTab,
                   );
                 },
@@ -131,28 +94,18 @@ class _Card extends StatelessWidget {
           children: [
             IconStatusMask(
               status: isReady ? StateType.stable : StateType.uninitialized,
-              child: Icon(iconData, size: 30, color: Colors.white),
+              child: Icon(serviceType.icon, size: 30, color: Colors.white),
             ),
             SizedBox(height: 10),
-            BrandText.h2(title),
+            BrandText.h2(serviceType.title),
             SizedBox(height: 10),
-            BrandText.body2(subtitle),
+            BrandText.body2(serviceType.subtitle),
             SizedBox(height: 10),
           ],
         ),
       ),
     );
   }
-}
-
-enum ServiceTypes {
-  mail,
-  messenger,
-  passwordManager,
-  video,
-  cloud,
-  socialNetwork,
-  git,
 }
 
 class _ServiceDetails extends StatelessWidget {

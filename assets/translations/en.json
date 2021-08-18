@@ -212,7 +212,10 @@
     "_comment": "Jobs list",
     "title": "Jobs list",
     "start": "Start",
-    "empty": "No jobs"
+    "empty": "No jobs",
+    "createUser": "Create",
+    "serviceTurnOff": "Turn off",
+    "serviceTurnOn": "Turn on"
   },
   "validations": {
     "required": "Required",

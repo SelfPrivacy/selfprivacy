@@ -212,7 +212,10 @@
     "_comment": "Jobs list",
     "title": "Задачи",
     "start": "Начать выполенение",
-    "empty": "Пусто"
+    "empty": "Пусто",
+    "createUser": "Создать запись",
+    "serviceTurnOff": "Остановить",
+    "serviceTurnOn": "Запустить"
   },
   "validations": {
     "required": "обязательное поле",

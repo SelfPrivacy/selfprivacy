@@ -7,6 +7,7 @@ import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/brand_switch/brand_switch.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -52,9 +53,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       ),
                     ),
                     SizedBox(width: 5),
-                    Switch(
-                      activeColor: BrandColors.green1,
-                      activeTrackColor: BrandColors.green2,
+                    BrandSwitch(
                       value: Theme.of(context).brightness == Brightness.dark,
                       onChanged: (value) => context
                           .read<AppSettingsCubit>()

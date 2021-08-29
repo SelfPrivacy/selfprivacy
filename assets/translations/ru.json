@@ -215,7 +215,8 @@
     "empty": "Пусто",
     "createUser": "Создать запись",
     "serviceTurnOff": "Остановить",
-    "serviceTurnOn": "Запустить"
+    "serviceTurnOn": "Запустить",
+    "jobAdded": "Задача добавленна"
   },
   "validations": {
     "required": "обязательное поле",

@@ -73,7 +73,6 @@ class HetznerApi extends ApiMap {
     required User rootUser,
     required String domainName,
   }) async {
-
     var client = await getClient();
 
     Response dbCreateResponse = await client.post(
@@ -87,12 +86,12 @@ class HetznerApi extends ApiMap {
         "format": "ext4"
       },
     );
-    
+
     var dbPassword = StringGenerators.dbPassword();
     var dbId = dbCreateResponse.data['volume']['id'];
 
     var data = jsonDecode(
-        '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} HASHED_PASSWORD=${rootUser.hashPassword.hash} SALT=${rootUser.hashPassword.salt} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
+        '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], ssh_keys:[kherel], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/development/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
 
     Response serverCreateResponse = await client.post(
       '/servers',

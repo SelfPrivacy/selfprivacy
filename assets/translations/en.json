@@ -215,7 +215,9 @@
     "empty": "No jobs",
     "createUser": "Create",
     "serviceTurnOff": "Turn off",
-    "serviceTurnOn": "Turn on"
+    "serviceTurnOn": "Turn on",
+    "jobAdded": "Job added"
+
   },
   "validations": {
     "required": "Required",

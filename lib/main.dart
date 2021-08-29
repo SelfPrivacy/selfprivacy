@@ -16,11 +16,11 @@ import 'config/localization.dart';
 import 'logic/cubit/app_settings/app_settings_cubit.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await HiveConfig.init();
   Bloc.observer = SimpleBlocObserver();
   Wakelock.enable();
   await getItSetup();
-  WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
   runApp(MyApp());
@@ -37,6 +37,8 @@ class MyApp extends StatelessWidget {
           return AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light, // Manually changnig appbar color
             child: MaterialApp(
+              scaffoldMessengerKey:
+                  getIt.get<NavigationService>().scaffoldMessengerKey,
               navigatorKey: getIt.get<NavigationService>().navigatorKey,
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,

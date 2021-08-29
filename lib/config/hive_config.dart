@@ -22,15 +22,13 @@ class HiveConfig {
     await Hive.openBox<User>(BNames.users);
 
     var cipher = HiveAesCipher(await getEncriptedKey());
-
     await Hive.openBox(BNames.appConfig, encryptionCipher: cipher);
   }
 
   static Future<Uint8List> getEncriptedKey() async {
-    final FlutterSecureStorage secureStorage = FlutterSecureStorage();
-    var containsEncryptionKey =
-        await secureStorage.containsKey(key: BNames.key);
-    if (!containsEncryptionKey) {
+    final secureStorage = FlutterSecureStorage();
+    var hasEncryptionKey = await secureStorage.containsKey(key: BNames.key);
+    if (!hasEncryptionKey) {
       var key = Hive.generateSecureKey();
       await secureStorage.write(key: BNames.key, value: base64UrlEncode(key));
     }

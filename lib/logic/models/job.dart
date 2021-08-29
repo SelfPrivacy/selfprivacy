@@ -4,7 +4,7 @@ import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import '../user.dart';
+import 'user.dart';
 
 @immutable
 class Job extends Equatable {
@@ -28,18 +28,20 @@ class CreateUserJob extends Job {
   final User user;
 
   @override
-  List<Object> get props => [id, title];
+  List<Object> get props => [id, title, user];
 }
 
 class ServiceToggleJob extends Job {
   ServiceToggleJob({
     required this.type,
     required this.needToTurnOn,
-  }) : super(title: '${needToTurnOn ? "jobs.serviceTurnOn".tr() : "jobs.serviceTurnOff".tr()} ');
+  }) : super(
+            title:
+                '${needToTurnOn ? "jobs.serviceTurnOn".tr() : "jobs.serviceTurnOff".tr()} ${type.title}');
 
   final ServiceTypes type;
   final bool needToTurnOn;
 
   @override
-  List<Object> get props => [id, title];
+  List<Object> get props => [id, title, type, needToTurnOn];
 }

@@ -81,4 +81,21 @@ class ServicesState extends Equatable {
         isSocialNetworkEnable,
         isVpnEnable
       ];
+
+  bool isEnableByType(ServiceTypes type) {
+    switch (type) {
+      case ServiceTypes.passwordManager:
+        return isPasswordManagerEnable;
+      case ServiceTypes.cloud:
+        return isCloudEnable;
+      case ServiceTypes.socialNetwork:
+        return isSocialNetworkEnable;
+      case ServiceTypes.git:
+        return isGitEnable;
+      case ServiceTypes.vpn:
+        return isVpnEnable;
+      default:
+        throw Exception('wrong state');
+    }
+  }
 }

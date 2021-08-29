@@ -4,10 +4,14 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/brand_switch/brand_switch.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
@@ -65,6 +69,11 @@ class _Card extends StatelessWidget {
   Widget build(BuildContext context) {
     var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
     var changeTab = context.read<ChangeTab>().onPress;
+
+    var serviceState = context.watch<ServicesCubit>().state;
+    var jobsCubit = context.watch<JobsCubit>();
+    var hasSwitcher = switchableServices.contains(serviceType);
+
     return GestureDetector(
       onTap: isReady
           ? () => showDialog<void>(
@@ -87,9 +96,43 @@ class _Card extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconStatusMask(
-              status: isReady ? StateType.stable : StateType.uninitialized,
-              child: Icon(serviceType.icon, size: 30, color: Colors.white),
+            Row(
+              children: [
+                IconStatusMask(
+                  status: isReady ? StateType.stable : StateType.uninitialized,
+                  child: Icon(serviceType.icon, size: 30, color: Colors.white),
+                ),
+                if (hasSwitcher) ...[
+                  Spacer(),
+                  Builder(
+                    builder: (context) {
+                      late bool isActive;
+                      var jobState = jobsCubit.state;
+                      if (jobState is JobsStateWithJobs &&
+                          jobState.jobList.any((el) =>
+                              el is ServiceToggleJob &&
+                              el.type == serviceType)) {
+                        isActive = (jobState.jobList.firstWhere((el) =>
+                                el is ServiceToggleJob &&
+                                el.type == serviceType) as ServiceToggleJob)
+                            .needToTurnOn;
+                      } else {
+                        isActive = serviceState.isEnableByType(serviceType);
+                      }
+
+                      return BrandSwitch(
+                        value: isActive,
+                        onChanged: (value) => jobsCubit.createOrRemove(
+                          ServiceToggleJob(
+                            type: serviceType,
+                            needToTurnOn: value,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ]
+              ],
             ),
             SizedBox(height: 10),
             BrandText.h2(serviceType.title),
@@ -306,6 +349,7 @@ class _ServiceDetails extends StatelessWidget {
           'services.vpn.bottom_sheet.1'.tr(),
         );
     }
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),

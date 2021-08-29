@@ -36,11 +36,7 @@ class JobsContent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: BrandCards.small(
-                          child: Row(
-                            children: [
-                              BrandText.body1(j.title),
-                            ],
-                          ),
+                          child: Text(j.title),
                         ),
                       ),
                       SizedBox(width: 10),

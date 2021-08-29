@@ -90,8 +90,13 @@ class ServerApi extends ApiMap {
     close(client);
     return res;
   }
-}
 
+  Future<void> switchService(ServiceTypes type, bool needToTurnOn) async {
+    var client = await getClient();
+    client.post('/services/${type.url}/${needToTurnOn ? 'enable' : 'disable'}');
+    client.close();
+  }
+}
 
 extension UrlServerExt on ServiceTypes {
   String get url {

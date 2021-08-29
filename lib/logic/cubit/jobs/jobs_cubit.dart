@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/jobs/job.dart';
 import 'package:equatable/equatable.dart';
@@ -12,10 +13,14 @@ import 'package:easy_localization/easy_localization.dart';
 part 'jobs_state.dart';
 
 class JobsCubit extends Cubit<JobsState> {
-  JobsCubit(this.usersCubit) : super(JobsStateEmpty());
+  JobsCubit({
+    required this.usersCubit,
+    required this.servicesCubit,
+  }) : super(JobsStateEmpty());
 
   final api = ServerApi();
   final UsersCubit usersCubit;
+  final ServicesCubit servicesCubit;
 
   void addJob(Job job) {
     var newJobsList = <Job>[];

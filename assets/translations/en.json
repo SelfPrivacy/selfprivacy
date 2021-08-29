@@ -147,6 +147,13 @@
       "bottom_sheet": {
         "1": "You can connect and create a new user here:"
       }
+    },
+    "vpn": {
+      "title": "VPN Server",
+      "subtitle": "Private VPN server",
+      "bottom_sheet": {
+        "1": "Openconnect VPN Server. Engine for secure and scalable VPN infrastructure"
+      }
     }
   },
   "users": {
@@ -217,7 +224,6 @@
     "serviceTurnOff": "Turn off",
     "serviceTurnOn": "Turn on",
     "jobAdded": "Job added"
-
   },
   "validations": {
     "required": "Required",

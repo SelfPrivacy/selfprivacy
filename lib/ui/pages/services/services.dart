@@ -301,6 +301,10 @@ class _ServiceDetails extends StatelessWidget {
           ],
         ));
         break;
+      case ServiceTypes.vpn:
+        child = Text(
+          'services.vpn.bottom_sheet.1'.tr(),
+        );
     }
     return Dialog(
       shape: RoundedRectangleBorder(

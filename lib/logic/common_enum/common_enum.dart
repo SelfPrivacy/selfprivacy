@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
+import 'package:unicons/unicons.dart';
 
 enum InitializingSteps {
   setHeznerKey,
@@ -22,6 +23,7 @@ enum ServiceTypes {
   cloud,
   socialNetwork,
   git,
+  vpn,
 }
 
 extension ServiceTypesExt on ServiceTypes {
@@ -41,6 +43,8 @@ extension ServiceTypesExt on ServiceTypes {
         return 'services.social_network.title'.tr();
       case ServiceTypes.git:
         return 'services.git.title'.tr();
+      case ServiceTypes.vpn:
+        return 'services.vpn.title'.tr();
     }
   }
 
@@ -60,6 +64,8 @@ extension ServiceTypesExt on ServiceTypes {
         return 'services.social_network.subtitle'.tr();
       case ServiceTypes.git:
         return 'services.git.subtitle'.tr();
+      case ServiceTypes.vpn:
+        return 'services.vpn.subtitle'.tr();
     }
   }
 
@@ -79,6 +85,10 @@ extension ServiceTypesExt on ServiceTypes {
         return BrandIcons.social;
       case ServiceTypes.git:
         return BrandIcons.git;
+      case ServiceTypes.vpn:
+        return UniconsLine.cloud_lock;
     }
   }
+
+  String get txt => this.toString().split('.')[1];
 }

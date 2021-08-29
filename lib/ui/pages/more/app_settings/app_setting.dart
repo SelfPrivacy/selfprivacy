@@ -119,67 +119,70 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   ],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.only(top: 20, bottom: 5),
-                decoration: BoxDecoration(
-                    border: Border(
-                  bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-                )),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: _TextColumn(
-                        title: 'more.settings.5'.tr(),
-                        value: 'more.settings.6'.tr(),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: BrandColors.red1,
-                      ),
-                      child: Text(
-                        'basis.delete'.tr(),
-                        style: TextStyle(
-                          color: BrandColors.white,
-                          fontWeight: NamedFontWeight.demiBold,
-                        ),
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (_) {
-                            return BrandAlert(
-                              title: 'modals.3'.tr(),
-                              contentText: 'modals.6'.tr(),
-                              acitons: [
-                                ActionButton(
-                                    text: 'modals.7'.tr(),
-                                    isRed: true,
-                                    onPressed: () async {
-                                      await context
-                                          .read<AppConfigCubit>()
-                                          .serverDelete();
-                                      Navigator.of(context).pop();
-                                    }),
-                                ActionButton(
-                                  text: 'basis.cancel'.tr(),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              )
+              // deleteServer(context)
             ],
           ),
         );
       }),
+    );
+  }
+
+  Widget deleteServer(BuildContext context) {
+    // todo: need to check
+    return Container(
+      padding: EdgeInsets.only(top: 20, bottom: 5),
+      decoration: BoxDecoration(
+          border: Border(
+        bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
+      )),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: _TextColumn(
+              title: 'more.settings.5'.tr(),
+              value: 'more.settings.6'.tr(),
+            ),
+          ),
+          SizedBox(width: 5),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: BrandColors.red1,
+            ),
+            child: Text(
+              'basis.delete'.tr(),
+              style: TextStyle(
+                color: BrandColors.white,
+                fontWeight: NamedFontWeight.demiBold,
+              ),
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return BrandAlert(
+                    title: 'modals.3'.tr(),
+                    contentText: 'modals.6'.tr(),
+                    acitons: [
+                      ActionButton(
+                          text: 'modals.7'.tr(),
+                          isRed: true,
+                          onPressed: () async {
+                            await context.read<AppConfigCubit>().serverDelete();
+                            Navigator.of(context).pop();
+                          }),
+                      ActionButton(
+                        text: 'basis.cancel'.tr(),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

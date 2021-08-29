@@ -20,6 +20,7 @@ class HiveConfig {
 
     await Hive.openBox(BNames.appSettings);
     await Hive.openBox<User>(BNames.users);
+    await Hive.openBox(BNames.servicesState);
 
     var cipher = HiveAesCipher(await getEncriptedKey());
     await Hive.openBox(BNames.appConfig, encryptionCipher: cipher);
@@ -45,6 +46,7 @@ class BNames {
   static String users = 'users';
 
   static String appSettings = 'appSettings';
+  static String servicesState = 'servicesState';
 
   static String key = 'key';
 

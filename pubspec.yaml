@@ -31,10 +31,13 @@ dependencies:
   pretty_dio_logger: ^1.1.1
   provider: ^6.0.0
   share_plus: ^2.1.4
-  unicons: ^2.0.1
   url_launcher: ^6.0.2
   wakelock: ^0.5.0+2
   basic_utils: ^3.4.0
+  ionicons: ^0.1.2
+  pointycastle: ^3.3.2
+  rsa_encrypt: ^2.0.0
+  ssh_key: ^0.7.0
 
 dev_dependencies:
   flutter_test:

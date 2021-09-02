@@ -96,6 +96,15 @@ class ServerApi extends ApiMap {
     client.post('/services/${type.url}/${needToTurnOn ? 'enable' : 'disable'}');
     client.close();
   }
+
+  Future<void> sendSsh(String ssh) async {
+    var client = await getClient();
+    client.post(
+      '/services/ssh/enable',
+      data: {"public_key": ssh},
+    );
+    client.close();
+  }
 }
 
 extension UrlServerExt on ServiceTypes {

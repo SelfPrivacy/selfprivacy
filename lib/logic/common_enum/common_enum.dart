@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:unicons/unicons.dart';
 
 enum InitializingSteps {
   setHeznerKey,
@@ -86,7 +86,7 @@ extension ServiceTypesExt on ServiceTypes {
       case ServiceTypes.git:
         return BrandIcons.git;
       case ServiceTypes.vpn:
-        return UniconsLine.cloud_lock;
+        return Ionicons.shield_checkmark_outline;
     }
   }
 

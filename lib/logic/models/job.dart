@@ -45,3 +45,10 @@ class ServiceToggleJob extends Job {
   @override
   List<Object> get props => [id, title, type, needToTurnOn];
 }
+
+class CreateSSHKeyJob extends Job {
+  CreateSSHKeyJob() : super(title: '${"more.create_ssh_key".tr()}');
+
+  @override
+  List<Object> get props => [id, title];
+}

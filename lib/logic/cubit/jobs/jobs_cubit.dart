@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
+import 'package:selfprivacy/logic/get_it/ssh_helper.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/models/user.dart';
@@ -40,7 +41,7 @@ class JobsCubit extends Cubit<JobsState> {
     emit(newState);
   }
 
-  void createOrRemove(ServiceToggleJob job) {
+  void createOrRemoveServiceToggleJob(ServiceToggleJob job) {
     var newJobsList = <Job>[];
     if (state is JobsStateWithJobs) {
       newJobsList.addAll((state as JobsStateWithJobs).jobList);
@@ -53,6 +54,26 @@ class JobsCubit extends Cubit<JobsState> {
       removeJob(removingJob.id);
     } else {
       newJobsList.add(job);
+      getIt<NavigationService>().showSnackBar(SnackBar(
+        content: Text('jobs.jobAdded'.tr()),
+        duration: const Duration(seconds: 2),
+      ));
+      emit(JobsStateWithJobs(newJobsList));
+    }
+  }
+
+  void createShhJobIfNotExist(CreateSSHKeyJob job) {
+    var newJobsList = <Job>[];
+    if (state is JobsStateWithJobs) {
+      newJobsList.addAll((state as JobsStateWithJobs).jobList);
+    }
+    var isExistInJobList = newJobsList.any((el) => el is CreateSSHKeyJob);
+    if (!isExistInJobList) {
+      newJobsList.add(job);
+      getIt<NavigationService>().showSnackBar(SnackBar(
+        content: Text('jobs.jobAdded'.tr()),
+        duration: const Duration(seconds: 2),
+      ));
       emit(JobsStateWithJobs(newJobsList));
     }
   }
@@ -61,7 +82,6 @@ class JobsCubit extends Cubit<JobsState> {
     if (state is JobsStateWithJobs) {
       var jobs = (state as JobsStateWithJobs).jobList;
       emit(JobsStateLoading());
-
       var newUsers = <User>[];
       for (var job in jobs) {
         if (job is CreateUserJob) {
@@ -74,6 +94,10 @@ class JobsCubit extends Cubit<JobsState> {
           } else {
             servicesCubit.turnOffList([job.type]);
           }
+        }
+        if (job is CreateSSHKeyJob) {
+          await getIt<SSHModel>().generateKeys();
+          api.sendSsh(getIt<SSHModel>().savedPubKey!);
         }
       }
 

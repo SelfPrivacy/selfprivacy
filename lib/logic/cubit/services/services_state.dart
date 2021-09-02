@@ -1,13 +1,5 @@
 part of 'services_cubit.dart';
 
-const switchableServices = [
-  ServiceTypes.passwordManager,
-  ServiceTypes.cloud,
-  ServiceTypes.socialNetwork,
-  ServiceTypes.git,
-  ServiceTypes.vpn,
-];
-
 class ServicesState extends Equatable {
   const ServicesState({
     required this.isPasswordManagerEnable,

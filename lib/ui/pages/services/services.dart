@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
@@ -20,6 +22,14 @@ import 'package:selfprivacy/utils/ui_helpers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../rootRoute.dart';
+
+const switchableServices = [
+  ServiceTypes.passwordManager,
+  ServiceTypes.cloud,
+  ServiceTypes.socialNetwork,
+  ServiceTypes.git,
+  ServiceTypes.vpn,
+];
 
 class ServicesPage extends StatefulWidget {
   ServicesPage({Key? key}) : super(key: key);
@@ -72,10 +82,20 @@ class _Card extends StatelessWidget {
 
     var serviceState = context.watch<ServicesCubit>().state;
     var jobsCubit = context.watch<JobsCubit>();
-    var hasSwitcher = switchableServices.contains(serviceType);
+    var jobState = jobsCubit.state;
+
+    var switchebleService = switchableServices.contains(serviceType);
+    var hasSwitchJob = switchebleService &&
+        jobState is JobsStateWithJobs &&
+        jobState.jobList
+            .any((el) => el is ServiceToggleJob && el.type == serviceType);
+
+    var isSwithOn = isReady &&
+        (!switchableServices.contains(serviceType) ||
+            serviceState.isEnableByType(serviceType));
 
     return GestureDetector(
-      onTap: isReady
+      onTap: isSwithOn
           ? () => showDialog<void>(
                 context: context,
                 // isScrollControlled: true,
@@ -84,7 +104,7 @@ class _Card extends StatelessWidget {
                   return _ServiceDetails(
                     serviceType: serviceType,
                     status:
-                        isReady ? StateType.stable : StateType.uninitialized,
+                        isSwithOn ? StateType.stable : StateType.uninitialized,
                     title: serviceType.title,
                     icon: serviceType.icon,
                     changeTab: changeTab,
@@ -99,22 +119,21 @@ class _Card extends StatelessWidget {
             Row(
               children: [
                 IconStatusMask(
-                  status: isReady ? StateType.stable : StateType.uninitialized,
+                  status:
+                      isSwithOn ? StateType.stable : StateType.uninitialized,
                   child: Icon(serviceType.icon, size: 30, color: Colors.white),
                 ),
-                if (hasSwitcher) ...[
+                if (isReady && switchebleService) ...[
                   Spacer(),
                   Builder(
                     builder: (context) {
                       late bool isActive;
-                      var jobState = jobsCubit.state;
-                      if (jobState is JobsStateWithJobs &&
-                          jobState.jobList.any((el) =>
-                              el is ServiceToggleJob &&
-                              el.type == serviceType)) {
-                        isActive = (jobState.jobList.firstWhere((el) =>
-                                el is ServiceToggleJob &&
-                                el.type == serviceType) as ServiceToggleJob)
+                      if (hasSwitchJob) {
+                        isActive = ((jobState as JobsStateWithJobs)
+                                .jobList
+                                .firstWhere((el) =>
+                                    el is ServiceToggleJob &&
+                                    el.type == serviceType) as ServiceToggleJob)
                             .needToTurnOn;
                       } else {
                         isActive = serviceState.isEnableByType(serviceType);
@@ -122,7 +141,8 @@ class _Card extends StatelessWidget {
 
                       return BrandSwitch(
                         value: isActive,
-                        onChanged: (value) => jobsCubit.createOrRemove(
+                        onChanged: (value) =>
+                            jobsCubit.createOrRemoveServiceToggleJob(
                           ServiceToggleJob(
                             type: serviceType,
                             needToTurnOn: value,
@@ -134,11 +154,38 @@ class _Card extends StatelessWidget {
                 ]
               ],
             ),
-            SizedBox(height: 10),
-            BrandText.h2(serviceType.title),
-            SizedBox(height: 10),
-            BrandText.body2(serviceType.subtitle),
-            SizedBox(height: 10),
+            ClipRect(
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10),
+                      BrandText.h2(serviceType.title),
+                      SizedBox(height: 10),
+                      BrandText.body2(serviceType.subtitle),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                  if (hasSwitchJob)
+                    Positioned(
+                      bottom: 30,
+                      left: 0,
+                      right: 0,
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: 3,
+                          sigmaY: 2,
+                        ),
+                        child: BrandText.h2(
+                          'jobs.runJobs'.tr(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                ],
+              ),
+            )
           ],
         ),
       ),

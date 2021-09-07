@@ -4,6 +4,7 @@ import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
+import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 
 class BlocAndProviderConfig extends StatelessWidget {
@@ -13,11 +14,9 @@ class BlocAndProviderConfig extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var platformBrightness =
-    //     SchedulerBinding.instance.window.platformBrightness;
-    // var isDark = platformBrightness == Brightness.dark;
     var isDark = false;
     var usersCubit = UsersCubit();
+    var servicesCubit = ServicesCubit();
     return MultiProvider(
       providers: [
         BlocProvider(
@@ -28,11 +27,17 @@ class BlocAndProviderConfig extends StatelessWidget {
         ),
         BlocProvider(
           lazy: false,
-          create: (_) => AppConfigCubit()..load(),
+          create: (_) => AppConfigCubit(servicesCubit)..load(),
         ),
         BlocProvider(create: (_) => ProvidersCubit()),
         BlocProvider(create: (_) => usersCubit..load(), lazy: false),
-        BlocProvider(create: (_) => JobsCubit(usersCubit)),
+        BlocProvider(create: (_) => servicesCubit..load(), lazy: false),
+        BlocProvider(
+          create: (_) => JobsCubit(
+            usersCubit: usersCubit,
+            servicesCubit: servicesCubit,
+          ),
+        ),
       ],
       child: child,
     );

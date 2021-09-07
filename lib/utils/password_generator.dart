@@ -1,138 +1,99 @@
 import 'dart:math';
 
-var generator = PasswordGenerator();
+Random _rnd = Random();
 
-String genPass() {
-  generator.generate(8);
-  return generator.getGeneratedValue();
-}
+typedef StringGeneratorFunction = String Function();
 
-///Generates a password.
-///
-///The password [_generatedValue] is of a specified length, including letters [_letterGen] of mixed cases,
-///numbers [_numGen], and symbols[_symGen] depending on user choice.
-class PasswordGenerator {
-  late bool _letterGen;
-  late bool _numGen;
-  late bool _symGen;
-  late String _generatedValue;
+class StringGenerators {
+  static const letters = 'abcdefghijklmnopqrstuvwxyz';
+  static const numbers = '1234567890';
+  static const symbols = '_';
 
-  ///Constructor.
-  ///
-  ///[_letterGen] is true to make password generation possible from the opening of the application, and
-  ///[_generatedValue] is intialized to the value below so the text containing it can be first generated
-  ///upon users request
-  PasswordGenerator() {
-    _letterGen = true;
-    _numGen = true;
-    _symGen = false;
-    _generatedValue = "Press Generate";
-  }
+  static String getRandomString(
+    int length, {
+    hasLowercaseLetters = false,
+    hasUppercaseLetters = false,
+    hasNumbers = false,
+    hasSymbols = false,
+    isStrict = false,
+  }) {
+    var chars = '';
+    if (hasLowercaseLetters) chars += letters;
+    if (hasUppercaseLetters) chars += letters.toUpperCase();
+    if (hasNumbers) chars += numbers;
+    if (hasSymbols) chars += symbols;
 
-  ///Call to generate a value, of [n] length
-  void generate(int n) {
-    //Discards the old value
-    _generatedValue = "";
+    assert(chars.isNotEmpty, 'chart empty');
 
-    ///Cannot generate a value without any character types selected
-    if (!_letterGen && !_numGen && !_symGen) {
-      _generatedValue = "No character type selected";
-      return;
+    if (!isStrict) {
+      return genString(length, chars);
     }
 
-    ///'Randomly' selectes caracter type to generate and append [toAppend] to [_generatedValue]
-    // ignore: unnecessary_statements
-    for (n; n > 0; n--) {
-      String? toAppend;
-      var random = new Random();
-
-      ///loops until a valid character is generated, meaning the user has to check the character value
-      ///to be generated. 'Randomly' picks a character type.
-      while (toAppend == null) {
-        int selector = random.nextInt(3);
-
-        if (selector == 0) {
-          toAppend = _generateLetter();
-        } else if (selector == 1) {
-          toAppend = _generateNumber();
-        } else {
-          toAppend = _generateSymbol();
-        }
-      }
-
-      _generatedValue += toAppend;
-      toAppend = null;
+    var res = '';
+    var loose = length;
+    if (hasLowercaseLetters) {
+      loose -= 1;
+      res += genString(1, letters);
     }
-  }
-
-  ///Generates a letter when called.
-  String _generateLetter() {
-    if (!_letterGen) return '';
-
-    ///Finds the integer value for the range between a-z and A-Z, with [base] UTF-16 value for lowercase letters and
-    ///[baseUpper] UTF-16 value for uppercase letters
-    int base = "a".codeUnitAt(0);
-    int baseUpper = "A".codeUnitAt(0);
-    int maxRand = ("z".codeUnitAt(0) - base) + 1;
-    Random random = new Random();
-
-    ///Randomly selects between upper and lower case generation, randomly generates value from [maxRand], then adding base,
-    ///which creates a UTF-16 encoded character to be converted into a string of one character between a-z/A-Z.
-    ///This string is then returned.
-    if (random.nextInt(2) == 0) {
-      return String.fromCharCodes([random.nextInt(maxRand) + base]);
-    } else {
-      return String.fromCharCodes([random.nextInt(maxRand) + baseUpper]);
+    if (hasUppercaseLetters) {
+      loose -= 1;
+      res += genString(1, letters.toUpperCase());
     }
+    if (hasNumbers) {
+      loose -= 1;
+      res += genString(1, numbers.toUpperCase());
+    }
+    if (hasSymbols) {
+      loose -= 1;
+      res += genString(1, symbols);
+    }
+    res += genString(loose, chars);
+
+    var shuffledlist = res.split('')..shuffle();
+    return shuffledlist.join();
   }
 
-  ///Generates a number when called
-  String? _generateNumber() {
-    if (!_numGen) return null;
-
-    ///Finds the integer value for the range between 0-9
-    int base = "0".codeUnitAt(0);
-    int maxRand = ("9".codeUnitAt(0) - base) + 1;
-    Random random = new Random();
-
-    ///Randomly generates value from [maxRand], then adding base, which creates a UTF-16 encoded character to be converted into a
-    ///string of one character between 0-9. This string is then returned.
-    return String.fromCharCodes([random.nextInt(maxRand) + base]);
+  static String genString(int length, String chars) {
+    return String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => chars.codeUnitAt(
+          _rnd.nextInt(chars.length),
+        ),
+      ),
+    );
   }
 
-  ///Generates a symbol when called
-  String? _generateSymbol() {
-    if (!_symGen) return null;
+  static StringGeneratorFunction userPassword = () => getRandomString(
+        8,
+        hasLowercaseLetters: true,
+        hasUppercaseLetters: true,
+        hasNumbers: true,
+        isStrict: true,
+      );
 
-    ///Finds the integer value for the range between symbols !-.
+  static StringGeneratorFunction passwordSalt = () => getRandomString(
+        8,
+        hasLowercaseLetters: true,
+      );
 
-    ///(note) which includes symbols !"#$%&'()*+,=.
-    int base = "!".codeUnitAt(0);
-    int maxRand = (".".codeUnitAt(0) - base) + 1;
-    Random random = new Random();
+  static StringGeneratorFunction simpleId = () => getRandomString(
+        5,
+        hasLowercaseLetters: true,
+      );
 
-    ///Randomly generates value from [maxRand], then adding base, which creates a UTF-16 encoded character to be
-    ///converted into a string of one character between !-. . This string is then returned.
-    return String.fromCharCodes([random.nextInt(maxRand) + base]);
-  }
+  static StringGeneratorFunction dbPassword = () => getRandomString(
+        40,
+        hasLowercaseLetters: true,
+        hasUppercaseLetters: true,
+        hasNumbers: true,
+        hasSymbols: true,
+      );
 
-  ///Toggles letter generation
-  void checkLetterGen(bool value) {
-    _letterGen = value;
-  }
-
-  ///Toggles number generation
-  void checkNumGen(bool value) {
-    _numGen = value;
-  }
-
-  ///Toggles symbol generation
-  void checkSymGen(bool value) {
-    _symGen = value;
-  }
-
-  ///Returns the generated value to be used by generator app
-  String getGeneratedValue() {
-    return _generatedValue;
-  }
+  static StringGeneratorFunction dbStorageName = () => getRandomString(
+        6,
+        hasLowercaseLetters: true,
+        hasUppercaseLetters: true,
+        hasNumbers: true,
+      );
 }

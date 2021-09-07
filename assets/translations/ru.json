@@ -26,7 +26,8 @@
     "details": "Детальная информация",
     "no_data": "Нет данных",
     "wait": "Ожидайте",
-    "remove": "Удалить"
+    "remove": "Удалить",
+    "apply": "Подать"
   },
   "more": {
     "_comment": "вкладка еще",
@@ -35,6 +36,9 @@
     "about_app": "О приложении",
     "onboarding": "Приветствие",
     "console": "Консоль",
+    "create_ssh_key": "Создать ssh ключ",
+    "generate_key": "Сгенерировать ключ",
+    "generate_key_text": "Вы сможете сгенерировать ключ",
     "about_app_page": {
       "text": "Версия приложения: v.{}"
     },
@@ -212,7 +216,12 @@
     "_comment": "Jobs list",
     "title": "Задачи",
     "start": "Начать выполенение",
-    "empty": "Пусто"
+    "empty": "Пусто",
+    "createUser": "Создать запись",
+    "serviceTurnOff": "Остановить",
+    "serviceTurnOn": "Запустить",
+    "jobAdded": "Задача добавленна",
+    "runJobs": "Запустите задачи"
   },
   "validations": {
     "required": "обязательное поле",

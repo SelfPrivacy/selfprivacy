@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 
@@ -43,9 +44,10 @@ part 'app_config_state.dart';
 ///      c. if server is okay set that fully checked
 
 class AppConfigCubit extends Cubit<AppConfigState> {
-  AppConfigCubit() : super(InitialAppConfigState());
+  AppConfigCubit(this.servicesCubit) : super(InitialAppConfigState());
 
   final repository = AppConfigRepository();
+  final ServicesCubit servicesCubit;
 
   Future<void> load() async {
     var state = await repository.load();
@@ -232,6 +234,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
 
       if (isServerWorking) {
         await repository.saveHasFinalChecked(true);
+        servicesCubit.allOn();
 
         emit(state.copyWith(
           hasFinalChecked: true,
@@ -259,12 +262,16 @@ class AppConfigCubit extends Cubit<AppConfigState> {
 
   void clearAppConfig() {
     closeTimer();
+    servicesCubit.allOff();
+
     repository.clearAppConfig();
     emit(InitialAppConfigState());
   }
 
   Future<void> serverDelete() async {
     closeTimer();
+    servicesCubit.allOff();
+
     if (state.hetznerServer != null) {
       await repository.deleteServer(state.cloudFlareDomain!);
     }

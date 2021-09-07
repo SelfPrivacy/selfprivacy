@@ -26,7 +26,8 @@
     "details": "Details",
     "no_data": "No data",
     "wait": "Wait",
-    "remove": "Remove"
+    "remove": "Remove",
+    "apply": "Apply"
   },
   "more": {
     "_comment": "'More' tab",
@@ -34,6 +35,9 @@
     "about_project": "About us",
     "about_app": "About application",
     "onboarding": "Onboarding",
+    "create_ssh_key": "Create ssh key",
+    "generate_key": "Generate key",
+    "generate_key_text": "You can generate ssh key",
     "console": "Console",
     "about_app_page": {
       "text": "Application version v.{}"
@@ -147,6 +151,13 @@
       "bottom_sheet": {
         "1": "You can connect and create a new user here:"
       }
+    },
+    "vpn": {
+      "title": "VPN Server",
+      "subtitle": "Private VPN server",
+      "bottom_sheet": {
+        "1": "Openconnect VPN Server. Engine for secure and scalable VPN infrastructure"
+      }
     }
   },
   "users": {
@@ -212,7 +223,12 @@
     "_comment": "Jobs list",
     "title": "Jobs list",
     "start": "Start",
-    "empty": "No jobs"
+    "empty": "No jobs",
+    "createUser": "Create",
+    "serviceTurnOff": "Turn off",
+    "serviceTurnOn": "Turn on",
+    "jobAdded": "Job added",
+    "runJobs": "Run jobs"
   },
   "validations": {
     "required": "Required",

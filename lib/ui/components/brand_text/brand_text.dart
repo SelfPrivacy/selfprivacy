@@ -52,10 +52,16 @@ class BrandText extends StatelessWidget {
         type: TextType.onboardingTitle,
         style: style,
       );
-  factory BrandText.h2(String? text, {TextStyle? style}) => BrandText(
+  factory BrandText.h2(
+    String? text, {
+    TextStyle? style,
+    TextAlign? textAlign,
+  }) =>
+      BrandText(
         text,
         type: TextType.h2,
         style: style,
+        textAlign: textAlign,
       );
   factory BrandText.h3(String text, {TextStyle? style, TextAlign? textAlign}) =>
       BrandText(

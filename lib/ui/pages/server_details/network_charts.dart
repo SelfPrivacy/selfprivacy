@@ -71,7 +71,7 @@ class NetworkChart extends StatelessWidget {
                 interval: 20,
                 rotateAngle: 90.0,
                 showTitles: true,
-                getTextStyles: (value) => const TextStyle(
+                getTextStyles: (_, __) => const TextStyle(
                       fontSize: 10,
                       color: Colors.purple,
                       fontWeight: FontWeight.bold,
@@ -87,7 +87,7 @@ class NetworkChart extends StatelessWidget {
                   ].reduce(max) *
                   1.2 /
                   10,
-              getTextStyles: (value) => progressTextStyleLight.copyWith(
+              getTextStyles: (_, __) => progressTextStyleLight.copyWith(
                 color: Theme.of(context).brightness == Brightness.dark
                     ? BrandColors.gray4
                     : null,

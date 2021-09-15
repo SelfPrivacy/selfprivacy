@@ -39,6 +39,16 @@
     "generate_key": "Generate key",
     "generate_key_text": "You can generate ssh key",
     "console": "Console",
+    "remove": "Remove",
+    "enable": "Enable",
+    "ok": "ok",
+    "continue": "Continue",
+    "ssh_key_exist_text": "You have generated ssh key",
+    "yes_delete": "Yes, delete my SSH key",
+    "share": "Share",
+    "copy_buffer": "Copy to buffer",
+    "copied_ssh": "SSH copied to clipboard",
+    "delete_ssh_text": "Delete SSH key?",
     "about_app_page": {
       "text": "Application version v.{}"
     },

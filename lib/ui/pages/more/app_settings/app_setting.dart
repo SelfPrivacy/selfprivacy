@@ -119,7 +119,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   ],
                 ),
               ),
-              // deleteServer(context)
+              deleteServer(context)
             ],
           ),
         );

@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:selfprivacy/logic/get_it/api_config.dart';
 import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/get_it/navigation.dart';
-import 'package:selfprivacy/logic/get_it/ssh_helper.dart';
+import 'package:selfprivacy/logic/get_it/ssh.dart';
 import 'package:selfprivacy/logic/get_it/timer.dart';
 
 export 'package:selfprivacy/logic/get_it/api_config.dart';

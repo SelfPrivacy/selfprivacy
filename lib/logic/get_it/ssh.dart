@@ -24,14 +24,14 @@ class SSHModel {
     await _box.put(BNames.sshPublicKey, savedPubKey);
   }
 
-  void init() {
+  void init() async {
     savedPrivateKey = _box.get(BNames.sshPrivateKey);
     savedPubKey = _box.get(BNames.sshPublicKey);
   }
 
   bool get isSSHKeyGenerated => savedPrivateKey != null && savedPubKey != null;
 
-  clear() async {
+  Future<void> clear() async {
     savedPrivateKey = null;
     savedPubKey = null;
     await _box.clear();

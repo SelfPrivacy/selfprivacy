@@ -5,8 +5,9 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/text_themes.dart';
+import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
-import 'package:selfprivacy/logic/get_it/ssh_helper.dart';
+import 'package:selfprivacy/logic/get_it/ssh.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
@@ -35,6 +36,7 @@ class MorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var jobsCubit = context.watch<JobsCubit>();
+    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
 
     return Scaffold(
       appBar: PreferredSize(
@@ -84,68 +86,69 @@ class MorePage extends StatelessWidget {
                 _MoreMenuTapItem(
                   title: 'more.create_ssh_key'.tr(),
                   iconData: Ionicons.key_outline,
-                  onTap: () {
-                    if (getIt<SSHModel>().isSSHKeyGenerated) {
-                      showDialog<void>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return _SSHExitsDetails(
-                            onShareTap: () {
-                              Share.share(getIt<SSHModel>().savedPrivateKey!);
-                            },
-                            onDeleteTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return BrandAlert(
-                                    title: 'modals.3'.tr(),
-                                    contentText: 'more.delete_ssh_text'.tr(),
-                                    acitons: [
-                                      ActionButton(
-                                          text: 'more.yes_delete'.tr(),
-                                          isRed: true,
-                                          onPressed: () {
-                                            getIt<SSHModel>().clear();
-                                            Navigator.of(context).pop();
-                                          }),
-                                      ActionButton(
-                                        text: 'basis.cancel'.tr(),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            onCopyTap: () {
-                              Clipboard.setData(ClipboardData(
-                                  text: getIt<SSHModel>().savedPrivateKey!));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('more.copied_ssh'.tr()),
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      );
-                    } else {
-                      showDialog<void>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return _MoreDetails(
-                            title: 'more.create_ssh_key'.tr(),
-                            icon: Ionicons.key_outline,
-                            onTap: () {
-                              jobsCubit
-                                  .createShhJobIfNotExist(CreateSSHKeyJob());
-                            },
-                            text: 'more.generate_key_text'.tr(),
-                          );
-                        },
-                      );
-                    }
-                  },
+                  onTap: isReady
+                      ? () {
+                          if (getIt<SSHModel>().isSSHKeyGenerated) {
+                            showDialog<void>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return _SSHExitsDetails(
+                                  onShareTap: () {
+                                    Share.share(
+                                        getIt<SSHModel>().savedPrivateKey!);
+                                  },
+                                  onDeleteTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return BrandAlert(
+                                          title: 'modals.3'.tr(),
+                                          contentText:
+                                              'more.delete_ssh_text'.tr(),
+                                          acitons: [
+                                            ActionButton(
+                                                text: 'more.yes_delete'.tr(),
+                                                isRed: true,
+                                                onPressed: () {
+                                                  getIt<SSHModel>().clear();
+                                                  Navigator.of(context).pop();
+                                                }),
+                                            ActionButton(
+                                              text: 'basis.cancel'.tr(),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  onCopyTap: () {
+                                    Clipboard.setData(ClipboardData(
+                                        text: getIt<SSHModel>()
+                                            .savedPrivateKey!));
+                                    getIt<NavigationService>()
+                                        .showSnackBar('more.copied_ssh'.tr());
+                                  },
+                                );
+                              },
+                            );
+                          } else {
+                            showDialog<void>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return _MoreDetails(
+                                  title: 'more.create_ssh_key'.tr(),
+                                  icon: Ionicons.key_outline,
+                                  onTap: () {
+                                    jobsCubit.createShhJobIfNotExist(
+                                        CreateSSHKeyJob());
+                                  },
+                                  text: 'more.generate_key_text'.tr(),
+                                );
+                              },
+                            );
+                          }
+                        }
+                      : null,
                 ),
               ],
             ),
@@ -319,6 +322,7 @@ class _NavItem extends StatelessWidget {
       child: _MoreMenuItem(
         iconData: iconData,
         title: title,
+        isActive: true,
       ),
     );
   }
@@ -333,15 +337,14 @@ class _MoreMenuTapItem extends StatelessWidget {
   }) : super(key: key);
 
   final IconData iconData;
-  final Function onTap;
+  final VoidCallback? onTap;
   final String title;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        onTap();
-      },
+      onTap: onTap,
       child: _MoreMenuItem(
+        isActive: onTap != null,
         iconData: iconData,
         title: title,
       ),
@@ -354,10 +357,12 @@ class _MoreMenuItem extends StatelessWidget {
     Key? key,
     required this.iconData,
     required this.title,
+    required this.isActive,
   }) : super(key: key);
 
   final IconData iconData;
   final String title;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
@@ -373,13 +378,19 @@ class _MoreMenuItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          BrandText.body1(title),
+          BrandText.body1(
+            title,
+            style: TextStyle(
+              color: isActive ? null : Colors.grey,
+            ),
+          ),
           Spacer(),
           SizedBox(
             width: 56,
             child: Icon(
               iconData,
               size: 20,
+              color: isActive ? null : Colors.grey,
             ),
           ),
         ],

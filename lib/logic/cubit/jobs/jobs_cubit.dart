@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
-import 'package:selfprivacy/logic/get_it/ssh_helper.dart';
+import 'package:selfprivacy/logic/get_it/ssh.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/models/user.dart';
@@ -29,10 +31,7 @@ class JobsCubit extends Cubit<JobsState> {
       newJobsList.addAll((state as JobsStateWithJobs).jobList);
     }
     newJobsList.add(job);
-    getIt<NavigationService>().showSnackBar(SnackBar(
-      content: Text('jobs.jobAdded'.tr()),
-      duration: const Duration(seconds: 2),
-    ));
+    getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
     emit(JobsStateWithJobs(newJobsList));
   }
 
@@ -54,10 +53,7 @@ class JobsCubit extends Cubit<JobsState> {
       removeJob(removingJob.id);
     } else {
       newJobsList.add(job);
-      getIt<NavigationService>().showSnackBar(SnackBar(
-        content: Text('jobs.jobAdded'.tr()),
-        duration: const Duration(seconds: 2),
-      ));
+      getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
       emit(JobsStateWithJobs(newJobsList));
     }
   }
@@ -70,10 +66,7 @@ class JobsCubit extends Cubit<JobsState> {
     var isExistInJobList = newJobsList.any((el) => el is CreateSSHKeyJob);
     if (!isExistInJobList) {
       newJobsList.add(job);
-      getIt<NavigationService>().showSnackBar(SnackBar(
-        content: Text('jobs.jobAdded'.tr()),
-        duration: const Duration(seconds: 2),
-      ));
+      getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
       emit(JobsStateWithJobs(newJobsList));
     }
   }

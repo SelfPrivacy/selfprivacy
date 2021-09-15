@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
+import 'package:selfprivacy/config/text_themes.dart';
 
 class NavigationService {
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
@@ -17,9 +19,13 @@ class NavigationService {
     );
   }
 
-  void showSnackBar(SnackBar snackBar) {
+  void showSnackBar(String text) {
     final state = scaffoldMessengerKey.currentState!;
-
-    state.showSnackBar(snackBar);
+    final snack = SnackBar(
+      backgroundColor: BrandColors.black.withOpacity(0.8),
+      content: Text(text, style: buttonTitleText),
+      duration: const Duration(seconds: 2),
+    );
+    state.showSnackBar(snack);
   }
 }

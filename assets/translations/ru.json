@@ -39,6 +39,16 @@
     "create_ssh_key": "Создать ssh ключ",
     "generate_key": "Сгенерировать ключ",
     "generate_key_text": "Вы сможете сгенерировать ключ",
+    "remove": "Отключить",
+    "enable": "Включить",
+    "ok": "ok",
+    "continue": "Продолжить",
+    "ssh_key_exist_text": "У вас уже есть сгенерированный ssk ключ",
+    "yes_delete": "Да, удалить",
+    "share": "Поделиться",
+    "copy_buffer": "Копировать в буфер",
+    "copied_ssh": "SSH  копировано в буфер",
+    "delete_ssh_text": "Удалить SSH ключ?",
     "about_app_page": {
       "text": "Версия приложения: v.{}"
     },

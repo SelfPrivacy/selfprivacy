@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:hive/hive.dart';
 import 'package:pointycastle/pointycastle.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
@@ -26,8 +24,16 @@ class SSHModel {
     await _box.put(BNames.sshPublicKey, savedPubKey);
   }
 
-  void init() {
+  void init() async {
     savedPrivateKey = _box.get(BNames.sshPrivateKey);
     savedPubKey = _box.get(BNames.sshPublicKey);
+  }
+
+  bool get isSSHKeyGenerated => savedPrivateKey != null && savedPubKey != null;
+
+  Future<void> clear() async {
+    savedPrivateKey = null;
+    savedPubKey = null;
+    await _box.clear();
   }
 }

@@ -24,6 +24,7 @@ class HiveConfig {
 
     var cipher = HiveAesCipher(await getEncriptedKey(BNames.key));
     await Hive.openBox(BNames.appConfig, encryptionCipher: cipher);
+
     var sshCipher = HiveAesCipher(await getEncriptedKey(BNames.sshEnckey));
     await Hive.openBox(BNames.sshConfig, encryptionCipher: sshCipher);
   }

@@ -33,7 +33,7 @@ class ServerApi extends ApiMap {
 
     var client = await getClient();
     try {
-      response = await client.get('/serviceStatus');
+      response = await client.get('/services/status');
       res = response.statusCode == HttpStatus.ok;
     } catch (e) {
       res = false;
@@ -49,7 +49,7 @@ class ServerApi extends ApiMap {
     var client = await getClient();
     try {
       response = await client.post(
-        '/createUser',
+        '/users/create',
         options: Options(
           headers: {
             "X-User": user.login,
@@ -78,7 +78,7 @@ class ServerApi extends ApiMap {
     var client = await getClient();
     try {
       response = await client.get(
-        '/apply',
+        '/system/configuration/apply',
       );
 
       res = response.statusCode == HttpStatus.ok;

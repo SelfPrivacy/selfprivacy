@@ -6,7 +6,6 @@ import 'hetzner_metrics_cubit.dart';
 
 class HetznerMetricsRepository {
   Future<HetznerMetricsLoaded> getMetrics(Period period) async {
-    print(period);
     var end = DateTime.now();
     DateTime start;
 

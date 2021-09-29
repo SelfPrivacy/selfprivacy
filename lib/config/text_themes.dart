@@ -38,6 +38,13 @@ final headline4Style = defaultTextStyle.copyWith(
   color: BrandColors.headlineColor,
 );
 
+final headline4UnderlinedStyle = defaultTextStyle.copyWith(
+  fontSize: 18,
+  fontWeight: NamedFontWeight.medium,
+  color: BrandColors.headlineColor,
+  decoration: TextDecoration.underline,
+);
+
 final headline5Style = defaultTextStyle.copyWith(
   fontSize: 15,
   fontWeight: NamedFontWeight.medium,

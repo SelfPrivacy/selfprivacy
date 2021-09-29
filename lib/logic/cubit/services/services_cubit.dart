@@ -14,16 +14,18 @@ class ServicesCubit extends AppConfigDependendCubit<ServicesState> {
   Box box = Hive.box(BNames.servicesState);
   final api = ServerApi();
   Future<void> load() async {
-    var statuses = await api.servicesPowerCheck();
-    emit(
-      ServicesState(
-        isPasswordManagerEnable: statuses[ServiceTypes.passwordManager]!,
-        isCloudEnable: statuses[ServiceTypes.cloud]!,
-        isGitEnable: statuses[ServiceTypes.git]!,
-        isSocialNetworkEnable: statuses[ServiceTypes.socialNetwork]!,
-        isVpnEnable: statuses[ServiceTypes.vpn]!,
-      ),
-    );
+    if (appConfigCubit.state is AppConfigFinished) {
+      var statuses = await api.servicesPowerCheck();
+      emit(
+        ServicesState(
+          isPasswordManagerEnable: statuses[ServiceTypes.passwordManager]!,
+          isCloudEnable: statuses[ServiceTypes.cloud]!,
+          isGitEnable: statuses[ServiceTypes.git]!,
+          isSocialNetworkEnable: statuses[ServiceTypes.socialNetwork]!,
+          isVpnEnable: statuses[ServiceTypes.vpn]!,
+        ),
+      );
+    }
   }
 
   @override

@@ -91,7 +91,7 @@
       "status": "Status — Good",
       "bottom_sheet": {
         "1": "It's your personal internet address that will point to the server and other services of yours.",
-        "2": "{} — expires on {}"
+        "2": "{}"
       }
     },
     "backup": {

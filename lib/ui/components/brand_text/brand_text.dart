@@ -13,7 +13,8 @@ enum TextType {
   medium,
   small,
   onboardingTitle,
-  buttonTitleText // risen button title text,
+  buttonTitleText, // risen button title text,
+  h4Underlined,
 }
 
 class BrandText extends StatelessWidget {
@@ -25,6 +26,7 @@ class BrandText extends StatelessWidget {
     this.overflow,
     this.softWrap,
     this.textAlign,
+    this.maxLines,
   }) : super(key: key);
 
   final String? text;
@@ -33,6 +35,7 @@ class BrandText extends StatelessWidget {
   final TextOverflow? overflow;
   final bool? softWrap;
   final TextAlign? textAlign;
+  final int? maxLines;
 
   factory BrandText.h1(
     String? text, {
@@ -80,6 +83,24 @@ class BrandText extends StatelessWidget {
         text,
         type: TextType.h4,
         style: style,
+        softWrap: true,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
+        textAlign: textAlign,
+      );
+
+  factory BrandText.h4Underlined(
+    String? text, {
+    TextStyle? style,
+    TextAlign? textAlign,
+  }) =>
+      BrandText(
+        text,
+        type: TextType.h4Underlined,
+        style: style,
+        softWrap: true,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
         textAlign: textAlign,
       );
 
@@ -148,6 +169,11 @@ class BrandText extends StatelessWidget {
             ? headline4Style.copyWith(color: Colors.white)
             : headline4Style;
         break;
+      case TextType.h4Underlined:
+        style = isDark
+            ? headline4UnderlinedStyle.copyWith(color: Colors.white)
+            : headline4UnderlinedStyle;
+        break;
       case TextType.h5:
         style = isDark
             ? headline5Style.copyWith(color: Colors.white)
@@ -185,6 +211,7 @@ class BrandText extends StatelessWidget {
     return Text(
       text!,
       style: style,
+      maxLines: maxLines,
       overflow: overflow,
       softWrap: softWrap,
       textAlign: textAlign,

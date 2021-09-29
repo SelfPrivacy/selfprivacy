@@ -1,9 +1,11 @@
 part of 'users.dart';
 
 class _User extends StatelessWidget {
-  const _User({Key? key, required this.user}) : super(key: key);
+  const _User({Key? key, required this.user, required this.rootUser})
+      : super(key: key);
 
   final User user;
+  final bool rootUser;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -29,7 +31,11 @@ class _User extends StatelessWidget {
               ),
             ),
             SizedBox(width: 20),
-            BrandText.h4(user.login),
+            Flexible(
+              child: rootUser
+                  ? BrandText.h4Underlined(user.login)
+                  : BrandText.h4(user.login),
+            ),
           ],
         ),
       ),

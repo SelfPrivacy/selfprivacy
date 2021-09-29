@@ -15,13 +15,23 @@ abstract class ApiMap {
     if (hasLoger) {
       dio.interceptors.add(PrettyDioLogger());
     }
-    dio..interceptors.add(ConsoleInterceptor());
+    dio.interceptors.add(ConsoleInterceptor());
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
       client.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
       return client;
     };
+
+    dio.interceptors.add(InterceptorsWrapper(onError: (DioError e, handler) {
+      print(e.requestOptions.path);
+      print(e.requestOptions.data);
+
+      print(e.message);
+      print(e.response);
+
+      return handler.next(e);
+    }));
     return dio;
   }
 

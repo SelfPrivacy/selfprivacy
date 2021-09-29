@@ -22,22 +22,37 @@ class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
 
   Future<AppConfigState> load() async {
-    var res = AppConfigState(
-      hetznerKey: getIt<ApiConfigModel>().hetznerKey,
-      cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey,
-      cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain,
-      backblazeCredential: getIt<ApiConfigModel>().backblazeCredential,
-      hetznerServer: getIt<ApiConfigModel>().hetznerServer,
-      rootUser: box.get(BNames.rootUser),
-      isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
-      isServerResetedFirstTime:
-          box.get(BNames.isServerResetedFirstTime, defaultValue: false),
-      isServerResetedSecondTime:
-          box.get(BNames.isServerResetedSecondTime, defaultValue: false),
-      hasFinalChecked: box.get(BNames.hasFinalChecked, defaultValue: false),
-      error: null,
-      isLoading: box.get(BNames.isLoading, defaultValue: false),
-    );
+    late AppConfigState res;
+    if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
+      res = AppConfigFinished(
+        hetznerKey: getIt<ApiConfigModel>().hetznerKey!,
+        cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey!,
+        cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain!,
+        backblazeCredential: getIt<ApiConfigModel>().backblazeCredential!,
+        hetznerServer: getIt<ApiConfigModel>().hetznerServer!,
+        rootUser: box.get(BNames.rootUser),
+        isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
+        isServerResetedFirstTime:
+            box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+        isServerResetedSecondTime:
+            box.get(BNames.isServerResetedSecondTime, defaultValue: false),
+      );
+    } else {
+      res = AppConfigNotFinished(
+        hetznerKey: getIt<ApiConfigModel>().hetznerKey,
+        cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey,
+        cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain,
+        backblazeCredential: getIt<ApiConfigModel>().backblazeCredential,
+        hetznerServer: getIt<ApiConfigModel>().hetznerServer,
+        rootUser: box.get(BNames.rootUser),
+        isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
+        isServerResetedFirstTime:
+            box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+        isServerResetedSecondTime:
+            box.get(BNames.isServerResetedSecondTime, defaultValue: false),
+        isLoading: box.get(BNames.isLoading, defaultValue: false),
+      );
+    }
 
     return res;
   }

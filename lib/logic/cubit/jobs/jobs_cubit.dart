@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
@@ -76,17 +73,14 @@ class JobsCubit extends Cubit<JobsState> {
       var jobs = (state as JobsStateWithJobs).jobList;
       emit(JobsStateLoading());
       var newUsers = <User>[];
+      var hasServiceJobs = false;
       for (var job in jobs) {
         if (job is CreateUserJob) {
           newUsers.add(job.user);
           await api.createUser(job.user);
         } else if (job is ServiceToggleJob) {
+          hasServiceJobs = true;
           await api.switchService(job.type, job.needToTurnOn);
-          if (job.needToTurnOn) {
-            servicesCubit.turnOnist([job.type]);
-          } else {
-            servicesCubit.turnOffList([job.type]);
-          }
         }
         if (job is CreateSSHKeyJob) {
           await getIt<SSHModel>().generateKeys();
@@ -96,6 +90,9 @@ class JobsCubit extends Cubit<JobsState> {
 
       usersCubit.addUsers(newUsers);
       await api.apply();
+      if (hasServiceJobs) {
+        await servicesCubit.load();
+      }
 
       emit(JobsStateEmpty());
 

@@ -16,7 +16,8 @@ class BlocAndProviderConfig extends StatelessWidget {
   Widget build(BuildContext context) {
     var isDark = false;
     var usersCubit = UsersCubit();
-    var servicesCubit = ServicesCubit();
+    var appConfigCubit = AppConfigCubit()..load();
+    var servicesCubit = ServicesCubit(appConfigCubit);
     return MultiProvider(
       providers: [
         BlocProvider(
@@ -25,18 +26,13 @@ class BlocAndProviderConfig extends StatelessWidget {
             isOnbordingShowing: true,
           )..load(),
         ),
-        BlocProvider(
-          lazy: false,
-          create: (_) => AppConfigCubit(servicesCubit)..load(),
-        ),
+        BlocProvider(lazy: false, create: (_) => appConfigCubit),
         BlocProvider(create: (_) => ProvidersCubit()),
         BlocProvider(create: (_) => usersCubit..load(), lazy: false),
         BlocProvider(create: (_) => servicesCubit..load(), lazy: false),
         BlocProvider(
-          create: (_) => JobsCubit(
-            usersCubit: usersCubit,
-            servicesCubit: servicesCubit,
-          ),
+          create: (_) =>
+              JobsCubit(usersCubit: usersCubit, servicesCubit: servicesCubit),
         ),
       ],
       child: child,

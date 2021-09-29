@@ -40,7 +40,7 @@ class InitializingPage extends StatelessWidget {
     ][cubit.state.progress]();
     return BlocListener<AppConfigCubit, AppConfigState>(
       listener: (context, state) {
-        if (state.isFullyInitilized) {
+        if (cubit.state is AppConfigFinished) {
           Navigator.of(context).pushReplacement(materialRoute(RootPage()));
         }
       },
@@ -80,7 +80,7 @@ class InitializingPage extends StatelessWidget {
                     child: Container(
                       alignment: Alignment.center,
                       child: BrandButton.text(
-                        title: cubit.state.isFullyInitilized
+                        title: cubit.state is AppConfigFinished
                             ? 'basis.close'.tr()
                             : 'basis.later'.tr(),
                         onPressed: () {
@@ -411,7 +411,7 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepServer(AppConfigCubit appConfigCubit) {
-    var isLoading = appConfigCubit.state.isLoading;
+    var isLoading = (appConfigCubit.state as AppConfigNotFinished).isLoading;
     return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -438,7 +438,7 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
-    assert(appConfigCubit.state is TimerState, 'wronge state');
+    assert(appConfigCubit.state is AppConfigNotFinished, 'wronge state');
     var state = appConfigCubit.state as TimerState;
     late int doneCount;
     late String? text;

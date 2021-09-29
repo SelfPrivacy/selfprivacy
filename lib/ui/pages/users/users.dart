@@ -32,7 +32,7 @@ class UsersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usersCubitState = context.watch<UsersCubit>().state;
-    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
     final users = usersCubitState.users;
     final isEmpty = usersCubitState.isEmpty;
     Widget child;

@@ -53,7 +53,7 @@ class _ServerDetailsState extends State<ServerDetails>
 
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+    var isReady = context.watch<AppConfigCubit>().state  is AppConfigFinished;
     var providerState = isReady ? StateType.stable : StateType.uninitialized;
 
     return Scaffold(

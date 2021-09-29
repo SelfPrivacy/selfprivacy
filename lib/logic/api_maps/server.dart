@@ -105,6 +105,20 @@ class ServerApi extends ApiMap {
     );
     client.close();
   }
+
+  Future<Map<ServiceTypes, bool>> servicesPowerCheck() async {
+    var client = await getClient();
+    Response response = await client.get('/services/status');
+
+    close(client);
+    return {
+      ServiceTypes.passwordManager: response.data['bitwarden'] == 0,
+      ServiceTypes.git: response.data['gitea'] == 0,
+      ServiceTypes.cloud: response.data['nextcloud'] == 0,
+      ServiceTypes.vpn: response.data['ocserv'] == 0,
+      ServiceTypes.socialNetwork: response.data['pleroma'] == 0,
+    };
+  }
 }
 
 extension UrlServerExt on ServiceTypes {

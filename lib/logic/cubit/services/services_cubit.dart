@@ -1,63 +1,34 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 
 part 'services_state.dart';
 
-class ServicesCubit extends Cubit<ServicesState> {
-  ServicesCubit() : super(ServicesState.allOff());
+class ServicesCubit extends AppConfigDependendCubit<ServicesState> {
+  ServicesCubit(AppConfigCubit appConfigCubit)
+      : super(appConfigCubit, ServicesState.allOff());
 
   Box box = Hive.box(BNames.servicesState);
-
-  void load() {
+  final api = ServerApi();
+  Future<void> load() async {
+    var statuses = await api.servicesPowerCheck();
     emit(
       ServicesState(
-        isPasswordManagerEnable:
-            box.get(ServiceTypes.passwordManager.txt, defaultValue: false),
-        isCloudEnable: box.get(ServiceTypes.cloud.txt, defaultValue: false),
-        isGitEnable: box.get(ServiceTypes.git.txt, defaultValue: false),
-        isSocialNetworkEnable:
-            box.get(ServiceTypes.socialNetwork.txt, defaultValue: false),
-        isVpnEnable: box.get(ServiceTypes.vpn.txt, defaultValue: false),
+        isPasswordManagerEnable: statuses[ServiceTypes.passwordManager]!,
+        isCloudEnable: statuses[ServiceTypes.cloud]!,
+        isGitEnable: statuses[ServiceTypes.git]!,
+        isSocialNetworkEnable: statuses[ServiceTypes.socialNetwork]!,
+        isVpnEnable: statuses[ServiceTypes.vpn]!,
       ),
     );
   }
 
-  void allOn() {
-    box.put(ServiceTypes.passwordManager.txt, true);
-    box.put(ServiceTypes.cloud.txt, true);
-    box.put(ServiceTypes.git.txt, true);
-    box.put(ServiceTypes.socialNetwork.txt, true);
-    box.put(ServiceTypes.vpn.txt, true);
-
-    emit(ServicesState.allOn());
-  }
-
-  void allOff() {
-    box.put(ServiceTypes.passwordManager.txt, false);
-    box.put(ServiceTypes.cloud.txt, false);
-    box.put(ServiceTypes.git.txt, false);
-    box.put(ServiceTypes.socialNetwork.txt, false);
-    box.put(ServiceTypes.vpn.txt, false);
-
+  @override
+  void clear() async {
+    box.clear();
     emit(ServicesState.allOff());
-  }
-
-  void turnOffList(List<ServiceTypes> list) {
-    for (final service in list) {
-      box.put(service.txt, false);
-    }
-
-    emit(state.disableList(list));
-  }
-
-  void turnOnist(List<ServiceTypes> list) {
-    for (final service in list) {
-      box.put(service.txt, true);
-    }
-
-    emit(state.enableList(list));
   }
 }

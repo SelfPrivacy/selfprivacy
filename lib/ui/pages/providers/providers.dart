@@ -28,7 +28,7 @@ class ProvidersPage extends StatefulWidget {
 class _ProvidersPageState extends State<ProvidersPage> {
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+    var isReady = context.watch<AppConfigCubit>().state  is AppConfigFinished;
 
     final cards = ProviderType.values
         .map(
@@ -75,7 +75,7 @@ class _Card extends StatelessWidget {
     String? message;
     late String stableText;
     late VoidCallback onTap;
-    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+    var isReady = context.watch<AppConfigCubit>().state  is AppConfigFinished;
     AppConfigState appConfig = context.watch<AppConfigCubit>().state;
 
     var domainName =

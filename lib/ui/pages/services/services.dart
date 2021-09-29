@@ -41,7 +41,7 @@ class ServicesPage extends StatefulWidget {
 class _ServicesPageState extends State<ServicesPage> {
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+    var isReady = context.watch<AppConfigCubit>().state  is AppConfigFinished;
 
     return Scaffold(
       appBar: PreferredSize(
@@ -77,7 +77,7 @@ class _Card extends StatelessWidget {
   final ServiceTypes serviceType;
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+    var isReady = context.watch<AppConfigCubit>().state  is AppConfigFinished;
     var changeTab = context.read<ChangeTab>().onPress;
 
     var serviceState = context.watch<ServicesCubit>().state;

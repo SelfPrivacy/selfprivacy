@@ -36,7 +36,7 @@ class MorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var jobsCubit = context.watch<JobsCubit>();
-    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
+    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
 
     return Scaffold(
       appBar: PreferredSize(

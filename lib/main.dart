@@ -18,6 +18,7 @@ import 'logic/cubit/app_settings/app_settings_cubit.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveConfig.init();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   Bloc.observer = SimpleBlocObserver();
   Wakelock.enable();
   await getItSetup();

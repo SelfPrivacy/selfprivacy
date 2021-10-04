@@ -51,7 +51,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
-  local_auth: ef62030a2731330b95df7ef1331bd15f6a64b8a6
+  local_auth: 25938960984c3a7f6e3253e3f8d962fdd16852bd
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68

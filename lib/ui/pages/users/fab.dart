@@ -24,7 +24,9 @@ class _Fab extends StatelessWidget {
             isScrollControlled: true,
             backgroundColor: Colors.transparent,
             builder: (BuildContext context) {
-              return _NewUser();
+              return Padding(
+                  padding: MediaQuery.of(context).viewInsets,
+                  child: _NewUser());
             },
           );
         },

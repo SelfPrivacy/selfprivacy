@@ -13,6 +13,7 @@ class UsersCubit extends Cubit<UsersState> {
 
   void load() async {
     var loadedUsers = box.values.toList();
+   
     if (loadedUsers.isNotEmpty) {
       emit(UsersState(loadedUsers));
     }

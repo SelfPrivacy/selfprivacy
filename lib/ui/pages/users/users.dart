@@ -1,7 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
@@ -34,6 +38,11 @@ class UsersPage extends StatelessWidget {
     final usersCubitState = context.watch<UsersCubit>().state;
     var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
     final users = usersCubitState.users;
+    //Todo: listen box events
+    User? user = Hive.box(BNames.appConfig).get(BNames.rootUser);
+    if (user != null) {
+      users.insert(0, user);
+    }
     final isEmpty = usersCubitState.isEmpty;
     Widget child;
 
@@ -47,10 +56,14 @@ class UsersPage extends StatelessWidget {
                 text: 'users.add_new_user'.tr(),
               ),
             )
-          : ListView(
-              children: [
-                ...users.map((user) => _User(user: user)).toList(),
-              ],
+          : ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _User(
+                  user: users[index],
+                  rootUser: index == 0,
+                );
+              },
             );
     }
 

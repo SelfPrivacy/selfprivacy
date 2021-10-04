@@ -76,7 +76,9 @@ class _UserDetails extends StatelessWidget {
                                       ),
                                       onPressed: () {
                                         context.read<UsersCubit>().remove(user);
-                                        Navigator.of(context)..pop()..pop();
+                                        Navigator.of(context)
+                                          ..pop()
+                                          ..pop();
                                       },
                                     ),
                                   ],
@@ -115,9 +117,12 @@ class _UserDetails extends StatelessWidget {
                       vertical: 20,
                       horizontal: 15,
                     ),
-                    child: BrandText.h1(
+                    child: AutoSizeText(
                       user.login,
+                      style: headline1Style,
                       softWrap: true,
+                      minFontSize: 9,
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     )),
               ],

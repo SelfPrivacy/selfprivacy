@@ -53,8 +53,7 @@ class ServerApi extends ApiMap {
         options: Options(
           headers: {
             "X-User": user.login,
-            "X-Password":
-                '\$6\$${user.hashPassword.salt}\$${user.hashPassword.hash}',
+            "X-Password": user.password,
           },
         ),
       );

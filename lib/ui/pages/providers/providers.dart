@@ -178,8 +178,7 @@ class _ProviderDetails extends StatelessWidget {
         children = [
           BrandText.body1('providers.domain.bottom_sheet.1'.tr()),
           SizedBox(height: 10),
-          BrandText.body1(
-              'providers.domain.bottom_sheet.2'.tr(args: [domainName])),
+          BrandText.body1(domainName),
           SizedBox(height: 10),
           BrandText.body1('providers.domain.status'.tr()),
         ];

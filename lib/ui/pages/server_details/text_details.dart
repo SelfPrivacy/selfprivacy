@@ -27,13 +27,13 @@ class _TextDetails extends StatelessWidget {
             children: [
               TableRow(
                 children: [
-                  getRowTitle('Last check'),
+                  getRowTitle('Last check:'),
                   getRowValue(formater.format(checkTime)),
                 ],
               ),
               TableRow(
                 children: [
-                  getRowTitle('Server Id'),
+                  getRowTitle('Server Id:'),
                   getRowValue(data.id.toString()),
                 ],
               ),
@@ -48,7 +48,7 @@ class _TextDetails extends StatelessWidget {
               ),
               TableRow(
                 children: [
-                  getRowTitle('CPU'),
+                  getRowTitle('CPU:'),
                   getRowValue(
                     data.serverType.cores.toString(),
                   ),
@@ -56,7 +56,7 @@ class _TextDetails extends StatelessWidget {
               ),
               TableRow(
                 children: [
-                  getRowTitle('Memory'),
+                  getRowTitle('Memory:'),
                   getRowValue(
                     '${data.serverType.memory.toString()} GB',
                   ),
@@ -64,7 +64,7 @@ class _TextDetails extends StatelessWidget {
               ),
               TableRow(
                 children: [
-                  getRowTitle('Disk Local'),
+                  getRowTitle('Disk Local:'),
                   getRowValue(
                     '${data.serverType.disk.toString()} GB',
                   ),
@@ -100,7 +100,7 @@ class _TextDetails extends StatelessWidget {
             children: [
               TableRow(
                 children: [
-                  getRowTitle('Country'),
+                  getRowTitle('Country:'),
                   getRowValue(
                     '${data.location.country}',
                   ),
@@ -108,13 +108,13 @@ class _TextDetails extends StatelessWidget {
               ),
               TableRow(
                 children: [
-                  getRowTitle('City'),
+                  getRowTitle('City:'),
                   getRowValue(data.location.city),
                 ],
               ),
               TableRow(
                 children: [
-                  getRowTitle('Description'),
+                  getRowTitle('Description:'),
                   getRowValue(data.location.description),
                 ],
               ),

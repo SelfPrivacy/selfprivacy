@@ -90,8 +90,7 @@
       "card_title": "Domain",
       "status": "Status — Good",
       "bottom_sheet": {
-        "1": "It's your personal internet address that will point to the server and other services of yours.",
-        "2": "{}"
+        "1": "It's your personal internet address that will point to the server and other services of yours."
       }
     },
     "backup": {

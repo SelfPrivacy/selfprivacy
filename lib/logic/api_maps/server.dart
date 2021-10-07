@@ -54,6 +54,7 @@ class ServerApi extends ApiMap {
           headers: {
             "X-User": user.login,
             "X-Password": user.password,
+            "X-Domain": getIt<ApiConfigModel>().cloudFlareDomain!.domainName
           },
         ),
       );

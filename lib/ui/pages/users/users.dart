@@ -37,7 +37,7 @@ class UsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final usersCubitState = context.watch<UsersCubit>().state;
     var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
-    final users = usersCubitState.users;
+    final users = [...usersCubitState.users];
     //Todo: listen box events
     User? user = Hive.box(BNames.appConfig).get(BNames.rootUser);
     if (user != null) {
@@ -61,7 +61,7 @@ class UsersPage extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return _User(
                   user: users[index],
-                  rootUser: index == 0,
+                  isRootUser: index == 0,
                 );
               },
             );

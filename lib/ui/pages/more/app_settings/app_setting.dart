@@ -119,7 +119,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   ],
                 ),
               ),
-              // deleteServer(context)
+              deleteServer(context)
             ],
           ),
         );
@@ -128,7 +128,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   }
 
   Widget deleteServer(BuildContext context) {
-    // todo: need to check
+    var isDisabled =
+        context.watch<AppConfigCubit>().state.hetznerServer == null;
     return Container(
       padding: EdgeInsets.only(top: 20, bottom: 5),
       decoration: BoxDecoration(
@@ -157,29 +158,41 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                 fontWeight: NamedFontWeight.demiBold,
               ),
             ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) {
-                  return BrandAlert(
-                    title: 'modals.3'.tr(),
-                    contentText: 'modals.6'.tr(),
-                    acitons: [
-                      ActionButton(
-                          text: 'modals.7'.tr(),
-                          isRed: true,
-                          onPressed: () async {
-                            await context.read<AppConfigCubit>().serverDelete();
-                            Navigator.of(context).pop();
-                          }),
-                      ActionButton(
-                        text: 'basis.cancel'.tr(),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
+            onPressed: isDisabled
+                ? null
+                : () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return BrandAlert(
+                          title: 'modals.3'.tr(),
+                          contentText: 'modals.6'.tr(),
+                          acitons: [
+                            ActionButton(
+                                text: 'modals.7'.tr(),
+                                isRed: true,
+                                onPressed: () async {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return Container(
+                                          alignment: Alignment.center,
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      });
+                                  await context
+                                      .read<AppConfigCubit>()
+                                      .serverDelete();
+                                  Navigator.of(context).pop();
+                                }),
+                            ActionButton(
+                              text: 'basis.cancel'.tr(),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
           ),
         ],
       ),

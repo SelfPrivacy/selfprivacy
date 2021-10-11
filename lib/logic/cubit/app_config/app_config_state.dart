@@ -1,6 +1,6 @@
 part of 'app_config_cubit.dart';
 
-class AppConfigState extends Equatable {
+abstract class AppConfigState extends Equatable {
   const AppConfigState({
     required this.hetznerKey,
     required this.cloudFlareKey,

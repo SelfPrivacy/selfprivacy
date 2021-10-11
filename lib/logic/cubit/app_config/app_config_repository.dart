@@ -116,12 +116,16 @@ class AppConfigRepository {
         onSuccess,
   }) async {
     var hetznerApi = HetznerApi();
+    late HetznerDataBase dataBase;
 
     try {
+      dataBase = await hetznerApi.createVolume();
+
       var serverDetails = await hetznerApi.createServer(
         cloudFlareKey: cloudFlareKey,
         rootUser: rootUser,
         domainName: domainName,
+        dataBase: dataBase,
       );
       saveServerDetails(serverDetails);
       onSuccess(serverDetails);
@@ -144,6 +148,7 @@ class AppConfigRepository {
                     cloudFlareKey: cloudFlareKey,
                     rootUser: rootUser,
                     domainName: domainName,
+                    dataBase: dataBase,
                   );
 
                   await saveServerDetails(serverDetails);
@@ -245,10 +250,11 @@ class AppConfigRepository {
     var hetznerApi = HetznerApi();
     var cloudFlare = CloudflareApi();
 
-    hetznerApi.deleteSelfprivacyServerAndAllVolumes(
+    await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
       domainName: cloudFlareDomain.domainName,
     );
-    cloudFlare.removeSimilarRecords(cloudFlareDomain: cloudFlareDomain);
+
+    await cloudFlare.removeSimilarRecords(cloudFlareDomain: cloudFlareDomain);
   }
 
   Future<void> deleteRecords() async {

@@ -1,11 +1,11 @@
 part of 'users.dart';
 
 class _User extends StatelessWidget {
-  const _User({Key? key, required this.user, required this.rootUser})
+  const _User({Key? key, required this.user, required this.isRootUser})
       : super(key: key);
 
   final User user;
-  final bool rootUser;
+  final bool isRootUser;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -13,7 +13,7 @@ class _User extends StatelessWidget {
         showBrandBottomSheet<void>(
           context: context,
           builder: (BuildContext context) {
-            return _UserDetails(user: user);
+            return _UserDetails(user: user, isRootUser: isRootUser);
           },
         );
       },
@@ -32,7 +32,7 @@ class _User extends StatelessWidget {
             ),
             SizedBox(width: 20),
             Flexible(
-              child: rootUser
+              child: isRootUser
                   ? BrandText.h4Underlined(user.login)
                   : BrandText.h4(user.login),
             ),

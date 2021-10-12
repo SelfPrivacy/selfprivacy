@@ -68,13 +68,8 @@ class HetznerApi extends ApiMap {
     return server == null;
   }
 
-  Future<HetznerServerDetails> createServer({
-    required String cloudFlareKey,
-    required User rootUser,
-    required String domainName,
-  }) async {
+  Future<HetznerDataBase> createVolume() async {
     var client = await getClient();
-
     Response dbCreateResponse = await client.post(
       '/volumes',
       data: {
@@ -86,9 +81,36 @@ class HetznerApi extends ApiMap {
         "format": "ext4"
       },
     );
+    var dbId = dbCreateResponse.data['volume']['id'];
+    return HetznerDataBase(
+      id: dbId,
+      name: dbCreateResponse.data['volume']['name'],
+    );
+  }
+
+  Future<HetznerServerDetails> createServer({
+    required String cloudFlareKey,
+    required User rootUser,
+    required String domainName,
+    required HetznerDataBase dataBase,
+  }) async {
+    var client = await getClient();
+
+    // Response dbCreateResponse = await client.post(
+    //   '/volumes',
+    //   data: {
+    //     "size": 10,
+    //     "name": StringGenerators.dbStorageName(),
+    //     "labels": {"labelkey": "value"},
+    //     "location": "fsn1",
+    //     "automount": false,
+    //     "format": "ext4"
+    //   },
+    // );
 
     var dbPassword = StringGenerators.dbPassword();
-    var dbId = dbCreateResponse.data['volume']['id'];
+    // var dbId = dbCreateResponse.data['volume']['id'];
+    var dbId = dataBase.id;
 
     /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
     /// check the branch name, it could be "development" or "master".
@@ -106,10 +128,7 @@ class HetznerApi extends ApiMap {
       id: serverCreateResponse.data['server']['id'],
       ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
       createTime: DateTime.now(),
-      dataBase: HetznerDataBase(
-        id: dbId,
-        name: dbCreateResponse.data['volume']['name'],
-      ),
+      dataBase: dataBase,
     );
   }
 
@@ -120,28 +139,22 @@ class HetznerApi extends ApiMap {
 
     Response serversReponse = await client.get('/servers');
     List servers = serversReponse.data['servers'];
-    var server = servers.firstWhere((el) => el['name'] == domainName);
-    await client.delete('/servers/${server['id']}');
-
-    Response volumesReponse = await client.get('/volumes');
-    List volumes = volumesReponse.data['volumes'];
-
+    Map server = servers.firstWhere((el) => el['name'] == domainName);
+    List volumes = server['volumes'];
     var laterFutures = <Future>[];
-    for (var volume in volumes) {
-      if (volume['server'] == null) {
-        await client.delete('/volumes/${volume['id']}');
-      } else {
-        laterFutures.add(Future.delayed(Duration(seconds: 60)).then(
-          (_) => client.delete('/volumes/${volume['id']}'),
-        ));
-      }
-    }
 
-    if (laterFutures.isEmpty) {
-      close(client);
-    } else {
-      Future.wait(laterFutures).then((value) => close(client));
+    for (var volumeId in volumes) {
+      await client.post('/volumes/$volumeId/actions/detach');
     }
+    await Future.delayed(Duration(seconds: 10));
+
+    for (var volumeId in volumes) {
+      laterFutures.add(client.delete('/volumes/$volumeId'));
+    }
+    laterFutures.add(client.delete('/servers/${server['id']}'));
+
+    await Future.wait(laterFutures);
+    close(client);
   }
 
   Future<HetznerServerDetails> reset() async {

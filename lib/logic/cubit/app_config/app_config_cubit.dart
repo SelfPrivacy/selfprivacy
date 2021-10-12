@@ -275,7 +275,18 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       await getIt<SSHModel>().clear();
     }
     await repository.deleteRecords();
-    emit(AppConfigEmpty());
+    emit(AppConfigNotFinished(
+      hetznerKey: state.hetznerKey,
+      cloudFlareDomain: state.cloudFlareDomain,
+      cloudFlareKey: state.cloudFlareKey,
+      backblazeCredential: state.backblazeCredential,
+      rootUser: state.rootUser,
+      hetznerServer: null,
+      isServerStarted: false,
+      isServerResetedFirstTime: false,
+      isServerResetedSecondTime: false,
+      isLoading: false,
+    ));
   }
 
   void setHetznerKey(String hetznerKey) async {

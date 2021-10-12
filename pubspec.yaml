@@ -1,43 +1,50 @@
 name: selfprivacy
 description: selfprivacy.org
 publish_to: 'none'
-version: 0.1.2+4
+version: 0.1.3+5
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
-  flutter: ">=2.0.0"
+  sdk: '>=2.13.4 <3.0.0'
+  flutter: ">=2.5.0"
 
 dependencies:
   flutter:
     sdk: flutter
   crypt: ^4.0.1
-  crypto: ^3.0.0
   cubit_form: ^1.0.0-nullsafety.0
   cupertino_icons: ^1.0.2
   dio: ^4.0.0-beta7
   easy_localization: ^3.0.0
   either_option: ^2.0.1-dev.1
-  equatable: ^2.0.0
-  fl_chart: ^0.35.0
-  flutter_bloc: ^7.0.0
+  equatable: ^2.0.3
+  fl_chart: ^0.40.0
+  flutter_bloc: ^7.3.0
   flutter_markdown: ^0.6.0
   flutter_secure_storage: ^4.1.0
-  get_it: ^6.0.0
+  get_it: ^7.2.0
   hive: ^2.0.0
   hive_flutter: ^1.0.0
   json_annotation: ^4.0.0
+  modal_bottom_sheet: ^2.0.0
+  nanoid: ^1.0.0
   package_info: ^2.0.0
   pretty_dio_logger: ^1.1.1
-  provider: ^5.0.0
-  unicons: ^1.0.2
+  provider: ^6.0.0
+  share_plus: ^2.1.4
   url_launcher: ^6.0.2
   wakelock: ^0.5.0+2
+  basic_utils: ^3.4.0
+  ionicons: ^0.1.2
+  pointycastle: ^3.3.2
+  rsa_encrypt: ^2.0.0
+  ssh_key: ^0.7.0
+  local_auth: ^1.1.7
+  auto_size_text: ^3.0.0-nullsafety.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  basic_utils: ^3.0.0-nullsafety.1
-  build_runner: ^1.11.5
+  build_runner: ^2.1.1
   flutter_launcher_icons: ^0.9.0
   hive_generator: ^1.0.0
   json_serializable: ^4.0.2

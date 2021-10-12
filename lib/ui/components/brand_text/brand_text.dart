@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/text_themes.dart';
+export 'package:selfprivacy/utils/extensions/text_extensions.dart';
 
 enum TextType {
   h1, // right now only at onboarding and opened providers
@@ -12,7 +13,8 @@ enum TextType {
   medium,
   small,
   onboardingTitle,
-  buttonTitleText // risen button title text,
+  buttonTitleText, // risen button title text,
+  h4Underlined,
 }
 
 class BrandText extends StatelessWidget {
@@ -24,6 +26,7 @@ class BrandText extends StatelessWidget {
     this.overflow,
     this.softWrap,
     this.textAlign,
+    this.maxLines,
   }) : super(key: key);
 
   final String? text;
@@ -32,6 +35,7 @@ class BrandText extends StatelessWidget {
   final TextOverflow? overflow;
   final bool? softWrap;
   final TextAlign? textAlign;
+  final int? maxLines;
 
   factory BrandText.h1(
     String? text, {
@@ -51,10 +55,16 @@ class BrandText extends StatelessWidget {
         type: TextType.onboardingTitle,
         style: style,
       );
-  factory BrandText.h2(String? text, {TextStyle? style}) => BrandText(
+  factory BrandText.h2(
+    String? text, {
+    TextStyle? style,
+    TextAlign? textAlign,
+  }) =>
+      BrandText(
         text,
         type: TextType.h2,
         style: style,
+        textAlign: textAlign,
       );
   factory BrandText.h3(String text, {TextStyle? style, TextAlign? textAlign}) =>
       BrandText(
@@ -73,6 +83,24 @@ class BrandText extends StatelessWidget {
         text,
         type: TextType.h4,
         style: style,
+        softWrap: true,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
+        textAlign: textAlign,
+      );
+
+  factory BrandText.h4Underlined(
+    String? text, {
+    TextStyle? style,
+    TextAlign? textAlign,
+  }) =>
+      BrandText(
+        text,
+        type: TextType.h4Underlined,
+        style: style,
+        softWrap: true,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
         textAlign: textAlign,
       );
 
@@ -120,7 +148,6 @@ class BrandText extends StatelessWidget {
   Text build(BuildContext context) {
     TextStyle style;
     var isDark = Theme.of(context).brightness == Brightness.dark;
-
     switch (type) {
       case TextType.h1:
         style = isDark
@@ -141,6 +168,11 @@ class BrandText extends StatelessWidget {
         style = isDark
             ? headline4Style.copyWith(color: Colors.white)
             : headline4Style;
+        break;
+      case TextType.h4Underlined:
+        style = isDark
+            ? headline4UnderlinedStyle.copyWith(color: Colors.white)
+            : headline4UnderlinedStyle;
         break;
       case TextType.h5:
         style = isDark
@@ -179,6 +211,7 @@ class BrandText extends StatelessWidget {
     return Text(
       text!,
       style: style,
+      maxLines: maxLines,
       overflow: overflow,
       softWrap: softWrap,
       textAlign: textAlign,

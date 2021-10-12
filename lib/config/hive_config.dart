@@ -19,21 +19,25 @@ class HiveConfig {
     Hive.registerAdapter(HetznerDataBaseAdapter());
 
     await Hive.openBox(BNames.appSettings);
-    var cipher = HiveAesCipher(await getEncriptedKey());
+    await Hive.openBox<User>(BNames.users);
+    await Hive.openBox(BNames.servicesState);
 
+    var cipher = HiveAesCipher(await getEncriptedKey(BNames.key));
     await Hive.openBox(BNames.appConfig, encryptionCipher: cipher);
+
+    var sshCipher = HiveAesCipher(await getEncriptedKey(BNames.sshEnckey));
+    await Hive.openBox(BNames.sshConfig, encryptionCipher: sshCipher);
   }
 
-  static Future<Uint8List> getEncriptedKey() async {
-    final FlutterSecureStorage secureStorage = FlutterSecureStorage();
-    var containsEncryptionKey =
-        await secureStorage.containsKey(key: BNames.key);
-    if (!containsEncryptionKey) {
+  static Future<Uint8List> getEncriptedKey(String encKey) async {
+    final secureStorage = FlutterSecureStorage();
+    var hasEncryptionKey = await secureStorage.containsKey(key: encKey);
+    if (!hasEncryptionKey) {
       var key = Hive.generateSecureKey();
-      await secureStorage.write(key: BNames.key, value: base64UrlEncode(key));
+      await secureStorage.write(key: encKey, value: base64UrlEncode(key));
     }
 
-    String? string = await secureStorage.read(key: BNames.key);
+    String? string = await secureStorage.read(key: encKey);
     return base64Url.decode(string!);
   }
 }
@@ -42,10 +46,13 @@ class BNames {
   static String appConfig = 'appConfig';
   static String isDarkModeOn = 'isDarkModeOn';
   static String isOnbordingShowing = 'isOnbordingShowing';
+  static String users = 'users';
 
   static String appSettings = 'appSettings';
+  static String servicesState = 'servicesState';
 
   static String key = 'key';
+  static String sshEnckey = 'sshEngkey';
 
   static String cloudFlareDomain = 'cloudFlareDomain';
   static String hetznerKey = 'hetznerKey';
@@ -58,4 +65,7 @@ class BNames {
   static String isLoading = 'isLoading';
   static String isServerResetedFirstTime = 'isServerResetedFirstTime';
   static String isServerResetedSecondTime = 'isServerResetedSecondTime';
+  static String sshConfig = 'sshConfig';
+  static String sshPrivateKey = "sshPrivateKey";
+  static String sshPublicKey = "sshPublicKey";
 }

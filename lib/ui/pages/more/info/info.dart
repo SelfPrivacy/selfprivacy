@@ -18,7 +18,7 @@ class InfoPage extends StatelessWidget {
           preferredSize: Size.fromHeight(52),
         ),
         body: ListView(
-          padding: brandPagePadding2,
+          padding: paddingH15V0,
           children: [
             BrandDivider(),
             SizedBox(height: 10),

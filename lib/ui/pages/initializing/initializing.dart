@@ -10,10 +10,10 @@ import 'package:selfprivacy/logic/cubit/forms/initializing/hetzner_form_cubit.da
 import 'package:selfprivacy/logic/cubit/forms/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
+import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_card/brand_card.dart';
+import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
-import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
@@ -36,11 +36,11 @@ class InitializingPage extends StatelessWidget {
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
-      () => Container(child: Text('Everythigng is initialized'))
+      () => Container(child: Center(child: Text('initializing.finish'.tr())))
     ][cubit.state.progress]();
     return BlocListener<AppConfigCubit, AppConfigState>(
       listener: (context, state) {
-        if (state.isFullyInitilized) {
+        if (cubit.state is AppConfigFinished) {
           Navigator.of(context).pushReplacement(materialRoute(RootPage()));
         }
       },
@@ -50,7 +50,7 @@ class InitializingPage extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: brandPagePadding2.copyWith(top: 10, bottom: 10),
+                  padding: paddingH15V0.copyWith(top: 10, bottom: 10),
                   child: ProgressBar(
                     steps: [
                       'Hetzner',
@@ -59,12 +59,9 @@ class InitializingPage extends StatelessWidget {
                       'Domain',
                       'User',
                       'Server',
-                      ' ✅',
-                      ' ✅',
-                      ' ✅',
-                      ' ✅',
+                      '✅ Check',
                     ],
-                    activeIndex: cubit.state.progress,
+                    activeIndex: cubit.state.porgressBar,
                   ),
                 ),
                 _addCard(
@@ -83,7 +80,7 @@ class InitializingPage extends StatelessWidget {
                     child: Container(
                       alignment: Alignment.center,
                       child: BrandButton.text(
-                        title: cubit.state.isFullyInitilized
+                        title: cubit.state is AppConfigFinished
                             ? 'basis.close'.tr()
                             : 'basis.later'.tr(),
                         onPressed: () {
@@ -132,7 +129,7 @@ class InitializingPage extends StatelessWidget {
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<HetznerFormCubit>().trySubmit(),
-              title: 'basis.connect'.tr(),
+              text: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
@@ -187,7 +184,7 @@ class InitializingPage extends StatelessWidget {
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<CloudFlareFormCubit>().trySubmit(),
-              title: 'basis.connect'.tr(),
+              text: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
@@ -238,7 +235,7 @@ class InitializingPage extends StatelessWidget {
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<BackblazeFormCubit>().trySubmit(),
-              title: 'basis.connect'.tr(),
+              text: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
@@ -330,7 +327,7 @@ class InitializingPage extends StatelessWidget {
               SizedBox(height: 30),
               BrandButton.rised(
                 onPressed: () => context.read<DomainSetupCubit>().saveDomain(),
-                title: 'initializing.10'.tr(),
+                text: 'initializing.10'.tr(),
               ),
             ],
             SizedBox(height: 10),
@@ -400,7 +397,7 @@ class InitializingPage extends StatelessWidget {
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<RootUserFormCubit>().trySubmit(),
-              title: 'basis.connect'.tr(),
+              text: 'basis.connect'.tr(),
             ),
             SizedBox(height: 10),
             BrandButton.text(
@@ -414,7 +411,7 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepServer(AppConfigCubit appConfigCubit) {
-    var isLoading = appConfigCubit.state.isLoading;
+    var isLoading = (appConfigCubit.state as AppConfigNotFinished).isLoading;
     return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -428,7 +425,7 @@ class InitializingPage extends StatelessWidget {
             onPressed: isLoading
                 ? null
                 : () => appConfigCubit.createServerAndSetDnsRecords(),
-            title: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
+            text: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
           ),
           Spacer(flex: 2),
           BrandButton.text(
@@ -441,23 +438,31 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
-    assert(appConfigCubit.state is TimerState, 'wronge state');
+    assert(appConfigCubit.state is AppConfigNotFinished, 'wronge state');
     var state = appConfigCubit.state as TimerState;
-
+    late int doneCount;
     late String? text;
     if (state.isServerResetedSecondTime) {
       text = 'initializing.13'.tr();
+      doneCount = 3;
     } else if (state.isServerResetedFirstTime) {
       text = 'initializing.21'.tr();
+      doneCount = 2;
     } else if (state.isServerStarted) {
       text = 'initializing.14'.tr();
+      doneCount = 1;
     } else if (state.isServerCreated) {
       text = 'initializing.15'.tr();
+      doneCount = 0;
     }
     return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 15),
+          BrandText.h4(
+            'initializing.checks'.tr(args: [doneCount.toString(), "4"]),
+          ),
           Spacer(flex: 2),
           SizedBox(height: 10),
           BrandText.body2(text),
@@ -488,8 +493,8 @@ class InitializingPage extends StatelessWidget {
   Widget _addCard(Widget child) {
     return Container(
       height: 450,
-      padding: brandPagePadding2,
-      child: BrandCard(child: child),
+      padding: paddingH15V0,
+      child: BrandCards.big(child: child),
     );
   }
 }
@@ -501,12 +506,14 @@ class _HowHetzner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BrandModalSheet(
+    return BrandBottomSheet(
+      isExpended: true,
       child: Padding(
-          padding: brandPagePadding2.copyWith(top: 25),
-          child: BrandMarkdown(
-            fileName: 'how_hetzner',
-          )),
+        padding: paddingH15V0,
+        child: BrandMarkdown(
+          fileName: 'how_hetzner',
+        ),
+      ),
     );
   }
 }

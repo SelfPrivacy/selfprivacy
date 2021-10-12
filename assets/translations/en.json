@@ -19,12 +19,15 @@
     "connect": "Connect",
     "domain": "Domain",
     "saving": "Saving..",
-    "nickname": "nickname",
+    "nickname": "Nickname",
     "loading": "Loading...",
     "later": "I will setup it later",
     "reset": "Reset",
     "details": "Details",
-    "no_data": "No data"
+    "no_data": "No data",
+    "wait": "Wait",
+    "remove": "Remove",
+    "apply": "Apply"
   },
   "more": {
     "_comment": "'More' tab",
@@ -32,9 +35,22 @@
     "about_project": "About us",
     "about_app": "About application",
     "onboarding": "Onboarding",
+    "create_ssh_key": "Create ssh key",
+    "generate_key": "Generate key",
+    "generate_key_text": "You can generate ssh key",
     "console": "Console",
+    "remove": "Remove",
+    "enable": "Enable",
+    "ok": "ok",
+    "continue": "Continue",
+    "ssh_key_exist_text": "You have generated ssh key",
+    "yes_delete": "Yes, delete my SSH key",
+    "share": "Share",
+    "copy_buffer": "Copy to buffer",
+    "copied_ssh": "SSH copied to clipboard",
+    "delete_ssh_text": "Delete SSH key?",
     "about_app_page": {
-      "text": "Тут любая служебная информация, v.{}"
+      "text": "Application version v.{}"
     },
     "settings": {
       "title": "Application settings",
@@ -74,8 +90,7 @@
       "card_title": "Domain",
       "status": "Status — Good",
       "bottom_sheet": {
-        "1": "It's your personal internet address that will point to the server and other services of yours.",
-        "2": "{} — expires on {}"
+        "1": "It's your personal internet address that will point to the server and other services of yours."
       }
     },
     "backup": {
@@ -145,6 +160,13 @@
       "bottom_sheet": {
         "1": "You can connect and create a new user here:"
       }
+    },
+    "vpn": {
+      "title": "VPN Server",
+      "subtitle": "Private VPN server",
+      "bottom_sheet": {
+        "1": "Openconnect VPN Server. Engine for secure and scalable VPN infrastructure"
+      }
     }
   },
   "users": {
@@ -188,8 +210,9 @@
     "20": "\n",
     "21": "One more restart to apply your security certificates.",
     "22": "Create master account",
-    "23": "Enter a nickname and strong password"
-
+    "23": "Enter a nickname and strong password",
+    "finish": "Everything is initialized",
+    "checks": "Checks have been completed \n{} ouf of {}"
   },
   "modals": {
     "_comment": "messages in modals",
@@ -199,9 +222,29 @@
     "4": "Purge all authentication keys?",
     "5": "Yes, purge all my tokens",
     "6": "Delete the server and volume?",
-    "7": "Yes"
+    "7": "Yes",
+    "8": "Remove task"
   },
   "timer": {
     "sec": "{} sec"
+  },
+  "jobs": {
+    "_comment": "Jobs list",
+    "title": "Jobs list",
+    "start": "Start",
+    "empty": "No jobs",
+    "createUser": "Create",
+    "serviceTurnOff": "Turn off",
+    "serviceTurnOn": "Turn on",
+    "jobAdded": "Job added",
+    "runJobs": "Run jobs"
+  },
+  "validations": {
+    "required": "Required",
+    "invalid_format": "Invalid format",
+    "root_name": "User name cannot be 'root'",
+    "key_format": "Invalid key format",
+    "length": "Length is [] shoud be {}",
+    "user_alredy_exist": "Already exists"
   }
 }

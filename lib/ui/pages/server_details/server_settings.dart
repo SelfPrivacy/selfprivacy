@@ -11,7 +11,7 @@ class _ServerSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: brandPagePadding2,
+      padding: paddingH15V0,
       children: [
         SizedBox(height: 10),
         Container(

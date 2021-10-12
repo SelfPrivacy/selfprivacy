@@ -10,14 +10,14 @@ class BrandButton {
   static rised({
     Key? key,
     required VoidCallback? onPressed,
-    String? title,
+    String? text,
     Widget? child,
   }) {
-    assert(title == null || child == null, 'required title or child');
-    assert(title != null || child != null, 'required title or child');
+    assert(text == null || child == null, 'required title or child');
+    assert(text != null || child != null, 'required title or child');
     return _RisedButton(
       key: key,
-      title: title,
+      title: text,
       onPressed: onPressed,
       child: child,
     );

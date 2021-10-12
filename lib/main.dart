@@ -16,47 +16,51 @@ import 'config/localization.dart';
 import 'logic/cubit/app_settings/app_settings_cubit.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await HiveConfig.init();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   Bloc.observer = SimpleBlocObserver();
   Wakelock.enable();
   await getItSetup();
-  WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  runApp(
-    Localization(
-      child: BlocAndProviderConfig(
-        child: MyApp(),
-      ),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AppSettingsState appSettings = context.watch<AppSettingsCubit>().state;
+    return Localization(
+      child: BlocAndProviderConfig(
+        child: Builder(builder: (context) {
+          var appSettings = context.watch<AppSettingsCubit>().state;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light, // Manually changnig appbar color
-      child: MaterialApp(
-        navigatorKey: getIt.get<NavigationService>().navigatorKey,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        debugShowCheckedModeBanner: false,
-        title: 'SelfPrivacy',
-        theme: appSettings.isDarkModeOn ? darkTheme : ligtTheme,
-        home: appSettings.isOnbordingShowing
-            ? OnboardingPage(nextPage: InitializingPage())
-            : RootPage(),
-        builder: (BuildContext context, Widget? widget) {
-          Widget error = Text('...rendering error...');
-          if (widget is Scaffold || widget is Navigator)
-            error = Scaffold(body: Center(child: error));
-          ErrorWidget.builder = (FlutterErrorDetails errorDetails) => error;
-          return widget!;
-        },
+          return AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle.light, // Manually changnig appbar color
+            child: MaterialApp(
+              scaffoldMessengerKey:
+                  getIt.get<NavigationService>().scaffoldMessengerKey,
+              navigatorKey: getIt.get<NavigationService>().navigatorKey,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              debugShowCheckedModeBanner: false,
+              title: 'SelfPrivacy',
+              theme: appSettings.isDarkModeOn ? darkTheme : ligtTheme,
+              home: appSettings.isOnbordingShowing
+                  ? OnboardingPage(nextPage: InitializingPage())
+                  : RootPage(),
+              builder: (BuildContext context, Widget? widget) {
+                Widget error = Text('...rendering error...');
+                if (widget is Scaffold || widget is Navigator)
+                  error = Scaffold(body: Center(child: error));
+                ErrorWidget.builder =
+                    (FlutterErrorDetails errorDetails) => error;
+                return widget!;
+              },
+            ),
+          );
+        }),
       ),
     );
   }

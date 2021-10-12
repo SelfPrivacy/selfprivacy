@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/models/user.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class RootUserFormCubit extends FormCubit {
   RootUserFormCubit(this.initializingCubit) {
@@ -12,18 +13,20 @@ class RootUserFormCubit extends FormCubit {
     userName = FieldCubit(
       initalValue: '',
       validations: [
-        RequiredStringValidation('required'),
         ValidationModel<String>(
-            (s) => userRegExp.hasMatch(s), 'invalid format'),
+            (s) => s.toLowerCase() == 'root', 'validations.root_name'.tr()),
+        RequiredStringValidation('validations.required'.tr()),
+        ValidationModel<String>(
+            (s) => userRegExp.hasMatch(s), 'validations.invalid_format'.tr()),
       ],
     );
 
     password = FieldCubit(
       initalValue: '',
       validations: [
-        RequiredStringValidation('required'),
+        RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
-            (s) => passwordRegExp.hasMatch(s), 'invalid format'),
+            (s) => passwordRegExp.hasMatch(s), 'validations.invalid_format'.tr()),
       ],
     );
 

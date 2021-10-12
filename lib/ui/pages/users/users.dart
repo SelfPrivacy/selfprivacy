@@ -1,20 +1,28 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
+import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/components/brand_modal_sheet/brand_modal_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
+import 'package:share_plus/share_plus.dart';
 
 part 'fab.dart';
 part 'new_user.dart';
@@ -28,10 +36,14 @@ class UsersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usersCubitState = context.watch<UsersCubit>().state;
-    var isReady = context.watch<AppConfigCubit>().state.isFullyInitilized;
-    final users = usersCubitState.users;
+    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
+    final users = [...usersCubitState.users];
+    //Todo: listen box events
+    User? user = Hive.box(BNames.appConfig).get(BNames.rootUser);
+    if (user != null) {
+      users.insert(0, user);
+    }
     final isEmpty = usersCubitState.isEmpty;
-
     Widget child;
 
     if (!isReady) {
@@ -44,16 +56,23 @@ class UsersPage extends StatelessWidget {
                 text: 'users.add_new_user'.tr(),
               ),
             )
-          : ListView(
-              children: [
-                ...users.map((user) => _User(user: user)),
-              ],
+          : ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _User(
+                  user: users[index],
+                  isRootUser: index == 0,
+                );
+              },
             );
     }
 
     return Scaffold(
       appBar: PreferredSize(
-        child: BrandHeader(title: 'basis.users'.tr()),
+        child: BrandHeader(
+          title: 'basis.users'.tr(),
+          hasFlashButton: true,
+        ),
         preferredSize: Size.fromHeight(52),
       ),
       floatingActionButton: isReady ? _Fab() : null,

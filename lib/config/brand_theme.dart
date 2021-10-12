@@ -76,6 +76,6 @@ var darkTheme = ligtTheme.copyWith(
   ),
 );
 
-final brandPagePadding1 = EdgeInsets.symmetric(horizontal: 15, vertical: 30);
+final paddingH15V30 = EdgeInsets.symmetric(horizontal: 15, vertical: 30);
 
-final brandPagePadding2 = EdgeInsets.symmetric(horizontal: 15);
+final paddingH15V0 = EdgeInsets.symmetric(horizontal: 15);

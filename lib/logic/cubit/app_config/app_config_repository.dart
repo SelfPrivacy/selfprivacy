@@ -22,22 +22,37 @@ class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
 
   Future<AppConfigState> load() async {
-    var res = AppConfigState(
-      hetznerKey: getIt<ApiConfigModel>().hetznerKey,
-      cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey,
-      cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain,
-      backblazeCredential: getIt<ApiConfigModel>().backblazeCredential,
-      hetznerServer: getIt<ApiConfigModel>().hetznerServer,
-      rootUser: box.get(BNames.rootUser),
-      isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
-      isServerResetedFirstTime:
-          box.get(BNames.isServerResetedFirstTime, defaultValue: false),
-      isServerResetedSecondTime:
-          box.get(BNames.isServerResetedSecondTime, defaultValue: false),
-      hasFinalChecked: box.get(BNames.hasFinalChecked, defaultValue: false),
-      error: null,
-      isLoading: box.get(BNames.isLoading, defaultValue: false),
-    );
+    late AppConfigState res;
+    if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
+      res = AppConfigFinished(
+        hetznerKey: getIt<ApiConfigModel>().hetznerKey!,
+        cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey!,
+        cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain!,
+        backblazeCredential: getIt<ApiConfigModel>().backblazeCredential!,
+        hetznerServer: getIt<ApiConfigModel>().hetznerServer!,
+        rootUser: box.get(BNames.rootUser),
+        isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
+        isServerResetedFirstTime:
+            box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+        isServerResetedSecondTime:
+            box.get(BNames.isServerResetedSecondTime, defaultValue: false),
+      );
+    } else {
+      res = AppConfigNotFinished(
+        hetznerKey: getIt<ApiConfigModel>().hetznerKey,
+        cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey,
+        cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain,
+        backblazeCredential: getIt<ApiConfigModel>().backblazeCredential,
+        hetznerServer: getIt<ApiConfigModel>().hetznerServer,
+        rootUser: box.get(BNames.rootUser),
+        isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
+        isServerResetedFirstTime:
+            box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+        isServerResetedSecondTime:
+            box.get(BNames.isServerResetedSecondTime, defaultValue: false),
+        isLoading: box.get(BNames.isLoading, defaultValue: false),
+      );
+    }
 
     return res;
   }
@@ -101,12 +116,16 @@ class AppConfigRepository {
         onSuccess,
   }) async {
     var hetznerApi = HetznerApi();
+    late HetznerDataBase dataBase;
 
     try {
+      dataBase = await hetznerApi.createVolume();
+
       var serverDetails = await hetznerApi.createServer(
         cloudFlareKey: cloudFlareKey,
         rootUser: rootUser,
         domainName: domainName,
+        dataBase: dataBase,
       );
       saveServerDetails(serverDetails);
       onSuccess(serverDetails);
@@ -129,6 +148,7 @@ class AppConfigRepository {
                     cloudFlareKey: cloudFlareKey,
                     rootUser: rootUser,
                     domainName: domainName,
+                    dataBase: dataBase,
                   );
 
                   await saveServerDetails(serverDetails);
@@ -149,7 +169,7 @@ class AppConfigRepository {
   }
 
   Future<void> createDnsRecords(
-    String? ip4,
+    String ip4,
     CloudFlareDomain cloudFlareDomain,
   ) async {
     var cloudflareApi = CloudflareApi();
@@ -162,6 +182,11 @@ class AppConfigRepository {
     await cloudflareApi.createMultipleDnsRecords(
       ip4: ip4,
       cloudFlareDomain: cloudFlareDomain,
+    );
+
+    await HetznerApi().createReverseDns(
+      ip4: ip4,
+      domainName: cloudFlareDomain.domainName,
     );
   }
 
@@ -225,10 +250,11 @@ class AppConfigRepository {
     var hetznerApi = HetznerApi();
     var cloudFlare = CloudflareApi();
 
-    hetznerApi.deleteSelfprivacyServerAndAllVolumes(
+    await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
       domainName: cloudFlareDomain.domainName,
     );
-    cloudFlare.removeSimilarRecords(cloudFlareDomain: cloudFlareDomain);
+
+    await cloudFlare.removeSimilarRecords(cloudFlareDomain: cloudFlareDomain);
   }
 
   Future<void> deleteRecords() async {

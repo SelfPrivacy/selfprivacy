@@ -55,6 +55,7 @@ class ApiConfigModel {
 
   void init() {
     _hetznerKey = _box.get(BNames.hetznerKey);
+
     _cloudFlareKey = _box.get(BNames.cloudFlareKey);
     _backblazeCredential = _box.get(BNames.backblazeKey);
     _cloudFlareDomain = _box.get(BNames.cloudFlareDomain);

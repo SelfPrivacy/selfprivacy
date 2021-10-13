@@ -35,7 +35,6 @@ class InitializingPage extends StatelessWidget {
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
-      () => _stepCheck(cubit),
       () => Container(child: Center(child: Text('initializing.finish'.tr())))
     ][cubit.state.progress]();
     return BlocListener<AppConfigCubit, AppConfigState>(
@@ -48,21 +47,26 @@ class InitializingPage extends StatelessWidget {
         child: Scaffold(
           body: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: paddingH15V0.copyWith(top: 10, bottom: 10),
-                  child: ProgressBar(
-                    steps: [
-                      'Hetzner',
-                      'CloudFlare',
-                      'Backblaze',
-                      'Domain',
-                      'User',
-                      'Server',
-                      '✅ Check',
-                    ],
-                    activeIndex: cubit.state.porgressBar,
-                  ),
+                  child: cubit.state.isFullyInitilized
+                      ? SizedBox(
+                          height: 80,
+                        )
+                      : ProgressBar(
+                          steps: [
+                            'Hetzner',
+                            'CloudFlare',
+                            'Backblaze',
+                            'Domain',
+                            'User',
+                            'Server',
+                            '✅ Check',
+                          ],
+                          activeIndex: cubit.state.porgressBar,
+                        ),
                 ),
                 _addCard(
                   AnimatedSwitcher(

@@ -42,7 +42,7 @@ abstract class AppConfigState extends Equatable {
   bool get isUserFilled => rootUser != null;
   bool get isServerCreated => hetznerServer != null;
 
-  // bool get isFullyInitilized => _fulfilementList.every((el) => el!);
+  bool get isFullyInitilized => _fulfilementList.every((el) => el!);
   int get progress => _fulfilementList.where((el) => el!).length;
 
   int get porgressBar {

@@ -53,7 +53,7 @@ class _ServerDetailsState extends State<ServerDetails>
 
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state  is AppConfigFinished;
+    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
     var providerState = isReady ? StateType.stable : StateType.uninitialized;
 
     return Scaffold(
@@ -89,18 +89,18 @@ class _ServerDetailsState extends State<ServerDetails>
                           providerState: providerState,
                           tabController: tabController),
                       BrandText.body1('providers.server.bottom_sheet.1'.tr()),
-                      SizedBox(height: 10),
-                      BlocProvider(
-                        create: (context) => HetznerMetricsCubit()..restart(),
-                        child: _Chart(),
-                      ),
-                      SizedBox(height: 20),
-                      BlocProvider(
-                        create: (context) => ServerDetailsCubit()..check(),
-                        child: _TextDetails(),
-                      ),
                     ],
                   ),
+                ),
+                SizedBox(height: 10),
+                BlocProvider(
+                  create: (context) => HetznerMetricsCubit()..restart(),
+                  child: _Chart(),
+                ),
+                SizedBox(height: 20),
+                BlocProvider(
+                  create: (context) => ServerDetailsCubit()..check(),
+                  child: _TextDetails(),
                 ),
               ],
             ),

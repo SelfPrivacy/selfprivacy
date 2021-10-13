@@ -21,6 +21,8 @@ class UserFormCubit extends FormCubit {
     login = FieldCubit(
       initalValue: isEdit ? user!.login : '',
       validations: [
+        ValidationModel<String>(
+            (s) => s.toLowerCase() == 'root', 'validations.root_name'.tr()),
         ValidationModel(
           (login) => users.any((user) => user.login == login),
           'validations.user_alredy_exist'.tr(),

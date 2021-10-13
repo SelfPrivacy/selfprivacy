@@ -63,6 +63,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         oneMoreReset(state: state, isImmediate: true);
       } else if (state.progress == 9) {
         finishCheckIfServerIsOkay(state: state, isImmediate: true);
+      } else {
+        emit(state);
       }
     } else {
       throw 'wrong state';

@@ -47,6 +47,7 @@ class CpuChart extends StatelessWidget {
         maxY: 100,
         minX: data.length - 200,
         titlesData: FlTitlesData(
+          topTitles: SideTitles(showTitles: false),
           bottomTitles: SideTitles(
               interval: 20,
               rotateAngle: 90.0,

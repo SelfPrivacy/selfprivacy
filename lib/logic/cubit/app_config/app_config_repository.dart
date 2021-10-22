@@ -211,6 +211,7 @@ class AppConfigRepository {
   }
 
   Future<void> saveHetznerKey(String key) async {
+    print('saved');
     await getIt<ApiConfigModel>().storeHetznerKey(key);
   }
 
@@ -253,6 +254,13 @@ class AppConfigRepository {
     await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
       domainName: cloudFlareDomain.domainName,
     );
+
+    await box.put(BNames.hasFinalChecked, false);
+    await box.put(BNames.isServerStarted, false);
+    await box.put(BNames.isServerResetedFirstTime, false);
+    await box.put(BNames.isServerResetedSecondTime, false);
+    await box.put(BNames.isLoading, false);
+    await box.put(BNames.hetznerServer, null);
 
     await cloudFlare.removeSimilarRecords(cloudFlareDomain: cloudFlareDomain);
   }

@@ -5,7 +5,6 @@ class _Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var cubit = context.watch<HetznerMetricsCubit>();
     var period = cubit.state.period;
     var state = cubit.state;
@@ -21,8 +20,8 @@ class _Chart extends StatelessWidget {
     } else if (state is HetznerMetricsLoaded) {
       charts = [
         Legend(color: Colors.red, text: 'CPU %'),
-        getCpuChart(state),
         SizedBox(height: 20),
+        getCpuChart(state),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -33,8 +32,9 @@ class _Chart extends StatelessWidget {
             Legend(color: Colors.green, text: 'OUT'),
           ],
         ),
-        getPpsChart(state),
         SizedBox(height: 20),
+        getPpsChart(state),
+        SizedBox(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -45,6 +45,7 @@ class _Chart extends StatelessWidget {
             Legend(color: Colors.green, text: 'OUT'),
           ],
         ),
+        SizedBox(height: 20),
         getBandwidthChart(state),
       ];
     } else {

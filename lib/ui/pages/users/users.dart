@@ -43,7 +43,7 @@ class UsersPage extends StatelessWidget {
     if (user != null) {
       users.insert(0, user);
     }
-    final isEmpty = usersCubitState.isEmpty;
+    final isEmpty = users.isEmpty;
     Widget child;
 
     if (!isReady) {

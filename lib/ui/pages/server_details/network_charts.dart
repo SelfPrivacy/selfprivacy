@@ -35,7 +35,7 @@ class NetworkChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 150,
-      width: MediaQuery.of(context).size.width * 0.90,
+      width: MediaQuery.of(context).size.width,
       child: LineChart(
         LineChartData(
           lineTouchData: LineTouchData(enabled: false),
@@ -67,6 +67,7 @@ class NetworkChart extends StatelessWidget {
               1.2,
           minX: listData[0].length - 200,
           titlesData: FlTitlesData(
+            topTitles: SideTitles(showTitles: false),
             bottomTitles: SideTitles(
                 interval: 20,
                 rotateAngle: 90.0,
@@ -80,12 +81,13 @@ class NetworkChart extends StatelessWidget {
                   return bottomTitle(value.toInt());
                 }),
             leftTitles: SideTitles(
-              margin: 15,
+              reservedSize: 50,
+              margin: 5,
               interval: [
                     ...listData[0].map((e) => e.value),
                     ...listData[1].map((e) => e.value)
                   ].reduce(max) *
-                  1.2 /
+                  2 /
                   10,
               getTextStyles: (_, __) => progressTextStyleLight.copyWith(
                 color: Theme.of(context).brightness == Brightness.dark

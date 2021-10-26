@@ -1,6 +1,7 @@
-# selfprivacy
+# SelfPrivacy App
 
-selfprivacy.org
+- [Official site](https://selfprivacy.org)
+- [SelfPrivacy App (F-Droid)](https://f-droid.org/en/packages/pro.kherel.selfprivacy/)
 
 ## Getting Started
 

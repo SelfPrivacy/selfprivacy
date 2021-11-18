@@ -347,6 +347,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         state.rootUser!,
         state.cloudFlareDomain!.domainName,
         state.cloudFlareKey!,
+        state.backblazeCredential!,
         onCancel: onCancel,
         onSuccess: onSuccess,
       );

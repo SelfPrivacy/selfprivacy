@@ -110,7 +110,8 @@ class AppConfigRepository {
   Future<void> createServer(
     User rootUser,
     String domainName,
-    String cloudFlareKey, {
+    String cloudFlareKey,
+    BackblazeCredential backblazeCredential, {
     required void Function() onCancel,
     required Future<void> Function(HetznerServerDetails serverDetails)
         onSuccess,
@@ -126,6 +127,7 @@ class AppConfigRepository {
         rootUser: rootUser,
         domainName: domainName,
         dataBase: dataBase,
+        backblazeCredential: backblazeCredential,
       );
       saveServerDetails(serverDetails);
       onSuccess(serverDetails);
@@ -149,6 +151,7 @@ class AppConfigRepository {
                     rootUser: rootUser,
                     domainName: domainName,
                     dataBase: dataBase,
+                    backblazeCredential: backblazeCredential,
                   );
 
                   await saveServerDetails(serverDetails);

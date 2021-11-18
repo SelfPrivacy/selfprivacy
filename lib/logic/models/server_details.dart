@@ -9,6 +9,7 @@ class HetznerServerDetails {
     required this.id,
     required this.createTime,
     required this.dataBase,
+    required this.apiToken,
     this.startTime,
   });
 
@@ -27,6 +28,9 @@ class HetznerServerDetails {
   @HiveField(4)
   final HetznerDataBase dataBase;
 
+  @HiveField(5)
+  final String apiToken;
+
   HetznerServerDetails copyWith({DateTime? startTime}) {
     return HetznerServerDetails(
       startTime: startTime ?? this.startTime,
@@ -34,6 +38,7 @@ class HetznerServerDetails {
       id: id,
       ip4: ip4,
       dataBase: dataBase,
+      apiToken: apiToken,
     );
   }
 

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
+import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
@@ -93,6 +94,7 @@ class HetznerApi extends ApiMap {
     required User rootUser,
     required String domainName,
     required HetznerDataBase dataBase,
+    required BackblazeCredential backblazeCredential,
   }) async {
     var client = await getClient();
 
@@ -112,11 +114,15 @@ class HetznerApi extends ApiMap {
     // var dbId = dbCreateResponse.data['volume']['id'];
     var dbId = dataBase.id;
 
+    final apiToken = StringGenerators.apiToken();
+
+    final hostname = domainName.split('.')[0];
+
     /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
     /// check the branch name, it could be "development" or "master".
 
     var data = jsonDecode(
-        '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/ilchub/selfprivacy-nixos-infect/raw/branch/development/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
+        '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword BACKBLAZE_KEY_ID=${backblazeCredential.keyId} BACKBLAZE_ACCOUNT_KEY=${backblazeCredential.applicationKey} API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
 
     Response serverCreateResponse = await client.post(
       '/servers',
@@ -129,6 +135,7 @@ class HetznerApi extends ApiMap {
       ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
       createTime: DateTime.now(),
       dataBase: dataBase,
+      apiToken: apiToken,
     );
   }
 

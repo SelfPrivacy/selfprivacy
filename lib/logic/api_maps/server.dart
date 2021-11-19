@@ -20,8 +20,11 @@ class ServerApi extends ApiMap {
     if (isWithToken) {
       var cloudFlareDomain = getIt<ApiConfigModel>().cloudFlareDomain;
       var domainName = cloudFlareDomain!.domainName;
+      var apiToken = getIt<ApiConfigModel>().hetznerServer?.apiToken;
 
-      options = BaseOptions(baseUrl: 'https://api.$domainName');
+      options = BaseOptions(baseUrl: 'https://api.$domainName', headers: {
+        'Authorization': 'Bearer ${apiToken}',
+      });
     }
 
     return options;
@@ -47,18 +50,19 @@ class ServerApi extends ApiMap {
     Response response;
 
     var client = await getClient();
+    // POST request with JSON body containing username and password
     try {
       response = await client.post(
-        '/users/create',
+        '/users',
+        data: {
+          'username': user.login,
+          'password': user.password,
+        },
         options: Options(
-          headers: {
-            "X-User": user.login,
-            "X-Password": user.password,
-            "X-Domain": getIt<ApiConfigModel>().cloudFlareDomain!.domainName
-          },
+          contentType: 'application/json',
         ),
       );
-      res = response.statusCode == HttpStatus.ok;
+      res = response.statusCode == HttpStatus.created;
     } catch (e) {
       print(e);
       res = false;
@@ -99,8 +103,8 @@ class ServerApi extends ApiMap {
 
   Future<void> sendSsh(String ssh) async {
     var client = await getClient();
-    client.post(
-      '/services/ssh/enable',
+    client.put(
+      '/services/ssh/key/send',
       data: {"public_key": ssh},
     );
     client.close();

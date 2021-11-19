@@ -21,6 +21,7 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
       id: fields[1] as int,
       createTime: fields[3] as DateTime?,
       dataBase: fields[4] as HetznerDataBase,
+      apiToken: fields[5] as String,
       startTime: fields[2] as DateTime?,
     );
   }
@@ -28,7 +29,7 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
   @override
   void write(BinaryWriter writer, HetznerServerDetails obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.ip4)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class HetznerServerDetailsAdapter extends TypeAdapter<HetznerServerDetails> {
       ..writeByte(2)
       ..write(obj.startTime)
       ..writeByte(4)
-      ..write(obj.dataBase);
+      ..write(obj.dataBase)
+      ..writeByte(5)
+      ..write(obj.apiToken);
   }
 
   @override

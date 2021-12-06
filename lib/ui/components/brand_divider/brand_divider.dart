@@ -13,4 +13,3 @@ class BrandDivider extends StatelessWidget {
     );
   }
 }
-

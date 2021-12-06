@@ -37,7 +37,8 @@ class SlideRightRoute extends PageRouteBuilder {
   SlideRightRoute(this.widget)
       : super(
           pageBuilder: pageBuilder(widget),
-          transitionsBuilder: transitionsBuilder as Widget Function(BuildContext, Animation<double>, Animation<double>, Widget),
+          transitionsBuilder: transitionsBuilder as Widget Function(
+              BuildContext, Animation<double>, Animation<double>, Widget),
         );
 
   final Widget widget;

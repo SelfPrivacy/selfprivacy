@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
@@ -12,12 +13,14 @@ class ApiConfigModel {
   String? get cloudFlareKey => _cloudFlareKey;
   BackblazeCredential? get backblazeCredential => _backblazeCredential;
   CloudFlareDomain? get cloudFlareDomain => _cloudFlareDomain;
+  BackblazeBucket? get backblazeBucket => _backblazeBucket;
 
   String? _hetznerKey;
   String? _cloudFlareKey;
   HetznerServerDetails? _hetznerServer;
   BackblazeCredential? _backblazeCredential;
   CloudFlareDomain? _cloudFlareDomain;
+  BackblazeBucket? _backblazeBucket;
 
   Future<void> storeHetznerKey(String value) async {
     await _box.put(BNames.hetznerKey, value);
@@ -45,12 +48,18 @@ class ApiConfigModel {
     _hetznerServer = value;
   }
 
+  Future<void> storeBackblazeBucket(BackblazeBucket value) async {
+    await _box.put(BNames.backblazeBucket, value);
+    _backblazeBucket = value;
+  }
+
   clear() {
     _hetznerKey = null;
     _cloudFlareKey = null;
     _backblazeCredential = null;
     _cloudFlareDomain = null;
     _hetznerServer = null;
+    _backblazeBucket = null;
   }
 
   void init() {
@@ -60,5 +69,6 @@ class ApiConfigModel {
     _backblazeCredential = _box.get(BNames.backblazeKey);
     _cloudFlareDomain = _box.get(BNames.cloudFlareDomain);
     _hetznerServer = _box.get(BNames.hetznerServer);
+    _backblazeBucket = _box.get(BNames.backblazeBucket);
   }
 }

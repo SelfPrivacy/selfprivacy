@@ -105,7 +105,7 @@ class MorePage extends StatelessWidget {
                                           title: 'modals.3'.tr(),
                                           contentText:
                                               'more.delete_ssh_text'.tr(),
-                                          acitons: [
+                                          actions: [
                                             ActionButton(
                                                 text: 'more.yes_delete'.tr(),
                                                 isRed: true,

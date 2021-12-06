@@ -5,11 +5,11 @@ class BrandAlert extends AlertDialog {
     Key? key,
     String? title,
     String? contentText,
-    List<Widget>? acitons,
+    List<Widget>? actions,
   }) : super(
           key: key,
           title: title != null ? Text(title) : null,
           content: title != null ? Text(contentText!) : null,
-          actions: acitons,
+          actions: actions,
         );
 }

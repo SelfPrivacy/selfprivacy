@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 extension ElevationExtension on BoxDecoration {
-
   BoxDecoration copyWith({
     Color? color,
     DecorationImage? image,

@@ -15,7 +15,8 @@ class HetznerFormCubit extends FormCubit {
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
             (s) => regExp.hasMatch(s), 'validations.key_format'.tr()),
-        LegnthStringValidationWithLenghShowing(64, 'validations.length'.tr(args: ["64"]))
+        LegnthStringValidationWithLenghShowing(
+            64, 'validations.length'.tr(args: ["64"]))
       ],
     );
 

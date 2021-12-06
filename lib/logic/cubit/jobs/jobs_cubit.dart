@@ -68,6 +68,29 @@ class JobsCubit extends Cubit<JobsState> {
     }
   }
 
+  Future<void> rebootServer() async {
+    final isSuccessful = await api.reboot();
+    if (isSuccessful) {
+      getIt<NavigationService>().showSnackBar('jobs.rebootSuccess'.tr());
+    } else {
+      getIt<NavigationService>().showSnackBar('jobs.rebootFailed'.tr());
+    }
+  }
+
+  Future<void> upgradeServer() async {
+    final isPullSuccessful = await api.pullConfigurationUpdate();
+    final isSuccessful = await api.upgrade();
+    if (isSuccessful) {
+      if (!isPullSuccessful) {
+        getIt<NavigationService>().showSnackBar('jobs.configPullFailed'.tr());
+      } else {
+        getIt<NavigationService>().showSnackBar('jobs.upgradeSuccess'.tr());
+      }
+    } else {
+      getIt<NavigationService>().showSnackBar('jobs.upgradeFailed'.tr());
+    }
+  }
+
   Future<void> applyAll() async {
     if (state is JobsStateWithJobs) {
       var jobs = (state as JobsStateWithJobs).jobList;
@@ -89,6 +112,7 @@ class JobsCubit extends Cubit<JobsState> {
       }
 
       usersCubit.addUsers(newUsers);
+      await api.pullConfigurationUpdate();
       await api.apply();
       if (hasServiceJobs) {
         await servicesCubit.load();

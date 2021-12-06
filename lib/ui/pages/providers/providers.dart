@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/models/provider.dart';
@@ -12,6 +13,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
+import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
@@ -29,6 +31,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
   @override
   Widget build(BuildContext context) {
     var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
+    var isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
 
     final cards = ProviderType.values
         .map(
@@ -36,7 +39,11 @@ class _ProvidersPageState extends State<ProvidersPage> {
             padding: EdgeInsets.only(bottom: 30),
             child: _Card(
               provider: ProviderModel(
-                state: isReady ? StateType.stable : StateType.uninitialized,
+                state: isReady
+                    ? (type == ProviderType.backup && !isBackupInitialized
+                        ? StateType.uninitialized
+                        : StateType.stable)
+                    : StateType.uninitialized,
                 type: type,
               ),
             ),
@@ -113,14 +120,12 @@ class _Card extends StatelessWidget {
         title = 'providers.backup.card_title'.tr();
         stableText = 'providers.backup.status'.tr();
 
-        onTap = () => showModalBottomSheet<void>(
+        onTap = () => showBrandBottomSheet(
               context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
               builder: (BuildContext context) {
-                return _ProviderDetails(
-                  provider: provider,
-                  statusText: stableText,
+                return BrandBottomSheet(
+                  isExpended: true,
+                  child: BackupDetails(),
                 );
               },
             );

@@ -16,5 +16,3 @@ class ProvidersCubit extends Cubit<ProvidersState> {
     emit(newState);
   }
 }
-
-

@@ -96,7 +96,7 @@ class StringGenerators {
         hasUppercaseLetters: true,
         hasNumbers: true,
       );
-  
+
   static StringGeneratorFunction apiToken = () => getRandomString(
         64,
         hasLowercaseLetters: true,

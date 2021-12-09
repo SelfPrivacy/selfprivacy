@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 
 import 'api_map.dart';
@@ -23,7 +25,7 @@ class ServerApi extends ApiMap {
       var apiToken = getIt<ApiConfigModel>().hetznerServer?.apiToken;
 
       options = BaseOptions(baseUrl: 'https://api.$domainName', headers: {
-        'Authorization': 'Bearer ${apiToken}',
+        'Authorization': 'Bearer $apiToken',
       });
     }
 
@@ -122,6 +124,95 @@ class ServerApi extends ApiMap {
       ServiceTypes.vpn: response.data['ocserv'] == 0,
       ServiceTypes.socialNetwork: response.data['pleroma'] == 0,
     };
+  }
+
+  Future<void> uploadBackblazeConfig(BackblazeBucket bucket) async {
+    var client = await getClient();
+    client.put(
+      '/services/restic/backblaze/config',
+      data: {
+        'accountId': bucket.applicationKeyId,
+        'accountKey': bucket.applicationKey,
+        'bucket': bucket.bucketName,
+      },
+    );
+    client.close();
+  }
+
+  Future<void> startBackup() async {
+    var client = await getClient();
+    client.put('/services/restic/backup/create');
+    client.close();
+  }
+
+  Future<List<Backup>> getBackups() async {
+    Response response;
+
+    var client = await getClient();
+    try {
+      response = await client.get(
+        '/services/restic/backup/list',
+      );
+      return response.data.map<Backup>((e) => Backup.fromJson(e)).toList();
+    } catch (e) {
+      print(e);
+    }
+    close(client);
+    return <Backup>[];
+  }
+
+  Future<BackupStatus> getBackupStatus() async {
+    Response response;
+
+    var client = await getClient();
+    try {
+      response = await client.get(
+        '/services/restic/backup/status',
+      );
+      return BackupStatus.fromJson(response.data);
+    } catch (e) {
+      print(e);
+    }
+    close(client);
+
+    return BackupStatus(
+      status: BackupStatusEnum.error,
+      errorMessage: 'Network error',
+      progress: 0,
+    );
+  }
+
+  Future<void> forceBackupListReload() async {
+    var client = await getClient();
+    client.get('/services/restic/backup/reload');
+    client.close();
+  }
+
+  Future<void> restoreBackup(String backupId) async {
+    var client = await getClient();
+    client.put('/services/restic/backup/restore', data: {'backupId': backupId});
+    client.close();
+  }
+
+  Future<bool> pullConfigurationUpdate() async {
+    var client = await getClient();
+    Response response = await client.get('/system/configuration/pull');
+    close(client);
+    return response.statusCode == HttpStatus.ok;
+  }
+
+  Future<bool> reboot() async {
+    var client = await getClient();
+    Response response = await client.get('/system/reboot');
+    client.close();
+    return response.statusCode == HttpStatus.ok;
+  }
+
+  Future<bool> upgrade() async {
+    var client = await getClient();
+    Response response = await client.get('/system/configuration/upgrade');
+    client.close();
+    return response.statusCode == HttpStatus.ok;
   }
 }
 

@@ -4,13 +4,11 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
-import 'package:selfprivacy/logic/get_it/api_config.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:basic_utils/basic_utils.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
@@ -127,7 +125,6 @@ class AppConfigRepository {
         rootUser: rootUser,
         domainName: domainName,
         dataBase: dataBase,
-        backblazeCredential: backblazeCredential,
       );
       saveServerDetails(serverDetails);
       onSuccess(serverDetails);
@@ -138,7 +135,7 @@ class AppConfigRepository {
           BrandAlert(
             title: 'modals.1'.tr(),
             contentText: 'modals.2'.tr(),
-            acitons: [
+            actions: [
               ActionButton(
                 text: 'basis.delete'.tr(),
                 isRed: true,
@@ -151,7 +148,6 @@ class AppConfigRepository {
                     rootUser: rootUser,
                     domainName: domainName,
                     dataBase: dataBase,
-                    backblazeCredential: backblazeCredential,
                   );
 
                   await saveServerDetails(serverDetails);

@@ -99,7 +99,20 @@
       "bottom_sheet": {
         "1": "Will save your day in case of incident: hackers attack, server deletion, etc.",
         "2": "3Gb/10Gb, last backup was yesterday {}"
-      }
+      },
+      "reuploadKey": "Force reupload key",
+      "reuploadedKey": "Key reuploaded",
+      "initialize": "Initialize",
+      "waitingForRebuild": "You will be able to create your first backup in a few minutes.",
+      "restore": "Restore from backup",
+      "no_backups": "There are no backups yet",
+      "create_new": "Create a new backup",
+      "creating": "Creating a new backup: {}%",
+      "restoring": "Restoring from backup",
+      "error_pending": "Server returned error, check it below",
+      "restore_alert": "You are about to restore from backup created on {}. All current data will be lost. Are you sure?",
+      "refetchBackups": "Refetch backup list",
+      "refetchingList": "In a few minutes list will be updated"
     }
   },
   "not_ready_card": {
@@ -223,7 +236,9 @@
     "5": "Yes, purge all my tokens",
     "6": "Delete the server and volume?",
     "7": "Yes",
-    "8": "Remove task"
+    "8": "Remove task",
+    "9": "Reboot",
+    "yes": "Yes"
   },
   "timer": {
     "sec": "{} sec"
@@ -237,7 +252,14 @@
     "serviceTurnOff": "Turn off",
     "serviceTurnOn": "Turn on",
     "jobAdded": "Job added",
-    "runJobs": "Run jobs"
+    "runJobs": "Run jobs",
+    "rebootSuccess": "Server is rebooting",
+    "rebootFailed": "Couldn't reboot the server. Check the app logs.",
+    "configPullFailed": "Failed to pull configuration upgrade. Started software upgrade anyways.",
+    "upgradeSuccess": "Server upgrade started",
+    "upgradeFailed": "Failed to upgrade server",
+    "upgradeServer": "Upgrade server",
+    "rebootServer": "Reboot server"
   },
   "validations": {
     "required": "Required",

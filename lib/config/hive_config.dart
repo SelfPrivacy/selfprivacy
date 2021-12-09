@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
@@ -16,6 +17,7 @@ class HiveConfig {
     Hive.registerAdapter(HetznerServerDetailsAdapter());
     Hive.registerAdapter(CloudFlareDomainAdapter());
     Hive.registerAdapter(BackblazeCredentialAdapter());
+    Hive.registerAdapter(BackblazeBucketAdapter());
     Hive.registerAdapter(HetznerDataBaseAdapter());
 
     await Hive.openBox(BNames.appSettings);
@@ -62,6 +64,7 @@ class BNames {
   static String hasFinalChecked = 'hasFinalChecked';
   static String isServerStarted = 'isServerStarted';
   static String backblazeKey = 'backblazeKey';
+  static String backblazeBucket = 'backblazeBucket';
   static String isLoading = 'isLoading';
   static String isServerResetedFirstTime = 'isServerResetedFirstTime';
   static String isServerResetedSecondTime = 'isServerResetedSecondTime';

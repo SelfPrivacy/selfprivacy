@@ -97,7 +97,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                             return BrandAlert(
                               title: 'modals.3'.tr(),
                               contentText: 'modals.4'.tr(),
-                              acitons: [
+                              actions: [
                                 ActionButton(
                                     text: 'modals.5'.tr(),
                                     isRed: true,
@@ -167,7 +167,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                         return BrandAlert(
                           title: 'modals.3'.tr(),
                           contentText: 'modals.6'.tr(),
-                          acitons: [
+                          actions: [
                             ActionButton(
                                 text: 'modals.7'.tr(),
                                 isRed: true,

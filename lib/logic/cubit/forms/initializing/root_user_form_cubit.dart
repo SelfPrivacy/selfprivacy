@@ -25,8 +25,8 @@ class RootUserFormCubit extends FormCubit {
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
-        ValidationModel<String>(
-            (s) => passwordRegExp.hasMatch(s), 'validations.invalid_format'.tr()),
+        ValidationModel<String>((s) => passwordRegExp.hasMatch(s),
+            'validations.invalid_format'.tr()),
       ],
     );
 

@@ -48,6 +48,9 @@ class _Header extends StatelessWidget {
                 case _PopupMenuItemType.reuploadKey:
                   context.read<BackupsCubit>().reuploadKey();
                   break;
+                case _PopupMenuItemType.refetchBackups:
+                  context.read<BackupsCubit>().forceUpdateBackups();
+                  break;
               }
             },
             icon: Icon(Icons.more_vert),
@@ -59,6 +62,13 @@ class _Header extends StatelessWidget {
                   child: Text('providers.backup.reuploadKey'.tr()),
                 ),
               ),
+              PopupMenuItem<_PopupMenuItemType>(
+                value: _PopupMenuItemType.refetchBackups,
+                child: Container(
+                  padding: EdgeInsets.only(left: 5),
+                  child: Text('providers.backup.refetchBackups'.tr()),
+                ),
+              ),
             ],
           ),
         ),
@@ -67,4 +77,4 @@ class _Header extends StatelessWidget {
   }
 }
 
-enum _PopupMenuItemType { reuploadKey }
+enum _PopupMenuItemType { reuploadKey, refetchBackups }

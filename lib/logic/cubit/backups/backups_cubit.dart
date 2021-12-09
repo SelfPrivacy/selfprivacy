@@ -148,6 +148,13 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
       Timer(state.refreshTimer, () => updateBackups(useTimer: true));
   }
 
+  Future<void> forceUpdateBackups() async {
+    emit(state.copyWith(preventActions: true));
+    await api.forceBackupListReload();
+    getIt<NavigationService>().showSnackBar('providers.backup.refetchingList');
+    emit(state.copyWith(preventActions: false));
+  }
+
   Future<void> createBackup() async {
     emit(state.copyWith(preventActions: true));
     await api.startBackup();

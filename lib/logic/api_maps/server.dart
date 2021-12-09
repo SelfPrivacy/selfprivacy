@@ -153,7 +153,7 @@ class ServerApi extends ApiMap {
       response = await client.get(
         '/services/restic/backup/list',
       );
-      return response.data.map((e) => Backup.fromJson(e)).toList();
+      return response.data.map<Backup>((e) => Backup.fromJson(e)).toList();
     } catch (e) {
       print(e);
     }

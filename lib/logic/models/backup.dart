@@ -41,7 +41,7 @@ class BackupStatus {
   final BackupStatusEnum status;
   final double progress;
   @JsonKey(name: 'error_message')
-  final String errorMessage;
+  final String? errorMessage;
 
   factory BackupStatus.fromJson(Map<String, dynamic> json) =>
       _$BackupStatusFromJson(json);

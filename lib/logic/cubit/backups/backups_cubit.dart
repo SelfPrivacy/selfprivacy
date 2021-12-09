@@ -56,7 +56,7 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
               preventActions: false,
               progress: status.progress,
               status: status.status,
-              error: status.errorMessage,
+              error: status.errorMessage ?? '',
               refreshing: false,
             ));
             break;
@@ -69,7 +69,7 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
               preventActions: true,
               progress: status.progress,
               status: status.status,
-              error: status.errorMessage,
+              error: status.errorMessage ?? '',
               refreshTimer: Duration(seconds: 5),
               refreshing: false,
             ));

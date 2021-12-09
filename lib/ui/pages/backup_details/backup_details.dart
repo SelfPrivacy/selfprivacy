@@ -105,6 +105,13 @@ class _BackupDetailsState extends State<BackupDetails>
                         children: [
                           if (backupStatus == BackupStatusEnum.initialized)
                             ListTile(
+                              onTap: preventActions
+                                  ? null
+                                  : () async {
+                                      await context
+                                          .read<BackupsCubit>()
+                                          .createBackup();
+                                    },
                               leading: Icon(
                                 Icons.add_circle_outline_rounded,
                                 color: BrandColors.textColor1,

@@ -1,0 +1,2 @@
+- Addressed SPCVE-0001 security issue
+- Majorly improved SelfPrivacy REST API stability

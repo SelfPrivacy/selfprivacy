@@ -1,0 +1,2 @@
+- Added backup creation, restoration and deletion possibility
+- Implemented backend updates without server redeployment

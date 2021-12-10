@@ -1,0 +1,6 @@
+- Added service management
+- Fixed e-mail and VPN login issues for newly created users
+- Fixed connection issues from Cisco AnyConnect VPN client
+- Fixed Nextcloud connection issues for Desktop and mobile clients
+- Updated Nextcloud to Nextcloud 22
+- Added Ad-Hoc SSH support

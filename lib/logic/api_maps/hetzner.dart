@@ -120,7 +120,7 @@ class HetznerApi extends ApiMap {
     /// check the branch name, it could be "development" or "master".
 
     var data = jsonDecode(
-        '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/rolling-testing/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
+        '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
 
     Response serverCreateResponse = await client.post(
       '/servers',

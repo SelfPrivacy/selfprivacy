@@ -74,6 +74,28 @@ class ServerApi extends ApiMap {
     return res;
   }
 
+  Future<bool> deleteUser(User user) async {
+    bool res;
+    Response response;
+
+    var client = await getClient();
+    try {
+      response = await client.delete(
+        '/users/${user.login}',
+        options: Options(
+          contentType: 'application/json',
+        ),
+      );
+      res = response.statusCode == HttpStatus.ok;
+    } catch (e) {
+      print(e);
+      res = false;
+    }
+
+    close(client);
+    return res;
+  }
+
   String get rootAddress =>
       throw UnimplementedError('not used in with implementation');
 

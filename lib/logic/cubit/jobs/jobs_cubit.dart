@@ -105,7 +105,12 @@ class JobsCubit extends Cubit<JobsState> {
         if (job is CreateUserJob) {
           newUsers.add(job.user);
           await api.createUser(job.user);
-        } else if (job is ServiceToggleJob) {
+        }
+        if (job is DeleteUserJob) {
+          final deleted = await api.deleteUser(job.user);
+          if (deleted) usersCubit.remove(job.user);
+        }
+        if (job is ServiceToggleJob) {
           hasServiceJobs = true;
           await api.switchService(job.type, job.needToTurnOn);
         }

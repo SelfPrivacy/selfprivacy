@@ -69,15 +69,18 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> rebootServer() async {
+    emit(JobsStateLoading());
     final isSuccessful = await api.reboot();
     if (isSuccessful) {
       getIt<NavigationService>().showSnackBar('jobs.rebootSuccess'.tr());
     } else {
       getIt<NavigationService>().showSnackBar('jobs.rebootFailed'.tr());
     }
+    emit(JobsStateEmpty());
   }
 
   Future<void> upgradeServer() async {
+    emit(JobsStateLoading());
     final isPullSuccessful = await api.pullConfigurationUpdate();
     final isSuccessful = await api.upgrade();
     if (isSuccessful) {
@@ -89,6 +92,7 @@ class JobsCubit extends Cubit<JobsState> {
     } else {
       getIt<NavigationService>().showSnackBar('jobs.upgradeFailed'.tr());
     }
+    emit(JobsStateEmpty());
   }
 
   Future<void> applyAll() async {

@@ -13,3 +13,5 @@
 12. Check if you got everything right. A similar string must be present: *Domain — DNS:Edit, Zone:Read*.
 13. Click on **Create Token**.
 14. We copy the created token, and save it in a reliable place (preferably in the password manager).
+
+![Cloudflare token setup](resource:assets/images/gifs/CloudFlare.gif)

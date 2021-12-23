@@ -343,8 +343,10 @@ class InitializingPage extends StatelessWidget {
                 text: 'initializing.10'.tr(),
               ),
             ],
-            SizedBox(height: 10),
-            Spacer(),
+            SizedBox(
+              height: 10,
+              width: double.infinity,
+            ),
           ],
         );
       }),

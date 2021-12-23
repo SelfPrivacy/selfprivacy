@@ -19,3 +19,5 @@
 8.  Click **Generate API Token.**
 9.  After that, our key will be shown. Store it in the reliable place,
     or in the password manager, which is better.
+
+![Hetzner token setup](resource:assets/images/gifs/Hetzner.gif)

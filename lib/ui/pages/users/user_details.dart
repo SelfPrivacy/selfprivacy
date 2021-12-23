@@ -75,9 +75,8 @@ class _UserDetails extends StatelessWidget {
                                           ),
                                         ),
                                         onPressed: () {
-                                          context
-                                              .read<JobsCubit>()
-                                              .addJob(DeleteUserJob(user: user));
+                                          context.read<JobsCubit>().addJob(
+                                              DeleteUserJob(user: user));
                                           Navigator.of(context)
                                             ..pop()
                                             ..pop();

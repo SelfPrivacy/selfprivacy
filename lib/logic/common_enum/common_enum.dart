@@ -69,6 +69,46 @@ extension ServiceTypesExt on ServiceTypes {
     }
   }
 
+  String get loginInfo {
+    switch (this) {
+      case ServiceTypes.mail:
+        return 'services.mail.login_info'.tr();
+      case ServiceTypes.messenger:
+        return 'services.messenger.login_info'.tr();
+      case ServiceTypes.passwordManager:
+        return 'services.password_manager.login_info'.tr();
+      case ServiceTypes.video:
+        return 'services.video.login_info'.tr();
+      case ServiceTypes.cloud:
+        return 'services.cloud.login_info'.tr();
+      case ServiceTypes.socialNetwork:
+        return 'services.social_network.login_info'.tr();
+      case ServiceTypes.git:
+        return 'services.git.login_info'.tr();
+      case ServiceTypes.vpn:
+        return '';
+    }
+  }
+
+  String get subdomain {
+    switch (this) {
+      case ServiceTypes.passwordManager:
+        return 'password';
+      case ServiceTypes.video:
+        return 'meet';
+      case ServiceTypes.cloud:
+        return 'cloud';
+      case ServiceTypes.socialNetwork:
+        return 'social';
+      case ServiceTypes.git:
+        return 'git';
+      case ServiceTypes.vpn:
+      case ServiceTypes.messenger:
+      default:
+        return '';
+    }
+  }
+
   IconData get icon {
     switch (this) {
       case ServiceTypes.mail:

@@ -1,3 +1,4 @@
+### How to get Hetzner API Token
 1.  Visit the following [link](https://console.hetzner.cloud/) and sign
     into newly created account.
 2.  Enter into previously created project. If you haven't created one,

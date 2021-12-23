@@ -38,6 +38,23 @@ class ServicesPage extends StatefulWidget {
   _ServicesPageState createState() => _ServicesPageState();
 }
 
+void _launchURL(url) async {
+  var _possible = await canLaunch(url);
+
+  if (_possible) {
+    try {
+      await launch(
+        url,
+        enableJavaScript: true,
+      );
+    } catch (e) {
+      print(e);
+    }
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
 class _ServicesPageState extends State<ServicesPage> {
   @override
   Widget build(BuildContext context) {
@@ -93,6 +110,9 @@ class _Card extends StatelessWidget {
     var isSwithOn = isReady &&
         (!switchableServices.contains(serviceType) ||
             serviceState.isEnableByType(serviceType));
+
+    var config = context.watch<AppConfigCubit>().state;
+    var domainName = UiHelpers.getDomainName(config);
 
     return GestureDetector(
       onTap: isSwithOn
@@ -162,6 +182,30 @@ class _Card extends StatelessWidget {
                     children: [
                       SizedBox(height: 10),
                       BrandText.h2(serviceType.title),
+                      SizedBox(height: 10),
+                      if (serviceType.subdomain != '')
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () => _launchURL(
+                                  'https://${serviceType.subdomain}.$domainName'),
+                              child: Text(
+                                '${serviceType.subdomain}.$domainName',
+                                style: linkStyle,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      if (serviceType == ServiceTypes.mail)
+                        Column(children: [
+                          Text(
+                            domainName,
+                            style: linkStyle,
+                          ),
+                          SizedBox(height: 10),
+                        ]),
+                      BrandText.body2(serviceType.loginInfo),
                       SizedBox(height: 10),
                       BrandText.body2(serviceType.subtitle),
                       SizedBox(height: 10),
@@ -437,22 +481,5 @@ class _ServiceDetails extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _launchURL(url) async {
-    var _possible = await canLaunch(url);
-
-    if (_possible) {
-      try {
-        await launch(
-          url,
-          enableJavaScript: true,
-        );
-      } catch (e) {
-        print(e);
-      }
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }

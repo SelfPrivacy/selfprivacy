@@ -115,7 +115,7 @@ class HetznerApi extends ApiMap {
     final apiToken = StringGenerators.apiToken();
 
     // Replace all non-alphanumeric characters with an underscore
-    final hostname = domainName.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_');
+    final hostname = domainName.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
 
     /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
     /// check the branch name, it could be "development" or "master".

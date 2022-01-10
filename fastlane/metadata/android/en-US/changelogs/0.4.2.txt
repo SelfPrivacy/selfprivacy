@@ -1,0 +1,4 @@
+- Show progress bar on upgrading/restarting server
+- Implemented user deletion
+- Built-in documentation improvement
+- Minor bug fixes

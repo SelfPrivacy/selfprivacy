@@ -137,7 +137,8 @@ class InitializingPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             BrandButton.text(
-              onPressed: () => _showModal(context, _HowHetzner()),
+              onPressed: () =>
+                  _showModal(context, _HowTo(fileName: 'how_hetzner')),
               title: 'initializing.how'.tr(),
             ),
           ],
@@ -192,7 +193,11 @@ class InitializingPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             BrandButton.text(
-              onPressed: () => _showModal(context, _HowHetzner()),
+              onPressed: () => _showModal(
+                  context,
+                  _HowTo(
+                    fileName: 'how_cloudflare',
+                  )),
               title: 'initializing.how'.tr(),
             ),
           ],
@@ -243,7 +248,11 @@ class InitializingPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             BrandButton.text(
-              onPressed: () => _showModal(context, _HowHetzner()),
+              onPressed: () => _showModal(
+                  context,
+                  _HowTo(
+                    fileName: 'how_backblaze',
+                  )),
               title: 'initializing.how'.tr(),
             ),
           ],
@@ -334,12 +343,9 @@ class InitializingPage extends StatelessWidget {
                 text: 'initializing.10'.tr(),
               ),
             ],
-            SizedBox(height: 10),
-            Spacer(),
-            SizedBox(height: 10),
-            BrandButton.text(
-              onPressed: () => _showModal(context, _HowHetzner()),
-              title: 'initializing.how'.tr(),
+            SizedBox(
+              height: 10,
+              width: double.infinity,
             ),
           ],
         );
@@ -403,11 +409,6 @@ class InitializingPage extends StatelessWidget {
                   : () => context.read<RootUserFormCubit>().trySubmit(),
               text: 'basis.connect'.tr(),
             ),
-            SizedBox(height: 10),
-            BrandButton.text(
-              onPressed: () => _showModal(context, _HowHetzner()),
-              title: 'initializing.how'.tr(),
-            ),
           ],
         );
       }),
@@ -430,11 +431,6 @@ class InitializingPage extends StatelessWidget {
                 ? null
                 : () => appConfigCubit.createServerAndSetDnsRecords(),
             text: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
-          ),
-          Spacer(flex: 2),
-          BrandButton.text(
-            onPressed: () => _showModal(context, _HowHetzner()),
-            title: 'initializing.what'.tr(),
           ),
         ],
       );
@@ -482,13 +478,6 @@ class InitializingPage extends StatelessWidget {
               ],
             ),
           if (state.isLoading) BrandText.body2('initializing.17'.tr()),
-          Spacer(
-            flex: 2,
-          ),
-          BrandButton.text(
-            onPressed: () => _showModal(context, _HowHetzner()),
-            title: 'initializing.what'.tr(),
-          ),
         ],
       );
     });
@@ -503,10 +492,13 @@ class InitializingPage extends StatelessWidget {
   }
 }
 
-class _HowHetzner extends StatelessWidget {
-  const _HowHetzner({
+class _HowTo extends StatelessWidget {
+  const _HowTo({
     Key? key,
+    required this.fileName,
   }) : super(key: key);
+
+  final String fileName;
 
   @override
   Widget build(BuildContext context) {
@@ -515,7 +507,7 @@ class _HowHetzner extends StatelessWidget {
       child: Padding(
         padding: paddingH15V0,
         child: BrandMarkdown(
-          fileName: 'how_hetzner',
+          fileName: fileName,
         ),
       ),
     );

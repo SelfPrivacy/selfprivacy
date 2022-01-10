@@ -127,6 +127,7 @@
     "mail": {
       "title": "E-Mail",
       "subtitle": "E-Mail for company and family.",
+      "login_info": "Use username and password from users tab. IMAP port is 143 with STARTTLS, SMTP port is 587 with STARTTLS.",
       "bottom_sheet": {
         "1": "To connect to the mailserver, please use {} domain alongside with username and password, that you created. Also feel free to invite",
         "2": "new users"
@@ -135,6 +136,7 @@
     "messenger": {
       "title": "Messenger",
       "subtitle": "Telegram or Signal not so private as Delta.Chat that uses your private server.",
+      "login_info": "Use the same username and password as for e-mail.",
       "bottom_sheet": {
         "1": "For connection, please use {} domain and credentials that you created."
       }
@@ -142,6 +144,7 @@
     "password_manager": {
       "title": "Password Manager",
       "subtitle": "Base of your security. Bitwarden will help you to create, store and move passwords between devices, as well as input them, when requested using autocompletion.",
+      "login_info": "You will have to create an account on the website.",
       "bottom_sheet": {
         "1": "You can connect to the service and create a user via this link:"
       }
@@ -149,6 +152,7 @@
     "video": {
       "title": "Videomeet",
       "subtitle": "Zoom and Google Meet are good, but Jitsi Meet is a worth alternative that also gives you confidence that you're not being listened.",
+      "login_info": "No account needed.",
       "bottom_sheet": {
         "1": "Using Jitsi as simple as just visiting this link:"
       }
@@ -156,6 +160,7 @@
     "cloud": {
       "title": "Cloud Storage",
       "subtitle": "Do not allow cloud services to read your data by using NextCloud.",
+      "login_info": "Login is admin, password is the same as with your main user. Create new accounts in Nextcloud interface.",
       "bottom_sheet": {
         "1": "You can connect and create a new user here:"
       }
@@ -163,6 +168,7 @@
     "social_network": {
       "title": "Social Network",
       "subtitle": "It's hard to believe, but it became possible to create your own social network, with your own rules and target audience.",
+      "login_info": "You will have to create an account on the website.",
       "bottom_sheet": {
         "1": "You can connect and create new social user here:"
       }
@@ -170,6 +176,7 @@
     "git": {
       "title": "Git Server",
       "subtitle": "Private alternative to the Github, that belongs to you, but not a Microsoft.",
+      "login_info": "You will have to create an account on the website. First user will become an admin.",
       "bottom_sheet": {
         "1": "You can connect and create a new user here:"
       }
@@ -248,7 +255,8 @@
     "title": "Jobs list",
     "start": "Start",
     "empty": "No jobs",
-    "createUser": "Create",
+    "createUser": "Create user",
+    "deleteUser": "Delete user",
     "serviceTurnOff": "Turn off",
     "serviceTurnOn": "Turn on",
     "jobAdded": "Job added",

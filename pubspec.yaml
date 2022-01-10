@@ -1,7 +1,7 @@
 name: selfprivacy
 description: selfprivacy.org
 publish_to: 'none'
-version: 0.4.1+9
+version: 0.4.2+10
 
 environment:
   sdk: '>=2.13.4 <3.0.0'
@@ -61,6 +61,7 @@ flutter:
     - assets/images/
     - assets/images/onboarding/
     - assets/images/logos/
+    - assets/images/gifs/
     - assets/translations/
     - assets/markdown/
   fonts:

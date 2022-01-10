@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/api_maps/backblaze.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 part 'backups_state.dart';
 
@@ -85,7 +86,7 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
   Future<void> createBucket() async {
     emit(state.copyWith(preventActions: true));
     final domain =
-        appConfigCubit.state.cloudFlareDomain!.domainName.replaceAll('.', '-');
+        appConfigCubit.state.cloudFlareDomain!.domainName.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
     final serverId = appConfigCubit.state.hetznerServer!.id;
     var bucketName = 'selfprivacy-$domain-$serverId';
     // If bucket name is too long, shorten it
@@ -151,7 +152,8 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
   Future<void> forceUpdateBackups() async {
     emit(state.copyWith(preventActions: true));
     await api.forceBackupListReload();
-    getIt<NavigationService>().showSnackBar('providers.backup.refetchingList');
+    getIt<NavigationService>()
+        .showSnackBar('providers.backup.refetchingList'.tr());
     emit(state.copyWith(preventActions: false));
   }
 

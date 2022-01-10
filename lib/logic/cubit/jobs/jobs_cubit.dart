@@ -69,15 +69,18 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> rebootServer() async {
+    emit(JobsStateLoading());
     final isSuccessful = await api.reboot();
     if (isSuccessful) {
       getIt<NavigationService>().showSnackBar('jobs.rebootSuccess'.tr());
     } else {
       getIt<NavigationService>().showSnackBar('jobs.rebootFailed'.tr());
     }
+    emit(JobsStateEmpty());
   }
 
   Future<void> upgradeServer() async {
+    emit(JobsStateLoading());
     final isPullSuccessful = await api.pullConfigurationUpdate();
     final isSuccessful = await api.upgrade();
     if (isSuccessful) {
@@ -89,6 +92,7 @@ class JobsCubit extends Cubit<JobsState> {
     } else {
       getIt<NavigationService>().showSnackBar('jobs.upgradeFailed'.tr());
     }
+    emit(JobsStateEmpty());
   }
 
   Future<void> applyAll() async {
@@ -101,7 +105,12 @@ class JobsCubit extends Cubit<JobsState> {
         if (job is CreateUserJob) {
           newUsers.add(job.user);
           await api.createUser(job.user);
-        } else if (job is ServiceToggleJob) {
+        }
+        if (job is DeleteUserJob) {
+          final deleted = await api.deleteUser(job.user);
+          if (deleted) usersCubit.remove(job.user);
+        }
+        if (job is ServiceToggleJob) {
           hasServiceJobs = true;
           await api.switchService(job.type, job.needToTurnOn);
         }

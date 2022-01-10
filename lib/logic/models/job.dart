@@ -31,6 +31,17 @@ class CreateUserJob extends Job {
   List<Object> get props => [id, title, user];
 }
 
+class DeleteUserJob extends Job {
+  DeleteUserJob({
+    required this.user,
+  }) : super(title: '${"jobs.deleteUser".tr()} ${user.login}');
+
+  final User user;
+
+  @override
+  List<Object> get props => [id, title, user];
+}
+
 class ServiceToggleJob extends Job {
   ServiceToggleJob({
     required this.type,

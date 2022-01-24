@@ -1,0 +1,9 @@
+kind: pipeline
+type: exec
+name: default
+
+steps:
+  - name: build
+    commands:
+      - flutter pub get
+      - flutter build apk

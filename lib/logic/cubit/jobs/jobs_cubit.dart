@@ -37,7 +37,7 @@ class JobsCubit extends Cubit<JobsState> {
     emit(newState);
   }
 
-  void createOrRemoveServiceToggleJob(ServiceToggleJob job) {
+  void createOrRemoveServiceToggleJob(ToggleJob job) {
     var newJobsList = <Job>[];
     if (state is JobsStateWithJobs) {
       newJobsList.addAll((state as JobsStateWithJobs).jobList);

@@ -42,19 +42,29 @@ class DeleteUserJob extends Job {
   List<Object> get props => [id, title, user];
 }
 
-class ServiceToggleJob extends Job {
-  ServiceToggleJob({
+class ToggleJob extends Job {
+  ToggleJob({
     required this.type,
-    required this.needToTurnOn,
-  }) : super(
-            title:
-                '${needToTurnOn ? "jobs.serviceTurnOn".tr() : "jobs.serviceTurnOff".tr()} ${type.title}');
+    required String title,
+  }) : super(title: title);
 
-  final ServiceTypes type;
-  final bool needToTurnOn;
+  final dynamic type;
 
   @override
-  List<Object> get props => [id, title, type, needToTurnOn];
+  List<Object> get props => [...super.props, type];
+}
+
+class ServiceToggleJob extends ToggleJob {
+  ServiceToggleJob({
+    required ServiceTypes type,
+    required this.needToTurnOn,
+  }) : super(
+          title:
+              '${needToTurnOn ? "jobs.serviceTurnOn".tr() : "jobs.serviceTurnOff".tr()} ${type.title}',
+          type: type,
+        );
+
+  final bool needToTurnOn;
 }
 
 class CreateSSHKeyJob extends Job {

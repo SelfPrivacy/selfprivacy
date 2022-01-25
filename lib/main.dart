@@ -7,6 +7,7 @@ import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import 'config/bloc_config.dart';
 import 'config/bloc_observer.dart';
@@ -19,12 +20,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveConfig.init();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  Bloc.observer = SimpleBlocObserver();
   Wakelock.enable();
   await getItSetup();
   await EasyLocalization.ensureInitialized();
+  tz.initializeTimeZones();
 
-  runApp(MyApp());
+  BlocOverrides.runZoned(
+    () => runApp(Localization(child: MyApp())),
+    blocObserver: SimpleBlocObserver(),
+  );
 }
 
 class MyApp extends StatelessWidget {

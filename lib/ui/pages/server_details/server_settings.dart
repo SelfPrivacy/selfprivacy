@@ -49,27 +49,14 @@ class _ServerSettings extends StatelessWidget {
           isActive: false,
         ),
         _Button(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(materialRoute(SelectTimezone()));
+          },
           child: _TextColumn(
             title: 'Server Timezone',
             value: 'Europe/Kyiv',
           ),
         ),
-        _Button(
-          onTap: () {},
-          child: _TextColumn(
-            title: 'Server Locale',
-            value: 'Default',
-          ),
-        ),
-        _Button(
-          onTap: () {},
-          child: _TextColumn(
-            hasWarning: true,
-            title: 'Factory Reset',
-            value: 'Restore default settings on your server',
-          ),
-        )
       ],
     );
   }

@@ -23,6 +23,5 @@ steps:
     commands:
       - export JAVA_HOME="/nix/store/ij5nydadkpikrzama011z3lvd7k7cd0v-openjdk-11.0.12+7/lib/openjdk"
       - flutter config --android-sdk Android/Sdk
-      - flutter upgrade
       - flutter pub get
       - flutter build apk

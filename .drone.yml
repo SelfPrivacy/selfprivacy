@@ -9,12 +9,13 @@ steps:
       - mkdir -p Android/Sdk/cmdline-tools/latest
       - unzip commandlinetools-linux-8092744_latest.zip
       - mv cmdline-tools/* Android/Sdk/cmdline-tools/latest
+      - ls Android/Sdk/cmdline-tools/latest
 
   - name: fetch
     commands:
-      - yes | Android/Sdk/latest/cmdline-tools/bin/sdkmanager --licenses
-      - Android/Sdk/latest/cmdline-tools/bin/sdkmanager --install "build-tools;32.0.0"
-      - Android/Sdk/latest/cmdline-tools/bin/sdkmanager --install "platforms;android-32"
+      - yes | Android/Sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+      - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "build-tools;32.0.0"
+      - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "platforms;android-32"
 
   - name: build
     commands:

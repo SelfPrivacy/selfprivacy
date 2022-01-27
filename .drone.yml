@@ -12,6 +12,8 @@ steps:
       - ls Android/Sdk/cmdline-tools/latest
 
   - name: fetch
+    environment:
+      JAVA_HOME: ${JAVA_HOME}
     commands:
       - yes | Android/Sdk/cmdline-tools/latest/bin/sdkmanager --licenses
       - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "build-tools;32.0.0"

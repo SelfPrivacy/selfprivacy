@@ -13,7 +13,6 @@ steps:
 
   - name: fetch
     commands:
-      - export JAVA_HOME=$$(echo ${pkgs.jdk11}/lib/openjdk)
       - yes | Android/Sdk/cmdline-tools/latest/bin/sdkmanager --licenses
       - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "build-tools;32.0.0"
       - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "platforms;android-32"

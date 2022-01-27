@@ -13,8 +13,7 @@ steps:
 
   - name: fetch
     commands:
-      - whereis java
-      - find /nix/store -name *openjdk
+      - export JAVA_HOME="/nix/store/ij5nydadkpikrzama011z3lvd7k7cd0v-openjdk-11.0.12+7/lib/openjdk"
       - yes | Android/Sdk/cmdline-tools/latest/bin/sdkmanager --licenses
       - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "build-tools;32.0.0"
       - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "platforms;android-32"

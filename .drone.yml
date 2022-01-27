@@ -13,8 +13,7 @@ steps:
 
   - name: fetch
     commands:
-      - java -version
-      - whereis java
+      - export JAVA_HOME=$$(whereis java)
       - yes | Android/Sdk/cmdline-tools/latest/bin/sdkmanager --licenses
       - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "build-tools;32.0.0"
       - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "platforms;android-32"

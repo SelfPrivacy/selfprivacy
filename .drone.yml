@@ -21,6 +21,10 @@ steps:
       - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "build-tools;32.0.0"
       - Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install "platforms;android-32"
 
+  - name: debug
+    commands:
+      - tree flutter/
+
   - name: build
     commands:
       - export PATH=$$PATH:flutter/bin

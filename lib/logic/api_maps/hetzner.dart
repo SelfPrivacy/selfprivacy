@@ -115,13 +115,25 @@ class HetznerApi extends ApiMap {
     final apiToken = StringGenerators.apiToken();
 
     // Replace all non-alphanumeric characters with an underscore
-    final hostname = domainName.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+    var hostname = domainName.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+    // if hostname ends with -, remove it
+    if (hostname.endsWith('-')) {
+      hostname = hostname.substring(0, hostname.length - 1);
+    }
+    // if hostname starts with -, remove it
+    if (hostname.startsWith('-')) {
+      hostname = hostname.substring(1);
+    }
+    // if hostname is empty, use default
+    if (hostname.isEmpty) {
+      hostname = 'selfprivacy-server';
+    }
 
     /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
     /// check the branch name, it could be "development" or "master".
 
     var data = jsonDecode(
-        '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
+        '''{"name":"$hostname","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${escapeSingleQuotes(rootUser.login)}' PASSWORD='${escapeSingleQuotes(rootUser.password)}' CF_TOKEN=$cloudFlareKey DB_PASSWORD=${escapeSingleQuotes(dbPassword)} API_TOKEN=$apiToken HOSTNAME=${escapeSingleQuotes(hostname)} bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
 
     Response serverCreateResponse = await client.post(
       '/servers',
@@ -225,4 +237,9 @@ class HetznerApi extends ApiMap {
     );
     close(client);
   }
+}
+
+String escapeSingleQuotes(String str) {
+  // replace all single quotes with escaped single quotes for bash strong quotes (i.e. '\'' )
+  return str.replaceAll(RegExp(r"'"), "'\\''");
 }

@@ -239,6 +239,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       var isServerWorking = await repository.isHttpServerWorking();
 
       if (isServerWorking) {
+        await repository.createDkimRecord(state.cloudFlareDomain!);
         await repository.saveHasFinalChecked(true);
 
         emit(state.finish());

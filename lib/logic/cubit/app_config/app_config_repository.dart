@@ -189,9 +189,23 @@ class AppConfigRepository {
     );
   }
 
+  Future<void> createDkimRecord(CloudFlareDomain cloudFlareDomain) async {
+    var cloudflareApi = CloudflareApi();
+    var api = ServerApi();
+
+    var dkimRecordString = await api.getDkim();
+
+    await cloudflareApi.setDkim(dkimRecordString, cloudFlareDomain);
+  }
+
   Future<bool> isHttpServerWorking() async {
     var api = ServerApi();
     var isHttpServerWorking = await api.isHttpServerWorking();
+    try {
+      await api.getDkim();
+    } catch (e) {
+      return false;
+    }
     return isHttpServerWorking;
   }
 

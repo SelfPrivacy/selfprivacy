@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -235,6 +236,21 @@ class ServerApi extends ApiMap {
     Response response = await client.get('/system/configuration/upgrade');
     client.close();
     return response.statusCode == HttpStatus.ok;
+  }
+
+  Future<String> getDkim() async {
+    var client = await getClient();
+    Response response = await client.get('/services/mailserver/dkim');
+    client.close();
+
+    // if got 404 raise exception
+    if (response.statusCode == HttpStatus.notFound) {
+      throw Exception('No DKIM key found');
+    }
+
+    final base64toString = utf8.fuse(base64);
+
+    return base64toString.decode(response.data).split('(')[1].split(')')[0];
   }
 }
 

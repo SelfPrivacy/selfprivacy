@@ -115,7 +115,8 @@ class HetznerApi extends ApiMap {
     final apiToken = StringGenerators.apiToken();
 
     // Replace all non-alphanumeric characters with an underscore
-    var hostname = domainName.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+    var hostname =
+        domainName.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
     // if hostname ends with -, remove it
     if (hostname.endsWith('-')) {
       hostname = hostname.substring(0, hostname.length - 1);

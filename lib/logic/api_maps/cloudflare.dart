@@ -154,6 +154,27 @@ class CloudflareApi extends ApiMap {
     ];
   }
 
+  Future<void> setDkim(
+      String dkimRecordString, CloudFlareDomain cloudFlareDomain) async {
+    final domainZoneId = cloudFlareDomain.zoneId;
+    final url = '$rootAddress/zones/$domainZoneId/dns_records';
+
+    final dkimRecord = DnsRecords(
+      type: 'TXT',
+      name: 'selector._domainkey',
+      content: dkimRecordString,
+      ttl: 18000,
+    );
+
+    var client = await getClient();
+    await client.post(
+      url,
+      data: dkimRecord.toJson(),
+    );
+
+    client.close();
+  }
+
   Future<List<String>> domainList() async {
     var url = '$rootAddress/zones?per_page=50';
     var client = await getClient();

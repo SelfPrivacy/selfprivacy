@@ -85,8 +85,8 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
 
   Future<void> createBucket() async {
     emit(state.copyWith(preventActions: true));
-    final domain =
-        appConfigCubit.state.cloudFlareDomain!.domainName.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+    final domain = appConfigCubit.state.cloudFlareDomain!.domainName
+        .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
     final serverId = appConfigCubit.state.hetznerServer!.id;
     var bucketName = 'selfprivacy-$domain-$serverId';
     // If bucket name is too long, shorten it

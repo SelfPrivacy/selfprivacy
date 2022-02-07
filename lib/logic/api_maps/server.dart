@@ -23,7 +23,7 @@ class ServerApi extends ApiMap {
       var cloudFlareDomain = getIt<ApiConfigModel>().cloudFlareDomain;
       var domainName = cloudFlareDomain!.domainName;
       var apiToken = getIt<ApiConfigModel>().hetznerServer?.apiToken;
-
+      print(apiToken);
       options = BaseOptions(baseUrl: 'https://api.$domainName', headers: {
         'Authorization': 'Bearer $apiToken',
       });
@@ -231,6 +231,13 @@ class ServerApi extends ApiMap {
   }
 
   Future<bool> upgrade() async {
+    var client = await getClient();
+    Response response = await client.get('/system/configuration/upgrade');
+    client.close();
+    return response.statusCode == HttpStatus.ok;
+  }
+
+  Future<bool> autoUpgradeSettings() async {
     var client = await getClient();
     Response response = await client.get('/system/configuration/upgrade');
     client.close();

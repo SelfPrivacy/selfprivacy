@@ -15,6 +15,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
+import 'package:selfprivacy/ui/pages/server_details/time_zone/lang.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:timezone/timezone.dart';
@@ -26,7 +27,7 @@ part 'server_settings.dart';
 part 'text_details.dart';
 part 'chart.dart';
 part 'header.dart';
-part 'time_zone.dart';
+part 'time_zone/time_zone.dart';
 
 var navigatorKey = GlobalKey<NavigatorState>();
 

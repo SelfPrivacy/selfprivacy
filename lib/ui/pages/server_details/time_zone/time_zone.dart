@@ -1,4 +1,4 @@
-part of 'server_details.dart';
+part of '../server_details.dart';
 
 final List<Location> locations = timeZoneDatabase.locations.values.toList()
   ..sort((l1, l2) =>
@@ -55,24 +55,35 @@ class _SelectTimezoneState extends State<SelectTimezone> {
                   Duration(milliseconds: value.currentTimeZone.offset);
               var area = value.currentTimeZone.abbreviation
                   .replaceAll(RegExp(r'[\d+()-]'), '');
+
+              String timezoneName = value.name;
+              if (context.locale.toString() == 'ru') {
+                timezoneName = russian[value.name] ??
+                    () {
+                      var arr = value.name.split('/')..removeAt(0);
+                      return arr.join('/');
+                    }();
+              }
+
               return MapEntry(
                 key,
                 Container(
-                  height: 40,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  alignment: Alignment.center,
-                  child: Row(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                            '${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}'),
+                      BrandText.body1(
+                        timezoneName,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(value.name),
-                      ),
-                      // Text(value.toString()),
+                      BrandText.small(
+                          'GMT ${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}',
+                          style: TextStyle(
+                            fontSize: 13,
+                          )),
                     ],
                   ),
                   decoration: BoxDecoration(

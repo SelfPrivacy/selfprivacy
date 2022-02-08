@@ -6,11 +6,11 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/get_it/ssh.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
-
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 
 import 'app_config_repository.dart';
+
 export 'package:provider/provider.dart';
 
 part 'app_config_state.dart';
@@ -83,9 +83,10 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       var ip4 = state.hetznerServer!.ip4;
       var domainName = state.cloudFlareDomain!.domainName;
 
-      var isMatch = await repository.isDnsAddressesMatch(domainName, ip4);
+      var matches = await repository.isDnsAddressesMatch(
+          domainName, ip4, state.dnsMatches);
 
-      if (isMatch) {
+      if (matches.values.every((value) => value)) {
         var server = await repository.startServer(
           state.hetznerServer!,
         );
@@ -101,6 +102,12 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         );
         resetServerIfServerIsOkay();
       } else {
+        emit(
+          state.copyWith(
+            isLoading: false,
+            dnsMatches: matches,
+          ),
+        );
         startServerIfDnsIsOkay();
       }
     };
@@ -108,7 +115,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     if (isImmediate) {
       work();
     } else {
-      var pauseDuration = Duration(seconds: 60);
+      var pauseDuration = Duration(seconds: 30);
       emit(TimerState(
         dataState: state,
         timerStart: DateTime.now(),
@@ -289,6 +296,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       isServerResetedFirstTime: false,
       isServerResetedSecondTime: false,
       isLoading: false,
+      dnsMatches: null,
     ));
   }
 

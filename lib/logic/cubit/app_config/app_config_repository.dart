@@ -1,20 +1,21 @@
+import 'package:basic_utils/basic_utils.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:hive/hive.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
+import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/models/message.dart';
-import 'package:basic_utils/basic_utils.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
+
 import 'app_config_cubit.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
@@ -49,6 +50,7 @@ class AppConfigRepository {
         isServerResetedSecondTime:
             box.get(BNames.isServerResetedSecondTime, defaultValue: false),
         isLoading: box.get(BNames.isLoading, defaultValue: false),
+        dnsMatches: null,
       );
     }
 
@@ -68,7 +70,8 @@ class AppConfigRepository {
     return serverDetails;
   }
 
-  Future<bool> isDnsAddressesMatch(String? domainName, String? ip4) async {
+  Future<Map<String, bool>> isDnsAddressesMatch(String? domainName, String? ip4,
+      Map<String, bool>? skippedMatches) async {
     var addresses = <String>[
       '$domainName',
       'api.$domainName',
@@ -77,7 +80,13 @@ class AppConfigRepository {
       'password.$domainName'
     ];
 
+    var matches = <String, bool>{};
+
     for (var address in addresses) {
+      if (skippedMatches != null && skippedMatches[address] == true) {
+        matches[address] = true;
+        continue;
+      }
       var lookupRecordRes = await DnsUtils.lookupRecord(
         address,
         RRecordType.A,
@@ -98,11 +107,13 @@ class AppConfigRepository {
       if (lookupRecordRes == null ||
           lookupRecordRes.isEmpty ||
           lookupRecordRes[0].data != ip4) {
-        return false;
+        matches[address] = false;
+      } else {
+        matches[address] = true;
       }
     }
 
-    return true;
+    return matches;
   }
 
   Future<void> createServer(

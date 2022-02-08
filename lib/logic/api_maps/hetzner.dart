@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -134,8 +133,9 @@ class HetznerApi extends ApiMap {
 
     /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
     /// check the branch name, it could be "development" or "master".
-    /// 
-    final userdataString = "#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${escapeQuotes(rootUser.login)}' PASSWORD='${escapeQuotes(rootUser.password)}' CF_TOKEN=$cloudFlareKey DB_PASSWORD=${escapeQuotes(dbPassword)} API_TOKEN=$apiToken HOSTNAME=${escapeQuotes(hostname)} bash 2>&1 | tee /tmp/infect.log";
+    ///
+    final userdataString =
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${escapeQuotes(rootUser.login)}' PASSWORD='${escapeQuotes(rootUser.password)}' CF_TOKEN=$cloudFlareKey DB_PASSWORD=${escapeQuotes(dbPassword)} API_TOKEN=$apiToken HOSTNAME=${escapeQuotes(hostname)} bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     final data = {
@@ -259,8 +259,11 @@ class HetznerApi extends ApiMap {
 
 String escapeQuotes(String str) {
   // replace all single quotes with escaped single quotes for bash strong quotes (i.e. '\'' )
-  print("Escaping single quotes for bash: $str");
-  print("Escaping result: ${str.replaceAll(RegExp(r"'"), "'\\''")}");
+  // print("Escaping single quotes for bash: $str");
+  // print("Escaping result: ${str.replaceAll(RegExp(r"'"), "'\\''")}");
   // also escape all double quotes for json
-  return str.replaceAll(RegExp(r"'"), "'\\''");
+  // return str.replaceAll(RegExp(r"'"), "'\\''");
+
+  // Pass for now
+  return str;
 }

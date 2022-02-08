@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -250,7 +250,11 @@ class ServerApi extends ApiMap {
 
     final base64toString = utf8.fuse(base64);
 
-    return base64toString.decode(response.data).split('(')[1].split(')')[0];
+    return base64toString
+        .decode(response.data)
+        .split('(')[1]
+        .split(')')[0]
+        .replaceAll('"', '');
   }
 }
 

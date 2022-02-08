@@ -17,13 +17,24 @@ class Loading extends ServerDetailsState {}
 
 class Loaded extends ServerDetailsState {
   final HetznerServerInfo serverInfo;
+
+  final TimeZoneSettings serverTimezone;
+
+  final AutoUpgradeSettings autoUpgradeSettings;
   final DateTime checkTime;
 
   Loaded({
     required this.serverInfo,
+    required this.serverTimezone,
+    required this.autoUpgradeSettings,
     required this.checkTime,
   });
 
   @override
-  List<Object> get props => [serverInfo, checkTime];
+  List<Object> get props => [
+        serverInfo,
+        serverTimezone,
+        autoUpgradeSettings,
+        checkTime,
+      ];
 }

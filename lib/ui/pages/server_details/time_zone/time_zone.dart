@@ -24,8 +24,10 @@ class _SelectTimezoneState extends State<SelectTimezone> {
     var t = DateTime.now().timeZoneOffset;
     var index = locations.indexWhere((element) =>
         Duration(milliseconds: element.currentTimeZone.offset) == t);
+    print(t);
+
     if (index >= 0) {
-      controller.animateTo(40.0 * index,
+      controller.animateTo(60.0 * index,
           duration: Duration(milliseconds: 300), curve: Curves.easeIn);
     }
   }
@@ -68,9 +70,11 @@ class _SelectTimezoneState extends State<SelectTimezone> {
               return MapEntry(
                 key,
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  height: 60,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       BrandText.body1(
                         timezoneName,

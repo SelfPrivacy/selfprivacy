@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/ui/components/brand_tab_bar/brand_tab_bar.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
@@ -28,6 +29,8 @@ class _RootPageState extends State<RootPage>
     super.dispose();
     tabController.dispose();
   }
+
+  var selfprivacyServer = ServerApi();
 
   @override
   Widget build(BuildContext context) {

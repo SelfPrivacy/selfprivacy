@@ -6,7 +6,7 @@ part of 'dns_records.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Map<String, dynamic> _$DnsRecordsToJson(DnsRecords instance) =>
+Map<String, dynamic> _$DnsRecordsToJson(DnsRecord instance) =>
     <String, dynamic>{
       'type': instance.type,
       'name': instance.name,

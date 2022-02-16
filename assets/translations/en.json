@@ -91,6 +91,28 @@
       "status": "Status — Good",
       "bottom_sheet": {
         "1": "It's your personal internet address that will point to the server and other services of yours."
+      },
+      "screen_title": "Domain and DNS",
+      "states": {
+        "ok": "Records are OK",
+        "error": "Problems found",
+        "error_subtitle": "Tap here to fix them",
+        "refreshing": "Refreshing status...",
+        "uninitialized": "Data is not retrieved yet"
+      },
+      "record_description": {
+        "root": "Root domain",
+        "api": "SelfPrivacy API",
+        "cloud": "File cloud",
+        "git": "Git server",
+        "meet": "Video conference",
+        "social": "Social network",
+        "password": "Password manager",
+        "vpn": "VPN",
+        "mx": "MX record",
+        "dmarc": "DMARC record",
+        "spf": "SPF record",
+        "dkim": "DKIM key"
       }
     },
     "backup": {
@@ -120,7 +142,8 @@
     "_comment": "Card shown when user skips initial setup",
     "1": "Please finish application setup using ",
     "2": "@:more.configuration_wizard",
-    "3": " for further work"
+    "3": " for further work",
+    "in_menu": "Server is not set up yet. Please finish setup using setup wizard for further work."
   },
   "services": {
     "_comment": "Вкладка сервисы",

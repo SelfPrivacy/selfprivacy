@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
@@ -15,7 +16,7 @@ import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 var navigatorKey = GlobalKey<NavigatorState>();
@@ -120,15 +121,9 @@ class _Card extends StatelessWidget {
         title = 'providers.backup.card_title'.tr();
         stableText = 'providers.backup.status'.tr();
 
-        onTap = () => showBrandBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return BrandBottomSheet(
-                  isExpended: true,
-                  child: BackupDetails(),
-                );
-              },
-            );
+        onTap = () => Navigator.of(context).push(materialRoute(
+              BackupDetails(),
+            ));
         break;
     }
     return GestureDetector(

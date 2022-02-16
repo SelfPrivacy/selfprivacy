@@ -20,6 +20,9 @@ class BrandCards {
         shadow: bigShadow,
         borderRadius: BorderRadius.circular(10),
       );
+  static Widget outlined({required Widget child}) => _OutlinedCard(
+        child: child,
+      );
 }
 
 class _BrandCard extends StatelessWidget {
@@ -47,6 +50,29 @@ class _BrandCard extends StatelessWidget {
         boxShadow: shadow,
       ),
       padding: padding,
+      child: child,
+    );
+  }
+}
+
+class _OutlinedCard extends StatelessWidget {
+  const _OutlinedCard({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+        side: BorderSide(
+          color: Colors.grey.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
       child: child,
     );
   }

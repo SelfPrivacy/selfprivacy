@@ -111,6 +111,7 @@
       "restoring": "Restoring from backup",
       "error_pending": "Server returned error, check it below",
       "restore_alert": "You are about to restore from backup created on {}. All current data will be lost. Are you sure?",
+      "refresh": "Refresh status",
       "refetchBackups": "Refetch backup list",
       "refetchingList": "In a few minutes list will be updated"
     }

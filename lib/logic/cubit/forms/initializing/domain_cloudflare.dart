@@ -42,7 +42,7 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
     );
 
     initializingCubit.setDomain(domain);
-    emit(DomainSetted());
+    emit(DomainSet());
   }
 }
 
@@ -67,4 +67,4 @@ class Loaded extends DomainSetupState {
   Loaded(this.domain);
 }
 
-class DomainSetted extends DomainSetupState {}
+class DomainSet extends DomainSetupState {}

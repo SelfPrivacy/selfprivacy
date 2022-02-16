@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
               locale: context.locale,
               debugShowCheckedModeBanner: false,
               title: 'SelfPrivacy',
-              theme: appSettings.isDarkModeOn ? darkTheme : ligtTheme,
+              theme: appSettings.isDarkModeOn ? darkTheme : lightTheme,
               home: appSettings.isOnbordingShowing
                   ? OnboardingPage(nextPage: InitializingPage())
                   : RootPage(),

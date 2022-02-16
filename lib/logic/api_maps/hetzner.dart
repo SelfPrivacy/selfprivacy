@@ -9,10 +9,10 @@ import 'package:selfprivacy/logic/models/user.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ApiMap {
-  bool hasLoger;
+  bool hasLogger;
   bool isWithToken;
 
-  HetznerApi({this.hasLoger = false, this.isWithToken = true});
+  HetznerApi({this.hasLogger = false, this.isWithToken = true});
 
   BaseOptions get options {
     var options = BaseOptions(baseUrl: rootAddress);

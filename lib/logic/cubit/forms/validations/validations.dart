@@ -1,7 +1,7 @@
 import 'package:cubit_form/cubit_form.dart';
 
-class LegnthStringValidationWithLenghShowing extends ValidationModel<String> {
-  LegnthStringValidationWithLenghShowing(int length, String errorText)
+class LengthStringValidationWithLengthShowing extends ValidationModel<String> {
+  LengthStringValidationWithLengthShowing(int length, String errorText)
       : super((n) => n.length != length, errorText);
 
   @override

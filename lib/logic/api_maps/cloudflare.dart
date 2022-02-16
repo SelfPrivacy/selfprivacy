@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/dns_records.dart';
 
 class CloudflareApi extends ApiMap {
-  CloudflareApi({this.hasLoger = false, this.isWithToken = true});
+  CloudflareApi({this.hasLogger = false, this.isWithToken = true});
 
   BaseOptions get options {
     var options = BaseOptions(baseUrl: rootAddress);
@@ -222,7 +222,7 @@ class CloudflareApi extends ApiMap {
   }
 
   @override
-  final bool hasLoger;
+  final bool hasLogger;
 
   @override
   final bool isWithToken;

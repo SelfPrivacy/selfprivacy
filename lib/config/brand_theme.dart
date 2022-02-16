@@ -3,7 +3,7 @@ import 'package:selfprivacy/config/text_themes.dart';
 
 import 'brand_colors.dart';
 
-final ligtTheme = ThemeData(
+final lightTheme = ThemeData(
   primaryColor: BrandColors.primary,
   fontFamily: 'Inter',
   brightness: Brightness.light,
@@ -51,7 +51,7 @@ final ligtTheme = ThemeData(
   ),
 );
 
-var darkTheme = ligtTheme.copyWith(
+var darkTheme = lightTheme.copyWith(
   brightness: Brightness.dark,
   scaffoldBackgroundColor: Color(0xFF202120),
   iconTheme: IconThemeData(color: BrandColors.gray3),

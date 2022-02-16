@@ -4,7 +4,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
 enum InitializingSteps {
-  setHeznerKey,
+  setHetznerKey,
   setCloudFlareKey,
   setDomainName,
   setRootUser,

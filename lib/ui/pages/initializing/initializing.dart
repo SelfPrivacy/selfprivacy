@@ -438,7 +438,7 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
-    assert(appConfigCubit.state is AppConfigNotFinished, 'wronge state');
+    assert(appConfigCubit.state is AppConfigNotFinished, 'wrong state');
     var state = appConfigCubit.state as TimerState;
     late int doneCount;
     late String? text;

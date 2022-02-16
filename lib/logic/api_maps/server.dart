@@ -12,10 +12,10 @@ import 'package:selfprivacy/logic/models/user.dart';
 import 'api_map.dart';
 
 class ServerApi extends ApiMap {
-  bool hasLoger;
+  bool hasLogger;
   bool isWithToken;
 
-  ServerApi({this.hasLoger = false, this.isWithToken = true});
+  ServerApi({this.hasLogger = false, this.isWithToken = true});
 
   BaseOptions get options {
     var options = BaseOptions();
@@ -262,11 +262,11 @@ extension UrlServerExt on ServiceTypes {
   String get url {
     switch (this) {
       // case ServiceTypes.mail:
-      //   return ''; // cannot be swithch off
+      //   return ''; // cannot be switch off
       // case ServiceTypes.messenger:
       //   return ''; // external service
       // case ServiceTypes.video:
-      // return ''; // jeetsu meet not working
+      // return ''; // jitsi meet not working
       case ServiceTypes.passwordManager:
         return 'bitwarden';
       case ServiceTypes.cloud:

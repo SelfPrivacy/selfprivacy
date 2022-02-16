@@ -237,7 +237,7 @@
     "delete_confirm_question": "Вы действительно хотите удалить учетную запись?",
     "reset_password": "Сбросить пароль",
     "account": "Учетная запись",
-    "send_regisration_data": "Поделиться реквизитами"
+    "send_registration_data": "Поделиться реквизитами"
   },
   "initializing": {
     "_comment": "initializing page",
@@ -310,6 +310,6 @@
     "root_name": "Имя пользователя не может быть'root'.",
     "key_format": "Неверный формат.",
     "length": "Длина строки [] должна быть {}.",
-    "user_alredy_exist": "Имя уже используется."
+    "user_already_exist": "Имя уже используется."
   }
 }

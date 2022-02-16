@@ -152,7 +152,7 @@ class _UserDetails extends StatelessWidget {
                 BrandDivider(),
                 SizedBox(height: 20),
                 BrandButton.emptyWithIconText(
-                  title: 'users.send_regisration_data'.tr(),
+                  title: 'users.send_registration_data'.tr(),
                   icon: Icon(BrandIcons.share),
                   onPressed: () {
                     Share.share(

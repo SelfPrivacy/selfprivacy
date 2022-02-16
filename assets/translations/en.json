@@ -113,6 +113,16 @@
         "dmarc": "DMARC record",
         "spf": "SPF record",
         "dkim": "DKIM key"
+      },
+      "cards": {
+        "services": {
+          "title": "Services",
+          "subtitle": "Type “A” records required for each service."
+        },
+        "email": {
+          "title": "Email",
+          "subtitle": "Records necessary for secure email exchange."
+        }
       }
     },
     "backup": {
@@ -226,7 +236,7 @@
     "delete_confirm_question": "Are you sure?",
     "reset_password": "Reset password",
     "account": "Account",
-    "send_regisration_data": "Share login credentials"
+    "send_registration_data": "Share login credentials"
   },
   "initializing": {
     "_comment": "initializing page",
@@ -298,7 +308,7 @@
     "invalid_format": "Invalid format",
     "root_name": "User name cannot be 'root'",
     "key_format": "Invalid key format",
-    "length": "Length is [] shoud be {}",
-    "user_alredy_exist": "Already exists"
+    "length": "Length is [] should be {}",
+    "user_already_exist": "Already exists"
   }
 }

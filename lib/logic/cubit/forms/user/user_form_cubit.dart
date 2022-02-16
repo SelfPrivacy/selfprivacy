@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/user.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class UserFormCubit extends FormCubit {
@@ -25,7 +25,7 @@ class UserFormCubit extends FormCubit {
             (s) => s.toLowerCase() == 'root', 'validations.root_name'.tr()),
         ValidationModel(
           (login) => users.any((user) => user.login == login),
-          'validations.user_alredy_exist'.tr(),
+          'validations.user_already_exist'.tr(),
         ),
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(

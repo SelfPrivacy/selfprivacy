@@ -101,13 +101,13 @@ class _Card extends StatelessWidget {
     var jobsCubit = context.watch<JobsCubit>();
     var jobState = jobsCubit.state;
 
-    var switchebleService = switchableServices.contains(serviceType);
-    var hasSwitchJob = switchebleService &&
+    var switchableService = switchableServices.contains(serviceType);
+    var hasSwitchJob = switchableService &&
         jobState is JobsStateWithJobs &&
         jobState.jobList
             .any((el) => el is ServiceToggleJob && el.type == serviceType);
 
-    var isSwithOn = isReady &&
+    var isSwitchOn = isReady &&
         (!switchableServices.contains(serviceType) ||
             serviceState.isEnableByType(serviceType));
 
@@ -115,7 +115,7 @@ class _Card extends StatelessWidget {
     var domainName = UiHelpers.getDomainName(config);
 
     return GestureDetector(
-      onTap: isSwithOn
+      onTap: isSwitchOn
           ? () => showDialog<void>(
                 context: context,
                 // isScrollControlled: true,
@@ -124,7 +124,7 @@ class _Card extends StatelessWidget {
                   return _ServiceDetails(
                     serviceType: serviceType,
                     status:
-                        isSwithOn ? StateType.stable : StateType.uninitialized,
+                        isSwitchOn ? StateType.stable : StateType.uninitialized,
                     title: serviceType.title,
                     icon: serviceType.icon,
                     changeTab: changeTab,
@@ -140,10 +140,10 @@ class _Card extends StatelessWidget {
               children: [
                 IconStatusMask(
                   status:
-                      isSwithOn ? StateType.stable : StateType.uninitialized,
+                      isSwitchOn ? StateType.stable : StateType.uninitialized,
                   child: Icon(serviceType.icon, size: 30, color: Colors.white),
                 ),
-                if (isReady && switchebleService) ...[
+                if (isReady && switchableService) ...[
                   Spacer(),
                   Builder(
                     builder: (context) {

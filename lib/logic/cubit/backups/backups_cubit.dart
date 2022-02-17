@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/backblaze.dart';
+import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
-import 'package:selfprivacy/logic/api_maps/server.dart';
-import 'package:selfprivacy/logic/api_maps/backblaze.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 part 'backups_state.dart';
 

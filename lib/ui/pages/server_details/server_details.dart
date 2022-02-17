@@ -8,20 +8,27 @@ import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.da
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
+import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
+import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/brand_radio_tile/brand_radio_tile.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
+import 'package:selfprivacy/ui/pages/server_details/time_zone/lang.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
+import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:timezone/timezone.dart';
 import 'cpu_chart.dart';
 import 'network_charts.dart';
+import 'package:selfprivacy/utils/extensions/duration.dart';
 
 part 'server_settings.dart';
 part 'text_details.dart';
 part 'chart.dart';
 part 'header.dart';
+part 'time_zone/time_zone.dart';
 
 var navigatorKey = GlobalKey<NavigatorState>();
 
@@ -56,57 +63,57 @@ class _ServerDetailsState extends State<ServerDetails>
     var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
     var providerState = isReady ? StateType.stable : StateType.uninitialized;
 
-    return Scaffold(
-      appBar: PreferredSize(
-        child: Column(
+    return BlocProvider(
+      create: (context) => ServerDetailsCubit()..check(),
+      child: Scaffold(
+        appBar: PreferredSize(
+          child: Column(
+            children: [
+              Container(
+                height: 51,
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: BrandText.h4('basis.details'.tr()),
+              ),
+              BrandDivider(),
+            ],
+          ),
+          preferredSize: Size.fromHeight(52),
+        ),
+        body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: tabController,
           children: [
-            Container(
-              height: 51,
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: BrandText.h4('basis.details'.tr()),
+            SingleChildScrollView(
+              physics: ClampingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: paddingH15V0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _Header(
+                            providerState: providerState,
+                            tabController: tabController),
+                        BrandText.body1('providers.server.bottom_sheet.1'.tr()),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  BlocProvider(
+                    create: (context) => HetznerMetricsCubit()..restart(),
+                    child: _Chart(),
+                  ),
+                  SizedBox(height: 20),
+                  _TextDetails(),
+                ],
+              ),
             ),
-            BrandDivider(),
+            _ServerSettings(tabController: tabController),
           ],
         ),
-        preferredSize: Size.fromHeight(52),
-      ),
-      body: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: tabController,
-        children: [
-          SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: paddingH15V0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _Header(
-                          providerState: providerState,
-                          tabController: tabController),
-                      BrandText.body1('providers.server.bottom_sheet.1'.tr()),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
-                BlocProvider(
-                  create: (context) => HetznerMetricsCubit()..restart(),
-                  child: _Chart(),
-                ),
-                SizedBox(height: 20),
-                BlocProvider(
-                  create: (context) => ServerDetailsCubit()..check(),
-                  child: _TextDetails(),
-                ),
-              ],
-            ),
-          ),
-          _ServerSettings(tabController: tabController),
-        ],
       ),
     );
   }

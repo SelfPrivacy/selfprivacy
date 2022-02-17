@@ -10,6 +10,12 @@ class _ServerSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var serverDetailsState = context.watch<ServerDetailsCubit>().state;
+    if (serverDetailsState is ServerDetailsNotReady) {
+      return Text('not ready');
+    } else if (serverDetailsState is! Loaded) {
+      return BrandLoader.horizontal();
+    }
     return ListView(
       padding: paddingH15V0,
       children: [
@@ -38,7 +44,7 @@ class _ServerSettings extends StatelessWidget {
             title: 'Allow Auto-upgrade',
             value: 'Wether to allow automatic packages upgrades',
           ),
-          isActive: true,
+          isActive: serverDetailsState.autoUpgradeSettings.enable,
         ),
         SwitcherBlock(
           onChange: (_) {},
@@ -46,30 +52,17 @@ class _ServerSettings extends StatelessWidget {
             title: 'Reboot after upgrade',
             value: 'Reboot without prompt after applying updates',
           ),
-          isActive: false,
+          isActive: serverDetailsState.autoUpgradeSettings.allowReboot,
         ),
         _Button(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(materialRoute(SelectTimezone()));
+          },
           child: _TextColumn(
             title: 'Server Timezone',
-            value: 'Europe/Kyiv',
+            value: serverDetailsState.serverTimezone.timezone.name,
           ),
         ),
-        _Button(
-          onTap: () {},
-          child: _TextColumn(
-            title: 'Server Locale',
-            value: 'Default',
-          ),
-        ),
-        _Button(
-          onTap: () {},
-          child: _TextColumn(
-            hasWarning: true,
-            title: 'Factory Reset',
-            value: 'Restore default settings on your server',
-          ),
-        )
       ],
     );
   }

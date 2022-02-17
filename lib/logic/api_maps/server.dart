@@ -5,8 +5,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/timezone_settings.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 
 import 'api_map.dart';
@@ -236,6 +238,39 @@ class ServerApi extends ApiMap {
     Response response = await client.get('/system/configuration/upgrade');
     client.close();
     return response.statusCode == HttpStatus.ok;
+  }
+
+  Future<AutoUpgradeSettings> getAutoUpgradeSettings() async {
+    var client = await getClient();
+    Response response = await client.get('/system/configuration/autoUpgrade');
+    client.close();
+    return AutoUpgradeSettings.fromJson(response.data);
+  }
+
+  Future<void> updateAutoUpgradeSettings(AutoUpgradeSettings settings) async {
+    var client = await getClient();
+    await client.put(
+      '/system/configuration/autoUpgrade',
+      data: settings.toJson(),
+    );
+    client.close();
+  }
+
+  Future<TimeZoneSettings> getServerTimezone() async {
+    var client = await getClient();
+    Response response = await client.get('/system/configuration/timezone');
+    client.close();
+
+    return TimeZoneSettings.fromString(response.data);
+  }
+
+  Future<void> updateServerTimezone(TimeZoneSettings settings) async {
+    var client = await getClient();
+    await client.put(
+      '/system/configuration/timezone',
+      data: settings.toJson(),
+    );
+    client.close();
   }
 
   Future<String> getDkim() async {

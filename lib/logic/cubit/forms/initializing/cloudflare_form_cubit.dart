@@ -17,7 +17,11 @@ class CloudFlareFormCubit extends FormCubit {
         ValidationModel<String>(
             (s) => regExp.hasMatch(s), 'validations.key_format'.tr()),
         LengthStringValidationWithLengthShowing(
-            40, 'validations.length'.tr(args: ["40"]))
+          40,
+          'validations.length'.tr(
+            args: ["40"],
+          ),
+        )
       ],
     );
 

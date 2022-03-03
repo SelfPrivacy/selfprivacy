@@ -301,7 +301,9 @@
     "upgradeSuccess": "Server upgrade started",
     "upgradeFailed": "Failed to upgrade server",
     "upgradeServer": "Upgrade server",
-    "rebootServer": "Reboot server"
+    "rebootServer": "Reboot server",
+    "create_ssh_key": "Create SSH key for {}",
+    "delete_ssh_key": "Delete SSH key for {}"
   },
   "validations": {
     "required": "Required",

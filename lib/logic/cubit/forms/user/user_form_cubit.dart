@@ -34,7 +34,8 @@ class UserFormCubit extends FormCubit {
     );
 
     password = FieldCubit(
-      initalValue: isEdit ? user!.password : StringGenerators.userPassword(),
+      initalValue:
+          isEdit ? (user?.password ?? '') : StringGenerators.userPassword(),
       validations: [
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>((s) => passwordRegExp.hasMatch(s),

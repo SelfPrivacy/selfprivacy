@@ -79,7 +79,7 @@ class DnsRecordsCubit extends AppConfigDependendCubit<DnsRecordsState> {
 
   @override
   void onChange(Change<DnsRecordsState> change) {
-    print(change);
+    // print(change);
     super.onChange(change);
   }
 

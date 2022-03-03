@@ -18,18 +18,27 @@ class UserAdapter extends TypeAdapter<User> {
     };
     return User(
       login: fields[0] as String,
-      password: fields[1] as String,
+      password: fields[1] as String?,
+      sshKeys: fields[2] == null ? [] : (fields[2] as List).cast<String>(),
+      isFoundOnServer: fields[3] == null ? true : fields[3] as bool,
+      note: fields[4] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.login)
       ..writeByte(1)
-      ..write(obj.password);
+      ..write(obj.password)
+      ..writeByte(2)
+      ..write(obj.sshKeys)
+      ..writeByte(3)
+      ..write(obj.isFoundOnServer)
+      ..writeByte(4)
+      ..write(obj.note);
   }
 
   @override

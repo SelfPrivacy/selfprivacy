@@ -135,7 +135,7 @@ class HetznerApi extends ApiMap {
     /// check the branch name, it could be "development" or "master".
     ///
     final userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${escapeQuotes(rootUser.login)}' PASSWORD='${escapeQuotes(rootUser.password)}' CF_TOKEN=$cloudFlareKey DB_PASSWORD=${escapeQuotes(dbPassword)} API_TOKEN=$apiToken HOSTNAME=${escapeQuotes(hostname)} bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${escapeQuotes(rootUser.login)}' PASSWORD='${escapeQuotes(rootUser.password ?? 'PASS')}' CF_TOKEN=$cloudFlareKey DB_PASSWORD=${escapeQuotes(dbPassword)} API_TOKEN=$apiToken HOSTNAME=${escapeQuotes(hostname)} bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     final data = {

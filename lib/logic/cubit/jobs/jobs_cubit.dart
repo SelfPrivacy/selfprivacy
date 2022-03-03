@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
@@ -5,10 +7,9 @@ import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/get_it/ssh.dart';
 import 'package:selfprivacy/logic/models/job.dart';
-import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/models/user.dart';
+
 export 'package:provider/provider.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 part 'jobs_state.dart';
 
@@ -103,12 +104,10 @@ class JobsCubit extends Cubit<JobsState> {
       var hasServiceJobs = false;
       for (var job in jobs) {
         if (job is CreateUserJob) {
-          newUsers.add(job.user);
-          await api.createUser(job.user);
+          await usersCubit.createUser(job.user);
         }
         if (job is DeleteUserJob) {
-          final deleted = await api.deleteUser(job.user);
-          if (deleted) usersCubit.remove(job.user);
+          await usersCubit.deleteUser(job.user);
         }
         if (job is ServiceToggleJob) {
           hasServiceJobs = true;
@@ -116,11 +115,10 @@ class JobsCubit extends Cubit<JobsState> {
         }
         if (job is CreateSSHKeyJob) {
           await getIt<SSHModel>().generateKeys();
-          api.sendSsh(getIt<SSHModel>().savedPubKey!);
+          api.addRootSshKey(getIt<SSHModel>().savedPubKey!);
         }
       }
 
-      usersCubit.addUsers(newUsers);
       await api.pullConfigurationUpdate();
       await api.apply();
       if (hasServiceJobs) {

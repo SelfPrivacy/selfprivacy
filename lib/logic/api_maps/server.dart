@@ -13,6 +13,20 @@ import 'package:selfprivacy/logic/models/user.dart';
 
 import 'api_map.dart';
 
+class ApiResponse<D> {
+  final int statusCode;
+  final String? errorMessage;
+  final D data;
+
+  get isSuccess => statusCode >= 200 && statusCode < 300;
+
+  ApiResponse({
+    required this.statusCode,
+    this.errorMessage,
+    required this.data,
+  });
+}
+
 class ServerApi extends ApiMap {
   bool hasLogger;
   bool isWithToken;
@@ -50,31 +64,151 @@ class ServerApi extends ApiMap {
     return res;
   }
 
-  Future<bool> createUser(User user) async {
-    bool res;
+  Future<ApiResponse<User>> createUser(User user) async {
     Response response;
 
     var client = await getClient();
     // POST request with JSON body containing username and password
-    try {
-      response = await client.post(
-        '/users',
-        data: {
-          'username': user.login,
-          'password': user.password,
-        },
-        options: Options(
-          contentType: 'application/json',
+
+    response = await client.post(
+      '/users',
+      data: {
+        'username': user.login,
+        'password': user.password,
+      },
+      options: Options(
+        contentType: 'application/json',
+      ),
+    );
+
+    close(client);
+
+    if (response.statusCode == HttpStatus.created) {
+      return ApiResponse(
+        statusCode: response.statusCode ?? HttpStatus.internalServerError,
+        data: User(
+          login: user.login,
+          password: user.password,
+          isFoundOnServer: true,
         ),
       );
-      res = response.statusCode == HttpStatus.created;
+    } else {
+      return ApiResponse(
+        statusCode: response.statusCode ?? HttpStatus.internalServerError,
+        data: User(
+          login: user.login,
+          password: user.password,
+          isFoundOnServer: false,
+          note: response.data['message'] ?? null,
+        ),
+        errorMessage: response.data?.containsKey('error') ?? false
+            ? response.data['error']
+            : null,
+      );
+    }
+  }
+
+  Future<ApiResponse<List<String>>> getUsersList() async {
+    List<String> res;
+    Response response;
+
+    var client = await getClient();
+    response = await client.get('/users');
+    try {
+      res = (json.decode(response.data) as List<dynamic>)
+          .map((e) => e as String)
+          .toList();
     } catch (e) {
-      print(e);
-      res = false;
+      res = [];
     }
 
     close(client);
-    return res;
+    return ApiResponse<List<String>>(
+      statusCode: response.statusCode ?? HttpStatus.internalServerError,
+      data: res,
+    );
+  }
+
+  Future<ApiResponse<void>> addUserSshKey(User user, String sshKey) async {
+    Response response;
+
+    var client = await getClient();
+    response = await client.post(
+      '/services/ssh/keys/${user.login}',
+      data: {
+        'public_key': sshKey,
+      },
+    );
+
+    close(client);
+    return ApiResponse<void>(
+      statusCode: response.statusCode ?? HttpStatus.internalServerError,
+      data: null,
+      errorMessage: response.data?.containsKey('error') ?? false
+          ? response.data['error']
+          : null,
+    );
+  }
+
+  Future<ApiResponse<void>> addRootSshKey(String ssh) async {
+    Response response;
+
+    var client = await getClient();
+    response = await client.put(
+      '/services/ssh/key/send',
+      data: {"public_key": ssh},
+    );
+    close(client);
+
+    return ApiResponse<void>(
+      statusCode: response.statusCode ?? HttpStatus.internalServerError,
+      data: null,
+      errorMessage: response.data?.containsKey('error') ?? false
+          ? response.data['error']
+          : null,
+    );
+  }
+
+  Future<ApiResponse<List<String>>> getUserSshKeys(User user) async {
+    List<String> res;
+    Response response;
+
+    var client = await getClient();
+    response = await client.get('/services/ssh/keys/${user.login}');
+    try {
+      res = (response.data as List<dynamic>).map((e) => e as String).toList();
+    } catch (e) {
+      print(e);
+      res = [];
+    }
+
+    close(client);
+    return ApiResponse<List<String>>(
+      statusCode: response.statusCode ?? HttpStatus.internalServerError,
+      data: res,
+      errorMessage: response.data is List
+          ? null
+          : response.data?.containsKey('error') ?? false
+              ? response.data['error']
+              : null,
+    );
+  }
+
+  Future<ApiResponse<void>> deleteUserSshKey(User user, String sshKey) async {
+    Response response;
+
+    var client = await getClient();
+    response = await client.delete('/services/ssh/keys/${user.login}',
+        data: {"public_key": sshKey});
+    close(client);
+
+    return ApiResponse<void>(
+      statusCode: response.statusCode ?? HttpStatus.internalServerError,
+      data: null,
+      errorMessage: response.data?.containsKey('error') ?? false
+          ? response.data['error']
+          : null,
+    );
   }
 
   Future<bool> deleteUser(User user) async {
@@ -89,7 +223,8 @@ class ServerApi extends ApiMap {
           contentType: 'application/json',
         ),
       );
-      res = response.statusCode == HttpStatus.ok;
+      res = response.statusCode == HttpStatus.ok ||
+          response.statusCode == HttpStatus.notFound;
     } catch (e) {
       print(e);
       res = false;
@@ -125,16 +260,7 @@ class ServerApi extends ApiMap {
   Future<void> switchService(ServiceTypes type, bool needToTurnOn) async {
     var client = await getClient();
     client.post('/services/${type.url}/${needToTurnOn ? 'enable' : 'disable'}');
-    client.close();
-  }
-
-  Future<void> sendSsh(String ssh) async {
-    var client = await getClient();
-    client.put(
-      '/services/ssh/key/send',
-      data: {"public_key": ssh},
-    );
-    client.close();
+    close(client);
   }
 
   Future<Map<ServiceTypes, bool>> servicesPowerCheck() async {
@@ -161,13 +287,13 @@ class ServerApi extends ApiMap {
         'bucket': bucket.bucketName,
       },
     );
-    client.close();
+    close(client);
   }
 
   Future<void> startBackup() async {
     var client = await getClient();
     client.put('/services/restic/backup/create');
-    client.close();
+    close(client);
   }
 
   Future<List<Backup>> getBackups() async {
@@ -210,13 +336,13 @@ class ServerApi extends ApiMap {
   Future<void> forceBackupListReload() async {
     var client = await getClient();
     client.get('/services/restic/backup/reload');
-    client.close();
+    close(client);
   }
 
   Future<void> restoreBackup(String backupId) async {
     var client = await getClient();
     client.put('/services/restic/backup/restore', data: {'backupId': backupId});
-    client.close();
+    close(client);
   }
 
   Future<bool> pullConfigurationUpdate() async {
@@ -229,21 +355,21 @@ class ServerApi extends ApiMap {
   Future<bool> reboot() async {
     var client = await getClient();
     Response response = await client.get('/system/reboot');
-    client.close();
+    close(client);
     return response.statusCode == HttpStatus.ok;
   }
 
   Future<bool> upgrade() async {
     var client = await getClient();
     Response response = await client.get('/system/configuration/upgrade');
-    client.close();
+    close(client);
     return response.statusCode == HttpStatus.ok;
   }
 
   Future<AutoUpgradeSettings> getAutoUpgradeSettings() async {
     var client = await getClient();
     Response response = await client.get('/system/configuration/autoUpgrade');
-    client.close();
+    close(client);
     return AutoUpgradeSettings.fromJson(response.data);
   }
 
@@ -253,13 +379,13 @@ class ServerApi extends ApiMap {
       '/system/configuration/autoUpgrade',
       data: settings.toJson(),
     );
-    client.close();
+    close(client);
   }
 
   Future<TimeZoneSettings> getServerTimezone() async {
     var client = await getClient();
     Response response = await client.get('/system/configuration/timezone');
-    client.close();
+    close(client);
 
     return TimeZoneSettings.fromString(response.data);
   }
@@ -270,13 +396,13 @@ class ServerApi extends ApiMap {
       '/system/configuration/timezone',
       data: settings.toJson(),
     );
-    client.close();
+    close(client);
   }
 
   Future<String> getDkim() async {
     var client = await getClient();
     Response response = await client.get('/services/mailserver/dkim');
-    client.close();
+    close(client);
 
     // if got 404 raise exception
     if (response.statusCode == HttpStatus.notFound) {

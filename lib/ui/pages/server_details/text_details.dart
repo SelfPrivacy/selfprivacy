@@ -28,7 +28,7 @@ class _TextDetails extends StatelessWidget {
               TableRow(
                 children: [
                   getRowTitle('Last check:'),
-                  getRowValue(formater.format(checkTime)),
+                  getRowValue(formatter.format(checkTime)),
                 ],
               ),
               TableRow(
@@ -168,4 +168,4 @@ class _TempMessage extends StatelessWidget {
   }
 }
 
-final DateFormat formater = DateFormat('HH:mm:ss');
+final DateFormat formatter = DateFormat('HH:mm:ss');

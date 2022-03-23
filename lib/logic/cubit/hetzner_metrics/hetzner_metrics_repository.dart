@@ -21,7 +21,7 @@ class HetznerMetricsRepository {
         break;
     }
 
-    var api = HetznerApi(hasLoger: true);
+    var api = HetznerApi(hasLogger: true);
 
     var results = await Future.wait([
       api.getMetrics(start, end, 'cpu'),

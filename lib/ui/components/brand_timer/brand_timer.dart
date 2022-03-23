@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class BrandTimer extends StatefulWidget {
   const BrandTimer({
@@ -30,7 +30,7 @@ class _BrandTimerState extends State<BrandTimer> {
   }
 
   _timerStart() {
-    _timeString = diffenceFromStart;
+    _timeString = differenceFromStart;
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       var timePassed = DateTime.now().difference(widget.startDateTime);
       if (timePassed > widget.duration) {
@@ -62,11 +62,11 @@ class _BrandTimerState extends State<BrandTimer> {
 
   void _getTime() {
     setState(() {
-      _timeString = diffenceFromStart;
+      _timeString = differenceFromStart;
     });
   }
 
-  String get diffenceFromStart =>
+  String get differenceFromStart =>
       _durationToString(DateTime.now().difference(widget.startDateTime));
 
   String _durationToString(Duration duration) {

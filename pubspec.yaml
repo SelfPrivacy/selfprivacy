@@ -1,53 +1,54 @@
 name: selfprivacy
 description: selfprivacy.org
 publish_to: 'none'
-version: 0.4.2+10
+version: 0.5.0+11
 
 environment:
   sdk: '>=2.13.4 <3.0.0'
-  flutter: ">=2.5.0"
+  flutter: ">=2.10.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  crypt: ^4.0.1
-  cubit_form: ^1.0.0-nullsafety.0
-  cupertino_icons: ^1.0.2
-  dio: ^4.0.0-beta7
+  auto_size_text: ^3.0.0
+  basic_utils: ^4.2.0
+  crypt: ^4.2.1
+  cubit_form: ^2.0.1
+  cupertino_icons: ^1.0.4
+  dio: ^4.0.4
   easy_localization: ^3.0.0
   either_option: ^2.0.1-dev.1
   equatable: ^2.0.3
-  fl_chart: ^0.40.0
-  flutter_bloc: ^7.3.3
-  flutter_markdown: ^0.6.0
-  flutter_secure_storage: ^4.1.0
+  fl_chart: ^0.45.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.0.1
+  flutter_markdown: ^0.6.9
+  flutter_secure_storage: ^5.0.2
   get_it: ^7.2.0
-  hive: ^2.0.0
-  hive_flutter: ^1.0.0
-  json_annotation: ^4.0.0
+  hive: ^2.0.5
+  hive_flutter: ^1.1.0
+  ionicons: ^0.1.2
+  json_annotation: ^4.4.0
+  local_auth: ^1.1.11
   modal_bottom_sheet: ^2.0.0
   nanoid: ^1.0.0
-  package_info: ^2.0.0
-  pretty_dio_logger: ^1.1.1
-  provider: ^6.0.0
-  share_plus: ^2.1.4
-  url_launcher: ^6.0.2
-  wakelock: ^0.5.0+2
-  basic_utils: ^3.4.0
-  ionicons: ^0.1.2
-  pointycastle: ^3.3.2
+  package_info: ^2.0.2
+  pointycastle: ^3.5.1
+  pretty_dio_logger: ^1.2.0-beta-1
+  provider: ^6.0.2
   rsa_encrypt: ^2.0.0
-  ssh_key: ^0.7.0
-  local_auth: ^1.1.7
-  auto_size_text: ^3.0.0-nullsafety.0
+  share_plus: ^3.0.5
+  ssh_key: ^0.7.1
+  timezone: ^0.8.0
+  url_launcher: ^6.0.20
+  wakelock: ^0.6.1+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.1.1
-  flutter_launcher_icons: ^0.9.0
+  flutter_launcher_icons: ^0.9.2
   hive_generator: ^1.0.0
-  json_serializable: ^4.0.2
+  json_serializable: ^6.1.4
 
 flutter_icons:
   android: "launcher_icon"

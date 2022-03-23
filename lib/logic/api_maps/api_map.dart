@@ -6,13 +6,12 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 
 abstract class ApiMap {
   Future<Dio> getClient() async {
     var dio = Dio(await options);
-    if (hasLoger) {
+    if (hasLogger) {
       dio.interceptors.add(PrettyDioLogger());
     }
     dio.interceptors.add(ConsoleInterceptor());
@@ -38,7 +37,7 @@ abstract class ApiMap {
   FutureOr<BaseOptions> get options;
 
   abstract final String rootAddress;
-  abstract final bool hasLoger;
+  abstract final bool hasLogger;
   abstract final bool isWithToken;
 
   ValidateStatus? validateStatus;

@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 import 'user.dart';
 
@@ -42,24 +42,53 @@ class DeleteUserJob extends Job {
   List<Object> get props => [id, title, user];
 }
 
-class ServiceToggleJob extends Job {
-  ServiceToggleJob({
+class ToggleJob extends Job {
+  ToggleJob({
     required this.type,
-    required this.needToTurnOn,
-  }) : super(
-            title:
-                '${needToTurnOn ? "jobs.serviceTurnOn".tr() : "jobs.serviceTurnOff".tr()} ${type.title}');
+    required String title,
+  }) : super(title: title);
 
-  final ServiceTypes type;
-  final bool needToTurnOn;
+  final dynamic type;
 
   @override
-  List<Object> get props => [id, title, type, needToTurnOn];
+  List<Object> get props => [...super.props, type];
+}
+
+class ServiceToggleJob extends ToggleJob {
+  ServiceToggleJob({
+    required ServiceTypes type,
+    required this.needToTurnOn,
+  }) : super(
+          title:
+              '${needToTurnOn ? "jobs.serviceTurnOn".tr() : "jobs.serviceTurnOff".tr()} ${type.title}',
+          type: type,
+        );
+
+  final bool needToTurnOn;
 }
 
 class CreateSSHKeyJob extends Job {
-  CreateSSHKeyJob() : super(title: '${"more.create_ssh_key".tr()}');
+  CreateSSHKeyJob({
+    required this.user,
+    required this.publicKey,
+  }) : super(title: '${"jobs.create_ssh_key".tr(args: [user.login])}');
+
+  final User user;
+  final String publicKey;
 
   @override
-  List<Object> get props => [id, title];
+  List<Object> get props => [id, title, user, publicKey];
+}
+
+class DeleteSSHKeyJob extends Job {
+  DeleteSSHKeyJob({
+    required this.user,
+    required this.publicKey,
+  }) : super(title: '${"jobs.delete_ssh_key".tr(args: [user.login])}');
+
+  final User user;
+  final String publicKey;
+
+  @override
+  List<Object> get props => [id, title, user, publicKey];
 }

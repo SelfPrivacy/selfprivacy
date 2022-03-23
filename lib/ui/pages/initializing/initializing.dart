@@ -1,14 +1,13 @@
 import 'package:cubit_form/cubit_form.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/domain_cloudflare.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/hetzner_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/root_user_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -19,7 +18,6 @@ import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class InitializingPage extends StatelessWidget {
   @override
@@ -438,7 +436,7 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepCheck(AppConfigCubit appConfigCubit) {
-    assert(appConfigCubit.state is AppConfigNotFinished, 'wronge state');
+    assert(appConfigCubit.state is AppConfigNotFinished, 'wrong state');
     var state = appConfigCubit.state as TimerState;
     late int doneCount;
     late String? text;
@@ -466,6 +464,22 @@ class InitializingPage extends StatelessWidget {
           Spacer(flex: 2),
           SizedBox(height: 10),
           BrandText.body2(text),
+          SizedBox(height: 10),
+          if (doneCount == 0 && state.dnsMatches != null)
+            Column(
+              children: state.dnsMatches!.entries.map((entry) {
+                var domain = entry.key;
+                var isCorrect = entry.value;
+                return Row(
+                  children: [
+                    if (isCorrect) Icon(Icons.check, color: Colors.green),
+                    if (!isCorrect) Icon(Icons.schedule, color: Colors.amber),
+                    SizedBox(width: 10),
+                    Text(domain),
+                  ],
+                );
+              }).toList(),
+            ),
           SizedBox(height: 10),
           if (!state.isLoading)
             Row(

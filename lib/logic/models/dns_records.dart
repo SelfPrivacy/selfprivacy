@@ -3,8 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 part 'dns_records.g.dart';
 
 @JsonSerializable(createToJson: true, createFactory: false)
-class DnsRecords {
-  DnsRecords({
+class DnsRecord {
+  DnsRecord({
     required this.type,
     required this.name,
     required this.content,
@@ -20,5 +20,5 @@ class DnsRecords {
   final int priority;
   final bool proxied;
 
-  toJson() => _$DnsRecordsToJson(this);
+  toJson() => _$DnsRecordToJson(this);
 }

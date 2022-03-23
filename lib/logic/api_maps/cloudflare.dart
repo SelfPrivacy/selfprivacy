@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
@@ -6,7 +7,7 @@ import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
 import 'package:selfprivacy/logic/models/dns_records.dart';
 
 class CloudflareApi extends ApiMap {
-  CloudflareApi({this.hasLoger = false, this.isWithToken = true});
+  CloudflareApi({this.hasLogger = false, this.isWithToken = true});
 
   BaseOptions get options {
     var options = BaseOptions(baseUrl: rootAddress);
@@ -87,6 +88,36 @@ class CloudflareApi extends ApiMap {
     close(client);
   }
 
+  Future<List<DnsRecord>> getDnsRecords({
+    required CloudFlareDomain cloudFlareDomain,
+  }) async {
+    var domainName = cloudFlareDomain.domainName;
+    var domainZoneId = cloudFlareDomain.zoneId;
+
+    var url = '/zones/$domainZoneId/dns_records';
+
+    var client = await getClient();
+    Response response = await client.get(url);
+
+    List records = response.data['result'] ?? [];
+    var allRecords = <DnsRecord>[];
+
+    for (var record in records) {
+      if (record['zone_name'] == domainName) {
+        allRecords.add(DnsRecord(
+          name: record['name'],
+          type: record['type'],
+          content: record['content'],
+          ttl: record['ttl'],
+          proxied: record['proxied'],
+        ));
+      }
+    }
+
+    close(client);
+    return allRecords;
+  }
+
   Future<void> createMultipleDnsRecords({
     String? ip4,
     required CloudFlareDomain cloudFlareDomain,
@@ -113,33 +144,33 @@ class CloudflareApi extends ApiMap {
     close(client);
   }
 
-  List<DnsRecords> projectDnsRecords(String? domainName, String? ip4) {
-    var domainA = DnsRecords(type: 'A', name: domainName, content: ip4);
+  List<DnsRecord> projectDnsRecords(String? domainName, String? ip4) {
+    var domainA = DnsRecord(type: 'A', name: domainName, content: ip4);
 
-    var mx = DnsRecords(type: 'MX', name: '@', content: domainName);
-    var apiA = DnsRecords(type: 'A', name: 'api', content: ip4);
-    var cloudA = DnsRecords(type: 'A', name: 'cloud', content: ip4);
-    var gitA = DnsRecords(type: 'A', name: 'git', content: ip4);
-    var meetA = DnsRecords(type: 'A', name: 'meet', content: ip4);
-    var passwordA = DnsRecords(type: 'A', name: 'password', content: ip4);
-    var socialA = DnsRecords(type: 'A', name: 'social', content: ip4);
-    var vpn = DnsRecords(type: 'A', name: 'vpn', content: ip4);
+    var mx = DnsRecord(type: 'MX', name: '@', content: domainName);
+    var apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
+    var cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
+    var gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
+    var meetA = DnsRecord(type: 'A', name: 'meet', content: ip4);
+    var passwordA = DnsRecord(type: 'A', name: 'password', content: ip4);
+    var socialA = DnsRecord(type: 'A', name: 'social', content: ip4);
+    var vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
 
-    var txt1 = DnsRecords(
+    var txt1 = DnsRecord(
       type: 'TXT',
       name: '_dmarc',
       content: 'v=DMARC1; p=none',
       ttl: 18000,
     );
 
-    var txt2 = DnsRecords(
+    var txt2 = DnsRecord(
       type: 'TXT',
       name: domainName,
       content: 'v=spf1 a mx ip4:$ip4 -all',
       ttl: 18000,
     );
 
-    return <DnsRecords>[
+    return <DnsRecord>[
       domainA,
       apiA,
       cloudA,
@@ -152,6 +183,27 @@ class CloudflareApi extends ApiMap {
       txt2,
       vpn
     ];
+  }
+
+  Future<void> setDkim(
+      String dkimRecordString, CloudFlareDomain cloudFlareDomain) async {
+    final domainZoneId = cloudFlareDomain.zoneId;
+    final url = '$rootAddress/zones/$domainZoneId/dns_records';
+
+    final dkimRecord = DnsRecord(
+      type: 'TXT',
+      name: 'selector._domainkey',
+      content: dkimRecordString,
+      ttl: 18000,
+    );
+
+    var client = await getClient();
+    await client.post(
+      url,
+      data: dkimRecord.toJson(),
+    );
+
+    client.close();
   }
 
   Future<List<String>> domainList() async {
@@ -170,7 +222,7 @@ class CloudflareApi extends ApiMap {
   }
 
   @override
-  final bool hasLoger;
+  final bool hasLogger;
 
   @override
   final bool isWithToken;

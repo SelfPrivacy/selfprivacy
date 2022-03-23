@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 final _kBottomTabBarHeight = 51;
 
@@ -62,12 +62,12 @@ class _BrandTabBarState extends State<BrandTabBar> {
   }
 
   _getIconButton(String label, IconData iconData, int index) {
-    var acitivColor = Theme.of(context).brightness == Brightness.dark
+    var activeColor = Theme.of(context).brightness == Brightness.dark
         ? BrandColors.white
         : BrandColors.black;
 
     var isActive = currentIndex == index;
-    var color = isActive ? acitivColor : BrandColors.inactive;
+    var color = isActive ? activeColor : BrandColors.inactive;
     return InkWell(
       onTap: () => widget.controller!.animateTo(index),
       child: Padding(

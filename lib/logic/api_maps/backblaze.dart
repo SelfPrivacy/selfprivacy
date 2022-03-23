@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
@@ -20,7 +21,7 @@ class BackblazeApplicationKey {
 }
 
 class BackblazeApi extends ApiMap {
-  BackblazeApi({this.hasLoger = false, this.isWithToken = true});
+  BackblazeApi({this.hasLogger = false, this.isWithToken = true});
 
   BaseOptions get options {
     var options = BaseOptions(baseUrl: rootAddress);
@@ -142,7 +143,7 @@ class BackblazeApi extends ApiMap {
   }
 
   @override
-  bool hasLoger;
+  bool hasLogger;
 
   @override
   bool isWithToken;

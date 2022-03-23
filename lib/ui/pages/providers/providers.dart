@@ -1,11 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
-import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/models/provider.dart';
-import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
@@ -14,9 +14,9 @@ import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
+import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:selfprivacy/utils/ui_helpers.dart';
+import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 var navigatorKey = GlobalKey<NavigatorState>();
 
@@ -32,6 +32,18 @@ class _ProvidersPageState extends State<ProvidersPage> {
   Widget build(BuildContext context) {
     var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
     var isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
+    var dnsStatus = context.watch<DnsRecordsCubit>().state.dnsState;
+
+    StateType getDnsStatus() {
+      if (dnsStatus == DnsRecordsStatus.uninitialized ||
+          dnsStatus == DnsRecordsStatus.refreshing) {
+        return StateType.uninitialized;
+      }
+      if (dnsStatus == DnsRecordsStatus.error) {
+        return StateType.warning;
+      }
+      return StateType.stable;
+    }
 
     final cards = ProviderType.values
         .map(
@@ -42,7 +54,9 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 state: isReady
                     ? (type == ProviderType.backup && !isBackupInitialized
                         ? StateType.uninitialized
-                        : StateType.stable)
+                        : (type == ProviderType.domain)
+                            ? getDnsStatus()
+                            : StateType.stable)
                     : StateType.uninitialized,
                 type: type,
               ),
@@ -102,33 +116,21 @@ class _Card extends StatelessWidget {
 
         break;
       case ProviderType.domain:
-        title = 'providers.domain.card_title'.tr();
+        title = 'providers.domain.screen_title'.tr();
         message = domainName;
         stableText = 'providers.domain.status'.tr();
 
-        onTap = () => showBrandBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return _ProviderDetails(
-                  provider: provider,
-                  statusText: stableText,
-                );
-              },
-            );
+        onTap = () => Navigator.of(context).push(materialRoute(
+              DnsDetailsPage(),
+            ));
         break;
       case ProviderType.backup:
         title = 'providers.backup.card_title'.tr();
         stableText = 'providers.backup.status'.tr();
 
-        onTap = () => showBrandBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return BrandBottomSheet(
-                  isExpended: true,
-                  child: BackupDetails(),
-                );
-              },
-            );
+        onTap = () => Navigator.of(context).push(materialRoute(
+              BackupDetails(),
+            ));
         break;
     }
     return GestureDetector(
@@ -149,80 +151,6 @@ class _Card extends StatelessWidget {
               SizedBox(height: 10),
             ],
             if (provider.state == StateType.stable) BrandText.body2(stableText),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ProviderDetails extends StatelessWidget {
-  const _ProviderDetails({
-    Key? key,
-    required this.provider,
-    required this.statusText,
-  }) : super(key: key);
-
-  final ProviderModel provider;
-  final String? statusText;
-
-  @override
-  Widget build(BuildContext context) {
-    late String title;
-    late List<Widget> children;
-
-    var config = context.watch<AppConfigCubit>().state;
-
-    var domainName = UiHelpers.getDomainName(config);
-
-    switch (provider.type) {
-      case ProviderType.server:
-        throw ('wrong type');
-      case ProviderType.domain:
-        title = 'providers.domain.card_title'.tr();
-        children = [
-          BrandText.body1('providers.domain.bottom_sheet.1'.tr()),
-          SizedBox(height: 10),
-          BrandText.body1(domainName),
-          SizedBox(height: 10),
-          BrandText.body1('providers.domain.status'.tr()),
-        ];
-        break;
-      case ProviderType.backup:
-        title = 'providers.backup.card_title'.tr();
-        children = [
-          BrandText.body1('providers.backup.bottom_sheet.1'.tr()),
-          SizedBox(height: 10),
-          BrandText.body1(
-              'providers.backup.bottom_sheet.2'.tr(args: [domainName, 'Time'])),
-          SizedBox(height: 10),
-          BrandText.body1('providers.backup.status'.tr()),
-        ];
-        break;
-    }
-    return BrandBottomSheet(
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 40),
-            Padding(
-              padding: paddingH15V0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconStatusMask(
-                    status: provider.state,
-                    child: Icon(provider.icon, size: 40, color: Colors.white),
-                  ),
-                  SizedBox(height: 10),
-                  BrandText.h1(title),
-                  SizedBox(height: 10),
-                  ...children,
-                  SizedBox(height: 30),
-                ],
-              ),
-            )
           ],
         ),
       ),

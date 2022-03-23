@@ -141,25 +141,44 @@ class _UserDetails extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: BrandText.h4('${user.login}@$domainName'),
                 ),
-                SizedBox(height: 14),
-                BrandText.small('basis.password'.tr()),
-                Container(
-                  height: 40,
-                  alignment: Alignment.centerLeft,
-                  child: BrandText.h4(user.password),
-                ),
+                if (user.password != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 14),
+                      BrandText.small('basis.password'.tr()),
+                      Container(
+                        height: 40,
+                        alignment: Alignment.centerLeft,
+                        child: BrandText.h4(user.password),
+                      ),
+                    ],
+                  ),
                 SizedBox(height: 24),
                 BrandDivider(),
                 SizedBox(height: 20),
-                BrandButton.emptyWithIconText(
-                  title: 'users.send_regisration_data'.tr(),
-                  icon: Icon(BrandIcons.share),
-                  onPressed: () {
+                ListTile(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(materialRoute(SshKeysPage(user: user)));
+                    },
+                    title: Text('ssh.title'.tr()),
+                    subtitle: user.sshKeys.length > 0
+                        ? Text('ssh.subtitle_with_keys'
+                            .tr(args: [user.sshKeys.length.toString()]))
+                        : Text('ssh.subtitle_without_keys'.tr()),
+                    trailing: Icon(BrandIcons.key)),
+                SizedBox(height: 20),
+                ListTile(
+                  onTap: () {
                     Share.share(
                         'login: ${user.login}, password: ${user.password}');
                   },
+                  title: Text(
+                    'users.send_registration_data'.tr(),
+                  ),
+                  trailing: Icon(BrandIcons.share),
                 ),
-                SizedBox(height: 20),
               ],
             ),
           )

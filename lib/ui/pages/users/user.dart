@@ -34,7 +34,11 @@ class _User extends StatelessWidget {
             Flexible(
               child: isRootUser
                   ? BrandText.h4Underlined(user.login)
-                  : BrandText.h4(user.login),
+                  // cross out text if user not found on server
+                  : BrandText.h4(user.login,
+                      style: user.isFoundOnServer
+                          ? null
+                          : TextStyle(decoration: TextDecoration.lineThrough)),
             ),
           ],
         ),

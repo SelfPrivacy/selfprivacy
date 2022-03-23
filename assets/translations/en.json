@@ -62,6 +62,20 @@
       "6": "This removes the Server. It will be no longer accessible"
     }
   },
+  "ssh": {
+    "title": "SSH keys",
+    "create": "Create SSH key",
+    "delete": "Delete SSH key",
+    "delete_confirm_question": "Are you sure you want to delete SSH key?",
+    "subtitle_with_keys": "{} keys",
+    "subtitle_without_keys": "No keys",
+    "no_key_name": "Unnamed key",
+    "root": {
+      "title": "These are superuser keys",
+      "subtitle": "Owners of these keys get full access to the server and can do anything on it. Only add your own keys to the server."
+    },
+    "input_label": "Public ED25519 or RSA key"
+  },
   "onboarding": {
     "_comment": "Onboarding pages",
     "page1_title": "Digital independence, available to all of us",
@@ -91,6 +105,38 @@
       "status": "Status — Good",
       "bottom_sheet": {
         "1": "It's your personal internet address that will point to the server and other services of yours."
+      },
+      "screen_title": "Domain and DNS",
+      "states": {
+        "ok": "Records are OK",
+        "error": "Problems found",
+        "error_subtitle": "Tap here to fix them",
+        "refreshing": "Refreshing status...",
+        "uninitialized": "Data is not retrieved yet"
+      },
+      "record_description": {
+        "root": "Root domain",
+        "api": "SelfPrivacy API",
+        "cloud": "File cloud",
+        "git": "Git server",
+        "meet": "Video conference",
+        "social": "Social network",
+        "password": "Password manager",
+        "vpn": "VPN",
+        "mx": "MX record",
+        "dmarc": "DMARC record",
+        "spf": "SPF record",
+        "dkim": "DKIM key"
+      },
+      "cards": {
+        "services": {
+          "title": "Services",
+          "subtitle": "Type “A” records required for each service."
+        },
+        "email": {
+          "title": "Email",
+          "subtitle": "Records necessary for secure email exchange."
+        }
       }
     },
     "backup": {
@@ -111,6 +157,7 @@
       "restoring": "Restoring from backup",
       "error_pending": "Server returned error, check it below",
       "restore_alert": "You are about to restore from backup created on {}. All current data will be lost. Are you sure?",
+      "refresh": "Refresh status",
       "refetchBackups": "Refetch backup list",
       "refetchingList": "In a few minutes list will be updated"
     }
@@ -119,7 +166,8 @@
     "_comment": "Card shown when user skips initial setup",
     "1": "Please finish application setup using ",
     "2": "@:more.configuration_wizard",
-    "3": " for further work"
+    "3": " for further work",
+    "in_menu": "Server is not set up yet. Please finish setup using setup wizard for further work."
   },
   "services": {
     "_comment": "Вкладка сервисы",
@@ -202,7 +250,7 @@
     "delete_confirm_question": "Are you sure?",
     "reset_password": "Reset password",
     "account": "Account",
-    "send_regisration_data": "Share login credentials"
+    "send_registration_data": "Share login credentials"
   },
   "initializing": {
     "_comment": "initializing page",
@@ -267,14 +315,17 @@
     "upgradeSuccess": "Server upgrade started",
     "upgradeFailed": "Failed to upgrade server",
     "upgradeServer": "Upgrade server",
-    "rebootServer": "Reboot server"
+    "rebootServer": "Reboot server",
+    "create_ssh_key": "Create SSH key for {}",
+    "delete_ssh_key": "Delete SSH key for {}"
   },
   "validations": {
     "required": "Required",
     "invalid_format": "Invalid format",
     "root_name": "User name cannot be 'root'",
     "key_format": "Invalid key format",
-    "length": "Length is [] shoud be {}",
-    "user_alredy_exist": "Already exists"
+    "length": "Length is [] should be {}",
+    "user_already_exist": "Already exists",
+    "key_already_exists": "This key already exists"
   }
 }

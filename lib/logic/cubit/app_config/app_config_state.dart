@@ -89,6 +89,7 @@ class TimerState extends AppConfigNotFinished {
           isServerResetedFirstTime: dataState.isServerResetedFirstTime,
           isServerResetedSecondTime: dataState.isServerResetedSecondTime,
           isLoading: isLoading,
+          dnsMatches: dataState.dnsMatches,
         );
 
   final AppConfigNotFinished dataState;
@@ -105,6 +106,7 @@ class TimerState extends AppConfigNotFinished {
 
 class AppConfigNotFinished extends AppConfigState {
   final bool isLoading;
+  final Map<String, bool>? dnsMatches;
 
   AppConfigNotFinished({
     String? hetznerKey,
@@ -117,6 +119,7 @@ class AppConfigNotFinished extends AppConfigState {
     required bool isServerResetedFirstTime,
     required bool isServerResetedSecondTime,
     required this.isLoading,
+    required this.dnsMatches,
   }) : super(
           hetznerKey: hetznerKey,
           cloudFlareKey: cloudFlareKey,
@@ -139,7 +142,8 @@ class AppConfigNotFinished extends AppConfigState {
         hetznerServer,
         isServerStarted,
         isServerResetedFirstTime,
-        isLoading
+        isLoading,
+        dnsMatches,
       ];
 
   AppConfigNotFinished copyWith({
@@ -153,6 +157,7 @@ class AppConfigNotFinished extends AppConfigState {
     bool? isServerResetedFirstTime,
     bool? isServerResetedSecondTime,
     bool? isLoading,
+    Map<String, bool>? dnsMatches,
   }) =>
       AppConfigNotFinished(
         hetznerKey: hetznerKey ?? this.hetznerKey,
@@ -167,6 +172,7 @@ class AppConfigNotFinished extends AppConfigState {
         isServerResetedSecondTime:
             isServerResetedSecondTime ?? this.isServerResetedSecondTime,
         isLoading: isLoading ?? this.isLoading,
+        dnsMatches: dnsMatches ?? this.dnsMatches,
       );
 
   AppConfigFinished finish() => AppConfigFinished(
@@ -195,6 +201,7 @@ class AppConfigEmpty extends AppConfigNotFinished {
           isServerResetedFirstTime: false,
           isServerResetedSecondTime: false,
           isLoading: false,
+          dnsMatches: null,
         );
 }
 

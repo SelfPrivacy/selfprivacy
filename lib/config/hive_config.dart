@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
@@ -24,14 +23,14 @@ class HiveConfig {
     await Hive.openBox<User>(BNames.users);
     await Hive.openBox(BNames.servicesState);
 
-    var cipher = HiveAesCipher(await getEncriptedKey(BNames.key));
+    var cipher = HiveAesCipher(await getEncryptedKey(BNames.key));
     await Hive.openBox(BNames.appConfig, encryptionCipher: cipher);
 
-    var sshCipher = HiveAesCipher(await getEncriptedKey(BNames.sshEnckey));
+    var sshCipher = HiveAesCipher(await getEncryptedKey(BNames.sshEnckey));
     await Hive.openBox(BNames.sshConfig, encryptionCipher: sshCipher);
   }
 
-  static Future<Uint8List> getEncriptedKey(String encKey) async {
+  static Future<Uint8List> getEncryptedKey(String encKey) async {
     final secureStorage = FlutterSecureStorage();
     var hasEncryptionKey = await secureStorage.containsKey(key: encKey);
     if (!hasEncryptionKey) {
@@ -49,6 +48,7 @@ class BNames {
   static String isDarkModeOn = 'isDarkModeOn';
   static String isOnbordingShowing = 'isOnbordingShowing';
   static String users = 'users';
+  static String rootKeys = 'rootKeys';
 
   static String appSettings = 'appSettings';
   static String servicesState = 'servicesState';

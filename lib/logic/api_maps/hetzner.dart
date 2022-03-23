@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -10,10 +9,10 @@ import 'package:selfprivacy/logic/models/user.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ApiMap {
-  bool hasLoger;
+  bool hasLogger;
   bool isWithToken;
 
-  HetznerApi({this.hasLoger = false, this.isWithToken = true});
+  HetznerApi({this.hasLogger = false, this.isWithToken = true});
 
   BaseOptions get options {
     var options = BaseOptions(baseUrl: rootAddress);
@@ -115,19 +114,50 @@ class HetznerApi extends ApiMap {
     final apiToken = StringGenerators.apiToken();
 
     // Replace all non-alphanumeric characters with an underscore
-    final hostname = domainName.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+    var hostname =
+        domainName.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+    // if hostname ends with -, remove it
+    if (hostname.endsWith('-')) {
+      hostname = hostname.substring(0, hostname.length - 1);
+    }
+    // if hostname starts with -, remove it
+    if (hostname.startsWith('-')) {
+      hostname = hostname.substring(1);
+    }
+    // if hostname is empty, use default
+    if (hostname.isEmpty) {
+      hostname = 'selfprivacy-server';
+    }
+
+    print("hostname: $hostname");
 
     /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
     /// check the branch name, it could be "development" or "master".
+    ///
+    final userdataString =
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${escapeQuotes(rootUser.login)}' PASSWORD='${escapeQuotes(rootUser.password ?? 'PASS')}' CF_TOKEN=$cloudFlareKey DB_PASSWORD=${escapeQuotes(dbPassword)} API_TOKEN=$apiToken HOSTNAME=${escapeQuotes(hostname)} bash 2>&1 | tee /tmp/infect.log";
+    print(userdataString);
 
-    var data = jsonDecode(
-        '''{"name":"$domainName","server_type":"cx11","start_after_create":false,"image":"ubuntu-20.04", "volumes":[$dbId], "networks":[], "user_data":"#cloud-config\\nruncmd:\\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN=$domainName LUSER=${rootUser.login} PASSWORD=${rootUser.password} CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log","labels":{},"automount":true, "location": "fsn1"}''');
+    final data = {
+      "name": hostname,
+      "server_type": "cx11",
+      "start_after_create": false,
+      "image": "ubuntu-20.04",
+      "volumes": [dbId],
+      "networks": [],
+      "user_data": userdataString,
+      "labels": {},
+      "automount": true,
+      "location": "fsn1"
+    };
+    print("Decoded data: $data");
 
     Response serverCreateResponse = await client.post(
       '/servers',
       data: data,
     );
 
+    print(serverCreateResponse.data);
     client.close();
     return HetznerServerDetails(
       id: serverCreateResponse.data['server']['id'],
@@ -225,4 +255,15 @@ class HetznerApi extends ApiMap {
     );
     close(client);
   }
+}
+
+String escapeQuotes(String str) {
+  // replace all single quotes with escaped single quotes for bash strong quotes (i.e. '\'' )
+  // print("Escaping single quotes for bash: $str");
+  // print("Escaping result: ${str.replaceAll(RegExp(r"'"), "'\\''")}");
+  // also escape all double quotes for json
+  // return str.replaceAll(RegExp(r"'"), "'\\''");
+
+  // Pass for now
+  return str;
 }

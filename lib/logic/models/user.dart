@@ -1,10 +1,8 @@
 import 'dart:ui';
 
-import 'package:crypt/crypt.dart';
 import 'package:equatable/equatable.dart';
-import 'package:selfprivacy/utils/color_utils.dart';
 import 'package:hive/hive.dart';
-import 'package:selfprivacy/utils/password_generator.dart';
+import 'package:selfprivacy/utils/color_utils.dart';
 
 part 'user.g.dart';
 
@@ -12,26 +10,33 @@ part 'user.g.dart';
 class User extends Equatable {
   User({
     required this.login,
-    required this.password,
+    this.password,
+    this.sshKeys = const [],
+    this.isFoundOnServer = true,
+    this.note,
   });
 
   @HiveField(0)
   final String login;
 
   @HiveField(1)
-  final String password;
+  final String? password;
+
+  @HiveField(2, defaultValue: const [])
+  final List<String> sshKeys;
+
+  @HiveField(3, defaultValue: true)
+  final bool isFoundOnServer;
+
+  @HiveField(4)
+  final String? note;
 
   @override
-  List<Object?> get props => [login, password];
+  List<Object?> get props => [login, password, sshKeys, isFoundOnServer, note];
 
   Color get color => stringToColor(login);
 
-  Crypt get hashPassword => Crypt.sha512(
-        password,
-        salt: StringGenerators.passwordSalt(),
-      );
-
   String toString() {
-    return login;
+    return '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
   }
 }

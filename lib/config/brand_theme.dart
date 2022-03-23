@@ -3,7 +3,7 @@ import 'package:selfprivacy/config/text_themes.dart';
 
 import 'brand_colors.dart';
 
-final ligtTheme = ThemeData(
+final lightTheme = ThemeData(
   primaryColor: BrandColors.primary,
   fontFamily: 'Inter',
   brightness: Brightness.light,
@@ -38,16 +38,20 @@ final ligtTheme = ThemeData(
       color: BrandColors.red1,
     ),
   ),
+  listTileTheme: ListTileThemeData(
+    minLeadingWidth: 24.0,
+  ),
   textTheme: TextTheme(
     headline1: headline1Style,
     headline2: headline2Style,
-    caption: headline4Style,
+    headline3: headline3Style,
+    headline4: headline4Style,
     bodyText1: body1Style,
     subtitle1: TextStyle(fontSize: 15, height: 1.6), // text input style
   ),
 );
 
-var darkTheme = ligtTheme.copyWith(
+var darkTheme = lightTheme.copyWith(
   brightness: Brightness.dark,
   scaffoldBackgroundColor: Color(0xFF202120),
   iconTheme: IconThemeData(color: BrandColors.gray3),
@@ -56,7 +60,8 @@ var darkTheme = ligtTheme.copyWith(
   textTheme: TextTheme(
     headline1: headline1Style.copyWith(color: BrandColors.white),
     headline2: headline2Style.copyWith(color: BrandColors.white),
-    caption: headline4Style.copyWith(color: BrandColors.white),
+    headline3: headline3Style.copyWith(color: BrandColors.white),
+    headline4: headline4Style.copyWith(color: BrandColors.white),
     bodyText1: body1Style.copyWith(color: BrandColors.white),
     subtitle1: TextStyle(fontSize: 15, height: 1.6), // text input style
   ),

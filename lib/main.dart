@@ -35,36 +35,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Localization(
-      child: BlocAndProviderConfig(
-        child: Builder(builder: (context) {
-          var appSettings = context.watch<AppSettingsCubit>().state;
-
-          return AnnotatedRegion<SystemUiOverlayStyle>(
-            value: SystemUiOverlayStyle.light, // Manually changing appbar color
-            child: MaterialApp(
-              scaffoldMessengerKey:
-                  getIt.get<NavigationService>().scaffoldMessengerKey,
-              navigatorKey: getIt.get<NavigationService>().navigatorKey,
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              debugShowCheckedModeBanner: false,
-              title: 'SelfPrivacy',
-              theme: appSettings.isDarkModeOn ? darkTheme : lightTheme,
-              home: appSettings.isOnbordingShowing
-                  ? OnboardingPage(nextPage: InitializingPage())
-                  : RootPage(),
-              builder: (BuildContext context, Widget? widget) {
-                Widget error = Text('...rendering error...');
-                if (widget is Scaffold || widget is Navigator)
-                  error = Scaffold(body: Center(child: error));
-                ErrorWidget.builder =
-                    (FlutterErrorDetails errorDetails) => error;
-                return widget!;
-              },
-            ),
-          );
-        }),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light, // Manually changing appbar color
+        child: BlocAndProviderConfig(
+          child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
+            builder: (context, appSettings) {
+              return MaterialApp(
+                scaffoldMessengerKey:
+                    getIt.get<NavigationService>().scaffoldMessengerKey,
+                navigatorKey: getIt.get<NavigationService>().navigatorKey,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                debugShowCheckedModeBanner: false,
+                title: 'SelfPrivacy',
+                theme: appSettings.isDarkModeOn ? darkTheme : lightTheme,
+                home: appSettings.isOnbordingShowing
+                    ? OnboardingPage(nextPage: InitializingPage())
+                    : RootPage(),
+                builder: (BuildContext context, Widget? widget) {
+                  Widget error = Text('...rendering error...');
+                  if (widget is Scaffold || widget is Navigator)
+                    error = Scaffold(body: Center(child: error));
+                  ErrorWidget.builder =
+                      (FlutterErrorDetails errorDetails) => error;
+                  return widget!;
+                },
+              );
+            },
+          ),
+        ),
       ),
     );
   }

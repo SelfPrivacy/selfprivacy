@@ -36,37 +36,38 @@ class UsersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final usersCubitState = context.watch<UsersCubit>().state;
+    // final usersCubitState = context.watch<UsersCubit>().state;
     var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
-    final primaryUser = usersCubitState.primaryUser;
-    final users = [primaryUser, ...usersCubitState.users];
-    final isEmpty = users.isEmpty;
+    // final primaryUser = usersCubitState.primaryUser;
+    // final users = [primaryUser, ...usersCubitState.users];
+    // final isEmpty = users.isEmpty;
     Widget child;
 
     if (!isReady) {
       child = isNotReady();
     } else {
-      child = isEmpty
-          ? Container(
-              alignment: Alignment.center,
-              child: _NoUsers(
-                text: 'users.add_new_user'.tr(),
-              ),
-            )
-          : RefreshIndicator(
-              onRefresh: () async {
-                context.read<UsersCubit>().refresh();
+      child = BlocBuilder<UsersCubit, UsersState>(
+        builder: (context, state) {
+          print('Rebuild users page');
+          final primaryUser = state.primaryUser;
+          final users = [primaryUser, ...state.users];
+
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<UsersCubit>().refresh();
+            },
+            child: ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _User(
+                  user: users[index],
+                  isRootUser: index == 0,
+                );
               },
-              child: ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _User(
-                    user: users[index],
-                    isRootUser: index == 0,
-                  );
-                },
-              ),
-            );
+            ),
+          );
+        },
+      );
     }
 
     return Scaffold(

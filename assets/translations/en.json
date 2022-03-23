@@ -62,6 +62,20 @@
       "6": "This removes the Server. It will be no longer accessible"
     }
   },
+  "ssh": {
+    "title": "SSH keys",
+    "create": "Create SSH key",
+    "delete": "Delete SSH key",
+    "delete_confirm_question": "Are you sure you want to delete SSH key?",
+    "subtitle_with_keys": "{} keys",
+    "subtitle_without_keys": "No keys",
+    "no_key_name": "Unnamed key",
+    "root": {
+      "title": "These are superuser keys",
+      "subtitle": "Owners of these keys get full access to the server and can do anything on it. Only add your own keys to the server."
+    },
+    "input_label": "Public ED25519 or RSA key"
+  },
   "onboarding": {
     "_comment": "Onboarding pages",
     "page1_title": "Digital independence, available to all of us",
@@ -311,6 +325,7 @@
     "root_name": "User name cannot be 'root'",
     "key_format": "Invalid key format",
     "length": "Length is [] should be {}",
-    "user_already_exist": "Already exists"
+    "user_already_exist": "Already exists",
+    "key_already_exists": "This key already exists"
   }
 }

@@ -5,9 +5,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
-import 'package:selfprivacy/logic/get_it/ssh.dart';
 import 'package:selfprivacy/logic/models/job.dart';
-import 'package:selfprivacy/logic/models/user.dart';
 
 export 'package:provider/provider.dart';
 
@@ -100,7 +98,6 @@ class JobsCubit extends Cubit<JobsState> {
     if (state is JobsStateWithJobs) {
       var jobs = (state as JobsStateWithJobs).jobList;
       emit(JobsStateLoading());
-      var newUsers = <User>[];
       var hasServiceJobs = false;
       for (var job in jobs) {
         if (job is CreateUserJob) {
@@ -114,8 +111,10 @@ class JobsCubit extends Cubit<JobsState> {
           await api.switchService(job.type, job.needToTurnOn);
         }
         if (job is CreateSSHKeyJob) {
-          await getIt<SSHModel>().generateKeys();
-          api.addRootSshKey(getIt<SSHModel>().savedPubKey!);
+          await usersCubit.addSshKey(job.user, job.publicKey);
+        }
+        if (job is DeleteSSHKeyJob) {
+          await usersCubit.deleteSshKey(job.user, job.publicKey);
         }
       }
 
@@ -126,8 +125,6 @@ class JobsCubit extends Cubit<JobsState> {
       }
 
       emit(JobsStateEmpty());
-
-      getIt<NavigationService>().navigator!.pop();
     }
   }
 }

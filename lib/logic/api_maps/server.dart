@@ -109,16 +109,17 @@ class ServerApi extends ApiMap {
   }
 
   Future<ApiResponse<List<String>>> getUsersList() async {
-    List<String> res;
+    List<String> res = [];
     Response response;
 
     var client = await getClient();
     response = await client.get('/users');
     try {
-      res = (json.decode(response.data) as List<dynamic>)
-          .map((e) => e as String)
-          .toList();
+      for (var user in response.data) {
+        res.add(user.toString());
+      }
     } catch (e) {
+      print(e);
       res = [];
     }
 

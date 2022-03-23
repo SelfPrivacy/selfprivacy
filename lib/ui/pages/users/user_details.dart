@@ -157,17 +157,6 @@ class _UserDetails extends StatelessWidget {
                 SizedBox(height: 24),
                 BrandDivider(),
                 SizedBox(height: 20),
-                BrandButton.emptyWithIconText(
-                  title: 'users.send_registration_data'.tr(),
-                  icon: Icon(BrandIcons.share),
-                  onPressed: () {
-                    Share.share(
-                        'login: ${user.login}, password: ${user.password}');
-                  },
-                ),
-                SizedBox(height: 20),
-                BrandDivider(),
-                SizedBox(height: 20),
                 ListTile(
                     onTap: () {
                       Navigator.of(context)
@@ -179,6 +168,17 @@ class _UserDetails extends StatelessWidget {
                             .tr(args: [user.sshKeys.length.toString()]))
                         : Text('ssh.subtitle_without_keys'.tr()),
                     trailing: Icon(BrandIcons.key)),
+                SizedBox(height: 20),
+                ListTile(
+                  onTap: () {
+                    Share.share(
+                        'login: ${user.login}, password: ${user.password}');
+                  },
+                  title: Text(
+                    'users.send_registration_data'.tr(),
+                  ),
+                  trailing: Icon(BrandIcons.share),
+                ),
               ],
             ),
           )

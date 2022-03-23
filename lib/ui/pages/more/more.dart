@@ -26,9 +26,6 @@ class MorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var jobsCubit = context.watch<JobsCubit>();
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
-
     return Scaffold(
       appBar: PreferredSize(
         child: BrandHeader(
@@ -109,30 +106,6 @@ class _NavItem extends StatelessWidget {
         iconData: iconData,
         title: title,
         isActive: true,
-      ),
-    );
-  }
-}
-
-class _MoreMenuTapItem extends StatelessWidget {
-  const _MoreMenuTapItem({
-    Key? key,
-    required this.iconData,
-    required this.onTap,
-    required this.title,
-  }) : super(key: key);
-
-  final IconData iconData;
-  final VoidCallback? onTap;
-  final String title;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: _MoreMenuItem(
-        isActive: onTap != null,
-        iconData: iconData,
-        title: title,
       ),
     );
   }

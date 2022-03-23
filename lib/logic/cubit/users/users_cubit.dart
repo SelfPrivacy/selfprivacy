@@ -128,11 +128,11 @@ class UsersCubit extends Cubit<UsersState> {
   }
 
   Future<void> refresh() async {
-    List<User> updatedUsers = state.users;
+    List<User> updatedUsers = List<User>.from(state.users);
     final usersFromServer = await api.getUsersList();
     if (usersFromServer.isSuccess) {
       updatedUsers =
-          mergeLocalAndServerUsers(state.users, usersFromServer.data);
+          mergeLocalAndServerUsers(updatedUsers, usersFromServer.data);
     }
     final usersWithSshKeys = await loadSshKeys(updatedUsers);
     box.clear();
@@ -157,8 +157,11 @@ class UsersCubit extends Cubit<UsersState> {
       return;
     }
     final result = await api.createUser(user);
-    await box.add(result.data);
-    emit(state.copyWith(users: box.values.toList()));
+    var loadedUsers = List<User>.from(state.users);
+    loadedUsers.add(result.data);
+    await box.clear();
+    await box.addAll(loadedUsers);
+    emit(state.copyWith(users: loadedUsers));
   }
 
   Future<void> deleteUser(User user) async {
@@ -166,10 +169,13 @@ class UsersCubit extends Cubit<UsersState> {
     if (user.login == state.primaryUser.login || user.login == 'root') {
       return;
     }
+    var loadedUsers = List<User>.from(state.users);
     final result = await api.deleteUser(user);
     if (result) {
-      await box.deleteAt(box.values.toList().indexOf(user));
-      emit(state.copyWith(users: box.values.toList()));
+      loadedUsers.removeWhere((u) => u.login == user.login);
+      await box.clear();
+      await box.addAll(loadedUsers);
+      emit(state.copyWith(users: loadedUsers));
     }
   }
 
@@ -199,7 +205,8 @@ class UsersCubit extends Cubit<UsersState> {
       if (result.isSuccess) {
         // If it is primary user, update primary user
         if (user.login == state.primaryUser.login) {
-          List<String> primaryUserKeys = state.primaryUser.sshKeys;
+          List<String> primaryUserKeys =
+              List<String>.from(state.primaryUser.sshKeys);
           primaryUserKeys.add(publicKey);
           final updatedUser = User(
             login: state.primaryUser.login,
@@ -214,7 +221,7 @@ class UsersCubit extends Cubit<UsersState> {
           ));
         } else {
           // If it is not primary user, update user
-          List<String> userKeys = user.sshKeys;
+          List<String> userKeys = List<String>.from(user.sshKeys);
           userKeys.add(publicKey);
           final updatedUser = User(
             login: user.login,
@@ -258,7 +265,8 @@ class UsersCubit extends Cubit<UsersState> {
         return;
       }
       if (user.login == state.primaryUser.login) {
-        List<String> primaryUserKeys = state.primaryUser.sshKeys;
+        List<String> primaryUserKeys =
+            List<String>.from(state.primaryUser.sshKeys);
         primaryUserKeys.remove(publicKey);
         final updatedUser = User(
           login: state.primaryUser.login,
@@ -273,7 +281,7 @@ class UsersCubit extends Cubit<UsersState> {
         ));
         return;
       }
-      List<String> userKeys = user.sshKeys;
+      List<String> userKeys = List<String>.from(user.sshKeys);
       userKeys.remove(publicKey);
       final updatedUser = User(
         login: user.login,
@@ -291,7 +299,9 @@ class UsersCubit extends Cubit<UsersState> {
 
   @override
   void onChange(Change<UsersState> change) {
-    print(change);
     super.onChange(change);
+
+    print('UsersState changed');
+    print(change);
   }
 }

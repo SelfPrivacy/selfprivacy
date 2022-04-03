@@ -1,6 +1,6 @@
 part of 'users_cubit.dart';
 
-class UsersState extends Equatable {
+class UsersState extends AppConfigDependendState {
   const UsersState(this.users, this.rootUser, this.primaryUser);
 
   final List<User> users;

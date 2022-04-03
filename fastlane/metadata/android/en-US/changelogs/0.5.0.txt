@@ -1,0 +1,7 @@
+- DKIM key is now deployed to DNS during server setup.
+- Step 1 of server setup (DNS checks) is now faster.
+- New DNS management screen: checks current records and lets recreate them if something is wrong.
+- User creation and deletion is now more responsive.
+- User list is now synchronized with the server.
+- New SSH key management screen. SSH keys can now be uploaded for any user, including root.
+- Root SSH key generation is removed, you can now upload your own keys.

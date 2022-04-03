@@ -17,8 +17,8 @@ class BlocAndProviderConfig extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var isDark = false;
-    var usersCubit = UsersCubit();
     var appConfigCubit = AppConfigCubit()..load();
+    var usersCubit = UsersCubit(appConfigCubit);
     var servicesCubit = ServicesCubit(appConfigCubit);
     var backupsCubit = BackupsCubit(appConfigCubit);
     var dnsRecordsCubit = DnsRecordsCubit(appConfigCubit);

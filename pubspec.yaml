@@ -17,7 +17,7 @@ dependencies:
   easy_localization: ^3.0.0
   either_option: ^2.0.1-dev.1
   equatable: ^2.0.3
-  fl_chart: ^0.45.0
+  fl_chart: ^0.50.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1

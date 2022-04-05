@@ -44,7 +44,7 @@ class NetworkChart extends StatelessWidget {
               spots: getSpots(listData[0]),
               isCurved: true,
               barWidth: 1,
-              colors: [Colors.red],
+              color: Colors.red,
               dotData: FlDotData(
                 show: false,
               ),
@@ -53,7 +53,7 @@ class NetworkChart extends StatelessWidget {
               spots: getSpots(listData[1]),
               isCurved: true,
               barWidth: 1,
-              colors: [Colors.green],
+              color: Colors.green,
               dotData: FlDotData(
                 show: false,
               ),
@@ -67,34 +67,51 @@ class NetworkChart extends StatelessWidget {
               1.2,
           minX: listData[0].length - 200,
           titlesData: FlTitlesData(
-            topTitles: SideTitles(showTitles: false),
-            bottomTitles: SideTitles(
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
                 interval: 20,
-                rotateAngle: 90.0,
-                showTitles: true,
-                getTextStyles: (_, __) => const TextStyle(
-                      fontSize: 10,
-                      color: Colors.purple,
-                      fontWeight: FontWeight.bold,
+                reservedSize: 50,
+                getTitlesWidget: (value, titleMeta) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RotatedBox(
+                      child: Text(bottomTitle(value.toInt()),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.purple,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      quarterTurns: 1,
                     ),
-                getTitles: (value) {
-                  return bottomTitle(value.toInt());
-                }),
-            leftTitles: SideTitles(
-              reservedSize: 50,
-              margin: 5,
-              interval: [
-                    ...listData[0].map((e) => e.value),
-                    ...listData[1].map((e) => e.value)
-                  ].reduce(max) *
-                  2 /
-                  10,
-              getTextStyles: (_, __) => progressTextStyleLight.copyWith(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? BrandColors.gray4
-                    : null,
+                  );
+                },
+                showTitles: true,
               ),
-              showTitles: true,
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                reservedSize: 50,
+                getTitlesWidget: (value, titleMeta) {
+                  return Padding(
+                      padding: EdgeInsets.only(right: 5),
+                      child: Text(
+                        value.toInt().toString(),
+                        style: progressTextStyleLight.copyWith(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? BrandColors.gray4
+                              : null,
+                        ),
+                      ));
+                },
+                interval: [
+                      ...listData[0].map((e) => e.value),
+                      ...listData[1].map((e) => e.value)
+                    ].reduce(max) *
+                    2 /
+                    10,
+                showTitles: false,
+              ),
             ),
           ),
           gridData: FlGridData(show: true),

@@ -35,9 +35,7 @@ class CpuChart extends StatelessWidget {
             spots: getSpots(),
             isCurved: true,
             barWidth: 1,
-            colors: [
-              Colors.red,
-            ],
+            color: Colors.red,
             dotData: FlDotData(
               show: false,
             ),
@@ -47,28 +45,45 @@ class CpuChart extends StatelessWidget {
         maxY: 100,
         minX: data.length - 200,
         titlesData: FlTitlesData(
-          topTitles: SideTitles(showTitles: false),
-          bottomTitles: SideTitles(
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
               interval: 20,
-              rotateAngle: 90.0,
-              showTitles: true,
-              getTextStyles: (_, __) => const TextStyle(
-                    fontSize: 10,
-                    color: Colors.purple,
-                    fontWeight: FontWeight.bold,
+              reservedSize: 50,
+              getTitlesWidget: (value, titleMeta) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RotatedBox(
+                    child: Text(bottomTitle(value.toInt()),
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.purple,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    quarterTurns: 1,
                   ),
-              getTitles: (value) {
-                return bottomTitle(value.toInt());
-              }),
-          leftTitles: SideTitles(
-            getTextStyles: (_, __) => progressTextStyleLight.copyWith(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? BrandColors.gray4
-                  : null,
+                );
+              },
+              showTitles: true,
             ),
-            margin: 15,
-            interval: 25,
-            showTitles: true,
+          ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              getTitlesWidget: (value, titleMeta) {
+                return Padding(
+                    padding: EdgeInsets.only(right: 15),
+                    child: Text(
+                      value.toInt().toString(),
+                      style: progressTextStyleLight.copyWith(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? BrandColors.gray4
+                            : null,
+                      ),
+                    ));
+              },
+              interval: 25,
+              showTitles: false,
+            ),
           ),
         ),
         gridData: FlGridData(show: true),

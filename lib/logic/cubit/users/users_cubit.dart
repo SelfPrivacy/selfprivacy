@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 
 import '../../api_maps/server.dart';
@@ -10,47 +10,51 @@ export 'package:provider/provider.dart';
 
 part 'users_state.dart';
 
-class UsersCubit extends Cubit<UsersState> {
-  UsersCubit()
-      : super(UsersState(
-            <User>[], User(login: 'root'), User(login: 'loading...')));
+class UsersCubit extends AppConfigDependendCubit<UsersState> {
+  UsersCubit(AppConfigCubit appConfigCubit)
+      : super(
+            appConfigCubit,
+            UsersState(
+                <User>[], User(login: 'root'), User(login: 'loading...')));
   Box<User> box = Hive.box<User>(BNames.users);
   Box configBox = Hive.box(BNames.appConfig);
 
   final api = ServerApi();
 
   Future<void> load() async {
-    var loadedUsers = box.values.toList();
-    final primaryUser =
-        configBox.get(BNames.rootUser, defaultValue: User(login: 'loading...'));
-    List<String> rootKeys = [
-      ...configBox.get(BNames.rootKeys, defaultValue: [])
-    ];
-    if (loadedUsers.isNotEmpty) {
+    if (appConfigCubit.state is AppConfigFinished) {
+      var loadedUsers = box.values.toList();
+      final primaryUser = configBox.get(BNames.rootUser,
+          defaultValue: User(login: 'loading...'));
+      List<String> rootKeys = [
+        ...configBox.get(BNames.rootKeys, defaultValue: [])
+      ];
+      if (loadedUsers.isNotEmpty) {
+        emit(UsersState(
+            loadedUsers, User(login: 'root', sshKeys: rootKeys), primaryUser));
+      }
+
+      final usersFromServer = await api.getUsersList();
+      if (usersFromServer.isSuccess) {
+        final updatedList =
+            mergeLocalAndServerUsers(loadedUsers, usersFromServer.data);
+        emit(UsersState(
+            updatedList, User(login: 'root', sshKeys: rootKeys), primaryUser));
+      }
+
+      final usersWithSshKeys = await loadSshKeys(state.users);
+      // Update the users it the box
+      box.clear();
+      box.addAll(usersWithSshKeys);
+
+      final rootUserWithSshKeys = (await loadSshKeys([state.rootUser])).first;
+      configBox.put(BNames.rootKeys, rootUserWithSshKeys.sshKeys);
+      final primaryUserWithSshKeys =
+          (await loadSshKeys([state.primaryUser])).first;
+      configBox.put(BNames.rootUser, primaryUserWithSshKeys);
       emit(UsersState(
-          loadedUsers, User(login: 'root', sshKeys: rootKeys), primaryUser));
+          usersWithSshKeys, rootUserWithSshKeys, primaryUserWithSshKeys));
     }
-
-    final usersFromServer = await api.getUsersList();
-    if (usersFromServer.isSuccess) {
-      final updatedList =
-          mergeLocalAndServerUsers(loadedUsers, usersFromServer.data);
-      emit(UsersState(
-          updatedList, User(login: 'root', sshKeys: rootKeys), primaryUser));
-    }
-
-    final usersWithSshKeys = await loadSshKeys(state.users);
-    // Update the users it the box
-    box.clear();
-    box.addAll(usersWithSshKeys);
-
-    final rootUserWithSshKeys = (await loadSshKeys([state.rootUser])).first;
-    configBox.put(BNames.rootKeys, rootUserWithSshKeys.sshKeys);
-    final primaryUserWithSshKeys =
-        (await loadSshKeys([state.primaryUser])).first;
-    configBox.put(BNames.rootUser, primaryUserWithSshKeys);
-    emit(UsersState(
-        usersWithSshKeys, rootUserWithSshKeys, primaryUserWithSshKeys));
   }
 
   List<User> mergeLocalAndServerUsers(
@@ -303,5 +307,10 @@ class UsersCubit extends Cubit<UsersState> {
 
     print('UsersState changed');
     print(change);
+  }
+
+  @override
+  void clear() async {
+    emit(UsersState(<User>[], User(login: 'root'), User(login: 'loading...')));
   }
 }

@@ -1,1 +1,2 @@
 - Fix app trying to load user list before server was created
+- Update fl_chart dependency

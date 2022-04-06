@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -129,13 +130,15 @@ class HetznerApi extends ApiMap {
       hostname = 'selfprivacy-server';
     }
 
+    final base64Password = base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
+
     print("hostname: $hostname");
 
     /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
     /// check the branch name, it could be "development" or "master".
     ///
     final userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${escapeQuotes(rootUser.login)}' PASSWORD='${escapeQuotes(rootUser.password ?? 'PASS')}' CF_TOKEN=$cloudFlareKey DB_PASSWORD=${escapeQuotes(dbPassword)} API_TOKEN=$apiToken HOSTNAME=${escapeQuotes(hostname)} bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${escapeQuotes(rootUser.login)}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$cloudFlareKey DB_PASSWORD=${escapeQuotes(dbPassword)} API_TOKEN=$apiToken HOSTNAME=${escapeQuotes(hostname)} bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     final data = {

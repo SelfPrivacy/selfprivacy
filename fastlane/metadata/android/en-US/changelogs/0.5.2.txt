@@ -1,0 +1,1 @@
+- Fixed bug when you couldn't use special symbols in password during server creation.

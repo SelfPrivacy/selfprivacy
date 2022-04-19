@@ -1,7 +1,7 @@
 name: selfprivacy
 description: selfprivacy.org
 publish_to: 'none'
-version: 0.5.2+13
+version: 0.5.3+14
 
 environment:
   sdk: '>=2.13.4 <3.0.0'

@@ -302,14 +302,6 @@ class UsersCubit extends AppConfigDependendCubit<UsersState> {
   }
 
   @override
-  void onChange(Change<UsersState> change) {
-    super.onChange(change);
-
-    print('UsersState changed');
-    print(change);
-  }
-
-  @override
   void clear() async {
     emit(UsersState(<User>[], User(login: 'root'), User(login: 'loading...')));
   }

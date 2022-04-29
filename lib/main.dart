@@ -20,7 +20,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveConfig.init();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  Wakelock.enable();
+
+  try {
+    /* Wakelock support for Linux
+     * desktop is not yet implemented */
+    await Wakelock.enable();
+  } on PlatformException catch (e) {
+    print(e);
+  }
+
   await getItSetup();
   await EasyLocalization.ensureInitialized();
   tz.initializeTimeZones();

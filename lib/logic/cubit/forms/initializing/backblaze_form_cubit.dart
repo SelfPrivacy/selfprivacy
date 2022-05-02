@@ -12,9 +12,6 @@ class BackblazeFormCubit extends FormCubit {
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
-        //ValidationModel<String>(
-        //(s) => regExp.hasMatch(s), 'invalid key format'),
-        //LegnthStringValidationWithLenghShowing(64, 'length is [] shoud be 64')
       ],
     );
 
@@ -22,9 +19,6 @@ class BackblazeFormCubit extends FormCubit {
       initalValue: '',
       validations: [
         RequiredStringValidation('required'),
-        //ValidationModel<String>(
-        //(s) => regExp.hasMatch(s), 'invalid key format'),
-        //LegnthStringValidationWithLenghShowing(64, 'length is [] shoud be 64')
       ],
     );
 

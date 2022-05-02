@@ -160,7 +160,12 @@ class UsersCubit extends AppConfigDependendCubit<UsersState> {
     if (user.login == 'root' || user.login == state.primaryUser.login) {
       return;
     }
+    // If API returned error, do nothing
     final result = await api.createUser(user);
+    if (!result.isSuccess) {
+      return;
+    }
+
     var loadedUsers = List<User>.from(state.users);
     loadedUsers.add(result.data);
     await box.clear();

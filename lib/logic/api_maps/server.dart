@@ -18,7 +18,7 @@ class ApiResponse<D> {
   final String? errorMessage;
   final D data;
 
-  get isSuccess => statusCode >= 200 && statusCode < 300;
+  bool get isSuccess => statusCode >= 200 && statusCode < 300;
 
   ApiResponse({
     required this.statusCode,
@@ -65,27 +65,48 @@ class ServerApi extends ApiMap {
   }
 
   Future<ApiResponse<User>> createUser(User user) async {
-    Response response;
-
     var client = await getClient();
     // POST request with JSON body containing username and password
 
-    response = await client.post(
-      '/users',
-      data: {
-        'username': user.login,
-        'password': user.password,
-      },
-      options: Options(
-        contentType: 'application/json',
-      ),
-    );
-
-    close(client);
-
-    if (response.statusCode == HttpStatus.created) {
+    var makeErrorApiReponse = (int status) {
       return ApiResponse(
-        statusCode: response.statusCode ?? HttpStatus.internalServerError,
+        statusCode: status,
+        data: User(
+          login: user.login,
+          password: user.password,
+          isFoundOnServer: false,
+        ),
+      );
+    };
+
+    late Response<dynamic> response;
+
+    try {
+      response = await client.post(
+        '/users',
+        data: {
+          'username': user.login,
+          'password': user.password,
+        },
+        options: Options(
+            contentType: 'application/json',
+            receiveDataWhenStatusError: true,
+            followRedirects: false,
+            validateStatus: (status) {
+              return (status != null) &&
+                  (status < HttpStatus.internalServerError);
+            }),
+      );
+    } catch (e) {
+      return makeErrorApiReponse(HttpStatus.internalServerError);
+    } finally {
+      close(client);
+    }
+
+    if ((response.statusCode != null) &&
+        (response.statusCode == HttpStatus.created)) {
+      return ApiResponse(
+        statusCode: response.statusCode!,
         data: User(
           login: user.login,
           password: user.password,
@@ -93,18 +114,11 @@ class ServerApi extends ApiMap {
         ),
       );
     } else {
-      return ApiResponse(
-        statusCode: response.statusCode ?? HttpStatus.internalServerError,
-        data: User(
-          login: user.login,
-          password: user.password,
-          isFoundOnServer: false,
-          note: response.data['message'] ?? null,
-        ),
-        errorMessage: response.data?.containsKey('error') ?? false
-            ? response.data['error']
-            : null,
-      );
+      print(response.statusCode.toString() +
+          ": " +
+          (response.statusMessage ?? ""));
+      return makeErrorApiReponse(
+          response.statusCode ?? HttpStatus.internalServerError);
     }
   }
 

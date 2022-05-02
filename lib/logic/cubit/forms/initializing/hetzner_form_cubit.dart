@@ -4,8 +4,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
-
-import '../validations/validations.dart';
+import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class HetznerFormCubit extends FormCubit {
   HetznerFormCubit(this.initializingCubit) {
@@ -16,8 +15,7 @@ class HetznerFormCubit extends FormCubit {
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
             (s) => regExp.hasMatch(s), 'validations.key_format'.tr()),
-        LengthStringValidationWithLengthShowing(
-            64, 'validations.length'.tr(args: ["64"]))
+        LengthStringNotEqualValidation(64)
       ],
     );
 

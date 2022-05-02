@@ -96,41 +96,15 @@ class HetznerApi extends ApiMap {
   }) async {
     var client = await getClient();
 
-    // Response dbCreateResponse = await client.post(
-    //   '/volumes',
-    //   data: {
-    //     "size": 10,
-    //     "name": StringGenerators.dbStorageName(),
-    //     "labels": {"labelkey": "value"},
-    //     "location": "fsn1",
-    //     "automount": false,
-    //     "format": "ext4"
-    //   },
-    // );
-
     var dbPassword = StringGenerators.dbPassword();
-    // var dbId = dbCreateResponse.data['volume']['id'];
     var dbId = dataBase.id;
 
     final apiToken = StringGenerators.apiToken();
 
-    // Replace all non-alphanumeric characters with an underscore
-    var hostname =
-        domainName.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
-    // if hostname ends with -, remove it
-    if (hostname.endsWith('-')) {
-      hostname = hostname.substring(0, hostname.length - 1);
-    }
-    // if hostname starts with -, remove it
-    if (hostname.startsWith('-')) {
-      hostname = hostname.substring(1);
-    }
-    // if hostname is empty, use default
-    if (hostname.isEmpty) {
-      hostname = 'selfprivacy-server';
-    }
+    final hostname = getHostnameFromDomain(domainName);
 
-    final base64Password = base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
+    final base64Password =
+        base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
     print("hostname: $hostname");
 
@@ -138,7 +112,7 @@ class HetznerApi extends ApiMap {
     /// check the branch name, it could be "development" or "master".
     ///
     final userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${escapeQuotes(rootUser.login)}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$cloudFlareKey DB_PASSWORD=${escapeQuotes(dbPassword)} API_TOKEN=$apiToken HOSTNAME=${escapeQuotes(hostname)} bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     final data = {
@@ -171,14 +145,33 @@ class HetznerApi extends ApiMap {
     );
   }
 
+  static String getHostnameFromDomain(String domain) {
+    // Replace all non-alphanumeric characters with an underscore
+    var hostname =
+        domain.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+    if (hostname.endsWith('-')) {
+      hostname = hostname.substring(0, hostname.length - 1);
+    }
+    if (hostname.startsWith('-')) {
+      hostname = hostname.substring(1);
+    }
+    if (hostname.isEmpty) {
+      hostname = 'selfprivacy-server';
+    }
+
+    return hostname;
+  }
+
   Future<void> deleteSelfprivacyServerAndAllVolumes({
     required String domainName,
   }) async {
     var client = await getClient();
 
+    final hostname = getHostnameFromDomain(domainName);
+
     Response serversReponse = await client.get('/servers');
     List servers = serversReponse.data['servers'];
-    Map server = servers.firstWhere((el) => el['name'] == domainName);
+    Map server = servers.firstWhere((el) => el['name'] == hostname);
     List volumes = server['volumes'];
     var laterFutures = <Future>[];
 
@@ -258,15 +251,4 @@ class HetznerApi extends ApiMap {
     );
     close(client);
   }
-}
-
-String escapeQuotes(String str) {
-  // replace all single quotes with escaped single quotes for bash strong quotes (i.e. '\'' )
-  // print("Escaping single quotes for bash: $str");
-  // print("Escaping result: ${str.replaceAll(RegExp(r"'"), "'\\''")}");
-  // also escape all double quotes for json
-  // return str.replaceAll(RegExp(r"'"), "'\\''");
-
-  // Pass for now
-  return str;
 }

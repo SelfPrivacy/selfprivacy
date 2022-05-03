@@ -22,7 +22,7 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
     ).animate(_animationController);
 
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback(_afterLayout);
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
   }
 
   void _afterLayout(_) {

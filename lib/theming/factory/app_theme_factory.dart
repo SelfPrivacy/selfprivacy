@@ -30,7 +30,9 @@ abstract class AppThemeFactory {
       GtkThemeData themeData = await GtkThemeData.initialize();
       gtkColorsScheme = ColorScheme.fromSeed(
         seedColor: Color(themeData.theme_selected_bg_color),
-        brightness: brightness,
+        brightness: Color(themeData.theme_base_color).computeLuminance() > 0.5
+            ? Brightness.light
+            : Brightness.dark,
         background: Color(themeData.theme_bg_color),
         surface: Color(themeData.theme_base_color),
       );

@@ -7,14 +7,14 @@ import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 class FieldCubitFactory {
   FieldCubitFactory(this.context);
 
-  /* A common user login field.
-   * - Available characters are lowercase a-z, digits and underscore _
-   * - Must start with either a-z or underscore
-   * - Must be no longer than 'userMaxLength' characters
-   * - Must not be empty
-   * - Must not be a reserved root login
-   * - Must be unique
-   */
+  /// A common user login field.
+  ///
+  /// - Available characters are lowercase a-z, digits and underscore _
+  /// - Must start with either a-z or underscore
+  /// - Must be no longer than 'userMaxLength' characters
+  /// - Must not be empty
+  /// - Must not be a reserved root login
+  /// - Must be unique
   FieldCubit<String> createUserLoginField() {
     final userAllowedRegExp = RegExp(r"^[a-z_][a-z0-9_]+$");
     const userMaxLength = 31;
@@ -35,10 +35,10 @@ class FieldCubitFactory {
     );
   }
 
-  /* A common user password field.
-   * - Must fail on the regural expression of invalid matches: [\n\r\s]+
-   * - Must not be empty
-   */
+  /// A common user password field.
+  ///
+  /// - Must fail on the regural expression of invalid matches: [\n\r\s]+
+  /// - Must not be empty
   FieldCubit<String> createUserPasswordField() {
     var passwordForbiddenRegExp = RegExp(r"[\n\r\s]+");
     return FieldCubit(

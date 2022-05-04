@@ -13,15 +13,15 @@ abstract class LengthStringValidation extends ValidationModel<String> {
   }
 }
 
-// String must be equal to [length]
 class LengthStringNotEqualValidation extends LengthStringValidation {
+  /// String must be equal to [length]
   LengthStringNotEqualValidation(int length)
       : super((n) => n.length != length,
             'validations.length_not_equal'.tr(args: [length.toString()]));
 }
 
-// String must be shorter than or equal to [length]
 class LengthStringLongerValidation extends LengthStringValidation {
+  /// String must be shorter than or equal to [length]
   LengthStringLongerValidation(int length)
       : super((n) => n.length > length,
             'validations.length_longer'.tr(args: [length.toString()]));

@@ -22,8 +22,8 @@ void main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   try {
-    /* Wakelock support for Linux
-     * desktop is not yet implemented */
+    /// Wakelock support for Linux
+    /// desktop is not yet implemented
     await Wakelock.enable();
   } on PlatformException catch (e) {
     print(e);

@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/initializing/domain_cloudflare.dart';
@@ -352,7 +353,8 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepUser(AppConfigCubit initializingCubit) {
     return BlocProvider(
-      create: (context) => RootUserFormCubit(initializingCubit),
+      create: (context) =>
+          RootUserFormCubit(initializingCubit, FieldCubitFactory(context)),
       child: Builder(builder: (context) {
         var formCubitState = context.watch<RootUserFormCubit>().state;
 

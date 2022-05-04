@@ -66,7 +66,6 @@ class ServerApi extends ApiMap {
 
   Future<ApiResponse<User>> createUser(User user) async {
     var client = await getClient();
-    // POST request with JSON body containing username and password
 
     var makeErrorApiReponse = (int status) {
       return ApiResponse(

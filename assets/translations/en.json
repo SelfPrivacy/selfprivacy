@@ -320,12 +320,13 @@
     "delete_ssh_key": "Delete SSH key for {}"
   },
   "validations": {
-    "required": "Required",
-    "invalid_format": "Invalid format",
-    "root_name": "User name cannot be 'root'",
-    "key_format": "Invalid key format",
-    "length": "Length is [] should be {}",
-    "user_already_exist": "Already exists",
-    "key_already_exists": "This key already exists"
+    "required": "Required.",
+    "invalid_format": "Invalid format.",
+    "root_name": "User name cannot be 'root'.",
+    "key_format": "Invalid key format.",
+    "length_not_equal": "Length is []. Should be {}.",
+    "length_longer": "Length is []. Should be shorter than or equal to {}.",
+    "user_already_exist": "This user already exists.",
+    "key_already_exists": "This key already exists."
   }
 }

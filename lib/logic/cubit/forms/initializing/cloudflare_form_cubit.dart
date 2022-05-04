@@ -4,8 +4,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
-
-import '../validations/validations.dart';
+import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class CloudFlareFormCubit extends FormCubit {
   CloudFlareFormCubit(this.initializingCubit) {
@@ -16,12 +15,7 @@ class CloudFlareFormCubit extends FormCubit {
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
             (s) => regExp.hasMatch(s), 'validations.key_format'.tr()),
-        LengthStringValidationWithLengthShowing(
-          40,
-          'validations.length'.tr(
-            args: ["40"],
-          ),
-        )
+        LengthStringNotEqualValidation(40)
       ],
     );
 

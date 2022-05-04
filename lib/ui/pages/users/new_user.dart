@@ -24,7 +24,7 @@ class _NewUser extends StatelessWidget {
           }
           return UserFormCubit(
             jobsCubit: jobCubit,
-            users: users,
+            fieldFactory: FieldCubitFactory(context),
           );
         },
         child: Builder(builder: (context) {

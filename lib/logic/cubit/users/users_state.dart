@@ -22,5 +22,11 @@ class UsersState extends AppConfigDependendState {
     );
   }
 
+  bool isLoginRegistered(String login) {
+    return users.any((user) => user.login == login) ||
+        login == rootUser.login ||
+        login == primaryUser.login;
+  }
+
   bool get isEmpty => users.isEmpty;
 }

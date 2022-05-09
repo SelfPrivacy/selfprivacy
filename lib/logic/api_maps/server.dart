@@ -5,9 +5,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/models/api_token.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/recovery_token_status.dart';
+import 'package:selfprivacy/logic/models/device_token.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 
@@ -430,6 +433,244 @@ class ServerApi extends ApiMap {
         .split('(')[1]
         .split(')')[0]
         .replaceAll('"', '');
+  }
+
+  Future<ApiResponse<RecoveryTokenStatus>> getRecoveryTokenStatus() async {
+    var client = await getClient();
+    Response response = await client.get(
+      '/auth/recovery_token',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
+    client.close();
+
+    if (response.statusCode != null) {
+      return ApiResponse(
+          statusCode: response.statusCode!,
+          data: response.data != null
+              ? response.data.fromJson(response.data)
+              : null);
+    }
+
+    return ApiResponse(
+        statusCode: HttpStatus.internalServerError,
+        data: RecoveryTokenStatus(exists: false, valid: false));
+  }
+
+  Future<ApiResponse<String>> generateRecoveryToken(
+      DateTime expiration, int uses) async {
+    var client = await getClient();
+    Response response = await client.post(
+      '/auth/recovery_token',
+      data: {
+        'expiration': expiration.toIso8601String(),
+        'uses': uses,
+      },
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
+    client.close();
+
+    if (response.statusCode != null) {
+      return ApiResponse(
+          statusCode: response.statusCode!,
+          data: response.data != null ? response.data["token"] : '');
+    }
+
+    return ApiResponse(statusCode: HttpStatus.internalServerError, data: '');
+  }
+
+  Future<ApiResponse<String>> useRecoveryToken(DeviceToken token) async {
+    var client = await getClient();
+    Response response = await client.post(
+      '/auth/recovery_token/use',
+      data: {
+        'token': token.token,
+        'device': token.device,
+      },
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
+    client.close();
+
+    if (response.statusCode != null) {
+      return ApiResponse(
+          statusCode: response.statusCode!,
+          data: response.data != null ? response.data["token"] : '');
+    }
+
+    return ApiResponse(statusCode: HttpStatus.internalServerError, data: '');
+  }
+
+  Future<ApiResponse<String>> authorizeDevice(DeviceToken token) async {
+    var client = await getClient();
+    Response response = await client.post(
+      '/auth/new_device/authorize',
+      data: {
+        'token': token.token,
+        'device': token.device,
+      },
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
+    client.close();
+
+    if (response.statusCode != null) {
+      return ApiResponse(
+          statusCode: response.statusCode!,
+          data: response.data != null ? response.data : '');
+    }
+
+    return ApiResponse(statusCode: HttpStatus.internalServerError, data: '');
+  }
+
+  Future<ApiResponse<String>> createDeviceToken() async {
+    var client = await getClient();
+    Response response = await client.post(
+      '/auth/new_device',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
+    client.close();
+
+    if (response.statusCode != null) {
+      return ApiResponse(
+          statusCode: response.statusCode!,
+          data: response.data != null ? response.data["token"] : '');
+    }
+
+    return ApiResponse(statusCode: HttpStatus.internalServerError, data: '');
+  }
+
+  Future<ApiResponse<String>> deleteDeviceToken() async {
+    var client = await getClient();
+    Response response = await client.delete(
+      '/auth/new_device',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
+    client.close();
+
+    if (response.statusCode != null) {
+      return ApiResponse(
+          statusCode: response.statusCode!,
+          data: response.data != null ? response.data : '');
+    }
+
+    return ApiResponse(statusCode: HttpStatus.internalServerError, data: '');
+  }
+
+  Future<ApiResponse<List<ApiToken>>> getApiTokens() async {
+    var client = await getClient();
+    Response response = await client.get(
+      '/auth/tokens',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
+    client.close();
+
+    if (response.statusCode != null) {
+      return ApiResponse(
+          statusCode: response.statusCode!,
+          data: (response.data != null)
+              ? response.data
+                  .map<ApiToken>((e) => ApiToken.fromJson(e))
+                  .toList()
+              : []);
+    }
+
+    return ApiResponse(statusCode: HttpStatus.internalServerError, data: []);
+  }
+
+  Future<ApiResponse<String>> refreshCurrentApiToken() async {
+    var client = await getClient();
+    Response response = await client.post(
+      '/auth/tokens',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
+    client.close();
+
+    if (response.statusCode != null) {
+      return ApiResponse(
+          statusCode: response.statusCode!,
+          data: (response.data != null) ? response.data["token"] : '');
+    }
+
+    return ApiResponse(statusCode: HttpStatus.internalServerError, data: '');
+  }
+
+  Future<ApiResponse<void>> deleteApiToken(String device) async {
+    var client = await getClient();
+    Response response = await client.delete(
+      '/auth/tokens',
+      data: {
+        'device': device,
+      },
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
+    client.close();
+
+    if (response.statusCode != null) {
+      return ApiResponse(statusCode: response.statusCode!, data: null);
+    }
+
+    return ApiResponse(statusCode: HttpStatus.internalServerError, data: null);
   }
 }
 

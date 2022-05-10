@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:wakelock/wakelock.dart';

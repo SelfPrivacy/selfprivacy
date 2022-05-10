@@ -17,13 +17,14 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_domain.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class InitializingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = context.watch<AppConfigCubit>();
-    var actualPage = [
+    var actualInitializingPage = [
       () => _stepHetzner(cubit),
       () => _stepCloudflare(cubit),
       () => _stepBackblaze(cubit),
@@ -69,7 +70,7 @@ class InitializingPage extends StatelessWidget {
                 _addCard(
                   AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
-                    child: actualPage,
+                    child: actualInitializingPage,
                   ),
                 ),
                 ConstrainedBox(
@@ -79,19 +80,38 @@ class InitializingPage extends StatelessWidget {
                           MediaQuery.of(context).padding.bottom -
                           566,
                     ),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: BrandButton.text(
-                        title: cubit.state is AppConfigFinished
-                            ? 'basis.close'.tr()
-                            : 'basis.later'.tr(),
-                        onPressed: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            materialRoute(RootPage()),
-                            (predicate) => false,
-                          );
-                        },
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          child: BrandButton.text(
+                            title: cubit.state is AppConfigFinished
+                                ? 'basis.close'.tr()
+                                : 'basis.later'.tr(),
+                            onPressed: () {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                materialRoute(RootPage()),
+                                (predicate) => false,
+                              );
+                            },
+                          ),
+                        ),
+                        (cubit.state is AppConfigFinished)
+                            ? Container()
+                            : Container(
+                                alignment: Alignment.center,
+                                child: BrandButton.text(
+                                  title: 'basis.connect_to_existing'.tr(),
+                                  onPressed: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      materialRoute(RecoveryDomain()),
+                                      (predicate) => false,
+                                    );
+                                  },
+                                ),
+                              )
+                      ],
                     )),
               ],
             ),

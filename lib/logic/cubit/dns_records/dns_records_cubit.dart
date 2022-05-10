@@ -97,11 +97,11 @@ class DnsRecordsCubit extends AppConfigDependendCubit<DnsRecordsState> {
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
     final CloudFlareDomain? domain = appConfigCubit.state.cloudFlareDomain;
     final String? ipAddress = appConfigCubit.state.hetznerServer?.ip4;
-    final dkimPublicKey = await api.getDkim();
+    final String? dkimPublicKey = await api.getDkim();
     await cloudflare.removeSimilarRecords(cloudFlareDomain: domain!);
     await cloudflare.createMultipleDnsRecords(
         cloudFlareDomain: domain, ip4: ipAddress);
-    await cloudflare.setDkim(dkimPublicKey, domain);
+    await cloudflare.setDkim(dkimPublicKey ?? "", domain);
     await load();
   }
 

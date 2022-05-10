@@ -58,7 +58,17 @@ class ServerApi extends ApiMap {
 
     var client = await getClient();
     try {
-      response = await client.get('/services/status');
+      response = await client.get(
+        '/services/status',
+        options: Options(
+            contentType: 'application/json',
+            receiveDataWhenStatusError: true,
+            followRedirects: false,
+            validateStatus: (status) {
+              return (status != null) &&
+                  (status < HttpStatus.internalServerError);
+            }),
+      );
       res = response.statusCode == HttpStatus.ok;
     } catch (e) {
       res = false;
@@ -129,7 +139,17 @@ class ServerApi extends ApiMap {
     Response response;
 
     var client = await getClient();
-    response = await client.get('/users');
+    response = await client.get(
+      '/users',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     try {
       for (var user in response.data) {
         res.add(user.toString());
@@ -155,6 +175,14 @@ class ServerApi extends ApiMap {
       data: {
         'public_key': sshKey,
       },
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
     );
 
     close(client);
@@ -174,6 +202,14 @@ class ServerApi extends ApiMap {
     response = await client.put(
       '/services/ssh/key/send',
       data: {"public_key": ssh},
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
     );
     close(client);
 
@@ -191,7 +227,17 @@ class ServerApi extends ApiMap {
     Response response;
 
     var client = await getClient();
-    response = await client.get('/services/ssh/keys/${user.login}');
+    response = await client.get(
+      '/services/ssh/keys/${user.login}',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     try {
       res = (response.data as List<dynamic>).map((e) => e as String).toList();
     } catch (e) {
@@ -215,8 +261,18 @@ class ServerApi extends ApiMap {
     Response response;
 
     var client = await getClient();
-    response = await client.delete('/services/ssh/keys/${user.login}',
-        data: {"public_key": sshKey});
+    response = await client.delete(
+      '/services/ssh/keys/${user.login}',
+      data: {"public_key": sshKey},
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
 
     return ApiResponse<void>(
@@ -237,8 +293,13 @@ class ServerApi extends ApiMap {
       response = await client.delete(
         '/users/${user.login}',
         options: Options(
-          contentType: 'application/json',
-        ),
+            contentType: 'application/json',
+            receiveDataWhenStatusError: true,
+            followRedirects: false,
+            validateStatus: (status) {
+              return (status != null) &&
+                  (status < HttpStatus.internalServerError);
+            }),
       );
       res = response.statusCode == HttpStatus.ok ||
           response.statusCode == HttpStatus.notFound;
@@ -262,6 +323,14 @@ class ServerApi extends ApiMap {
     try {
       response = await client.get(
         '/system/configuration/apply',
+        options: Options(
+            contentType: 'application/json',
+            receiveDataWhenStatusError: true,
+            followRedirects: false,
+            validateStatus: (status) {
+              return (status != null) &&
+                  (status < HttpStatus.internalServerError);
+            }),
       );
 
       res = response.statusCode == HttpStatus.ok;
@@ -276,13 +345,33 @@ class ServerApi extends ApiMap {
 
   Future<void> switchService(ServiceTypes type, bool needToTurnOn) async {
     var client = await getClient();
-    client.post('/services/${type.url}/${needToTurnOn ? 'enable' : 'disable'}');
+    client.post(
+      '/services/${type.url}/${needToTurnOn ? 'enable' : 'disable'}',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
   }
 
   Future<Map<ServiceTypes, bool>> servicesPowerCheck() async {
     var client = await getClient();
-    Response response = await client.get('/services/status');
+    Response response = await client.get(
+      '/services/status',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
 
     close(client);
     return {
@@ -303,13 +392,31 @@ class ServerApi extends ApiMap {
         'accountKey': bucket.applicationKey,
         'bucket': bucket.bucketName,
       },
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
     );
     close(client);
   }
 
   Future<void> startBackup() async {
     var client = await getClient();
-    client.put('/services/restic/backup/create');
+    client.put(
+      '/services/restic/backup/create',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
   }
 
@@ -320,6 +427,14 @@ class ServerApi extends ApiMap {
     try {
       response = await client.get(
         '/services/restic/backup/list',
+        options: Options(
+            contentType: 'application/json',
+            receiveDataWhenStatusError: true,
+            followRedirects: false,
+            validateStatus: (status) {
+              return (status != null) &&
+                  (status < HttpStatus.internalServerError);
+            }),
       );
       return response.data.map<Backup>((e) => Backup.fromJson(e)).toList();
     } catch (e) {
@@ -336,6 +451,14 @@ class ServerApi extends ApiMap {
     try {
       response = await client.get(
         '/services/restic/backup/status',
+        options: Options(
+            contentType: 'application/json',
+            receiveDataWhenStatusError: true,
+            followRedirects: false,
+            validateStatus: (status) {
+              return (status != null) &&
+                  (status < HttpStatus.internalServerError);
+            }),
       );
       return BackupStatus.fromJson(response.data);
     } catch (e) {
@@ -352,40 +475,101 @@ class ServerApi extends ApiMap {
 
   Future<void> forceBackupListReload() async {
     var client = await getClient();
-    client.get('/services/restic/backup/reload');
+    client.get(
+      '/services/restic/backup/reload',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
   }
 
   Future<void> restoreBackup(String backupId) async {
     var client = await getClient();
-    client.put('/services/restic/backup/restore', data: {'backupId': backupId});
+    client.put(
+      '/services/restic/backup/restore',
+      data: {'backupId': backupId},
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
   }
 
   Future<bool> pullConfigurationUpdate() async {
     var client = await getClient();
-    Response response = await client.get('/system/configuration/pull');
+    Response response = await client.get(
+      '/system/configuration/pull',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
     return response.statusCode == HttpStatus.ok;
   }
 
   Future<bool> reboot() async {
     var client = await getClient();
-    Response response = await client.get('/system/reboot');
+    Response response = await client.get(
+      '/system/reboot',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
     return response.statusCode == HttpStatus.ok;
   }
 
   Future<bool> upgrade() async {
     var client = await getClient();
-    Response response = await client.get('/system/configuration/upgrade');
+    Response response = await client.get(
+      '/system/configuration/upgrade',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
     return response.statusCode == HttpStatus.ok;
   }
 
   Future<AutoUpgradeSettings> getAutoUpgradeSettings() async {
     var client = await getClient();
-    Response response = await client.get('/system/configuration/autoUpgrade');
+    Response response = await client.get(
+      '/system/configuration/autoUpgrade',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
     return AutoUpgradeSettings.fromJson(response.data);
   }
@@ -395,13 +579,31 @@ class ServerApi extends ApiMap {
     await client.put(
       '/system/configuration/autoUpgrade',
       data: settings.toJson(),
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
     );
     close(client);
   }
 
   Future<TimeZoneSettings> getServerTimezone() async {
     var client = await getClient();
-    Response response = await client.get('/system/configuration/timezone');
+    Response response = await client.get(
+      '/system/configuration/timezone',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
 
     return TimeZoneSettings.fromString(response.data);
@@ -412,18 +614,43 @@ class ServerApi extends ApiMap {
     await client.put(
       '/system/configuration/timezone',
       data: settings.toJson(),
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
     );
     close(client);
   }
 
-  Future<String> getDkim() async {
+  Future<String?> getDkim() async {
     var client = await getClient();
-    Response response = await client.get('/services/mailserver/dkim');
+    Response response = await client.get(
+      '/services/mailserver/dkim',
+      options: Options(
+          contentType: 'application/json',
+          receiveDataWhenStatusError: true,
+          followRedirects: false,
+          validateStatus: (status) {
+            return (status != null) &&
+                (status < HttpStatus.internalServerError);
+          }),
+    );
     close(client);
 
-    // if got 404 raise exception
-    if (response.statusCode == HttpStatus.notFound) {
+    if (response.statusCode == null) {
+      return null;
+    }
+
+    if (response.statusCode == HttpStatus.notFound || response.data == null) {
       throw Exception('No DKIM key found');
+    }
+
+    if (response.statusCode != HttpStatus.ok) {
+      return "";
     }
 
     final base64toString = utf8.fuse(base64);

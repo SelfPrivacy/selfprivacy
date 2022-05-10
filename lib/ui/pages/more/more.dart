@@ -7,7 +7,7 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
-import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 import 'package:selfprivacy/ui/pages/ssh_keys/ssh_keys.dart';

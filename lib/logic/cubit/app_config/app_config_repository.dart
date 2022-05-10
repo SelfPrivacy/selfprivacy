@@ -206,7 +206,7 @@ class AppConfigRepository {
 
     var dkimRecordString = await api.getDkim();
 
-    await cloudflareApi.setDkim(dkimRecordString, cloudFlareDomain);
+    await cloudflareApi.setDkim(dkimRecordString ?? "", cloudFlareDomain);
   }
 
   Future<bool> isHttpServerWorking() async {

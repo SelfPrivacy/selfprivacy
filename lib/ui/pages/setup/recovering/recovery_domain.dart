@@ -1,54 +1,75 @@
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/pages/rootRoute.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
-class RecoveryDomain extends StatelessWidget {
+class RecoveryDomain extends StatefulWidget {
+  @override
+  State<RecoveryDomain> createState() => _RecoveryDomainState();
+}
+
+class _RecoveryDomainState extends State<RecoveryDomain> {
   @override
   Widget build(BuildContext context) {
-    var cubit = context.watch<AppConfigCubit>();
-    return BlocListener<AppConfigCubit, AppConfigState>(
-      listener: (context, state) {
-        if (cubit.state is AppConfigFinished) {
-          Navigator.of(context).pushReplacement(materialRoute(RootPage()));
-        }
-      },
-      child: SafeArea(
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).padding.top -
-                        MediaQuery.of(context).padding.bottom -
-                        566,
-                  ),
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: BrandButton.text(
-                      title: cubit.state is AppConfigFinished
-                          ? 'basis.close'.tr()
-                          : 'basis.later'.tr(),
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          materialRoute(RootPage()),
-                          (predicate) => false,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
+    return BrandHeroScreen(
+      children: [
+        TextField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: "recovering.domain_recover_placeholder".tr(),
           ),
+        ),
+        SizedBox(height: 16),
+        BrandButton.rised(
+          onPressed: () {},
+          text: "more.continue".tr(),
+        ),
+      ],
+      heroTitle: "recovering.recovery_main_header".tr(),
+      heroSubtitle: "recovering.domain_recovery_description".tr(),
+      hasBackButton: true,
+      hasFlashButton: false,
+      heroIcon: Icons.link,
+    );
+  }
+}
+
+/*class RecoveryDomain extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(52),
+          child: BrandHeader(hasBackButton: true),
+        ),
+        body: ListView(
+          padding: EdgeInsets.all(16),
+          children: [
+            Text(
+              "recovering.recovery_main_header".tr(),
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            SizedBox(height: 18),
+            Text(
+              "recovering.domain_recovery_description".tr(),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            SizedBox(height: 18),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "recovering.domain_recover_placeholder".tr(),
+              ),
+            ),
+            SizedBox(height: 18),
+            BrandButton.rised(
+              onPressed: () {},
+              text: "more.continue".tr(),
+            ),
+          ],
         ),
       ),
     );
   }
-}
+}*/

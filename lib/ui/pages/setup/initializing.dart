@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
-import 'package:selfprivacy/logic/cubit/forms/initializing/backblaze_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/initializing/cloudflare_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/initializing/domain_cloudflare.dart';
-import 'package:selfprivacy/logic/cubit/forms/initializing/hetzner_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/initializing/root_user_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/cloudflare_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_cloudflare.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/hetzner_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
@@ -104,10 +104,8 @@ class InitializingPage extends StatelessWidget {
                                 child: BrandButton.text(
                                   title: 'basis.connect_to_existing'.tr(),
                                   onPressed: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                      materialRoute(RecoveryDomain()),
-                                      (predicate) => false,
-                                    );
+                                    Navigator.of(context)
+                                        .push(materialRoute(RecoveryDomain()));
                                   },
                                 ),
                               )

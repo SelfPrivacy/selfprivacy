@@ -240,3 +240,39 @@ class AppConfigFinished extends AppConfigState {
         isServerResetedFirstTime,
       ];
 }
+
+class AppRecovery extends AppConfigState {
+  const AppRecovery({
+    required String hetznerKey,
+    required String cloudFlareKey,
+    required BackblazeCredential backblazeCredential,
+    required CloudFlareDomain cloudFlareDomain,
+    required User rootUser,
+    required HetznerServerDetails hetznerServer,
+    required bool isServerStarted,
+    required bool isServerResetedFirstTime,
+    required bool isServerResetedSecondTime,
+  }) : super(
+          hetznerKey: hetznerKey,
+          cloudFlareKey: cloudFlareKey,
+          backblazeCredential: backblazeCredential,
+          cloudFlareDomain: cloudFlareDomain,
+          rootUser: rootUser,
+          hetznerServer: hetznerServer,
+          isServerStarted: isServerStarted,
+          isServerResetedFirstTime: isServerResetedFirstTime,
+          isServerResetedSecondTime: isServerResetedSecondTime,
+        );
+
+  @override
+  List<Object?> get props => [
+        hetznerKey,
+        cloudFlareKey,
+        backblazeCredential,
+        cloudFlareDomain,
+        rootUser,
+        hetznerServer,
+        isServerStarted,
+        isServerResetedFirstTime,
+      ];
+}

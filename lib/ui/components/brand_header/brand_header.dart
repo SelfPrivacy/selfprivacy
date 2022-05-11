@@ -6,7 +6,7 @@ import 'package:selfprivacy/ui/components/pre_styled_buttons/pre_styled_buttons.
 class BrandHeader extends StatelessWidget {
   const BrandHeader({
     Key? key,
-    required this.title,
+    this.title = "",
     this.hasBackButton = false,
     this.hasFlashButton = false,
   }) : super(key: key);

@@ -71,4 +71,5 @@ class BNames {
   static String sshConfig = 'sshConfig';
   static String sshPrivateKey = "sshPrivateKey";
   static String sshPublicKey = "sshPublicKey";
+  static String serverDomain = "serverDomain";
 }

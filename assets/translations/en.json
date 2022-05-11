@@ -22,7 +22,7 @@
     "nickname": "Nickname",
     "loading": "Loading...",
     "later": "Skip to setup later",
-    "connect_to_existing": "Connect to existing server",
+    "connect_to_existing": "Connect to an existing server",
     "reset": "Reset",
     "details": "Details",
     "no_data": "No data",
@@ -282,6 +282,11 @@
     "23": "Enter a nickname and strong password",
     "finish": "Everything is initialized",
     "checks": "Checks have been completed \n{} ouf of {}"
+  },
+  "recovering": {
+    "recovery_main_header": "Connect to an existing server",
+    "domain_recovery_description": "Enter a server domain you want to get access for",
+    "domain_recover_placeholder": "Your domain"
   },
   "modals": {
     "_comment": "messages in modals",

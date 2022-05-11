@@ -239,6 +239,10 @@ class AppConfigRepository {
     await getIt<ApiConfigModel>().storeHetznerKey(key);
   }
 
+  Future<void> saveServerDomain(String domain) async {
+    await getIt<ApiConfigModel>().storeServerDomain(domain);
+  }
+
   Future<void> saveBackblazeKey(BackblazeCredential backblazeCredential) async {
     await getIt<ApiConfigModel>().storeBackblazeCredential(backblazeCredential);
   }

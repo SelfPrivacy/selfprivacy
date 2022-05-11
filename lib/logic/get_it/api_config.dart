@@ -11,12 +11,14 @@ class ApiConfigModel {
   HetznerServerDetails? get hetznerServer => _hetznerServer;
   String? get hetznerKey => _hetznerKey;
   String? get cloudFlareKey => _cloudFlareKey;
+  String? get serverDomain => _serverDomain;
   BackblazeCredential? get backblazeCredential => _backblazeCredential;
   CloudFlareDomain? get cloudFlareDomain => _cloudFlareDomain;
   BackblazeBucket? get backblazeBucket => _backblazeBucket;
 
   String? _hetznerKey;
   String? _cloudFlareKey;
+  String? _serverDomain;
   HetznerServerDetails? _hetznerServer;
   BackblazeCredential? _backblazeCredential;
   CloudFlareDomain? _cloudFlareDomain;
@@ -30,6 +32,11 @@ class ApiConfigModel {
   Future<void> storeCloudFlareKey(String value) async {
     await _box.put(BNames.cloudFlareKey, value);
     _cloudFlareKey = value;
+  }
+
+  Future<void> storeServerDomain(String value) async {
+    await _box.put(BNames.serverDomain, value);
+    _serverDomain = value;
   }
 
   Future<void> storeBackblazeCredential(BackblazeCredential value) async {

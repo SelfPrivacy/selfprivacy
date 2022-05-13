@@ -5,7 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
+import 'package:selfprivacy/logic/models/server_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
 
@@ -14,7 +14,7 @@ class HiveConfig {
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(HetznerServerDetailsAdapter());
-    Hive.registerAdapter(CloudFlareDomainAdapter());
+    Hive.registerAdapter(ServerDomainAdapter());
     Hive.registerAdapter(BackblazeCredentialAdapter());
     Hive.registerAdapter(BackblazeBucketAdapter());
     Hive.registerAdapter(HetznerDataBaseAdapter());
@@ -56,13 +56,14 @@ class BNames {
   static String key = 'key';
   static String sshEnckey = 'sshEngkey';
 
-  static String cloudFlareDomain = 'cloudFlareDomain';
+  static String hasFinalChecked = 'hasFinalChecked';
+  static String isServerStarted = 'isServerStarted';
+
+  static String serverDomain = 'cloudFlareDomain';
   static String hetznerKey = 'hetznerKey';
   static String cloudFlareKey = 'cloudFlareKey';
   static String rootUser = 'rootUser';
-  static String hetznerServer = 'hetznerServer';
-  static String hasFinalChecked = 'hasFinalChecked';
-  static String isServerStarted = 'isServerStarted';
+  static String serverDetails = 'hetznerServer';
   static String backblazeKey = 'backblazeKey';
   static String backblazeBucket = 'backblazeBucket';
   static String isLoading = 'isLoading';
@@ -71,5 +72,4 @@ class BNames {
   static String sshConfig = 'sshConfig';
   static String sshPrivateKey = "sshPrivateKey";
   static String sshPublicKey = "sshPublicKey";
-  static String serverDomain = "serverDomain";
 }

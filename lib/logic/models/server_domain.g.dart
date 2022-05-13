@@ -1,35 +1,39 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cloudflare_domain.dart';
+part of 'server_domain.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CloudFlareDomainAdapter extends TypeAdapter<CloudFlareDomain> {
+class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
   @override
   final int typeId = 3;
 
   @override
-  CloudFlareDomain read(BinaryReader reader) {
+  ServerDomain read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CloudFlareDomain(
+    return ServerDomain(
       domainName: fields[0] as String,
       zoneId: fields[1] as String,
+      provider:
+          fields[2] == null ? DnsProvider.Cloudflare : fields[2] as DnsProvider,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CloudFlareDomain obj) {
+  void write(BinaryWriter writer, ServerDomain obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.domainName)
       ..writeByte(1)
-      ..write(obj.zoneId);
+      ..write(obj.zoneId)
+      ..writeByte(2)
+      ..write(obj.provider);
   }
 
   @override
@@ -38,7 +42,7 @@ class CloudFlareDomainAdapter extends TypeAdapter<CloudFlareDomain> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CloudFlareDomainAdapter &&
+      other is ServerDomainAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

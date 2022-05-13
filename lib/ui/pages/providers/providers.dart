@@ -100,7 +100,7 @@ class _Card extends StatelessWidget {
     AppConfigState appConfig = context.watch<AppConfigCubit>().state;
 
     var domainName =
-        appConfig.isDomainFilled ? appConfig.cloudFlareDomain!.domainName : '';
+        appConfig.isDomainFilled ? appConfig.serverDomain!.domainName : '';
 
     switch (provider.type) {
       case ProviderType.server:

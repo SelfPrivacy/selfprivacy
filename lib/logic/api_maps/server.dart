@@ -33,65 +33,68 @@ class ApiResponse<D> {
 class ServerApi extends ApiMap {
   bool hasLogger;
   bool isWithToken;
+  String? overrideDomain;
 
-  ServerApi({this.hasLogger = false, this.isWithToken = true});
+  ServerApi(
+      {this.hasLogger = false, this.isWithToken = true, this.overrideDomain});
 
   BaseOptions get options {
     var options = BaseOptions();
 
     if (isWithToken) {
-      var cloudFlareDomain = getIt<ApiConfigModel>().cloudFlareDomain;
+      var cloudFlareDomain = getIt<ApiConfigModel>().serverDomain;
       var domainName = cloudFlareDomain!.domainName;
-      var apiToken = getIt<ApiConfigModel>().hetznerServer?.apiToken;
+      var apiToken = getIt<ApiConfigModel>().serverDetails?.apiToken;
 
       options = BaseOptions(baseUrl: 'https://api.$domainName', headers: {
         'Authorization': 'Bearer $apiToken',
       });
     }
 
+    if (overrideDomain != null) {
+      options = BaseOptions(baseUrl: 'https://api.$overrideDomain');
+    }
+
     return options;
   }
 
+  Future<String?> getApiVersion() async {
+    Response response;
+
+    var client = await getClient();
+    String? apiVersion = null;
+
+    try {
+      response = await client.get('/api/version');
+      apiVersion = response.data['version'];
+    } on DioError catch (e) {
+      print(e.message);
+    } finally {
+      close(client);
+      return apiVersion;
+    }
+  }
+
   Future<bool> isHttpServerWorking() async {
-    bool res;
+    bool res = false;
     Response response;
 
     var client = await getClient();
     try {
-      response = await client.get(
-        '/services/status',
-        options: Options(
-            contentType: 'application/json',
-            receiveDataWhenStatusError: true,
-            followRedirects: false,
-            validateStatus: (status) {
-              return (status != null) &&
-                  (status < HttpStatus.internalServerError);
-            }),
-      );
+      response = await client.get('/services/status');
       res = response.statusCode == HttpStatus.ok;
-    } catch (e) {
-      res = false;
+    } on DioError catch (e) {
+      print(e.message);
+    } finally {
+      close(client);
+      return res;
     }
-    close(client);
-    return res;
   }
 
   Future<ApiResponse<User>> createUser(User user) async {
     var client = await getClient();
 
-    var makeErrorApiReponse = (int status) {
-      return ApiResponse(
-        statusCode: status,
-        data: User(
-          login: user.login,
-          password: user.password,
-          isFoundOnServer: false,
-        ),
-      );
-    };
-
-    late Response<dynamic> response;
+    Response response;
 
     try {
       response = await client.post(
@@ -100,68 +103,75 @@ class ServerApi extends ApiMap {
           'username': user.login,
           'password': user.password,
         },
-        options: Options(
-            contentType: 'application/json',
-            receiveDataWhenStatusError: true,
-            followRedirects: false,
-            validateStatus: (status) {
-              return (status != null) &&
-                  (status < HttpStatus.internalServerError);
-            }),
       );
-    } catch (e) {
-      return makeErrorApiReponse(HttpStatus.internalServerError);
+    } on DioError catch (e) {
+      print(e.message);
+      return ApiResponse(
+        errorMessage: e.error.toString(),
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: User(
+          login: user.login,
+          password: user.password,
+          isFoundOnServer: false,
+        ),
+      );
     } finally {
       close(client);
     }
 
-    if ((response.statusCode != null) &&
-        (response.statusCode == HttpStatus.created)) {
-      return ApiResponse(
-        statusCode: response.statusCode!,
-        data: User(
-          login: user.login,
-          password: user.password,
-          isFoundOnServer: true,
-        ),
-      );
+    bool isFoundOnServer = false;
+    int statusCode = 0;
+
+    final bool isUserCreated = (response.statusCode != null) &&
+        (response.statusCode == HttpStatus.created);
+
+    if (isUserCreated) {
+      isFoundOnServer = true;
+      statusCode = response.statusCode!;
     } else {
-      print(response.statusCode.toString() +
-          ": " +
-          (response.statusMessage ?? ""));
-      return makeErrorApiReponse(
-          response.statusCode ?? HttpStatus.internalServerError);
+      isFoundOnServer = false;
+      statusCode = HttpStatus.notAcceptable;
     }
+
+    return ApiResponse(
+      statusCode: statusCode,
+      data: User(
+        login: user.login,
+        password: user.password,
+        isFoundOnServer: isFoundOnServer,
+      ),
+    );
   }
 
   Future<ApiResponse<List<String>>> getUsersList() async {
     List<String> res = [];
     Response response;
+    String? message;
+    int code = 0;
 
     var client = await getClient();
-    response = await client.get(
-      '/users',
-      options: Options(
-          contentType: 'application/json',
-          receiveDataWhenStatusError: true,
-          followRedirects: false,
-          validateStatus: (status) {
-            return (status != null) &&
-                (status < HttpStatus.internalServerError);
-          }),
-    );
     try {
+      response = await client.get('/users');
       for (var user in response.data) {
         res.add(user.toString());
       }
+    } on DioError catch (e) {
+      print(e.message);
+      message = e.message;
+      code = e.response?.statusCode ?? HttpStatus.internalServerError;
+      res = [];
     } catch (e) {
       print(e);
+      message = e.toString();
+      code = HttpStatus.internalServerError;
       res = [];
+    } finally {
+      close(client);
     }
 
-    close(client);
-    return ApiResponse<List<String>>(
-      statusCode: response.statusCode ?? HttpStatus.internalServerError,
+    return ApiResponse(
+      errorMessage: message,
+      statusCode: code,
       data: res,
     );
   }
@@ -170,22 +180,23 @@ class ServerApi extends ApiMap {
     Response response;
 
     var client = await getClient();
-    response = await client.post(
-      '/services/ssh/keys/${user.login}',
-      data: {
-        'public_key': sshKey,
-      },
-      options: Options(
-          contentType: 'application/json',
-          receiveDataWhenStatusError: true,
-          followRedirects: false,
-          validateStatus: (status) {
-            return (status != null) &&
-                (status < HttpStatus.internalServerError);
-          }),
-    );
+    try {
+      response = await client.post(
+        '/services/ssh/keys/${user.login}',
+        data: {
+          'public_key': sshKey,
+        },
+      );
+    } on DioError catch (e) {
+      print(e.message);
+      return ApiResponse(
+          data: null,
+          errorMessage: e.message,
+          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError);
+    } finally {
+      close(client);
+    }
 
-    close(client);
     return ApiResponse<void>(
       statusCode: response.statusCode ?? HttpStatus.internalServerError,
       data: null,

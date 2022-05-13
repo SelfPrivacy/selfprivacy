@@ -1,7 +1,7 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
-import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
+import 'package:selfprivacy/logic/models/server_domain.dart';
 
 class DomainSetupCubit extends Cubit<DomainSetupState> {
   DomainSetupCubit(this.initializingCubit) : super(Initial());
@@ -36,9 +36,10 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
     var zoneId = await api.getZoneId(domainName);
 
-    var domain = CloudFlareDomain(
+    var domain = ServerDomain(
       domainName: domainName,
       zoneId: zoneId,
+      provider: DnsProvider.Cloudflare,
     );
 
     initializingCubit.setDomain(domain);

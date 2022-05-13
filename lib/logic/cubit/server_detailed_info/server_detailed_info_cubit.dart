@@ -14,7 +14,7 @@ class ServerDetailsCubit extends Cubit<ServerDetailsState> {
   ServerDetailsRepository repository = ServerDetailsRepository();
 
   void check() async {
-    var isReadyToCheck = getIt<ApiConfigModel>().hetznerServer != null;
+    var isReadyToCheck = getIt<ApiConfigModel>().serverDetails != null;
     if (isReadyToCheck) {
       emit(ServerDetailsLoading());
       var data = await repository.load();

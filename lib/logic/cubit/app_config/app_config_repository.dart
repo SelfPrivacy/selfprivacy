@@ -8,7 +8,7 @@ import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
+import 'package:selfprivacy/logic/models/server_domain.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 import 'package:selfprivacy/logic/models/user.dart';
@@ -21,48 +21,82 @@ class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
 
   Future<AppConfigState> load() async {
-    late AppConfigState res;
+    final hetznerToken = getIt<ApiConfigModel>().hetznerKey;
+    final cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
+    final serverDomain = getIt<ApiConfigModel>().serverDomain;
+    final backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
+    final serverDetails = getIt<ApiConfigModel>().serverDetails;
+
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
-      res = AppConfigFinished(
-        hetznerKey: getIt<ApiConfigModel>().hetznerKey!,
-        cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey!,
-        cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain!,
-        backblazeCredential: getIt<ApiConfigModel>().backblazeCredential!,
-        hetznerServer: getIt<ApiConfigModel>().hetznerServer!,
+      return AppConfigFinished(
+        hetznerKey: hetznerToken!,
+        cloudFlareKey: cloudflareToken!,
+        serverDomain: serverDomain!,
+        backblazeCredential: backblazeCredential!,
+        serverDetails: serverDetails!,
         rootUser: box.get(BNames.rootUser),
         isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
         isServerResetedFirstTime:
             box.get(BNames.isServerResetedFirstTime, defaultValue: false),
         isServerResetedSecondTime:
             box.get(BNames.isServerResetedSecondTime, defaultValue: false),
-      );
-    } else {
-      res = AppConfigNotFinished(
-        hetznerKey: getIt<ApiConfigModel>().hetznerKey,
-        cloudFlareKey: getIt<ApiConfigModel>().cloudFlareKey,
-        cloudFlareDomain: getIt<ApiConfigModel>().cloudFlareDomain,
-        backblazeCredential: getIt<ApiConfigModel>().backblazeCredential,
-        hetznerServer: getIt<ApiConfigModel>().hetznerServer,
-        rootUser: box.get(BNames.rootUser),
-        isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
-        isServerResetedFirstTime:
-            box.get(BNames.isServerResetedFirstTime, defaultValue: false),
-        isServerResetedSecondTime:
-            box.get(BNames.isServerResetedSecondTime, defaultValue: false),
-        isLoading: box.get(BNames.isLoading, defaultValue: false),
-        dnsMatches: null,
       );
     }
 
-    return res;
+    if (getIt<ApiConfigModel>().serverDomain?.provider == DnsProvider.Unknown) {
+      return AppConfigRecovery(
+        hetznerKey: hetznerToken,
+        cloudFlareKey: cloudflareToken,
+        serverDomain: serverDomain,
+        backblazeCredential: backblazeCredential,
+        serverDetails: serverDetails,
+        rootUser: box.get(BNames.rootUser),
+        currentStep: getCurrentRecoveryStep(
+            hetznerToken, cloudflareToken, serverDomain!, serverDetails),
+      );
+    }
+
+    return AppConfigNotFinished(
+      hetznerKey: hetznerToken,
+      cloudFlareKey: cloudflareToken,
+      serverDomain: serverDomain,
+      backblazeCredential: backblazeCredential,
+      serverDetails: serverDetails,
+      rootUser: box.get(BNames.rootUser),
+      isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
+      isServerResetedFirstTime:
+          box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+      isServerResetedSecondTime:
+          box.get(BNames.isServerResetedSecondTime, defaultValue: false),
+      isLoading: box.get(BNames.isLoading, defaultValue: false),
+      dnsMatches: null,
+    );
+  }
+
+  RecoveryStep getCurrentRecoveryStep(
+    String? hetznerToken,
+    String? cloudflareToken,
+    ServerDomain serverDomain,
+    ServerHostingDetails? serverDetails,
+  ) {
+    if (serverDetails != null) {
+      if (hetznerToken != null) {
+        if (cloudflareToken != null) {
+          return RecoveryStep.BackblazeToken;
+        }
+        return RecoveryStep.CloudflareToken;
+      }
+      return RecoveryStep.HetznerToken;
+    }
+    return RecoveryStep.Selecting;
   }
 
   void clearAppConfig() {
     box.clear();
   }
 
-  Future<HetznerServerDetails> startServer(
-    HetznerServerDetails hetznerServer,
+  Future<ServerHostingDetails> startServer(
+    ServerHostingDetails hetznerServer,
   ) async {
     var hetznerApi = HetznerApi();
     var serverDetails = await hetznerApi.powerOn();
@@ -122,11 +156,11 @@ class AppConfigRepository {
     String cloudFlareKey,
     BackblazeCredential backblazeCredential, {
     required void Function() onCancel,
-    required Future<void> Function(HetznerServerDetails serverDetails)
+    required Future<void> Function(ServerHostingDetails serverDetails)
         onSuccess,
   }) async {
     var hetznerApi = HetznerApi();
-    late HetznerDataBase dataBase;
+    late ServerVolume dataBase;
 
     try {
       dataBase = await hetznerApi.createVolume();
@@ -180,7 +214,7 @@ class AppConfigRepository {
 
   Future<void> createDnsRecords(
     String ip4,
-    CloudFlareDomain cloudFlareDomain,
+    ServerDomain cloudFlareDomain,
   ) async {
     var cloudflareApi = CloudflareApi();
 
@@ -200,7 +234,7 @@ class AppConfigRepository {
     );
   }
 
-  Future<void> createDkimRecord(CloudFlareDomain cloudFlareDomain) async {
+  Future<void> createDkimRecord(ServerDomain cloudFlareDomain) async {
     var cloudflareApi = CloudflareApi();
     var api = ServerApi();
 
@@ -220,27 +254,23 @@ class AppConfigRepository {
     return isHttpServerWorking;
   }
 
-  Future<HetznerServerDetails> restart() async {
+  Future<ServerHostingDetails> restart() async {
     var hetznerApi = HetznerApi();
     return await hetznerApi.reset();
   }
 
-  Future<HetznerServerDetails> powerOn() async {
+  Future<ServerHostingDetails> powerOn() async {
     var hetznerApi = HetznerApi();
     return await hetznerApi.powerOn();
   }
 
-  Future<void> saveServerDetails(HetznerServerDetails serverDetails) async {
+  Future<void> saveServerDetails(ServerHostingDetails serverDetails) async {
     await getIt<ApiConfigModel>().storeServerDetails(serverDetails);
   }
 
   Future<void> saveHetznerKey(String key) async {
     print('saved');
     await getIt<ApiConfigModel>().storeHetznerKey(key);
-  }
-
-  Future<void> saveServerDomain(String domain) async {
-    await getIt<ApiConfigModel>().storeServerDomain(domain);
   }
 
   Future<void> saveBackblazeKey(BackblazeCredential backblazeCredential) async {
@@ -251,8 +281,8 @@ class AppConfigRepository {
     await getIt<ApiConfigModel>().storeCloudFlareKey(key);
   }
 
-  Future<void> saveDomain(CloudFlareDomain cloudFlareDomain) async {
-    await getIt<ApiConfigModel>().storeCloudFlareDomain(cloudFlareDomain);
+  Future<void> saveDomain(ServerDomain serverDomain) async {
+    await getIt<ApiConfigModel>().storeServerDomain(serverDomain);
   }
 
   Future<void> saveIsServerStarted(bool value) async {
@@ -275,12 +305,12 @@ class AppConfigRepository {
     await box.put(BNames.hasFinalChecked, value);
   }
 
-  Future<void> deleteServer(CloudFlareDomain cloudFlareDomain) async {
+  Future<void> deleteServer(ServerDomain serverDomain) async {
     var hetznerApi = HetznerApi();
     var cloudFlare = CloudflareApi();
 
     await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
-      domainName: cloudFlareDomain.domainName,
+      domainName: serverDomain.domainName,
     );
 
     await box.put(BNames.hasFinalChecked, false);
@@ -288,14 +318,14 @@ class AppConfigRepository {
     await box.put(BNames.isServerResetedFirstTime, false);
     await box.put(BNames.isServerResetedSecondTime, false);
     await box.put(BNames.isLoading, false);
-    await box.put(BNames.hetznerServer, null);
+    await box.put(BNames.serverDetails, null);
 
-    await cloudFlare.removeSimilarRecords(cloudFlareDomain: cloudFlareDomain);
+    await cloudFlare.removeSimilarRecords(cloudFlareDomain: serverDomain);
   }
 
   Future<void> deleteRecords() async {
     await box.deleteAll([
-      BNames.hetznerServer,
+      BNames.serverDetails,
       BNames.isServerStarted,
       BNames.isServerResetedFirstTime,
       BNames.isServerResetedSecondTime,

@@ -2,26 +2,24 @@ import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
+import 'package:selfprivacy/logic/models/server_domain.dart';
 import 'package:selfprivacy/logic/models/server_details.dart';
 
 class ApiConfigModel {
   Box _box = Hive.box(BNames.appConfig);
 
-  HetznerServerDetails? get hetznerServer => _hetznerServer;
+  ServerHostingDetails? get serverDetails => _serverDetails;
   String? get hetznerKey => _hetznerKey;
   String? get cloudFlareKey => _cloudFlareKey;
-  String? get serverDomain => _serverDomain;
   BackblazeCredential? get backblazeCredential => _backblazeCredential;
-  CloudFlareDomain? get cloudFlareDomain => _cloudFlareDomain;
+  ServerDomain? get serverDomain => _serverDomain;
   BackblazeBucket? get backblazeBucket => _backblazeBucket;
 
   String? _hetznerKey;
   String? _cloudFlareKey;
-  String? _serverDomain;
-  HetznerServerDetails? _hetznerServer;
+  ServerHostingDetails? _serverDetails;
   BackblazeCredential? _backblazeCredential;
-  CloudFlareDomain? _cloudFlareDomain;
+  ServerDomain? _serverDomain;
   BackblazeBucket? _backblazeBucket;
 
   Future<void> storeHetznerKey(String value) async {
@@ -34,25 +32,20 @@ class ApiConfigModel {
     _cloudFlareKey = value;
   }
 
-  Future<void> storeServerDomain(String value) async {
-    await _box.put(BNames.serverDomain, value);
-    _serverDomain = value;
-  }
-
   Future<void> storeBackblazeCredential(BackblazeCredential value) async {
     await _box.put(BNames.backblazeKey, value);
 
     _backblazeCredential = value;
   }
 
-  Future<void> storeCloudFlareDomain(CloudFlareDomain value) async {
-    await _box.put(BNames.cloudFlareDomain, value);
-    _cloudFlareDomain = value;
+  Future<void> storeServerDomain(ServerDomain value) async {
+    await _box.put(BNames.serverDomain, value);
+    _serverDomain = value;
   }
 
-  Future<void> storeServerDetails(HetznerServerDetails value) async {
-    await _box.put(BNames.hetznerServer, value);
-    _hetznerServer = value;
+  Future<void> storeServerDetails(ServerHostingDetails value) async {
+    await _box.put(BNames.serverDetails, value);
+    _serverDetails = value;
   }
 
   Future<void> storeBackblazeBucket(BackblazeBucket value) async {
@@ -64,8 +57,8 @@ class ApiConfigModel {
     _hetznerKey = null;
     _cloudFlareKey = null;
     _backblazeCredential = null;
-    _cloudFlareDomain = null;
-    _hetznerServer = null;
+    _serverDomain = null;
+    _serverDetails = null;
     _backblazeBucket = null;
   }
 
@@ -74,8 +67,8 @@ class ApiConfigModel {
 
     _cloudFlareKey = _box.get(BNames.cloudFlareKey);
     _backblazeCredential = _box.get(BNames.backblazeKey);
-    _cloudFlareDomain = _box.get(BNames.cloudFlareDomain);
-    _hetznerServer = _box.get(BNames.hetznerServer);
+    _serverDomain = _box.get(BNames.serverDomain);
+    _serverDetails = _box.get(BNames.serverDetails);
     _backblazeBucket = _box.get(BNames.backblazeBucket);
   }
 }

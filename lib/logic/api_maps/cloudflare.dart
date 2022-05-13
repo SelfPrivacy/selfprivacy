@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
-import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
+import 'package:selfprivacy/logic/models/server_domain.dart';
 import 'package:selfprivacy/logic/models/dns_records.dart';
 
 class CloudflareApi extends ApiMap {
@@ -63,7 +63,7 @@ class CloudflareApi extends ApiMap {
 
   Future<void> removeSimilarRecords({
     String? ip4,
-    required CloudFlareDomain cloudFlareDomain,
+    required ServerDomain cloudFlareDomain,
   }) async {
     var domainName = cloudFlareDomain.domainName;
     var domainZoneId = cloudFlareDomain.zoneId;
@@ -89,7 +89,7 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<List<DnsRecord>> getDnsRecords({
-    required CloudFlareDomain cloudFlareDomain,
+    required ServerDomain cloudFlareDomain,
   }) async {
     var domainName = cloudFlareDomain.domainName;
     var domainZoneId = cloudFlareDomain.zoneId;
@@ -120,7 +120,7 @@ class CloudflareApi extends ApiMap {
 
   Future<void> createMultipleDnsRecords({
     String? ip4,
-    required CloudFlareDomain cloudFlareDomain,
+    required ServerDomain cloudFlareDomain,
   }) async {
     var domainName = cloudFlareDomain.domainName;
     var domainZoneId = cloudFlareDomain.zoneId;
@@ -186,7 +186,7 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<void> setDkim(
-      String dkimRecordString, CloudFlareDomain cloudFlareDomain) async {
+      String dkimRecordString, ServerDomain cloudFlareDomain) async {
     final domainZoneId = cloudFlareDomain.zoneId;
     final url = '$rootAddress/zones/$domainZoneId/dns_records';
 

@@ -5,9 +5,9 @@ abstract class AppConfigState extends Equatable {
     required this.hetznerKey,
     required this.cloudFlareKey,
     required this.backblazeCredential,
-    required this.cloudFlareDomain,
+    required this.serverDomain,
     required this.rootUser,
-    required this.hetznerServer,
+    required this.serverDetails,
     required this.isServerStarted,
     required this.isServerResetedFirstTime,
     required this.isServerResetedSecondTime,
@@ -18,9 +18,9 @@ abstract class AppConfigState extends Equatable {
         hetznerKey,
         cloudFlareKey,
         backblazeCredential,
-        cloudFlareDomain,
+        serverDomain,
         rootUser,
-        hetznerServer,
+        serverDetails,
         isServerStarted,
         isServerResetedFirstTime,
       ];
@@ -28,9 +28,9 @@ abstract class AppConfigState extends Equatable {
   final String? hetznerKey;
   final String? cloudFlareKey;
   final BackblazeCredential? backblazeCredential;
-  final CloudFlareDomain? cloudFlareDomain;
+  final ServerDomain? serverDomain;
   final User? rootUser;
-  final HetznerServerDetails? hetznerServer;
+  final ServerHostingDetails? serverDetails;
   final bool isServerStarted;
   final bool isServerResetedFirstTime;
   final bool isServerResetedSecondTime;
@@ -38,17 +38,18 @@ abstract class AppConfigState extends Equatable {
   bool get isHetznerFilled => hetznerKey != null;
   bool get isCloudFlareFilled => cloudFlareKey != null;
   bool get isBackblazeFilled => backblazeCredential != null;
-  bool get isDomainFilled => cloudFlareDomain != null;
+  bool get isDomainFilled => serverDomain != null;
   bool get isUserFilled => rootUser != null;
-  bool get isServerCreated => hetznerServer != null;
+  bool get isServerCreated => serverDetails != null;
 
   bool get isFullyInitilized => _fulfilementList.every((el) => el!);
-  int get progress => _fulfilementList.where((el) => el!).length;
+  ServerSetupProgress get progress =>
+      ServerSetupProgress.values[_fulfilementList.where((el) => el!).length];
 
   int get porgressBar {
-    if (progress < 6) {
-      return progress;
-    } else if (progress < 10) {
+    if (progress.index < 6) {
+      return progress.index;
+    } else if (progress.index < 10) {
       return 6;
     } else {
       return 7;
@@ -82,9 +83,9 @@ class TimerState extends AppConfigNotFinished {
           hetznerKey: dataState.hetznerKey,
           cloudFlareKey: dataState.cloudFlareKey,
           backblazeCredential: dataState.backblazeCredential,
-          cloudFlareDomain: dataState.cloudFlareDomain,
+          serverDomain: dataState.serverDomain,
           rootUser: dataState.rootUser,
-          hetznerServer: dataState.hetznerServer,
+          serverDetails: dataState.serverDetails,
           isServerStarted: dataState.isServerStarted,
           isServerResetedFirstTime: dataState.isServerResetedFirstTime,
           isServerResetedSecondTime: dataState.isServerResetedSecondTime,
@@ -104,6 +105,19 @@ class TimerState extends AppConfigNotFinished {
       ];
 }
 
+enum ServerSetupProgress {
+  nothingYet,
+  hetznerFilled,
+  cloudFlareFilled,
+  backblazeFilled,
+  domainFilled,
+  userFilled,
+  serverCreated,
+  serverStarted,
+  serverResetedFirstTime,
+  serverResetedSecondTime,
+}
+
 class AppConfigNotFinished extends AppConfigState {
   final bool isLoading;
   final Map<String, bool>? dnsMatches;
@@ -112,9 +126,9 @@ class AppConfigNotFinished extends AppConfigState {
     String? hetznerKey,
     String? cloudFlareKey,
     BackblazeCredential? backblazeCredential,
-    CloudFlareDomain? cloudFlareDomain,
+    ServerDomain? serverDomain,
     User? rootUser,
-    HetznerServerDetails? hetznerServer,
+    ServerHostingDetails? serverDetails,
     required bool isServerStarted,
     required bool isServerResetedFirstTime,
     required bool isServerResetedSecondTime,
@@ -124,9 +138,9 @@ class AppConfigNotFinished extends AppConfigState {
           hetznerKey: hetznerKey,
           cloudFlareKey: cloudFlareKey,
           backblazeCredential: backblazeCredential,
-          cloudFlareDomain: cloudFlareDomain,
+          serverDomain: serverDomain,
           rootUser: rootUser,
-          hetznerServer: hetznerServer,
+          serverDetails: serverDetails,
           isServerStarted: isServerStarted,
           isServerResetedFirstTime: isServerResetedFirstTime,
           isServerResetedSecondTime: isServerResetedSecondTime,
@@ -137,9 +151,9 @@ class AppConfigNotFinished extends AppConfigState {
         hetznerKey,
         cloudFlareKey,
         backblazeCredential,
-        cloudFlareDomain,
+        serverDomain,
         rootUser,
-        hetznerServer,
+        serverDetails,
         isServerStarted,
         isServerResetedFirstTime,
         isLoading,
@@ -150,9 +164,9 @@ class AppConfigNotFinished extends AppConfigState {
     String? hetznerKey,
     String? cloudFlareKey,
     BackblazeCredential? backblazeCredential,
-    CloudFlareDomain? cloudFlareDomain,
+    ServerDomain? serverDomain,
     User? rootUser,
-    HetznerServerDetails? hetznerServer,
+    ServerHostingDetails? serverDetails,
     bool? isServerStarted,
     bool? isServerResetedFirstTime,
     bool? isServerResetedSecondTime,
@@ -163,9 +177,9 @@ class AppConfigNotFinished extends AppConfigState {
         hetznerKey: hetznerKey ?? this.hetznerKey,
         cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
         backblazeCredential: backblazeCredential ?? this.backblazeCredential,
-        cloudFlareDomain: cloudFlareDomain ?? this.cloudFlareDomain,
+        serverDomain: serverDomain ?? this.serverDomain,
         rootUser: rootUser ?? this.rootUser,
-        hetznerServer: hetznerServer ?? this.hetznerServer,
+        serverDetails: serverDetails ?? this.serverDetails,
         isServerStarted: isServerStarted ?? this.isServerStarted,
         isServerResetedFirstTime:
             isServerResetedFirstTime ?? this.isServerResetedFirstTime,
@@ -179,9 +193,9 @@ class AppConfigNotFinished extends AppConfigState {
         hetznerKey: hetznerKey!,
         cloudFlareKey: cloudFlareKey!,
         backblazeCredential: backblazeCredential!,
-        cloudFlareDomain: cloudFlareDomain!,
+        serverDomain: serverDomain!,
         rootUser: rootUser!,
-        hetznerServer: hetznerServer!,
+        serverDetails: serverDetails!,
         isServerStarted: isServerStarted,
         isServerResetedFirstTime: isServerResetedFirstTime,
         isServerResetedSecondTime: isServerResetedSecondTime,
@@ -194,9 +208,9 @@ class AppConfigEmpty extends AppConfigNotFinished {
           hetznerKey: null,
           cloudFlareKey: null,
           backblazeCredential: null,
-          cloudFlareDomain: null,
+          serverDomain: null,
           rootUser: null,
-          hetznerServer: null,
+          serverDetails: null,
           isServerStarted: false,
           isServerResetedFirstTime: false,
           isServerResetedSecondTime: false,
@@ -210,9 +224,9 @@ class AppConfigFinished extends AppConfigState {
     required String hetznerKey,
     required String cloudFlareKey,
     required BackblazeCredential backblazeCredential,
-    required CloudFlareDomain cloudFlareDomain,
+    required ServerDomain serverDomain,
     required User rootUser,
-    required HetznerServerDetails hetznerServer,
+    required ServerHostingDetails serverDetails,
     required bool isServerStarted,
     required bool isServerResetedFirstTime,
     required bool isServerResetedSecondTime,
@@ -220,9 +234,9 @@ class AppConfigFinished extends AppConfigState {
           hetznerKey: hetznerKey,
           cloudFlareKey: cloudFlareKey,
           backblazeCredential: backblazeCredential,
-          cloudFlareDomain: cloudFlareDomain,
+          serverDomain: serverDomain,
           rootUser: rootUser,
-          hetznerServer: hetznerServer,
+          serverDetails: serverDetails,
           isServerStarted: isServerStarted,
           isServerResetedFirstTime: isServerResetedFirstTime,
           isServerResetedSecondTime: isServerResetedSecondTime,
@@ -233,35 +247,45 @@ class AppConfigFinished extends AppConfigState {
         hetznerKey,
         cloudFlareKey,
         backblazeCredential,
-        cloudFlareDomain,
+        serverDomain,
         rootUser,
-        hetznerServer,
+        serverDetails,
         isServerStarted,
         isServerResetedFirstTime,
       ];
 }
 
-class AppRecovery extends AppConfigState {
-  const AppRecovery({
-    required String hetznerKey,
-    required String cloudFlareKey,
-    required BackblazeCredential backblazeCredential,
-    required CloudFlareDomain cloudFlareDomain,
-    required User rootUser,
-    required HetznerServerDetails hetznerServer,
-    required bool isServerStarted,
-    required bool isServerResetedFirstTime,
-    required bool isServerResetedSecondTime,
+enum RecoveryStep {
+  Selecting,
+  RecoveryKey,
+  NewDeviceKey,
+  OldToken,
+  HetznerToken,
+  CloudflareToken,
+  BackblazeToken,
+}
+
+class AppConfigRecovery extends AppConfigState {
+  final RecoveryStep currentStep;
+
+  const AppConfigRecovery({
+    String? hetznerKey,
+    String? cloudFlareKey,
+    BackblazeCredential? backblazeCredential,
+    ServerDomain? serverDomain,
+    User? rootUser,
+    ServerHostingDetails? serverDetails,
+    required RecoveryStep this.currentStep,
   }) : super(
           hetznerKey: hetznerKey,
           cloudFlareKey: cloudFlareKey,
           backblazeCredential: backblazeCredential,
-          cloudFlareDomain: cloudFlareDomain,
+          serverDomain: serverDomain,
           rootUser: rootUser,
-          hetznerServer: hetznerServer,
-          isServerStarted: isServerStarted,
-          isServerResetedFirstTime: isServerResetedFirstTime,
-          isServerResetedSecondTime: isServerResetedSecondTime,
+          serverDetails: serverDetails,
+          isServerStarted: true,
+          isServerResetedFirstTime: true,
+          isServerResetedSecondTime: true,
         );
 
   @override
@@ -269,10 +293,29 @@ class AppRecovery extends AppConfigState {
         hetznerKey,
         cloudFlareKey,
         backblazeCredential,
-        cloudFlareDomain,
+        serverDomain,
         rootUser,
-        hetznerServer,
+        serverDetails,
         isServerStarted,
         isServerResetedFirstTime,
+        currentStep
       ];
+
+  AppConfigRecovery copyWith({
+    String? hetznerKey,
+    String? cloudFlareKey,
+    BackblazeCredential? backblazeCredential,
+    ServerDomain? serverDomain,
+    User? rootUser,
+    ServerHostingDetails? serverDetails,
+    RecoveryStep? currentStep,
+  }) =>
+      AppConfigRecovery(
+          hetznerKey: hetznerKey ?? this.hetznerKey,
+          cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
+          backblazeCredential: backblazeCredential ?? this.backblazeCredential,
+          serverDomain: serverDomain ?? this.serverDomain,
+          rootUser: rootUser ?? this.rootUser,
+          serverDetails: serverDetails ?? this.serverDetails,
+          currentStep: currentStep ?? this.currentStep);
 }

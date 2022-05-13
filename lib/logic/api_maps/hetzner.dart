@@ -68,7 +68,7 @@ class HetznerApi extends ApiMap {
     return server == null;
   }
 
-  Future<HetznerDataBase> createVolume() async {
+  Future<ServerVolume> createVolume() async {
     var client = await getClient();
     Response dbCreateResponse = await client.post(
       '/volumes',
@@ -82,17 +82,17 @@ class HetznerApi extends ApiMap {
       },
     );
     var dbId = dbCreateResponse.data['volume']['id'];
-    return HetznerDataBase(
+    return ServerVolume(
       id: dbId,
       name: dbCreateResponse.data['volume']['name'],
     );
   }
 
-  Future<HetznerServerDetails> createServer({
+  Future<ServerHostingDetails> createServer({
     required String cloudFlareKey,
     required User rootUser,
     required String domainName,
-    required HetznerDataBase dataBase,
+    required ServerVolume dataBase,
   }) async {
     var client = await getClient();
 
@@ -136,7 +136,7 @@ class HetznerApi extends ApiMap {
 
     print(serverCreateResponse.data);
     client.close();
-    return HetznerServerDetails(
+    return ServerHostingDetails(
       id: serverCreateResponse.data['server']['id'],
       ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
       createTime: DateTime.now(),
@@ -189,8 +189,8 @@ class HetznerApi extends ApiMap {
     close(client);
   }
 
-  Future<HetznerServerDetails> reset() async {
-    var server = getIt<ApiConfigModel>().hetznerServer!;
+  Future<ServerHostingDetails> reset() async {
+    var server = getIt<ApiConfigModel>().serverDetails!;
 
     var client = await getClient();
     await client.post('/servers/${server.id}/actions/reset');
@@ -199,8 +199,8 @@ class HetznerApi extends ApiMap {
     return server.copyWith(startTime: DateTime.now());
   }
 
-  Future<HetznerServerDetails> powerOn() async {
-    var server = getIt<ApiConfigModel>().hetznerServer!;
+  Future<ServerHostingDetails> powerOn() async {
+    var server = getIt<ApiConfigModel>().serverDetails!;
 
     var client = await getClient();
     await client.post('/servers/${server.id}/actions/poweron');
@@ -211,7 +211,7 @@ class HetznerApi extends ApiMap {
 
   Future<Map<String, dynamic>> getMetrics(
       DateTime start, DateTime end, String type) async {
-    var hetznerServer = getIt<ApiConfigModel>().hetznerServer;
+    var hetznerServer = getIt<ApiConfigModel>().serverDetails;
     var client = await getClient();
 
     Map<String, dynamic> queryParameters = {
@@ -228,7 +228,7 @@ class HetznerApi extends ApiMap {
   }
 
   Future<HetznerServerInfo> getInfo() async {
-    var hetznerServer = getIt<ApiConfigModel>().hetznerServer;
+    var hetznerServer = getIt<ApiConfigModel>().serverDetails;
     var client = await getClient();
     Response response = await client.get('/servers/${hetznerServer!.id}');
     close(client);
@@ -240,7 +240,7 @@ class HetznerApi extends ApiMap {
     required String ip4,
     required String domainName,
   }) async {
-    var hetznerServer = getIt<ApiConfigModel>().hetznerServer;
+    var hetznerServer = getIt<ApiConfigModel>().serverDetails;
     var client = await getClient();
     await client.post(
       '/servers/${hetznerServer!.id}/actions/change_dns_ptr',

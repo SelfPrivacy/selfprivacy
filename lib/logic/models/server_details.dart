@@ -3,8 +3,8 @@ import 'package:hive/hive.dart';
 part 'server_details.g.dart';
 
 @HiveType(typeId: 2)
-class HetznerServerDetails {
-  HetznerServerDetails({
+class ServerHostingDetails {
+  ServerHostingDetails({
     required this.ip4,
     required this.id,
     required this.createTime,
@@ -26,13 +26,13 @@ class HetznerServerDetails {
   final DateTime? startTime;
 
   @HiveField(4)
-  final HetznerDataBase dataBase;
+  final ServerVolume dataBase;
 
   @HiveField(5)
   final String apiToken;
 
-  HetznerServerDetails copyWith({DateTime? startTime}) {
-    return HetznerServerDetails(
+  ServerHostingDetails copyWith({DateTime? startTime}) {
+    return ServerHostingDetails(
       startTime: startTime ?? this.startTime,
       createTime: createTime,
       id: id,
@@ -46,8 +46,8 @@ class HetznerServerDetails {
 }
 
 @HiveType(typeId: 5)
-class HetznerDataBase {
-  HetznerDataBase({
+class ServerVolume {
+  ServerVolume({
     required this.id,
     required this.name,
   });

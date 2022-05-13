@@ -129,7 +129,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
 
   Widget deleteServer(BuildContext context) {
     var isDisabled =
-        context.watch<AppConfigCubit>().state.hetznerServer == null;
+        context.watch<AppConfigCubit>().state.serverDetails == null;
     return Container(
       padding: EdgeInsets.only(top: 20, bottom: 5),
       decoration: BoxDecoration(

@@ -63,7 +63,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
   @override
   Widget build(BuildContext context) {
     var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
-    final domain = getIt<ApiConfigModel>().cloudFlareDomain?.domainName ?? '';
+    final domain = getIt<ApiConfigModel>().serverDomain?.domainName ?? '';
     var dnsCubit = context.watch<DnsRecordsCubit>().state;
 
     print(dnsCubit.dnsState);

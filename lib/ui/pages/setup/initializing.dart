@@ -35,7 +35,7 @@ class InitializingPage extends StatelessWidget {
       () => _stepCheck(cubit),
       () => _stepCheck(cubit),
       () => Container(child: Center(child: Text('initializing.finish'.tr())))
-    ][cubit.state.progress]();
+    ][cubit.state.progress.index]();
     return BlocListener<AppConfigCubit, AppConfigState>(
       listener: (context, state) {
         if (cubit.state is AppConfigFinished) {

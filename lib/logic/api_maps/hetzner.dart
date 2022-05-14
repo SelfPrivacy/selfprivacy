@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
-import 'package:selfprivacy/logic/models/hetzner_server_info.dart';
-import 'package:selfprivacy/logic/models/server_details.dart';
-import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ApiMap {
@@ -140,8 +140,9 @@ class HetznerApi extends ApiMap {
       id: serverCreateResponse.data['server']['id'],
       ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
       createTime: DateTime.now(),
-      dataBase: dataBase,
+      volume: dataBase,
       apiToken: apiToken,
+      provider: ServerProvider.Hetzner,
     );
   }
 

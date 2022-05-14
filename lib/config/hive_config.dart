@@ -3,21 +3,21 @@ import 'dart:typed_data';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/server_domain.dart';
-import 'package:selfprivacy/logic/models/server_details.dart';
-import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 
 class HiveConfig {
   static Future<void> init() async {
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
-    Hive.registerAdapter(HetznerServerDetailsAdapter());
+    Hive.registerAdapter(ServerHostingDetailsAdapter());
     Hive.registerAdapter(ServerDomainAdapter());
     Hive.registerAdapter(BackblazeCredentialAdapter());
     Hive.registerAdapter(BackblazeBucketAdapter());
-    Hive.registerAdapter(HetznerDataBaseAdapter());
+    Hive.registerAdapter(ServerVolumeAdapter());
 
     await Hive.openBox(BNames.appSettings);
     await Hive.openBox<User>(BNames.users);

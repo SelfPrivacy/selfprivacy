@@ -6,7 +6,7 @@ part of 'server_details.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class HetznerServerDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
+class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
   @override
   final int typeId = 2;
 
@@ -20,8 +20,11 @@ class HetznerServerDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
       ip4: fields[0] as String,
       id: fields[1] as int,
       createTime: fields[3] as DateTime?,
-      dataBase: fields[4] as ServerVolume,
+      volume: fields[4] as ServerVolume,
       apiToken: fields[5] as String,
+      provider: fields[6] == null
+          ? ServerProvider.Hetzner
+          : fields[6] as ServerProvider,
       startTime: fields[2] as DateTime?,
     );
   }
@@ -29,7 +32,7 @@ class HetznerServerDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
   @override
   void write(BinaryWriter writer, ServerHostingDetails obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.ip4)
       ..writeByte(1)
@@ -39,9 +42,11 @@ class HetznerServerDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
       ..writeByte(2)
       ..write(obj.startTime)
       ..writeByte(4)
-      ..write(obj.dataBase)
+      ..write(obj.volume)
       ..writeByte(5)
-      ..write(obj.apiToken);
+      ..write(obj.apiToken)
+      ..writeByte(6)
+      ..write(obj.provider);
   }
 
   @override
@@ -50,12 +55,12 @@ class HetznerServerDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is HetznerServerDetailsAdapter &&
+      other is ServerHostingDetailsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
 
-class HetznerDataBaseAdapter extends TypeAdapter<ServerVolume> {
+class ServerVolumeAdapter extends TypeAdapter<ServerVolume> {
   @override
   final int typeId = 5;
 
@@ -87,7 +92,46 @@ class HetznerDataBaseAdapter extends TypeAdapter<ServerVolume> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is HetznerDataBaseAdapter &&
+      other is ServerVolumeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ServerProviderAdapter extends TypeAdapter<ServerProvider> {
+  @override
+  final int typeId = 101;
+
+  @override
+  ServerProvider read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ServerProvider.Unknown;
+      case 1:
+        return ServerProvider.Hetzner;
+      default:
+        return ServerProvider.Unknown;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ServerProvider obj) {
+    switch (obj) {
+      case ServerProvider.Unknown:
+        writer.writeByte(0);
+        break;
+      case ServerProvider.Hetzner:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ServerProviderAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

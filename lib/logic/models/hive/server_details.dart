@@ -8,8 +8,9 @@ class ServerHostingDetails {
     required this.ip4,
     required this.id,
     required this.createTime,
-    required this.dataBase,
+    required this.volume,
     required this.apiToken,
+    required this.provider,
     this.startTime,
   });
 
@@ -26,10 +27,13 @@ class ServerHostingDetails {
   final DateTime? startTime;
 
   @HiveField(4)
-  final ServerVolume dataBase;
+  final ServerVolume volume;
 
   @HiveField(5)
   final String apiToken;
+
+  @HiveField(6, defaultValue: ServerProvider.Hetzner)
+  final ServerProvider provider;
 
   ServerHostingDetails copyWith({DateTime? startTime}) {
     return ServerHostingDetails(
@@ -37,8 +41,9 @@ class ServerHostingDetails {
       createTime: createTime,
       id: id,
       ip4: ip4,
-      dataBase: dataBase,
+      volume: volume,
       apiToken: apiToken,
+      provider: provider,
     );
   }
 
@@ -56,4 +61,12 @@ class ServerVolume {
   int id;
   @HiveField(2)
   String name;
+}
+
+@HiveType(typeId: 101)
+enum ServerProvider {
+  @HiveField(0)
+  Unknown,
+  @HiveField(1)
+  Hetzner,
 }

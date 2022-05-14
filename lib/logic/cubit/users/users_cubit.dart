@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 
 import '../../api_maps/server.dart';
 

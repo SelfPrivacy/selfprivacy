@@ -7,11 +7,11 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
-import 'package:selfprivacy/logic/models/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/server_domain.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/message.dart';
-import 'package:selfprivacy/logic/models/server_details.dart';
-import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 
@@ -51,7 +51,7 @@ class AppConfigRepository {
         backblazeCredential: backblazeCredential,
         serverDetails: serverDetails,
         rootUser: box.get(BNames.rootUser),
-        currentStep: getCurrentRecoveryStep(
+        currentStep: _getCurrentRecoveryStep(
             hetznerToken, cloudflareToken, serverDomain!, serverDetails),
       );
     }
@@ -73,7 +73,7 @@ class AppConfigRepository {
     );
   }
 
-  RecoveryStep getCurrentRecoveryStep(
+  RecoveryStep _getCurrentRecoveryStep(
     String? hetznerToken,
     String? cloudflareToken,
     ServerDomain serverDomain,

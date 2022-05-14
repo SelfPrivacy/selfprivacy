@@ -46,3 +46,42 @@ class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+class DnsProviderAdapter extends TypeAdapter<DnsProvider> {
+  @override
+  final int typeId = 100;
+
+  @override
+  DnsProvider read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return DnsProvider.Unknown;
+      case 1:
+        return DnsProvider.Cloudflare;
+      default:
+        return DnsProvider.Unknown;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, DnsProvider obj) {
+    switch (obj) {
+      case DnsProvider.Unknown:
+        writer.writeByte(0);
+        break;
+      case DnsProvider.Cloudflare:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DnsProviderAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

@@ -4,7 +4,7 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
-import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
-import 'user.dart';
+import 'hive/user.dart';
 
 @immutable
 class Job extends Equatable {

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
-import 'package:selfprivacy/logic/models/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 
 class BackblazeApiAuth {
   BackblazeApiAuth({required this.authorizationToken, required this.apiUrl});

@@ -1,7 +1,7 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/models/server_domain.dart';
-import 'package:selfprivacy/logic/models/dns_records.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 import '../../api_maps/cloudflare.dart';
 import '../../api_maps/server.dart';

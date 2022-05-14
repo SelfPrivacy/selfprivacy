@@ -2,11 +2,6 @@ import 'package:hive/hive.dart';
 
 part 'server_domain.g.dart';
 
-enum DnsProvider {
-  Unknown,
-  Cloudflare,
-}
-
 @HiveType(typeId: 3)
 class ServerDomain {
   ServerDomain({
@@ -28,4 +23,12 @@ class ServerDomain {
   String toString() {
     return '$domainName: $zoneId';
   }
+}
+
+@HiveType(typeId: 100)
+enum DnsProvider {
+  @HiveField(0)
+  Unknown,
+  @HiveField(1)
+  Cloudflare,
 }

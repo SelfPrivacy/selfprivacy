@@ -4,7 +4,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
-import 'package:selfprivacy/logic/models/server_domain.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 class RecoveryDomainFormCubit extends FormCubit {
   RecoveryDomainFormCubit(

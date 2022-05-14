@@ -11,7 +11,7 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import '../../../config/brand_colors.dart';
 import '../../../config/brand_theme.dart';
 import '../../../logic/cubit/jobs/jobs_cubit.dart';
-import '../../../logic/models/user.dart';
+import '../../../logic/models/hive/user.dart';
 import '../../components/brand_button/brand_button.dart';
 import '../../components/brand_header/brand_header.dart';
 

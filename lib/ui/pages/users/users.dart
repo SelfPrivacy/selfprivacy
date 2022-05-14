@@ -11,7 +11,7 @@ import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
-import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';

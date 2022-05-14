@@ -1,9 +1,9 @@
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/server_domain.dart';
-import 'package:selfprivacy/logic/models/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
 
 class ApiConfigModel {
   Box _box = Hive.box(BNames.appConfig);

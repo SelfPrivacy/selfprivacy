@@ -4,10 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/get_it/ssh.dart';
-import 'package:selfprivacy/logic/models/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/server_domain.dart';
-import 'package:selfprivacy/logic/models/server_details.dart';
-import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 
 import 'app_config_repository.dart';
 
@@ -19,6 +19,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
   AppConfigCubit() : super(AppConfigEmpty());
 
   final repository = AppConfigRepository();
+
+  Timer? timer;
 
   Future<void> load() async {
     var state = await repository.load();
@@ -45,17 +47,68 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     }
   }
 
-  void runDelayed(
-      void Function() work, Duration delay, AppConfigNotFinished? state) async {
-    final dataState = state ?? this.state as AppConfigNotFinished;
+  void setHetznerKey(String hetznerKey) async {
+    await repository.saveHetznerKey(hetznerKey);
+    emit((state as AppConfigNotFinished).copyWith(hetznerKey: hetznerKey));
+  }
 
-    emit(TimerState(
-      dataState: dataState,
-      timerStart: DateTime.now(),
-      duration: delay,
-      isLoading: false,
-    ));
-    timer = Timer(delay, work);
+  void setCloudflareKey(String cloudFlareKey) async {
+    await repository.saveCloudFlareKey(cloudFlareKey);
+    emit(
+        (state as AppConfigNotFinished).copyWith(cloudFlareKey: cloudFlareKey));
+  }
+
+  void setBackblazeKey(String keyId, String applicationKey) async {
+    var backblazeCredential = BackblazeCredential(
+      keyId: keyId,
+      applicationKey: applicationKey,
+    );
+    await repository.saveBackblazeKey(backblazeCredential);
+    emit((state as AppConfigNotFinished)
+        .copyWith(backblazeCredential: backblazeCredential));
+  }
+
+  void setDomain(ServerDomain serverDomain) async {
+    await repository.saveDomain(serverDomain);
+    emit((state as AppConfigNotFinished).copyWith(serverDomain: serverDomain));
+  }
+
+  void setRootUser(User rootUser) async {
+    await repository.saveRootUser(rootUser);
+    emit((state as AppConfigNotFinished).copyWith(rootUser: rootUser));
+  }
+
+  void createServerAndSetDnsRecords() async {
+    AppConfigNotFinished _stateCopy = state as AppConfigNotFinished;
+    var onSuccess = (ServerHostingDetails serverDetails) async {
+      await repository.createDnsRecords(
+        serverDetails.ip4,
+        state.serverDomain!,
+      );
+
+      emit((state as AppConfigNotFinished).copyWith(
+        isLoading: false,
+        serverDetails: serverDetails,
+      ));
+      runDelayed(startServerIfDnsIsOkay, Duration(seconds: 30), null);
+    };
+
+    var onCancel =
+        () => emit((state as AppConfigNotFinished).copyWith(isLoading: false));
+
+    try {
+      emit((state as AppConfigNotFinished).copyWith(isLoading: true));
+      await repository.createServer(
+        state.rootUser!,
+        state.serverDomain!.domainName,
+        state.cloudFlareKey!,
+        state.backblazeCredential!,
+        onCancel: onCancel,
+        onSuccess: onSuccess,
+      );
+    } catch (e) {
+      emit(_stateCopy);
+    }
   }
 
   void startServerIfDnsIsOkay({AppConfigNotFinished? state}) async {
@@ -165,8 +218,6 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     }
   }
 
-  Timer? timer;
-
   void finishCheckIfServerIsOkay({
     AppConfigNotFinished? state,
   }) async {
@@ -184,6 +235,19 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     } else {
       runDelayed(finishCheckIfServerIsOkay, Duration(seconds: 60), dataState);
     }
+  }
+
+  void runDelayed(
+      void Function() work, Duration delay, AppConfigNotFinished? state) async {
+    final dataState = state ?? this.state as AppConfigNotFinished;
+
+    emit(TimerState(
+      dataState: dataState,
+      timerStart: DateTime.now(),
+      duration: delay,
+      isLoading: false,
+    ));
+    timer = Timer(delay, work);
   }
 
   void clearAppConfig() {
@@ -214,70 +278,6 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       isLoading: false,
       dnsMatches: null,
     ));
-  }
-
-  void setHetznerKey(String hetznerKey) async {
-    await repository.saveHetznerKey(hetznerKey);
-    emit((state as AppConfigNotFinished).copyWith(hetznerKey: hetznerKey));
-  }
-
-  void setCloudflareKey(String cloudFlareKey) async {
-    await repository.saveCloudFlareKey(cloudFlareKey);
-    emit(
-        (state as AppConfigNotFinished).copyWith(cloudFlareKey: cloudFlareKey));
-  }
-
-  void setBackblazeKey(String keyId, String applicationKey) async {
-    var backblazeCredential = BackblazeCredential(
-      keyId: keyId,
-      applicationKey: applicationKey,
-    );
-    await repository.saveBackblazeKey(backblazeCredential);
-    emit((state as AppConfigNotFinished)
-        .copyWith(backblazeCredential: backblazeCredential));
-  }
-
-  void setDomain(ServerDomain serverDomain) async {
-    await repository.saveDomain(serverDomain);
-    emit((state as AppConfigNotFinished).copyWith(serverDomain: serverDomain));
-  }
-
-  void setRootUser(User rootUser) async {
-    await repository.saveRootUser(rootUser);
-    emit((state as AppConfigNotFinished).copyWith(rootUser: rootUser));
-  }
-
-  void createServerAndSetDnsRecords() async {
-    AppConfigNotFinished _stateCopy = state as AppConfigNotFinished;
-    var onSuccess = (ServerHostingDetails serverDetails) async {
-      await repository.createDnsRecords(
-        serverDetails.ip4,
-        state.serverDomain!,
-      );
-
-      emit((state as AppConfigNotFinished).copyWith(
-        isLoading: false,
-        serverDetails: serverDetails,
-      ));
-      runDelayed(startServerIfDnsIsOkay, Duration(seconds: 30), null);
-    };
-
-    var onCancel =
-        () => emit((state as AppConfigNotFinished).copyWith(isLoading: false));
-
-    try {
-      emit((state as AppConfigNotFinished).copyWith(isLoading: true));
-      await repository.createServer(
-        state.rootUser!,
-        state.serverDomain!.domainName,
-        state.cloudFlareKey!,
-        state.backblazeCredential!,
-        onCancel: onCancel,
-        onSuccess: onSuccess,
-      );
-    } catch (e) {
-      emit(_stateCopy);
-    }
   }
 
   close() {

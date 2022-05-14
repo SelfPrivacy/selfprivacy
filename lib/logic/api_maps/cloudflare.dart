@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
-import 'package:selfprivacy/logic/models/server_domain.dart';
-import 'package:selfprivacy/logic/models/dns_records.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 class CloudflareApi extends ApiMap {
   CloudflareApi({this.hasLogger = false, this.isWithToken = true});

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_domain_form_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
 class RecoveryDomain extends StatelessWidget {
@@ -29,18 +29,17 @@ class RecoveryDomain extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            BrandButton.rised(
+            FilledButton(
+              title: "more.continue".tr(),
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<RecoveryDomainFormCubit>().trySubmit(),
-              text: "more.continue".tr(),
-            ),
+            )
           ],
           heroTitle: "recovering.recovery_main_header".tr(),
           heroSubtitle: "recovering.domain_recovery_description".tr(),
           hasBackButton: true,
           hasFlashButton: false,
-          heroIcon: Icons.link,
         );
       }),
     );

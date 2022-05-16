@@ -28,13 +28,18 @@ abstract class AppThemeFactory {
 
     if (Platform.isLinux) {
       GtkThemeData themeData = await GtkThemeData.initialize();
+      final isGtkDark =
+          Color(themeData.theme_base_color).computeLuminance() < 0.5;
+      final isInverseNeeded = isGtkDark != isDark;
       gtkColorsScheme = ColorScheme.fromSeed(
         seedColor: Color(themeData.theme_selected_bg_color),
-        brightness: Color(themeData.theme_base_color).computeLuminance() > 0.5
-            ? Brightness.light
-            : Brightness.dark,
-        background: Color(themeData.theme_bg_color),
-        surface: Color(themeData.theme_base_color),
+        brightness: brightness,
+        background: isInverseNeeded
+            ? Color(themeData.theme_base_color)
+            : Color(themeData.theme_bg_color),
+        surface: isInverseNeeded
+            ? Color(themeData.theme_bg_color)
+            : Color(themeData.theme_base_color),
       );
     }
 
@@ -46,7 +51,8 @@ abstract class AppThemeFactory {
       brightness: brightness,
     );
 
-    final colorScheme = dynamicColorsScheme ?? gtkColorsScheme ?? fallbackColorScheme;
+    final colorScheme =
+        dynamicColorsScheme ?? gtkColorsScheme ?? fallbackColorScheme;
 
     final appTypography = Typography.material2021();
 
@@ -55,6 +61,7 @@ abstract class AppThemeFactory {
       brightness: colorScheme.brightness,
       typography: appTypography,
       useMaterial3: true,
+      scaffoldBackgroundColor: colorScheme.background,
       appBarTheme: AppBarTheme(
         elevation: 0,
         backgroundColor: colorScheme.primary,

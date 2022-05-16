@@ -37,20 +37,27 @@ class BrandHeroScreen extends StatelessWidget {
           padding: EdgeInsets.all(16.0),
           children: <Widget>[
             if (heroIcon != null)
-              Icon(
-                heroIcon,
-                size: 48.0,
+              Container(
+                child: Icon(
+                  heroIcon,
+                  size: 48.0,
+                ),
+                alignment: Alignment.bottomLeft,
               ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 8.0),
             if (heroTitle != null)
-              Text(heroTitle!,
-                  style: Theme.of(context).textTheme.headline2,
-                  textAlign: TextAlign.center),
+              Text(
+                heroTitle!,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: Colors.black,
+                    ),
+                textAlign: TextAlign.start,
+              ),
             SizedBox(height: 8.0),
             if (heroSubtitle != null)
               Text(heroSubtitle!,
                   style: Theme.of(context).textTheme.bodyMedium,
-                  textAlign: TextAlign.center),
+                  textAlign: TextAlign.start),
             SizedBox(height: 16.0),
             ...children,
           ],

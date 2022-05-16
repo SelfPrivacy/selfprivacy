@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
+import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 enum BrandButtonTypes { rised, text, iconText }
@@ -13,11 +13,17 @@ class BrandButton {
   }) {
     assert(text == null || child == null, 'required title or child');
     assert(text != null || child != null, 'required title or child');
-    return _RisedButton(
-      key: key,
-      title: text,
-      onPressed: onPressed,
-      child: child,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minHeight: 48,
+        minWidth: double.infinity,
+      ),
+      child: FilledButton(
+        key: key,
+        title: text,
+        onPressed: onPressed,
+        child: child,
+      ),
     );
   }
 
@@ -26,10 +32,12 @@ class BrandButton {
     required VoidCallback onPressed,
     required String title,
   }) =>
-      _TextButton(
-        key: key,
-        title: title,
-        onPressed: onPressed,
+      ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: 48,
+          minWidth: double.infinity,
+        ),
+        child: TextButton(onPressed: onPressed, child: Text(title)),
       );
 
   static emptyWithIconText({
@@ -44,78 +52,6 @@ class BrandButton {
         onPressed: onPressed,
         icon: icon,
       );
-}
-
-class _RisedButton extends StatelessWidget {
-  const _RisedButton({
-    Key? key,
-    this.onPressed,
-    this.title,
-    this.child,
-  }) : super(key: key);
-
-  final VoidCallback? onPressed;
-  final String? title;
-  final Widget? child;
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: ColoredBox(
-        color: onPressed == null
-            ? BrandColors.gray2
-            : Theme.of(context).primaryColor,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onPressed,
-            child: Container(
-              height: 48,
-              width: double.infinity,
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(12),
-              child: child ?? BrandText.buttonTitleText(title),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TextButton extends StatelessWidget {
-  const _TextButton({
-    Key? key,
-    this.onPressed,
-    this.title,
-  }) : super(key: key);
-
-  final VoidCallback? onPressed;
-  final String? title;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        height: 48,
-        width: double.infinity,
-        alignment: Alignment.center,
-        padding: EdgeInsets.all(12),
-        child: Text(
-          title!,
-          style: TextStyle(
-            color: BrandColors.blue,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            height: 1.5,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _IconTextButton extends StatelessWidget {

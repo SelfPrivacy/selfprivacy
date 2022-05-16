@@ -13,7 +13,6 @@ import 'package:timezone/data/latest.dart' as tz;
 
 import 'config/bloc_config.dart';
 import 'config/bloc_observer.dart';
-import 'config/brand_theme.dart';
 import 'config/get_it_config.dart';
 import 'config/localization.dart';
 import 'logic/cubit/app_settings/app_settings_cubit.dart';
@@ -45,7 +44,8 @@ void main() async {
   );
 
   BlocOverrides.runZoned(
-    () => runApp(Localization(child: MyApp(
+    () => runApp(Localization(
+        child: MyApp(
       lightThemeData: lightThemeData,
       darkThemeData: darkThemeData,
     ))),
@@ -81,7 +81,8 @@ class MyApp extends StatelessWidget {
                 title: 'SelfPrivacy',
                 theme: lightThemeData,
                 darkTheme: darkThemeData,
-                themeMode: appSettings.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
+                themeMode:
+                    appSettings.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
                 home: appSettings.isOnbordingShowing
                     ? OnboardingPage(nextPage: InitializingPage())
                     : RootPage(),

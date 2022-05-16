@@ -16,7 +16,7 @@ class _SelectTimezoneState extends State<SelectTimezone> {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback(_afterLayout);
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     super.initState();
   }
 

@@ -29,17 +29,13 @@ abstract class AppThemeFactory {
     if (Platform.isLinux) {
       GtkThemeData themeData = await GtkThemeData.initialize();
       final isGtkDark =
-          Color(themeData.theme_base_color).computeLuminance() < 0.5;
+          Color(themeData.theme_bg_color).computeLuminance() < 0.5;
       final isInverseNeeded = isGtkDark != isDark;
       gtkColorsScheme = ColorScheme.fromSeed(
         seedColor: Color(themeData.theme_selected_bg_color),
         brightness: brightness,
-        background: isInverseNeeded
-            ? Color(themeData.theme_base_color)
-            : Color(themeData.theme_bg_color),
-        surface: isInverseNeeded
-            ? Color(themeData.theme_bg_color)
-            : Color(themeData.theme_base_color),
+        background: isInverseNeeded ? null : Color(themeData.theme_bg_color),
+        surface: isInverseNeeded ? null : Color(themeData.theme_base_color),
       );
     }
 

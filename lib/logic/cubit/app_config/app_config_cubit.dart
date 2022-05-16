@@ -80,10 +80,14 @@ class AppConfigCubit extends Cubit<AppConfigState> {
 
   void createServerAndSetDnsRecords() async {
     AppConfigNotFinished _stateCopy = state as AppConfigNotFinished;
+    var onCancel =
+        () => emit((state as AppConfigNotFinished).copyWith(isLoading: false));
+
     var onSuccess = (ServerHostingDetails serverDetails) async {
       await repository.createDnsRecords(
         serverDetails.ip4,
         state.serverDomain!,
+        onCancel: onCancel,
       );
 
       emit((state as AppConfigNotFinished).copyWith(
@@ -92,9 +96,6 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       ));
       runDelayed(startServerIfDnsIsOkay, Duration(seconds: 30), null);
     };
-
-    var onCancel =
-        () => emit((state as AppConfigNotFinished).copyWith(isLoading: false));
 
     try {
       emit((state as AppConfigNotFinished).copyWith(isLoading: true));

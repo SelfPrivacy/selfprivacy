@@ -125,23 +125,25 @@ class CloudflareApi extends ApiMap {
     var domainName = cloudFlareDomain.domainName;
     var domainZoneId = cloudFlareDomain.zoneId;
     var listDnsRecords = projectDnsRecords(domainName, ip4);
-
-    var url = '$rootAddress/zones/$domainZoneId/dns_records';
-
     var allCreateFutures = <Future>[];
+
     var client = await getClient();
-
-    for (var record in listDnsRecords) {
-      allCreateFutures.add(
-        client.post(
-          url,
-          data: record.toJson(),
-        ),
-      );
+    try {
+      for (var record in listDnsRecords) {
+        allCreateFutures.add(
+          client.post(
+            '/zones/$domainZoneId/dns_records',
+            data: record.toJson(),
+          ),
+        );
+      }
+      await Future.wait(allCreateFutures);
+    } on DioError catch (e) {
+      print(e.message);
+      throw e;
+    } finally {
+      close(client);
     }
-
-    await Future.wait(allCreateFutures);
-    close(client);
   }
 
   List<DnsRecord> projectDnsRecords(String? domainName, String? ip4) {

@@ -299,6 +299,7 @@
     "7": "Yes",
     "8": "Remove task",
     "9": "Reboot",
+    "10": "You cannot use this API for domains with such TLD.",
     "yes": "Yes"
   },
   "timer": {

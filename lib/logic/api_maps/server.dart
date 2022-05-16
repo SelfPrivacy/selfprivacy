@@ -13,7 +13,6 @@ import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:timezone/browser.dart';
 
 import 'api_map.dart';
 

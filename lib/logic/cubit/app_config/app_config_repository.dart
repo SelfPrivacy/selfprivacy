@@ -214,8 +214,9 @@ class AppConfigRepository {
 
   Future<void> createDnsRecords(
     String ip4,
-    ServerDomain cloudFlareDomain,
-  ) async {
+    ServerDomain cloudFlareDomain, {
+    required void Function() onCancel,
+  }) async {
     var cloudflareApi = CloudflareApi();
 
     await cloudflareApi.removeSimilarRecords(
@@ -223,10 +224,41 @@ class AppConfigRepository {
       cloudFlareDomain: cloudFlareDomain,
     );
 
-    await cloudflareApi.createMultipleDnsRecords(
-      ip4: ip4,
-      cloudFlareDomain: cloudFlareDomain,
-    );
+    try {
+      await cloudflareApi.createMultipleDnsRecords(
+        ip4: ip4,
+        cloudFlareDomain: cloudFlareDomain,
+      );
+    } on DioError catch (e) {
+      var hetznerApi = HetznerApi();
+      var nav = getIt.get<NavigationService>();
+      nav.showPopUpDialog(
+        BrandAlert(
+          title: e.response!.data["errors"][0]["code"] == 1038
+              ? 'modals.10'.tr()
+              : 'providers.domain.states.error'.tr(),
+          contentText: 'modals.6'.tr(),
+          actions: [
+            ActionButton(
+              text: 'basis.delete'.tr(),
+              isRed: true,
+              onPressed: () async {
+                await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
+                    domainName: cloudFlareDomain.domainName);
+
+                onCancel();
+              },
+            ),
+            ActionButton(
+              text: 'basis.cancel'.tr(),
+              onPressed: () {
+                onCancel();
+              },
+            ),
+          ],
+        ),
+      );
+    }
 
     await HetznerApi().createReverseDns(
       ip4: ip4,

@@ -7,6 +7,8 @@ import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
 
+import '../components/pre_styled_buttons/flashFab.dart';
+
 class RootPage extends StatefulWidget {
   const RootPage({Key? key}) : super(key: key);
 
@@ -51,6 +53,7 @@ class _RootPageState extends State<RootPage>
         bottomNavigationBar: BrandTabBar(
           controller: tabController,
         ),
+        floatingActionButton: BrandFab(),
       ),
     );
   }

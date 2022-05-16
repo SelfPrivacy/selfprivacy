@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/text_themes.dart';
 import 'brand_colors.dart';
 
 final lightTheme = ThemeData(
+  useMaterial3: true,
   primaryColor: BrandColors.primary,
   fontFamily: 'Inter',
   brightness: Brightness.light,

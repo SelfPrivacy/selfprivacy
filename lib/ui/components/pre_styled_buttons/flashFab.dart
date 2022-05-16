@@ -1,13 +1,20 @@
-part of 'pre_styled_buttons.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
+import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
+import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
+import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 
-class _BrandFlashButton extends StatefulWidget {
-  _BrandFlashButton({Key? key}) : super(key: key);
+class BrandFab extends StatefulWidget {
+  BrandFab({Key? key}) : super(key: key);
 
   @override
-  _BrandFlashButtonState createState() => _BrandFlashButtonState();
+  _BrandFabState createState() => _BrandFabState();
 }
 
-class _BrandFlashButtonState extends State<_BrandFlashButton>
+class _BrandFabState extends State<BrandFab>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation _colorTween;
@@ -57,7 +64,7 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
           _animationController.reverse();
         }
       },
-      child: IconButton(
+      child: FloatingActionButton(
         onPressed: () {
           showBrandBottomSheet(
             context: context,
@@ -67,7 +74,7 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
             ),
           );
         },
-        icon: AnimatedBuilder(
+        child: AnimatedBuilder(
             animation: _colorTween,
             builder: (context, child) {
               var v = _animationController.value;

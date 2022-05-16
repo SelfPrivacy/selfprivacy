@@ -16,10 +16,10 @@ class UserFormCubit extends FormCubit {
     var isEdit = user != null;
 
     login = fieldFactory.createUserLoginField();
-    login.setValue(isEdit ? user!.login : '');
+    login.setValue(isEdit ? user.login : '');
     password = fieldFactory.createUserPasswordField();
     password.setValue(
-        isEdit ? (user?.password ?? '') : StringGenerators.userPassword());
+        isEdit ? (user.password ?? '') : StringGenerators.userPassword());
 
     super.addFields([login, password]);
   }

@@ -13,7 +13,7 @@ enum DnsRecordsCategory {
   other,
 }
 
-class DnsRecordsState extends AppConfigDependendState {
+class DnsRecordsState extends ServerInstallationDependendState {
   const DnsRecordsState({
     this.dnsState = DnsRecordsStatus.uninitialized,
     this.dnsRecords = const [],

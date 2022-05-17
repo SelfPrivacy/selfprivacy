@@ -2,7 +2,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/cloudflare_form_cubit.dart';
@@ -23,7 +23,7 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 class InitializingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var cubit = context.watch<AppConfigCubit>();
+    var cubit = context.watch<ServerInstallationCubit>();
     var actualInitializingPage = [
       () => _stepHetzner(cubit),
       () => _stepCloudflare(cubit),
@@ -36,9 +36,9 @@ class InitializingPage extends StatelessWidget {
       () => _stepCheck(cubit),
       () => Container(child: Center(child: Text('initializing.finish'.tr())))
     ][cubit.state.progress.index]();
-    return BlocListener<AppConfigCubit, AppConfigState>(
+    return BlocListener<ServerInstallationCubit, ServerInstallationState>(
       listener: (context, state) {
-        if (cubit.state is AppConfigFinished) {
+        if (cubit.state is ServerInstallationFinished) {
           Navigator.of(context).pushReplacement(materialRoute(RootPage()));
         }
       },
@@ -86,7 +86,7 @@ class InitializingPage extends StatelessWidget {
                         Container(
                           alignment: Alignment.center,
                           child: BrandButton.text(
-                            title: cubit.state is AppConfigFinished
+                            title: cubit.state is ServerInstallationFinished
                                 ? 'basis.close'.tr()
                                 : 'basis.later'.tr(),
                             onPressed: () {
@@ -97,7 +97,7 @@ class InitializingPage extends StatelessWidget {
                             },
                           ),
                         ),
-                        (cubit.state is AppConfigFinished)
+                        (cubit.state is ServerInstallationFinished)
                             ? Container()
                             : Container(
                                 alignment: Alignment.center,
@@ -119,7 +119,7 @@ class InitializingPage extends StatelessWidget {
     );
   }
 
-  Widget _stepHetzner(AppConfigCubit initializingCubit) {
+  Widget _stepHetzner(ServerInstallationCubit initializingCubit) {
     return BlocProvider(
       create: (context) => HetznerFormCubit(initializingCubit),
       child: Builder(builder: (context) {
@@ -174,7 +174,7 @@ class InitializingPage extends StatelessWidget {
     );
   }
 
-  Widget _stepCloudflare(AppConfigCubit initializingCubit) {
+  Widget _stepCloudflare(ServerInstallationCubit initializingCubit) {
     return BlocProvider(
       create: (context) => CloudFlareFormCubit(initializingCubit),
       child: Builder(builder: (context) {
@@ -222,7 +222,7 @@ class InitializingPage extends StatelessWidget {
     );
   }
 
-  Widget _stepBackblaze(AppConfigCubit initializingCubit) {
+  Widget _stepBackblaze(ServerInstallationCubit initializingCubit) {
     return BlocProvider(
       create: (context) => BackblazeFormCubit(initializingCubit),
       child: Builder(builder: (context) {
@@ -277,7 +277,7 @@ class InitializingPage extends StatelessWidget {
     );
   }
 
-  Widget _stepDomain(AppConfigCubit initializingCubit) {
+  Widget _stepDomain(ServerInstallationCubit initializingCubit) {
     return BlocProvider(
       create: (context) => DomainSetupCubit(initializingCubit)..load(),
       child: Builder(builder: (context) {
@@ -369,7 +369,7 @@ class InitializingPage extends StatelessWidget {
     );
   }
 
-  Widget _stepUser(AppConfigCubit initializingCubit) {
+  Widget _stepUser(ServerInstallationCubit initializingCubit) {
     return BlocProvider(
       create: (context) =>
           RootUserFormCubit(initializingCubit, FieldCubitFactory(context)),
@@ -432,8 +432,9 @@ class InitializingPage extends StatelessWidget {
     );
   }
 
-  Widget _stepServer(AppConfigCubit appConfigCubit) {
-    var isLoading = (appConfigCubit.state as AppConfigNotFinished).isLoading;
+  Widget _stepServer(ServerInstallationCubit appConfigCubit) {
+    var isLoading =
+        (appConfigCubit.state as ServerInstallationNotFinished).isLoading;
     return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -454,8 +455,9 @@ class InitializingPage extends StatelessWidget {
     });
   }
 
-  Widget _stepCheck(AppConfigCubit appConfigCubit) {
-    assert(appConfigCubit.state is AppConfigNotFinished, 'wrong state');
+  Widget _stepCheck(ServerInstallationCubit appConfigCubit) {
+    assert(
+        appConfigCubit.state is ServerInstallationNotFinished, 'wrong state');
     var state = appConfigCubit.state as TimerState;
     late int doneCount;
     late String? text;

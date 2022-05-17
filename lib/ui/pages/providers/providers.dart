@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
@@ -30,7 +30,8 @@ class ProvidersPage extends StatefulWidget {
 class _ProvidersPageState extends State<ProvidersPage> {
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
+    var isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
     var isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
     var dnsStatus = context.watch<DnsRecordsCubit>().state.dnsState;
 
@@ -96,8 +97,10 @@ class _Card extends StatelessWidget {
     String? message;
     late String stableText;
     late VoidCallback onTap;
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
-    AppConfigState appConfig = context.watch<AppConfigCubit>().state;
+    var isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
+    ServerInstallationState appConfig =
+        context.watch<ServerInstallationCubit>().state;
 
     var domainName =
         appConfig.isDomainFilled ? appConfig.serverDomain!.domainName : '';

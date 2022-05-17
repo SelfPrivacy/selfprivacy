@@ -8,8 +8,9 @@ import '../../api_maps/server.dart';
 
 part 'dns_records_state.dart';
 
-class DnsRecordsCubit extends AppConfigDependendCubit<DnsRecordsState> {
-  DnsRecordsCubit(AppConfigCubit appConfigCubit)
+class DnsRecordsCubit
+    extends ServerInstallationDependendCubit<DnsRecordsState> {
+  DnsRecordsCubit(ServerInstallationCubit appConfigCubit)
       : super(appConfigCubit,
             DnsRecordsState(dnsState: DnsRecordsStatus.refreshing));
 
@@ -22,7 +23,7 @@ class DnsRecordsCubit extends AppConfigDependendCubit<DnsRecordsState> {
         dnsRecords: _getDesiredDnsRecords(
             appConfigCubit.state.serverDomain?.domainName, "", "")));
     print('Loading DNS status');
-    if (appConfigCubit.state is AppConfigFinished) {
+    if (appConfigCubit.state is ServerInstallationFinished) {
       final ServerDomain? domain = appConfigCubit.state.serverDomain;
       final String? ipAddress = appConfigCubit.state.serverDetails?.ip4;
       if (domain != null && ipAddress != null) {

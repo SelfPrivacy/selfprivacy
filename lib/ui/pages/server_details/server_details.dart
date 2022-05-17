@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
@@ -60,7 +60,8 @@ class _ServerDetailsState extends State<ServerDetails>
 
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
+    var isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
     var providerState = isReady ? StateType.stable : StateType.uninitialized;
 
     return BlocProvider(

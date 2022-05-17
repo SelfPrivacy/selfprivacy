@@ -6,14 +6,14 @@ import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_depe
 
 part 'services_state.dart';
 
-class ServicesCubit extends AppConfigDependendCubit<ServicesState> {
-  ServicesCubit(AppConfigCubit appConfigCubit)
+class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
+  ServicesCubit(ServerInstallationCubit appConfigCubit)
       : super(appConfigCubit, ServicesState.allOff());
 
   Box box = Hive.box(BNames.servicesState);
   final api = ServerApi();
   Future<void> load() async {
-    if (appConfigCubit.state is AppConfigFinished) {
+    if (appConfigCubit.state is ServerInstallationFinished) {
       var statuses = await api.servicesPowerCheck();
       emit(
         ServicesState(

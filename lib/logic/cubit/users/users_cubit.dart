@@ -10,8 +10,8 @@ export 'package:provider/provider.dart';
 
 part 'users_state.dart';
 
-class UsersCubit extends AppConfigDependendCubit<UsersState> {
-  UsersCubit(AppConfigCubit appConfigCubit)
+class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
+  UsersCubit(ServerInstallationCubit appConfigCubit)
       : super(
             appConfigCubit,
             UsersState(
@@ -22,7 +22,7 @@ class UsersCubit extends AppConfigDependendCubit<UsersState> {
   final api = ServerApi();
 
   Future<void> load() async {
-    if (appConfigCubit.state is AppConfigFinished) {
+    if (appConfigCubit.state is ServerInstallationFinished) {
       var loadedUsers = box.values.toList();
       final primaryUser = configBox.get(BNames.rootUser,
           defaultValue: User(login: 'loading...'));

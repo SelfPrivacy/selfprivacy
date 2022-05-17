@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/api_maps/backblaze.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -33,7 +33,7 @@ class BackblazeFormCubit extends FormCubit {
     );
   }
 
-  final AppConfigCubit initializingCubit;
+  final ServerInstallationCubit initializingCubit;
 
   late final FieldCubit<String> keyId;
   late final FieldCubit<String> applicationKey;

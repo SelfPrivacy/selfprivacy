@@ -10,15 +10,15 @@ import 'package:selfprivacy/logic/models/json/backup.dart';
 
 part 'backups_state.dart';
 
-class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
-  BackupsCubit(AppConfigCubit appConfigCubit)
+class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
+  BackupsCubit(ServerInstallationCubit appConfigCubit)
       : super(appConfigCubit, BackupsState(preventActions: true));
 
   final api = ServerApi();
   final backblaze = BackblazeApi();
 
   Future<void> load() async {
-    if (appConfigCubit.state is AppConfigFinished) {
+    if (appConfigCubit.state is ServerInstallationFinished) {
       final bucket = getIt<ApiConfigModel>().backblazeBucket;
       if (bucket == null) {
         emit(BackupsState(

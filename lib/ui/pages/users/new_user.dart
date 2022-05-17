@@ -3,7 +3,7 @@ part of 'users.dart';
 class _NewUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var config = context.watch<AppConfigCubit>().state;
+    var config = context.watch<ServerInstallationCubit>().state;
 
     var domainName = UiHelpers.getDomainName(config);
 

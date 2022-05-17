@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
@@ -62,7 +62,8 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
+    var isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
     final domain = getIt<ApiConfigModel>().serverDomain?.domainName ?? '';
     var dnsCubit = context.watch<DnsRecordsCubit>().state;
 

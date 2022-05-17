@@ -1,12 +1,12 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 class DomainSetupCubit extends Cubit<DomainSetupState> {
   DomainSetupCubit(this.initializingCubit) : super(Initial());
 
-  final AppConfigCubit initializingCubit;
+  final ServerInstallationCubit initializingCubit;
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));

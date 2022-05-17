@@ -9,14 +9,14 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
-import 'app_config_repository.dart';
+import '../server_installation/server_installation_repository.dart';
 
 export 'package:provider/provider.dart';
 
-part 'app_config_state.dart';
+part '../server_installation/server_installation_state.dart';
 
-class AppConfigCubit extends Cubit<AppConfigState> {
-  AppConfigCubit() : super(AppConfigEmpty());
+class ServerInstallationCubit extends Cubit<ServerInstallationState> {
+  ServerInstallationCubit() : super(ServerInstallationEmpty());
 
   final repository = AppConfigRepository();
 
@@ -25,9 +25,9 @@ class AppConfigCubit extends Cubit<AppConfigState> {
   Future<void> load() async {
     var state = await repository.load();
 
-    if (state is AppConfigFinished) {
+    if (state is ServerInstallationFinished) {
       emit(state);
-    } else if (state is AppConfigNotFinished) {
+    } else if (state is ServerInstallationNotFinished) {
       if (state.progress == ServerSetupProgress.serverCreated) {
         startServerIfDnsIsOkay(state: state);
       } else if (state.progress == ServerSetupProgress.serverStarted) {
@@ -40,7 +40,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       } else {
         emit(state);
       }
-    } else if (state is AppConfigRecovery) {
+    } else if (state is ServerInstallationRecovery) {
       emit(state);
     } else {
       throw 'wrong state';
@@ -49,13 +49,14 @@ class AppConfigCubit extends Cubit<AppConfigState> {
 
   void setHetznerKey(String hetznerKey) async {
     await repository.saveHetznerKey(hetznerKey);
-    emit((state as AppConfigNotFinished).copyWith(hetznerKey: hetznerKey));
+    emit((state as ServerInstallationNotFinished)
+        .copyWith(hetznerKey: hetznerKey));
   }
 
   void setCloudflareKey(String cloudFlareKey) async {
     await repository.saveCloudFlareKey(cloudFlareKey);
-    emit(
-        (state as AppConfigNotFinished).copyWith(cloudFlareKey: cloudFlareKey));
+    emit((state as ServerInstallationNotFinished)
+        .copyWith(cloudFlareKey: cloudFlareKey));
   }
 
   void setBackblazeKey(String keyId, String applicationKey) async {
@@ -64,24 +65,26 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       applicationKey: applicationKey,
     );
     await repository.saveBackblazeKey(backblazeCredential);
-    emit((state as AppConfigNotFinished)
+    emit((state as ServerInstallationNotFinished)
         .copyWith(backblazeCredential: backblazeCredential));
   }
 
   void setDomain(ServerDomain serverDomain) async {
     await repository.saveDomain(serverDomain);
-    emit((state as AppConfigNotFinished).copyWith(serverDomain: serverDomain));
+    emit((state as ServerInstallationNotFinished)
+        .copyWith(serverDomain: serverDomain));
   }
 
   void setRootUser(User rootUser) async {
     await repository.saveRootUser(rootUser);
-    emit((state as AppConfigNotFinished).copyWith(rootUser: rootUser));
+    emit((state as ServerInstallationNotFinished).copyWith(rootUser: rootUser));
   }
 
   void createServerAndSetDnsRecords() async {
-    AppConfigNotFinished _stateCopy = state as AppConfigNotFinished;
-    var onCancel =
-        () => emit((state as AppConfigNotFinished).copyWith(isLoading: false));
+    ServerInstallationNotFinished _stateCopy =
+        state as ServerInstallationNotFinished;
+    var onCancel = () => emit(
+        (state as ServerInstallationNotFinished).copyWith(isLoading: false));
 
     var onSuccess = (ServerHostingDetails serverDetails) async {
       await repository.createDnsRecords(
@@ -90,7 +93,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
         onCancel: onCancel,
       );
 
-      emit((state as AppConfigNotFinished).copyWith(
+      emit((state as ServerInstallationNotFinished).copyWith(
         isLoading: false,
         serverDetails: serverDetails,
       ));
@@ -98,7 +101,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     };
 
     try {
-      emit((state as AppConfigNotFinished).copyWith(isLoading: true));
+      emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
       await repository.createServer(
         state.rootUser!,
         state.serverDomain!.domainName,
@@ -112,8 +115,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     }
   }
 
-  void startServerIfDnsIsOkay({AppConfigNotFinished? state}) async {
-    final dataState = state ?? this.state as AppConfigNotFinished;
+  void startServerIfDnsIsOkay({ServerInstallationNotFinished? state}) async {
+    final dataState = state ?? this.state as ServerInstallationNotFinished;
 
     emit(TimerState(dataState: dataState, isLoading: true));
 
@@ -149,8 +152,8 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     }
   }
 
-  void oneMoreReset({AppConfigNotFinished? state}) async {
-    final dataState = state ?? this.state as AppConfigNotFinished;
+  void oneMoreReset({ServerInstallationNotFinished? state}) async {
+    final dataState = state ?? this.state as ServerInstallationNotFinished;
 
     emit(TimerState(dataState: dataState, isLoading: true));
 
@@ -184,9 +187,9 @@ class AppConfigCubit extends Cubit<AppConfigState> {
   }
 
   void resetServerIfServerIsOkay({
-    AppConfigNotFinished? state,
+    ServerInstallationNotFinished? state,
   }) async {
-    final dataState = state ?? this.state as AppConfigNotFinished;
+    final dataState = state ?? this.state as ServerInstallationNotFinished;
 
     emit(TimerState(dataState: dataState, isLoading: true));
 
@@ -220,9 +223,9 @@ class AppConfigCubit extends Cubit<AppConfigState> {
   }
 
   void finishCheckIfServerIsOkay({
-    AppConfigNotFinished? state,
+    ServerInstallationNotFinished? state,
   }) async {
-    final dataState = state ?? this.state as AppConfigNotFinished;
+    final dataState = state ?? this.state as ServerInstallationNotFinished;
 
     emit(TimerState(dataState: dataState, isLoading: true));
 
@@ -238,9 +241,9 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     }
   }
 
-  void runDelayed(
-      void Function() work, Duration delay, AppConfigNotFinished? state) async {
-    final dataState = state ?? this.state as AppConfigNotFinished;
+  void runDelayed(void Function() work, Duration delay,
+      ServerInstallationNotFinished? state) async {
+    final dataState = state ?? this.state as ServerInstallationNotFinished;
 
     emit(TimerState(
       dataState: dataState,
@@ -255,7 +258,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
     closeTimer();
 
     repository.clearAppConfig();
-    emit(AppConfigEmpty());
+    emit(ServerInstallationEmpty());
   }
 
   Future<void> serverDelete() async {
@@ -266,7 +269,7 @@ class AppConfigCubit extends Cubit<AppConfigState> {
       await getIt<SSHModel>().clear();
     }
     await repository.deleteRecords();
-    emit(AppConfigNotFinished(
+    emit(ServerInstallationNotFinished(
       hetznerKey: state.hetznerKey,
       serverDomain: state.serverDomain,
       cloudFlareKey: state.cloudFlareKey,

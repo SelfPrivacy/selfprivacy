@@ -1,7 +1,7 @@
-part of 'app_config_cubit.dart';
+part of '../server_installation/server_installation_cubit.dart';
 
-abstract class AppConfigState extends Equatable {
-  const AppConfigState({
+abstract class ServerInstallationState extends Equatable {
+  const ServerInstallationState({
     required this.hetznerKey,
     required this.cloudFlareKey,
     required this.backblazeCredential,
@@ -73,7 +73,7 @@ abstract class AppConfigState extends Equatable {
   }
 }
 
-class TimerState extends AppConfigNotFinished {
+class TimerState extends ServerInstallationNotFinished {
   TimerState({
     required this.dataState,
     this.timerStart,
@@ -93,7 +93,7 @@ class TimerState extends AppConfigNotFinished {
           dnsMatches: dataState.dnsMatches,
         );
 
-  final AppConfigNotFinished dataState;
+  final ServerInstallationNotFinished dataState;
   final DateTime? timerStart;
   final Duration? duration;
 
@@ -118,11 +118,11 @@ enum ServerSetupProgress {
   serverResetedSecondTime,
 }
 
-class AppConfigNotFinished extends AppConfigState {
+class ServerInstallationNotFinished extends ServerInstallationState {
   final bool isLoading;
   final Map<String, bool>? dnsMatches;
 
-  AppConfigNotFinished({
+  ServerInstallationNotFinished({
     String? hetznerKey,
     String? cloudFlareKey,
     BackblazeCredential? backblazeCredential,
@@ -160,7 +160,7 @@ class AppConfigNotFinished extends AppConfigState {
         dnsMatches,
       ];
 
-  AppConfigNotFinished copyWith({
+  ServerInstallationNotFinished copyWith({
     String? hetznerKey,
     String? cloudFlareKey,
     BackblazeCredential? backblazeCredential,
@@ -173,7 +173,7 @@ class AppConfigNotFinished extends AppConfigState {
     bool? isLoading,
     Map<String, bool>? dnsMatches,
   }) =>
-      AppConfigNotFinished(
+      ServerInstallationNotFinished(
         hetznerKey: hetznerKey ?? this.hetznerKey,
         cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
         backblazeCredential: backblazeCredential ?? this.backblazeCredential,
@@ -189,7 +189,7 @@ class AppConfigNotFinished extends AppConfigState {
         dnsMatches: dnsMatches ?? this.dnsMatches,
       );
 
-  AppConfigFinished finish() => AppConfigFinished(
+  ServerInstallationFinished finish() => ServerInstallationFinished(
         hetznerKey: hetznerKey!,
         cloudFlareKey: cloudFlareKey!,
         backblazeCredential: backblazeCredential!,
@@ -202,8 +202,8 @@ class AppConfigNotFinished extends AppConfigState {
       );
 }
 
-class AppConfigEmpty extends AppConfigNotFinished {
-  AppConfigEmpty()
+class ServerInstallationEmpty extends ServerInstallationNotFinished {
+  ServerInstallationEmpty()
       : super(
           hetznerKey: null,
           cloudFlareKey: null,
@@ -219,8 +219,8 @@ class AppConfigEmpty extends AppConfigNotFinished {
         );
 }
 
-class AppConfigFinished extends AppConfigState {
-  const AppConfigFinished({
+class ServerInstallationFinished extends ServerInstallationState {
+  const ServerInstallationFinished({
     required String hetznerKey,
     required String cloudFlareKey,
     required BackblazeCredential backblazeCredential,
@@ -265,10 +265,10 @@ enum RecoveryStep {
   BackblazeToken,
 }
 
-class AppConfigRecovery extends AppConfigState {
+class ServerInstallationRecovery extends ServerInstallationState {
   final RecoveryStep currentStep;
 
-  const AppConfigRecovery({
+  const ServerInstallationRecovery({
     String? hetznerKey,
     String? cloudFlareKey,
     BackblazeCredential? backblazeCredential,
@@ -301,7 +301,7 @@ class AppConfigRecovery extends AppConfigState {
         currentStep
       ];
 
-  AppConfigRecovery copyWith({
+  ServerInstallationRecovery copyWith({
     String? hetznerKey,
     String? cloudFlareKey,
     BackblazeCredential? backblazeCredential,
@@ -310,7 +310,7 @@ class AppConfigRecovery extends AppConfigState {
     ServerHostingDetails? serverDetails,
     RecoveryStep? currentStep,
   }) =>
-      AppConfigRecovery(
+      ServerInstallationRecovery(
           hetznerKey: hetznerKey ?? this.hetznerKey,
           cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
           backblazeCredential: backblazeCredential ?? this.backblazeCredential,

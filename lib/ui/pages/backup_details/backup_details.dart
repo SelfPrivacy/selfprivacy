@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
@@ -28,7 +28,8 @@ class _BackupDetailsState extends State<BackupDetails>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
+    var isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
     var isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
     var backupStatus = context.watch<BackupsCubit>().state.status;
     var providerState = isReady && isBackupInitialized

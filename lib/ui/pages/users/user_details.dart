@@ -11,7 +11,7 @@ class _UserDetails extends StatelessWidget {
   final bool isRootUser;
   @override
   Widget build(BuildContext context) {
-    var config = context.watch<AppConfigCubit>().state;
+    var config = context.watch<ServerInstallationCubit>().state;
 
     var domainName = UiHelpers.getDomainName(config);
 

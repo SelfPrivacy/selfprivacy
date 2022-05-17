@@ -5,7 +5,7 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
@@ -58,7 +58,8 @@ void _launchURL(url) async {
 class _ServicesPageState extends State<ServicesPage> {
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
+    var isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
 
     return Scaffold(
       appBar: PreferredSize(
@@ -94,7 +95,8 @@ class _Card extends StatelessWidget {
   final ServiceTypes serviceType;
   @override
   Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
+    var isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
     var changeTab = context.read<ChangeTab>().onPress;
 
     var serviceState = context.watch<ServicesCubit>().state;
@@ -111,7 +113,7 @@ class _Card extends StatelessWidget {
         (!switchableServices.contains(serviceType) ||
             serviceState.isEnableByType(serviceType));
 
-    var config = context.watch<AppConfigCubit>().state;
+    var config = context.watch<ServerInstallationCubit>().state;
     var domainName = UiHelpers.getDomainName(config);
 
     return GestureDetector(
@@ -257,7 +259,7 @@ class _ServiceDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     late Widget child;
 
-    var config = context.watch<AppConfigCubit>().state;
+    var config = context.watch<ServerInstallationCubit>().state;
     var domainName = UiHelpers.getDomainName(config);
 
     var linksStyle = body1Style.copyWith(

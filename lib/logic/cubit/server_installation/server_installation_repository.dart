@@ -15,12 +15,12 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 
-import 'app_config_cubit.dart';
+import '../server_installation/server_installation_cubit.dart';
 
 class AppConfigRepository {
   Box box = Hive.box(BNames.appConfig);
 
-  Future<AppConfigState> load() async {
+  Future<ServerInstallationState> load() async {
     final hetznerToken = getIt<ApiConfigModel>().hetznerKey;
     final cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
     final serverDomain = getIt<ApiConfigModel>().serverDomain;
@@ -28,7 +28,7 @@ class AppConfigRepository {
     final serverDetails = getIt<ApiConfigModel>().serverDetails;
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
-      return AppConfigFinished(
+      return ServerInstallationFinished(
         hetznerKey: hetznerToken!,
         cloudFlareKey: cloudflareToken!,
         serverDomain: serverDomain!,
@@ -44,7 +44,7 @@ class AppConfigRepository {
     }
 
     if (getIt<ApiConfigModel>().serverDomain?.provider == DnsProvider.Unknown) {
-      return AppConfigRecovery(
+      return ServerInstallationRecovery(
         hetznerKey: hetznerToken,
         cloudFlareKey: cloudflareToken,
         serverDomain: serverDomain,
@@ -56,7 +56,7 @@ class AppConfigRepository {
       );
     }
 
-    return AppConfigNotFinished(
+    return ServerInstallationNotFinished(
       hetznerKey: hetznerToken,
       cloudFlareKey: cloudflareToken,
       serverDomain: serverDomain,

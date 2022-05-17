@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class HetznerFormCubit extends FormCubit {
@@ -27,7 +27,7 @@ class HetznerFormCubit extends FormCubit {
     initializingCubit.setHetznerKey(apiKey.state.value);
   }
 
-  final AppConfigCubit initializingCubit;
+  final ServerInstallationCubit initializingCubit;
 
   late final FieldCubit<String> apiKey;
 

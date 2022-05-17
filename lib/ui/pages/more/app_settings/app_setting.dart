@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
@@ -103,7 +103,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                                     isRed: true,
                                     onPressed: () {
                                       context
-                                          .read<AppConfigCubit>()
+                                          .read<ServerInstallationCubit>()
                                           .clearAppConfig();
                                       Navigator.of(context).pop();
                                     }),
@@ -129,7 +129,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
 
   Widget deleteServer(BuildContext context) {
     var isDisabled =
-        context.watch<AppConfigCubit>().state.serverDetails == null;
+        context.watch<ServerInstallationCubit>().state.serverDetails == null;
     return Container(
       padding: EdgeInsets.only(top: 20, bottom: 5),
       decoration: BoxDecoration(
@@ -181,7 +181,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                                         );
                                       });
                                   await context
-                                      .read<AppConfigCubit>()
+                                      .read<ServerInstallationCubit>()
                                       .serverDelete();
                                   Navigator.of(context).pop();
                                 }),

@@ -1,6 +1,6 @@
 part of 'services_cubit.dart';
 
-class ServicesState extends AppConfigDependendState {
+class ServicesState extends ServerInstallationDependendState {
   const ServicesState({
     required this.isPasswordManagerEnable,
     required this.isCloudEnable,

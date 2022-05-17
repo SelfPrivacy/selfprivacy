@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
@@ -17,11 +17,11 @@ class BlocAndProviderConfig extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var isDark = false;
-    var appConfigCubit = AppConfigCubit()..load();
-    var usersCubit = UsersCubit(appConfigCubit);
-    var servicesCubit = ServicesCubit(appConfigCubit);
-    var backupsCubit = BackupsCubit(appConfigCubit);
-    var dnsRecordsCubit = DnsRecordsCubit(appConfigCubit);
+    var serverInstallationCubit = ServerInstallationCubit()..load();
+    var usersCubit = UsersCubit(serverInstallationCubit);
+    var servicesCubit = ServicesCubit(serverInstallationCubit);
+    var backupsCubit = BackupsCubit(serverInstallationCubit);
+    var dnsRecordsCubit = DnsRecordsCubit(serverInstallationCubit);
     return MultiProvider(
       providers: [
         BlocProvider(
@@ -30,7 +30,7 @@ class BlocAndProviderConfig extends StatelessWidget {
             isOnbordingShowing: true,
           )..load(),
         ),
-        BlocProvider(create: (_) => appConfigCubit, lazy: false),
+        BlocProvider(create: (_) => serverInstallationCubit, lazy: false),
         BlocProvider(create: (_) => ProvidersCubit()),
         BlocProvider(create: (_) => usersCubit..load(), lazy: false),
         BlocProvider(create: (_) => servicesCubit..load(), lazy: false),

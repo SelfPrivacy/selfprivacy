@@ -1,6 +1,6 @@
 part of 'backups_cubit.dart';
 
-class BackupsState extends AppConfigDependendState {
+class BackupsState extends ServerInstallationDependendState {
   const BackupsState({
     this.isInitialized = false,
     this.backups = const [],

@@ -286,7 +286,16 @@
   "recovering": {
     "recovery_main_header": "Connect to an existing server",
     "domain_recovery_description": "Enter a server domain you want to get access for",
-    "domain_recover_placeholder": "Your domain"
+    "domain_recover_placeholder": "Your domain",
+    "method_select_description": "Select a recovery method:",
+    "method_select_other_device": "I have access on another device",
+    "method_select_recovery_key": "I have a recovery key",
+    "method_select_nothing": "I don't have any of that",
+    "fallback_select_description": "What exactly do you have? Pick the first available option:",
+    "fallback_select_token_copy": "Copy of auth token from other version of the application.",
+    "fallback_select_root_ssh": "Root SSH access to the server.",
+    "fallback_select_provider_console": "Access to the server console of my prodiver.",
+    "fallback_select_provider_console_hint": "For example: Hetzner."
   },
   "modals": {
     "_comment": "messages in modals",

@@ -15,33 +15,35 @@ class RecoveryDomain extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           RecoveryDomainFormCubit(appConfig, FieldCubitFactory(context)),
-      child: Builder(builder: (context) {
-        var formCubitState = context.watch<RecoveryDomainFormCubit>().state;
+      child: Builder(
+        builder: (context) {
+          var formCubitState = context.watch<RecoveryDomainFormCubit>().state;
 
-        return BrandHeroScreen(
-          children: [
-            CubitFormTextField(
-              formFieldCubit:
-                  context.read<RecoveryDomainFormCubit>().serverDomainField,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "recovering.domain_recover_placeholder".tr(),
+          return BrandHeroScreen(
+            heroTitle: "recovering.recovery_main_header".tr(),
+            heroSubtitle: "recovering.domain_recovery_description".tr(),
+            hasBackButton: true,
+            hasFlashButton: false,
+            children: [
+              CubitFormTextField(
+                formFieldCubit:
+                    context.read<RecoveryDomainFormCubit>().serverDomainField,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "recovering.domain_recover_placeholder".tr(),
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            FilledButton(
-              title: "more.continue".tr(),
-              onPressed: formCubitState.isSubmitting
-                  ? null
-                  : () => context.read<RecoveryDomainFormCubit>().trySubmit(),
-            )
-          ],
-          heroTitle: "recovering.recovery_main_header".tr(),
-          heroSubtitle: "recovering.domain_recovery_description".tr(),
-          hasBackButton: true,
-          hasFlashButton: false,
-        );
-      }),
+              SizedBox(height: 16),
+              FilledButton(
+                title: "more.continue".tr(),
+                onPressed: formCubitState.isSubmitting
+                    ? null
+                    : () => context.read<RecoveryDomainFormCubit>().trySubmit(),
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 }

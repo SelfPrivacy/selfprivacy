@@ -39,8 +39,13 @@ abstract class AppThemeFactory {
       );
     }
 
-    final accentColor = await SystemAccentColor(fallbackColor)
-      ..load();
+    final accentColor = await SystemAccentColor(fallbackColor);
+
+    try {
+      await accentColor.load();
+    } on MissingPluginException catch (e) {
+      print("_createAppTheme: ${e.message}");
+    }
 
     final fallbackColorScheme = ColorScheme.fromSeed(
       seedColor: accentColor.accent,

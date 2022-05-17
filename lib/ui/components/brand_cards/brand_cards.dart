@@ -67,12 +67,12 @@ class _OutlinedCard extends StatelessWidget {
     return Card(
       elevation: 0.0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
         side: BorderSide(
-          color: Colors.grey.withOpacity(0.2),
-          width: 1,
+          color: Theme.of(context).colorScheme.outline,
         ),
       ),
+      clipBehavior: Clip.antiAlias,
       child: child,
     );
   }

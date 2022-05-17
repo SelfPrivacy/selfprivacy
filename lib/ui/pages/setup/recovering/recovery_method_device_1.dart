@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/pages/rootRoute.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_device_2.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class RecoveryMethodDevice1 extends StatelessWidget {
@@ -16,8 +16,8 @@ class RecoveryMethodDevice1 extends StatelessWidget {
       children: [
         FilledButton(
           title: "recovering.method_device_button".tr(),
-          onPressed: () =>
-              Navigator.of(context).push(materialRoute(RootPage())),
+          onPressed: () => Navigator.of(context)
+              .push(materialRoute(RecoveryMethodDevice2())),
         )
       ],
     );

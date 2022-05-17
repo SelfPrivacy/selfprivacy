@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
-class RecoveryMethodDevice2 extends StatelessWidget {
+class RecoveryMethodToken extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appConfig = context.watch<ServerInstallationCubit>();
@@ -21,7 +21,7 @@ class RecoveryMethodDevice2 extends StatelessWidget {
 
           return BrandHeroScreen(
             heroTitle: "recovering.recovery_main_header".tr(),
-            heroSubtitle: "recovering.method_device_input_description".tr(),
+            heroSubtitle: "recovering.method_recovery_input_description".tr(),
             hasBackButton: true,
             hasFlashButton: false,
             children: [

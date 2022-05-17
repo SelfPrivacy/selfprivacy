@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_device_1.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 
@@ -22,7 +23,8 @@ class RecoveryMethodSelect extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             leading: Icon(Icons.offline_share_outlined),
-            onTap: () => Navigator.of(context).push(materialRoute(RootPage())),
+            onTap: () => Navigator.of(context)
+                .push(materialRoute(RecoveryMethodDevice1())),
           ),
         ),
         SizedBox(height: 16),

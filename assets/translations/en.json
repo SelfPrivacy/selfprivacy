@@ -291,6 +291,8 @@
     "method_select_other_device": "I have access on another device",
     "method_select_recovery_key": "I have a recovery key",
     "method_select_nothing": "I don't have any of that",
+    "method_device_description": "Open the application on another device, then go to the device page. Press \"Add device\" to receive your token.",
+    "method_device_button": "I have received my token",
     "fallback_select_description": "What exactly do you have? Pick the first available option:",
     "fallback_select_token_copy": "Copy of auth token from other version of the application.",
     "fallback_select_root_ssh": "Root SSH access to the server.",

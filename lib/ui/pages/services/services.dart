@@ -19,7 +19,7 @@ import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../rootRoute.dart';
 
@@ -39,13 +39,12 @@ class ServicesPage extends StatefulWidget {
 }
 
 void _launchURL(url) async {
-  var _possible = await canLaunch(url);
+  var _possible = await canLaunchUrlString(url);
 
   if (_possible) {
     try {
-      await launch(
+      await launchUrlString(
         url,
-        enableJavaScript: true,
       );
     } catch (e) {
       print(e);
@@ -151,11 +150,9 @@ class _Card extends StatelessWidget {
                     builder: (context) {
                       late bool isActive;
                       if (hasSwitchJob) {
-                        isActive = ((jobState as JobsStateWithJobs)
-                                .jobList
-                                .firstWhere((el) =>
-                                    el is ServiceToggleJob &&
-                                    el.type == serviceType) as ServiceToggleJob)
+                        isActive = ((jobState).jobList.firstWhere((el) =>
+                                el is ServiceToggleJob &&
+                                el.type == serviceType) as ServiceToggleJob)
                             .needToTurnOn;
                       } else {
                         isActive = serviceState.isEnableByType(serviceType);

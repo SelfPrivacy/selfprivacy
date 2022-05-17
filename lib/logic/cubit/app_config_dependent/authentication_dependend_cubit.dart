@@ -10,11 +10,12 @@ part 'authentication_dependend_state.dart';
 abstract class ServerInstallationDependendCubit<
     T extends ServerInstallationDependendState> extends Cubit<T> {
   ServerInstallationDependendCubit(
-    this.appConfigCubit,
+    this.serverInstallationCubit,
     T initState,
   ) : super(initState) {
-    authCubitSubscription = appConfigCubit.stream.listen(checkAuthStatus);
-    checkAuthStatus(appConfigCubit.state);
+    authCubitSubscription =
+        serverInstallationCubit.stream.listen(checkAuthStatus);
+    checkAuthStatus(serverInstallationCubit.state);
   }
 
   void checkAuthStatus(ServerInstallationState state) {
@@ -26,7 +27,7 @@ abstract class ServerInstallationDependendCubit<
   }
 
   late StreamSubscription authCubitSubscription;
-  final ServerInstallationCubit appConfigCubit;
+  final ServerInstallationCubit serverInstallationCubit;
 
   void load();
   void clear();

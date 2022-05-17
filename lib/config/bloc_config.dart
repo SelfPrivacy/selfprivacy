@@ -27,7 +27,7 @@ class BlocAndProviderConfig extends StatelessWidget {
         BlocProvider(
           create: (_) => AppSettingsCubit(
             isDarkModeOn: isDark,
-            isOnbordingShowing: true,
+            isOnboardingShowing: true,
           )..load(),
         ),
         BlocProvider(create: (_) => serverInstallationCubit, lazy: false),

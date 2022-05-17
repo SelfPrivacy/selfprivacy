@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
                 darkTheme: darkThemeData,
                 themeMode:
                     appSettings.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
-                home: appSettings.isOnbordingShowing
+                home: appSettings.isOnboardingShowing
                     ? OnboardingPage(nextPage: InitializingPage())
                     : RootPage(),
                 builder: (BuildContext context, Widget? widget) {

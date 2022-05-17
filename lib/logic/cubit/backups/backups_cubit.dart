@@ -11,14 +11,14 @@ import 'package:selfprivacy/logic/models/json/backup.dart';
 part 'backups_state.dart';
 
 class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
-  BackupsCubit(ServerInstallationCubit appConfigCubit)
-      : super(appConfigCubit, BackupsState(preventActions: true));
+  BackupsCubit(ServerInstallationCubit serverInstallationCubit)
+      : super(serverInstallationCubit, BackupsState(preventActions: true));
 
   final api = ServerApi();
   final backblaze = BackblazeApi();
 
   Future<void> load() async {
-    if (appConfigCubit.state is ServerInstallationFinished) {
+    if (serverInstallationCubit.state is ServerInstallationFinished) {
       final bucket = getIt<ApiConfigModel>().backblazeBucket;
       if (bucket == null) {
         emit(BackupsState(
@@ -85,9 +85,9 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   Future<void> createBucket() async {
     emit(state.copyWith(preventActions: true));
-    final domain = appConfigCubit.state.serverDomain!.domainName
+    final domain = serverInstallationCubit.state.serverDomain!.domainName
         .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
-    final serverId = appConfigCubit.state.serverDetails!.id;
+    final serverId = serverInstallationCubit.state.serverDetails!.id;
     var bucketName = 'selfprivacy-$domain-$serverId';
     // If bucket name is too long, shorten it
     if (bucketName.length > 49) {

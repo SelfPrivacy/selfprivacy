@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 
 class ApiConfigModel {
-  Box _box = Hive.box(BNames.appConfig);
+  Box _box = Hive.box(BNames.serverInstallation);
 
   ServerHostingDetails? get serverDetails => _serverDetails;
   String? get hetznerKey => _hetznerKey;
@@ -33,7 +33,7 @@ class ApiConfigModel {
   }
 
   Future<void> storeBackblazeCredential(BackblazeCredential value) async {
-    await _box.put(BNames.backblazeKey, value);
+    await _box.put(BNames.backblazeCredential, value);
 
     _backblazeCredential = value;
   }
@@ -66,7 +66,7 @@ class ApiConfigModel {
     _hetznerKey = _box.get(BNames.hetznerKey);
 
     _cloudFlareKey = _box.get(BNames.cloudFlareKey);
-    _backblazeCredential = _box.get(BNames.backblazeKey);
+    _backblazeCredential = _box.get(BNames.backblazeCredential);
     _serverDomain = _box.get(BNames.serverDomain);
     _serverDetails = _box.get(BNames.serverDetails);
     _backblazeBucket = _box.get(BNames.backblazeBucket);

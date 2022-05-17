@@ -10,11 +10,11 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 class RecoveryDomain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appConfig = context.watch<ServerInstallationCubit>();
+    var serverInstallation = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (context) =>
-          RecoveryDomainFormCubit(appConfig, FieldCubitFactory(context)),
+      create: (context) => RecoveryDomainFormCubit(
+          serverInstallation, FieldCubitFactory(context)),
       child: Builder(
         builder: (context) {
           var formCubitState = context.watch<RecoveryDomainFormCubit>().state;

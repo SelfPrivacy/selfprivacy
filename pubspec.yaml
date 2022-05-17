@@ -34,10 +34,8 @@ dependencies:
   modal_bottom_sheet: ^2.0.1
   nanoid: ^1.0.0
   package_info: ^2.0.2
-  pointycastle: ^3.5.1
   pretty_dio_logger: ^1.2.0-beta-1
   provider: ^6.0.2
-  rsa_encrypt: ^2.0.0
   share_plus: ^4.0.4
   ssh_key: ^0.7.1
   system_theme: ^2.0.0

@@ -17,8 +17,8 @@ import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 
 import '../server_installation/server_installation_cubit.dart';
 
-class AppConfigRepository {
-  Box box = Hive.box(BNames.appConfig);
+class ServerInstallationRepository {
+  Box box = Hive.box(BNames.serverInstallation);
 
   Future<ServerInstallationState> load() async {
     final hetznerToken = getIt<ApiConfigModel>().hetznerKey;

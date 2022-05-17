@@ -10,8 +10,8 @@ part 'dns_records_state.dart';
 
 class DnsRecordsCubit
     extends ServerInstallationDependendCubit<DnsRecordsState> {
-  DnsRecordsCubit(ServerInstallationCubit appConfigCubit)
-      : super(appConfigCubit,
+  DnsRecordsCubit(ServerInstallationCubit serverInstallationCubit)
+      : super(serverInstallationCubit,
             DnsRecordsState(dnsState: DnsRecordsStatus.refreshing));
 
   final api = ServerApi();
@@ -21,11 +21,12 @@ class DnsRecordsCubit
     emit(DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
         dnsRecords: _getDesiredDnsRecords(
-            appConfigCubit.state.serverDomain?.domainName, "", "")));
+            serverInstallationCubit.state.serverDomain?.domainName, "", "")));
     print('Loading DNS status');
-    if (appConfigCubit.state is ServerInstallationFinished) {
-      final ServerDomain? domain = appConfigCubit.state.serverDomain;
-      final String? ipAddress = appConfigCubit.state.serverDetails?.ip4;
+    if (serverInstallationCubit.state is ServerInstallationFinished) {
+      final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
+      final String? ipAddress =
+          serverInstallationCubit.state.serverDetails?.ip4;
       if (domain != null && ipAddress != null) {
         final List<DnsRecord> records =
             await cloudflare.getDnsRecords(cloudFlareDomain: domain);
@@ -96,8 +97,8 @@ class DnsRecordsCubit
 
   Future<void> fix() async {
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
-    final ServerDomain? domain = appConfigCubit.state.serverDomain;
-    final String? ipAddress = appConfigCubit.state.serverDetails?.ip4;
+    final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
+    final String? ipAddress = serverInstallationCubit.state.serverDetails?.ip4;
     final String? dkimPublicKey = await api.getDkim();
     await cloudflare.removeSimilarRecords(cloudFlareDomain: domain!);
     await cloudflare.createMultipleDnsRecords(

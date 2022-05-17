@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/get_it/ssh.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -18,7 +16,7 @@ part '../server_installation/server_installation_state.dart';
 class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   ServerInstallationCubit() : super(ServerInstallationEmpty());
 
-  final repository = AppConfigRepository();
+  final repository = ServerInstallationRepository();
 
   Timer? timer;
 
@@ -266,7 +264,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     if (state.serverDetails != null) {
       await repository.deleteServer(state.serverDomain!);
-      await getIt<SSHModel>().clear();
     }
     await repository.deleteRecords();
     emit(ServerInstallationNotFinished(

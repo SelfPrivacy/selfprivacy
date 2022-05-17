@@ -715,7 +715,7 @@ packages:
     source: hosted
     version: "2.1.2"
   pointycastle:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: pointycastle
       url: "https://pub.dartlang.org"
@@ -770,13 +770,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
-  rsa_encrypt:
-    dependency: "direct main"
-    description:
-      name: rsa_encrypt
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   share_plus:
     dependency: "direct main"
     description:

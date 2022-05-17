@@ -9,22 +9,22 @@ part 'app_settings_state.dart';
 class AppSettingsCubit extends Cubit<AppSettingsState> {
   AppSettingsCubit({
     required bool isDarkModeOn,
-    required bool isOnbordingShowing,
+    required bool isOnboardingShowing,
   }) : super(
           AppSettingsState(
             isDarkModeOn: isDarkModeOn,
-            isOnbordingShowing: isOnbordingShowing,
+            isOnboardingShowing: isOnboardingShowing,
           ),
         );
 
-  Box box = Hive.box(BNames.appSettings);
+  Box box = Hive.box(BNames.appSettingsBox);
 
   void load() {
     bool? isDarkModeOn = box.get(BNames.isDarkModeOn);
-    bool? isOnbordingShowing = box.get(BNames.isOnbordingShowing);
+    bool? isOnboardingShowing = box.get(BNames.isOnboardingShowing);
     emit(state.copyWith(
       isDarkModeOn: isDarkModeOn,
-      isOnbordingShowing: isOnbordingShowing,
+      isOnboardingShowing: isOnboardingShowing,
     ));
   }
 
@@ -34,8 +34,8 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
   }
 
   void turnOffOnboarding() {
-    box.put(BNames.isOnbordingShowing, false);
+    box.put(BNames.isOnboardingShowing, false);
 
-    emit(state.copyWith(isOnbordingShowing: false));
+    emit(state.copyWith(isOnboardingShowing: false));
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/text_themes.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class BrandMarkdown extends StatefulWidget {
   const BrandMarkdown({
@@ -60,9 +60,9 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
       styleSheet: markdown,
       onTapLink: (String text, String? href, String title) {
         if (href != null) {
-          canLaunch(href).then((canLaunchURL) {
+          canLaunchUrlString(href).then((canLaunchURL) {
             if (canLaunchURL) {
-              launch(href);
+              launchUrlString(href);
             }
           });
         }

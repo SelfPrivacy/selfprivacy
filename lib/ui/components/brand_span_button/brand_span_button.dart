@@ -26,8 +26,8 @@ class BrandSpanButton extends TextSpan {
       );
 
   static _launchURL(String link) async {
-    if (await canLaunch(link)) {
-      await launch(link);
+    if (await canLaunchUrl(Uri.parse(link))) {
+      await launchUrl(Uri.parse(link));
     } else {
       throw 'Could not launch $link';
     }

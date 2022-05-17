@@ -3,48 +3,54 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/pages/setup/recovering/recovery_fallback_select.dart';
-import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_device_1.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
 
-class RecoveryMethodSelect extends StatelessWidget {
+class RecoveryFallbackSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BrandHeroScreen(
       heroTitle: "recovering.recovery_main_header".tr(),
-      heroSubtitle: "recovering.method_select_description".tr(),
+      heroSubtitle: "recovering.fallback_select_description".tr(),
       hasBackButton: true,
       hasFlashButton: false,
       children: [
         BrandCards.outlined(
           child: ListTile(
             title: Text(
-              "recovering.method_select_other_device".tr(),
+              "recovering.fallback_select_token_copy".tr(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            leading: Icon(Icons.offline_share_outlined),
-            onTap: () => Navigator.of(context)
-                .push(materialRoute(RecoveryMethodDevice1())),
+            leading: Icon(Icons.vpn_key),
+            onTap: () => Navigator.of(context).push(materialRoute(RootPage())),
           ),
         ),
         SizedBox(height: 16),
         BrandCards.outlined(
           child: ListTile(
             title: Text(
-              "recovering.method_select_recovery_key".tr(),
+              "recovering.fallback_select_root_ssh".tr(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            leading: Icon(Icons.password_outlined),
+            leading: Icon(Icons.terminal),
             onTap: () => Navigator.of(context).push(materialRoute(RootPage())),
           ),
         ),
         SizedBox(height: 16),
-        BrandButton.text(
-          title: "recovering.method_select_nothing".tr(),
-          onPressed: () => Navigator.of(context)
-              .push(materialRoute(RecoveryFallbackSelect())),
-        )
+        BrandCards.outlined(
+          child: ListTile(
+            title: Text(
+              "recovering.fallback_select_provider_console".tr(),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            subtitle: Text(
+              "recovering.fallback_select_provider_console_hint".tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            leading: Icon(Icons.web),
+            onTap: () => Navigator.of(context).push(materialRoute(RootPage())),
+          ),
+        ),
       ],
     );
   }

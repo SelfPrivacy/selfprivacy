@@ -17,7 +17,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
-import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_domain.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class InitializingPage extends StatelessWidget {
@@ -104,8 +104,8 @@ class InitializingPage extends StatelessWidget {
                                 child: BrandButton.text(
                                   title: 'basis.connect_to_existing'.tr(),
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                        materialRoute(RecoveryMethodSelect()));
+                                    Navigator.of(context)
+                                        .push(materialRoute(RecoveryDomain()));
                                   },
                                 ),
                               )

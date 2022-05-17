@@ -288,6 +288,7 @@
     "recovery_main_header": "Подключиться к существующему серверу",
     "domain_recovery_description": "Введите домен, по которому вы хотите получить доступ к серверу:",
     "domain_recover_placeholder": "Домен",
+    "domain_recover_error": "Не удалось найти сервер с таким доменом",
     "method_select_description": "Выберите способ входа:",
     "method_select_other_device": "У меня есть доступ на другом устройстве",
     "method_select_recovery_key": "У меня есть ключ восстановления",

@@ -8,17 +8,17 @@ import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 
 import '../server_installation/server_installation_cubit.dart';
 
 class ServerInstallationRepository {
-  Box box = Hive.box(BNames.serverInstallation);
+  Box box = Hive.box(BNames.serverInstallationBox);
 
   Future<ServerInstallationState> load() async {
     final hetznerToken = getIt<ApiConfigModel>().hetznerKey;

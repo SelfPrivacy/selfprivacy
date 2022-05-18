@@ -5,8 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 class HiveConfig {
@@ -25,16 +25,16 @@ class HiveConfig {
         await getEncryptedKey(BNames.serverInstallationEncryptionKey));
 
     await Hive.openBox<User>(BNames.usersDeprecated);
-    await Hive.openBox<User>(BNames.users, encryptionCipher: cipher);
+    await Hive.openBox<User>(BNames.usersBox, encryptionCipher: cipher);
 
     Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
     if (deprecatedUsers.isNotEmpty) {
-      Box<User> users = Hive.box<User>(BNames.users);
+      Box<User> users = Hive.box<User>(BNames.usersBox);
       users.addAll(deprecatedUsers.values.toList());
       deprecatedUsers.clear();
     }
 
-    await Hive.openBox(BNames.serverInstallation, encryptionCipher: cipher);
+    await Hive.openBox(BNames.serverInstallationBox, encryptionCipher: cipher);
   }
 
   static Future<Uint8List> getEncryptedKey(String encKey) async {
@@ -61,54 +61,54 @@ class BNames {
   /// A boolean field of [appSettingsBox] box.
   static String isOnboardingShowing = 'isOnboardingShowing';
 
-  /// Encryption key to decrypt [serverInstallation] and [users] box.
+  /// Encryption key to decrypt [serverInstallationBox] and [usersBox] box.
   static String serverInstallationEncryptionKey = 'key';
 
   /// Server installation box. Contains server details and provider tokens.
-  static String serverInstallation = 'appConfig';
+  static String serverInstallationBox = 'appConfig';
 
-  /// A List<String> field of [serverInstallation] box.
+  /// A List<String> field of [serverInstallationBox] box.
   static String rootKeys = 'rootKeys';
 
-  /// A boolean field of [serverInstallation] box.
+  /// A boolean field of [serverInstallationBox] box.
   static String hasFinalChecked = 'hasFinalChecked';
 
-  /// A boolean field of [serverInstallation] box.
+  /// A boolean field of [serverInstallationBox] box.
   static String isServerStarted = 'isServerStarted';
 
-  /// A [ServerDomain] field of [serverInstallation] box.
+  /// A [ServerDomain] field of [serverInstallationBox] box.
   static String serverDomain = 'cloudFlareDomain';
 
-  /// A String field of [serverInstallation] box.
+  /// A String field of [serverInstallationBox] box.
   static String hetznerKey = 'hetznerKey';
 
-  /// A String field of [serverInstallation] box.
+  /// A String field of [serverInstallationBox] box.
   static String cloudFlareKey = 'cloudFlareKey';
 
-  /// A [User] field of [serverInstallation] box.
+  /// A [User] field of [serverInstallationBox] box.
   static String rootUser = 'rootUser';
 
-  /// A [ServerHostingDetails] field of [serverInstallation] box.
+  /// A [ServerHostingDetails] field of [serverInstallationBox] box.
   static String serverDetails = 'hetznerServer';
 
-  /// A [BackblazeCredential] field of [serverInstallation] box.
+  /// A [BackblazeCredential] field of [serverInstallationBox] box.
   static String backblazeCredential = 'backblazeKey';
 
-  /// A [BackblazeBucket] field of [serverInstallation] box.
+  /// A [BackblazeBucket] field of [serverInstallationBox] box.
   static String backblazeBucket = 'backblazeBucket';
 
-  /// A boolean field of [serverInstallation] box.
+  /// A boolean field of [serverInstallationBox] box.
   static String isLoading = 'isLoading';
 
-  /// A boolean field of [serverInstallation] box.
+  /// A boolean field of [serverInstallationBox] box.
   static String isServerResetedFirstTime = 'isServerResetedFirstTime';
 
-  /// A boolean field of [serverInstallation] box.
+  /// A boolean field of [serverInstallationBox] box.
   static String isServerResetedSecondTime = 'isServerResetedSecondTime';
 
   /// Deprecated users box as it is unencrypted
   static String usersDeprecated = 'users';
 
   /// Box with users
-  static String users = 'usersEncrypted';
+  static String usersBox = 'usersEncrypted';
 }

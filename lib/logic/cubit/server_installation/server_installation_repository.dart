@@ -371,9 +371,9 @@ class ServerInstallationRepository {
     return 'Unidentified';
   }
 
-  Future<ServerHostingDetails> authorizeByLoginToken(
+  Future<ServerHostingDetails> authorizeByNewDeviceKey(
     ServerDomain serverDomain,
-    String loginToken,
+    String newDeviceKey,
   ) async {
     var serverApi = ServerApi(
       isWithToken: false,
@@ -381,7 +381,7 @@ class ServerInstallationRepository {
     );
     final serverIp = await getServerIpFromDomain(serverDomain);
     final apiResponse = await serverApi.authorizeDevice(
-        DeviceToken(device: await getDeviceName(), token: loginToken));
+        DeviceToken(device: await getDeviceName(), token: newDeviceKey));
 
     if (apiResponse.isSuccess) {
       return ServerHostingDetails(
@@ -403,16 +403,16 @@ class ServerInstallationRepository {
     );
   }
 
-  Future<ServerHostingDetails> authorizeByRecoveryToken(
+  Future<ServerHostingDetails> authorizeByRecoveryKey(
     ServerDomain serverDomain,
-    String recoveryToken,
+    String recoveryKey,
   ) async {
     var serverApi = ServerApi(
       isWithToken: false,
       overrideDomain: serverDomain.domainName,
     );
     final apiResponse = await serverApi.useRecoveryToken(
-        DeviceToken(device: await getDeviceName(), token: recoveryToken));
+        DeviceToken(device: await getDeviceName(), token: recoveryKey));
 
     if (apiResponse.isSuccess) {
       return ServerHostingDetails(

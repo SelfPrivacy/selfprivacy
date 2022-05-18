@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 import '../server_installation/server_installation_repository.dart';
@@ -250,6 +250,59 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       isLoading: false,
     ));
     timer = Timer(delay, work);
+  }
+
+  void submitDomainForAccessRecovery(String domain) async {
+    var serverDomain = ServerDomain(
+      domainName: domain,
+      provider: DnsProvider.Unknown,
+      zoneId: '',
+    );
+    final recoveryCapabilities =
+        await repository.getRecoveryCapabilities(serverDomain);
+
+    emit(ServerInstallationRecovery(
+      serverDomain: serverDomain,
+      recoveryCapabilities: recoveryCapabilities,
+      currentStep: RecoveryStep.Selecting,
+    ));
+  }
+
+  void tryToRecover(String token, ServerRecoveryMethods method) async {
+    final dataState = this.state as ServerInstallationRecovery;
+    final serverDomain = dataState.serverDomain;
+    if (serverDomain == null) {
+      return;
+    }
+    try {
+      Future<ServerHostingDetails> Function(ServerDomain, String)
+          recoveryFunction;
+      switch (method) {
+        case ServerRecoveryMethods.newDeviceKey:
+          recoveryFunction = repository.authorizeByNewDeviceKey;
+          break;
+        case ServerRecoveryMethods.recoveryKey:
+          recoveryFunction = repository.authorizeByRecoveryKey;
+          break;
+        case ServerRecoveryMethods.oldToken:
+          recoveryFunction = repository.authorizeByApiToken;
+          break;
+        default:
+          throw Exception('Unknown recovery method');
+      }
+      final serverDetails = await recoveryFunction(
+        serverDomain,
+        token,
+      );
+      emit(dataState.copyWith(
+        serverDetails: serverDetails,
+        currentStep: RecoveryStep.HetznerToken,
+      ));
+    } on ServerAuthorizationException {
+      return;
+    } on IpNotFoundException {
+      return;
+    }
   }
 
   void clearAppConfig() {

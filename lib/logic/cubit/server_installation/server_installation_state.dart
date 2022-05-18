@@ -271,6 +271,12 @@ enum ServerRecoveryCapabilities {
   loginTokens,
 }
 
+enum ServerRecoveryMethods {
+  newDeviceKey,
+  recoveryKey,
+  oldToken,
+}
+
 class ServerInstallationRecovery extends ServerInstallationState {
   final RecoveryStep currentStep;
   final ServerRecoveryCapabilities recoveryCapabilities;

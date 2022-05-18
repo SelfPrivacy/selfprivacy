@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
@@ -70,6 +71,8 @@ class MorePage extends StatelessWidget {
                   goTo: Console(),
                 ),
                 _NavItem(
+                    isEnabled: context.read<ServerInstallationCubit>().state
+                        is ServerInstallationFinished,
                     title: 'more.create_ssh_key'.tr(),
                     iconData: Ionicons.key_outline,
                     goTo: SshKeysPage(
@@ -87,6 +90,7 @@ class MorePage extends StatelessWidget {
 class _NavItem extends StatelessWidget {
   const _NavItem({
     Key? key,
+    this.isEnabled = true,
     required this.iconData,
     required this.goTo,
     required this.title,
@@ -95,15 +99,18 @@ class _NavItem extends StatelessWidget {
   final IconData iconData;
   final Widget goTo;
   final String title;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(materialRoute(goTo)),
+      onTap: isEnabled
+          ? () => Navigator.of(context).push(materialRoute(goTo))
+          : null,
       child: _MoreMenuItem(
         iconData: iconData,
         title: title,
-        isActive: true,
+        isActive: isEnabled,
       ),
     );
   }

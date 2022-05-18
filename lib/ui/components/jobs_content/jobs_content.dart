@@ -5,6 +5,7 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -19,38 +20,45 @@ class JobsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<JobsCubit, JobsState>(
       builder: (context, state) {
-        late final List<Widget> widgets;
+        late List<Widget> widgets;
+        var installationState = context.read<ServerInstallationCubit>().state;
         if (state is JobsStateEmpty) {
           widgets = [
             SizedBox(height: 80),
             Center(child: BrandText.body1('jobs.empty'.tr())),
-            SizedBox(height: 80),
-            BrandButton.rised(
-              onPressed: () => context.read<JobsCubit>().upgradeServer(),
-              text: 'jobs.upgradeServer'.tr(),
-            ),
-            SizedBox(height: 10),
-            BrandButton.text(
-              onPressed: () {
-                var nav = getIt<NavigationService>();
-                nav.showPopUpDialog(BrandAlert(
-                  title: 'jobs.rebootServer'.tr(),
-                  contentText: 'modals.3'.tr(),
-                  actions: [
-                    ActionButton(
-                      text: 'basis.cancel'.tr(),
-                    ),
-                    ActionButton(
-                      onPressed: () =>
-                          {context.read<JobsCubit>().rebootServer()},
-                      text: 'modals.9'.tr(),
-                    )
-                  ],
-                ));
-              },
-              title: 'jobs.rebootServer'.tr(),
-            ),
           ];
+
+          if (installationState is ServerInstallationFinished) {
+            widgets = [
+              ...widgets,
+              SizedBox(height: 80),
+              BrandButton.rised(
+                onPressed: () => context.read<JobsCubit>().upgradeServer(),
+                text: 'jobs.upgradeServer'.tr(),
+              ),
+              SizedBox(height: 10),
+              BrandButton.text(
+                onPressed: () {
+                  var nav = getIt<NavigationService>();
+                  nav.showPopUpDialog(BrandAlert(
+                    title: 'jobs.rebootServer'.tr(),
+                    contentText: 'modals.3'.tr(),
+                    actions: [
+                      ActionButton(
+                        text: 'basis.cancel'.tr(),
+                      ),
+                      ActionButton(
+                        onPressed: () =>
+                            {context.read<JobsCubit>().rebootServer()},
+                        text: 'modals.9'.tr(),
+                      )
+                    ],
+                  ));
+                },
+                title: 'jobs.rebootServer'.tr(),
+              ),
+            ];
+          }
         } else if (state is JobsStateLoading) {
           widgets = [
             SizedBox(height: 80),

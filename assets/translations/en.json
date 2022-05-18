@@ -36,7 +36,7 @@
     "about_project": "About us",
     "about_app": "About application",
     "onboarding": "Onboarding",
-    "create_ssh_key": "Create ssh key",
+    "create_ssh_key": "Create SSH key",
     "generate_key": "Generate key",
     "generate_key_text": "You can generate ssh key",
     "console": "Console",

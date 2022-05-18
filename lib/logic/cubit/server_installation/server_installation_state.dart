@@ -265,8 +265,15 @@ enum RecoveryStep {
   BackblazeToken,
 }
 
+enum ServerRecoveryCapabilities {
+  none,
+  legacy,
+  loginTokens,
+}
+
 class ServerInstallationRecovery extends ServerInstallationState {
   final RecoveryStep currentStep;
+  final ServerRecoveryCapabilities recoveryCapabilities;
 
   const ServerInstallationRecovery({
     String? hetznerKey,
@@ -276,6 +283,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     User? rootUser,
     ServerHostingDetails? serverDetails,
     required RecoveryStep this.currentStep,
+    required ServerRecoveryCapabilities this.recoveryCapabilities,
   }) : super(
           hetznerKey: hetznerKey,
           cloudFlareKey: cloudFlareKey,
@@ -309,13 +317,16 @@ class ServerInstallationRecovery extends ServerInstallationState {
     User? rootUser,
     ServerHostingDetails? serverDetails,
     RecoveryStep? currentStep,
+    ServerRecoveryCapabilities? recoveryCapabilities,
   }) =>
       ServerInstallationRecovery(
-          hetznerKey: hetznerKey ?? this.hetznerKey,
-          cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
-          backblazeCredential: backblazeCredential ?? this.backblazeCredential,
-          serverDomain: serverDomain ?? this.serverDomain,
-          rootUser: rootUser ?? this.rootUser,
-          serverDetails: serverDetails ?? this.serverDetails,
-          currentStep: currentStep ?? this.currentStep);
+        hetznerKey: hetznerKey ?? this.hetznerKey,
+        cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
+        backblazeCredential: backblazeCredential ?? this.backblazeCredential,
+        serverDomain: serverDomain ?? this.serverDomain,
+        rootUser: rootUser ?? this.rootUser,
+        serverDetails: serverDetails ?? this.serverDetails,
+        currentStep: currentStep ?? this.currentStep,
+        recoveryCapabilities: recoveryCapabilities ?? this.recoveryCapabilities,
+      );
 }

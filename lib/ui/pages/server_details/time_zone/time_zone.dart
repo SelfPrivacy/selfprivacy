@@ -1,4 +1,4 @@
-part of '../server_details.dart';
+part of '../server_details_screen.dart';
 
 final List<Location> locations = timeZoneDatabase.locations.values.toList()
   ..sort((l1, l2) =>

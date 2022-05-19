@@ -43,6 +43,10 @@ class RecoveryDomainFormCubit extends FormCubit {
     return domainValid;
   }
 
+  FutureOr<void> setCustomError(String error) {
+    serverDomainField.setError(error);
+  }
+
   final ServerInstallationCubit initializingCubit;
   late final FieldCubit<String> serverDomainField;
 }

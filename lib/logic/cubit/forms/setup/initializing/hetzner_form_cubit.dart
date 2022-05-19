@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class HetznerFormCubit extends FormCubit {
-  HetznerFormCubit(this.initializingCubit) {
+  HetznerFormCubit(this.serverSetupCubit) {
     var regExp = RegExp(r"\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]");
     apiKey = FieldCubit(
       initalValue: '',
@@ -24,10 +24,10 @@ class HetznerFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    initializingCubit.setHetznerKey(apiKey.state.value);
+    serverSetupCubit.setHetznerKey(apiKey.state.value);
   }
 
-  final ServerInstallationCubit initializingCubit;
+  final ServerInstallationCubit serverSetupCubit;
 
   late final FieldCubit<String> apiKey;
 

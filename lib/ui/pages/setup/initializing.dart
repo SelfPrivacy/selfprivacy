@@ -17,7 +17,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
-import 'package:selfprivacy/ui/pages/setup/recovering/recovery_domain.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -37,6 +37,10 @@ class InitializingPage extends StatelessWidget {
       () => _stepCheck(cubit),
       () => Container(child: Center(child: Text('initializing.finish'.tr())))
     ][cubit.state.progress.index]();
+
+    if (cubit is ServerInstallationRecovery) {
+      return RecoveryRouting();
+    }
     return BlocListener<ServerInstallationCubit, ServerInstallationState>(
       listener: (context, state) {
         if (cubit.state is ServerInstallationFinished) {

@@ -11,6 +11,7 @@ class BrandHeroScreen extends StatelessWidget {
     this.heroIcon,
     this.heroTitle,
     this.heroSubtitle,
+    this.onBackButtonPressed,
   }) : super(key: key);
 
   final List<Widget> children;
@@ -20,6 +21,7 @@ class BrandHeroScreen extends StatelessWidget {
   final IconData? heroIcon;
   final String? heroTitle;
   final String? heroSubtitle;
+  final VoidCallback? onBackButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class BrandHeroScreen extends StatelessWidget {
             title: headerTitle,
             hasBackButton: hasBackButton,
             hasFlashButton: hasFlashButton,
+            onBackButtonPressed: onBackButtonPressed,
           ),
         ),
         body: ListView(
@@ -48,9 +51,7 @@ class BrandHeroScreen extends StatelessWidget {
             if (heroTitle != null)
               Text(
                 heroTitle!,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Colors.black,
-                    ),
+                style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.start,
               ),
             SizedBox(height: 8.0),

@@ -305,6 +305,46 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
+  void revertRecoveryStep() {
+    final dataState = this.state as ServerInstallationRecovery;
+    switch (dataState.currentStep) {
+      case RecoveryStep.Selecting:
+        emit(ServerInstallationEmpty());
+        break;
+      case RecoveryStep.RecoveryKey:
+      case RecoveryStep.NewDeviceKey:
+      case RecoveryStep.OldToken:
+        emit(dataState.copyWith(
+          currentStep: RecoveryStep.Selecting,
+        ));
+        break;
+      // We won't revert steps after client is authorized
+      default:
+        break;
+    }
+  }
+
+  void selectRecoveryMethod(ServerRecoveryMethods method) {
+    final dataState = this.state as ServerInstallationRecovery;
+    switch (method) {
+      case ServerRecoveryMethods.newDeviceKey:
+        emit(dataState.copyWith(
+          currentStep: RecoveryStep.NewDeviceKey,
+        ));
+        break;
+      case ServerRecoveryMethods.recoveryKey:
+        emit(dataState.copyWith(
+          currentStep: RecoveryStep.RecoveryKey,
+        ));
+        break;
+      case ServerRecoveryMethods.oldToken:
+        emit(dataState.copyWith(
+          currentStep: RecoveryStep.OldToken,
+        ));
+        break;
+    }
+  }
+
   void clearAppConfig() {
     closeTimer();
 

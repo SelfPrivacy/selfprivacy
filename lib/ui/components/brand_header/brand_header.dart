@@ -9,11 +9,13 @@ class BrandHeader extends StatelessWidget {
     this.title = "",
     this.hasBackButton = false,
     this.hasFlashButton = false,
+    this.onBackButtonPressed,
   }) : super(key: key);
 
   final String title;
   final bool hasBackButton;
   final bool hasFlashButton;
+  final VoidCallback? onBackButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,8 @@ class BrandHeader extends StatelessWidget {
             if (hasBackButton) ...[
               IconButton(
                 icon: Icon(BrandIcons.arrow_left),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed:
+                    onBackButtonPressed ?? () => Navigator.of(context).pop(),
               ),
               SizedBox(width: 10),
             ],

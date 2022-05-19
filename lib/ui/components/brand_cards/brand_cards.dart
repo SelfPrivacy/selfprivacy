@@ -23,6 +23,9 @@ class BrandCards {
   static Widget outlined({required Widget child}) => _OutlinedCard(
         child: child,
       );
+  static Widget filled({required Widget child}) => _FilledCard(
+        child: child,
+      );
 }
 
 class _BrandCard extends StatelessWidget {
@@ -74,6 +77,27 @@ class _OutlinedCard extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: child,
+    );
+  }
+}
+
+class _FilledCard extends StatelessWidget {
+  const _FilledCard({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: child,
+      color: Theme.of(context).colorScheme.surfaceVariant,
     );
   }
 }

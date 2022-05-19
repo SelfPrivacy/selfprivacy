@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 
 class RootUserFormCubit extends FormCubit {
   RootUserFormCubit(
-      this.serverSetupCubit, final FieldCubitFactory fieldFactory) {
+      this.serverInstallationCubit, final FieldCubitFactory fieldFactory) {
     userName = fieldFactory.createUserLoginField();
     password = fieldFactory.createUserPasswordField();
 
@@ -22,10 +22,10 @@ class RootUserFormCubit extends FormCubit {
       login: userName.state.value,
       password: password.state.value,
     );
-    serverSetupCubit.setRootUser(user);
+    serverInstallationCubit.setRootUser(user);
   }
 
-  final ServerInstallationCubit serverSetupCubit;
+  final ServerInstallationCubit serverInstallationCubit;
 
   late final FieldCubit<String> userName;
   late final FieldCubit<String> password;

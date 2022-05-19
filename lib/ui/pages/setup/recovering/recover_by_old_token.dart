@@ -27,8 +27,9 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
         SizedBox(height: 16),
         FilledButton(
           title: "recovering.method_device_button".tr(),
-          onPressed: () =>
-              Navigator.of(context).push(materialRoute(RecoverByOldToken())),
+          onPressed: () => context
+              .read<ServerInstallationCubit>()
+              .selectRecoveryMethod(ServerRecoveryMethods.oldToken),
         )
       ],
     );

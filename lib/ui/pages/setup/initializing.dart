@@ -124,9 +124,9 @@ class InitializingPage extends StatelessWidget {
     );
   }
 
-  Widget _stepHetzner(ServerInstallationCubit initializingCubit) {
+  Widget _stepHetzner(ServerInstallationCubit serverInstallationCubit) {
     return BlocProvider(
-      create: (context) => HetznerFormCubit(initializingCubit),
+      create: (context) => HetznerFormCubit(serverInstallationCubit),
       child: Builder(builder: (context) {
         var formCubitState = context.watch<HetznerFormCubit>().state;
         return Column(

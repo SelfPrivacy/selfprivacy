@@ -55,19 +55,6 @@ class HetznerApi extends ApiMap {
     }
   }
 
-  Future<bool> isFreeToCreate() async {
-    var client = await getClient();
-
-    Response serversReponse = await client.get('/servers');
-    List servers = serversReponse.data['servers'];
-    var server = servers.firstWhere(
-      (el) => el['name'] == 'selfprivacy-server',
-      orElse: null,
-    );
-    client.close();
-    return server == null;
-  }
-
   Future<ServerVolume> createVolume() async {
     var client = await getClient();
     Response dbCreateResponse = await client.post(
@@ -235,6 +222,16 @@ class HetznerApi extends ApiMap {
     close(client);
 
     return HetznerServerInfo.fromJson(response.data!['server']);
+  }
+
+  Future<List<HetznerServerInfo>> getServers() async {
+    var client = await getClient();
+    Response response = await client.get('/servers');
+    close(client);
+
+    return (response.data!['servers'] as List)
+        .map((e) => HetznerServerInfo.fromJson(e))
+        .toList();
   }
 
   Future<void> createReverseDns({

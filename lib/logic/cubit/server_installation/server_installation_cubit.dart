@@ -47,6 +47,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void setHetznerKey(String hetznerKey) async {
     await repository.saveHetznerKey(hetznerKey);
+
+    if (state is ServerInstallationRecovery) {
+      emit((state as ServerInstallationRecovery).copyWith(
+        hetznerKey: hetznerKey,
+        currentStep: RecoveryStep.ServerSelection,
+      ));
+    }
+
     emit((state as ServerInstallationNotFinished)
         .copyWith(hetznerKey: hetznerKey));
   }
@@ -316,6 +324,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       case RecoveryStep.OldToken:
         emit(dataState.copyWith(
           currentStep: RecoveryStep.Selecting,
+        ));
+        break;
+      case RecoveryStep.ServerSelection:
+        emit(dataState.copyWith(
+          currentStep: RecoveryStep.HetznerToken,
         ));
         break;
       // We won't revert steps after client is authorized

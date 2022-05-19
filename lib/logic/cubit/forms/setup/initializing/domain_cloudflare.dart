@@ -4,9 +4,9 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 class DomainSetupCubit extends Cubit<DomainSetupState> {
-  DomainSetupCubit(this.serverSetupCubit) : super(Initial());
+  DomainSetupCubit(this.serverInstallationCubit) : super(Initial());
 
-  final ServerInstallationCubit serverSetupCubit;
+  final ServerInstallationCubit serverInstallationCubit;
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));
@@ -42,7 +42,7 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
       provider: DnsProvider.Cloudflare,
     );
 
-    serverSetupCubit.setDomain(domain);
+    serverInstallationCubit.setDomain(domain);
     emit(DomainSet());
   }
 }

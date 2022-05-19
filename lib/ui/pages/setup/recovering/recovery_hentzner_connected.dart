@@ -1,0 +1,70 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/hetzner_form_cubit.dart';
+import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
+import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
+import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:cubit_form/cubit_form.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
+
+class RecoveryHetznerConnected extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appConfig = context.watch<ServerInstallationCubit>();
+
+    return BlocProvider(
+      create: (context) => HetznerFormCubit(appConfig),
+      child: Builder(
+        builder: (context) {
+          var formCubitState = context.watch<HetznerFormCubit>().state;
+
+          return BrandHeroScreen(
+            heroTitle: "recovering.hetzner_connected".tr(),
+            heroSubtitle: "recovering.hetzner_connected_description".tr(),
+            hasBackButton: true,
+            hasFlashButton: false,
+            children: [
+              CubitFormTextField(
+                formFieldCubit: context.read<HetznerFormCubit>().apiKey,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "recovering.hetzner_connected_placeholder".tr(),
+                ),
+              ),
+              SizedBox(height: 16),
+              FilledButton(
+                title: "more.continue".tr(),
+                onPressed: formCubitState.isSubmitting
+                    ? null
+                    : () => context.read<HetznerFormCubit>().trySubmit(),
+              ),
+              SizedBox(height: 16),
+              BrandButton.text(
+                title: 'initializing.how'.tr(),
+                onPressed: () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (BuildContext context) {
+                    return BrandBottomSheet(
+                      isExpended: true,
+                      child: Padding(
+                        padding: paddingH15V0,
+                        child: BrandMarkdown(
+                          fileName: 'how_hetzner',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}

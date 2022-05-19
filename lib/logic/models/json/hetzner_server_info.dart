@@ -15,6 +15,9 @@ class HetznerServerInfo {
   @JsonKey(name: 'datacenter', fromJson: HetznerServerInfo.locationFromJson)
   final HetznerLocation location;
 
+  @JsonKey(name: 'public_net')
+  final HetznerPublicNetInfo publicNet;
+
   static HetznerLocation locationFromJson(Map json) =>
       HetznerLocation.fromJson(json['location']);
 
@@ -28,7 +31,32 @@ class HetznerServerInfo {
     this.created,
     this.serverType,
     this.location,
+    this.publicNet,
   );
+}
+
+@JsonSerializable()
+class HetznerPublicNetInfo {
+  final HetznerIp4 ip4;
+
+  static HetznerPublicNetInfo fromJson(Map<String, dynamic> json) =>
+      _$HetznerPublicNetInfoFromJson(json);
+
+  HetznerPublicNetInfo(this.ip4);
+}
+
+@JsonSerializable()
+class HetznerIp4 {
+  final bool blocked;
+  @JsonKey(name: 'dns_ptr')
+  final String reverseDns;
+  final int id;
+  final String ip;
+
+  static HetznerIp4 fromJson(Map<String, dynamic> json) =>
+      _$HetznerIp4FromJson(json);
+
+  HetznerIp4(this.id, this.ip, this.blocked, this.reverseDns);
 }
 
 enum ServerStatus {

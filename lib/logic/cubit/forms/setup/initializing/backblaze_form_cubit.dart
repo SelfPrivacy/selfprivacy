@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class BackblazeFormCubit extends FormCubit {
-  BackblazeFormCubit(this.serverSetupCubit) {
+  BackblazeFormCubit(this.serverInstallationCubit) {
     //var regExp = RegExp(r"\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]");
     keyId = FieldCubit(
       initalValue: '',
@@ -27,13 +27,13 @@ class BackblazeFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    serverSetupCubit.setBackblazeKey(
+    serverInstallationCubit.setBackblazeKey(
       keyId.state.value,
       applicationKey.state.value,
     );
   }
 
-  final ServerInstallationCubit serverSetupCubit;
+  final ServerInstallationCubit serverInstallationCubit;
 
   late final FieldCubit<String> keyId;
   late final FieldCubit<String> applicationKey;

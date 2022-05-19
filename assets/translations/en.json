@@ -274,7 +274,6 @@
     "15": "Server created. DNS checks and server boot in progress...",
     "16": "Until the next check: ",
     "17": "Check",
-    "18": "How to obtain Hetzner API Token",
     "19": "1 Go via this link ",
     "20": "\n",
     "21": "One more restart to apply your security certificates.",
@@ -301,7 +300,15 @@
     "fallback_select_token_copy": "Copy of auth token from other version of the application.",
     "fallback_select_root_ssh": "Root SSH access to the server.",
     "fallback_select_provider_console": "Access to the server console of my prodiver.",
-    "fallback_select_provider_console_hint": "For example: Hetzner."
+    "fallback_select_provider_console_hint": "For example: Hetzner.",
+    "hetzner_connected": "Connect to Hetzner",
+    "hetzner_connected_description": "Communication established. Enter Hetzner token with access to {}:",
+    "hetzner_connected_placeholder": "Hetzner token",
+    "confirm_server": "Confirm server",
+    "confirm_server_description": "Found your server! Confirm it is correct.",
+    "confirm_server_accept": "Yes! That's it",
+    "confirm_server_decline": "Choose a different server"
+
   },
   "modals": {
     "_comment": "messages in modals",

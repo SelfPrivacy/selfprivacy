@@ -1,4 +1,4 @@
-part of 'server_details.dart';
+part of 'server_details_screen.dart';
 
 class _TextDetails extends StatelessWidget {
   const _TextDetails({Key? key}) : super(key: key);

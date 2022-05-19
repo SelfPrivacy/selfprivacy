@@ -5,14 +5,14 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/auto_upgrade_settings.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
-import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
+import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
-import 'package:selfprivacy/logic/models/hive/user.dart';
 
 import 'api_map.dart';
 
@@ -34,9 +34,13 @@ class ServerApi extends ApiMap {
   bool hasLogger;
   bool isWithToken;
   String? overrideDomain;
+  String? customToken;
 
   ServerApi(
-      {this.hasLogger = false, this.isWithToken = true, this.overrideDomain});
+      {this.hasLogger = false,
+      this.isWithToken = true,
+      this.overrideDomain,
+      this.customToken});
 
   BaseOptions get options {
     var options = BaseOptions();
@@ -52,7 +56,12 @@ class ServerApi extends ApiMap {
     }
 
     if (overrideDomain != null) {
-      options = BaseOptions(baseUrl: 'https://api.$overrideDomain');
+      options = BaseOptions(
+        baseUrl: 'https://api.$overrideDomain',
+        headers: customToken != null
+            ? {'Authorization': 'Bearer $customToken'}
+            : null,
+      );
     }
 
     return options;

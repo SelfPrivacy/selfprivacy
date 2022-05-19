@@ -16,8 +16,8 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
             serverInstallationCubit,
             UsersState(
                 <User>[], User(login: 'root'), User(login: 'loading...')));
-  Box<User> box = Hive.box<User>(BNames.users);
-  Box serverInstallationBox = Hive.box(BNames.serverInstallation);
+  Box<User> box = Hive.box<User>(BNames.usersBox);
+  Box serverInstallationBox = Hive.box(BNames.serverInstallationBox);
 
   final api = ServerApi();
 

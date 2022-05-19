@@ -13,6 +13,7 @@ dependencies:
   crypt: ^4.2.1
   cubit_form: ^2.0.1
   cupertino_icons: ^1.0.4
+  device_info_plus: ^3.2.3
   dio: ^4.0.4
   dynamic_color: ^1.2.2
   easy_localization: ^3.0.0
@@ -36,6 +37,7 @@ dependencies:
   package_info: ^2.0.2
   pretty_dio_logger: ^1.2.0-beta-1
   provider: ^6.0.2
+  pub_semver: ^2.1.1
   share_plus: ^4.0.4
   ssh_key: ^0.7.1
   system_theme: ^2.0.0

@@ -1,24 +1,42 @@
+import 'dart:io';
+
 import 'package:basic_utils/basic_utils.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/json/device_token.dart';
+import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 
 import '../server_installation/server_installation_cubit.dart';
 
+class IpNotFoundException implements Exception {
+  final String message;
+
+  IpNotFoundException(this.message);
+}
+
+class ServerAuthorizationException implements Exception {
+  final String message;
+
+  ServerAuthorizationException(this.message);
+}
+
 class ServerInstallationRepository {
-  Box box = Hive.box(BNames.serverInstallation);
+  Box box = Hive.box(BNames.serverInstallationBox);
 
   Future<ServerInstallationState> load() async {
     final hetznerToken = getIt<ApiConfigModel>().hetznerKey;
@@ -43,7 +61,7 @@ class ServerInstallationRepository {
       );
     }
 
-    if (getIt<ApiConfigModel>().serverDomain?.provider == DnsProvider.Unknown) {
+    if (serverDomain != null && serverDomain.provider == DnsProvider.Unknown) {
       return ServerInstallationRecovery(
         hetznerKey: hetznerToken,
         cloudFlareKey: cloudflareToken,
@@ -52,7 +70,8 @@ class ServerInstallationRepository {
         serverDetails: serverDetails,
         rootUser: box.get(BNames.rootUser),
         currentStep: _getCurrentRecoveryStep(
-            hetznerToken, cloudflareToken, serverDomain!, serverDetails),
+            hetznerToken, cloudflareToken, serverDomain, serverDetails),
+        recoveryCapabilities: await getRecoveryCapabilities(serverDomain),
       );
     }
 
@@ -294,6 +313,158 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> powerOn() async {
     var hetznerApi = HetznerApi();
     return await hetznerApi.powerOn();
+  }
+
+  Future<ServerRecoveryCapabilities> getRecoveryCapabilities(
+    ServerDomain serverDomain,
+  ) async {
+    var serverApi = ServerApi(
+      isWithToken: false,
+      overrideDomain: serverDomain.domainName,
+    );
+    final serverApiVersion = await serverApi.getApiVersion();
+    if (serverApiVersion == null) {
+      return ServerRecoveryCapabilities.none;
+    }
+    try {
+      final parsedVersion = Version.parse(serverApiVersion);
+      if (parsedVersion.major == 1 && parsedVersion.minor < 2) {
+        return ServerRecoveryCapabilities.legacy;
+      }
+      return ServerRecoveryCapabilities.loginTokens;
+    } on FormatException {
+      return ServerRecoveryCapabilities.none;
+    }
+  }
+
+  Future<String> getServerIpFromDomain(ServerDomain serverDomain) async {
+    final lookup = await DnsUtils.lookupRecord(
+        serverDomain.domainName, RRecordType.A,
+        provider: DnsApiProvider.CLOUDFLARE);
+    if (lookup == null || lookup.isEmpty) {
+      throw IpNotFoundException('No IP found for domain $serverDomain');
+    }
+    return lookup[0].data;
+  }
+
+  Future<String> getDeviceName() async {
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (kIsWeb) {
+      return await deviceInfo.webBrowserInfo
+          .then((value) => '${value.browserName} ${value.platform}');
+    } else {
+      if (Platform.isAndroid) {
+        return await deviceInfo.androidInfo
+            .then((value) => '${value.model} ${value.version.release}');
+      } else if (Platform.isIOS) {
+        return await deviceInfo.iosInfo.then((value) =>
+            '${value.utsname.machine} ${value.systemName} ${value.systemVersion}');
+      } else if (Platform.isLinux) {
+        return await deviceInfo.linuxInfo.then((value) => value.prettyName);
+      } else if (Platform.isMacOS) {
+        return await deviceInfo.macOsInfo
+            .then((value) => '${value.hostName} ${value.computerName}');
+      } else if (Platform.isWindows) {
+        return await deviceInfo.windowsInfo.then((value) => value.computerName);
+      }
+    }
+    return 'Unidentified';
+  }
+
+  Future<ServerHostingDetails> authorizeByNewDeviceKey(
+    ServerDomain serverDomain,
+    String newDeviceKey,
+  ) async {
+    var serverApi = ServerApi(
+      isWithToken: false,
+      overrideDomain: serverDomain.domainName,
+    );
+    final serverIp = await getServerIpFromDomain(serverDomain);
+    final apiResponse = await serverApi.authorizeDevice(
+        DeviceToken(device: await getDeviceName(), token: newDeviceKey));
+
+    if (apiResponse.isSuccess) {
+      return ServerHostingDetails(
+        apiToken: apiResponse.data,
+        volume: ServerVolume(
+          id: 0,
+          name: '',
+        ),
+        provider: ServerProvider.Unknown,
+        id: 0,
+        ip4: serverIp,
+        startTime: null,
+        createTime: null,
+      );
+    }
+
+    throw ServerAuthorizationException(
+      apiResponse.errorMessage ?? apiResponse.data,
+    );
+  }
+
+  Future<ServerHostingDetails> authorizeByRecoveryKey(
+    ServerDomain serverDomain,
+    String recoveryKey,
+  ) async {
+    var serverApi = ServerApi(
+      isWithToken: false,
+      overrideDomain: serverDomain.domainName,
+    );
+    final apiResponse = await serverApi.useRecoveryToken(
+        DeviceToken(device: await getDeviceName(), token: recoveryKey));
+
+    if (apiResponse.isSuccess) {
+      return ServerHostingDetails(
+        apiToken: apiResponse.data,
+        volume: ServerVolume(
+          id: 0,
+          name: '',
+        ),
+        provider: ServerProvider.Unknown,
+        id: 0,
+        ip4: '',
+        startTime: null,
+        createTime: null,
+      );
+    }
+
+    throw ServerAuthorizationException(
+      apiResponse.errorMessage ?? apiResponse.data,
+    );
+  }
+
+  Future<ServerHostingDetails> authorizeByApiToken(
+    ServerDomain serverDomain,
+    String apiToken,
+  ) async {
+    var serverApi = ServerApi(
+      isWithToken: false,
+      overrideDomain: serverDomain.domainName,
+      customToken: apiToken,
+    );
+    final deviceAuthKey = await serverApi.createDeviceToken();
+    final apiResponse = await serverApi.authorizeDevice(
+        DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data));
+
+    if (apiResponse.isSuccess) {
+      return ServerHostingDetails(
+        apiToken: apiResponse.data,
+        volume: ServerVolume(
+          id: 0,
+          name: '',
+        ),
+        provider: ServerProvider.Unknown,
+        id: 0,
+        ip4: '',
+        startTime: null,
+        createTime: null,
+      );
+    }
+
+    throw ServerAuthorizationException(
+      apiResponse.errorMessage ?? apiResponse.data,
+    );
   }
 
   Future<void> saveServerDetails(ServerHostingDetails serverDetails) async {

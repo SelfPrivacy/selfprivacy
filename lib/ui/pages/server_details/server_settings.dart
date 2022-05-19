@@ -1,4 +1,4 @@
-part of 'server_details.dart';
+part of 'server_details_screen.dart';
 
 class _ServerSettings extends StatelessWidget {
   const _ServerSettings({

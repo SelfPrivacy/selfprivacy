@@ -5,22 +5,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 class RecoveryDomainFormCubit extends FormCubit {
   RecoveryDomainFormCubit(
       this.initializingCubit, final FieldCubitFactory fieldFactory) {
-    serverDomainField = fieldFactory.createServerDomainField();
+    serverDomainField = fieldFactory.createRequiredStringField();
 
     super.addFields([serverDomainField]);
   }
 
   @override
   FutureOr<void> onSubmit() async {
-    initializingCubit.setDomain(ServerDomain(
-        domainName: serverDomainField.state.value,
-        provider: DnsProvider.Unknown,
-        zoneId: ""));
+    initializingCubit
+        .submitDomainForAccessRecovery(serverDomainField.state.value);
   }
 
   @override

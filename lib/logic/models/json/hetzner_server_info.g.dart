@@ -16,6 +16,7 @@ HetznerServerInfo _$HetznerServerInfoFromJson(Map<String, dynamic> json) =>
           json['server_type'] as Map<String, dynamic>),
       HetznerServerInfo.locationFromJson(json['datacenter'] as Map),
       HetznerPublicNetInfo.fromJson(json['public_net'] as Map<String, dynamic>),
+      (json['volumes'] as List<dynamic>).map((e) => e as int).toList(),
     );
 
 const _$ServerStatusEnumMap = {
@@ -33,7 +34,7 @@ const _$ServerStatusEnumMap = {
 HetznerPublicNetInfo _$HetznerPublicNetInfoFromJson(
         Map<String, dynamic> json) =>
     HetznerPublicNetInfo(
-      HetznerIp4.fromJson(json['ip4'] as Map<String, dynamic>),
+      HetznerIp4.fromJson(json['ipv4'] as Map<String, dynamic>),
     );
 
 HetznerIp4 _$HetznerIp4FromJson(Map<String, dynamic> json) => HetznerIp4(

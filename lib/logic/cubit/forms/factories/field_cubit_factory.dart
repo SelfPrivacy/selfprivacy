@@ -52,7 +52,7 @@ class FieldCubitFactory {
     );
   }
 
-  FieldCubit<String> createServerDomainField() {
+  FieldCubit<String> createRequiredStringField() {
     return FieldCubit(
       initalValue: '',
       validations: [

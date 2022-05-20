@@ -17,6 +17,8 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_server.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_hentzner_connected.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
@@ -25,103 +27,105 @@ class InitializingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = context.watch<ServerInstallationCubit>();
-    var actualInitializingPage = [
-      () => _stepHetzner(cubit),
-      () => _stepCloudflare(cubit),
-      () => _stepBackblaze(cubit),
-      () => _stepDomain(cubit),
-      () => _stepUser(cubit),
-      () => _stepServer(cubit),
-      () => _stepCheck(cubit),
-      () => _stepCheck(cubit),
-      () => _stepCheck(cubit),
-      () => Container(child: Center(child: Text('initializing.finish'.tr())))
-    ][cubit.state.progress.index]();
 
-    if (cubit is ServerInstallationRecovery) {
+    if (cubit.state is ServerInstallationRecovery) {
       return RecoveryRouting();
-    }
-    return BlocListener<ServerInstallationCubit, ServerInstallationState>(
-      listener: (context, state) {
-        if (cubit.state is ServerInstallationFinished) {
-          Navigator.of(context).pushReplacement(materialRoute(RootPage()));
-        }
-      },
-      child: SafeArea(
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: paddingH15V0.copyWith(top: 10, bottom: 10),
-                  child: cubit.state.isFullyInitilized
-                      ? SizedBox(
-                          height: 80,
-                        )
-                      : ProgressBar(
-                          steps: [
-                            'Hetzner',
-                            'CloudFlare',
-                            'Backblaze',
-                            'Domain',
-                            'User',
-                            'Server',
-                            '✅ Check',
-                          ],
-                          activeIndex: cubit.state.porgressBar,
-                        ),
-                ),
-                _addCard(
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: actualInitializingPage,
-                  ),
-                ),
-                ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height -
-                          MediaQuery.of(context).padding.top -
-                          MediaQuery.of(context).padding.bottom -
-                          566,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          child: BrandButton.text(
-                            title: cubit.state is ServerInstallationFinished
-                                ? 'basis.close'.tr()
-                                : 'basis.later'.tr(),
-                            onPressed: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                materialRoute(RootPage()),
-                                (predicate) => false,
-                              );
-                            },
+    } else {
+      var actualInitializingPage = [
+        () => _stepHetzner(cubit),
+        () => _stepCloudflare(cubit),
+        () => _stepBackblaze(cubit),
+        () => _stepDomain(cubit),
+        () => _stepUser(cubit),
+        () => _stepServer(cubit),
+        () => _stepCheck(cubit),
+        () => _stepCheck(cubit),
+        () => _stepCheck(cubit),
+        () => Container(child: Center(child: Text('initializing.finish'.tr())))
+      ][cubit.state.progress.index]();
+
+      return BlocListener<ServerInstallationCubit, ServerInstallationState>(
+        listener: (context, state) {
+          if (cubit.state is ServerInstallationFinished) {
+            Navigator.of(context).pushReplacement(materialRoute(RootPage()));
+          }
+        },
+        child: SafeArea(
+          child: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: paddingH15V0.copyWith(top: 10, bottom: 10),
+                    child: cubit.state.isFullyInitilized
+                        ? SizedBox(
+                            height: 80,
+                          )
+                        : ProgressBar(
+                            steps: [
+                              'Hetzner',
+                              'CloudFlare',
+                              'Backblaze',
+                              'Domain',
+                              'User',
+                              'Server',
+                              '✅ Check',
+                            ],
+                            activeIndex: cubit.state.porgressBar,
                           ),
-                        ),
-                        (cubit.state is ServerInstallationFinished)
-                            ? Container()
-                            : Container(
-                                alignment: Alignment.center,
-                                child: BrandButton.text(
-                                  title: 'basis.connect_to_existing'.tr(),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        materialRoute(RecoveryMethodSelect()));
-                                  },
-                                ),
-                              )
-                      ],
-                    )),
-              ],
+                  ),
+                  _addCard(
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      child: actualInitializingPage,
+                    ),
+                  ),
+                  ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top -
+                            MediaQuery.of(context).padding.bottom -
+                            566,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: BrandButton.text(
+                              title: cubit.state is ServerInstallationFinished
+                                  ? 'basis.close'.tr()
+                                  : 'basis.later'.tr(),
+                              onPressed: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  materialRoute(RootPage()),
+                                  (predicate) => false,
+                                );
+                              },
+                            ),
+                          ),
+                          (cubit.state is ServerInstallationFinished)
+                              ? Container()
+                              : Container(
+                                  alignment: Alignment.center,
+                                  child: BrandButton.text(
+                                    title: 'basis.connect_to_existing'.tr(),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          materialRoute(RecoveryRouting()));
+                                    },
+                                  ),
+                                )
+                        ],
+                      )),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   Widget _stepHetzner(ServerInstallationCubit serverInstallationCubit) {

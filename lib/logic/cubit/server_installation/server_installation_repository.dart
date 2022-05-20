@@ -18,6 +18,7 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/message.dart';
+import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 
@@ -100,10 +101,13 @@ class ServerInstallationRepository {
   ) {
     if (serverDetails != null) {
       if (hetznerToken != null) {
-        if (cloudflareToken != null) {
-          return RecoveryStep.BackblazeToken;
+        if (serverDetails.provider != ServerProvider.Unknown) {
+          if (serverDomain.provider != DnsProvider.Unknown) {
+            return RecoveryStep.BackblazeToken;
+          }
+          return RecoveryStep.CloudflareToken;
         }
-        return RecoveryStep.CloudflareToken;
+        return RecoveryStep.ServerSelection;
       }
       return RecoveryStep.HetznerToken;
     }
@@ -121,6 +125,20 @@ class ServerInstallationRepository {
     var serverDetails = await hetznerApi.powerOn();
 
     return serverDetails;
+  }
+
+  Future<String?> getDomainId(String token, String domain) async {
+    var cloudflareApi = CloudflareApi(
+      isWithToken: false,
+      customToken: token,
+    );
+
+    try {
+      final domainId = await cloudflareApi.getZoneId(domain);
+      return domainId;
+    } on DomainNotFoundException {
+      return null;
+    }
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(String? domainName, String? ip4,
@@ -467,6 +485,21 @@ class ServerInstallationRepository {
     );
   }
 
+  Future<List<ServerBasicInfo>> getServersOnHetznerAccount() async {
+    var hetznerApi = HetznerApi();
+    final servers = await hetznerApi.getServers();
+    return servers
+        .map((server) => ServerBasicInfo(
+              id: server.id,
+              name: server.name,
+              ip: server.publicNet.ipv4.ip,
+              reverseDns: server.publicNet.ipv4.reverseDns,
+              created: server.created,
+              volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
+            ))
+        .toList();
+  }
+
   Future<void> saveServerDetails(ServerHostingDetails serverDetails) async {
     await getIt<ApiConfigModel>().storeServerDetails(serverDetails);
   }
@@ -474,6 +507,11 @@ class ServerInstallationRepository {
   Future<void> saveHetznerKey(String key) async {
     print('saved');
     await getIt<ApiConfigModel>().storeHetznerKey(key);
+  }
+
+  Future<void> deleteHetznerKey() async {
+    await box.delete(BNames.hetznerKey);
+    getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveBackblazeKey(BackblazeCredential backblazeCredential) async {
@@ -486,6 +524,11 @@ class ServerInstallationRepository {
 
   Future<void> saveDomain(ServerDomain serverDomain) async {
     await getIt<ApiConfigModel>().storeServerDomain(serverDomain);
+  }
+
+  Future<void> deleteDomain() async {
+    await box.delete(BNames.serverDomain);
+    getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveIsServerStarted(bool value) async {

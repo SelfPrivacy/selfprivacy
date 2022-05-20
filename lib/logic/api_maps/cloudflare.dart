@@ -6,8 +6,24 @@ import 'package:selfprivacy/logic/api_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
+class DomainNotFoundException implements Exception {
+  final String message;
+  DomainNotFoundException(this.message);
+}
+
 class CloudflareApi extends ApiMap {
-  CloudflareApi({this.hasLogger = false, this.isWithToken = true});
+  @override
+  final bool hasLogger;
+  @override
+  final bool isWithToken;
+
+  final String? customToken;
+
+  CloudflareApi({
+    this.hasLogger = false,
+    this.isWithToken = true,
+    this.customToken,
+  });
 
   BaseOptions get options {
     var options = BaseOptions(baseUrl: rootAddress);
@@ -15,6 +31,10 @@ class CloudflareApi extends ApiMap {
       var token = getIt<ApiConfigModel>().cloudFlareKey;
       assert(token != null);
       options.headers = {'Authorization': 'Bearer $token'};
+    }
+
+    if (customToken != null) {
+      options.headers = {'Authorization': 'Bearer $customToken'};
     }
 
     if (validateStatus != null) {
@@ -58,7 +78,11 @@ class CloudflareApi extends ApiMap {
 
     close(client);
 
-    return response.data['result'][0]['id'];
+    if (response.data['result'].isEmpty) {
+      throw DomainNotFoundException('No domains found');
+    } else {
+      return response.data['result'][0]['id'];
+    }
   }
 
   Future<void> removeSimilarRecords({
@@ -209,7 +233,7 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<List<String>> domainList() async {
-    var url = '$rootAddress/zones?per_page=50';
+    var url = '$rootAddress/zones';
     var client = await getClient();
 
     var response = await client.get(
@@ -222,10 +246,4 @@ class CloudflareApi extends ApiMap {
         .map<String>((el) => el['name'] as String)
         .toList();
   }
-
-  @override
-  final bool hasLogger;
-
-  @override
-  final bool isWithToken;
 }

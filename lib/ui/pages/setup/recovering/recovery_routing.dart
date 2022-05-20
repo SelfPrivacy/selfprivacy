@@ -9,20 +9,22 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_recovery_key.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_new_device_key.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_server.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_hentzner_connected.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 
 class RecoveryRouting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var serverInstallation = context.watch<ServerInstallationCubit>();
+    var serverInstallation = context.watch<ServerInstallationCubit>().state;
 
-    StatelessWidget currentPage = SelectDomainToRecover();
+    Widget currentPage = SelectDomainToRecover();
 
     if (serverInstallation is ServerInstallationRecovery) {
-      final state = (serverInstallation as ServerInstallationRecovery);
-      switch (state.currentStep) {
+      switch (serverInstallation.currentStep) {
         case RecoveryStep.Selecting:
-          if (state.recoveryCapabilities != ServerRecoveryCapabilities.none)
+          if (serverInstallation.recoveryCapabilities !=
+              ServerRecoveryCapabilities.none)
             currentPage = RecoveryMethodSelect();
           break;
         case RecoveryStep.RecoveryKey:
@@ -35,8 +37,10 @@ class RecoveryRouting extends StatelessWidget {
           currentPage = RecoverByOldToken();
           break;
         case RecoveryStep.HetznerToken:
+          currentPage = RecoveryHetznerConnected();
           break;
         case RecoveryStep.ServerSelection:
+          currentPage = RecoveryConfirmServer();
           break;
         case RecoveryStep.CloudflareToken:
           break;

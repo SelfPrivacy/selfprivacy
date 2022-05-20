@@ -4,7 +4,6 @@ import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_device_f
 import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
@@ -44,8 +43,11 @@ class RecoverByOldToken extends StatelessWidget {
     var appConfig = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (context) =>
-          RecoveryDeviceFormCubit(appConfig, FieldCubitFactory(context)),
+      create: (context) => RecoveryDeviceFormCubit(
+        appConfig,
+        FieldCubitFactory(context),
+        ServerRecoveryMethods.oldToken,
+      ),
       child: Builder(
         builder: (context) {
           var formCubitState = context.watch<RecoveryDeviceFormCubit>().state;

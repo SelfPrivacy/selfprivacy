@@ -13,8 +13,11 @@ class RecoverByRecoveryKey extends StatelessWidget {
     var appConfig = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (context) =>
-          RecoveryDeviceFormCubit(appConfig, FieldCubitFactory(context)),
+      create: (context) => RecoveryDeviceFormCubit(
+        appConfig,
+        FieldCubitFactory(context),
+        ServerRecoveryMethods.recoveryKey,
+      ),
       child: Builder(
         builder: (context) {
           var formCubitState = context.watch<RecoveryDeviceFormCubit>().state;

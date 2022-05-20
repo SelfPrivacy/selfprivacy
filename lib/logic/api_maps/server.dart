@@ -31,7 +31,9 @@ class ApiResponse<D> {
 }
 
 class ServerApi extends ApiMap {
+  @override
   bool hasLogger;
+  @override
   bool isWithToken;
   String? overrideDomain;
   String? customToken;
@@ -734,7 +736,8 @@ class ServerApi extends ApiMap {
     final int code = response.statusCode ?? HttpStatus.internalServerError;
 
     return ApiResponse(
-        statusCode: code, data: response.data != null ? response.data : '');
+        statusCode: code,
+        data: response.data["token"] != null ? response.data["token"] : '');
   }
 
   Future<ApiResponse<String>> createDeviceToken() async {

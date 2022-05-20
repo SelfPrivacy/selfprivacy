@@ -302,7 +302,18 @@
     "fallback_select_token_copy": "Копия токена авторизации из другой версии приложения.",
     "fallback_select_root_ssh": "Root доступ к серверу по SSH.",
     "fallback_select_provider_console": "Доступ к консоли хостинга.",
-    "fallback_select_provider_console_hint": "Например, Hetzner."
+    "authorization_failed": "Не удалось войти с этим ключом",
+    "fallback_select_provider_console_hint": "Например, Hetzner.",
+    "hetzner_connected": "Подключение к Hetzner",
+    "hetzner_connected_description": "Связь с сервером установлена. Введите токен Hetzner с доступом к {}:",
+    "hetzner_connected_placeholder": "Hetzner токен",
+    "confirm_server": "Подтвердите сервер",
+    "confirm_server_description": "Нашли сервер! Подтвердите, что это он:",
+    "confirm_server_accept": "Да, это он",
+    "confirm_server_decline": "Выбрать другой сервер",
+    "choose_server": "Выберите сервер",
+    "choose_server_description": "Не удалось определить, с каким сервером вы устанавливаете связь.",
+    "no_servers": "На вашем аккаунте нет доступных серверов."
   },
   "modals": {
     "_comment": "messages in modals",

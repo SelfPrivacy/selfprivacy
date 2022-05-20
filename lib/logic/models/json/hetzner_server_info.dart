@@ -8,6 +8,7 @@ class HetznerServerInfo {
   final String name;
   final ServerStatus status;
   final DateTime created;
+  final List<int> volumes;
 
   @JsonKey(name: 'server_type')
   final HetznerServerTypeInfo serverType;
@@ -32,17 +33,18 @@ class HetznerServerInfo {
     this.serverType,
     this.location,
     this.publicNet,
+    this.volumes,
   );
 }
 
 @JsonSerializable()
 class HetznerPublicNetInfo {
-  final HetznerIp4 ip4;
+  final HetznerIp4 ipv4;
 
   static HetznerPublicNetInfo fromJson(Map<String, dynamic> json) =>
       _$HetznerPublicNetInfoFromJson(json);
 
-  HetznerPublicNetInfo(this.ip4);
+  HetznerPublicNetInfo(this.ipv4);
 }
 
 @JsonSerializable()

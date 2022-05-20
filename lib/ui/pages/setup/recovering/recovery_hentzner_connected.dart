@@ -23,7 +23,9 @@ class RecoveryHetznerConnected extends StatelessWidget {
 
           return BrandHeroScreen(
             heroTitle: "recovering.hetzner_connected".tr(),
-            heroSubtitle: "recovering.hetzner_connected_description".tr(),
+            heroSubtitle: "recovering.hetzner_connected_description".tr(args: [
+              appConfig.state.serverDomain?.domainName ?? "your domain"
+            ]),
             hasBackButton: true,
             hasFlashButton: false,
             children: [

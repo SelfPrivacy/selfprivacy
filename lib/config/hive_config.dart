@@ -19,6 +19,9 @@ class HiveConfig {
     Hive.registerAdapter(BackblazeBucketAdapter());
     Hive.registerAdapter(ServerVolumeAdapter());
 
+    Hive.registerAdapter(DnsProviderAdapter());
+    Hive.registerAdapter(ServerProviderAdapter());
+
     await Hive.openBox(BNames.appSettingsBox);
 
     var cipher = HiveAesCipher(

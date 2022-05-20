@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/server_basic_info.dart';
 
 import '../server_installation/server_installation_repository.dart';
 
@@ -53,6 +56,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         hetznerKey: hetznerKey,
         currentStep: RecoveryStep.ServerSelection,
       ));
+      return;
     }
 
     emit((state as ServerInstallationNotFinished)
@@ -269,6 +273,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final recoveryCapabilities =
         await repository.getRecoveryCapabilities(serverDomain);
 
+    await repository.saveDomain(serverDomain);
+
     emit(ServerInstallationRecovery(
       serverDomain: serverDomain,
       recoveryCapabilities: recoveryCapabilities,
@@ -302,13 +308,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         serverDomain,
         token,
       );
+      await repository.saveServerDetails(serverDetails);
       emit(dataState.copyWith(
         serverDetails: serverDetails,
         currentStep: RecoveryStep.HetznerToken,
       ));
     } on ServerAuthorizationException {
+      getIt<NavigationService>()
+          .showSnackBar('recovering.authorization_failed'.tr());
       return;
     } on IpNotFoundException {
+      getIt<NavigationService>()
+          .showSnackBar('recovering.domain_recover_error'.tr());
       return;
     }
   }
@@ -317,6 +328,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final dataState = this.state as ServerInstallationRecovery;
     switch (dataState.currentStep) {
       case RecoveryStep.Selecting:
+        repository.deleteDomain();
         emit(ServerInstallationEmpty());
         break;
       case RecoveryStep.RecoveryKey:
@@ -327,6 +339,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         ));
         break;
       case RecoveryStep.ServerSelection:
+        repository.deleteHetznerKey();
         emit(dataState.copyWith(
           currentStep: RecoveryStep.HetznerToken,
         ));
@@ -355,6 +368,72 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           currentStep: RecoveryStep.OldToken,
         ));
         break;
+    }
+  }
+
+  Future<List<ServerBasicInfoWithValidators>>
+      getServersOnHetznerAccount() async {
+    final dataState = this.state as ServerInstallationRecovery;
+    final servers = await repository.getServersOnHetznerAccount();
+    final validated = servers
+        .map((server) => ServerBasicInfoWithValidators.fromServerBasicInfo(
+              serverBasicInfo: server,
+              isIpValid: server.ip == dataState.serverDetails?.ip4,
+              isReverseDnsValid:
+                  server.reverseDns == dataState.serverDomain?.domainName,
+            ));
+    return validated.toList();
+  }
+
+  Future<void> setServerId(ServerBasicInfo server) async {
+    final dataState = this.state as ServerInstallationRecovery;
+    final serverDomain = dataState.serverDomain;
+    if (serverDomain == null) {
+      return;
+    }
+    final serverDetails = ServerHostingDetails(
+      ip4: server.ip,
+      id: server.id,
+      createTime: server.created,
+      volume: ServerVolume(
+        id: server.volumeId,
+        name: "recovered_volume",
+      ),
+      apiToken: dataState.serverDetails!.apiToken,
+      provider: ServerProvider.Hetzner,
+    );
+    await repository.saveDomain(serverDomain);
+    await repository.saveServerDetails(serverDetails);
+    emit(dataState.copyWith(
+      serverDetails: serverDetails,
+      currentStep: RecoveryStep.CloudflareToken,
+    ));
+  }
+
+  // Future<void> setAndValidateCloudflareToken(String token) async {
+  //   final dataState = this.state as ServerInstallationRecovery;
+  //   final serverDomain = dataState.serverDomain;
+  //   if (serverDomain == null) {
+  //     return;
+  //   }
+  //   final domainId = await repository.getDomainId(serverDomain.domainName);
+  // }
+
+  @override
+  void onChange(Change<ServerInstallationState> change) {
+    super.onChange(change);
+    print('================================');
+    print('ServerInstallationState changed!');
+    print('Current type: ${change.nextState.runtimeType}');
+    print('Hetzner key: ${change.nextState.hetznerKey}');
+    print('Cloudflare key: ${change.nextState.cloudFlareKey}');
+    print('Domain: ${change.nextState.serverDomain}');
+    print('BackblazeCredential: ${change.nextState.backblazeCredential}');
+    if (change.nextState is ServerInstallationRecovery) {
+      print(
+          'Recovery Step: ${(change.nextState as ServerInstallationRecovery).currentStep}');
+      print(
+          'Recovery Capabilities: ${(change.nextState as ServerInstallationRecovery).recoveryCapabilities}');
     }
   }
 

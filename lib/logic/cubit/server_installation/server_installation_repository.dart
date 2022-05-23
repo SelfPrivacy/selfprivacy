@@ -346,7 +346,7 @@ class ServerInstallationRepository {
     }
     try {
       final parsedVersion = Version.parse(serverApiVersion);
-      if (parsedVersion.major == 1 && parsedVersion.minor < 2) {
+      if (!VersionConstraint.parse('>=1.2.0').allows(parsedVersion)) {
         return ServerRecoveryCapabilities.legacy;
       }
       return ServerRecoveryCapabilities.loginTokens;
@@ -483,6 +483,34 @@ class ServerInstallationRepository {
     throw ServerAuthorizationException(
       apiResponse.errorMessage ?? apiResponse.data,
     );
+  }
+
+  Future<User> getMainUser() async {
+    var serverApi = ServerApi();
+    final fallbackUser = User(
+      isFoundOnServer: false,
+      note: 'Couldn\'t find main user on server, API is outdated',
+      login: 'UNKNOWN',
+      sshKeys: [],
+    );
+
+    final serverApiVersion = await serverApi.getApiVersion();
+    final users = await serverApi.getUsersList(withMainUser: true);
+    if (serverApiVersion == null || !users.isSuccess) {
+      return fallbackUser;
+    }
+    try {
+      final parsedVersion = Version.parse(serverApiVersion);
+      if (!VersionConstraint.parse('>=1.2.5').allows(parsedVersion)) {
+        return fallbackUser;
+      }
+      return User(
+        isFoundOnServer: true,
+        login: users.data[0],
+      );
+    } on FormatException {
+      return fallbackUser;
+    }
   }
 
   Future<List<ServerBasicInfo>> getServersOnHetznerAccount() async {

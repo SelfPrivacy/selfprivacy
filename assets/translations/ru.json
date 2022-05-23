@@ -313,7 +313,9 @@
     "confirm_server_decline": "Выбрать другой сервер",
     "choose_server": "Выберите сервер",
     "choose_server_description": "Не удалось определить, с каким сервером вы устанавливаете связь.",
-    "no_servers": "На вашем аккаунте нет доступных серверов."
+    "no_servers": "На вашем аккаунте нет доступных серверов.",
+    "domain_not_available_on_token": "Введённый токен не имеет доступа к нужному домену."
+
   },
   "modals": {
     "_comment": "messages in modals",

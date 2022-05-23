@@ -336,4 +336,18 @@ class ServerInstallationRecovery extends ServerInstallationState {
         currentStep: currentStep ?? this.currentStep,
         recoveryCapabilities: recoveryCapabilities ?? this.recoveryCapabilities,
       );
+
+  ServerInstallationFinished finish() {
+    return ServerInstallationFinished(
+      hetznerKey: hetznerKey!,
+      cloudFlareKey: cloudFlareKey!,
+      backblazeCredential: backblazeCredential!,
+      serverDomain: serverDomain!,
+      rootUser: rootUser!,
+      serverDetails: serverDetails!,
+      isServerStarted: true,
+      isServerResetedFirstTime: true,
+      isServerResetedSecondTime: true,
+    );
+  }
 }

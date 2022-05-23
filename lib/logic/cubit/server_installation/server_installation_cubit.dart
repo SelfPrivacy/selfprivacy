@@ -75,6 +75,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       applicationKey: applicationKey,
     );
     await repository.saveBackblazeKey(backblazeCredential);
+    if (state is ServerInstallationRecovery) {
+      final mainUser = await repository.getMainUser();
+      final updatedState = (state as ServerInstallationRecovery).copyWith(
+        backblazeCredential: backblazeCredential,
+        rootUser: mainUser,
+      );
+      emit(updatedState.finish());
+      return;
+    }
     emit((state as ServerInstallationNotFinished)
         .copyWith(backblazeCredential: backblazeCredential));
   }
@@ -410,14 +419,27 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     ));
   }
 
-  // Future<void> setAndValidateCloudflareToken(String token) async {
-  //   final dataState = this.state as ServerInstallationRecovery;
-  //   final serverDomain = dataState.serverDomain;
-  //   if (serverDomain == null) {
-  //     return;
-  //   }
-  //   final domainId = await repository.getDomainId(serverDomain.domainName);
-  // }
+  Future<void> setAndValidateCloudflareToken(String token) async {
+    final dataState = this.state as ServerInstallationRecovery;
+    final serverDomain = dataState.serverDomain;
+    if (serverDomain == null) {
+      return;
+    }
+    final zoneId = await repository.getDomainId(token, serverDomain.domainName);
+    if (zoneId == null) {
+      getIt<NavigationService>()
+          .showSnackBar('recovering.domain_not_available_on_token'.tr());
+      return;
+    }
+    emit(dataState.copyWith(
+      serverDomain: ServerDomain(
+        domainName: serverDomain.domainName,
+        zoneId: zoneId,
+        provider: DnsProvider.Cloudflare,
+      ),
+      currentStep: RecoveryStep.BackblazeToken,
+    ));
+  }
 
   @override
   void onChange(Change<ServerInstallationState> change) {

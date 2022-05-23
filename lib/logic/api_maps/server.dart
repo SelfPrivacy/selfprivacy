@@ -153,13 +153,15 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<ApiResponse<List<String>>> getUsersList() async {
+  Future<ApiResponse<List<String>>> getUsersList(
+  {withMainUser = false}
+      ) async {
     List<String> res = [];
     Response response;
 
     var client = await getClient();
     try {
-      response = await client.get('/users');
+      response = await client.get('/users', queryParameters: withMainUser ? {'withMainUser': 'true'} : null);
       for (var user in response.data) {
         res.add(user.toString());
       }

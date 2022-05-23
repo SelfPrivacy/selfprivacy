@@ -311,7 +311,8 @@
     "confirm_server_decline": "Choose a different server",
     "choose_server": "Choose your server",
     "choose_server_description": "We couldn't figure out which server your are trying to connect to.",
-    "no_servers": "There is no available servers on your account."
+    "no_servers": "There is no available servers on your account.",
+    "domain_not_available_on_token": "Selected domain is not available on this token."
 
   },
   "modals": {

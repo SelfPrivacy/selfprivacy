@@ -628,7 +628,7 @@ class ServerApi extends ApiMap {
         .replaceAll('"', '');
   }
 
-  Future<ApiResponse<RecoveryTokenStatus>> getRecoveryTokenStatus() async {
+  Future<ApiResponse<RecoveryKeyStatus>> getRecoveryTokenStatus() async {
     Response response;
 
     var client = await getClient();
@@ -639,7 +639,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: RecoveryTokenStatus(exists: false, valid: false));
+          data: RecoveryKeyStatus(exists: false, valid: false));
     } finally {
       close(client);
     }
@@ -654,17 +654,23 @@ class ServerApi extends ApiMap {
   }
 
   Future<ApiResponse<String>> generateRecoveryToken(
-      DateTime expiration, int uses) async {
+    DateTime? expiration,
+    int? uses,
+  ) async {
     Response response;
 
     var client = await getClient();
+    var data = {};
+    if (expiration != null) {
+      data['expiration'] = expiration.toIso8601String();
+    }
+    if (uses != null) {
+      data['uses'] = uses;
+    }
     try {
       response = await client.post(
         '/auth/recovery_token',
-        data: {
-          'expiration': expiration.toIso8601String(),
-          'uses': uses,
-        },
+        data: data,
       );
     } on DioError catch (e) {
       print(e.message);

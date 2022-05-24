@@ -1,23 +1,34 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'recovery_token_status.g.dart';
 
 @JsonSerializable()
-class RecoveryTokenStatus {
-  RecoveryTokenStatus({
+class RecoveryKeyStatus extends Equatable {
+  RecoveryKeyStatus({
     required this.exists,
     required this.valid,
     this.date,
     this.expiration,
-    this.uses_left,
+    this.usesLeft,
   });
 
   final bool exists;
   final DateTime? date;
   final DateTime? expiration;
-  final int? uses_left;
+  @JsonKey(name: 'uses_left')
+  final int? usesLeft;
   final bool valid;
 
-  factory RecoveryTokenStatus.fromJson(Map<String, dynamic> json) =>
-      _$RecoveryTokenStatusFromJson(json);
+  factory RecoveryKeyStatus.fromJson(Map<String, dynamic> json) =>
+      _$RecoveryKeyStatusFromJson(json);
+
+  @override
+  List<Object?> get props => [
+        exists,
+        date,
+        expiration,
+        usesLeft,
+        valid,
+      ];
 }

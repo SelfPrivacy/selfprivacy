@@ -6,8 +6,8 @@ part of 'recovery_token_status.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-RecoveryTokenStatus _$RecoveryTokenStatusFromJson(Map<String, dynamic> json) =>
-    RecoveryTokenStatus(
+RecoveryKeyStatus _$RecoveryKeyStatusFromJson(Map<String, dynamic> json) =>
+    RecoveryKeyStatus(
       exists: json['exists'] as bool,
       valid: json['valid'] as bool,
       date:
@@ -15,5 +15,5 @@ RecoveryTokenStatus _$RecoveryTokenStatusFromJson(Map<String, dynamic> json) =>
       expiration: json['expiration'] == null
           ? null
           : DateTime.parse(json['expiration'] as String),
-      uses_left: json['uses_left'] as int?,
+      usesLeft: json['uses_left'] as int?,
     );

@@ -11,7 +11,7 @@ class NotReadyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15), color: BrandColors.gray6),
       child: RichText(
@@ -19,7 +19,7 @@ class NotReadyCard extends StatelessWidget {
           children: [
             TextSpan(
               text: 'not_ready_card.1'.tr(),
-              style: TextStyle(color: BrandColors.white),
+              style: const TextStyle(color: BrandColors.white),
             ),
             WidgetSpan(
               child: Padding(
@@ -44,7 +44,7 @@ class NotReadyCard extends StatelessWidget {
             ),
             TextSpan(
               text: 'not_ready_card.3'.tr(),
-              style: TextStyle(color: BrandColors.white),
+              style: const TextStyle(color: BrandColors.white),
             ),
           ],
         ),

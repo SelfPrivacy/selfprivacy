@@ -18,7 +18,7 @@ abstract class AppThemeFactory {
   }
 
   static Future<ThemeData> _createAppTheme({
-    bool isDark: false,
+    bool isDark = false,
     required Color fallbackColor,
   }) async {
     ColorScheme? gtkColorsScheme;
@@ -39,12 +39,12 @@ abstract class AppThemeFactory {
       );
     }
 
-    final accentColor = await SystemAccentColor(fallbackColor);
+    final accentColor = SystemAccentColor(fallbackColor);
 
     try {
       await accentColor.load();
     } on MissingPluginException catch (e) {
-      print("_createAppTheme: ${e.message}");
+      print('_createAppTheme: ${e.message}');
     }
 
     final fallbackColorScheme = ColorScheme.fromSeed(

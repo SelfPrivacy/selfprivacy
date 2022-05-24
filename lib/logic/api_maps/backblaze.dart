@@ -23,6 +23,7 @@ class BackblazeApplicationKey {
 class BackblazeApi extends ApiMap {
   BackblazeApi({this.hasLogger = false, this.isWithToken = true});
 
+  @override
   BaseOptions get options {
     var options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
@@ -97,9 +98,9 @@ class BackblazeApi extends ApiMap {
         'bucketType': 'allPrivate',
         'lifecycleRules': [
           {
-            "daysFromHidingToDeleting": 30,
-            "daysFromUploadingToHiding": null,
-            "fileNamePrefix": ""
+            'daysFromHidingToDeleting': 30,
+            'daysFromUploadingToHiding': null,
+            'fileNamePrefix': ''
           }
         ],
       },

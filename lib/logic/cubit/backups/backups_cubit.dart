@@ -5,7 +5,6 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
 
@@ -13,16 +12,18 @@ part 'backups_state.dart';
 
 class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
   BackupsCubit(ServerInstallationCubit serverInstallationCubit)
-      : super(serverInstallationCubit, BackupsState(preventActions: true));
+      : super(
+            serverInstallationCubit, const BackupsState(preventActions: true));
 
   final api = ServerApi();
   final backblaze = BackblazeApi();
 
+  @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
       final bucket = getIt<ApiConfigModel>().backblazeBucket;
       if (bucket == null) {
-        emit(BackupsState(
+        emit(const BackupsState(
             isInitialized: false, preventActions: false, refreshing: false));
       } else {
         final status = await api.getBackupStatus();
@@ -30,7 +31,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
           case BackupStatusEnum.noKey:
           case BackupStatusEnum.notInitialized:
             emit(BackupsState(
-              backups: [],
+              backups: const [],
               isInitialized: true,
               preventActions: false,
               progress: 0,
@@ -40,12 +41,12 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
             break;
           case BackupStatusEnum.initializing:
             emit(BackupsState(
-              backups: [],
+              backups: const [],
               isInitialized: true,
               preventActions: false,
               progress: 0,
               status: status.status,
-              refreshTimer: Duration(seconds: 10),
+              refreshTimer: const Duration(seconds: 10),
               refreshing: false,
             ));
             break;
@@ -72,12 +73,12 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
               progress: status.progress,
               status: status.status,
               error: status.errorMessage ?? '',
-              refreshTimer: Duration(seconds: 5),
+              refreshTimer: const Duration(seconds: 5),
               refreshing: false,
             ));
             break;
           default:
-            emit(BackupsState());
+            emit(const BackupsState());
         }
         Timer(state.refreshTimer, () => updateBackups(useTimer: true));
       }
@@ -126,11 +127,11 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     switch (status) {
       case BackupStatusEnum.backingUp:
       case BackupStatusEnum.restoring:
-        return Duration(seconds: 5);
+        return const Duration(seconds: 5);
       case BackupStatusEnum.initializing:
-        return Duration(seconds: 10);
+        return const Duration(seconds: 10);
       default:
-        return Duration(seconds: 60);
+        return const Duration(seconds: 60);
     }
   }
 
@@ -146,8 +147,9 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
       refreshTimer: refreshTimeFromState(status.status),
       refreshing: false,
     ));
-    if (useTimer)
+    if (useTimer) {
       Timer(state.refreshTimer, () => updateBackups(useTimer: true));
+    }
   }
 
   Future<void> forceUpdateBackups() async {
@@ -173,6 +175,6 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   @override
   void clear() async {
-    emit(BackupsState());
+    emit(const BackupsState());
   }
 }

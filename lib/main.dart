@@ -85,9 +85,9 @@ class MyApp extends StatelessWidget {
                     appSettings.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
                 home: appSettings.isOnboardingShowing
                     ? OnboardingPage(nextPage: InitializingPage())
-                    : RootPage(),
+                    : const RootPage(),
                 builder: (BuildContext context, Widget? widget) {
-                  Widget error = Text('...rendering error...');
+                  Widget error = const Text('...rendering error...');
                   if (widget is Scaffold || widget is Navigator) {
                     error = Scaffold(body: Center(child: error));
                   }

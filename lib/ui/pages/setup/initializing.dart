@@ -16,7 +16,7 @@ import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
-import 'package:selfprivacy/ui/pages/rootRoute.dart';
+import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -26,7 +26,7 @@ class InitializingPage extends StatelessWidget {
     var cubit = context.watch<ServerInstallationCubit>();
 
     if (cubit.state is ServerInstallationRecovery) {
-      return RecoveryRouting();
+      return const RecoveryRouting();
     } else {
       var actualInitializingPage = [
         () => _stepHetzner(cubit),
@@ -38,13 +38,14 @@ class InitializingPage extends StatelessWidget {
         () => _stepCheck(cubit),
         () => _stepCheck(cubit),
         () => _stepCheck(cubit),
-        () => Container(child: Center(child: Text('initializing.finish'.tr())))
+        () => Center(child: Text('initializing.finish'.tr()))
       ][cubit.state.progress.index]();
 
       return BlocListener<ServerInstallationCubit, ServerInstallationState>(
         listener: (context, state) {
           if (cubit.state is ServerInstallationFinished) {
-            Navigator.of(context).pushReplacement(materialRoute(RootPage()));
+            Navigator.of(context)
+                .pushReplacement(materialRoute(const RootPage()));
           }
         },
         child: SafeArea(
@@ -56,11 +57,11 @@ class InitializingPage extends StatelessWidget {
                   Padding(
                     padding: paddingH15V0.copyWith(top: 10, bottom: 10),
                     child: cubit.state.isFullyInitilized
-                        ? SizedBox(
+                        ? const SizedBox(
                             height: 80,
                           )
                         : ProgressBar(
-                            steps: [
+                            steps: const [
                               'Hetzner',
                               'CloudFlare',
                               'Backblaze',
@@ -74,7 +75,7 @@ class InitializingPage extends StatelessWidget {
                   ),
                   _addCard(
                     AnimatedSwitcher(
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       child: actualInitializingPage,
                     ),
                   ),
@@ -96,7 +97,7 @@ class InitializingPage extends StatelessWidget {
                                   : 'basis.later'.tr(),
                               onPressed: () {
                                 Navigator.of(context).pushAndRemoveUntil(
-                                  materialRoute(RootPage()),
+                                  materialRoute(const RootPage()),
                                   (predicate) => false,
                                 );
                               },
@@ -109,8 +110,8 @@ class InitializingPage extends StatelessWidget {
                                   child: BrandButton.text(
                                     title: 'basis.connect_to_existing'.tr(),
                                     onPressed: () {
-                                      Navigator.of(context).push(
-                                          materialRoute(RecoveryRouting()));
+                                      Navigator.of(context).push(materialRoute(
+                                          const RecoveryRouting()));
                                     },
                                   ),
                                 )
@@ -137,30 +138,30 @@ class InitializingPage extends StatelessWidget {
               'assets/images/logos/hetzner.png',
               width: 150,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandText.h2('initializing.1'.tr()),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandText.body2('initializing.2'.tr()),
-            Spacer(),
+            const Spacer(),
             CubitFormTextField(
               formFieldCubit: context.read<HetznerFormCubit>().apiKey,
               textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
-              decoration: InputDecoration(
+              scrollPadding: const EdgeInsets.only(bottom: 70),
+              decoration: const InputDecoration(
                 hintText: 'Hetzner API Token',
               ),
             ),
-            Spacer(),
+            const Spacer(),
             BrandButton.rised(
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<HetznerFormCubit>().trySubmit(),
               text: 'basis.connect'.tr(),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandButton.text(
               onPressed: () =>
-                  _showModal(context, _HowTo(fileName: 'how_hetzner')),
+                  _showModal(context, const _HowTo(fileName: 'how_hetzner')),
               title: 'initializing.how'.tr(),
             ),
           ],
@@ -193,31 +194,31 @@ class InitializingPage extends StatelessWidget {
               'assets/images/logos/cloudflare.png',
               width: 150,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandText.h2('initializing.3'.tr()),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandText.body2('initializing.4'.tr()),
-            Spacer(),
+            const Spacer(),
             CubitFormTextField(
               formFieldCubit: context.read<CloudFlareFormCubit>().apiKey,
               textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
+              scrollPadding: const EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
                 hintText: 'initializing.5'.tr(),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             BrandButton.rised(
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<CloudFlareFormCubit>().trySubmit(),
               text: 'basis.connect'.tr(),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandButton.text(
               onPressed: () => _showModal(
                   context,
-                  _HowTo(
+                  const _HowTo(
                     fileName: 'how_cloudflare',
                   )),
               title: 'initializing.how'.tr(),
@@ -240,39 +241,39 @@ class InitializingPage extends StatelessWidget {
               'assets/images/logos/backblaze.png',
               height: 50,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandText.h2('initializing.6'.tr()),
-            SizedBox(height: 10),
-            Spacer(),
+            const SizedBox(height: 10),
+            const Spacer(),
             CubitFormTextField(
               formFieldCubit: context.read<BackblazeFormCubit>().keyId,
               textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
-              decoration: InputDecoration(
+              scrollPadding: const EdgeInsets.only(bottom: 70),
+              decoration: const InputDecoration(
                 hintText: 'KeyID',
               ),
             ),
-            Spacer(),
+            const Spacer(),
             CubitFormTextField(
               formFieldCubit: context.read<BackblazeFormCubit>().applicationKey,
               textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
-              decoration: InputDecoration(
+              scrollPadding: const EdgeInsets.only(bottom: 70),
+              decoration: const InputDecoration(
                 hintText: 'Master Application Key',
               ),
             ),
-            Spacer(),
+            const Spacer(),
             BrandButton.rised(
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<BackblazeFormCubit>().trySubmit(),
               text: 'basis.connect'.tr(),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandButton.text(
               onPressed: () => _showModal(
                   context,
-                  _HowTo(
+                  const _HowTo(
                     fileName: 'how_backblaze',
                   )),
               title: 'initializing.how'.tr(),
@@ -295,9 +296,9 @@ class InitializingPage extends StatelessWidget {
               'assets/images/logos/cloudflare.png',
               width: 150,
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             BrandText.h2('basis.domain'.tr()),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             if (state is Empty) BrandText.body2('initializing.7'.tr()),
             if (state is Loading)
               BrandText.body2(
@@ -310,7 +311,7 @@ class InitializingPage extends StatelessWidget {
                 'initializing.9'.tr(),
               ),
             if (state is Loaded) ...[
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -318,18 +319,18 @@ class InitializingPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: BrandText.h3(
-                      '${state.domain}',
+                      state.domain,
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 50,
                     child: BrandButton.rised(
                       onPressed: () => context.read<DomainSetupCubit>().load(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
-                        children: [
+                        children: const [
                           Icon(
                             Icons.refresh,
                             color: Colors.white,
@@ -342,30 +343,30 @@ class InitializingPage extends StatelessWidget {
               )
             ],
             if (state is Empty) ...[
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               BrandButton.rised(
                 onPressed: () => context.read<DomainSetupCubit>().load(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.refresh,
                       color: Colors.white,
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     BrandText.buttonTitleText('Обновить cписок'),
                   ],
                 ),
               ),
             ],
             if (state is Loaded) ...[
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               BrandButton.rised(
                 onPressed: () => context.read<DomainSetupCubit>().saveDomain(),
                 text: 'initializing.10'.tr(),
               ),
             ],
-            SizedBox(
+            const SizedBox(
               height: 10,
               width: double.infinity,
             ),
@@ -386,18 +387,18 @@ class InitializingPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BrandText.h2('initializing.22'.tr()),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandText.body2('initializing.23'.tr()),
-            Spacer(),
+            const Spacer(),
             CubitFormTextField(
               formFieldCubit: context.read<RootUserFormCubit>().userName,
               textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
+              scrollPadding: const EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
                 hintText: 'basis.nickname'.tr(),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BlocBuilder<FieldCubit<bool>, FieldCubitState<bool>>(
               bloc: context.read<RootUserFormCubit>().isVisible,
               builder: (context, state) {
@@ -406,7 +407,7 @@ class InitializingPage extends StatelessWidget {
                   obscureText: !isVisible,
                   formFieldCubit: context.read<RootUserFormCubit>().password,
                   textAlign: TextAlign.center,
-                  scrollPadding: EdgeInsets.only(bottom: 70),
+                  scrollPadding: const EdgeInsets.only(bottom: 70),
                   decoration: InputDecoration(
                     hintText: 'basis.password'.tr(),
                     suffixIcon: IconButton(
@@ -418,14 +419,14 @@ class InitializingPage extends StatelessWidget {
                           .isVisible
                           .setValue(!isVisible),
                     ),
-                    suffixIconConstraints: BoxConstraints(minWidth: 60),
-                    prefixIconConstraints: BoxConstraints(maxWidth: 85),
+                    suffixIconConstraints: const BoxConstraints(minWidth: 60),
+                    prefixIconConstraints: const BoxConstraints(maxWidth: 85),
                     prefixIcon: Container(),
                   ),
                 );
               },
             ),
-            Spacer(),
+            const Spacer(),
             BrandButton.rised(
               onPressed: formCubitState.isSubmitting
                   ? null
@@ -445,11 +446,11 @@ class InitializingPage extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Spacer(flex: 2),
+          const Spacer(flex: 2),
           BrandText.h2('initializing.final'.tr()),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           BrandText.body2('initializing.11'.tr()),
-          Spacer(),
+          const Spacer(),
           BrandButton.rised(
             onPressed: isLoading
                 ? null
@@ -484,14 +485,14 @@ class InitializingPage extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           BrandText.h4(
-            'initializing.checks'.tr(args: [doneCount.toString(), "4"]),
+            'initializing.checks'.tr(args: [doneCount.toString(), '4']),
           ),
-          Spacer(flex: 2),
-          SizedBox(height: 10),
+          const Spacer(flex: 2),
+          const SizedBox(height: 10),
           BrandText.body2(text),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           if (doneCount == 0 && state.dnsMatches != null)
             Column(
               children: state.dnsMatches!.entries.map((entry) {
@@ -499,15 +500,16 @@ class InitializingPage extends StatelessWidget {
                 var isCorrect = entry.value;
                 return Row(
                   children: [
-                    if (isCorrect) Icon(Icons.check, color: Colors.green),
-                    if (!isCorrect) Icon(Icons.schedule, color: Colors.amber),
-                    SizedBox(width: 10),
+                    if (isCorrect) const Icon(Icons.check, color: Colors.green),
+                    if (!isCorrect)
+                      const Icon(Icons.schedule, color: Colors.amber),
+                    const SizedBox(width: 10),
                     Text(domain),
                   ],
                 );
               }).toList(),
             ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           if (!state.isLoading)
             Row(
               children: [

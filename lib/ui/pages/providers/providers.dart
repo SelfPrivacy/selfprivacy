@@ -21,7 +21,7 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 var navigatorKey = GlobalKey<NavigatorState>();
 
 class ProvidersPage extends StatefulWidget {
-  ProvidersPage({Key? key}) : super(key: key);
+  const ProvidersPage({Key? key}) : super(key: key);
 
   @override
   _ProvidersPageState createState() => _ProvidersPageState();
@@ -49,7 +49,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
     final cards = ProviderType.values
         .map(
           (type) => Padding(
-            padding: EdgeInsets.only(bottom: 30),
+            padding: const EdgeInsets.only(bottom: 30),
             child: _Card(
               provider: ProviderModel(
                 state: isReady
@@ -67,18 +67,18 @@ class _ProvidersPageState extends State<ProvidersPage> {
         .toList();
     return Scaffold(
       appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
           title: 'providers.page_title'.tr(),
           hasFlashButton: true,
         ),
-        preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
         padding: paddingH15V0,
         children: [
           if (!isReady) ...[
-            NotReadyCard(),
-            SizedBox(height: 24),
+            const NotReadyCard(),
+            const SizedBox(height: 24),
           ],
           ...cards,
         ],
@@ -111,7 +111,7 @@ class _Card extends StatelessWidget {
         stableText = 'providers.server.status'.tr();
         onTap = () => showBrandBottomSheet(
               context: context,
-              builder: (context) => BrandBottomSheet(
+              builder: (context) => const BrandBottomSheet(
                 isExpended: true,
                 child: ServerDetailsScreen(),
               ),
@@ -132,7 +132,7 @@ class _Card extends StatelessWidget {
         stableText = 'providers.backup.status'.tr();
 
         onTap = () => Navigator.of(context).push(materialRoute(
-              BackupDetails(),
+              const BackupDetails(),
             ));
         break;
     }
@@ -146,12 +146,12 @@ class _Card extends StatelessWidget {
               status: provider.state,
               child: Icon(provider.icon, size: 30, color: Colors.white),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             BrandText.h2(title),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             if (message != null) ...[
               BrandText.body2(message),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
             if (provider.state == StateType.stable) BrandText.body2(stableText),
           ],

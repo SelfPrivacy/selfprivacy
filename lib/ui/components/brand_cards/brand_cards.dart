@@ -3,22 +3,22 @@ import 'package:selfprivacy/config/brand_colors.dart';
 
 class BrandCards {
   static Widget big({required Widget child}) => _BrandCard(
-        child: child,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 15,
         ),
         shadow: bigShadow,
         borderRadius: BorderRadius.circular(20),
+        child: child,
       );
   static Widget small({required Widget child}) => _BrandCard(
-        child: child,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 10,
         ),
         shadow: bigShadow,
         borderRadius: BorderRadius.circular(10),
+        child: child,
       );
   static Widget outlined({required Widget child}) => _OutlinedCard(
         child: child,
@@ -70,7 +70,7 @@ class _OutlinedCard extends StatelessWidget {
     return Card(
       elevation: 0.0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
         side: BorderSide(
           color: Theme.of(context).colorScheme.outline,
         ),
@@ -92,19 +92,19 @@ class _FilledCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0.0,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       clipBehavior: Clip.antiAlias,
-      child: child,
       color: Theme.of(context).colorScheme.surfaceVariant,
+      child: child,
     );
   }
 }
 
 final bigShadow = [
   BoxShadow(
-    offset: Offset(0, 4),
+    offset: const Offset(0, 4),
     blurRadius: 8,
     color: Colors.black.withOpacity(.08),
   )

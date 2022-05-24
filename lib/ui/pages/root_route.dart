@@ -7,7 +7,7 @@ import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
 
-import '../components/pre_styled_buttons/flashFab.dart';
+import '../components/pre_styled_buttons/flash_fab.dart';
 
 class RootPage extends StatefulWidget {
   const RootPage({Key? key}) : super(key: key);
@@ -42,7 +42,7 @@ class _RootPageState extends State<RootPage>
           create: (_) => ChangeTab(tabController.animateTo),
           child: TabBarView(
             controller: tabController,
-            children: [
+            children: const [
               ProvidersPage(),
               ServicesPage(),
               UsersPage(),
@@ -53,7 +53,7 @@ class _RootPageState extends State<RootPage>
         bottomNavigationBar: BrandTabBar(
           controller: tabController,
         ),
-        floatingActionButton: BrandFab(),
+        floatingActionButton: const BrandFab(),
       ),
     );
   }

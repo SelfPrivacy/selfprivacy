@@ -21,7 +21,7 @@ part 'new_ssh_key.dart';
 class SshKeysPage extends StatefulWidget {
   final User user;
 
-  SshKeysPage({Key? key, required this.user}) : super(key: key);
+  const SshKeysPage({Key? key, required this.user}) : super(key: key);
 
   @override
   _SshKeysPageState createState() => _SshKeysPageState();
@@ -59,7 +59,7 @@ class _SshKeysPageState extends State<SshKeysPage> {
                   'ssh.create'.tr(),
                   style: Theme.of(context).textTheme.headline6,
                 ),
-                leading: Icon(Icons.add_circle_outline_rounded),
+                leading: const Icon(Icons.add_circle_outline_rounded),
                 onTap: () {
                   showModalBottomSheet<void>(
                     context: context,
@@ -73,7 +73,7 @@ class _SshKeysPageState extends State<SshKeysPage> {
                   );
                 },
               ),
-              Divider(height: 0),
+              const Divider(height: 0),
               // show a list of ListTiles with ssh keys
               // Clicking on one should delete it
               Column(
@@ -108,13 +108,13 @@ class _SshKeysPageState extends State<SshKeysPage> {
                                 TextButton(
                                   child: Text('basis.cancel'.tr()),
                                   onPressed: () {
-                                    Navigator.of(context)..pop();
+                                    Navigator.of(context).pop();
                                   },
                                 ),
                                 TextButton(
                                   child: Text(
                                     'basis.delete'.tr(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: BrandColors.red1,
                                     ),
                                   ),

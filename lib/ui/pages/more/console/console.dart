@@ -35,13 +35,13 @@ class _ConsoleState extends State<Console> {
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(53),
           child: Column(
-            children: [
+            children: const [
               BrandHeader(title: 'Console', hasBackButton: true),
               BrandDivider(),
             ],
           ),
-          preferredSize: Size.fromHeight(53),
         ),
         body: FutureBuilder(
           future: getIt.allReady(),
@@ -53,7 +53,7 @@ class _ConsoleState extends State<Console> {
                 reverse: true,
                 shrinkWrap: true,
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ...UnmodifiableListView(messages
                       .map((message) {
                         var isError = message.type == MessageType.warning;
@@ -84,7 +84,7 @@ class _ConsoleState extends State<Console> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
-                children: [
+                children: const [
                   Text('Waiting for initialisation'),
                   SizedBox(
                     height: 16,

@@ -5,7 +5,7 @@ part 'recovery_token_status.g.dart';
 
 @JsonSerializable()
 class RecoveryKeyStatus extends Equatable {
-  RecoveryKeyStatus({
+  const RecoveryKeyStatus({
     required this.exists,
     required this.valid,
     this.date,

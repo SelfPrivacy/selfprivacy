@@ -3,7 +3,7 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 
 class IconStatusMask extends StatelessWidget {
-  IconStatusMask({required this.child, required this.status});
+  const IconStatusMask({required this.child, required this.status});
   final Icon child;
 
   final StateType status;
@@ -24,8 +24,8 @@ class IconStatusMask extends StatelessWidget {
     }
     return ShaderMask(
       shaderCallback: (bounds) => LinearGradient(
-        begin: Alignment(-1, -0.8),
-        end: Alignment(0.9, 0.9),
+        begin: const Alignment(-1, -0.8),
+        end: const Alignment(0.9, 0.9),
         colors: colors,
         tileMode: TileMode.mirror,
       ).createShader(bounds),

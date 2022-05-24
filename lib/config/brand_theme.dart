@@ -9,7 +9,7 @@ final lightTheme = ThemeData(
   fontFamily: 'Inter',
   brightness: Brightness.light,
   scaffoldBackgroundColor: BrandColors.scaffoldBackground,
-  inputDecorationTheme: InputDecorationTheme(
+  inputDecorationTheme: const InputDecorationTheme(
     border: InputBorder.none,
     contentPadding: EdgeInsets.all(16),
     enabledBorder: OutlineInputBorder(
@@ -39,7 +39,7 @@ final lightTheme = ThemeData(
       color: BrandColors.red1,
     ),
   ),
-  listTileTheme: ListTileThemeData(
+  listTileTheme: const ListTileThemeData(
     minLeadingWidth: 24.0,
   ),
   textTheme: TextTheme(
@@ -48,25 +48,25 @@ final lightTheme = ThemeData(
     headline3: headline3Style,
     headline4: headline4Style,
     bodyText1: body1Style,
-    subtitle1: TextStyle(fontSize: 15, height: 1.6), // text input style
+    subtitle1: const TextStyle(fontSize: 15, height: 1.6), // text input style
   ),
 );
 
 var darkTheme = lightTheme.copyWith(
   brightness: Brightness.dark,
-  scaffoldBackgroundColor: Color(0xFF202120),
-  iconTheme: IconThemeData(color: BrandColors.gray3),
+  scaffoldBackgroundColor: const Color(0xFF202120),
+  iconTheme: const IconThemeData(color: BrandColors.gray3),
   cardColor: BrandColors.gray1,
-  dialogBackgroundColor: Color(0xFF202120),
+  dialogBackgroundColor: const Color(0xFF202120),
   textTheme: TextTheme(
     headline1: headline1Style.copyWith(color: BrandColors.white),
     headline2: headline2Style.copyWith(color: BrandColors.white),
     headline3: headline3Style.copyWith(color: BrandColors.white),
     headline4: headline4Style.copyWith(color: BrandColors.white),
     bodyText1: body1Style.copyWith(color: BrandColors.white),
-    subtitle1: TextStyle(fontSize: 15, height: 1.6), // text input style
+    subtitle1: const TextStyle(fontSize: 15, height: 1.6), // text input style
   ),
-  inputDecorationTheme: InputDecorationTheme(
+  inputDecorationTheme: const InputDecorationTheme(
     labelStyle: TextStyle(color: BrandColors.white),
     hintStyle: TextStyle(color: BrandColors.white),
     border: OutlineInputBorder(
@@ -82,6 +82,6 @@ var darkTheme = lightTheme.copyWith(
   ),
 );
 
-final paddingH15V30 = EdgeInsets.symmetric(horizontal: 15, vertical: 30);
+const paddingH15V30 = EdgeInsets.symmetric(horizontal: 15, vertical: 30);
 
-final paddingH15V0 = EdgeInsets.symmetric(horizontal: 15);
+const paddingH15V0 = EdgeInsets.symmetric(horizontal: 15);

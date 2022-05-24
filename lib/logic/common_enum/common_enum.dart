@@ -131,5 +131,5 @@ extension ServiceTypesExt on ServiceTypes {
     }
   }
 
-  String get txt => this.toString().split('.')[1];
+  String get txt => toString().split('.')[1];
 }

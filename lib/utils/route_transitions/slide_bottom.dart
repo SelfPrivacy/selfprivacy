@@ -21,7 +21,7 @@ Function transitionsBuilder = (
     child: Container(
       decoration: animation.isCompleted
           ? null
-          : BoxDecoration(
+          : const BoxDecoration(
               border: Border(
                 bottom: BorderSide(
                   color: Colors.black,
@@ -36,7 +36,7 @@ Function transitionsBuilder = (
 class SlideBottomRoute extends PageRouteBuilder {
   SlideBottomRoute(this.widget)
       : super(
-          transitionDuration: Duration(milliseconds: 150),
+          transitionDuration: const Duration(milliseconds: 150),
           pageBuilder: pageBuilder(widget),
           transitionsBuilder: transitionsBuilder as Widget Function(
               BuildContext, Animation<double>, Animation<double>, Widget),

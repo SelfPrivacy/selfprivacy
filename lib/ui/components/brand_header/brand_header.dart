@@ -6,7 +6,7 @@ import 'package:selfprivacy/ui/components/pre_styled_buttons/pre_styled_buttons.
 class BrandHeader extends StatelessWidget {
   const BrandHeader({
     Key? key,
-    this.title = "",
+    this.title = '',
     this.hasBackButton = false,
     this.hasFlashButton = false,
     this.onBackButtonPressed,
@@ -25,22 +25,20 @@ class BrandHeader extends StatelessWidget {
       padding: EdgeInsets.only(
         left: hasBackButton ? 1 : 15,
       ),
-      child: Container(
-        child: Row(
-          children: [
-            if (hasBackButton) ...[
-              IconButton(
-                icon: Icon(BrandIcons.arrow_left),
-                onPressed:
-                    onBackButtonPressed ?? () => Navigator.of(context).pop(),
-              ),
-              SizedBox(width: 10),
-            ],
-            BrandText.h4(title),
-            Spacer(),
-            if (hasFlashButton) PreStyledButtons.flash(),
+      child: Row(
+        children: [
+          if (hasBackButton) ...[
+            IconButton(
+              icon: const Icon(BrandIcons.arrowLeft),
+              onPressed:
+                  onBackButtonPressed ?? () => Navigator.of(context).pop(),
+            ),
+            const SizedBox(width: 10),
           ],
-        ),
+          BrandText.h4(title),
+          const Spacer(),
+          if (hasFlashButton) PreStyledButtons.flash(),
+        ],
       ),
     );
   }

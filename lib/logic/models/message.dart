@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-final formatter = new DateFormat('hh:mm');
+final formatter = DateFormat('hh:mm');
 
 class Message {
   Message({this.text, this.type = MessageType.normal}) : time = DateTime.now();

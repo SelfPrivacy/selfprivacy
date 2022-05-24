@@ -11,9 +11,9 @@ class Localization extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EasyLocalization(
-      supportedLocales: [Locale('ru'), Locale('en')],
+      supportedLocales: const [Locale('ru'), Locale('en')],
       path: 'assets/translations',
-      fallbackLocale: Locale('en'),
+      fallbackLocale: const Locale('en'),
       saveLocale: false,
       useOnlyLangCode: true,
       child: child!,

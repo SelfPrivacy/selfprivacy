@@ -3,7 +3,7 @@ part of 'ssh_keys.dart';
 class _NewSshKey extends StatelessWidget {
   final User user;
 
-  _NewSshKey(this.user);
+  const _NewSshKey(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,11 @@ class _NewSshKey extends StatelessWidget {
           var jobState = jobCubit.state;
           if (jobState is JobsStateWithJobs) {
             var jobs = jobState.jobList;
-            jobs.forEach((job) {
+            for (var job in jobs) {
               if (job is CreateSSHKeyJob && job.user.login == user.login) {
                 user.sshKeys.add(job.publicKey);
               }
-            });
+            }
           }
           return SshFormCubit(
             jobsCubit: jobCubit,
@@ -41,7 +41,7 @@ class _NewSshKey extends StatelessWidget {
                 BrandHeader(
                   title: user.login,
                 ),
-                SizedBox(width: 14),
+                const SizedBox(width: 14),
                 Padding(
                   padding: paddingH15V0,
                   child: Column(
@@ -55,14 +55,14 @@ class _NewSshKey extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       BrandButton.rised(
                         onPressed: formCubitState.isSubmitting
                             ? null
                             : () => context.read<SshFormCubit>().trySubmit(),
                         text: 'ssh.create'.tr(),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                     ],
                   ),
                 ),

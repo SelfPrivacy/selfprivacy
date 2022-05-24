@@ -21,7 +21,7 @@ Function transitionsBuilder = (
     child: Container(
       decoration: animation.isCompleted
           ? null
-          : BoxDecoration(
+          : const BoxDecoration(
               border: Border(
                 right: BorderSide(
                   color: Colors.black,

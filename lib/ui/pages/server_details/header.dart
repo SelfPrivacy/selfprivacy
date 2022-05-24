@@ -16,17 +16,17 @@ class _Header extends StatelessWidget {
       children: [
         IconStatusMask(
           status: providerState,
-          child: Icon(
+          child: const Icon(
             BrandIcons.server,
             size: 40,
             color: Colors.white,
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         BrandText.h2('providers.server.card_title'.tr()),
-        Spacer(),
+        const Spacer(),
         Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 4,
             horizontal: 2,
           ),
@@ -41,12 +41,12 @@ class _Header extends StatelessWidget {
                   break;
               }
             },
-            icon: Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) => [
               PopupMenuItem<_PopupMenuItemType>(
                 value: _PopupMenuItemType.setting,
                 child: Container(
-                  padding: EdgeInsets.only(left: 5),
+                  padding: const EdgeInsets.only(left: 5),
                   child: Text('basis.settings'.tr()),
                 ),
               ),

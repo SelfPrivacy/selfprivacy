@@ -8,9 +8,9 @@ class ServerDetailsRepository {
   var hetznerAPi = HetznerApi();
   var selfprivacyServer = ServerApi();
 
-  Future<_ServerDetailsRepositoryDto> load() async {
+  Future<ServerDetailsRepositoryDto> load() async {
     print('load');
-    return _ServerDetailsRepositoryDto(
+    return ServerDetailsRepositoryDto(
       autoUpgradeSettings: await selfprivacyServer.getAutoUpgradeSettings(),
       hetznerServerInfo: await hetznerAPi.getInfo(),
       serverTimezone: await selfprivacyServer.getServerTimezone(),
@@ -18,14 +18,14 @@ class ServerDetailsRepository {
   }
 }
 
-class _ServerDetailsRepositoryDto {
+class ServerDetailsRepositoryDto {
   final HetznerServerInfo hetznerServerInfo;
 
   final TimeZoneSettings serverTimezone;
 
   final AutoUpgradeSettings autoUpgradeSettings;
 
-  _ServerDetailsRepositoryDto({
+  ServerDetailsRepositoryDto({
     required this.hetznerServerInfo,
     required this.serverTimezone,
     required this.autoUpgradeSettings,

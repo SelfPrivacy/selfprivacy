@@ -11,13 +11,13 @@ class HetznerMetricsRepository {
 
     switch (period) {
       case Period.hour:
-        start = end.subtract(Duration(hours: 1));
+        start = end.subtract(const Duration(hours: 1));
         break;
       case Period.day:
-        start = end.subtract(Duration(days: 1));
+        start = end.subtract(const Duration(days: 1));
         break;
       case Period.month:
-        start = end.subtract(Duration(days: 15));
+        start = end.subtract(const Duration(days: 15));
         break;
     }
 
@@ -28,14 +28,14 @@ class HetznerMetricsRepository {
       api.getMetrics(start, end, 'network'),
     ]);
 
-    var cpuMetricsData = results[0]["metrics"];
-    var networkMetricsData = results[1]["metrics"];
+    var cpuMetricsData = results[0]['metrics'];
+    var networkMetricsData = results[1]['metrics'];
 
     return HetznerMetricsLoaded(
       period: period,
       start: start,
       end: end,
-      stepInSeconds: cpuMetricsData["step"],
+      stepInSeconds: cpuMetricsData['step'],
       cpu: timeSeriesSerializer(cpuMetricsData, 'cpu'),
       ppsIn: timeSeriesSerializer(networkMetricsData, 'network.0.pps.in'),
       ppsOut: timeSeriesSerializer(networkMetricsData, 'network.0.pps.out'),
@@ -51,6 +51,6 @@ class HetznerMetricsRepository {
 
 List<TimeSeriesData> timeSeriesSerializer(
     Map<String, dynamic> json, String type) {
-  List list = json["time_series"][type]["values"];
+  List list = json['time_series'][type]['values'];
   return list.map((el) => TimeSeriesData(el[0], double.parse(el[1]))).toList();
 }

@@ -8,7 +8,7 @@ abstract class LengthStringValidation extends ValidationModel<String> {
   @override
   String? check(String value) {
     var length = value.length;
-    var errorMessage = this.errorMassage.replaceAll("[]", length.toString());
+    var errorMessage = errorMassage.replaceAll('[]', length.toString());
     return test(value) ? errorMessage : null;
   }
 }

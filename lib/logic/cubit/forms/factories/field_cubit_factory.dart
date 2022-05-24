@@ -16,7 +16,7 @@ class FieldCubitFactory {
   /// - Must not be a reserved root login
   /// - Must be unique
   FieldCubit<String> createUserLoginField() {
-    final userAllowedRegExp = RegExp(r"^[a-z_][a-z0-9_]+$");
+    final userAllowedRegExp = RegExp(r'^[a-z_][a-z0-9_]+$');
     const userMaxLength = 31;
     return FieldCubit(
       initalValue: '',
@@ -40,7 +40,7 @@ class FieldCubitFactory {
   /// - Must fail on the regural expression of invalid matches: [\n\r\s]+
   /// - Must not be empty
   FieldCubit<String> createUserPasswordField() {
-    var passwordForbiddenRegExp = RegExp(r"[\n\r\s]+");
+    var passwordForbiddenRegExp = RegExp(r'[\n\r\s]+');
     return FieldCubit(
       initalValue: '',
       validations: [

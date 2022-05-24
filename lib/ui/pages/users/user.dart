@@ -30,7 +30,7 @@ class _User extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Flexible(
               child: isRootUser
                   ? BrandText.h4Underlined(user.login)
@@ -38,7 +38,8 @@ class _User extends StatelessWidget {
                   : BrandText.h4(user.login,
                       style: user.isFoundOnServer
                           ? null
-                          : TextStyle(decoration: TextDecoration.lineThrough)),
+                          : const TextStyle(
+                              decoration: TextDecoration.lineThrough)),
             ),
           ],
         ),

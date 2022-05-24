@@ -67,7 +67,7 @@ class BrandIcons {
       IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData upload =
       IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData arrow_left =
+  static const IconData arrowLeft =
       IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData shape =
       IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);

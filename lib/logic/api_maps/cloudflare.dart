@@ -25,6 +25,7 @@ class CloudflareApi extends ApiMap {
     this.customToken,
   });
 
+  @override
   BaseOptions get options {
     var options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
@@ -164,7 +165,7 @@ class CloudflareApi extends ApiMap {
       await Future.wait(allCreateFutures);
     } on DioError catch (e) {
       print(e.message);
-      throw e;
+      rethrow;
     } finally {
       close(client);
     }

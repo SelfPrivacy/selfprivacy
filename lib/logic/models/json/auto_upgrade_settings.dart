@@ -8,7 +8,7 @@ class AutoUpgradeSettings extends Equatable {
   final bool enable;
   final bool allowReboot;
 
-  AutoUpgradeSettings({
+  const AutoUpgradeSettings({
     required this.enable,
     required this.allowReboot,
   });

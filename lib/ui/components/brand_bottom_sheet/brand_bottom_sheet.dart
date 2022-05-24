@@ -44,9 +44,9 @@ class BrandBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: mainHeight),
               child: innerWidget,

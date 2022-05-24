@@ -16,26 +16,26 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
   Widget _getStateCard(DnsRecordsStatus dnsState, Function fixCallback) {
     var description = '';
     var subtitle = '';
-    var icon = Icon(
+    var icon = const Icon(
       Icons.check,
       color: Colors.green,
     );
     switch (dnsState) {
       case DnsRecordsStatus.uninitialized:
         description = 'providers.domain.states.uninitialized'.tr();
-        icon = Icon(
+        icon = const Icon(
           Icons.refresh,
         );
         break;
       case DnsRecordsStatus.refreshing:
         description = 'providers.domain.states.refreshing'.tr();
-        icon = Icon(
+        icon = const Icon(
           Icons.refresh,
         );
         break;
       case DnsRecordsStatus.good:
         description = 'providers.domain.states.ok'.tr();
-        icon = Icon(
+        icon = const Icon(
           Icons.check,
           color: Colors.green,
         );
@@ -43,7 +43,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       case DnsRecordsStatus.error:
         description = 'providers.domain.states.error'.tr();
         subtitle = 'providers.domain.states.error_subtitle'.tr();
-        icon = Icon(
+        icon = const Icon(
           Icons.error,
           color: Colors.red,
         );
@@ -104,7 +104,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
           ),
         ),
 
-        SizedBox(height: 16.0),
+        const SizedBox(height: 16.0),
         // Outlined card with a list of A records and their
         // status.
         BrandCards.outlined(
@@ -128,7 +128,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                   .map(
                     (dnsRecord) => Column(
                       children: [
-                        Divider(
+                        const Divider(
                           height: 1.0,
                         ),
                         ListTile(
@@ -162,7 +162,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
             ],
           ),
         ),
-        SizedBox(height: 16.0),
+        const SizedBox(height: 16.0),
         BrandCards.outlined(
           child: Column(
             children: <Widget>[
@@ -184,7 +184,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                   .map(
                     (dnsRecord) => Column(
                       children: [
-                        Divider(
+                        const Divider(
                           height: 1.0,
                         ),
                         ListTile(

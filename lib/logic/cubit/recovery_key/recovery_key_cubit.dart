@@ -7,7 +7,7 @@ part 'recovery_key_state.dart';
 class RecoveryKeyCubit
     extends ServerInstallationDependendCubit<RecoveryKeyState> {
   RecoveryKeyCubit(ServerInstallationCubit serverInstallationCubit)
-      : super(serverInstallationCubit, RecoveryKeyState.initial());
+      : super(serverInstallationCubit, const RecoveryKeyState.initial());
 
   final api = ServerApi();
 

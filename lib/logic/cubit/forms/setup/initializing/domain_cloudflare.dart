@@ -39,7 +39,7 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
     var domain = ServerDomain(
       domainName: domainName,
       zoneId: zoneId,
-      provider: DnsProvider.Cloudflare,
+      provider: DnsProvider.cloudflare,
     );
 
     serverInstallationCubit.setDomain(domain);

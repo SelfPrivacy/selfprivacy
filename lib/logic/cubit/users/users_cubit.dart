@@ -1,7 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 import '../../api_maps/server.dart';
@@ -14,18 +13,19 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   UsersCubit(ServerInstallationCubit serverInstallationCubit)
       : super(
             serverInstallationCubit,
-            UsersState(
+            const UsersState(
                 <User>[], User(login: 'root'), User(login: 'loading...')));
   Box<User> box = Hive.box<User>(BNames.usersBox);
   Box serverInstallationBox = Hive.box(BNames.serverInstallationBox);
 
   final api = ServerApi();
 
+  @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
       var loadedUsers = box.values.toList();
       final primaryUser = serverInstallationBox.get(BNames.rootUser,
-          defaultValue: User(login: 'loading...'));
+          defaultValue: const User(login: 'loading...'));
       List<String> rootKeys = [
         ...serverInstallationBox.get(BNames.rootKeys, defaultValue: [])
       ];
@@ -308,6 +308,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
 
   @override
   void clear() async {
-    emit(UsersState(<User>[], User(login: 'root'), User(login: 'loading...')));
+    emit(const UsersState(
+        <User>[], User(login: 'root'), User(login: 'loading...')));
   }
 }

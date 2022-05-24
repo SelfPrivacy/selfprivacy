@@ -42,7 +42,7 @@ class DnsRecordsState extends ServerInstallationDependendState {
 class DesiredDnsRecord {
   const DesiredDnsRecord({
     required this.name,
-    this.type = "A",
+    this.type = 'A',
     required this.content,
     this.description = '',
     this.category = DnsRecordsCategory.services,

@@ -13,7 +13,7 @@ class _CloseButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           BrandText.h4('basis.close'.tr()),
-          Icon(Icons.close),
+          const Icon(Icons.close),
         ],
       ),
     );

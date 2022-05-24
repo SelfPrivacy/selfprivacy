@@ -28,7 +28,7 @@ class BrandHeroScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(52.0),
+          preferredSize: const Size.fromHeight(52.0),
           child: BrandHeader(
             title: headerTitle,
             hasBackButton: hasBackButton,
@@ -37,29 +37,29 @@ class BrandHeroScreen extends StatelessWidget {
           ),
         ),
         body: ListView(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           children: <Widget>[
             if (heroIcon != null)
               Container(
+                alignment: Alignment.bottomLeft,
                 child: Icon(
                   heroIcon,
                   size: 48.0,
                 ),
-                alignment: Alignment.bottomLeft,
               ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             if (heroTitle != null)
               Text(
                 heroTitle!,
                 style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.start,
               ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             if (heroSubtitle != null)
               Text(heroSubtitle!,
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.start),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ...children,
           ],
         ),

@@ -28,17 +28,17 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
       child: Builder(builder: (context) {
         return Scaffold(
           appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(52),
             child: BrandHeader(
                 title: 'more.settings.title'.tr(), hasBackButton: true),
-            preferredSize: Size.fromHeight(52),
           ),
           body: ListView(
             padding: paddingH15V0,
             children: [
-              BrandDivider(),
+              const BrandDivider(),
               Container(
-                padding: EdgeInsets.only(top: 20, bottom: 5),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.only(top: 20, bottom: 5),
+                decoration: const BoxDecoration(
                     border: Border(
                   bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
                 )),
@@ -52,7 +52,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                         value: 'more.settings.2'.tr(),
                       ),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     BrandSwitch(
                       value: Theme.of(context).brightness == Brightness.dark,
                       onChanged: (value) => context
@@ -63,8 +63,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 20, bottom: 5),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.only(top: 20, bottom: 5),
+                decoration: const BoxDecoration(
                     border: Border(
                   bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
                 )),
@@ -78,14 +78,14 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                         value: 'more.settings.4'.tr(),
                       ),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: BrandColors.red1,
                       ),
                       child: Text(
                         'basis.reset'.tr(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: BrandColors.white,
                           fontWeight: NamedFontWeight.demiBold,
                         ),
@@ -131,8 +131,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     var isDisabled =
         context.watch<ServerInstallationCubit>().state.serverDetails == null;
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 5),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.only(top: 20, bottom: 5),
+      decoration: const BoxDecoration(
           border: Border(
         bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
       )),
@@ -146,17 +146,10 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
               value: 'more.settings.6'.tr(),
             ),
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary: BrandColors.red1,
-            ),
-            child: Text(
-              'basis.delete'.tr(),
-              style: TextStyle(
-                color: BrandColors.white,
-                fontWeight: NamedFontWeight.demiBold,
-              ),
             ),
             onPressed: isDisabled
                 ? null
@@ -177,7 +170,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                                       builder: (context) {
                                         return Container(
                                           alignment: Alignment.center,
-                                          child: CircularProgressIndicator(),
+                                          child:
+                                              const CircularProgressIndicator(),
                                         );
                                       });
                                   await context
@@ -193,6 +187,13 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       },
                     );
                   },
+            child: Text(
+              'basis.delete'.tr(),
+              style: const TextStyle(
+                color: BrandColors.white,
+                fontWeight: NamedFontWeight.demiBold,
+              ),
+            ),
           ),
         ],
       ),
@@ -220,9 +221,9 @@ class _TextColumn extends StatelessWidget {
           title,
           style: TextStyle(color: hasWarning ? BrandColors.warning : null),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         BrandText.body1(value,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 13,
               height: 1.53,
               color: BrandColors.gray1,

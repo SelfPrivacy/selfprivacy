@@ -11,14 +11,12 @@ class AboutPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(52),
           child: BrandHeader(
               title: 'more.about_project'.tr(), hasBackButton: true),
-          preferredSize: Size.fromHeight(52),
         ),
-        body: Container(
-          child: BrandMarkdown(
-            fileName: 'about',
-          ),
+        body: const BrandMarkdown(
+          fileName: 'about',
         ),
       ),
     );

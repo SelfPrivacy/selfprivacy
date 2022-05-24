@@ -18,5 +18,5 @@ class PreStyledButtons {
   }) =>
       _CloseButton(onPress: onPress);
 
-  static Widget flash() => _BrandFlashButton();
+  static Widget flash() => const _BrandFlashButton();
 }

@@ -1,6 +1,5 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
@@ -13,16 +12,17 @@ class DnsRecordsCubit
     extends ServerInstallationDependendCubit<DnsRecordsState> {
   DnsRecordsCubit(ServerInstallationCubit serverInstallationCubit)
       : super(serverInstallationCubit,
-            DnsRecordsState(dnsState: DnsRecordsStatus.refreshing));
+            const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing));
 
   final api = ServerApi();
   final cloudflare = CloudflareApi();
 
+  @override
   Future<void> load() async {
     emit(DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
         dnsRecords: _getDesiredDnsRecords(
-            serverInstallationCubit.state.serverDomain?.domainName, "", "")));
+            serverInstallationCubit.state.serverDomain?.domainName, '', '')));
     print('Loading DNS status');
     if (serverInstallationCubit.state is ServerInstallationFinished) {
       final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
@@ -75,7 +75,7 @@ class DnsRecordsCubit
               : DnsRecordsStatus.good,
         ));
       } else {
-        emit(DnsRecordsState());
+        emit(const DnsRecordsState());
       }
     }
   }
@@ -88,7 +88,7 @@ class DnsRecordsCubit
 
   @override
   Future<void> clear() async {
-    emit(DnsRecordsState(dnsState: DnsRecordsStatus.error));
+    emit(const DnsRecordsState(dnsState: DnsRecordsStatus.error));
   }
 
   Future<void> refresh() async {
@@ -104,7 +104,7 @@ class DnsRecordsCubit
     await cloudflare.removeSimilarRecords(cloudFlareDomain: domain!);
     await cloudflare.createMultipleDnsRecords(
         cloudFlareDomain: domain, ip4: ipAddress);
-    await cloudflare.setDkim(dkimPublicKey ?? "", domain);
+    await cloudflare.setDkim(dkimPublicKey ?? '', domain);
     await load();
   }
 

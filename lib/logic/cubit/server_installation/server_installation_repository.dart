@@ -62,7 +62,7 @@ class ServerInstallationRepository {
       );
     }
 
-    if (serverDomain != null && serverDomain.provider == DnsProvider.Unknown) {
+    if (serverDomain != null && serverDomain.provider == DnsProvider.unknown) {
       return ServerInstallationRecovery(
         hetznerKey: hetznerToken,
         cloudFlareKey: cloudflareToken,
@@ -101,17 +101,17 @@ class ServerInstallationRepository {
   ) {
     if (serverDetails != null) {
       if (hetznerToken != null) {
-        if (serverDetails.provider != ServerProvider.Unknown) {
-          if (serverDomain.provider != DnsProvider.Unknown) {
-            return RecoveryStep.BackblazeToken;
+        if (serverDetails.provider != ServerProvider.unknown) {
+          if (serverDomain.provider != DnsProvider.unknown) {
+            return RecoveryStep.backblazeToken;
           }
-          return RecoveryStep.CloudflareToken;
+          return RecoveryStep.cloudflareToken;
         }
-        return RecoveryStep.ServerSelection;
+        return RecoveryStep.serverSelection;
       }
-      return RecoveryStep.HetznerToken;
+      return RecoveryStep.hetznerToken;
     }
-    return RecoveryStep.Selecting;
+    return RecoveryStep.selecting;
   }
 
   void clearAppConfig() {
@@ -271,7 +271,7 @@ class ServerInstallationRepository {
       var nav = getIt.get<NavigationService>();
       nav.showPopUpDialog(
         BrandAlert(
-          title: e.response!.data["errors"][0]["code"] == 1038
+          title: e.response!.data['errors'][0]['code'] == 1038
               ? 'modals.10'.tr()
               : 'providers.domain.states.error'.tr(),
           contentText: 'modals.6'.tr(),
@@ -309,7 +309,7 @@ class ServerInstallationRepository {
 
     var dkimRecordString = await api.getDkim();
 
-    await cloudflareApi.setDkim(dkimRecordString ?? "", cloudFlareDomain);
+    await cloudflareApi.setDkim(dkimRecordString ?? '', cloudFlareDomain);
   }
 
   Future<bool> isHttpServerWorking() async {
@@ -408,7 +408,7 @@ class ServerInstallationRepository {
           id: 0,
           name: '',
         ),
-        provider: ServerProvider.Unknown,
+        provider: ServerProvider.unknown,
         id: 0,
         ip4: serverIp,
         startTime: null,
@@ -439,7 +439,7 @@ class ServerInstallationRepository {
           id: 0,
           name: '',
         ),
-        provider: ServerProvider.Unknown,
+        provider: ServerProvider.unknown,
         id: 0,
         ip4: '',
         startTime: null,
@@ -472,7 +472,7 @@ class ServerInstallationRepository {
           id: 0,
           name: '',
         ),
-        provider: ServerProvider.Unknown,
+        provider: ServerProvider.unknown,
         id: 0,
         ip4: '',
         startTime: null,
@@ -487,7 +487,7 @@ class ServerInstallationRepository {
 
   Future<User> getMainUser() async {
     var serverApi = ServerApi();
-    final fallbackUser = User(
+    const fallbackUser = User(
       isFoundOnServer: false,
       note: 'Couldn\'t find main user on server, API is outdated',
       login: 'UNKNOWN',

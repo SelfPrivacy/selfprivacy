@@ -10,6 +10,8 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryConfirmCloudflare extends StatelessWidget {
+  const RecoveryConfirmCloudflare({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var appConfig = context.watch<ServerInstallationCubit>();
@@ -20,9 +22,9 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
         var formCubitState = context.watch<CloudFlareFormCubit>().state;
 
         return BrandHeroScreen(
-          heroTitle: "recovering.confirm_cloudflare".tr(),
-          heroSubtitle: "recovering.confirm_cloudflare_description".tr(args: [
-            appConfig.state.serverDomain?.domainName ?? "your domain"
+          heroTitle: 'recovering.confirm_cloudflare'.tr(),
+          heroSubtitle: 'recovering.confirm_cloudflare_description'.tr(args: [
+            appConfig.state.serverDomain?.domainName ?? 'your domain'
           ]),
           hasBackButton: true,
           hasFlashButton: false,
@@ -30,7 +32,7 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
             CubitFormTextField(
               formFieldCubit: context.read<CloudFlareFormCubit>().apiKey,
               textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
+              scrollPadding: const EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 hintText: 'initializing.5'.tr(),
@@ -50,7 +52,7 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) {
-                  return BrandBottomSheet(
+                  return const BrandBottomSheet(
                     isExpended: true,
                     child: Padding(
                       padding: paddingH15V0,

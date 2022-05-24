@@ -44,6 +44,7 @@ class ServerApi extends ApiMap {
       this.overrideDomain,
       this.customToken});
 
+  @override
   BaseOptions get options {
     var options = BaseOptions();
 
@@ -73,7 +74,7 @@ class ServerApi extends ApiMap {
     Response response;
 
     var client = await getClient();
-    String? apiVersion = null;
+    String? apiVersion;
 
     try {
       response = await client.get('/api/version');
@@ -82,8 +83,8 @@ class ServerApi extends ApiMap {
       print(e.message);
     } finally {
       close(client);
-      return apiVersion;
     }
+    return apiVersion;
   }
 
   Future<bool> isHttpServerWorking() async {
@@ -98,8 +99,8 @@ class ServerApi extends ApiMap {
       print(e.message);
     } finally {
       close(client);
-      return res;
     }
+    return res;
   }
 
   Future<ApiResponse<User>> createUser(User user) async {
@@ -227,7 +228,7 @@ class ServerApi extends ApiMap {
     try {
       response = await client.put(
         '/services/ssh/key/send',
-        data: {"public_key": ssh},
+        data: {'public_key': ssh},
       );
     } on DioError catch (e) {
       print(e.message);
@@ -293,7 +294,7 @@ class ServerApi extends ApiMap {
     try {
       response = await client.delete(
         '/services/ssh/keys/${user.login}',
-        data: {"public_key": sshKey},
+        data: {'public_key': sshKey},
       );
     } on DioError catch (e) {
       print(e.message);
@@ -331,10 +332,11 @@ class ServerApi extends ApiMap {
       res = false;
     } finally {
       close(client);
-      return res;
     }
+    return res;
   }
 
+  @override
   String get rootAddress =>
       throw UnimplementedError('not used in with implementation');
 
@@ -351,8 +353,8 @@ class ServerApi extends ApiMap {
       res = false;
     } finally {
       close(client);
-      return res;
     }
+    return res;
   }
 
   Future<void> switchService(ServiceTypes type, bool needToTurnOn) async {
@@ -433,8 +435,8 @@ class ServerApi extends ApiMap {
       print(e);
     } finally {
       close(client);
-      return backups;
     }
+    return backups;
   }
 
   Future<BackupStatus> getBackupStatus() async {
@@ -453,8 +455,8 @@ class ServerApi extends ApiMap {
       print(e.message);
     } finally {
       close(client);
-      return status;
     }
+    return status;
   }
 
   Future<void> forceBackupListReload() async {
@@ -496,8 +498,8 @@ class ServerApi extends ApiMap {
       print(e.message);
     } finally {
       close(client);
-      return result;
     }
+    return result;
   }
 
   Future<bool> reboot() async {
@@ -514,8 +516,8 @@ class ServerApi extends ApiMap {
       print(e.message);
     } finally {
       close(client);
-      return result;
     }
+    return result;
   }
 
   Future<bool> upgrade() async {
@@ -532,13 +534,13 @@ class ServerApi extends ApiMap {
       print(e.message);
     } finally {
       close(client);
-      return result;
     }
+    return result;
   }
 
   Future<AutoUpgradeSettings> getAutoUpgradeSettings() async {
     Response response;
-    AutoUpgradeSettings settings = AutoUpgradeSettings(
+    AutoUpgradeSettings settings = const AutoUpgradeSettings(
       enable: false,
       allowReboot: false,
     );
@@ -553,8 +555,8 @@ class ServerApi extends ApiMap {
       print(e.message);
     } finally {
       close(client);
-      return settings;
     }
+    return settings;
   }
 
   Future<void> updateAutoUpgradeSettings(AutoUpgradeSettings settings) async {
@@ -616,7 +618,7 @@ class ServerApi extends ApiMap {
     }
 
     if (response.statusCode != HttpStatus.ok) {
-      return "";
+      return '';
     }
 
     final base64toString = utf8.fuse(base64);
@@ -639,7 +641,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: RecoveryKeyStatus(exists: false, valid: false));
+          data: const RecoveryKeyStatus(exists: false, valid: false));
     } finally {
       close(client);
     }
@@ -677,7 +679,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: "");
+          data: '');
     } finally {
       close(client);
     }
@@ -686,7 +688,7 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
         statusCode: code,
-        data: response.data != null ? response.data["token"] : '');
+        data: response.data != null ? response.data['token'] : '');
   }
 
   Future<ApiResponse<String>> useRecoveryToken(DeviceToken token) async {
@@ -706,7 +708,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: "");
+          data: '');
     } finally {
       client.close();
     }
@@ -715,7 +717,7 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
         statusCode: code,
-        data: response.data != null ? response.data["token"] : '');
+        data: response.data != null ? response.data['token'] : '');
   }
 
   Future<ApiResponse<String>> authorizeDevice(DeviceToken token) async {
@@ -735,16 +737,14 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: "");
+          data: '');
     } finally {
       client.close();
     }
 
     final int code = response.statusCode ?? HttpStatus.internalServerError;
 
-    return ApiResponse(
-        statusCode: code,
-        data: response.data["token"] != null ? response.data["token"] : '');
+    return ApiResponse(statusCode: code, data: response.data['token'] ?? '');
   }
 
   Future<ApiResponse<String>> createDeviceToken() async {
@@ -758,7 +758,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: "");
+          data: '');
     } finally {
       client.close();
     }
@@ -767,7 +767,7 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
         statusCode: code,
-        data: response.data != null ? response.data["token"] : '');
+        data: response.data != null ? response.data['token'] : '');
   }
 
   Future<ApiResponse<String>> deleteDeviceToken() async {
@@ -781,15 +781,14 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: "");
+          data: '');
     } finally {
       client.close();
     }
 
     final int code = response.statusCode ?? HttpStatus.internalServerError;
 
-    return ApiResponse(
-        statusCode: code, data: response.data != null ? response.data : '');
+    return ApiResponse(statusCode: code, data: response.data ?? '');
   }
 
   Future<ApiResponse<List<ApiToken>>> getApiTokens() async {
@@ -828,7 +827,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: "");
+          data: '');
     } finally {
       client.close();
     }
@@ -837,7 +836,7 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
         statusCode: code,
-        data: response.data != null ? response.data["token"] : '');
+        data: response.data != null ? response.data['token'] : '');
   }
 
   Future<ApiResponse<void>> deleteApiToken(String device) async {

@@ -26,7 +26,7 @@ extension DurationFormatter on Duration {
 
   String toHoursMinutesSecondsFormat() {
     // WAT: https://flutterigniter.com/how-to-format-duration/
-    return this.toString().split('.').first.padLeft(8, "0");
+    return this.toString().split('.').first.padLeft(8, '0');
   }
 
   String toDayHourMinuteFormat2() {
@@ -36,6 +36,6 @@ extension DurationFormatter on Duration {
     ].map((seg) {
       return seg.toString().padLeft(2, '0');
     });
-    return segments.first + " h" + " " + segments.last + " min";
+    return '${segments.first} h ${segments.last} min';
   }
 }

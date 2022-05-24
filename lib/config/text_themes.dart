@@ -3,7 +3,7 @@ import 'package:selfprivacy/utils/named_font_weight.dart';
 
 import 'brand_colors.dart';
 
-final defaultTextStyle = TextStyle(
+const defaultTextStyle = TextStyle(
   fontSize: 15,
   color: BrandColors.textColor1,
 );
@@ -51,7 +51,7 @@ final headline5Style = defaultTextStyle.copyWith(
   color: BrandColors.headlineColor.withOpacity(0.8),
 );
 
-final body1Style = defaultTextStyle;
+const body1Style = defaultTextStyle;
 final body2Style = defaultTextStyle.copyWith(
   color: BrandColors.textColor2,
 );
@@ -69,7 +69,7 @@ final smallStyle = defaultTextStyle.copyWith(fontSize: 11, height: 1.45);
 
 final linkStyle = defaultTextStyle.copyWith(color: BrandColors.blue);
 
-final progressTextStyleLight = TextStyle(
+const progressTextStyleLight = TextStyle(
   fontSize: 11,
   color: BrandColors.textColor1,
   height: 1.7,

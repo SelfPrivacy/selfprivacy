@@ -20,7 +20,7 @@ class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
       domainName: fields[0] as String,
       zoneId: fields[1] as String,
       provider:
-          fields[2] == null ? DnsProvider.Cloudflare : fields[2] as DnsProvider,
+          fields[2] == null ? DnsProvider.cloudflare : fields[2] as DnsProvider,
     );
   }
 
@@ -55,21 +55,21 @@ class DnsProviderAdapter extends TypeAdapter<DnsProvider> {
   DnsProvider read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return DnsProvider.Unknown;
+        return DnsProvider.unknown;
       case 1:
-        return DnsProvider.Cloudflare;
+        return DnsProvider.cloudflare;
       default:
-        return DnsProvider.Unknown;
+        return DnsProvider.unknown;
     }
   }
 
   @override
   void write(BinaryWriter writer, DnsProvider obj) {
     switch (obj) {
-      case DnsProvider.Unknown:
+      case DnsProvider.unknown:
         writer.writeByte(0);
         break;
-      case DnsProvider.Cloudflare:
+      case DnsProvider.cloudflare:
         writer.writeByte(1);
         break;
     }

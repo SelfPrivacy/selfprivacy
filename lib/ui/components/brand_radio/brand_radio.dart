@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 
 class BrandRadio extends StatelessWidget {
-  BrandRadio({
+  const BrandRadio({
     Key? key,
     required this.isChecked,
   }) : super(key: key);
@@ -15,7 +15,7 @@ class BrandRadio extends StatelessWidget {
       height: 20,
       width: 20,
       alignment: Alignment.center,
-      padding: EdgeInsets.all(2),
+      padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: _getBorder(),
@@ -24,7 +24,7 @@ class BrandRadio extends StatelessWidget {
           ? Container(
               height: 10,
               width: 10,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: BrandColors.primary,
               ),

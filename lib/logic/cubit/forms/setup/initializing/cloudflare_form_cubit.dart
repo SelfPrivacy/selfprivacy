@@ -8,7 +8,7 @@ import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class CloudFlareFormCubit extends FormCubit {
   CloudFlareFormCubit(this.initializingCubit) {
-    var regExp = RegExp(r"\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]");
+    var regExp = RegExp(r'\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
@@ -47,10 +47,5 @@ class CloudFlareFormCubit extends FormCubit {
       return false;
     }
     return true;
-  }
-
-  @override
-  Future<void> close() async {
-    return super.close();
   }
 }

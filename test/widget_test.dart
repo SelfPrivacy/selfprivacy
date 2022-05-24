@@ -114,9 +114,9 @@ void main() {
   });
 }
 
-var regExpNewLines = RegExp(r"[\n\r]+");
-var regExpWhiteSpaces = RegExp(r"[\s]+");
-var regExpUppercaseLetters = RegExp(r"[A-Z]");
-var regExpLowercaseLetters = RegExp(r"[a-z]");
-var regExpNumbers = RegExp(r"[0-9]");
+var regExpNewLines = RegExp(r'[\n\r]+');
+var regExpWhiteSpaces = RegExp(r'[\s]+');
+var regExpUppercaseLetters = RegExp(r'[A-Z]');
+var regExpLowercaseLetters = RegExp(r'[a-z]');
+var regExpNumbers = RegExp(r'[0-9]');
 var regExpSymbols = RegExp(r'(?:_|[^\w\s])+');

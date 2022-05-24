@@ -6,7 +6,7 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class ProgressBar extends StatefulWidget {
-  ProgressBar({
+  const ProgressBar({
     Key? key,
     required this.steps,
     required this.activeIndex,
@@ -49,12 +49,12 @@ class _ProgressBarState extends State<ProgressBar> {
 
     odd.insert(
       0,
-      SizedBox(
+      const SizedBox(
         width: 10,
       ),
     );
     odd.add(
-      SizedBox(
+      const SizedBox(
         width: 20,
       ),
     );
@@ -63,12 +63,12 @@ class _ProgressBarState extends State<ProgressBar> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BrandText.h2('Progress'),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
-          children: even,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: even,
         ),
-        SizedBox(height: 7),
+        const SizedBox(height: 7),
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
@@ -82,23 +82,23 @@ class _ProgressBarState extends State<ProgressBar> {
                 height: 5,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: BrandColors.stableGradientColors,
                   ),
                 ),
-                duration: Duration(
+                duration: const Duration(
                   milliseconds: 300,
                 ),
               );
             },
           ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Row(
-          children: odd,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: odd,
         ),
       ],
     );
@@ -114,7 +114,7 @@ class _ProgressBarState extends State<ProgressBar> {
 
     style = isActive ? style!.copyWith(fontWeight: FontWeight.w700) : style;
     return Container(
-      padding: EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.only(left: 10),
       height: 20,
       alignment: Alignment.center,
       child: RichText(
@@ -123,9 +123,9 @@ class _ProgressBarState extends State<ProgressBar> {
           style: progressTextStyleLight,
           children: [
             checked
-                ? WidgetSpan(
+                ? const WidgetSpan(
                     child: Padding(
-                    padding: const EdgeInsets.only(bottom: 2, right: 2),
+                    padding: EdgeInsets.only(bottom: 2, right: 2),
                     child: Icon(BrandIcons.check, size: 11),
                   ))
                 : TextSpan(text: '${index + 1}.', style: style),

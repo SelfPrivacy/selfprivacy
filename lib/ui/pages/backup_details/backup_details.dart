@@ -72,7 +72,7 @@ class _BackupDetailsState extends State<BackupDetails>
                         : () async {
                             await context.read<BackupsCubit>().createBackup();
                           },
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.add_circle_outline_rounded,
                     ),
                     title: Text(
@@ -105,7 +105,7 @@ class _BackupDetailsState extends State<BackupDetails>
                   ),
                 if (backupStatus == BackupStatusEnum.error)
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.error_outline,
                       color: BrandColors.red1,
                     ),
@@ -117,7 +117,7 @@ class _BackupDetailsState extends State<BackupDetails>
               ],
             ),
           ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         // Card with a list of existing backups
         // Each list item has a date
         // When clicked, starts the restore action
@@ -128,7 +128,7 @@ class _BackupDetailsState extends State<BackupDetails>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.refresh,
                   ),
                   title: Text(
@@ -136,12 +136,12 @@ class _BackupDetailsState extends State<BackupDetails>
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
-                Divider(
+                const Divider(
                   height: 1.0,
                 ),
                 if (backups.isEmpty)
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.error_outline,
                     ),
                     title: Text('providers.backup.no_backups'.tr()),
@@ -174,11 +174,7 @@ class _BackupDetailsState extends State<BackupDetails>
                                 ));
                               },
                         title: Text(
-                          MaterialLocalizations.of(context)
-                                  .formatShortDate(backup.time) +
-                              ' ' +
-                              TimeOfDay.fromDateTime(backup.time)
-                                  .format(context),
+                          '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
                         ),
                       );
                     }).toList(),
@@ -186,7 +182,7 @@ class _BackupDetailsState extends State<BackupDetails>
               ],
             ),
           ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         BrandCards.outlined(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +199,7 @@ class _BackupDetailsState extends State<BackupDetails>
               if (providerState != StateType.uninitialized)
                 Column(
                   children: [
-                    Divider(
+                    const Divider(
                       height: 1.0,
                     ),
                     ListTile(
@@ -218,7 +214,7 @@ class _BackupDetailsState extends State<BackupDetails>
                                     .forceUpdateBackups()
                               },
                     ),
-                    Divider(
+                    const Divider(
                       height: 1.0,
                     ),
                     ListTile(

@@ -16,11 +16,11 @@ class _NewUser extends StatelessWidget {
           users.addAll(context.read<UsersCubit>().state.users);
           if (jobState is JobsStateWithJobs) {
             var jobs = jobState.jobList;
-            jobs.forEach((job) {
+            for (var job in jobs) {
               if (job is CreateUserJob) {
                 users.add(job.user);
               }
-            });
+            }
           }
           return UserFormCubit(
             jobsCubit: jobCubit,
@@ -43,7 +43,7 @@ class _NewUser extends StatelessWidget {
                 BrandHeader(
                   title: 'users.new_user'.tr(),
                 ),
-                SizedBox(width: 14),
+                const SizedBox(width: 14),
                 Padding(
                   padding: paddingH15V0,
                   child: Column(
@@ -58,7 +58,7 @@ class _NewUser extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       CubitFormTextField(
                         formFieldCubit: context.read<UserFormCubit>().password,
                         decoration: InputDecoration(
@@ -67,7 +67,7 @@ class _NewUser extends StatelessWidget {
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 BrandIcons.refresh,
                                 color: BrandColors.blue,
                               ),
@@ -77,16 +77,16 @@ class _NewUser extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       BrandButton.rised(
                         onPressed: formCubitState.isSubmitting
                             ? null
                             : () => context.read<UserFormCubit>().trySubmit(),
                         text: 'basis.create'.tr(),
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
                       Text('users.new_user_info_note'.tr()),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                     ],
                   ),
                 ),

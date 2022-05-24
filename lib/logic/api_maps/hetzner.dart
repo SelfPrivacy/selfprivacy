@@ -10,11 +10,14 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ApiMap {
+  @override
   bool hasLogger;
+  @override
   bool isWithToken;
 
   HetznerApi({this.hasLogger = false, this.isWithToken = true});
 
+  @override
   BaseOptions get options {
     var options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
@@ -60,12 +63,12 @@ class HetznerApi extends ApiMap {
     Response dbCreateResponse = await client.post(
       '/volumes',
       data: {
-        "size": 10,
-        "name": StringGenerators.dbStorageName(),
-        "labels": {"labelkey": "value"},
-        "location": "fsn1",
-        "automount": false,
-        "format": "ext4"
+        'size': 10,
+        'name': StringGenerators.dbStorageName(),
+        'labels': {'labelkey': 'value'},
+        'location': 'fsn1',
+        'automount': false,
+        'format': 'ext4'
       },
     );
     var dbId = dbCreateResponse.data['volume']['id'];
@@ -93,7 +96,7 @@ class HetznerApi extends ApiMap {
     final base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
-    print("hostname: $hostname");
+    print('hostname: $hostname');
 
     /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
     /// check the branch name, it could be "development" or "master".
@@ -103,18 +106,18 @@ class HetznerApi extends ApiMap {
     print(userdataString);
 
     final data = {
-      "name": hostname,
-      "server_type": "cx11",
-      "start_after_create": false,
-      "image": "ubuntu-20.04",
-      "volumes": [dbId],
-      "networks": [],
-      "user_data": userdataString,
-      "labels": {},
-      "automount": true,
-      "location": "fsn1"
+      'name': hostname,
+      'server_type': 'cx11',
+      'start_after_create': false,
+      'image': 'ubuntu-20.04',
+      'volumes': [dbId],
+      'networks': [],
+      'user_data': userdataString,
+      'labels': {},
+      'automount': true,
+      'location': 'fsn1'
     };
-    print("Decoded data: $data");
+    print('Decoded data: $data');
 
     Response serverCreateResponse = await client.post(
       '/servers',
@@ -129,7 +132,7 @@ class HetznerApi extends ApiMap {
       createTime: DateTime.now(),
       volume: dataBase,
       apiToken: apiToken,
-      provider: ServerProvider.Hetzner,
+      provider: ServerProvider.hetzner,
     );
   }
 
@@ -166,7 +169,7 @@ class HetznerApi extends ApiMap {
     for (var volumeId in volumes) {
       await client.post('/volumes/$volumeId/actions/detach');
     }
-    await Future.delayed(Duration(seconds: 10));
+    await Future.delayed(const Duration(seconds: 10));
 
     for (var volumeId in volumes) {
       laterFutures.add(client.delete('/volumes/$volumeId'));
@@ -203,9 +206,9 @@ class HetznerApi extends ApiMap {
     var client = await getClient();
 
     Map<String, dynamic> queryParameters = {
-      "start": start.toUtc().toIso8601String(),
-      "end": end.toUtc().toIso8601String(),
-      "type": type
+      'start': start.toUtc().toIso8601String(),
+      'end': end.toUtc().toIso8601String(),
+      'type': type
     };
     var res = await client.get(
       '/servers/${hetznerServer!.id}/metrics',
@@ -243,8 +246,8 @@ class HetznerApi extends ApiMap {
     await client.post(
       '/servers/${hetznerServer!.id}/actions/change_dns_ptr',
       data: {
-        "ip": ip4,
-        "dns_ptr": domainName,
+        'ip': ip4,
+        'dns_ptr': domainName,
       },
     );
     close(client);

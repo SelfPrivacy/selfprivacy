@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
 class BrandTabBar extends StatefulWidget {
-  BrandTabBar({Key? key, this.controller}) : super(key: key);
+  const BrandTabBar({Key? key, this.controller}) : super(key: key);
 
   final TabController? controller;
   @override

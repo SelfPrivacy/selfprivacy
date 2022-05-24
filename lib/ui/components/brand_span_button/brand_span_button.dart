@@ -11,7 +11,7 @@ class BrandSpanButton extends TextSpan {
   }) : super(
           recognizer: TapGestureRecognizer()..onTap = onTap,
           text: text,
-          style: (style ?? TextStyle()).copyWith(color: BrandColors.blue),
+          style: (style ?? const TextStyle()).copyWith(color: BrandColors.blue),
         );
 
   static link({

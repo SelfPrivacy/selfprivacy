@@ -16,7 +16,7 @@ class ServerDomain {
   @HiveField(1)
   final String zoneId;
 
-  @HiveField(2, defaultValue: DnsProvider.Cloudflare)
+  @HiveField(2, defaultValue: DnsProvider.cloudflare)
   final DnsProvider provider;
 
   @override
@@ -28,7 +28,7 @@ class ServerDomain {
 @HiveType(typeId: 100)
 enum DnsProvider {
   @HiveField(0)
-  Unknown,
+  unknown,
   @HiveField(1)
-  Cloudflare,
+  cloudflare,
 }

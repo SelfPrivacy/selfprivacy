@@ -1,9 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
-import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
+import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
@@ -75,7 +74,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                 ],
               );
             } else {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -90,26 +89,24 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     ServerBasicInfoWithValidators server,
     bool showMoreServersButton,
   ) {
-    return Container(
-      child: Column(
-        children: [
-          _ServerCard(
-            context: context,
-            server: server,
+    return Column(
+      children: [
+        _ServerCard(
+          context: context,
+          server: server,
+        ),
+        const SizedBox(height: 16),
+        FilledButton(
+          title: 'recovering.confirm_server_accept'.tr(),
+          onPressed: () => _showConfirmationDialog(context, server),
+        ),
+        const SizedBox(height: 16),
+        if (showMoreServersButton)
+          BrandButton.text(
+            title: 'recovering.confirm_server_decline'.tr(),
+            onPressed: () => setState(() => _isExtended = true),
           ),
-          SizedBox(height: 16),
-          FilledButton(
-            title: 'recovering.confirm_server_accept'.tr(),
-            onPressed: () => _showConfirmationDialog(context, server),
-          ),
-          SizedBox(height: 16),
-          if (showMoreServersButton)
-            BrandButton.text(
-              title: 'recovering.confirm_server_decline'.tr(),
-              onPressed: () => setState(() => _isExtended = true),
-            ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -138,7 +135,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
       child: ListTile(
         onTap: onTap,
         title: Text(server.name),
-        leading: Icon(Icons.dns),
+        leading: const Icon(Icons.dns),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

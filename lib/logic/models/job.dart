@@ -71,7 +71,7 @@ class CreateSSHKeyJob extends Job {
   CreateSSHKeyJob({
     required this.user,
     required this.publicKey,
-  }) : super(title: '${"jobs.create_ssh_key".tr(args: [user.login])}');
+  }) : super(title: 'jobs.create_ssh_key'.tr(args: [user.login]));
 
   final User user;
   final String publicKey;
@@ -84,7 +84,7 @@ class DeleteSSHKeyJob extends Job {
   DeleteSSHKeyJob({
     required this.user,
     required this.publicKey,
-  }) : super(title: '${"jobs.delete_ssh_key".tr(args: [user.login])}');
+  }) : super(title: 'jobs.delete_ssh_key'.tr(args: [user.login]));
 
   final User user;
   final String publicKey;

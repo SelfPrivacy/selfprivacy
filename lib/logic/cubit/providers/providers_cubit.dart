@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/models/provider.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';

@@ -23,7 +23,7 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
       volume: fields[4] as ServerVolume,
       apiToken: fields[5] as String,
       provider: fields[6] == null
-          ? ServerProvider.Hetzner
+          ? ServerProvider.hetzner
           : fields[6] as ServerProvider,
       startTime: fields[2] as DateTime?,
     );
@@ -105,21 +105,21 @@ class ServerProviderAdapter extends TypeAdapter<ServerProvider> {
   ServerProvider read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ServerProvider.Unknown;
+        return ServerProvider.unknown;
       case 1:
-        return ServerProvider.Hetzner;
+        return ServerProvider.hetzner;
       default:
-        return ServerProvider.Unknown;
+        return ServerProvider.unknown;
     }
   }
 
   @override
   void write(BinaryWriter writer, ServerProvider obj) {
     switch (obj) {
-      case ServerProvider.Unknown:
+      case ServerProvider.unknown:
         writer.writeByte(0);
         break;
-      case ServerProvider.Hetzner:
+      case ServerProvider.hetzner:
         writer.writeByte(1);
         break;
     }

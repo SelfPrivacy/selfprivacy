@@ -21,7 +21,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../rootRoute.dart';
+import '../root_route.dart';
 
 const switchableServices = [
   ServiceTypes.passwordManager,
@@ -32,7 +32,7 @@ const switchableServices = [
 ];
 
 class ServicesPage extends StatefulWidget {
-  ServicesPage({Key? key}) : super(key: key);
+  const ServicesPage({Key? key}) : super(key: key);
 
   @override
   _ServicesPageState createState() => _ServicesPageState();
@@ -62,21 +62,21 @@ class _ServicesPageState extends State<ServicesPage> {
 
     return Scaffold(
       appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
           title: 'basis.services'.tr(),
           hasFlashButton: true,
         ),
-        preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
         padding: paddingH15V0,
         children: [
           BrandText.body1('services.title'.tr()),
-          SizedBox(height: 24),
-          if (!isReady) ...[NotReadyCard(), SizedBox(height: 24)],
+          const SizedBox(height: 24),
+          if (!isReady) ...[const NotReadyCard(), const SizedBox(height: 24)],
           ...ServiceTypes.values
               .map((t) => Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       bottom: 30,
                     ),
                     child: _Card(serviceType: t),
@@ -145,7 +145,7 @@ class _Card extends StatelessWidget {
                   child: Icon(serviceType.icon, size: 30, color: Colors.white),
                 ),
                 if (isReady && switchableService) ...[
-                  Spacer(),
+                  const Spacer(),
                   Builder(
                     builder: (context) {
                       late bool isActive;
@@ -179,9 +179,9 @@ class _Card extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       BrandText.h2(serviceType.title),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       if (serviceType.subdomain != '')
                         Column(
                           children: [
@@ -193,7 +193,7 @@ class _Card extends StatelessWidget {
                                 style: linkStyle,
                               ),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                           ],
                         ),
                       if (serviceType == ServiceTypes.mail)
@@ -202,12 +202,12 @@ class _Card extends StatelessWidget {
                             domainName,
                             style: linkStyle,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                         ]),
                       BrandText.body2(serviceType.loginInfo),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       BrandText.body2(serviceType.subtitle),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                   if (hasSwitchJob)
@@ -282,10 +282,10 @@ class _ServiceDetails extends StatelessWidget {
               text: 'services.mail.bottom_sheet.1'.tr(args: [domainName]),
               style: textStyle,
             ),
-            WidgetSpan(child: SizedBox(width: 5)),
+            const WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
+                padding: const EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   child: Text(
                     'services.mail.bottom_sheet.2'.tr(),
@@ -321,10 +321,10 @@ class _ServiceDetails extends StatelessWidget {
                   .tr(args: [domainName]),
               style: textStyle,
             ),
-            WidgetSpan(child: SizedBox(width: 5)),
+            const WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
+                padding: const EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://password.$domainName'),
                   child: Text(
@@ -345,10 +345,10 @@ class _ServiceDetails extends StatelessWidget {
               text: 'services.video.bottom_sheet.1'.tr(args: [domainName]),
               style: textStyle,
             ),
-            WidgetSpan(child: SizedBox(width: 5)),
+            const WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
+                padding: const EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://meet.$domainName'),
                   child: Text(
@@ -369,10 +369,10 @@ class _ServiceDetails extends StatelessWidget {
               text: 'services.cloud.bottom_sheet.1'.tr(args: [domainName]),
               style: textStyle,
             ),
-            WidgetSpan(child: SizedBox(width: 5)),
+            const WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
+                padding: const EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://cloud.$domainName'),
                   child: Text(
@@ -394,10 +394,10 @@ class _ServiceDetails extends StatelessWidget {
                   .tr(args: [domainName]),
               style: textStyle,
             ),
-            WidgetSpan(child: SizedBox(width: 5)),
+            const WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
+                padding: const EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://social.$domainName'),
                   child: Text(
@@ -418,10 +418,10 @@ class _ServiceDetails extends StatelessWidget {
               text: 'services.git.bottom_sheet.1'.tr(args: [domainName]),
               style: textStyle,
             ),
-            WidgetSpan(child: SizedBox(width: 5)),
+            const WidgetSpan(child: SizedBox(width: 5)),
             WidgetSpan(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
+                padding: const EdgeInsets.only(bottom: 0.8),
                 child: GestureDetector(
                   onTap: () => _launchURL('https://git.$domainName'),
                   child: Text(
@@ -445,7 +445,7 @@ class _ServiceDetails extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           width: 350,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -459,11 +459,11 @@ class _ServiceDetails extends StatelessWidget {
                       status: status,
                       child: Icon(icon, size: 40, color: Colors.white),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     BrandText.h2(title),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     child,
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                     Center(
                       child: Container(
                         child: BrandButton.rised(

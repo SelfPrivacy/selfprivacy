@@ -23,7 +23,7 @@ class Loaded extends ServerDetailsState {
   final AutoUpgradeSettings autoUpgradeSettings;
   final DateTime checkTime;
 
-  Loaded({
+  const Loaded({
     required this.serverInfo,
     required this.serverTimezone,
     required this.autoUpgradeSettings,

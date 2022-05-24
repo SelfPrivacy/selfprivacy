@@ -8,7 +8,7 @@ import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
 class BrandFab extends StatefulWidget {
-  BrandFab({Key? key}) : super(key: key);
+  const BrandFab({Key? key}) : super(key: key);
 
   @override
   _BrandFabState createState() => _BrandFabState();
@@ -21,8 +21,8 @@ class _BrandFabState extends State<BrandFab>
 
   @override
   void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800));
     _colorTween = ColorTween(
       begin: BrandColors.black,
       end: BrandColors.primary,
@@ -68,7 +68,7 @@ class _BrandFabState extends State<BrandFab>
         onPressed: () {
           showBrandBottomSheet(
             context: context,
-            builder: (context) => BrandBottomSheet(
+            builder: (context) => const BrandBottomSheet(
               isExpended: true,
               child: JobsContent(),
             ),

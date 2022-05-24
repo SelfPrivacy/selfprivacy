@@ -14,14 +14,14 @@ class InfoPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(52),
           child: BrandHeader(title: 'more.about_app'.tr(), hasBackButton: true),
-          preferredSize: Size.fromHeight(52),
         ),
         body: ListView(
           padding: paddingH15V0,
           children: [
-            BrandDivider(),
-            SizedBox(height: 10),
+            const BrandDivider(),
+            const SizedBox(height: 10),
             FutureBuilder(
                 future: _version(),
                 builder: (context, snapshot) {

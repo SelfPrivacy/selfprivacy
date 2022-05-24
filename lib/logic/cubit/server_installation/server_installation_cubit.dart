@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -17,7 +17,7 @@ export 'package:provider/provider.dart';
 part '../server_installation/server_installation_state.dart';
 
 class ServerInstallationCubit extends Cubit<ServerInstallationState> {
-  ServerInstallationCubit() : super(ServerInstallationEmpty());
+  ServerInstallationCubit() : super(const ServerInstallationEmpty());
 
   final repository = ServerInstallationRepository();
 
@@ -54,7 +54,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     if (state is ServerInstallationRecovery) {
       emit((state as ServerInstallationRecovery).copyWith(
         hetznerKey: hetznerKey,
-        currentStep: RecoveryStep.ServerSelection,
+        currentStep: RecoveryStep.serverSelection,
       ));
       return;
     }
@@ -104,12 +104,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void createServerAndSetDnsRecords() async {
-    ServerInstallationNotFinished _stateCopy =
+    ServerInstallationNotFinished stateCopy =
         state as ServerInstallationNotFinished;
-    var onCancel = () => emit(
+    onCancel() => emit(
         (state as ServerInstallationNotFinished).copyWith(isLoading: false));
 
-    var onSuccess = (ServerHostingDetails serverDetails) async {
+    onSuccess(ServerHostingDetails serverDetails) async {
       await repository.createDnsRecords(
         serverDetails.ip4,
         state.serverDomain!,
@@ -120,8 +120,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         isLoading: false,
         serverDetails: serverDetails,
       ));
-      runDelayed(startServerIfDnsIsOkay, Duration(seconds: 30), null);
-    };
+      runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), null);
+    }
 
     try {
       emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
@@ -134,7 +134,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         onSuccess: onSuccess,
       );
     } catch (e) {
-      emit(_stateCopy);
+      emit(stateCopy);
     }
   }
 
@@ -163,7 +163,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           serverDetails: server,
         ),
       );
-      runDelayed(resetServerIfServerIsOkay, Duration(seconds: 60), dataState);
+      runDelayed(
+          resetServerIfServerIsOkay, const Duration(seconds: 60), dataState);
     } else {
       emit(
         dataState.copyWith(
@@ -171,7 +172,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           dnsMatches: matches,
         ),
       );
-      runDelayed(startServerIfDnsIsOkay, Duration(seconds: 30), dataState);
+      runDelayed(
+          startServerIfDnsIsOkay, const Duration(seconds: 30), dataState);
     }
   }
 
@@ -183,7 +185,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     var isServerWorking = await repository.isHttpServerWorking();
 
     if (isServerWorking) {
-      var pauseDuration = Duration(seconds: 30);
+      var pauseDuration = const Duration(seconds: 30);
       emit(TimerState(
         dataState: dataState,
         timerStart: DateTime.now(),
@@ -202,10 +204,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
             isLoading: false,
           ),
         );
-        runDelayed(finishCheckIfServerIsOkay, Duration(seconds: 60), dataState);
+        runDelayed(
+            finishCheckIfServerIsOkay, const Duration(seconds: 60), dataState);
       });
     } else {
-      runDelayed(oneMoreReset, Duration(seconds: 60), dataState);
+      runDelayed(oneMoreReset, const Duration(seconds: 60), dataState);
     }
   }
 
@@ -219,7 +222,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     var isServerWorking = await repository.isHttpServerWorking();
 
     if (isServerWorking) {
-      var pauseDuration = Duration(seconds: 30);
+      var pauseDuration = const Duration(seconds: 30);
       emit(TimerState(
         dataState: dataState,
         timerStart: DateTime.now(),
@@ -238,10 +241,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
             isLoading: false,
           ),
         );
-        runDelayed(oneMoreReset, Duration(seconds: 60), dataState);
+        runDelayed(oneMoreReset, const Duration(seconds: 60), dataState);
       });
     } else {
-      runDelayed(resetServerIfServerIsOkay, Duration(seconds: 60), dataState);
+      runDelayed(
+          resetServerIfServerIsOkay, const Duration(seconds: 60), dataState);
     }
   }
 
@@ -260,7 +264,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
       emit(dataState.finish());
     } else {
-      runDelayed(finishCheckIfServerIsOkay, Duration(seconds: 60), dataState);
+      runDelayed(
+          finishCheckIfServerIsOkay, const Duration(seconds: 60), dataState);
     }
   }
 
@@ -280,7 +285,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void submitDomainForAccessRecovery(String domain) async {
     var serverDomain = ServerDomain(
       domainName: domain,
-      provider: DnsProvider.Unknown,
+      provider: DnsProvider.unknown,
       zoneId: '',
     );
     final recoveryCapabilities =
@@ -291,12 +296,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(ServerInstallationRecovery(
       serverDomain: serverDomain,
       recoveryCapabilities: recoveryCapabilities,
-      currentStep: RecoveryStep.Selecting,
+      currentStep: RecoveryStep.selecting,
     ));
   }
 
   void tryToRecover(String token, ServerRecoveryMethods method) async {
-    final dataState = this.state as ServerInstallationRecovery;
+    final dataState = state as ServerInstallationRecovery;
     final serverDomain = dataState.serverDomain;
     if (serverDomain == null) {
       return;
@@ -324,7 +329,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       await repository.saveServerDetails(serverDetails);
       emit(dataState.copyWith(
         serverDetails: serverDetails,
-        currentStep: RecoveryStep.HetznerToken,
+        currentStep: RecoveryStep.hetznerToken,
       ));
     } on ServerAuthorizationException {
       getIt<NavigationService>()
@@ -338,23 +343,23 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void revertRecoveryStep() {
-    final dataState = this.state as ServerInstallationRecovery;
+    final dataState = state as ServerInstallationRecovery;
     switch (dataState.currentStep) {
-      case RecoveryStep.Selecting:
+      case RecoveryStep.selecting:
         repository.deleteDomain();
-        emit(ServerInstallationEmpty());
+        emit(const ServerInstallationEmpty());
         break;
-      case RecoveryStep.RecoveryKey:
-      case RecoveryStep.NewDeviceKey:
-      case RecoveryStep.OldToken:
+      case RecoveryStep.recoveryKey:
+      case RecoveryStep.newDeviceKey:
+      case RecoveryStep.oldToken:
         emit(dataState.copyWith(
-          currentStep: RecoveryStep.Selecting,
+          currentStep: RecoveryStep.selecting,
         ));
         break;
-      case RecoveryStep.ServerSelection:
+      case RecoveryStep.serverSelection:
         repository.deleteHetznerKey();
         emit(dataState.copyWith(
-          currentStep: RecoveryStep.HetznerToken,
+          currentStep: RecoveryStep.hetznerToken,
         ));
         break;
       // We won't revert steps after client is authorized
@@ -364,21 +369,21 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void selectRecoveryMethod(ServerRecoveryMethods method) {
-    final dataState = this.state as ServerInstallationRecovery;
+    final dataState = state as ServerInstallationRecovery;
     switch (method) {
       case ServerRecoveryMethods.newDeviceKey:
         emit(dataState.copyWith(
-          currentStep: RecoveryStep.NewDeviceKey,
+          currentStep: RecoveryStep.newDeviceKey,
         ));
         break;
       case ServerRecoveryMethods.recoveryKey:
         emit(dataState.copyWith(
-          currentStep: RecoveryStep.RecoveryKey,
+          currentStep: RecoveryStep.recoveryKey,
         ));
         break;
       case ServerRecoveryMethods.oldToken:
         emit(dataState.copyWith(
-          currentStep: RecoveryStep.OldToken,
+          currentStep: RecoveryStep.oldToken,
         ));
         break;
     }
@@ -386,7 +391,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   Future<List<ServerBasicInfoWithValidators>>
       getServersOnHetznerAccount() async {
-    final dataState = this.state as ServerInstallationRecovery;
+    final dataState = state as ServerInstallationRecovery;
     final servers = await repository.getServersOnHetznerAccount();
     final validated = servers
         .map((server) => ServerBasicInfoWithValidators.fromServerBasicInfo(
@@ -399,7 +404,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   Future<void> setServerId(ServerBasicInfo server) async {
-    final dataState = this.state as ServerInstallationRecovery;
+    final dataState = state as ServerInstallationRecovery;
     final serverDomain = dataState.serverDomain;
     if (serverDomain == null) {
       return;
@@ -410,21 +415,21 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       createTime: server.created,
       volume: ServerVolume(
         id: server.volumeId,
-        name: "recovered_volume",
+        name: 'recovered_volume',
       ),
       apiToken: dataState.serverDetails!.apiToken,
-      provider: ServerProvider.Hetzner,
+      provider: ServerProvider.hetzner,
     );
     await repository.saveDomain(serverDomain);
     await repository.saveServerDetails(serverDetails);
     emit(dataState.copyWith(
       serverDetails: serverDetails,
-      currentStep: RecoveryStep.CloudflareToken,
+      currentStep: RecoveryStep.cloudflareToken,
     ));
   }
 
   Future<void> setAndValidateCloudflareToken(String token) async {
-    final dataState = this.state as ServerInstallationRecovery;
+    final dataState = state as ServerInstallationRecovery;
     final serverDomain = dataState.serverDomain;
     if (serverDomain == null) {
       return;
@@ -438,17 +443,17 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveDomain(ServerDomain(
       domainName: serverDomain.domainName,
       zoneId: zoneId,
-      provider: DnsProvider.Cloudflare,
+      provider: DnsProvider.cloudflare,
     ));
     await repository.saveCloudFlareKey(token);
     emit(dataState.copyWith(
       serverDomain: ServerDomain(
         domainName: serverDomain.domainName,
         zoneId: zoneId,
-        provider: DnsProvider.Cloudflare,
+        provider: DnsProvider.cloudflare,
       ),
       cloudFlareKey: token,
-      currentStep: RecoveryStep.BackblazeToken,
+      currentStep: RecoveryStep.backblazeToken,
     ));
   }
 
@@ -474,7 +479,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     closeTimer();
 
     repository.clearAppConfig();
-    emit(ServerInstallationEmpty());
+    emit(const ServerInstallationEmpty());
   }
 
   Future<void> serverDelete() async {
@@ -499,6 +504,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     ));
   }
 
+  @override
   close() {
     closeTimer();
     return super.close();

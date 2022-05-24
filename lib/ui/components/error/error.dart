@@ -16,7 +16,7 @@ class BrandError extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(error.toString()),
-                Text('stackTrace: '),
+                const Text('stackTrace: '),
                 Text(stackTrace.toString()),
               ],
             ),

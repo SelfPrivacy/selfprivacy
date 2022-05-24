@@ -17,9 +17,9 @@ class _TextDetails extends StatelessWidget {
       return Column(
         children: [
           Center(child: BrandText.h3('providers.server.bottom_sheet.2'.tr())),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Table(
-            columnWidths: {
+            columnWidths: const {
               0: FractionColumnWidth(.5),
               1: FractionColumnWidth(.5),
             },
@@ -41,7 +41,7 @@ class _TextDetails extends StatelessWidget {
                 children: [
                   getRowTitle('Status:'),
                   getRowValue(
-                    '${data.status.toString().split('.')[1].toUpperCase()}',
+                    data.status.toString().split('.')[1].toUpperCase(),
                     isBold: true,
                   ),
                 ],
@@ -74,7 +74,7 @@ class _TextDetails extends StatelessWidget {
                 children: [
                   getRowTitle('Price monthly:'),
                   getRowValue(
-                    '${data.serverType.prices[1].monthly.toString()}',
+                    data.serverType.prices[1].monthly.toString(),
                   ),
                 ],
               ),
@@ -82,17 +82,17 @@ class _TextDetails extends StatelessWidget {
                 children: [
                   getRowTitle('Price hourly:'),
                   getRowValue(
-                    '${data.serverType.prices[1].hourly.toString()}',
+                    data.serverType.prices[1].hourly.toString(),
                   ),
                 ],
               ),
             ],
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           Center(child: BrandText.h3('providers.server.bottom_sheet.3'.tr())),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Table(
-            columnWidths: {
+            columnWidths: const {
               0: FractionColumnWidth(.5),
               1: FractionColumnWidth(.5),
             },
@@ -102,7 +102,7 @@ class _TextDetails extends StatelessWidget {
                 children: [
                   getRowTitle('Country:'),
                   getRowValue(
-                    '${data.location.country}',
+                    data.location.country,
                   ),
                 ],
               ),
@@ -120,7 +120,7 @@ class _TextDetails extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       );
     } else {
@@ -142,7 +142,7 @@ class _TextDetails extends StatelessWidget {
     return BrandText.body1(
       title,
       style: isBold
-          ? TextStyle(
+          ? const TextStyle(
               fontWeight: NamedFontWeight.demiBold,
             )
           : null,

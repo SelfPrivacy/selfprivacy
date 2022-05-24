@@ -8,7 +8,7 @@ part 'user.g.dart';
 
 @HiveType(typeId: 1)
 class User extends Equatable {
-  User({
+  const User({
     required this.login,
     this.password,
     this.sshKeys = const [],
@@ -22,7 +22,7 @@ class User extends Equatable {
   @HiveField(1)
   final String? password;
 
-  @HiveField(2, defaultValue: const [])
+  @HiveField(2, defaultValue: [])
   final List<String> sshKeys;
 
   @HiveField(3, defaultValue: true)
@@ -36,6 +36,7 @@ class User extends Equatable {
 
   Color get color => stringToColor(login);
 
+  @override
   String toString() {
     return '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
   }

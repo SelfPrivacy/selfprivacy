@@ -5,7 +5,7 @@ final List<Location> locations = timeZoneDatabase.locations.values.toList()
       l1.currentTimeZone.offset.compareTo(l2.currentTimeZone.offset));
 
 class SelectTimezone extends StatefulWidget {
-  SelectTimezone({Key? key}) : super(key: key);
+  const SelectTimezone({Key? key}) : super(key: key);
 
   @override
   _SelectTimezoneState createState() => _SelectTimezoneState();
@@ -28,7 +28,7 @@ class _SelectTimezoneState extends State<SelectTimezone> {
 
     if (index >= 0) {
       controller.animateTo(60.0 * index,
-          duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+          duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
     }
   }
 
@@ -41,12 +41,12 @@ class _SelectTimezoneState extends State<SelectTimezone> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(52),
         child: BrandHeader(
           title: 'select timezone',
           hasBackButton: true,
         ),
-        preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
         controller: controller,
@@ -71,30 +71,30 @@ class _SelectTimezoneState extends State<SelectTimezone> {
                 key,
                 Container(
                   height: 60,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                      color: BrandColors.dividerColor,
+                    )),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       BrandText.body1(
                         timezoneName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       BrandText.small(
                           'GMT ${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 13,
                           )),
                     ],
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                      color: BrandColors.dividerColor,
-                    )),
                   ),
                 ),
               );

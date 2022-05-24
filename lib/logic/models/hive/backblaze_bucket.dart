@@ -24,6 +24,6 @@ class BackblazeBucket {
 
   @override
   String toString() {
-    return '$bucketName';
+    return bucketName;
   }
 }

@@ -29,6 +29,7 @@ dependencies:
   gtk_theme_fl: ^0.0.1
   hive: ^2.0.5
   hive_flutter: ^1.1.0
+  intl: ^0.17.0
   ionicons: ^0.1.2
   json_annotation: ^4.4.0
   local_auth: ^2.0.2

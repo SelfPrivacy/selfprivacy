@@ -27,11 +27,11 @@ class MorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
           title: 'basis.more'.tr(),
           hasFlashButton: true,
         ),
-        preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
         children: [
@@ -39,7 +39,7 @@ class MorePage extends StatelessWidget {
             padding: paddingH15V0,
             child: Column(
               children: [
-                BrandDivider(),
+                const BrandDivider(),
                 _NavItem(
                   title: 'more.configuration_wizard'.tr(),
                   iconData: BrandIcons.triangle,
@@ -48,27 +48,27 @@ class MorePage extends StatelessWidget {
                 _NavItem(
                   title: 'more.settings.title'.tr(),
                   iconData: BrandIcons.settings,
-                  goTo: AppSettingsPage(),
+                  goTo: const AppSettingsPage(),
                 ),
                 _NavItem(
                   title: 'more.about_project'.tr(),
                   iconData: BrandIcons.engineer,
-                  goTo: AboutPage(),
+                  goTo: const AboutPage(),
                 ),
                 _NavItem(
                   title: 'more.about_app'.tr(),
                   iconData: BrandIcons.fire,
-                  goTo: InfoPage(),
+                  goTo: const InfoPage(),
                 ),
                 _NavItem(
                   title: 'more.onboarding'.tr(),
                   iconData: BrandIcons.start,
-                  goTo: OnboardingPage(nextPage: RootPage()),
+                  goTo: const OnboardingPage(nextPage: RootPage()),
                 ),
                 _NavItem(
                   title: 'more.console'.tr(),
                   iconData: BrandIcons.terminal,
-                  goTo: Console(),
+                  goTo: const Console(),
                 ),
                 _NavItem(
                     isEnabled: context.read<ServerInstallationCubit>().state
@@ -131,8 +131,8 @@ class _MoreMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 24),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
             width: 1.0,
@@ -148,7 +148,7 @@ class _MoreMenuItem extends StatelessWidget {
               color: isActive ? null : Colors.grey,
             ),
           ),
-          Spacer(),
+          const Spacer(),
           SizedBox(
             width: 56,
             child: Icon(

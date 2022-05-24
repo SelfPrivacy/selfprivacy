@@ -21,13 +21,13 @@ class BrandRadioTile extends StatelessWidget {
       onTap: onPress,
       behavior: HitTestBehavior.translucent,
       child: Padding(
-        padding: EdgeInsets.all(2),
+        padding: const EdgeInsets.all(2),
         child: Row(
           children: [
             BrandRadio(
               isChecked: isChecked,
             ),
-            SizedBox(width: 9),
+            const SizedBox(width: 9),
             BrandText.h5(text)
           ],
         ),

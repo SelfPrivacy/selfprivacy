@@ -10,6 +10,8 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryConfirmBackblaze extends StatelessWidget {
+  const RecoveryConfirmBackblaze({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var appConfig = context.watch<ServerInstallationCubit>();
@@ -20,17 +22,17 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
         var formCubitState = context.watch<BackblazeFormCubit>().state;
 
         return BrandHeroScreen(
-          heroTitle: "recovering.confirm_backblaze".tr(),
-          heroSubtitle: "recovering.confirm_backblaze_description".tr(),
+          heroTitle: 'recovering.confirm_backblaze'.tr(),
+          heroSubtitle: 'recovering.confirm_backblaze_description'.tr(),
           hasBackButton: true,
           hasFlashButton: false,
           children: [
             CubitFormTextField(
               formFieldCubit: context.read<BackblazeFormCubit>().keyId,
               textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
+              scrollPadding: const EdgeInsets.only(bottom: 70),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: 'KeyID',
               ),
             ),
@@ -38,9 +40,9 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
             CubitFormTextField(
               formFieldCubit: context.read<BackblazeFormCubit>().applicationKey,
               textAlign: TextAlign.center,
-              scrollPadding: EdgeInsets.only(bottom: 70),
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
+              scrollPadding: const EdgeInsets.only(bottom: 70),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: 'Master Application Key',
               ),
             ),
@@ -58,7 +60,7 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) {
-                  return BrandBottomSheet(
+                  return const BrandBottomSheet(
                     isExpended: true,
                     child: Padding(
                       padding: paddingH15V0,

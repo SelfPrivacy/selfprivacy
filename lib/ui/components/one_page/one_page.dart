@@ -18,18 +18,18 @@ class OnePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(52),
         child: Column(
           children: [
             Container(
               height: 51,
               alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: BrandText.h4('basis.details'.tr()),
             ),
-            BrandDivider(),
+            const BrandDivider(),
           ],
         ),
-        preferredSize: Size.fromHeight(52),
       ),
       body: child,
       bottomNavigationBar: SafeArea(

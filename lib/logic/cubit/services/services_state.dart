@@ -15,14 +15,14 @@ class ServicesState extends ServerInstallationDependendState {
   final bool isSocialNetworkEnable;
   final bool isVpnEnable;
 
-  factory ServicesState.allOff() => ServicesState(
+  factory ServicesState.allOff() => const ServicesState(
         isPasswordManagerEnable: false,
         isCloudEnable: false,
         isGitEnable: false,
         isSocialNetworkEnable: false,
         isVpnEnable: false,
       );
-  factory ServicesState.allOn() => ServicesState(
+  factory ServicesState.allOn() => const ServicesState(
         isPasswordManagerEnable: true,
         isCloudEnable: true,
         isGitEnable: true,

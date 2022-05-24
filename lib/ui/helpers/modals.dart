@@ -9,6 +9,6 @@ Future<T?> showBrandBottomSheet<T>({
       builder: builder,
       barrierColor: Colors.black45,
       context: context,
-      shadow: BoxShadow(color: Colors.transparent),
+      shadow: const BoxShadow(color: Colors.transparent),
       backgroundColor: Colors.transparent,
     );

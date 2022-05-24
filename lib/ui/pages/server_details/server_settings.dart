@@ -12,47 +12,45 @@ class _ServerSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     var serverDetailsState = context.watch<ServerDetailsCubit>().state;
     if (serverDetailsState is ServerDetailsNotReady) {
-      return Text('not ready');
+      return const Text('not ready');
     } else if (serverDetailsState is! Loaded) {
       return BrandLoader.horizontal();
     }
     return ListView(
       padding: paddingH15V0,
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Container(
           height: 52,
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 1),
-          child: Container(
-            child: Row(
-              children: [
-                IconButton(
-                  icon: Icon(BrandIcons.arrow_left),
-                  onPressed: () => tabController.animateTo(0),
-                ),
-                SizedBox(width: 10),
-                BrandText.h4('basis.settings'.tr()),
-              ],
-            ),
+          padding: const EdgeInsets.only(left: 1),
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(BrandIcons.arrowLeft),
+                onPressed: () => tabController.animateTo(0),
+              ),
+              const SizedBox(width: 10),
+              BrandText.h4('basis.settings'.tr()),
+            ],
           ),
         ),
-        BrandDivider(),
+        const BrandDivider(),
         SwitcherBlock(
           onChange: (_) {},
-          child: _TextColumn(
+          isActive: serverDetailsState.autoUpgradeSettings.enable,
+          child: const _TextColumn(
             title: 'Allow Auto-upgrade',
             value: 'Wether to allow automatic packages upgrades',
           ),
-          isActive: serverDetailsState.autoUpgradeSettings.enable,
         ),
         SwitcherBlock(
           onChange: (_) {},
-          child: _TextColumn(
+          isActive: serverDetailsState.autoUpgradeSettings.allowReboot,
+          child: const _TextColumn(
             title: 'Reboot after upgrade',
             value: 'Reboot without prompt after applying updates',
           ),
-          isActive: serverDetailsState.autoUpgradeSettings.allowReboot,
         ),
         _Button(
           onTap: () {
@@ -83,8 +81,8 @@ class _Button extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.only(top: 20, bottom: 5),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.only(top: 20, bottom: 5),
+        decoration: const BoxDecoration(
             border: Border(
           bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
         )),
@@ -114,7 +112,7 @@ class _TextColumn extends StatelessWidget {
           title,
           style: TextStyle(color: hasWarning ? BrandColors.warning : null),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         BrandText.body1(
           value,
           style: TextStyle(

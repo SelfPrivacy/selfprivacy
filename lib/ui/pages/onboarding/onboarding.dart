@@ -53,11 +53,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           BrandText.h2(
             'onboarding.page1_title'.tr(),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           BrandText.body2('onboarding.page1_text'.tr()),
           Flexible(
             child: Center(
@@ -75,13 +75,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
             onPressed: () {
               pageController.animateToPage(
                 1,
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 curve: Curves.easeIn,
               );
             },
             text: 'basis.next'.tr(),
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
         ],
       ),
     );
@@ -94,11 +94,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
       child: Column(
         children: [
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           BrandText.h2('onboarding.page2_title'.tr()),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           BrandText.body2('onboarding.page2_text'.tr()),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Center(
             child: Image.asset(
               _fileName(
@@ -131,7 +131,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             },
             text: 'basis.got_it'.tr(),
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
         ],
       ),
     );

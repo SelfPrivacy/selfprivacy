@@ -5,15 +5,15 @@ class _Fab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 48.0,
       height: 48.0,
       child: RawMaterialButton(
         fillColor: BrandColors.blue,
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         elevation: 0.0,
         highlightElevation: 2,
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: Colors.white,
           size: 34,

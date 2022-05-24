@@ -12,19 +12,19 @@ class _NoUsers extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(BrandIcons.users, size: 50, color: BrandColors.grey7),
-          SizedBox(height: 20),
+          const Icon(BrandIcons.users, size: 50, color: BrandColors.grey7),
+          const SizedBox(height: 20),
           BrandText.h2(
             'users.nobody_here'.tr(),
-            style: TextStyle(
+            style: const TextStyle(
               color: BrandColors.grey7,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           BrandText.medium(
             text,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: BrandColors.grey7,
             ),
           ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_domain_form_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
+import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_recovery_key.dart';
@@ -16,51 +16,56 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_hentzner_connecte
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 
 class RecoveryRouting extends StatelessWidget {
+  const RecoveryRouting({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var serverInstallation = context.watch<ServerInstallationCubit>().state;
 
-    Widget currentPage = SelectDomainToRecover();
+    Widget currentPage = const SelectDomainToRecover();
 
     if (serverInstallation is ServerInstallationRecovery) {
       switch (serverInstallation.currentStep) {
-        case RecoveryStep.Selecting:
+        case RecoveryStep.selecting:
           if (serverInstallation.recoveryCapabilities !=
-              ServerRecoveryCapabilities.none)
-            currentPage = RecoveryMethodSelect();
+              ServerRecoveryCapabilities.none) {
+            currentPage = const RecoveryMethodSelect();
+          }
           break;
-        case RecoveryStep.RecoveryKey:
-          currentPage = RecoverByRecoveryKey();
+        case RecoveryStep.recoveryKey:
+          currentPage = const RecoverByRecoveryKey();
           break;
-        case RecoveryStep.NewDeviceKey:
+        case RecoveryStep.newDeviceKey:
           currentPage = RecoverByNewDeviceKeyInstruction();
           break;
-        case RecoveryStep.OldToken:
+        case RecoveryStep.oldToken:
           currentPage = RecoverByOldToken();
           break;
-        case RecoveryStep.HetznerToken:
-          currentPage = RecoveryHetznerConnected();
+        case RecoveryStep.hetznerToken:
+          currentPage = const RecoveryHetznerConnected();
           break;
-        case RecoveryStep.ServerSelection:
-          currentPage = RecoveryConfirmServer();
+        case RecoveryStep.serverSelection:
+          currentPage = const RecoveryConfirmServer();
           break;
-        case RecoveryStep.CloudflareToken:
-          currentPage = RecoveryConfirmCloudflare();
+        case RecoveryStep.cloudflareToken:
+          currentPage = const RecoveryConfirmCloudflare();
           break;
-        case RecoveryStep.BackblazeToken:
-          currentPage = RecoveryConfirmBackblaze();
+        case RecoveryStep.backblazeToken:
+          currentPage = const RecoveryConfirmBackblaze();
           break;
       }
     }
 
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       child: currentPage,
     );
   }
 }
 
 class SelectDomainToRecover extends StatelessWidget {
+  const SelectDomainToRecover({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var serverInstallation = context.watch<ServerInstallationCubit>();
@@ -75,19 +80,19 @@ class SelectDomainToRecover extends StatelessWidget {
           return BlocListener<ServerInstallationCubit, ServerInstallationState>(
             listener: (context, state) {
               if (state is ServerInstallationRecovery) {
-                if (state.currentStep == RecoveryStep.Selecting) {
+                if (state.currentStep == RecoveryStep.selecting) {
                   if (state.recoveryCapabilities ==
                       ServerRecoveryCapabilities.none) {
                     context
                         .read<RecoveryDomainFormCubit>()
-                        .setCustomError("recovering.domain_recover_error".tr());
+                        .setCustomError('recovering.domain_recover_error'.tr());
                   }
                 }
               }
             },
             child: BrandHeroScreen(
-              heroTitle: "recovering.recovery_main_header".tr(),
-              heroSubtitle: "recovering.domain_recovery_description".tr(),
+              heroTitle: 'recovering.recovery_main_header'.tr(),
+              heroSubtitle: 'recovering.domain_recovery_description'.tr(),
               hasBackButton: true,
               hasFlashButton: false,
               onBackButtonPressed:
@@ -99,13 +104,13 @@ class SelectDomainToRecover extends StatelessWidget {
                   formFieldCubit:
                       context.read<RecoveryDomainFormCubit>().serverDomainField,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "recovering.domain_recover_placeholder".tr(),
+                    border: const OutlineInputBorder(),
+                    labelText: 'recovering.domain_recover_placeholder'.tr(),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 FilledButton(
-                  title: "more.continue".tr(),
+                  title: 'more.continue'.tr(),
                   onPressed: formCubitState.isSubmitting
                       ? null
                       : () =>

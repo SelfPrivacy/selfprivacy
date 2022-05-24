@@ -14,7 +14,7 @@ class BrandButton {
     assert(text == null || child == null, 'required title or child');
     assert(text != null || child != null, 'required title or child');
     return ConstrainedBox(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minHeight: 48,
         minWidth: double.infinity,
       ),
@@ -33,7 +33,7 @@ class BrandButton {
     required String title,
   }) =>
       ConstrainedBox(
-        constraints: BoxConstraints(
+        constraints: const BoxConstraints(
           minHeight: 48,
           minWidth: double.infinity,
         ),

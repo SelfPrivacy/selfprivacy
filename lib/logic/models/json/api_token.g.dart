@@ -9,5 +9,5 @@ part of 'api_token.dart';
 ApiToken _$ApiTokenFromJson(Map<String, dynamic> json) => ApiToken(
       name: json['name'] as String,
       date: DateTime.parse(json['date'] as String),
-      is_caller: json['is_caller'] as bool,
+      isCaller: json['is_caller'] as bool,
     );

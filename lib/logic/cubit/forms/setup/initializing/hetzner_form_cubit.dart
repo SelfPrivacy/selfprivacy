@@ -8,7 +8,7 @@ import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class HetznerFormCubit extends FormCubit {
   HetznerFormCubit(this.serverInstallationCubit) {
-    var regExp = RegExp(r"\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]");
+    var regExp = RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
     apiKey = FieldCubit(
       initalValue: '',
       validations: [

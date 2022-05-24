@@ -122,7 +122,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
   final bool isLoading;
   final Map<String, bool>? dnsMatches;
 
-  ServerInstallationNotFinished({
+  const ServerInstallationNotFinished({
     String? hetznerKey,
     String? cloudFlareKey,
     BackblazeCredential? backblazeCredential,
@@ -203,7 +203,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
 }
 
 class ServerInstallationEmpty extends ServerInstallationNotFinished {
-  ServerInstallationEmpty()
+  const ServerInstallationEmpty()
       : super(
           hetznerKey: null,
           cloudFlareKey: null,
@@ -256,14 +256,14 @@ class ServerInstallationFinished extends ServerInstallationState {
 }
 
 enum RecoveryStep {
-  Selecting,
-  RecoveryKey,
-  NewDeviceKey,
-  OldToken,
-  HetznerToken,
-  ServerSelection,
-  CloudflareToken,
-  BackblazeToken,
+  selecting,
+  recoveryKey,
+  newDeviceKey,
+  oldToken,
+  hetznerToken,
+  serverSelection,
+  cloudflareToken,
+  backblazeToken,
 }
 
 enum ServerRecoveryCapabilities {
@@ -289,8 +289,8 @@ class ServerInstallationRecovery extends ServerInstallationState {
     ServerDomain? serverDomain,
     User? rootUser,
     ServerHostingDetails? serverDetails,
-    required RecoveryStep this.currentStep,
-    required ServerRecoveryCapabilities this.recoveryCapabilities,
+    required this.currentStep,
+    required this.recoveryCapabilities,
   }) : super(
           hetznerKey: hetznerKey,
           cloudFlareKey: cloudFlareKey,

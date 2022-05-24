@@ -56,7 +56,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   @override
   Future onRequest(
     RequestOptions options,
-    RequestInterceptorHandler requestInterceptorHandler,
+    RequestInterceptorHandler handler,
   ) async {
     addMessage(
       Message(
@@ -64,13 +64,13 @@ class ConsoleInterceptor extends InterceptorsWrapper {
             'request-uri: ${options.uri}\nheaders: ${options.headers}\ndata: ${options.data}',
       ),
     );
-    return super.onRequest(options, requestInterceptorHandler);
+    return super.onRequest(options, handler);
   }
 
   @override
   Future onResponse(
     Response response,
-    ResponseInterceptorHandler requestInterceptorHandler,
+    ResponseInterceptorHandler handler,
   ) async {
     addMessage(
       Message(
@@ -80,7 +80,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     );
     return super.onResponse(
       response,
-      requestInterceptorHandler,
+      handler,
     );
   }
 

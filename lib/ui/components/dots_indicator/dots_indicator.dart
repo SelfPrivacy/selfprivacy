@@ -16,7 +16,7 @@ class DotsIndicator extends StatelessWidget {
     var dots = List.generate(
       count,
       (index) => Container(
-        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         height: 10,
         width: 10,
         decoration: BoxDecoration(

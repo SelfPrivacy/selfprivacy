@@ -12,8 +12,8 @@ class _HorizontalLoader extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text('basis.wait'.tr()),
-        SizedBox(height: 10),
-        LinearProgressIndicator(minHeight: 3),
+        const SizedBox(height: 10),
+        const LinearProgressIndicator(minHeight: 3),
       ],
     );
   }

@@ -16,8 +16,8 @@ class SwitcherBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 5),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.only(top: 20, bottom: 5),
+      decoration: const BoxDecoration(
           border: Border(
         bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
       )),
@@ -26,7 +26,7 @@ class SwitcherBlock extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(child: child),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           Switch(
             activeColor: BrandColors.green1,
             activeTrackColor: BrandColors.green2,

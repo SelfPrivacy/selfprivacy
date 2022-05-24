@@ -10,7 +10,7 @@ class BrandColors {
   static const Color gray3 = Color(0xFFFAFAFA);
   static const Color gray4 = Color(0xFFDDDDDD);
   static const Color gray5 = Color(0xFFEDEEF1);
-  static Color gray6 = Color(0xFF181818).withOpacity(0.7);
+  static Color gray6 = const Color(0xFF181818).withOpacity(0.7);
   static const Color grey7 = Color(0xFFABABAB);
 
   static const Color red1 = Color(0xFFFA0E0E);

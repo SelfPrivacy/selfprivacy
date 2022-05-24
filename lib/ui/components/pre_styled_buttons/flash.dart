@@ -1,7 +1,7 @@
 part of 'pre_styled_buttons.dart';
 
 class _BrandFlashButton extends StatefulWidget {
-  _BrandFlashButton({Key? key}) : super(key: key);
+  const _BrandFlashButton({Key? key}) : super(key: key);
 
   @override
   _BrandFlashButtonState createState() => _BrandFlashButtonState();
@@ -14,8 +14,8 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
 
   @override
   void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800));
     _colorTween = ColorTween(
       begin: BrandColors.black,
       end: BrandColors.primary,
@@ -61,7 +61,7 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
         onPressed: () {
           showBrandBottomSheet(
             context: context,
-            builder: (context) => BrandBottomSheet(
+            builder: (context) => const BrandBottomSheet(
               isExpended: true,
               child: JobsContent(),
             ),

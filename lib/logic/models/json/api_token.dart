@@ -7,12 +7,13 @@ class ApiToken {
   ApiToken({
     required this.name,
     required this.date,
-    required this.is_caller,
+    required this.isCaller,
   });
 
   final String name;
   final DateTime date;
-  final bool is_caller;
+  @JsonKey(name: 'is_caller')
+  final bool isCaller;
 
   factory ApiToken.fromJson(Map<String, dynamic> json) =>
       _$ApiTokenFromJson(json);

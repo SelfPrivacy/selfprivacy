@@ -74,13 +74,13 @@ class UsersPage extends StatelessWidget {
 
     return Scaffold(
       appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
           title: 'basis.users'.tr(),
           hasFlashButton: true,
         ),
-        preferredSize: Size.fromHeight(52),
       ),
-      floatingActionButton: isReady ? _Fab() : null,
+      floatingActionButton: isReady ? const _Fab() : null,
       body: child,
     );
   }
@@ -89,8 +89,8 @@ class UsersPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: NotReadyCard(),
         ),
         Expanded(

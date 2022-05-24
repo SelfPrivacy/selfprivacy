@@ -7,7 +7,7 @@ class BackupsState extends ServerInstallationDependendState {
     this.progress = 0.0,
     this.status = BackupStatusEnum.noKey,
     this.preventActions = true,
-    this.error = "",
+    this.error = '',
     this.refreshTimer = const Duration(seconds: 60),
     this.refreshing = true,
   });

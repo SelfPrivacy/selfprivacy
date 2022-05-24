@@ -16,11 +16,11 @@ class FilledButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: child ?? Text(title ?? ''),
       style: ElevatedButton.styleFrom(
         onPrimary: Theme.of(context).colorScheme.onPrimary,
         primary: Theme.of(context).colorScheme.primary,
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+      child: child ?? Text(title ?? ''),
     );
   }
 }

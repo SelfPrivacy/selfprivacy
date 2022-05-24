@@ -3,19 +3,19 @@ import 'package:flutter/cupertino.dart';
 extension TextExtension on Text {
   Text withColor(Color color) => Text(
         data!,
-        key: this.key,
-        strutStyle: this.strutStyle,
-        textAlign: this.textAlign,
-        textDirection: this.textDirection,
-        locale: this.locale,
-        softWrap: this.softWrap,
-        overflow: this.overflow,
-        textScaleFactor: this.textScaleFactor,
-        maxLines: this.maxLines,
-        semanticsLabel: this.semanticsLabel,
-        textWidthBasis: textWidthBasis ?? this.textWidthBasis,
-        style: this.style != null
-            ? this.style!.copyWith(color: color)
+        key: key,
+        strutStyle: strutStyle,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        locale: locale,
+        softWrap: softWrap,
+        overflow: overflow,
+        textScaleFactor: textScaleFactor,
+        maxLines: maxLines,
+        semanticsLabel: semanticsLabel,
+        textWidthBasis: textWidthBasis ?? textWidthBasis,
+        style: style != null
+            ? style!.copyWith(color: color)
             : TextStyle(color: color),
       );
 

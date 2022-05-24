@@ -6,7 +6,7 @@ Color stringToColor(String string) {
   return colorPalette[index];
 }
 
-var originalColor = Color(0xFFDBD8BD);
+var originalColor = const Color(0xFFDBD8BD);
 var count = 40;
 var colorPalette = List.generate(
   count,

@@ -34,7 +34,7 @@ class RecoveryDomainFormCubit extends FormCubit {
 
     final bool domainValid = await api.getApiVersion() != null;
     if (!domainValid) {
-      serverDomainField.setError("recovering.domain_recover_error".tr());
+      serverDomainField.setError('recovering.domain_recover_error'.tr());
     }
 
     return domainValid;

@@ -32,7 +32,7 @@ class ServerHostingDetails {
   @HiveField(5)
   final String apiToken;
 
-  @HiveField(6, defaultValue: ServerProvider.Hetzner)
+  @HiveField(6, defaultValue: ServerProvider.hetzner)
   final ServerProvider provider;
 
   ServerHostingDetails copyWith({DateTime? startTime}) {
@@ -47,6 +47,7 @@ class ServerHostingDetails {
     );
   }
 
+  @override
   String toString() => id.toString();
 }
 
@@ -66,7 +67,7 @@ class ServerVolume {
 @HiveType(typeId: 101)
 enum ServerProvider {
   @HiveField(0)
-  Unknown,
+  unknown,
   @HiveField(1)
-  Hetzner,
+  hetzner,
 }

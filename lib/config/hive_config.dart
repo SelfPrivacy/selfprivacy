@@ -41,7 +41,7 @@ class HiveConfig {
   }
 
   static Future<Uint8List> getEncryptedKey(String encKey) async {
-    final secureStorage = FlutterSecureStorage();
+    const secureStorage = FlutterSecureStorage();
     var hasEncryptionKey = await secureStorage.containsKey(key: encKey);
     if (!hasEncryptionKey) {
       var key = Hive.generateSecureKey();

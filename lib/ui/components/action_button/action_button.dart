@@ -20,7 +20,7 @@ class ActionButton extends StatelessWidget {
     return TextButton(
       child: Text(
         text!,
-        style: isRed ? TextStyle(color: BrandColors.red1) : null,
+        style: isRed ? const TextStyle(color: BrandColors.red1) : null,
       ),
       onPressed: () {
         navigator.pop();

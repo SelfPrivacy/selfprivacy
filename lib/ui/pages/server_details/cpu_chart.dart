@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 import 'package:intl/intl.dart';
 
 class CpuChart extends StatelessWidget {
-  CpuChart(this.data, this.period, this.start);
+  const CpuChart(this.data, this.period, this.start);
 
   final List<TimeSeriesData> data;
   final Period period;
@@ -54,13 +54,13 @@ class CpuChart extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: RotatedBox(
+                    quarterTurns: 1,
                     child: Text(bottomTitle(value.toInt()),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 10,
                           color: Colors.purple,
                           fontWeight: FontWeight.bold,
                         )),
-                    quarterTurns: 1,
                   ),
                 );
               },
@@ -71,7 +71,7 @@ class CpuChart extends StatelessWidget {
             sideTitles: SideTitles(
               getTitlesWidget: (value, titleMeta) {
                 return Padding(
-                    padding: EdgeInsets.only(right: 15),
+                    padding: const EdgeInsets.only(right: 15),
                     child: Text(
                       value.toInt().toString(),
                       style: progressTextStyleLight.copyWith(

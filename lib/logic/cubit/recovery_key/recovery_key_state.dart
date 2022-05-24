@@ -7,12 +7,12 @@ enum LoadingStatus {
   error,
 }
 
-
 class RecoveryKeyState extends ServerInstallationDependendState {
   const RecoveryKeyState(this._status, this.loadingStatus);
 
-  RecoveryKeyState.initial()
-      : this(RecoveryKeyStatus(exists: false, valid: false), LoadingStatus.refreshing);
+  const RecoveryKeyState.initial()
+      : this(const RecoveryKeyStatus(exists: false, valid: false),
+            LoadingStatus.refreshing);
 
   final RecoveryKeyStatus _status;
   final LoadingStatus loadingStatus;
@@ -30,7 +30,7 @@ class RecoveryKeyState extends ServerInstallationDependendState {
     LoadingStatus? loadingStatus,
   }) {
     return RecoveryKeyState(
-      status ?? this._status,
+      status ?? _status,
       loadingStatus ?? this.loadingStatus,
     );
   }

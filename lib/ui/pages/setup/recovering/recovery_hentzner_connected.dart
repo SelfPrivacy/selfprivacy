@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/hetzner_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
+import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:cubit_form/cubit_form.dart';
@@ -11,6 +11,8 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryHetznerConnected extends StatelessWidget {
+  const RecoveryHetznerConnected({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var appConfig = context.watch<ServerInstallationCubit>();
@@ -22,9 +24,9 @@ class RecoveryHetznerConnected extends StatelessWidget {
           var formCubitState = context.watch<HetznerFormCubit>().state;
 
           return BrandHeroScreen(
-            heroTitle: "recovering.hetzner_connected".tr(),
-            heroSubtitle: "recovering.hetzner_connected_description".tr(args: [
-              appConfig.state.serverDomain?.domainName ?? "your domain"
+            heroTitle: 'recovering.hetzner_connected'.tr(),
+            heroSubtitle: 'recovering.hetzner_connected_description'.tr(args: [
+              appConfig.state.serverDomain?.domainName ?? 'your domain'
             ]),
             hasBackButton: true,
             hasFlashButton: false,
@@ -32,18 +34,18 @@ class RecoveryHetznerConnected extends StatelessWidget {
               CubitFormTextField(
                 formFieldCubit: context.read<HetznerFormCubit>().apiKey,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "recovering.hetzner_connected_placeholder".tr(),
+                  border: const OutlineInputBorder(),
+                  labelText: 'recovering.hetzner_connected_placeholder'.tr(),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               FilledButton(
-                title: "more.continue".tr(),
+                title: 'more.continue'.tr(),
                 onPressed: formCubitState.isSubmitting
                     ? null
                     : () => context.read<HetznerFormCubit>().trySubmit(),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               BrandButton.text(
                 title: 'initializing.how'.tr(),
                 onPressed: () => showModalBottomSheet<void>(
@@ -51,7 +53,7 @@ class RecoveryHetznerConnected extends StatelessWidget {
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
                   builder: (BuildContext context) {
-                    return BrandBottomSheet(
+                    return const BrandBottomSheet(
                       isExpended: true,
                       child: Padding(
                         padding: paddingH15V0,

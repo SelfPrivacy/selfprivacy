@@ -19,33 +19,33 @@ class _Chart extends StatelessWidget {
       ];
     } else if (state is HetznerMetricsLoaded) {
       charts = [
-        Legend(color: Colors.red, text: 'CPU %'),
-        SizedBox(height: 20),
+        const Legend(color: Colors.red, text: 'CPU %'),
+        const SizedBox(height: 20),
         getCpuChart(state),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             BrandText.small('Public Network interface packets per sec'),
-            SizedBox(width: 10),
-            Legend(color: Colors.red, text: 'IN'),
-            SizedBox(width: 5),
-            Legend(color: Colors.green, text: 'OUT'),
+            const SizedBox(width: 10),
+            const Legend(color: Colors.red, text: 'IN'),
+            const SizedBox(width: 5),
+            const Legend(color: Colors.green, text: 'OUT'),
           ],
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         getPpsChart(state),
-        SizedBox(height: 1),
+        const SizedBox(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             BrandText.small('Public Network interface bytes per sec'),
-            SizedBox(width: 10),
-            Legend(color: Colors.red, text: 'IN'),
-            SizedBox(width: 5),
-            Legend(color: Colors.green, text: 'OUT'),
+            const SizedBox(width: 10),
+            const Legend(color: Colors.red, text: 'IN'),
+            const SizedBox(width: 5),
+            const Legend(color: Colors.green, text: 'OUT'),
           ],
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         getBandwidthChart(state),
       ];
     } else {
@@ -57,7 +57,7 @@ class _Chart extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -88,7 +88,7 @@ class _Chart extends StatelessWidget {
   Widget getCpuChart(HetznerMetricsLoaded state) {
     var data = state.cpu;
 
-    return Container(
+    return SizedBox(
       height: 200,
       child: CpuChart(data, state.period, state.start),
     );
@@ -98,7 +98,7 @@ class _Chart extends StatelessWidget {
     var ppsIn = state.ppsIn;
     var ppsOut = state.ppsOut;
 
-    return Container(
+    return SizedBox(
       height: 200,
       child: NetworkChart(
         [ppsIn, ppsOut],
@@ -112,7 +112,7 @@ class _Chart extends StatelessWidget {
     var ppsIn = state.bandwidthIn;
     var ppsOut = state.bandwidthOut;
 
-    return Container(
+    return SizedBox(
       height: 200,
       child: NetworkChart(
         [ppsIn, ppsOut],
@@ -138,7 +138,7 @@ class Legend extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         _ColoredBox(color: color),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         BrandText.small(text),
       ],
     );

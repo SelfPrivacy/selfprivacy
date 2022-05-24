@@ -23,7 +23,7 @@ class BackblazeCredential {
 }
 
 String encodedBackblazeKey(String? keyId, String? applicationKey) {
-  String _apiKey = '$keyId:$applicationKey';
-  String encodedApiKey = base64.encode(utf8.encode(_apiKey));
+  String apiKey = '$keyId:$applicationKey';
+  String encodedApiKey = base64.encode(utf8.encode(apiKey));
   return encodedApiKey;
 }

@@ -69,25 +69,25 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
       create: (context) => ServerDetailsCubit()..check(),
       child: Scaffold(
         appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(52),
           child: Column(
             children: [
               Container(
                 height: 51,
                 alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: BrandText.h4('basis.details'.tr()),
               ),
-              BrandDivider(),
+              const BrandDivider(),
             ],
           ),
-          preferredSize: Size.fromHeight(52),
         ),
         body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           controller: tabController,
           children: [
             SingleChildScrollView(
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -103,13 +103,13 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   BlocProvider(
                     create: (context) => HetznerMetricsCubit()..restart(),
-                    child: _Chart(),
+                    child: const _Chart(),
                   ),
-                  SizedBox(height: 20),
-                  _TextDetails(),
+                  const SizedBox(height: 20),
+                  const _TextDetails(),
                 ],
               ),
             ),

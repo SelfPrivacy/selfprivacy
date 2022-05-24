@@ -24,19 +24,19 @@ class JobsContent extends StatelessWidget {
         var installationState = context.read<ServerInstallationCubit>().state;
         if (state is JobsStateEmpty) {
           widgets = [
-            SizedBox(height: 80),
+            const SizedBox(height: 80),
             Center(child: BrandText.body1('jobs.empty'.tr())),
           ];
 
           if (installationState is ServerInstallationFinished) {
             widgets = [
               ...widgets,
-              SizedBox(height: 80),
+              const SizedBox(height: 80),
               BrandButton.rised(
                 onPressed: () => context.read<JobsCubit>().upgradeServer(),
                 text: 'jobs.upgradeServer'.tr(),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               BrandButton.text(
                 onPressed: () {
                   var nav = getIt<NavigationService>();
@@ -61,7 +61,7 @@ class JobsContent extends StatelessWidget {
           }
         } else if (state is JobsStateLoading) {
           widgets = [
-            SizedBox(height: 80),
+            const SizedBox(height: 80),
             BrandLoader.horizontal(),
           ];
         } else if (state is JobsStateWithJobs) {
@@ -75,7 +75,7 @@ class JobsContent extends StatelessWidget {
                           child: Text(j.title),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: BrandColors.red1,
@@ -91,7 +91,7 @@ class JobsContent extends StatelessWidget {
                   ),
                 )
                 .toList(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             BrandButton.rised(
               onPressed: () => context.read<JobsCubit>().applyAll(),
               text: 'jobs.start'.tr(),
@@ -101,13 +101,13 @@ class JobsContent extends StatelessWidget {
         return ListView(
           padding: paddingH15V0,
           children: [
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Center(
               child: BrandText.h2(
                 'jobs.title'.tr(),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ...widgets
           ],
         );

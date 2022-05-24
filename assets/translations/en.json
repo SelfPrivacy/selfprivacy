@@ -312,7 +312,11 @@
     "choose_server": "Choose your server",
     "choose_server_description": "We couldn't figure out which server your are trying to connect to.",
     "no_servers": "There is no available servers on your account.",
-    "domain_not_available_on_token": "Selected domain is not available on this token."
+    "domain_not_available_on_token": "Selected domain is not available on this token.",
+    "confirm_cloudflare": "Connect to CloudFlare",
+    "confirm_cloudflare_description": "Enter a Cloudflare token with access to {}:",
+    "confirm_backblze": "Connect to Backblaze",
+    "confirm_backblaze_description": "Enter a Backblaze token with access to backup storage:"
 
   },
   "modals": {

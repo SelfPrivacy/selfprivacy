@@ -17,10 +17,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/rootRoute.dart';
-import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_server.dart';
-import 'package:selfprivacy/ui/pages/setup/recovering/recovery_hentzner_connected.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
-import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class InitializingPage extends StatelessWidget {

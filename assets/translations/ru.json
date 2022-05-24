@@ -314,8 +314,11 @@
     "choose_server": "Выберите сервер",
     "choose_server_description": "Не удалось определить, с каким сервером вы устанавливаете связь.",
     "no_servers": "На вашем аккаунте нет доступных серверов.",
-    "domain_not_available_on_token": "Введённый токен не имеет доступа к нужному домену."
-
+    "domain_not_available_on_token": "Введённый токен не имеет доступа к нужному домену.",
+    "confirm_cloudflare": "Подключение к Cloudflare",
+    "confirm_cloudflare_description": "Введите токен Cloudflare, который имеет права на {}:",
+    "confirm_backblze": "Подключение к Backblaze",
+    "confirm_backblaze_description": "Введите токен Backblaze, который имеет права на хранилище резервных копий:"
   },
   "modals": {
     "_comment": "messages in modals",

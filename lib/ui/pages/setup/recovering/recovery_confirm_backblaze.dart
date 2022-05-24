@@ -30,26 +30,28 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
+                border: const OutlineInputBorder(),
                 hintText: 'KeyID',
               ),
             ),
-            Spacer(),
+            const SizedBox(height: 18),
             CubitFormTextField(
               formFieldCubit: context.read<BackblazeFormCubit>().applicationKey,
               textAlign: TextAlign.center,
               scrollPadding: EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
+                border: const OutlineInputBorder(),
                 hintText: 'Master Application Key',
               ),
             ),
-            Spacer(),
+            const SizedBox(height: 18),
             BrandButton.rised(
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<BackblazeFormCubit>().trySubmit(),
               text: 'basis.connect'.tr(),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 18),
             BrandButton.text(
               onPressed: () => showModalBottomSheet<void>(
                 context: context,

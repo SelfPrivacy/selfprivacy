@@ -26,7 +26,7 @@ class RecoveryKeyCubit
   }
 
   Future<RecoveryKeyStatus?> _getRecoveryKeyStatus() async {
-    final ApiResponse<RecoveryKeyStatus> response =
+    final ApiResponse<RecoveryKeyStatus?> response =
         await api.getRecoveryTokenStatus();
     if (response.isSuccess) {
       return response.data;

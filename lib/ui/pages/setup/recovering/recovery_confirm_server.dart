@@ -36,11 +36,11 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
   Widget build(BuildContext context) {
     return BrandHeroScreen(
       heroTitle: _isExtended
-          ? "recovering.choose_server".tr()
-          : "recovering.confirm_server".tr(),
+          ? 'recovering.choose_server'.tr()
+          : 'recovering.confirm_server'.tr(),
       heroSubtitle: _isExtended
-          ? "recovering.choose_server_description".tr()
-          : "recovering.confirm_server_description".tr(),
+          ? 'recovering.choose_server_description'.tr()
+          : 'recovering.confirm_server_description'.tr(),
       hasBackButton: true,
       hasFlashButton: false,
       children: [
@@ -68,7 +68,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                   if (servers?.isEmpty ?? true)
                     Center(
                       child: Text(
-                        "recovering.no_servers".tr(),
+                        'recovering.no_servers'.tr(),
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
@@ -99,7 +99,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
           ),
           SizedBox(height: 16),
           FilledButton(
-            title: "recovering.confirm_server_accept".tr(),
+            title: 'recovering.confirm_server_accept'.tr(),
             onPressed: () => _showConfirmationDialog(context, server),
           ),
           SizedBox(height: 16),
@@ -166,19 +166,65 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('ssh.delete'.tr()),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text("WOW DIALOGUE TEXT WOW :)"),
-                ],
-              ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Icon(Icons.warning_amber_outlined),
+                const SizedBox(height: 8),
+                Text(
+                  'recovering.modal_confirmation_title'.tr(),
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('recovering.modal_confirmation_description'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium),
+                const Divider(),
+                Text(
+                  server.name,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.start,
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(server.isReverseDnsValid ? Icons.check : Icons.close),
+                    const SizedBox(width: 8),
+                    Text(server.isReverseDnsValid
+                        ? 'recovering.modal_confirmation_dns_valid'.tr()
+                        : 'recovering.modal_confirmation_dns_invalid'.tr()),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(server.isIpValid ? Icons.check : Icons.close),
+                    const SizedBox(width: 8),
+                    Text(server.isIpValid
+                        ? 'recovering.modal_confirmation_ip_valid'.tr()
+                        : 'recovering.modal_confirmation_ip_invalid'.tr()),
+                  ],
+                ),
+              ],
             ),
             actions: <Widget>[
               TextButton(
-                child: Text('basis.cancel'.tr()),
+                child: Text('modals.no'.tr()),
                 onPressed: () {
-                  Navigator.of(context)..pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('modals.yes'.tr()),
+                onPressed: () {
+                  context.read<ServerInstallationCubit>().setServerId(server);
+                  Navigator.of(context).pop();
                 },
               ),
             ],

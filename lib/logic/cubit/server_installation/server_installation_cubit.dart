@@ -64,6 +64,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void setCloudflareKey(String cloudFlareKey) async {
+    if (state is ServerInstallationRecovery) {
+      setAndValidateCloudflareToken(cloudFlareKey);
+      return;
+    }
     await repository.saveCloudFlareKey(cloudFlareKey);
     emit((state as ServerInstallationNotFinished)
         .copyWith(cloudFlareKey: cloudFlareKey));
@@ -431,12 +435,19 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           .showSnackBar('recovering.domain_not_available_on_token'.tr());
       return;
     }
+    await repository.saveDomain(ServerDomain(
+      domainName: serverDomain.domainName,
+      zoneId: zoneId,
+      provider: DnsProvider.Cloudflare,
+    ));
+    await repository.saveCloudFlareKey(token);
     emit(dataState.copyWith(
       serverDomain: ServerDomain(
         domainName: serverDomain.domainName,
         zoneId: zoneId,
         provider: DnsProvider.Cloudflare,
       ),
+      cloudFlareKey: token,
       currentStep: RecoveryStep.BackblazeToken,
     ));
   }

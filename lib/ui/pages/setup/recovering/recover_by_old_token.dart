@@ -13,24 +13,33 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
   RecoverByOldTokenInstruction({required this.instructionFilename});
 
   Widget build(BuildContext context) {
-    return BrandHeroScreen(
-      heroTitle: "recovering.recovery_main_header".tr(),
-      hasBackButton: true,
-      hasFlashButton: false,
-      onBackButtonPressed: () =>
-          context.read<ServerInstallationCubit>().revertRecoveryStep(),
-      children: [
-        BrandMarkdown(
-          fileName: instructionFilename,
-        ),
-        SizedBox(height: 16),
-        FilledButton(
-          title: "recovering.method_device_button".tr(),
-          onPressed: () => context
-              .read<ServerInstallationCubit>()
-              .selectRecoveryMethod(ServerRecoveryMethods.oldToken),
-        )
-      ],
+    return BlocListener<ServerInstallationCubit, ServerInstallationState>(
+      listener: (context, state) {
+        if (state is ServerInstallationRecovery &&
+            state.currentStep != RecoveryStep.Selecting) {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        }
+      },
+      child: BrandHeroScreen(
+        heroTitle: "recovering.recovery_main_header".tr(),
+        hasBackButton: true,
+        hasFlashButton: false,
+        onBackButtonPressed: () =>
+            context.read<ServerInstallationCubit>().revertRecoveryStep(),
+        children: [
+          BrandMarkdown(
+            fileName: instructionFilename,
+          ),
+          SizedBox(height: 18),
+          FilledButton(
+            title: "recovering.method_device_button".tr(),
+            onPressed: () => context
+                .read<ServerInstallationCubit>()
+                .selectRecoveryMethod(ServerRecoveryMethods.oldToken),
+          )
+        ],
+      ),
     );
   }
 
@@ -66,7 +75,7 @@ class RecoverByOldToken extends StatelessWidget {
                   labelText: "recovering.method_device_input_placeholder".tr(),
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 18),
               FilledButton(
                 title: "more.continue".tr(),
                 onPressed: formCubitState.isSubmitting

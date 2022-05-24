@@ -313,11 +313,25 @@
     "choose_server_description": "We couldn't figure out which server your are trying to connect to.",
     "no_servers": "There is no available servers on your account.",
     "domain_not_available_on_token": "Selected domain is not available on this token.",
+    "modal_confirmation_title": "Is it really your server?",
+    "modal_confirmation_description": "If you connect to a wrong server you may lose all your data.",
+    "modal_confirmation_dns_valid": "Reverse DNS is valid",
+    "modal_confirmation_dns_invalid": "Reverse DNS points to another domain",
+    "modal_confirmation_ip_valid": "IP is the same as in DNS record",
+    "modal_confirmation_ip_invalid": "IP is not the same as in DNS record",
     "confirm_cloudflare": "Connect to CloudFlare",
     "confirm_cloudflare_description": "Enter a Cloudflare token with access to {}:",
-    "confirm_backblze": "Connect to Backblaze",
+    "confirm_backblaze": "Connect to Backblaze",
     "confirm_backblaze_description": "Enter a Backblaze token with access to backup storage:"
-
+  },
+  "recovery_key": {
+    "key_main_header": "Recovery key",
+    "key_main_description": "Is needed for SelfPrivacy authorization when all your other authorized devices aren't available.",
+    "key_amount_toggle": "Limit by number of uses",
+    "key_amount_field_title": "Max number of uses",
+    "key_duedate_toggle": "Limit by time",
+    "key_duedate_field_title": "Due date of expiration",
+    "key_receive_button": "Receive key"
   },
   "modals": {
     "_comment": "messages in modals",
@@ -331,7 +345,8 @@
     "8": "Remove task",
     "9": "Reboot",
     "10": "You cannot use this API for domains with such TLD.",
-    "yes": "Yes"
+    "yes": "Yes",
+    "no": "No"
   },
   "timer": {
     "sec": "{} sec"

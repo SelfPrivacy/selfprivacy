@@ -9,6 +9,8 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_recovery_key.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_new_device_key.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_backblaze.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_cloudflare.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_server.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_hentzner_connected.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
@@ -43,8 +45,10 @@ class RecoveryRouting extends StatelessWidget {
           currentPage = RecoveryConfirmServer();
           break;
         case RecoveryStep.CloudflareToken:
+          currentPage = RecoveryConfirmCloudflare();
           break;
         case RecoveryStep.BackblazeToken:
+          currentPage = RecoveryConfirmBackblaze();
           break;
       }
     }

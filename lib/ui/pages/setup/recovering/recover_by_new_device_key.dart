@@ -40,34 +40,44 @@ class RecoverByNewDeviceKeyInput extends StatelessWidget {
         FieldCubitFactory(context),
         ServerRecoveryMethods.newDeviceKey,
       ),
-      child: Builder(
-        builder: (context) {
-          var formCubitState = context.watch<RecoveryDeviceFormCubit>().state;
-
-          return BrandHeroScreen(
-            heroTitle: "recovering.recovery_main_header".tr(),
-            heroSubtitle: "recovering.method_device_input_description".tr(),
-            hasBackButton: true,
-            hasFlashButton: false,
-            children: [
-              CubitFormTextField(
-                formFieldCubit:
-                    context.read<RecoveryDeviceFormCubit>().tokenField,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "recovering.method_device_input_placeholder".tr(),
-                ),
-              ),
-              SizedBox(height: 16),
-              FilledButton(
-                title: "more.continue".tr(),
-                onPressed: formCubitState.isSubmitting
-                    ? null
-                    : () => context.read<RecoveryDeviceFormCubit>().trySubmit(),
-              )
-            ],
-          );
+      child: BlocListener<ServerInstallationCubit, ServerInstallationState>(
+        listener: (context, state) {
+          if (state is ServerInstallationRecovery &&
+              state.currentStep != RecoveryStep.NewDeviceKey) {
+            Navigator.of(context).pop();
+          }
         },
+        child: Builder(
+          builder: (context) {
+            var formCubitState = context.watch<RecoveryDeviceFormCubit>().state;
+
+            return BrandHeroScreen(
+              heroTitle: "recovering.recovery_main_header".tr(),
+              heroSubtitle: "recovering.method_device_input_description".tr(),
+              hasBackButton: true,
+              hasFlashButton: false,
+              children: [
+                CubitFormTextField(
+                  formFieldCubit:
+                      context.read<RecoveryDeviceFormCubit>().tokenField,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText:
+                        "recovering.method_device_input_placeholder".tr(),
+                  ),
+                ),
+                SizedBox(height: 16),
+                FilledButton(
+                  title: "more.continue".tr(),
+                  onPressed: formCubitState.isSubmitting
+                      ? null
+                      : () =>
+                          context.read<RecoveryDeviceFormCubit>().trySubmit(),
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

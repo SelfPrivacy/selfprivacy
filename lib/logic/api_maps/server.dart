@@ -628,7 +628,7 @@ class ServerApi extends ApiMap {
         .replaceAll('"', '');
   }
 
-  Future<ApiResponse<RecoveryKeyStatus>> getRecoveryTokenStatus() async {
+  Future<ApiResponse<RecoveryKeyStatus?>> getRecoveryTokenStatus() async {
     Response response;
 
     var client = await getClient();
@@ -649,7 +649,7 @@ class ServerApi extends ApiMap {
     return ApiResponse(
         statusCode: code,
         data: response.data != null
-            ? response.data.fromJson(response.data)
+            ? RecoveryKeyStatus.fromJson(response.data)
             : null);
   }
 

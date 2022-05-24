@@ -51,6 +51,7 @@ class BackblazeFormCubit extends FormCubit {
       isKeyValid = await apiClient.isValid(encodedApiKey);
     } catch (e) {
       addError(e);
+      isKeyValid = false;
     }
 
     if (!isKeyValid) {

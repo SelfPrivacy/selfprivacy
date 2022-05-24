@@ -256,7 +256,7 @@
   "initializing": {
     "_comment": "initializing page",
     "1": "Connect a server",
-    "2": "Here, your data and SelfPrivacy services wiil reside",
+    "2": "A place where your data and SelfPrivacy services will reside:",
     "how": "How to obtain API token",
     "3": "Connect CloudFlare",
     "4": "To manage your domain's DNS",

@@ -7,7 +7,7 @@ class BrandTabBar extends StatefulWidget {
 
   final TabController? controller;
   @override
-  _BrandTabBarState createState() => _BrandTabBarState();
+  State<BrandTabBar> createState() => _BrandTabBarState();
 }
 
 class _BrandTabBarState extends State<BrandTabBar> {

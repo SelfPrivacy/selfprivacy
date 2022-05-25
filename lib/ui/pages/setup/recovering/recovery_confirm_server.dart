@@ -11,7 +11,7 @@ class RecoveryConfirmServer extends StatefulWidget {
   const RecoveryConfirmServer({Key? key}) : super(key: key);
 
   @override
-  _RecoveryConfirmServerState createState() => _RecoveryConfirmServerState();
+  State<RecoveryConfirmServer> createState() => _RecoveryConfirmServerState();
 }
 
 class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
@@ -57,11 +57,11 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                       children: [
                         if (servers.length == 1 ||
                             (!_isExtended && _isServerFound(servers)))
-                          _ConfirmServer(context, _firstValidServer(servers),
+                          confirmServer(context, _firstValidServer(servers),
                               servers.length > 1),
                         if (servers.length > 1 &&
                             (_isExtended || !_isServerFound(servers)))
-                          _ChooseServer(context, servers),
+                          chooseServer(context, servers),
                       ],
                     ),
                   if (servers?.isEmpty ?? true)
@@ -84,14 +84,14 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     );
   }
 
-  Widget _ConfirmServer(
+  Widget confirmServer(
     BuildContext context,
     ServerBasicInfoWithValidators server,
     bool showMoreServersButton,
   ) {
     return Column(
       children: [
-        _ServerCard(
+        serverCard(
           context: context,
           server: server,
         ),
@@ -110,14 +110,14 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     );
   }
 
-  Widget _ChooseServer(
+  Widget chooseServer(
       BuildContext context, List<ServerBasicInfoWithValidators> servers) {
     return Column(
       children: [
         for (final server in servers)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: _ServerCard(
+            child: serverCard(
               context: context,
               server: server,
               onTap: () => _showConfirmationDialog(context, server),
@@ -127,7 +127,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     );
   }
 
-  Widget _ServerCard(
+  Widget serverCard(
       {required BuildContext context,
       required ServerBasicInfoWithValidators server,
       VoidCallback? onTap}) {

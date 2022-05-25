@@ -10,7 +10,7 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
-import 'package:selfprivacy/ui/pages/rootRoute.dart';
+import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/ssh_keys/ssh_keys.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -43,7 +43,7 @@ class MorePage extends StatelessWidget {
                 _NavItem(
                   title: 'more.configuration_wizard'.tr(),
                   iconData: BrandIcons.triangle,
-                  goTo: InitializingPage(),
+                  goTo: const InitializingPage(),
                 ),
                 _NavItem(
                   title: 'more.settings.title'.tr(),

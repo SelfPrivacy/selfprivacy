@@ -11,7 +11,7 @@ class BrandFab extends StatefulWidget {
   const BrandFab({Key? key}) : super(key: key);
 
   @override
-  _BrandFabState createState() => _BrandFabState();
+  State<BrandFab> createState() => _BrandFabState();
 }
 
 class _BrandFabState extends State<BrandFab>

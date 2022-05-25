@@ -7,7 +7,12 @@ import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 import 'package:intl/intl.dart';
 
 class CpuChart extends StatelessWidget {
-  const CpuChart(this.data, this.period, this.start);
+  const CpuChart({
+    Key? key,
+    required this.data,
+    required this.period,
+    required this.start,
+  }) : super(key: key);
 
   final List<TimeSeriesData> data;
   final Period period;
@@ -103,8 +108,8 @@ class CpuChart extends StatelessWidget {
     } else if (value == 0) {
       return true;
     }
-    var _value = value - minValue;
-    var v = _value / 20;
+    var localValue = value - minValue;
+    var v = localValue / 20;
     return v - v.floor() == 0;
   }
 

@@ -21,6 +21,8 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class InitializingPage extends StatelessWidget {
+  const InitializingPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var cubit = context.watch<ServerInstallationCubit>();

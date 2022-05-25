@@ -21,7 +21,7 @@ class BackupDetails extends StatefulWidget {
   const BackupDetails({Key? key}) : super(key: key);
 
   @override
-  _BackupDetailsState createState() => _BackupDetailsState();
+  State<BackupDetails> createState() => _BackupDetailsState();
 }
 
 class _BackupDetailsState extends State<BackupDetails>

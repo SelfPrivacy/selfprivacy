@@ -37,7 +37,7 @@ class ServerDetailsScreen extends StatefulWidget {
   const ServerDetailsScreen({Key? key}) : super(key: key);
 
   @override
-  _ServerDetailsScreenState createState() => _ServerDetailsScreenState();
+  State<ServerDetailsScreen> createState() => _ServerDetailsScreenState();
 }
 
 class _ServerDetailsScreenState extends State<ServerDetailsScreen>

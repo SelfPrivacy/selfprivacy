@@ -15,7 +15,7 @@ class BrandMarkdown extends StatefulWidget {
   final String fileName;
 
   @override
-  _BrandMarkdownState createState() => _BrandMarkdownState();
+  State<BrandMarkdown> createState() => _BrandMarkdownState();
 }
 
 class _BrandMarkdownState extends State<BrandMarkdown> {

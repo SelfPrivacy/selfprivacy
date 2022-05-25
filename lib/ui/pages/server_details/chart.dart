@@ -90,7 +90,11 @@ class _Chart extends StatelessWidget {
 
     return SizedBox(
       height: 200,
-      child: CpuChart(data, state.period, state.start),
+      child: CpuChart(
+        data: data,
+        period: state.period,
+        start: state.start,
+      ),
     );
   }
 
@@ -101,9 +105,9 @@ class _Chart extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: NetworkChart(
-        [ppsIn, ppsOut],
-        state.period,
-        state.start,
+        listData: [ppsIn, ppsOut],
+        period: state.period,
+        start: state.start,
       ),
     );
   }
@@ -115,9 +119,9 @@ class _Chart extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: NetworkChart(
-        [ppsIn, ppsOut],
-        state.period,
-        state.start,
+        listData: [ppsIn, ppsOut],
+        period: state.period,
+        start: state.start,
       ),
     );
   }

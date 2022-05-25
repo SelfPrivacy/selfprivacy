@@ -9,11 +9,12 @@ import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 import 'package:intl/intl.dart';
 
 class NetworkChart extends StatelessWidget {
-  const NetworkChart(
-    this.listData,
-    this.period,
-    this.start,
-  );
+  const NetworkChart({
+    Key? key,
+    required this.listData,
+    required this.period,
+    required this.start,
+  }) : super(key: key);
 
   final List<List<TimeSeriesData>> listData;
   final Period period;
@@ -132,9 +133,9 @@ class NetworkChart extends StatelessWidget {
     } else if (value == 0) {
       return true;
     }
-    var _value = value - minValue;
-    var v = _value / 20;
-    return v - v.floor() == 0;
+    var diff = value - minValue;
+    var finalValue = diff / 20;
+    return finalValue - finalValue.floor() == 0;
   }
 
   String bottomTitle(int value) {

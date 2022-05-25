@@ -35,13 +35,13 @@ class ServicesPage extends StatefulWidget {
   const ServicesPage({Key? key}) : super(key: key);
 
   @override
-  _ServicesPageState createState() => _ServicesPageState();
+  State<ServicesPage> createState() => _ServicesPageState();
 }
 
 void _launchURL(url) async {
-  var _possible = await canLaunchUrlString(url);
+  var canLaunch = await canLaunchUrlString(url);
 
-  if (_possible) {
+  if (canLaunch) {
     try {
       await launchUrlString(
         url,

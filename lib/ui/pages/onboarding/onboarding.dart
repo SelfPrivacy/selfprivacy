@@ -10,7 +10,7 @@ class OnboardingPage extends StatefulWidget {
 
   final Widget nextPage;
   @override
-  _OnboardingPageState createState() => _OnboardingPageState();
+  State<OnboardingPage> createState() => _OnboardingPageState();
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {

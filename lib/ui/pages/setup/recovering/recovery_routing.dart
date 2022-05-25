@@ -36,10 +36,10 @@ class RecoveryRouting extends StatelessWidget {
           currentPage = const RecoverByRecoveryKey();
           break;
         case RecoveryStep.newDeviceKey:
-          currentPage = RecoverByNewDeviceKeyInstruction();
+          currentPage = const RecoverByNewDeviceKeyInstruction();
           break;
         case RecoveryStep.oldToken:
-          currentPage = RecoverByOldToken();
+          currentPage = const RecoverByOldToken();
           break;
         case RecoveryStep.hetznerToken:
           currentPage = const RecoveryHetznerConnected();

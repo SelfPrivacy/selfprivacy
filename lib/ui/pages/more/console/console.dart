@@ -11,7 +11,7 @@ class Console extends StatefulWidget {
   const Console({Key? key}) : super(key: key);
 
   @override
-  _ConsoleState createState() => _ConsoleState();
+  State<Console> createState() => _ConsoleState();
 }
 
 class _ConsoleState extends State<Console> {

@@ -27,7 +27,7 @@ class NotReadyCard extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () => Navigator.of(context).push(
                     materialRoute(
-                      InitializingPage(),
+                      const InitializingPage(),
                     ),
                   ),
                   child: Text(

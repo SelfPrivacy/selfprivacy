@@ -16,7 +16,7 @@ class BrandTimer extends StatefulWidget {
   final Duration duration;
 
   @override
-  _BrandTimerState createState() => _BrandTimerState();
+  State<BrandTimer> createState() => _BrandTimerState();
 }
 
 class _BrandTimerState extends State<BrandTimer> {

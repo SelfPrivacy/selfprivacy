@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/brand_button/FilledButton.dart';
+import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 enum BrandButtonTypes { rised, text, iconText }

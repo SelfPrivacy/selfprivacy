@@ -7,7 +7,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/theming/factory/app_theme_factory.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
-import 'package:selfprivacy/ui/pages/rootRoute.dart';
+import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -55,9 +55,10 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({
+    Key? key,
     required this.lightThemeData,
     required this.darkThemeData,
-  });
+  }) : super(key: key);
 
   final ThemeData lightThemeData;
   final ThemeData darkThemeData;
@@ -84,7 +85,7 @@ class MyApp extends StatelessWidget {
                 themeMode:
                     appSettings.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
                 home: appSettings.isOnboardingShowing
-                    ? OnboardingPage(nextPage: InitializingPage())
+                    ? const OnboardingPage(nextPage: InitializingPage())
                     : const RootPage(),
                 builder: (BuildContext context, Widget? widget) {
                   Widget error = const Text('...rendering error...');

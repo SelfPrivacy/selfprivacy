@@ -6,10 +6,10 @@ abstract class LengthStringValidation extends ValidationModel<String> {
       : super(predicate, errorMessage);
 
   @override
-  String? check(String value) {
-    var length = value.length;
+  String? check(String val) {
+    var length = val.length;
     var errorMessage = errorMassage.replaceAll('[]', length.toString());
-    return test(value) ? errorMessage : null;
+    return test(val) ? errorMessage : null;
   }
 }
 

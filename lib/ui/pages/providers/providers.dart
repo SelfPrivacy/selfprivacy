@@ -24,7 +24,7 @@ class ProvidersPage extends StatefulWidget {
   const ProvidersPage({Key? key}) : super(key: key);
 
   @override
-  _ProvidersPageState createState() => _ProvidersPageState();
+  State<ProvidersPage> createState() => _ProvidersPageState();
 }
 
 class _ProvidersPageState extends State<ProvidersPage> {
@@ -124,7 +124,7 @@ class _Card extends StatelessWidget {
         stableText = 'providers.domain.status'.tr();
 
         onTap = () => Navigator.of(context).push(materialRoute(
-              DnsDetailsPage(),
+              const DnsDetailsPage(),
             ));
         break;
       case ProviderType.backup:

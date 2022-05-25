@@ -24,7 +24,7 @@ class SshKeysPage extends StatefulWidget {
   const SshKeysPage({Key? key, required this.user}) : super(key: key);
 
   @override
-  _SshKeysPageState createState() => _SshKeysPageState();
+  State<SshKeysPage> createState() => _SshKeysPageState();
 }
 
 class _SshKeysPageState extends State<SshKeysPage> {

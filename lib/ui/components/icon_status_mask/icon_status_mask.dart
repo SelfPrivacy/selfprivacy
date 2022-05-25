@@ -3,7 +3,11 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 
 class IconStatusMask extends StatelessWidget {
-  const IconStatusMask({required this.child, required this.status});
+  const IconStatusMask({
+    Key? key,
+    required this.child,
+    required this.status,
+  }) : super(key: key);
   final Icon child;
 
   final StateType status;

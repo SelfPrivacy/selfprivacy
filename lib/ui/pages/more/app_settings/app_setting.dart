@@ -16,7 +16,7 @@ class AppSettingsPage extends StatefulWidget {
   const AppSettingsPage({Key? key}) : super(key: key);
 
   @override
-  _AppSettingsPageState createState() => _AppSettingsPageState();
+  State<AppSettingsPage> createState() => _AppSettingsPageState();
 }
 
 class _AppSettingsPageState extends State<AppSettingsPage> {
@@ -50,6 +50,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       child: _TextColumn(
                         title: 'more.settings.1'.tr(),
                         value: 'more.settings.2'.tr(),
+                        hasWarning: false,
                       ),
                     ),
                     const SizedBox(width: 5),
@@ -76,6 +77,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       child: _TextColumn(
                         title: 'more.settings.3'.tr(),
                         value: 'more.settings.4'.tr(),
+                        hasWarning: false,
                       ),
                     ),
                     const SizedBox(width: 5),
@@ -144,6 +146,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             child: _TextColumn(
               title: 'more.settings.5'.tr(),
               value: 'more.settings.6'.tr(),
+              hasWarning: false,
             ),
           ),
           const SizedBox(width: 5),
@@ -177,6 +180,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                                   await context
                                       .read<ServerInstallationCubit>()
                                       .serverDelete();
+                                  if (!mounted) return;
                                   Navigator.of(context).pop();
                                 }),
                             ActionButton(

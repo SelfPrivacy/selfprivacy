@@ -8,7 +8,7 @@ class SelectTimezone extends StatefulWidget {
   const SelectTimezone({Key? key}) : super(key: key);
 
   @override
-  _SelectTimezoneState createState() => _SelectTimezoneState();
+  State<SelectTimezone> createState() => _SelectTimezoneState();
 }
 
 class _SelectTimezoneState extends State<SelectTimezone> {

@@ -17,7 +17,7 @@ class ProgressBar extends StatefulWidget {
   final List<String> steps;
 
   @override
-  _ProgressBarState createState() => _ProgressBarState();
+  State<ProgressBar> createState() => _ProgressBarState();
 }
 
 class _ProgressBarState extends State<ProgressBar> {

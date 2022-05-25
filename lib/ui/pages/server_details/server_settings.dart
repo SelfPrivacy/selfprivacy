@@ -42,6 +42,7 @@ class _ServerSettings extends StatelessWidget {
           child: const _TextColumn(
             title: 'Allow Auto-upgrade',
             value: 'Wether to allow automatic packages upgrades',
+            hasWarning: false,
           ),
         ),
         SwitcherBlock(
@@ -50,15 +51,17 @@ class _ServerSettings extends StatelessWidget {
           child: const _TextColumn(
             title: 'Reboot after upgrade',
             value: 'Reboot without prompt after applying updates',
+            hasWarning: false,
           ),
         ),
         _Button(
           onTap: () {
-            Navigator.of(context).push(materialRoute(SelectTimezone()));
+            Navigator.of(context).push(materialRoute(const SelectTimezone()));
           },
           child: _TextColumn(
             title: 'Server Timezone',
             value: serverDetailsState.serverTimezone.timezone.name,
+            hasWarning: false,
           ),
         ),
       ],

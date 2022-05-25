@@ -10,7 +10,9 @@ import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart
 
 class RecoverByOldTokenInstruction extends StatelessWidget {
   @override
-  const RecoverByOldTokenInstruction({required this.instructionFilename});
+  const RecoverByOldTokenInstruction(
+      {Key? key, required this.instructionFilename})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

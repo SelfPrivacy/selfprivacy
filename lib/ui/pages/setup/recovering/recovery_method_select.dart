@@ -47,7 +47,7 @@ class RecoveryMethodSelect extends StatelessWidget {
         BrandButton.text(
           title: 'recovering.method_select_nothing'.tr(),
           onPressed: () => Navigator.of(context)
-              .push(materialRoute(RecoveryFallbackMethodSelect())),
+              .push(materialRoute(const RecoveryFallbackMethodSelect())),
         )
       ],
     );

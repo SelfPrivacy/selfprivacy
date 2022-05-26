@@ -27,9 +27,13 @@ class RecoveryRouting extends StatelessWidget {
     if (serverInstallation is ServerInstallationRecovery) {
       switch (serverInstallation.currentStep) {
         case RecoveryStep.selecting:
-          if (serverInstallation.recoveryCapabilities !=
-              ServerRecoveryCapabilities.none) {
+          if (serverInstallation.recoveryCapabilities ==
+              ServerRecoveryCapabilities.loginTokens) {
             currentPage = const RecoveryMethodSelect();
+          }
+          if (serverInstallation.recoveryCapabilities ==
+              ServerRecoveryCapabilities.legacy) {
+            currentPage = const RecoveryFallbackMethodSelect();
           }
           break;
         case RecoveryStep.recoveryKey:

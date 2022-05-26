@@ -1,12 +1,5 @@
 part of 'recovery_key_cubit.dart';
 
-enum LoadingStatus {
-  uninitialized,
-  refreshing,
-  good,
-  error,
-}
-
 class RecoveryKeyState extends ServerInstallationDependendState {
   const RecoveryKeyState(this._status, this.loadingStatus);
 
@@ -20,7 +13,7 @@ class RecoveryKeyState extends ServerInstallationDependendState {
   bool get exists => _status.exists;
   bool get isValid => _status.valid;
   DateTime? get generatedAt => _status.date;
-  DateTime? get expiresAt => _status.date;
+  DateTime? get expiresAt => _status.expiration;
   int? get usesLeft => _status.usesLeft;
   @override
   List<Object> get props => [_status, loadingStatus];

@@ -6,20 +6,29 @@ class FilledButton extends StatelessWidget {
     this.onPressed,
     this.title,
     this.child,
+    this.disabled = false,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
   final String? title;
   final Widget? child;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
+    final ButtonStyle _enabledStyle = ElevatedButton.styleFrom(
+      onPrimary: Theme.of(context).colorScheme.onPrimary,
+      primary: Theme.of(context).colorScheme.primary,
+    ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0));
+
+    final ButtonStyle _disabledStyle = ElevatedButton.styleFrom(
+      onPrimary: Theme.of(context).colorScheme.onSurface.withAlpha(30),
+      primary: Theme.of(context).colorScheme.onSurface.withAlpha(98),
+    ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0));
+
     return ElevatedButton(
       onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        onPrimary: Theme.of(context).colorScheme.onPrimary,
-        primary: Theme.of(context).colorScheme.primary,
-      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+      style: disabled ? _disabledStyle : _enabledStyle,
       child: child ?? Text(title ?? ''),
     );
   }

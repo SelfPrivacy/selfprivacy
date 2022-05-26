@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 
@@ -18,7 +19,8 @@ class RecoveryKeyCubit
       if (status == null) {
         emit(state.copyWith(loadingStatus: LoadingStatus.error));
       } else {
-        emit(state.copyWith(status: status, loadingStatus: LoadingStatus.good));
+        emit(state.copyWith(
+            status: status, loadingStatus: LoadingStatus.success));
       }
     } else {
       emit(state.copyWith(loadingStatus: LoadingStatus.uninitialized));
@@ -41,7 +43,8 @@ class RecoveryKeyCubit
     if (status == null) {
       emit(state.copyWith(loadingStatus: LoadingStatus.error));
     } else {
-      emit(state.copyWith(status: status, loadingStatus: LoadingStatus.good));
+      emit(
+          state.copyWith(status: status, loadingStatus: LoadingStatus.success));
     }
   }
 

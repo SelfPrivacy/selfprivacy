@@ -307,8 +307,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return;
     }
     try {
-      Future<ServerHostingDetails> Function(ServerDomain, String)
-          recoveryFunction;
+      Future<ServerHostingDetails> Function(
+          ServerDomain, String, ServerRecoveryCapabilities) recoveryFunction;
       switch (method) {
         case ServerRecoveryMethods.newDeviceKey:
           recoveryFunction = repository.authorizeByNewDeviceKey;
@@ -325,6 +325,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       final serverDetails = await recoveryFunction(
         serverDomain,
         token,
+        dataState.recoveryCapabilities,
       );
       await repository.saveServerDetails(serverDetails);
       emit(dataState.copyWith(

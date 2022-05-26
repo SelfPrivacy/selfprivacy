@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
@@ -59,58 +60,68 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BrandHeroScreen(
-      heroTitle: 'recovering.recovery_main_header'.tr(),
-      heroSubtitle: 'recovering.fallback_select_description'.tr(),
-      hasBackButton: true,
-      hasFlashButton: false,
-      children: [
-        BrandCards.outlined(
-          child: ListTile(
-            title: Text(
-              'recovering.fallback_select_token_copy'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
+    return BlocListener<ServerInstallationCubit, ServerInstallationState>(
+      listener: (context, state) {
+        if (state is ServerInstallationRecovery &&
+            state.recoveryCapabilities ==
+                ServerRecoveryCapabilities.loginTokens &&
+            state.currentStep != RecoveryStep.selecting) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: BrandHeroScreen(
+        heroTitle: 'recovering.recovery_main_header'.tr(),
+        heroSubtitle: 'recovering.fallback_select_description'.tr(),
+        hasBackButton: true,
+        hasFlashButton: false,
+        children: [
+          BrandCards.outlined(
+            child: ListTile(
+              title: Text(
+                'recovering.fallback_select_token_copy'.tr(),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              leading: const Icon(Icons.vpn_key),
+              onTap: () => Navigator.of(context)
+                  .push(materialRoute(const RecoverByOldTokenInstruction(
+                instructionFilename: 'how_fallback_old',
+              ))),
             ),
-            leading: const Icon(Icons.vpn_key),
-            onTap: () => Navigator.of(context)
-                .push(materialRoute(const RecoverByOldTokenInstruction(
-              instructionFilename: 'how_fallback_old',
-            ))),
           ),
-        ),
-        const SizedBox(height: 16),
-        BrandCards.outlined(
-          child: ListTile(
-            title: Text(
-              'recovering.fallback_select_root_ssh'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
+          const SizedBox(height: 16),
+          BrandCards.outlined(
+            child: ListTile(
+              title: Text(
+                'recovering.fallback_select_root_ssh'.tr(),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              leading: const Icon(Icons.terminal),
+              onTap: () => Navigator.of(context)
+                  .push(materialRoute(const RecoverByOldTokenInstruction(
+                instructionFilename: 'how_fallback_ssh',
+              ))),
             ),
-            leading: const Icon(Icons.terminal),
-            onTap: () => Navigator.of(context)
-                .push(materialRoute(const RecoverByOldTokenInstruction(
-              instructionFilename: 'how_fallback_ssh',
-            ))),
           ),
-        ),
-        const SizedBox(height: 16),
-        BrandCards.outlined(
-          child: ListTile(
-            title: Text(
-              'recovering.fallback_select_provider_console'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
+          const SizedBox(height: 16),
+          BrandCards.outlined(
+            child: ListTile(
+              title: Text(
+                'recovering.fallback_select_provider_console'.tr(),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              subtitle: Text(
+                'recovering.fallback_select_provider_console_hint'.tr(),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              leading: const Icon(Icons.web),
+              onTap: () => Navigator.of(context)
+                  .push(materialRoute(const RecoverByOldTokenInstruction(
+                instructionFilename: 'how_fallback_terminal',
+              ))),
             ),
-            subtitle: Text(
-              'recovering.fallback_select_provider_console_hint'.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            leading: const Icon(Icons.web),
-            onTap: () => Navigator.of(context)
-                .push(materialRoute(const RecoverByOldTokenInstruction(
-              instructionFilename: 'how_fallback_terminal',
-            ))),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

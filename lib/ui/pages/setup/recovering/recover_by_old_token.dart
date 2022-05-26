@@ -21,7 +21,6 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
         if (state is ServerInstallationRecovery &&
             state.currentStep != RecoveryStep.selecting) {
           Navigator.of(context).pop();
-          Navigator.of(context).pop();
         }
       },
       child: BrandHeroScreen(

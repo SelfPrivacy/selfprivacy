@@ -3,6 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
+enum LoadingStatus {
+  uninitialized,
+  refreshing,
+  success,
+  error,
+}
+
 enum InitializingSteps {
   setHetznerKey,
   setCloudFlareKey,

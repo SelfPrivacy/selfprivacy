@@ -325,13 +325,24 @@
     "confirm_backblaze_description": "Enter a Backblaze token with access to backup storage:"
   },
   "recovery_key": {
+    "key_connection_error": "Couldn't connect to the server.",
+    "key_synchronizing": "Synchronizing...",
     "key_main_header": "Recovery key",
     "key_main_description": "Is needed for SelfPrivacy authorization when all your other authorized devices aren't available.",
     "key_amount_toggle": "Limit by number of uses",
     "key_amount_field_title": "Max number of uses",
     "key_duedate_toggle": "Limit by time",
     "key_duedate_field_title": "Due date of expiration",
-    "key_receive_button": "Receive key"
+    "key_receive_button": "Receive key",
+    "key_valid": "Your key is valid",
+    "key_invalid": "Your key is no longer valid",
+    "key_valid_until": "Valid until {}",
+    "key_valid_for": "Valid for {} uses",
+    "key_creation_date": "Created on {}",
+    "key_replace_button": "Generate new key",
+    "key_receiving_description": "Write down this key and put to a safe place. It is used to restore full access to your server:",
+    "key_receiving_info": "The key will never ever be shown again, but you will be able to replace it with another one.",
+    "key_receiving_done": "Done!"
   },
   "modals": {
     "_comment": "messages in modals",

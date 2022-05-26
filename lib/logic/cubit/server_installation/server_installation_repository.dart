@@ -392,6 +392,7 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> authorizeByNewDeviceKey(
     ServerDomain serverDomain,
     String newDeviceKey,
+    ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
     var serverApi = ServerApi(
       isWithToken: false,
@@ -424,6 +425,7 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> authorizeByRecoveryKey(
     ServerDomain serverDomain,
     String recoveryKey,
+    ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
     var serverApi = ServerApi(
       isWithToken: false,
@@ -455,12 +457,34 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> authorizeByApiToken(
     ServerDomain serverDomain,
     String apiToken,
+    ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
     var serverApi = ServerApi(
       isWithToken: false,
       overrideDomain: serverDomain.domainName,
       customToken: apiToken,
     );
+    if (recoveryCapabilities == ServerRecoveryCapabilities.legacy) {
+      final apiResponse = await serverApi.servicesPowerCheck();
+      if (apiResponse.isNotEmpty) {
+        return ServerHostingDetails(
+          apiToken: apiToken,
+          volume: ServerVolume(
+            id: 0,
+            name: '',
+          ),
+          provider: ServerProvider.unknown,
+          id: 0,
+          ip4: '',
+          startTime: null,
+          createTime: null,
+        );
+      } else {
+        throw ServerAuthorizationException(
+          'Couldn\'t connect to server with this token',
+        );
+      }
+    }
     final deviceAuthKey = await serverApi.createDeviceToken();
     final apiResponse = await serverApi.authorizeDevice(
         DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data));

@@ -38,14 +38,14 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
                 hintText: 'initializing.5'.tr(),
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
             BrandButton.rised(
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<CloudFlareFormCubit>().trySubmit(),
               text: 'basis.connect'.tr(),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
             BrandButton.text(
               onPressed: () => showModalBottomSheet<void>(
                 context: context,

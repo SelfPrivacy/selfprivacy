@@ -36,7 +36,7 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                 hintText: 'KeyID',
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
             CubitFormTextField(
               formFieldCubit: context.read<BackblazeFormCubit>().applicationKey,
               textAlign: TextAlign.center,
@@ -46,14 +46,14 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                 hintText: 'Master Application Key',
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
             BrandButton.rised(
               onPressed: formCubitState.isSubmitting
                   ? null
                   : () => context.read<BackblazeFormCubit>().trySubmit(),
               text: 'basis.connect'.tr(),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
             BrandButton.text(
               onPressed: () => showModalBottomSheet<void>(
                 context: context,

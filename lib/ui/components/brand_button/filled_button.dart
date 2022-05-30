@@ -26,10 +26,16 @@ class FilledButton extends StatelessWidget {
       primary: Theme.of(context).colorScheme.onSurface.withAlpha(98),
     ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0));
 
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: disabled ? _disabledStyle : _enabledStyle,
-      child: child ?? Text(title ?? ''),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minHeight: 40,
+        minWidth: double.infinity,
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: disabled ? _disabledStyle : _enabledStyle,
+        child: child ?? Text(title ?? ''),
+      ),
     );
   }
 }

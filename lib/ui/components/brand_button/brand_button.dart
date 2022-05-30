@@ -34,7 +34,7 @@ class BrandButton {
   }) =>
       ConstrainedBox(
         constraints: const BoxConstraints(
-          minHeight: 48,
+          minHeight: 40,
           minWidth: double.infinity,
         ),
         child: TextButton(onPressed: onPressed, child: Text(title)),

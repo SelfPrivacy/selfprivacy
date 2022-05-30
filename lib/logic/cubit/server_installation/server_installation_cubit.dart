@@ -80,12 +80,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
     await repository.saveBackblazeKey(backblazeCredential);
     if (state is ServerInstallationRecovery) {
-      final mainUser = await repository.getMainUser();
-      final updatedState = (state as ServerInstallationRecovery).copyWith(
-        backblazeCredential: backblazeCredential,
-        rootUser: mainUser,
-      );
-      emit(updatedState.finish());
+      finishRecoveryProcess(backblazeCredential);
       return;
     }
     emit((state as ServerInstallationNotFinished)
@@ -458,6 +453,19 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     ));
   }
 
+  void finishRecoveryProcess(BackblazeCredential backblazeCredential) async {
+    await repository.saveIsServerStarted(true);
+    await repository.saveIsServerResetedFirstTime(true);
+    await repository.saveIsServerResetedSecondTime(true);
+    await repository.saveHasFinalChecked(true);
+    final mainUser = await repository.getMainUser();
+    final updatedState = (state as ServerInstallationRecovery).copyWith(
+      backblazeCredential: backblazeCredential,
+      rootUser: mainUser,
+    );
+    emit(updatedState.finish());
+  }
+
   @override
   void onChange(Change<ServerInstallationState> change) {
     super.onChange(change);
@@ -473,6 +481,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           'Recovery Step: ${(change.nextState as ServerInstallationRecovery).currentStep}');
       print(
           'Recovery Capabilities: ${(change.nextState as ServerInstallationRecovery).recoveryCapabilities}');
+    }
+    if (change.nextState is TimerState) {
+      print('Timer: ${(change.nextState as TimerState).duration}');
     }
   }
 

@@ -431,6 +431,7 @@ class ServerInstallationRepository {
       isWithToken: false,
       overrideDomain: serverDomain.domainName,
     );
+    final serverIp = await getServerIpFromDomain(serverDomain);
     final apiResponse = await serverApi.useRecoveryToken(
         DeviceToken(device: await getDeviceName(), token: recoveryKey));
 
@@ -443,7 +444,7 @@ class ServerInstallationRepository {
         ),
         provider: ServerProvider.unknown,
         id: 0,
-        ip4: '',
+        ip4: serverIp,
         startTime: null,
         createTime: null,
       );
@@ -464,6 +465,7 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
       customToken: apiToken,
     );
+    final serverIp = await getServerIpFromDomain(serverDomain);
     if (recoveryCapabilities == ServerRecoveryCapabilities.legacy) {
       final apiResponse = await serverApi.servicesPowerCheck();
       if (apiResponse.isNotEmpty) {
@@ -475,7 +477,7 @@ class ServerInstallationRepository {
           ),
           provider: ServerProvider.unknown,
           id: 0,
-          ip4: '',
+          ip4: serverIp,
           startTime: null,
           createTime: null,
         );

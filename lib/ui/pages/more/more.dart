@@ -8,6 +8,7 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
@@ -77,6 +78,13 @@ class MorePage extends StatelessWidget {
                     goTo: SshKeysPage(
                       user: context.read<UsersCubit>().state.rootUser,
                     )),
+                _NavItem(
+                  isEnabled: context.read<ServerInstallationCubit>().state
+                      is ServerInstallationFinished,
+                  iconData: Icons.password_outlined,
+                  goTo: const RecoveryKey(),
+                  title: 'recovery_key.key_main_header'.tr(),
+                )
               ],
             ),
           )

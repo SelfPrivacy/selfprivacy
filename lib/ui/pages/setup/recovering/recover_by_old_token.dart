@@ -33,7 +33,7 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
           BrandMarkdown(
             fileName: instructionFilename,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           FilledButton(
             title: 'recovering.method_device_button'.tr(),
             onPressed: () => context
@@ -79,7 +79,7 @@ class RecoverByOldToken extends StatelessWidget {
                   labelText: 'recovering.method_device_input_placeholder'.tr(),
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
               FilledButton(
                 title: 'more.continue'.tr(),
                 onPressed: formCubitState.isSubmitting

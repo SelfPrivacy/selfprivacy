@@ -20,10 +20,10 @@ class RecoveryKeyReceiving extends StatelessWidget {
       hasFlashButton: false,
       children: [
         Text(recoveryKey, style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(height: 18),
+        const SizedBox(height: 16),
         const Icon(Icons.info_outlined, size: 14),
         Text('recovery_key.key_receiving_info'.tr()),
-        const SizedBox(height: 18),
+        const SizedBox(height: 16),
         FilledButton(
           title: 'recovery_key.key_receiving_done'.tr(),
           onPressed: () {

@@ -52,13 +52,17 @@ class BrandHeroScreen extends StatelessWidget {
             if (heroTitle != null)
               Text(
                 heroTitle!,
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
                 textAlign: TextAlign.start,
               ),
             const SizedBox(height: 8.0),
             if (heroSubtitle != null)
               Text(heroSubtitle!,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                   textAlign: TextAlign.start),
             const SizedBox(height: 16.0),
             ...children,

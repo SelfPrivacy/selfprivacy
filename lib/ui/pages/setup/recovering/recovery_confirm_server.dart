@@ -133,22 +133,54 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
       VoidCallback? onTap}) {
     return BrandCards.filled(
       child: ListTile(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         onTap: onTap,
-        title: Text(server.name),
-        leading: const Icon(Icons.dns),
+        title: Text(
+          server.name,
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+        ),
+        leading: Icon(
+          Icons.dns,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(server.isReverseDnsValid ? Icons.check : Icons.close),
-                Text('rDNS: ${server.reverseDns}'),
+                Icon(
+                  server.isReverseDnsValid ? Icons.check : Icons.close,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'rDNS: ${server.reverseDns}',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                  ),
+                ),
               ],
             ),
             Row(
               children: [
-                Icon(server.isIpValid ? Icons.check : Icons.close),
-                Text('IP: ${server.ip}'),
+                Icon(
+                  server.isIpValid ? Icons.check : Icons.close,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'IP: ${server.ip}',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -186,27 +218,19 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.start,
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(server.isReverseDnsValid ? Icons.check : Icons.close),
-                    const SizedBox(width: 8),
-                    Text(server.isReverseDnsValid
-                        ? 'recovering.modal_confirmation_dns_valid'.tr()
-                        : 'recovering.modal_confirmation_dns_invalid'.tr()),
-                  ],
+                const SizedBox(height: 8),
+                IsValidStringDisplay(
+                  isValid: server.isReverseDnsValid,
+                  textIfValid: 'recovering.modal_confirmation_dns_valid'.tr(),
+                  textIfInvalid:
+                      'recovering.modal_confirmation_dns_invalid'.tr(),
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(server.isIpValid ? Icons.check : Icons.close),
-                    const SizedBox(width: 8),
-                    Text(server.isIpValid
-                        ? 'recovering.modal_confirmation_ip_valid'.tr()
-                        : 'recovering.modal_confirmation_ip_invalid'.tr()),
-                  ],
+                const SizedBox(height: 8),
+                IsValidStringDisplay(
+                  isValid: server.isIpValid,
+                  textIfValid: 'recovering.modal_confirmation_ip_valid'.tr(),
+                  textIfInvalid:
+                      'recovering.modal_confirmation_ip_invalid'.tr(),
                 ),
               ],
             ),
@@ -228,4 +252,43 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
           );
         },
       );
+}
+
+class IsValidStringDisplay extends StatelessWidget {
+  const IsValidStringDisplay({
+    Key? key,
+    required this.isValid,
+    required this.textIfValid,
+    required this.textIfInvalid,
+  }) : super(key: key);
+
+  final bool isValid;
+  final String textIfValid;
+  final String textIfInvalid;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        isValid
+            ? Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface)
+            : Icon(Icons.close, color: Theme.of(context).colorScheme.error),
+        const SizedBox(width: 8),
+        isValid
+            ? Text(
+                textIfValid,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+              )
+            : Text(
+                textIfInvalid,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+              )
+      ],
+    );
+  }
 }

@@ -70,7 +70,6 @@ class _ProvidersPageState extends State<ProvidersPage> {
         preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
           title: 'providers.page_title'.tr(),
-          hasFlashButton: true,
         ),
       ),
       body: ListView(

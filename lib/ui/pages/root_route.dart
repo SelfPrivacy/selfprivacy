@@ -16,20 +16,36 @@ class RootPage extends StatefulWidget {
   State<RootPage> createState() => _RootPageState();
 }
 
-class _RootPageState extends State<RootPage>
-    with SingleTickerProviderStateMixin {
+class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   late TabController tabController;
+
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 400),
+    vsync: this,
+  );
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.fastOutSlowIn,
+  );
 
   @override
   void initState() {
     tabController = TabController(length: 4, vsync: this);
+    tabController.addListener(() {
+      setState(() {
+        tabController.index == 2
+            ? _controller.forward()
+            : _controller.reverse();
+      });
+    });
     super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     tabController.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   var selfprivacyServer = ServerApi();
@@ -37,10 +53,10 @@ class _RootPageState extends State<RootPage>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Provider<ChangeTab>(
-          create: (_) => ChangeTab(tabController.animateTo),
-          child: TabBarView(
+      child: Provider<ChangeTab>(
+        create: (_) => ChangeTab(tabController.animateTo),
+        child: Scaffold(
+          body: TabBarView(
             controller: tabController,
             children: const [
               ProvidersPage(),
@@ -49,11 +65,40 @@ class _RootPageState extends State<RootPage>
               MorePage(),
             ],
           ),
+          bottomNavigationBar: BrandTabBar(
+            controller: tabController,
+          ),
+          floatingActionButton: SizedBox(
+            height: 104 + 16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ScaleTransition(
+                  scale: _animation,
+                  child: FloatingActionButton.small(
+                    heroTag: 'new_user_fab',
+                    onPressed: () {
+                      showModalBottomSheet<void>(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (BuildContext context) {
+                          return Padding(
+                              padding: MediaQuery.of(context).viewInsets,
+                              child: NewUser());
+                        },
+                      );
+                    },
+                    child: const Icon(Icons.person_add_outlined),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const BrandFab(),
+              ],
+            ),
+          ),
         ),
-        bottomNavigationBar: BrandTabBar(
-          controller: tabController,
-        ),
-        floatingActionButton: const BrandFab(),
       ),
     );
   }

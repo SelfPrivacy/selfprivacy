@@ -65,7 +65,6 @@ class _ServicesPageState extends State<ServicesPage> {
         preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
           title: 'basis.services'.tr(),
-          hasFlashButton: true,
         ),
       ),
       body: ListView(

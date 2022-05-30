@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
 enum LoadingStatus {
@@ -134,7 +133,7 @@ extension ServiceTypesExt on ServiceTypes {
       case ServiceTypes.git:
         return BrandIcons.git;
       case ServiceTypes.vpn:
-        return Ionicons.shield_checkmark_outline;
+        return Icons.vpn_lock_outlined;
     }
   }
 

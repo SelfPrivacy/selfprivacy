@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
 
 class BrandHeroScreen extends StatelessWidget {
   const BrandHeroScreen({
@@ -32,10 +33,10 @@ class BrandHeroScreen extends StatelessWidget {
           child: BrandHeader(
             title: headerTitle,
             hasBackButton: hasBackButton,
-            hasFlashButton: hasFlashButton,
             onBackButtonPressed: onBackButtonPressed,
           ),
         ),
+        floatingActionButton: hasFlashButton ? const BrandFab() : null,
         body: ListView(
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[

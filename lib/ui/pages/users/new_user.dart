@@ -1,6 +1,6 @@
 part of 'users.dart';
 
-class _NewUser extends StatelessWidget {
+class NewUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var config = context.watch<ServerInstallationCubit>().state;

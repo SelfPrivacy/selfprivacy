@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
-import 'package:selfprivacy/ui/components/pre_styled_buttons/pre_styled_buttons.dart';
 
 class BrandHeader extends StatelessWidget {
   const BrandHeader({
     Key? key,
     this.title = '',
     this.hasBackButton = false,
-    this.hasFlashButton = false,
     this.onBackButtonPressed,
   }) : super(key: key);
 
   final String title;
   final bool hasBackButton;
-  final bool hasFlashButton;
   final VoidCallback? onBackButtonPressed;
 
   @override
@@ -37,7 +34,6 @@ class BrandHeader extends StatelessWidget {
           ],
           BrandText.h4(title),
           const Spacer(),
-          if (hasFlashButton) PreStyledButtons.flash(),
         ],
       ),
     );

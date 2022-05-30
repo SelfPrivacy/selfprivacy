@@ -27,7 +27,6 @@ import 'package:share_plus/share_plus.dart';
 import '../../../utils/route_transitions/basic.dart';
 
 part 'empty.dart';
-part 'fab.dart';
 part 'new_user.dart';
 part 'user.dart';
 part 'user_details.dart';
@@ -77,10 +76,8 @@ class UsersPage extends StatelessWidget {
         preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
           title: 'basis.users'.tr(),
-          hasFlashButton: true,
         ),
       ),
-      floatingActionButton: isReady ? const _Fab() : null,
       body: child,
     );
   }

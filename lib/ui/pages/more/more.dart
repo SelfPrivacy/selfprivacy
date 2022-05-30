@@ -30,7 +30,6 @@ class MorePage extends StatelessWidget {
         preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
           title: 'basis.more'.tr(),
-          hasFlashButton: true,
         ),
       ),
       body: ListView(

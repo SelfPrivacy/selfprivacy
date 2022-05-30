@@ -664,7 +664,8 @@ class ServerApi extends ApiMap {
     var client = await getClient();
     var data = {};
     if (expiration != null) {
-      data['expiration'] = expiration.toIso8601String();
+      data['expiration'] = '${expiration.toIso8601String()}Z';
+      print(data['expiration']);
     }
     if (uses != null) {
       data['uses'] = uses;

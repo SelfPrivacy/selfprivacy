@@ -31,11 +31,9 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
           children: [
             CubitFormTextField(
               formFieldCubit: context.read<CloudFlareFormCubit>().apiKey,
-              textAlign: TextAlign.center,
-              scrollPadding: const EdgeInsets.only(bottom: 70),
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                hintText: 'initializing.5'.tr(),
+                labelText: 'initializing.5'.tr(),
               ),
             ),
             const SizedBox(height: 16),

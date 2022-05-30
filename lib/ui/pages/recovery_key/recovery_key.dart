@@ -2,6 +2,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -88,7 +89,7 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
         if (keyStatus.exists && !_isConfigurationVisible)
           RecoveryKeyInformation(state: keyStatus),
         if (_isConfigurationVisible || !keyStatus.exists)
-          RecoveryKeyConfiguration(),
+          const RecoveryKeyConfiguration(),
         const SizedBox(height: 16),
         if (!_isConfigurationVisible && keyStatus.isValid)
           BrandButton.text(
@@ -161,39 +162,42 @@ class RecoveryKeyInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const padding = EdgeInsets.symmetric(vertical: 8.0);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (state.expiresAt != null)
-          Padding(
-            padding: padding,
-            child: Text(
-              'recovery_key.key_valid_until'.tr(
-                args: [state.expiresAt!.toIso8601String()],
+    const padding = EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0);
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (state.expiresAt != null)
+            Padding(
+              padding: padding,
+              child: Text(
+                'recovery_key.key_valid_until'.tr(
+                  args: [DateFormat.yMMMMd().format(state.expiresAt!)],
+                ),
               ),
             ),
-          ),
-        if (state.usesLeft != null)
-          Padding(
-            padding: padding,
-            child: Text(
-              'recovery_key.key_valid_for'.tr(
-                args: [state.usesLeft!.toString()],
+          if (state.usesLeft != null)
+            Padding(
+              padding: padding,
+              child: Text(
+                'recovery_key.key_valid_for'.tr(
+                  args: [state.usesLeft!.toString()],
+                ),
               ),
             ),
-          ),
-        if (state.generatedAt != null)
-          Padding(
-            padding: padding,
-            child: Text(
-              'recovery_key.key_creation_date'.tr(
-                args: [state.generatedAt!.toIso8601String()],
+          if (state.generatedAt != null)
+            Padding(
+              padding: padding,
+              child: Text(
+                'recovery_key.key_creation_date'.tr(
+                  args: [DateFormat.yMMMMd().format(state.generatedAt!)],
+                ),
+                textAlign: TextAlign.start,
               ),
-              textAlign: TextAlign.start,
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -218,6 +222,38 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
   DateTime _selectedDate = DateTime.now();
   bool _isDateSelected = false;
 
+  bool _isLoading = false;
+
+  Future<void> _generateRecoveryToken() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final token = await context.read<RecoveryKeyCubit>().generateRecoveryKey(
+            numberOfUses:
+                _isAmountToggled ? int.tryParse(_amountController.text) : null,
+            expirationDate: _isExpirationToggled ? _selectedDate : null,
+          );
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.of(context).push(
+        materialRoute(
+          RecoveryKeyReceiving(recoveryKey: token), // TO DO
+        ),
+      );
+    } on GenerationError catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      getIt<NavigationService>().showSnackBar(
+        'recovery_key.generation_error'.tr(args: [e.message]),
+      );
+      return;
+    }
+  }
+
   void _updateErrorStatuses() {
     final amount = _amountController.text;
     final expiration = _expirationController.text;
@@ -241,8 +277,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
       } else if (expiration.isEmpty) {
         _isExpirationError = true;
       } else {
-        _isExpirationError =
-            _selectedDate == null || _selectedDate.isBefore(DateTime.now());
+        _isExpirationError = _selectedDate.isBefore(DateTime.now());
       }
     });
 
@@ -266,10 +301,10 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
           value: _isAmountToggled,
           title: Text('recovery_key.key_amount_toggle'.tr()),
           activeColor: Theme.of(context).colorScheme.primary,
-          onChanged: (bool toogled) {
+          onChanged: (bool toggled) {
             setState(
               () {
-                _isAmountToggled = toogled;
+                _isAmountToggled = toggled;
               },
             );
             _updateErrorStatuses();
@@ -287,7 +322,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
                 enabled: _isAmountToggled,
                 controller: _amountController,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     errorText: _isAmountError ? ' ' : null,
                     labelText: 'recovery_key.key_amount_field_title'.tr()),
                 keyboardType: TextInputType.number,
@@ -304,10 +339,10 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
           value: _isExpirationToggled,
           title: Text('recovery_key.key_duedate_toggle'.tr()),
           activeColor: Theme.of(context).colorScheme.primary,
-          onChanged: (bool toogled) {
+          onChanged: (bool toggled) {
             setState(
               () {
-                _isExpirationToggled = toogled;
+                _isExpirationToggled = toggled;
               },
             );
             _updateErrorStatuses();
@@ -329,7 +364,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
                 },
                 readOnly: true,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     errorText: _isExpirationError ? ' ' : null,
                     labelText: 'recovery_key.key_duedate_field_title'.tr()),
                 keyboardType: TextInputType.number,
@@ -344,15 +379,9 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
         const SizedBox(height: 16),
         FilledButton(
           title: 'recovery_key.key_receive_button'.tr(),
-          disabled: _isAmountError || _isExpirationError,
+          disabled: _isAmountError || _isExpirationError || _isLoading,
           onPressed: !_isAmountError && !_isExpirationError
-              ? () {
-                  Navigator.of(context).push(
-                    materialRoute(
-                      const RecoveryKeyReceiving(recoveryKey: ''), // TO DO
-                    ),
-                  );
-                }
+              ? _generateRecoveryToken
               : null,
         ),
       ],

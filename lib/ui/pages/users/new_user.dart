@@ -1,6 +1,8 @@
 part of 'users.dart';
 
 class NewUser extends StatelessWidget {
+  const NewUser({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var config = context.watch<ServerInstallationCubit>().state;

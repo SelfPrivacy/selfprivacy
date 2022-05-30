@@ -16,12 +16,12 @@ class FilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle _enabledStyle = ElevatedButton.styleFrom(
+    final ButtonStyle enabledStyle = ElevatedButton.styleFrom(
       onPrimary: Theme.of(context).colorScheme.onPrimary,
       primary: Theme.of(context).colorScheme.primary,
     ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0));
 
-    final ButtonStyle _disabledStyle = ElevatedButton.styleFrom(
+    final ButtonStyle disabledStyle = ElevatedButton.styleFrom(
       onPrimary: Theme.of(context).colorScheme.onSurface.withAlpha(30),
       primary: Theme.of(context).colorScheme.onSurface.withAlpha(98),
     ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0));
@@ -33,7 +33,7 @@ class FilledButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         onPressed: onPressed,
-        style: disabled ? _disabledStyle : _enabledStyle,
+        style: disabled ? disabledStyle : enabledStyle,
         child: child ?? Text(title ?? ''),
       ),
     );

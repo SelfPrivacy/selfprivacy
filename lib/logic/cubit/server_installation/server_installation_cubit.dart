@@ -287,6 +287,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         await repository.getRecoveryCapabilities(serverDomain);
 
     await repository.saveDomain(serverDomain);
+    await repository.saveIsRecoveringServer(true);
 
     emit(ServerInstallationRecovery(
       serverDomain: serverDomain,
@@ -458,6 +459,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveIsServerResetedFirstTime(true);
     await repository.saveIsServerResetedSecondTime(true);
     await repository.saveHasFinalChecked(true);
+    await repository.saveIsRecoveringServer(false);
     final mainUser = await repository.getMainUser();
     final updatedState = (state as ServerInstallationRecovery).copyWith(
       backblazeCredential: backblazeCredential,

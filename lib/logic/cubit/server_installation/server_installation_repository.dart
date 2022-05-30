@@ -62,7 +62,8 @@ class ServerInstallationRepository {
       );
     }
 
-    if (serverDomain != null && serverDomain.provider == DnsProvider.unknown) {
+    if (box.get(BNames.isRecoveringServer, defaultValue: false) &&
+        serverDomain != null) {
       return ServerInstallationRecovery(
         hetznerKey: hetznerToken,
         cloudFlareKey: cloudflareToken,
@@ -599,6 +600,10 @@ class ServerInstallationRepository {
 
   Future<void> saveRootUser(User rootUser) async {
     await box.put(BNames.rootUser, rootUser);
+  }
+
+  Future<void> saveIsRecoveringServer(bool value) async {
+    await box.put(BNames.isRecoveringServer, value);
   }
 
   Future<void> saveHasFinalChecked(bool value) async {

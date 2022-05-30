@@ -323,13 +323,25 @@
     "confirm_backblaze_description": "Введите токен Backblaze, который имеет права на хранилище резервных копий:"
   },
   "recovery_key": {
+    "key_connection_error": "Не удалось соединиться с сервером",
+    "key_synchronizing": "Синхронизация...",
     "key_main_header": "Ключ восстановления",
     "key_main_description": "Требуется для авторизации SelfPrivacy, когда авторизованные устройства недоступны.",
     "key_amount_toggle": "Ограничить использования",
     "key_amount_field_title": "Макс. кол-во использований",
     "key_duedate_toggle": "Ограничить срок использования",
     "key_duedate_field_title": "Дата окончания срока",
-    "key_receive_button": "Получить ключ"
+    "key_receive_button": "Получить ключ",
+    "key_valid": "Ваш ключ действителен",
+    "key_invalid": "Ваш ключ больше не действителен",
+    "key_valid_until": "Действителен до {}",
+    "key_valid_for": "Можно использовать ещё {} раз",
+    "key_creation_date": "Создан {}",
+    "key_replace_button": "Сгенерировать новый ключ",
+    "key_receiving_description": "Запишите этот ключ в безопасном месте. Он предоставляет полный доступ к вашему серверу:",
+    "key_receiving_info": "Этот ключ больше не будет показан, но вы сможете заменить его новым.",
+    "key_receiving_done": "Готово!",
+    "generation_error": "Не удалось сгенерировать ключ. {}"
   },
   "modals": {
     "_comment": "messages in modals",

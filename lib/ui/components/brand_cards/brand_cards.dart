@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 
 class BrandCards {
   static Widget big({required Widget child}) => _BrandCard(
@@ -23,7 +22,9 @@ class BrandCards {
   static Widget outlined({required Widget child}) => _OutlinedCard(
         child: child,
       );
-  static Widget filled({required Widget child}) => _FilledCard(
+  static Widget filled({required Widget child, bool tertiary = false}) =>
+      _FilledCard(
+        tertiary: tertiary,
         child: child,
       );
 }
@@ -80,12 +81,11 @@ class _OutlinedCard extends StatelessWidget {
 }
 
 class _FilledCard extends StatelessWidget {
-  const _FilledCard({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
+  const _FilledCard({Key? key, required this.child, required this.tertiary})
+      : super(key: key);
 
   final Widget child;
+  final bool tertiary;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -94,7 +94,9 @@ class _FilledCard extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       clipBehavior: Clip.antiAlias,
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: tertiary
+          ? Theme.of(context).colorScheme.tertiaryContainer
+          : Theme.of(context).colorScheme.surfaceVariant,
       child: child,
     );
   }

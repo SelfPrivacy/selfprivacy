@@ -109,6 +109,9 @@ class BNames {
   /// A boolean field of [serverInstallationBox] box.
   static String isServerResetedSecondTime = 'isServerResetedSecondTime';
 
+  /// A boolean field of [serverInstallationBox] box.
+  static String isRecoveringServer = 'isRecoveringServer';
+
   /// Deprecated users box as it is unencrypted
   static String usersDeprecated = 'users';
 

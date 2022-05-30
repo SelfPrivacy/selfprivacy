@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_tab_bar/brand_tab_bar.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
@@ -48,10 +47,11 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  var selfprivacyServer = ServerApi();
-
   @override
   Widget build(BuildContext context) {
+    var isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
+
     return SafeArea(
       child: Provider<ChangeTab>(
         create: (_) => ChangeTab(tabController.animateTo),
@@ -68,36 +68,23 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
           bottomNavigationBar: BrandTabBar(
             controller: tabController,
           ),
-          floatingActionButton: SizedBox(
-            height: 104 + 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ScaleTransition(
-                  scale: _animation,
-                  child: FloatingActionButton.small(
-                    heroTag: 'new_user_fab',
-                    onPressed: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (BuildContext context) {
-                          return Padding(
-                              padding: MediaQuery.of(context).viewInsets,
-                              child: NewUser());
-                        },
-                      );
-                    },
-                    child: const Icon(Icons.person_add_outlined),
+          floatingActionButton: isReady
+              ? SizedBox(
+                  height: 104 + 16,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ScaleTransition(
+                        scale: _animation,
+                        child: const AddUserFab(),
+                      ),
+                      const SizedBox(height: 16),
+                      const BrandFab(),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 16),
-                const BrandFab(),
-              ],
-            ),
-          ),
+                )
+              : null,
         ),
       ),
     );

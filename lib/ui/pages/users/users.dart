@@ -30,6 +30,7 @@ part 'empty.dart';
 part 'new_user.dart';
 part 'user.dart';
 part 'user_details.dart';
+part 'add_user_fab.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({Key? key}) : super(key: key);

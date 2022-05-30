@@ -291,7 +291,7 @@
     "method_select_other_device": "I have access on another device",
     "method_select_recovery_key": "I have a recovery key",
     "method_select_nothing": "I don't have any of that",
-    "method_device_description": "Open the application on another device, then go to the device page. Press \"Add device\" to receive your token.",
+    "method_device_description": "Open the application on another device, then go to the devices page. Press \"Add device\" to receive your token.",
     "method_device_button": "I have received my token",
     "method_device_input_description": "Enter your authorization token",
     "method_device_input_placeholder": "Token",
@@ -342,7 +342,8 @@
     "key_replace_button": "Generate new key",
     "key_receiving_description": "Write down this key and put to a safe place. It is used to restore full access to your server:",
     "key_receiving_info": "The key will never ever be shown again, but you will be able to replace it with another one.",
-    "key_receiving_done": "Done!"
+    "key_receiving_done": "Done!",
+    "generation_error": "Couldn't generate a recovery key. {}"
   },
   "modals": {
     "_comment": "messages in modals",

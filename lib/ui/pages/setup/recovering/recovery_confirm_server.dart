@@ -143,7 +143,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
               ),
         ),
         leading: Icon(
-          Icons.dns,
+          Icons.dns_outlined,
           color: Theme.of(context).colorScheme.onSurface,
         ),
         subtitle: Column(
@@ -199,10 +199,11 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Icon(Icons.warning_amber_outlined),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 Text(
                   'recovering.modal_confirmation_title'.tr(),
                   style: Theme.of(context).textTheme.headlineSmall,
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
@@ -212,7 +213,9 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
               children: <Widget>[
                 Text('recovering.modal_confirmation_description'.tr(),
                     style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 12),
                 const Divider(),
+                const SizedBox(height: 12),
                 Text(
                   server.name,
                   style: Theme.of(context).textTheme.titleMedium,
@@ -275,19 +278,20 @@ class IsValidStringDisplay extends StatelessWidget {
             ? Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface)
             : Icon(Icons.close, color: Theme.of(context).colorScheme.error),
         const SizedBox(width: 8),
-        isValid
-            ? Text(
-                textIfValid,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-              )
-            : Text(
-                textIfInvalid,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-              )
+        Expanded(
+            child: isValid
+                ? Text(
+                    textIfValid,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                  )
+                : Text(
+                    textIfInvalid,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                  )),
       ],
     );
   }

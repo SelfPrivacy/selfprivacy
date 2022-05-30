@@ -15,14 +15,31 @@ class RecoveryKeyReceiving extends StatelessWidget {
   Widget build(BuildContext context) {
     return BrandHeroScreen(
       heroTitle: 'recovery_key.key_main_header'.tr(),
-      heroSubtitle: 'recovering.method_select_description'.tr(),
+      heroSubtitle: 'recovery_key.key_receiving_description'.tr(),
       hasBackButton: true,
       hasFlashButton: false,
       children: [
-        Text(recoveryKey, style: Theme.of(context).textTheme.bodyLarge),
+        const Divider(),
         const SizedBox(height: 16),
-        const Icon(Icons.info_outlined, size: 14),
-        Text('recovery_key.key_receiving_info'.tr()),
+        Text(
+          recoveryKey,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                fontSize: 24,
+                fontFamily: 'RobotoMono',
+              ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 16),
+        const Divider(),
+        const SizedBox(height: 16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(Icons.info_outlined, size: 24),
+            const SizedBox(height: 16),
+            Text('recovery_key.key_receiving_info'.tr()),
+          ],
+        ),
         const SizedBox(height: 16),
         FilledButton(
           title: 'recovery_key.key_receiving_done'.tr(),

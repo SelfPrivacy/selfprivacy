@@ -67,8 +67,6 @@ final mediumStyle = defaultTextStyle.copyWith(fontSize: 13, height: 1.53);
 
 final smallStyle = defaultTextStyle.copyWith(fontSize: 11, height: 1.45);
 
-final linkStyle = defaultTextStyle.copyWith(color: BrandColors.blue);
-
 const progressTextStyleLight = TextStyle(
   fontSize: 11,
   color: BrandColors.textColor1,

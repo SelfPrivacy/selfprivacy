@@ -67,9 +67,9 @@ class NewUser extends StatelessWidget {
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: IconButton(
-                              icon: const Icon(
+                              icon: Icon(
                                 BrandIcons.refresh,
-                                color: BrandColors.blue,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                               onPressed:
                                   context.read<UserFormCubit>().genNewPassword,

@@ -20,7 +20,10 @@ class IconStatusMask extends StatelessWidget {
         colors = BrandColors.uninitializedGradientColors;
         break;
       case StateType.stable:
-        colors = BrandColors.stableGradientColors;
+        colors = [
+          Theme.of(context).colorScheme.primary,
+          Theme.of(context).colorScheme.tertiary,
+        ];
         break;
       case StateType.warning:
         colors = BrandColors.warningGradientColors;

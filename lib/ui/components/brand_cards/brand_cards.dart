@@ -46,9 +46,7 @@ class _BrandCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark
-            ? BrandColors.black
-            : BrandColors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: borderRadius,
         boxShadow: shadow,
       ),

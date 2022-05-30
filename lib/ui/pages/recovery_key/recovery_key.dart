@@ -81,61 +81,35 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
   Widget build(BuildContext context) {
     final keyStatus = context.watch<RecoveryKeyCubit>().state;
 
-    List<Widget> widgets = [];
-
-    if (keyStatus.exists) {
-      widgets = [
-        RecoveryKeyStatusCard(isValid: keyStatus.isValid),
-        RecoveryKeyInformation(state: keyStatus),
-        ...widgets,
-      ];
-
-      if (_isConfigurationVisible) {
-        widgets = [
-          ...widgets,
-          const RecoveryKeyConfiguration(),
-        ];
-      }
-
-      if (!_isConfigurationVisible) {
-        if (keyStatus.isValid) {
-          widgets = [
-            ...widgets,
-            const SizedBox(height: 16),
-            BrandButton.text(
-              title: 'recovery_key.key_replace_button'.tr(),
-              onPressed: () {
-                setState(() {
-                  _isConfigurationVisible = true;
-                });
-              },
-            ),
-          ];
-        } else {
-          widgets = [
-            ...widgets,
-            const SizedBox(height: 16),
-            FilledButton(
-              title: 'recovery_key.key_replace_button'.tr(),
-              onPressed: () {
-                setState(() {
-                  _isConfigurationVisible = true;
-                });
-              },
-            ),
-          ];
-        }
-      }
-    }
-
-    if (!keyStatus.exists) {
-      widgets = [
-        ...widgets,
-        const RecoveryKeyConfiguration(),
-      ];
-    }
-
-    return Column(children: widgets);
+    return Column(
+      children: [
+        if (keyStatus.exists) RecoveryKeyStatusCard(isValid: keyStatus.isValid),
+        const SizedBox(height: 16),
+        if (keyStatus.exists && !_isConfigurationVisible)
+          RecoveryKeyInformation(state: keyStatus),
+        if (_isConfigurationVisible || !keyStatus.exists)
+          RecoveryKeyConfiguration(),
+        const SizedBox(height: 16),
+        if (!_isConfigurationVisible && keyStatus.isValid)
+          BrandButton.text(
+            title: 'recovery_key.key_replace_button'.tr(),
+            onPressed: () {
+              setState(() {
+                _isConfigurationVisible = true;
+              });
+            },
+          ),
+        if (!_isConfigurationVisible && !keyStatus.isValid)
+          FilledButton(
+            title: 'recovery_key.key_replace_button'.tr(),
+            onPressed: () {
+              setState(() {
+                _isConfigurationVisible = true;
+              });
+            },
+          ),
+      ],
+    );
   }
 }
 
@@ -235,119 +209,151 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
   bool _isAmountToggled = false;
   bool _isExpirationToggled = false;
 
-  bool _isAmountError = false;
-  bool _isExpirationError = false;
-
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _expirationController = TextEditingController();
+
+  bool _isAmountError = false;
+  bool _isExpirationError = false;
 
   DateTime _selectedDate = DateTime.now();
   bool _isDateSelected = false;
 
+  void _updateErrorStatuses() {
+    final amount = _amountController.text;
+    final expiration = _expirationController.text;
+
+    print('amount: $amount');
+    print('_isAmountToggled: $_isAmountToggled');
+    print('_isExpirationToggled: $_isExpirationToggled');
+
+    setState(() {
+      if (!_isAmountToggled) {
+        _isAmountError = false;
+      } else if (amount.isEmpty) {
+        _isAmountError = true;
+      } else {
+        final amountInt = int.tryParse(amount);
+        _isAmountError = amountInt == null || amountInt <= 0;
+      }
+
+      if (!_isExpirationToggled) {
+        _isExpirationError = false;
+      } else if (expiration.isEmpty) {
+        _isExpirationError = true;
+      } else {
+        _isExpirationError =
+            _selectedDate == null || _selectedDate.isBefore(DateTime.now());
+      }
+    });
+
+    print('_isAmountError: $_isAmountError');
+    print('_isExpirationError: $_isExpirationError');
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isDateSelected) {
-      _expirationController.text = _selectedDate.toIso8601String();
+      _expirationController.text = DateFormat.yMMMMd().format(_selectedDate);
     }
+
+    _amountController.addListener(_updateErrorStatuses);
+
+    _expirationController.addListener(_updateErrorStatuses);
 
     return Column(
       children: [
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Text('recovery_key.key_amount_toggle'.tr()),
-            Switch(
-              value: _isAmountToggled,
-              onChanged: (bool toogled) {
-                setState(
-                  () {
-                    _isAmountToggled = toogled;
-                    _isExpirationToggled = _isExpirationToggled;
-                  },
-                );
+        SwitchListTile(
+          value: _isAmountToggled,
+          title: Text('recovery_key.key_amount_toggle'.tr()),
+          activeColor: Theme.of(context).colorScheme.primary,
+          onChanged: (bool toogled) {
+            setState(
+              () {
+                _isAmountToggled = toogled;
               },
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        TextField(
-          enabled: _isAmountToggled,
-          controller: _amountController,
-          decoration: InputDecoration(
-              errorText: _isAmountError ? ' ' : null,
-              labelText: 'recovery_key.key_amount_field_title'.tr()),
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.digitsOnly,
-          ], // Only numbers can be entered
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Text('recovery_key.key_duedate_toggle'.tr()),
-            Switch(
-              value: _isExpirationToggled,
-              onChanged: (bool toogled) {
-                setState(
-                  () {
-                    _isAmountToggled = _isAmountToggled;
-                    _isExpirationToggled = toogled;
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        TextField(
-          enabled: _isExpirationToggled,
-          controller: _expirationController,
-          onTap: () {
-            _selectDate(context);
+            );
+            _updateErrorStatuses();
           },
-          decoration: InputDecoration(
-              errorText: _isExpirationError ? ' ' : null,
-              labelText: 'recovery_key.key_duedate_field_title'.tr()),
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.digitsOnly,
-          ], // Only numbers can be entered
+        ),
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 200),
+          crossFadeState: _isAmountToggled
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          firstChild: Column(
+            children: [
+              const SizedBox(height: 8),
+              TextField(
+                enabled: _isAmountToggled,
+                controller: _amountController,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    errorText: _isAmountError ? ' ' : null,
+                    labelText: 'recovery_key.key_amount_field_title'.tr()),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                ], // Only numbers can be entered
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+          secondChild: Container(),
+        ),
+        SwitchListTile(
+          value: _isExpirationToggled,
+          title: Text('recovery_key.key_duedate_toggle'.tr()),
+          activeColor: Theme.of(context).colorScheme.primary,
+          onChanged: (bool toogled) {
+            setState(
+              () {
+                _isExpirationToggled = toogled;
+              },
+            );
+            _updateErrorStatuses();
+          },
+        ),
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 200),
+          crossFadeState: _isExpirationToggled
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          firstChild: Column(
+            children: [
+              const SizedBox(height: 8),
+              TextField(
+                enabled: _isExpirationToggled,
+                controller: _expirationController,
+                onTap: () {
+                  _selectDate(context);
+                },
+                readOnly: true,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    errorText: _isExpirationError ? ' ' : null,
+                    labelText: 'recovery_key.key_duedate_field_title'.tr()),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                ], // Only numbers can be entered
+              ),
+            ],
+          ),
+          secondChild: Container(),
         ),
         const SizedBox(height: 16),
         FilledButton(
           title: 'recovery_key.key_receive_button'.tr(),
-          onPressed: () {
-            if (_isExpirationToggled && _expirationController.text.isEmpty) {
-              setState(() {
-                _isExpirationError = true;
-                _isAmountError = false;
-                _isAmountToggled = _isAmountToggled;
-                _isExpirationToggled = _isExpirationToggled;
-              });
-              return;
-            } else if (_isAmountToggled && _amountController.text.isEmpty) {
-              setState(() {
-                _isAmountError = true;
-                _isExpirationError = false;
-                _isAmountToggled = _isAmountToggled;
-                _isExpirationToggled = _isExpirationToggled;
-              });
-              return;
-            } else {
-              setState(() {
-                _isAmountError = false;
-                _isExpirationError = false;
-                _isAmountToggled = _isAmountToggled;
-                _isExpirationToggled = _isExpirationToggled;
-              });
-
-              Navigator.of(context).push(
-                materialRoute(
-                  const RecoveryKeyReceiving(recoveryKey: ''), // TO DO
-                ),
-              );
-            }
-          },
+          disabled: _isAmountError || _isExpirationError,
+          onPressed: !_isAmountError && !_isExpirationError
+              ? () {
+                  Navigator.of(context).push(
+                    materialRoute(
+                      const RecoveryKeyReceiving(recoveryKey: ''), // TO DO
+                    ),
+                  );
+                }
+              : null,
         ),
       ],
     );

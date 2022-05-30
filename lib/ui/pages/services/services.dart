@@ -189,7 +189,11 @@ class _Card extends StatelessWidget {
                                   'https://${serviceType.subdomain}.$domainName'),
                               child: Text(
                                 '${serviceType.subdomain}.$domainName',
-                                style: linkStyle,
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -199,7 +203,10 @@ class _Card extends StatelessWidget {
                         Column(children: [
                           Text(
                             domainName,
-                            style: linkStyle,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              decoration: TextDecoration.underline,
+                            ),
                           ),
                           const SizedBox(height: 10),
                         ]),

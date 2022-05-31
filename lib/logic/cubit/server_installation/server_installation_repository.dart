@@ -628,7 +628,7 @@ class ServerInstallationRepository {
     await cloudFlare.removeSimilarRecords(cloudFlareDomain: serverDomain);
   }
 
-  Future<void> deleteRecords() async {
+  Future<void> deleteServerRelatedRecords() async {
     await box.deleteAll([
       BNames.serverDetails,
       BNames.isServerStarted,
@@ -636,6 +636,7 @@ class ServerInstallationRepository {
       BNames.isServerResetedSecondTime,
       BNames.hasFinalChecked,
       BNames.isLoading,
+      BNames.isRecoveringServer,
     ]);
     getIt<ApiConfigModel>().init();
   }

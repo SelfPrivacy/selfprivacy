@@ -24,7 +24,7 @@ class RecoveryKey extends StatefulWidget {
 class _RecoveryKeyState extends State<RecoveryKey> {
   @override
   Widget build(BuildContext context) {
-    var keyStatus = context.watch<RecoveryKeyCubit>().state;
+    final keyStatus = context.watch<RecoveryKeyCubit>().state;
 
     final List<Widget> widgets;
     final String? subtitle =

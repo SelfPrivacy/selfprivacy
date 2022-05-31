@@ -60,9 +60,16 @@ class RecoveryRouting extends StatelessWidget {
       }
     }
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      child: currentPage,
+    return BlocListener<ServerInstallationCubit, ServerInstallationState>(
+      listener: (context, state) {
+        if (state is ServerInstallationFinished) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        }
+      },
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: currentPage,
+      ),
     );
   }
 }

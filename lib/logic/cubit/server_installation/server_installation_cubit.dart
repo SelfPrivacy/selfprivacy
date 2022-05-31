@@ -461,6 +461,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveHasFinalChecked(true);
     await repository.saveIsRecoveringServer(false);
     final mainUser = await repository.getMainUser();
+    await repository.saveRootUser(mainUser);
     final updatedState = (state as ServerInstallationRecovery).copyWith(
       backblazeCredential: backblazeCredential,
       rootUser: mainUser,
@@ -502,7 +503,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     if (state.serverDetails != null) {
       await repository.deleteServer(state.serverDomain!);
     }
-    await repository.deleteRecords();
+    await repository.deleteServerRelatedRecords();
     emit(ServerInstallationNotFinished(
       hetznerKey: state.hetznerKey,
       serverDomain: state.serverDomain,

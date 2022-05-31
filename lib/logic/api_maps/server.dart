@@ -847,7 +847,7 @@ class ServerApi extends ApiMap {
       response = await client.delete(
         '/auth/tokens',
         data: {
-          'device': device,
+          'token_name': device,
         },
       );
     } on DioError catch (e) {

@@ -28,7 +28,8 @@
     "no_data": "No data",
     "wait": "Wait",
     "remove": "Remove",
-    "apply": "Apply"
+    "apply": "Apply",
+    "done": "Done"
   },
   "more": {
     "_comment": "'More' tab",
@@ -286,7 +287,7 @@
     "recovery_main_header": "Connect to an existing server",
     "domain_recovery_description": "Enter a server domain you want to get access for:",
     "domain_recover_placeholder": "Your domain",
-    "domain_recover_error": "Server with such domain is not found",
+    "domain_recover_error": "Server with such domain was not found",
     "method_select_description": "Select a recovery method:",
     "method_select_other_device": "I have access on another device",
     "method_select_recovery_key": "I have a recovery key",
@@ -323,6 +324,31 @@
     "confirm_cloudflare_description": "Enter a Cloudflare token with access to {}:",
     "confirm_backblaze": "Connect to Backblaze",
     "confirm_backblaze_description": "Enter a Backblaze token with access to backup storage:"
+  },
+  "devices": {
+    "main_screen": {
+      "header": "Devices",
+      "description": "These devices have full access to the server via SelfPrivacy app.",
+      "this_device": "This device",
+      "other_devices": "Other devices",
+      "authorize_new_device": "Authorize new device",
+      "access_granted_on" : "Access granted on {}",
+      "tip": "Press on the device to revoke access."
+    },
+    "add_new_device_screen": {
+      "header": "Authorizing new device",
+      "description": "Enter the key on the device you want to authorize:",
+      "please_wait": "Please wait",
+      "tip": "The key is valid for 10 minutes.",
+      "expired": "The key has expired.",
+      "get_new_key": "Get new key"
+    },
+    "revoke_device_alert": {
+      "header": "Revoke access?",
+      "description": "The device {} will no longer have access to the server.",
+      "yes": "Revoke",
+      "no": "Cancel"
+    }
   },
   "recovery_key": {
     "key_connection_error": "Couldn't connect to the server.",

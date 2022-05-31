@@ -28,7 +28,8 @@
     "no_data": "Нет данных",
     "wait": "Загрузка",
     "remove": "Удалить",
-    "apply": "Подать"
+    "apply": "Подать",
+    "done": "Готово"
   },
   "more": {
     "_comment": "вкладка ещё",
@@ -321,6 +322,31 @@
     "confirm_cloudflare_description": "Введите токен Cloudflare, который имеет права на {}:",
     "confirm_backblze": "Подключение к Backblaze",
     "confirm_backblaze_description": "Введите токен Backblaze, который имеет права на хранилище резервных копий:"
+  },
+  "devices": {
+    "main_screen": {
+      "header": "Устройства",
+      "description": "Эти устройства имеют полный доступ к управлению сервером через приложение SelfPrivacy.",
+      "this_device": "Это устройство",
+      "other_devices": "Другие устройства",
+      "authorize_new_device": "Авторизовать новое устройство",
+      "access_granted_on" : "Доступ выдан {}",
+      "tip": "Нажмите на устройство, чтобы отозвать доступ."
+    },
+    "add_new_device_screen": {
+      "header": "Авторизация нового устройства",
+      "description": "Введите этот ключ на новом устройстве:",
+      "please_wait": "Пожалуйста, подождите",
+      "tip": "Ключ действителен 10 минут.",
+      "expired": "Срок действия ключа истёк.",
+      "get_new_key": "Получить новый ключ"
+    },
+    "revoke_device_alert": {
+      "header": "Отозвать доступ?",
+      "description": "Устройство {} больше не сможет управлять сервером.",
+      "yes": "Отозвать",
+      "no": "Отмена"
+    }
   },
   "recovery_key": {
     "key_connection_error": "Не удалось соединиться с сервером",

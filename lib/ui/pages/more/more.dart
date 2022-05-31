@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
+import 'package:selfprivacy/ui/pages/devices/devices.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
@@ -60,6 +61,12 @@ class MorePage extends StatelessWidget {
                     iconData: Icons.password_outlined,
                     goTo: const RecoveryKey(),
                     title: 'recovery_key.key_main_header'.tr(),
+                  ),
+                if (isReady)
+                  _MoreMenuItem(
+                    iconData: Icons.devices_outlined,
+                    goTo: const DevicesScreen(),
+                    title: 'devices.main_screen.header'.tr(),
                   ),
                 _MoreMenuItem(
                   title: 'more.settings.title'.tr(),

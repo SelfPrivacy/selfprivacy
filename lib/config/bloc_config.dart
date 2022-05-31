@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
@@ -24,6 +25,7 @@ class BlocAndProviderConfig extends StatelessWidget {
     var backupsCubit = BackupsCubit(serverInstallationCubit);
     var dnsRecordsCubit = DnsRecordsCubit(serverInstallationCubit);
     var recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
+    var apiDevicesCubit = ApiDevicesCubit(serverInstallationCubit);
     return MultiProvider(
       providers: [
         BlocProvider(
@@ -39,6 +41,7 @@ class BlocAndProviderConfig extends StatelessWidget {
         BlocProvider(create: (_) => backupsCubit..load(), lazy: false),
         BlocProvider(create: (_) => dnsRecordsCubit..load()),
         BlocProvider(create: (_) => recoveryKeyCubit..load()),
+        BlocProvider(create: (_) => apiDevicesCubit..load()),
         BlocProvider(
           create: (_) =>
               JobsCubit(usersCubit: usersCubit, servicesCubit: servicesCubit),

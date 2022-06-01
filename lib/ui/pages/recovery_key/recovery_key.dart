@@ -27,17 +27,14 @@ class _RecoveryKeyState extends State<RecoveryKey> {
     final keyStatus = context.watch<RecoveryKeyCubit>().state;
 
     final List<Widget> widgets;
-    final String? subtitle =
+    String? subtitle =
         keyStatus.exists ? null : 'recovery_key.key_main_description'.tr();
+
     switch (keyStatus.loadingStatus) {
       case LoadingStatus.refreshing:
+        subtitle = 'recovery_key.key_synchronizing'.tr();
         widgets = [
           const Center(child: CircularProgressIndicator()),
-          const SizedBox(height: 16),
-          BrandText(
-            'recovery_key.key_synchronizing'.tr(),
-            type: TextType.h1,
-          ),
         ];
         break;
       case LoadingStatus.success:
@@ -47,13 +44,9 @@ class _RecoveryKeyState extends State<RecoveryKey> {
         break;
       case LoadingStatus.uninitialized:
       case LoadingStatus.error:
+        subtitle = 'recovery_key.key_connection_error'.tr();
         widgets = [
           const Icon(Icons.sentiment_dissatisfied_outlined),
-          const SizedBox(height: 16),
-          BrandText(
-            'recovery_key.key_connection_error'.tr(),
-            type: TextType.h1,
-          ),
         ];
         break;
     }

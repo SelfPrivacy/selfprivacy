@@ -14,18 +14,18 @@ class BrandSpanButton extends TextSpan {
           style: (style ?? const TextStyle()).copyWith(color: BrandColors.blue),
         );
 
-  static BrandSpanButton link({
+  BrandSpanButton.link({
     required final String text,
     final String? urlString,
     final TextStyle? style,
-  }) =>
-      BrandSpanButton(
-        text: text,
-        style: style,
-        onTap: () => _launchURL(urlString ?? text),
-      );
+  }) : super(
+          recognizer: TapGestureRecognizer()
+            ..onTap = () => _launchURL(urlString ?? text),
+          text: text,
+          style: (style ?? const TextStyle()).copyWith(color: BrandColors.blue),
+        );
 
-  static _launchURL(final String link) async {
+  static Future<void> _launchURL(final String link) async {
     if (await canLaunchUrl(Uri.parse(link))) {
       await launchUrl(Uri.parse(link));
     } else {

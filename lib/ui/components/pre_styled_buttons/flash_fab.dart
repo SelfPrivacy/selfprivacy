@@ -7,7 +7,7 @@ import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
 class BrandFab extends StatefulWidget {
-  const BrandFab({super.key});
+  const BrandFab({final super.key});
 
   @override
   State<BrandFab> createState() => _BrandFabState();
@@ -21,7 +21,9 @@ class _BrandFabState extends State<BrandFab>
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 800),);
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
     super.initState();
   }
 
@@ -62,18 +64,20 @@ class _BrandFabState extends State<BrandFab>
           );
         },
         child: AnimatedBuilder(
-            animation: _colorTween,
-            builder: (final BuildContext context, final Widget? child) {
-              final double v = _animationController.value;
-              final IconData icon = v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
-              return Transform.scale(
-                scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
-                child: Icon(
-                  icon,
-                  color: _colorTween.value,
-                ),
-              );
-            },),
+          animation: _colorTween,
+          builder: (final BuildContext context, final Widget? child) {
+            final double v = _animationController.value;
+            final IconData icon =
+                v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
+            return Transform.scale(
+              scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
+              child: Icon(
+                icon,
+                color: _colorTween.value,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -8,14 +8,17 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
 class DnsDetailsPage extends StatefulWidget {
-  const DnsDetailsPage({super.key});
+  const DnsDetailsPage({final super.key});
 
   @override
   State<DnsDetailsPage> createState() => _DnsDetailsPageState();
 }
 
 class _DnsDetailsPageState extends State<DnsDetailsPage> {
-  Widget _getStateCard(final DnsRecordsStatus dnsState, final Function fixCallback) {
+  Widget _getStateCard(
+    final DnsRecordsStatus dnsState,
+    final Function fixCallback,
+  ) {
     String description = '';
     String subtitle = '';
     Icon icon = const Icon(
@@ -66,7 +69,8 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
   Widget build(final BuildContext context) {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    final String domain = getIt<ApiConfigModel>().serverDomain?.domainName ?? '';
+    final String domain =
+        getIt<ApiConfigModel>().serverDomain?.domainName ?? '';
     final DnsRecordsState dnsCubit = context.watch<DnsRecordsCubit>().state;
 
     print(dnsCubit.dnsState);

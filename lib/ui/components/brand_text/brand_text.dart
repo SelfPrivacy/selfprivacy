@@ -33,13 +33,20 @@ class BrandText extends StatelessWidget {
         textAlign: textAlign,
       );
 
-  factory BrandText.onboardingTitle(final String text, {final TextStyle? style}) =>
+  factory BrandText.onboardingTitle(
+    final String text, {
+    final TextStyle? style,
+  }) =>
       BrandText(
         text,
         type: TextType.onboardingTitle,
         style: style,
       );
-  factory BrandText.h3(final String text, {final TextStyle? style, final TextAlign? textAlign}) =>
+  factory BrandText.h3(
+    final String text, {
+    final TextStyle? style,
+    final TextAlign? textAlign,
+  }) =>
       BrandText(
         text,
         type: TextType.h3,
@@ -85,22 +92,28 @@ class BrandText extends StatelessWidget {
         style: style,
         textAlign: textAlign,
       );
-  factory BrandText.body1(final String? text, {final TextStyle? style}) => BrandText(
+  factory BrandText.body1(final String? text, {final TextStyle? style}) =>
+      BrandText(
         text,
         type: TextType.body1,
         style: style,
       );
-  factory BrandText.small(final String text, {final TextStyle? style}) => BrandText(
+  factory BrandText.small(final String text, {final TextStyle? style}) =>
+      BrandText(
         text,
         type: TextType.small,
         style: style,
       );
-  factory BrandText.body2(final String? text, {final TextStyle? style}) => BrandText(
+  factory BrandText.body2(final String? text, {final TextStyle? style}) =>
+      BrandText(
         text,
         type: TextType.body2,
         style: style,
       );
-  factory BrandText.buttonTitleText(final String? text, {final TextStyle? style}) =>
+  factory BrandText.buttonTitleText(
+    final String? text, {
+    final TextStyle? style,
+  }) =>
       BrandText(
         text,
         type: TextType.buttonTitleText,
@@ -118,8 +131,11 @@ class BrandText extends StatelessWidget {
         style: style,
         textAlign: textAlign,
       );
-  factory BrandText.medium(final String? text,
-          {final TextStyle? style, final TextAlign? textAlign}) =>
+  factory BrandText.medium(
+    final String? text, {
+    final TextStyle? style,
+    final TextAlign? textAlign,
+  }) =>
       BrandText(
         text,
         type: TextType.medium,
@@ -128,9 +144,9 @@ class BrandText extends StatelessWidget {
       );
   const BrandText(
     this.text, {
-    super.key,
-    this.style,
     required this.type,
+    final super.key,
+    this.style,
     this.overflow,
     this.softWrap,
     this.textAlign,

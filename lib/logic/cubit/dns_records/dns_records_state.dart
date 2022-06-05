@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of 'dns_records_cubit.dart';
 
 enum DnsRecordsStatus {
@@ -33,10 +31,11 @@ class DnsRecordsState extends ServerInstallationDependendState {
   DnsRecordsState copyWith({
     final DnsRecordsStatus? dnsState,
     final List<DesiredDnsRecord>? dnsRecords,
-  }) => DnsRecordsState(
-      dnsState: dnsState ?? this.dnsState,
-      dnsRecords: dnsRecords ?? this.dnsRecords,
-    );
+  }) =>
+      DnsRecordsState(
+        dnsState: dnsState ?? this.dnsState,
+        dnsRecords: dnsRecords ?? this.dnsRecords,
+      );
 }
 
 class DesiredDnsRecord {
@@ -63,12 +62,13 @@ class DesiredDnsRecord {
     final String? description,
     final DnsRecordsCategory? category,
     final bool? isSatisfied,
-  }) => DesiredDnsRecord(
-      name: name ?? this.name,
-      type: type ?? this.type,
-      content: content ?? this.content,
-      description: description ?? this.description,
-      category: category ?? this.category,
-      isSatisfied: isSatisfied ?? this.isSatisfied,
-    );
+  }) =>
+      DesiredDnsRecord(
+        name: name ?? this.name,
+        type: type ?? this.type,
+        content: content ?? this.content,
+        description: description ?? this.description,
+        category: category ?? this.category,
+        isSatisfied: isSatisfied ?? this.isSatisfied,
+      );
 }

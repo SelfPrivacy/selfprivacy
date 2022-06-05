@@ -7,9 +7,9 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class ProgressBar extends StatefulWidget {
   const ProgressBar({
-    super.key,
     required this.steps,
     required this.activeIndex,
+    final super.key,
   });
 
   final int activeIndex;
@@ -23,9 +23,11 @@ class ProgressBar extends StatefulWidget {
 class _ProgressBarState extends State<ProgressBar> {
   @override
   Widget build(final BuildContext context) {
-    final double progress = 1 / widget.steps.length * (widget.activeIndex + 0.3);
+    final double progress =
+        1 / widget.steps.length * (widget.activeIndex + 0.3);
     final bool isDark = context.watch<AppSettingsCubit>().state.isDarkModeOn;
-    final TextStyle style = isDark ? progressTextStyleDark : progressTextStyleLight;
+    final TextStyle style =
+        isDark ? progressTextStyleDark : progressTextStyleLight;
 
     final Iterable<Container> allSteps = widget.steps.asMap().map(
       (final i, final step) {
@@ -77,20 +79,20 @@ class _ProgressBarState extends State<ProgressBar> {
           ),
           child: LayoutBuilder(
             builder: (final _, final constraints) => AnimatedContainer(
-                width: constraints.maxWidth * progress,
-                height: 5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: BrandColors.stableGradientColors,
-                  ),
-                ),
-                duration: const Duration(
-                  milliseconds: 300,
+              width: constraints.maxWidth * progress,
+              height: 5,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: BrandColors.stableGradientColors,
                 ),
               ),
+              duration: const Duration(
+                milliseconds: 300,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 5),
@@ -120,11 +122,15 @@ class _ProgressBarState extends State<ProgressBar> {
         text: TextSpan(
           style: progressTextStyleLight,
           children: [
-            if (checked) const WidgetSpan(
-                    child: Padding(
-                    padding: EdgeInsets.only(bottom: 2, right: 2),
-                    child: Icon(BrandIcons.check, size: 11),
-                  ),) else TextSpan(text: '${index + 1}.', style: style),
+            if (checked)
+              const WidgetSpan(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 2, right: 2),
+                  child: Icon(BrandIcons.check, size: 11),
+                ),
+              )
+            else
+              TextSpan(text: '${index + 1}.', style: style),
             TextSpan(text: step, style: style)
           ],
         ),

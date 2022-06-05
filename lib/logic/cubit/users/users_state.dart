@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of 'users_cubit.dart';
 
 class UsersState extends ServerInstallationDependendState {
@@ -16,15 +14,17 @@ class UsersState extends ServerInstallationDependendState {
     final List<User>? users,
     final User? rootUser,
     final User? primaryUser,
-  }) => UsersState(
-      users ?? this.users,
-      rootUser ?? this.rootUser,
-      primaryUser ?? this.primaryUser,
-    );
+  }) =>
+      UsersState(
+        users ?? this.users,
+        rootUser ?? this.rootUser,
+        primaryUser ?? this.primaryUser,
+      );
 
-  bool isLoginRegistered(final String login) => users.any((final User user) => user.login == login) ||
-        login == rootUser.login ||
-        login == primaryUser.login;
+  bool isLoginRegistered(final String login) =>
+      users.any((final User user) => user.login == login) ||
+      login == rootUser.login ||
+      login == primaryUser.login;
 
   bool get isEmpty => users.isEmpty;
 }

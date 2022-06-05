@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
@@ -52,7 +50,11 @@ class HetznerMetricsRepository {
 }
 
 List<TimeSeriesData> timeSeriesSerializer(
-    final Map<String, dynamic> json, final String type,) {
+  final Map<String, dynamic> json,
+  final String type,
+) {
   final List list = json['time_series'][type]['values'];
-  return list.map((final el) => TimeSeriesData(el[0], double.parse(el[1]))).toList();
+  return list
+      .map((final el) => TimeSeriesData(el[0], double.parse(el[1])))
+      .toList();
 }

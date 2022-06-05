@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of 'services_cubit.dart';
 
 class ServicesState extends ServerInstallationDependendState {

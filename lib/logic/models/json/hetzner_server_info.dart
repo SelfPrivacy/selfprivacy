@@ -1,12 +1,9 @@
-// ignore_for_file: always_specify_types
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'hetzner_server_info.g.dart';
 
 @JsonSerializable()
 class HetznerServerInfo {
-
   HetznerServerInfo(
     this.id,
     this.name,
@@ -41,7 +38,6 @@ class HetznerServerInfo {
 
 @JsonSerializable()
 class HetznerPublicNetInfo {
-
   HetznerPublicNetInfo(this.ipv4);
   final HetznerIp4 ipv4;
 
@@ -51,7 +47,6 @@ class HetznerPublicNetInfo {
 
 @JsonSerializable()
 class HetznerIp4 {
-
   HetznerIp4(this.id, this.ip, this.blocked, this.reverseDns);
   final bool blocked;
   @JsonKey(name: 'dns_ptr')
@@ -77,7 +72,6 @@ enum ServerStatus {
 
 @JsonSerializable()
 class HetznerServerTypeInfo {
-
   HetznerServerTypeInfo(this.cores, this.memory, this.disk, this.prices);
   final int cores;
   final num memory;
@@ -102,12 +96,12 @@ class HetznerPriceInfo {
   static HetznerPriceInfo fromJson(final Map<String, dynamic> json) =>
       _$HetznerPriceInfoFromJson(json);
 
-  static double getPrice(final Map json) => double.parse(json['gross'] as String);
+  static double getPrice(final Map json) =>
+      double.parse(json['gross'] as String);
 }
 
 @JsonSerializable()
 class HetznerLocation {
-
   HetznerLocation(this.country, this.city, this.description, this.zone);
   final String country;
   final String city;

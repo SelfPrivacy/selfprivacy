@@ -24,7 +24,7 @@ import 'package:selfprivacy/ui/pages/ssh_keys/ssh_keys.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../utils/route_transitions/basic.dart';
+import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 part 'empty.dart';
 part 'new_user.dart';
@@ -33,23 +33,19 @@ part 'user_details.dart';
 part 'add_user_fab.dart';
 
 class UsersPage extends StatelessWidget {
-  const UsersPage({Key? key}) : super(key: key);
+  const UsersPage({final super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // final usersCubitState = context.watch<UsersCubit>().state;
-    var isReady = context.watch<ServerInstallationCubit>().state
+  Widget build(final BuildContext context) {
+    final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    // final primaryUser = usersCubitState.primaryUser;
-    // final users = [primaryUser, ...usersCubitState.users];
-    // final isEmpty = users.isEmpty;
     Widget child;
 
     if (!isReady) {
       child = isNotReady();
     } else {
       child = BlocBuilder<UsersCubit, UsersState>(
-        builder: (context, state) {
+        builder: (final BuildContext context, final UsersState state) {
           print('Rebuild users page');
           final primaryUser = state.primaryUser;
           final users = [primaryUser, ...state.users];
@@ -60,12 +56,11 @@ class UsersPage extends StatelessWidget {
             },
             child: ListView.builder(
               itemCount: users.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _User(
-                  user: users[index],
-                  isRootUser: index == 0,
-                );
-              },
+              itemBuilder: (final BuildContext context, final int index) =>
+                  _User(
+                user: users[index],
+                isRootUser: index == 0,
+              ),
             ),
           );
         },
@@ -83,25 +78,23 @@ class UsersPage extends StatelessWidget {
     );
   }
 
-  Widget isNotReady() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: NotReadyCard(),
-        ),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Center(
-              child: _NoUsers(
-                text: 'users.not_ready'.tr(),
+  Widget isNotReady() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: NotReadyCard(),
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Center(
+                child: _NoUsers(
+                  text: 'users.not_ready'.tr(),
+                ),
               ),
             ),
-          ),
-        )
-      ],
-    );
-  }
+          )
+        ],
+      );
 }

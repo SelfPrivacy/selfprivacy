@@ -4,9 +4,9 @@ import 'package:selfprivacy/logic/models/state_types.dart';
 
 class IconStatusMask extends StatelessWidget {
   const IconStatusMask({
-    super.key,
     required this.child,
     required this.status,
+    final super.key,
   });
   final Icon child;
 

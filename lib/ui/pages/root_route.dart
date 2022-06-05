@@ -9,7 +9,7 @@ import 'package:selfprivacy/ui/pages/users/users.dart';
 import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
 
 class RootPage extends StatefulWidget {
-  const RootPage({super.key});
+  const RootPage({final super.key});
 
   @override
   State<RootPage> createState() => _RootPageState();
@@ -92,7 +92,6 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
 }
 
 class ChangeTab {
-
   ChangeTab(this.onPress);
   final ValueChanged<int> onPress;
 }

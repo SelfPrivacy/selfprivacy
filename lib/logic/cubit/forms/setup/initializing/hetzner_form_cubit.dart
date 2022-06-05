@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
@@ -16,7 +14,9 @@ class HetznerFormCubit extends FormCubit {
       validations: [
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
-            regExp.hasMatch, 'validations.key_format'.tr(),),
+          regExp.hasMatch,
+          'validations.key_format'.tr(),
+        ),
         LengthStringNotEqualValidation(64)
       ],
     );

@@ -24,7 +24,7 @@ class ActionButton extends StatelessWidget {
       ),
       onPressed: () {
         navigator.pop();
-        if (onPressed != null) onPressed!();
+        onPressed?.call();
       },
     );
   }

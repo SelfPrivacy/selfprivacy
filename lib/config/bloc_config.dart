@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
@@ -20,14 +18,14 @@ class BlocAndProviderConfig extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    const bool isDark = false;
-    final ServerInstallationCubit serverInstallationCubit = ServerInstallationCubit()..load();
-    final UsersCubit usersCubit = UsersCubit(serverInstallationCubit);
-    final ServicesCubit servicesCubit = ServicesCubit(serverInstallationCubit);
-    final BackupsCubit backupsCubit = BackupsCubit(serverInstallationCubit);
-    final DnsRecordsCubit dnsRecordsCubit = DnsRecordsCubit(serverInstallationCubit);
-    final RecoveryKeyCubit recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
-    final ApiDevicesCubit apiDevicesCubit = ApiDevicesCubit(serverInstallationCubit);
+    const isDark = false;
+    final serverInstallationCubit = ServerInstallationCubit()..load();
+    final usersCubit = UsersCubit(serverInstallationCubit);
+    final servicesCubit = ServicesCubit(serverInstallationCubit);
+    final backupsCubit = BackupsCubit(serverInstallationCubit);
+    final dnsRecordsCubit = DnsRecordsCubit(serverInstallationCubit);
+    final recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
+    final apiDevicesCubit = ApiDevicesCubit(serverInstallationCubit);
     return MultiProvider(
       providers: [
         BlocProvider(
@@ -36,14 +34,32 @@ class BlocAndProviderConfig extends StatelessWidget {
             isOnboardingShowing: true,
           )..load(),
         ),
-        BlocProvider(create: (final _) => serverInstallationCubit, lazy: false),
+        BlocProvider(
+          create: (final _) => serverInstallationCubit,
+          lazy: false,
+        ),
         BlocProvider(create: (final _) => ProvidersCubit()),
-        BlocProvider(create: (final _) => usersCubit..load(), lazy: false),
-        BlocProvider(create: (final _) => servicesCubit..load(), lazy: false),
-        BlocProvider(create: (final _) => backupsCubit..load(), lazy: false),
-        BlocProvider(create: (final _) => dnsRecordsCubit..load()),
-        BlocProvider(create: (final _) => recoveryKeyCubit..load()),
-        BlocProvider(create: (final _) => apiDevicesCubit..load()),
+        BlocProvider(
+          create: (final _) => usersCubit..load(),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (final _) => servicesCubit..load(),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (final _) => backupsCubit..load(),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (final _) => dnsRecordsCubit..load(),
+        ),
+        BlocProvider(
+          create: (final _) => recoveryKeyCubit..load(),
+        ),
+        BlocProvider(
+          create: (final _) => apiDevicesCubit..load(),
+        ),
         BlocProvider(
           create: (final _) =>
               JobsCubit(usersCubit: usersCubit, servicesCubit: servicesCubit),

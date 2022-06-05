@@ -21,7 +21,7 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class ProvidersPage extends StatefulWidget {
-  const ProvidersPage({super.key});
+  const ProvidersPage({final super.key});
 
   @override
   State<ProvidersPage> createState() => _ProvidersPageState();
@@ -32,8 +32,10 @@ class _ProvidersPageState extends State<ProvidersPage> {
   Widget build(final BuildContext context) {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    final bool isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
-    final DnsRecordsStatus dnsStatus = context.watch<DnsRecordsCubit>().state.dnsState;
+    final bool isBackupInitialized =
+        context.watch<BackupsCubit>().state.isInitialized;
+    final DnsRecordsStatus dnsStatus =
+        context.watch<DnsRecordsCubit>().state.dnsState;
 
     StateType getDnsStatus() {
       if (dnsStatus == DnsRecordsStatus.uninitialized ||
@@ -87,7 +89,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
 }
 
 class _Card extends StatelessWidget {
-  const _Card({super.key, required this.provider});
+  const _Card({required this.provider});
 
   final ProviderModel provider;
   @override
@@ -122,17 +124,21 @@ class _Card extends StatelessWidget {
         message = domainName;
         stableText = 'providers.domain.status'.tr();
 
-        onTap = () => Navigator.of(context).push(materialRoute(
-              const DnsDetailsPage(),
-            ),);
+        onTap = () => Navigator.of(context).push(
+              materialRoute(
+                const DnsDetailsPage(),
+              ),
+            );
         break;
       case ProviderType.backup:
         title = 'providers.backup.card_title'.tr();
         stableText = 'providers.backup.status'.tr();
 
-        onTap = () => Navigator.of(context).push(materialRoute(
-              const BackupDetails(),
-            ),);
+        onTap = () => Navigator.of(context).push(
+              materialRoute(
+                const BackupDetails(),
+              ),
+            );
         break;
     }
     return GestureDetector(

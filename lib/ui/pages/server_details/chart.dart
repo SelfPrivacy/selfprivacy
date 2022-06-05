@@ -1,8 +1,6 @@
 part of 'server_details_screen.dart';
 
 class _Chart extends StatelessWidget {
-  const _Chart({final super.key});
-
   @override
   Widget build(final BuildContext context) {
     final HetznerMetricsCubit cubit = context.watch<HetznerMetricsCubit>();
@@ -129,44 +127,40 @@ class _Chart extends StatelessWidget {
 
 class Legend extends StatelessWidget {
   const Legend({
-    final Key? key,
     required this.color,
     required this.text,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final String text;
   final Color color;
   @override
-  Widget build(final BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        _ColoredBox(color: color),
-        const SizedBox(width: 5),
-        BrandText.small(text),
-      ],
-    );
-  }
+  Widget build(final BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _ColoredBox(color: color),
+          const SizedBox(width: 5),
+          BrandText.small(text),
+        ],
+      );
 }
 
 class _ColoredBox extends StatelessWidget {
   const _ColoredBox({
-    final Key? key,
     required this.color,
-  }) : super(key: key);
+  });
 
   final Color color;
 
   @override
-  Widget build(final BuildContext context) {
-    return Container(
-      width: 10,
-      height: 10,
-      decoration: BoxDecoration(
+  Widget build(final BuildContext context) => Container(
+        width: 10,
+        height: 10,
+        decoration: BoxDecoration(
           color: color.withOpacity(0.3),
           border: Border.all(
             color: color,
-          )),
-    );
-  }
+          ),
+        ),
+      );
 }

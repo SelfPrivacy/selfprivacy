@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of 'backups_cubit.dart';
 
 class BackupsState extends ServerInstallationDependendState {

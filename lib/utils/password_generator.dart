@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:math';
 
 Random _rnd = Random();
@@ -20,10 +18,22 @@ class StringGenerators {
     final isStrict = false,
   }) {
     String chars = '';
-    if (hasLowercaseLetters) chars += letters;
-    if (hasUppercaseLetters) chars += letters.toUpperCase();
-    if (hasNumbers) chars += numbers;
-    if (hasSymbols) chars += symbols;
+
+    if (hasLowercaseLetters) {
+      chars += letters;
+    }
+
+    if (hasUppercaseLetters) {
+      chars += letters.toUpperCase();
+    }
+
+    if (hasNumbers) {
+      chars += numbers;
+    }
+
+    if (hasSymbols) {
+      chars += symbols;
+    }
 
     assert(chars.isNotEmpty, 'chart empty');
 
@@ -55,14 +65,15 @@ class StringGenerators {
     return shuffledlist.join();
   }
 
-  static String genString(final int length, final String chars) => String.fromCharCodes(
-      Iterable.generate(
-        length,
-        (final _) => chars.codeUnitAt(
-          _rnd.nextInt(chars.length),
+  static String genString(final int length, final String chars) =>
+      String.fromCharCodes(
+        Iterable.generate(
+          length,
+          (final _) => chars.codeUnitAt(
+            _rnd.nextInt(chars.length),
+          ),
         ),
-      ),
-    );
+      );
 
   static StringGeneratorFunction userPassword = () => getRandomString(
         8,

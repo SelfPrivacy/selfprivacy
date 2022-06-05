@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_device_form_cubit.dart';
@@ -11,51 +9,52 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 
 class RecoverByNewDeviceKeyInstruction extends StatelessWidget {
-  const RecoverByNewDeviceKeyInstruction({Key? key}) : super(key: key);
+  const RecoverByNewDeviceKeyInstruction({final super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BrandHeroScreen(
-      heroTitle: 'recovering.recovery_main_header'.tr(),
-      heroSubtitle: 'recovering.method_device_description'.tr(),
-      hasBackButton: true,
-      hasFlashButton: false,
-      onBackButtonPressed: () =>
-          context.read<ServerInstallationCubit>().revertRecoveryStep(),
-      children: [
-        FilledButton(
-          title: 'recovering.method_device_button'.tr(),
-          onPressed: () => Navigator.of(context)
-              .push(materialRoute(const RecoverByNewDeviceKeyInput())),
-        )
-      ],
-    );
-  }
+  Widget build(final BuildContext context) => BrandHeroScreen(
+        heroTitle: 'recovering.recovery_main_header'.tr(),
+        heroSubtitle: 'recovering.method_device_description'.tr(),
+        hasBackButton: true,
+        hasFlashButton: false,
+        onBackButtonPressed: () =>
+            context.read<ServerInstallationCubit>().revertRecoveryStep(),
+        children: [
+          FilledButton(
+            title: 'recovering.method_device_button'.tr(),
+            onPressed: () => Navigator.of(context)
+                .push(materialRoute(const RecoverByNewDeviceKeyInput())),
+          )
+        ],
+      );
 }
 
 class RecoverByNewDeviceKeyInput extends StatelessWidget {
-  const RecoverByNewDeviceKeyInput({Key? key}) : super(key: key);
+  const RecoverByNewDeviceKeyInput({final super.key});
 
   @override
-  Widget build(BuildContext context) {
-    ServerInstallationCubit appConfig = context.watch<ServerInstallationCubit>();
+  Widget build(final BuildContext context) {
+    final ServerInstallationCubit appConfig =
+        context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (BuildContext context) => RecoveryDeviceFormCubit(
+      create: (final BuildContext context) => RecoveryDeviceFormCubit(
         appConfig,
         FieldCubitFactory(context),
         ServerRecoveryMethods.newDeviceKey,
       ),
       child: BlocListener<ServerInstallationCubit, ServerInstallationState>(
-        listener: (BuildContext context, ServerInstallationState state) {
+        listener:
+            (final BuildContext context, final ServerInstallationState state) {
           if (state is ServerInstallationRecovery &&
               state.currentStep != RecoveryStep.newDeviceKey) {
             Navigator.of(context).pop();
           }
         },
         child: Builder(
-          builder: (BuildContext context) {
-            FormCubitState formCubitState = context.watch<RecoveryDeviceFormCubit>().state;
+          builder: (final BuildContext context) {
+            final FormCubitState formCubitState =
+                context.watch<RecoveryDeviceFormCubit>().state;
 
             return BrandHeroScreen(
               heroTitle: 'recovering.recovery_main_header'.tr(),

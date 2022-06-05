@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -15,7 +13,9 @@ part 'backups_state.dart';
 class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
   BackupsCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(
-            serverInstallationCubit, const BackupsState(preventActions: true),);
+          serverInstallationCubit,
+          const BackupsState(preventActions: true),
+        );
 
   final ServerApi api = ServerApi();
   final BackblazeApi backblaze = BackblazeApi();
@@ -25,59 +25,72 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
       final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
       if (bucket == null) {
-        emit(const BackupsState(
-            isInitialized: false, preventActions: false, refreshing: false,),);
+        emit(
+          const BackupsState(
+            isInitialized: false,
+            preventActions: false,
+            refreshing: false,
+          ),
+        );
       } else {
         final BackupStatus status = await api.getBackupStatus();
         switch (status.status) {
           case BackupStatusEnum.noKey:
           case BackupStatusEnum.notInitialized:
-            emit(BackupsState(
-              backups: const [],
-              isInitialized: true,
-              preventActions: false,
-              progress: 0,
-              status: status.status,
-              refreshing: false,
-            ),);
+            emit(
+              BackupsState(
+                backups: const [],
+                isInitialized: true,
+                preventActions: false,
+                progress: 0,
+                status: status.status,
+                refreshing: false,
+              ),
+            );
             break;
           case BackupStatusEnum.initializing:
-            emit(BackupsState(
-              backups: const [],
-              isInitialized: true,
-              preventActions: false,
-              progress: 0,
-              status: status.status,
-              refreshTimer: const Duration(seconds: 10),
-              refreshing: false,
-            ),);
+            emit(
+              BackupsState(
+                backups: const [],
+                isInitialized: true,
+                preventActions: false,
+                progress: 0,
+                status: status.status,
+                refreshTimer: const Duration(seconds: 10),
+                refreshing: false,
+              ),
+            );
             break;
           case BackupStatusEnum.initialized:
           case BackupStatusEnum.error:
             final List<Backup> backups = await api.getBackups();
-            emit(BackupsState(
-              backups: backups,
-              isInitialized: true,
-              preventActions: false,
-              progress: status.progress,
-              status: status.status,
-              error: status.errorMessage ?? '',
-              refreshing: false,
-            ),);
+            emit(
+              BackupsState(
+                backups: backups,
+                isInitialized: true,
+                preventActions: false,
+                progress: status.progress,
+                status: status.status,
+                error: status.errorMessage ?? '',
+                refreshing: false,
+              ),
+            );
             break;
           case BackupStatusEnum.backingUp:
           case BackupStatusEnum.restoring:
             final List<Backup> backups = await api.getBackups();
-            emit(BackupsState(
-              backups: backups,
-              isInitialized: true,
-              preventActions: true,
-              progress: status.progress,
-              status: status.status,
-              error: status.errorMessage ?? '',
-              refreshTimer: const Duration(seconds: 5),
-              refreshing: false,
-            ),);
+            emit(
+              BackupsState(
+                backups: backups,
+                isInitialized: true,
+                preventActions: true,
+                progress: status.progress,
+                status: status.status,
+                error: status.errorMessage ?? '',
+                refreshTimer: const Duration(seconds: 5),
+                refreshing: false,
+              ),
+            );
             break;
           default:
             emit(const BackupsState());
@@ -101,10 +114,11 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
     final BackblazeApplicationKey key = await backblaze.createKey(bucketId);
     final BackblazeBucket bucket = BackblazeBucket(
-        bucketId: bucketId,
-        bucketName: bucketName,
-        applicationKey: key.applicationKey,
-        applicationKeyId: key.applicationKeyId,);
+      bucketId: bucketId,
+      bucketName: bucketName,
+      applicationKey: key.applicationKey,
+      applicationKeyId: key.applicationKeyId,
+    );
 
     await getIt<ApiConfigModel>().storeBackblazeBucket(bucket);
     await api.uploadBackblazeConfig(bucket);
@@ -141,14 +155,16 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     emit(state.copyWith(refreshing: true));
     final List<Backup> backups = await api.getBackups();
     final BackupStatus status = await api.getBackupStatus();
-    emit(state.copyWith(
-      backups: backups,
-      progress: status.progress,
-      status: status.status,
-      error: status.errorMessage,
-      refreshTimer: refreshTimeFromState(status.status),
-      refreshing: false,
-    ),);
+    emit(
+      state.copyWith(
+        backups: backups,
+        progress: status.progress,
+        status: status.status,
+        error: status.errorMessage,
+        refreshTimer: refreshTimeFromState(status.status),
+        refreshing: false,
+      ),
+    );
     if (useTimer) {
       Timer(state.refreshTimer, () => updateBackups(useTimer: true));
     }

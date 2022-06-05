@@ -11,9 +11,9 @@ class BrandSwitch extends StatelessWidget {
   final bool value;
 
   @override
-  Widget build(BuildContext context) => Switch(
-      activeColor: Theme.of(context).colorScheme.primary,
-      value: value,
-      onChanged: onChanged,
-    );
+  Widget build(final BuildContext context) => Switch(
+        activeColor: Theme.of(context).colorScheme.primary,
+        value: value,
+        onChanged: onChanged,
+      );
 }

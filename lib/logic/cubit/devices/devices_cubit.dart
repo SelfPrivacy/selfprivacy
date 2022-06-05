@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
@@ -50,9 +48,12 @@ class ApiDevicesCubit
   Future<void> deleteDevice(final ApiToken device) async {
     final ApiResponse<void> response = await api.deleteApiToken(device.name);
     if (response.isSuccess) {
-      emit(ApiDevicesState(
+      emit(
+        ApiDevicesState(
           state.devices.where((final d) => d.name != device.name).toList(),
-          LoadingStatus.success,),);
+          LoadingStatus.success,
+        ),
+      );
     } else {
       getIt<NavigationService>()
           .showSnackBar(response.errorMessage ?? 'Error deleting device');
@@ -65,7 +66,8 @@ class ApiDevicesCubit
       return response.data;
     } else {
       getIt<NavigationService>().showSnackBar(
-          response.errorMessage ?? 'Error getting new device key',);
+        response.errorMessage ?? 'Error getting new device key',
+      );
       return null;
     }
   }

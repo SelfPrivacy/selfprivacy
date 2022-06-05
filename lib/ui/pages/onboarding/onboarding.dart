@@ -6,7 +6,7 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({super.key, required this.nextPage});
+  const OnboardingPage({required this.nextPage, final super.key});
 
   final Widget nextPage;
   @override
@@ -23,111 +23,111 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(final BuildContext context) => SafeArea(
-      child: Scaffold(
-        body: PageView(
-          controller: pageController,
-          children: [
-            _withPadding(firstPage()),
-            _withPadding(secondPage()),
-          ],
+        child: Scaffold(
+          body: PageView(
+            controller: pageController,
+            children: [
+              _withPadding(firstPage()),
+              _withPadding(secondPage()),
+            ],
+          ),
         ),
-      ),
-    );
+      );
 
   Widget _withPadding(final Widget child) => Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-      ),
-      child: child,
-    );
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        child: child,
+      );
 
   Widget firstPage() => ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 30),
-          BrandText.h2(
-            'onboarding.page1_title'.tr(),
-          ),
-          const SizedBox(height: 20),
-          BrandText.body2('onboarding.page1_text'.tr()),
-          Flexible(
-            child: Center(
-              child: Image.asset(
-                _fileName(
-                  context: context,
-                  path: 'assets/images/onboarding',
-                  fileExtention: 'png',
-                  fileName: 'onboarding1',
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 30),
+            BrandText.h2(
+              'onboarding.page1_title'.tr(),
+            ),
+            const SizedBox(height: 20),
+            BrandText.body2('onboarding.page1_text'.tr()),
+            Flexible(
+              child: Center(
+                child: Image.asset(
+                  _fileName(
+                    context: context,
+                    path: 'assets/images/onboarding',
+                    fileExtention: 'png',
+                    fileName: 'onboarding1',
+                  ),
                 ),
               ),
             ),
-          ),
-          BrandButton.rised(
-            onPressed: () {
-              pageController.animateToPage(
-                1,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeIn,
-              );
-            },
-            text: 'basis.next'.tr(),
-          ),
-          const SizedBox(height: 30),
-        ],
-      ),
-    );
+            BrandButton.rised(
+              onPressed: () {
+                pageController.animateToPage(
+                  1,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
+                );
+              },
+              text: 'basis.next'.tr(),
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
+      );
 
   Widget secondPage() => ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height,
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 30),
-          BrandText.h2('onboarding.page2_title'.tr()),
-          const SizedBox(height: 20),
-          BrandText.body2('onboarding.page2_text'.tr()),
-          const SizedBox(height: 20),
-          Center(
-            child: Image.asset(
-              _fileName(
-                context: context,
-                path: 'assets/images/onboarding',
-                fileExtention: 'png',
-                fileName: 'logos_line',
-              ),
-            ),
-          ),
-          Flexible(
-            child: Center(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height,
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            BrandText.h2('onboarding.page2_title'.tr()),
+            const SizedBox(height: 20),
+            BrandText.body2('onboarding.page2_text'.tr()),
+            const SizedBox(height: 20),
+            Center(
               child: Image.asset(
                 _fileName(
                   context: context,
                   path: 'assets/images/onboarding',
                   fileExtention: 'png',
-                  fileName: 'onboarding2',
+                  fileName: 'logos_line',
                 ),
               ),
             ),
-          ),
-          BrandButton.rised(
-            onPressed: () {
-              context.read<AppSettingsCubit>().turnOffOnboarding();
-              Navigator.of(context).pushAndRemoveUntil(
-                materialRoute(widget.nextPage),
-                (final route) => false,
-              );
-            },
-            text: 'basis.got_it'.tr(),
-          ),
-          const SizedBox(height: 30),
-        ],
-      ),
-    );
+            Flexible(
+              child: Center(
+                child: Image.asset(
+                  _fileName(
+                    context: context,
+                    path: 'assets/images/onboarding',
+                    fileExtention: 'png',
+                    fileName: 'onboarding2',
+                  ),
+                ),
+              ),
+            ),
+            BrandButton.rised(
+              onPressed: () {
+                context.read<AppSettingsCubit>().turnOffOnboarding();
+                Navigator.of(context).pushAndRemoveUntil(
+                  materialRoute(widget.nextPage),
+                  (final route) => false,
+                );
+              },
+              text: 'basis.got_it'.tr(),
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
+      );
 }
 
 String _fileName({

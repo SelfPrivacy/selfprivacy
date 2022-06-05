@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
@@ -14,9 +12,13 @@ part 'users_state.dart';
 class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   UsersCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(
-            serverInstallationCubit,
-            const UsersState(
-                <User>[], User(login: 'root'), User(login: 'loading...'),),);
+          serverInstallationCubit,
+          const UsersState(
+            <User>[],
+            User(login: 'root'),
+            User(login: 'loading...'),
+          ),
+        );
   Box<User> box = Hive.box<User>(BNames.usersBox);
   Box serverInstallationBox = Hive.box(BNames.serverInstallationBox);
 
@@ -26,22 +28,35 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
       final List<User> loadedUsers = box.values.toList();
-      final primaryUser = serverInstallationBox.get(BNames.rootUser,
-          defaultValue: const User(login: 'loading...'),);
+      final primaryUser = serverInstallationBox.get(
+        BNames.rootUser,
+        defaultValue: const User(login: 'loading...'),
+      );
       final List<String> rootKeys = [
         ...serverInstallationBox.get(BNames.rootKeys, defaultValue: [])
       ];
       if (loadedUsers.isNotEmpty) {
-        emit(UsersState(
-            loadedUsers, User(login: 'root', sshKeys: rootKeys), primaryUser,),);
+        emit(
+          UsersState(
+            loadedUsers,
+            User(login: 'root', sshKeys: rootKeys),
+            primaryUser,
+          ),
+        );
       }
 
-      final ApiResponse<List<String>> usersFromServer = await api.getUsersList();
+      final ApiResponse<List<String>> usersFromServer =
+          await api.getUsersList();
       if (usersFromServer.isSuccess) {
         final List<User> updatedList =
             mergeLocalAndServerUsers(loadedUsers, usersFromServer.data);
-        emit(UsersState(
-            updatedList, User(login: 'root', sshKeys: rootKeys), primaryUser,),);
+        emit(
+          UsersState(
+            updatedList,
+            User(login: 'root', sshKeys: rootKeys),
+            primaryUser,
+          ),
+        );
       }
 
       final List<User> usersWithSshKeys = await loadSshKeys(state.users);
@@ -49,18 +64,26 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       box.clear();
       box.addAll(usersWithSshKeys);
 
-      final User rootUserWithSshKeys = (await loadSshKeys([state.rootUser])).first;
+      final User rootUserWithSshKeys =
+          (await loadSshKeys([state.rootUser])).first;
       serverInstallationBox.put(BNames.rootKeys, rootUserWithSshKeys.sshKeys);
       final User primaryUserWithSshKeys =
           (await loadSshKeys([state.primaryUser])).first;
       serverInstallationBox.put(BNames.rootUser, primaryUserWithSshKeys);
-      emit(UsersState(
-          usersWithSshKeys, rootUserWithSshKeys, primaryUserWithSshKeys,),);
+      emit(
+        UsersState(
+          usersWithSshKeys,
+          rootUserWithSshKeys,
+          primaryUserWithSshKeys,
+        ),
+      );
     }
   }
 
   List<User> mergeLocalAndServerUsers(
-      final List<User> localUsers, final List<String> serverUsers,) {
+    final List<User> localUsers,
+    final List<String> serverUsers,
+  ) {
     // If local user not exists on server, add it with isFoundOnServer = false
     // If server user not exists on local, add it
 
@@ -69,28 +92,34 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
 
     for (final User localUser in localUsers) {
       if (serverUsersCopy.contains(localUser.login)) {
-        mergedUsers.add(User(
-          login: localUser.login,
-          isFoundOnServer: true,
-          password: localUser.password,
-          sshKeys: localUser.sshKeys,
-        ),);
+        mergedUsers.add(
+          User(
+            login: localUser.login,
+            isFoundOnServer: true,
+            password: localUser.password,
+            sshKeys: localUser.sshKeys,
+          ),
+        );
         serverUsersCopy.remove(localUser.login);
       } else {
-        mergedUsers.add(User(
-          login: localUser.login,
-          isFoundOnServer: false,
-          password: localUser.password,
-          note: localUser.note,
-        ),);
+        mergedUsers.add(
+          User(
+            login: localUser.login,
+            isFoundOnServer: false,
+            password: localUser.password,
+            note: localUser.note,
+          ),
+        );
       }
     }
 
     for (final String serverUser in serverUsersCopy) {
-      mergedUsers.add(User(
-        login: serverUser,
-        isFoundOnServer: true,
-      ),);
+      mergedUsers.add(
+        User(
+          login: serverUser,
+          isFoundOnServer: true,
+        ),
+      );
     }
 
     return mergedUsers;
@@ -103,31 +132,38 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       if (user.isFoundOnServer ||
           user.login == 'root' ||
           user.login == state.primaryUser.login) {
-        final ApiResponse<List<String>> sshKeys = await api.getUserSshKeys(user);
+        final ApiResponse<List<String>> sshKeys =
+            await api.getUserSshKeys(user);
         print('sshKeys for $user: ${sshKeys.data}');
         if (sshKeys.isSuccess) {
-          updatedUsers.add(User(
-            login: user.login,
-            isFoundOnServer: true,
-            password: user.password,
-            sshKeys: sshKeys.data,
-            note: user.note,
-          ),);
+          updatedUsers.add(
+            User(
+              login: user.login,
+              isFoundOnServer: true,
+              password: user.password,
+              sshKeys: sshKeys.data,
+              note: user.note,
+            ),
+          );
         } else {
-          updatedUsers.add(User(
-            login: user.login,
-            isFoundOnServer: true,
-            password: user.password,
-            note: user.note,
-          ),);
+          updatedUsers.add(
+            User(
+              login: user.login,
+              isFoundOnServer: true,
+              password: user.password,
+              note: user.note,
+            ),
+          );
         }
       } else {
-        updatedUsers.add(User(
-          login: user.login,
-          isFoundOnServer: false,
-          password: user.password,
-          note: user.note,
-        ),);
+        updatedUsers.add(
+          User(
+            login: user.login,
+            isFoundOnServer: false,
+            password: user.password,
+            note: user.note,
+          ),
+        );
       }
     }
     return updatedUsers;
@@ -143,19 +179,26 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
     final List<User> usersWithSshKeys = await loadSshKeys(updatedUsers);
     box.clear();
     box.addAll(usersWithSshKeys);
-    final User rootUserWithSshKeys = (await loadSshKeys([state.rootUser])).first;
+    final User rootUserWithSshKeys =
+        (await loadSshKeys([state.rootUser])).first;
     serverInstallationBox.put(BNames.rootKeys, rootUserWithSshKeys.sshKeys);
     final User primaryUserWithSshKeys =
         (await loadSshKeys([state.primaryUser])).first;
     serverInstallationBox.put(BNames.rootUser, primaryUserWithSshKeys);
-    emit(UsersState(
-        usersWithSshKeys, rootUserWithSshKeys, primaryUserWithSshKeys,),);
+    emit(
+      UsersState(
+        usersWithSshKeys,
+        rootUserWithSshKeys,
+        primaryUserWithSshKeys,
+      ),
+    );
     return;
   }
 
   Future<void> createUser(final User user) async {
     // If user exists on server, do nothing
-    if (state.users.any((final User u) => u.login == user.login && u.isFoundOnServer)) {
+    if (state.users
+        .any((final User u) => u.login == user.login && u.isFoundOnServer)) {
       return;
     }
     // If user is root or primary user, do nothing
@@ -201,15 +244,17 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
             .get(BNames.rootKeys, defaultValue: []) as List<String>;
         rootKeys.add(publicKey);
         serverInstallationBox.put(BNames.rootKeys, rootKeys);
-        emit(state.copyWith(
-          rootUser: User(
-            login: state.rootUser.login,
-            isFoundOnServer: true,
-            password: state.rootUser.password,
-            sshKeys: rootKeys,
-            note: state.rootUser.note,
+        emit(
+          state.copyWith(
+            rootUser: User(
+              login: state.rootUser.login,
+              isFoundOnServer: true,
+              password: state.rootUser.password,
+              sshKeys: rootKeys,
+              note: state.rootUser.note,
+            ),
           ),
-        ),);
+        );
       }
     } else {
       final ApiResponse<void> result = await api.addUserSshKey(user, publicKey);
@@ -227,9 +272,11 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
             note: state.primaryUser.note,
           );
           serverInstallationBox.put(BNames.rootUser, updatedUser);
-          emit(state.copyWith(
-            primaryUser: updatedUser,
-          ),);
+          emit(
+            state.copyWith(
+              primaryUser: updatedUser,
+            ),
+          );
         } else {
           // If it is not primary user, update user
           final List<String> userKeys = List<String>.from(user.sshKeys);
@@ -242,9 +289,11 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
             note: user.note,
           );
           await box.putAt(box.values.toList().indexOf(user), updatedUser);
-          emit(state.copyWith(
-            users: box.values.toList(),
-          ),);
+          emit(
+            state.copyWith(
+              users: box.values.toList(),
+            ),
+          );
         }
       }
     }
@@ -253,7 +302,8 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   Future<void> deleteSshKey(final User user, final String publicKey) async {
     // All keys are deleted via api.deleteUserSshKey
 
-    final ApiResponse<void> result = await api.deleteUserSshKey(user, publicKey);
+    final ApiResponse<void> result =
+        await api.deleteUserSshKey(user, publicKey);
     if (result.isSuccess) {
       // If it is root user, delete key from root keys
       // If it is primary user, update primary user
@@ -264,15 +314,17 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
             .get(BNames.rootKeys, defaultValue: []) as List<String>;
         rootKeys.remove(publicKey);
         serverInstallationBox.put(BNames.rootKeys, rootKeys);
-        emit(state.copyWith(
-          rootUser: User(
-            login: state.rootUser.login,
-            isFoundOnServer: true,
-            password: state.rootUser.password,
-            sshKeys: rootKeys,
-            note: state.rootUser.note,
+        emit(
+          state.copyWith(
+            rootUser: User(
+              login: state.rootUser.login,
+              isFoundOnServer: true,
+              password: state.rootUser.password,
+              sshKeys: rootKeys,
+              note: state.rootUser.note,
+            ),
           ),
-        ),);
+        );
         return;
       }
       if (user.login == state.primaryUser.login) {
@@ -287,9 +339,11 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
           note: state.primaryUser.note,
         );
         serverInstallationBox.put(BNames.rootUser, updatedUser);
-        emit(state.copyWith(
-          primaryUser: updatedUser,
-        ),);
+        emit(
+          state.copyWith(
+            primaryUser: updatedUser,
+          ),
+        );
         return;
       }
       final List<String> userKeys = List<String>.from(user.sshKeys);
@@ -302,15 +356,22 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
         note: user.note,
       );
       await box.putAt(box.values.toList().indexOf(user), updatedUser);
-      emit(state.copyWith(
-        users: box.values.toList(),
-      ),);
+      emit(
+        state.copyWith(
+          users: box.values.toList(),
+        ),
+      );
     }
   }
 
   @override
   void clear() async {
-    emit(const UsersState(
-        <User>[], User(login: 'root'), User(login: 'loading...'),),);
+    emit(
+      const UsersState(
+        <User>[],
+        User(login: 'root'),
+        User(login: 'loading...'),
+      ),
+    );
   }
 }

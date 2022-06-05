@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:flutter/material.dart';
 
 class BrandCards {
@@ -24,8 +22,10 @@ class BrandCards {
   static Widget outlined({required final Widget child}) => _OutlinedCard(
         child: child,
       );
-  static Widget filled(
-          {required final Widget child, final bool tertiary = false,}) =>
+  static Widget filled({
+    required final Widget child,
+    final bool tertiary = false,
+  }) =>
       _FilledCard(
         tertiary: tertiary,
         child: child,
@@ -38,7 +38,6 @@ class _BrandCard extends StatelessWidget {
     required this.padding,
     required this.shadow,
     required this.borderRadius,
-    final super.key,
   });
 
   final Widget child;
@@ -60,7 +59,6 @@ class _BrandCard extends StatelessWidget {
 
 class _OutlinedCard extends StatelessWidget {
   const _OutlinedCard({
-    final super.key,
     required this.child,
   });
 
@@ -83,7 +81,6 @@ class _FilledCard extends StatelessWidget {
   const _FilledCard({
     required this.child,
     required this.tertiary,
-    final super.key,
   });
 
   final Widget child;

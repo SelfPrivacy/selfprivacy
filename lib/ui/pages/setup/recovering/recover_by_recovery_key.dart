@@ -8,11 +8,12 @@ import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
 class RecoverByRecoveryKey extends StatelessWidget {
-  const RecoverByRecoveryKey({final Key? key}) : super(key: key);
+  const RecoverByRecoveryKey({final super.key});
 
   @override
   Widget build(final BuildContext context) {
-    ServerInstallationCubit appConfig = context.watch<ServerInstallationCubit>();
+    final ServerInstallationCubit appConfig =
+        context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
       create: (final context) => RecoveryDeviceFormCubit(
@@ -22,7 +23,8 @@ class RecoverByRecoveryKey extends StatelessWidget {
       ),
       child: Builder(
         builder: (final context) {
-          FormCubitState formCubitState = context.watch<RecoveryDeviceFormCubit>().state;
+          final FormCubitState formCubitState =
+              context.watch<RecoveryDeviceFormCubit>().state;
 
           return BrandHeroScreen(
             heroTitle: 'recovering.recovery_main_header'.tr(),

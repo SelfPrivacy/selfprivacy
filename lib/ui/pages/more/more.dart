@@ -21,7 +21,7 @@ import 'package:selfprivacy/ui/pages/more/console/console.dart';
 import 'package:selfprivacy/ui/pages/more/info/info.dart';
 
 class MorePage extends StatelessWidget {
-  const MorePage({super.key});
+  const MorePage({final super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -51,11 +51,12 @@ class MorePage extends StatelessWidget {
                   ),
                 if (isReady)
                   _MoreMenuItem(
-                      title: 'more.create_ssh_key'.tr(),
-                      iconData: Ionicons.key_outline,
-                      goTo: SshKeysPage(
-                        user: context.read<UsersCubit>().state.rootUser,
-                      ),),
+                    title: 'more.create_ssh_key'.tr(),
+                    iconData: Ionicons.key_outline,
+                    goTo: SshKeysPage(
+                      user: context.read<UsersCubit>().state.rootUser,
+                    ),
+                  ),
                 if (isReady)
                   _MoreMenuItem(
                     iconData: Icons.password_outlined,
@@ -105,7 +106,6 @@ class MorePage extends StatelessWidget {
 
 class _MoreMenuItem extends StatelessWidget {
   const _MoreMenuItem({
-    super.key,
     required this.iconData,
     required this.title,
     this.subtitle,

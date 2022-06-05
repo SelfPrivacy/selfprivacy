@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,11 +41,12 @@ class JobsCubit extends Cubit<JobsState> {
     if (state is JobsStateWithJobs) {
       newJobsList.addAll((state as JobsStateWithJobs).jobList);
     }
-    final bool needToRemoveJob =
-        newJobsList.any((final el) => el is ServiceToggleJob && el.type == job.type);
+    final bool needToRemoveJob = newJobsList
+        .any((final el) => el is ServiceToggleJob && el.type == job.type);
     if (needToRemoveJob) {
-      final Job removingJob = newJobsList
-          .firstWhere((final el) => el is ServiceToggleJob && el.type == job.type);
+      final Job removingJob = newJobsList.firstWhere(
+        (final el) => el is ServiceToggleJob && el.type == job.type,
+      );
       removeJob(removingJob.id);
     } else {
       newJobsList.add(job);
@@ -61,7 +60,8 @@ class JobsCubit extends Cubit<JobsState> {
     if (state is JobsStateWithJobs) {
       newJobsList.addAll((state as JobsStateWithJobs).jobList);
     }
-    final bool isExistInJobList = newJobsList.any((final el) => el is CreateSSHKeyJob);
+    final bool isExistInJobList =
+        newJobsList.any((final el) => el is CreateSSHKeyJob);
     if (!isExistInJobList) {
       newJobsList.add(job);
       getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());

@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -12,7 +10,6 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ApiMap {
-
   HetznerApi({this.hasLogger = false, this.isWithToken = true});
   @override
   bool hasLogger;
@@ -39,7 +36,8 @@ class HetznerApi extends ApiMap {
   String rootAddress = 'https://api.hetzner.cloud/v1';
 
   Future<bool> isValid(final String token) async {
-    validateStatus = (final int? status) => status == HttpStatus.ok || status == HttpStatus.unauthorized;
+    validateStatus = (final int? status) =>
+        status == HttpStatus.ok || status == HttpStatus.unauthorized;
     final Dio client = await getClient();
     final Response response = await client.get(
       '/servers',
@@ -201,8 +199,12 @@ class HetznerApi extends ApiMap {
   }
 
   Future<Map<String, dynamic>> getMetrics(
-      final DateTime start, final DateTime end, final String type,) async {
-    final ServerHostingDetails? hetznerServer = getIt<ApiConfigModel>().serverDetails;
+    final DateTime start,
+    final DateTime end,
+    final String type,
+  ) async {
+    final ServerHostingDetails? hetznerServer =
+        getIt<ApiConfigModel>().serverDetails;
     final Dio client = await getClient();
 
     final Map<String, dynamic> queryParameters = {
@@ -219,7 +221,8 @@ class HetznerApi extends ApiMap {
   }
 
   Future<HetznerServerInfo> getInfo() async {
-    final ServerHostingDetails? hetznerServer = getIt<ApiConfigModel>().serverDetails;
+    final ServerHostingDetails? hetznerServer =
+        getIt<ApiConfigModel>().serverDetails;
     final Dio client = await getClient();
     final Response response = await client.get('/servers/${hetznerServer!.id}');
     close(client);
@@ -233,6 +236,7 @@ class HetznerApi extends ApiMap {
     close(client);
 
     return (response.data!['servers'] as List)
+        // ignore: unnecessary_lambdas
         .map((final e) => HetznerServerInfo.fromJson(e))
         .toList();
   }
@@ -241,7 +245,8 @@ class HetznerApi extends ApiMap {
     required final String ip4,
     required final String domainName,
   }) async {
-    final ServerHostingDetails? hetznerServer = getIt<ApiConfigModel>().serverDetails;
+    final ServerHostingDetails? hetznerServer =
+        getIt<ApiConfigModel>().serverDetails;
     final Dio client = await getClient();
     await client.post(
       '/servers/${hetznerServer!.id}/actions/change_dns_ptr',

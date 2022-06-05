@@ -22,8 +22,8 @@ import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:timezone/timezone.dart';
 
-import 'cpu_chart.dart';
-import 'network_charts.dart';
+import 'package:selfprivacy/ui/pages/server_details/cpu_chart.dart';
+import 'package:selfprivacy/ui/pages/server_details/network_charts.dart';
 
 part 'chart.dart';
 part 'header.dart';
@@ -34,7 +34,7 @@ part 'time_zone/time_zone.dart';
 var navigatorKey = GlobalKey<NavigatorState>();
 
 class ServerDetailsScreen extends StatefulWidget {
-  const ServerDetailsScreen({Key? key}) : super(key: key);
+  const ServerDetailsScreen({final super.key});
 
   @override
   State<ServerDetailsScreen> createState() => _ServerDetailsScreenState();
@@ -60,13 +60,13 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
-    var isReady = context.watch<ServerInstallationCubit>().state
+  Widget build(final BuildContext context) {
+    final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    var providerState = isReady ? StateType.stable : StateType.uninitialized;
+    final providerState = isReady ? StateType.stable : StateType.uninitialized;
 
     return BlocProvider(
-      create: (context) => ServerDetailsCubit()..check(),
+      create: (final context) => ServerDetailsCubit()..check(),
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(52),
@@ -97,19 +97,20 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _Header(
-                            providerState: providerState,
-                            tabController: tabController),
+                          providerState: providerState,
+                          tabController: tabController,
+                        ),
                         BrandText.body1('providers.server.bottom_sheet.1'.tr()),
                       ],
                     ),
                   ),
                   const SizedBox(height: 10),
                   BlocProvider(
-                    create: (context) => HetznerMetricsCubit()..restart(),
-                    child: const _Chart(),
+                    create: (final context) => HetznerMetricsCubit()..restart(),
+                    child: _Chart(),
                   ),
                   const SizedBox(height: 20),
-                  const _TextDetails(),
+                  _TextDetails(),
                 ],
               ),
             ),

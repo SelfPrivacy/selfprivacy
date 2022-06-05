@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
@@ -42,13 +40,13 @@ class BrandButton {
         child: TextButton(onPressed: onPressed, child: Text(title)),
       );
 
-  static _IconTextButton emptyWithIconText({
+  static IconTextButton emptyWithIconText({
     required final VoidCallback onPressed,
     required final String title,
     required final Icon icon,
     final Key? key,
   }) =>
-      _IconTextButton(
+      IconTextButton(
         key: key,
         title: title,
         onPressed: onPressed,
@@ -56,8 +54,13 @@ class BrandButton {
       );
 }
 
-class _IconTextButton extends StatelessWidget {
-  const _IconTextButton({final super.key, this.onPressed, this.title, this.icon});
+class IconTextButton extends StatelessWidget {
+  const IconTextButton({
+    final super.key,
+    this.onPressed,
+    this.title,
+    this.icon,
+  });
 
   final VoidCallback? onPressed;
   final String? title;
@@ -65,24 +68,24 @@ class _IconTextButton extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onPressed,
-        child: Container(
-          height: 48,
-          width: double.infinity,
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              BrandText.body1(title),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: icon,
-              )
-            ],
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          child: Container(
+            height: 48,
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BrandText.body1(title),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: icon,
+                )
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
 }

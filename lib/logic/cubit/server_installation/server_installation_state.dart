@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of '../server_installation/server_installation_cubit.dart';
 
 abstract class ServerInstallationState extends Equatable {
@@ -45,8 +43,8 @@ abstract class ServerInstallationState extends Equatable {
   bool get isServerCreated => serverDetails != null;
 
   bool get isFullyInitilized => _fulfilementList.every((final el) => el!);
-  ServerSetupProgress get progress =>
-      ServerSetupProgress.values[_fulfilementList.where((final el) => el!).length];
+  ServerSetupProgress get progress => ServerSetupProgress
+      .values[_fulfilementList.where((final el) => el!).length];
 
   int get porgressBar {
     if (progress.index < 6) {
@@ -120,7 +118,6 @@ enum ServerSetupProgress {
 }
 
 class ServerInstallationNotFinished extends ServerInstallationState {
-
   const ServerInstallationNotFinished({
     required final super.isServerStarted,
     required final super.isServerResetedFirstTime,
@@ -260,7 +257,6 @@ enum ServerRecoveryMethods {
 }
 
 class ServerInstallationRecovery extends ServerInstallationState {
-
   const ServerInstallationRecovery({
     required this.currentStep,
     required this.recoveryCapabilities,
@@ -313,14 +309,14 @@ class ServerInstallationRecovery extends ServerInstallationState {
       );
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
-      hetznerKey: hetznerKey!,
-      cloudFlareKey: cloudFlareKey!,
-      backblazeCredential: backblazeCredential!,
-      serverDomain: serverDomain!,
-      rootUser: rootUser!,
-      serverDetails: serverDetails!,
-      isServerStarted: true,
-      isServerResetedFirstTime: true,
-      isServerResetedSecondTime: true,
-    );
+        hetznerKey: hetznerKey!,
+        cloudFlareKey: cloudFlareKey!,
+        backblazeCredential: backblazeCredential!,
+        serverDomain: serverDomain!,
+        rootUser: rootUser!,
+        serverDetails: serverDetails!,
+        isServerStarted: true,
+        isServerResetedFirstTime: true,
+        isServerResetedSecondTime: true,
+      );
 }

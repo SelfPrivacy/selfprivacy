@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';

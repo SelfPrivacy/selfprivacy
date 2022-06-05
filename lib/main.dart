@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,11 +44,14 @@ void main() async {
   );
 
   BlocOverrides.runZoned(
-    () => runApp(Localization(
+    () => runApp(
+      Localization(
         child: MyApp(
-      lightThemeData: lightThemeData,
-      darkThemeData: darkThemeData,
-    ),),),
+          lightThemeData: lightThemeData,
+          darkThemeData: darkThemeData,
+        ),
+      ),
+    ),
     blocObserver: SimpleBlocObserver(),
   );
 }
@@ -67,11 +68,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Localization(
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light, // Manually changing appbar color
-        child: BlocAndProviderConfig(
-          child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
-            builder: (final BuildContext context, final AppSettingsState appSettings) => MaterialApp(
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light, // Manually changing appbar color
+          child: BlocAndProviderConfig(
+            child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
+              builder: (
+                final BuildContext context,
+                final AppSettingsState appSettings,
+              ) =>
+                  MaterialApp(
                 scaffoldMessengerKey:
                     getIt.get<NavigationService>().scaffoldMessengerKey,
                 navigatorKey: getIt.get<NavigationService>().navigatorKey,
@@ -97,8 +102,8 @@ class MyApp extends StatelessWidget {
                   return widget!;
                 },
               ),
+            ),
           ),
         ),
-      ),
-    );
+      );
 }

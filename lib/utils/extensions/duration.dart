@@ -1,35 +1,32 @@
 // ignore_for_file: unnecessary_this
 
 extension DurationFormatter on Duration {
-  String toDayHourMinuteSecondFormat() {
-    return [
-      this.inHours.remainder(24),
-      this.inMinutes.remainder(60),
-      this.inSeconds.remainder(60)
-    ].map((seg) => seg.toString().padLeft(2, '0')).join(':');
-  }
+  String toDayHourMinuteSecondFormat() => [
+        this.inHours.remainder(24),
+        this.inMinutes.remainder(60),
+        this.inSeconds.remainder(60)
+      ].map((final int seg) => seg.toString().padLeft(2, '0')).join(':');
 
   String toDayHourMinuteFormat() {
-    var designator = this >= Duration.zero ? '+' : '-';
+    final designator = this >= Duration.zero ? '+' : '-';
 
-    var segments = [
+    final Iterable<String> segments = [
       this.inHours.remainder(24).abs(),
       this.inMinutes.remainder(60).abs(),
-    ].map((seg) => seg.toString().padLeft(2, '0'));
+    ].map((final int seg) => seg.toString().padLeft(2, '0'));
 
     return '$designator${segments.first}:${segments.last}';
   }
 
-  String toHoursMinutesSecondsFormat() {
-    // WAT: https://flutterigniter.com/how-to-format-duration/
-    return this.toString().split('.').first.padLeft(8, '0');
-  }
+// WAT: https://flutterigniter.com/how-to-format-duration/
+  String toHoursMinutesSecondsFormat() =>
+      this.toString().split('.').first.padLeft(8, '0');
 
   String toDayHourMinuteFormat2() {
-    var segments = [
+    final Iterable<String> segments = [
       this.inHours.remainder(24),
       this.inMinutes.remainder(60),
-    ].map((seg) => seg.toString().padLeft(2, '0'));
+    ].map((final int seg) => seg.toString().padLeft(2, '0'));
     return '${segments.first} h ${segments.last} min';
   }
 }

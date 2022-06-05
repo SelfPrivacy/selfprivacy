@@ -7,9 +7,9 @@ import 'package:selfprivacy/utils/named_font_weight.dart';
 
 class BrandTimer extends StatefulWidget {
   const BrandTimer({
-    super.key,
     required this.startDateTime,
     required this.duration,
+    final super.key,
   });
 
   final DateTime startDateTime;
@@ -29,10 +29,11 @@ class _BrandTimerState extends State<BrandTimer> {
     super.initState();
   }
 
-  _timerStart() {
+  void _timerStart() {
     _timeString = differenceFromStart;
     timer = Timer.periodic(const Duration(seconds: 1), (final Timer t) {
-      final Duration timePassed = DateTime.now().difference(widget.startDateTime);
+      final Duration timePassed =
+          DateTime.now().difference(widget.startDateTime);
       if (timePassed > widget.duration) {
         t.cancel();
       } else {
@@ -52,11 +53,11 @@ class _BrandTimerState extends State<BrandTimer> {
 
   @override
   Widget build(final BuildContext context) => BrandText.medium(
-      _timeString,
-      style: const TextStyle(
-        fontWeight: NamedFontWeight.demiBold,
-      ),
-    );
+        _timeString,
+        style: const TextStyle(
+          fontWeight: NamedFontWeight.demiBold,
+        ),
+      );
 
   void _getTime() {
     setState(() {

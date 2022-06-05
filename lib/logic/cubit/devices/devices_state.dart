@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of 'devices_cubit.dart';
 
 class ApiDevicesState extends ServerInstallationDependendState {
@@ -10,12 +8,14 @@ class ApiDevicesState extends ServerInstallationDependendState {
   final LoadingStatus status;
 
   List<ApiToken> get devices => _devices;
-  ApiToken get thisDevice => _devices.firstWhere((final device) => device.isCaller,
-      orElse: () => ApiToken(
-            name: 'Error fetching device',
-            isCaller: true,
-            date: DateTime.now(),
-          ),);
+  ApiToken get thisDevice => _devices.firstWhere(
+        (final device) => device.isCaller,
+        orElse: () => ApiToken(
+          name: 'Error fetching device',
+          isCaller: true,
+          date: DateTime.now(),
+        ),
+      );
 
   List<ApiToken> get otherDevices =>
       _devices.where((final device) => !device.isCaller).toList();
@@ -23,10 +23,11 @@ class ApiDevicesState extends ServerInstallationDependendState {
   ApiDevicesState copyWith({
     final List<ApiToken>? devices,
     final LoadingStatus? status,
-  }) => ApiDevicesState(
-      devices ?? _devices,
-      status ?? this.status,
-    );
+  }) =>
+      ApiDevicesState(
+        devices ?? _devices,
+        status ?? this.status,
+      );
 
   @override
   List<Object?> get props => [_devices];

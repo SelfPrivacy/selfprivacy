@@ -1,9 +1,6 @@
-// ignore_for_file: always_specify_types
-
 import 'package:timezone/timezone.dart';
 
 class TimeZoneSettings {
-
   factory TimeZoneSettings.fromString(final String string) {
     final Location location = timeZoneDatabase.locations[string]!;
     return TimeZoneSettings(location);
@@ -13,6 +10,6 @@ class TimeZoneSettings {
   final Location timezone;
 
   Map<String, dynamic> toJson() => {
-      'timezone': timezone.name,
-    };
+        'timezone': timezone.name,
+      };
 }

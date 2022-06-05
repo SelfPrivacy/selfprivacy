@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -7,7 +5,6 @@ part 'recovery_token_status.g.dart';
 
 @JsonSerializable()
 class RecoveryKeyStatus extends Equatable {
-
   factory RecoveryKeyStatus.fromJson(final Map<String, dynamic> json) =>
       _$RecoveryKeyStatusFromJson(json);
   const RecoveryKeyStatus({

@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 

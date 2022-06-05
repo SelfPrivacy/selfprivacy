@@ -14,48 +14,53 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    ServerInstallationCubit appConfig = context.watch<ServerInstallationCubit>();
+    final ServerInstallationCubit appConfig =
+        context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
       create: (final BuildContext context) => BackblazeFormCubit(appConfig),
-      child: Builder(builder: (final BuildContext context) {
-        FormCubitState formCubitState = context.watch<BackblazeFormCubit>().state;
+      child: Builder(
+        builder: (final BuildContext context) {
+          final FormCubitState formCubitState =
+              context.watch<BackblazeFormCubit>().state;
 
-        return BrandHeroScreen(
-          heroTitle: 'recovering.confirm_backblaze'.tr(),
-          heroSubtitle: 'recovering.confirm_backblaze_description'.tr(),
-          hasBackButton: true,
-          hasFlashButton: false,
-          children: [
-            CubitFormTextField(
-              formFieldCubit: context.read<BackblazeFormCubit>().keyId,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'KeyID',
+          return BrandHeroScreen(
+            heroTitle: 'recovering.confirm_backblaze'.tr(),
+            heroSubtitle: 'recovering.confirm_backblaze_description'.tr(),
+            hasBackButton: true,
+            hasFlashButton: false,
+            children: [
+              CubitFormTextField(
+                formFieldCubit: context.read<BackblazeFormCubit>().keyId,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'KeyID',
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            CubitFormTextField(
-              formFieldCubit: context.read<BackblazeFormCubit>().applicationKey,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Master Application Key',
+              const SizedBox(height: 16),
+              CubitFormTextField(
+                formFieldCubit:
+                    context.read<BackblazeFormCubit>().applicationKey,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Master Application Key',
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            BrandButton.rised(
-              onPressed: formCubitState.isSubmitting
-                  ? null
-                  : () => context.read<BackblazeFormCubit>().trySubmit(),
-              text: 'basis.connect'.tr(),
-            ),
-            const SizedBox(height: 16),
-            BrandButton.text(
-              onPressed: () => showModalBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (final BuildContext context) => const BrandBottomSheet(
+              const SizedBox(height: 16),
+              BrandButton.rised(
+                onPressed: formCubitState.isSubmitting
+                    ? null
+                    : () => context.read<BackblazeFormCubit>().trySubmit(),
+                text: 'basis.connect'.tr(),
+              ),
+              const SizedBox(height: 16),
+              BrandButton.text(
+                onPressed: () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (final BuildContext context) =>
+                      const BrandBottomSheet(
                     isExpended: true,
                     child: Padding(
                       padding: paddingH15V0,
@@ -64,12 +69,13 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                       ),
                     ),
                   ),
+                ),
+                title: 'initializing.how'.tr(),
               ),
-              title: 'initializing.how'.tr(),
-            ),
-          ],
-        );
-      },),
+            ],
+          );
+        },
+      ),
     );
   }
 }

@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -20,7 +18,6 @@ import 'package:selfprivacy/logic/models/timezone_settings.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
 
 class ApiResponse<D> {
-
   ApiResponse({
     required this.statusCode,
     required this.data,
@@ -34,12 +31,12 @@ class ApiResponse<D> {
 }
 
 class ServerApi extends ApiMap {
-
-  ServerApi(
-      {this.hasLogger = false,
-      this.isWithToken = true,
-      this.overrideDomain,
-      this.customToken,});
+  ServerApi({
+    this.hasLogger = false,
+    this.isWithToken = true,
+    this.overrideDomain,
+    this.customToken,
+  });
   @override
   bool hasLogger;
   @override
@@ -52,13 +49,17 @@ class ServerApi extends ApiMap {
     BaseOptions options = BaseOptions();
 
     if (isWithToken) {
-      final ServerDomain? cloudFlareDomain = getIt<ApiConfigModel>().serverDomain;
+      final ServerDomain? cloudFlareDomain =
+          getIt<ApiConfigModel>().serverDomain;
       final String domainName = cloudFlareDomain!.domainName;
       final String? apiToken = getIt<ApiConfigModel>().serverDetails?.apiToken;
 
-      options = BaseOptions(baseUrl: 'https://api.$domainName', headers: {
-        'Authorization': 'Bearer $apiToken',
-      },);
+      options = BaseOptions(
+        baseUrl: 'https://api.$domainName',
+        headers: {
+          'Authorization': 'Bearer $apiToken',
+        },
+      );
     }
 
     if (overrideDomain != null) {
@@ -157,14 +158,18 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<ApiResponse<List<String>>> getUsersList({final withMainUser = false}) async {
+  Future<ApiResponse<List<String>>> getUsersList({
+    final withMainUser = false,
+  }) async {
     final List<String> res = [];
     Response response;
 
     final Dio client = await getClient();
     try {
-      response = await client.get('/users',
-          queryParameters: withMainUser ? {'withMainUser': 'true'} : null,);
+      response = await client.get(
+        '/users',
+        queryParameters: withMainUser ? {'withMainUser': 'true'} : null,
+      );
       for (final user in response.data) {
         res.add(user.toString());
       }
@@ -194,7 +199,10 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<ApiResponse<void>> addUserSshKey(final User user, final String sshKey) async {
+  Future<ApiResponse<void>> addUserSshKey(
+    final User user,
+    final String sshKey,
+  ) async {
     late Response response;
 
     final Dio client = await getClient();
@@ -259,7 +267,9 @@ class ServerApi extends ApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get('/services/ssh/keys/${user.login}');
-      res = (response.data as List<dynamic>).map((final e) => e as String).toList();
+      res = (response.data as List<dynamic>)
+          .map((final e) => e as String)
+          .toList();
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse<List<String>>(
@@ -290,7 +300,10 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<ApiResponse<void>> deleteUserSshKey(final User user, final String sshKey) async {
+  Future<ApiResponse<void>> deleteUserSshKey(
+    final User user,
+    final String sshKey,
+  ) async {
     Response response;
 
     final Dio client = await getClient();
@@ -360,7 +373,10 @@ class ServerApi extends ApiMap {
     return res;
   }
 
-  Future<void> switchService(final ServiceTypes type, final bool needToTurnOn) async {
+  Future<void> switchService(
+    final ServiceTypes type,
+    final bool needToTurnOn,
+  ) async {
     final Dio client = await getClient();
     try {
       client.post(
@@ -431,7 +447,7 @@ class ServerApi extends ApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get('/services/restic/backup/list');
-      backups = response.data.map<Backup>((final e) => Backup.fromJson(e)).toList();
+      backups = response.data.map<Backup>(Backup.fromJson).toList();
     } on DioError catch (e) {
       print(e.message);
     } catch (e) {
@@ -562,7 +578,9 @@ class ServerApi extends ApiMap {
     return settings;
   }
 
-  Future<void> updateAutoUpgradeSettings(final AutoUpgradeSettings settings) async {
+  Future<void> updateAutoUpgradeSettings(
+    final AutoUpgradeSettings settings,
+  ) async {
     final Dio client = await getClient();
     try {
       await client.put(
@@ -579,7 +597,8 @@ class ServerApi extends ApiMap {
   Future<TimeZoneSettings> getServerTimezone() async {
     // I am not sure how to initialize TimeZoneSettings with default value...
     final Dio client = await getClient();
-    final Response response = await client.get('/system/configuration/timezone');
+    final Response response =
+        await client.get('/system/configuration/timezone');
     close(client);
 
     return TimeZoneSettings.fromString(response.data);
@@ -642,9 +661,10 @@ class ServerApi extends ApiMap {
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse(
-          errorMessage: e.message,
-          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: const RecoveryKeyStatus(exists: false, valid: false),);
+        errorMessage: e.message,
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: const RecoveryKeyStatus(exists: false, valid: false),
+      );
     } finally {
       close(client);
     }
@@ -652,10 +672,11 @@ class ServerApi extends ApiMap {
     final int code = response.statusCode ?? HttpStatus.internalServerError;
 
     return ApiResponse(
-        statusCode: code,
-        data: response.data != null
-            ? RecoveryKeyStatus.fromJson(response.data)
-            : null,);
+      statusCode: code,
+      data: response.data != null
+          ? RecoveryKeyStatus.fromJson(response.data)
+          : null,
+    );
   }
 
   Future<ApiResponse<String>> generateRecoveryToken(
@@ -681,9 +702,10 @@ class ServerApi extends ApiMap {
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse(
-          errorMessage: e.message,
-          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '',);
+        errorMessage: e.message,
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: '',
+      );
     } finally {
       close(client);
     }
@@ -691,8 +713,9 @@ class ServerApi extends ApiMap {
     final int code = response.statusCode ?? HttpStatus.internalServerError;
 
     return ApiResponse(
-        statusCode: code,
-        data: response.data != null ? response.data['token'] : '',);
+      statusCode: code,
+      data: response.data != null ? response.data['token'] : '',
+    );
   }
 
   Future<ApiResponse<String>> useRecoveryToken(final DeviceToken token) async {
@@ -710,9 +733,10 @@ class ServerApi extends ApiMap {
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse(
-          errorMessage: e.message,
-          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '',);
+        errorMessage: e.message,
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: '',
+      );
     } finally {
       client.close();
     }
@@ -720,8 +744,9 @@ class ServerApi extends ApiMap {
     final int code = response.statusCode ?? HttpStatus.internalServerError;
 
     return ApiResponse(
-        statusCode: code,
-        data: response.data != null ? response.data['token'] : '',);
+      statusCode: code,
+      data: response.data != null ? response.data['token'] : '',
+    );
   }
 
   Future<ApiResponse<String>> authorizeDevice(final DeviceToken token) async {
@@ -739,9 +764,10 @@ class ServerApi extends ApiMap {
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse(
-          errorMessage: e.message,
-          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '',);
+        errorMessage: e.message,
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: '',
+      );
     } finally {
       client.close();
     }
@@ -760,9 +786,10 @@ class ServerApi extends ApiMap {
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse(
-          errorMessage: e.message,
-          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '',);
+        errorMessage: e.message,
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: '',
+      );
     } finally {
       client.close();
     }
@@ -770,8 +797,9 @@ class ServerApi extends ApiMap {
     final int code = response.statusCode ?? HttpStatus.internalServerError;
 
     return ApiResponse(
-        statusCode: code,
-        data: response.data != null ? response.data['token'] : '',);
+      statusCode: code,
+      data: response.data != null ? response.data['token'] : '',
+    );
   }
 
   Future<ApiResponse<String>> deleteDeviceToken() async {
@@ -783,9 +811,10 @@ class ServerApi extends ApiMap {
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse(
-          errorMessage: e.message,
-          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '',);
+        errorMessage: e.message,
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: '',
+      );
     } finally {
       client.close();
     }
@@ -804,9 +833,10 @@ class ServerApi extends ApiMap {
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse(
-          errorMessage: e.message,
-          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: [],);
+        errorMessage: e.message,
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: [],
+      );
     } finally {
       client.close();
     }
@@ -814,10 +844,11 @@ class ServerApi extends ApiMap {
     final int code = response.statusCode ?? HttpStatus.internalServerError;
 
     return ApiResponse(
-        statusCode: code,
-        data: (response.data != null)
-            ? response.data.map<ApiToken>((final e) => ApiToken.fromJson(e)).toList()
-            : [],);
+      statusCode: code,
+      data: (response.data != null)
+          ? response.data.map<ApiToken>(ApiToken.fromJson).toList()
+          : [],
+    );
   }
 
   Future<ApiResponse<String>> refreshCurrentApiToken() async {
@@ -829,9 +860,10 @@ class ServerApi extends ApiMap {
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse(
-          errorMessage: e.message,
-          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '',);
+        errorMessage: e.message,
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: '',
+      );
     } finally {
       client.close();
     }
@@ -839,8 +871,9 @@ class ServerApi extends ApiMap {
     final int code = response.statusCode ?? HttpStatus.internalServerError;
 
     return ApiResponse(
-        statusCode: code,
-        data: response.data != null ? response.data['token'] : '',);
+      statusCode: code,
+      data: response.data != null ? response.data['token'] : '',
+    );
   }
 
   Future<ApiResponse<void>> deleteApiToken(final String device) async {
@@ -856,9 +889,10 @@ class ServerApi extends ApiMap {
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse(
-          errorMessage: e.message,
-          statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: null,);
+        errorMessage: e.message,
+        statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
+        data: null,
+      );
     } finally {
       client.close();
     }

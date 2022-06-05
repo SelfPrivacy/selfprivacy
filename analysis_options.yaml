@@ -36,7 +36,6 @@ linter:
     always_declare_return_types: true
     always_put_required_named_parameters_first: true
     always_put_control_body_on_new_line: true
-    always_specify_types: true
     avoid_escaping_inner_quotes: true
     avoid_setters_without_getters: true
     eol_at_end_of_file: true

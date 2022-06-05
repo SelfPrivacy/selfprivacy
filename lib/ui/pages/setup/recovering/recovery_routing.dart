@@ -16,11 +16,11 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_hentzner_connecte
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 
 class RecoveryRouting extends StatelessWidget {
-  const RecoveryRouting({Key? key}) : super(key: key);
+  const RecoveryRouting({final super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var serverInstallation = context.watch<ServerInstallationCubit>().state;
+  Widget build(final BuildContext context) {
+    final serverInstallation = context.watch<ServerInstallationCubit>().state;
 
     Widget currentPage = const SelectDomainToRecover();
 
@@ -61,9 +61,9 @@ class RecoveryRouting extends StatelessWidget {
     }
 
     return BlocListener<ServerInstallationCubit, ServerInstallationState>(
-      listener: (context, state) {
+      listener: (final context, final state) {
         if (state is ServerInstallationFinished) {
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.of(context).popUntil((final route) => route.isFirst);
         }
       },
       child: AnimatedSwitcher(
@@ -75,21 +75,23 @@ class RecoveryRouting extends StatelessWidget {
 }
 
 class SelectDomainToRecover extends StatelessWidget {
-  const SelectDomainToRecover({Key? key}) : super(key: key);
+  const SelectDomainToRecover({final super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var serverInstallation = context.watch<ServerInstallationCubit>();
+  Widget build(final BuildContext context) {
+    final serverInstallation = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (context) => RecoveryDomainFormCubit(
-          serverInstallation, FieldCubitFactory(context)),
+      create: (final context) => RecoveryDomainFormCubit(
+        serverInstallation,
+        FieldCubitFactory(context),
+      ),
       child: Builder(
-        builder: (context) {
-          var formCubitState = context.watch<RecoveryDomainFormCubit>().state;
+        builder: (final context) {
+          final formCubitState = context.watch<RecoveryDomainFormCubit>().state;
 
           return BlocListener<ServerInstallationCubit, ServerInstallationState>(
-            listener: (context, state) {
+            listener: (final context, final state) {
               if (state is ServerInstallationRecovery) {
                 if (state.currentStep == RecoveryStep.selecting) {
                   if (state.recoveryCapabilities ==
@@ -108,7 +110,7 @@ class SelectDomainToRecover extends StatelessWidget {
               hasFlashButton: false,
               onBackButtonPressed:
                   serverInstallation is ServerInstallationRecovery
-                      ? () => serverInstallation.clearAppConfig()
+                      ? serverInstallation.clearAppConfig
                       : null,
               children: [
                 CubitFormTextField(

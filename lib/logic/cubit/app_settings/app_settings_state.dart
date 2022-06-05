@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of 'app_settings_cubit.dart';
 
 class AppSettingsState extends Equatable {
@@ -11,7 +9,10 @@ class AppSettingsState extends Equatable {
   final bool isDarkModeOn;
   final bool isOnboardingShowing;
 
-  AppSettingsState copyWith({final isDarkModeOn, final isOnboardingShowing}) =>
+  AppSettingsState copyWith({
+    final bool? isDarkModeOn,
+    final bool? isOnboardingShowing,
+  }) =>
       AppSettingsState(
         isDarkModeOn: isDarkModeOn ?? this.isDarkModeOn,
         isOnboardingShowing: isOnboardingShowing ?? this.isOnboardingShowing,

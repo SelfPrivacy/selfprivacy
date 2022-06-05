@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
@@ -21,7 +19,8 @@ class UserFormCubit extends FormCubit {
     login.setValue(isEdit ? user.login : '');
     password = fieldFactory.createUserPasswordField();
     password.setValue(
-        isEdit ? (user.password ?? '') : StringGenerators.userPassword(),);
+      isEdit ? (user.password ?? '') : StringGenerators.userPassword(),
+    );
 
     super.addFields([login, password]);
   }

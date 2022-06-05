@@ -8,7 +8,7 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 
 class Console extends StatefulWidget {
-  const Console({super.key});
+  const Console({final super.key});
 
   @override
   State<Console> createState() => _ConsoleState();
@@ -32,68 +32,77 @@ class _ConsoleState extends State<Console> {
 
   @override
   Widget build(final BuildContext context) => SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(53),
-          child: Column(
-            children: const [
-              BrandHeader(title: 'Console', hasBackButton: true),
-              BrandDivider(),
-            ],
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(53),
+            child: Column(
+              children: const [
+                BrandHeader(title: 'Console', hasBackButton: true),
+                BrandDivider(),
+              ],
+            ),
           ),
-        ),
-        body: FutureBuilder(
-          future: getIt.allReady(),
-          builder: (final BuildContext context, final AsyncSnapshot<void> snapshot) {
-            if (snapshot.hasData) {
-              final List<Message> messages = getIt.get<ConsoleModel>().messages;
+          body: FutureBuilder(
+            future: getIt.allReady(),
+            builder: (
+              final BuildContext context,
+              final AsyncSnapshot<void> snapshot,
+            ) {
+              if (snapshot.hasData) {
+                final List<Message> messages =
+                    getIt.get<ConsoleModel>().messages;
 
-              return ListView(
-                reverse: true,
-                shrinkWrap: true,
-                children: [
-                  const SizedBox(height: 20),
-                  ...UnmodifiableListView(messages
-                      .map((final message) {
-                        final bool isError = message.type == MessageType.warning;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: RichText(
-                            text: TextSpan(
-                              style: DefaultTextStyle.of(context).style,
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text:
-                                        '${message.timeString}${isError ? '(Error)' : ''}: \n',
-                                    style: TextStyle(
+                return ListView(
+                  reverse: true,
+                  shrinkWrap: true,
+                  children: [
+                    const SizedBox(height: 20),
+                    ...UnmodifiableListView(
+                      messages
+                          .map((final message) {
+                            final bool isError =
+                                message.type == MessageType.warning;
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: RichText(
+                                text: TextSpan(
+                                  style: DefaultTextStyle.of(context).style,
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text:
+                                          '${message.timeString}${isError ? '(Error)' : ''}: \n',
+                                      style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color:
-                                            isError ? BrandColors.red1 : null,),),
-                                TextSpan(text: message.text),
-                              ],
-                            ),
-                          ),
-                        );
-                      })
-                      .toList()
-                      .reversed,),
-                ],
-              );
-            } else {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text('Waiting for initialisation'),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  CircularProgressIndicator(),
-                ],
-              );
-            }
-          },
+                                            isError ? BrandColors.red1 : null,
+                                      ),
+                                    ),
+                                    TextSpan(text: message.text),
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
+                          .toList()
+                          .reversed,
+                    ),
+                  ],
+                );
+              } else {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text('Waiting for initialisation'),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CircularProgressIndicator(),
+                  ],
+                );
+              }
+            },
+          ),
         ),
-      ),
-    );
+      );
 }

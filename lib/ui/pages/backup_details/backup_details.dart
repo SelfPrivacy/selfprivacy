@@ -18,7 +18,7 @@ import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class BackupDetails extends StatefulWidget {
-  const BackupDetails({super.key});
+  const BackupDetails({final super.key});
 
   @override
   State<BackupDetails> createState() => _BackupDetailsState();
@@ -30,14 +30,17 @@ class _BackupDetailsState extends State<BackupDetails>
   Widget build(final BuildContext context) {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    final bool isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
-    final BackupStatusEnum backupStatus = context.watch<BackupsCubit>().state.status;
+    final bool isBackupInitialized =
+        context.watch<BackupsCubit>().state.isInitialized;
+    final BackupStatusEnum backupStatus =
+        context.watch<BackupsCubit>().state.status;
     final StateType providerState = isReady && isBackupInitialized
         ? (backupStatus == BackupStatusEnum.error
             ? StateType.warning
             : StateType.stable)
         : StateType.uninitialized;
-    final bool preventActions = context.watch<BackupsCubit>().state.preventActions;
+    final bool preventActions =
+        context.watch<BackupsCubit>().state.preventActions;
     final double backupProgress = context.watch<BackupsCubit>().state.progress;
     final String backupError = context.watch<BackupsCubit>().state.error;
     final List<Backup> backups = context.watch<BackupsCubit>().state.backups;
@@ -84,7 +87,8 @@ class _BackupDetailsState extends State<BackupDetails>
                   ListTile(
                     title: Text(
                       'providers.backup.creating'.tr(
-                          args: [(backupProgress * 100).round().toString()],),
+                        args: [(backupProgress * 100).round().toString()],
+                      ),
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     subtitle: LinearProgressIndicator(
@@ -96,7 +100,8 @@ class _BackupDetailsState extends State<BackupDetails>
                   ListTile(
                     title: Text(
                       'providers.backup.restoring'.tr(
-                          args: [(backupProgress * 100).round().toString()],),
+                        args: [(backupProgress * 100).round().toString()],
+                      ),
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     subtitle: LinearProgressIndicator(
@@ -148,34 +153,44 @@ class _BackupDetailsState extends State<BackupDetails>
                   ),
                 if (backups.isNotEmpty)
                   Column(
-                    children: backups.map((final Backup backup) => ListTile(
-                        onTap: preventActions
-                            ? null
-                            : () {
-                                final NavigationService nav = getIt<NavigationService>();
-                                nav.showPopUpDialog(BrandAlert(
-                                  title: 'providers.backup.restoring'.tr(),
-                                  contentText: 'providers.backup.restore_alert'
-                                      .tr(args: [backup.time.toString()]),
-                                  actions: [
-                                    ActionButton(
-                                      text: 'basis.cancel'.tr(),
-                                    ),
-                                    ActionButton(
-                                      onPressed: () => {
-                                        context
-                                            .read<BackupsCubit>()
-                                            .restoreBackup(backup.id)
-                                      },
-                                      text: 'modals.yes'.tr(),
-                                    )
-                                  ],
-                                ),);
-                              },
-                        title: Text(
-                          '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
-                        ),
-                      ),).toList(),
+                    children: backups
+                        .map(
+                          (final Backup backup) => ListTile(
+                            onTap: preventActions
+                                ? null
+                                : () {
+                                    final NavigationService nav =
+                                        getIt<NavigationService>();
+                                    nav.showPopUpDialog(
+                                      BrandAlert(
+                                        title:
+                                            'providers.backup.restoring'.tr(),
+                                        contentText:
+                                            'providers.backup.restore_alert'.tr(
+                                          args: [backup.time.toString()],
+                                        ),
+                                        actions: [
+                                          ActionButton(
+                                            text: 'basis.cancel'.tr(),
+                                          ),
+                                          ActionButton(
+                                            onPressed: () => {
+                                              context
+                                                  .read<BackupsCubit>()
+                                                  .restoreBackup(backup.id)
+                                            },
+                                            text: 'modals.yes'.tr(),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
+                            title: Text(
+                              '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
               ],
             ),

@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
@@ -18,24 +16,24 @@ class BrandHeader extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Container(
-      height: 52,
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.only(
-        left: hasBackButton ? 1 : 15,
-      ),
-      child: Row(
-        children: [
-          if (hasBackButton) ...[
-            IconButton(
-              icon: const Icon(BrandIcons.arrowLeft),
-              onPressed:
-                  onBackButtonPressed ?? () => Navigator.of(context).pop(),
-            ),
-            const SizedBox(width: 10),
+        height: 52,
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.only(
+          left: hasBackButton ? 1 : 15,
+        ),
+        child: Row(
+          children: [
+            if (hasBackButton) ...[
+              IconButton(
+                icon: const Icon(BrandIcons.arrowLeft),
+                onPressed:
+                    onBackButtonPressed ?? () => Navigator.of(context).pop(),
+              ),
+              const SizedBox(width: 10),
+            ],
+            BrandText.h4(title),
+            const Spacer(),
           ],
-          BrandText.h4(title),
-          const Spacer(),
-        ],
-      ),
-    );
+        ),
+      );
 }

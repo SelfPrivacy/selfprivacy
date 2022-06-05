@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of 'hetzner_metrics_cubit.dart';
 
 abstract class HetznerMetricsState extends Equatable {

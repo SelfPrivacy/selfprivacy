@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -14,7 +12,6 @@ class DomainNotFoundException implements Exception {
 }
 
 class CloudflareApi extends ApiMap {
-
   CloudflareApi({
     this.hasLogger = false,
     this.isWithToken = true,
@@ -50,11 +47,14 @@ class CloudflareApi extends ApiMap {
   String rootAddress = 'https://api.cloudflare.com/client/v4';
 
   Future<bool> isValid(final String token) async {
-    validateStatus = (final status) => status == HttpStatus.ok || status == HttpStatus.unauthorized;
+    validateStatus = (final status) =>
+        status == HttpStatus.ok || status == HttpStatus.unauthorized;
 
     final Dio client = await getClient();
-    final Response response = await client.get('/user/tokens/verify',
-        options: Options(headers: {'Authorization': 'Bearer $token'}),);
+    final Response response = await client.get(
+      '/user/tokens/verify',
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
 
     close(client);
 
@@ -68,7 +68,8 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<String> getZoneId(final String domain) async {
-    validateStatus = (final status) => status == HttpStatus.ok || status == HttpStatus.forbidden;
+    validateStatus = (final status) =>
+        status == HttpStatus.ok || status == HttpStatus.forbidden;
     final Dio client = await getClient();
     final Response response = await client.get(
       '/zones',
@@ -127,13 +128,15 @@ class CloudflareApi extends ApiMap {
 
     for (final record in records) {
       if (record['zone_name'] == domainName) {
-        allRecords.add(DnsRecord(
-          name: record['name'],
-          type: record['type'],
-          content: record['content'],
-          ttl: record['ttl'],
-          proxied: record['proxied'],
-        ),);
+        allRecords.add(
+          DnsRecord(
+            name: record['name'],
+            type: record['type'],
+            content: record['content'],
+            ttl: record['ttl'],
+            proxied: record['proxied'],
+          ),
+        );
       }
     }
 
@@ -169,16 +172,22 @@ class CloudflareApi extends ApiMap {
     }
   }
 
-  List<DnsRecord> projectDnsRecords(final String? domainName, final String? ip4) {
-    final DnsRecord domainA = DnsRecord(type: 'A', name: domainName, content: ip4);
+  List<DnsRecord> projectDnsRecords(
+    final String? domainName,
+    final String? ip4,
+  ) {
+    final DnsRecord domainA =
+        DnsRecord(type: 'A', name: domainName, content: ip4);
 
     final DnsRecord mx = DnsRecord(type: 'MX', name: '@', content: domainName);
     final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
     final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
     final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
     final DnsRecord meetA = DnsRecord(type: 'A', name: 'meet', content: ip4);
-    final DnsRecord passwordA = DnsRecord(type: 'A', name: 'password', content: ip4);
-    final DnsRecord socialA = DnsRecord(type: 'A', name: 'social', content: ip4);
+    final DnsRecord passwordA =
+        DnsRecord(type: 'A', name: 'password', content: ip4);
+    final DnsRecord socialA =
+        DnsRecord(type: 'A', name: 'social', content: ip4);
     final DnsRecord vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
 
     final DnsRecord txt1 = DnsRecord(
@@ -211,7 +220,9 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<void> setDkim(
-      final String dkimRecordString, final ServerDomain cloudFlareDomain,) async {
+    final String dkimRecordString,
+    final ServerDomain cloudFlareDomain,
+  ) async {
     final String domainZoneId = cloudFlareDomain.zoneId;
     final String url = '$rootAddress/zones/$domainZoneId/dns_records';
 

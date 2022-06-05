@@ -9,7 +9,7 @@ import 'package:selfprivacy/ui/pages/devices/new_device.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class DevicesScreen extends StatefulWidget {
-  const DevicesScreen({super.key});
+  const DevicesScreen({final super.key});
 
   @override
   State<DevicesScreen> createState() => _DevicesScreenState();
@@ -18,7 +18,8 @@ class DevicesScreen extends StatefulWidget {
 class _DevicesScreenState extends State<DevicesScreen> {
   @override
   Widget build(final BuildContext context) {
-    final ApiDevicesState devicesStatus = context.watch<ApiDevicesCubit>().state;
+    final ApiDevicesState devicesStatus =
+        context.watch<ApiDevicesCubit>().state;
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -79,61 +80,68 @@ class _DevicesScreenState extends State<DevicesScreen> {
 }
 
 class _DeviceTile extends StatelessWidget {
-  const _DeviceTile({super.key, required this.device});
+  const _DeviceTile({required this.device});
 
   final ApiToken device;
 
   @override
   Widget build(final BuildContext context) => ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-      title: Text(device.name),
-      subtitle: Text('devices.main_screen.access_granted_on'
-          .tr(args: [DateFormat.yMMMMd().format(device.date)]),),
-      onTap: device.isCaller
-          ? null
-          : () => _showConfirmationDialog(context, device),
-    );
+        contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+        title: Text(device.name),
+        subtitle: Text(
+          'devices.main_screen.access_granted_on'
+              .tr(args: [DateFormat.yMMMMd().format(device.date)]),
+        ),
+        onTap: device.isCaller
+            ? null
+            : () => _showConfirmationDialog(context, device),
+      );
 
-  Future _showConfirmationDialog(final BuildContext context, final ApiToken device) => showDialog(
+  Future _showConfirmationDialog(
+    final BuildContext context,
+    final ApiToken device,
+  ) =>
+      showDialog(
         context: context,
         builder: (final context) => AlertDialog(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(Icons.link_off_outlined),
-                const SizedBox(height: 16),
-                Text(
-                  'devices.revoke_device_alert.header'.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                    'devices.revoke_device_alert.description'
-                        .tr(args: [device.name]),
-                    style: Theme.of(context).textTheme.bodyMedium,),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('devices.revoke_device_alert.no'.tr()),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('devices.revoke_device_alert.yes'.tr()),
-                onPressed: () {
-                  context.read<ApiDevicesCubit>().deleteDevice(device);
-                  Navigator.of(context).pop();
-                },
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Icons.link_off_outlined),
+              const SizedBox(height: 16),
+              Text(
+                'devices.revoke_device_alert.header'.tr(),
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
               ),
             ],
           ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'devices.revoke_device_alert.description'
+                    .tr(args: [device.name]),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('devices.revoke_device_alert.no'.tr()),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('devices.revoke_device_alert.yes'.tr()),
+              onPressed: () {
+                context.read<ApiDevicesCubit>().deleteDevice(device);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
       );
 }

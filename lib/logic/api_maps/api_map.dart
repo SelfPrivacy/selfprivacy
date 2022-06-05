@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
@@ -20,19 +18,24 @@ abstract class ApiMap {
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (final HttpClient client) {
       client.badCertificateCallback =
-          (final X509Certificate cert, final String host, final int port) => true;
+          (final X509Certificate cert, final String host, final int port) =>
+              true;
       return client;
     };
 
-    dio.interceptors.add(InterceptorsWrapper(onError: (final DioError e, final ErrorInterceptorHandler handler) {
-      print(e.requestOptions.path);
-      print(e.requestOptions.data);
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onError: (final DioError e, final ErrorInterceptorHandler handler) {
+          print(e.requestOptions.path);
+          print(e.requestOptions.data);
 
-      print(e.message);
-      print(e.response);
+          print(e.message);
+          print(e.response);
 
-      return handler.next(e);
-    },),);
+          return handler.next(e);
+        },
+      ),
+    );
     return dio;
   }
 
@@ -56,7 +59,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  Future onRequest(
+  Future<void> onRequest(
     final RequestOptions options,
     final RequestInterceptorHandler handler,
   ) async {
@@ -70,7 +73,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  Future onResponse(
+  Future<void> onResponse(
     final Response response,
     final ResponseInterceptorHandler handler,
   ) async {
@@ -87,7 +90,10 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  Future onError(final DioError err, final ErrorInterceptorHandler handler) async {
+  Future<void> onError(
+    final DioError err,
+    final ErrorInterceptorHandler handler,
+  ) async {
     final Response? response = err.response;
     log(err.toString());
     addMessage(

@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
@@ -39,5 +37,6 @@ class User extends Equatable {
   Color get color => stringToColor(login);
 
   @override
-  String toString() => '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
+  String toString() =>
+      '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
 }

@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:io';
 
 import 'package:basic_utils/basic_utils.dart';
@@ -29,13 +27,11 @@ import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 
 class IpNotFoundException implements Exception {
-
   IpNotFoundException(this.message);
   final String message;
 }
 
 class ServerAuthorizationException implements Exception {
-
   ServerAuthorizationException(this.message);
   final String message;
 }
@@ -47,8 +43,10 @@ class ServerInstallationRepository {
     final String? hetznerToken = getIt<ApiConfigModel>().hetznerKey;
     final String? cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
-    final BackblazeCredential? backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
-    final ServerHostingDetails? serverDetails = getIt<ApiConfigModel>().serverDetails;
+    final BackblazeCredential? backblazeCredential =
+        getIt<ApiConfigModel>().backblazeCredential;
+    final ServerHostingDetails? serverDetails =
+        getIt<ApiConfigModel>().serverDetails;
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
       return ServerInstallationFinished(
@@ -76,7 +74,11 @@ class ServerInstallationRepository {
         serverDetails: serverDetails,
         rootUser: box.get(BNames.rootUser),
         currentStep: _getCurrentRecoveryStep(
-            hetznerToken, cloudflareToken, serverDomain, serverDetails,),
+          hetznerToken,
+          cloudflareToken,
+          serverDomain,
+          serverDetails,
+        ),
         recoveryCapabilities: await getRecoveryCapabilities(serverDomain),
       );
     }
@@ -146,8 +148,11 @@ class ServerInstallationRepository {
     }
   }
 
-  Future<Map<String, bool>> isDnsAddressesMatch(final String? domainName, final String? ip4,
-      final Map<String, bool>? skippedMatches,) async {
+  Future<Map<String, bool>> isDnsAddressesMatch(
+    final String? domainName,
+    final String? ip4,
+    final Map<String, bool>? skippedMatches,
+  ) async {
     final List<String> addresses = <String>[
       '$domainName',
       'api.$domainName',
@@ -228,9 +233,11 @@ class ServerInstallationRepository {
                 isRed: true,
                 onPressed: () async {
                   await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
-                      domainName: domainName,);
+                    domainName: domainName,
+                  );
 
-                  final ServerHostingDetails serverDetails = await hetznerApi.createServer(
+                  final ServerHostingDetails serverDetails =
+                      await hetznerApi.createServer(
                     cloudFlareKey: cloudFlareKey,
                     rootUser: rootUser,
                     domainName: domainName,
@@ -284,7 +291,8 @@ class ServerInstallationRepository {
               isRed: true,
               onPressed: () async {
                 await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
-                    domainName: cloudFlareDomain.domainName,);
+                  domainName: cloudFlareDomain.domainName,
+                );
 
                 onCancel();
               },
@@ -358,8 +366,10 @@ class ServerInstallationRepository {
 
   Future<String> getServerIpFromDomain(final ServerDomain serverDomain) async {
     final List<RRecord>? lookup = await DnsUtils.lookupRecord(
-        serverDomain.domainName, RRecordType.A,
-        provider: DnsApiProvider.CLOUDFLARE,);
+      serverDomain.domainName,
+      RRecordType.A,
+      provider: DnsApiProvider.CLOUDFLARE,
+    );
     if (lookup == null || lookup.isEmpty) {
       throw IpNotFoundException('No IP found for domain $serverDomain');
     }
@@ -369,22 +379,32 @@ class ServerInstallationRepository {
   Future<String> getDeviceName() async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (kIsWeb) {
-      return deviceInfo.webBrowserInfo
-          .then((final WebBrowserInfo value) => '${value.browserName} ${value.platform}');
+      return deviceInfo.webBrowserInfo.then(
+        (final WebBrowserInfo value) =>
+            '${value.browserName} ${value.platform}',
+      );
     } else {
       if (Platform.isAndroid) {
-        return deviceInfo.androidInfo
-            .then((final AndroidDeviceInfo value) => '${value.model} ${value.version.release}');
+        return deviceInfo.androidInfo.then(
+          (final AndroidDeviceInfo value) =>
+              '${value.model} ${value.version.release}',
+        );
       } else if (Platform.isIOS) {
-        return deviceInfo.iosInfo.then((final IosDeviceInfo value) =>
-            '${value.utsname.machine} ${value.systemName} ${value.systemVersion}',);
+        return deviceInfo.iosInfo.then(
+          (final IosDeviceInfo value) =>
+              '${value.utsname.machine} ${value.systemName} ${value.systemVersion}',
+        );
       } else if (Platform.isLinux) {
-        return deviceInfo.linuxInfo.then((final LinuxDeviceInfo value) => value.prettyName);
+        return deviceInfo.linuxInfo
+            .then((final LinuxDeviceInfo value) => value.prettyName);
       } else if (Platform.isMacOS) {
-        return deviceInfo.macOsInfo
-            .then((final MacOsDeviceInfo value) => '${value.hostName} ${value.computerName}');
+        return deviceInfo.macOsInfo.then(
+          (final MacOsDeviceInfo value) =>
+              '${value.hostName} ${value.computerName}',
+        );
       } else if (Platform.isWindows) {
-        return deviceInfo.windowsInfo.then((final WindowsDeviceInfo value) => value.computerName);
+        return deviceInfo.windowsInfo
+            .then((final WindowsDeviceInfo value) => value.computerName);
       }
     }
     return 'Unidentified';
@@ -401,7 +421,8 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     final ApiResponse<String> apiResponse = await serverApi.authorizeDevice(
-        DeviceToken(device: await getDeviceName(), token: newDeviceKey),);
+      DeviceToken(device: await getDeviceName(), token: newDeviceKey),
+    );
 
     if (apiResponse.isSuccess) {
       return ServerHostingDetails(
@@ -434,7 +455,8 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     final ApiResponse<String> apiResponse = await serverApi.useRecoveryToken(
-        DeviceToken(device: await getDeviceName(), token: recoveryKey),);
+      DeviceToken(device: await getDeviceName(), token: recoveryKey),
+    );
 
     if (apiResponse.isSuccess) {
       return ServerHostingDetails(
@@ -468,7 +490,8 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     if (recoveryCapabilities == ServerRecoveryCapabilities.legacy) {
-      final Map<ServiceTypes, bool> apiResponse = await serverApi.servicesPowerCheck();
+      final Map<ServiceTypes, bool> apiResponse =
+          await serverApi.servicesPowerCheck();
       if (apiResponse.isNotEmpty) {
         return ServerHostingDetails(
           apiToken: apiToken,
@@ -488,9 +511,11 @@ class ServerInstallationRepository {
         );
       }
     }
-    final ApiResponse<String> deviceAuthKey = await serverApi.createDeviceToken();
+    final ApiResponse<String> deviceAuthKey =
+        await serverApi.createDeviceToken();
     final ApiResponse<String> apiResponse = await serverApi.authorizeDevice(
-        DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),);
+      DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
+    );
 
     if (apiResponse.isSuccess) {
       return ServerHostingDetails(
@@ -522,7 +547,8 @@ class ServerInstallationRepository {
     );
 
     final String? serverApiVersion = await serverApi.getApiVersion();
-    final ApiResponse<List<String>> users = await serverApi.getUsersList(withMainUser: true);
+    final ApiResponse<List<String>> users =
+        await serverApi.getUsersList(withMainUser: true);
     if (serverApiVersion == null || !users.isSuccess) {
       return fallbackUser;
     }
@@ -544,18 +570,22 @@ class ServerInstallationRepository {
     final HetznerApi hetznerApi = HetznerApi();
     final List<HetznerServerInfo> servers = await hetznerApi.getServers();
     return servers
-        .map((final HetznerServerInfo server) => ServerBasicInfo(
-              id: server.id,
-              name: server.name,
-              ip: server.publicNet.ipv4.ip,
-              reverseDns: server.publicNet.ipv4.reverseDns,
-              created: server.created,
-              volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
-            ),)
+        .map(
+          (final HetznerServerInfo server) => ServerBasicInfo(
+            id: server.id,
+            name: server.name,
+            ip: server.publicNet.ipv4.ip,
+            reverseDns: server.publicNet.ipv4.reverseDns,
+            created: server.created,
+            volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
+          ),
+        )
         .toList();
   }
 
-  Future<void> saveServerDetails(final ServerHostingDetails serverDetails) async {
+  Future<void> saveServerDetails(
+    final ServerHostingDetails serverDetails,
+  ) async {
     await getIt<ApiConfigModel>().storeServerDetails(serverDetails);
   }
 
@@ -569,7 +599,9 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
-  Future<void> saveBackblazeKey(final BackblazeCredential backblazeCredential) async {
+  Future<void> saveBackblazeKey(
+    final BackblazeCredential backblazeCredential,
+  ) async {
     await getIt<ApiConfigModel>().storeBackblazeCredential(backblazeCredential);
   }
 

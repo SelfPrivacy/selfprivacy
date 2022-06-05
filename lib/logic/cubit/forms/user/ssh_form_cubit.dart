@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
@@ -14,21 +12,26 @@ class SshFormCubit extends FormCubit {
     required this.user,
   }) {
     final RegExp keyRegExp = RegExp(
-        r'^(ssh-rsa AAAAB3NzaC1yc2|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5)[0-9A-Za-z+/]+[=]{0,3}( .*)?$',);
+      r'^(ssh-rsa AAAAB3NzaC1yc2|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5)[0-9A-Za-z+/]+[=]{0,3}( .*)?$',
+    );
 
     key = FieldCubit(
       initalValue: '',
       validations: [
         ValidationModel(
-          (final String newKey) => user.sshKeys.any((final String key) => key == newKey),
+          (final String newKey) =>
+              user.sshKeys.any((final String key) => key == newKey),
           'validations.key_already_exists'.tr(),
         ),
         RequiredStringValidation('validations.required'.tr()),
-        ValidationModel<String>((final String s) {
-          print(s);
-          print(keyRegExp.hasMatch(s));
-          return !keyRegExp.hasMatch(s);
-        }, 'validations.invalid_format'.tr(),),
+        ValidationModel<String>(
+          (final String s) {
+            print(s);
+            print(keyRegExp.hasMatch(s));
+            return !keyRegExp.hasMatch(s);
+          },
+          'validations.invalid_format'.tr(),
+        ),
       ],
     );
 

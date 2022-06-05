@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of 'jobs_cubit.dart';
 
 abstract class JobsState extends Equatable {
@@ -16,7 +14,8 @@ class JobsStateWithJobs extends JobsState {
   final List<Job> jobList;
 
   JobsState removeById(final String id) {
-    final List<Job> newJobsList = jobList.where((final element) => element.id != id).toList();
+    final List<Job> newJobsList =
+        jobList.where((final element) => element.id != id).toList();
 
     if (newJobsList.isEmpty) {
       return JobsStateEmpty();

@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -24,15 +22,20 @@ class FieldCubitFactory {
       initalValue: '',
       validations: [
         ValidationModel<String>(
-            (final String s) => s.toLowerCase() == 'root', 'validations.root_name'.tr(),),
+          (final String s) => s.toLowerCase() == 'root',
+          'validations.root_name'.tr(),
+        ),
         ValidationModel(
-          (final String login) => context.read<UsersCubit>().state.isLoginRegistered(login),
+          (final String login) =>
+              context.read<UsersCubit>().state.isLoginRegistered(login),
           'validations.user_already_exist'.tr(),
         ),
         RequiredStringValidation('validations.required'.tr()),
         LengthStringLongerValidation(userMaxLength),
-        ValidationModel<String>((final String s) => !userAllowedRegExp.hasMatch(s),
-            'validations.invalid_format'.tr(),),
+        ValidationModel<String>(
+          (final String s) => !userAllowedRegExp.hasMatch(s),
+          'validations.invalid_format'.tr(),
+        ),
       ],
     );
   }
@@ -48,18 +51,19 @@ class FieldCubitFactory {
       validations: [
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
-            passwordForbiddenRegExp.hasMatch,
-            'validations.invalid_format'.tr(),),
+          passwordForbiddenRegExp.hasMatch,
+          'validations.invalid_format'.tr(),
+        ),
       ],
     );
   }
 
   FieldCubit<String> createRequiredStringField() => FieldCubit(
-      initalValue: '',
-      validations: [
-        RequiredStringValidation('validations.required'.tr()),
-      ],
-    );
+        initalValue: '',
+        validations: [
+          RequiredStringValidation('validations.required'.tr()),
+        ],
+      );
 
   final BuildContext context;
 }

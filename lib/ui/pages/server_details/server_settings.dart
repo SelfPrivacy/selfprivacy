@@ -2,15 +2,14 @@ part of 'server_details_screen.dart';
 
 class _ServerSettings extends StatelessWidget {
   const _ServerSettings({
-    Key? key,
     required this.tabController,
-  }) : super(key: key);
+  });
 
   final TabController tabController;
 
   @override
-  Widget build(BuildContext context) {
-    var serverDetailsState = context.watch<ServerDetailsCubit>().state;
+  Widget build(final BuildContext context) {
+    final serverDetailsState = context.watch<ServerDetailsCubit>().state;
     if (serverDetailsState is ServerDetailsNotReady) {
       return const Text('not ready');
     } else if (serverDetailsState is! Loaded) {
@@ -37,7 +36,7 @@ class _ServerSettings extends StatelessWidget {
         ),
         const BrandDivider(),
         SwitcherBlock(
-          onChange: (_) {},
+          onChange: (final _) {},
           isActive: serverDetailsState.autoUpgradeSettings.enable,
           child: const _TextColumn(
             title: 'Allow Auto-upgrade',
@@ -46,7 +45,7 @@ class _ServerSettings extends StatelessWidget {
           ),
         ),
         SwitcherBlock(
-          onChange: (_) {},
+          onChange: (final _) {},
           isActive: serverDetailsState.autoUpgradeSettings.allowReboot,
           child: const _TextColumn(
             title: 'Reboot after upgrade',
@@ -71,60 +70,55 @@ class _ServerSettings extends StatelessWidget {
 
 class _Button extends StatelessWidget {
   const _Button({
-    Key? key,
     required this.onTap,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.only(top: 20, bottom: 5),
-        decoration: const BoxDecoration(
+  Widget build(final BuildContext context) => InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.only(top: 20, bottom: 5),
+          decoration: const BoxDecoration(
             border: Border(
-          bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-        )),
-        child: child,
-      ),
-    );
-  }
+              bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
+            ),
+          ),
+          child: child,
+        ),
+      );
 }
 
 class _TextColumn extends StatelessWidget {
   const _TextColumn({
-    Key? key,
     required this.title,
     required this.value,
     this.hasWarning = false,
-  }) : super(key: key);
+  });
 
   final String title;
   final String value;
   final bool hasWarning;
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        BrandText.body1(
-          title,
-          style: TextStyle(color: hasWarning ? BrandColors.warning : null),
-        ),
-        const SizedBox(height: 5),
-        BrandText.body1(
-          value,
-          style: TextStyle(
-            fontSize: 13,
-            height: 1.53,
-            color: hasWarning ? BrandColors.warning : BrandColors.gray1,
+  Widget build(final BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BrandText.body1(
+            title,
+            style: TextStyle(color: hasWarning ? BrandColors.warning : null),
           ),
-        ),
-      ],
-    );
-  }
+          const SizedBox(height: 5),
+          BrandText.body1(
+            value,
+            style: TextStyle(
+              fontSize: 13,
+              height: 1.53,
+              color: hasWarning ? BrandColors.warning : BrandColors.gray1,
+            ),
+          ),
+        ],
+      );
 }

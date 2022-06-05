@@ -1,7 +1,4 @@
-// ignore_for_file: always_specify_types
-
 class ServerBasicInfo {
-
   ServerBasicInfo({
     required this.id,
     required this.name,
@@ -19,7 +16,6 @@ class ServerBasicInfo {
 }
 
 class ServerBasicInfoWithValidators extends ServerBasicInfo {
-
   ServerBasicInfoWithValidators.fromServerBasicInfo({
     required final ServerBasicInfo serverBasicInfo,
     required final isIpValid,

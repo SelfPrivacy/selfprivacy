@@ -11,23 +11,25 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryHetznerConnected extends StatelessWidget {
-  const RecoveryHetznerConnected({final Key? key}) : super(key: key);
+  const RecoveryHetznerConnected({final super.key});
 
   @override
   Widget build(final BuildContext context) {
-    ServerInstallationCubit appConfig = context.watch<ServerInstallationCubit>();
+    final ServerInstallationCubit appConfig =
+        context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
       create: (final BuildContext context) => HetznerFormCubit(appConfig),
       child: Builder(
         builder: (final BuildContext context) {
-          FormCubitState formCubitState = context.watch<HetznerFormCubit>().state;
+          final FormCubitState formCubitState =
+              context.watch<HetznerFormCubit>().state;
 
           return BrandHeroScreen(
             heroTitle: 'recovering.hetzner_connected'.tr(),
-            heroSubtitle: 'recovering.hetzner_connected_description'.tr(args: [
-              appConfig.state.serverDomain?.domainName ?? 'your domain'
-            ]),
+            heroSubtitle: 'recovering.hetzner_connected_description'.tr(
+              args: [appConfig.state.serverDomain?.domainName ?? 'your domain'],
+            ),
             hasBackButton: true,
             hasFlashButton: false,
             children: [
@@ -52,17 +54,16 @@ class RecoveryHetznerConnected extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
-                  builder: (final BuildContext context) {
-                    return const BrandBottomSheet(
-                      isExpended: true,
-                      child: Padding(
-                        padding: paddingH15V0,
-                        child: BrandMarkdown(
-                          fileName: 'how_hetzner',
-                        ),
+                  builder: (final BuildContext context) =>
+                      const BrandBottomSheet(
+                    isExpended: true,
+                    child: Padding(
+                      padding: paddingH15V0,
+                      child: BrandMarkdown(
+                        fileName: 'how_hetzner',
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
               ),
             ],

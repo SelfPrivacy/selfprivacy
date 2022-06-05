@@ -1,13 +1,13 @@
-// ignore_for_file: always_specify_types
-
 part of 'recovery_key_cubit.dart';
 
 class RecoveryKeyState extends ServerInstallationDependendState {
   const RecoveryKeyState(this._status, this.loadingStatus);
 
   const RecoveryKeyState.initial()
-      : this(const RecoveryKeyStatus(exists: false, valid: false),
-            LoadingStatus.refreshing,);
+      : this(
+          const RecoveryKeyStatus(exists: false, valid: false),
+          LoadingStatus.refreshing,
+        );
 
   final RecoveryKeyStatus _status;
   final LoadingStatus loadingStatus;
@@ -23,8 +23,9 @@ class RecoveryKeyState extends ServerInstallationDependendState {
   RecoveryKeyState copyWith({
     final RecoveryKeyStatus? status,
     final LoadingStatus? loadingStatus,
-  }) => RecoveryKeyState(
-      status ?? _status,
-      loadingStatus ?? this.loadingStatus,
-    );
+  }) =>
+      RecoveryKeyState(
+        status ?? _status,
+        loadingStatus ?? this.loadingStatus,
+      );
 }

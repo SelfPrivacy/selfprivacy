@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 part of 'server_detailed_info_cubit.dart';
 
 abstract class ServerDetailsState extends Equatable {
@@ -18,7 +16,6 @@ class ServerDetailsNotReady extends ServerDetailsState {}
 class Loading extends ServerDetailsState {}
 
 class Loaded extends ServerDetailsState {
-
   const Loaded({
     required this.serverInfo,
     required this.serverTimezone,

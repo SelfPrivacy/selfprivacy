@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types
-
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
@@ -7,8 +5,11 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 
 class RecoveryDeviceFormCubit extends FormCubit {
-  RecoveryDeviceFormCubit(this.installationCubit,
-      final FieldCubitFactory fieldFactory, this.recoveryMethod,) {
+  RecoveryDeviceFormCubit(
+    this.installationCubit,
+    final FieldCubitFactory fieldFactory,
+    this.recoveryMethod,
+  ) {
     tokenField = fieldFactory.createRequiredStringField();
 
     super.addFields([tokenField]);

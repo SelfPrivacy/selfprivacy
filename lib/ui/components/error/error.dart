@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class BrandError extends StatelessWidget {
-  const BrandError({Key? key, this.error, this.stackTrace}) : super(key: key);
+  const BrandError({final super.key, this.error, this.stackTrace});
 
   final Object? error;
   final StackTrace? stackTrace;
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
+  Widget build(final BuildContext context) => SafeArea(
       child: Scaffold(
         body: Center(
           child: SingleChildScrollView(
@@ -24,5 +23,4 @@ class BrandError extends StatelessWidget {
         ),
       ),
     );
-  }
 }

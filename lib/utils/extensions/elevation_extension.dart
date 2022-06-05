@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 library elevation_extension;
 
 import 'package:flutter/material.dart';
@@ -5,16 +7,15 @@ import 'package:flutter/cupertino.dart';
 
 extension ElevationExtension on BoxDecoration {
   BoxDecoration copyWith({
-    Color? color,
-    DecorationImage? image,
-    BoxBorder? border,
-    BorderRadiusGeometry? borderRadius,
-    List<BoxShadow>? boxShadow,
-    Gradient? gradient,
-    BlendMode? backgroundBlendMode,
-    BoxShape? shape,
-  }) {
-    return BoxDecoration(
+    final Color? color,
+    final DecorationImage? image,
+    final BoxBorder? border,
+    final BorderRadiusGeometry? borderRadius,
+    final List<BoxShadow>? boxShadow,
+    final Gradient? gradient,
+    final BlendMode? backgroundBlendMode,
+    final BoxShape? shape,
+  }) => BoxDecoration(
       color: color ?? this.color,
       image: image ?? this.image,
       border: border ?? this.border,
@@ -26,5 +27,4 @@ extension ElevationExtension on BoxDecoration {
       backgroundBlendMode: backgroundBlendMode ?? this.backgroundBlendMode,
       shape: shape ?? this.shape,
     );
-  }
 }

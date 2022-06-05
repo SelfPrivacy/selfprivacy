@@ -6,14 +6,13 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class NotReadyCard extends StatelessWidget {
-  const NotReadyCard({Key? key}) : super(key: key);
+  const NotReadyCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(final BuildContext context) => Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15), color: BrandColors.gray6),
+          borderRadius: BorderRadius.circular(15), color: BrandColors.gray6,),
       child: RichText(
         text: TextSpan(
           children: [
@@ -50,5 +49,4 @@ class NotReadyCard extends StatelessWidget {
         ),
       ),
     );
-  }
 }

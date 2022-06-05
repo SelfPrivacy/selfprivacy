@@ -5,13 +5,13 @@ import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_depe
 part 'services_state.dart';
 
 class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
-  ServicesCubit(ServerInstallationCubit serverInstallationCubit)
+  ServicesCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(serverInstallationCubit, ServicesState.allOff());
-  final api = ServerApi();
+  final ServerApi api = ServerApi();
   @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
-      var statuses = await api.servicesPowerCheck();
+      final Map<ServiceTypes, bool> statuses = await api.servicesPowerCheck();
       emit(
         ServicesState(
           isPasswordManagerEnable: statuses[ServiceTypes.passwordManager]!,

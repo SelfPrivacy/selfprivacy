@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
@@ -7,7 +9,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 
 class RootUserFormCubit extends FormCubit {
   RootUserFormCubit(
-      this.serverInstallationCubit, final FieldCubitFactory fieldFactory) {
+      this.serverInstallationCubit, final FieldCubitFactory fieldFactory,) {
     userName = fieldFactory.createUserLoginField();
     password = fieldFactory.createUserPasswordField();
 
@@ -18,7 +20,7 @@ class RootUserFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    var user = User(
+    final User user = User(
       login: userName.state.value,
       password: password.state.value,
     );

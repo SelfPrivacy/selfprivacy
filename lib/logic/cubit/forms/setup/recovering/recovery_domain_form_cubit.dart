@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
@@ -8,7 +10,7 @@ import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart
 
 class RecoveryDomainFormCubit extends FormCubit {
   RecoveryDomainFormCubit(
-      this.initializingCubit, final FieldCubitFactory fieldFactory) {
+      this.initializingCubit, final FieldCubitFactory fieldFactory,) {
     serverDomainField = fieldFactory.createRequiredStringField();
 
     super.addFields([serverDomainField]);
@@ -22,10 +24,10 @@ class RecoveryDomainFormCubit extends FormCubit {
 
   @override
   FutureOr<bool> asyncValidation() async {
-    var api = ServerApi(
+    final ServerApi api = ServerApi(
         hasLogger: false,
         isWithToken: false,
-        overrideDomain: serverDomainField.state.value);
+        overrideDomain: serverDomainField.state.value,);
 
     // API version doesn't require access token,
     // so if the entered domain is indeed valid
@@ -40,7 +42,7 @@ class RecoveryDomainFormCubit extends FormCubit {
     return domainValid;
   }
 
-  FutureOr<void> setCustomError(String error) {
+  FutureOr<void> setCustomError(final String error) {
     serverDomainField.setError(error);
   }
 

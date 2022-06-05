@@ -18,7 +18,7 @@ import 'package:flutter/widgets.dart';
 class BrandIcons {
   BrandIcons._();
 
-  static const _kFontFam = 'BrandIcons';
+  static const String _kFontFam = 'BrandIcons';
   static const String? _kFontPkg = null;
 
   static const IconData connection =

@@ -4,14 +4,12 @@ import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
 class RecoveryKeyReceiving extends StatelessWidget {
-  const RecoveryKeyReceiving({required this.recoveryKey, Key? key})
-      : super(key: key);
+  const RecoveryKeyReceiving({required this.recoveryKey, super.key});
 
   final String recoveryKey;
 
   @override
-  Widget build(BuildContext context) {
-    return BrandHeroScreen(
+  Widget build(final BuildContext context) => BrandHeroScreen(
       heroTitle: 'recovery_key.key_main_header'.tr(),
       heroSubtitle: 'recovery_key.key_receiving_description'.tr(),
       hasBackButton: true,
@@ -42,10 +40,9 @@ class RecoveryKeyReceiving extends StatelessWidget {
         FilledButton(
           title: 'recovery_key.key_receiving_done'.tr(),
           onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            Navigator.of(context).popUntil((final route) => route.isFirst);
           },
         ),
       ],
     );
-  }
 }

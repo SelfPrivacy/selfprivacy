@@ -4,6 +4,9 @@ part 'device_token.g.dart';
 
 @JsonSerializable()
 class DeviceToken {
+
+  factory DeviceToken.fromJson(final Map<String, dynamic> json) =>
+      _$DeviceTokenFromJson(json);
   DeviceToken({
     required this.device,
     required this.token,
@@ -11,7 +14,4 @@ class DeviceToken {
 
   final String device;
   final String token;
-
-  factory DeviceToken.fromJson(Map<String, dynamic> json) =>
-      _$DeviceTokenFromJson(json);
 }

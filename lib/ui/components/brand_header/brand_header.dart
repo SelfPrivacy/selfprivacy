@@ -1,22 +1,23 @@
+// ignore_for_file: always_specify_types
+
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class BrandHeader extends StatelessWidget {
   const BrandHeader({
-    Key? key,
+    final super.key,
     this.title = '',
     this.hasBackButton = false,
     this.onBackButtonPressed,
-  }) : super(key: key);
+  });
 
   final String title;
   final bool hasBackButton;
   final VoidCallback? onBackButtonPressed;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(final BuildContext context) => Container(
       height: 52,
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.only(
@@ -37,5 +38,4 @@ class BrandHeader extends StatelessWidget {
         ],
       ),
     );
-  }
 }

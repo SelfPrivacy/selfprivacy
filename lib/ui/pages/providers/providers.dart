@@ -18,10 +18,10 @@ import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
-var navigatorKey = GlobalKey<NavigatorState>();
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class ProvidersPage extends StatefulWidget {
-  const ProvidersPage({Key? key}) : super(key: key);
+  const ProvidersPage({super.key});
 
   @override
   State<ProvidersPage> createState() => _ProvidersPageState();
@@ -29,11 +29,11 @@ class ProvidersPage extends StatefulWidget {
 
 class _ProvidersPageState extends State<ProvidersPage> {
   @override
-  Widget build(BuildContext context) {
-    var isReady = context.watch<ServerInstallationCubit>().state
+  Widget build(final BuildContext context) {
+    final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    var isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
-    var dnsStatus = context.watch<DnsRecordsCubit>().state.dnsState;
+    final bool isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
+    final DnsRecordsStatus dnsStatus = context.watch<DnsRecordsCubit>().state.dnsState;
 
     StateType getDnsStatus() {
       if (dnsStatus == DnsRecordsStatus.uninitialized ||
@@ -46,9 +46,9 @@ class _ProvidersPageState extends State<ProvidersPage> {
       return StateType.stable;
     }
 
-    final cards = ProviderType.values
+    final List<Padding> cards = ProviderType.values
         .map(
-          (type) => Padding(
+          (final ProviderType type) => Padding(
             padding: const EdgeInsets.only(bottom: 30),
             child: _Card(
               provider: ProviderModel(
@@ -87,21 +87,21 @@ class _ProvidersPageState extends State<ProvidersPage> {
 }
 
 class _Card extends StatelessWidget {
-  const _Card({Key? key, required this.provider}) : super(key: key);
+  const _Card({super.key, required this.provider});
 
   final ProviderModel provider;
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     late String title;
     String? message;
     late String stableText;
     late VoidCallback onTap;
-    var isReady = context.watch<ServerInstallationCubit>().state
+    final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    ServerInstallationState appConfig =
+    final ServerInstallationState appConfig =
         context.watch<ServerInstallationCubit>().state;
 
-    var domainName =
+    final String domainName =
         appConfig.isDomainFilled ? appConfig.serverDomain!.domainName : '';
 
     switch (provider.type) {
@@ -110,7 +110,7 @@ class _Card extends StatelessWidget {
         stableText = 'providers.server.status'.tr();
         onTap = () => showBrandBottomSheet(
               context: context,
-              builder: (context) => const BrandBottomSheet(
+              builder: (final BuildContext context) => const BrandBottomSheet(
                 isExpended: true,
                 child: ServerDetailsScreen(),
               ),
@@ -124,7 +124,7 @@ class _Card extends StatelessWidget {
 
         onTap = () => Navigator.of(context).push(materialRoute(
               const DnsDetailsPage(),
-            ));
+            ),);
         break;
       case ProviderType.backup:
         title = 'providers.backup.card_title'.tr();
@@ -132,7 +132,7 @@ class _Card extends StatelessWidget {
 
         onTap = () => Navigator.of(context).push(materialRoute(
               const BackupDetails(),
-            ));
+            ),);
         break;
     }
     return GestureDetector(

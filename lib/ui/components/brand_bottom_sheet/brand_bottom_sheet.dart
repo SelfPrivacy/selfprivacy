@@ -1,19 +1,21 @@
+// ignore_for_file: always_specify_types
+
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 
 class BrandBottomSheet extends StatelessWidget {
   const BrandBottomSheet({
-    Key? key,
     required this.child,
+    final super.key,
     this.isExpended = false,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final bool isExpended;
 
   @override
-  Widget build(BuildContext context) {
-    var mainHeight = MediaQuery.of(context).size.height -
+  Widget build(final BuildContext context) {
+    final double mainHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         100;
     late Widget innerWidget;

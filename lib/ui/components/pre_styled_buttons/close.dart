@@ -1,13 +1,12 @@
 part of 'pre_styled_buttons.dart';
 
 class _CloseButton extends StatelessWidget {
-  const _CloseButton({Key? key, required this.onPress}) : super(key: key);
+  const _CloseButton({super.key, required this.onPress});
 
   final VoidCallback onPress;
 
   @override
-  Widget build(BuildContext context) {
-    return OutlinedButton(
+  Widget build(final BuildContext context) => OutlinedButton(
       onPressed: () => Navigator.of(context).pop(),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -17,5 +16,4 @@ class _CloseButton extends StatelessWidget {
         ],
       ),
     );
-  }
 }

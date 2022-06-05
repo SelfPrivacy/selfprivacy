@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
@@ -10,23 +12,23 @@ import 'package:selfprivacy/utils/password_generator.dart';
 class UserFormCubit extends FormCubit {
   UserFormCubit({
     required this.jobsCubit,
-    required FieldCubitFactory fieldFactory,
-    User? user,
+    required final FieldCubitFactory fieldFactory,
+    final User? user,
   }) {
-    var isEdit = user != null;
+    final bool isEdit = user != null;
 
     login = fieldFactory.createUserLoginField();
     login.setValue(isEdit ? user.login : '');
     password = fieldFactory.createUserPasswordField();
     password.setValue(
-        isEdit ? (user.password ?? '') : StringGenerators.userPassword());
+        isEdit ? (user.password ?? '') : StringGenerators.userPassword(),);
 
     super.addFields([login, password]);
   }
 
   @override
   FutureOr<void> onSubmit() {
-    var user = User(
+    final User user = User(
       login: login.state.value,
       password: password.state.value,
     );

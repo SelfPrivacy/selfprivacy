@@ -1,7 +1,7 @@
 part of 'pre_styled_buttons.dart';
 
 class _BrandFlashButton extends StatefulWidget {
-  const _BrandFlashButton({Key? key}) : super(key: key);
+  const _BrandFlashButton({super.key});
 
   @override
   _BrandFlashButtonState createState() => _BrandFlashButtonState();
@@ -15,7 +15,7 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 800));
+        vsync: this, duration: const Duration(milliseconds: 800),);
     _colorTween = ColorTween(
       begin: BrandColors.black,
       end: BrandColors.primary,
@@ -25,7 +25,7 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
   }
 
-  void _afterLayout(_) {
+  void _afterLayout(final _) {
     if (Theme.of(context).brightness == Brightness.dark) {
       setState(() {
         _colorTween = ColorTween(
@@ -45,9 +45,8 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
   bool wasPrevStateIsEmpty = true;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<JobsCubit, JobsState>(
-      listener: (context, state) {
+  Widget build(final BuildContext context) => BlocListener<JobsCubit, JobsState>(
+      listener: (final context, final state) {
         if (wasPrevStateIsEmpty && state is! JobsStateEmpty) {
           wasPrevStateIsEmpty = false;
           _animationController.forward();
@@ -61,7 +60,7 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
         onPressed: () {
           showBrandBottomSheet(
             context: context,
-            builder: (context) => const BrandBottomSheet(
+            builder: (final context) => const BrandBottomSheet(
               isExpended: true,
               child: JobsContent(),
             ),
@@ -69,9 +68,9 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
         },
         icon: AnimatedBuilder(
             animation: _colorTween,
-            builder: (context, child) {
-              var v = _animationController.value;
-              var icon = v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
+            builder: (final context, final child) {
+              final double v = _animationController.value;
+              final IconData icon = v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
               return Transform.scale(
                 scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
                 child: Icon(
@@ -79,8 +78,7 @@ class _BrandFlashButtonState extends State<_BrandFlashButton>
                   color: _colorTween.value,
                 ),
               );
-            }),
+            },),
       ),
     );
-  }
 }

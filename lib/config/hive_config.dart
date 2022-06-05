@@ -24,15 +24,15 @@ class HiveConfig {
 
     await Hive.openBox(BNames.appSettingsBox);
 
-    var cipher = HiveAesCipher(
-        await getEncryptedKey(BNames.serverInstallationEncryptionKey));
+    final HiveAesCipher cipher = HiveAesCipher(
+        await getEncryptedKey(BNames.serverInstallationEncryptionKey),);
 
     await Hive.openBox<User>(BNames.usersDeprecated);
     await Hive.openBox<User>(BNames.usersBox, encryptionCipher: cipher);
 
-    Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
+    final Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
     if (deprecatedUsers.isNotEmpty) {
-      Box<User> users = Hive.box<User>(BNames.usersBox);
+      final Box<User> users = Hive.box<User>(BNames.usersBox);
       users.addAll(deprecatedUsers.values.toList());
       deprecatedUsers.clear();
     }
@@ -40,15 +40,15 @@ class HiveConfig {
     await Hive.openBox(BNames.serverInstallationBox, encryptionCipher: cipher);
   }
 
-  static Future<Uint8List> getEncryptedKey(String encKey) async {
-    const secureStorage = FlutterSecureStorage();
-    var hasEncryptionKey = await secureStorage.containsKey(key: encKey);
+  static Future<Uint8List> getEncryptedKey(final String encKey) async {
+    const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+    final bool hasEncryptionKey = await secureStorage.containsKey(key: encKey);
     if (!hasEncryptionKey) {
-      var key = Hive.generateSecureKey();
+      final List<int> key = Hive.generateSecureKey();
       await secureStorage.write(key: encKey, value: base64UrlEncode(key));
     }
 
-    String? string = await secureStorage.read(key: encKey);
+    final String? string = await secureStorage.read(key: encKey);
     return base64Url.decode(string!);
   }
 }

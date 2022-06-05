@@ -9,7 +9,7 @@ import 'package:selfprivacy/ui/pages/devices/new_device.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class DevicesScreen extends StatefulWidget {
-  const DevicesScreen({Key? key}) : super(key: key);
+  const DevicesScreen({super.key});
 
   @override
   State<DevicesScreen> createState() => _DevicesScreenState();
@@ -17,8 +17,8 @@ class DevicesScreen extends StatefulWidget {
 
 class _DevicesScreenState extends State<DevicesScreen> {
   @override
-  Widget build(BuildContext context) {
-    final devicesStatus = context.watch<ApiDevicesCubit>().state;
+  Widget build(final BuildContext context) {
+    final ApiDevicesState devicesStatus = context.watch<ApiDevicesCubit>().state;
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -46,7 +46,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 ),
           ),
           ...devicesStatus.otherDevices
-              .map((device) => _DeviceTile(device: device))
+              .map((final device) => _DeviceTile(device: device))
               .toList(),
           const SizedBox(height: 16),
           OutlinedButton(
@@ -79,27 +79,24 @@ class _DevicesScreenState extends State<DevicesScreen> {
 }
 
 class _DeviceTile extends StatelessWidget {
-  const _DeviceTile({Key? key, required this.device}) : super(key: key);
+  const _DeviceTile({super.key, required this.device});
 
   final ApiToken device;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
+  Widget build(final BuildContext context) => ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       title: Text(device.name),
       subtitle: Text('devices.main_screen.access_granted_on'
-          .tr(args: [DateFormat.yMMMMd().format(device.date)])),
+          .tr(args: [DateFormat.yMMMMd().format(device.date)]),),
       onTap: device.isCaller
           ? null
           : () => _showConfirmationDialog(context, device),
     );
-  }
 
-  _showConfirmationDialog(BuildContext context, ApiToken device) => showDialog(
+  Future _showConfirmationDialog(final BuildContext context, final ApiToken device) => showDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
+        builder: (final context) => AlertDialog(
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -119,7 +116,7 @@ class _DeviceTile extends StatelessWidget {
                 Text(
                     'devices.revoke_device_alert.description'
                         .tr(args: [device.name]),
-                    style: Theme.of(context).textTheme.bodyMedium),
+                    style: Theme.of(context).textTheme.bodyMedium,),
               ],
             ),
             actions: <Widget>[
@@ -137,7 +134,6 @@ class _DeviceTile extends StatelessWidget {
                 },
               ),
             ],
-          );
-        },
+          ),
       );
 }

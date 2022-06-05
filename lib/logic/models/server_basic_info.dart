@@ -1,10 +1,6 @@
+// ignore_for_file: always_specify_types
+
 class ServerBasicInfo {
-  final int id;
-  final String name;
-  final String reverseDns;
-  final String ip;
-  final DateTime created;
-  final int volumeId;
 
   ServerBasicInfo({
     required this.id,
@@ -14,34 +10,20 @@ class ServerBasicInfo {
     required this.created,
     required this.volumeId,
   });
+  final int id;
+  final String name;
+  final String reverseDns;
+  final String ip;
+  final DateTime created;
+  final int volumeId;
 }
 
 class ServerBasicInfoWithValidators extends ServerBasicInfo {
-  final bool isIpValid;
-  final bool isReverseDnsValid;
-
-  ServerBasicInfoWithValidators({
-    required int id,
-    required String name,
-    required String reverseDns,
-    required String ip,
-    required DateTime created,
-    required int volumeId,
-    required this.isIpValid,
-    required this.isReverseDnsValid,
-  }) : super(
-          id: id,
-          name: name,
-          reverseDns: reverseDns,
-          ip: ip,
-          created: created,
-          volumeId: volumeId,
-        );
 
   ServerBasicInfoWithValidators.fromServerBasicInfo({
-    required ServerBasicInfo serverBasicInfo,
-    required isIpValid,
-    required isReverseDnsValid,
+    required final ServerBasicInfo serverBasicInfo,
+    required final isIpValid,
+    required final isReverseDnsValid,
   }) : this(
           id: serverBasicInfo.id,
           name: serverBasicInfo.name,
@@ -52,4 +34,17 @@ class ServerBasicInfoWithValidators extends ServerBasicInfo {
           isIpValid: isIpValid,
           isReverseDnsValid: isReverseDnsValid,
         );
+
+  ServerBasicInfoWithValidators({
+    required final super.id,
+    required final super.name,
+    required final super.reverseDns,
+    required final super.ip,
+    required final super.created,
+    required final super.volumeId,
+    required this.isIpValid,
+    required this.isReverseDnsValid,
+  });
+  final bool isIpValid;
+  final bool isReverseDnsValid;
 }

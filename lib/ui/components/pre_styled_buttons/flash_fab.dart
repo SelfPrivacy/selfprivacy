@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
 class BrandFab extends StatefulWidget {
-  const BrandFab({Key? key}) : super(key: key);
+  const BrandFab({super.key});
 
   @override
   State<BrandFab> createState() => _BrandFabState();
@@ -22,25 +21,8 @@ class _BrandFabState extends State<BrandFab>
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 800));
-    _colorTween = ColorTween(
-      begin: BrandColors.black,
-      end: BrandColors.primary,
-    ).animate(_animationController);
-
+        vsync: this, duration: const Duration(milliseconds: 800),);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-  }
-
-  void _afterLayout(_) {
-    if (Theme.of(context).brightness == Brightness.dark) {
-      setState(() {
-        _colorTween = ColorTween(
-          begin: BrandColors.white,
-          end: BrandColors.primary,
-        ).animate(_animationController);
-      });
-    }
   }
 
   @override
@@ -52,9 +34,14 @@ class _BrandFabState extends State<BrandFab>
   bool wasPrevStateIsEmpty = true;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
+    _colorTween = ColorTween(
+      begin: Theme.of(context).colorScheme.onPrimaryContainer,
+      end: Theme.of(context).colorScheme.primary,
+    ).animate(_animationController);
+
     return BlocListener<JobsCubit, JobsState>(
-      listener: (context, state) {
+      listener: (final BuildContext context, final JobsState state) {
         if (wasPrevStateIsEmpty && state is! JobsStateEmpty) {
           wasPrevStateIsEmpty = false;
           _animationController.forward();
@@ -68,7 +55,7 @@ class _BrandFabState extends State<BrandFab>
         onPressed: () {
           showBrandBottomSheet(
             context: context,
-            builder: (context) => const BrandBottomSheet(
+            builder: (final BuildContext context) => const BrandBottomSheet(
               isExpended: true,
               child: JobsContent(),
             ),
@@ -76,9 +63,9 @@ class _BrandFabState extends State<BrandFab>
         },
         child: AnimatedBuilder(
             animation: _colorTween,
-            builder: (context, child) {
-              var v = _animationController.value;
-              var icon = v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
+            builder: (final BuildContext context, final Widget? child) {
+              final double v = _animationController.value;
+              final IconData icon = v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
               return Transform.scale(
                 scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
                 child: Icon(
@@ -86,7 +73,7 @@ class _BrandFabState extends State<BrandFab>
                   color: _colorTween.value,
                 ),
               );
-            }),
+            },),
       ),
     );
   }

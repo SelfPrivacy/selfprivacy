@@ -4,16 +4,16 @@ import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
 
 class BrandHeroScreen extends StatelessWidget {
   const BrandHeroScreen({
-    Key? key,
+    required this.children,
+    final super.key,
     this.headerTitle = '',
     this.hasBackButton = true,
     this.hasFlashButton = true,
-    required this.children,
     this.heroIcon,
     this.heroTitle,
     this.heroSubtitle,
     this.onBackButtonPressed,
-  }) : super(key: key);
+  });
 
   final List<Widget> children;
   final String headerTitle;
@@ -25,8 +25,7 @@ class BrandHeroScreen extends StatelessWidget {
   final VoidCallback? onBackButtonPressed;
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
+  Widget build(BuildContext context) => SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(52.0),
@@ -63,12 +62,11 @@ class BrandHeroScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
-                  textAlign: TextAlign.start),
+                  textAlign: TextAlign.start,),
             const SizedBox(height: 16.0),
             ...children,
           ],
         ),
       ),
     );
-  }
 }

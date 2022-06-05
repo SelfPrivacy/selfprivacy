@@ -10,16 +10,16 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryConfirmBackblaze extends StatelessWidget {
-  const RecoveryConfirmBackblaze({Key? key}) : super(key: key);
+  const RecoveryConfirmBackblaze({final Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var appConfig = context.watch<ServerInstallationCubit>();
+  Widget build(final BuildContext context) {
+    ServerInstallationCubit appConfig = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (context) => BackblazeFormCubit(appConfig),
-      child: Builder(builder: (context) {
-        var formCubitState = context.watch<BackblazeFormCubit>().state;
+      create: (final BuildContext context) => BackblazeFormCubit(appConfig),
+      child: Builder(builder: (final BuildContext context) {
+        FormCubitState formCubitState = context.watch<BackblazeFormCubit>().state;
 
         return BrandHeroScreen(
           heroTitle: 'recovering.confirm_backblaze'.tr(),
@@ -55,8 +55,7 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
-                builder: (BuildContext context) {
-                  return const BrandBottomSheet(
+                builder: (final BuildContext context) => const BrandBottomSheet(
                     isExpended: true,
                     child: Padding(
                       padding: paddingH15V0,
@@ -64,14 +63,13 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                         fileName: 'how_backblaze',
                       ),
                     ),
-                  );
-                },
+                  ),
               ),
               title: 'initializing.how'.tr(),
             ),
           ],
         );
-      }),
+      },),
     );
   }
 }

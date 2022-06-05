@@ -13,12 +13,12 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
-import '../../components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 
-var navigatorKey = GlobalKey<NavigatorState>();
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class BackupDetails extends StatefulWidget {
-  const BackupDetails({Key? key}) : super(key: key);
+  const BackupDetails({super.key});
 
   @override
   State<BackupDetails> createState() => _BackupDetailsState();
@@ -27,21 +27,21 @@ class BackupDetails extends StatefulWidget {
 class _BackupDetailsState extends State<BackupDetails>
     with SingleTickerProviderStateMixin {
   @override
-  Widget build(BuildContext context) {
-    var isReady = context.watch<ServerInstallationCubit>().state
+  Widget build(final BuildContext context) {
+    final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    var isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
-    var backupStatus = context.watch<BackupsCubit>().state.status;
-    var providerState = isReady && isBackupInitialized
+    final bool isBackupInitialized = context.watch<BackupsCubit>().state.isInitialized;
+    final BackupStatusEnum backupStatus = context.watch<BackupsCubit>().state.status;
+    final StateType providerState = isReady && isBackupInitialized
         ? (backupStatus == BackupStatusEnum.error
             ? StateType.warning
             : StateType.stable)
         : StateType.uninitialized;
-    var preventActions = context.watch<BackupsCubit>().state.preventActions;
-    var backupProgress = context.watch<BackupsCubit>().state.progress;
-    var backupError = context.watch<BackupsCubit>().state.error;
-    var backups = context.watch<BackupsCubit>().state.backups;
-    var refreshing = context.watch<BackupsCubit>().state.refreshing;
+    final bool preventActions = context.watch<BackupsCubit>().state.preventActions;
+    final double backupProgress = context.watch<BackupsCubit>().state.progress;
+    final String backupError = context.watch<BackupsCubit>().state.error;
+    final List<Backup> backups = context.watch<BackupsCubit>().state.backups;
+    final bool refreshing = context.watch<BackupsCubit>().state.refreshing;
 
     return BrandHeroScreen(
       heroIcon: BrandIcons.save,
@@ -84,7 +84,7 @@ class _BackupDetailsState extends State<BackupDetails>
                   ListTile(
                     title: Text(
                       'providers.backup.creating'.tr(
-                          args: [(backupProgress * 100).round().toString()]),
+                          args: [(backupProgress * 100).round().toString()],),
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     subtitle: LinearProgressIndicator(
@@ -96,7 +96,7 @@ class _BackupDetailsState extends State<BackupDetails>
                   ListTile(
                     title: Text(
                       'providers.backup.restoring'.tr(
-                          args: [(backupProgress * 100).round().toString()]),
+                          args: [(backupProgress * 100).round().toString()],),
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     subtitle: LinearProgressIndicator(
@@ -148,12 +148,11 @@ class _BackupDetailsState extends State<BackupDetails>
                   ),
                 if (backups.isNotEmpty)
                   Column(
-                    children: backups.map((backup) {
-                      return ListTile(
+                    children: backups.map((final Backup backup) => ListTile(
                         onTap: preventActions
                             ? null
                             : () {
-                                var nav = getIt<NavigationService>();
+                                final NavigationService nav = getIt<NavigationService>();
                                 nav.showPopUpDialog(BrandAlert(
                                   title: 'providers.backup.restoring'.tr(),
                                   contentText: 'providers.backup.restore_alert'
@@ -171,13 +170,12 @@ class _BackupDetailsState extends State<BackupDetails>
                                       text: 'modals.yes'.tr(),
                                     )
                                   ],
-                                ));
+                                ),);
                               },
                         title: Text(
                           '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
                         ),
-                      );
-                    }).toList(),
+                      ),).toList(),
                   ),
               ],
             ),

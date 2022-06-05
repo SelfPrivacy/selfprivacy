@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: always_specify_types
+
 part of 'user.dart';
 
 // **************************************************************************
@@ -11,9 +13,9 @@ class UserAdapter extends TypeAdapter<User> {
   final int typeId = 1;
 
   @override
-  User read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
+  User read(final BinaryReader reader) {
+    final int numOfFields = reader.readByte();
+    final Map<int, dynamic> fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return User(
@@ -26,7 +28,7 @@ class UserAdapter extends TypeAdapter<User> {
   }
 
   @override
-  void write(BinaryWriter writer, User obj) {
+  void write(final BinaryWriter writer, final User obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)
@@ -45,7 +47,7 @@ class UserAdapter extends TypeAdapter<User> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
+  bool operator ==(final Object other) =>
       identical(this, other) ||
       other is UserAdapter &&
           runtimeType == other.runtimeType &&

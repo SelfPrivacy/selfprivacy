@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -11,14 +13,14 @@ abstract class ServerInstallationDependendCubit<
     T extends ServerInstallationDependendState> extends Cubit<T> {
   ServerInstallationDependendCubit(
     this.serverInstallationCubit,
-    T initState,
+    final T initState,
   ) : super(initState) {
     authCubitSubscription =
         serverInstallationCubit.stream.listen(checkAuthStatus);
     checkAuthStatus(serverInstallationCubit.state);
   }
 
-  void checkAuthStatus(ServerInstallationState state) {
+  void checkAuthStatus(final ServerInstallationState state) {
     if (state is ServerInstallationFinished) {
       load();
     } else if (state is ServerInstallationEmpty) {

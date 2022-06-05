@@ -1,13 +1,13 @@
 part of 'server_details_screen.dart';
 
 class _Chart extends StatelessWidget {
-  const _Chart({Key? key}) : super(key: key);
+  const _Chart({final super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var cubit = context.watch<HetznerMetricsCubit>();
-    var period = cubit.state.period;
-    var state = cubit.state;
+  Widget build(final BuildContext context) {
+    final HetznerMetricsCubit cubit = context.watch<HetznerMetricsCubit>();
+    final Period period = cubit.state.period;
+    final HetznerMetricsState state = cubit.state;
     List<Widget> charts;
     if (state is HetznerMetricsLoading) {
       charts = [
@@ -85,8 +85,8 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  Widget getCpuChart(HetznerMetricsLoaded state) {
-    var data = state.cpu;
+  Widget getCpuChart(final HetznerMetricsLoaded state) {
+    final data = state.cpu;
 
     return SizedBox(
       height: 200,
@@ -98,9 +98,9 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  Widget getPpsChart(HetznerMetricsLoaded state) {
-    var ppsIn = state.ppsIn;
-    var ppsOut = state.ppsOut;
+  Widget getPpsChart(final HetznerMetricsLoaded state) {
+    final ppsIn = state.ppsIn;
+    final ppsOut = state.ppsOut;
 
     return SizedBox(
       height: 200,
@@ -112,9 +112,9 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  Widget getBandwidthChart(HetznerMetricsLoaded state) {
-    var ppsIn = state.bandwidthIn;
-    var ppsOut = state.bandwidthOut;
+  Widget getBandwidthChart(final HetznerMetricsLoaded state) {
+    final ppsIn = state.bandwidthIn;
+    final ppsOut = state.bandwidthOut;
 
     return SizedBox(
       height: 200,
@@ -129,7 +129,7 @@ class _Chart extends StatelessWidget {
 
 class Legend extends StatelessWidget {
   const Legend({
-    Key? key,
+    final Key? key,
     required this.color,
     required this.text,
   }) : super(key: key);
@@ -137,7 +137,7 @@ class Legend extends StatelessWidget {
   final String text;
   final Color color;
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -151,14 +151,14 @@ class Legend extends StatelessWidget {
 
 class _ColoredBox extends StatelessWidget {
   const _ColoredBox({
-    Key? key,
+    final Key? key,
     required this.color,
   }) : super(key: key);
 
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Container(
       width: 10,
       height: 10,

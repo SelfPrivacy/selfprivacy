@@ -326,7 +326,7 @@ class InitializingPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: 50,
+                    width: 56,
                     child: BrandButton.rised(
                       onPressed: () => context.read<DomainSetupCubit>().load(),
                       child: Row(
@@ -422,7 +422,7 @@ class InitializingPage extends StatelessWidget {
                           .setValue(!isVisible),
                     ),
                     suffixIconConstraints: const BoxConstraints(minWidth: 60),
-                    prefixIconConstraints: const BoxConstraints(maxWidth: 85),
+                    prefixIconConstraints: const BoxConstraints(maxWidth: 60),
                     prefixIcon: Container(),
                   ),
                 );

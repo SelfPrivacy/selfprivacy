@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class FilledButton extends StatelessWidget {
   const FilledButton({
-    Key? key,
+    final super.key,
     this.onPressed,
     this.title,
     this.child,
     this.disabled = false,
-  }) : super(key: key);
+  });
 
   final VoidCallback? onPressed;
   final String? title;
@@ -15,7 +15,7 @@ class FilledButton extends StatelessWidget {
   final bool disabled;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final ButtonStyle enabledStyle = ElevatedButton.styleFrom(
       onPrimary: Theme.of(context).colorScheme.onPrimary,
       primary: Theme.of(context).colorScheme.primary,

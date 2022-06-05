@@ -14,7 +14,7 @@ part 'flash.dart';
 
 class PreStyledButtons {
   static Widget close({
-    required VoidCallback onPress,
+    required final VoidCallback onPress,
   }) =>
       _CloseButton(onPress: onPress);
 

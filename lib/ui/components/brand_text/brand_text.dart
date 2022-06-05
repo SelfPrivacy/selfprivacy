@@ -18,66 +18,10 @@ enum TextType {
 }
 
 class BrandText extends StatelessWidget {
-  const BrandText(
-    this.text, {
-    Key? key,
-    this.style,
-    required this.type,
-    this.overflow,
-    this.softWrap,
-    this.textAlign,
-    this.maxLines,
-  }) : super(key: key);
-
-  final String? text;
-  final TextStyle? style;
-  final TextType type;
-  final TextOverflow? overflow;
-  final bool? softWrap;
-  final TextAlign? textAlign;
-  final int? maxLines;
-
-  factory BrandText.h1(
-    String? text, {
-    TextStyle? style,
-    TextOverflow? overflow,
-    bool? softWrap,
-  }) =>
-      BrandText(
-        text,
-        type: TextType.h1,
-        style: style,
-      );
-
-  factory BrandText.onboardingTitle(String text, {TextStyle? style}) =>
-      BrandText(
-        text,
-        type: TextType.onboardingTitle,
-        style: style,
-      );
-  factory BrandText.h2(
-    String? text, {
-    TextStyle? style,
-    TextAlign? textAlign,
-  }) =>
-      BrandText(
-        text,
-        type: TextType.h2,
-        style: style,
-        textAlign: textAlign,
-      );
-  factory BrandText.h3(String text, {TextStyle? style, TextAlign? textAlign}) =>
-      BrandText(
-        text,
-        type: TextType.h3,
-        style: style,
-        textAlign: textAlign,
-        overflow: TextOverflow.ellipsis,
-      );
   factory BrandText.h4(
-    String? text, {
-    TextStyle? style,
-    TextAlign? textAlign,
+    final String? text, {
+    final TextStyle? style,
+    final TextAlign? textAlign,
   }) =>
       BrandText(
         text,
@@ -89,10 +33,25 @@ class BrandText extends StatelessWidget {
         textAlign: textAlign,
       );
 
+  factory BrandText.onboardingTitle(final String text, {final TextStyle? style}) =>
+      BrandText(
+        text,
+        type: TextType.onboardingTitle,
+        style: style,
+      );
+  factory BrandText.h3(final String text, {final TextStyle? style, final TextAlign? textAlign}) =>
+      BrandText(
+        text,
+        type: TextType.h3,
+        style: style,
+        textAlign: textAlign,
+        overflow: TextOverflow.ellipsis,
+      );
+
   factory BrandText.h4Underlined(
-    String? text, {
-    TextStyle? style,
-    TextAlign? textAlign,
+    final String? text, {
+    final TextStyle? style,
+    final TextAlign? textAlign,
   }) =>
       BrandText(
         text,
@@ -104,10 +63,54 @@ class BrandText extends StatelessWidget {
         textAlign: textAlign,
       );
 
+  factory BrandText.h1(
+    final String? text, {
+    final TextStyle? style,
+    final TextOverflow? overflow,
+    final bool? softWrap,
+  }) =>
+      BrandText(
+        text,
+        type: TextType.h1,
+        style: style,
+      );
+  factory BrandText.h2(
+    final String? text, {
+    final TextStyle? style,
+    final TextAlign? textAlign,
+  }) =>
+      BrandText(
+        text,
+        type: TextType.h2,
+        style: style,
+        textAlign: textAlign,
+      );
+  factory BrandText.body1(final String? text, {final TextStyle? style}) => BrandText(
+        text,
+        type: TextType.body1,
+        style: style,
+      );
+  factory BrandText.small(final String text, {final TextStyle? style}) => BrandText(
+        text,
+        type: TextType.small,
+        style: style,
+      );
+  factory BrandText.body2(final String? text, {final TextStyle? style}) => BrandText(
+        text,
+        type: TextType.body2,
+        style: style,
+      );
+  factory BrandText.buttonTitleText(final String? text, {final TextStyle? style}) =>
+      BrandText(
+        text,
+        type: TextType.buttonTitleText,
+        style: style,
+      );
+
   factory BrandText.h5(
-    String? text, {
-    TextStyle? style,
-    TextAlign? textAlign,
+    final String? text, {
+    final TextStyle? style,
+    final TextAlign? textAlign,
   }) =>
       BrandText(
         text,
@@ -115,39 +118,36 @@ class BrandText extends StatelessWidget {
         style: style,
         textAlign: textAlign,
       );
-  factory BrandText.body1(String? text, {TextStyle? style}) => BrandText(
-        text,
-        type: TextType.body1,
-        style: style,
-      );
-  factory BrandText.body2(String? text, {TextStyle? style}) => BrandText(
-        text,
-        type: TextType.body2,
-        style: style,
-      );
-  factory BrandText.medium(String? text,
-          {TextStyle? style, TextAlign? textAlign}) =>
+  factory BrandText.medium(final String? text,
+          {final TextStyle? style, final TextAlign? textAlign}) =>
       BrandText(
         text,
         type: TextType.medium,
         style: style,
         textAlign: textAlign,
       );
-  factory BrandText.small(String text, {TextStyle? style}) => BrandText(
-        text,
-        type: TextType.small,
-        style: style,
-      );
-  factory BrandText.buttonTitleText(String? text, {TextStyle? style}) =>
-      BrandText(
-        text,
-        type: TextType.buttonTitleText,
-        style: style,
-      );
+  const BrandText(
+    this.text, {
+    super.key,
+    this.style,
+    required this.type,
+    this.overflow,
+    this.softWrap,
+    this.textAlign,
+    this.maxLines,
+  });
+
+  final String? text;
+  final TextStyle? style;
+  final TextType type;
+  final TextOverflow? overflow;
+  final bool? softWrap;
+  final TextAlign? textAlign;
+  final int? maxLines;
   @override
-  Text build(BuildContext context) {
+  Text build(final BuildContext context) {
     TextStyle style;
-    var isDark = Theme.of(context).brightness == Brightness.dark;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     switch (type) {
       case TextType.h1:
         style = isDark

@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
@@ -5,11 +7,11 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 enum BrandButtonTypes { rised, text, iconText }
 
 class BrandButton {
-  static rised({
-    Key? key,
-    required VoidCallback? onPressed,
-    String? text,
-    Widget? child,
+  static ConstrainedBox rised({
+    required final VoidCallback? onPressed,
+    final Key? key,
+    final String? text,
+    final Widget? child,
   }) {
     assert(text == null || child == null, 'required title or child');
     assert(text != null || child != null, 'required title or child');
@@ -27,10 +29,10 @@ class BrandButton {
     );
   }
 
-  static text({
-    Key? key,
-    required VoidCallback onPressed,
-    required String title,
+  static ConstrainedBox text({
+    required final VoidCallback onPressed,
+    required final String title,
+    final Key? key,
   }) =>
       ConstrainedBox(
         constraints: const BoxConstraints(
@@ -40,11 +42,11 @@ class BrandButton {
         child: TextButton(onPressed: onPressed, child: Text(title)),
       );
 
-  static emptyWithIconText({
-    Key? key,
-    required VoidCallback onPressed,
-    required String title,
-    required Icon icon,
+  static _IconTextButton emptyWithIconText({
+    required final VoidCallback onPressed,
+    required final String title,
+    required final Icon icon,
+    final Key? key,
   }) =>
       _IconTextButton(
         key: key,
@@ -55,16 +57,14 @@ class BrandButton {
 }
 
 class _IconTextButton extends StatelessWidget {
-  const _IconTextButton({Key? key, this.onPressed, this.title, this.icon})
-      : super(key: key);
+  const _IconTextButton({final super.key, this.onPressed, this.title, this.icon});
 
   final VoidCallback? onPressed;
   final String? title;
   final Icon? icon;
 
   @override
-  Widget build(BuildContext context) {
-    return Material(
+  Widget build(final BuildContext context) => Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onPressed,
@@ -85,5 +85,4 @@ class _IconTextButton extends StatelessWidget {
         ),
       ),
     );
-  }
 }

@@ -4,16 +4,16 @@ import 'package:selfprivacy/logic/models/state_types.dart';
 
 class IconStatusMask extends StatelessWidget {
   const IconStatusMask({
-    Key? key,
+    super.key,
     required this.child,
     required this.status,
-  }) : super(key: key);
+  });
   final Icon child;
 
   final StateType status;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     late List<Color> colors;
     switch (status) {
       case StateType.uninitialized:
@@ -30,7 +30,7 @@ class IconStatusMask extends StatelessWidget {
         break;
     }
     return ShaderMask(
-      shaderCallback: (bounds) => LinearGradient(
+      shaderCallback: (final bounds) => LinearGradient(
         begin: const Alignment(-1, -0.8),
         end: const Alignment(0.9, 0.9),
         colors: colors,

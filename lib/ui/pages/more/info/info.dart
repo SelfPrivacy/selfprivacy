@@ -7,11 +7,10 @@ import 'package:package_info/package_info.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class InfoPage extends StatelessWidget {
-  const InfoPage({Key? key}) : super(key: key);
+  const InfoPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
+  Widget build(final BuildContext context) => SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(52),
@@ -24,18 +23,15 @@ class InfoPage extends StatelessWidget {
             const SizedBox(height: 10),
             FutureBuilder(
                 future: _version(),
-                builder: (context, snapshot) {
-                  return BrandText.body1('more.about_app_page.text'
-                      .tr(args: [snapshot.data.toString()]));
-                }),
+                builder: (final context, final snapshot) => BrandText.body1('more.about_app_page.text'
+                      .tr(args: [snapshot.data.toString()]),),),
           ],
         ),
       ),
     );
-  }
 
   Future<String> _version() async {
-    var packageInfo = await PackageInfo.fromPlatform();
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
     return packageInfo.version;
   }
 }

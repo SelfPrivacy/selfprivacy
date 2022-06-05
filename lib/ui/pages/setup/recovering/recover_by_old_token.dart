@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_device_form_cubit.dart';
@@ -11,13 +13,11 @@ import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart
 class RecoverByOldTokenInstruction extends StatelessWidget {
   @override
   const RecoverByOldTokenInstruction(
-      {Key? key, required this.instructionFilename})
-      : super(key: key);
+      {super.key, required this.instructionFilename,});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<ServerInstallationCubit, ServerInstallationState>(
-      listener: (context, state) {
+  Widget build(final BuildContext context) => BlocListener<ServerInstallationCubit, ServerInstallationState>(
+      listener: (final context, final state) {
         if (state is ServerInstallationRecovery &&
             state.currentStep != RecoveryStep.selecting) {
           Navigator.of(context).pop();
@@ -43,27 +43,26 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
         ],
       ),
     );
-  }
 
   final String instructionFilename;
 }
 
 class RecoverByOldToken extends StatelessWidget {
-  const RecoverByOldToken({Key? key}) : super(key: key);
+  const RecoverByOldToken({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var appConfig = context.watch<ServerInstallationCubit>();
+  Widget build(final BuildContext context) {
+    final ServerInstallationCubit appConfig = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (context) => RecoveryDeviceFormCubit(
+      create: (final context) => RecoveryDeviceFormCubit(
         appConfig,
         FieldCubitFactory(context),
         ServerRecoveryMethods.oldToken,
       ),
       child: Builder(
-        builder: (context) {
-          var formCubitState = context.watch<RecoveryDeviceFormCubit>().state;
+        builder: (final context) {
+          final FormCubitState formCubitState = context.watch<RecoveryDeviceFormCubit>().state;
 
           return BrandHeroScreen(
             heroTitle: 'recovering.recovery_main_header'.tr(),

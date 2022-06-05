@@ -1,12 +1,14 @@
+// ignore_for_file: always_specify_types
+
 import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 
-import 'hetzner_metrics_cubit.dart';
+import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.dart';
 
 class HetznerMetricsRepository {
-  Future<HetznerMetricsLoaded> getMetrics(Period period) async {
-    var end = DateTime.now();
+  Future<HetznerMetricsLoaded> getMetrics(final Period period) async {
+    final DateTime end = DateTime.now();
     DateTime start;
 
     switch (period) {
@@ -21,15 +23,15 @@ class HetznerMetricsRepository {
         break;
     }
 
-    var api = HetznerApi(hasLogger: true);
+    final HetznerApi api = HetznerApi(hasLogger: true);
 
-    var results = await Future.wait([
+    final List<Map<String, dynamic>> results = await Future.wait([
       api.getMetrics(start, end, 'cpu'),
       api.getMetrics(start, end, 'network'),
     ]);
 
-    var cpuMetricsData = results[0]['metrics'];
-    var networkMetricsData = results[1]['metrics'];
+    final cpuMetricsData = results[0]['metrics'];
+    final networkMetricsData = results[1]['metrics'];
 
     return HetznerMetricsLoaded(
       period: period,
@@ -50,7 +52,7 @@ class HetznerMetricsRepository {
 }
 
 List<TimeSeriesData> timeSeriesSerializer(
-    Map<String, dynamic> json, String type) {
-  List list = json['time_series'][type]['values'];
-  return list.map((el) => TimeSeriesData(el[0], double.parse(el[1]))).toList();
+    final Map<String, dynamic> json, final String type,) {
+  final List list = json['time_series'][type]['values'];
+  return list.map((final el) => TimeSeriesData(el[0], double.parse(el[1]))).toList();
 }

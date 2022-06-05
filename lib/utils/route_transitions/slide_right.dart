@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
-Function pageBuilder = (Widget widget) => (
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
+Function pageBuilder = (final Widget widget) => (
+      final BuildContext context,
+      final Animation<double> animation,
+      final Animation<double> secondaryAnimation,
     ) =>
         widget;
 
 Function transitionsBuilder = (
-  BuildContext context,
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  Widget child,
-) {
-  return SlideTransition(
+  final BuildContext context,
+  final Animation<double> animation,
+  final Animation<double> secondaryAnimation,
+  final Widget child,
+) => SlideTransition(
     position: Tween<Offset>(
       begin: const Offset(-1, 0),
       end: Offset.zero,
@@ -31,14 +30,13 @@ Function transitionsBuilder = (
       child: child,
     ),
   );
-};
 
 class SlideRightRoute extends PageRouteBuilder {
   SlideRightRoute(this.widget)
       : super(
           pageBuilder: pageBuilder(widget),
           transitionsBuilder: transitionsBuilder as Widget Function(
-              BuildContext, Animation<double>, Animation<double>, Widget),
+              BuildContext, Animation<double>, Animation<double>, Widget,),
         );
 
   final Widget widget;

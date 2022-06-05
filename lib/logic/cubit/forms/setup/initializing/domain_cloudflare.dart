@@ -10,9 +10,9 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));
-    var api = CloudflareApi();
+    final CloudflareApi api = CloudflareApi();
 
-    var list = await api.domainList();
+    final List<String> list = await api.domainList();
     if (list.isEmpty) {
       emit(Empty());
     } else if (list.length == 1) {
@@ -23,20 +23,18 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
   }
 
   @override
-  Future<void> close() {
-    return super.close();
-  }
+  Future<void> close() => super.close();
 
   Future<void> saveDomain() async {
     assert(state is Loaded, 'wrong state');
-    var domainName = (state as Loaded).domain;
-    var api = CloudflareApi();
+    final String domainName = (state as Loaded).domain;
+    final CloudflareApi api = CloudflareApi();
 
     emit(Loading(LoadingTypes.saving));
 
-    var zoneId = await api.getZoneId(domainName);
+    final String zoneId = await api.getZoneId(domainName);
 
-    var domain = ServerDomain(
+    final ServerDomain domain = ServerDomain(
       domainName: domainName,
       zoneId: zoneId,
       provider: DnsProvider.cloudflare,
@@ -63,9 +61,9 @@ class Loading extends DomainSetupState {
 enum LoadingTypes { loadingDomain, saving }
 
 class Loaded extends DomainSetupState {
-  final String domain;
 
   Loaded(this.domain);
+  final String domain;
 }
 
 class DomainSet extends DomainSetupState {}

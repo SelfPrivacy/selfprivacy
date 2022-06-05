@@ -1,9 +1,22 @@
+// ignore_for_file: always_specify_types
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'hetzner_server_info.g.dart';
 
 @JsonSerializable()
 class HetznerServerInfo {
+
+  HetznerServerInfo(
+    this.id,
+    this.name,
+    this.status,
+    this.created,
+    this.serverType,
+    this.location,
+    this.publicNet,
+    this.volumes,
+  );
   final int id;
   final String name;
   final ServerStatus status;
@@ -19,46 +32,35 @@ class HetznerServerInfo {
   @JsonKey(name: 'public_net')
   final HetznerPublicNetInfo publicNet;
 
-  static HetznerLocation locationFromJson(Map json) =>
+  static HetznerLocation locationFromJson(final Map json) =>
       HetznerLocation.fromJson(json['location']);
 
-  static HetznerServerInfo fromJson(Map<String, dynamic> json) =>
+  static HetznerServerInfo fromJson(final Map<String, dynamic> json) =>
       _$HetznerServerInfoFromJson(json);
-
-  HetznerServerInfo(
-    this.id,
-    this.name,
-    this.status,
-    this.created,
-    this.serverType,
-    this.location,
-    this.publicNet,
-    this.volumes,
-  );
 }
 
 @JsonSerializable()
 class HetznerPublicNetInfo {
-  final HetznerIp4 ipv4;
-
-  static HetznerPublicNetInfo fromJson(Map<String, dynamic> json) =>
-      _$HetznerPublicNetInfoFromJson(json);
 
   HetznerPublicNetInfo(this.ipv4);
+  final HetznerIp4 ipv4;
+
+  static HetznerPublicNetInfo fromJson(final Map<String, dynamic> json) =>
+      _$HetznerPublicNetInfoFromJson(json);
 }
 
 @JsonSerializable()
 class HetznerIp4 {
+
+  HetznerIp4(this.id, this.ip, this.blocked, this.reverseDns);
   final bool blocked;
   @JsonKey(name: 'dns_ptr')
   final String reverseDns;
   final int id;
   final String ip;
 
-  static HetznerIp4 fromJson(Map<String, dynamic> json) =>
+  static HetznerIp4 fromJson(final Map<String, dynamic> json) =>
       _$HetznerIp4FromJson(json);
-
-  HetznerIp4(this.id, this.ip, this.blocked, this.reverseDns);
 }
 
 enum ServerStatus {
@@ -75,15 +77,15 @@ enum ServerStatus {
 
 @JsonSerializable()
 class HetznerServerTypeInfo {
+
+  HetznerServerTypeInfo(this.cores, this.memory, this.disk, this.prices);
   final int cores;
   final num memory;
   final int disk;
 
   final List<HetznerPriceInfo> prices;
 
-  HetznerServerTypeInfo(this.cores, this.memory, this.disk, this.prices);
-
-  static HetznerServerTypeInfo fromJson(Map<String, dynamic> json) =>
+  static HetznerServerTypeInfo fromJson(final Map<String, dynamic> json) =>
       _$HetznerServerTypeInfoFromJson(json);
 }
 
@@ -97,14 +99,16 @@ class HetznerPriceInfo {
   @JsonKey(name: 'price_monthly', fromJson: HetznerPriceInfo.getPrice)
   final double monthly;
 
-  static HetznerPriceInfo fromJson(Map<String, dynamic> json) =>
+  static HetznerPriceInfo fromJson(final Map<String, dynamic> json) =>
       _$HetznerPriceInfoFromJson(json);
 
-  static double getPrice(Map json) => double.parse(json['gross'] as String);
+  static double getPrice(final Map json) => double.parse(json['gross'] as String);
 }
 
 @JsonSerializable()
 class HetznerLocation {
+
+  HetznerLocation(this.country, this.city, this.description, this.zone);
   final String country;
   final String city;
   final String description;
@@ -112,8 +116,6 @@ class HetznerLocation {
   @JsonKey(name: 'network_zone')
   final String zone;
 
-  HetznerLocation(this.country, this.city, this.description, this.zone);
-
-  static HetznerLocation fromJson(Map<String, dynamic> json) =>
+  static HetznerLocation fromJson(final Map<String, dynamic> json) =>
       _$HetznerLocationFromJson(json);
 }

@@ -8,17 +8,17 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
 class DnsDetailsPage extends StatefulWidget {
-  const DnsDetailsPage({Key? key}) : super(key: key);
+  const DnsDetailsPage({super.key});
 
   @override
   State<DnsDetailsPage> createState() => _DnsDetailsPageState();
 }
 
 class _DnsDetailsPageState extends State<DnsDetailsPage> {
-  Widget _getStateCard(DnsRecordsStatus dnsState, Function fixCallback) {
-    var description = '';
-    var subtitle = '';
-    var icon = const Icon(
+  Widget _getStateCard(final DnsRecordsStatus dnsState, final Function fixCallback) {
+    String description = '';
+    String subtitle = '';
+    Icon icon = const Icon(
       Icons.check,
       color: Colors.green,
     );
@@ -63,11 +63,11 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var isReady = context.watch<ServerInstallationCubit>().state
+  Widget build(final BuildContext context) {
+    final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    final domain = getIt<ApiConfigModel>().serverDomain?.domainName ?? '';
-    var dnsCubit = context.watch<DnsRecordsCubit>().state;
+    final String domain = getIt<ApiConfigModel>().serverDomain?.domainName ?? '';
+    final DnsRecordsState dnsCubit = context.watch<DnsRecordsCubit>().state;
 
     print(dnsCubit.dnsState);
 
@@ -124,11 +124,11 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
               ),
               ...dnsCubit.dnsRecords
                   .where(
-                    (dnsRecord) =>
+                    (final dnsRecord) =>
                         dnsRecord.category == DnsRecordsCategory.services,
                   )
                   .map(
-                    (dnsRecord) => Column(
+                    (final dnsRecord) => Column(
                       children: [
                         const Divider(
                           height: 1.0,
@@ -180,11 +180,11 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
               ),
               ...dnsCubit.dnsRecords
                   .where(
-                    (dnsRecord) =>
+                    (final dnsRecord) =>
                         dnsRecord.category == DnsRecordsCategory.email,
                   )
                   .map(
-                    (dnsRecord) => Column(
+                    (final dnsRecord) => Column(
                       children: [
                         const Divider(
                           height: 1.0,

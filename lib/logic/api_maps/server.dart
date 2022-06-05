@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -6,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/auto_upgrade_settings.dart';
@@ -14,23 +17,29 @@ import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 
-import 'api_map.dart';
+import 'package:selfprivacy/logic/api_maps/api_map.dart';
 
 class ApiResponse<D> {
+
+  ApiResponse({
+    required this.statusCode,
+    required this.data,
+    this.errorMessage,
+  });
   final int statusCode;
   final String? errorMessage;
   final D data;
 
   bool get isSuccess => statusCode >= 200 && statusCode < 300;
-
-  ApiResponse({
-    required this.statusCode,
-    this.errorMessage,
-    required this.data,
-  });
 }
 
 class ServerApi extends ApiMap {
+
+  ServerApi(
+      {this.hasLogger = false,
+      this.isWithToken = true,
+      this.overrideDomain,
+      this.customToken,});
   @override
   bool hasLogger;
   @override
@@ -38,24 +47,18 @@ class ServerApi extends ApiMap {
   String? overrideDomain;
   String? customToken;
 
-  ServerApi(
-      {this.hasLogger = false,
-      this.isWithToken = true,
-      this.overrideDomain,
-      this.customToken});
-
   @override
   BaseOptions get options {
-    var options = BaseOptions();
+    BaseOptions options = BaseOptions();
 
     if (isWithToken) {
-      var cloudFlareDomain = getIt<ApiConfigModel>().serverDomain;
-      var domainName = cloudFlareDomain!.domainName;
-      var apiToken = getIt<ApiConfigModel>().serverDetails?.apiToken;
+      final ServerDomain? cloudFlareDomain = getIt<ApiConfigModel>().serverDomain;
+      final String domainName = cloudFlareDomain!.domainName;
+      final String? apiToken = getIt<ApiConfigModel>().serverDetails?.apiToken;
 
       options = BaseOptions(baseUrl: 'https://api.$domainName', headers: {
         'Authorization': 'Bearer $apiToken',
-      });
+      },);
     }
 
     if (overrideDomain != null) {
@@ -73,7 +76,7 @@ class ServerApi extends ApiMap {
   Future<String?> getApiVersion() async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     String? apiVersion;
 
     try {
@@ -91,7 +94,7 @@ class ServerApi extends ApiMap {
     bool res = false;
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/services/status');
       res = response.statusCode == HttpStatus.ok;
@@ -103,10 +106,10 @@ class ServerApi extends ApiMap {
     return res;
   }
 
-  Future<ApiResponse<User>> createUser(User user) async {
+  Future<ApiResponse<User>> createUser(final User user) async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.post(
         '/users',
@@ -154,15 +157,15 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<ApiResponse<List<String>>> getUsersList({withMainUser = false}) async {
-    List<String> res = [];
+  Future<ApiResponse<List<String>>> getUsersList({final withMainUser = false}) async {
+    final List<String> res = [];
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/users',
-          queryParameters: withMainUser ? {'withMainUser': 'true'} : null);
-      for (var user in response.data) {
+          queryParameters: withMainUser ? {'withMainUser': 'true'} : null,);
+      for (final user in response.data) {
         res.add(user.toString());
       }
     } on DioError catch (e) {
@@ -191,10 +194,10 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<ApiResponse<void>> addUserSshKey(User user, String sshKey) async {
+  Future<ApiResponse<void>> addUserSshKey(final User user, final String sshKey) async {
     late Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.post(
         '/services/ssh/keys/${user.login}',
@@ -221,10 +224,10 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<ApiResponse<void>> addRootSshKey(String ssh) async {
+  Future<ApiResponse<void>> addRootSshKey(final String ssh) async {
     late Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.put(
         '/services/ssh/key/send',
@@ -249,14 +252,14 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<ApiResponse<List<String>>> getUserSshKeys(User user) async {
+  Future<ApiResponse<List<String>>> getUserSshKeys(final User user) async {
     List<String> res;
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/services/ssh/keys/${user.login}');
-      res = (response.data as List<dynamic>).map((e) => e as String).toList();
+      res = (response.data as List<dynamic>).map((final e) => e as String).toList();
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse<List<String>>(
@@ -287,10 +290,10 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<ApiResponse<void>> deleteUserSshKey(User user, String sshKey) async {
+  Future<ApiResponse<void>> deleteUserSshKey(final User user, final String sshKey) async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.delete(
         '/services/ssh/keys/${user.login}',
@@ -318,11 +321,11 @@ class ServerApi extends ApiMap {
     );
   }
 
-  Future<bool> deleteUser(User user) async {
+  Future<bool> deleteUser(final User user) async {
     bool res = false;
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.delete('/users/${user.login}');
       res = response.statusCode == HttpStatus.ok ||
@@ -344,7 +347,7 @@ class ServerApi extends ApiMap {
     bool res = false;
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/system/configuration/apply');
       res = response.statusCode == HttpStatus.ok;
@@ -357,8 +360,8 @@ class ServerApi extends ApiMap {
     return res;
   }
 
-  Future<void> switchService(ServiceTypes type, bool needToTurnOn) async {
-    var client = await getClient();
+  Future<void> switchService(final ServiceTypes type, final bool needToTurnOn) async {
+    final Dio client = await getClient();
     try {
       client.post(
         '/services/${type.url}/${needToTurnOn ? 'enable' : 'disable'}',
@@ -373,7 +376,7 @@ class ServerApi extends ApiMap {
   Future<Map<ServiceTypes, bool>> servicesPowerCheck() async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/services/status');
     } on DioError catch (e) {
@@ -392,8 +395,8 @@ class ServerApi extends ApiMap {
     };
   }
 
-  Future<void> uploadBackblazeConfig(BackblazeBucket bucket) async {
-    var client = await getClient();
+  Future<void> uploadBackblazeConfig(final BackblazeBucket bucket) async {
+    final Dio client = await getClient();
     try {
       client.put(
         '/services/restic/backblaze/config',
@@ -411,7 +414,7 @@ class ServerApi extends ApiMap {
   }
 
   Future<void> startBackup() async {
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       client.put('/services/restic/backup/create');
     } on DioError catch (e) {
@@ -425,10 +428,10 @@ class ServerApi extends ApiMap {
     Response response;
     List<Backup> backups = [];
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/services/restic/backup/list');
-      backups = response.data.map<Backup>((e) => Backup.fromJson(e)).toList();
+      backups = response.data.map<Backup>((final e) => Backup.fromJson(e)).toList();
     } on DioError catch (e) {
       print(e.message);
     } catch (e) {
@@ -447,7 +450,7 @@ class ServerApi extends ApiMap {
       progress: 0,
     );
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/services/restic/backup/status');
       status = BackupStatus.fromJson(response.data);
@@ -460,7 +463,7 @@ class ServerApi extends ApiMap {
   }
 
   Future<void> forceBackupListReload() async {
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       client.get('/services/restic/backup/reload');
     } on DioError catch (e) {
@@ -470,8 +473,8 @@ class ServerApi extends ApiMap {
     }
   }
 
-  Future<void> restoreBackup(String backupId) async {
-    var client = await getClient();
+  Future<void> restoreBackup(final String backupId) async {
+    final Dio client = await getClient();
     try {
       client.put(
         '/services/restic/backup/restore',
@@ -488,7 +491,7 @@ class ServerApi extends ApiMap {
     Response response;
     bool result = false;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/system/configuration/pull');
       result = (response.statusCode != null)
@@ -506,7 +509,7 @@ class ServerApi extends ApiMap {
     Response response;
     bool result = false;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/system/reboot');
       result = (response.statusCode != null)
@@ -524,7 +527,7 @@ class ServerApi extends ApiMap {
     Response response;
     bool result = false;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/system/configuration/upgrade');
       result = (response.statusCode != null)
@@ -545,7 +548,7 @@ class ServerApi extends ApiMap {
       allowReboot: false,
     );
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/system/configuration/autoUpgrade');
       if (response.data != null) {
@@ -559,8 +562,8 @@ class ServerApi extends ApiMap {
     return settings;
   }
 
-  Future<void> updateAutoUpgradeSettings(AutoUpgradeSettings settings) async {
-    var client = await getClient();
+  Future<void> updateAutoUpgradeSettings(final AutoUpgradeSettings settings) async {
+    final Dio client = await getClient();
     try {
       await client.put(
         '/system/configuration/autoUpgrade',
@@ -575,15 +578,15 @@ class ServerApi extends ApiMap {
 
   Future<TimeZoneSettings> getServerTimezone() async {
     // I am not sure how to initialize TimeZoneSettings with default value...
-    var client = await getClient();
-    Response response = await client.get('/system/configuration/timezone');
+    final Dio client = await getClient();
+    final Response response = await client.get('/system/configuration/timezone');
     close(client);
 
     return TimeZoneSettings.fromString(response.data);
   }
 
-  Future<void> updateServerTimezone(TimeZoneSettings settings) async {
-    var client = await getClient();
+  Future<void> updateServerTimezone(final TimeZoneSettings settings) async {
+    final Dio client = await getClient();
     try {
       await client.put(
         '/system/configuration/timezone',
@@ -599,7 +602,7 @@ class ServerApi extends ApiMap {
   Future<String?> getDkim() async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/services/mailserver/dkim');
     } on DioError catch (e) {
@@ -621,7 +624,7 @@ class ServerApi extends ApiMap {
       return '';
     }
 
-    final base64toString = utf8.fuse(base64);
+    final Codec<String, String> base64toString = utf8.fuse(base64);
 
     return base64toString
         .decode(response.data)
@@ -633,7 +636,7 @@ class ServerApi extends ApiMap {
   Future<ApiResponse<RecoveryKeyStatus?>> getRecoveryTokenStatus() async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/auth/recovery_token');
     } on DioError catch (e) {
@@ -641,7 +644,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: const RecoveryKeyStatus(exists: false, valid: false));
+          data: const RecoveryKeyStatus(exists: false, valid: false),);
     } finally {
       close(client);
     }
@@ -652,17 +655,17 @@ class ServerApi extends ApiMap {
         statusCode: code,
         data: response.data != null
             ? RecoveryKeyStatus.fromJson(response.data)
-            : null);
+            : null,);
   }
 
   Future<ApiResponse<String>> generateRecoveryToken(
-    DateTime? expiration,
-    int? uses,
+    final DateTime? expiration,
+    final int? uses,
   ) async {
     Response response;
 
-    var client = await getClient();
-    var data = {};
+    final Dio client = await getClient();
+    final Map data = {};
     if (expiration != null) {
       data['expiration'] = '${expiration.toIso8601String()}Z';
       print(data['expiration']);
@@ -680,7 +683,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '');
+          data: '',);
     } finally {
       close(client);
     }
@@ -689,13 +692,13 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
         statusCode: code,
-        data: response.data != null ? response.data['token'] : '');
+        data: response.data != null ? response.data['token'] : '',);
   }
 
-  Future<ApiResponse<String>> useRecoveryToken(DeviceToken token) async {
+  Future<ApiResponse<String>> useRecoveryToken(final DeviceToken token) async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.post(
         '/auth/recovery_token/use',
@@ -709,7 +712,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '');
+          data: '',);
     } finally {
       client.close();
     }
@@ -718,13 +721,13 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
         statusCode: code,
-        data: response.data != null ? response.data['token'] : '');
+        data: response.data != null ? response.data['token'] : '',);
   }
 
-  Future<ApiResponse<String>> authorizeDevice(DeviceToken token) async {
+  Future<ApiResponse<String>> authorizeDevice(final DeviceToken token) async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.post(
         '/auth/new_device/authorize',
@@ -738,7 +741,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '');
+          data: '',);
     } finally {
       client.close();
     }
@@ -751,7 +754,7 @@ class ServerApi extends ApiMap {
   Future<ApiResponse<String>> createDeviceToken() async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.post('/auth/new_device');
     } on DioError catch (e) {
@@ -759,7 +762,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '');
+          data: '',);
     } finally {
       client.close();
     }
@@ -768,13 +771,13 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
         statusCode: code,
-        data: response.data != null ? response.data['token'] : '');
+        data: response.data != null ? response.data['token'] : '',);
   }
 
   Future<ApiResponse<String>> deleteDeviceToken() async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.delete('/auth/new_device');
     } on DioError catch (e) {
@@ -782,7 +785,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '');
+          data: '',);
     } finally {
       client.close();
     }
@@ -795,7 +798,7 @@ class ServerApi extends ApiMap {
   Future<ApiResponse<List<ApiToken>>> getApiTokens() async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.get('/auth/tokens');
     } on DioError catch (e) {
@@ -803,7 +806,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: []);
+          data: [],);
     } finally {
       client.close();
     }
@@ -813,14 +816,14 @@ class ServerApi extends ApiMap {
     return ApiResponse(
         statusCode: code,
         data: (response.data != null)
-            ? response.data.map<ApiToken>((e) => ApiToken.fromJson(e)).toList()
-            : []);
+            ? response.data.map<ApiToken>((final e) => ApiToken.fromJson(e)).toList()
+            : [],);
   }
 
   Future<ApiResponse<String>> refreshCurrentApiToken() async {
     Response response;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.post('/auth/tokens');
     } on DioError catch (e) {
@@ -828,7 +831,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: '');
+          data: '',);
     } finally {
       client.close();
     }
@@ -837,12 +840,12 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
         statusCode: code,
-        data: response.data != null ? response.data['token'] : '');
+        data: response.data != null ? response.data['token'] : '',);
   }
 
-  Future<ApiResponse<void>> deleteApiToken(String device) async {
+  Future<ApiResponse<void>> deleteApiToken(final String device) async {
     Response response;
-    var client = await getClient();
+    final Dio client = await getClient();
     try {
       response = await client.delete(
         '/auth/tokens',
@@ -855,7 +858,7 @@ class ServerApi extends ApiMap {
       return ApiResponse(
           errorMessage: e.message,
           statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
-          data: null);
+          data: null,);
     } finally {
       client.close();
     }

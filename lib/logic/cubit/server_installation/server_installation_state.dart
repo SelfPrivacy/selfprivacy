@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 part of '../server_installation/server_installation_cubit.dart';
 
 abstract class ServerInstallationState extends Equatable {
@@ -42,9 +44,9 @@ abstract class ServerInstallationState extends Equatable {
   bool get isUserFilled => rootUser != null;
   bool get isServerCreated => serverDetails != null;
 
-  bool get isFullyInitilized => _fulfilementList.every((el) => el!);
+  bool get isFullyInitilized => _fulfilementList.every((final el) => el!);
   ServerSetupProgress get progress =>
-      ServerSetupProgress.values[_fulfilementList.where((el) => el!).length];
+      ServerSetupProgress.values[_fulfilementList.where((final el) => el!).length];
 
   int get porgressBar {
     if (progress.index < 6) {
@@ -57,7 +59,7 @@ abstract class ServerInstallationState extends Equatable {
   }
 
   List<bool?> get _fulfilementList {
-    var res = [
+    final List<bool> res = [
       isHetznerFilled,
       isCloudFlareFilled,
       isBackblazeFilled,
@@ -76,9 +78,9 @@ abstract class ServerInstallationState extends Equatable {
 class TimerState extends ServerInstallationNotFinished {
   TimerState({
     required this.dataState,
+    required final super.isLoading,
     this.timerStart,
     this.duration,
-    required bool isLoading,
   }) : super(
           hetznerKey: dataState.hetznerKey,
           cloudFlareKey: dataState.cloudFlareKey,
@@ -89,7 +91,6 @@ class TimerState extends ServerInstallationNotFinished {
           isServerStarted: dataState.isServerStarted,
           isServerResetedFirstTime: dataState.isServerResetedFirstTime,
           isServerResetedSecondTime: dataState.isServerResetedSecondTime,
-          isLoading: isLoading,
           dnsMatches: dataState.dnsMatches,
         );
 
@@ -119,32 +120,22 @@ enum ServerSetupProgress {
 }
 
 class ServerInstallationNotFinished extends ServerInstallationState {
-  final bool isLoading;
-  final Map<String, bool>? dnsMatches;
 
   const ServerInstallationNotFinished({
-    String? hetznerKey,
-    String? cloudFlareKey,
-    BackblazeCredential? backblazeCredential,
-    ServerDomain? serverDomain,
-    User? rootUser,
-    ServerHostingDetails? serverDetails,
-    required bool isServerStarted,
-    required bool isServerResetedFirstTime,
-    required bool isServerResetedSecondTime,
-    required this.isLoading,
+    required final super.isServerStarted,
+    required final super.isServerResetedFirstTime,
+    required final super.isServerResetedSecondTime,
+    required final this.isLoading,
     required this.dnsMatches,
-  }) : super(
-          hetznerKey: hetznerKey,
-          cloudFlareKey: cloudFlareKey,
-          backblazeCredential: backblazeCredential,
-          serverDomain: serverDomain,
-          rootUser: rootUser,
-          serverDetails: serverDetails,
-          isServerStarted: isServerStarted,
-          isServerResetedFirstTime: isServerResetedFirstTime,
-          isServerResetedSecondTime: isServerResetedSecondTime,
-        );
+    final super.hetznerKey,
+    final super.cloudFlareKey,
+    final super.backblazeCredential,
+    final super.serverDomain,
+    final super.rootUser,
+    final super.serverDetails,
+  });
+  final bool isLoading;
+  final Map<String, bool>? dnsMatches;
 
   @override
   List<Object?> get props => [
@@ -161,17 +152,17 @@ class ServerInstallationNotFinished extends ServerInstallationState {
       ];
 
   ServerInstallationNotFinished copyWith({
-    String? hetznerKey,
-    String? cloudFlareKey,
-    BackblazeCredential? backblazeCredential,
-    ServerDomain? serverDomain,
-    User? rootUser,
-    ServerHostingDetails? serverDetails,
-    bool? isServerStarted,
-    bool? isServerResetedFirstTime,
-    bool? isServerResetedSecondTime,
-    bool? isLoading,
-    Map<String, bool>? dnsMatches,
+    final String? hetznerKey,
+    final String? cloudFlareKey,
+    final BackblazeCredential? backblazeCredential,
+    final ServerDomain? serverDomain,
+    final User? rootUser,
+    final ServerHostingDetails? serverDetails,
+    final bool? isServerStarted,
+    final bool? isServerResetedFirstTime,
+    final bool? isServerResetedSecondTime,
+    final bool? isLoading,
+    final Map<String, bool>? dnsMatches,
   }) =>
       ServerInstallationNotFinished(
         hetznerKey: hetznerKey ?? this.hetznerKey,
@@ -221,26 +212,16 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
 
 class ServerInstallationFinished extends ServerInstallationState {
   const ServerInstallationFinished({
-    required String hetznerKey,
-    required String cloudFlareKey,
-    required BackblazeCredential backblazeCredential,
-    required ServerDomain serverDomain,
-    required User rootUser,
-    required ServerHostingDetails serverDetails,
-    required bool isServerStarted,
-    required bool isServerResetedFirstTime,
-    required bool isServerResetedSecondTime,
-  }) : super(
-          hetznerKey: hetznerKey,
-          cloudFlareKey: cloudFlareKey,
-          backblazeCredential: backblazeCredential,
-          serverDomain: serverDomain,
-          rootUser: rootUser,
-          serverDetails: serverDetails,
-          isServerStarted: isServerStarted,
-          isServerResetedFirstTime: isServerResetedFirstTime,
-          isServerResetedSecondTime: isServerResetedSecondTime,
-        );
+    required final String super.hetznerKey,
+    required final String super.cloudFlareKey,
+    required final BackblazeCredential super.backblazeCredential,
+    required final ServerDomain super.serverDomain,
+    required final User super.rootUser,
+    required final ServerHostingDetails super.serverDetails,
+    required final super.isServerStarted,
+    required final super.isServerResetedFirstTime,
+    required final super.isServerResetedSecondTime,
+  });
 
   @override
   List<Object?> get props => [
@@ -279,29 +260,23 @@ enum ServerRecoveryMethods {
 }
 
 class ServerInstallationRecovery extends ServerInstallationState {
-  final RecoveryStep currentStep;
-  final ServerRecoveryCapabilities recoveryCapabilities;
 
   const ServerInstallationRecovery({
-    String? hetznerKey,
-    String? cloudFlareKey,
-    BackblazeCredential? backblazeCredential,
-    ServerDomain? serverDomain,
-    User? rootUser,
-    ServerHostingDetails? serverDetails,
     required this.currentStep,
     required this.recoveryCapabilities,
+    final super.hetznerKey,
+    final super.cloudFlareKey,
+    final super.backblazeCredential,
+    final super.serverDomain,
+    final super.rootUser,
+    final super.serverDetails,
   }) : super(
-          hetznerKey: hetznerKey,
-          cloudFlareKey: cloudFlareKey,
-          backblazeCredential: backblazeCredential,
-          serverDomain: serverDomain,
-          rootUser: rootUser,
-          serverDetails: serverDetails,
           isServerStarted: true,
           isServerResetedFirstTime: true,
           isServerResetedSecondTime: true,
         );
+  final RecoveryStep currentStep;
+  final ServerRecoveryCapabilities recoveryCapabilities;
 
   @override
   List<Object?> get props => [
@@ -317,14 +292,14 @@ class ServerInstallationRecovery extends ServerInstallationState {
       ];
 
   ServerInstallationRecovery copyWith({
-    String? hetznerKey,
-    String? cloudFlareKey,
-    BackblazeCredential? backblazeCredential,
-    ServerDomain? serverDomain,
-    User? rootUser,
-    ServerHostingDetails? serverDetails,
-    RecoveryStep? currentStep,
-    ServerRecoveryCapabilities? recoveryCapabilities,
+    final String? hetznerKey,
+    final String? cloudFlareKey,
+    final BackblazeCredential? backblazeCredential,
+    final ServerDomain? serverDomain,
+    final User? rootUser,
+    final ServerHostingDetails? serverDetails,
+    final RecoveryStep? currentStep,
+    final ServerRecoveryCapabilities? recoveryCapabilities,
   }) =>
       ServerInstallationRecovery(
         hetznerKey: hetznerKey ?? this.hetznerKey,
@@ -337,8 +312,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
         recoveryCapabilities: recoveryCapabilities ?? this.recoveryCapabilities,
       );
 
-  ServerInstallationFinished finish() {
-    return ServerInstallationFinished(
+  ServerInstallationFinished finish() => ServerInstallationFinished(
       hetznerKey: hetznerKey!,
       cloudFlareKey: cloudFlareKey!,
       backblazeCredential: backblazeCredential!,
@@ -349,5 +323,4 @@ class ServerInstallationRecovery extends ServerInstallationState {
       isServerResetedFirstTime: true,
       isServerResetedSecondTime: true,
     );
-  }
 }

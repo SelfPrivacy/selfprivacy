@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
@@ -12,38 +14,38 @@ import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 
 class BlocAndProviderConfig extends StatelessWidget {
-  const BlocAndProviderConfig({Key? key, this.child}) : super(key: key);
+  const BlocAndProviderConfig({final super.key, this.child});
 
   final Widget? child;
 
   @override
-  Widget build(BuildContext context) {
-    var isDark = false;
-    var serverInstallationCubit = ServerInstallationCubit()..load();
-    var usersCubit = UsersCubit(serverInstallationCubit);
-    var servicesCubit = ServicesCubit(serverInstallationCubit);
-    var backupsCubit = BackupsCubit(serverInstallationCubit);
-    var dnsRecordsCubit = DnsRecordsCubit(serverInstallationCubit);
-    var recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
-    var apiDevicesCubit = ApiDevicesCubit(serverInstallationCubit);
+  Widget build(final BuildContext context) {
+    const bool isDark = false;
+    final ServerInstallationCubit serverInstallationCubit = ServerInstallationCubit()..load();
+    final UsersCubit usersCubit = UsersCubit(serverInstallationCubit);
+    final ServicesCubit servicesCubit = ServicesCubit(serverInstallationCubit);
+    final BackupsCubit backupsCubit = BackupsCubit(serverInstallationCubit);
+    final DnsRecordsCubit dnsRecordsCubit = DnsRecordsCubit(serverInstallationCubit);
+    final RecoveryKeyCubit recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
+    final ApiDevicesCubit apiDevicesCubit = ApiDevicesCubit(serverInstallationCubit);
     return MultiProvider(
       providers: [
         BlocProvider(
-          create: (_) => AppSettingsCubit(
+          create: (final _) => AppSettingsCubit(
             isDarkModeOn: isDark,
             isOnboardingShowing: true,
           )..load(),
         ),
-        BlocProvider(create: (_) => serverInstallationCubit, lazy: false),
-        BlocProvider(create: (_) => ProvidersCubit()),
-        BlocProvider(create: (_) => usersCubit..load(), lazy: false),
-        BlocProvider(create: (_) => servicesCubit..load(), lazy: false),
-        BlocProvider(create: (_) => backupsCubit..load(), lazy: false),
-        BlocProvider(create: (_) => dnsRecordsCubit..load()),
-        BlocProvider(create: (_) => recoveryKeyCubit..load()),
-        BlocProvider(create: (_) => apiDevicesCubit..load()),
+        BlocProvider(create: (final _) => serverInstallationCubit, lazy: false),
+        BlocProvider(create: (final _) => ProvidersCubit()),
+        BlocProvider(create: (final _) => usersCubit..load(), lazy: false),
+        BlocProvider(create: (final _) => servicesCubit..load(), lazy: false),
+        BlocProvider(create: (final _) => backupsCubit..load(), lazy: false),
+        BlocProvider(create: (final _) => dnsRecordsCubit..load()),
+        BlocProvider(create: (final _) => recoveryKeyCubit..load()),
+        BlocProvider(create: (final _) => apiDevicesCubit..load()),
         BlocProvider(
-          create: (_) =>
+          create: (final _) =>
               JobsCubit(usersCubit: usersCubit, servicesCubit: servicesCubit),
         ),
       ],

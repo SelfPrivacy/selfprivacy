@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 
-import 'brand_colors.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
 
-final lightTheme = ThemeData(
+final ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   primaryColor: BrandColors.primary,
   fontFamily: 'Inter',
@@ -52,7 +52,7 @@ final lightTheme = ThemeData(
   ),
 );
 
-var darkTheme = lightTheme.copyWith(
+ThemeData darkTheme = lightTheme.copyWith(
   brightness: Brightness.dark,
   scaffoldBackgroundColor: const Color(0xFF202120),
   iconTheme: const IconThemeData(color: BrandColors.gray3),
@@ -82,6 +82,6 @@ var darkTheme = lightTheme.copyWith(
   ),
 );
 
-const paddingH15V30 = EdgeInsets.symmetric(horizontal: 15, vertical: 30);
+const EdgeInsets paddingH15V30 = EdgeInsets.symmetric(horizontal: 15, vertical: 30);
 
-const paddingH15V0 = EdgeInsets.symmetric(horizontal: 15);
+const EdgeInsets paddingH15V0 = EdgeInsets.symmetric(horizontal: 15);

@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
@@ -8,16 +10,16 @@ part 'devices_state.dart';
 
 class ApiDevicesCubit
     extends ServerInstallationDependendCubit<ApiDevicesState> {
-  ApiDevicesCubit(ServerInstallationCubit serverInstallationCubit)
+  ApiDevicesCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(serverInstallationCubit, const ApiDevicesState.initial());
 
-  final api = ServerApi();
+  final ServerApi api = ServerApi();
 
   @override
   void load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
       emit(const ApiDevicesState([], LoadingStatus.refreshing));
-      final devices = await _getApiTokens();
+      final List<ApiToken>? devices = await _getApiTokens();
       if (devices != null) {
         emit(ApiDevicesState(devices, LoadingStatus.success));
       } else {
@@ -28,7 +30,7 @@ class ApiDevicesCubit
 
   Future<void> refresh() async {
     emit(const ApiDevicesState([], LoadingStatus.refreshing));
-    final devices = await _getApiTokens();
+    final List<ApiToken>? devices = await _getApiTokens();
     if (devices != null) {
       emit(ApiDevicesState(devices, LoadingStatus.success));
     } else {
@@ -37,7 +39,7 @@ class ApiDevicesCubit
   }
 
   Future<List<ApiToken>?> _getApiTokens() async {
-    final response = await api.getApiTokens();
+    final ApiResponse<List<ApiToken>> response = await api.getApiTokens();
     if (response.isSuccess) {
       return response.data;
     } else {
@@ -45,12 +47,12 @@ class ApiDevicesCubit
     }
   }
 
-  Future<void> deleteDevice(ApiToken device) async {
-    final response = await api.deleteApiToken(device.name);
+  Future<void> deleteDevice(final ApiToken device) async {
+    final ApiResponse<void> response = await api.deleteApiToken(device.name);
     if (response.isSuccess) {
       emit(ApiDevicesState(
-          state.devices.where((d) => d.name != device.name).toList(),
-          LoadingStatus.success));
+          state.devices.where((final d) => d.name != device.name).toList(),
+          LoadingStatus.success,),);
     } else {
       getIt<NavigationService>()
           .showSnackBar(response.errorMessage ?? 'Error deleting device');
@@ -58,12 +60,12 @@ class ApiDevicesCubit
   }
 
   Future<String?> getNewDeviceKey() async {
-    final response = await api.createDeviceToken();
+    final ApiResponse<String> response = await api.createDeviceToken();
     if (response.isSuccess) {
       return response.data;
     } else {
       getIt<NavigationService>().showSnackBar(
-          response.errorMessage ?? 'Error getting new device key');
+          response.errorMessage ?? 'Error getting new device key',);
       return null;
     }
   }

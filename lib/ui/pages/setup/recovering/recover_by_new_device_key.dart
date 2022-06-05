@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_device_form_cubit.dart';
@@ -36,24 +38,24 @@ class RecoverByNewDeviceKeyInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appConfig = context.watch<ServerInstallationCubit>();
+    ServerInstallationCubit appConfig = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (context) => RecoveryDeviceFormCubit(
+      create: (BuildContext context) => RecoveryDeviceFormCubit(
         appConfig,
         FieldCubitFactory(context),
         ServerRecoveryMethods.newDeviceKey,
       ),
       child: BlocListener<ServerInstallationCubit, ServerInstallationState>(
-        listener: (context, state) {
+        listener: (BuildContext context, ServerInstallationState state) {
           if (state is ServerInstallationRecovery &&
               state.currentStep != RecoveryStep.newDeviceKey) {
             Navigator.of(context).pop();
           }
         },
         child: Builder(
-          builder: (context) {
-            var formCubitState = context.watch<RecoveryDeviceFormCubit>().state;
+          builder: (BuildContext context) {
+            FormCubitState formCubitState = context.watch<RecoveryDeviceFormCubit>().state;
 
             return BrandHeroScreen(
               heroTitle: 'recovering.recovery_main_header'.tr(),

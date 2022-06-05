@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,18 +12,18 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ApiMap {
+
+  HetznerApi({this.hasLogger = false, this.isWithToken = true});
   @override
   bool hasLogger;
   @override
   bool isWithToken;
 
-  HetznerApi({this.hasLogger = false, this.isWithToken = true});
-
   @override
   BaseOptions get options {
-    var options = BaseOptions(baseUrl: rootAddress);
+    final BaseOptions options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
-      var token = getIt<ApiConfigModel>().hetznerKey;
+      final String? token = getIt<ApiConfigModel>().hetznerKey;
       assert(token != null);
       options.headers = {'Authorization': 'Bearer $token'};
     }
@@ -36,12 +38,10 @@ class HetznerApi extends ApiMap {
   @override
   String rootAddress = 'https://api.hetzner.cloud/v1';
 
-  Future<bool> isValid(String token) async {
-    validateStatus = (status) {
-      return status == HttpStatus.ok || status == HttpStatus.unauthorized;
-    };
-    var client = await getClient();
-    Response response = await client.get(
+  Future<bool> isValid(final String token) async {
+    validateStatus = (final int? status) => status == HttpStatus.ok || status == HttpStatus.unauthorized;
+    final Dio client = await getClient();
+    final Response response = await client.get(
       '/servers',
       options: Options(
         headers: {'Authorization': 'Bearer $token'},
@@ -59,8 +59,8 @@ class HetznerApi extends ApiMap {
   }
 
   Future<ServerVolume> createVolume() async {
-    var client = await getClient();
-    Response dbCreateResponse = await client.post(
+    final Dio client = await getClient();
+    final Response dbCreateResponse = await client.post(
       '/volumes',
       data: {
         'size': 10,
@@ -71,7 +71,7 @@ class HetznerApi extends ApiMap {
         'format': 'ext4'
       },
     );
-    var dbId = dbCreateResponse.data['volume']['id'];
+    final dbId = dbCreateResponse.data['volume']['id'];
     return ServerVolume(
       id: dbId,
       name: dbCreateResponse.data['volume']['name'],
@@ -79,21 +79,21 @@ class HetznerApi extends ApiMap {
   }
 
   Future<ServerHostingDetails> createServer({
-    required String cloudFlareKey,
-    required User rootUser,
-    required String domainName,
-    required ServerVolume dataBase,
+    required final String cloudFlareKey,
+    required final User rootUser,
+    required final String domainName,
+    required final ServerVolume dataBase,
   }) async {
-    var client = await getClient();
+    final Dio client = await getClient();
 
-    var dbPassword = StringGenerators.dbPassword();
-    var dbId = dataBase.id;
+    final String dbPassword = StringGenerators.dbPassword();
+    final int dbId = dataBase.id;
 
-    final apiToken = StringGenerators.apiToken();
+    final String apiToken = StringGenerators.apiToken();
 
-    final hostname = getHostnameFromDomain(domainName);
+    final String hostname = getHostnameFromDomain(domainName);
 
-    final base64Password =
+    final String base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
     print('hostname: $hostname');
@@ -101,11 +101,11 @@ class HetznerApi extends ApiMap {
     /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
     /// check the branch name, it could be "development" or "master".
     ///
-    final userdataString =
+    final String userdataString =
         "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
-    final data = {
+    final Map<String, Object> data = {
       'name': hostname,
       'server_type': 'cx11',
       'start_after_create': false,
@@ -119,7 +119,7 @@ class HetznerApi extends ApiMap {
     };
     print('Decoded data: $data');
 
-    Response serverCreateResponse = await client.post(
+    final Response serverCreateResponse = await client.post(
       '/servers',
       data: data,
     );
@@ -136,9 +136,9 @@ class HetznerApi extends ApiMap {
     );
   }
 
-  static String getHostnameFromDomain(String domain) {
+  static String getHostnameFromDomain(final String domain) {
     // Replace all non-alphanumeric characters with an underscore
-    var hostname =
+    String hostname =
         domain.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
     if (hostname.endsWith('-')) {
       hostname = hostname.substring(0, hostname.length - 1);
@@ -154,24 +154,24 @@ class HetznerApi extends ApiMap {
   }
 
   Future<void> deleteSelfprivacyServerAndAllVolumes({
-    required String domainName,
+    required final String domainName,
   }) async {
-    var client = await getClient();
+    final Dio client = await getClient();
 
-    final hostname = getHostnameFromDomain(domainName);
+    final String hostname = getHostnameFromDomain(domainName);
 
-    Response serversReponse = await client.get('/servers');
-    List servers = serversReponse.data['servers'];
-    Map server = servers.firstWhere((el) => el['name'] == hostname);
-    List volumes = server['volumes'];
-    var laterFutures = <Future>[];
+    final Response serversReponse = await client.get('/servers');
+    final List servers = serversReponse.data['servers'];
+    final Map server = servers.firstWhere((final el) => el['name'] == hostname);
+    final List volumes = server['volumes'];
+    final List<Future> laterFutures = <Future>[];
 
-    for (var volumeId in volumes) {
+    for (final volumeId in volumes) {
       await client.post('/volumes/$volumeId/actions/detach');
     }
     await Future.delayed(const Duration(seconds: 10));
 
-    for (var volumeId in volumes) {
+    for (final volumeId in volumes) {
       laterFutures.add(client.delete('/volumes/$volumeId'));
     }
     laterFutures.add(client.delete('/servers/${server['id']}'));
@@ -181,9 +181,9 @@ class HetznerApi extends ApiMap {
   }
 
   Future<ServerHostingDetails> reset() async {
-    var server = getIt<ApiConfigModel>().serverDetails!;
+    final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     await client.post('/servers/${server.id}/actions/reset');
     close(client);
 
@@ -191,9 +191,9 @@ class HetznerApi extends ApiMap {
   }
 
   Future<ServerHostingDetails> powerOn() async {
-    var server = getIt<ApiConfigModel>().serverDetails!;
+    final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
 
-    var client = await getClient();
+    final Dio client = await getClient();
     await client.post('/servers/${server.id}/actions/poweron');
     close(client);
 
@@ -201,16 +201,16 @@ class HetznerApi extends ApiMap {
   }
 
   Future<Map<String, dynamic>> getMetrics(
-      DateTime start, DateTime end, String type) async {
-    var hetznerServer = getIt<ApiConfigModel>().serverDetails;
-    var client = await getClient();
+      final DateTime start, final DateTime end, final String type,) async {
+    final ServerHostingDetails? hetznerServer = getIt<ApiConfigModel>().serverDetails;
+    final Dio client = await getClient();
 
-    Map<String, dynamic> queryParameters = {
+    final Map<String, dynamic> queryParameters = {
       'start': start.toUtc().toIso8601String(),
       'end': end.toUtc().toIso8601String(),
       'type': type
     };
-    var res = await client.get(
+    final Response res = await client.get(
       '/servers/${hetznerServer!.id}/metrics',
       queryParameters: queryParameters,
     );
@@ -219,30 +219,30 @@ class HetznerApi extends ApiMap {
   }
 
   Future<HetznerServerInfo> getInfo() async {
-    var hetznerServer = getIt<ApiConfigModel>().serverDetails;
-    var client = await getClient();
-    Response response = await client.get('/servers/${hetznerServer!.id}');
+    final ServerHostingDetails? hetznerServer = getIt<ApiConfigModel>().serverDetails;
+    final Dio client = await getClient();
+    final Response response = await client.get('/servers/${hetznerServer!.id}');
     close(client);
 
     return HetznerServerInfo.fromJson(response.data!['server']);
   }
 
   Future<List<HetznerServerInfo>> getServers() async {
-    var client = await getClient();
-    Response response = await client.get('/servers');
+    final Dio client = await getClient();
+    final Response response = await client.get('/servers');
     close(client);
 
     return (response.data!['servers'] as List)
-        .map((e) => HetznerServerInfo.fromJson(e))
+        .map((final e) => HetznerServerInfo.fromJson(e))
         .toList();
   }
 
   Future<void> createReverseDns({
-    required String ip4,
-    required String domainName,
+    required final String ip4,
+    required final String domainName,
   }) async {
-    var hetznerServer = getIt<ApiConfigModel>().serverDetails;
-    var client = await getClient();
+    final ServerHostingDetails? hetznerServer = getIt<ApiConfigModel>().serverDetails;
+    final Dio client = await getClient();
     await client.post(
       '/servers/${hetznerServer!.id}/actions/change_dns_ptr',
       data: {

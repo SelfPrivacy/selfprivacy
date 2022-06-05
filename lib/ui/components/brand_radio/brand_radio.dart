@@ -3,15 +3,14 @@ import 'package:selfprivacy/config/brand_colors.dart';
 
 class BrandRadio extends StatelessWidget {
   const BrandRadio({
-    Key? key,
+    super.key,
     required this.isChecked,
-  }) : super(key: key);
+  });
 
   final bool isChecked;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(final BuildContext context) => Container(
       height: 20,
       width: 20,
       alignment: Alignment.center,
@@ -31,12 +30,9 @@ class BrandRadio extends StatelessWidget {
             )
           : null,
     );
-  }
 
-  BoxBorder? _getBorder() {
-    return Border.all(
+  BoxBorder? _getBorder() => Border.all(
       color: isChecked ? BrandColors.primary : BrandColors.gray1,
       width: 2,
     );
-  }
 }

@@ -9,18 +9,18 @@ class NavigationService {
 
   NavigatorState? get navigator => navigatorKey.currentState;
 
-  void showPopUpDialog(AlertDialog dialog) {
-    final context = navigatorKey.currentState!.overlay!.context;
+  void showPopUpDialog(final AlertDialog dialog) {
+    final BuildContext context = navigatorKey.currentState!.overlay!.context;
 
     showDialog(
       context: context,
-      builder: (_) => dialog,
+      builder: (final _) => dialog,
     );
   }
 
-  void showSnackBar(String text) {
-    final state = scaffoldMessengerKey.currentState!;
-    final snack = SnackBar(
+  void showSnackBar(final String text) {
+    final ScaffoldMessengerState state = scaffoldMessengerKey.currentState!;
+    final SnackBar snack = SnackBar(
       backgroundColor: BrandColors.black.withOpacity(0.8),
       content: Text(text, style: buttonTitleText),
       duration: const Duration(seconds: 2),

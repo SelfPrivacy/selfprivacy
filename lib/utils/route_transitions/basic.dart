@@ -1,9 +1,11 @@
+// ignore_for_file: always_specify_types
+
 import 'package:flutter/material.dart';
 
-Route materialRoute(Widget widget) => MaterialPageRoute(
-      builder: (context) => widget,
+Route materialRoute(final Widget widget) => MaterialPageRoute(
+      builder: (final BuildContext context) => widget,
     );
 
-Route noAnimationRoute(Widget widget) => PageRouteBuilder(
-      pageBuilder: (context, animation1, animation2) => widget,
+Route noAnimationRoute(final Widget widget) => PageRouteBuilder(
+      pageBuilder: (final BuildContext context, final Animation<double> animation1, final Animation<double> animation2) => widget,
     );

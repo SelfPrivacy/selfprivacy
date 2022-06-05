@@ -1,6 +1,23 @@
+// ignore_for_file: always_specify_types
+
 part of 'services_cubit.dart';
 
 class ServicesState extends ServerInstallationDependendState {
+  factory ServicesState.allOn() => const ServicesState(
+        isPasswordManagerEnable: true,
+        isCloudEnable: true,
+        isGitEnable: true,
+        isSocialNetworkEnable: true,
+        isVpnEnable: true,
+      );
+
+  factory ServicesState.allOff() => const ServicesState(
+        isPasswordManagerEnable: false,
+        isCloudEnable: false,
+        isGitEnable: false,
+        isSocialNetworkEnable: false,
+        isVpnEnable: false,
+      );
   const ServicesState({
     required this.isPasswordManagerEnable,
     required this.isCloudEnable,
@@ -15,23 +32,8 @@ class ServicesState extends ServerInstallationDependendState {
   final bool isSocialNetworkEnable;
   final bool isVpnEnable;
 
-  factory ServicesState.allOff() => const ServicesState(
-        isPasswordManagerEnable: false,
-        isCloudEnable: false,
-        isGitEnable: false,
-        isSocialNetworkEnable: false,
-        isVpnEnable: false,
-      );
-  factory ServicesState.allOn() => const ServicesState(
-        isPasswordManagerEnable: true,
-        isCloudEnable: true,
-        isGitEnable: true,
-        isSocialNetworkEnable: true,
-        isVpnEnable: true,
-      );
-
   ServicesState enableList(
-    List<ServiceTypes> list,
+    final List<ServiceTypes> list,
   ) =>
       ServicesState(
         isPasswordManagerEnable: list.contains(ServiceTypes.passwordManager)
@@ -48,7 +50,7 @@ class ServicesState extends ServerInstallationDependendState {
       );
 
   ServicesState disableList(
-    List<ServiceTypes> list,
+    final List<ServiceTypes> list,
   ) =>
       ServicesState(
         isPasswordManagerEnable: list.contains(ServiceTypes.passwordManager)
@@ -74,7 +76,7 @@ class ServicesState extends ServerInstallationDependendState {
         isVpnEnable
       ];
 
-  bool isEnableByType(ServiceTypes type) {
+  bool isEnableByType(final ServiceTypes type) {
     switch (type) {
       case ServiceTypes.passwordManager:
         return isPasswordManagerEnable;

@@ -14,16 +14,16 @@ class ServerDetailsCubit extends Cubit<ServerDetailsState> {
   ServerDetailsRepository repository = ServerDetailsRepository();
 
   void check() async {
-    var isReadyToCheck = getIt<ApiConfigModel>().serverDetails != null;
+    final bool isReadyToCheck = getIt<ApiConfigModel>().serverDetails != null;
     if (isReadyToCheck) {
       emit(ServerDetailsLoading());
-      var data = await repository.load();
+      final ServerDetailsRepositoryDto data = await repository.load();
       emit(Loaded(
         serverInfo: data.hetznerServerInfo,
         autoUpgradeSettings: data.autoUpgradeSettings,
         serverTimezone: data.serverTimezone,
         checkTime: DateTime.now(),
-      ));
+      ),);
     } else {
       emit(ServerDetailsNotReady());
     }

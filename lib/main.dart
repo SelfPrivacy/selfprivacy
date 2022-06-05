@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,11 +13,11 @@ import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-import 'config/bloc_config.dart';
-import 'config/bloc_observer.dart';
-import 'config/get_it_config.dart';
-import 'config/localization.dart';
-import 'logic/cubit/app_settings/app_settings_cubit.dart';
+import 'package:selfprivacy/config/bloc_config.dart';
+import 'package:selfprivacy/config/bloc_observer.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/config/localization.dart';
+import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,11 +36,11 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   tz.initializeTimeZones();
 
-  final lightThemeData = await AppThemeFactory.create(
+  final ThemeData lightThemeData = await AppThemeFactory.create(
     isDark: false,
     fallbackColor: BrandColors.primary,
   );
-  final darkThemeData = await AppThemeFactory.create(
+  final ThemeData darkThemeData = await AppThemeFactory.create(
     isDark: true,
     fallbackColor: BrandColors.primary,
   );
@@ -48,30 +50,28 @@ void main() async {
         child: MyApp(
       lightThemeData: lightThemeData,
       darkThemeData: darkThemeData,
-    ))),
+    ),),),
     blocObserver: SimpleBlocObserver(),
   );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({
-    Key? key,
     required this.lightThemeData,
     required this.darkThemeData,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final ThemeData lightThemeData;
   final ThemeData darkThemeData;
 
   @override
-  Widget build(BuildContext context) {
-    return Localization(
+  Widget build(final BuildContext context) => Localization(
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light, // Manually changing appbar color
         child: BlocAndProviderConfig(
           child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
-            builder: (context, appSettings) {
-              return MaterialApp(
+            builder: (final BuildContext context, final AppSettingsState appSettings) => MaterialApp(
                 scaffoldMessengerKey:
                     getIt.get<NavigationService>().scaffoldMessengerKey,
                 navigatorKey: getIt.get<NavigationService>().navigatorKey,
@@ -87,20 +87,18 @@ class MyApp extends StatelessWidget {
                 home: appSettings.isOnboardingShowing
                     ? const OnboardingPage(nextPage: InitializingPage())
                     : const RootPage(),
-                builder: (BuildContext context, Widget? widget) {
+                builder: (final BuildContext context, final Widget? widget) {
                   Widget error = const Text('...rendering error...');
                   if (widget is Scaffold || widget is Navigator) {
                     error = Scaffold(body: Center(child: error));
                   }
                   ErrorWidget.builder =
-                      (FlutterErrorDetails errorDetails) => error;
+                      (final FlutterErrorDetails errorDetails) => error;
                   return widget!;
                 },
-              );
-            },
+              ),
           ),
         ),
       ),
     );
-  }
 }

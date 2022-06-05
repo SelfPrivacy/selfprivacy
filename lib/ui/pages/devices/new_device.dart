@@ -7,11 +7,10 @@ import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
 class NewDeviceScreen extends StatelessWidget {
-  const NewDeviceScreen({Key? key}) : super(key: key);
+  const NewDeviceScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BrandHeroScreen(
+  Widget build(final BuildContext context) => BrandHeroScreen(
       heroTitle: 'devices.add_new_device_screen.header'.tr(),
       heroSubtitle: 'devices.add_new_device_screen.description'.tr(),
       hasBackButton: true,
@@ -19,7 +18,7 @@ class NewDeviceScreen extends StatelessWidget {
       children: [
         FutureBuilder(
           future: context.read<ApiDevicesCubit>().getNewDeviceKey(),
-          builder: (context, snapshot) {
+          builder: (final BuildContext context, final AsyncSnapshot<Object?> snapshot) {
             if (snapshot.hasData) {
               return _KeyDisplay(
                 newDeviceKey: snapshot.data.toString(),
@@ -31,16 +30,14 @@ class NewDeviceScreen extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 class _KeyDisplay extends StatelessWidget {
-  const _KeyDisplay({Key? key, required this.newDeviceKey}) : super(key: key);
+  const _KeyDisplay({super.key, required this.newDeviceKey});
   final String newDeviceKey;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(final BuildContext context) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Divider(),
@@ -80,5 +77,4 @@ class _KeyDisplay extends StatelessWidget {
         const SizedBox(height: 24),
       ],
     );
-  }
 }

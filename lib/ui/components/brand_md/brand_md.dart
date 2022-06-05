@@ -8,9 +8,9 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class BrandMarkdown extends StatefulWidget {
   const BrandMarkdown({
-    Key? key,
     required this.fileName,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final String fileName;
 
@@ -28,7 +28,7 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
   }
 
   void _loadMdFile() async {
-    String mdFromFile = await rootBundle
+    final String mdFromFile = await rootBundle
         .loadString('assets/markdown/${widget.fileName}-${'locale'.tr()}.md');
     setState(() {
       _mdContent = mdFromFile;
@@ -36,9 +36,9 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var isDark = Theme.of(context).brightness == Brightness.dark;
-    var markdown = MarkdownStyleSheet(
+  Widget build(final BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final MarkdownStyleSheet markdown = MarkdownStyleSheet(
       p: defaultTextStyle.copyWith(
         color: isDark ? BrandColors.white : null,
       ),
@@ -58,9 +58,9 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
     return Markdown(
       shrinkWrap: true,
       styleSheet: markdown,
-      onTapLink: (String text, String? href, String title) {
+      onTapLink: (final String text, final String? href, final String title) {
         if (href != null) {
-          canLaunchUrlString(href).then((canLaunchURL) {
+          canLaunchUrlString(href).then((final bool canLaunchURL) {
             if (canLaunchURL) {
               launchUrlString(href);
             }

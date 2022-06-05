@@ -9,7 +9,7 @@ export 'package:selfprivacy/logic/get_it/console.dart';
 export 'package:selfprivacy/logic/get_it/navigation.dart';
 export 'package:selfprivacy/logic/get_it/timer.dart';
 
-final getIt = GetIt.instance;
+final GetIt getIt = GetIt.instance;
 
 Future<void> getItSetup() async {
   getIt.registerSingleton<NavigationService>(NavigationService());

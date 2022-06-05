@@ -6,10 +6,10 @@ import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
 
-import '../components/pre_styled_buttons/flash_fab.dart';
+import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
 
 class RootPage extends StatefulWidget {
-  const RootPage({Key? key}) : super(key: key);
+  const RootPage({super.key});
 
   @override
   State<RootPage> createState() => _RootPageState();
@@ -48,13 +48,13 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var isReady = context.watch<ServerInstallationCubit>().state
+  Widget build(final BuildContext context) {
+    final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
 
     return SafeArea(
       child: Provider<ChangeTab>(
-        create: (_) => ChangeTab(tabController.animateTo),
+        create: (final _) => ChangeTab(tabController.animateTo),
         child: Scaffold(
           body: TabBarView(
             controller: tabController,
@@ -92,7 +92,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
 }
 
 class ChangeTab {
-  final ValueChanged<int> onPress;
 
   ChangeTab(this.onPress);
+  final ValueChanged<int> onPress;
 }

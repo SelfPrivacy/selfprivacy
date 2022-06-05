@@ -8,12 +8,12 @@ void main() {
       test('assert chart empty', () {
         expect(() {
           StringGenerators.getRandomString(8);
-        }, throwsAssertionError);
+        }, throwsAssertionError,);
       });
 
       test('only lowercase string', () {
-        var length = 8;
-        var generatedString =
+        const int length = 8;
+        final String generatedString =
             StringGenerators.getRandomString(length, hasLowercaseLetters: true);
 
         expect(generatedString, isNot(matches(regExpNewLines)));
@@ -26,9 +26,9 @@ void main() {
       });
 
       test('only uppercase string', () {
-        var length = 8;
-        var generatedString = StringGenerators.getRandomString(length,
-            hasLowercaseLetters: false, hasUppercaseLetters: true);
+        const int length = 8;
+        final String generatedString = StringGenerators.getRandomString(length,
+            hasLowercaseLetters: false, hasUppercaseLetters: true,);
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));
@@ -40,11 +40,11 @@ void main() {
       });
 
       test('only numbers string', () {
-        var length = 8;
-        var generatedString = StringGenerators.getRandomString(length,
+        const int length = 8;
+        final String generatedString = StringGenerators.getRandomString(length,
             hasLowercaseLetters: false,
             hasUppercaseLetters: false,
-            hasNumbers: true);
+            hasNumbers: true,);
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));
@@ -56,8 +56,8 @@ void main() {
       });
 
       test('only symbols string', () {
-        var length = 8;
-        var generatedString = StringGenerators.getRandomString(
+        const int length = 8;
+        final String generatedString = StringGenerators.getRandomString(
           length,
           hasLowercaseLetters: false,
           hasUppercaseLetters: false,
@@ -77,13 +77,13 @@ void main() {
 
     group('Strict mode', () {
       test('All', () {
-        var length = 5;
-        var generatedString = StringGenerators.getRandomString(length,
+        const int length = 5;
+        final String generatedString = StringGenerators.getRandomString(length,
             hasLowercaseLetters: true,
             hasUppercaseLetters: true,
             hasNumbers: true,
             hasSymbols: true,
-            isStrict: true);
+            isStrict: true,);
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));
@@ -94,13 +94,13 @@ void main() {
         expect(generatedString.length, equals(length));
       });
       test('Lowercase letters and numbers', () {
-        var length = 3;
-        var generatedString = StringGenerators.getRandomString(length,
+        const int length = 3;
+        final String generatedString = StringGenerators.getRandomString(length,
             hasLowercaseLetters: true,
             hasUppercaseLetters: false,
             hasNumbers: true,
             hasSymbols: false,
-            isStrict: true);
+            isStrict: true,);
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));
@@ -114,9 +114,9 @@ void main() {
   });
 }
 
-var regExpNewLines = RegExp(r'[\n\r]+');
-var regExpWhiteSpaces = RegExp(r'[\s]+');
-var regExpUppercaseLetters = RegExp(r'[A-Z]');
-var regExpLowercaseLetters = RegExp(r'[a-z]');
-var regExpNumbers = RegExp(r'[0-9]');
-var regExpSymbols = RegExp(r'(?:_|[^\w\s])+');
+RegExp regExpNewLines = RegExp(r'[\n\r]+');
+RegExp regExpWhiteSpaces = RegExp(r'[\s]+');
+RegExp regExpUppercaseLetters = RegExp(r'[A-Z]');
+RegExp regExpLowercaseLetters = RegExp(r'[a-z]');
+RegExp regExpNumbers = RegExp(r'[0-9]');
+RegExp regExpSymbols = RegExp(r'(?:_|[^\w\s])+');

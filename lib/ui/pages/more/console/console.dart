@@ -8,7 +8,7 @@ import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 
 class Console extends StatefulWidget {
-  const Console({Key? key}) : super(key: key);
+  const Console({super.key});
 
   @override
   State<Console> createState() => _ConsoleState();
@@ -31,8 +31,7 @@ class _ConsoleState extends State<Console> {
   void update() => setState(() => {});
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
+  Widget build(final BuildContext context) => SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(53),
@@ -45,9 +44,9 @@ class _ConsoleState extends State<Console> {
         ),
         body: FutureBuilder(
           future: getIt.allReady(),
-          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          builder: (final BuildContext context, final AsyncSnapshot<void> snapshot) {
             if (snapshot.hasData) {
-              var messages = getIt.get<ConsoleModel>().messages;
+              final List<Message> messages = getIt.get<ConsoleModel>().messages;
 
               return ListView(
                 reverse: true,
@@ -55,8 +54,8 @@ class _ConsoleState extends State<Console> {
                 children: [
                   const SizedBox(height: 20),
                   ...UnmodifiableListView(messages
-                      .map((message) {
-                        var isError = message.type == MessageType.warning;
+                      .map((final message) {
+                        final bool isError = message.type == MessageType.warning;
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: RichText(
@@ -69,7 +68,7 @@ class _ConsoleState extends State<Console> {
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color:
-                                            isError ? BrandColors.red1 : null)),
+                                            isError ? BrandColors.red1 : null,),),
                                 TextSpan(text: message.text),
                               ],
                             ),
@@ -77,7 +76,7 @@ class _ConsoleState extends State<Console> {
                         );
                       })
                       .toList()
-                      .reversed),
+                      .reversed,),
                 ],
               );
             } else {
@@ -97,5 +96,4 @@ class _ConsoleState extends State<Console> {
         ),
       ),
     );
-  }
 }

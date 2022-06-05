@@ -20,5 +20,5 @@ class DnsRecord {
   final int priority;
   final bool proxied;
 
-  toJson() => _$DnsRecordToJson(this);
+  Map<String, dynamic> toJson() => _$DnsRecordToJson(this);
 }

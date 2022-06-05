@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
@@ -14,14 +13,13 @@ import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class JobsContent extends StatelessWidget {
-  const JobsContent({Key? key}) : super(key: key);
+  const JobsContent({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<JobsCubit, JobsState>(
-      builder: (context, state) {
+  Widget build(final BuildContext context) => BlocBuilder<JobsCubit, JobsState>(
+      builder: (final context, final state) {
         late List<Widget> widgets;
-        var installationState = context.read<ServerInstallationCubit>().state;
+        final ServerInstallationState installationState = context.read<ServerInstallationCubit>().state;
         if (state is JobsStateEmpty) {
           widgets = [
             const SizedBox(height: 80),
@@ -39,7 +37,7 @@ class JobsContent extends StatelessWidget {
               const SizedBox(height: 10),
               BrandButton.text(
                 onPressed: () {
-                  var nav = getIt<NavigationService>();
+                  final NavigationService nav = getIt<NavigationService>();
                   nav.showPopUpDialog(BrandAlert(
                     title: 'jobs.rebootServer'.tr(),
                     contentText: 'modals.3'.tr(),
@@ -53,7 +51,7 @@ class JobsContent extends StatelessWidget {
                         text: 'modals.9'.tr(),
                       )
                     ],
-                  ));
+                  ),);
                 },
                 title: 'jobs.rebootServer'.tr(),
               ),
@@ -68,7 +66,7 @@ class JobsContent extends StatelessWidget {
           widgets = [
             ...state.jobList
                 .map(
-                  (j) => Row(
+                  (final j) => Row(
                     children: [
                       Expanded(
                         child: BrandCards.small(
@@ -78,14 +76,18 @@ class JobsContent extends StatelessWidget {
                       const SizedBox(width: 10),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: BrandColors.red1,
+                          primary: Theme.of(context).colorScheme.errorContainer,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         onPressed: () =>
                             context.read<JobsCubit>().removeJob(j.id),
-                        child: Text('basis.remove'.tr()),
+                        child: Text('basis.remove'.tr(),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onErrorContainer,),),
                       ),
                     ],
                   ),
@@ -113,5 +115,4 @@ class JobsContent extends StatelessWidget {
         );
       },
     );
-  }
 }

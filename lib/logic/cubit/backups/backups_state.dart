@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 part of 'backups_cubit.dart';
 
 class BackupsState extends ServerInstallationDependendState {
@@ -34,14 +36,14 @@ class BackupsState extends ServerInstallationDependendState {
       ];
 
   BackupsState copyWith({
-    bool? isInitialized,
-    List<Backup>? backups,
-    double? progress,
-    BackupStatusEnum? status,
-    bool? preventActions,
-    String? error,
-    Duration? refreshTimer,
-    bool? refreshing,
+    final bool? isInitialized,
+    final List<Backup>? backups,
+    final double? progress,
+    final BackupStatusEnum? status,
+    final bool? preventActions,
+    final String? error,
+    final Duration? refreshTimer,
+    final bool? refreshing,
   }) =>
       BackupsState(
         isInitialized: isInitialized ?? this.isInitialized,

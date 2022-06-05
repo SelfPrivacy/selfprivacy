@@ -14,18 +14,18 @@ import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/ssh_keys/ssh_keys.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
-import '../../../logic/cubit/users/users_cubit.dart';
-import 'about/about.dart';
-import 'app_settings/app_setting.dart';
-import 'console/console.dart';
-import 'info/info.dart';
+import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
+import 'package:selfprivacy/ui/pages/more/about/about.dart';
+import 'package:selfprivacy/ui/pages/more/app_settings/app_setting.dart';
+import 'package:selfprivacy/ui/pages/more/console/console.dart';
+import 'package:selfprivacy/ui/pages/more/info/info.dart';
 
 class MorePage extends StatelessWidget {
-  const MorePage({Key? key}) : super(key: key);
+  const MorePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var isReady = context.watch<ServerInstallationCubit>().state
+  Widget build(final BuildContext context) {
+    final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
 
     return Scaffold(
@@ -55,7 +55,7 @@ class MorePage extends StatelessWidget {
                       iconData: Ionicons.key_outline,
                       goTo: SshKeysPage(
                         user: context.read<UsersCubit>().state.rootUser,
-                      )),
+                      ),),
                 if (isReady)
                   _MoreMenuItem(
                     iconData: Icons.password_outlined,
@@ -105,13 +105,13 @@ class MorePage extends StatelessWidget {
 
 class _MoreMenuItem extends StatelessWidget {
   const _MoreMenuItem({
-    Key? key,
+    super.key,
     required this.iconData,
     required this.title,
     this.subtitle,
     this.goTo,
     this.accent = false,
-  }) : super(key: key);
+  });
 
   final IconData iconData;
   final String title;
@@ -120,8 +120,8 @@ class _MoreMenuItem extends StatelessWidget {
   final bool accent;
 
   @override
-  Widget build(BuildContext context) {
-    final color = accent
+  Widget build(final BuildContext context) {
+    final Color color = accent
         ? Theme.of(context).colorScheme.onTertiaryContainer
         : Theme.of(context).colorScheme.onSurface;
     return BrandCards.filled(

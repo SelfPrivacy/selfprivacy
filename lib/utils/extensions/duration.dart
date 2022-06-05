@@ -6,9 +6,7 @@ extension DurationFormatter on Duration {
       this.inHours.remainder(24),
       this.inMinutes.remainder(60),
       this.inSeconds.remainder(60)
-    ].map((seg) {
-      return seg.toString().padLeft(2, '0');
-    }).join(':');
+    ].map((seg) => seg.toString().padLeft(2, '0')).join(':');
   }
 
   String toDayHourMinuteFormat() {
@@ -17,9 +15,7 @@ extension DurationFormatter on Duration {
     var segments = [
       this.inHours.remainder(24).abs(),
       this.inMinutes.remainder(60).abs(),
-    ].map((seg) {
-      return seg.toString().padLeft(2, '0');
-    });
+    ].map((seg) => seg.toString().padLeft(2, '0'));
 
     return '$designator${segments.first}:${segments.last}';
   }
@@ -33,9 +29,7 @@ extension DurationFormatter on Duration {
     var segments = [
       this.inHours.remainder(24),
       this.inMinutes.remainder(60),
-    ].map((seg) {
-      return seg.toString().padLeft(2, '0');
-    });
+    ].map((seg) => seg.toString().padLeft(2, '0'));
     return '${segments.first} h ${segments.last} min';
   }
 }

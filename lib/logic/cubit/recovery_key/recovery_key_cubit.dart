@@ -7,20 +7,20 @@ part 'recovery_key_state.dart';
 
 class RecoveryKeyCubit
     extends ServerInstallationDependendCubit<RecoveryKeyState> {
-  RecoveryKeyCubit(ServerInstallationCubit serverInstallationCubit)
+  RecoveryKeyCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(serverInstallationCubit, const RecoveryKeyState.initial());
 
-  final api = ServerApi();
+  final ServerApi api = ServerApi();
 
   @override
   void load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
-      final status = await _getRecoveryKeyStatus();
+      final RecoveryKeyStatus? status = await _getRecoveryKeyStatus();
       if (status == null) {
         emit(state.copyWith(loadingStatus: LoadingStatus.error));
       } else {
         emit(state.copyWith(
-            status: status, loadingStatus: LoadingStatus.success));
+            status: status, loadingStatus: LoadingStatus.success,),);
       }
     } else {
       emit(state.copyWith(loadingStatus: LoadingStatus.uninitialized));
@@ -39,18 +39,18 @@ class RecoveryKeyCubit
 
   Future<void> refresh() async {
     emit(state.copyWith(loadingStatus: LoadingStatus.refreshing));
-    final status = await _getRecoveryKeyStatus();
+    final RecoveryKeyStatus? status = await _getRecoveryKeyStatus();
     if (status == null) {
       emit(state.copyWith(loadingStatus: LoadingStatus.error));
     } else {
       emit(
-          state.copyWith(status: status, loadingStatus: LoadingStatus.success));
+          state.copyWith(status: status, loadingStatus: LoadingStatus.success),);
     }
   }
 
   Future<String> generateRecoveryKey({
-    DateTime? expirationDate,
-    int? numberOfUses,
+    final DateTime? expirationDate,
+    final int? numberOfUses,
   }) async {
     final ApiResponse<String> response =
         await api.generateRecoveryToken(expirationDate, numberOfUses);
@@ -69,7 +69,7 @@ class RecoveryKeyCubit
 }
 
 class GenerationError extends Error {
-  final String message;
 
   GenerationError(this.message);
+  final String message;
 }

@@ -1,16 +1,18 @@
+// ignore_for_file: always_specify_types
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
-import 'hive/user.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 
 @immutable
 class Job extends Equatable {
   Job({
-    String? id,
     required this.title,
+    final String? id,
   }) : id = id ?? StringGenerators.simpleId();
 
   final String title;
@@ -45,8 +47,8 @@ class DeleteUserJob extends Job {
 class ToggleJob extends Job {
   ToggleJob({
     required this.type,
-    required String title,
-  }) : super(title: title);
+    required final super.title,
+  });
 
   final dynamic type;
 
@@ -56,12 +58,11 @@ class ToggleJob extends Job {
 
 class ServiceToggleJob extends ToggleJob {
   ServiceToggleJob({
-    required ServiceTypes type,
+    required final ServiceTypes super.type,
     required this.needToTurnOn,
   }) : super(
           title:
               '${needToTurnOn ? "jobs.serviceTurnOn".tr() : "jobs.serviceTurnOff".tr()} ${type.title}',
-          type: type,
         );
 
   final bool needToTurnOn;

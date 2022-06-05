@@ -13,7 +13,7 @@ import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class AppSettingsPage extends StatefulWidget {
-  const AppSettingsPage({Key? key}) : super(key: key);
+  const AppSettingsPage({super.key});
 
   @override
   State<AppSettingsPage> createState() => _AppSettingsPageState();
@@ -21,16 +21,15 @@ class AppSettingsPage extends StatefulWidget {
 
 class _AppSettingsPageState extends State<AppSettingsPage> {
   @override
-  Widget build(BuildContext context) {
-    var isDarkModeOn = context.watch<AppSettingsCubit>().state.isDarkModeOn;
+  Widget build(final BuildContext context) {
+    final bool isDarkModeOn = context.watch<AppSettingsCubit>().state.isDarkModeOn;
 
     return SafeArea(
-      child: Builder(builder: (context) {
-        return Scaffold(
+      child: Builder(builder: (final context) => Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(52),
             child: BrandHeader(
-                title: 'more.settings.title'.tr(), hasBackButton: true),
+                title: 'more.settings.title'.tr(), hasBackButton: true,),
           ),
           body: ListView(
             padding: paddingH15V0,
@@ -41,7 +40,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                 decoration: const BoxDecoration(
                     border: Border(
                   bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-                )),
+                ),),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,7 +55,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                     const SizedBox(width: 5),
                     BrandSwitch(
                       value: Theme.of(context).brightness == Brightness.dark,
-                      onChanged: (value) => context
+                      onChanged: (final value) => context
                           .read<AppSettingsCubit>()
                           .updateDarkMode(isDarkModeOn: !isDarkModeOn),
                     ),
@@ -68,7 +67,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                 decoration: const BoxDecoration(
                     border: Border(
                   bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-                )),
+                ),),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,8 +94,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (_) {
-                            return BrandAlert(
+                          builder: (final _) => BrandAlert(
                               title: 'modals.3'.tr(),
                               contentText: 'modals.4'.tr(),
                               actions: [
@@ -108,13 +106,12 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                                           .read<ServerInstallationCubit>()
                                           .clearAppConfig();
                                       Navigator.of(context).pop();
-                                    }),
+                                    },),
                                 ActionButton(
                                   text: 'basis.cancel'.tr(),
                                 ),
                               ],
-                            );
-                          },
+                            ),
                         );
                       },
                     ),
@@ -124,20 +121,19 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
               deleteServer(context)
             ],
           ),
-        );
-      }),
+        ),),
     );
   }
 
-  Widget deleteServer(BuildContext context) {
-    var isDisabled =
+  Widget deleteServer(final BuildContext context) {
+    final bool isDisabled =
         context.watch<ServerInstallationCubit>().state.serverDetails == null;
     return Container(
       padding: const EdgeInsets.only(top: 20, bottom: 5),
       decoration: const BoxDecoration(
           border: Border(
         bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-      )),
+      ),),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,8 +155,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                 : () {
                     showDialog(
                       context: context,
-                      builder: (_) {
-                        return BrandAlert(
+                      builder: (final _) => BrandAlert(
                           title: 'modals.3'.tr(),
                           contentText: 'modals.6'.tr(),
                           actions: [
@@ -170,25 +165,22 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                                 onPressed: () async {
                                   showDialog(
                                       context: context,
-                                      builder: (context) {
-                                        return Container(
+                                      builder: (final context) => Container(
                                           alignment: Alignment.center,
                                           child:
                                               const CircularProgressIndicator(),
-                                        );
-                                      });
+                                        ),);
                                   await context
                                       .read<ServerInstallationCubit>()
                                       .serverDelete();
                                   if (!mounted) return;
                                   Navigator.of(context).pop();
-                                }),
+                                },),
                             ActionButton(
                               text: 'basis.cancel'.tr(),
                             ),
                           ],
-                        );
-                      },
+                        ),
                     );
                   },
             child: Text(
@@ -207,18 +199,17 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
 
 class _TextColumn extends StatelessWidget {
   const _TextColumn({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     this.hasWarning = false,
-  }) : super(key: key);
+  });
 
   final String title;
   final String value;
   final bool hasWarning;
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(final BuildContext context) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BrandText.body1(
@@ -231,8 +222,7 @@ class _TextColumn extends StatelessWidget {
               fontSize: 13,
               height: 1.53,
               color: BrandColors.gray1,
-            ).merge(TextStyle(color: hasWarning ? BrandColors.warning : null))),
+            ).merge(TextStyle(color: hasWarning ? BrandColors.warning : null)),),
       ],
     );
-  }
 }

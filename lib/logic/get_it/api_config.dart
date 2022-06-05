@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
@@ -22,38 +24,38 @@ class ApiConfigModel {
   ServerDomain? _serverDomain;
   BackblazeBucket? _backblazeBucket;
 
-  Future<void> storeHetznerKey(String value) async {
+  Future<void> storeHetznerKey(final String value) async {
     await _box.put(BNames.hetznerKey, value);
     _hetznerKey = value;
   }
 
-  Future<void> storeCloudFlareKey(String value) async {
+  Future<void> storeCloudFlareKey(final String value) async {
     await _box.put(BNames.cloudFlareKey, value);
     _cloudFlareKey = value;
   }
 
-  Future<void> storeBackblazeCredential(BackblazeCredential value) async {
+  Future<void> storeBackblazeCredential(final BackblazeCredential value) async {
     await _box.put(BNames.backblazeCredential, value);
 
     _backblazeCredential = value;
   }
 
-  Future<void> storeServerDomain(ServerDomain value) async {
+  Future<void> storeServerDomain(final ServerDomain value) async {
     await _box.put(BNames.serverDomain, value);
     _serverDomain = value;
   }
 
-  Future<void> storeServerDetails(ServerHostingDetails value) async {
+  Future<void> storeServerDetails(final ServerHostingDetails value) async {
     await _box.put(BNames.serverDetails, value);
     _serverDetails = value;
   }
 
-  Future<void> storeBackblazeBucket(BackblazeBucket value) async {
+  Future<void> storeBackblazeBucket(final BackblazeBucket value) async {
     await _box.put(BNames.backblazeBucket, value);
     _backblazeBucket = value;
   }
 
-  clear() {
+  void clear() {
     _hetznerKey = null;
     _cloudFlareKey = null;
     _backblazeCredential = null;

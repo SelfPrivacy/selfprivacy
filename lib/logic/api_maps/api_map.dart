@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
@@ -10,19 +12,19 @@ import 'package:selfprivacy/logic/models/message.dart';
 
 abstract class ApiMap {
   Future<Dio> getClient() async {
-    var dio = Dio(await options);
+    final Dio dio = Dio(await options);
     if (hasLogger) {
       dio.interceptors.add(PrettyDioLogger());
     }
     dio.interceptors.add(ConsoleInterceptor());
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
+        (final HttpClient client) {
       client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+          (final X509Certificate cert, final String host, final int port) => true;
       return client;
     };
 
-    dio.interceptors.add(InterceptorsWrapper(onError: (DioError e, handler) {
+    dio.interceptors.add(InterceptorsWrapper(onError: (final DioError e, final ErrorInterceptorHandler handler) {
       print(e.requestOptions.path);
       print(e.requestOptions.data);
 
@@ -30,7 +32,7 @@ abstract class ApiMap {
       print(e.response);
 
       return handler.next(e);
-    }));
+    },),);
     return dio;
   }
 
@@ -42,21 +44,21 @@ abstract class ApiMap {
 
   ValidateStatus? validateStatus;
 
-  void close(Dio client) {
+  void close(final Dio client) {
     client.close();
     validateStatus = null;
   }
 }
 
 class ConsoleInterceptor extends InterceptorsWrapper {
-  void addMessage(Message message) {
+  void addMessage(final Message message) {
     getIt.get<ConsoleModel>().addMessage(message);
   }
 
   @override
   Future onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
+    final RequestOptions options,
+    final RequestInterceptorHandler handler,
   ) async {
     addMessage(
       Message(
@@ -69,8 +71,8 @@ class ConsoleInterceptor extends InterceptorsWrapper {
 
   @override
   Future onResponse(
-    Response response,
-    ResponseInterceptorHandler handler,
+    final Response response,
+    final ResponseInterceptorHandler handler,
   ) async {
     addMessage(
       Message(
@@ -85,8 +87,8 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    var response = err.response;
+  Future onError(final DioError err, final ErrorInterceptorHandler handler) async {
+    final Response? response = err.response;
     log(err.toString());
     addMessage(
       Message.warn(

@@ -11,17 +11,17 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryHetznerConnected extends StatelessWidget {
-  const RecoveryHetznerConnected({Key? key}) : super(key: key);
+  const RecoveryHetznerConnected({final Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var appConfig = context.watch<ServerInstallationCubit>();
+  Widget build(final BuildContext context) {
+    ServerInstallationCubit appConfig = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (context) => HetznerFormCubit(appConfig),
+      create: (final BuildContext context) => HetznerFormCubit(appConfig),
       child: Builder(
-        builder: (context) {
-          var formCubitState = context.watch<HetznerFormCubit>().state;
+        builder: (final BuildContext context) {
+          FormCubitState formCubitState = context.watch<HetznerFormCubit>().state;
 
           return BrandHeroScreen(
             heroTitle: 'recovering.hetzner_connected'.tr(),
@@ -52,7 +52,7 @@ class RecoveryHetznerConnected extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
-                  builder: (BuildContext context) {
+                  builder: (final BuildContext context) {
                     return const BrandBottomSheet(
                       isExpended: true,
                       child: Padding(

@@ -10,12 +10,11 @@ import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key_receiving.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class RecoveryKey extends StatefulWidget {
-  const RecoveryKey({Key? key}) : super(key: key);
+  const RecoveryKey({super.key});
 
   @override
   State<RecoveryKey> createState() => _RecoveryKeyState();
@@ -23,8 +22,8 @@ class RecoveryKey extends StatefulWidget {
 
 class _RecoveryKeyState extends State<RecoveryKey> {
   @override
-  Widget build(BuildContext context) {
-    final keyStatus = context.watch<RecoveryKeyCubit>().state;
+  Widget build(final BuildContext context) {
+    final RecoveryKeyState keyStatus = context.watch<RecoveryKeyCubit>().state;
 
     final List<Widget> widgets;
     String? subtitle =
@@ -62,7 +61,7 @@ class _RecoveryKeyState extends State<RecoveryKey> {
 }
 
 class RecoveryKeyContent extends StatefulWidget {
-  const RecoveryKeyContent({Key? key}) : super(key: key);
+  const RecoveryKeyContent({super.key});
 
   @override
   State<RecoveryKeyContent> createState() => _RecoveryKeyContentState();
@@ -72,8 +71,8 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
   bool _isConfigurationVisible = false;
 
   @override
-  Widget build(BuildContext context) {
-    final keyStatus = context.watch<RecoveryKeyCubit>().state;
+  Widget build(final BuildContext context) {
+    final RecoveryKeyState keyStatus = context.watch<RecoveryKeyCubit>().state;
 
     return Column(
       children: [
@@ -108,14 +107,12 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
 }
 
 class RecoveryKeyStatusCard extends StatelessWidget {
-  const RecoveryKeyStatusCard({required this.isValid, Key? key})
-      : super(key: key);
+  const RecoveryKeyStatusCard({required this.isValid, super.key});
 
   final bool isValid;
 
   @override
-  Widget build(BuildContext context) {
-    return BrandCards.filled(
+  Widget build(final BuildContext context) => BrandCards.filled(
       child: ListTile(
         title: isValid
             ? Text(
@@ -144,18 +141,16 @@ class RecoveryKeyStatusCard extends StatelessWidget {
             : Theme.of(context).colorScheme.errorContainer,
       ),
     );
-  }
 }
 
 class RecoveryKeyInformation extends StatelessWidget {
-  const RecoveryKeyInformation({required this.state, Key? key})
-      : super(key: key);
+  const RecoveryKeyInformation({required this.state, super.key});
 
   final RecoveryKeyState state;
 
   @override
-  Widget build(BuildContext context) {
-    const padding = EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0);
+  Widget build(final BuildContext context) {
+    const EdgeInsets padding = EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0);
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -196,7 +191,7 @@ class RecoveryKeyInformation extends StatelessWidget {
 }
 
 class RecoveryKeyConfiguration extends StatefulWidget {
-  const RecoveryKeyConfiguration({Key? key}) : super(key: key);
+  const RecoveryKeyConfiguration({super.key});
 
   @override
   State<StatefulWidget> createState() => _RecoveryKeyConfigurationState();
@@ -222,7 +217,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
       _isLoading = true;
     });
     try {
-      final token = await context.read<RecoveryKeyCubit>().generateRecoveryKey(
+      final String token = await context.read<RecoveryKeyCubit>().generateRecoveryKey(
             numberOfUses:
                 _isAmountToggled ? int.tryParse(_amountController.text) : null,
             expirationDate: _isExpirationToggled ? _selectedDate : null,
@@ -248,8 +243,8 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
   }
 
   void _updateErrorStatuses() {
-    final amount = _amountController.text;
-    final expiration = _expirationController.text;
+    final String amount = _amountController.text;
+    final String expiration = _expirationController.text;
 
     print('amount: $amount');
     print('_isAmountToggled: $_isAmountToggled');
@@ -261,7 +256,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
       } else if (amount.isEmpty) {
         _isAmountError = true;
       } else {
-        final amountInt = int.tryParse(amount);
+        final int? amountInt = int.tryParse(amount);
         _isAmountError = amountInt == null || amountInt <= 0;
       }
 
@@ -279,7 +274,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (_isDateSelected) {
       _expirationController.text = DateFormat.yMMMMd().format(_selectedDate);
     }
@@ -294,7 +289,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
           value: _isAmountToggled,
           title: Text('recovery_key.key_amount_toggle'.tr()),
           activeColor: Theme.of(context).colorScheme.primary,
-          onChanged: (bool toggled) {
+          onChanged: (final bool toggled) {
             setState(
               () {
                 _isAmountToggled = toggled;
@@ -317,7 +312,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
                 decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     errorText: _isAmountError ? ' ' : null,
-                    labelText: 'recovery_key.key_amount_field_title'.tr()),
+                    labelText: 'recovery_key.key_amount_field_title'.tr(),),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
@@ -332,7 +327,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
           value: _isExpirationToggled,
           title: Text('recovery_key.key_duedate_toggle'.tr()),
           activeColor: Theme.of(context).colorScheme.primary,
-          onChanged: (bool toggled) {
+          onChanged: (final bool toggled) {
             setState(
               () {
                 _isExpirationToggled = toggled;
@@ -359,7 +354,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
                 decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     errorText: _isExpirationError ? ' ' : null,
-                    labelText: 'recovery_key.key_duedate_field_title'.tr()),
+                    labelText: 'recovery_key.key_duedate_field_title'.tr(),),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
@@ -381,12 +376,12 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
     );
   }
 
-  Future<DateTime> _selectDate(BuildContext context) async {
-    final selected = await showDatePicker(
+  Future<DateTime> _selectDate(final BuildContext context) async {
+    final DateTime? selected = await showDatePicker(
         context: context,
         initialDate: _selectedDate,
         firstDate: DateTime.now(),
-        lastDate: DateTime(DateTime.now().year + 50));
+        lastDate: DateTime(DateTime.now().year + 50),);
 
     if (selected != null && selected != _selectedDate) {
       setState(

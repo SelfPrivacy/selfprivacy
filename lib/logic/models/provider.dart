@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
@@ -15,7 +17,7 @@ class ProviderModel extends Equatable {
   final StateType state;
   final ProviderType type;
 
-  ProviderModel updateState(StateType newState) => ProviderModel(
+  ProviderModel updateState(final StateType newState) => ProviderModel(
         state: newState,
         type: type,
       );

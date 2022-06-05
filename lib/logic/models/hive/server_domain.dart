@@ -20,9 +20,7 @@ class ServerDomain {
   final DnsProvider provider;
 
   @override
-  String toString() {
-    return '$domainName: $zoneId';
-  }
+  String toString() => '$domainName: $zoneId';
 }
 
 @HiveType(typeId: 100)

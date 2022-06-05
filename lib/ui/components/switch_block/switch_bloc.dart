@@ -3,24 +3,23 @@ import 'package:selfprivacy/config/brand_colors.dart';
 
 class SwitcherBlock extends StatelessWidget {
   const SwitcherBlock({
-    Key? key,
+    super.key,
     required this.child,
     required this.isActive,
     required this.onChange,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final bool isActive;
   final ValueChanged<bool> onChange;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(final BuildContext context) => Container(
       padding: const EdgeInsets.only(top: 20, bottom: 5),
       decoration: const BoxDecoration(
           border: Border(
         bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-      )),
+      ),),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,5 +35,4 @@ class SwitcherBlock extends StatelessWidget {
         ],
       ),
     );
-  }
 }

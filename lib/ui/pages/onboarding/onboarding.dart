@@ -6,7 +6,7 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({Key? key, required this.nextPage}) : super(key: key);
+  const OnboardingPage({super.key, required this.nextPage});
 
   final Widget nextPage;
   @override
@@ -22,8 +22,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
+  Widget build(final BuildContext context) => SafeArea(
       child: Scaffold(
         body: PageView(
           controller: pageController,
@@ -34,19 +33,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
         ),
       ),
     );
-  }
 
-  Widget _withPadding(Widget child) {
-    return Padding(
+  Widget _withPadding(final Widget child) => Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
       ),
       child: child,
     );
-  }
 
-  Widget firstPage() {
-    return ConstrainedBox(
+  Widget firstPage() => ConstrainedBox(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height,
       ),
@@ -85,10 +80,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
         ],
       ),
     );
-  }
 
-  Widget secondPage() {
-    return ConstrainedBox(
+  Widget secondPage() => ConstrainedBox(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height,
       ),
@@ -126,7 +119,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               context.read<AppSettingsCubit>().turnOffOnboarding();
               Navigator.of(context).pushAndRemoveUntil(
                 materialRoute(widget.nextPage),
-                (route) => false,
+                (final route) => false,
               );
             },
             text: 'basis.got_it'.tr(),
@@ -135,16 +128,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
         ],
       ),
     );
-  }
 }
 
 String _fileName({
-  required BuildContext context,
-  required String path,
-  required String fileName,
-  required String fileExtention,
+  required final BuildContext context,
+  required final String path,
+  required final String fileName,
+  required final String fileExtention,
 }) {
-  var theme = Theme.of(context);
-  var isDark = theme.brightness == Brightness.dark;
+  final ThemeData theme = Theme.of(context);
+  final bool isDark = theme.brightness == Brightness.dark;
   return '$path/$fileName${isDark ? '-dark' : '-light'}.$fileExtention';
 }

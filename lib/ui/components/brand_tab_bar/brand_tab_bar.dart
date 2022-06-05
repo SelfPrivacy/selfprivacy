@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
 class BrandTabBar extends StatefulWidget {
-  const BrandTabBar({Key? key, this.controller}) : super(key: key);
+  const BrandTabBar({final super.key, this.controller});
 
   final TabController? controller;
   @override
@@ -34,26 +34,22 @@ class _BrandTabBarState extends State<BrandTabBar> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return NavigationBar(
+  Widget build(final BuildContext context) => NavigationBar(
       destinations: [
         _getIconButton('basis.providers'.tr(), BrandIcons.server, 0),
         _getIconButton('basis.services'.tr(), BrandIcons.box, 1),
         _getIconButton('basis.users'.tr(), BrandIcons.users, 2),
         _getIconButton('basis.more'.tr(), Icons.menu_rounded, 3),
       ],
-      onDestinationSelected: (index) {
+      onDestinationSelected: (final index) {
         widget.controller!.animateTo(index);
       },
       selectedIndex: currentIndex ?? 0,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
     );
-  }
 
-  _getIconButton(String label, IconData iconData, int index) {
-    return NavigationDestination(
+  NavigationDestination _getIconButton(final String label, final IconData iconData, final int index) => NavigationDestination(
       icon: Icon(iconData),
       label: label,
     );
-  }
 }

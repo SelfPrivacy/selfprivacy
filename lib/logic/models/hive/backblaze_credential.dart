@@ -14,16 +14,14 @@ class BackblazeCredential {
   @HiveField(1)
   final String applicationKey;
 
-  get encodedApiKey => encodedBackblazeKey(keyId, applicationKey);
+  String get encodedApiKey => encodedBackblazeKey(keyId, applicationKey);
 
   @override
-  String toString() {
-    return '$keyId: $encodedApiKey';
-  }
+  String toString() => '$keyId: $encodedApiKey';
 }
 
-String encodedBackblazeKey(String? keyId, String? applicationKey) {
-  String apiKey = '$keyId:$applicationKey';
-  String encodedApiKey = base64.encode(utf8.encode(apiKey));
+String encodedBackblazeKey(final String? keyId, final String? applicationKey) {
+  final String apiKey = '$keyId:$applicationKey';
+  final String encodedApiKey = base64.encode(utf8.encode(apiKey));
   return encodedApiKey;
 }

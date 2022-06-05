@@ -8,7 +8,7 @@ class BackblazeBucket {
       {required this.bucketId,
       required this.bucketName,
       required this.applicationKeyId,
-      required this.applicationKey});
+      required this.applicationKey,});
 
   @HiveField(0)
   final String bucketId;
@@ -23,7 +23,5 @@ class BackblazeBucket {
   final String bucketName;
 
   @override
-  String toString() {
-    return bucketName;
-  }
+  String toString() => bucketName;
 }

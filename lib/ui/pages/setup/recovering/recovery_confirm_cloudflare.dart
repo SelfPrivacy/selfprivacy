@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -10,22 +12,22 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryConfirmCloudflare extends StatelessWidget {
-  const RecoveryConfirmCloudflare({Key? key}) : super(key: key);
+  const RecoveryConfirmCloudflare({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var appConfig = context.watch<ServerInstallationCubit>();
+  Widget build(final BuildContext context) {
+    final ServerInstallationCubit appConfig = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (context) => CloudFlareFormCubit(appConfig),
-      child: Builder(builder: (context) {
-        var formCubitState = context.watch<CloudFlareFormCubit>().state;
+      create: (final BuildContext context) => CloudFlareFormCubit(appConfig),
+      child: Builder(builder: (final BuildContext context) {
+        final FormCubitState formCubitState = context.watch<CloudFlareFormCubit>().state;
 
         return BrandHeroScreen(
           heroTitle: 'recovering.confirm_cloudflare'.tr(),
           heroSubtitle: 'recovering.confirm_cloudflare_description'.tr(args: [
             appConfig.state.serverDomain?.domainName ?? 'your domain'
-          ]),
+          ],),
           hasBackButton: true,
           hasFlashButton: false,
           children: [
@@ -49,8 +51,7 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
-                builder: (BuildContext context) {
-                  return const BrandBottomSheet(
+                builder: (final BuildContext context) => const BrandBottomSheet(
                     isExpended: true,
                     child: Padding(
                       padding: paddingH15V0,
@@ -58,14 +59,13 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
                         fileName: 'how_cloudflare',
                       ),
                     ),
-                  );
-                },
+                  ),
               ),
               title: 'initializing.how'.tr(),
             ),
           ],
         );
-      }),
+      },),
     );
   }
 }

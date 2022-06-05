@@ -11,8 +11,8 @@ part 'providers_state.dart';
 class ProvidersCubit extends Cubit<ProvidersState> {
   ProvidersCubit() : super(InitialProviderState());
 
-  void connect(ProviderModel provider) {
-    var newState = state.updateElement(provider, StateType.stable);
+  void connect(final ProviderModel provider) {
+    final ProvidersState newState = state.updateElement(provider, StateType.stable);
     emit(newState);
   }
 }

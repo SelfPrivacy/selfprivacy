@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -14,7 +16,7 @@ class BackblazeApiAuth {
 
 class BackblazeApplicationKey {
   BackblazeApplicationKey(
-      {required this.applicationKeyId, required this.applicationKey});
+      {required this.applicationKeyId, required this.applicationKey,});
 
   final String applicationKeyId;
   final String applicationKey;
@@ -25,10 +27,10 @@ class BackblazeApi extends ApiMap {
 
   @override
   BaseOptions get options {
-    var options = BaseOptions(baseUrl: rootAddress);
+    final BaseOptions options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
-      var backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
-      var token = backblazeCredential!.applicationKey;
+      final BackblazeCredential? backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
+      final String token = backblazeCredential!.applicationKey;
       options.headers = {'Authorization': 'Basic $token'};
     }
 
@@ -45,14 +47,14 @@ class BackblazeApi extends ApiMap {
   String apiPrefix = '/b2api/v2';
 
   Future<BackblazeApiAuth> getAuthorizationToken() async {
-    var client = await getClient();
-    var backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
+    final Dio client = await getClient();
+    final BackblazeCredential? backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
     if (backblazeCredential == null) {
       throw Exception('Backblaze credential is null');
     }
     final String encodedApiKey = encodedBackblazeKey(
-        backblazeCredential.keyId, backblazeCredential.applicationKey);
-    var response = await client.get(
+        backblazeCredential.keyId, backblazeCredential.applicationKey,);
+    final Response response = await client.get(
       'b2_authorize_account',
       options: Options(headers: {'Authorization': 'Basic $encodedApiKey'}),
     );
@@ -65,9 +67,9 @@ class BackblazeApi extends ApiMap {
     );
   }
 
-  Future<bool> isValid(String encodedApiKey) async {
-    var client = await getClient();
-    Response response = await client.get(
+  Future<bool> isValid(final String encodedApiKey) async {
+    final Dio client = await getClient();
+    final Response response = await client.get(
       'b2_authorize_account',
       options: Options(headers: {'Authorization': 'Basic $encodedApiKey'}),
     );
@@ -85,12 +87,12 @@ class BackblazeApi extends ApiMap {
   }
 
   // Create bucket
-  Future<String> createBucket(String bucketName) async {
-    final auth = await getAuthorizationToken();
-    var backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
-    var client = await getClient();
+  Future<String> createBucket(final String bucketName) async {
+    final BackblazeApiAuth auth = await getAuthorizationToken();
+    final BackblazeCredential? backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
+    final Dio client = await getClient();
     client.options.baseUrl = auth.apiUrl;
-    var response = await client.post(
+    final Response response = await client.post(
       '$apiPrefix/b2_create_bucket',
       data: {
         'accountId': backblazeCredential!.keyId,
@@ -117,11 +119,11 @@ class BackblazeApi extends ApiMap {
   }
 
   // Create a limited capability key with access to the given bucket
-  Future<BackblazeApplicationKey> createKey(String bucketId) async {
-    final auth = await getAuthorizationToken();
-    var client = await getClient();
+  Future<BackblazeApplicationKey> createKey(final String bucketId) async {
+    final BackblazeApiAuth auth = await getAuthorizationToken();
+    final Dio client = await getClient();
     client.options.baseUrl = auth.apiUrl;
-    var response = await client.post(
+    final Response response = await client.post(
       '$apiPrefix/b2_create_key',
       data: {
         'accountId': getIt<ApiConfigModel>().backblazeCredential!.keyId,
@@ -137,7 +139,7 @@ class BackblazeApi extends ApiMap {
     if (response.statusCode == HttpStatus.ok) {
       return BackblazeApplicationKey(
           applicationKeyId: response.data['applicationKeyId'],
-          applicationKey: response.data['applicationKey']);
+          applicationKey: response.data['applicationKey'],);
     } else {
       throw Exception('code: ${response.statusCode}');
     }

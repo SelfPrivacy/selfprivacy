@@ -6,17 +6,16 @@ import 'package:selfprivacy/ui/components/pre_styled_buttons/pre_styled_buttons.
 
 class OnePage extends StatelessWidget {
   const OnePage({
-    Key? key,
+    super.key,
     required this.title,
     required this.child,
-  }) : super(key: key);
+  });
 
   final String title;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(final BuildContext context) => Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(52),
         child: Column(
@@ -40,10 +39,9 @@ class OnePage extends StatelessWidget {
             color: Theme.of(context).scaffoldBackgroundColor,
             alignment: Alignment.center,
             child: PreStyledButtons.close(
-                onPress: () => Navigator.of(context).pop()),
+                onPress: () => Navigator.of(context).pop(),),
           ),
         ),
       ),
     );
-  }
 }

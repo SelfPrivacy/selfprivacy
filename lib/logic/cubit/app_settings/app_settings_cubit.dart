@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
@@ -9,8 +11,8 @@ part 'app_settings_state.dart';
 
 class AppSettingsCubit extends Cubit<AppSettingsState> {
   AppSettingsCubit({
-    required bool isDarkModeOn,
-    required bool isOnboardingShowing,
+    required final bool isDarkModeOn,
+    required final bool isOnboardingShowing,
   }) : super(
           AppSettingsState(
             isDarkModeOn: isDarkModeOn,
@@ -21,15 +23,15 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
   Box box = Hive.box(BNames.appSettingsBox);
 
   void load() {
-    bool? isDarkModeOn = box.get(BNames.isDarkModeOn);
-    bool? isOnboardingShowing = box.get(BNames.isOnboardingShowing);
+    final bool? isDarkModeOn = box.get(BNames.isDarkModeOn);
+    final bool? isOnboardingShowing = box.get(BNames.isOnboardingShowing);
     emit(state.copyWith(
       isDarkModeOn: isDarkModeOn,
       isOnboardingShowing: isOnboardingShowing,
-    ));
+    ),);
   }
 
-  void updateDarkMode({required bool isDarkModeOn}) {
+  void updateDarkMode({required final bool isDarkModeOn}) {
     box.put(BNames.isDarkModeOn, isDarkModeOn);
     emit(state.copyWith(isDarkModeOn: isDarkModeOn));
   }

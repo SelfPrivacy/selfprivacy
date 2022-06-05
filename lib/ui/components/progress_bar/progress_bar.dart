@@ -7,10 +7,10 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class ProgressBar extends StatefulWidget {
   const ProgressBar({
-    Key? key,
+    super.key,
     required this.steps,
     required this.activeIndex,
-  }) : super(key: key);
+  });
 
   final int activeIndex;
 
@@ -22,23 +22,23 @@ class ProgressBar extends StatefulWidget {
 
 class _ProgressBarState extends State<ProgressBar> {
   @override
-  Widget build(BuildContext context) {
-    double progress = 1 / widget.steps.length * (widget.activeIndex + 0.3);
-    var isDark = context.watch<AppSettingsCubit>().state.isDarkModeOn;
-    var style = isDark ? progressTextStyleDark : progressTextStyleLight;
+  Widget build(final BuildContext context) {
+    final double progress = 1 / widget.steps.length * (widget.activeIndex + 0.3);
+    final bool isDark = context.watch<AppSettingsCubit>().state.isDarkModeOn;
+    final TextStyle style = isDark ? progressTextStyleDark : progressTextStyleLight;
 
-    var allSteps = widget.steps.asMap().map(
-      (i, step) {
-        var value = _stepTitle(index: i, style: style, step: step);
+    final Iterable<Container> allSteps = widget.steps.asMap().map(
+      (final i, final step) {
+        final Container value = _stepTitle(index: i, style: style, step: step);
         return MapEntry(i, value);
       },
     ).values;
 
-    List<Widget> odd = [];
-    List<Widget> even = [];
+    final List<Widget> odd = [];
+    final List<Widget> even = [];
 
-    var i = 0;
-    for (var step in allSteps) {
+    int i = 0;
+    for (final Container step in allSteps) {
       if (i.isEven) {
         even.add(step);
       } else {
@@ -76,8 +76,7 @@ class _ProgressBarState extends State<ProgressBar> {
             borderRadius: BorderRadius.circular(5),
           ),
           child: LayoutBuilder(
-            builder: (_, constraints) {
-              return AnimatedContainer(
+            builder: (final _, final constraints) => AnimatedContainer(
                 width: constraints.maxWidth * progress,
                 height: 5,
                 decoration: BoxDecoration(
@@ -91,8 +90,7 @@ class _ProgressBarState extends State<ProgressBar> {
                 duration: const Duration(
                   milliseconds: 300,
                 ),
-              );
-            },
+              ),
           ),
         ),
         const SizedBox(height: 5),
@@ -105,12 +103,12 @@ class _ProgressBarState extends State<ProgressBar> {
   }
 
   Container _stepTitle({
-    required int index,
+    required final int index,
     TextStyle? style,
-    String? step,
+    final String? step,
   }) {
-    var isActive = index == widget.activeIndex;
-    var checked = index < widget.activeIndex;
+    final bool isActive = index == widget.activeIndex;
+    final bool checked = index < widget.activeIndex;
 
     style = isActive ? style!.copyWith(fontWeight: FontWeight.w700) : style;
     return Container(
@@ -122,13 +120,11 @@ class _ProgressBarState extends State<ProgressBar> {
         text: TextSpan(
           style: progressTextStyleLight,
           children: [
-            checked
-                ? const WidgetSpan(
+            if (checked) const WidgetSpan(
                     child: Padding(
                     padding: EdgeInsets.only(bottom: 2, right: 2),
                     child: Icon(BrandIcons.check, size: 11),
-                  ))
-                : TextSpan(text: '${index + 1}.', style: style),
+                  ),) else TextSpan(text: '${index + 1}.', style: style),
             TextSpan(text: step, style: style)
           ],
         ),

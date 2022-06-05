@@ -8,7 +8,7 @@ import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
 class RecoveryConfirmServer extends StatefulWidget {
-  const RecoveryConfirmServer({Key? key}) : super(key: key);
+  const RecoveryConfirmServer({super.key});
 
   @override
   State<RecoveryConfirmServer> createState() => _RecoveryConfirmServerState();
@@ -259,11 +259,11 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
 
 class IsValidStringDisplay extends StatelessWidget {
   const IsValidStringDisplay({
-    Key? key,
+    super.key,
     required this.isValid,
     required this.textIfValid,
     required this.textIfInvalid,
-  }) : super(key: key);
+  });
 
   final bool isValid;
   final String textIfValid;

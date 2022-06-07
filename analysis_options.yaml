@@ -52,7 +52,6 @@ linter:
     sized_box_shrink_expand: true
     sort_constructors_first: true
     unnecessary_await_in_return: true
-    unnecessary_lambdas: true
     unnecessary_null_checks: true
     unnecessary_parenthesis: true
     use_enums: true

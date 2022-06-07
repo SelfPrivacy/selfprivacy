@@ -17,6 +17,14 @@ class RecoveryKeyState extends ServerInstallationDependendState {
   DateTime? get generatedAt => _status.date;
   DateTime? get expiresAt => _status.expiration;
   int? get usesLeft => _status.usesLeft;
+
+  bool get isInvalidBecauseExpired =>
+      _status.expiration != null &&
+      _status.expiration!.isBefore(DateTime.now());
+
+  bool get isInvalidBecauseUsed =>
+      _status.usesLeft != null && _status.usesLeft == 0;
+
   @override
   List<Object> get props => [_status, loadingStatus];
 

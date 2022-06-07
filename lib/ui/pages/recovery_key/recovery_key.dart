@@ -151,7 +151,7 @@ class RecoveryKeyInformation extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     const EdgeInsets padding =
-        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0);
+        EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0);
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -164,6 +164,11 @@ class RecoveryKeyInformation extends StatelessWidget {
                 'recovery_key.key_valid_until'.tr(
                   args: [DateFormat.yMMMMd().format(state.expiresAt!)],
                 ),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: state.isInvalidBecauseExpired
+                          ? Theme.of(context).colorScheme.error
+                          : Theme.of(context).colorScheme.onBackground,
+                    ),
               ),
             ),
           if (state.usesLeft != null)
@@ -173,6 +178,11 @@ class RecoveryKeyInformation extends StatelessWidget {
                 'recovery_key.key_valid_for'.tr(
                   args: [state.usesLeft!.toString()],
                 ),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: state.isInvalidBecauseUsed
+                          ? Theme.of(context).colorScheme.error
+                          : Theme.of(context).colorScheme.onBackground,
+                    ),
               ),
             ),
           if (state.generatedAt != null)
@@ -182,7 +192,6 @@ class RecoveryKeyInformation extends StatelessWidget {
                 'recovery_key.key_creation_date'.tr(
                   args: [DateFormat.yMMMMd().format(state.generatedAt!)],
                 ),
-                textAlign: TextAlign.start,
               ),
             ),
         ],

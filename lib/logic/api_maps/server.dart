@@ -447,7 +447,8 @@ class ServerApi extends ApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get('/services/restic/backup/list');
-      backups = response.data.map<Backup>(Backup.fromJson).toList();
+      backups =
+          response.data.map<Backup>((final e) => Backup.fromJson(e)).toList();
     } on DioError catch (e) {
       print(e.message);
     } catch (e) {
@@ -846,7 +847,9 @@ class ServerApi extends ApiMap {
     return ApiResponse(
       statusCode: code,
       data: (response.data != null)
-          ? response.data.map<ApiToken>(ApiToken.fromJson).toList()
+          ? response.data
+              .map<ApiToken>((final e) => ApiToken.fromJson(e))
+              .toList()
           : [],
     );
   }

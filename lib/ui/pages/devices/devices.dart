@@ -1,6 +1,7 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
@@ -31,6 +32,58 @@ class _DevicesScreenState extends State<DevicesScreen> {
         hasBackButton: true,
         hasFlashButton: false,
         children: [
+          if (devicesStatus.status == LoadingStatus.uninitialized) ...[
+            const Center(
+              heightFactor: 8,
+              child: CircularProgressIndicator(),
+            ),
+          ],
+          if (devicesStatus.status != LoadingStatus.uninitialized) ...[
+            _DevicesInfo(
+              devicesStatus: devicesStatus,
+            ),
+            const SizedBox(height: 16),
+            OutlinedButton(
+              onPressed: () => Navigator.of(context)
+                  .push(materialRoute(const NewDeviceScreen())),
+              child: Text('devices.main_screen.authorize_new_device'.tr()),
+            ),
+            const SizedBox(height: 16),
+            const Divider(height: 1),
+            const SizedBox(height: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'devices.main_screen.tip'.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ],
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+}
+
+class _DevicesInfo extends StatelessWidget {
+  const _DevicesInfo({
+    required this.devicesStatus,
+  });
+
+  final ApiDevicesState devicesStatus;
+
+  @override
+  Widget build(final BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Text(
             'devices.main_screen.this_device'.tr(),
             style: Theme.of(context).textTheme.labelLarge!.copyWith(
@@ -49,34 +102,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
           ...devicesStatus.otherDevices
               .map((final device) => _DeviceTile(device: device))
               .toList(),
-          const SizedBox(height: 16),
-          OutlinedButton(
-            onPressed: () => Navigator.of(context)
-                .push(materialRoute(const NewDeviceScreen())),
-            child: Text('devices.main_screen.authorize_new_device'.tr()),
-          ),
-          const SizedBox(height: 16),
-          const Divider(height: 1),
-          const SizedBox(height: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(
-                Icons.info_outline,
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'devices.main_screen.tip'.tr(),
-                style: Theme.of(context).textTheme.bodyMedium!,
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
         ],
-      ),
-    );
-  }
+      );
 }
 
 class _DeviceTile extends StatelessWidget {

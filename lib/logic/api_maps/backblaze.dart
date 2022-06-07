@@ -73,20 +73,25 @@ class BackblazeApi extends ApiMap {
 
   Future<bool> isValid(final String encodedApiKey) async {
     final Dio client = await getClient();
-    final Response response = await client.get(
-      'b2_authorize_account',
-      options: Options(headers: {'Authorization': 'Basic $encodedApiKey'}),
-    );
-    close(client);
-    if (response.statusCode == HttpStatus.ok) {
-      if (response.data['allowed']['capabilities'].contains('listBuckets')) {
-        return true;
+    try {
+      final Response response = await client.get(
+        'b2_authorize_account',
+        options: Options(headers: {'Authorization': 'Basic $encodedApiKey'}),
+      );
+      if (response.statusCode == HttpStatus.ok) {
+        if (response.data['allowed']['capabilities'].contains('listBuckets')) {
+          return true;
+        }
+        return false;
+      } else if (response.statusCode == HttpStatus.unauthorized) {
+        return false;
+      } else {
+        throw Exception('code: ${response.statusCode}');
       }
+    } on DioError {
       return false;
-    } else if (response.statusCode == HttpStatus.unauthorized) {
-      return false;
-    } else {
-      throw Exception('code: ${response.statusCode}');
+    } finally {
+      close(client);
     }
   }
 

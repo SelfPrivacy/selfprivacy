@@ -38,6 +38,7 @@ class ServerAuthorizationException implements Exception {
 
 class ServerInstallationRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
+  Box<User> usersBox = Hive.box(BNames.usersBox);
 
   Future<ServerInstallationState> load() async {
     final String? hetznerToken = getIt<ApiConfigModel>().hetznerKey;
@@ -123,6 +124,7 @@ class ServerInstallationRepository {
 
   void clearAppConfig() {
     box.clear();
+    usersBox.clear();
   }
 
   Future<ServerHostingDetails> startServer(
@@ -526,7 +528,7 @@ class ServerInstallationRepository {
         ),
         provider: ServerProvider.unknown,
         id: 0,
-        ip4: '',
+        ip4: serverIp,
         startTime: null,
         createTime: null,
       );
@@ -668,7 +670,6 @@ class ServerInstallationRepository {
       BNames.isServerResetedSecondTime,
       BNames.hasFinalChecked,
       BNames.isLoading,
-      BNames.isRecoveringServer,
     ]);
     getIt<ApiConfigModel>().init();
   }

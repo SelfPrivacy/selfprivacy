@@ -1,0 +1,6 @@
+- Added support for multi-device server access from SelfPrivacy app.
+- You can now create recovery token to regain the access to the server if you lose your device or the app's data.
+- You can now connect to an existing server, instead of creating a new one.
+- Initial support for Material Design 3 (Material You).
+- App now uses your system colors on Android 12 (Material You), Windows 10 (accent color) and Linux (GTK colors).
+- Minor bug fixes.

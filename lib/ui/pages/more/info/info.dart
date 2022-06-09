@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
@@ -35,7 +36,14 @@ class InfoPage extends StatelessWidget {
       );
 
   Future<String> _version() async {
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    return packageInfo.version;
+    String packageVersion = 'unknown';
+    try {
+      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      packageVersion = packageInfo.version;
+    } catch (e) {
+      print(e);
+    }
+
+    return packageVersion;
   }
 }

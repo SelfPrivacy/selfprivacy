@@ -83,7 +83,7 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
         if (_isConfigurationVisible || !keyStatus.exists)
           const RecoveryKeyConfiguration(),
         const SizedBox(height: 16),
-        if (!_isConfigurationVisible && keyStatus.isValid)
+        if (!_isConfigurationVisible && keyStatus.isValid && keyStatus.exists)
           BrandButton.text(
             title: 'recovery_key.key_replace_button'.tr(),
             onPressed: () {
@@ -92,7 +92,7 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
               });
             },
           ),
-        if (!_isConfigurationVisible && !keyStatus.isValid)
+        if (!_isConfigurationVisible && !keyStatus.isValid && keyStatus.exists)
           FilledButton(
             title: 'recovery_key.key_replace_button'.tr(),
             onPressed: () {

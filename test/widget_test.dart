@@ -6,9 +6,12 @@ void main() {
   group('StringGenerators', () {
     group('Basic', () {
       test('assert chart empty', () {
-        expect(() {
-          StringGenerators.getRandomString(8);
-        }, throwsAssertionError,);
+        expect(
+          () {
+            StringGenerators.getRandomString(8);
+          },
+          throwsAssertionError,
+        );
       });
 
       test('only lowercase string', () {
@@ -27,8 +30,11 @@ void main() {
 
       test('only uppercase string', () {
         const int length = 8;
-        final String generatedString = StringGenerators.getRandomString(length,
-            hasLowercaseLetters: false, hasUppercaseLetters: true,);
+        final String generatedString = StringGenerators.getRandomString(
+          length,
+          hasLowercaseLetters: false,
+          hasUppercaseLetters: true,
+        );
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));
@@ -41,10 +47,12 @@ void main() {
 
       test('only numbers string', () {
         const int length = 8;
-        final String generatedString = StringGenerators.getRandomString(length,
-            hasLowercaseLetters: false,
-            hasUppercaseLetters: false,
-            hasNumbers: true,);
+        final String generatedString = StringGenerators.getRandomString(
+          length,
+          hasLowercaseLetters: false,
+          hasUppercaseLetters: false,
+          hasNumbers: true,
+        );
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));
@@ -78,12 +86,14 @@ void main() {
     group('Strict mode', () {
       test('All', () {
         const int length = 5;
-        final String generatedString = StringGenerators.getRandomString(length,
-            hasLowercaseLetters: true,
-            hasUppercaseLetters: true,
-            hasNumbers: true,
-            hasSymbols: true,
-            isStrict: true,);
+        final String generatedString = StringGenerators.getRandomString(
+          length,
+          hasLowercaseLetters: true,
+          hasUppercaseLetters: true,
+          hasNumbers: true,
+          hasSymbols: true,
+          isStrict: true,
+        );
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));
@@ -95,12 +105,14 @@ void main() {
       });
       test('Lowercase letters and numbers', () {
         const int length = 3;
-        final String generatedString = StringGenerators.getRandomString(length,
-            hasLowercaseLetters: true,
-            hasUppercaseLetters: false,
-            hasNumbers: true,
-            hasSymbols: false,
-            isStrict: true,);
+        final String generatedString = StringGenerators.getRandomString(
+          length,
+          hasLowercaseLetters: true,
+          hasUppercaseLetters: false,
+          hasNumbers: true,
+          hasSymbols: false,
+          isStrict: true,
+        );
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));

@@ -234,7 +234,9 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
                     : null,
                 expirationDate: _isExpirationToggled ? _selectedDate : null,
               );
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _isLoading = false;
       });

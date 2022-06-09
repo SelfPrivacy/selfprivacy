@@ -17,6 +17,8 @@ class RecoveryMethodSelect extends StatelessWidget {
         heroSubtitle: 'recovering.method_select_description'.tr(),
         hasBackButton: true,
         hasFlashButton: false,
+        onBackButtonPressed:
+            context.read<ServerInstallationCubit>().revertRecoveryStep,
         children: [
           BrandCards.outlined(
             child: ListTile(

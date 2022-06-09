@@ -61,7 +61,6 @@ class Loading extends DomainSetupState {
 enum LoadingTypes { loadingDomain, saving }
 
 class Loaded extends DomainSetupState {
-
   Loaded(this.domain);
   final String domain;
 }

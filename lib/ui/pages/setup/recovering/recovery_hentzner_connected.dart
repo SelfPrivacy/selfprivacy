@@ -54,13 +54,17 @@ class RecoveryHetznerConnected extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
-                  builder: (final BuildContext context) =>
-                      const BrandBottomSheet(
+                  builder: (final BuildContext context) => BrandBottomSheet(
                     isExpended: true,
                     child: Padding(
                       padding: paddingH15V0,
-                      child: BrandMarkdown(
-                        fileName: 'how_hetzner',
+                      child: ListView(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        children: const [
+                          BrandMarkdown(
+                            fileName: 'how_hetzner',
+                          ),
+                        ],
                       ),
                     ),
                   ),

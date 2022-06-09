@@ -18,12 +18,14 @@ class ServerDetailsCubit extends Cubit<ServerDetailsState> {
     if (isReadyToCheck) {
       emit(ServerDetailsLoading());
       final ServerDetailsRepositoryDto data = await repository.load();
-      emit(Loaded(
-        serverInfo: data.hetznerServerInfo,
-        autoUpgradeSettings: data.autoUpgradeSettings,
-        serverTimezone: data.serverTimezone,
-        checkTime: DateTime.now(),
-      ),);
+      emit(
+        Loaded(
+          serverInfo: data.hetznerServerInfo,
+          autoUpgradeSettings: data.autoUpgradeSettings,
+          serverTimezone: data.serverTimezone,
+          checkTime: DateTime.now(),
+        ),
+      );
     } else {
       emit(ServerDetailsNotReady());
     }

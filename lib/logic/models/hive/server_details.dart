@@ -35,15 +35,16 @@ class ServerHostingDetails {
   @HiveField(6, defaultValue: ServerProvider.hetzner)
   final ServerProvider provider;
 
-  ServerHostingDetails copyWith({final DateTime? startTime}) => ServerHostingDetails(
-      startTime: startTime ?? this.startTime,
-      createTime: createTime,
-      id: id,
-      ip4: ip4,
-      volume: volume,
-      apiToken: apiToken,
-      provider: provider,
-    );
+  ServerHostingDetails copyWith({final DateTime? startTime}) =>
+      ServerHostingDetails(
+        startTime: startTime ?? this.startTime,
+        createTime: createTime,
+        id: id,
+        ip4: ip4,
+        volume: volume,
+        apiToken: apiToken,
+        provider: provider,
+      );
 
   @override
   String toString() => id.toString();

@@ -19,7 +19,6 @@ class ServerDetailsRepository {
 }
 
 class ServerDetailsRepositoryDto {
-
   ServerDetailsRepositoryDto({
     required this.hetznerServerInfo,
     required this.serverTimezone,

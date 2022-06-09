@@ -63,9 +63,11 @@ final TextStyle buttonTitleText = defaultTextStyle.copyWith(
   height: 1,
 );
 
-final TextStyle mediumStyle = defaultTextStyle.copyWith(fontSize: 13, height: 1.53);
+final TextStyle mediumStyle =
+    defaultTextStyle.copyWith(fontSize: 13, height: 1.53);
 
-final TextStyle smallStyle = defaultTextStyle.copyWith(fontSize: 11, height: 1.45);
+final TextStyle smallStyle =
+    defaultTextStyle.copyWith(fontSize: 11, height: 1.45);
 
 const TextStyle progressTextStyleLight = TextStyle(
   fontSize: 11,

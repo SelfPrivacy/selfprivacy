@@ -31,8 +31,8 @@ class RecoverByRecoveryKey extends StatelessWidget {
             heroSubtitle: 'recovering.method_recovery_input_description'.tr(),
             hasBackButton: true,
             hasFlashButton: false,
-            onBackButtonPressed: () =>
-                context.read<ServerInstallationCubit>().revertRecoveryStep(),
+            onBackButtonPressed:
+                context.read<ServerInstallationCubit>().revertRecoveryStep,
             children: [
               CubitFormTextField(
                 formFieldCubit:

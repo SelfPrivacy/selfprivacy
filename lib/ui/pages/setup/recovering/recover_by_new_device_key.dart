@@ -17,8 +17,8 @@ class RecoverByNewDeviceKeyInstruction extends StatelessWidget {
         heroSubtitle: 'recovering.method_device_description'.tr(),
         hasBackButton: true,
         hasFlashButton: false,
-        onBackButtonPressed: () =>
-            context.read<ServerInstallationCubit>().revertRecoveryStep(),
+        onBackButtonPressed:
+            context.read<ServerInstallationCubit>().revertRecoveryStep,
         children: [
           FilledButton(
             title: 'recovering.method_device_button'.tr(),

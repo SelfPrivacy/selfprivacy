@@ -1,5 +1,4 @@
 class ServerStatus {
-
   ServerStatus({
     required this.http,
     this.imap = StatusTypes.nodata,
@@ -10,10 +9,10 @@ class ServerStatus {
   final StatusTypes smtp;
 
   ServerStatus fromJson(final Map<String, dynamic> json) => ServerStatus(
-      http: statusTypeFromNumber(json['http']),
-      imap: statusTypeFromNumber(json['imap']),
-      smtp: statusTypeFromNumber(json['smtp']),
-    );
+        http: statusTypeFromNumber(json['http']),
+        imap: statusTypeFromNumber(json['imap']),
+        smtp: statusTypeFromNumber(json['smtp']),
+      );
 }
 
 StatusTypes statusTypeFromNumber(final int? number) {

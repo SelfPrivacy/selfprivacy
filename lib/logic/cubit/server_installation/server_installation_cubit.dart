@@ -146,8 +146,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  void startServerIfDnsIsOkay(
-      {final ServerInstallationNotFinished? state,}) async {
+  void startServerIfDnsIsOkay({
+    final ServerInstallationNotFinished? state,
+  }) async {
     final ServerInstallationNotFinished dataState =
         state ?? this.state as ServerInstallationNotFinished;
 
@@ -345,7 +346,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void tryToRecover(
-      final String token, final ServerRecoveryMethods method,) async {
+    final String token,
+    final ServerRecoveryMethods method,
+  ) async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
     final ServerDomain? serverDomain = dataState.serverDomain;
@@ -395,6 +398,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void revertRecoveryStep() {
+    if (state is ServerInstallationEmpty) {
+      return;
+    }
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
     switch (dataState.currentStep) {
@@ -535,7 +541,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void finishRecoveryProcess(
-      final BackblazeCredential backblazeCredential,) async {
+    final BackblazeCredential backblazeCredential,
+  ) async {
     await repository.saveIsServerStarted(true);
     await repository.saveIsServerResetedFirstTime(true);
     await repository.saveIsServerResetedSecondTime(true);

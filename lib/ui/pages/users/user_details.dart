@@ -2,10 +2,9 @@ part of 'users.dart';
 
 class _UserDetails extends StatelessWidget {
   const _UserDetails({
-    final Key? key,
     required this.user,
     required this.isRootUser,
-  }) : super(key: key);
+  });
 
   final User user;
   final bool isRootUser;

@@ -28,8 +28,8 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
           heroTitle: 'recovering.recovery_main_header'.tr(),
           hasBackButton: true,
           hasFlashButton: false,
-          onBackButtonPressed: () =>
-              context.read<ServerInstallationCubit>().revertRecoveryStep(),
+          onBackButtonPressed:
+              context.read<ServerInstallationCubit>().revertRecoveryStep,
           children: [
             BrandMarkdown(
               fileName: instructionFilename,

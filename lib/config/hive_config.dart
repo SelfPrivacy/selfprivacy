@@ -25,7 +25,8 @@ class HiveConfig {
     await Hive.openBox(BNames.appSettingsBox);
 
     final HiveAesCipher cipher = HiveAesCipher(
-        await getEncryptedKey(BNames.serverInstallationEncryptionKey),);
+      await getEncryptedKey(BNames.serverInstallationEncryptionKey),
+    );
 
     await Hive.openBox<User>(BNames.usersDeprecated);
     await Hive.openBox<User>(BNames.usersBox, encryptionCipher: cipher);

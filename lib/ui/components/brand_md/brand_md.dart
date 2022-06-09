@@ -55,7 +55,7 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
         color: isDark ? BrandColors.white : null,
       ),
     );
-    return Markdown(
+    return MarkdownBody(
       shrinkWrap: true,
       styleSheet: markdown,
       onTapLink: (final String text, final String? href, final String title) {

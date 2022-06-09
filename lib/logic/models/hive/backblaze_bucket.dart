@@ -4,11 +4,12 @@ part 'backblaze_bucket.g.dart';
 
 @HiveType(typeId: 6)
 class BackblazeBucket {
-  BackblazeBucket(
-      {required this.bucketId,
-      required this.bucketName,
-      required this.applicationKeyId,
-      required this.applicationKey,});
+  BackblazeBucket({
+    required this.bucketId,
+    required this.bucketName,
+    required this.applicationKeyId,
+    required this.applicationKey,
+  });
 
   @HiveField(0)
   final String bucketId;

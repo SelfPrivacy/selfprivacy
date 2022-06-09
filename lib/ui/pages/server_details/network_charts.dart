@@ -10,11 +10,11 @@ import 'package:intl/intl.dart';
 
 class NetworkChart extends StatelessWidget {
   const NetworkChart({
-    final Key? key,
     required this.listData,
     required this.period,
     required this.start,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final List<List<TimeSeriesData>> listData;
   final Period period;

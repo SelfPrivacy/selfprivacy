@@ -82,6 +82,7 @@ ThemeData darkTheme = lightTheme.copyWith(
   ),
 );
 
-const EdgeInsets paddingH15V30 = EdgeInsets.symmetric(horizontal: 15, vertical: 30);
+const EdgeInsets paddingH15V30 =
+    EdgeInsets.symmetric(horizontal: 15, vertical: 30);
 
 const EdgeInsets paddingH15V0 = EdgeInsets.symmetric(horizontal: 15);

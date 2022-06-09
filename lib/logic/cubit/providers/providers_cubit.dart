@@ -12,7 +12,8 @@ class ProvidersCubit extends Cubit<ProvidersState> {
   ProvidersCubit() : super(InitialProviderState());
 
   void connect(final ProviderModel provider) {
-    final ProvidersState newState = state.updateElement(provider, StateType.stable);
+    final ProvidersState newState =
+        state.updateElement(provider, StateType.stable);
     emit(newState);
   }
 }

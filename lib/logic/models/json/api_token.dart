@@ -4,7 +4,6 @@ part 'api_token.g.dart';
 
 @JsonSerializable()
 class ApiToken {
-
   factory ApiToken.fromJson(final Map<String, dynamic> json) =>
       _$ApiTokenFromJson(json);
   ApiToken({

@@ -66,7 +66,7 @@ class _KeyDisplay extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 'devices.add_new_device_screen.tip'.tr(),
-                style: Theme.of(context).textTheme.bodyMedium!,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),

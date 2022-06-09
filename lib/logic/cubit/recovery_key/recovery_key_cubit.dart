@@ -19,8 +19,12 @@ class RecoveryKeyCubit
       if (status == null) {
         emit(state.copyWith(loadingStatus: LoadingStatus.error));
       } else {
-        emit(state.copyWith(
-            status: status, loadingStatus: LoadingStatus.success,),);
+        emit(
+          state.copyWith(
+            status: status,
+            loadingStatus: LoadingStatus.success,
+          ),
+        );
       }
     } else {
       emit(state.copyWith(loadingStatus: LoadingStatus.uninitialized));
@@ -44,7 +48,8 @@ class RecoveryKeyCubit
       emit(state.copyWith(loadingStatus: LoadingStatus.error));
     } else {
       emit(
-          state.copyWith(status: status, loadingStatus: LoadingStatus.success),);
+        state.copyWith(status: status, loadingStatus: LoadingStatus.success),
+      );
     }
   }
 
@@ -69,7 +74,6 @@ class RecoveryKeyCubit
 }
 
 class GenerationError extends Error {
-
   GenerationError(this.message);
   final String message;
 }

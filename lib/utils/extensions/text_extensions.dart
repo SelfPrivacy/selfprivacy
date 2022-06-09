@@ -32,7 +32,9 @@ extension TextExtension on Text {
     final String? semanticsLabel,
     final TextWidthBasis? textWidthBasis,
     final TextStyle? style,
-  }) => Text(data!,
+  }) =>
+      Text(
+        data!,
         key: key ?? this.key,
         strutStyle: strutStyle ?? this.strutStyle,
         textAlign: textAlign ?? this.textAlign,
@@ -44,5 +46,6 @@ extension TextExtension on Text {
         maxLines: maxLines ?? this.maxLines,
         semanticsLabel: semanticsLabel ?? this.semanticsLabel,
         textWidthBasis: textWidthBasis ?? this.textWidthBasis,
-        style: style != null ? this.style?.merge(style) ?? style : this.style,);
+        style: style != null ? this.style?.merge(style) ?? style : this.style,
+      );
 }

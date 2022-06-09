@@ -8,11 +8,11 @@ import 'package:intl/intl.dart';
 
 class CpuChart extends StatelessWidget {
   const CpuChart({
-    final Key? key,
     required this.data,
     required this.period,
     required this.start,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final List<TimeSeriesData> data;
   final Period period;

@@ -108,10 +108,6 @@ class SelectDomainToRecover extends StatelessWidget {
               heroSubtitle: 'recovering.domain_recovery_description'.tr(),
               hasBackButton: true,
               hasFlashButton: false,
-              onBackButtonPressed:
-                  serverInstallation is ServerInstallationRecovery
-                      ? serverInstallation.clearAppConfig
-                      : null,
               children: [
                 CubitFormTextField(
                   formFieldCubit:

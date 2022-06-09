@@ -10,7 +10,7 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryConfirmBackblaze extends StatelessWidget {
-  const RecoveryConfirmBackblaze({final Key? key}) : super(key: key);
+  const RecoveryConfirmBackblaze({final super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -59,13 +59,17 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
-                  builder: (final BuildContext context) =>
-                      const BrandBottomSheet(
+                  builder: (final BuildContext context) => BrandBottomSheet(
                     isExpended: true,
                     child: Padding(
                       padding: paddingH15V0,
-                      child: BrandMarkdown(
-                        fileName: 'how_backblaze',
+                      child: ListView(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        children: const [
+                          BrandMarkdown(
+                            fileName: 'how_backblaze',
+                          ),
+                        ],
                       ),
                     ),
                   ),

@@ -214,12 +214,16 @@ class ServerInstallationRepository {
     try {
       dataBase = await hetznerApi.createVolume();
 
-      final ServerHostingDetails serverDetails = await hetznerApi.createServer(
+      final ServerHostingDetails? serverDetails = await hetznerApi.createServer(
         cloudFlareKey: cloudFlareKey,
         rootUser: rootUser,
         domainName: domainName,
         dataBase: dataBase,
       );
+      if (serverDetails == null) {
+        print('Server is not initialized!');
+        return;
+      }
       saveServerDetails(serverDetails);
       onSuccess(serverDetails);
     } on DioError catch (e) {
@@ -238,14 +242,17 @@ class ServerInstallationRepository {
                     domainName: domainName,
                   );
 
-                  final ServerHostingDetails serverDetails =
+                  final ServerHostingDetails? serverDetails =
                       await hetznerApi.createServer(
                     cloudFlareKey: cloudFlareKey,
                     rootUser: rootUser,
                     domainName: domainName,
                     dataBase: dataBase,
                   );
-
+                  if (serverDetails == null) {
+                    print('Server is not initialized!');
+                    return;
+                  }
                   await saveServerDetails(serverDetails);
                   onSuccess(serverDetails);
                 },

@@ -76,7 +76,7 @@ class HetznerApi extends ApiMap {
     );
   }
 
-  Future<ServerHostingDetails> createServer({
+  Future<ServerHostingDetails?> createServer({
     required final String cloudFlareKey,
     required final User rootUser,
     required final String domainName,
@@ -117,21 +117,32 @@ class HetznerApi extends ApiMap {
     };
     print('Decoded data: $data');
 
-    final Response serverCreateResponse = await client.post(
-      '/servers',
-      data: data,
-    );
+    ServerHostingDetails? serverDetails;
 
-    print(serverCreateResponse.data);
-    client.close();
-    return ServerHostingDetails(
-      id: serverCreateResponse.data['server']['id'],
-      ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
-      createTime: DateTime.now(),
-      volume: dataBase,
-      apiToken: apiToken,
-      provider: ServerProvider.hetzner,
-    );
+    try {
+      final Response serverCreateResponse = await client.post(
+        '/servers',
+        data: data,
+      );
+      print(serverCreateResponse.data);
+      serverDetails = ServerHostingDetails(
+        id: serverCreateResponse.data['server']['id'],
+        ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
+        createTime: DateTime.now(),
+        volume: dataBase,
+        apiToken: apiToken,
+        provider: ServerProvider.hetzner,
+      );
+    } on DioError catch (e) {
+      print(e);
+      rethrow;
+    } catch (e) {
+      print(e);
+    } finally {
+      client.close();
+    }
+
+    return serverDetails;
   }
 
   static String getHostnameFromDomain(final String domain) {
@@ -247,14 +258,20 @@ class HetznerApi extends ApiMap {
   }) async {
     final ServerHostingDetails? hetznerServer =
         getIt<ApiConfigModel>().serverDetails;
+
     final Dio client = await getClient();
-    await client.post(
-      '/servers/${hetznerServer!.id}/actions/change_dns_ptr',
-      data: {
-        'ip': ip4,
-        'dns_ptr': domainName,
-      },
-    );
-    close(client);
+    try {
+      await client.post(
+        '/servers/${hetznerServer!.id}/actions/change_dns_ptr',
+        data: {
+          'ip': ip4,
+          'dns_ptr': domainName,
+        },
+      );
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
   }
 }

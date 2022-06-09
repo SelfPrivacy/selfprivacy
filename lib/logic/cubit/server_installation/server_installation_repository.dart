@@ -153,7 +153,7 @@ class ServerInstallationRepository {
   Future<Map<String, bool>> isDnsAddressesMatch(
     final String? domainName,
     final String? ip4,
-    final Map<String, bool>? skippedMatches,
+    final Map<String, bool> skippedMatches,
   ) async {
     final List<String> addresses = <String>[
       '$domainName',
@@ -166,7 +166,7 @@ class ServerInstallationRepository {
     final Map<String, bool> matches = <String, bool>{};
 
     for (final String address in addresses) {
-      if (skippedMatches![address] ?? false) {
+      if (skippedMatches[address] ?? false) {
         matches[address] = true;
         continue;
       }

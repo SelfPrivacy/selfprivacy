@@ -159,7 +159,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final Map<String, bool> matches = await repository.isDnsAddressesMatch(
       domainName,
       ip4,
-      dataState.dnsMatches,
+      dataState.dnsMatches ?? {},
     );
 
     if (matches.values.every((final bool value) => value)) {

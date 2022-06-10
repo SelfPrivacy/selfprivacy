@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_domain_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_recovery_key.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_new_device_key.dart';
@@ -14,6 +15,7 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_cloudflar
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_server.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_hentzner_connected.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
+import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class RecoveryRouting extends StatelessWidget {
   const RecoveryRouting({final super.key});
@@ -108,6 +110,12 @@ class SelectDomainToRecover extends StatelessWidget {
               heroSubtitle: 'recovering.domain_recovery_description'.tr(),
               hasBackButton: true,
               hasFlashButton: false,
+              onBackButtonPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                  materialRoute(const RootPage()),
+                  (final predicate) => false,
+                );
+              },
               children: [
                 CubitFormTextField(
                   formFieldCubit:

@@ -16,21 +16,26 @@ class FieldCubitFactory {
   /// - Must not be a reserved root login
   /// - Must be unique
   FieldCubit<String> createUserLoginField() {
-    final userAllowedRegExp = RegExp(r"^[a-z_][a-z0-9_]+$");
-    const userMaxLength = 31;
+    final RegExp userAllowedRegExp = RegExp(r'^[a-z_][a-z0-9_]+$');
+    const int userMaxLength = 31;
     return FieldCubit(
       initalValue: '',
       validations: [
         ValidationModel<String>(
-            (s) => s.toLowerCase() == 'root', 'validations.root_name'.tr()),
+          (final String s) => s.toLowerCase() == 'root',
+          'validations.root_name'.tr(),
+        ),
         ValidationModel(
-          (login) => context.read<UsersCubit>().state.isLoginRegistered(login),
+          (final String login) =>
+              context.read<UsersCubit>().state.isLoginRegistered(login),
           'validations.user_already_exist'.tr(),
         ),
         RequiredStringValidation('validations.required'.tr()),
         LengthStringLongerValidation(userMaxLength),
-        ValidationModel<String>((s) => !userAllowedRegExp.hasMatch(s),
-            'validations.invalid_format'.tr()),
+        ValidationModel<String>(
+          (final String s) => !userAllowedRegExp.hasMatch(s),
+          'validations.invalid_format'.tr(),
+        ),
       ],
     );
   }
@@ -40,17 +45,25 @@ class FieldCubitFactory {
   /// - Must fail on the regural expression of invalid matches: [\n\r\s]+
   /// - Must not be empty
   FieldCubit<String> createUserPasswordField() {
-    var passwordForbiddenRegExp = RegExp(r"[\n\r\s]+");
+    final RegExp passwordForbiddenRegExp = RegExp(r'[\n\r\s]+');
     return FieldCubit(
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
-            (password) => passwordForbiddenRegExp.hasMatch(password),
-            'validations.invalid_format'.tr()),
+          passwordForbiddenRegExp.hasMatch,
+          'validations.invalid_format'.tr(),
+        ),
       ],
     );
   }
+
+  FieldCubit<String> createRequiredStringField() => FieldCubit(
+        initalValue: '',
+        validations: [
+          RequiredStringValidation('validations.required'.tr()),
+        ],
+      );
 
   final BuildContext context;
 }

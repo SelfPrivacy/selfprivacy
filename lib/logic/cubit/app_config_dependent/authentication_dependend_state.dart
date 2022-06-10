@@ -1,5 +1,5 @@
 part of 'authentication_dependend_cubit.dart';
 
-abstract class AppConfigDependendState extends Equatable {
-  const AppConfigDependendState();
+abstract class ServerInstallationDependendState extends Equatable {
+  const ServerInstallationDependendState();
 }

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
-import 'user.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 
 @immutable
 class Job extends Equatable {
   Job({
-    String? id,
     required this.title,
+    final String? id,
   }) : id = id ?? StringGenerators.simpleId();
 
   final String title;
@@ -45,8 +45,8 @@ class DeleteUserJob extends Job {
 class ToggleJob extends Job {
   ToggleJob({
     required this.type,
-    required String title,
-  }) : super(title: title);
+    required final super.title,
+  });
 
   final dynamic type;
 
@@ -56,12 +56,11 @@ class ToggleJob extends Job {
 
 class ServiceToggleJob extends ToggleJob {
   ServiceToggleJob({
-    required ServiceTypes type,
+    required final ServiceTypes super.type,
     required this.needToTurnOn,
   }) : super(
           title:
               '${needToTurnOn ? "jobs.serviceTurnOn".tr() : "jobs.serviceTurnOff".tr()} ${type.title}',
-          type: type,
         );
 
   final bool needToTurnOn;
@@ -71,7 +70,7 @@ class CreateSSHKeyJob extends Job {
   CreateSSHKeyJob({
     required this.user,
     required this.publicKey,
-  }) : super(title: '${"jobs.create_ssh_key".tr(args: [user.login])}');
+  }) : super(title: 'jobs.create_ssh_key'.tr(args: [user.login]));
 
   final User user;
   final String publicKey;
@@ -84,7 +83,7 @@ class DeleteSSHKeyJob extends Job {
   DeleteSSHKeyJob({
     required this.user,
     required this.publicKey,
-  }) : super(title: '${"jobs.delete_ssh_key".tr(args: [user.login])}');
+  }) : super(title: 'jobs.delete_ssh_key'.tr(args: [user.login]));
 
   final User user;
   final String publicKey;

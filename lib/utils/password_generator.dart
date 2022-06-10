@@ -5,23 +5,35 @@ Random _rnd = Random();
 typedef StringGeneratorFunction = String Function();
 
 class StringGenerators {
-  static const letters = 'abcdefghijklmnopqrstuvwxyz';
-  static const numbers = '1234567890';
-  static const symbols = '_';
+  static const String letters = 'abcdefghijklmnopqrstuvwxyz';
+  static const String numbers = '1234567890';
+  static const String symbols = '_';
 
   static String getRandomString(
-    int length, {
-    hasLowercaseLetters = false,
-    hasUppercaseLetters = false,
-    hasNumbers = false,
-    hasSymbols = false,
-    isStrict = false,
+    final int length, {
+    final hasLowercaseLetters = false,
+    final hasUppercaseLetters = false,
+    final hasNumbers = false,
+    final hasSymbols = false,
+    final isStrict = false,
   }) {
-    var chars = '';
-    if (hasLowercaseLetters) chars += letters;
-    if (hasUppercaseLetters) chars += letters.toUpperCase();
-    if (hasNumbers) chars += numbers;
-    if (hasSymbols) chars += symbols;
+    String chars = '';
+
+    if (hasLowercaseLetters) {
+      chars += letters;
+    }
+
+    if (hasUppercaseLetters) {
+      chars += letters.toUpperCase();
+    }
+
+    if (hasNumbers) {
+      chars += numbers;
+    }
+
+    if (hasSymbols) {
+      chars += symbols;
+    }
 
     assert(chars.isNotEmpty, 'chart empty');
 
@@ -29,8 +41,8 @@ class StringGenerators {
       return genString(length, chars);
     }
 
-    var res = '';
-    var loose = length;
+    String res = '';
+    int loose = length;
     if (hasLowercaseLetters) {
       loose -= 1;
       res += genString(1, letters);
@@ -49,20 +61,19 @@ class StringGenerators {
     }
     res += genString(loose, chars);
 
-    var shuffledlist = res.split('')..shuffle();
+    final List<String> shuffledlist = res.split('')..shuffle();
     return shuffledlist.join();
   }
 
-  static String genString(int length, String chars) {
-    return String.fromCharCodes(
-      Iterable.generate(
-        length,
-        (_) => chars.codeUnitAt(
-          _rnd.nextInt(chars.length),
+  static String genString(final int length, final String chars) =>
+      String.fromCharCodes(
+        Iterable.generate(
+          length,
+          (final _) => chars.codeUnitAt(
+            _rnd.nextInt(chars.length),
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   static StringGeneratorFunction userPassword = () => getRandomString(
         8,

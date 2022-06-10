@@ -15,7 +15,7 @@ class ProviderModel extends Equatable {
   final StateType state;
   final ProviderType type;
 
-  ProviderModel updateState(StateType newState) => ProviderModel(
+  ProviderModel updateState(final StateType newState) => ProviderModel(
         state: newState,
         type: type,
       );

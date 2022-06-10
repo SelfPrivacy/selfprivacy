@@ -21,13 +21,15 @@
     "saving": "Сохранение…",
     "nickname": "Никнейм",
     "loading": "Загрузка",
-    "later": "Настрою потом",
+    "later": "Пропустить и настроить потом",
+    "connect_to_existing": "Подключиться к существующему серверу",
     "reset": "Сбросить",
     "details": "Детальная информация",
     "no_data": "Нет данных",
     "wait": "Загрузка",
     "remove": "Удалить",
-    "apply": "Подать"
+    "apply": "Подать",
+    "done": "Готово"
   },
   "more": {
     "_comment": "вкладка ещё",
@@ -283,6 +285,90 @@
     "finish": "Всё инициализировано.",
     "checks": "Проверок выполнено: \n{} / {}"
   },
+  "recovering": {
+    "recovery_main_header": "Подключиться к существующему серверу",
+    "domain_recovery_description": "Введите домен, по которому вы хотите получить доступ к серверу:",
+    "domain_recover_placeholder": "Домен",
+    "domain_recover_error": "Не удалось найти сервер с таким доменом",
+    "method_select_description": "Выберите способ входа:",
+    "method_select_other_device": "У меня есть доступ на другом устройстве",
+    "method_select_recovery_key": "У меня есть ключ восстановления",
+    "method_select_nothing": "У меня ничего из этого нет",
+    "method_device_description": "Откройте приложение на другом устройстве и откройте экран управления устройствами. Нажмите \"Добавить устройство\" чтобы получить токен для авторизации.",
+    "method_device_button": "Я получил токен",
+    "method_device_input_description": "Введите ваш токен авторизации",
+    "method_device_input_placeholder": "Токен",
+    "method_recovery_input_description": "Введите ваш токен восстановления",
+    "fallback_select_description": "Что у вас из этого есть? Выберите первое, что подходит:",
+    "fallback_select_token_copy": "Копия токена авторизации из другой версии приложения.",
+    "fallback_select_root_ssh": "Root доступ к серверу по SSH.",
+    "fallback_select_provider_console": "Доступ к консоли хостинга.",
+    "authorization_failed": "Не удалось войти с этим ключом",
+    "fallback_select_provider_console_hint": "Например, Hetzner.",
+    "hetzner_connected": "Подключение к Hetzner",
+    "hetzner_connected_description": "Связь с сервером установлена. Введите токен Hetzner с доступом к {}:",
+    "hetzner_connected_placeholder": "Hetzner токен",
+    "confirm_server": "Подтвердите сервер",
+    "confirm_server_description": "Нашли сервер! Подтвердите, что это он:",
+    "confirm_server_accept": "Да, это он",
+    "confirm_server_decline": "Выбрать другой сервер",
+    "choose_server": "Выберите сервер",
+    "choose_server_description": "Не удалось определить, с каким сервером вы устанавливаете связь.",
+    "no_servers": "На вашем аккаунте нет доступных серверов.",
+    "domain_not_available_on_token": "Введённый токен не имеет доступа к нужному домену.",
+    "modal_confirmation_title": "Это действительно ваш сервер?",
+    "modal_confirmation_description": "Подключение к неправильному серверу может привести к деструктивным последствиям.",
+    "confirm_cloudflare": "Подключение к Cloudflare",
+    "confirm_cloudflare_description": "Введите токен Cloudflare, который имеет права на {}:",
+    "confirm_backblze": "Подключение к Backblaze",
+    "confirm_backblaze_description": "Введите токен Backblaze, который имеет права на хранилище резервных копий:"
+  },
+  "devices": {
+    "main_screen": {
+      "header": "Устройства",
+      "description": "Эти устройства имеют полный доступ к управлению сервером через приложение SelfPrivacy.",
+      "this_device": "Это устройство",
+      "other_devices": "Другие устройства",
+      "authorize_new_device": "Авторизовать новое устройство",
+      "access_granted_on" : "Доступ выдан {}",
+      "tip": "Нажмите на устройство, чтобы отозвать доступ."
+    },
+    "add_new_device_screen": {
+      "header": "Авторизация нового устройства",
+      "description": "Введите этот ключ на новом устройстве:",
+      "please_wait": "Пожалуйста, подождите",
+      "tip": "Ключ действителен 10 минут.",
+      "expired": "Срок действия ключа истёк.",
+      "get_new_key": "Получить новый ключ"
+    },
+    "revoke_device_alert": {
+      "header": "Отозвать доступ?",
+      "description": "Устройство {} больше не сможет управлять сервером.",
+      "yes": "Отозвать",
+      "no": "Отмена"
+    }
+  },
+  "recovery_key": {
+    "key_connection_error": "Не удалось соединиться с сервером",
+    "key_synchronizing": "Синхронизация...",
+    "key_main_header": "Ключ восстановления",
+    "key_main_description": "Требуется для авторизации SelfPrivacy, когда авторизованные устройства недоступны.",
+    "key_amount_toggle": "Ограничить использования",
+    "key_amount_field_title": "Макс. кол-во использований",
+    "key_duedate_toggle": "Ограничить срок использования",
+    "key_duedate_field_title": "Дата окончания срока",
+    "key_receive_button": "Получить ключ",
+    "key_valid": "Ваш ключ действителен",
+    "key_invalid": "Ваш ключ больше не действителен",
+    "key_valid_until": "Действителен до {}",
+    "key_valid_for": "Можно использовать ещё {} раз",
+    "key_creation_date": "Создан {}",
+    "key_replace_button": "Сгенерировать новый ключ",
+    "key_receiving_description": "Запишите этот ключ в безопасном месте. Он предоставляет полный доступ к вашему серверу:",
+    "key_receiving_info": "Этот ключ больше не будет показан, но вы сможете заменить его новым.",
+    "key_receiving_done": "Готово!",
+    "generation_error": "Не удалось сгенерировать ключ. {}"
+  },
   "modals": {
     "_comment": "messages in modals",
     "1": "Сервер с таким именем уже существует",
@@ -294,7 +380,9 @@
     "7": "Да, удалить",
     "8": "Удалить задачу",
     "9": "Перезагрузить",
-    "yes": "Да"
+    "10": "API не поддерживает домены с таким TLD.",
+    "yes": "Да",
+    "no": "Нет"
   },
   "timer": {
     "sec": "{} сек"

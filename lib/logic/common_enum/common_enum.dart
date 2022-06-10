@@ -1,7 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
+
+enum LoadingStatus {
+  uninitialized,
+  refreshing,
+  success,
+  error,
+}
 
 enum InitializingSteps {
   setHetznerKey,
@@ -13,6 +19,7 @@ enum InitializingSteps {
   startServer,
   checkSystemDnsAndDkimSet,
 }
+
 enum Period { hour, day, month }
 
 enum ServiceTypes {
@@ -126,9 +133,9 @@ extension ServiceTypesExt on ServiceTypes {
       case ServiceTypes.git:
         return BrandIcons.git;
       case ServiceTypes.vpn:
-        return Ionicons.shield_checkmark_outline;
+        return Icons.vpn_lock_outlined;
     }
   }
 
-  String get txt => this.toString().split('.')[1];
+  String get txt => toString().split('.')[1];
 }

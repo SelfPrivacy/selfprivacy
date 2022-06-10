@@ -3,17 +3,17 @@ import 'package:selfprivacy/config/brand_colors.dart';
 
 class BrandBottomSheet extends StatelessWidget {
   const BrandBottomSheet({
-    Key? key,
     required this.child,
+    final super.key,
     this.isExpended = false,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final bool isExpended;
 
   @override
-  Widget build(BuildContext context) {
-    var mainHeight = MediaQuery.of(context).size.height -
+  Widget build(final BuildContext context) {
+    final double mainHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         100;
     late Widget innerWidget;
@@ -44,9 +44,9 @@ class BrandBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: mainHeight),
               child: innerWidget,

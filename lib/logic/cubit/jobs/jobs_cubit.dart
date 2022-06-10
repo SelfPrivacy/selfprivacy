@@ -17,12 +17,12 @@ class JobsCubit extends Cubit<JobsState> {
     required this.servicesCubit,
   }) : super(JobsStateEmpty());
 
-  final api = ServerApi();
+  final ServerApi api = ServerApi();
   final UsersCubit usersCubit;
   final ServicesCubit servicesCubit;
 
-  void addJob(Job job) {
-    var newJobsList = <Job>[];
+  void addJob(final Job job) {
+    final List<Job> newJobsList = <Job>[];
     if (state is JobsStateWithJobs) {
       newJobsList.addAll((state as JobsStateWithJobs).jobList);
     }
@@ -31,21 +31,22 @@ class JobsCubit extends Cubit<JobsState> {
     emit(JobsStateWithJobs(newJobsList));
   }
 
-  void removeJob(String id) {
-    final newState = (state as JobsStateWithJobs).removeById(id);
+  void removeJob(final String id) {
+    final JobsState newState = (state as JobsStateWithJobs).removeById(id);
     emit(newState);
   }
 
-  void createOrRemoveServiceToggleJob(ToggleJob job) {
-    var newJobsList = <Job>[];
+  void createOrRemoveServiceToggleJob(final ToggleJob job) {
+    final List<Job> newJobsList = <Job>[];
     if (state is JobsStateWithJobs) {
       newJobsList.addAll((state as JobsStateWithJobs).jobList);
     }
-    var needToRemoveJob =
-        newJobsList.any((el) => el is ServiceToggleJob && el.type == job.type);
+    final bool needToRemoveJob = newJobsList
+        .any((final el) => el is ServiceToggleJob && el.type == job.type);
     if (needToRemoveJob) {
-      var removingJob = newJobsList
-          .firstWhere(((el) => el is ServiceToggleJob && el.type == job.type));
+      final Job removingJob = newJobsList.firstWhere(
+        (final el) => el is ServiceToggleJob && el.type == job.type,
+      );
       removeJob(removingJob.id);
     } else {
       newJobsList.add(job);
@@ -54,12 +55,13 @@ class JobsCubit extends Cubit<JobsState> {
     }
   }
 
-  void createShhJobIfNotExist(CreateSSHKeyJob job) {
-    var newJobsList = <Job>[];
+  void createShhJobIfNotExist(final CreateSSHKeyJob job) {
+    final List<Job> newJobsList = <Job>[];
     if (state is JobsStateWithJobs) {
       newJobsList.addAll((state as JobsStateWithJobs).jobList);
     }
-    var isExistInJobList = newJobsList.any((el) => el is CreateSSHKeyJob);
+    final bool isExistInJobList =
+        newJobsList.any((final el) => el is CreateSSHKeyJob);
     if (!isExistInJobList) {
       newJobsList.add(job);
       getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
@@ -69,7 +71,7 @@ class JobsCubit extends Cubit<JobsState> {
 
   Future<void> rebootServer() async {
     emit(JobsStateLoading());
-    final isSuccessful = await api.reboot();
+    final bool isSuccessful = await api.reboot();
     if (isSuccessful) {
       getIt<NavigationService>().showSnackBar('jobs.rebootSuccess'.tr());
     } else {
@@ -80,8 +82,8 @@ class JobsCubit extends Cubit<JobsState> {
 
   Future<void> upgradeServer() async {
     emit(JobsStateLoading());
-    final isPullSuccessful = await api.pullConfigurationUpdate();
-    final isSuccessful = await api.upgrade();
+    final bool isPullSuccessful = await api.pullConfigurationUpdate();
+    final bool isSuccessful = await api.upgrade();
     if (isSuccessful) {
       if (!isPullSuccessful) {
         getIt<NavigationService>().showSnackBar('jobs.configPullFailed'.tr());
@@ -96,10 +98,10 @@ class JobsCubit extends Cubit<JobsState> {
 
   Future<void> applyAll() async {
     if (state is JobsStateWithJobs) {
-      var jobs = (state as JobsStateWithJobs).jobList;
+      final List<Job> jobs = (state as JobsStateWithJobs).jobList;
       emit(JobsStateLoading());
-      var hasServiceJobs = false;
-      for (var job in jobs) {
+      bool hasServiceJobs = false;
+      for (final Job job in jobs) {
         if (job is CreateUserJob) {
           await usersCubit.createUser(job.user);
         }

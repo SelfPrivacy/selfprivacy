@@ -5,78 +5,95 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/server.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/models/json/backup.dart';
 
 part 'backups_state.dart';
 
-class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
-  BackupsCubit(AppConfigCubit appConfigCubit)
-      : super(appConfigCubit, BackupsState(preventActions: true));
+class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
+  BackupsCubit(final ServerInstallationCubit serverInstallationCubit)
+      : super(
+          serverInstallationCubit,
+          const BackupsState(preventActions: true),
+        );
 
-  final api = ServerApi();
-  final backblaze = BackblazeApi();
+  final ServerApi api = ServerApi();
+  final BackblazeApi backblaze = BackblazeApi();
 
+  @override
   Future<void> load() async {
-    if (appConfigCubit.state is AppConfigFinished) {
-      final bucket = getIt<ApiConfigModel>().backblazeBucket;
+    if (serverInstallationCubit.state is ServerInstallationFinished) {
+      final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
       if (bucket == null) {
-        emit(BackupsState(
-            isInitialized: false, preventActions: false, refreshing: false));
+        emit(
+          const BackupsState(
+            isInitialized: false,
+            preventActions: false,
+            refreshing: false,
+          ),
+        );
       } else {
-        final status = await api.getBackupStatus();
+        final BackupStatus status = await api.getBackupStatus();
         switch (status.status) {
           case BackupStatusEnum.noKey:
           case BackupStatusEnum.notInitialized:
-            emit(BackupsState(
-              backups: [],
-              isInitialized: true,
-              preventActions: false,
-              progress: 0,
-              status: status.status,
-              refreshing: false,
-            ));
+            emit(
+              BackupsState(
+                backups: const [],
+                isInitialized: true,
+                preventActions: false,
+                progress: 0,
+                status: status.status,
+                refreshing: false,
+              ),
+            );
             break;
           case BackupStatusEnum.initializing:
-            emit(BackupsState(
-              backups: [],
-              isInitialized: true,
-              preventActions: false,
-              progress: 0,
-              status: status.status,
-              refreshTimer: Duration(seconds: 10),
-              refreshing: false,
-            ));
+            emit(
+              BackupsState(
+                backups: const [],
+                isInitialized: true,
+                preventActions: false,
+                progress: 0,
+                status: status.status,
+                refreshTimer: const Duration(seconds: 10),
+                refreshing: false,
+              ),
+            );
             break;
           case BackupStatusEnum.initialized:
           case BackupStatusEnum.error:
-            final backups = await api.getBackups();
-            emit(BackupsState(
-              backups: backups,
-              isInitialized: true,
-              preventActions: false,
-              progress: status.progress,
-              status: status.status,
-              error: status.errorMessage ?? '',
-              refreshing: false,
-            ));
+            final List<Backup> backups = await api.getBackups();
+            emit(
+              BackupsState(
+                backups: backups,
+                isInitialized: true,
+                preventActions: false,
+                progress: status.progress,
+                status: status.status,
+                error: status.errorMessage ?? '',
+                refreshing: false,
+              ),
+            );
             break;
           case BackupStatusEnum.backingUp:
           case BackupStatusEnum.restoring:
-            final backups = await api.getBackups();
-            emit(BackupsState(
-              backups: backups,
-              isInitialized: true,
-              preventActions: true,
-              progress: status.progress,
-              status: status.status,
-              error: status.errorMessage ?? '',
-              refreshTimer: Duration(seconds: 5),
-              refreshing: false,
-            ));
+            final List<Backup> backups = await api.getBackups();
+            emit(
+              BackupsState(
+                backups: backups,
+                isInitialized: true,
+                preventActions: true,
+                progress: status.progress,
+                status: status.status,
+                error: status.errorMessage ?? '',
+                refreshTimer: const Duration(seconds: 5),
+                refreshing: false,
+              ),
+            );
             break;
           default:
-            emit(BackupsState());
+            emit(const BackupsState());
         }
         Timer(state.refreshTimer, () => updateBackups(useTimer: true));
       }
@@ -85,22 +102,23 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
 
   Future<void> createBucket() async {
     emit(state.copyWith(preventActions: true));
-    final domain = appConfigCubit.state.cloudFlareDomain!.domainName
+    final String domain = serverInstallationCubit.state.serverDomain!.domainName
         .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
-    final serverId = appConfigCubit.state.hetznerServer!.id;
-    var bucketName = 'selfprivacy-$domain-$serverId';
+    final int serverId = serverInstallationCubit.state.serverDetails!.id;
+    String bucketName = 'selfprivacy-$domain-$serverId';
     // If bucket name is too long, shorten it
     if (bucketName.length > 49) {
       bucketName = bucketName.substring(0, 49);
     }
-    final bucketId = await backblaze.createBucket(bucketName);
+    final String bucketId = await backblaze.createBucket(bucketName);
 
-    final key = await backblaze.createKey(bucketId);
-    final bucket = BackblazeBucket(
-        bucketId: bucketId,
-        bucketName: bucketName,
-        applicationKey: key.applicationKey,
-        applicationKeyId: key.applicationKeyId);
+    final BackblazeApplicationKey key = await backblaze.createKey(bucketId);
+    final BackblazeBucket bucket = BackblazeBucket(
+      bucketId: bucketId,
+      bucketName: bucketName,
+      applicationKey: key.applicationKey,
+      applicationKeyId: key.applicationKeyId,
+    );
 
     await getIt<ApiConfigModel>().storeBackblazeBucket(bucket);
     await api.uploadBackblazeConfig(bucket);
@@ -111,7 +129,7 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
 
   Future<void> reuploadKey() async {
     emit(state.copyWith(preventActions: true));
-    final bucket = getIt<ApiConfigModel>().backblazeBucket;
+    final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
     if (bucket == null) {
       emit(state.copyWith(isInitialized: false));
     } else {
@@ -121,32 +139,35 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
     }
   }
 
-  Duration refreshTimeFromState(BackupStatusEnum status) {
+  Duration refreshTimeFromState(final BackupStatusEnum status) {
     switch (status) {
       case BackupStatusEnum.backingUp:
       case BackupStatusEnum.restoring:
-        return Duration(seconds: 5);
+        return const Duration(seconds: 5);
       case BackupStatusEnum.initializing:
-        return Duration(seconds: 10);
+        return const Duration(seconds: 10);
       default:
-        return Duration(seconds: 60);
+        return const Duration(seconds: 60);
     }
   }
 
-  Future<void> updateBackups({bool useTimer = false}) async {
+  Future<void> updateBackups({final bool useTimer = false}) async {
     emit(state.copyWith(refreshing: true));
-    final backups = await api.getBackups();
-    final status = await api.getBackupStatus();
-    emit(state.copyWith(
-      backups: backups,
-      progress: status.progress,
-      status: status.status,
-      error: status.errorMessage,
-      refreshTimer: refreshTimeFromState(status.status),
-      refreshing: false,
-    ));
-    if (useTimer)
+    final List<Backup> backups = await api.getBackups();
+    final BackupStatus status = await api.getBackupStatus();
+    emit(
+      state.copyWith(
+        backups: backups,
+        progress: status.progress,
+        status: status.status,
+        error: status.errorMessage,
+        refreshTimer: refreshTimeFromState(status.status),
+        refreshing: false,
+      ),
+    );
+    if (useTimer) {
       Timer(state.refreshTimer, () => updateBackups(useTimer: true));
+    }
   }
 
   Future<void> forceUpdateBackups() async {
@@ -164,7 +185,7 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
     emit(state.copyWith(preventActions: false));
   }
 
-  Future<void> restoreBackup(String backupId) async {
+  Future<void> restoreBackup(final String backupId) async {
     emit(state.copyWith(preventActions: true));
     await api.restoreBackup(backupId);
     emit(state.copyWith(preventActions: false));
@@ -172,6 +193,6 @@ class BackupsCubit extends AppConfigDependendCubit<BackupsState> {
 
   @override
   void clear() async {
-    emit(BackupsState());
+    emit(const BackupsState());
   }
 }

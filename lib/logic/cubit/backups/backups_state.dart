@@ -1,13 +1,13 @@
 part of 'backups_cubit.dart';
 
-class BackupsState extends AppConfigDependendState {
+class BackupsState extends ServerInstallationDependendState {
   const BackupsState({
     this.isInitialized = false,
     this.backups = const [],
     this.progress = 0.0,
     this.status = BackupStatusEnum.noKey,
     this.preventActions = true,
-    this.error = "",
+    this.error = '',
     this.refreshTimer = const Duration(seconds: 60),
     this.refreshing = true,
   });
@@ -34,14 +34,14 @@ class BackupsState extends AppConfigDependendState {
       ];
 
   BackupsState copyWith({
-    bool? isInitialized,
-    List<Backup>? backups,
-    double? progress,
-    BackupStatusEnum? status,
-    bool? preventActions,
-    String? error,
-    Duration? refreshTimer,
-    bool? refreshing,
+    final bool? isInitialized,
+    final List<Backup>? backups,
+    final double? progress,
+    final BackupStatusEnum? status,
+    final bool? preventActions,
+    final String? error,
+    final Duration? refreshTimer,
+    final bool? refreshing,
   }) =>
       BackupsState(
         isInitialized: isInitialized ?? this.isInitialized,

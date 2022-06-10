@@ -4,18 +4,18 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/text_themes.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class BrandMarkdown extends StatefulWidget {
   const BrandMarkdown({
-    Key? key,
     required this.fileName,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final String fileName;
 
   @override
-  _BrandMarkdownState createState() => _BrandMarkdownState();
+  State<BrandMarkdown> createState() => _BrandMarkdownState();
 }
 
 class _BrandMarkdownState extends State<BrandMarkdown> {
@@ -28,7 +28,7 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
   }
 
   void _loadMdFile() async {
-    String mdFromFile = await rootBundle
+    final String mdFromFile = await rootBundle
         .loadString('assets/markdown/${widget.fileName}-${'locale'.tr()}.md');
     setState(() {
       _mdContent = mdFromFile;
@@ -36,9 +36,9 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var isDark = Theme.of(context).brightness == Brightness.dark;
-    var markdown = MarkdownStyleSheet(
+  Widget build(final BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final MarkdownStyleSheet markdown = MarkdownStyleSheet(
       p: defaultTextStyle.copyWith(
         color: isDark ? BrandColors.white : null,
       ),
@@ -55,14 +55,14 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
         color: isDark ? BrandColors.white : null,
       ),
     );
-    return Markdown(
+    return MarkdownBody(
       shrinkWrap: true,
       styleSheet: markdown,
-      onTapLink: (String text, String? href, String title) {
+      onTapLink: (final String text, final String? href, final String title) {
         if (href != null) {
-          canLaunch(href).then((canLaunchURL) {
+          canLaunchUrlString(href).then((final bool canLaunchURL) {
             if (canLaunchURL) {
-              launch(href);
+              launchUrlString(href);
             }
           });
         }

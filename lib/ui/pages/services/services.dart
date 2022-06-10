@@ -5,7 +5,7 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
@@ -19,9 +19,9 @@ import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
-import '../rootRoute.dart';
+import 'package:selfprivacy/ui/pages/root_route.dart';
 
 const switchableServices = [
   ServiceTypes.passwordManager,
@@ -32,20 +32,19 @@ const switchableServices = [
 ];
 
 class ServicesPage extends StatefulWidget {
-  ServicesPage({Key? key}) : super(key: key);
+  const ServicesPage({final super.key});
 
   @override
-  _ServicesPageState createState() => _ServicesPageState();
+  State<ServicesPage> createState() => _ServicesPageState();
 }
 
-void _launchURL(url) async {
-  var _possible = await canLaunch(url);
+void _launchURL(final url) async {
+  final canLaunch = await canLaunchUrlString(url);
 
-  if (_possible) {
+  if (canLaunch) {
     try {
-      await launch(
+      await launchUrlString(
         url,
-        enableJavaScript: true,
       );
     } catch (e) {
       print(e);
@@ -57,30 +56,32 @@ void _launchURL(url) async {
 
 class _ServicesPageState extends State<ServicesPage> {
   @override
-  Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
+  Widget build(final BuildContext context) {
+    final isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
 
     return Scaffold(
       appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
           title: 'basis.services'.tr(),
-          hasFlashButton: true,
         ),
-        preferredSize: Size.fromHeight(52),
       ),
       body: ListView(
         padding: paddingH15V0,
         children: [
           BrandText.body1('services.title'.tr()),
-          SizedBox(height: 24),
-          if (!isReady) ...[NotReadyCard(), SizedBox(height: 24)],
+          const SizedBox(height: 24),
+          if (!isReady) ...[const NotReadyCard(), const SizedBox(height: 24)],
           ...ServiceTypes.values
-              .map((t) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 30,
-                    ),
-                    child: _Card(serviceType: t),
-                  ))
+              .map(
+                (final t) => Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 30,
+                  ),
+                  child: _Card(serviceType: t),
+                ),
+              )
               .toList()
         ],
       ),
@@ -89,30 +90,32 @@ class _ServicesPageState extends State<ServicesPage> {
 }
 
 class _Card extends StatelessWidget {
-  const _Card({Key? key, required this.serviceType}) : super(key: key);
+  const _Card({required this.serviceType});
 
   final ServiceTypes serviceType;
   @override
-  Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
-    var changeTab = context.read<ChangeTab>().onPress;
+  Widget build(final BuildContext context) {
+    final isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
+    final changeTab = context.read<ChangeTab>().onPress;
 
-    var serviceState = context.watch<ServicesCubit>().state;
-    var jobsCubit = context.watch<JobsCubit>();
-    var jobState = jobsCubit.state;
+    final serviceState = context.watch<ServicesCubit>().state;
+    final jobsCubit = context.watch<JobsCubit>();
+    final jobState = jobsCubit.state;
 
-    var switchableService = switchableServices.contains(serviceType);
-    var hasSwitchJob = switchableService &&
+    final switchableService = switchableServices.contains(serviceType);
+    final hasSwitchJob = switchableService &&
         jobState is JobsStateWithJobs &&
-        jobState.jobList
-            .any((el) => el is ServiceToggleJob && el.type == serviceType);
+        jobState.jobList.any(
+          (final el) => el is ServiceToggleJob && el.type == serviceType,
+        );
 
-    var isSwitchOn = isReady &&
+    final isSwitchOn = isReady &&
         (!switchableServices.contains(serviceType) ||
             serviceState.isEnableByType(serviceType));
 
-    var config = context.watch<AppConfigCubit>().state;
-    var domainName = UiHelpers.getDomainName(config);
+    final config = context.watch<ServerInstallationCubit>().state;
+    final domainName = UiHelpers.getDomainName(config);
 
     return GestureDetector(
       onTap: isSwitchOn
@@ -120,16 +123,14 @@ class _Card extends StatelessWidget {
                 context: context,
                 // isScrollControlled: true,
                 // backgroundColor: Colors.transparent,
-                builder: (BuildContext context) {
-                  return _ServiceDetails(
-                    serviceType: serviceType,
-                    status:
-                        isSwitchOn ? StateType.stable : StateType.uninitialized,
-                    title: serviceType.title,
-                    icon: serviceType.icon,
-                    changeTab: changeTab,
-                  );
-                },
+                builder: (final BuildContext context) => _ServiceDetails(
+                  serviceType: serviceType,
+                  status:
+                      isSwitchOn ? StateType.stable : StateType.uninitialized,
+                  title: serviceType.title,
+                  icon: serviceType.icon,
+                  changeTab: changeTab,
+                ),
               )
           : null,
       child: BrandCards.big(
@@ -144,16 +145,15 @@ class _Card extends StatelessWidget {
                   child: Icon(serviceType.icon, size: 30, color: Colors.white),
                 ),
                 if (isReady && switchableService) ...[
-                  Spacer(),
+                  const Spacer(),
                   Builder(
-                    builder: (context) {
+                    builder: (final context) {
                       late bool isActive;
                       if (hasSwitchJob) {
-                        isActive = ((jobState as JobsStateWithJobs)
-                                .jobList
-                                .firstWhere((el) =>
-                                    el is ServiceToggleJob &&
-                                    el.type == serviceType) as ServiceToggleJob)
+                        isActive = (jobState.jobList.firstWhere(
+                          (final el) =>
+                              el is ServiceToggleJob && el.type == serviceType,
+                        ) as ServiceToggleJob)
                             .needToTurnOn;
                       } else {
                         isActive = serviceState.isEnableByType(serviceType);
@@ -161,7 +161,7 @@ class _Card extends StatelessWidget {
 
                       return BrandSwitch(
                         value: isActive,
-                        onChanged: (value) =>
+                        onChanged: (final value) =>
                             jobsCubit.createOrRemoveServiceToggleJob(
                           ServiceToggleJob(
                             type: serviceType,
@@ -180,35 +180,45 @@ class _Card extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       BrandText.h2(serviceType.title),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       if (serviceType.subdomain != '')
                         Column(
                           children: [
                             GestureDetector(
                               onTap: () => _launchURL(
-                                  'https://${serviceType.subdomain}.$domainName'),
+                                'https://${serviceType.subdomain}.$domainName',
+                              ),
                               child: Text(
                                 '${serviceType.subdomain}.$domainName',
-                                style: linkStyle,
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                           ],
                         ),
                       if (serviceType == ServiceTypes.mail)
-                        Column(children: [
-                          Text(
-                            domainName,
-                            style: linkStyle,
-                          ),
-                          SizedBox(height: 10),
-                        ]),
+                        Column(
+                          children: [
+                            Text(
+                              domainName,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
                       BrandText.body2(serviceType.loginInfo),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       BrandText.body2(serviceType.subtitle),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                   if (hasSwitchJob)
@@ -239,13 +249,12 @@ class _Card extends StatelessWidget {
 
 class _ServiceDetails extends StatelessWidget {
   const _ServiceDetails({
-    Key? key,
     required this.serviceType,
     required this.icon,
     required this.status,
     required this.title,
     required this.changeTab,
-  }) : super(key: key);
+  });
 
   final ServiceTypes serviceType;
   final IconData icon;
@@ -254,13 +263,13 @@ class _ServiceDetails extends StatelessWidget {
   final ValueChanged<int> changeTab;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     late Widget child;
 
-    var config = context.watch<AppConfigCubit>().state;
-    var domainName = UiHelpers.getDomainName(config);
+    final config = context.watch<ServerInstallationCubit>().state;
+    final domainName = UiHelpers.getDomainName(config);
 
-    var linksStyle = body1Style.copyWith(
+    final linksStyle = body1Style.copyWith(
       fontSize: 15,
       color: Theme.of(context).brightness == Brightness.dark
           ? Colors.white
@@ -269,7 +278,7 @@ class _ServiceDetails extends StatelessWidget {
       decoration: TextDecoration.underline,
     );
 
-    var textStyle = body1Style.copyWith(
+    final textStyle = body1Style.copyWith(
       color: Theme.of(context).brightness == Brightness.dark
           ? Colors.white
           : BrandColors.black,
@@ -277,163 +286,171 @@ class _ServiceDetails extends StatelessWidget {
     switch (serviceType) {
       case ServiceTypes.mail:
         child = RichText(
-            text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'services.mail.bottom_sheet.1'.tr(args: [domainName]),
-              style: textStyle,
-            ),
-            WidgetSpan(child: SizedBox(width: 5)),
-            WidgetSpan(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
-                child: GestureDetector(
-                  child: Text(
-                    'services.mail.bottom_sheet.2'.tr(),
-                    style: linksStyle,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'services.mail.bottom_sheet.1'.tr(args: [domainName]),
+                style: textStyle,
+              ),
+              const WidgetSpan(child: SizedBox(width: 5)),
+              WidgetSpan(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 0.8),
+                  child: GestureDetector(
+                    child: Text(
+                      'services.mail.bottom_sheet.2'.tr(),
+                      style: linksStyle,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      changeTab(2);
+                    },
                   ),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    changeTab(2);
-                  },
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          ),
+        );
         break;
       case ServiceTypes.messenger:
         child = RichText(
-            text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'services.messenger.bottom_sheet.1'.tr(args: [domainName]),
-              style: textStyle,
-            )
-          ],
-        ));
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text:
+                    'services.messenger.bottom_sheet.1'.tr(args: [domainName]),
+                style: textStyle,
+              )
+            ],
+          ),
+        );
         break;
       case ServiceTypes.passwordManager:
         child = RichText(
-            text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'services.password_manager.bottom_sheet.1'
-                  .tr(args: [domainName]),
-              style: textStyle,
-            ),
-            WidgetSpan(child: SizedBox(width: 5)),
-            WidgetSpan(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
-                child: GestureDetector(
-                  onTap: () => _launchURL('https://password.$domainName'),
-                  child: Text(
-                    'password.$domainName',
-                    style: linksStyle,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'services.password_manager.bottom_sheet.1'
+                    .tr(args: [domainName]),
+                style: textStyle,
+              ),
+              const WidgetSpan(child: SizedBox(width: 5)),
+              WidgetSpan(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 0.8),
+                  child: GestureDetector(
+                    onTap: () => _launchURL('https://password.$domainName'),
+                    child: Text(
+                      'password.$domainName',
+                      style: linksStyle,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          ),
+        );
         break;
       case ServiceTypes.video:
         child = RichText(
-            text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'services.video.bottom_sheet.1'.tr(args: [domainName]),
-              style: textStyle,
-            ),
-            WidgetSpan(child: SizedBox(width: 5)),
-            WidgetSpan(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
-                child: GestureDetector(
-                  onTap: () => _launchURL('https://meet.$domainName'),
-                  child: Text(
-                    'meet.$domainName',
-                    style: linksStyle,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'services.video.bottom_sheet.1'.tr(args: [domainName]),
+                style: textStyle,
+              ),
+              const WidgetSpan(child: SizedBox(width: 5)),
+              WidgetSpan(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 0.8),
+                  child: GestureDetector(
+                    onTap: () => _launchURL('https://meet.$domainName'),
+                    child: Text(
+                      'meet.$domainName',
+                      style: linksStyle,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          ),
+        );
         break;
       case ServiceTypes.cloud:
         child = RichText(
-            text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'services.cloud.bottom_sheet.1'.tr(args: [domainName]),
-              style: textStyle,
-            ),
-            WidgetSpan(child: SizedBox(width: 5)),
-            WidgetSpan(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
-                child: GestureDetector(
-                  onTap: () => _launchURL('https://cloud.$domainName'),
-                  child: Text(
-                    'cloud.$domainName',
-                    style: linksStyle,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'services.cloud.bottom_sheet.1'.tr(args: [domainName]),
+                style: textStyle,
+              ),
+              const WidgetSpan(child: SizedBox(width: 5)),
+              WidgetSpan(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 0.8),
+                  child: GestureDetector(
+                    onTap: () => _launchURL('https://cloud.$domainName'),
+                    child: Text(
+                      'cloud.$domainName',
+                      style: linksStyle,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          ),
+        );
         break;
       case ServiceTypes.socialNetwork:
         child = RichText(
-            text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'services.social_network.bottom_sheet.1'
-                  .tr(args: [domainName]),
-              style: textStyle,
-            ),
-            WidgetSpan(child: SizedBox(width: 5)),
-            WidgetSpan(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
-                child: GestureDetector(
-                  onTap: () => _launchURL('https://social.$domainName'),
-                  child: Text(
-                    'social.$domainName',
-                    style: linksStyle,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'services.social_network.bottom_sheet.1'
+                    .tr(args: [domainName]),
+                style: textStyle,
+              ),
+              const WidgetSpan(child: SizedBox(width: 5)),
+              WidgetSpan(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 0.8),
+                  child: GestureDetector(
+                    onTap: () => _launchURL('https://social.$domainName'),
+                    child: Text(
+                      'social.$domainName',
+                      style: linksStyle,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          ),
+        );
         break;
       case ServiceTypes.git:
         child = RichText(
-            text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'services.git.bottom_sheet.1'.tr(args: [domainName]),
-              style: textStyle,
-            ),
-            WidgetSpan(child: SizedBox(width: 5)),
-            WidgetSpan(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 0.8),
-                child: GestureDetector(
-                  onTap: () => _launchURL('https://git.$domainName'),
-                  child: Text(
-                    'git.$domainName',
-                    style: linksStyle,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'services.git.bottom_sheet.1'.tr(args: [domainName]),
+                style: textStyle,
+              ),
+              const WidgetSpan(child: SizedBox(width: 5)),
+              WidgetSpan(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 0.8),
+                  child: GestureDetector(
+                    onTap: () => _launchURL('https://git.$domainName'),
+                    child: Text(
+                      'git.$domainName',
+                      style: linksStyle,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          ),
+        );
         break;
       case ServiceTypes.vpn:
         child = Text(
@@ -446,7 +463,7 @@ class _ServiceDetails extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           width: 350,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -460,11 +477,11 @@ class _ServiceDetails extends StatelessWidget {
                       status: status,
                       child: Icon(icon, size: 40, color: Colors.white),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     BrandText.h2(title),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     child,
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                     Center(
                       child: Container(
                         child: BrandButton.rised(

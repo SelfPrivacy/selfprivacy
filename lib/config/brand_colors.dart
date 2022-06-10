@@ -10,7 +10,7 @@ class BrandColors {
   static const Color gray3 = Color(0xFFFAFAFA);
   static const Color gray4 = Color(0xFFDDDDDD);
   static const Color gray5 = Color(0xFFEDEEF1);
-  static Color gray6 = Color(0xFF181818).withOpacity(0.7);
+  static Color gray6 = const Color(0xFF181818).withOpacity(0.7);
   static const Color grey7 = Color(0xFFABABAB);
 
   static const Color red1 = Color(0xFFFA0E0E);
@@ -20,8 +20,8 @@ class BrandColors {
 
   static const Color green2 = Color(0xFF0F8849);
 
-  static get navBackgroundLight => white.withOpacity(0.8);
-  static get navBackgroundDark => black.withOpacity(0.8);
+  static Color get navBackgroundLight => white.withOpacity(0.8);
+  static Color get navBackgroundDark => black.withOpacity(0.8);
 
   static const List<Color> uninitializedGradientColors = [
     Color(0xFF555555),
@@ -41,14 +41,14 @@ class BrandColors {
     Color(0xFFEFD135),
   ];
 
-  static const primary = blue;
-  static const headlineColor = black;
-  static const inactive = gray2;
-  static const scaffoldBackground = gray3;
-  static const inputInactive = gray4;
+  static const Color primary = blue;
+  static const Color headlineColor = black;
+  static const Color inactive = gray2;
+  static const Color scaffoldBackground = gray3;
+  static const Color inputInactive = gray4;
 
-  static const textColor1 = black;
-  static const textColor2 = gray1;
-  static const dividerColor = gray5;
-  static const warning = red1;
+  static const Color textColor1 = black;
+  static const Color textColor2 = gray1;
+  static const Color dividerColor = gray5;
+  static const Color warning = red1;
 }

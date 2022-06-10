@@ -7,7 +7,8 @@ abstract class HetznerMetricsState extends Equatable {
 }
 
 class HetznerMetricsLoading extends HetznerMetricsState {
-  HetznerMetricsLoading(this.period);
+  const HetznerMetricsLoading(this.period);
+  @override
   final Period period;
 
   @override
@@ -15,7 +16,7 @@ class HetznerMetricsLoading extends HetznerMetricsState {
 }
 
 class HetznerMetricsLoaded extends HetznerMetricsState {
-  HetznerMetricsLoaded({
+  const HetznerMetricsLoaded({
     required this.period,
     required this.start,
     required this.end,
@@ -27,6 +28,7 @@ class HetznerMetricsLoaded extends HetznerMetricsState {
     required this.bandwidthOut,
   });
 
+  @override
   final Period period;
   final DateTime start;
   final DateTime end;

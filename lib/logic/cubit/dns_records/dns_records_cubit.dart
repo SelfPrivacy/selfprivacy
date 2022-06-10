@@ -1,91 +1,109 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
-import 'package:selfprivacy/logic/models/dns_records.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-import '../../api_maps/cloudflare.dart';
-import '../../api_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
+import 'package:selfprivacy/logic/api_maps/server.dart';
 
 part 'dns_records_state.dart';
 
-class DnsRecordsCubit extends AppConfigDependendCubit<DnsRecordsState> {
-  DnsRecordsCubit(AppConfigCubit appConfigCubit)
-      : super(appConfigCubit,
-            DnsRecordsState(dnsState: DnsRecordsStatus.refreshing));
+class DnsRecordsCubit
+    extends ServerInstallationDependendCubit<DnsRecordsState> {
+  DnsRecordsCubit(final ServerInstallationCubit serverInstallationCubit)
+      : super(
+          serverInstallationCubit,
+          const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing),
+        );
 
-  final api = ServerApi();
-  final cloudflare = CloudflareApi();
+  final ServerApi api = ServerApi();
+  final CloudflareApi cloudflare = CloudflareApi();
 
+  @override
   Future<void> load() async {
-    emit(DnsRecordsState(
+    emit(
+      DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
         dnsRecords: _getDesiredDnsRecords(
-            appConfigCubit.state.cloudFlareDomain?.domainName, "", "")));
+          serverInstallationCubit.state.serverDomain?.domainName,
+          '',
+          '',
+        ),
+      ),
+    );
     print('Loading DNS status');
-    if (appConfigCubit.state is AppConfigFinished) {
-      final CloudFlareDomain? domain = appConfigCubit.state.cloudFlareDomain;
-      final String? ipAddress = appConfigCubit.state.hetznerServer?.ip4;
+    if (serverInstallationCubit.state is ServerInstallationFinished) {
+      final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
+      final String? ipAddress =
+          serverInstallationCubit.state.serverDetails?.ip4;
       if (domain != null && ipAddress != null) {
         final List<DnsRecord> records =
             await cloudflare.getDnsRecords(cloudFlareDomain: domain);
-        final dkimPublicKey = await api.getDkim();
-        final desiredRecords =
+        final String? dkimPublicKey = await api.getDkim();
+        final List<DesiredDnsRecord> desiredRecords =
             _getDesiredDnsRecords(domain.domainName, ipAddress, dkimPublicKey);
-        List<DesiredDnsRecord> foundRecords = [];
-        for (final record in desiredRecords) {
+        final List<DesiredDnsRecord> foundRecords = [];
+        for (final DesiredDnsRecord record in desiredRecords) {
           if (record.description ==
               'providers.domain.record_description.dkim') {
-            final foundRecord = records.firstWhere(
-                (r) => r.name == record.name && r.type == record.type,
-                orElse: () => DnsRecord(
-                    name: record.name,
-                    type: record.type,
-                    content: '',
-                    ttl: 800,
-                    proxied: false));
+            final DnsRecord foundRecord = records.firstWhere(
+              (final r) => r.name == record.name && r.type == record.type,
+              orElse: () => DnsRecord(
+                name: record.name,
+                type: record.type,
+                content: '',
+                ttl: 800,
+                proxied: false,
+              ),
+            );
             // remove all spaces and tabulators from
             // the foundRecord.content and the record.content
             // to compare them
-            final foundContent =
+            final String? foundContent =
                 foundRecord.content?.replaceAll(RegExp(r'\s+'), '');
-            final content = record.content.replaceAll(RegExp(r'\s+'), '');
+            final String content =
+                record.content.replaceAll(RegExp(r'\s+'), '');
             if (foundContent == content) {
               foundRecords.add(record.copyWith(isSatisfied: true));
             } else {
               foundRecords.add(record.copyWith(isSatisfied: false));
             }
           } else {
-            if (records.any((r) =>
-                r.name == record.name &&
-                r.type == record.type &&
-                r.content == record.content)) {
+            if (records.any(
+              (final r) =>
+                  r.name == record.name &&
+                  r.type == record.type &&
+                  r.content == record.content,
+            )) {
               foundRecords.add(record.copyWith(isSatisfied: true));
             } else {
               foundRecords.add(record.copyWith(isSatisfied: false));
             }
           }
         }
-        emit(DnsRecordsState(
-          dnsRecords: foundRecords,
-          dnsState: foundRecords.any((r) => r.isSatisfied == false)
-              ? DnsRecordsStatus.error
-              : DnsRecordsStatus.good,
-        ));
+        emit(
+          DnsRecordsState(
+            dnsRecords: foundRecords,
+            dnsState: foundRecords.any((final r) => r.isSatisfied == false)
+                ? DnsRecordsStatus.error
+                : DnsRecordsStatus.good,
+          ),
+        );
       } else {
-        emit(DnsRecordsState());
+        emit(const DnsRecordsState());
       }
     }
   }
 
   @override
-  void onChange(Change<DnsRecordsState> change) {
+  void onChange(final Change<DnsRecordsState> change) {
     // print(change);
     super.onChange(change);
   }
 
   @override
   Future<void> clear() async {
-    emit(DnsRecordsState(dnsState: DnsRecordsStatus.error));
+    emit(const DnsRecordsState(dnsState: DnsRecordsStatus.error));
   }
 
   Future<void> refresh() async {
@@ -95,18 +113,23 @@ class DnsRecordsCubit extends AppConfigDependendCubit<DnsRecordsState> {
 
   Future<void> fix() async {
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
-    final CloudFlareDomain? domain = appConfigCubit.state.cloudFlareDomain;
-    final String? ipAddress = appConfigCubit.state.hetznerServer?.ip4;
-    final dkimPublicKey = await api.getDkim();
+    final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
+    final String? ipAddress = serverInstallationCubit.state.serverDetails?.ip4;
+    final String? dkimPublicKey = await api.getDkim();
     await cloudflare.removeSimilarRecords(cloudFlareDomain: domain!);
     await cloudflare.createMultipleDnsRecords(
-        cloudFlareDomain: domain, ip4: ipAddress);
-    await cloudflare.setDkim(dkimPublicKey, domain);
+      cloudFlareDomain: domain,
+      ip4: ipAddress,
+    );
+    await cloudflare.setDkim(dkimPublicKey ?? '', domain);
     await load();
   }
 
   List<DesiredDnsRecord> _getDesiredDnsRecords(
-      String? domainName, String? ipAddress, String? dkimPublicKey) {
+    final String? domainName,
+    final String? ipAddress,
+    final String? dkimPublicKey,
+  ) {
     if (domainName == null || ipAddress == null || dkimPublicKey == null) {
       return [];
     }

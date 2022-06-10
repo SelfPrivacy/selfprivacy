@@ -2,19 +2,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/ui/pages/initializing/initializing.dart';
+import 'package:selfprivacy/theming/factory/app_theme_factory.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
-import 'package:selfprivacy/ui/pages/rootRoute.dart';
+import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-import 'config/bloc_config.dart';
-import 'config/bloc_observer.dart';
-import 'config/brand_theme.dart';
-import 'config/get_it_config.dart';
-import 'config/localization.dart';
-import 'logic/cubit/app_settings/app_settings_cubit.dart';
+import 'package:selfprivacy/config/bloc_config.dart';
+import 'package:selfprivacy/config/bloc_observer.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/config/localization.dart';
+import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,22 +34,49 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   tz.initializeTimeZones();
 
+  final ThemeData lightThemeData = await AppThemeFactory.create(
+    isDark: false,
+    fallbackColor: BrandColors.primary,
+  );
+  final ThemeData darkThemeData = await AppThemeFactory.create(
+    isDark: true,
+    fallbackColor: BrandColors.primary,
+  );
+
   BlocOverrides.runZoned(
-    () => runApp(Localization(child: MyApp())),
+    () => runApp(
+      Localization(
+        child: MyApp(
+          lightThemeData: lightThemeData,
+          darkThemeData: darkThemeData,
+        ),
+      ),
+    ),
     blocObserver: SimpleBlocObserver(),
   );
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({
+    required this.lightThemeData,
+    required this.darkThemeData,
+    final super.key,
+  });
+
+  final ThemeData lightThemeData;
+  final ThemeData darkThemeData;
+
   @override
-  Widget build(BuildContext context) {
-    return Localization(
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light, // Manually changing appbar color
-        child: BlocAndProviderConfig(
-          child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
-            builder: (context, appSettings) {
-              return MaterialApp(
+  Widget build(final BuildContext context) => Localization(
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light, // Manually changing appbar color
+          child: BlocAndProviderConfig(
+            child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
+              builder: (
+                final BuildContext context,
+                final AppSettingsState appSettings,
+              ) =>
+                  MaterialApp(
                 scaffoldMessengerKey:
                     getIt.get<NavigationService>().scaffoldMessengerKey,
                 navigatorKey: getIt.get<NavigationService>().navigatorKey,
@@ -57,23 +85,25 @@ class MyApp extends StatelessWidget {
                 locale: context.locale,
                 debugShowCheckedModeBanner: false,
                 title: 'SelfPrivacy',
-                theme: appSettings.isDarkModeOn ? darkTheme : lightTheme,
-                home: appSettings.isOnbordingShowing
-                    ? OnboardingPage(nextPage: InitializingPage())
-                    : RootPage(),
-                builder: (BuildContext context, Widget? widget) {
-                  Widget error = Text('...rendering error...');
-                  if (widget is Scaffold || widget is Navigator)
+                theme: lightThemeData,
+                darkTheme: darkThemeData,
+                themeMode:
+                    appSettings.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
+                home: appSettings.isOnboardingShowing
+                    ? const OnboardingPage(nextPage: InitializingPage())
+                    : const RootPage(),
+                builder: (final BuildContext context, final Widget? widget) {
+                  Widget error = const Text('...rendering error...');
+                  if (widget is Scaffold || widget is Navigator) {
                     error = Scaffold(body: Center(child: error));
+                  }
                   ErrorWidget.builder =
-                      (FlutterErrorDetails errorDetails) => error;
+                      (final FlutterErrorDetails errorDetails) => error;
                   return widget!;
                 },
-              );
-            },
+              ),
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }

@@ -1,13 +1,11 @@
-part of 'server_details.dart';
+part of 'server_details_screen.dart';
 
 class _Chart extends StatelessWidget {
-  const _Chart({Key? key}) : super(key: key);
-
   @override
-  Widget build(BuildContext context) {
-    var cubit = context.watch<HetznerMetricsCubit>();
-    var period = cubit.state.period;
-    var state = cubit.state;
+  Widget build(final BuildContext context) {
+    final HetznerMetricsCubit cubit = context.watch<HetznerMetricsCubit>();
+    final Period period = cubit.state.period;
+    final HetznerMetricsState state = cubit.state;
     List<Widget> charts;
     if (state is HetznerMetricsLoading) {
       charts = [
@@ -19,33 +17,33 @@ class _Chart extends StatelessWidget {
       ];
     } else if (state is HetznerMetricsLoaded) {
       charts = [
-        Legend(color: Colors.red, text: 'CPU %'),
-        SizedBox(height: 20),
+        const Legend(color: Colors.red, text: 'CPU %'),
+        const SizedBox(height: 20),
         getCpuChart(state),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             BrandText.small('Public Network interface packets per sec'),
-            SizedBox(width: 10),
-            Legend(color: Colors.red, text: 'IN'),
-            SizedBox(width: 5),
-            Legend(color: Colors.green, text: 'OUT'),
+            const SizedBox(width: 10),
+            const Legend(color: Colors.red, text: 'IN'),
+            const SizedBox(width: 5),
+            const Legend(color: Colors.green, text: 'OUT'),
           ],
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         getPpsChart(state),
-        SizedBox(height: 1),
+        const SizedBox(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             BrandText.small('Public Network interface bytes per sec'),
-            SizedBox(width: 10),
-            Legend(color: Colors.red, text: 'IN'),
-            SizedBox(width: 5),
-            Legend(color: Colors.green, text: 'OUT'),
+            const SizedBox(width: 10),
+            const Legend(color: Colors.red, text: 'IN'),
+            const SizedBox(width: 5),
+            const Legend(color: Colors.green, text: 'OUT'),
           ],
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         getBandwidthChart(state),
       ];
     } else {
@@ -57,7 +55,7 @@ class _Chart extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -85,39 +83,43 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  Widget getCpuChart(HetznerMetricsLoaded state) {
-    var data = state.cpu;
+  Widget getCpuChart(final HetznerMetricsLoaded state) {
+    final data = state.cpu;
 
-    return Container(
+    return SizedBox(
       height: 200,
-      child: CpuChart(data, state.period, state.start),
-    );
-  }
-
-  Widget getPpsChart(HetznerMetricsLoaded state) {
-    var ppsIn = state.ppsIn;
-    var ppsOut = state.ppsOut;
-
-    return Container(
-      height: 200,
-      child: NetworkChart(
-        [ppsIn, ppsOut],
-        state.period,
-        state.start,
+      child: CpuChart(
+        data: data,
+        period: state.period,
+        start: state.start,
       ),
     );
   }
 
-  Widget getBandwidthChart(HetznerMetricsLoaded state) {
-    var ppsIn = state.bandwidthIn;
-    var ppsOut = state.bandwidthOut;
+  Widget getPpsChart(final HetznerMetricsLoaded state) {
+    final ppsIn = state.ppsIn;
+    final ppsOut = state.ppsOut;
 
-    return Container(
+    return SizedBox(
       height: 200,
       child: NetworkChart(
-        [ppsIn, ppsOut],
-        state.period,
-        state.start,
+        listData: [ppsIn, ppsOut],
+        period: state.period,
+        start: state.start,
+      ),
+    );
+  }
+
+  Widget getBandwidthChart(final HetznerMetricsLoaded state) {
+    final ppsIn = state.bandwidthIn;
+    final ppsOut = state.bandwidthOut;
+
+    return SizedBox(
+      height: 200,
+      child: NetworkChart(
+        listData: [ppsIn, ppsOut],
+        period: state.period,
+        start: state.start,
       ),
     );
   }
@@ -125,44 +127,40 @@ class _Chart extends StatelessWidget {
 
 class Legend extends StatelessWidget {
   const Legend({
-    Key? key,
     required this.color,
     required this.text,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final String text;
   final Color color;
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        _ColoredBox(color: color),
-        SizedBox(width: 5),
-        BrandText.small(text),
-      ],
-    );
-  }
+  Widget build(final BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _ColoredBox(color: color),
+          const SizedBox(width: 5),
+          BrandText.small(text),
+        ],
+      );
 }
 
 class _ColoredBox extends StatelessWidget {
   const _ColoredBox({
-    Key? key,
     required this.color,
-  }) : super(key: key);
+  });
 
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 10,
-      height: 10,
-      decoration: BoxDecoration(
+  Widget build(final BuildContext context) => Container(
+        width: 10,
+        height: 10,
+        decoration: BoxDecoration(
           color: color.withOpacity(0.3),
           border: Border.all(
             color: color,
-          )),
-    );
-  }
+          ),
+        ),
+      );
 }

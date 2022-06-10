@@ -7,16 +7,16 @@ import 'package:selfprivacy/utils/named_font_weight.dart';
 
 class BrandTimer extends StatefulWidget {
   const BrandTimer({
-    Key? key,
     required this.startDateTime,
     required this.duration,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final DateTime startDateTime;
   final Duration duration;
 
   @override
-  _BrandTimerState createState() => _BrandTimerState();
+  State<BrandTimer> createState() => _BrandTimerState();
 }
 
 class _BrandTimerState extends State<BrandTimer> {
@@ -29,10 +29,11 @@ class _BrandTimerState extends State<BrandTimer> {
     super.initState();
   }
 
-  _timerStart() {
+  void _timerStart() {
     _timeString = differenceFromStart;
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-      var timePassed = DateTime.now().difference(widget.startDateTime);
+    timer = Timer.periodic(const Duration(seconds: 1), (final Timer t) {
+      final Duration timePassed =
+          DateTime.now().difference(widget.startDateTime);
       if (timePassed > widget.duration) {
         t.cancel();
       } else {
@@ -42,7 +43,7 @@ class _BrandTimerState extends State<BrandTimer> {
   }
 
   @override
-  void didUpdateWidget(BrandTimer oldWidget) {
+  void didUpdateWidget(final BrandTimer oldWidget) {
     if (timer.isActive) {
       timer.cancel();
     }
@@ -51,14 +52,12 @@ class _BrandTimerState extends State<BrandTimer> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BrandText.medium(
-      _timeString,
-      style: TextStyle(
-        fontWeight: NamedFontWeight.demiBold,
-      ),
-    );
-  }
+  Widget build(final BuildContext context) => BrandText.medium(
+        _timeString,
+        style: const TextStyle(
+          fontWeight: NamedFontWeight.demiBold,
+        ),
+      );
 
   void _getTime() {
     setState(() {
@@ -69,12 +68,12 @@ class _BrandTimerState extends State<BrandTimer> {
   String get differenceFromStart =>
       _durationToString(DateTime.now().difference(widget.startDateTime));
 
-  String _durationToString(Duration duration) {
-    var timeLeft = widget.duration - duration;
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitSeconds = twoDigits(timeLeft.inSeconds);
+  String _durationToString(final Duration duration) {
+    final Duration timeLeft = widget.duration - duration;
+    String twoDigits(final int n) => n.toString().padLeft(2, '0');
+    final String twoDigitSeconds = twoDigits(timeLeft.inSeconds);
 
-    return "timer.sec".tr(args: [twoDigitSeconds]);
+    return 'timer.sec'.tr(args: [twoDigitSeconds]);
   }
 
   @override

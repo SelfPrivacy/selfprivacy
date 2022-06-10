@@ -4,11 +4,11 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class BrandRadioTile extends StatelessWidget {
   const BrandRadioTile({
-    Key? key,
     required this.isChecked,
     required this.text,
     required this.onPress,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final bool isChecked;
 
@@ -16,22 +16,20 @@ class BrandRadioTile extends StatelessWidget {
   final VoidCallback onPress;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPress,
-      behavior: HitTestBehavior.translucent,
-      child: Padding(
-        padding: EdgeInsets.all(2),
-        child: Row(
-          children: [
-            BrandRadio(
-              isChecked: isChecked,
-            ),
-            SizedBox(width: 9),
-            BrandText.h5(text)
-          ],
+  Widget build(final BuildContext context) => GestureDetector(
+        onTap: onPress,
+        behavior: HitTestBehavior.translucent,
+        child: Padding(
+          padding: const EdgeInsets.all(2),
+          child: Row(
+            children: [
+              BrandRadio(
+                isChecked: isChecked,
+              ),
+              const SizedBox(width: 9),
+              BrandText.h5(text)
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

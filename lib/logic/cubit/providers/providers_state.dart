@@ -5,18 +5,23 @@ class ProvidersState extends Equatable {
 
   final List<ProviderModel> all;
 
-  ProvidersState updateElement(ProviderModel provider, StateType newState) {
-    var newList = [...all];
-    var index = newList.indexOf(provider);
+  ProvidersState updateElement(
+    final ProviderModel provider,
+    final StateType newState,
+  ) {
+    final List<ProviderModel> newList = [...all];
+    final int index = newList.indexOf(provider);
     newList[index] = provider.updateState(newState);
     return ProvidersState(newList);
   }
 
-  List<ProviderModel> get connected =>
-      all.where((service) => service.state != StateType.uninitialized).toList();
+  List<ProviderModel> get connected => all
+      .where((final service) => service.state != StateType.uninitialized)
+      .toList();
 
-  List<ProviderModel> get uninitialized =>
-      all.where((service) => service.state == StateType.uninitialized).toList();
+  List<ProviderModel> get uninitialized => all
+      .where((final service) => service.state == StateType.uninitialized)
+      .toList();
 
   bool get isFullyInitialized => uninitialized.isEmpty;
 
@@ -29,7 +34,7 @@ class InitialProviderState extends ProvidersState {
       : super(
           ProviderType.values
               .map(
-                (type) => ProviderModel(
+                (final type) => ProviderModel(
                   state: StateType.uninitialized,
                   type: type,
                 ),

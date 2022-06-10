@@ -3,20 +3,20 @@ import 'package:selfprivacy/config/brand_colors.dart';
 
 class DotsIndicator extends StatelessWidget {
   const DotsIndicator({
-    Key? key,
     required this.activeIndex,
     required this.count,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final int activeIndex;
   final int count;
 
   @override
-  Widget build(BuildContext context) {
-    var dots = List.generate(
+  Widget build(final BuildContext context) {
+    final List<Container> dots = List.generate(
       count,
-      (index) => Container(
-        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      (final index) => Container(
+        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         height: 10,
         width: 10,
         decoration: BoxDecoration(

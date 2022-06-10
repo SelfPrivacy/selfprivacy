@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class BrandLoader {
-  static horizontal() => _HorizontalLoader();
+  static HorizontalLoader horizontal() => const HorizontalLoader();
 }
 
-class _HorizontalLoader extends StatelessWidget {
+class HorizontalLoader extends StatelessWidget {
+  const HorizontalLoader({final super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text('basis.wait'.tr()),
-        SizedBox(height: 10),
-        LinearProgressIndicator(minHeight: 3),
-      ],
-    );
-  }
+  Widget build(final BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('basis.wait'.tr()),
+          const SizedBox(height: 10),
+          const LinearProgressIndicator(minHeight: 3),
+        ],
+      );
 }

@@ -13,8 +13,9 @@ class JobsStateWithJobs extends JobsState {
   JobsStateWithJobs(this.jobList);
   final List<Job> jobList;
 
-  JobsState removeById(String id) {
-    var newJobsList = jobList.where((element) => element.id != id).toList();
+  JobsState removeById(final String id) {
+    final List<Job> newJobsList =
+        jobList.where((final element) => element.id != id).toList();
 
     if (newJobsList.isEmpty) {
       return JobsStateEmpty();

@@ -3,18 +3,38 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_map.dart';
-import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
-import 'package:selfprivacy/logic/models/dns_records.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
+
+class DomainNotFoundException implements Exception {
+  DomainNotFoundException(this.message);
+  final String message;
+}
 
 class CloudflareApi extends ApiMap {
-  CloudflareApi({this.hasLogger = false, this.isWithToken = true});
+  CloudflareApi({
+    this.hasLogger = false,
+    this.isWithToken = true,
+    this.customToken,
+  });
+  @override
+  final bool hasLogger;
+  @override
+  final bool isWithToken;
 
+  final String? customToken;
+
+  @override
   BaseOptions get options {
-    var options = BaseOptions(baseUrl: rootAddress);
+    final BaseOptions options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
-      var token = getIt<ApiConfigModel>().cloudFlareKey;
+      final String? token = getIt<ApiConfigModel>().cloudFlareKey;
       assert(token != null);
       options.headers = {'Authorization': 'Bearer $token'};
+    }
+
+    if (customToken != null) {
+      options.headers = {'Authorization': 'Bearer $customToken'};
     }
 
     if (validateStatus != null) {
@@ -26,14 +46,15 @@ class CloudflareApi extends ApiMap {
   @override
   String rootAddress = 'https://api.cloudflare.com/client/v4';
 
-  Future<bool> isValid(String token) async {
-    validateStatus = (status) {
-      return status == HttpStatus.ok || status == HttpStatus.unauthorized;
-    };
+  Future<bool> isValid(final String token) async {
+    validateStatus = (final status) =>
+        status == HttpStatus.ok || status == HttpStatus.unauthorized;
 
-    var client = await getClient();
-    Response response = await client.get('/user/tokens/verify',
-        options: Options(headers: {'Authorization': 'Bearer $token'}));
+    final Dio client = await getClient();
+    final Response response = await client.get(
+      '/user/tokens/verify',
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
 
     close(client);
 
@@ -46,37 +67,40 @@ class CloudflareApi extends ApiMap {
     }
   }
 
-  Future<String> getZoneId(String domain) async {
-    validateStatus = (status) {
-      return status == HttpStatus.ok || status == HttpStatus.forbidden;
-    };
-    var client = await getClient();
-    Response response = await client.get(
+  Future<String> getZoneId(final String domain) async {
+    validateStatus = (final status) =>
+        status == HttpStatus.ok || status == HttpStatus.forbidden;
+    final Dio client = await getClient();
+    final Response response = await client.get(
       '/zones',
       queryParameters: {'name': domain},
     );
 
     close(client);
 
-    return response.data['result'][0]['id'];
+    if (response.data['result'].isEmpty) {
+      throw DomainNotFoundException('No domains found');
+    } else {
+      return response.data['result'][0]['id'];
+    }
   }
 
   Future<void> removeSimilarRecords({
-    String? ip4,
-    required CloudFlareDomain cloudFlareDomain,
+    required final ServerDomain cloudFlareDomain,
+    final String? ip4,
   }) async {
-    var domainName = cloudFlareDomain.domainName;
-    var domainZoneId = cloudFlareDomain.zoneId;
+    final String domainName = cloudFlareDomain.domainName;
+    final String domainZoneId = cloudFlareDomain.zoneId;
 
-    var url = '/zones/$domainZoneId/dns_records';
+    final String url = '/zones/$domainZoneId/dns_records';
 
-    var client = await getClient();
-    Response response = await client.get(url);
+    final Dio client = await getClient();
+    final Response response = await client.get(url);
 
-    List records = response.data['result'] ?? [];
-    var allDeleteFutures = <Future>[];
+    final List records = response.data['result'] ?? [];
+    final List<Future> allDeleteFutures = <Future>[];
 
-    for (var record in records) {
+    for (final record in records) {
       if (record['zone_name'] == domainName) {
         allDeleteFutures.add(
           client.delete('$url/${record["id"]}'),
@@ -89,28 +113,30 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<List<DnsRecord>> getDnsRecords({
-    required CloudFlareDomain cloudFlareDomain,
+    required final ServerDomain cloudFlareDomain,
   }) async {
-    var domainName = cloudFlareDomain.domainName;
-    var domainZoneId = cloudFlareDomain.zoneId;
+    final String domainName = cloudFlareDomain.domainName;
+    final String domainZoneId = cloudFlareDomain.zoneId;
 
-    var url = '/zones/$domainZoneId/dns_records';
+    final String url = '/zones/$domainZoneId/dns_records';
 
-    var client = await getClient();
-    Response response = await client.get(url);
+    final Dio client = await getClient();
+    final Response response = await client.get(url);
 
-    List records = response.data['result'] ?? [];
-    var allRecords = <DnsRecord>[];
+    final List records = response.data['result'] ?? [];
+    final List<DnsRecord> allRecords = <DnsRecord>[];
 
-    for (var record in records) {
+    for (final record in records) {
       if (record['zone_name'] == domainName) {
-        allRecords.add(DnsRecord(
-          name: record['name'],
-          type: record['type'],
-          content: record['content'],
-          ttl: record['ttl'],
-          proxied: record['proxied'],
-        ));
+        allRecords.add(
+          DnsRecord(
+            name: record['name'],
+            type: record['type'],
+            content: record['content'],
+            ttl: record['ttl'],
+            proxied: record['proxied'],
+          ),
+        );
       }
     }
 
@@ -119,51 +145,59 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<void> createMultipleDnsRecords({
-    String? ip4,
-    required CloudFlareDomain cloudFlareDomain,
+    required final ServerDomain cloudFlareDomain,
+    final String? ip4,
   }) async {
-    var domainName = cloudFlareDomain.domainName;
-    var domainZoneId = cloudFlareDomain.zoneId;
-    var listDnsRecords = projectDnsRecords(domainName, ip4);
+    final String domainName = cloudFlareDomain.domainName;
+    final String domainZoneId = cloudFlareDomain.zoneId;
+    final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
+    final List<Future> allCreateFutures = <Future>[];
 
-    var url = '$rootAddress/zones/$domainZoneId/dns_records';
-
-    var allCreateFutures = <Future>[];
-    var client = await getClient();
-
-    for (var record in listDnsRecords) {
-      allCreateFutures.add(
-        client.post(
-          url,
-          data: record.toJson(),
-        ),
-      );
+    final Dio client = await getClient();
+    try {
+      for (final DnsRecord record in listDnsRecords) {
+        allCreateFutures.add(
+          client.post(
+            '/zones/$domainZoneId/dns_records',
+            data: record.toJson(),
+          ),
+        );
+      }
+      await Future.wait(allCreateFutures);
+    } on DioError catch (e) {
+      print(e.message);
+      rethrow;
+    } finally {
+      close(client);
     }
-
-    await Future.wait(allCreateFutures);
-    close(client);
   }
 
-  List<DnsRecord> projectDnsRecords(String? domainName, String? ip4) {
-    var domainA = DnsRecord(type: 'A', name: domainName, content: ip4);
+  List<DnsRecord> projectDnsRecords(
+    final String? domainName,
+    final String? ip4,
+  ) {
+    final DnsRecord domainA =
+        DnsRecord(type: 'A', name: domainName, content: ip4);
 
-    var mx = DnsRecord(type: 'MX', name: '@', content: domainName);
-    var apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
-    var cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
-    var gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
-    var meetA = DnsRecord(type: 'A', name: 'meet', content: ip4);
-    var passwordA = DnsRecord(type: 'A', name: 'password', content: ip4);
-    var socialA = DnsRecord(type: 'A', name: 'social', content: ip4);
-    var vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
+    final DnsRecord mx = DnsRecord(type: 'MX', name: '@', content: domainName);
+    final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
+    final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
+    final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
+    final DnsRecord meetA = DnsRecord(type: 'A', name: 'meet', content: ip4);
+    final DnsRecord passwordA =
+        DnsRecord(type: 'A', name: 'password', content: ip4);
+    final DnsRecord socialA =
+        DnsRecord(type: 'A', name: 'social', content: ip4);
+    final DnsRecord vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
 
-    var txt1 = DnsRecord(
+    final DnsRecord txt1 = DnsRecord(
       type: 'TXT',
       name: '_dmarc',
       content: 'v=DMARC1; p=none',
       ttl: 18000,
     );
 
-    var txt2 = DnsRecord(
+    final DnsRecord txt2 = DnsRecord(
       type: 'TXT',
       name: domainName,
       content: 'v=spf1 a mx ip4:$ip4 -all',
@@ -186,18 +220,20 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<void> setDkim(
-      String dkimRecordString, CloudFlareDomain cloudFlareDomain) async {
-    final domainZoneId = cloudFlareDomain.zoneId;
-    final url = '$rootAddress/zones/$domainZoneId/dns_records';
+    final String dkimRecordString,
+    final ServerDomain cloudFlareDomain,
+  ) async {
+    final String domainZoneId = cloudFlareDomain.zoneId;
+    final String url = '$rootAddress/zones/$domainZoneId/dns_records';
 
-    final dkimRecord = DnsRecord(
+    final DnsRecord dkimRecord = DnsRecord(
       type: 'TXT',
       name: 'selector._domainkey',
       content: dkimRecordString,
       ttl: 18000,
     );
 
-    var client = await getClient();
+    final Dio client = await getClient();
     await client.post(
       url,
       data: dkimRecord.toJson(),
@@ -207,23 +243,17 @@ class CloudflareApi extends ApiMap {
   }
 
   Future<List<String>> domainList() async {
-    var url = '$rootAddress/zones?per_page=50';
-    var client = await getClient();
+    final String url = '$rootAddress/zones';
+    final Dio client = await getClient();
 
-    var response = await client.get(
+    final Response response = await client.get(
       url,
       queryParameters: {'per_page': 50},
     );
 
     close(client);
     return response.data['result']
-        .map<String>((el) => el['name'] as String)
+        .map<String>((final el) => el['name'] as String)
         .toList();
   }
-
-  @override
-  final bool hasLogger;
-
-  @override
-  final bool isWithToken;
 }

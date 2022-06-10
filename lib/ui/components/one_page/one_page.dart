@@ -6,44 +6,43 @@ import 'package:selfprivacy/ui/components/pre_styled_buttons/pre_styled_buttons.
 
 class OnePage extends StatelessWidget {
   const OnePage({
-    Key? key,
     required this.title,
     required this.child,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final String title;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        child: Column(
-          children: [
-            Container(
-              height: 51,
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: BrandText.h4('basis.details'.tr()),
-            ),
-            BrandDivider(),
-          ],
-        ),
-        preferredSize: Size.fromHeight(52),
-      ),
-      body: child,
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(boxShadow: kElevationToShadow[3]),
-          height: kBottomNavigationBarHeight,
-          child: Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            alignment: Alignment.center,
-            child: PreStyledButtons.close(
-                onPress: () => Navigator.of(context).pop()),
+  Widget build(final BuildContext context) => Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(52),
+          child: Column(
+            children: [
+              Container(
+                height: 51,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: BrandText.h4('basis.details'.tr()),
+              ),
+              const BrandDivider(),
+            ],
           ),
         ),
-      ),
-    );
-  }
+        body: child,
+        bottomNavigationBar: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(boxShadow: kElevationToShadow[3]),
+            height: kBottomNavigationBarHeight,
+            child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              alignment: Alignment.center,
+              child: PreStyledButtons.close(
+                onPress: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ),
+        ),
+      );
 }

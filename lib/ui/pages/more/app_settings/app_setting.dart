@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
@@ -13,35 +13,40 @@ import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class AppSettingsPage extends StatefulWidget {
-  const AppSettingsPage({Key? key}) : super(key: key);
+  const AppSettingsPage({final super.key});
 
   @override
-  _AppSettingsPageState createState() => _AppSettingsPageState();
+  State<AppSettingsPage> createState() => _AppSettingsPageState();
 }
 
 class _AppSettingsPageState extends State<AppSettingsPage> {
   @override
-  Widget build(BuildContext context) {
-    var isDarkModeOn = context.watch<AppSettingsCubit>().state.isDarkModeOn;
+  Widget build(final BuildContext context) {
+    final bool isDarkModeOn =
+        context.watch<AppSettingsCubit>().state.isDarkModeOn;
 
     return SafeArea(
-      child: Builder(builder: (context) {
-        return Scaffold(
+      child: Builder(
+        builder: (final context) => Scaffold(
           appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(52),
             child: BrandHeader(
-                title: 'more.settings.title'.tr(), hasBackButton: true),
-            preferredSize: Size.fromHeight(52),
+              title: 'more.settings.title'.tr(),
+              hasBackButton: true,
+            ),
           ),
           body: ListView(
             padding: paddingH15V0,
             children: [
-              BrandDivider(),
+              const BrandDivider(),
               Container(
-                padding: EdgeInsets.only(top: 20, bottom: 5),
-                decoration: BoxDecoration(
-                    border: Border(
-                  bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-                )),
+                padding: const EdgeInsets.only(top: 20, bottom: 5),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom:
+                        BorderSide(width: 1, color: BrandColors.dividerColor),
+                  ),
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,12 +55,13 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       child: _TextColumn(
                         title: 'more.settings.1'.tr(),
                         value: 'more.settings.2'.tr(),
+                        hasWarning: false,
                       ),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     BrandSwitch(
                       value: Theme.of(context).brightness == Brightness.dark,
-                      onChanged: (value) => context
+                      onChanged: (final value) => context
                           .read<AppSettingsCubit>()
                           .updateDarkMode(isDarkModeOn: !isDarkModeOn),
                     ),
@@ -63,11 +69,13 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 20, bottom: 5),
-                decoration: BoxDecoration(
-                    border: Border(
-                  bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-                )),
+                padding: const EdgeInsets.only(top: 20, bottom: 5),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom:
+                        BorderSide(width: 1, color: BrandColors.dividerColor),
+                  ),
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,16 +84,17 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       child: _TextColumn(
                         title: 'more.settings.3'.tr(),
                         value: 'more.settings.4'.tr(),
+                        hasWarning: false,
                       ),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: BrandColors.red1,
                       ),
                       child: Text(
                         'basis.reset'.tr(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: BrandColors.white,
                           fontWeight: NamedFontWeight.demiBold,
                         ),
@@ -93,26 +102,25 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (_) {
-                            return BrandAlert(
-                              title: 'modals.3'.tr(),
-                              contentText: 'modals.4'.tr(),
-                              actions: [
-                                ActionButton(
-                                    text: 'modals.5'.tr(),
-                                    isRed: true,
-                                    onPressed: () {
-                                      context
-                                          .read<AppConfigCubit>()
-                                          .clearAppConfig();
-                                      Navigator.of(context).pop();
-                                    }),
-                                ActionButton(
-                                  text: 'basis.cancel'.tr(),
-                                ),
-                              ],
-                            );
-                          },
+                          builder: (final _) => BrandAlert(
+                            title: 'modals.3'.tr(),
+                            contentText: 'modals.4'.tr(),
+                            actions: [
+                              ActionButton(
+                                text: 'modals.5'.tr(),
+                                isRed: true,
+                                onPressed: () {
+                                  context
+                                      .read<ServerInstallationCubit>()
+                                      .clearAppConfig();
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              ActionButton(
+                                text: 'basis.cancel'.tr(),
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),
@@ -122,20 +130,21 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
               deleteServer(context)
             ],
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 
-  Widget deleteServer(BuildContext context) {
-    var isDisabled =
-        context.watch<AppConfigCubit>().state.hetznerServer == null;
+  Widget deleteServer(final BuildContext context) {
+    final bool isDisabled =
+        context.watch<ServerInstallationCubit>().state.serverDetails == null;
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 5),
-      decoration: BoxDecoration(
-          border: Border(
-        bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-      )),
+      padding: const EdgeInsets.only(top: 20, bottom: 5),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
+        ),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,55 +153,57 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             child: _TextColumn(
               title: 'more.settings.5'.tr(),
               value: 'more.settings.6'.tr(),
+              hasWarning: false,
             ),
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary: BrandColors.red1,
-            ),
-            child: Text(
-              'basis.delete'.tr(),
-              style: TextStyle(
-                color: BrandColors.white,
-                fontWeight: NamedFontWeight.demiBold,
-              ),
             ),
             onPressed: isDisabled
                 ? null
                 : () {
                     showDialog(
                       context: context,
-                      builder: (_) {
-                        return BrandAlert(
-                          title: 'modals.3'.tr(),
-                          contentText: 'modals.6'.tr(),
-                          actions: [
-                            ActionButton(
-                                text: 'modals.7'.tr(),
-                                isRed: true,
-                                onPressed: () async {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return Container(
-                                          alignment: Alignment.center,
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      });
-                                  await context
-                                      .read<AppConfigCubit>()
-                                      .serverDelete();
-                                  Navigator.of(context).pop();
-                                }),
-                            ActionButton(
-                              text: 'basis.cancel'.tr(),
-                            ),
-                          ],
-                        );
-                      },
+                      builder: (final _) => BrandAlert(
+                        title: 'modals.3'.tr(),
+                        contentText: 'modals.6'.tr(),
+                        actions: [
+                          ActionButton(
+                            text: 'modals.7'.tr(),
+                            isRed: true,
+                            onPressed: () async {
+                              showDialog(
+                                context: context,
+                                builder: (final context) => Container(
+                                  alignment: Alignment.center,
+                                  child: const CircularProgressIndicator(),
+                                ),
+                              );
+                              await context
+                                  .read<ServerInstallationCubit>()
+                                  .serverDelete();
+                              if (!mounted) {
+                                return;
+                              }
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          ActionButton(
+                            text: 'basis.cancel'.tr(),
+                          ),
+                        ],
+                      ),
                     );
                   },
+            child: Text(
+              'basis.delete'.tr(),
+              style: const TextStyle(
+                color: BrandColors.white,
+                fontWeight: NamedFontWeight.demiBold,
+              ),
+            ),
           ),
         ],
       ),
@@ -202,32 +213,31 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
 
 class _TextColumn extends StatelessWidget {
   const _TextColumn({
-    Key? key,
     required this.title,
     required this.value,
     this.hasWarning = false,
-  }) : super(key: key);
+  });
 
   final String title;
   final String value;
   final bool hasWarning;
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        BrandText.body1(
-          title,
-          style: TextStyle(color: hasWarning ? BrandColors.warning : null),
-        ),
-        SizedBox(height: 5),
-        BrandText.body1(value,
-            style: TextStyle(
+  Widget build(final BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BrandText.body1(
+            title,
+            style: TextStyle(color: hasWarning ? BrandColors.warning : null),
+          ),
+          const SizedBox(height: 5),
+          BrandText.body1(
+            value,
+            style: const TextStyle(
               fontSize: 13,
               height: 1.53,
               color: BrandColors.gray1,
-            ).merge(TextStyle(color: hasWarning ? BrandColors.warning : null))),
-      ],
-    );
-  }
+            ).merge(TextStyle(color: hasWarning ? BrandColors.warning : null)),
+          ),
+        ],
+      );
 }

@@ -1,41 +1,46 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/cubit/app_config/app_config_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
 class DnsDetailsPage extends StatefulWidget {
+  const DnsDetailsPage({final super.key});
+
   @override
-  _DnsDetailsPageState createState() => _DnsDetailsPageState();
+  State<DnsDetailsPage> createState() => _DnsDetailsPageState();
 }
 
 class _DnsDetailsPageState extends State<DnsDetailsPage> {
-  Widget _getStateCard(DnsRecordsStatus dnsState, Function fixCallback) {
-    var description = '';
-    var subtitle = '';
-    var icon = Icon(
+  Widget _getStateCard(
+    final DnsRecordsStatus dnsState,
+    final Function fixCallback,
+  ) {
+    String description = '';
+    String subtitle = '';
+    Icon icon = const Icon(
       Icons.check,
       color: Colors.green,
     );
     switch (dnsState) {
       case DnsRecordsStatus.uninitialized:
         description = 'providers.domain.states.uninitialized'.tr();
-        icon = Icon(
+        icon = const Icon(
           Icons.refresh,
         );
         break;
       case DnsRecordsStatus.refreshing:
         description = 'providers.domain.states.refreshing'.tr();
-        icon = Icon(
+        icon = const Icon(
           Icons.refresh,
         );
         break;
       case DnsRecordsStatus.good:
         description = 'providers.domain.states.ok'.tr();
-        icon = Icon(
+        icon = const Icon(
           Icons.check,
           color: Colors.green,
         );
@@ -43,7 +48,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       case DnsRecordsStatus.error:
         description = 'providers.domain.states.error'.tr();
         subtitle = 'providers.domain.states.error_subtitle'.tr();
-        icon = Icon(
+        icon = const Icon(
           Icons.error,
           color: Colors.red,
         );
@@ -61,10 +66,12 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var isReady = context.watch<AppConfigCubit>().state is AppConfigFinished;
-    final domain = getIt<ApiConfigModel>().cloudFlareDomain?.domainName ?? '';
-    var dnsCubit = context.watch<DnsRecordsCubit>().state;
+  Widget build(final BuildContext context) {
+    final bool isReady = context.watch<ServerInstallationCubit>().state
+        is ServerInstallationFinished;
+    final String domain =
+        getIt<ApiConfigModel>().serverDomain?.domainName ?? '';
+    final DnsRecordsState dnsCubit = context.watch<DnsRecordsCubit>().state;
 
     print(dnsCubit.dnsState);
 
@@ -103,7 +110,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
           ),
         ),
 
-        SizedBox(height: 16.0),
+        const SizedBox(height: 16.0),
         // Outlined card with a list of A records and their
         // status.
         BrandCards.outlined(
@@ -121,13 +128,13 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
               ),
               ...dnsCubit.dnsRecords
                   .where(
-                    (dnsRecord) =>
+                    (final dnsRecord) =>
                         dnsRecord.category == DnsRecordsCategory.services,
                   )
                   .map(
-                    (dnsRecord) => Column(
+                    (final dnsRecord) => Column(
                       children: [
-                        Divider(
+                        const Divider(
                           height: 1.0,
                         ),
                         ListTile(
@@ -161,7 +168,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
             ],
           ),
         ),
-        SizedBox(height: 16.0),
+        const SizedBox(height: 16.0),
         BrandCards.outlined(
           child: Column(
             children: <Widget>[
@@ -177,13 +184,13 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
               ),
               ...dnsCubit.dnsRecords
                   .where(
-                    (dnsRecord) =>
+                    (final dnsRecord) =>
                         dnsRecord.category == DnsRecordsCategory.email,
                   )
                   .map(
-                    (dnsRecord) => Column(
+                    (final dnsRecord) => Column(
                       children: [
-                        Divider(
+                        const Divider(
                           height: 1.0,
                         ),
                         ListTile(

@@ -3,72 +3,119 @@ import 'dart:typed_data';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:selfprivacy/logic/models/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/backblaze_credential.dart';
-import 'package:selfprivacy/logic/models/cloudflare_domain.dart';
-import 'package:selfprivacy/logic/models/server_details.dart';
-import 'package:selfprivacy/logic/models/user.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 
 class HiveConfig {
   static Future<void> init() async {
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
-    Hive.registerAdapter(HetznerServerDetailsAdapter());
-    Hive.registerAdapter(CloudFlareDomainAdapter());
+    Hive.registerAdapter(ServerHostingDetailsAdapter());
+    Hive.registerAdapter(ServerDomainAdapter());
     Hive.registerAdapter(BackblazeCredentialAdapter());
     Hive.registerAdapter(BackblazeBucketAdapter());
-    Hive.registerAdapter(HetznerDataBaseAdapter());
+    Hive.registerAdapter(ServerVolumeAdapter());
 
-    await Hive.openBox(BNames.appSettings);
-    await Hive.openBox<User>(BNames.users);
-    await Hive.openBox(BNames.servicesState);
+    Hive.registerAdapter(DnsProviderAdapter());
+    Hive.registerAdapter(ServerProviderAdapter());
 
-    var cipher = HiveAesCipher(await getEncryptedKey(BNames.key));
-    await Hive.openBox(BNames.appConfig, encryptionCipher: cipher);
+    await Hive.openBox(BNames.appSettingsBox);
 
-    var sshCipher = HiveAesCipher(await getEncryptedKey(BNames.sshEnckey));
-    await Hive.openBox(BNames.sshConfig, encryptionCipher: sshCipher);
+    final HiveAesCipher cipher = HiveAesCipher(
+      await getEncryptedKey(BNames.serverInstallationEncryptionKey),
+    );
+
+    await Hive.openBox<User>(BNames.usersDeprecated);
+    await Hive.openBox<User>(BNames.usersBox, encryptionCipher: cipher);
+
+    final Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
+    if (deprecatedUsers.isNotEmpty) {
+      final Box<User> users = Hive.box<User>(BNames.usersBox);
+      users.addAll(deprecatedUsers.values.toList());
+      deprecatedUsers.clear();
+    }
+
+    await Hive.openBox(BNames.serverInstallationBox, encryptionCipher: cipher);
   }
 
-  static Future<Uint8List> getEncryptedKey(String encKey) async {
-    final secureStorage = FlutterSecureStorage();
-    var hasEncryptionKey = await secureStorage.containsKey(key: encKey);
+  static Future<Uint8List> getEncryptedKey(final String encKey) async {
+    const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+    final bool hasEncryptionKey = await secureStorage.containsKey(key: encKey);
     if (!hasEncryptionKey) {
-      var key = Hive.generateSecureKey();
+      final List<int> key = Hive.generateSecureKey();
       await secureStorage.write(key: encKey, value: base64UrlEncode(key));
     }
 
-    String? string = await secureStorage.read(key: encKey);
+    final String? string = await secureStorage.read(key: encKey);
     return base64Url.decode(string!);
   }
 }
 
+/// Mappings for the different boxes and their keys
 class BNames {
-  static String appConfig = 'appConfig';
+  /// App settings box. Contains app settings like [isDarkModeOn], [isOnboardingShowing]
+  static String appSettingsBox = 'appSettings';
+
+  /// A boolean field of [appSettingsBox] box.
   static String isDarkModeOn = 'isDarkModeOn';
-  static String isOnbordingShowing = 'isOnbordingShowing';
-  static String users = 'users';
+
+  /// A boolean field of [appSettingsBox] box.
+  static String isOnboardingShowing = 'isOnboardingShowing';
+
+  /// Encryption key to decrypt [serverInstallationBox] and [usersBox] box.
+  static String serverInstallationEncryptionKey = 'key';
+
+  /// Server installation box. Contains server details and provider tokens.
+  static String serverInstallationBox = 'appConfig';
+
+  /// A List<String> field of [serverInstallationBox] box.
   static String rootKeys = 'rootKeys';
 
-  static String appSettings = 'appSettings';
-  static String servicesState = 'servicesState';
-
-  static String key = 'key';
-  static String sshEnckey = 'sshEngkey';
-
-  static String cloudFlareDomain = 'cloudFlareDomain';
-  static String hetznerKey = 'hetznerKey';
-  static String cloudFlareKey = 'cloudFlareKey';
-  static String rootUser = 'rootUser';
-  static String hetznerServer = 'hetznerServer';
+  /// A boolean field of [serverInstallationBox] box.
   static String hasFinalChecked = 'hasFinalChecked';
+
+  /// A boolean field of [serverInstallationBox] box.
   static String isServerStarted = 'isServerStarted';
-  static String backblazeKey = 'backblazeKey';
+
+  /// A [ServerDomain] field of [serverInstallationBox] box.
+  static String serverDomain = 'cloudFlareDomain';
+
+  /// A String field of [serverInstallationBox] box.
+  static String hetznerKey = 'hetznerKey';
+
+  /// A String field of [serverInstallationBox] box.
+  static String cloudFlareKey = 'cloudFlareKey';
+
+  /// A [User] field of [serverInstallationBox] box.
+  static String rootUser = 'rootUser';
+
+  /// A [ServerHostingDetails] field of [serverInstallationBox] box.
+  static String serverDetails = 'hetznerServer';
+
+  /// A [BackblazeCredential] field of [serverInstallationBox] box.
+  static String backblazeCredential = 'backblazeKey';
+
+  /// A [BackblazeBucket] field of [serverInstallationBox] box.
   static String backblazeBucket = 'backblazeBucket';
+
+  /// A boolean field of [serverInstallationBox] box.
   static String isLoading = 'isLoading';
+
+  /// A boolean field of [serverInstallationBox] box.
   static String isServerResetedFirstTime = 'isServerResetedFirstTime';
+
+  /// A boolean field of [serverInstallationBox] box.
   static String isServerResetedSecondTime = 'isServerResetedSecondTime';
-  static String sshConfig = 'sshConfig';
-  static String sshPrivateKey = "sshPrivateKey";
-  static String sshPublicKey = "sshPublicKey";
+
+  /// A boolean field of [serverInstallationBox] box.
+  static String isRecoveringServer = 'isRecoveringServer';
+
+  /// Deprecated users box as it is unencrypted
+  static String usersDeprecated = 'users';
+
+  /// Box with users
+  static String usersBox = 'usersEncrypted';
 }

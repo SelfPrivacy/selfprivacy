@@ -6,39 +6,41 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class ProgressBar extends StatefulWidget {
-  ProgressBar({
-    Key? key,
+  const ProgressBar({
     required this.steps,
     required this.activeIndex,
-  }) : super(key: key);
+    final super.key,
+  });
 
   final int activeIndex;
 
   final List<String> steps;
 
   @override
-  _ProgressBarState createState() => _ProgressBarState();
+  State<ProgressBar> createState() => _ProgressBarState();
 }
 
 class _ProgressBarState extends State<ProgressBar> {
   @override
-  Widget build(BuildContext context) {
-    double progress = 1 / widget.steps.length * (widget.activeIndex + 0.3);
-    var isDark = context.watch<AppSettingsCubit>().state.isDarkModeOn;
-    var style = isDark ? progressTextStyleDark : progressTextStyleLight;
+  Widget build(final BuildContext context) {
+    final double progress =
+        1 / widget.steps.length * (widget.activeIndex + 0.3);
+    final bool isDark = context.watch<AppSettingsCubit>().state.isDarkModeOn;
+    final TextStyle style =
+        isDark ? progressTextStyleDark : progressTextStyleLight;
 
-    var allSteps = widget.steps.asMap().map(
-      (i, step) {
-        var value = _stepTitle(index: i, style: style, step: step);
+    final Iterable<Container> allSteps = widget.steps.asMap().map(
+      (final i, final step) {
+        final Container value = _stepTitle(index: i, style: style, step: step);
         return MapEntry(i, value);
       },
     ).values;
 
-    List<Widget> odd = [];
-    List<Widget> even = [];
+    final List<Widget> odd = [];
+    final List<Widget> even = [];
 
-    var i = 0;
-    for (var step in allSteps) {
+    int i = 0;
+    for (final Container step in allSteps) {
       if (i.isEven) {
         even.add(step);
       } else {
@@ -49,12 +51,12 @@ class _ProgressBarState extends State<ProgressBar> {
 
     odd.insert(
       0,
-      SizedBox(
+      const SizedBox(
         width: 10,
       ),
     );
     odd.add(
-      SizedBox(
+      const SizedBox(
         width: 20,
       ),
     );
@@ -63,12 +65,12 @@ class _ProgressBarState extends State<ProgressBar> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BrandText.h2('Progress'),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
-          children: even,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: even,
         ),
-        SizedBox(height: 7),
+        const SizedBox(height: 7),
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
@@ -76,45 +78,43 @@ class _ProgressBarState extends State<ProgressBar> {
             borderRadius: BorderRadius.circular(5),
           ),
           child: LayoutBuilder(
-            builder: (_, constraints) {
-              return AnimatedContainer(
-                width: constraints.maxWidth * progress,
-                height: 5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: BrandColors.stableGradientColors,
-                  ),
+            builder: (final _, final constraints) => AnimatedContainer(
+              width: constraints.maxWidth * progress,
+              height: 5,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: BrandColors.stableGradientColors,
                 ),
-                duration: Duration(
-                  milliseconds: 300,
-                ),
-              );
-            },
+              ),
+              duration: const Duration(
+                milliseconds: 300,
+              ),
+            ),
           ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Row(
-          children: odd,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: odd,
         ),
       ],
     );
   }
 
   Container _stepTitle({
-    required int index,
+    required final int index,
     TextStyle? style,
-    String? step,
+    final String? step,
   }) {
-    var isActive = index == widget.activeIndex;
-    var checked = index < widget.activeIndex;
+    final bool isActive = index == widget.activeIndex;
+    final bool checked = index < widget.activeIndex;
 
     style = isActive ? style!.copyWith(fontWeight: FontWeight.w700) : style;
     return Container(
-      padding: EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.only(left: 10),
       height: 20,
       alignment: Alignment.center,
       child: RichText(
@@ -122,13 +122,15 @@ class _ProgressBarState extends State<ProgressBar> {
         text: TextSpan(
           style: progressTextStyleLight,
           children: [
-            checked
-                ? WidgetSpan(
-                    child: Padding(
-                    padding: const EdgeInsets.only(bottom: 2, right: 2),
-                    child: Icon(BrandIcons.check, size: 11),
-                  ))
-                : TextSpan(text: '${index + 1}.', style: style),
+            if (checked)
+              const WidgetSpan(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 2, right: 2),
+                  child: Icon(BrandIcons.check, size: 11),
+                ),
+              )
+            else
+              TextSpan(text: '${index + 1}.', style: style),
             TextSpan(text: step, style: style)
           ],
         ),

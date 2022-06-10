@@ -7,7 +7,12 @@ import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 import 'package:intl/intl.dart';
 
 class CpuChart extends StatelessWidget {
-  CpuChart(this.data, this.period, this.start);
+  const CpuChart({
+    required this.data,
+    required this.period,
+    required this.start,
+    final super.key,
+  });
 
   final List<TimeSeriesData> data;
   final Period period;
@@ -15,9 +20,9 @@ class CpuChart extends StatelessWidget {
 
   List<FlSpot> getSpots() {
     var i = 0;
-    List<FlSpot> res = [];
+    final List<FlSpot> res = [];
 
-    for (var d in data) {
+    for (final d in data) {
       res.add(FlSpot(i.toDouble(), d.value));
       i++;
     }
@@ -26,97 +31,96 @@ class CpuChart extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return LineChart(
-      LineChartData(
-        lineTouchData: LineTouchData(enabled: false),
-        lineBarsData: [
-          LineChartBarData(
-            spots: getSpots(),
-            isCurved: true,
-            barWidth: 1,
-            color: Colors.red,
-            dotData: FlDotData(
-              show: false,
+  Widget build(final BuildContext context) => LineChart(
+        LineChartData(
+          lineTouchData: LineTouchData(enabled: false),
+          lineBarsData: [
+            LineChartBarData(
+              spots: getSpots(),
+              isCurved: true,
+              barWidth: 1,
+              color: Colors.red,
+              dotData: FlDotData(
+                show: false,
+              ),
             ),
-          ),
-        ],
-        minY: 0,
-        maxY: 100,
-        minX: data.length - 200,
-        titlesData: FlTitlesData(
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              interval: 20,
-              reservedSize: 50,
-              getTitlesWidget: (value, titleMeta) {
-                return Padding(
+          ],
+          minY: 0,
+          maxY: 100,
+          minX: data.length - 200,
+          titlesData: FlTitlesData(
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                interval: 20,
+                reservedSize: 50,
+                getTitlesWidget: (final value, final titleMeta) => Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: RotatedBox(
-                    child: Text(bottomTitle(value.toInt()),
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.purple,
-                          fontWeight: FontWeight.bold,
-                        )),
                     quarterTurns: 1,
-                  ),
-                );
-              },
-              showTitles: true,
-            ),
-          ),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              getTitlesWidget: (value, titleMeta) {
-                return Padding(
-                    padding: EdgeInsets.only(right: 15),
                     child: Text(
-                      value.toInt().toString(),
-                      style: progressTextStyleLight.copyWith(
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? BrandColors.gray4
-                            : null,
+                      bottomTitle(value.toInt()),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.purple,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ));
-              },
-              interval: 25,
-              showTitles: false,
+                    ),
+                  ),
+                ),
+                showTitles: true,
+              ),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                getTitlesWidget: (final value, final titleMeta) => Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: Text(
+                    value.toInt().toString(),
+                    style: progressTextStyleLight.copyWith(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? BrandColors.gray4
+                          : null,
+                    ),
+                  ),
+                ),
+                interval: 25,
+                showTitles: false,
+              ),
             ),
           ),
+          gridData: FlGridData(show: true),
         ),
-        gridData: FlGridData(show: true),
-      ),
-    );
-  }
+      );
 
   bool checkToShowTitle(
-    double minValue,
-    double maxValue,
-    SideTitles sideTitles,
-    double appliedInterval,
-    double value,
+    final double minValue,
+    final double maxValue,
+    final SideTitles sideTitles,
+    final double appliedInterval,
+    final double value,
   ) {
     if (value < 0) {
       return false;
     } else if (value == 0) {
       return true;
     }
-    var _value = value - minValue;
-    var v = _value / 20;
+
+    final localValue = value - minValue;
+    final v = localValue / 20;
     return v - v.floor() == 0;
   }
 
-  String bottomTitle(int value) {
+  String bottomTitle(final int value) {
     final hhmm = DateFormat('HH:mm');
-    var day = DateFormat('MMMd');
+    final day = DateFormat('MMMd');
     String res;
 
     if (value <= 0) {
       return '';
     }
-    var time = data[value].time;
+
+    final time = data[value].time;
     switch (period) {
       case Period.hour:
       case Period.day:

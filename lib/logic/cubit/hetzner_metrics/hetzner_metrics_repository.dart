@@ -2,40 +2,40 @@ import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 
-import 'hetzner_metrics_cubit.dart';
+import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.dart';
 
 class HetznerMetricsRepository {
-  Future<HetznerMetricsLoaded> getMetrics(Period period) async {
-    var end = DateTime.now();
+  Future<HetznerMetricsLoaded> getMetrics(final Period period) async {
+    final DateTime end = DateTime.now();
     DateTime start;
 
     switch (period) {
       case Period.hour:
-        start = end.subtract(Duration(hours: 1));
+        start = end.subtract(const Duration(hours: 1));
         break;
       case Period.day:
-        start = end.subtract(Duration(days: 1));
+        start = end.subtract(const Duration(days: 1));
         break;
       case Period.month:
-        start = end.subtract(Duration(days: 15));
+        start = end.subtract(const Duration(days: 15));
         break;
     }
 
-    var api = HetznerApi(hasLogger: true);
+    final HetznerApi api = HetznerApi(hasLogger: true);
 
-    var results = await Future.wait([
+    final List<Map<String, dynamic>> results = await Future.wait([
       api.getMetrics(start, end, 'cpu'),
       api.getMetrics(start, end, 'network'),
     ]);
 
-    var cpuMetricsData = results[0]["metrics"];
-    var networkMetricsData = results[1]["metrics"];
+    final cpuMetricsData = results[0]['metrics'];
+    final networkMetricsData = results[1]['metrics'];
 
     return HetznerMetricsLoaded(
       period: period,
       start: start,
       end: end,
-      stepInSeconds: cpuMetricsData["step"],
+      stepInSeconds: cpuMetricsData['step'],
       cpu: timeSeriesSerializer(cpuMetricsData, 'cpu'),
       ppsIn: timeSeriesSerializer(networkMetricsData, 'network.0.pps.in'),
       ppsOut: timeSeriesSerializer(networkMetricsData, 'network.0.pps.out'),
@@ -50,7 +50,11 @@ class HetznerMetricsRepository {
 }
 
 List<TimeSeriesData> timeSeriesSerializer(
-    Map<String, dynamic> json, String type) {
-  List list = json["time_series"][type]["values"];
-  return list.map((el) => TimeSeriesData(el[0], double.parse(el[1]))).toList();
+  final Map<String, dynamic> json,
+  final String type,
+) {
+  final List list = json['time_series'][type]['values'];
+  return list
+      .map((final el) => TimeSeriesData(el[0], double.parse(el[1])))
+      .toList();
 }

@@ -1,18 +1,15 @@
 import 'package:timezone/timezone.dart';
 
 class TimeZoneSettings {
-  final Location timezone;
-
-  TimeZoneSettings(this.timezone);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'timezone': timezone.name,
-    };
-  }
-
-  factory TimeZoneSettings.fromString(String string) {
-    var location = timeZoneDatabase.locations[string]!;
+  factory TimeZoneSettings.fromString(final String string) {
+    final Location location = timeZoneDatabase.locations[string]!;
     return TimeZoneSettings(location);
   }
+
+  TimeZoneSettings(this.timezone);
+  final Location timezone;
+
+  Map<String, dynamic> toJson() => {
+        'timezone': timezone.name,
+      };
 }

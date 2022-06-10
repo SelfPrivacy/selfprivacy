@@ -1,4 +1,4 @@
-In the server control panel in Hetzner, go to the **Rescue** tab. Then, click on **Enable rescue & power cycle**.
+In the Hetzner server control panel, go to the **Rescue** tab. Then, click on **Enable rescue & power cycle**.
 
 In *Choose a Recue OS* select **linux64**, and in *SSH Key* select your key if it has been added to your Hetzner account.
 

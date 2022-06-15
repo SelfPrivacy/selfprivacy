@@ -411,35 +411,17 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       case RecoveryStep.recoveryKey:
       case RecoveryStep.newDeviceKey:
       case RecoveryStep.oldToken:
-      case RecoveryStep.hetznerToken:
         emit(
           dataState.copyWith(
             currentStep: RecoveryStep.selecting,
           ),
         );
         break;
-      case RecoveryStep.serverSelection:
-        repository.deleteHetznerKey();
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.hetznerToken,
-          ),
-        );
-        break;
       case RecoveryStep.cloudflareToken:
-        repository.deleteDomain();
         repository.deleteServerDetails();
         emit(
           dataState.copyWith(
             currentStep: RecoveryStep.serverSelection,
-          ),
-        );
-        break;
-      case RecoveryStep.backblazeToken:
-        repository.deleteBackblazeKey();
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.cloudflareToken,
           ),
         );
         break;

@@ -39,8 +39,9 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
             ? 'recovering.choose_server_description'.tr()
             : 'recovering.confirm_server_description'.tr(),
         hasBackButton: true,
-        onBackButtonPressed:
-            context.read<ServerInstallationCubit>().revertRecoveryStep,
+        onBackButtonPressed: () {
+          Navigator.of(context).popUntil((final route) => route.isFirst);
+        },
         hasFlashButton: false,
         children: [
           FutureBuilder<List<ServerBasicInfoWithValidators>>(

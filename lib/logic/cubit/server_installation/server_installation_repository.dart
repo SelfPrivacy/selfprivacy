@@ -242,13 +242,18 @@ class ServerInstallationRepository {
                     domainName: domainName,
                   );
 
-                  final ServerHostingDetails? serverDetails =
-                      await hetznerApi.createServer(
-                    cloudFlareKey: cloudFlareKey,
-                    rootUser: rootUser,
-                    domainName: domainName,
-                    dataBase: dataBase,
-                  );
+                  ServerHostingDetails? serverDetails;
+                  try {
+                    serverDetails = await hetznerApi.createServer(
+                      cloudFlareKey: cloudFlareKey,
+                      rootUser: rootUser,
+                      domainName: domainName,
+                      dataBase: dataBase,
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
+
                   if (serverDetails == null) {
                     print('Server is not initialized!');
                     return;

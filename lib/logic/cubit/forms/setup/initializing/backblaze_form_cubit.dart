@@ -55,10 +55,11 @@ class BackblazeFormCubit extends FormCubit {
     }
 
     if (!isKeyValid) {
-      keyId.setError('bad key');
-      applicationKey.setError('bad key');
+      keyId.setError('initializing.backblaze_bad_key_error'.tr());
+      applicationKey.setError('initializing.backblaze_bad_key_error'.tr());
       return false;
     }
+
     return true;
   }
 }

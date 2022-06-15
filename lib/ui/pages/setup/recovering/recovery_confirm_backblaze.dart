@@ -28,6 +28,8 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
             heroTitle: 'recovering.confirm_backblaze'.tr(),
             heroSubtitle: 'recovering.confirm_backblaze_description'.tr(),
             hasBackButton: true,
+            onBackButtonPressed:
+                context.read<ServerInstallationCubit>().revertRecoveryStep,
             hasFlashButton: false,
             children: [
               CubitFormTextField(

@@ -32,6 +32,9 @@ class RecoveryHetznerConnected extends StatelessWidget {
             ),
             hasBackButton: true,
             hasFlashButton: false,
+            onBackButtonPressed: () {
+              Navigator.of(context).popUntil((final route) => route.isFirst);
+            },
             children: [
               CubitFormTextField(
                 formFieldCubit: context.read<HetznerFormCubit>().apiKey,

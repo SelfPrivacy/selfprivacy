@@ -42,12 +42,14 @@ class HetznerFormCubit extends FormCubit {
       isKeyValid = await apiClient.isValid(apiKey.state.value);
     } catch (e) {
       addError(e);
+      isKeyValid = false;
     }
 
     if (!isKeyValid) {
-      apiKey.setError('bad key');
+      apiKey.setError('initializing.hetzner_bad_key_error'.tr());
       return false;
     }
+
     return true;
   }
 }

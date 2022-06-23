@@ -34,7 +34,6 @@ class ApiConfigModel {
 
   Future<void> storeBackblazeCredential(final BackblazeCredential value) async {
     await _box.put(BNames.backblazeCredential, value);
-
     _backblazeCredential = value;
   }
 
@@ -64,7 +63,6 @@ class ApiConfigModel {
 
   void init() {
     _hetznerKey = _box.get(BNames.hetznerKey);
-
     _cloudFlareKey = _box.get(BNames.cloudFlareKey);
     _backblazeCredential = _box.get(BNames.backblazeCredential);
     _serverDomain = _box.get(BNames.serverDomain);

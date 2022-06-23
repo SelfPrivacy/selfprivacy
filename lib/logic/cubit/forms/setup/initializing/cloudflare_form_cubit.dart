@@ -42,12 +42,14 @@ class CloudFlareFormCubit extends FormCubit {
       isKeyValid = await apiClient.isValid(apiKey.state.value);
     } catch (e) {
       addError(e);
+      isKeyValid = false;
     }
 
     if (!isKeyValid) {
-      apiKey.setError('bad key');
+      apiKey.setError('initializing.cloudflare_bad_key_error'.tr());
       return false;
     }
+
     return true;
   }
 }

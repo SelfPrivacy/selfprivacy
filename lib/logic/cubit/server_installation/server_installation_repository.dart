@@ -242,13 +242,18 @@ class ServerInstallationRepository {
                     domainName: domainName,
                   );
 
-                  final ServerHostingDetails? serverDetails =
-                      await hetznerApi.createServer(
-                    cloudFlareKey: cloudFlareKey,
-                    rootUser: rootUser,
-                    domainName: domainName,
-                    dataBase: dataBase,
-                  );
+                  ServerHostingDetails? serverDetails;
+                  try {
+                    serverDetails = await hetznerApi.createServer(
+                      cloudFlareKey: cloudFlareKey,
+                      rootUser: rootUser,
+                      domainName: domainName,
+                      dataBase: dataBase,
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
+
                   if (serverDetails == null) {
                     print('Server is not initialized!');
                     return;
@@ -598,6 +603,11 @@ class ServerInstallationRepository {
     await getIt<ApiConfigModel>().storeServerDetails(serverDetails);
   }
 
+  Future<void> deleteServerDetails() async {
+    await box.delete(BNames.serverDetails);
+    getIt<ApiConfigModel>().init();
+  }
+
   Future<void> saveHetznerKey(final String key) async {
     print('saved');
     await getIt<ApiConfigModel>().storeHetznerKey(key);
@@ -614,8 +624,18 @@ class ServerInstallationRepository {
     await getIt<ApiConfigModel>().storeBackblazeCredential(backblazeCredential);
   }
 
+  Future<void> deleteBackblazeKey() async {
+    await box.delete(BNames.backblazeCredential);
+    getIt<ApiConfigModel>().init();
+  }
+
   Future<void> saveCloudFlareKey(final String key) async {
     await getIt<ApiConfigModel>().storeCloudFlareKey(key);
+  }
+
+  Future<void> deleteCloudFlareKey() async {
+    await box.delete(BNames.cloudFlareKey);
+    getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveDomain(final ServerDomain serverDomain) async {

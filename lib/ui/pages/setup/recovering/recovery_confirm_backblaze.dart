@@ -28,6 +28,9 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
             heroTitle: 'recovering.confirm_backblaze'.tr(),
             heroSubtitle: 'recovering.confirm_backblaze_description'.tr(),
             hasBackButton: true,
+            onBackButtonPressed: () {
+              Navigator.of(context).popUntil((final route) => route.isFirst);
+            },
             hasFlashButton: false,
             children: [
               CubitFormTextField(

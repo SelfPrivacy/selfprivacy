@@ -18,8 +18,9 @@ class RecoveryDomainFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    initializingCubit
-        .submitDomainForAccessRecovery(serverDomainField.state.value);
+    initializingCubit.submitDomainForAccessRecovery(
+      serverDomainField.state.value.toLowerCase(),
+    );
   }
 
   @override

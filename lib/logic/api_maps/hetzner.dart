@@ -74,10 +74,14 @@ class HetznerApi extends ApiMap {
         },
       );
       final dbId = dbCreateResponse.data['volume']['id'];
+      final dbSize = dbCreateResponse.data['volume']['size'];
+      final dbServer = dbCreateResponse.data['volume']['server'];
       final dbName = dbCreateResponse.data['volume']['name'];
       volume = ServerVolume(
         id: dbId,
         name: dbName,
+        sizeGb: dbSize,
+        serverId: dbServer,
       );
     } catch (e) {
       print(e);
@@ -88,7 +92,7 @@ class HetznerApi extends ApiMap {
     return volume;
   }
 
-  Future<List<ServerVolume>> getVolumes(final String? status) async {
+  Future<List<ServerVolume>> getVolumes({final String? status}) async {
     final List<ServerVolume> volumes = [];
 
     final Response dbGetResponse;
@@ -103,10 +107,14 @@ class HetznerApi extends ApiMap {
       final List<dynamic> rawVolumes = dbGetResponse.data['volumes'];
       for (final rawVolume in rawVolumes) {
         final int dbId = rawVolume['id'];
+        final int dbSize = rawVolume['size'];
+        final dbServer = rawVolume['server'];
         final String dbName = rawVolume['name'];
         final volume = ServerVolume(
           id: dbId,
           name: dbName,
+          sizeGb: dbSize,
+          serverId: dbServer,
         );
         volumes.add(volume);
       }
@@ -127,10 +135,14 @@ class HetznerApi extends ApiMap {
     try {
       dbGetResponse = await client.get('/volumes/$id');
       final int dbId = dbGetResponse.data['volume']['id'];
+      final int dbSize = dbGetResponse.data['volume']['size'];
+      final int dbServer = dbGetResponse.data['volume']['server'];
       final String dbName = dbGetResponse.data['volume']['name'];
       volume = ServerVolume(
         id: dbId,
         name: dbName,
+        sizeGb: dbSize,
+        serverId: dbServer,
       );
     } catch (e) {
       print(e);

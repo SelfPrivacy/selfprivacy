@@ -451,6 +451,8 @@ class ServerInstallationRepository {
         volume: ServerVolume(
           id: 0,
           name: '',
+          sizeGb: 10,
+          serverId: 0,
         ),
         provider: ServerProvider.unknown,
         id: 0,
@@ -485,6 +487,8 @@ class ServerInstallationRepository {
         volume: ServerVolume(
           id: 0,
           name: '',
+          sizeGb: 10,
+          serverId: 0,
         ),
         provider: ServerProvider.unknown,
         id: 0,
@@ -519,6 +523,8 @@ class ServerInstallationRepository {
           volume: ServerVolume(
             id: 0,
             name: '',
+            serverId: 0,
+            sizeGb: 10,
           ),
           provider: ServerProvider.unknown,
           id: 0,
@@ -544,6 +550,8 @@ class ServerInstallationRepository {
         volume: ServerVolume(
           id: 0,
           name: '',
+          sizeGb: 10,
+          serverId: 0,
         ),
         provider: ServerProvider.unknown,
         id: 0,

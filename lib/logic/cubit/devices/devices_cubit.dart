@@ -16,17 +16,16 @@ class ApiDevicesCubit
   @override
   void load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
-      final List<ApiToken>? devices = await _getApiTokens();
-      if (devices != null) {
-        emit(ApiDevicesState(devices, LoadingStatus.success));
-      } else {
-        emit(const ApiDevicesState([], LoadingStatus.error));
-      }
+      _refetch();
     }
   }
 
   Future<void> refresh() async {
     emit(const ApiDevicesState([], LoadingStatus.refreshing));
+    _refetch();
+  }
+
+  void _refetch() async {
     final List<ApiToken>? devices = await _getApiTokens();
     if (devices != null) {
       emit(ApiDevicesState(devices, LoadingStatus.success));

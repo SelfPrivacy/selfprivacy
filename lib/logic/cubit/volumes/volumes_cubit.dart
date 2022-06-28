@@ -47,7 +47,7 @@ class ApiVolumesCubit
   }
 
   void resizeVolume(final ServerVolume volume, final int newSizeGb) {
-    if (volume.sizeGb < newSizeGb) {
+    if (volume.sizeByte < newSizeGb) {
       HetznerApi().resizeVolume(volume.id, newSizeGb);
       refresh();
     }

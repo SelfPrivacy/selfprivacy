@@ -491,7 +491,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       volume: ServerVolume(
         id: server.volumeId,
         name: 'recovered_volume',
-        sizeGb: 10, // ?????
+        sizeByte: 0,
         serverId: server.id,
       ),
       apiToken: dataState.serverDetails!.apiToken,

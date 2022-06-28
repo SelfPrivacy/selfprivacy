@@ -80,7 +80,7 @@ class HetznerApi extends ApiMap {
       volume = ServerVolume(
         id: dbId,
         name: dbName,
-        sizeGb: dbSize,
+        sizeByte: dbSize,
         serverId: dbServer,
       );
     } catch (e) {
@@ -113,7 +113,7 @@ class HetznerApi extends ApiMap {
         final volume = ServerVolume(
           id: dbId,
           name: dbName,
-          sizeGb: dbSize,
+          sizeByte: dbSize,
           serverId: dbServer,
         );
         volumes.add(volume);
@@ -141,7 +141,7 @@ class HetznerApi extends ApiMap {
       volume = ServerVolume(
         id: dbId,
         name: dbName,
-        sizeGb: dbSize,
+        sizeByte: dbSize,
         serverId: dbServer,
       );
     } catch (e) {

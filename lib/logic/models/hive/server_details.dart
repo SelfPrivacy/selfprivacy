@@ -55,7 +55,7 @@ class ServerVolume {
   ServerVolume({
     required this.id,
     required this.name,
-    required this.sizeGb,
+    required this.sizeByte,
     required this.serverId,
   });
 
@@ -63,8 +63,8 @@ class ServerVolume {
   int id;
   @HiveField(2)
   String name;
-  @HiveField(3, defaultValue: 10)
-  int sizeGb;
+  @HiveField(3, defaultValue: 10737418240) // 10 Gb
+  int sizeByte;
   @HiveField(4, defaultValue: null)
   int? serverId;
 }

@@ -56,24 +56,174 @@ class HetznerApi extends ApiMap {
     }
   }
 
-  Future<ServerVolume> createVolume() async {
+  Future<ServerVolume?> createVolume() async {
+    ServerVolume? volume;
+
+    final Response dbCreateResponse;
     final Dio client = await getClient();
-    final Response dbCreateResponse = await client.post(
-      '/volumes',
-      data: {
-        'size': 10,
-        'name': StringGenerators.dbStorageName(),
-        'labels': {'labelkey': 'value'},
-        'location': 'fsn1',
-        'automount': false,
-        'format': 'ext4'
-      },
-    );
-    final dbId = dbCreateResponse.data['volume']['id'];
-    return ServerVolume(
-      id: dbId,
-      name: dbCreateResponse.data['volume']['name'],
-    );
+    try {
+      dbCreateResponse = await client.post(
+        '/volumes',
+        data: {
+          'size': 10,
+          'name': StringGenerators.dbStorageName(),
+          'labels': {'labelkey': 'value'},
+          'location': 'fsn1',
+          'automount': false,
+          'format': 'ext4'
+        },
+      );
+      final dbId = dbCreateResponse.data['volume']['id'];
+      final dbSize = dbCreateResponse.data['volume']['size'];
+      final dbServer = dbCreateResponse.data['volume']['server'];
+      final dbName = dbCreateResponse.data['volume']['name'];
+      volume = ServerVolume(
+        id: dbId,
+        name: dbName,
+        sizeByte: dbSize,
+        serverId: dbServer,
+      );
+    } catch (e) {
+      print(e);
+    } finally {
+      client.close();
+    }
+
+    return volume;
+  }
+
+  Future<List<ServerVolume>> getVolumes({final String? status}) async {
+    final List<ServerVolume> volumes = [];
+
+    final Response dbGetResponse;
+    final Dio client = await getClient();
+    try {
+      dbGetResponse = await client.get(
+        '/volumes',
+        queryParameters: {
+          'status': status,
+        },
+      );
+      final List<dynamic> rawVolumes = dbGetResponse.data['volumes'];
+      for (final rawVolume in rawVolumes) {
+        final int dbId = rawVolume['id'];
+        final int dbSize = rawVolume['size'];
+        final dbServer = rawVolume['server'];
+        final String dbName = rawVolume['name'];
+        final volume = ServerVolume(
+          id: dbId,
+          name: dbName,
+          sizeByte: dbSize,
+          serverId: dbServer,
+        );
+        volumes.add(volume);
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      client.close();
+    }
+
+    return volumes;
+  }
+
+  Future<ServerVolume?> getVolume(final int id) async {
+    ServerVolume? volume;
+
+    final Response dbGetResponse;
+    final Dio client = await getClient();
+    try {
+      dbGetResponse = await client.get('/volumes/$id');
+      final int dbId = dbGetResponse.data['volume']['id'];
+      final int dbSize = dbGetResponse.data['volume']['size'];
+      final int dbServer = dbGetResponse.data['volume']['server'];
+      final String dbName = dbGetResponse.data['volume']['name'];
+      volume = ServerVolume(
+        id: dbId,
+        name: dbName,
+        sizeByte: dbSize,
+        serverId: dbServer,
+      );
+    } catch (e) {
+      print(e);
+    } finally {
+      client.close();
+    }
+
+    return volume;
+  }
+
+  void deleteVolume(final int id) async {
+    final Dio client = await getClient();
+    try {
+      await client.delete('/volumes/$id');
+    } catch (e) {
+      print(e);
+    } finally {
+      client.close();
+    }
+  }
+
+  Future<bool> attachVolume(final int volumeId, final int serverId) async {
+    bool success = false;
+
+    final Response dbPostResponse;
+    final Dio client = await getClient();
+    try {
+      dbPostResponse = await client.post(
+        '/volumes/$volumeId/actions/attach',
+        data: {
+          'automount': true,
+          'server': serverId,
+        },
+      );
+      success = dbPostResponse.data['action']['status'].toString() != 'error';
+    } catch (e) {
+      print(e);
+    } finally {
+      client.close();
+    }
+
+    return success;
+  }
+
+  Future<bool> detachVolume(final int volumeId) async {
+    bool success = false;
+
+    final Response dbPostResponse;
+    final Dio client = await getClient();
+    try {
+      dbPostResponse = await client.post('/volumes/$volumeId/actions/detach');
+      success = dbPostResponse.data['action']['status'].toString() != 'error';
+    } catch (e) {
+      print(e);
+    } finally {
+      client.close();
+    }
+
+    return success;
+  }
+
+  Future<bool> resizeVolume(final int volumeId, final int sizeGb) async {
+    bool success = false;
+
+    final Response dbPostResponse;
+    final Dio client = await getClient();
+    try {
+      dbPostResponse = await client.post(
+        '/volumes/$volumeId/actions/resize',
+        data: {
+          'size': sizeGb,
+        },
+      );
+      success = dbPostResponse.data['action']['status'].toString() != 'error';
+    } catch (e) {
+      print(e);
+    } finally {
+      client.close();
+    }
+
+    return success;
   }
 
   Future<ServerHostingDetails?> createServer({

@@ -212,7 +212,13 @@ class ServerInstallationRepository {
     late ServerVolume dataBase;
 
     try {
-      dataBase = await hetznerApi.createVolume();
+      final ServerVolume? createdVolume = await hetznerApi.createVolume();
+      if (createdVolume == null) {
+        print('Volume is not created!');
+        return;
+      }
+
+      dataBase = createdVolume;
 
       final ServerHostingDetails? serverDetails = await hetznerApi.createServer(
         cloudFlareKey: cloudFlareKey,
@@ -220,6 +226,7 @@ class ServerInstallationRepository {
         domainName: domainName,
         dataBase: dataBase,
       );
+
       if (serverDetails == null) {
         print('Server is not initialized!');
         return;
@@ -444,6 +451,8 @@ class ServerInstallationRepository {
         volume: ServerVolume(
           id: 0,
           name: '',
+          sizeByte: 0,
+          serverId: 0,
         ),
         provider: ServerProvider.unknown,
         id: 0,
@@ -478,6 +487,8 @@ class ServerInstallationRepository {
         volume: ServerVolume(
           id: 0,
           name: '',
+          sizeByte: 0,
+          serverId: 0,
         ),
         provider: ServerProvider.unknown,
         id: 0,
@@ -512,6 +523,8 @@ class ServerInstallationRepository {
           volume: ServerVolume(
             id: 0,
             name: '',
+            serverId: 0,
+            sizeByte: 0,
           ),
           provider: ServerProvider.unknown,
           id: 0,
@@ -537,6 +550,8 @@ class ServerInstallationRepository {
         volume: ServerVolume(
           id: 0,
           name: '',
+          sizeByte: 0,
+          serverId: 0,
         ),
         provider: ServerProvider.unknown,
         id: 0,

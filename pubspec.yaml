@@ -26,6 +26,10 @@ dependencies:
   flutter_markdown: ^0.6.9
   flutter_secure_storage: ^5.0.2
   get_it: ^7.2.0
+  gql: ^0.13.1
+  graphql: ^5.1.1
+  graphql_codegen: ^0.9.0
+  graphql_flutter: ^5.1.0
   gtk_theme_fl: ^0.0.1
   hive: ^2.0.5
   hive_flutter: ^1.1.0

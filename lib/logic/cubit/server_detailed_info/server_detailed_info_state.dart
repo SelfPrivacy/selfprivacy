@@ -22,7 +22,7 @@ class Loaded extends ServerDetailsState {
     required this.autoUpgradeSettings,
     required this.checkTime,
   });
-  final HetznerServerInfo serverInfo;
+  final ProviderServerInfo serverInfo;
 
   final TimeZoneSettings serverTimezone;
 

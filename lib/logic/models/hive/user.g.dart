@@ -11,9 +11,9 @@ class UserAdapter extends TypeAdapter<User> {
   final int typeId = 1;
 
   @override
-  User read(final BinaryReader reader) {
-    final int numOfFields = reader.readByte();
-    final Map<int, dynamic> fields = <int, dynamic>{
+  User read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return User(
@@ -26,7 +26,7 @@ class UserAdapter extends TypeAdapter<User> {
   }
 
   @override
-  void write(final BinaryWriter writer, final User obj) {
+  void write(BinaryWriter writer, User obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)
@@ -45,7 +45,7 @@ class UserAdapter extends TypeAdapter<User> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       other is UserAdapter &&
           runtimeType == other.runtimeType &&

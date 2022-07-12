@@ -1,6 +1,6 @@
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/hetzner.dart';
-import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/providers/provider_factory.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -12,7 +12,10 @@ class ApiVolumesCubit
   ApiVolumesCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(serverInstallationCubit, const ApiVolumesState.initial());
 
-  final ServerApi api = ServerApi();
+  final VolumeProviderApiFactory providerApi =
+      VolumeApiFactoryCreator.createVolumeProviderApiFactory(
+    getIt<ApiConfigModel>().serverDetails!.provider,
+  );
 
   @override
   void load() async {
@@ -27,7 +30,8 @@ class ApiVolumesCubit
   }
 
   void _refetch() async {
-    final List<ServerVolume> volumes = await HetznerApi().getVolumes();
+    final List<ServerVolume> volumes =
+        await providerApi.getVolumeProvider().getVolumes();
     if (volumes.isNotEmpty) {
       emit(ApiVolumesState(volumes, LoadingStatus.success));
     } else {
@@ -37,29 +41,29 @@ class ApiVolumesCubit
 
   void attachVolume(final ServerVolume volume) async {
     final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
-    HetznerApi().attachVolume(volume.id, server.id);
+    await providerApi.getVolumeProvider().attachVolume(volume.id, server.id);
     refresh();
   }
 
   void detachVolume(final ServerVolume volume) async {
-    HetznerApi().detachVolume(volume.id);
+    await providerApi.getVolumeProvider().detachVolume(volume.id);
     refresh();
   }
 
-  void resizeVolume(final ServerVolume volume, final int newSizeGb) {
-    if (volume.sizeByte < newSizeGb) {
-      HetznerApi().resizeVolume(volume.id, newSizeGb);
-      refresh();
-    }
+  void resizeVolume(final ServerVolume volume, final int newSizeGb) async {
+    //if (volume.sizeByte < newSizeGb) {
+    await providerApi.getVolumeProvider().resizeVolume(volume.id, newSizeGb);
+    refresh();
+    //}
   }
 
   void createVolume() async {
-    HetznerApi().createVolume();
+    await providerApi.getVolumeProvider().createVolume();
     refresh();
   }
 
   void deleteVolume(final ServerVolume volume) async {
-    HetznerApi().deleteVolume(volume.id);
+    await providerApi.getVolumeProvider().deleteVolume(volume.id);
     refresh();
   }
 

@@ -21,7 +21,9 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class InitializingPage extends StatelessWidget {
-  const InitializingPage({final super.key});
+  const InitializingPage({
+    final super.key,
+  });
 
   @override
   Widget build(final BuildContext context) {
@@ -135,10 +137,12 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepHetzner(final ServerInstallationCubit serverInstallationCubit) =>
       BlocProvider(
-        create: (final context) => HetznerFormCubit(serverInstallationCubit),
+        create: (final context) => ProviderFormCubit(
+          serverInstallationCubit,
+        ),
         child: Builder(
           builder: (final context) {
-            final formCubitState = context.watch<HetznerFormCubit>().state;
+            final formCubitState = context.watch<ProviderFormCubit>().state;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -152,7 +156,7 @@ class InitializingPage extends StatelessWidget {
                 BrandText.body2('initializing.2'.tr()),
                 const Spacer(),
                 CubitFormTextField(
-                  formFieldCubit: context.read<HetznerFormCubit>().apiKey,
+                  formFieldCubit: context.read<ProviderFormCubit>().apiKey,
                   textAlign: TextAlign.center,
                   scrollPadding: const EdgeInsets.only(bottom: 70),
                   decoration: const InputDecoration(
@@ -163,7 +167,7 @@ class InitializingPage extends StatelessWidget {
                 BrandButton.rised(
                   onPressed: formCubitState.isSubmitting
                       ? null
-                      : () => context.read<HetznerFormCubit>().trySubmit(),
+                      : () => context.read<ProviderFormCubit>().trySubmit(),
                   text: 'basis.connect'.tr(),
                 ),
                 const SizedBox(height: 10),

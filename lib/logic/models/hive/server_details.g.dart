@@ -73,17 +73,23 @@ class ServerVolumeAdapter extends TypeAdapter<ServerVolume> {
     return ServerVolume(
       id: fields[1] as int,
       name: fields[2] as String,
+      sizeByte: fields[3] == null ? 10737418240 : fields[3] as int,
+      serverId: fields[4] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ServerVolume obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
-      ..write(obj.name);
+      ..write(obj.name)
+      ..writeByte(3)
+      ..write(obj.sizeByte)
+      ..writeByte(4)
+      ..write(obj.serverId);
   }
 
   @override

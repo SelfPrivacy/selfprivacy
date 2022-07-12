@@ -19,11 +19,11 @@ class RecoveryHetznerConnected extends StatelessWidget {
         context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (final BuildContext context) => HetznerFormCubit(appConfig),
+      create: (final BuildContext context) => ProviderFormCubit(appConfig),
       child: Builder(
         builder: (final BuildContext context) {
           final FormCubitState formCubitState =
-              context.watch<HetznerFormCubit>().state;
+              context.watch<ProviderFormCubit>().state;
 
           return BrandHeroScreen(
             heroTitle: 'recovering.hetzner_connected'.tr(),
@@ -37,7 +37,7 @@ class RecoveryHetznerConnected extends StatelessWidget {
             },
             children: [
               CubitFormTextField(
-                formFieldCubit: context.read<HetznerFormCubit>().apiKey,
+                formFieldCubit: context.read<ProviderFormCubit>().apiKey,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: 'recovering.hetzner_connected_placeholder'.tr(),
@@ -48,7 +48,7 @@ class RecoveryHetznerConnected extends StatelessWidget {
                 title: 'more.continue'.tr(),
                 onPressed: formCubitState.isSubmitting
                     ? null
-                    : () => context.read<HetznerFormCubit>().trySubmit(),
+                    : () => context.read<ProviderFormCubit>().trySubmit(),
               ),
               const SizedBox(height: 16),
               BrandButton.text(

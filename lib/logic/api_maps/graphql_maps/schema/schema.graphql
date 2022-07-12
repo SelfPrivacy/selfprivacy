@@ -1,0 +1,151 @@
+scalar DateTime
+
+type Alert {
+  severity: Severity!
+  title: String!
+  message: String!
+  timestamp: DateTime
+}
+
+type Api {
+  version: String!
+  devices: [ApiDevice!]!
+  recoveryKey: ApiRecoveryKeyStatus!
+}
+
+type ApiDevice {
+  name: String!
+  creationDate: DateTime!
+  isCaller: Boolean!
+}
+
+type ApiKeyMutationReturn implements MutationReturnInterface {
+  success: Boolean!
+  message: String!
+  code: Int!
+  key: String
+}
+
+type ApiRecoveryKeyStatus {
+  exists: Boolean!
+  valid: Boolean!
+  creationDate: DateTime
+  expirationDate: DateTime
+  usesLeft: Int
+}
+
+type AutoUpgradeOptions {
+  enable: Boolean!
+  allowReboot: Boolean!
+}
+
+type DeviceApiTokenMutationReturn implements MutationReturnInterface {
+  success: Boolean!
+  message: String!
+  code: Int!
+  token: String
+}
+
+enum DnsProvider {
+  CLOUDFLARE
+}
+
+type DnsRecord {
+  recordType: String!
+  name: String!
+  content: String!
+  ttl: Int!
+  priority: Int
+}
+
+type GenericMutationReturn implements MutationReturnInterface {
+  success: Boolean!
+  message: String!
+  code: Int!
+}
+
+type Mutation {
+  getNewRecoveryApiKey(limits: RecoveryKeyLimitsInput!): ApiKeyMutationReturn!
+  useRecoveryApiKey(input: UseRecoveryKeyInput!): DeviceApiTokenMutationReturn!
+  refreshDeviceApiToken: DeviceApiTokenMutationReturn!
+  deleteDeviceApiToken(device: String!): GenericMutationReturn!
+  getNewDeviceApiKey: ApiKeyMutationReturn!
+  invalidateNewDeviceApiKey: GenericMutationReturn!
+  authorizeWithNewDeviceApiKey(input: UseNewDeviceKeyInput!): DeviceApiTokenMutationReturn!
+}
+
+interface MutationReturnInterface {
+  success: Boolean!
+  message: String!
+  code: Int!
+}
+
+type Query {
+  system: System!
+  api: Api!
+}
+
+input RecoveryKeyLimitsInput {
+  expirationDate: DateTime
+  uses: Int
+}
+
+enum ServerProvider {
+  HETZNER
+}
+
+enum Severity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+  SUCCESS
+}
+
+type SshSettings {
+  enable: Boolean!
+  passwordAuthentication: Boolean!
+  rootSshKeys: [String!]!
+}
+
+type System {
+  status: Alert!
+  domain: SystemDomainInfo!
+  settings: SystemSettings!
+  info: SystemInfo!
+  provider: SystemProviderInfo!
+  busy: Boolean!
+}
+
+type SystemDomainInfo {
+  domain: String!
+  hostname: String!
+  provider: DnsProvider!
+  requiredDnsRecords: [DnsRecord!]!
+}
+
+type SystemInfo {
+  systemVersion: String!
+  pythonVersion: String!
+}
+
+type SystemProviderInfo {
+  provider: ServerProvider!
+  id: String!
+}
+
+type SystemSettings {
+  autoUpgrade: AutoUpgradeOptions!
+  ssh: SshSettings!
+  timezone: String!
+}
+
+input UseNewDeviceKeyInput {
+  key: String!
+  deviceName: String!
+}
+
+input UseRecoveryKeyInput {
+  key: String!
+  deviceName: String!
+}

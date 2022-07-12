@@ -1,0 +1,9 @@
+query GetApiTokensQuery {
+  api {
+    devices {
+      creationDate
+      isCaller
+      name
+    }
+  }
+}

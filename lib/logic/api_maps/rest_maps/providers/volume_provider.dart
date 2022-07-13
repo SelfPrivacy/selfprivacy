@@ -1,12 +1,7 @@
-import 'package:selfprivacy/logic/api_maps/rest_maps/providers/provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 
-abstract class VolumeProviderApi extends ProviderApi {
-  VolumeProviderApi({
-    final super.hasLogger = false,
-    final super.isWithToken = true,
-  });
-
+mixin VolumeProviderApi on ApiMap {
   Future<ServerVolume?> createVolume();
   Future<List<ServerVolume>> getVolumes({final String? status});
   Future<ServerVolume?> getVolume(final int id);

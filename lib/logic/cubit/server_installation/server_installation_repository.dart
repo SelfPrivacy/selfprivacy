@@ -20,7 +20,6 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
-import 'package:selfprivacy/logic/models/json/provider_server_info.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
@@ -41,7 +40,7 @@ class ServerAuthorizationException implements Exception {
 class ServerInstallationRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
   Box<User> usersBox = Hive.box(BNames.usersBox);
-  ProviderApiFactory? providerApiFactory =
+  ProviderApiFactory? serverProviderApiFactory =
       ApiFactoryCreator.createProviderApiFactory(
     ServerProvider.hetzner, // HARDCODE FOR NOW!!!
   ); // Remove when provider selection is implemented.
@@ -56,7 +55,7 @@ class ServerInstallationRepository {
         getIt<ApiConfigModel>().serverDetails;
 
     if (serverDetails != null) {
-      providerApiFactory =
+      serverProviderApiFactory =
           ApiFactoryCreator.createProviderApiFactory(serverDetails.provider);
     }
 
@@ -141,15 +140,10 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails?> startServer(
     final ServerHostingDetails hetznerServer,
   ) async {
-    ServerHostingDetails? details;
+    ServerHostingDetails? serverDetails;
 
-    if (providerApiFactory == null) {
-      print("startServer: Factory for API provider doesn't exist!");
-      return details;
-    }
-
-    final ProviderApi api = providerApiFactory!.getProvider();
-    final ServerHostingDetails serverDetails = await api.powerOn();
+    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
+    serverDetails = await api.powerOn();
 
     return serverDetails;
   }
@@ -226,12 +220,7 @@ class ServerInstallationRepository {
     required final Future<void> Function(ServerHostingDetails serverDetails)
         onSuccess,
   }) async {
-    if (providerApiFactory == null) {
-      print("createServer: Factory for API provider doesn't exist!");
-      return;
-    }
-
-    final ProviderApi api = providerApiFactory!.getProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
     try {
       final ServerHostingDetails? serverDetails = await api.createServer(
         dnsApiToken: cloudFlareKey,
@@ -291,42 +280,22 @@ class ServerInstallationRepository {
     }
   }
 
-  Future<void> onCreationSuccess(
-    final ServerHostingDetails serverDetails,
-    final ServerDomain domain,
-  ) async {
-    if (providerApiFactory == null) {
-      print("onCreationSuccess: Factory for API provider doesn't exist!");
-      return;
-    }
-    final ProviderApi api = providerApiFactory!.getProvider();
-    return api.createReverseDns(
-      serverDetails: serverDetails,
-      domain: domain,
-    );
-  }
-
   Future<bool> createDnsRecords(
-    final String ip4,
+    final ServerHostingDetails serverDetails,
     final ServerDomain domain, {
     required final void Function() onCancel,
   }) async {
     final CloudflareApi cloudflareApi = CloudflareApi();
-
-    if (providerApiFactory == null) {
-      print("createServer: Factory for API provider doesn't exist!");
-      return false;
-    }
-    final ProviderApi api = providerApiFactory!.getProvider();
+    final ServerProviderApi serverApi = serverProviderApiFactory!.getProvider();
 
     await cloudflareApi.removeSimilarRecords(
-      ip4: ip4,
+      ip4: serverDetails.ip4,
       cloudFlareDomain: domain,
     );
 
     try {
       await cloudflareApi.createMultipleDnsRecords(
-        ip4: ip4,
+        ip4: serverDetails.ip4,
         cloudFlareDomain: domain,
       );
     } on DioError catch (e) {
@@ -342,7 +311,7 @@ class ServerInstallationRepository {
               text: 'basis.delete'.tr(),
               isRed: true,
               onPressed: () async {
-                await api.deleteServer(
+                await serverApi.deleteServer(
                   domainName: domain.domainName,
                 );
 
@@ -358,6 +327,11 @@ class ServerInstallationRepository {
       );
       return false;
     }
+
+    await serverApi.createReverseDns(
+      serverDetails: serverDetails,
+      domain: domain,
+    );
 
     return true;
   }
@@ -383,12 +357,12 @@ class ServerInstallationRepository {
   }
 
   Future<ServerHostingDetails> restart() async {
-    final ProviderApi api = providerApiFactory!.getProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
     return api.restart();
   }
 
   Future<ServerHostingDetails> powerOn() async {
-    final ProviderApi api = providerApiFactory!.getProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
     return api.powerOn();
   }
 
@@ -625,27 +599,8 @@ class ServerInstallationRepository {
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async {
-    if (providerApiFactory == null) {
-      print(
-        'getServersOnProviderAccount: '
-        "Factory for API provider doesn't exist!",
-      );
-      return [];
-    }
-    final ProviderApi api = providerApiFactory!.getProvider();
-    final List<ProviderServerInfo> servers = await api.getServers();
-    return servers
-        .map(
-          (final ProviderServerInfo server) => ServerBasicInfo(
-            id: server.id,
-            name: server.name,
-            ip: server.publicNet.ipv4.ip,
-            reverseDns: server.publicNet.ipv4.reverseDns,
-            created: server.created,
-            volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
-          ),
-        )
-        .toList();
+    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
+    return api.getServers();
   }
 
   Future<void> saveServerDetails(
@@ -723,11 +678,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> deleteServer(final ServerDomain serverDomain) async {
-    if (providerApiFactory == null) {
-      print("deleteServer: Factory for API provider doesn't exist!");
-      return;
-    }
-    final ProviderApi api = providerApiFactory!.getProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
     final CloudflareApi cloudFlare = CloudflareApi();
 
     await api.deleteServer(

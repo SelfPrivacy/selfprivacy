@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/providers/volume_provider.d
 class HetznerApiFactory extends ProviderApiFactory
     with VolumeProviderApiFactory {
   @override
-  ProviderApi getProvider({
+  ServerProviderApi getProvider({
     final ProviderApiSettings settings = const ProviderApiSettings(),
   }) =>
       HetznerApi(

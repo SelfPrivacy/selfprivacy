@@ -2,16 +2,10 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/json/provider_server_info.dart';
+import 'package:selfprivacy/logic/models/server_basic_info.dart';
 
-abstract class ProviderApi extends ApiMap {
-  ProviderApi({this.hasLogger = false, this.isWithToken = true});
-  @override
-  bool hasLogger;
-  @override
-  bool isWithToken;
-
-  Future<List<ProviderServerInfo>> getServers();
+abstract class ServerProviderApi extends ApiMap {
+  Future<List<ServerBasicInfo>> getServers();
 
   Future<ServerHostingDetails> restart();
   Future<ServerHostingDetails> powerOn();

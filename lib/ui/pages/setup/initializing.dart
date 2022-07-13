@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/cloudflare_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_cloudflare.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/hetzner_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';

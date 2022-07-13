@@ -1,22 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'provider_server_info.dart';
+part of 'hetzner_server_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ProviderServerInfo _$ProviderServerInfoFromJson(Map<String, dynamic> json) =>
-    ProviderServerInfo(
+HetznerServerInfo _$HetznerServerInfoFromJson(Map<String, dynamic> json) =>
+    HetznerServerInfo(
       json['id'] as int,
       json['name'] as String,
       $enumDecode(_$ServerStatusEnumMap, json['status']),
       DateTime.parse(json['created'] as String),
-      ProviderServerTypeInfo.fromJson(
+      HetznerServerTypeInfo.fromJson(
           json['server_type'] as Map<String, dynamic>),
-      ProviderServerInfo.locationFromJson(json['datacenter'] as Map),
-      ProviderPublicNetInfo.fromJson(
-          json['public_net'] as Map<String, dynamic>),
+      HetznerServerInfo.locationFromJson(json['datacenter'] as Map),
+      HetznerPublicNetInfo.fromJson(json['public_net'] as Map<String, dynamic>),
       (json['volumes'] as List<dynamic>).map((e) => e as int).toList(),
     );
 
@@ -32,38 +31,38 @@ const _$ServerStatusEnumMap = {
   ServerStatus.unknown: 'unknown',
 };
 
-ProviderPublicNetInfo _$ProviderPublicNetInfoFromJson(
+HetznerPublicNetInfo _$HetznerPublicNetInfoFromJson(
         Map<String, dynamic> json) =>
-    ProviderPublicNetInfo(
-      ProviderIp4.fromJson(json['ipv4'] as Map<String, dynamic>),
+    HetznerPublicNetInfo(
+      HetznerIp4.fromJson(json['ipv4'] as Map<String, dynamic>),
     );
 
-ProviderIp4 _$ProviderIp4FromJson(Map<String, dynamic> json) => ProviderIp4(
+HetznerIp4 _$HetznerIp4FromJson(Map<String, dynamic> json) => HetznerIp4(
       json['id'] as int,
       json['ip'] as String,
       json['blocked'] as bool,
       json['dns_ptr'] as String,
     );
 
-ProviderServerTypeInfo _$ProviderServerTypeInfoFromJson(
+HetznerServerTypeInfo _$HetznerServerTypeInfoFromJson(
         Map<String, dynamic> json) =>
-    ProviderServerTypeInfo(
+    HetznerServerTypeInfo(
       json['cores'] as int,
       json['memory'] as num,
       json['disk'] as int,
       (json['prices'] as List<dynamic>)
-          .map((e) => ProviderPriceInfo.fromJson(e as Map<String, dynamic>))
+          .map((e) => HetznerPriceInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-ProviderPriceInfo _$ProviderPriceInfoFromJson(Map<String, dynamic> json) =>
-    ProviderPriceInfo(
-      ProviderPriceInfo.getPrice(json['price_hourly'] as Map),
-      ProviderPriceInfo.getPrice(json['price_monthly'] as Map),
+HetznerPriceInfo _$HetznerPriceInfoFromJson(Map<String, dynamic> json) =>
+    HetznerPriceInfo(
+      HetznerPriceInfo.getPrice(json['price_hourly'] as Map),
+      HetznerPriceInfo.getPrice(json['price_monthly'] as Map),
     );
 
-ProviderLocation _$ProviderLocationFromJson(Map<String, dynamic> json) =>
-    ProviderLocation(
+HetznerLocation _$HetznerLocationFromJson(Map<String, dynamic> json) =>
+    HetznerLocation(
       json['country'] as String,
       json['city'] as String,
       json['description'] as String,

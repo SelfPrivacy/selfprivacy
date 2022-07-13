@@ -8,7 +8,7 @@ class ProviderApiSettings {
 }
 
 abstract class ProviderApiFactory {
-  ProviderApi getProvider({
+  ServerProviderApi getProvider({
     final ProviderApiSettings settings = const ProviderApiSettings(),
   });
 }

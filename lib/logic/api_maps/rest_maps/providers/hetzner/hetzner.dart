@@ -4,14 +4,20 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/providers/volume_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/providers/provider.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/json/provider_server_info.dart';
+import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
-class HetznerApi extends VolumeProviderApi {
-  HetznerApi({final super.hasLogger = false, final super.isWithToken = true});
+class HetznerApi extends ServerProviderApi with VolumeProviderApi {
+  HetznerApi({final this.hasLogger = false, final this.isWithToken = true});
+  @override
+  bool hasLogger;
+  @override
+  bool isWithToken;
 
   @override
   BaseOptions get options {
@@ -258,7 +264,7 @@ class HetznerApi extends VolumeProviderApi {
       return details;
     }
 
-    details = await createServerByVolume(
+    details = await createServerWithVolume(
       dnsApiToken: dnsApiToken,
       rootUser: rootUser,
       domainName: domainName,
@@ -272,7 +278,7 @@ class HetznerApi extends VolumeProviderApi {
     return details;
   }
 
-  Future<ServerHostingDetails?> createServerByVolume({
+  Future<ServerHostingDetails?> createServerWithVolume({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
@@ -441,26 +447,46 @@ class HetznerApi extends VolumeProviderApi {
     return res.data;
   }
 
-  Future<ProviderServerInfo> getInfo() async {
+  Future<HetznerServerInfo> getInfo() async {
     final ServerHostingDetails? hetznerServer =
         getIt<ApiConfigModel>().serverDetails;
     final Dio client = await getClient();
     final Response response = await client.get('/servers/${hetznerServer!.id}');
     close(client);
 
-    return ProviderServerInfo.fromJson(response.data!['server']);
+    return HetznerServerInfo.fromJson(response.data!['server']);
   }
 
   @override
-  Future<List<ProviderServerInfo>> getServers() async {
-    final Dio client = await getClient();
-    final Response response = await client.get('/servers');
-    close(client);
+  Future<List<ServerBasicInfo>> getServers() async {
+    List<ServerBasicInfo> servers = [];
 
-    return (response.data!['servers'] as List)
-        // ignore: unnecessary_lambdas
-        .map((final e) => ProviderServerInfo.fromJson(e))
-        .toList();
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get('/servers');
+      servers = (response.data!['servers'] as List)
+          .map(
+            (final e) => HetznerServerInfo.fromJson(e),
+          )
+          .toList()
+          .map(
+            (final HetznerServerInfo server) => ServerBasicInfo(
+              id: server.id,
+              name: server.name,
+              ip: server.publicNet.ipv4.ip,
+              reverseDns: server.publicNet.ipv4.reverseDns,
+              created: server.created,
+              volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
+            ),
+          )
+          .toList();
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return servers;
   }
 
   @override

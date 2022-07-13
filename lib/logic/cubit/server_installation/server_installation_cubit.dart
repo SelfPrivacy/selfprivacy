@@ -50,29 +50,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  RegExp getProviderApiTokenValidation() {
-    if (repository.providerApiFactory == null) {
-      print(
-        "validateProviderApiToken: Factory for API provider doesn't exist!",
-      );
-      return RegExp(r'');
-    }
+  RegExp getProviderApiTokenValidation() => repository.serverProviderApiFactory!
+      .getProvider()
+      .getApiTokenValidation();
 
-    return repository.providerApiFactory!.getProvider().getApiTokenValidation();
-  }
-
-  Future<bool> isProviderApiTokenValid(final String providerToken) async {
-    if (repository.providerApiFactory == null) {
-      print(
-        "validateProviderApiToken: Factory for API provider doesn't exist!",
-      );
-      return false;
-    }
-
-    return repository.providerApiFactory!
-        .getProvider(settings: const ProviderApiSettings(isWithToken: false))
-        .isApiTokenValid(providerToken);
-  }
+  Future<bool> isProviderApiTokenValid(final String providerToken) async =>
+      repository.serverProviderApiFactory!
+          .getProvider(settings: const ProviderApiSettings(isWithToken: false))
+          .isApiTokenValid(providerToken);
 
   void setHetznerKey(final String hetznerKey) async {
     await repository.saveHetznerKey(hetznerKey);
@@ -143,15 +128,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         );
 
     Future<void> onSuccess(final ServerHostingDetails serverDetails) async {
-      final bool dnsRecordsCreated = await repository.createDnsRecords(
-        serverDetails.ip4,
+      await repository.createDnsRecords(
+        serverDetails,
         state.serverDomain!,
         onCancel: onCancel,
       );
-
-      if (dnsRecordsCreated) {
-        repository.onCreationSuccess(serverDetails, state.serverDomain!);
-      }
 
       emit(
         (state as ServerInstallationNotFinished).copyWith(

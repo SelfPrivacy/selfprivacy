@@ -11,7 +11,6 @@ targets:
               import: package:selfprivacy/utils/scalars.dart
           clients:
             - graphql
-            - graphql_flutter
       json_serializable:
         options:
           create_factory: true

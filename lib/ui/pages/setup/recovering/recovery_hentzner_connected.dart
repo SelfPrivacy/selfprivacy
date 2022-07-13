@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/hetzner_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -19,11 +19,11 @@ class RecoveryHetznerConnected extends StatelessWidget {
         context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (final BuildContext context) => HetznerFormCubit(appConfig),
+      create: (final BuildContext context) => ProviderFormCubit(appConfig),
       child: Builder(
         builder: (final BuildContext context) {
           final FormCubitState formCubitState =
-              context.watch<HetznerFormCubit>().state;
+              context.watch<ProviderFormCubit>().state;
 
           return BrandHeroScreen(
             heroTitle: 'recovering.hetzner_connected'.tr(),
@@ -37,7 +37,7 @@ class RecoveryHetznerConnected extends StatelessWidget {
             },
             children: [
               CubitFormTextField(
-                formFieldCubit: context.read<HetznerFormCubit>().apiKey,
+                formFieldCubit: context.read<ProviderFormCubit>().apiKey,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: 'recovering.hetzner_connected_placeholder'.tr(),
@@ -48,7 +48,7 @@ class RecoveryHetznerConnected extends StatelessWidget {
                 title: 'more.continue'.tr(),
                 onPressed: formCubitState.isSubmitting
                     ? null
-                    : () => context.read<HetznerFormCubit>().trySubmit(),
+                    : () => context.read<ProviderFormCubit>().trySubmit(),
               ),
               const SizedBox(height: 16),
               BrandButton.text(

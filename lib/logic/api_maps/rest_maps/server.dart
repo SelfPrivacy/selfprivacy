@@ -15,7 +15,7 @@ import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 
-import 'package:selfprivacy/logic/api_maps/api_map.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 
 class ApiResponse<D> {
   ApiResponse({

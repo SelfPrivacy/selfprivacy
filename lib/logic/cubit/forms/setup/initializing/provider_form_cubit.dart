@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:selfprivacy/logic/api_maps/hetzner.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
-class HetznerFormCubit extends FormCubit {
-  HetznerFormCubit(this.serverInstallationCubit) {
-    final RegExp regExp = RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
+class ProviderFormCubit extends FormCubit {
+  ProviderFormCubit(this.serverInstallationCubit) {
+    final RegExp regExp =
+        serverInstallationCubit.getProviderApiTokenValidation();
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
@@ -30,16 +30,15 @@ class HetznerFormCubit extends FormCubit {
   }
 
   final ServerInstallationCubit serverInstallationCubit;
-
   late final FieldCubit<String> apiKey;
 
   @override
   FutureOr<bool> asyncValidation() async {
     late bool isKeyValid;
-    final HetznerApi apiClient = HetznerApi(isWithToken: false);
 
     try {
-      isKeyValid = await apiClient.isValid(apiKey.state.value);
+      isKeyValid = await serverInstallationCubit
+          .isProviderApiTokenValid(apiKey.state.value);
     } catch (e) {
       addError(e);
       isKeyValid = false;

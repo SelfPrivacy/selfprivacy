@@ -3,14 +3,17 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/api_map.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/providers/volume_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/providers/provider.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
-class HetznerApi extends ApiMap {
-  HetznerApi({this.hasLogger = false, this.isWithToken = true});
+class HetznerApi extends ServerProviderApi with VolumeProviderApi {
+  HetznerApi({final this.hasLogger = false, final this.isWithToken = true});
   @override
   bool hasLogger;
   @override
@@ -35,27 +38,43 @@ class HetznerApi extends ApiMap {
   @override
   String rootAddress = 'https://api.hetzner.cloud/v1';
 
-  Future<bool> isValid(final String token) async {
-    validateStatus = (final int? status) =>
-        status == HttpStatus.ok || status == HttpStatus.unauthorized;
+  @override
+  Future<bool> isApiTokenValid(final String token) async {
+    bool isValid = false;
+    Response? response;
     final Dio client = await getClient();
-    final Response response = await client.get(
-      '/servers',
-      options: Options(
-        headers: {'Authorization': 'Bearer $token'},
-      ),
-    );
-    close(client);
-
-    if (response.statusCode == HttpStatus.ok) {
-      return true;
-    } else if (response.statusCode == HttpStatus.unauthorized) {
-      return false;
-    } else {
-      throw Exception('code: ${response.statusCode}');
+    try {
+      response = await client.get(
+        '/servers',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+    } catch (e) {
+      print(e);
+      isValid = false;
+    } finally {
+      close(client);
     }
+
+    if (response != null) {
+      if (response.statusCode == HttpStatus.ok) {
+        isValid = true;
+      } else if (response.statusCode == HttpStatus.unauthorized) {
+        isValid = false;
+      } else {
+        throw Exception('code: ${response.statusCode}');
+      }
+    }
+
+    return isValid;
   }
 
+  @override
+  RegExp getApiTokenValidation() =>
+      RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
+
+  @override
   Future<ServerVolume?> createVolume() async {
     ServerVolume? volume;
 
@@ -92,6 +111,7 @@ class HetznerApi extends ApiMap {
     return volume;
   }
 
+  @override
   Future<List<ServerVolume>> getVolumes({final String? status}) async {
     final List<ServerVolume> volumes = [];
 
@@ -127,6 +147,7 @@ class HetznerApi extends ApiMap {
     return volumes;
   }
 
+  @override
   Future<ServerVolume?> getVolume(final int id) async {
     ServerVolume? volume;
 
@@ -153,7 +174,8 @@ class HetznerApi extends ApiMap {
     return volume;
   }
 
-  void deleteVolume(final int id) async {
+  @override
+  Future<void> deleteVolume(final int id) async {
     final Dio client = await getClient();
     try {
       await client.delete('/volumes/$id');
@@ -164,6 +186,7 @@ class HetznerApi extends ApiMap {
     }
   }
 
+  @override
   Future<bool> attachVolume(final int volumeId, final int serverId) async {
     bool success = false;
 
@@ -187,6 +210,7 @@ class HetznerApi extends ApiMap {
     return success;
   }
 
+  @override
   Future<bool> detachVolume(final int volumeId) async {
     bool success = false;
 
@@ -204,6 +228,7 @@ class HetznerApi extends ApiMap {
     return success;
   }
 
+  @override
   Future<bool> resizeVolume(final int volumeId, final int sizeGb) async {
     bool success = false;
 
@@ -226,8 +251,35 @@ class HetznerApi extends ApiMap {
     return success;
   }
 
+  @override
   Future<ServerHostingDetails?> createServer({
-    required final String cloudFlareKey,
+    required final String dnsApiToken,
+    required final User rootUser,
+    required final String domainName,
+  }) async {
+    ServerHostingDetails? details;
+
+    final ServerVolume? newVolume = await createVolume();
+    if (newVolume == null) {
+      return details;
+    }
+
+    details = await createServerWithVolume(
+      dnsApiToken: dnsApiToken,
+      rootUser: rootUser,
+      domainName: domainName,
+      dataBase: newVolume,
+    );
+
+    if (details == null) {
+      deleteVolume(newVolume.id);
+    }
+
+    return details;
+  }
+
+  Future<ServerHostingDetails?> createServerWithVolume({
+    required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
     required final ServerVolume dataBase,
@@ -250,7 +302,7 @@ class HetznerApi extends ApiMap {
     /// check the branch name, it could be "development" or "master".
     ///
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$cloudFlareKey DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     final Map<String, Object> data = {
@@ -285,6 +337,7 @@ class HetznerApi extends ApiMap {
       );
     } on DioError catch (e) {
       print(e);
+      deleteVolume(dataBase.id);
       rethrow;
     } catch (e) {
       print(e);
@@ -312,7 +365,8 @@ class HetznerApi extends ApiMap {
     return hostname;
   }
 
-  Future<void> deleteSelfprivacyServerAndAllVolumes({
+  @override
+  Future<void> deleteServer({
     required final String domainName,
   }) async {
     final Dio client = await getClient();
@@ -339,22 +393,34 @@ class HetznerApi extends ApiMap {
     close(client);
   }
 
-  Future<ServerHostingDetails> reset() async {
+  @override
+  Future<ServerHostingDetails> restart() async {
     final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
 
     final Dio client = await getClient();
-    await client.post('/servers/${server.id}/actions/reset');
-    close(client);
+    try {
+      await client.post('/servers/${server.id}/actions/reset');
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
 
     return server.copyWith(startTime: DateTime.now());
   }
 
+  @override
   Future<ServerHostingDetails> powerOn() async {
     final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
 
     final Dio client = await getClient();
-    await client.post('/servers/${server.id}/actions/poweron');
-    close(client);
+    try {
+      await client.post('/servers/${server.id}/actions/poweron');
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
 
     return server.copyWith(startTime: DateTime.now());
   }
@@ -391,31 +457,50 @@ class HetznerApi extends ApiMap {
     return HetznerServerInfo.fromJson(response.data!['server']);
   }
 
-  Future<List<HetznerServerInfo>> getServers() async {
-    final Dio client = await getClient();
-    final Response response = await client.get('/servers');
-    close(client);
-
-    return (response.data!['servers'] as List)
-        // ignore: unnecessary_lambdas
-        .map((final e) => HetznerServerInfo.fromJson(e))
-        .toList();
-  }
-
-  Future<void> createReverseDns({
-    required final String ip4,
-    required final String domainName,
-  }) async {
-    final ServerHostingDetails? hetznerServer =
-        getIt<ApiConfigModel>().serverDetails;
+  @override
+  Future<List<ServerBasicInfo>> getServers() async {
+    List<ServerBasicInfo> servers = [];
 
     final Dio client = await getClient();
     try {
+      final Response response = await client.get('/servers');
+      servers = (response.data!['servers'] as List)
+          .map(
+            (final e) => HetznerServerInfo.fromJson(e),
+          )
+          .toList()
+          .map(
+            (final HetznerServerInfo server) => ServerBasicInfo(
+              id: server.id,
+              name: server.name,
+              ip: server.publicNet.ipv4.ip,
+              reverseDns: server.publicNet.ipv4.reverseDns,
+              created: server.created,
+              volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
+            ),
+          )
+          .toList();
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return servers;
+  }
+
+  @override
+  Future<void> createReverseDns({
+    required final ServerHostingDetails serverDetails,
+    required final ServerDomain domain,
+  }) async {
+    final Dio client = await getClient();
+    try {
       await client.post(
-        '/servers/${hetznerServer!.id}/actions/change_dns_ptr',
+        '/servers/${serverDetails.id}/actions/change_dns_ptr',
         data: {
-          'ip': ip4,
-          'dns_ptr': domainName,
+          'ip': serverDetails.ip4,
+          'dns_ptr': domain.domainName,
         },
       );
     } catch (e) {

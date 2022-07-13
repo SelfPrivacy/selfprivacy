@@ -1,5 +1,5 @@
-import 'package:selfprivacy/logic/api_maps/hetzner.dart';
-import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/providers/hetzner/hetzner.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
 import 'package:selfprivacy/logic/models/json/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';

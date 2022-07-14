@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
-class CloudFlareFormCubit extends FormCubit {
-  CloudFlareFormCubit(this.initializingCubit) {
-    final RegExp regExp = RegExp(r'\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
+class DnsProviderFormCubit extends FormCubit {
+  DnsProviderFormCubit(this.initializingCubit) {
+    final RegExp regExp = initializingCubit.getDnsProviderApiTokenValidation();
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
@@ -30,16 +29,15 @@ class CloudFlareFormCubit extends FormCubit {
   }
 
   final ServerInstallationCubit initializingCubit;
-
   late final FieldCubit<String> apiKey;
 
   @override
   FutureOr<bool> asyncValidation() async {
     late bool isKeyValid;
-    final CloudflareApi apiClient = CloudflareApi(isWithToken: false);
 
     try {
-      isKeyValid = await apiClient.isValid(apiKey.state.value);
+      isKeyValid = await initializingCubit
+          .isDnsProviderApiTokenValid(apiKey.state.value);
     } catch (e) {
       addError(e);
       isKeyValid = false;

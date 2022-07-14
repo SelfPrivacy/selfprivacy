@@ -10,9 +10,10 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/cloudflare.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/providers/provider.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/providers/provider_factory.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
@@ -40,10 +41,14 @@ class ServerAuthorizationException implements Exception {
 class ServerInstallationRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
   Box<User> usersBox = Hive.box(BNames.usersBox);
-  ProviderApiFactory? serverProviderApiFactory =
-      ApiFactoryCreator.createProviderApiFactory(
-    ServerProvider.hetzner, // HARDCODE FOR NOW!!!
-  ); // Remove when provider selection is implemented.
+  ServerProviderApiFactory? serverProviderApiFactory =
+      ApiFactoryCreator.createServerProviderApiFactory(
+    ServerProvider.hetzner, // TODO: HARDCODE FOR NOW!!!
+  ); // TODO: Remove when provider selection is implemented.
+  DnsProviderApiFactory? dnsProviderApiFactory =
+      ApiFactoryCreator.createDnsProviderApiFactory(
+    DnsProvider.cloudflare, // TODO: HARDCODE FOR NOW!!!
+  );
 
   Future<ServerInstallationState> load() async {
     final String? providerApiToken = getIt<ApiConfigModel>().hetznerKey;
@@ -54,9 +59,18 @@ class ServerInstallationRepository {
     final ServerHostingDetails? serverDetails =
         getIt<ApiConfigModel>().serverDetails;
 
-    if (serverDetails != null) {
+    if (serverDetails != null &&
+        serverDetails.provider != ServerProvider.unknown) {
       serverProviderApiFactory =
-          ApiFactoryCreator.createProviderApiFactory(serverDetails.provider);
+          ApiFactoryCreator.createServerProviderApiFactory(
+        serverDetails.provider,
+      );
+    }
+
+    if (serverDomain != null && serverDomain.provider != DnsProvider.unknown) {
+      dnsProviderApiFactory = ApiFactoryCreator.createDnsProviderApiFactory(
+        serverDomain.provider,
+      );
     }
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
@@ -142,20 +156,22 @@ class ServerInstallationRepository {
   ) async {
     ServerHostingDetails? serverDetails;
 
-    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     serverDetails = await api.powerOn();
 
     return serverDetails;
   }
 
   Future<String?> getDomainId(final String token, final String domain) async {
-    final CloudflareApi cloudflareApi = CloudflareApi(
-      isWithToken: false,
-      customToken: token,
+    final DnsProviderApi dnsProviderApi = dnsProviderApiFactory!.getDnsProvider(
+      settings: DnsProviderApiSettings(
+        isWithToken: false,
+        customToken: token,
+      ),
     );
 
     try {
-      final String domainId = await cloudflareApi.getZoneId(domain);
+      final String domainId = await dnsProviderApi.getZoneId(domain);
       return domainId;
     } on DomainNotFoundException {
       return null;
@@ -220,7 +236,7 @@ class ServerInstallationRepository {
     required final Future<void> Function(ServerHostingDetails serverDetails)
         onSuccess,
   }) async {
-    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     try {
       final ServerHostingDetails? serverDetails = await api.createServer(
         dnsApiToken: cloudFlareKey,
@@ -285,18 +301,20 @@ class ServerInstallationRepository {
     final ServerDomain domain, {
     required final void Function() onCancel,
   }) async {
-    final CloudflareApi cloudflareApi = CloudflareApi();
-    final ServerProviderApi serverApi = serverProviderApiFactory!.getProvider();
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
+    final ServerProviderApi serverApi =
+        serverProviderApiFactory!.getServerProvider();
 
-    await cloudflareApi.removeSimilarRecords(
+    await dnsProviderApi.removeSimilarRecords(
       ip4: serverDetails.ip4,
-      cloudFlareDomain: domain,
+      domain: domain,
     );
 
     try {
-      await cloudflareApi.createMultipleDnsRecords(
+      await dnsProviderApi.createMultipleDnsRecords(
         ip4: serverDetails.ip4,
-        cloudFlareDomain: domain,
+        domain: domain,
       );
     } on DioError catch (e) {
       final NavigationService nav = getIt.get<NavigationService>();
@@ -337,12 +355,13 @@ class ServerInstallationRepository {
   }
 
   Future<void> createDkimRecord(final ServerDomain cloudFlareDomain) async {
-    final CloudflareApi cloudflareApi = CloudflareApi();
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
     final ServerApi api = ServerApi();
 
     final String? dkimRecordString = await api.getDkim();
 
-    await cloudflareApi.setDkim(dkimRecordString ?? '', cloudFlareDomain);
+    await dnsProviderApi.setDkim(dkimRecordString ?? '', cloudFlareDomain);
   }
 
   Future<bool> isHttpServerWorking() async {
@@ -357,12 +376,12 @@ class ServerInstallationRepository {
   }
 
   Future<ServerHostingDetails> restart() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     return api.restart();
   }
 
   Future<ServerHostingDetails> powerOn() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     return api.powerOn();
   }
 
@@ -599,7 +618,7 @@ class ServerInstallationRepository {
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     return api.getServers();
   }
 
@@ -678,8 +697,9 @@ class ServerInstallationRepository {
   }
 
   Future<void> deleteServer(final ServerDomain serverDomain) async {
-    final ServerProviderApi api = serverProviderApiFactory!.getProvider();
-    final CloudflareApi cloudFlare = CloudflareApi();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
 
     await api.deleteServer(
       domainName: serverDomain.domainName,
@@ -692,7 +712,7 @@ class ServerInstallationRepository {
     await box.put(BNames.isLoading, false);
     await box.put(BNames.serverDetails, null);
 
-    await cloudFlare.removeSimilarRecords(cloudFlareDomain: serverDomain);
+    await dnsProviderApi.removeSimilarRecords(domain: serverDomain);
   }
 
   Future<void> deleteServerRelatedRecords() async {

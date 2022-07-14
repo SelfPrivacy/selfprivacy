@@ -2,16 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-class DomainNotFoundException implements Exception {
-  DomainNotFoundException(this.message);
-  final String message;
-}
-
-class CloudflareApi extends ApiMap {
+class CloudflareApi extends DnsProviderApi {
   CloudflareApi({
     this.hasLogger = false,
     this.isWithToken = true,
@@ -23,6 +18,10 @@ class CloudflareApi extends ApiMap {
   final bool isWithToken;
 
   final String? customToken;
+
+  @override
+  RegExp getApiTokenValidation() =>
+      RegExp(r'\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
 
   @override
   BaseOptions get options {
@@ -46,27 +45,37 @@ class CloudflareApi extends ApiMap {
   @override
   String rootAddress = 'https://api.cloudflare.com/client/v4';
 
-  Future<bool> isValid(final String token) async {
-    validateStatus = (final status) =>
-        status == HttpStatus.ok || status == HttpStatus.unauthorized;
-
+  @override
+  Future<bool> isApiTokenValid(final String token) async {
+    bool isValid = false;
+    Response? response;
     final Dio client = await getClient();
-    final Response response = await client.get(
-      '/user/tokens/verify',
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
-    );
-
-    close(client);
-
-    if (response.statusCode == HttpStatus.ok) {
-      return true;
-    } else if (response.statusCode == HttpStatus.unauthorized) {
-      return false;
-    } else {
-      throw Exception('code: ${response.statusCode}');
+    try {
+      response = await client.get(
+        '/user/tokens/verify',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+    } catch (e) {
+      print(e);
+      isValid = false;
+    } finally {
+      close(client);
     }
+
+    if (response != null) {
+      if (response.statusCode == HttpStatus.ok) {
+        isValid = true;
+      } else if (response.statusCode == HttpStatus.unauthorized) {
+        isValid = false;
+      } else {
+        throw Exception('code: ${response.statusCode}');
+      }
+    }
+
+    return isValid;
   }
 
+  @override
   Future<String> getZoneId(final String domain) async {
     validateStatus = (final status) =>
         status == HttpStatus.ok || status == HttpStatus.forbidden;
@@ -85,12 +94,13 @@ class CloudflareApi extends ApiMap {
     }
   }
 
+  @override
   Future<void> removeSimilarRecords({
-    required final ServerDomain cloudFlareDomain,
+    required final ServerDomain domain,
     final String? ip4,
   }) async {
-    final String domainName = cloudFlareDomain.domainName;
-    final String domainZoneId = cloudFlareDomain.zoneId;
+    final String domainName = domain.domainName;
+    final String domainZoneId = domain.zoneId;
 
     final String url = '/zones/$domainZoneId/dns_records';
 
@@ -112,11 +122,12 @@ class CloudflareApi extends ApiMap {
     close(client);
   }
 
+  @override
   Future<List<DnsRecord>> getDnsRecords({
-    required final ServerDomain cloudFlareDomain,
+    required final ServerDomain domain,
   }) async {
-    final String domainName = cloudFlareDomain.domainName;
-    final String domainZoneId = cloudFlareDomain.zoneId;
+    final String domainName = domain.domainName;
+    final String domainZoneId = domain.zoneId;
 
     final String url = '/zones/$domainZoneId/dns_records';
 
@@ -144,12 +155,13 @@ class CloudflareApi extends ApiMap {
     return allRecords;
   }
 
+  @override
   Future<void> createMultipleDnsRecords({
-    required final ServerDomain cloudFlareDomain,
+    required final ServerDomain domain,
     final String? ip4,
   }) async {
-    final String domainName = cloudFlareDomain.domainName;
-    final String domainZoneId = cloudFlareDomain.zoneId;
+    final String domainName = domain.domainName;
+    final String domainZoneId = domain.zoneId;
     final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
     final List<Future> allCreateFutures = <Future>[];
 
@@ -219,11 +231,12 @@ class CloudflareApi extends ApiMap {
     ];
   }
 
+  @override
   Future<void> setDkim(
     final String dkimRecordString,
-    final ServerDomain cloudFlareDomain,
+    final ServerDomain domain,
   ) async {
-    final String domainZoneId = cloudFlareDomain.zoneId;
+    final String domainZoneId = domain.zoneId;
     final String url = '$rootAddress/zones/$domainZoneId/dns_records';
 
     final DnsRecord dkimRecord = DnsRecord(
@@ -242,6 +255,7 @@ class CloudflareApi extends ApiMap {
     client.close();
   }
 
+  @override
   Future<List<String>> domainList() async {
     final String url = '$rootAddress/zones';
     final Dio client = await getClient();

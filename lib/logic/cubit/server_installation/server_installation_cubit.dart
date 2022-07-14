@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/providers/provider_factory.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -50,13 +51,31 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  RegExp getProviderApiTokenValidation() => repository.serverProviderApiFactory!
-      .getProvider()
+  RegExp getServerProviderApiTokenValidation() =>
+      repository.serverProviderApiFactory!
+          .getServerProvider()
+          .getApiTokenValidation();
+
+  RegExp getDnsProviderApiTokenValidation() => repository.dnsProviderApiFactory!
+      .getDnsProvider()
       .getApiTokenValidation();
 
-  Future<bool> isProviderApiTokenValid(final String providerToken) async =>
+  Future<bool> isServerProviderApiTokenValid(
+    final String providerToken,
+  ) async =>
       repository.serverProviderApiFactory!
-          .getProvider(settings: const ProviderApiSettings(isWithToken: false))
+          .getServerProvider(
+            settings: const ProviderApiSettings(isWithToken: false),
+          )
+          .isApiTokenValid(providerToken);
+
+  Future<bool> isDnsProviderApiTokenValid(
+    final String providerToken,
+  ) async =>
+      repository.dnsProviderApiFactory!
+          .getDnsProvider(
+            settings: const DnsProviderApiSettings(isWithToken: false),
+          )
           .isApiTokenValid(providerToken);
 
   void setHetznerKey(final String hetznerKey) async {

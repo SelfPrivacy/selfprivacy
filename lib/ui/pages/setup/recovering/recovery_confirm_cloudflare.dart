@@ -2,7 +2,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/cloudflare_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -18,11 +18,11 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
         context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (final BuildContext context) => CloudFlareFormCubit(appConfig),
+      create: (final BuildContext context) => DnsProviderFormCubit(appConfig),
       child: Builder(
         builder: (final BuildContext context) {
           final FormCubitState formCubitState =
-              context.watch<CloudFlareFormCubit>().state;
+              context.watch<DnsProviderFormCubit>().state;
 
           return BrandHeroScreen(
             heroTitle: 'recovering.confirm_cloudflare'.tr(),
@@ -35,7 +35,7 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
                 context.read<ServerInstallationCubit>().revertRecoveryStep,
             children: [
               CubitFormTextField(
-                formFieldCubit: context.read<CloudFlareFormCubit>().apiKey,
+                formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: 'initializing.5'.tr(),
@@ -45,7 +45,7 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
               BrandButton.rised(
                 onPressed: formCubitState.isSubmitting
                     ? null
-                    : () => context.read<CloudFlareFormCubit>().trySubmit(),
+                    : () => context.read<DnsProviderFormCubit>().trySubmit(),
                 text: 'basis.connect'.tr(),
               ),
               const SizedBox(height: 16),

@@ -8,7 +8,7 @@ import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 class ProviderFormCubit extends FormCubit {
   ProviderFormCubit(this.serverInstallationCubit) {
     final RegExp regExp =
-        serverInstallationCubit.getProviderApiTokenValidation();
+        serverInstallationCubit.getServerProviderApiTokenValidation();
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
@@ -38,7 +38,7 @@ class ProviderFormCubit extends FormCubit {
 
     try {
       isKeyValid = await serverInstallationCubit
-          .isProviderApiTokenValid(apiKey.state.value);
+          .isServerProviderApiTokenValid(apiKey.state.value);
     } catch (e) {
       addError(e);
       isKeyValid = false;

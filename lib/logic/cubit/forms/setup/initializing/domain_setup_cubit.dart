@@ -1,5 +1,4 @@
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/cloudflare.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
@@ -10,9 +9,10 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));
-    final CloudflareApi api = CloudflareApi();
-
-    final List<String> list = await api.domainList();
+    final List<String> list = await serverInstallationCubit
+        .repository.dnsProviderApiFactory!
+        .getDnsProvider()
+        .domainList();
     if (list.isEmpty) {
       emit(Empty());
     } else if (list.length == 1) {
@@ -28,11 +28,13 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
   Future<void> saveDomain() async {
     assert(state is Loaded, 'wrong state');
     final String domainName = (state as Loaded).domain;
-    final CloudflareApi api = CloudflareApi();
 
     emit(Loading(LoadingTypes.saving));
 
-    final String zoneId = await api.getZoneId(domainName);
+    final String zoneId = await serverInstallationCubit
+        .repository.dnsProviderApiFactory!
+        .getDnsProvider()
+        .getZoneId(domainName);
 
     final ServerDomain domain = ServerDomain(
       domainName: domainName,

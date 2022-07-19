@@ -5,8 +5,8 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/cloudflare_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_cloudflare.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
@@ -195,10 +195,10 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepCloudflare(final ServerInstallationCubit initializingCubit) =>
       BlocProvider(
-        create: (final context) => CloudFlareFormCubit(initializingCubit),
+        create: (final context) => DnsProviderFormCubit(initializingCubit),
         child: Builder(
           builder: (final context) {
-            final formCubitState = context.watch<CloudFlareFormCubit>().state;
+            final formCubitState = context.watch<DnsProviderFormCubit>().state;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +213,7 @@ class InitializingPage extends StatelessWidget {
                 BrandText.body2('initializing.4'.tr()),
                 const Spacer(),
                 CubitFormTextField(
-                  formFieldCubit: context.read<CloudFlareFormCubit>().apiKey,
+                  formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
                   textAlign: TextAlign.center,
                   scrollPadding: const EdgeInsets.only(bottom: 70),
                   decoration: InputDecoration(
@@ -224,7 +224,7 @@ class InitializingPage extends StatelessWidget {
                 BrandButton.rised(
                   onPressed: formCubitState.isSubmitting
                       ? null
-                      : () => context.read<CloudFlareFormCubit>().trySubmit(),
+                      : () => context.read<DnsProviderFormCubit>().trySubmit(),
                   text: 'basis.connect'.tr(),
                 ),
                 const SizedBox(height: 10),

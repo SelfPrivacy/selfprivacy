@@ -195,23 +195,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
 
     if (matches.values.every((final bool value) => value)) {
-      final ServerHostingDetails? server = await repository.startServer(
+      final ServerHostingDetails server = await repository.startServer(
         dataState.serverDetails!,
       );
-
-      if (server == null) {
-        final ServerInstallationNotFinished newState = dataState.copyWith(
-          isLoading: false,
-          dnsMatches: matches,
-        );
-        emit(newState);
-        runDelayed(
-          startServerIfDnsIsOkay,
-          const Duration(seconds: 30),
-          newState,
-        );
-        return;
-      }
 
       await repository.saveServerDetails(server);
       await repository.saveIsServerStarted(true);
@@ -338,10 +324,22 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final bool isServerWorking = await repository.isHttpServerWorking();
 
     if (isServerWorking) {
-      await repository.createDkimRecord(dataState.serverDomain!);
-      await repository.saveHasFinalChecked(true);
-
-      emit(dataState.finish());
+      bool dkimCreated = true;
+      try {
+        await repository.createDkimRecord(dataState.serverDomain!);
+      } catch (e) {
+        dkimCreated = false;
+      }
+      if (dkimCreated) {
+        await repository.saveHasFinalChecked(true);
+        emit(dataState.finish());
+      } else {
+        runDelayed(
+          finishCheckIfServerIsOkay,
+          const Duration(seconds: 60),
+          dataState,
+        );
+      }
     } else {
       runDelayed(
         finishCheckIfServerIsOkay,

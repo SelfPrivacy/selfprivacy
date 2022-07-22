@@ -341,6 +341,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       rethrow;
     } catch (e) {
       print(e);
+      deleteVolume(dataBase.id);
     } finally {
       client.close();
     }

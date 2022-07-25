@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
@@ -23,9 +24,16 @@ class InfoPage extends StatelessWidget {
               const BrandDivider(),
               const SizedBox(height: 10),
               FutureBuilder(
-                future: _version(),
+                future: _packageVersion(),
                 builder: (final context, final snapshot) => BrandText.body1(
-                  'more.about_app_page.text'
+                  'more.about_app_page.application_version_text'
+                      .tr(args: [snapshot.data.toString()]),
+                ),
+              ),
+              FutureBuilder(
+                future: _apiVersion(),
+                builder: (final context, final snapshot) => BrandText.body1(
+                  'more.about_app_page.api_version_text'
                       .tr(args: [snapshot.data.toString()]),
                 ),
               ),
@@ -34,7 +42,7 @@ class InfoPage extends StatelessWidget {
         ),
       );
 
-  Future<String> _version() async {
+  Future<String> _packageVersion() async {
     String packageVersion = 'unknown';
     try {
       final PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -44,5 +52,16 @@ class InfoPage extends StatelessWidget {
     }
 
     return packageVersion;
+  }
+
+  Future<String> _apiVersion() async {
+    String apiVersion = 'unknown';
+    try {
+      apiVersion = await ServerApi().getApiVersion() ?? apiVersion;
+    } catch (e) {
+      print(e);
+    }
+
+    return apiVersion;
   }
 }

@@ -52,7 +52,8 @@
     "copied_ssh": "SSH ключ cкопирован в буфер",
     "delete_ssh_text": "Удалить SSH ключ?",
     "about_app_page": {
-      "text": "Версия приложения: v.{}"
+      "application_version_text": "Версия приложения v.{}",
+      "api_version_text": "Версия API сервера v.{}"
     },
     "settings": {
       "title": "Настройки приложения",

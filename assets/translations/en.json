@@ -52,7 +52,8 @@
     "copied_ssh": "SSH copied to clipboard",
     "delete_ssh_text": "Delete SSH key?",
     "about_app_page": {
-      "text": "Application version v.{}"
+      "application_version_text": "Application version v.{}",
+      "api_version_text": "Server API version v.{}"
     },
     "settings": {
       "title": "Application settings",

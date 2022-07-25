@@ -49,9 +49,8 @@ class ServerApi extends ApiMap {
     BaseOptions options = BaseOptions();
 
     if (isWithToken) {
-      final ServerDomain? cloudFlareDomain =
-          getIt<ApiConfigModel>().serverDomain;
-      final String domainName = cloudFlareDomain!.domainName;
+      final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
+      final String domainName = serverDomain!.domainName;
       final String? apiToken = getIt<ApiConfigModel>().serverDetails?.apiToken;
 
       options = BaseOptions(

@@ -46,7 +46,10 @@ class ServerApi extends ApiMap {
 
   @override
   BaseOptions get options {
-    BaseOptions options = BaseOptions();
+    BaseOptions options = BaseOptions(
+      connectTimeout: 10000,
+      receiveTimeout: 10000,
+    );
 
     if (isWithToken) {
       final ServerDomain? cloudFlareDomain =
@@ -56,6 +59,8 @@ class ServerApi extends ApiMap {
 
       options = BaseOptions(
         baseUrl: 'https://api.$domainName',
+        connectTimeout: 10000,
+        receiveTimeout: 10000,
         headers: {
           'Authorization': 'Bearer $apiToken',
         },
@@ -65,6 +70,8 @@ class ServerApi extends ApiMap {
     if (overrideDomain != null) {
       options = BaseOptions(
         baseUrl: 'https://api.$overrideDomain',
+        connectTimeout: 10000,
+        receiveTimeout: 10000,
         headers: customToken != null
             ? {'Authorization': 'Bearer $customToken'}
             : null,
@@ -619,7 +626,7 @@ class ServerApi extends ApiMap {
     }
   }
 
-  Future<String?> getDkim() async {
+  Future<String> getDkim() async {
     Response response;
 
     final Dio client = await getClient();
@@ -627,13 +634,13 @@ class ServerApi extends ApiMap {
       response = await client.get('/services/mailserver/dkim');
     } on DioError catch (e) {
       print(e.message);
-      return null;
+      throw Exception('No DKIM key found');
     } finally {
       close(client);
     }
 
     if (response.statusCode == null) {
-      return null;
+      throw Exception('No DKIM key found');
     }
 
     if (response.statusCode == HttpStatus.notFound || response.data == null) {
@@ -641,7 +648,7 @@ class ServerApi extends ApiMap {
     }
 
     if (response.statusCode != HttpStatus.ok) {
-      return '';
+      throw Exception('No DKIM key found');
     }
 
     final Codec<String, String> base64toString = utf8.fuse(base64);

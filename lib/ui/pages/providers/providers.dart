@@ -5,6 +5,7 @@ import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/provider.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
@@ -15,6 +16,7 @@ import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
 import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
+import 'package:selfprivacy/ui/pages/providers/storage_card.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -67,6 +69,23 @@ class _ProvidersPageState extends State<ProvidersPage> {
           ),
         )
         .toList();
+    cards.add(
+      Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: FutureBuilder(
+          future:
+              context.read<ServerInstallationCubit>().getServerDiskVolumes(),
+          builder: (
+            final BuildContext context,
+            final AsyncSnapshot<Object?> snapshot,
+          ) =>
+              StorageCard(
+            volumes:
+                snapshot.hasData ? snapshot.data as List<ServerDiskVolume> : [],
+          ),
+        ),
+      ),
+    );
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(52),

@@ -28,6 +28,12 @@ class IconStatusMask extends StatelessWidget {
       case StateType.warning:
         colors = BrandColors.warningGradientColors;
         break;
+      case StateType.error:
+        colors = [
+          Theme.of(context).colorScheme.error,
+          Theme.of(context).colorScheme.error,
+        ];
+        break;
     }
     return ShaderMask(
       shaderCallback: (final bounds) => LinearGradient(

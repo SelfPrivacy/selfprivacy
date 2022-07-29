@@ -1,0 +1,11 @@
+query GetServerDiskVolumesQuery {
+  storage {
+    volumes {
+      freeSpace
+      name
+      root
+      totalSpace
+      usedSpace
+    }
+  }
+}

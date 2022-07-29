@@ -163,6 +163,16 @@
       "refresh": "Refresh status",
       "refetchBackups": "Refetch backup list",
       "refetchingList": "In a few minutes list will be updated"
+    },
+    "storage": {
+      "card_title": "Server Storage",
+      "status_ok": "Disk usage is OK",
+      "status_error": "Low disk space",
+      "disk_usage": "{} GB used",
+      "disk_total": "{} GB total · {}",
+      "gb": "{} GB",
+      "mb": "{} MB",
+      "extend_volume_button": "Extend volume"
     }
   },
   "not_ready_card": {

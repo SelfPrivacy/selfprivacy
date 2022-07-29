@@ -7,6 +7,18 @@ type Alert {
   timestamp: DateTime
 }
 
+type Storage {
+  volumes: [StorageVolume!]!
+}
+
+type StorageVolume {
+  freeSpace: String!
+  name: String!
+  root: Boolean!
+  totalSpace: String!
+  usedSpace: String!
+}
+
 type Api {
   version: String!
   devices: [ApiDevice!]!
@@ -82,6 +94,7 @@ interface MutationReturnInterface {
 
 type Query {
   system: System!
+  storage: Storage!
   api: Api!
 }
 

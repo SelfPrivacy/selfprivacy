@@ -3,8 +3,10 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/api_map.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/get_api_tokens.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/get_api_version.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/get_server_disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 
 class ServerApi extends ApiMap {
   ServerApi({
@@ -53,5 +55,22 @@ class ServerApi extends ApiMap {
     }
 
     return tokens;
+  }
+
+  Future<List<ServerDiskVolume>> getServerDiskVolumes() async {
+    QueryResult response;
+    List<ServerDiskVolume> volumes = [];
+
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$GetServerDiskVolumesQuery();
+      volumes = response.data!['storage']['volumes']
+          .map<ServerDiskVolume>((final e) => ServerDiskVolume.fromJson(e))
+          .toList();
+    } catch (e) {
+      print(e);
+    }
+
+    return volumes;
   }
 }

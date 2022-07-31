@@ -7,16 +7,19 @@ type Alert {
   timestamp: DateTime
 }
 
-type Storage {
-  volumes: [StorageVolume!]!
-}
-
 type StorageVolume {
   freeSpace: String!
+  model: String!
   name: String!
   root: Boolean!
+  serial: String!
   totalSpace: String!
+  type: String!
   usedSpace: String!
+}
+
+type Storage {
+  volumes: [StorageVolume!]!
 }
 
 type Api {
@@ -84,6 +87,9 @@ type Mutation {
   getNewDeviceApiKey: ApiKeyMutationReturn!
   invalidateNewDeviceApiKey: GenericMutationReturn!
   authorizeWithNewDeviceApiKey(input: UseNewDeviceKeyInput!): DeviceApiTokenMutationReturn!
+  resizeVolume(name: String!): GenericMutationReturn!
+  unmountVolume(name: String!): GenericMutationReturn!
+  mountVolume(name: String!): GenericMutationReturn!
 }
 
 interface MutationReturnInterface {

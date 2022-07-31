@@ -122,9 +122,6 @@ class _Card extends StatelessWidget {
     final ServerInstallationState appConfig =
         context.watch<ServerInstallationCubit>().state;
 
-    final String domainName =
-        appConfig.isDomainFilled ? appConfig.serverDomain!.domainName : '';
-
     switch (provider.type) {
       case ProviderType.server:
         title = 'providers.server.card_title'.tr();
@@ -140,7 +137,8 @@ class _Card extends StatelessWidget {
         break;
       case ProviderType.domain:
         title = 'providers.domain.screen_title'.tr();
-        message = domainName;
+        message =
+            appConfig.isDomainFilled ? appConfig.serverDomain!.domainName : '';
         stableText = 'providers.domain.status'.tr();
 
         onTap = () => Navigator.of(context).push(

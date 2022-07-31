@@ -1,9 +1,8 @@
 import 'package:graphql/client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/api_map.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/get_api_tokens.graphql.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/get_api_version.graphql.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/get_server_disk_volumes.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
@@ -12,7 +11,7 @@ class ServerApi extends ApiMap {
   ServerApi({
     this.hasLogger = false,
     this.isWithToken = true,
-    this.authToken = '',
+    this.customToken = '',
   }) {
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
     rootAddress = serverDomain?.domainName ?? '';
@@ -22,7 +21,7 @@ class ServerApi extends ApiMap {
   @override
   bool isWithToken;
   @override
-  String authToken;
+  String customToken;
   @override
   String? rootAddress;
 
@@ -72,5 +71,44 @@ class ServerApi extends ApiMap {
     }
 
     return volumes;
+  }
+
+  Future<void> mountVolume(final String volumeName) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final variables =
+          Variables$Mutation$MountVolumeMutation(name: volumeName);
+      final mountVolumeMutation =
+          Options$Mutation$MountVolumeMutation(variables: variables);
+      await client.mutate$MountVolumeMutation(mountVolumeMutation);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> unmountVolume(final String volumeName) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final variables =
+          Variables$Mutation$UnmountVolumeMutation(name: volumeName);
+      final unmountVolumeMutation =
+          Options$Mutation$UnmountVolumeMutation(variables: variables);
+      await client.mutate$UnmountVolumeMutation(unmountVolumeMutation);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> resizeVolume(final String volumeName) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final variables =
+          Variables$Mutation$ResizeVolumeMutation(name: volumeName);
+      final resizeVolumeMutation =
+          Options$Mutation$ResizeVolumeMutation(variables: variables);
+      await client.mutate$ResizeVolumeMutation(resizeVolumeMutation);
+    } catch (e) {
+      print(e);
+    }
   }
 }

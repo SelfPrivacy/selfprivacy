@@ -541,6 +541,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         name: 'recovered_volume',
         sizeByte: 0,
         serverId: server.id,
+        linuxDevice: '',
       ),
       apiToken: dataState.serverDetails!.apiToken,
       provider: ServerProvider.hetzner,
@@ -556,8 +557,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   Future<List<ServerDiskVolume>> getServerDiskVolumes() async =>
-      ServerApi(authToken: 'HARDCODE OUR BEARER HERE FOR NOW')
-          .getServerDiskVolumes();
+      ServerApi().getServerDiskVolumes();
 
   Future<void> setAndValidateCloudflareToken(final String token) async {
     final ServerInstallationRecovery dataState =

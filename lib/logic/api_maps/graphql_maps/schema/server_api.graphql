@@ -7,3 +7,9 @@ query GetApiTokensQuery {
     }
   }
 }
+
+query GetApiVersionQuery {
+  api {
+    version
+  }
+}

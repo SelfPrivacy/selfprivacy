@@ -96,11 +96,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       final dbSize = dbCreateResponse.data['volume']['size'];
       final dbServer = dbCreateResponse.data['volume']['server'];
       final dbName = dbCreateResponse.data['volume']['name'];
+      final dbDevice = dbCreateResponse.data['volume']['linux_device'];
       volume = ServerVolume(
         id: dbId,
         name: dbName,
         sizeByte: dbSize,
         serverId: dbServer,
+        linuxDevice: dbDevice,
       );
     } catch (e) {
       print(e);
@@ -130,11 +132,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         final int dbSize = rawVolume['size'];
         final dbServer = rawVolume['server'];
         final String dbName = rawVolume['name'];
+        final dbDevice = rawVolume['linux_device'];
         final volume = ServerVolume(
           id: dbId,
           name: dbName,
           sizeByte: dbSize,
           serverId: dbServer,
+          linuxDevice: dbDevice,
         );
         volumes.add(volume);
       }
@@ -159,11 +163,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       final int dbSize = dbGetResponse.data['volume']['size'];
       final int dbServer = dbGetResponse.data['volume']['server'];
       final String dbName = dbGetResponse.data['volume']['name'];
+      final dbDevice = dbGetResponse.data['volume']['linux_device'];
       volume = ServerVolume(
         id: dbId,
         name: dbName,
         sizeByte: dbSize,
         serverId: dbServer,
+        linuxDevice: dbDevice,
       );
     } catch (e) {
       print(e);

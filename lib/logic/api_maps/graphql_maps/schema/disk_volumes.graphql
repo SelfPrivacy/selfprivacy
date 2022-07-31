@@ -1,0 +1,38 @@
+query GetServerDiskVolumesQuery {
+  storage {
+    volumes {
+      freeSpace
+      model
+      name
+      root
+      serial
+      totalSpace
+      type
+      usedSpace
+    }
+  }
+}
+
+mutation MountVolumeMutation($name: String!) {
+  mountVolume(name: $name) {
+    code
+    message
+    success
+  }
+}
+
+mutation ResizeVolumeMutation($name: String!) {
+  resizeVolume(name: $name) {
+    code
+    message
+    success
+  }
+}
+
+mutation UnmountVolumeMutation($name: String!) {
+  unmountVolume(name: $name) {
+    code
+    message
+    success
+  }
+}

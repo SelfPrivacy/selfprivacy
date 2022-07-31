@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
@@ -7,21 +5,9 @@ import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_linear_indicator/brand_linear_indicator.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
-
-class DiskVolume {
-  int gbUsed = 0;
-  int gbTotal = 0;
-  String name = '';
-  bool root = false;
-
-  /// from 0.0 to 1.0
-  double percentage = 0.0;
-}
-
-class DiskStatus {
-  bool isDiskOkay = false;
-  List<DiskVolume> diskVolumes = [];
-}
+import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
+import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
+import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class StorageCard extends StatelessWidget {
   const StorageCard({required this.volumes, final super.key});
@@ -29,9 +15,7 @@ class StorageCard extends StatelessWidget {
   final List<ServerDiskVolume> volumes;
 
   @override
-  Widget build(
-    final BuildContext context,
-  ) {
+  Widget build(final BuildContext context) {
     final DiskStatus diskStatus = toDiskStatus(volumes);
 
     final List<Widget> sections = [];
@@ -41,7 +25,11 @@ class StorageCard extends StatelessWidget {
       );
       sections.add(
         Text(
-          'providers.storage.disk_usage'.tr(args: [volume.gbUsed.toString()]),
+          'providers.storage.disk_usage'.tr(
+            args: [
+              volume.gbUsed.toString(),
+            ],
+          ),
           style: Theme.of(context).textTheme.titleMedium,
         ),
       );
@@ -63,17 +51,25 @@ class StorageCard extends StatelessWidget {
       );
       sections.add(
         Text(
-          'providers.storage.disk_total'.tr(args: [
-            volume.gbTotal.toString(),
-            volume.name,
-          ]),
+          'providers.storage.disk_total'.tr(
+            args: [
+              volume.gbTotal.toString(),
+              volume.name,
+            ],
+          ),
           style: Theme.of(context).textTheme.bodySmall,
         ),
       );
     }
 
     return GestureDetector(
-      onTap: null,
+      onTap: () => Navigator.of(context).push(
+        materialRoute(
+          ServerStoragePage(
+            diskStatus: diskStatus,
+          ),
+        ),
+      ),
       child: BrandCards.big(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

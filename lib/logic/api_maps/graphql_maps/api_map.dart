@@ -1,4 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 
 abstract class ApiMap {
   Future<GraphQLClient> getClient() async {
@@ -8,7 +9,9 @@ abstract class ApiMap {
 
     final Link graphQLLink = isWithToken
         ? AuthLink(
-            getToken: () async => authToken,
+            getToken: () async => customToken == ''
+                ? getIt<ApiConfigModel>().serverDetails!.apiToken
+                : customToken,
           ).concat(httpLink)
         : httpLink;
 
@@ -21,5 +24,5 @@ abstract class ApiMap {
   abstract final String? rootAddress;
   abstract final bool hasLogger;
   abstract final bool isWithToken;
-  abstract final String authToken;
+  abstract final String customToken;
 }

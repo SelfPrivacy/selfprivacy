@@ -57,6 +57,7 @@ class ServerVolume {
     required this.name,
     required this.sizeByte,
     required this.serverId,
+    required this.linuxDevice,
   });
 
   @HiveField(1)
@@ -67,6 +68,8 @@ class ServerVolume {
   int sizeByte;
   @HiveField(4, defaultValue: null)
   int? serverId;
+  @HiveField(5, defaultValue: null)
+  String? linuxDevice;
 }
 
 @HiveType(typeId: 101)

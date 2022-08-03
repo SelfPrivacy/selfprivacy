@@ -9,4 +9,5 @@ mixin VolumeProviderApi on ApiMap {
   Future<bool> detachVolume(final int volumeId);
   Future<bool> resizeVolume(final int volumeId, final int sizeGb);
   Future<void> deleteVolume(final int id);
+  Future<double?> getPricePerGb();
 }

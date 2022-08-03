@@ -75,6 +75,27 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
 
   @override
+  Future<double?> getPricePerGb() async {
+    double? price;
+
+    final Response dbGetResponse;
+    final Dio client = await getClient();
+    try {
+      dbGetResponse = await client.post('/pricing');
+
+      final volume = dbGetResponse.data['pricing']['volume'];
+      final volumePrice = volume['price_per_gb_month']['gross'];
+      price = volumePrice as double;
+    } catch (e) {
+      print(e);
+    } finally {
+      client.close();
+    }
+
+    return price;
+  }
+
+  @override
   Future<ServerVolume?> createVolume() async {
     ServerVolume? volume;
 

@@ -294,7 +294,6 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
     }
 
     _amountController.addListener(_updateErrorStatuses);
-
     _expirationController.addListener(_updateErrorStatuses);
 
     return Column(
@@ -321,6 +320,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
             children: [
               const SizedBox(height: 8),
               TextField(
+                textInputAction: TextInputAction.next,
                 enabled: _isAmountToggled,
                 controller: _amountController,
                 decoration: InputDecoration(
@@ -360,6 +360,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
             children: [
               const SizedBox(height: 8),
               TextField(
+                textInputAction: TextInputAction.next,
                 enabled: _isExpirationToggled,
                 controller: _expirationController,
                 onTap: () {

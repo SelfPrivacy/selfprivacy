@@ -26,6 +26,9 @@ class ApiVolumesCubit
     }
   }
 
+  Future<double?> getPricePerGb() async =>
+      providerApi.getVolumeProvider().getPricePerGb();
+
   Future<void> refresh() async {
     emit(const ApiVolumesState([], LoadingStatus.refreshing));
     _refetch();

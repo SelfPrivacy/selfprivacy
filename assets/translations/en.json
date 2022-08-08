@@ -303,7 +303,7 @@
     "22": "Create master account",
     "23": "Enter a nickname and strong password",
     "finish": "Everything is initialized",
-    "checks": "Checks have been completed \n{} ouf of {}"
+    "checks": "Checks have been completed \n{} out of {}"
   },
   "recovering": {
     "recovery_main_header": "Connect to an existing server",

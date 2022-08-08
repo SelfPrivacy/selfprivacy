@@ -42,7 +42,7 @@ class InitializingPage extends StatelessWidget {
         () => _stepCheck(cubit),
         () => _stepCheck(cubit),
         () => _stepCheck(cubit),
-        () => Center(child: Text('initializing.finish'.tr()))
+        () => _stepCheck(cubit)
       ][cubit.state.progress.index]();
 
       return BlocListener<ServerInstallationCubit, ServerInstallationState>(
@@ -60,7 +60,7 @@ class InitializingPage extends StatelessWidget {
                 children: [
                   Padding(
                     padding: paddingH15V0.copyWith(top: 10, bottom: 10),
-                    child: cubit.state.isFullyInitilized
+                    child: cubit.state is ServerInstallationFinished
                         ? const SizedBox(
                             height: 80,
                           )

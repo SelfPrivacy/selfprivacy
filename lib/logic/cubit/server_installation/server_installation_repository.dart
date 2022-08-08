@@ -151,10 +151,10 @@ class ServerInstallationRepository {
     usersBox.clear();
   }
 
-  Future<ServerHostingDetails?> startServer(
+  Future<ServerHostingDetails> startServer(
     final ServerHostingDetails hetznerServer,
   ) async {
-    ServerHostingDetails? serverDetails;
+    ServerHostingDetails serverDetails;
 
     final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     serverDetails = await api.powerOn();
@@ -359,20 +359,20 @@ class ServerInstallationRepository {
         dnsProviderApiFactory!.getDnsProvider();
     final ServerApi api = ServerApi();
 
-    final String? dkimRecordString = await api.getDkim();
+    String dkimRecordString = '';
+    try {
+      dkimRecordString = await api.getDkim();
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
 
-    await dnsProviderApi.setDkim(dkimRecordString ?? '', cloudFlareDomain);
+    await dnsProviderApi.setDkim(dkimRecordString, cloudFlareDomain);
   }
 
   Future<bool> isHttpServerWorking() async {
     final ServerApi api = ServerApi();
-    final bool isHttpServerWorking = await api.isHttpServerWorking();
-    try {
-      await api.getDkim();
-    } catch (e) {
-      return false;
-    }
-    return isHttpServerWorking;
+    return api.isHttpServerWorking();
   }
 
   Future<ServerHostingDetails> restart() async {

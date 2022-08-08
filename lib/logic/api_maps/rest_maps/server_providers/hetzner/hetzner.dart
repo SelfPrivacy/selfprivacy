@@ -298,10 +298,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       dataBase: newVolume,
     );
 
-    if (details == null) {
-      deleteVolume(newVolume.id);
-    }
-
     return details;
   }
 
@@ -347,6 +343,8 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     print('Decoded data: $data');
 
     ServerHostingDetails? serverDetails;
+    DioError? hetznerError;
+    bool success = false;
 
     try {
       final Response serverCreateResponse = await client.post(
@@ -362,14 +360,23 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         apiToken: apiToken,
         provider: ServerProvider.hetzner,
       );
+      success = true;
     } on DioError catch (e) {
       print(e);
-      deleteVolume(dataBase.id);
-      rethrow;
+      hetznerError = e;
     } catch (e) {
       print(e);
     } finally {
       client.close();
+    }
+
+    if (!success) {
+      await Future.delayed(const Duration(seconds: 10));
+      await deleteVolume(dbId);
+    }
+
+    if (hetznerError != null) {
+      throw hetznerError;
     }
 
     return serverDetails;

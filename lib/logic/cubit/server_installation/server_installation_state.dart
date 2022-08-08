@@ -35,11 +35,11 @@ abstract class ServerInstallationState extends Equatable {
   final bool isServerResetedFirstTime;
   final bool isServerResetedSecondTime;
 
-  bool get isProviderFilled => providerApiToken != null;
-  bool get isCloudFlareFilled => cloudFlareKey != null;
-  bool get isBackblazeFilled => backblazeCredential != null;
-  bool get isDomainFilled => serverDomain != null;
-  bool get isUserFilled => rootUser != null;
+  bool get isServerProviderFilled => providerApiToken != null;
+  bool get isDnsProviderFilled => cloudFlareKey != null;
+  bool get isBackupsProviderFilled => backblazeCredential != null;
+  bool get isDomainSelected => serverDomain != null;
+  bool get isPrimaryUserFilled => rootUser != null;
   bool get isServerCreated => serverDetails != null;
 
   bool get isFullyInitilized => _fulfilementList.every((final el) => el!);
@@ -58,11 +58,11 @@ abstract class ServerInstallationState extends Equatable {
 
   List<bool?> get _fulfilementList {
     final List<bool> res = [
-      isProviderFilled,
-      isCloudFlareFilled,
-      isBackblazeFilled,
-      isDomainFilled,
-      isUserFilled,
+      isServerProviderFilled,
+      isDnsProviderFilled,
+      isBackupsProviderFilled,
+      isDomainSelected,
+      isPrimaryUserFilled,
       isServerCreated,
       isServerStarted,
       isServerResetedFirstTime,

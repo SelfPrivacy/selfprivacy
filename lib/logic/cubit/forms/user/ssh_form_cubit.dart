@@ -41,7 +41,8 @@ class SshFormCubit extends FormCubit {
   @override
   FutureOr<void> onSubmit() {
     print(key.state.isValid);
-    jobsCubit.addJob(CreateSSHKeyJob(user: user, publicKey: key.state.value));
+    jobsCubit
+        .addJob(CreateSSHKeyJob(user: user, publicKey: key.state.value.trim()));
   }
 
   late FieldCubit<String> key;

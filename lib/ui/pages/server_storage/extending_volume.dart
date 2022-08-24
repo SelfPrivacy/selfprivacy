@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/cubit/volumes/volumes_cubit.dart';
+import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
@@ -39,7 +39,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
 
   @override
   Widget build(final BuildContext context) => FutureBuilder(
-        future: context.read<ApiVolumesCubit>().getPricePerGb(),
+        future: context.read<ApiProviderVolumeCubit>().getPricePerGb(),
         builder: (
           final BuildContext context,
           final AsyncSnapshot<void> snapshot,

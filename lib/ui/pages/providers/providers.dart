@@ -5,7 +5,8 @@ import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/volumes/volumes_cubit.dart';
+import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
@@ -76,22 +77,10 @@ class _ProvidersPageState extends State<ProvidersPage> {
     cards.add(
       Padding(
         padding: const EdgeInsets.only(bottom: 30),
-        child: FutureBuilder(
-          future: Future.wait([
-            context.read<ServerInstallationCubit>().getServerDiskVolumes(),
-            context.read<ApiVolumesCubit>().getVolumes(),
-          ]),
-          builder: (
-            final BuildContext context,
-            final AsyncSnapshot<List<dynamic>> snapshot,
-          ) =>
-              StorageCard(
-            diskStatus: snapshot.hasData
-                ? toDiskStatus(
-                    snapshot.data![0] as List<ServerDiskVolume>,
-                    snapshot.data![1] as List<ServerVolume>,
-                  )
-                : DiskStatus(),
+        child: StorageCard(
+          diskStatus: toDiskStatus(
+            context.read<ApiServerVolumeCubit>().state.volumes,
+            context.read<ApiProviderVolumeCubit>().state.volumes,
           ),
         ),
       ),

@@ -10,7 +10,7 @@ import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
-import 'package:selfprivacy/logic/cubit/volumes/volumes_cubit.dart';
+import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 
 class BlocAndProviderConfig extends StatelessWidget {
   const BlocAndProviderConfig({final super.key, this.child});
@@ -27,7 +27,7 @@ class BlocAndProviderConfig extends StatelessWidget {
     final dnsRecordsCubit = DnsRecordsCubit(serverInstallationCubit);
     final recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
     final apiDevicesCubit = ApiDevicesCubit(serverInstallationCubit);
-    final apiVolumesCubit = ApiVolumesCubit(serverInstallationCubit);
+    final apiVolumesCubit = ApiProviderVolumeCubit(serverInstallationCubit);
     return MultiProvider(
       providers: [
         BlocProvider(

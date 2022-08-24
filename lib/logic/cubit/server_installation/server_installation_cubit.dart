@@ -554,9 +554,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  Future<List<ServerDiskVolume>> getServerDiskVolumes() async =>
-      ServerApi().getServerDiskVolumes();
-
   Future<void> setAndValidateCloudflareToken(final String token) async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;

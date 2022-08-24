@@ -2,24 +2,156 @@ import 'dart:async';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/utils/scalars.dart';
+import 'schema.graphql.dart';
 part 'disk_volumes.graphql.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Query$GetServerDiskVolumesQuery {
-  Query$GetServerDiskVolumesQuery(
-      {required this.storage, required this.$__typename});
+class Fragment$basicMutationReturnFields {
+  Fragment$basicMutationReturnFields(
+      {required this.code,
+      required this.message,
+      required this.success,
+      required this.$__typename});
 
   @override
-  factory Query$GetServerDiskVolumesQuery.fromJson(Map<String, dynamic> json) =>
-      _$Query$GetServerDiskVolumesQueryFromJson(json);
+  factory Fragment$basicMutationReturnFields.fromJson(
+          Map<String, dynamic> json) =>
+      _$Fragment$basicMutationReturnFieldsFromJson(json);
 
-  final Query$GetServerDiskVolumesQuery$storage storage;
+  final int code;
+
+  final String message;
+
+  final bool success;
 
   @JsonKey(name: '__typename')
   final String $__typename;
 
   Map<String, dynamic> toJson() =>
-      _$Query$GetServerDiskVolumesQueryToJson(this);
+      _$Fragment$basicMutationReturnFieldsToJson(this);
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Fragment$basicMutationReturnFields) ||
+        runtimeType != other.runtimeType) return false;
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) return false;
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) return false;
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$basicMutationReturnFields
+    on Fragment$basicMutationReturnFields {
+  Fragment$basicMutationReturnFields copyWith(
+          {int? code, String? message, bool? success, String? $__typename}) =>
+      Fragment$basicMutationReturnFields(
+          code: code == null ? this.code : code,
+          message: message == null ? this.message : message,
+          success: success == null ? this.success : success,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
+}
+
+const fragmentDefinitionbasicMutationReturnFields = FragmentDefinitionNode(
+    name: NameNode(value: 'basicMutationReturnFields'),
+    typeCondition: TypeConditionNode(
+        on: NamedTypeNode(
+            name: NameNode(value: 'MutationReturnInterface'),
+            isNonNull: false)),
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+          name: NameNode(value: 'code'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null),
+      FieldNode(
+          name: NameNode(value: 'message'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null),
+      FieldNode(
+          name: NameNode(value: 'success'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null),
+      FieldNode(
+          name: NameNode(value: '__typename'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null)
+    ]));
+const documentNodeFragmentbasicMutationReturnFields =
+    DocumentNode(definitions: [
+  fragmentDefinitionbasicMutationReturnFields,
+]);
+
+extension ClientExtension$Fragment$basicMutationReturnFields
+    on graphql.GraphQLClient {
+  void writeFragment$basicMutationReturnFields(
+          {required Fragment$basicMutationReturnFields data,
+          required Map<String, dynamic> idFields,
+          bool broadcast = true}) =>
+      this.writeFragment(
+          graphql.FragmentRequest(
+              idFields: idFields,
+              fragment: const graphql.Fragment(
+                  fragmentName: 'basicMutationReturnFields',
+                  document: documentNodeFragmentbasicMutationReturnFields)),
+          data: data.toJson(),
+          broadcast: broadcast);
+  Fragment$basicMutationReturnFields? readFragment$basicMutationReturnFields(
+      {required Map<String, dynamic> idFields, bool optimistic = true}) {
+    final result = this.readFragment(
+        graphql.FragmentRequest(
+            idFields: idFields,
+            fragment: const graphql.Fragment(
+                fragmentName: 'basicMutationReturnFields',
+                document: documentNodeFragmentbasicMutationReturnFields)),
+        optimistic: optimistic);
+    return result == null
+        ? null
+        : Fragment$basicMutationReturnFields.fromJson(result);
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$GetServerDiskVolumes {
+  Query$GetServerDiskVolumes(
+      {required this.storage, required this.$__typename});
+
+  @override
+  factory Query$GetServerDiskVolumes.fromJson(Map<String, dynamic> json) =>
+      _$Query$GetServerDiskVolumesFromJson(json);
+
+  final Query$GetServerDiskVolumes$storage storage;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() => _$Query$GetServerDiskVolumesToJson(this);
   int get hashCode {
     final l$storage = storage;
     final l$$__typename = $__typename;
@@ -29,7 +161,7 @@ class Query$GetServerDiskVolumesQuery {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Query$GetServerDiskVolumesQuery) ||
+    if (!(other is Query$GetServerDiskVolumes) ||
         runtimeType != other.runtimeType) return false;
     final l$storage = storage;
     final lOther$storage = other.storage;
@@ -41,69 +173,19 @@ class Query$GetServerDiskVolumesQuery {
   }
 }
 
-extension UtilityExtension$Query$GetServerDiskVolumesQuery
-    on Query$GetServerDiskVolumesQuery {
-  CopyWith$Query$GetServerDiskVolumesQuery<Query$GetServerDiskVolumesQuery>
-      get copyWith => CopyWith$Query$GetServerDiskVolumesQuery(this, (i) => i);
+extension UtilityExtension$Query$GetServerDiskVolumes
+    on Query$GetServerDiskVolumes {
+  Query$GetServerDiskVolumes copyWith(
+          {Query$GetServerDiskVolumes$storage? storage, String? $__typename}) =>
+      Query$GetServerDiskVolumes(
+          storage: storage == null ? this.storage : storage,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
 
-abstract class CopyWith$Query$GetServerDiskVolumesQuery<TRes> {
-  factory CopyWith$Query$GetServerDiskVolumesQuery(
-          Query$GetServerDiskVolumesQuery instance,
-          TRes Function(Query$GetServerDiskVolumesQuery) then) =
-      _CopyWithImpl$Query$GetServerDiskVolumesQuery;
-
-  factory CopyWith$Query$GetServerDiskVolumesQuery.stub(TRes res) =
-      _CopyWithStubImpl$Query$GetServerDiskVolumesQuery;
-
-  TRes call(
-      {Query$GetServerDiskVolumesQuery$storage? storage, String? $__typename});
-  CopyWith$Query$GetServerDiskVolumesQuery$storage<TRes> get storage;
-}
-
-class _CopyWithImpl$Query$GetServerDiskVolumesQuery<TRes>
-    implements CopyWith$Query$GetServerDiskVolumesQuery<TRes> {
-  _CopyWithImpl$Query$GetServerDiskVolumesQuery(this._instance, this._then);
-
-  final Query$GetServerDiskVolumesQuery _instance;
-
-  final TRes Function(Query$GetServerDiskVolumesQuery) _then;
-
-  static const _undefined = {};
-
-  TRes call({Object? storage = _undefined, Object? $__typename = _undefined}) =>
-      _then(Query$GetServerDiskVolumesQuery(
-          storage: storage == _undefined || storage == null
-              ? _instance.storage
-              : (storage as Query$GetServerDiskVolumesQuery$storage),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-  CopyWith$Query$GetServerDiskVolumesQuery$storage<TRes> get storage {
-    final local$storage = _instance.storage;
-    return CopyWith$Query$GetServerDiskVolumesQuery$storage(
-        local$storage, (e) => call(storage: e));
-  }
-}
-
-class _CopyWithStubImpl$Query$GetServerDiskVolumesQuery<TRes>
-    implements CopyWith$Query$GetServerDiskVolumesQuery<TRes> {
-  _CopyWithStubImpl$Query$GetServerDiskVolumesQuery(this._res);
-
-  TRes _res;
-
-  call(
-          {Query$GetServerDiskVolumesQuery$storage? storage,
-          String? $__typename}) =>
-      _res;
-  CopyWith$Query$GetServerDiskVolumesQuery$storage<TRes> get storage =>
-      CopyWith$Query$GetServerDiskVolumesQuery$storage.stub(_res);
-}
-
-const documentNodeQueryGetServerDiskVolumesQuery = DocumentNode(definitions: [
+const documentNodeQueryGetServerDiskVolumes = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.query,
-      name: NameNode(value: 'GetServerDiskVolumesQuery'),
+      name: NameNode(value: 'GetServerDiskVolumes'),
       variableDefinitions: [],
       directives: [],
       selectionSet: SelectionSetNode(selections: [
@@ -162,6 +244,77 @@ const documentNodeQueryGetServerDiskVolumesQuery = DocumentNode(definitions: [
                         directives: [],
                         selectionSet: null),
                     FieldNode(
+                        name: NameNode(value: 'usages'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(selections: [
+                          FieldNode(
+                              name: NameNode(value: 'title'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null),
+                          FieldNode(
+                              name: NameNode(value: 'usedSpace'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null),
+                          FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null),
+                          InlineFragmentNode(
+                              typeCondition: TypeConditionNode(
+                                  on: NamedTypeNode(
+                                      name: NameNode(
+                                          value: 'ServiceStorageUsage'),
+                                      isNonNull: false)),
+                              directives: [],
+                              selectionSet: SelectionSetNode(selections: [
+                                FieldNode(
+                                    name: NameNode(value: 'service'),
+                                    alias: null,
+                                    arguments: [],
+                                    directives: [],
+                                    selectionSet: SelectionSetNode(selections: [
+                                      FieldNode(
+                                          name: NameNode(value: 'id'),
+                                          alias: null,
+                                          arguments: [],
+                                          directives: [],
+                                          selectionSet: null),
+                                      FieldNode(
+                                          name: NameNode(value: 'isMovable'),
+                                          alias: null,
+                                          arguments: [],
+                                          directives: [],
+                                          selectionSet: null),
+                                      FieldNode(
+                                          name: NameNode(value: 'displayName'),
+                                          alias: null,
+                                          arguments: [],
+                                          directives: [],
+                                          selectionSet: null),
+                                      FieldNode(
+                                          name: NameNode(value: '__typename'),
+                                          alias: null,
+                                          arguments: [],
+                                          directives: [],
+                                          selectionSet: null)
+                                    ])),
+                                FieldNode(
+                                    name: NameNode(value: '__typename'),
+                                    alias: null,
+                                    arguments: [],
+                                    directives: [],
+                                    selectionSet: null)
+                              ]))
+                        ])),
+                    FieldNode(
                         name: NameNode(value: 'usedSpace'),
                         alias: null,
                         arguments: [],
@@ -189,13 +342,13 @@ const documentNodeQueryGetServerDiskVolumesQuery = DocumentNode(definitions: [
             selectionSet: null)
       ])),
 ]);
-Query$GetServerDiskVolumesQuery _parserFn$Query$GetServerDiskVolumesQuery(
+Query$GetServerDiskVolumes _parserFn$Query$GetServerDiskVolumes(
         Map<String, dynamic> data) =>
-    Query$GetServerDiskVolumesQuery.fromJson(data);
+    Query$GetServerDiskVolumes.fromJson(data);
 
-class Options$Query$GetServerDiskVolumesQuery
-    extends graphql.QueryOptions<Query$GetServerDiskVolumesQuery> {
-  Options$Query$GetServerDiskVolumesQuery(
+class Options$Query$GetServerDiskVolumes
+    extends graphql.QueryOptions<Query$GetServerDiskVolumes> {
+  Options$Query$GetServerDiskVolumes(
       {String? operationName,
       graphql.FetchPolicy? fetchPolicy,
       graphql.ErrorPolicy? errorPolicy,
@@ -211,13 +364,13 @@ class Options$Query$GetServerDiskVolumesQuery
             optimisticResult: optimisticResult,
             pollInterval: pollInterval,
             context: context,
-            document: documentNodeQueryGetServerDiskVolumesQuery,
-            parserFn: _parserFn$Query$GetServerDiskVolumesQuery);
+            document: documentNodeQueryGetServerDiskVolumes,
+            parserFn: _parserFn$Query$GetServerDiskVolumes);
 }
 
-class WatchOptions$Query$GetServerDiskVolumesQuery
-    extends graphql.WatchQueryOptions<Query$GetServerDiskVolumesQuery> {
-  WatchOptions$Query$GetServerDiskVolumesQuery(
+class WatchOptions$Query$GetServerDiskVolumes
+    extends graphql.WatchQueryOptions<Query$GetServerDiskVolumes> {
+  WatchOptions$Query$GetServerDiskVolumes(
       {String? operationName,
       graphql.FetchPolicy? fetchPolicy,
       graphql.ErrorPolicy? errorPolicy,
@@ -235,74 +388,68 @@ class WatchOptions$Query$GetServerDiskVolumesQuery
             cacheRereadPolicy: cacheRereadPolicy,
             optimisticResult: optimisticResult,
             context: context,
-            document: documentNodeQueryGetServerDiskVolumesQuery,
+            document: documentNodeQueryGetServerDiskVolumes,
             pollInterval: pollInterval,
             eagerlyFetchResults: eagerlyFetchResults,
             carryForwardDataOnException: carryForwardDataOnException,
             fetchResults: fetchResults,
-            parserFn: _parserFn$Query$GetServerDiskVolumesQuery);
+            parserFn: _parserFn$Query$GetServerDiskVolumes);
 }
 
-class FetchMoreOptions$Query$GetServerDiskVolumesQuery
+class FetchMoreOptions$Query$GetServerDiskVolumes
     extends graphql.FetchMoreOptions {
-  FetchMoreOptions$Query$GetServerDiskVolumesQuery(
+  FetchMoreOptions$Query$GetServerDiskVolumes(
       {required graphql.UpdateQuery updateQuery})
       : super(
             updateQuery: updateQuery,
-            document: documentNodeQueryGetServerDiskVolumesQuery);
+            document: documentNodeQueryGetServerDiskVolumes);
 }
 
-extension ClientExtension$Query$GetServerDiskVolumesQuery
-    on graphql.GraphQLClient {
-  Future<graphql.QueryResult<Query$GetServerDiskVolumesQuery>>
-      query$GetServerDiskVolumesQuery(
-              [Options$Query$GetServerDiskVolumesQuery? options]) async =>
-          await this
-              .query(options ?? Options$Query$GetServerDiskVolumesQuery());
-  graphql.ObservableQuery<Query$GetServerDiskVolumesQuery>
-      watchQuery$GetServerDiskVolumesQuery(
-              [WatchOptions$Query$GetServerDiskVolumesQuery? options]) =>
-          this.watchQuery(
-              options ?? WatchOptions$Query$GetServerDiskVolumesQuery());
-  void writeQuery$GetServerDiskVolumesQuery(
-          {required Query$GetServerDiskVolumesQuery data,
-          bool broadcast = true}) =>
+extension ClientExtension$Query$GetServerDiskVolumes on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Query$GetServerDiskVolumes>>
+      query$GetServerDiskVolumes(
+              [Options$Query$GetServerDiskVolumes? options]) async =>
+          await this.query(options ?? Options$Query$GetServerDiskVolumes());
+  graphql.ObservableQuery<Query$GetServerDiskVolumes>
+      watchQuery$GetServerDiskVolumes(
+              [WatchOptions$Query$GetServerDiskVolumes? options]) =>
+          this.watchQuery(options ?? WatchOptions$Query$GetServerDiskVolumes());
+  void writeQuery$GetServerDiskVolumes(
+          {required Query$GetServerDiskVolumes data, bool broadcast = true}) =>
       this.writeQuery(
           graphql.Request(
               operation: graphql.Operation(
-                  document: documentNodeQueryGetServerDiskVolumesQuery)),
+                  document: documentNodeQueryGetServerDiskVolumes)),
           data: data.toJson(),
           broadcast: broadcast);
-  Query$GetServerDiskVolumesQuery? readQuery$GetServerDiskVolumesQuery(
+  Query$GetServerDiskVolumes? readQuery$GetServerDiskVolumes(
       {bool optimistic = true}) {
     final result = this.readQuery(
         graphql.Request(
             operation: graphql.Operation(
-                document: documentNodeQueryGetServerDiskVolumesQuery)),
+                document: documentNodeQueryGetServerDiskVolumes)),
         optimistic: optimistic);
-    return result == null
-        ? null
-        : Query$GetServerDiskVolumesQuery.fromJson(result);
+    return result == null ? null : Query$GetServerDiskVolumes.fromJson(result);
   }
 }
 
 @JsonSerializable(explicitToJson: true)
-class Query$GetServerDiskVolumesQuery$storage {
-  Query$GetServerDiskVolumesQuery$storage(
+class Query$GetServerDiskVolumes$storage {
+  Query$GetServerDiskVolumes$storage(
       {required this.volumes, required this.$__typename});
 
   @override
-  factory Query$GetServerDiskVolumesQuery$storage.fromJson(
+  factory Query$GetServerDiskVolumes$storage.fromJson(
           Map<String, dynamic> json) =>
-      _$Query$GetServerDiskVolumesQuery$storageFromJson(json);
+      _$Query$GetServerDiskVolumes$storageFromJson(json);
 
-  final List<Query$GetServerDiskVolumesQuery$storage$volumes> volumes;
+  final List<Query$GetServerDiskVolumes$storage$volumes> volumes;
 
   @JsonKey(name: '__typename')
   final String $__typename;
 
   Map<String, dynamic> toJson() =>
-      _$Query$GetServerDiskVolumesQuery$storageToJson(this);
+      _$Query$GetServerDiskVolumes$storageToJson(this);
   int get hashCode {
     final l$volumes = volumes;
     final l$$__typename = $__typename;
@@ -313,7 +460,7 @@ class Query$GetServerDiskVolumesQuery$storage {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Query$GetServerDiskVolumesQuery$storage) ||
+    if (!(other is Query$GetServerDiskVolumes$storage) ||
         runtimeType != other.runtimeType) return false;
     final l$volumes = volumes;
     final lOther$volumes = other.volumes;
@@ -331,110 +478,50 @@ class Query$GetServerDiskVolumesQuery$storage {
   }
 }
 
-extension UtilityExtension$Query$GetServerDiskVolumesQuery$storage
-    on Query$GetServerDiskVolumesQuery$storage {
-  CopyWith$Query$GetServerDiskVolumesQuery$storage<
-          Query$GetServerDiskVolumesQuery$storage>
-      get copyWith =>
-          CopyWith$Query$GetServerDiskVolumesQuery$storage(this, (i) => i);
-}
-
-abstract class CopyWith$Query$GetServerDiskVolumesQuery$storage<TRes> {
-  factory CopyWith$Query$GetServerDiskVolumesQuery$storage(
-          Query$GetServerDiskVolumesQuery$storage instance,
-          TRes Function(Query$GetServerDiskVolumesQuery$storage) then) =
-      _CopyWithImpl$Query$GetServerDiskVolumesQuery$storage;
-
-  factory CopyWith$Query$GetServerDiskVolumesQuery$storage.stub(TRes res) =
-      _CopyWithStubImpl$Query$GetServerDiskVolumesQuery$storage;
-
-  TRes call(
-      {List<Query$GetServerDiskVolumesQuery$storage$volumes>? volumes,
-      String? $__typename});
-  TRes volumes(
-      Iterable<Query$GetServerDiskVolumesQuery$storage$volumes> Function(
-              Iterable<
-                  CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes<
-                      Query$GetServerDiskVolumesQuery$storage$volumes>>)
-          _fn);
-}
-
-class _CopyWithImpl$Query$GetServerDiskVolumesQuery$storage<TRes>
-    implements CopyWith$Query$GetServerDiskVolumesQuery$storage<TRes> {
-  _CopyWithImpl$Query$GetServerDiskVolumesQuery$storage(
-      this._instance, this._then);
-
-  final Query$GetServerDiskVolumesQuery$storage _instance;
-
-  final TRes Function(Query$GetServerDiskVolumesQuery$storage) _then;
-
-  static const _undefined = {};
-
-  TRes call({Object? volumes = _undefined, Object? $__typename = _undefined}) =>
-      _then(Query$GetServerDiskVolumesQuery$storage(
-          volumes: volumes == _undefined || volumes == null
-              ? _instance.volumes
-              : (volumes
-                  as List<Query$GetServerDiskVolumesQuery$storage$volumes>),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-  TRes volumes(
-          Iterable<Query$GetServerDiskVolumesQuery$storage$volumes> Function(
-                  Iterable<
-                      CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes<
-                          Query$GetServerDiskVolumesQuery$storage$volumes>>)
-              _fn) =>
-      call(
-          volumes: _fn(_instance.volumes.map((e) =>
-              CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes(
-                  e, (i) => i))).toList());
-}
-
-class _CopyWithStubImpl$Query$GetServerDiskVolumesQuery$storage<TRes>
-    implements CopyWith$Query$GetServerDiskVolumesQuery$storage<TRes> {
-  _CopyWithStubImpl$Query$GetServerDiskVolumesQuery$storage(this._res);
-
-  TRes _res;
-
-  call(
-          {List<Query$GetServerDiskVolumesQuery$storage$volumes>? volumes,
+extension UtilityExtension$Query$GetServerDiskVolumes$storage
+    on Query$GetServerDiskVolumes$storage {
+  Query$GetServerDiskVolumes$storage copyWith(
+          {List<Query$GetServerDiskVolumes$storage$volumes>? volumes,
           String? $__typename}) =>
-      _res;
-  volumes(_fn) => _res;
+      Query$GetServerDiskVolumes$storage(
+          volumes: volumes == null ? this.volumes : volumes,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Query$GetServerDiskVolumesQuery$storage$volumes {
-  Query$GetServerDiskVolumesQuery$storage$volumes(
+class Query$GetServerDiskVolumes$storage$volumes {
+  Query$GetServerDiskVolumes$storage$volumes(
       {required this.freeSpace,
-      required this.model,
+      this.model,
       required this.name,
       required this.root,
-      required this.serial,
+      this.serial,
       required this.totalSpace,
       required this.type,
+      required this.usages,
       required this.usedSpace,
       required this.$__typename});
 
   @override
-  factory Query$GetServerDiskVolumesQuery$storage$volumes.fromJson(
+  factory Query$GetServerDiskVolumes$storage$volumes.fromJson(
           Map<String, dynamic> json) =>
-      _$Query$GetServerDiskVolumesQuery$storage$volumesFromJson(json);
+      _$Query$GetServerDiskVolumes$storage$volumesFromJson(json);
 
   final String freeSpace;
 
-  final String model;
+  final String? model;
 
   final String name;
 
   final bool root;
 
-  final String serial;
+  final String? serial;
 
   final String totalSpace;
 
   final String type;
+
+  final List<Query$GetServerDiskVolumes$storage$volumes$usages> usages;
 
   final String usedSpace;
 
@@ -442,7 +529,7 @@ class Query$GetServerDiskVolumesQuery$storage$volumes {
   final String $__typename;
 
   Map<String, dynamic> toJson() =>
-      _$Query$GetServerDiskVolumesQuery$storage$volumesToJson(this);
+      _$Query$GetServerDiskVolumes$storage$volumesToJson(this);
   int get hashCode {
     final l$freeSpace = freeSpace;
     final l$model = model;
@@ -451,6 +538,7 @@ class Query$GetServerDiskVolumesQuery$storage$volumes {
     final l$serial = serial;
     final l$totalSpace = totalSpace;
     final l$type = type;
+    final l$usages = usages;
     final l$usedSpace = usedSpace;
     final l$$__typename = $__typename;
     return Object.hashAll([
@@ -461,6 +549,7 @@ class Query$GetServerDiskVolumesQuery$storage$volumes {
       l$serial,
       l$totalSpace,
       l$type,
+      Object.hashAll(l$usages.map((v) => v)),
       l$usedSpace,
       l$$__typename
     ]);
@@ -469,7 +558,7 @@ class Query$GetServerDiskVolumesQuery$storage$volumes {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Query$GetServerDiskVolumesQuery$storage$volumes) ||
+    if (!(other is Query$GetServerDiskVolumes$storage$volumes) ||
         runtimeType != other.runtimeType) return false;
     final l$freeSpace = freeSpace;
     final lOther$freeSpace = other.freeSpace;
@@ -492,6 +581,15 @@ class Query$GetServerDiskVolumesQuery$storage$volumes {
     final l$type = type;
     final lOther$type = other.type;
     if (l$type != lOther$type) return false;
+    final l$usages = usages;
+    final lOther$usages = other.usages;
+    if (l$usages.length != lOther$usages.length) return false;
+    for (int i = 0; i < l$usages.length; i++) {
+      final l$usages$entry = l$usages[i];
+      final lOther$usages$entry = lOther$usages[i];
+      if (l$usages$entry != lOther$usages$entry) return false;
+    }
+
     final l$usedSpace = usedSpace;
     final lOther$usedSpace = other.usedSpace;
     if (l$usedSpace != lOther$usedSpace) return false;
@@ -502,119 +600,253 @@ class Query$GetServerDiskVolumesQuery$storage$volumes {
   }
 }
 
-extension UtilityExtension$Query$GetServerDiskVolumesQuery$storage$volumes
-    on Query$GetServerDiskVolumesQuery$storage$volumes {
-  CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes<
-          Query$GetServerDiskVolumesQuery$storage$volumes>
-      get copyWith => CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes(
-          this, (i) => i);
-}
-
-abstract class CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes<TRes> {
-  factory CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes(
-          Query$GetServerDiskVolumesQuery$storage$volumes instance,
-          TRes Function(Query$GetServerDiskVolumesQuery$storage$volumes) then) =
-      _CopyWithImpl$Query$GetServerDiskVolumesQuery$storage$volumes;
-
-  factory CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$GetServerDiskVolumesQuery$storage$volumes;
-
-  TRes call(
-      {String? freeSpace,
-      String? model,
-      String? name,
-      bool? root,
-      String? serial,
-      String? totalSpace,
-      String? type,
-      String? usedSpace,
-      String? $__typename});
-}
-
-class _CopyWithImpl$Query$GetServerDiskVolumesQuery$storage$volumes<TRes>
-    implements CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes<TRes> {
-  _CopyWithImpl$Query$GetServerDiskVolumesQuery$storage$volumes(
-      this._instance, this._then);
-
-  final Query$GetServerDiskVolumesQuery$storage$volumes _instance;
-
-  final TRes Function(Query$GetServerDiskVolumesQuery$storage$volumes) _then;
-
-  static const _undefined = {};
-
-  TRes call(
-          {Object? freeSpace = _undefined,
-          Object? model = _undefined,
-          Object? name = _undefined,
-          Object? root = _undefined,
-          Object? serial = _undefined,
-          Object? totalSpace = _undefined,
-          Object? type = _undefined,
-          Object? usedSpace = _undefined,
-          Object? $__typename = _undefined}) =>
-      _then(Query$GetServerDiskVolumesQuery$storage$volumes(
-          freeSpace: freeSpace == _undefined || freeSpace == null
-              ? _instance.freeSpace
-              : (freeSpace as String),
-          model: model == _undefined || model == null
-              ? _instance.model
-              : (model as String),
-          name: name == _undefined || name == null
-              ? _instance.name
-              : (name as String),
-          root: root == _undefined || root == null
-              ? _instance.root
-              : (root as bool),
-          serial: serial == _undefined || serial == null
-              ? _instance.serial
-              : (serial as String),
-          totalSpace: totalSpace == _undefined || totalSpace == null
-              ? _instance.totalSpace
-              : (totalSpace as String),
-          type: type == _undefined || type == null
-              ? _instance.type
-              : (type as String),
-          usedSpace: usedSpace == _undefined || usedSpace == null
-              ? _instance.usedSpace
-              : (usedSpace as String),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-}
-
-class _CopyWithStubImpl$Query$GetServerDiskVolumesQuery$storage$volumes<TRes>
-    implements CopyWith$Query$GetServerDiskVolumesQuery$storage$volumes<TRes> {
-  _CopyWithStubImpl$Query$GetServerDiskVolumesQuery$storage$volumes(this._res);
-
-  TRes _res;
-
-  call(
+extension UtilityExtension$Query$GetServerDiskVolumes$storage$volumes
+    on Query$GetServerDiskVolumes$storage$volumes {
+  Query$GetServerDiskVolumes$storage$volumes copyWith(
           {String? freeSpace,
-          String? model,
+          String? Function()? model,
           String? name,
           bool? root,
-          String? serial,
+          String? Function()? serial,
           String? totalSpace,
           String? type,
+          List<Query$GetServerDiskVolumes$storage$volumes$usages>? usages,
           String? usedSpace,
           String? $__typename}) =>
-      _res;
+      Query$GetServerDiskVolumes$storage$volumes(
+          freeSpace: freeSpace == null ? this.freeSpace : freeSpace,
+          model: model == null ? this.model : model(),
+          name: name == null ? this.name : name,
+          root: root == null ? this.root : root,
+          serial: serial == null ? this.serial : serial(),
+          totalSpace: totalSpace == null ? this.totalSpace : totalSpace,
+          type: type == null ? this.type : type,
+          usages: usages == null ? this.usages : usages,
+          usedSpace: usedSpace == null ? this.usedSpace : usedSpace,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Variables$Mutation$MountVolumeMutation {
-  Variables$Mutation$MountVolumeMutation({required this.name});
+class Query$GetServerDiskVolumes$storage$volumes$usages {
+  Query$GetServerDiskVolumes$storage$volumes$usages(
+      {required this.title,
+      required this.usedSpace,
+      required this.$__typename});
 
   @override
-  factory Variables$Mutation$MountVolumeMutation.fromJson(
+  factory Query$GetServerDiskVolumes$storage$volumes$usages.fromJson(
+      Map<String, dynamic> json) {
+    switch (json["__typename"] as String) {
+      case "ServiceStorageUsage":
+        return Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage
+            .fromJson(json);
+      default:
+        return _$Query$GetServerDiskVolumes$storage$volumes$usagesFromJson(
+            json);
+    }
+  }
+
+  final String title;
+
+  final String usedSpace;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() =>
+      _$Query$GetServerDiskVolumes$storage$volumes$usagesToJson(this);
+  int get hashCode {
+    final l$title = title;
+    final l$usedSpace = usedSpace;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$title, l$usedSpace, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$GetServerDiskVolumes$storage$volumes$usages) ||
+        runtimeType != other.runtimeType) return false;
+    final l$title = title;
+    final lOther$title = other.title;
+    if (l$title != lOther$title) return false;
+    final l$usedSpace = usedSpace;
+    final lOther$usedSpace = other.usedSpace;
+    if (l$usedSpace != lOther$usedSpace) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetServerDiskVolumes$storage$volumes$usages
+    on Query$GetServerDiskVolumes$storage$volumes$usages {
+  Query$GetServerDiskVolumes$storage$volumes$usages copyWith(
+          {String? title, String? usedSpace, String? $__typename}) =>
+      Query$GetServerDiskVolumes$storage$volumes$usages(
+          title: title == null ? this.title : title,
+          usedSpace: usedSpace == null ? this.usedSpace : usedSpace,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage
+    implements Query$GetServerDiskVolumes$storage$volumes$usages {
+  Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage(
+      {required this.title,
+      required this.usedSpace,
+      required this.$__typename,
+      this.service});
+
+  @override
+  factory Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage.fromJson(
           Map<String, dynamic> json) =>
-      _$Variables$Mutation$MountVolumeMutationFromJson(json);
+      _$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsageFromJson(
+          json);
+
+  final String title;
+
+  final String usedSpace;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  final Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service?
+      service;
+
+  Map<String, dynamic> toJson() =>
+      _$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsageToJson(
+          this);
+  int get hashCode {
+    final l$title = title;
+    final l$usedSpace = usedSpace;
+    final l$$__typename = $__typename;
+    final l$service = service;
+    return Object.hashAll([l$title, l$usedSpace, l$$__typename, l$service]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other
+            is Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage) ||
+        runtimeType != other.runtimeType) return false;
+    final l$title = title;
+    final lOther$title = other.title;
+    if (l$title != lOther$title) return false;
+    final l$usedSpace = usedSpace;
+    final lOther$usedSpace = other.usedSpace;
+    if (l$usedSpace != lOther$usedSpace) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    final l$service = service;
+    final lOther$service = other.service;
+    if (l$service != lOther$service) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage
+    on Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage {
+  Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage copyWith(
+          {String? title,
+          String? usedSpace,
+          String? $__typename,
+          Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service?
+                  Function()?
+              service}) =>
+      Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage(
+          title: title == null ? this.title : title,
+          usedSpace: usedSpace == null ? this.usedSpace : usedSpace,
+          $__typename: $__typename == null ? this.$__typename : $__typename,
+          service: service == null ? this.service : service());
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service {
+  Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service(
+      {required this.id,
+      required this.isMovable,
+      required this.displayName,
+      required this.$__typename});
+
+  @override
+  factory Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service.fromJson(
+          Map<String, dynamic> json) =>
+      _$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$serviceFromJson(
+          json);
+
+  final String id;
+
+  final bool isMovable;
+
+  final String displayName;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() =>
+      _$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$serviceToJson(
+          this);
+  int get hashCode {
+    final l$id = id;
+    final l$isMovable = isMovable;
+    final l$displayName = displayName;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$id, l$isMovable, l$displayName, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other
+            is Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service) ||
+        runtimeType != other.runtimeType) return false;
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) return false;
+    final l$isMovable = isMovable;
+    final lOther$isMovable = other.isMovable;
+    if (l$isMovable != lOther$isMovable) return false;
+    final l$displayName = displayName;
+    final lOther$displayName = other.displayName;
+    if (l$displayName != lOther$displayName) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service
+    on Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service {
+  Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service
+      copyWith(
+              {String? id,
+              bool? isMovable,
+              String? displayName,
+              String? $__typename}) =>
+          Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service(
+              id: id == null ? this.id : id,
+              isMovable: isMovable == null ? this.isMovable : isMovable,
+              displayName: displayName == null ? this.displayName : displayName,
+              $__typename:
+                  $__typename == null ? this.$__typename : $__typename);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Variables$Mutation$MountVolume {
+  Variables$Mutation$MountVolume({required this.name});
+
+  @override
+  factory Variables$Mutation$MountVolume.fromJson(Map<String, dynamic> json) =>
+      _$Variables$Mutation$MountVolumeFromJson(json);
 
   final String name;
 
-  Map<String, dynamic> toJson() =>
-      _$Variables$Mutation$MountVolumeMutationToJson(this);
+  Map<String, dynamic> toJson() => _$Variables$Mutation$MountVolumeToJson(this);
   int get hashCode {
     final l$name = name;
     return Object.hashAll([l$name]);
@@ -623,7 +855,7 @@ class Variables$Mutation$MountVolumeMutation {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Variables$Mutation$MountVolumeMutation) ||
+    if (!(other is Variables$Mutation$MountVolume) ||
         runtimeType != other.runtimeType) return false;
     final l$name = name;
     final lOther$name = other.name;
@@ -631,66 +863,24 @@ class Variables$Mutation$MountVolumeMutation {
     return true;
   }
 
-  CopyWith$Variables$Mutation$MountVolumeMutation<
-          Variables$Mutation$MountVolumeMutation>
-      get copyWith =>
-          CopyWith$Variables$Mutation$MountVolumeMutation(this, (i) => i);
-}
-
-abstract class CopyWith$Variables$Mutation$MountVolumeMutation<TRes> {
-  factory CopyWith$Variables$Mutation$MountVolumeMutation(
-          Variables$Mutation$MountVolumeMutation instance,
-          TRes Function(Variables$Mutation$MountVolumeMutation) then) =
-      _CopyWithImpl$Variables$Mutation$MountVolumeMutation;
-
-  factory CopyWith$Variables$Mutation$MountVolumeMutation.stub(TRes res) =
-      _CopyWithStubImpl$Variables$Mutation$MountVolumeMutation;
-
-  TRes call({String? name});
-}
-
-class _CopyWithImpl$Variables$Mutation$MountVolumeMutation<TRes>
-    implements CopyWith$Variables$Mutation$MountVolumeMutation<TRes> {
-  _CopyWithImpl$Variables$Mutation$MountVolumeMutation(
-      this._instance, this._then);
-
-  final Variables$Mutation$MountVolumeMutation _instance;
-
-  final TRes Function(Variables$Mutation$MountVolumeMutation) _then;
-
-  static const _undefined = {};
-
-  TRes call({Object? name = _undefined}) =>
-      _then(Variables$Mutation$MountVolumeMutation(
-          name: name == _undefined || name == null
-              ? _instance.name
-              : (name as String)));
-}
-
-class _CopyWithStubImpl$Variables$Mutation$MountVolumeMutation<TRes>
-    implements CopyWith$Variables$Mutation$MountVolumeMutation<TRes> {
-  _CopyWithStubImpl$Variables$Mutation$MountVolumeMutation(this._res);
-
-  TRes _res;
-
-  call({String? name}) => _res;
+  Variables$Mutation$MountVolume copyWith({String? name}) =>
+      Variables$Mutation$MountVolume(name: name == null ? this.name : name);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Mutation$MountVolumeMutation {
-  Mutation$MountVolumeMutation(
-      {required this.mountVolume, required this.$__typename});
+class Mutation$MountVolume {
+  Mutation$MountVolume({required this.mountVolume, required this.$__typename});
 
   @override
-  factory Mutation$MountVolumeMutation.fromJson(Map<String, dynamic> json) =>
-      _$Mutation$MountVolumeMutationFromJson(json);
+  factory Mutation$MountVolume.fromJson(Map<String, dynamic> json) =>
+      _$Mutation$MountVolumeFromJson(json);
 
-  final Mutation$MountVolumeMutation$mountVolume mountVolume;
+  final Mutation$MountVolume$mountVolume mountVolume;
 
   @JsonKey(name: '__typename')
   final String $__typename;
 
-  Map<String, dynamic> toJson() => _$Mutation$MountVolumeMutationToJson(this);
+  Map<String, dynamic> toJson() => _$Mutation$MountVolumeToJson(this);
   int get hashCode {
     final l$mountVolume = mountVolume;
     final l$$__typename = $__typename;
@@ -700,8 +890,8 @@ class Mutation$MountVolumeMutation {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Mutation$MountVolumeMutation) ||
-        runtimeType != other.runtimeType) return false;
+    if (!(other is Mutation$MountVolume) || runtimeType != other.runtimeType)
+      return false;
     final l$mountVolume = mountVolume;
     final lOther$mountVolume = other.mountVolume;
     if (l$mountVolume != lOther$mountVolume) return false;
@@ -712,72 +902,19 @@ class Mutation$MountVolumeMutation {
   }
 }
 
-extension UtilityExtension$Mutation$MountVolumeMutation
-    on Mutation$MountVolumeMutation {
-  CopyWith$Mutation$MountVolumeMutation<Mutation$MountVolumeMutation>
-      get copyWith => CopyWith$Mutation$MountVolumeMutation(this, (i) => i);
-}
-
-abstract class CopyWith$Mutation$MountVolumeMutation<TRes> {
-  factory CopyWith$Mutation$MountVolumeMutation(
-          Mutation$MountVolumeMutation instance,
-          TRes Function(Mutation$MountVolumeMutation) then) =
-      _CopyWithImpl$Mutation$MountVolumeMutation;
-
-  factory CopyWith$Mutation$MountVolumeMutation.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$MountVolumeMutation;
-
-  TRes call(
-      {Mutation$MountVolumeMutation$mountVolume? mountVolume,
-      String? $__typename});
-  CopyWith$Mutation$MountVolumeMutation$mountVolume<TRes> get mountVolume;
-}
-
-class _CopyWithImpl$Mutation$MountVolumeMutation<TRes>
-    implements CopyWith$Mutation$MountVolumeMutation<TRes> {
-  _CopyWithImpl$Mutation$MountVolumeMutation(this._instance, this._then);
-
-  final Mutation$MountVolumeMutation _instance;
-
-  final TRes Function(Mutation$MountVolumeMutation) _then;
-
-  static const _undefined = {};
-
-  TRes call(
-          {Object? mountVolume = _undefined,
-          Object? $__typename = _undefined}) =>
-      _then(Mutation$MountVolumeMutation(
-          mountVolume: mountVolume == _undefined || mountVolume == null
-              ? _instance.mountVolume
-              : (mountVolume as Mutation$MountVolumeMutation$mountVolume),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-  CopyWith$Mutation$MountVolumeMutation$mountVolume<TRes> get mountVolume {
-    final local$mountVolume = _instance.mountVolume;
-    return CopyWith$Mutation$MountVolumeMutation$mountVolume(
-        local$mountVolume, (e) => call(mountVolume: e));
-  }
-}
-
-class _CopyWithStubImpl$Mutation$MountVolumeMutation<TRes>
-    implements CopyWith$Mutation$MountVolumeMutation<TRes> {
-  _CopyWithStubImpl$Mutation$MountVolumeMutation(this._res);
-
-  TRes _res;
-
-  call(
-          {Mutation$MountVolumeMutation$mountVolume? mountVolume,
+extension UtilityExtension$Mutation$MountVolume on Mutation$MountVolume {
+  Mutation$MountVolume copyWith(
+          {Mutation$MountVolume$mountVolume? mountVolume,
           String? $__typename}) =>
-      _res;
-  CopyWith$Mutation$MountVolumeMutation$mountVolume<TRes> get mountVolume =>
-      CopyWith$Mutation$MountVolumeMutation$mountVolume.stub(_res);
+      Mutation$MountVolume(
+          mountVolume: mountVolume == null ? this.mountVolume : mountVolume,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
 
-const documentNodeMutationMountVolumeMutation = DocumentNode(definitions: [
+const documentNodeMutationMountVolume = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.mutation,
-      name: NameNode(value: 'MountVolumeMutation'),
+      name: NameNode(value: 'MountVolume'),
       variableDefinitions: [
         VariableDefinitionNode(
             variable: VariableNode(name: NameNode(value: 'name')),
@@ -798,24 +935,9 @@ const documentNodeMutationMountVolumeMutation = DocumentNode(definitions: [
             ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                  name: NameNode(value: 'code'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
-              FieldNode(
-                  name: NameNode(value: 'message'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
-              FieldNode(
-                  name: NameNode(value: 'success'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
+              FragmentSpreadNode(
+                  name: NameNode(value: 'basicMutationReturnFields'),
+                  directives: []),
               FieldNode(
                   name: NameNode(value: '__typename'),
                   alias: null,
@@ -830,25 +952,26 @@ const documentNodeMutationMountVolumeMutation = DocumentNode(definitions: [
             directives: [],
             selectionSet: null)
       ])),
+  fragmentDefinitionbasicMutationReturnFields,
 ]);
-Mutation$MountVolumeMutation _parserFn$Mutation$MountVolumeMutation(
+Mutation$MountVolume _parserFn$Mutation$MountVolume(
         Map<String, dynamic> data) =>
-    Mutation$MountVolumeMutation.fromJson(data);
-typedef OnMutationCompleted$Mutation$MountVolumeMutation = FutureOr<void>
-    Function(dynamic, Mutation$MountVolumeMutation?);
+    Mutation$MountVolume.fromJson(data);
+typedef OnMutationCompleted$Mutation$MountVolume = FutureOr<void> Function(
+    dynamic, Mutation$MountVolume?);
 
-class Options$Mutation$MountVolumeMutation
-    extends graphql.MutationOptions<Mutation$MountVolumeMutation> {
-  Options$Mutation$MountVolumeMutation(
+class Options$Mutation$MountVolume
+    extends graphql.MutationOptions<Mutation$MountVolume> {
+  Options$Mutation$MountVolume(
       {String? operationName,
-      required Variables$Mutation$MountVolumeMutation variables,
+      required Variables$Mutation$MountVolume variables,
       graphql.FetchPolicy? fetchPolicy,
       graphql.ErrorPolicy? errorPolicy,
       graphql.CacheRereadPolicy? cacheRereadPolicy,
       Object? optimisticResult,
       graphql.Context? context,
-      OnMutationCompleted$Mutation$MountVolumeMutation? onCompleted,
-      graphql.OnMutationUpdate<Mutation$MountVolumeMutation>? update,
+      OnMutationCompleted$Mutation$MountVolume? onCompleted,
+      graphql.OnMutationUpdate<Mutation$MountVolume>? update,
       graphql.OnError? onError})
       : onCompletedWithParsed = onCompleted,
         super(
@@ -861,17 +984,14 @@ class Options$Mutation$MountVolumeMutation
             context: context,
             onCompleted: onCompleted == null
                 ? null
-                : (data) => onCompleted(
-                    data,
-                    data == null
-                        ? null
-                        : _parserFn$Mutation$MountVolumeMutation(data)),
+                : (data) => onCompleted(data,
+                    data == null ? null : _parserFn$Mutation$MountVolume(data)),
             update: update,
             onError: onError,
-            document: documentNodeMutationMountVolumeMutation,
-            parserFn: _parserFn$Mutation$MountVolumeMutation);
+            document: documentNodeMutationMountVolume,
+            parserFn: _parserFn$Mutation$MountVolume);
 
-  final OnMutationCompleted$Mutation$MountVolumeMutation? onCompletedWithParsed;
+  final OnMutationCompleted$Mutation$MountVolume? onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
@@ -882,11 +1002,11 @@ class Options$Mutation$MountVolumeMutation
       ];
 }
 
-class WatchOptions$Mutation$MountVolumeMutation
-    extends graphql.WatchQueryOptions<Mutation$MountVolumeMutation> {
-  WatchOptions$Mutation$MountVolumeMutation(
+class WatchOptions$Mutation$MountVolume
+    extends graphql.WatchQueryOptions<Mutation$MountVolume> {
+  WatchOptions$Mutation$MountVolume(
       {String? operationName,
-      required Variables$Mutation$MountVolumeMutation variables,
+      required Variables$Mutation$MountVolume variables,
       graphql.FetchPolicy? fetchPolicy,
       graphql.ErrorPolicy? errorPolicy,
       graphql.CacheRereadPolicy? cacheRereadPolicy,
@@ -904,38 +1024,36 @@ class WatchOptions$Mutation$MountVolumeMutation
             cacheRereadPolicy: cacheRereadPolicy,
             optimisticResult: optimisticResult,
             context: context,
-            document: documentNodeMutationMountVolumeMutation,
+            document: documentNodeMutationMountVolume,
             pollInterval: pollInterval,
             eagerlyFetchResults: eagerlyFetchResults,
             carryForwardDataOnException: carryForwardDataOnException,
             fetchResults: fetchResults,
-            parserFn: _parserFn$Mutation$MountVolumeMutation);
+            parserFn: _parserFn$Mutation$MountVolume);
 }
 
-extension ClientExtension$Mutation$MountVolumeMutation
-    on graphql.GraphQLClient {
-  Future<graphql.QueryResult<Mutation$MountVolumeMutation>>
-      mutate$MountVolumeMutation(
-              Options$Mutation$MountVolumeMutation options) async =>
-          await this.mutate(options);
-  graphql.ObservableQuery<Mutation$MountVolumeMutation>
-      watchMutation$MountVolumeMutation(
-              WatchOptions$Mutation$MountVolumeMutation options) =>
-          this.watchMutation(options);
+extension ClientExtension$Mutation$MountVolume on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$MountVolume>> mutate$MountVolume(
+          Options$Mutation$MountVolume options) async =>
+      await this.mutate(options);
+  graphql.ObservableQuery<Mutation$MountVolume> watchMutation$MountVolume(
+          WatchOptions$Mutation$MountVolume options) =>
+      this.watchMutation(options);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Mutation$MountVolumeMutation$mountVolume {
-  Mutation$MountVolumeMutation$mountVolume(
+class Mutation$MountVolume$mountVolume
+    implements Fragment$basicMutationReturnFields {
+  Mutation$MountVolume$mountVolume(
       {required this.code,
       required this.message,
       required this.success,
       required this.$__typename});
 
   @override
-  factory Mutation$MountVolumeMutation$mountVolume.fromJson(
+  factory Mutation$MountVolume$mountVolume.fromJson(
           Map<String, dynamic> json) =>
-      _$Mutation$MountVolumeMutation$mountVolumeFromJson(json);
+      _$Mutation$MountVolume$mountVolumeFromJson(json);
 
   final int code;
 
@@ -947,7 +1065,7 @@ class Mutation$MountVolumeMutation$mountVolume {
   final String $__typename;
 
   Map<String, dynamic> toJson() =>
-      _$Mutation$MountVolumeMutation$mountVolumeToJson(this);
+      _$Mutation$MountVolume$mountVolumeToJson(this);
   int get hashCode {
     final l$code = code;
     final l$message = message;
@@ -959,7 +1077,7 @@ class Mutation$MountVolumeMutation$mountVolume {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Mutation$MountVolumeMutation$mountVolume) ||
+    if (!(other is Mutation$MountVolume$mountVolume) ||
         runtimeType != other.runtimeType) return false;
     final l$code = code;
     final lOther$code = other.code;
@@ -977,80 +1095,29 @@ class Mutation$MountVolumeMutation$mountVolume {
   }
 }
 
-extension UtilityExtension$Mutation$MountVolumeMutation$mountVolume
-    on Mutation$MountVolumeMutation$mountVolume {
-  CopyWith$Mutation$MountVolumeMutation$mountVolume<
-          Mutation$MountVolumeMutation$mountVolume>
-      get copyWith =>
-          CopyWith$Mutation$MountVolumeMutation$mountVolume(this, (i) => i);
-}
-
-abstract class CopyWith$Mutation$MountVolumeMutation$mountVolume<TRes> {
-  factory CopyWith$Mutation$MountVolumeMutation$mountVolume(
-          Mutation$MountVolumeMutation$mountVolume instance,
-          TRes Function(Mutation$MountVolumeMutation$mountVolume) then) =
-      _CopyWithImpl$Mutation$MountVolumeMutation$mountVolume;
-
-  factory CopyWith$Mutation$MountVolumeMutation$mountVolume.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$MountVolumeMutation$mountVolume;
-
-  TRes call({int? code, String? message, bool? success, String? $__typename});
-}
-
-class _CopyWithImpl$Mutation$MountVolumeMutation$mountVolume<TRes>
-    implements CopyWith$Mutation$MountVolumeMutation$mountVolume<TRes> {
-  _CopyWithImpl$Mutation$MountVolumeMutation$mountVolume(
-      this._instance, this._then);
-
-  final Mutation$MountVolumeMutation$mountVolume _instance;
-
-  final TRes Function(Mutation$MountVolumeMutation$mountVolume) _then;
-
-  static const _undefined = {};
-
-  TRes call(
-          {Object? code = _undefined,
-          Object? message = _undefined,
-          Object? success = _undefined,
-          Object? $__typename = _undefined}) =>
-      _then(Mutation$MountVolumeMutation$mountVolume(
-          code: code == _undefined || code == null
-              ? _instance.code
-              : (code as int),
-          message: message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-          success: success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-}
-
-class _CopyWithStubImpl$Mutation$MountVolumeMutation$mountVolume<TRes>
-    implements CopyWith$Mutation$MountVolumeMutation$mountVolume<TRes> {
-  _CopyWithStubImpl$Mutation$MountVolumeMutation$mountVolume(this._res);
-
-  TRes _res;
-
-  call({int? code, String? message, bool? success, String? $__typename}) =>
-      _res;
+extension UtilityExtension$Mutation$MountVolume$mountVolume
+    on Mutation$MountVolume$mountVolume {
+  Mutation$MountVolume$mountVolume copyWith(
+          {int? code, String? message, bool? success, String? $__typename}) =>
+      Mutation$MountVolume$mountVolume(
+          code: code == null ? this.code : code,
+          message: message == null ? this.message : message,
+          success: success == null ? this.success : success,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Variables$Mutation$ResizeVolumeMutation {
-  Variables$Mutation$ResizeVolumeMutation({required this.name});
+class Variables$Mutation$ResizeVolume {
+  Variables$Mutation$ResizeVolume({required this.name});
 
   @override
-  factory Variables$Mutation$ResizeVolumeMutation.fromJson(
-          Map<String, dynamic> json) =>
-      _$Variables$Mutation$ResizeVolumeMutationFromJson(json);
+  factory Variables$Mutation$ResizeVolume.fromJson(Map<String, dynamic> json) =>
+      _$Variables$Mutation$ResizeVolumeFromJson(json);
 
   final String name;
 
   Map<String, dynamic> toJson() =>
-      _$Variables$Mutation$ResizeVolumeMutationToJson(this);
+      _$Variables$Mutation$ResizeVolumeToJson(this);
   int get hashCode {
     final l$name = name;
     return Object.hashAll([l$name]);
@@ -1059,7 +1126,7 @@ class Variables$Mutation$ResizeVolumeMutation {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Variables$Mutation$ResizeVolumeMutation) ||
+    if (!(other is Variables$Mutation$ResizeVolume) ||
         runtimeType != other.runtimeType) return false;
     final l$name = name;
     final lOther$name = other.name;
@@ -1067,66 +1134,25 @@ class Variables$Mutation$ResizeVolumeMutation {
     return true;
   }
 
-  CopyWith$Variables$Mutation$ResizeVolumeMutation<
-          Variables$Mutation$ResizeVolumeMutation>
-      get copyWith =>
-          CopyWith$Variables$Mutation$ResizeVolumeMutation(this, (i) => i);
-}
-
-abstract class CopyWith$Variables$Mutation$ResizeVolumeMutation<TRes> {
-  factory CopyWith$Variables$Mutation$ResizeVolumeMutation(
-          Variables$Mutation$ResizeVolumeMutation instance,
-          TRes Function(Variables$Mutation$ResizeVolumeMutation) then) =
-      _CopyWithImpl$Variables$Mutation$ResizeVolumeMutation;
-
-  factory CopyWith$Variables$Mutation$ResizeVolumeMutation.stub(TRes res) =
-      _CopyWithStubImpl$Variables$Mutation$ResizeVolumeMutation;
-
-  TRes call({String? name});
-}
-
-class _CopyWithImpl$Variables$Mutation$ResizeVolumeMutation<TRes>
-    implements CopyWith$Variables$Mutation$ResizeVolumeMutation<TRes> {
-  _CopyWithImpl$Variables$Mutation$ResizeVolumeMutation(
-      this._instance, this._then);
-
-  final Variables$Mutation$ResizeVolumeMutation _instance;
-
-  final TRes Function(Variables$Mutation$ResizeVolumeMutation) _then;
-
-  static const _undefined = {};
-
-  TRes call({Object? name = _undefined}) =>
-      _then(Variables$Mutation$ResizeVolumeMutation(
-          name: name == _undefined || name == null
-              ? _instance.name
-              : (name as String)));
-}
-
-class _CopyWithStubImpl$Variables$Mutation$ResizeVolumeMutation<TRes>
-    implements CopyWith$Variables$Mutation$ResizeVolumeMutation<TRes> {
-  _CopyWithStubImpl$Variables$Mutation$ResizeVolumeMutation(this._res);
-
-  TRes _res;
-
-  call({String? name}) => _res;
+  Variables$Mutation$ResizeVolume copyWith({String? name}) =>
+      Variables$Mutation$ResizeVolume(name: name == null ? this.name : name);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Mutation$ResizeVolumeMutation {
-  Mutation$ResizeVolumeMutation(
+class Mutation$ResizeVolume {
+  Mutation$ResizeVolume(
       {required this.resizeVolume, required this.$__typename});
 
   @override
-  factory Mutation$ResizeVolumeMutation.fromJson(Map<String, dynamic> json) =>
-      _$Mutation$ResizeVolumeMutationFromJson(json);
+  factory Mutation$ResizeVolume.fromJson(Map<String, dynamic> json) =>
+      _$Mutation$ResizeVolumeFromJson(json);
 
-  final Mutation$ResizeVolumeMutation$resizeVolume resizeVolume;
+  final Mutation$ResizeVolume$resizeVolume resizeVolume;
 
   @JsonKey(name: '__typename')
   final String $__typename;
 
-  Map<String, dynamic> toJson() => _$Mutation$ResizeVolumeMutationToJson(this);
+  Map<String, dynamic> toJson() => _$Mutation$ResizeVolumeToJson(this);
   int get hashCode {
     final l$resizeVolume = resizeVolume;
     final l$$__typename = $__typename;
@@ -1136,8 +1162,8 @@ class Mutation$ResizeVolumeMutation {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Mutation$ResizeVolumeMutation) ||
-        runtimeType != other.runtimeType) return false;
+    if (!(other is Mutation$ResizeVolume) || runtimeType != other.runtimeType)
+      return false;
     final l$resizeVolume = resizeVolume;
     final lOther$resizeVolume = other.resizeVolume;
     if (l$resizeVolume != lOther$resizeVolume) return false;
@@ -1148,72 +1174,19 @@ class Mutation$ResizeVolumeMutation {
   }
 }
 
-extension UtilityExtension$Mutation$ResizeVolumeMutation
-    on Mutation$ResizeVolumeMutation {
-  CopyWith$Mutation$ResizeVolumeMutation<Mutation$ResizeVolumeMutation>
-      get copyWith => CopyWith$Mutation$ResizeVolumeMutation(this, (i) => i);
-}
-
-abstract class CopyWith$Mutation$ResizeVolumeMutation<TRes> {
-  factory CopyWith$Mutation$ResizeVolumeMutation(
-          Mutation$ResizeVolumeMutation instance,
-          TRes Function(Mutation$ResizeVolumeMutation) then) =
-      _CopyWithImpl$Mutation$ResizeVolumeMutation;
-
-  factory CopyWith$Mutation$ResizeVolumeMutation.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$ResizeVolumeMutation;
-
-  TRes call(
-      {Mutation$ResizeVolumeMutation$resizeVolume? resizeVolume,
-      String? $__typename});
-  CopyWith$Mutation$ResizeVolumeMutation$resizeVolume<TRes> get resizeVolume;
-}
-
-class _CopyWithImpl$Mutation$ResizeVolumeMutation<TRes>
-    implements CopyWith$Mutation$ResizeVolumeMutation<TRes> {
-  _CopyWithImpl$Mutation$ResizeVolumeMutation(this._instance, this._then);
-
-  final Mutation$ResizeVolumeMutation _instance;
-
-  final TRes Function(Mutation$ResizeVolumeMutation) _then;
-
-  static const _undefined = {};
-
-  TRes call(
-          {Object? resizeVolume = _undefined,
-          Object? $__typename = _undefined}) =>
-      _then(Mutation$ResizeVolumeMutation(
-          resizeVolume: resizeVolume == _undefined || resizeVolume == null
-              ? _instance.resizeVolume
-              : (resizeVolume as Mutation$ResizeVolumeMutation$resizeVolume),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-  CopyWith$Mutation$ResizeVolumeMutation$resizeVolume<TRes> get resizeVolume {
-    final local$resizeVolume = _instance.resizeVolume;
-    return CopyWith$Mutation$ResizeVolumeMutation$resizeVolume(
-        local$resizeVolume, (e) => call(resizeVolume: e));
-  }
-}
-
-class _CopyWithStubImpl$Mutation$ResizeVolumeMutation<TRes>
-    implements CopyWith$Mutation$ResizeVolumeMutation<TRes> {
-  _CopyWithStubImpl$Mutation$ResizeVolumeMutation(this._res);
-
-  TRes _res;
-
-  call(
-          {Mutation$ResizeVolumeMutation$resizeVolume? resizeVolume,
+extension UtilityExtension$Mutation$ResizeVolume on Mutation$ResizeVolume {
+  Mutation$ResizeVolume copyWith(
+          {Mutation$ResizeVolume$resizeVolume? resizeVolume,
           String? $__typename}) =>
-      _res;
-  CopyWith$Mutation$ResizeVolumeMutation$resizeVolume<TRes> get resizeVolume =>
-      CopyWith$Mutation$ResizeVolumeMutation$resizeVolume.stub(_res);
+      Mutation$ResizeVolume(
+          resizeVolume: resizeVolume == null ? this.resizeVolume : resizeVolume,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
 
-const documentNodeMutationResizeVolumeMutation = DocumentNode(definitions: [
+const documentNodeMutationResizeVolume = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.mutation,
-      name: NameNode(value: 'ResizeVolumeMutation'),
+      name: NameNode(value: 'ResizeVolume'),
       variableDefinitions: [
         VariableDefinitionNode(
             variable: VariableNode(name: NameNode(value: 'name')),
@@ -1234,24 +1207,9 @@ const documentNodeMutationResizeVolumeMutation = DocumentNode(definitions: [
             ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                  name: NameNode(value: 'code'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
-              FieldNode(
-                  name: NameNode(value: 'message'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
-              FieldNode(
-                  name: NameNode(value: 'success'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
+              FragmentSpreadNode(
+                  name: NameNode(value: 'basicMutationReturnFields'),
+                  directives: []),
               FieldNode(
                   name: NameNode(value: '__typename'),
                   alias: null,
@@ -1266,25 +1224,26 @@ const documentNodeMutationResizeVolumeMutation = DocumentNode(definitions: [
             directives: [],
             selectionSet: null)
       ])),
+  fragmentDefinitionbasicMutationReturnFields,
 ]);
-Mutation$ResizeVolumeMutation _parserFn$Mutation$ResizeVolumeMutation(
+Mutation$ResizeVolume _parserFn$Mutation$ResizeVolume(
         Map<String, dynamic> data) =>
-    Mutation$ResizeVolumeMutation.fromJson(data);
-typedef OnMutationCompleted$Mutation$ResizeVolumeMutation = FutureOr<void>
-    Function(dynamic, Mutation$ResizeVolumeMutation?);
+    Mutation$ResizeVolume.fromJson(data);
+typedef OnMutationCompleted$Mutation$ResizeVolume = FutureOr<void> Function(
+    dynamic, Mutation$ResizeVolume?);
 
-class Options$Mutation$ResizeVolumeMutation
-    extends graphql.MutationOptions<Mutation$ResizeVolumeMutation> {
-  Options$Mutation$ResizeVolumeMutation(
+class Options$Mutation$ResizeVolume
+    extends graphql.MutationOptions<Mutation$ResizeVolume> {
+  Options$Mutation$ResizeVolume(
       {String? operationName,
-      required Variables$Mutation$ResizeVolumeMutation variables,
+      required Variables$Mutation$ResizeVolume variables,
       graphql.FetchPolicy? fetchPolicy,
       graphql.ErrorPolicy? errorPolicy,
       graphql.CacheRereadPolicy? cacheRereadPolicy,
       Object? optimisticResult,
       graphql.Context? context,
-      OnMutationCompleted$Mutation$ResizeVolumeMutation? onCompleted,
-      graphql.OnMutationUpdate<Mutation$ResizeVolumeMutation>? update,
+      OnMutationCompleted$Mutation$ResizeVolume? onCompleted,
+      graphql.OnMutationUpdate<Mutation$ResizeVolume>? update,
       graphql.OnError? onError})
       : onCompletedWithParsed = onCompleted,
         super(
@@ -1301,14 +1260,13 @@ class Options$Mutation$ResizeVolumeMutation
                     data,
                     data == null
                         ? null
-                        : _parserFn$Mutation$ResizeVolumeMutation(data)),
+                        : _parserFn$Mutation$ResizeVolume(data)),
             update: update,
             onError: onError,
-            document: documentNodeMutationResizeVolumeMutation,
-            parserFn: _parserFn$Mutation$ResizeVolumeMutation);
+            document: documentNodeMutationResizeVolume,
+            parserFn: _parserFn$Mutation$ResizeVolume);
 
-  final OnMutationCompleted$Mutation$ResizeVolumeMutation?
-      onCompletedWithParsed;
+  final OnMutationCompleted$Mutation$ResizeVolume? onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
@@ -1319,11 +1277,11 @@ class Options$Mutation$ResizeVolumeMutation
       ];
 }
 
-class WatchOptions$Mutation$ResizeVolumeMutation
-    extends graphql.WatchQueryOptions<Mutation$ResizeVolumeMutation> {
-  WatchOptions$Mutation$ResizeVolumeMutation(
+class WatchOptions$Mutation$ResizeVolume
+    extends graphql.WatchQueryOptions<Mutation$ResizeVolume> {
+  WatchOptions$Mutation$ResizeVolume(
       {String? operationName,
-      required Variables$Mutation$ResizeVolumeMutation variables,
+      required Variables$Mutation$ResizeVolume variables,
       graphql.FetchPolicy? fetchPolicy,
       graphql.ErrorPolicy? errorPolicy,
       graphql.CacheRereadPolicy? cacheRereadPolicy,
@@ -1341,38 +1299,36 @@ class WatchOptions$Mutation$ResizeVolumeMutation
             cacheRereadPolicy: cacheRereadPolicy,
             optimisticResult: optimisticResult,
             context: context,
-            document: documentNodeMutationResizeVolumeMutation,
+            document: documentNodeMutationResizeVolume,
             pollInterval: pollInterval,
             eagerlyFetchResults: eagerlyFetchResults,
             carryForwardDataOnException: carryForwardDataOnException,
             fetchResults: fetchResults,
-            parserFn: _parserFn$Mutation$ResizeVolumeMutation);
+            parserFn: _parserFn$Mutation$ResizeVolume);
 }
 
-extension ClientExtension$Mutation$ResizeVolumeMutation
-    on graphql.GraphQLClient {
-  Future<graphql.QueryResult<Mutation$ResizeVolumeMutation>>
-      mutate$ResizeVolumeMutation(
-              Options$Mutation$ResizeVolumeMutation options) async =>
-          await this.mutate(options);
-  graphql.ObservableQuery<Mutation$ResizeVolumeMutation>
-      watchMutation$ResizeVolumeMutation(
-              WatchOptions$Mutation$ResizeVolumeMutation options) =>
-          this.watchMutation(options);
+extension ClientExtension$Mutation$ResizeVolume on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$ResizeVolume>> mutate$ResizeVolume(
+          Options$Mutation$ResizeVolume options) async =>
+      await this.mutate(options);
+  graphql.ObservableQuery<Mutation$ResizeVolume> watchMutation$ResizeVolume(
+          WatchOptions$Mutation$ResizeVolume options) =>
+      this.watchMutation(options);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Mutation$ResizeVolumeMutation$resizeVolume {
-  Mutation$ResizeVolumeMutation$resizeVolume(
+class Mutation$ResizeVolume$resizeVolume
+    implements Fragment$basicMutationReturnFields {
+  Mutation$ResizeVolume$resizeVolume(
       {required this.code,
       required this.message,
       required this.success,
       required this.$__typename});
 
   @override
-  factory Mutation$ResizeVolumeMutation$resizeVolume.fromJson(
+  factory Mutation$ResizeVolume$resizeVolume.fromJson(
           Map<String, dynamic> json) =>
-      _$Mutation$ResizeVolumeMutation$resizeVolumeFromJson(json);
+      _$Mutation$ResizeVolume$resizeVolumeFromJson(json);
 
   final int code;
 
@@ -1384,7 +1340,7 @@ class Mutation$ResizeVolumeMutation$resizeVolume {
   final String $__typename;
 
   Map<String, dynamic> toJson() =>
-      _$Mutation$ResizeVolumeMutation$resizeVolumeToJson(this);
+      _$Mutation$ResizeVolume$resizeVolumeToJson(this);
   int get hashCode {
     final l$code = code;
     final l$message = message;
@@ -1396,7 +1352,7 @@ class Mutation$ResizeVolumeMutation$resizeVolume {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Mutation$ResizeVolumeMutation$resizeVolume) ||
+    if (!(other is Mutation$ResizeVolume$resizeVolume) ||
         runtimeType != other.runtimeType) return false;
     final l$code = code;
     final lOther$code = other.code;
@@ -1414,80 +1370,30 @@ class Mutation$ResizeVolumeMutation$resizeVolume {
   }
 }
 
-extension UtilityExtension$Mutation$ResizeVolumeMutation$resizeVolume
-    on Mutation$ResizeVolumeMutation$resizeVolume {
-  CopyWith$Mutation$ResizeVolumeMutation$resizeVolume<
-          Mutation$ResizeVolumeMutation$resizeVolume>
-      get copyWith =>
-          CopyWith$Mutation$ResizeVolumeMutation$resizeVolume(this, (i) => i);
-}
-
-abstract class CopyWith$Mutation$ResizeVolumeMutation$resizeVolume<TRes> {
-  factory CopyWith$Mutation$ResizeVolumeMutation$resizeVolume(
-          Mutation$ResizeVolumeMutation$resizeVolume instance,
-          TRes Function(Mutation$ResizeVolumeMutation$resizeVolume) then) =
-      _CopyWithImpl$Mutation$ResizeVolumeMutation$resizeVolume;
-
-  factory CopyWith$Mutation$ResizeVolumeMutation$resizeVolume.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$ResizeVolumeMutation$resizeVolume;
-
-  TRes call({int? code, String? message, bool? success, String? $__typename});
-}
-
-class _CopyWithImpl$Mutation$ResizeVolumeMutation$resizeVolume<TRes>
-    implements CopyWith$Mutation$ResizeVolumeMutation$resizeVolume<TRes> {
-  _CopyWithImpl$Mutation$ResizeVolumeMutation$resizeVolume(
-      this._instance, this._then);
-
-  final Mutation$ResizeVolumeMutation$resizeVolume _instance;
-
-  final TRes Function(Mutation$ResizeVolumeMutation$resizeVolume) _then;
-
-  static const _undefined = {};
-
-  TRes call(
-          {Object? code = _undefined,
-          Object? message = _undefined,
-          Object? success = _undefined,
-          Object? $__typename = _undefined}) =>
-      _then(Mutation$ResizeVolumeMutation$resizeVolume(
-          code: code == _undefined || code == null
-              ? _instance.code
-              : (code as int),
-          message: message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-          success: success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-}
-
-class _CopyWithStubImpl$Mutation$ResizeVolumeMutation$resizeVolume<TRes>
-    implements CopyWith$Mutation$ResizeVolumeMutation$resizeVolume<TRes> {
-  _CopyWithStubImpl$Mutation$ResizeVolumeMutation$resizeVolume(this._res);
-
-  TRes _res;
-
-  call({int? code, String? message, bool? success, String? $__typename}) =>
-      _res;
+extension UtilityExtension$Mutation$ResizeVolume$resizeVolume
+    on Mutation$ResizeVolume$resizeVolume {
+  Mutation$ResizeVolume$resizeVolume copyWith(
+          {int? code, String? message, bool? success, String? $__typename}) =>
+      Mutation$ResizeVolume$resizeVolume(
+          code: code == null ? this.code : code,
+          message: message == null ? this.message : message,
+          success: success == null ? this.success : success,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Variables$Mutation$UnmountVolumeMutation {
-  Variables$Mutation$UnmountVolumeMutation({required this.name});
+class Variables$Mutation$UnmountVolume {
+  Variables$Mutation$UnmountVolume({required this.name});
 
   @override
-  factory Variables$Mutation$UnmountVolumeMutation.fromJson(
+  factory Variables$Mutation$UnmountVolume.fromJson(
           Map<String, dynamic> json) =>
-      _$Variables$Mutation$UnmountVolumeMutationFromJson(json);
+      _$Variables$Mutation$UnmountVolumeFromJson(json);
 
   final String name;
 
   Map<String, dynamic> toJson() =>
-      _$Variables$Mutation$UnmountVolumeMutationToJson(this);
+      _$Variables$Mutation$UnmountVolumeToJson(this);
   int get hashCode {
     final l$name = name;
     return Object.hashAll([l$name]);
@@ -1496,7 +1402,7 @@ class Variables$Mutation$UnmountVolumeMutation {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Variables$Mutation$UnmountVolumeMutation) ||
+    if (!(other is Variables$Mutation$UnmountVolume) ||
         runtimeType != other.runtimeType) return false;
     final l$name = name;
     final lOther$name = other.name;
@@ -1504,66 +1410,25 @@ class Variables$Mutation$UnmountVolumeMutation {
     return true;
   }
 
-  CopyWith$Variables$Mutation$UnmountVolumeMutation<
-          Variables$Mutation$UnmountVolumeMutation>
-      get copyWith =>
-          CopyWith$Variables$Mutation$UnmountVolumeMutation(this, (i) => i);
-}
-
-abstract class CopyWith$Variables$Mutation$UnmountVolumeMutation<TRes> {
-  factory CopyWith$Variables$Mutation$UnmountVolumeMutation(
-          Variables$Mutation$UnmountVolumeMutation instance,
-          TRes Function(Variables$Mutation$UnmountVolumeMutation) then) =
-      _CopyWithImpl$Variables$Mutation$UnmountVolumeMutation;
-
-  factory CopyWith$Variables$Mutation$UnmountVolumeMutation.stub(TRes res) =
-      _CopyWithStubImpl$Variables$Mutation$UnmountVolumeMutation;
-
-  TRes call({String? name});
-}
-
-class _CopyWithImpl$Variables$Mutation$UnmountVolumeMutation<TRes>
-    implements CopyWith$Variables$Mutation$UnmountVolumeMutation<TRes> {
-  _CopyWithImpl$Variables$Mutation$UnmountVolumeMutation(
-      this._instance, this._then);
-
-  final Variables$Mutation$UnmountVolumeMutation _instance;
-
-  final TRes Function(Variables$Mutation$UnmountVolumeMutation) _then;
-
-  static const _undefined = {};
-
-  TRes call({Object? name = _undefined}) =>
-      _then(Variables$Mutation$UnmountVolumeMutation(
-          name: name == _undefined || name == null
-              ? _instance.name
-              : (name as String)));
-}
-
-class _CopyWithStubImpl$Variables$Mutation$UnmountVolumeMutation<TRes>
-    implements CopyWith$Variables$Mutation$UnmountVolumeMutation<TRes> {
-  _CopyWithStubImpl$Variables$Mutation$UnmountVolumeMutation(this._res);
-
-  TRes _res;
-
-  call({String? name}) => _res;
+  Variables$Mutation$UnmountVolume copyWith({String? name}) =>
+      Variables$Mutation$UnmountVolume(name: name == null ? this.name : name);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Mutation$UnmountVolumeMutation {
-  Mutation$UnmountVolumeMutation(
+class Mutation$UnmountVolume {
+  Mutation$UnmountVolume(
       {required this.unmountVolume, required this.$__typename});
 
   @override
-  factory Mutation$UnmountVolumeMutation.fromJson(Map<String, dynamic> json) =>
-      _$Mutation$UnmountVolumeMutationFromJson(json);
+  factory Mutation$UnmountVolume.fromJson(Map<String, dynamic> json) =>
+      _$Mutation$UnmountVolumeFromJson(json);
 
-  final Mutation$UnmountVolumeMutation$unmountVolume unmountVolume;
+  final Mutation$UnmountVolume$unmountVolume unmountVolume;
 
   @JsonKey(name: '__typename')
   final String $__typename;
 
-  Map<String, dynamic> toJson() => _$Mutation$UnmountVolumeMutationToJson(this);
+  Map<String, dynamic> toJson() => _$Mutation$UnmountVolumeToJson(this);
   int get hashCode {
     final l$unmountVolume = unmountVolume;
     final l$$__typename = $__typename;
@@ -1573,8 +1438,8 @@ class Mutation$UnmountVolumeMutation {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Mutation$UnmountVolumeMutation) ||
-        runtimeType != other.runtimeType) return false;
+    if (!(other is Mutation$UnmountVolume) || runtimeType != other.runtimeType)
+      return false;
     final l$unmountVolume = unmountVolume;
     final lOther$unmountVolume = other.unmountVolume;
     if (l$unmountVolume != lOther$unmountVolume) return false;
@@ -1585,74 +1450,20 @@ class Mutation$UnmountVolumeMutation {
   }
 }
 
-extension UtilityExtension$Mutation$UnmountVolumeMutation
-    on Mutation$UnmountVolumeMutation {
-  CopyWith$Mutation$UnmountVolumeMutation<Mutation$UnmountVolumeMutation>
-      get copyWith => CopyWith$Mutation$UnmountVolumeMutation(this, (i) => i);
-}
-
-abstract class CopyWith$Mutation$UnmountVolumeMutation<TRes> {
-  factory CopyWith$Mutation$UnmountVolumeMutation(
-          Mutation$UnmountVolumeMutation instance,
-          TRes Function(Mutation$UnmountVolumeMutation) then) =
-      _CopyWithImpl$Mutation$UnmountVolumeMutation;
-
-  factory CopyWith$Mutation$UnmountVolumeMutation.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$UnmountVolumeMutation;
-
-  TRes call(
-      {Mutation$UnmountVolumeMutation$unmountVolume? unmountVolume,
-      String? $__typename});
-  CopyWith$Mutation$UnmountVolumeMutation$unmountVolume<TRes> get unmountVolume;
-}
-
-class _CopyWithImpl$Mutation$UnmountVolumeMutation<TRes>
-    implements CopyWith$Mutation$UnmountVolumeMutation<TRes> {
-  _CopyWithImpl$Mutation$UnmountVolumeMutation(this._instance, this._then);
-
-  final Mutation$UnmountVolumeMutation _instance;
-
-  final TRes Function(Mutation$UnmountVolumeMutation) _then;
-
-  static const _undefined = {};
-
-  TRes call(
-          {Object? unmountVolume = _undefined,
-          Object? $__typename = _undefined}) =>
-      _then(Mutation$UnmountVolumeMutation(
-          unmountVolume: unmountVolume == _undefined || unmountVolume == null
-              ? _instance.unmountVolume
-              : (unmountVolume as Mutation$UnmountVolumeMutation$unmountVolume),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-  CopyWith$Mutation$UnmountVolumeMutation$unmountVolume<TRes>
-      get unmountVolume {
-    final local$unmountVolume = _instance.unmountVolume;
-    return CopyWith$Mutation$UnmountVolumeMutation$unmountVolume(
-        local$unmountVolume, (e) => call(unmountVolume: e));
-  }
-}
-
-class _CopyWithStubImpl$Mutation$UnmountVolumeMutation<TRes>
-    implements CopyWith$Mutation$UnmountVolumeMutation<TRes> {
-  _CopyWithStubImpl$Mutation$UnmountVolumeMutation(this._res);
-
-  TRes _res;
-
-  call(
-          {Mutation$UnmountVolumeMutation$unmountVolume? unmountVolume,
+extension UtilityExtension$Mutation$UnmountVolume on Mutation$UnmountVolume {
+  Mutation$UnmountVolume copyWith(
+          {Mutation$UnmountVolume$unmountVolume? unmountVolume,
           String? $__typename}) =>
-      _res;
-  CopyWith$Mutation$UnmountVolumeMutation$unmountVolume<TRes>
-      get unmountVolume =>
-          CopyWith$Mutation$UnmountVolumeMutation$unmountVolume.stub(_res);
+      Mutation$UnmountVolume(
+          unmountVolume:
+              unmountVolume == null ? this.unmountVolume : unmountVolume,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
 
-const documentNodeMutationUnmountVolumeMutation = DocumentNode(definitions: [
+const documentNodeMutationUnmountVolume = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.mutation,
-      name: NameNode(value: 'UnmountVolumeMutation'),
+      name: NameNode(value: 'UnmountVolume'),
       variableDefinitions: [
         VariableDefinitionNode(
             variable: VariableNode(name: NameNode(value: 'name')),
@@ -1673,24 +1484,9 @@ const documentNodeMutationUnmountVolumeMutation = DocumentNode(definitions: [
             ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                  name: NameNode(value: 'code'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
-              FieldNode(
-                  name: NameNode(value: 'message'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
-              FieldNode(
-                  name: NameNode(value: 'success'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
+              FragmentSpreadNode(
+                  name: NameNode(value: 'basicMutationReturnFields'),
+                  directives: []),
               FieldNode(
                   name: NameNode(value: '__typename'),
                   alias: null,
@@ -1705,25 +1501,26 @@ const documentNodeMutationUnmountVolumeMutation = DocumentNode(definitions: [
             directives: [],
             selectionSet: null)
       ])),
+  fragmentDefinitionbasicMutationReturnFields,
 ]);
-Mutation$UnmountVolumeMutation _parserFn$Mutation$UnmountVolumeMutation(
+Mutation$UnmountVolume _parserFn$Mutation$UnmountVolume(
         Map<String, dynamic> data) =>
-    Mutation$UnmountVolumeMutation.fromJson(data);
-typedef OnMutationCompleted$Mutation$UnmountVolumeMutation = FutureOr<void>
-    Function(dynamic, Mutation$UnmountVolumeMutation?);
+    Mutation$UnmountVolume.fromJson(data);
+typedef OnMutationCompleted$Mutation$UnmountVolume = FutureOr<void> Function(
+    dynamic, Mutation$UnmountVolume?);
 
-class Options$Mutation$UnmountVolumeMutation
-    extends graphql.MutationOptions<Mutation$UnmountVolumeMutation> {
-  Options$Mutation$UnmountVolumeMutation(
+class Options$Mutation$UnmountVolume
+    extends graphql.MutationOptions<Mutation$UnmountVolume> {
+  Options$Mutation$UnmountVolume(
       {String? operationName,
-      required Variables$Mutation$UnmountVolumeMutation variables,
+      required Variables$Mutation$UnmountVolume variables,
       graphql.FetchPolicy? fetchPolicy,
       graphql.ErrorPolicy? errorPolicy,
       graphql.CacheRereadPolicy? cacheRereadPolicy,
       Object? optimisticResult,
       graphql.Context? context,
-      OnMutationCompleted$Mutation$UnmountVolumeMutation? onCompleted,
-      graphql.OnMutationUpdate<Mutation$UnmountVolumeMutation>? update,
+      OnMutationCompleted$Mutation$UnmountVolume? onCompleted,
+      graphql.OnMutationUpdate<Mutation$UnmountVolume>? update,
       graphql.OnError? onError})
       : onCompletedWithParsed = onCompleted,
         super(
@@ -1740,14 +1537,13 @@ class Options$Mutation$UnmountVolumeMutation
                     data,
                     data == null
                         ? null
-                        : _parserFn$Mutation$UnmountVolumeMutation(data)),
+                        : _parserFn$Mutation$UnmountVolume(data)),
             update: update,
             onError: onError,
-            document: documentNodeMutationUnmountVolumeMutation,
-            parserFn: _parserFn$Mutation$UnmountVolumeMutation);
+            document: documentNodeMutationUnmountVolume,
+            parserFn: _parserFn$Mutation$UnmountVolume);
 
-  final OnMutationCompleted$Mutation$UnmountVolumeMutation?
-      onCompletedWithParsed;
+  final OnMutationCompleted$Mutation$UnmountVolume? onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
@@ -1758,11 +1554,11 @@ class Options$Mutation$UnmountVolumeMutation
       ];
 }
 
-class WatchOptions$Mutation$UnmountVolumeMutation
-    extends graphql.WatchQueryOptions<Mutation$UnmountVolumeMutation> {
-  WatchOptions$Mutation$UnmountVolumeMutation(
+class WatchOptions$Mutation$UnmountVolume
+    extends graphql.WatchQueryOptions<Mutation$UnmountVolume> {
+  WatchOptions$Mutation$UnmountVolume(
       {String? operationName,
-      required Variables$Mutation$UnmountVolumeMutation variables,
+      required Variables$Mutation$UnmountVolume variables,
       graphql.FetchPolicy? fetchPolicy,
       graphql.ErrorPolicy? errorPolicy,
       graphql.CacheRereadPolicy? cacheRereadPolicy,
@@ -1780,38 +1576,36 @@ class WatchOptions$Mutation$UnmountVolumeMutation
             cacheRereadPolicy: cacheRereadPolicy,
             optimisticResult: optimisticResult,
             context: context,
-            document: documentNodeMutationUnmountVolumeMutation,
+            document: documentNodeMutationUnmountVolume,
             pollInterval: pollInterval,
             eagerlyFetchResults: eagerlyFetchResults,
             carryForwardDataOnException: carryForwardDataOnException,
             fetchResults: fetchResults,
-            parserFn: _parserFn$Mutation$UnmountVolumeMutation);
+            parserFn: _parserFn$Mutation$UnmountVolume);
 }
 
-extension ClientExtension$Mutation$UnmountVolumeMutation
-    on graphql.GraphQLClient {
-  Future<graphql.QueryResult<Mutation$UnmountVolumeMutation>>
-      mutate$UnmountVolumeMutation(
-              Options$Mutation$UnmountVolumeMutation options) async =>
-          await this.mutate(options);
-  graphql.ObservableQuery<Mutation$UnmountVolumeMutation>
-      watchMutation$UnmountVolumeMutation(
-              WatchOptions$Mutation$UnmountVolumeMutation options) =>
-          this.watchMutation(options);
+extension ClientExtension$Mutation$UnmountVolume on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$UnmountVolume>> mutate$UnmountVolume(
+          Options$Mutation$UnmountVolume options) async =>
+      await this.mutate(options);
+  graphql.ObservableQuery<Mutation$UnmountVolume> watchMutation$UnmountVolume(
+          WatchOptions$Mutation$UnmountVolume options) =>
+      this.watchMutation(options);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Mutation$UnmountVolumeMutation$unmountVolume {
-  Mutation$UnmountVolumeMutation$unmountVolume(
+class Mutation$UnmountVolume$unmountVolume
+    implements Fragment$basicMutationReturnFields {
+  Mutation$UnmountVolume$unmountVolume(
       {required this.code,
       required this.message,
       required this.success,
       required this.$__typename});
 
   @override
-  factory Mutation$UnmountVolumeMutation$unmountVolume.fromJson(
+  factory Mutation$UnmountVolume$unmountVolume.fromJson(
           Map<String, dynamic> json) =>
-      _$Mutation$UnmountVolumeMutation$unmountVolumeFromJson(json);
+      _$Mutation$UnmountVolume$unmountVolumeFromJson(json);
 
   final int code;
 
@@ -1823,7 +1617,7 @@ class Mutation$UnmountVolumeMutation$unmountVolume {
   final String $__typename;
 
   Map<String, dynamic> toJson() =>
-      _$Mutation$UnmountVolumeMutation$unmountVolumeToJson(this);
+      _$Mutation$UnmountVolume$unmountVolumeToJson(this);
   int get hashCode {
     final l$code = code;
     final l$message = message;
@@ -1835,7 +1629,7 @@ class Mutation$UnmountVolumeMutation$unmountVolume {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (!(other is Mutation$UnmountVolumeMutation$unmountVolume) ||
+    if (!(other is Mutation$UnmountVolume$unmountVolume) ||
         runtimeType != other.runtimeType) return false;
     final l$code = code;
     final lOther$code = other.code;
@@ -1853,63 +1647,544 @@ class Mutation$UnmountVolumeMutation$unmountVolume {
   }
 }
 
-extension UtilityExtension$Mutation$UnmountVolumeMutation$unmountVolume
-    on Mutation$UnmountVolumeMutation$unmountVolume {
-  CopyWith$Mutation$UnmountVolumeMutation$unmountVolume<
-          Mutation$UnmountVolumeMutation$unmountVolume>
-      get copyWith =>
-          CopyWith$Mutation$UnmountVolumeMutation$unmountVolume(this, (i) => i);
+extension UtilityExtension$Mutation$UnmountVolume$unmountVolume
+    on Mutation$UnmountVolume$unmountVolume {
+  Mutation$UnmountVolume$unmountVolume copyWith(
+          {int? code, String? message, bool? success, String? $__typename}) =>
+      Mutation$UnmountVolume$unmountVolume(
+          code: code == null ? this.code : code,
+          message: message == null ? this.message : message,
+          success: success == null ? this.success : success,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
 
-abstract class CopyWith$Mutation$UnmountVolumeMutation$unmountVolume<TRes> {
-  factory CopyWith$Mutation$UnmountVolumeMutation$unmountVolume(
-          Mutation$UnmountVolumeMutation$unmountVolume instance,
-          TRes Function(Mutation$UnmountVolumeMutation$unmountVolume) then) =
-      _CopyWithImpl$Mutation$UnmountVolumeMutation$unmountVolume;
+@JsonSerializable(explicitToJson: true)
+class Variables$Mutation$MigrateToBinds {
+  Variables$Mutation$MigrateToBinds({required this.input});
 
-  factory CopyWith$Mutation$UnmountVolumeMutation$unmountVolume.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$UnmountVolumeMutation$unmountVolume;
+  @override
+  factory Variables$Mutation$MigrateToBinds.fromJson(
+          Map<String, dynamic> json) =>
+      _$Variables$Mutation$MigrateToBindsFromJson(json);
 
-  TRes call({int? code, String? message, bool? success, String? $__typename});
+  final Input$MigrateToBindsInput input;
+
+  Map<String, dynamic> toJson() =>
+      _$Variables$Mutation$MigrateToBindsToJson(this);
+  int get hashCode {
+    final l$input = input;
+    return Object.hashAll([l$input]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Variables$Mutation$MigrateToBinds) ||
+        runtimeType != other.runtimeType) return false;
+    final l$input = input;
+    final lOther$input = other.input;
+    if (l$input != lOther$input) return false;
+    return true;
+  }
+
+  Variables$Mutation$MigrateToBinds copyWith(
+          {Input$MigrateToBindsInput? input}) =>
+      Variables$Mutation$MigrateToBinds(
+          input: input == null ? this.input : input);
 }
 
-class _CopyWithImpl$Mutation$UnmountVolumeMutation$unmountVolume<TRes>
-    implements CopyWith$Mutation$UnmountVolumeMutation$unmountVolume<TRes> {
-  _CopyWithImpl$Mutation$UnmountVolumeMutation$unmountVolume(
-      this._instance, this._then);
+@JsonSerializable(explicitToJson: true)
+class Mutation$MigrateToBinds {
+  Mutation$MigrateToBinds(
+      {required this.migrateToBinds, required this.$__typename});
 
-  final Mutation$UnmountVolumeMutation$unmountVolume _instance;
+  @override
+  factory Mutation$MigrateToBinds.fromJson(Map<String, dynamic> json) =>
+      _$Mutation$MigrateToBindsFromJson(json);
 
-  final TRes Function(Mutation$UnmountVolumeMutation$unmountVolume) _then;
+  final Mutation$MigrateToBinds$migrateToBinds migrateToBinds;
 
-  static const _undefined = {};
+  @JsonKey(name: '__typename')
+  final String $__typename;
 
-  TRes call(
-          {Object? code = _undefined,
-          Object? message = _undefined,
-          Object? success = _undefined,
-          Object? $__typename = _undefined}) =>
-      _then(Mutation$UnmountVolumeMutation$unmountVolume(
-          code: code == _undefined || code == null
-              ? _instance.code
-              : (code as int),
-          message: message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-          success: success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
+  Map<String, dynamic> toJson() => _$Mutation$MigrateToBindsToJson(this);
+  int get hashCode {
+    final l$migrateToBinds = migrateToBinds;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$migrateToBinds, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Mutation$MigrateToBinds) || runtimeType != other.runtimeType)
+      return false;
+    final l$migrateToBinds = migrateToBinds;
+    final lOther$migrateToBinds = other.migrateToBinds;
+    if (l$migrateToBinds != lOther$migrateToBinds) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
 }
 
-class _CopyWithStubImpl$Mutation$UnmountVolumeMutation$unmountVolume<TRes>
-    implements CopyWith$Mutation$UnmountVolumeMutation$unmountVolume<TRes> {
-  _CopyWithStubImpl$Mutation$UnmountVolumeMutation$unmountVolume(this._res);
-
-  TRes _res;
-
-  call({int? code, String? message, bool? success, String? $__typename}) =>
-      _res;
+extension UtilityExtension$Mutation$MigrateToBinds on Mutation$MigrateToBinds {
+  Mutation$MigrateToBinds copyWith(
+          {Mutation$MigrateToBinds$migrateToBinds? migrateToBinds,
+          String? $__typename}) =>
+      Mutation$MigrateToBinds(
+          migrateToBinds:
+              migrateToBinds == null ? this.migrateToBinds : migrateToBinds,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
 }
+
+const documentNodeMutationMigrateToBinds = DocumentNode(definitions: [
+  OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'MigrateToBinds'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'input')),
+            type: NamedTypeNode(
+                name: NameNode(value: 'MigrateToBindsInput'), isNonNull: true),
+            defaultValue: DefaultValueNode(value: null),
+            directives: [])
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(selections: [
+        FieldNode(
+            name: NameNode(value: 'migrateToBinds'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                  name: NameNode(value: 'input'),
+                  value: VariableNode(name: NameNode(value: 'input')))
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                  name: NameNode(value: 'basicMutationReturnFields'),
+                  directives: []),
+              FieldNode(
+                  name: NameNode(value: 'job'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: SelectionSetNode(selections: [
+                    FieldNode(
+                        name: NameNode(value: 'createdAt'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'description'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'error'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'finishedAt'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'name'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'progress'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'result'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'status'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'statusText'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'uid'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'updatedAt'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null)
+                  ])),
+              FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null)
+            ])),
+        FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null)
+      ])),
+  fragmentDefinitionbasicMutationReturnFields,
+]);
+Mutation$MigrateToBinds _parserFn$Mutation$MigrateToBinds(
+        Map<String, dynamic> data) =>
+    Mutation$MigrateToBinds.fromJson(data);
+typedef OnMutationCompleted$Mutation$MigrateToBinds = FutureOr<void> Function(
+    dynamic, Mutation$MigrateToBinds?);
+
+class Options$Mutation$MigrateToBinds
+    extends graphql.MutationOptions<Mutation$MigrateToBinds> {
+  Options$Mutation$MigrateToBinds(
+      {String? operationName,
+      required Variables$Mutation$MigrateToBinds variables,
+      graphql.FetchPolicy? fetchPolicy,
+      graphql.ErrorPolicy? errorPolicy,
+      graphql.CacheRereadPolicy? cacheRereadPolicy,
+      Object? optimisticResult,
+      graphql.Context? context,
+      OnMutationCompleted$Mutation$MigrateToBinds? onCompleted,
+      graphql.OnMutationUpdate<Mutation$MigrateToBinds>? update,
+      graphql.OnError? onError})
+      : onCompletedWithParsed = onCompleted,
+        super(
+            variables: variables.toJson(),
+            operationName: operationName,
+            fetchPolicy: fetchPolicy,
+            errorPolicy: errorPolicy,
+            cacheRereadPolicy: cacheRereadPolicy,
+            optimisticResult: optimisticResult,
+            context: context,
+            onCompleted: onCompleted == null
+                ? null
+                : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$MigrateToBinds(data)),
+            update: update,
+            onError: onError,
+            document: documentNodeMutationMigrateToBinds,
+            parserFn: _parserFn$Mutation$MigrateToBinds);
+
+  final OnMutationCompleted$Mutation$MigrateToBinds? onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed
+      ];
+}
+
+class WatchOptions$Mutation$MigrateToBinds
+    extends graphql.WatchQueryOptions<Mutation$MigrateToBinds> {
+  WatchOptions$Mutation$MigrateToBinds(
+      {String? operationName,
+      required Variables$Mutation$MigrateToBinds variables,
+      graphql.FetchPolicy? fetchPolicy,
+      graphql.ErrorPolicy? errorPolicy,
+      graphql.CacheRereadPolicy? cacheRereadPolicy,
+      Object? optimisticResult,
+      graphql.Context? context,
+      Duration? pollInterval,
+      bool? eagerlyFetchResults,
+      bool carryForwardDataOnException = true,
+      bool fetchResults = false})
+      : super(
+            variables: variables.toJson(),
+            operationName: operationName,
+            fetchPolicy: fetchPolicy,
+            errorPolicy: errorPolicy,
+            cacheRereadPolicy: cacheRereadPolicy,
+            optimisticResult: optimisticResult,
+            context: context,
+            document: documentNodeMutationMigrateToBinds,
+            pollInterval: pollInterval,
+            eagerlyFetchResults: eagerlyFetchResults,
+            carryForwardDataOnException: carryForwardDataOnException,
+            fetchResults: fetchResults,
+            parserFn: _parserFn$Mutation$MigrateToBinds);
+}
+
+extension ClientExtension$Mutation$MigrateToBinds on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$MigrateToBinds>> mutate$MigrateToBinds(
+          Options$Mutation$MigrateToBinds options) async =>
+      await this.mutate(options);
+  graphql.ObservableQuery<Mutation$MigrateToBinds> watchMutation$MigrateToBinds(
+          WatchOptions$Mutation$MigrateToBinds options) =>
+      this.watchMutation(options);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Mutation$MigrateToBinds$migrateToBinds
+    implements Fragment$basicMutationReturnFields {
+  Mutation$MigrateToBinds$migrateToBinds(
+      {required this.code,
+      required this.message,
+      required this.success,
+      required this.$__typename,
+      this.job});
+
+  @override
+  factory Mutation$MigrateToBinds$migrateToBinds.fromJson(
+          Map<String, dynamic> json) =>
+      _$Mutation$MigrateToBinds$migrateToBindsFromJson(json);
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  final Mutation$MigrateToBinds$migrateToBinds$job? job;
+
+  Map<String, dynamic> toJson() =>
+      _$Mutation$MigrateToBinds$migrateToBindsToJson(this);
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    final l$job = job;
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename, l$job]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Mutation$MigrateToBinds$migrateToBinds) ||
+        runtimeType != other.runtimeType) return false;
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) return false;
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) return false;
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    final l$job = job;
+    final lOther$job = other.job;
+    if (l$job != lOther$job) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$MigrateToBinds$migrateToBinds
+    on Mutation$MigrateToBinds$migrateToBinds {
+  Mutation$MigrateToBinds$migrateToBinds copyWith(
+          {int? code,
+          String? message,
+          bool? success,
+          String? $__typename,
+          Mutation$MigrateToBinds$migrateToBinds$job? Function()? job}) =>
+      Mutation$MigrateToBinds$migrateToBinds(
+          code: code == null ? this.code : code,
+          message: message == null ? this.message : message,
+          success: success == null ? this.success : success,
+          $__typename: $__typename == null ? this.$__typename : $__typename,
+          job: job == null ? this.job : job());
+}
+
+@JsonSerializable(explicitToJson: true)
+class Mutation$MigrateToBinds$migrateToBinds$job {
+  Mutation$MigrateToBinds$migrateToBinds$job(
+      {required this.createdAt,
+      required this.description,
+      this.error,
+      this.finishedAt,
+      required this.name,
+      this.progress,
+      this.result,
+      required this.status,
+      this.statusText,
+      required this.uid,
+      required this.updatedAt,
+      required this.$__typename});
+
+  @override
+  factory Mutation$MigrateToBinds$migrateToBinds$job.fromJson(
+          Map<String, dynamic> json) =>
+      _$Mutation$MigrateToBinds$migrateToBinds$jobFromJson(json);
+
+  @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
+  final DateTime createdAt;
+
+  final String description;
+
+  final String? error;
+
+  @JsonKey(
+      fromJson: _nullable$dateTimeFromJson, toJson: _nullable$dateTimeToJson)
+  final DateTime? finishedAt;
+
+  final String name;
+
+  final int? progress;
+
+  final String? result;
+
+  final String status;
+
+  final String? statusText;
+
+  final String uid;
+
+  @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
+  final DateTime updatedAt;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() =>
+      _$Mutation$MigrateToBinds$migrateToBinds$jobToJson(this);
+  int get hashCode {
+    final l$createdAt = createdAt;
+    final l$description = description;
+    final l$error = error;
+    final l$finishedAt = finishedAt;
+    final l$name = name;
+    final l$progress = progress;
+    final l$result = result;
+    final l$status = status;
+    final l$statusText = statusText;
+    final l$uid = uid;
+    final l$updatedAt = updatedAt;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$createdAt,
+      l$description,
+      l$error,
+      l$finishedAt,
+      l$name,
+      l$progress,
+      l$result,
+      l$status,
+      l$statusText,
+      l$uid,
+      l$updatedAt,
+      l$$__typename
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Mutation$MigrateToBinds$migrateToBinds$job) ||
+        runtimeType != other.runtimeType) return false;
+    final l$createdAt = createdAt;
+    final lOther$createdAt = other.createdAt;
+    if (l$createdAt != lOther$createdAt) return false;
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) return false;
+    final l$error = error;
+    final lOther$error = other.error;
+    if (l$error != lOther$error) return false;
+    final l$finishedAt = finishedAt;
+    final lOther$finishedAt = other.finishedAt;
+    if (l$finishedAt != lOther$finishedAt) return false;
+    final l$name = name;
+    final lOther$name = other.name;
+    if (l$name != lOther$name) return false;
+    final l$progress = progress;
+    final lOther$progress = other.progress;
+    if (l$progress != lOther$progress) return false;
+    final l$result = result;
+    final lOther$result = other.result;
+    if (l$result != lOther$result) return false;
+    final l$status = status;
+    final lOther$status = other.status;
+    if (l$status != lOther$status) return false;
+    final l$statusText = statusText;
+    final lOther$statusText = other.statusText;
+    if (l$statusText != lOther$statusText) return false;
+    final l$uid = uid;
+    final lOther$uid = other.uid;
+    if (l$uid != lOther$uid) return false;
+    final l$updatedAt = updatedAt;
+    final lOther$updatedAt = other.updatedAt;
+    if (l$updatedAt != lOther$updatedAt) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$MigrateToBinds$migrateToBinds$job
+    on Mutation$MigrateToBinds$migrateToBinds$job {
+  Mutation$MigrateToBinds$migrateToBinds$job copyWith(
+          {DateTime? createdAt,
+          String? description,
+          String? Function()? error,
+          DateTime? Function()? finishedAt,
+          String? name,
+          int? Function()? progress,
+          String? Function()? result,
+          String? status,
+          String? Function()? statusText,
+          String? uid,
+          DateTime? updatedAt,
+          String? $__typename}) =>
+      Mutation$MigrateToBinds$migrateToBinds$job(
+          createdAt: createdAt == null ? this.createdAt : createdAt,
+          description: description == null ? this.description : description,
+          error: error == null ? this.error : error(),
+          finishedAt: finishedAt == null ? this.finishedAt : finishedAt(),
+          name: name == null ? this.name : name,
+          progress: progress == null ? this.progress : progress(),
+          result: result == null ? this.result : result(),
+          status: status == null ? this.status : status,
+          statusText: statusText == null ? this.statusText : statusText(),
+          uid: uid == null ? this.uid : uid,
+          updatedAt: updatedAt == null ? this.updatedAt : updatedAt,
+          $__typename: $__typename == null ? this.$__typename : $__typename);
+}
+
+DateTime? _nullable$dateTimeFromJson(dynamic data) =>
+    data == null ? null : dateTimeFromJson(data);
+dynamic _nullable$dateTimeToJson(DateTime? data) =>
+    data == null ? null : dateTimeToJson(data);

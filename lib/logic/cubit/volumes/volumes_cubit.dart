@@ -12,12 +12,16 @@ part 'volumes_state.dart';
 class ApiVolumesCubit
     extends ServerInstallationDependendCubit<ApiVolumesState> {
   ApiVolumesCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(serverInstallationCubit, const ApiVolumesState.initial());
+      : super(serverInstallationCubit, const ApiVolumesState.initial()) {
+    final serverDetails = getIt<ApiConfigModel>().serverDetails;
+    providerApi = serverDetails == null
+        ? null
+        : VolumeApiFactoryCreator.createVolumeProviderApiFactory(
+            getIt<ApiConfigModel>().serverDetails!.provider,
+          );
+  }
 
-  final VolumeProviderApiFactory providerApi =
-      VolumeApiFactoryCreator.createVolumeProviderApiFactory(
-    getIt<ApiConfigModel>().serverDetails!.provider,
-  );
+  VolumeProviderApiFactory? providerApi;
 
   @override
   Future<void> load() async {
@@ -26,8 +30,16 @@ class ApiVolumesCubit
     }
   }
 
+  Future<List<ServerVolume>> getVolumes() async {
+    if (providerApi == null) {
+      return [];
+    }
+
+    return providerApi!.getVolumeProvider().getVolumes();
+  }
+
   Future<double?> getPricePerGb() async =>
-      providerApi.getVolumeProvider().getPricePerGb();
+      providerApi!.getVolumeProvider().getPricePerGb();
 
   Future<void> refresh() async {
     emit(const ApiVolumesState([], LoadingStatus.refreshing));
@@ -35,8 +47,7 @@ class ApiVolumesCubit
   }
 
   Future<void> _refetch() async {
-    final List<ServerVolume> volumes =
-        await providerApi.getVolumeProvider().getVolumes();
+    final List<ServerVolume> volumes = await getVolumes();
     if (volumes.isNotEmpty) {
       emit(ApiVolumesState(volumes, LoadingStatus.success));
     } else {
@@ -46,12 +57,12 @@ class ApiVolumesCubit
 
   Future<void> attachVolume(final ServerVolume volume) async {
     final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
-    await providerApi.getVolumeProvider().attachVolume(volume.id, server.id);
+    await providerApi!.getVolumeProvider().attachVolume(volume.id, server.id);
     refresh();
   }
 
   Future<void> detachVolume(final ServerVolume volume) async {
-    await providerApi.getVolumeProvider().detachVolume(volume.id);
+    await providerApi!.getVolumeProvider().detachVolume(volume.id);
     refresh();
   }
 
@@ -60,7 +71,7 @@ class ApiVolumesCubit
     final int newSizeGb,
   ) async {
     final ServerVolume? providerVolume = await fetchProdiverVolume(volume);
-    final bool resized = await providerApi.getVolumeProvider().resizeVolume(
+    final bool resized = await providerApi!.getVolumeProvider().resizeVolume(
           providerVolume!.id,
           newSizeGb,
         );
@@ -76,7 +87,7 @@ class ApiVolumesCubit
 
   Future<void> createVolume() async {
     final ServerVolume? volume =
-        await providerApi.getVolumeProvider().createVolume();
+        await providerApi!.getVolumeProvider().createVolume();
     await attachVolume(volume!);
 
     await Future.delayed(const Duration(seconds: 10));
@@ -88,7 +99,7 @@ class ApiVolumesCubit
 
   Future<void> deleteVolume(final ServerDiskVolume volume) async {
     final ServerVolume? providerVolume = await fetchProdiverVolume(volume);
-    await providerApi.getVolumeProvider().deleteVolume(providerVolume!.id);
+    await providerApi!.getVolumeProvider().deleteVolume(providerVolume!.id);
     refresh();
   }
 
@@ -102,7 +113,7 @@ class ApiVolumesCubit
   ) async {
     ServerVolume? fetchedVolume;
     final List<ServerVolume> volumes =
-        await providerApi.getVolumeProvider().getVolumes();
+        await providerApi!.getVolumeProvider().getVolumes();
 
     for (final ServerVolume providerVolume in volumes) {
       if (providerVolume.linuxDevice == null) {

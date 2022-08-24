@@ -11,7 +11,7 @@ class _NewSshKey extends StatelessWidget {
             final jobCubit = context.read<JobsCubit>();
             final jobState = jobCubit.state;
             if (jobState is JobsStateWithJobs) {
-              final jobs = jobState.jobList;
+              final jobs = jobState.clientJobList;
               for (final job in jobs) {
                 if (job is CreateSSHKeyJob && job.user.login == user.login) {
                   user.sshKeys.add(job.publicKey);

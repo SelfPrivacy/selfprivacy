@@ -83,10 +83,14 @@ class _ProgressBarState extends State<ProgressBar> {
               height: 5,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                gradient: const LinearGradient(
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: BrandColors.stableGradientColors,
+                  colors: [
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.secondary
+                  ],
                 ),
               ),
               duration: const Duration(
@@ -122,15 +126,7 @@ class _ProgressBarState extends State<ProgressBar> {
         text: TextSpan(
           style: progressTextStyleLight,
           children: [
-            if (checked)
-              const WidgetSpan(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 2, right: 2),
-                  child: Icon(BrandIcons.check, size: 11),
-                ),
-              )
-            else
-              TextSpan(text: '${index + 1}.', style: style),
+            TextSpan(text: '${index + 1}.', style: style),
             TextSpan(text: step, style: style)
           ],
         ),

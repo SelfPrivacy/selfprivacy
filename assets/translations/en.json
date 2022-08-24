@@ -256,6 +256,15 @@
       "bottom_sheet": {
         "1": "Openconnect VPN Server. Engine for secure and scalable VPN infrastructure"
       }
+    },
+    "page": {
+      "up_and_running": "Up and running",
+      "resource_usage": "Resource usage",
+      "disk_used": "{} of disk space used",
+      "users": "Users",
+      "controlled_by": "Controlled by {}",
+      "apps": "Apps",
+      "settings": "Settings and maintenance"
     }
   },
   "users": {
@@ -395,8 +404,10 @@
   },
   "modals": {
     "_comment": "messages in modals",
-    "1": "Server with such name, already exist",
+    "1": "Server with such name, already exist.",
+    "1_1": "Unexpected error during placement from the provider side.",
     "2": "Destroy server and create a new one?",
+    "2_2": "Try again?",
     "3": "Are you sure?",
     "4": "Purge all authentication keys?",
     "5": "Yes, purge all my tokens",

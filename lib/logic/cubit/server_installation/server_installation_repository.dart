@@ -292,6 +292,43 @@ class ServerInstallationRepository {
             ],
           ),
         );
+      } else if (e.response!.data['error']['code'] == 'resource_unavailable') {
+        final NavigationService nav = getIt.get<NavigationService>();
+        nav.showPopUpDialog(
+          BrandAlert(
+            title: 'modals.1_1'.tr(),
+            contentText: 'modals.2_2'.tr(),
+            actions: [
+              ActionButton(
+                text: 'modals.7'.tr(),
+                isRed: true,
+                onPressed: () async {
+                  ServerHostingDetails? serverDetails;
+                  try {
+                    serverDetails = await api.createServer(
+                      dnsApiToken: cloudFlareKey,
+                      rootUser: rootUser,
+                      domainName: domainName,
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
+
+                  if (serverDetails == null) {
+                    print('Server is not initialized!');
+                    return;
+                  }
+                  await saveServerDetails(serverDetails);
+                  onSuccess(serverDetails);
+                },
+              ),
+              ActionButton(
+                text: 'basis.cancel'.tr(),
+                onPressed: onCancel,
+              ),
+            ],
+          ),
+        );
       }
     }
   }

@@ -1,4 +1,10 @@
-query GetServerDiskVolumesQuery {
+fragment basicMutationReturnFields on MutationReturnInterface{
+  code
+  message
+  success
+}
+
+query GetServerDiskVolumes {
   storage {
     volumes {
       freeSpace
@@ -8,31 +14,56 @@ query GetServerDiskVolumesQuery {
       serial
       totalSpace
       type
+      usages {
+        title
+        usedSpace
+        __typename
+        ... on ServiceStorageUsage {
+          service {
+            id
+            isMovable
+            displayName
+          }
+        }
+      }
       usedSpace
     }
   }
 }
 
-mutation MountVolumeMutation($name: String!) {
+mutation MountVolume($name: String!) {
   mountVolume(name: $name) {
-    code
-    message
-    success
+    ...basicMutationReturnFields
   }
 }
 
-mutation ResizeVolumeMutation($name: String!) {
+mutation ResizeVolume($name: String!) {
   resizeVolume(name: $name) {
-    code
-    message
-    success
+    ...basicMutationReturnFields
   }
 }
 
-mutation UnmountVolumeMutation($name: String!) {
+mutation UnmountVolume($name: String!) {
   unmountVolume(name: $name) {
-    code
-    message
-    success
+    ...basicMutationReturnFields
+  }
+}
+
+mutation MigrateToBinds($input: MigrateToBindsInput!) {
+  migrateToBinds(input: $input) {
+    ...basicMutationReturnFields
+    job {
+      createdAt
+      description
+      error
+      finishedAt
+      name
+      progress
+      result
+      status
+      statusText
+      uid
+      updatedAt
+    }
   }
 }

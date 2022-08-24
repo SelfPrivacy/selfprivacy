@@ -1,0 +1,54 @@
+fragment basicMutationReturnFields on MutationReturnInterface{
+  code
+  message
+  success
+}
+
+query SystemSettings {
+  system {
+    settings {
+      autoUpgrade {
+        allowReboot
+        enable
+      }
+      ssh {
+        enable
+        passwordAuthentication
+        rootSshKeys
+      }
+      timezone
+    }
+  }
+}
+
+query DomainInfo {
+  system {
+    domainInfo {
+      domain
+      hostname
+      provider
+      requiredDnsRecords {
+        content
+        name
+        priority
+        recordType
+        ttl
+      }
+    }
+  }
+}
+
+mutation ChangeTimezone($timezone: String!) {
+  changeTimezone(timezone: $timezone) {
+    ...basicMutationReturnFields
+    timezone
+  }
+}
+
+mutation ChangeAutoUpgradeSettings($settings: AutoUpgradeSettingsInput!) {
+  changeAutoUpgradeSettings(settings: $settings) {
+    ...basicMutationReturnFields
+    allowReboot
+    enableAutoUpgrade
+  }
+}

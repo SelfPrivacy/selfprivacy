@@ -1,55 +1,40 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/volumes/volumes_cubit.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
 
 class ExtendingVolumePage extends StatefulWidget {
-  const ExtendingVolumePage({required this.diskVolume, final super.key});
+  const ExtendingVolumePage({
+    required this.diskVolumeToResize,
+    required this.diskStatus,
+    final super.key,
+  });
 
-  final DiskVolume diskVolume;
+  final DiskVolume diskVolumeToResize;
+  final DiskStatus diskStatus;
 
   @override
   State<ExtendingVolumePage> createState() => _ExtendingVolumePageState();
 }
 
 class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
-  bool _isSizeError = false;
-  bool _isPriceError = false;
+  bool _isError = false;
 
-  double _currentSliderGbValue = 20.0;
+  double _currentSliderGbValue = -1;
   double _euroPerGb = 1.0;
 
-  final double maxGb = 500.0;
-  double minGb = 0.0;
+  final DiskSize maxSize = DiskSize(byte: 500000000000);
+  DiskSize minSize = DiskSize();
 
   final TextEditingController _sizeController = TextEditingController();
-  late final TextEditingController _priceController;
-
-  void _updateByPrice() {
-    final double price = double.parse(_priceController.text);
-    _currentSliderGbValue = price / _euroPerGb;
-    _sizeController.text = _currentSliderGbValue.round.toString();
-
-    /// Now we need to convert size back to price to round
-    /// it properly and display it in text field as well,
-    /// because size in GB can ONLY(!) be discrete.
-    _updateBySize();
-  }
-
-  void _updateBySize() {
-    final double size = double.parse(_sizeController.text);
-    _priceController.text = (size * _euroPerGb).toString();
-    _updateErrorStatuses();
-  }
+  final TextEditingController _priceController = TextEditingController();
 
   void _updateErrorStatuses() {
-    final bool error = minGb > _currentSliderGbValue;
-    _isSizeError = error;
-    _isPriceError = error;
+    _isError = minSize.asGb() > _currentSliderGbValue;
   }
 
   @override
@@ -59,15 +44,26 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           final BuildContext context,
           final AsyncSnapshot<void> snapshot,
         ) {
+          if (!snapshot.hasData) {
+            return BrandHeroScreen(
+              hasBackButton: true,
+              heroTitle: 'providers.storage.extending_volume_title'.tr(),
+              heroSubtitle:
+                  'providers.storage.extending_volume_description'.tr(),
+              children: const [
+                SizedBox(height: 16),
+              ],
+            );
+          }
           _euroPerGb = snapshot.data as double;
-          _sizeController.text = _currentSliderGbValue.toString();
+          _sizeController.text = _currentSliderGbValue.truncate().toString();
           _priceController.text =
-              (_euroPerGb * double.parse(_sizeController.text)).toString();
-          _sizeController.addListener(_updateBySize);
-          _priceController.addListener(_updateByPrice);
-          minGb = widget.diskVolume.gbTotal + 1 < maxGb
-              ? widget.diskVolume.gbTotal + 1
-              : maxGb;
+              (_euroPerGb * double.parse(_sizeController.text))
+                  .toStringAsPrecision(2);
+          minSize = widget.diskVolumeToResize.sizeTotal;
+          if (_currentSliderGbValue < 0) {
+            _currentSliderGbValue = minSize.asGb();
+          }
 
           return BrandHeroScreen(
             hasBackButton: true,
@@ -76,47 +72,48 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
             children: [
               const SizedBox(height: 16),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TextField(
-                    textInputAction: TextInputAction.next,
-                    enabled: true,
-                    controller: _sizeController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      errorText: _isSizeError ? ' ' : null,
-                      labelText: 'providers.storage.size'.tr(),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 130),
+                    child: TextField(
+                      readOnly: true,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      enabled: true,
+                      controller: _sizeController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        errorText: _isError ? ' ' : null,
+                        labelText: 'providers.storage.size'.tr(),
+                      ),
                     ),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                    ], // Only numbers can be entered
                   ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    textInputAction: TextInputAction.next,
-                    enabled: true,
-                    controller: _priceController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      errorText: _isPriceError ? ' ' : null,
-                      labelText: 'providers.storage.euro'.tr(),
+                  const SizedBox(width: 16),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 130),
+                    child: TextField(
+                      readOnly: true,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      enabled: true,
+                      controller: _priceController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        errorText: _isError ? ' ' : null,
+                        labelText: 'providers.storage.euro'.tr(),
+                      ),
                     ),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                    ], // Only numbers can be entered
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               Slider(
-                min: minGb,
-                value: widget.diskVolume.gbTotal + 5 < maxGb
-                    ? widget.diskVolume.gbTotal + 5
-                    : maxGb,
-                max: maxGb,
-                divisions: 1,
-                label: _currentSliderGbValue.round().toString(),
+                min: minSize.asGb(),
+                value: _currentSliderGbValue,
+                max: maxSize.asGb(),
                 onChanged: (final double value) {
                   setState(() {
                     _currentSliderGbValue = value;
@@ -126,15 +123,22 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               ),
               const SizedBox(height: 16),
               FilledButton(
-                title: 'providers.extend_volume_button.title'.tr(),
+                title: 'providers.storage.extend_volume_button.title'.tr(),
                 onPressed: null,
+                disabled: _isError,
               ),
               const SizedBox(height: 16),
               const Divider(
                 height: 1.0,
               ),
               const SizedBox(height: 16),
-              const Icon(Icons.info_outlined, size: 24),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Icon(
+                  Icons.info_outlined,
+                  size: 24,
+                ),
+              ),
               const SizedBox(height: 16),
               Text('providers.storage.extending_volume_price_info'.tr()),
               const SizedBox(height: 16),

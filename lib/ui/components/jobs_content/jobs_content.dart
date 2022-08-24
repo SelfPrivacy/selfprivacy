@@ -67,7 +67,7 @@ class JobsContent extends StatelessWidget {
             ];
           } else if (state is JobsStateWithJobs) {
             widgets = [
-              ...state.jobList
+              ...state.clientJobList
                   .map(
                     (final j) => Row(
                       children: [

@@ -105,8 +105,8 @@ class ServerApi extends ApiMap {
     try {
       response = await client.get('/services/status');
       res = response.statusCode == HttpStatus.ok;
-    } on DioError catch (e) {
-      print(e.message);
+    } catch (e) {
+      print(e);
     } finally {
       close(client);
     }

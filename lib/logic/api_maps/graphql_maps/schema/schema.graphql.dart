@@ -3,6 +3,174 @@ import 'package:selfprivacy/utils/scalars.dart';
 part 'schema.graphql.g.dart';
 
 @JsonSerializable(explicitToJson: true)
+class Input$AutoUpgradeSettingsInput {
+  Input$AutoUpgradeSettingsInput({this.enableAutoUpgrade, this.allowReboot});
+
+  @override
+  factory Input$AutoUpgradeSettingsInput.fromJson(Map<String, dynamic> json) =>
+      _$Input$AutoUpgradeSettingsInputFromJson(json);
+
+  final bool? enableAutoUpgrade;
+
+  final bool? allowReboot;
+
+  Map<String, dynamic> toJson() => _$Input$AutoUpgradeSettingsInputToJson(this);
+  int get hashCode {
+    final l$enableAutoUpgrade = enableAutoUpgrade;
+    final l$allowReboot = allowReboot;
+    return Object.hashAll([l$enableAutoUpgrade, l$allowReboot]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Input$AutoUpgradeSettingsInput) ||
+        runtimeType != other.runtimeType) return false;
+    final l$enableAutoUpgrade = enableAutoUpgrade;
+    final lOther$enableAutoUpgrade = other.enableAutoUpgrade;
+    if (l$enableAutoUpgrade != lOther$enableAutoUpgrade) return false;
+    final l$allowReboot = allowReboot;
+    final lOther$allowReboot = other.allowReboot;
+    if (l$allowReboot != lOther$allowReboot) return false;
+    return true;
+  }
+
+  Input$AutoUpgradeSettingsInput copyWith(
+          {bool? Function()? enableAutoUpgrade,
+          bool? Function()? allowReboot}) =>
+      Input$AutoUpgradeSettingsInput(
+          enableAutoUpgrade: enableAutoUpgrade == null
+              ? this.enableAutoUpgrade
+              : enableAutoUpgrade(),
+          allowReboot: allowReboot == null ? this.allowReboot : allowReboot());
+}
+
+@JsonSerializable(explicitToJson: true)
+class Input$MigrateToBindsInput {
+  Input$MigrateToBindsInput(
+      {required this.emailBlockDevice,
+      required this.bitwardenBlockDevice,
+      required this.giteaBlockDevice,
+      required this.nextcloudBlockDevice,
+      required this.pleromaBlockDevice});
+
+  @override
+  factory Input$MigrateToBindsInput.fromJson(Map<String, dynamic> json) =>
+      _$Input$MigrateToBindsInputFromJson(json);
+
+  final String emailBlockDevice;
+
+  final String bitwardenBlockDevice;
+
+  final String giteaBlockDevice;
+
+  final String nextcloudBlockDevice;
+
+  final String pleromaBlockDevice;
+
+  Map<String, dynamic> toJson() => _$Input$MigrateToBindsInputToJson(this);
+  int get hashCode {
+    final l$emailBlockDevice = emailBlockDevice;
+    final l$bitwardenBlockDevice = bitwardenBlockDevice;
+    final l$giteaBlockDevice = giteaBlockDevice;
+    final l$nextcloudBlockDevice = nextcloudBlockDevice;
+    final l$pleromaBlockDevice = pleromaBlockDevice;
+    return Object.hashAll([
+      l$emailBlockDevice,
+      l$bitwardenBlockDevice,
+      l$giteaBlockDevice,
+      l$nextcloudBlockDevice,
+      l$pleromaBlockDevice
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Input$MigrateToBindsInput) ||
+        runtimeType != other.runtimeType) return false;
+    final l$emailBlockDevice = emailBlockDevice;
+    final lOther$emailBlockDevice = other.emailBlockDevice;
+    if (l$emailBlockDevice != lOther$emailBlockDevice) return false;
+    final l$bitwardenBlockDevice = bitwardenBlockDevice;
+    final lOther$bitwardenBlockDevice = other.bitwardenBlockDevice;
+    if (l$bitwardenBlockDevice != lOther$bitwardenBlockDevice) return false;
+    final l$giteaBlockDevice = giteaBlockDevice;
+    final lOther$giteaBlockDevice = other.giteaBlockDevice;
+    if (l$giteaBlockDevice != lOther$giteaBlockDevice) return false;
+    final l$nextcloudBlockDevice = nextcloudBlockDevice;
+    final lOther$nextcloudBlockDevice = other.nextcloudBlockDevice;
+    if (l$nextcloudBlockDevice != lOther$nextcloudBlockDevice) return false;
+    final l$pleromaBlockDevice = pleromaBlockDevice;
+    final lOther$pleromaBlockDevice = other.pleromaBlockDevice;
+    if (l$pleromaBlockDevice != lOther$pleromaBlockDevice) return false;
+    return true;
+  }
+
+  Input$MigrateToBindsInput copyWith(
+          {String? emailBlockDevice,
+          String? bitwardenBlockDevice,
+          String? giteaBlockDevice,
+          String? nextcloudBlockDevice,
+          String? pleromaBlockDevice}) =>
+      Input$MigrateToBindsInput(
+          emailBlockDevice: emailBlockDevice == null
+              ? this.emailBlockDevice
+              : emailBlockDevice,
+          bitwardenBlockDevice: bitwardenBlockDevice == null
+              ? this.bitwardenBlockDevice
+              : bitwardenBlockDevice,
+          giteaBlockDevice: giteaBlockDevice == null
+              ? this.giteaBlockDevice
+              : giteaBlockDevice,
+          nextcloudBlockDevice: nextcloudBlockDevice == null
+              ? this.nextcloudBlockDevice
+              : nextcloudBlockDevice,
+          pleromaBlockDevice: pleromaBlockDevice == null
+              ? this.pleromaBlockDevice
+              : pleromaBlockDevice);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Input$MoveServiceInput {
+  Input$MoveServiceInput({required this.serviceId, required this.location});
+
+  @override
+  factory Input$MoveServiceInput.fromJson(Map<String, dynamic> json) =>
+      _$Input$MoveServiceInputFromJson(json);
+
+  final String serviceId;
+
+  final String location;
+
+  Map<String, dynamic> toJson() => _$Input$MoveServiceInputToJson(this);
+  int get hashCode {
+    final l$serviceId = serviceId;
+    final l$location = location;
+    return Object.hashAll([l$serviceId, l$location]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Input$MoveServiceInput) || runtimeType != other.runtimeType)
+      return false;
+    final l$serviceId = serviceId;
+    final lOther$serviceId = other.serviceId;
+    if (l$serviceId != lOther$serviceId) return false;
+    final l$location = location;
+    final lOther$location = other.location;
+    if (l$location != lOther$location) return false;
+    return true;
+  }
+
+  Input$MoveServiceInput copyWith({String? serviceId, String? location}) =>
+      Input$MoveServiceInput(
+          serviceId: serviceId == null ? this.serviceId : serviceId,
+          location: location == null ? this.location : location);
+}
+
+@JsonSerializable(explicitToJson: true)
 class Input$RecoveryKeyLimitsInput {
   Input$RecoveryKeyLimitsInput({this.expirationDate, this.uses});
 
@@ -37,47 +205,51 @@ class Input$RecoveryKeyLimitsInput {
     return true;
   }
 
-  CopyWith$Input$RecoveryKeyLimitsInput<Input$RecoveryKeyLimitsInput>
-      get copyWith => CopyWith$Input$RecoveryKeyLimitsInput(this, (i) => i);
+  Input$RecoveryKeyLimitsInput copyWith(
+          {DateTime? Function()? expirationDate, int? Function()? uses}) =>
+      Input$RecoveryKeyLimitsInput(
+          expirationDate:
+              expirationDate == null ? this.expirationDate : expirationDate(),
+          uses: uses == null ? this.uses : uses());
 }
 
-abstract class CopyWith$Input$RecoveryKeyLimitsInput<TRes> {
-  factory CopyWith$Input$RecoveryKeyLimitsInput(
-          Input$RecoveryKeyLimitsInput instance,
-          TRes Function(Input$RecoveryKeyLimitsInput) then) =
-      _CopyWithImpl$Input$RecoveryKeyLimitsInput;
+@JsonSerializable(explicitToJson: true)
+class Input$SshMutationInput {
+  Input$SshMutationInput({required this.username, required this.sshKey});
 
-  factory CopyWith$Input$RecoveryKeyLimitsInput.stub(TRes res) =
-      _CopyWithStubImpl$Input$RecoveryKeyLimitsInput;
+  @override
+  factory Input$SshMutationInput.fromJson(Map<String, dynamic> json) =>
+      _$Input$SshMutationInputFromJson(json);
 
-  TRes call({DateTime? expirationDate, int? uses});
-}
+  final String username;
 
-class _CopyWithImpl$Input$RecoveryKeyLimitsInput<TRes>
-    implements CopyWith$Input$RecoveryKeyLimitsInput<TRes> {
-  _CopyWithImpl$Input$RecoveryKeyLimitsInput(this._instance, this._then);
+  final String sshKey;
 
-  final Input$RecoveryKeyLimitsInput _instance;
+  Map<String, dynamic> toJson() => _$Input$SshMutationInputToJson(this);
+  int get hashCode {
+    final l$username = username;
+    final l$sshKey = sshKey;
+    return Object.hashAll([l$username, l$sshKey]);
+  }
 
-  final TRes Function(Input$RecoveryKeyLimitsInput) _then;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Input$SshMutationInput) || runtimeType != other.runtimeType)
+      return false;
+    final l$username = username;
+    final lOther$username = other.username;
+    if (l$username != lOther$username) return false;
+    final l$sshKey = sshKey;
+    final lOther$sshKey = other.sshKey;
+    if (l$sshKey != lOther$sshKey) return false;
+    return true;
+  }
 
-  static const _undefined = {};
-
-  TRes call({Object? expirationDate = _undefined, Object? uses = _undefined}) =>
-      _then(Input$RecoveryKeyLimitsInput(
-          expirationDate: expirationDate == _undefined
-              ? _instance.expirationDate
-              : (expirationDate as DateTime?),
-          uses: uses == _undefined ? _instance.uses : (uses as int?)));
-}
-
-class _CopyWithStubImpl$Input$RecoveryKeyLimitsInput<TRes>
-    implements CopyWith$Input$RecoveryKeyLimitsInput<TRes> {
-  _CopyWithStubImpl$Input$RecoveryKeyLimitsInput(this._res);
-
-  TRes _res;
-
-  call({DateTime? expirationDate, int? uses}) => _res;
+  Input$SshMutationInput copyWith({String? username, String? sshKey}) =>
+      Input$SshMutationInput(
+          username: username == null ? this.username : username,
+          sshKey: sshKey == null ? this.sshKey : sshKey);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -113,49 +285,10 @@ class Input$UseNewDeviceKeyInput {
     return true;
   }
 
-  CopyWith$Input$UseNewDeviceKeyInput<Input$UseNewDeviceKeyInput>
-      get copyWith => CopyWith$Input$UseNewDeviceKeyInput(this, (i) => i);
-}
-
-abstract class CopyWith$Input$UseNewDeviceKeyInput<TRes> {
-  factory CopyWith$Input$UseNewDeviceKeyInput(
-          Input$UseNewDeviceKeyInput instance,
-          TRes Function(Input$UseNewDeviceKeyInput) then) =
-      _CopyWithImpl$Input$UseNewDeviceKeyInput;
-
-  factory CopyWith$Input$UseNewDeviceKeyInput.stub(TRes res) =
-      _CopyWithStubImpl$Input$UseNewDeviceKeyInput;
-
-  TRes call({String? key, String? deviceName});
-}
-
-class _CopyWithImpl$Input$UseNewDeviceKeyInput<TRes>
-    implements CopyWith$Input$UseNewDeviceKeyInput<TRes> {
-  _CopyWithImpl$Input$UseNewDeviceKeyInput(this._instance, this._then);
-
-  final Input$UseNewDeviceKeyInput _instance;
-
-  final TRes Function(Input$UseNewDeviceKeyInput) _then;
-
-  static const _undefined = {};
-
-  TRes call({Object? key = _undefined, Object? deviceName = _undefined}) =>
-      _then(Input$UseNewDeviceKeyInput(
-          key: key == _undefined || key == null
-              ? _instance.key
-              : (key as String),
-          deviceName: deviceName == _undefined || deviceName == null
-              ? _instance.deviceName
-              : (deviceName as String)));
-}
-
-class _CopyWithStubImpl$Input$UseNewDeviceKeyInput<TRes>
-    implements CopyWith$Input$UseNewDeviceKeyInput<TRes> {
-  _CopyWithStubImpl$Input$UseNewDeviceKeyInput(this._res);
-
-  TRes _res;
-
-  call({String? key, String? deviceName}) => _res;
+  Input$UseNewDeviceKeyInput copyWith({String? key, String? deviceName}) =>
+      Input$UseNewDeviceKeyInput(
+          key: key == null ? this.key : key,
+          deviceName: deviceName == null ? this.deviceName : deviceName);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -191,48 +324,49 @@ class Input$UseRecoveryKeyInput {
     return true;
   }
 
-  CopyWith$Input$UseRecoveryKeyInput<Input$UseRecoveryKeyInput> get copyWith =>
-      CopyWith$Input$UseRecoveryKeyInput(this, (i) => i);
+  Input$UseRecoveryKeyInput copyWith({String? key, String? deviceName}) =>
+      Input$UseRecoveryKeyInput(
+          key: key == null ? this.key : key,
+          deviceName: deviceName == null ? this.deviceName : deviceName);
 }
 
-abstract class CopyWith$Input$UseRecoveryKeyInput<TRes> {
-  factory CopyWith$Input$UseRecoveryKeyInput(Input$UseRecoveryKeyInput instance,
-          TRes Function(Input$UseRecoveryKeyInput) then) =
-      _CopyWithImpl$Input$UseRecoveryKeyInput;
+@JsonSerializable(explicitToJson: true)
+class Input$UserMutationInput {
+  Input$UserMutationInput({required this.username, required this.password});
 
-  factory CopyWith$Input$UseRecoveryKeyInput.stub(TRes res) =
-      _CopyWithStubImpl$Input$UseRecoveryKeyInput;
+  @override
+  factory Input$UserMutationInput.fromJson(Map<String, dynamic> json) =>
+      _$Input$UserMutationInputFromJson(json);
 
-  TRes call({String? key, String? deviceName});
-}
+  final String username;
 
-class _CopyWithImpl$Input$UseRecoveryKeyInput<TRes>
-    implements CopyWith$Input$UseRecoveryKeyInput<TRes> {
-  _CopyWithImpl$Input$UseRecoveryKeyInput(this._instance, this._then);
+  final String password;
 
-  final Input$UseRecoveryKeyInput _instance;
+  Map<String, dynamic> toJson() => _$Input$UserMutationInputToJson(this);
+  int get hashCode {
+    final l$username = username;
+    final l$password = password;
+    return Object.hashAll([l$username, l$password]);
+  }
 
-  final TRes Function(Input$UseRecoveryKeyInput) _then;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Input$UserMutationInput) || runtimeType != other.runtimeType)
+      return false;
+    final l$username = username;
+    final lOther$username = other.username;
+    if (l$username != lOther$username) return false;
+    final l$password = password;
+    final lOther$password = other.password;
+    if (l$password != lOther$password) return false;
+    return true;
+  }
 
-  static const _undefined = {};
-
-  TRes call({Object? key = _undefined, Object? deviceName = _undefined}) =>
-      _then(Input$UseRecoveryKeyInput(
-          key: key == _undefined || key == null
-              ? _instance.key
-              : (key as String),
-          deviceName: deviceName == _undefined || deviceName == null
-              ? _instance.deviceName
-              : (deviceName as String)));
-}
-
-class _CopyWithStubImpl$Input$UseRecoveryKeyInput<TRes>
-    implements CopyWith$Input$UseRecoveryKeyInput<TRes> {
-  _CopyWithStubImpl$Input$UseRecoveryKeyInput(this._res);
-
-  TRes _res;
-
-  call({String? key, String? deviceName}) => _res;
+  Input$UserMutationInput copyWith({String? username, String? password}) =>
+      Input$UserMutationInput(
+          username: username == null ? this.username : username,
+          password: password == null ? this.password : password);
 }
 
 enum Enum$DnsProvider {
@@ -247,26 +381,61 @@ enum Enum$ServerProvider {
   $unknown
 }
 
+enum Enum$ServiceStatusEnum {
+  @JsonValue('ACTIVATING')
+  ACTIVATING,
+  @JsonValue('ACTIVE')
+  ACTIVE,
+  @JsonValue('DEACTIVATING')
+  DEACTIVATING,
+  @JsonValue('FAILED')
+  FAILED,
+  @JsonValue('INACTIVE')
+  INACTIVE,
+  @JsonValue('OFF')
+  OFF,
+  @JsonValue('RELOADING')
+  RELOADING,
+  $unknown
+}
+
 enum Enum$Severity {
-  @JsonValue('INFO')
-  INFO,
-  @JsonValue('WARNING')
-  WARNING,
-  @JsonValue('ERROR')
-  ERROR,
   @JsonValue('CRITICAL')
   CRITICAL,
+  @JsonValue('ERROR')
+  ERROR,
+  @JsonValue('INFO')
+  INFO,
   @JsonValue('SUCCESS')
   SUCCESS,
+  @JsonValue('WARNING')
+  WARNING,
+  $unknown
+}
+
+enum Enum$UserType {
+  @JsonValue('NORMAL')
+  NORMAL,
+  @JsonValue('PRIMARY')
+  PRIMARY,
+  @JsonValue('ROOT')
+  ROOT,
   $unknown
 }
 
 const possibleTypesMap = {
   'MutationReturnInterface': {
     'ApiKeyMutationReturn',
+    'AutoUpgradeSettingsMutationReturn',
     'DeviceApiTokenMutationReturn',
-    'GenericMutationReturn'
-  }
+    'GenericJobButationReturn',
+    'GenericMutationReturn',
+    'ServiceJobMutationReturn',
+    'ServiceMutationReturn',
+    'TimezoneMutationReturn',
+    'UserMutationReturn'
+  },
+  'StorageUsageInterface': {'ServiceStorageUsage'}
 };
 DateTime? _nullable$dateTimeFromJson(dynamic data) =>
     data == null ? null : dateTimeFromJson(data);

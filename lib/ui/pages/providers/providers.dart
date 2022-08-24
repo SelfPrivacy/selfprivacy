@@ -5,6 +5,9 @@ import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/cubit/volumes/volumes_cubit.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/provider.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
@@ -18,6 +21,7 @@ import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
 import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/providers/storage_card.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
+import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -73,15 +77,21 @@ class _ProvidersPageState extends State<ProvidersPage> {
       Padding(
         padding: const EdgeInsets.only(bottom: 30),
         child: FutureBuilder(
-          future:
-              context.read<ServerInstallationCubit>().getServerDiskVolumes(),
+          future: Future.wait([
+            context.read<ServerInstallationCubit>().getServerDiskVolumes(),
+            context.read<ApiVolumesCubit>().getVolumes(),
+          ]),
           builder: (
             final BuildContext context,
-            final AsyncSnapshot<Object?> snapshot,
+            final AsyncSnapshot<List<dynamic>> snapshot,
           ) =>
               StorageCard(
-            volumes:
-                snapshot.hasData ? snapshot.data as List<ServerDiskVolume> : [],
+            diskStatus: snapshot.hasData
+                ? toDiskStatus(
+                    snapshot.data![0] as List<ServerDiskVolume>,
+                    snapshot.data![1] as List<ServerVolume>,
+                  )
+                : DiskStatus(),
           ),
         ),
       ),
@@ -104,6 +114,60 @@ class _ProvidersPageState extends State<ProvidersPage> {
         ],
       ),
     );
+  }
+
+  DiskStatus toDiskStatus(
+    final List<ServerDiskVolume> serverVolumes,
+    final List<ServerVolume> providerVolumes,
+  ) {
+    final DiskStatus diskStatus = DiskStatus();
+    diskStatus.isDiskOkay = true;
+
+    if (providerVolumes.isEmpty || serverVolumes.isEmpty) {
+      diskStatus.isDiskOkay = false;
+    }
+
+    diskStatus.diskVolumes = serverVolumes.map((
+      final ServerDiskVolume volume,
+    ) {
+      final DiskVolume diskVolume = DiskVolume();
+      diskVolume.sizeUsed = DiskSize(
+        byte: volume.usedSpace == 'None' ? 0 : int.parse(volume.usedSpace),
+      );
+      diskVolume.sizeTotal = DiskSize(
+        byte: volume.totalSpace == 'None' ? 0 : int.parse(volume.totalSpace),
+      );
+      diskVolume.serverDiskVolume = volume;
+
+      for (final ServerVolume providerVolume in providerVolumes) {
+        if (providerVolume.linuxDevice == null ||
+            volume.model == null ||
+            volume.serial == null) {
+          continue;
+        }
+
+        final String deviceId = providerVolume.linuxDevice!.split('/').last;
+        if (deviceId.contains(volume.model!) &&
+            deviceId.contains(volume.serial!)) {
+          diskVolume.providerVolume = providerVolume;
+          break;
+        }
+      }
+
+      diskVolume.name = volume.name;
+      diskVolume.root = volume.root;
+      diskVolume.percentage =
+          volume.usedSpace != 'None' && volume.totalSpace != 'None'
+              ? 1.0 / diskVolume.sizeTotal.byte * diskVolume.sizeUsed.byte
+              : 0.0;
+      if (diskVolume.percentage >= 0.8 ||
+          diskVolume.sizeTotal.asGb() - diskVolume.sizeUsed.asGb() <= 2.0) {
+        diskStatus.isDiskOkay = false;
+      }
+      return diskVolume;
+    }).toList();
+
+    return diskStatus;
   }
 }
 
@@ -137,8 +201,9 @@ class _Card extends StatelessWidget {
         break;
       case ProviderType.domain:
         title = 'providers.domain.screen_title'.tr();
-        message =
-            appConfig.isDomainFilled ? appConfig.serverDomain!.domainName : '';
+        message = appConfig.isDomainSelected
+            ? appConfig.serverDomain!.domainName
+            : '';
         stableText = 'providers.domain.status'.tr();
 
         onTap = () => Navigator.of(context).push(
@@ -168,12 +233,17 @@ class _Card extends StatelessWidget {
               status: provider.state,
               child: Icon(provider.icon, size: 30, color: Colors.white),
             ),
-            const SizedBox(height: 10),
-            BrandText.h2(title),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             if (message != null) ...[
-              BrandText.body2(message),
-              const SizedBox(height: 10),
+              Text(
+                message,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 16),
             ],
             if (provider.state == StateType.stable) BrandText.body2(stableText),
           ],

@@ -1,11 +1,14 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/json/server_job.dart';
 
 export 'package:provider/provider.dart';
 
@@ -15,20 +18,21 @@ class JobsCubit extends Cubit<JobsState> {
   JobsCubit({
     required this.usersCubit,
     required this.servicesCubit,
-  }) : super(JobsStateEmpty());
+  }) : super(const JobsStateEmpty([]));
 
   final ServerApi api = ServerApi();
   final UsersCubit usersCubit;
   final ServicesCubit servicesCubit;
 
-  void addJob(final Job job) {
-    final List<Job> newJobsList = <Job>[];
+  void addJob(final ClientJob job) {
+    final List<ClientJob> newJobsList = [];
     if (state is JobsStateWithJobs) {
-      newJobsList.addAll((state as JobsStateWithJobs).jobList);
+      final JobsStateWithJobs jobsState = state as JobsStateWithJobs;
+      newJobsList.addAll(jobsState.clientJobList);
     }
     newJobsList.add(job);
     getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
-    emit(JobsStateWithJobs(newJobsList));
+    emit(JobsStateWithJobs(newJobsList, state.serverJobList));
   }
 
   void removeJob(final String id) {
@@ -37,51 +41,51 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   void createOrRemoveServiceToggleJob(final ToggleJob job) {
-    final List<Job> newJobsList = <Job>[];
+    final List<ClientJob> newJobsList = <ClientJob>[];
     if (state is JobsStateWithJobs) {
-      newJobsList.addAll((state as JobsStateWithJobs).jobList);
+      newJobsList.addAll((state as JobsStateWithJobs).clientJobList);
     }
     final bool needToRemoveJob = newJobsList
         .any((final el) => el is ServiceToggleJob && el.type == job.type);
     if (needToRemoveJob) {
-      final Job removingJob = newJobsList.firstWhere(
+      final ClientJob removingJob = newJobsList.firstWhere(
         (final el) => el is ServiceToggleJob && el.type == job.type,
       );
       removeJob(removingJob.id);
     } else {
       newJobsList.add(job);
       getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
-      emit(JobsStateWithJobs(newJobsList));
+      emit(JobsStateWithJobs(newJobsList, state.serverJobList));
     }
   }
 
   void createShhJobIfNotExist(final CreateSSHKeyJob job) {
-    final List<Job> newJobsList = <Job>[];
+    final List<ClientJob> newJobsList = <ClientJob>[];
     if (state is JobsStateWithJobs) {
-      newJobsList.addAll((state as JobsStateWithJobs).jobList);
+      newJobsList.addAll((state as JobsStateWithJobs).clientJobList);
     }
     final bool isExistInJobList =
         newJobsList.any((final el) => el is CreateSSHKeyJob);
     if (!isExistInJobList) {
       newJobsList.add(job);
       getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
-      emit(JobsStateWithJobs(newJobsList));
+      emit(JobsStateWithJobs(newJobsList, state.serverJobList));
     }
   }
 
   Future<void> rebootServer() async {
-    emit(JobsStateLoading());
+    emit(JobsStateLoading(state.serverJobList));
     final bool isSuccessful = await api.reboot();
     if (isSuccessful) {
       getIt<NavigationService>().showSnackBar('jobs.rebootSuccess'.tr());
     } else {
       getIt<NavigationService>().showSnackBar('jobs.rebootFailed'.tr());
     }
-    emit(JobsStateEmpty());
+    emit(JobsStateEmpty(state.serverJobList));
   }
 
   Future<void> upgradeServer() async {
-    emit(JobsStateLoading());
+    emit(JobsStateLoading(state.serverJobList));
     final bool isPullSuccessful = await api.pullConfigurationUpdate();
     final bool isSuccessful = await api.upgrade();
     if (isSuccessful) {
@@ -93,15 +97,15 @@ class JobsCubit extends Cubit<JobsState> {
     } else {
       getIt<NavigationService>().showSnackBar('jobs.upgradeFailed'.tr());
     }
-    emit(JobsStateEmpty());
+    emit(JobsStateEmpty(state.serverJobList));
   }
 
   Future<void> applyAll() async {
     if (state is JobsStateWithJobs) {
-      final List<Job> jobs = (state as JobsStateWithJobs).jobList;
-      emit(JobsStateLoading());
+      final List<ClientJob> jobs = (state as JobsStateWithJobs).clientJobList;
+      emit(JobsStateLoading(state.serverJobList));
       bool hasServiceJobs = false;
-      for (final Job job in jobs) {
+      for (final ClientJob job in jobs) {
         if (job is CreateUserJob) {
           await usersCubit.createUser(job.user);
         }
@@ -122,11 +126,45 @@ class JobsCubit extends Cubit<JobsState> {
 
       await api.pullConfigurationUpdate();
       await api.apply();
+
       if (hasServiceJobs) {
         await servicesCubit.load();
       }
 
-      emit(JobsStateEmpty());
+      emit(JobsStateEmpty(state.serverJobList));
     }
+  }
+
+  Future<void> resetRequestsTimer() async {
+    const duration = Duration(seconds: 1);
+    Timer.periodic(
+      duration,
+      (final timer) async {
+        if (timer.tick >= 10) {
+          final List<ServerJob> serverJobs = await api.getServerJobs();
+          final List<ServerJob> newServerJobs = [];
+          for (final ServerJob job in serverJobs) {
+            if (job.status == 'FINISHED') {
+              await api.removeApiJob(job.uid);
+            } else {
+              newServerJobs.add(job);
+            }
+          }
+
+          if (state is JobsStateWithJobs) {
+            emit(
+              JobsStateWithJobs(
+                (state as JobsStateWithJobs).clientJobList,
+                newServerJobs,
+              ),
+            );
+          } else {
+            emit(
+              JobsStateEmpty(newServerJobs),
+            );
+          }
+        }
+      },
+    );
   }
 }

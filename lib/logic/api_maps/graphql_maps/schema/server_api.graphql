@@ -1,4 +1,70 @@
-query GetApiTokensQuery {
+fragment basicMutationReturnFields on MutationReturnInterface{
+  code
+  message
+  success
+}
+
+query GetApiVersion {
+  api {
+    version
+  }
+}
+
+query GetApiJobs {
+  jobs {
+    getJobs {
+      createdAt
+      description
+      error
+      finishedAt
+      name
+      progress
+      result
+      status
+      statusText
+      uid
+      updatedAt
+    }
+  }
+}
+
+mutation RemoveJob($jobId: String!) {
+  removeJob(jobId: $jobId) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation RunSystemRebuild {
+  runSystemRebuild {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation RunSystemRollback {
+  runSystemRollback {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation RunSystemUpgrade {
+  runSystemUpgrade {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation PullRepositoryChanges {
+  pullRepositoryChanges {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation RebootSystem {
+  rebootSystem {
+    ...basicMutationReturnFields
+  }
+}
+
+query GetApiTokens {
   api {
     devices {
       creationDate
@@ -8,8 +74,61 @@ query GetApiTokensQuery {
   }
 }
 
-query GetApiVersionQuery {
+query RecoveryKey {
   api {
-    version
+    recoveryKey {
+      creationDate
+      exists
+      expirationDate
+      usesLeft
+      valid
+    }
+  }
+}
+
+mutation GetNewRecoveryApiKey($limits: RecoveryKeyLimitsInput) {
+  getNewRecoveryApiKey(limits: $limits) {
+    ...basicMutationReturnFields
+    key
+  }
+}
+
+mutation UseRecoveryApiKey($input: UseRecoveryKeyInput!) {
+  useRecoveryApiKey(input: $input) {
+    ...basicMutationReturnFields
+    token
+  }
+}
+
+mutation RefreshDeviceApiToken {
+  refreshDeviceApiToken {
+    ...basicMutationReturnFields
+    token
+  }
+}
+
+mutation DeleteDeviceApiToken($device: String!) {
+  deleteDeviceApiToken(device: $device) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation GetNewDeviceApiKey {
+  getNewDeviceApiKey {
+    ...basicMutationReturnFields
+    key
+  }
+}
+
+mutation InvalidateNewDeviceApiKey {
+  invalidateNewDeviceApiKey {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation AuthorizeWithNewDeviceApiKey($input: UseNewDeviceKeyInput!) {
+  authorizeWithNewDeviceApiKey(input: $input) {
+    ...basicMutationReturnFields
+    token
   }
 }

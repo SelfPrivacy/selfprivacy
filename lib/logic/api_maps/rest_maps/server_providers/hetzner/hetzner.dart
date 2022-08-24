@@ -81,11 +81,11 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final Response dbGetResponse;
     final Dio client = await getClient();
     try {
-      dbGetResponse = await client.post('/pricing');
+      dbGetResponse = await client.get('/pricing');
 
       final volume = dbGetResponse.data['pricing']['volume'];
       final volumePrice = volume['price_per_gb_month']['gross'];
-      price = volumePrice as double;
+      price = double.parse(volumePrice);
     } catch (e) {
       print(e);
     } finally {

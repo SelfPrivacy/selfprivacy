@@ -106,7 +106,7 @@ class _Card extends StatelessWidget {
     final switchableService = switchableServices.contains(serviceType);
     final hasSwitchJob = switchableService &&
         jobState is JobsStateWithJobs &&
-        jobState.jobList.any(
+        jobState.clientJobList.any(
           (final el) => el is ServiceToggleJob && el.type == serviceType,
         );
 
@@ -150,7 +150,7 @@ class _Card extends StatelessWidget {
                     builder: (final context) {
                       late bool isActive;
                       if (hasSwitchJob) {
-                        isActive = (jobState.jobList.firstWhere(
+                        isActive = (jobState.clientJobList.firstWhere(
                           (final el) =>
                               el is ServiceToggleJob && el.type == serviceType,
                         ) as ServiceToggleJob)

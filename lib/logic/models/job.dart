@@ -7,8 +7,8 @@ import 'package:selfprivacy/utils/password_generator.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 @immutable
-class Job extends Equatable {
-  Job({
+class ClientJob extends Equatable {
+  ClientJob({
     required this.title,
     final String? id,
   }) : id = id ?? StringGenerators.simpleId();
@@ -20,7 +20,7 @@ class Job extends Equatable {
   List<Object> get props => [id, title];
 }
 
-class CreateUserJob extends Job {
+class CreateUserJob extends ClientJob {
   CreateUserJob({
     required this.user,
   }) : super(title: '${"jobs.createUser".tr()} ${user.login}');
@@ -31,7 +31,7 @@ class CreateUserJob extends Job {
   List<Object> get props => [id, title, user];
 }
 
-class DeleteUserJob extends Job {
+class DeleteUserJob extends ClientJob {
   DeleteUserJob({
     required this.user,
   }) : super(title: '${"jobs.deleteUser".tr()} ${user.login}');
@@ -42,7 +42,7 @@ class DeleteUserJob extends Job {
   List<Object> get props => [id, title, user];
 }
 
-class ToggleJob extends Job {
+class ToggleJob extends ClientJob {
   ToggleJob({
     required this.type,
     required final super.title,
@@ -66,7 +66,7 @@ class ServiceToggleJob extends ToggleJob {
   final bool needToTurnOn;
 }
 
-class CreateSSHKeyJob extends Job {
+class CreateSSHKeyJob extends ClientJob {
   CreateSSHKeyJob({
     required this.user,
     required this.publicKey,
@@ -79,7 +79,7 @@ class CreateSSHKeyJob extends Job {
   List<Object> get props => [id, title, user, publicKey];
 }
 
-class DeleteSSHKeyJob extends Job {
+class DeleteSSHKeyJob extends ClientJob {
   DeleteSSHKeyJob({
     required this.user,
     required this.publicKey,

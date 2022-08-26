@@ -172,6 +172,7 @@
       "disk_total": "{} GB total · {}",
       "gb": "{} GB",
       "mb": "{} MB",
+      "kb": "{} KB",
       "extend_volume_button": "Extend volume",
       "extending_volume_title": "Extending volume",
       "extending_volume_description": "Resizing volume will allow you to store more data on your server without extending the server itself. Volume can only be extended: shrinking is not possible.",

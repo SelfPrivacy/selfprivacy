@@ -24,16 +24,12 @@ class ServerJob {
   final String description;
   final String status;
   final String uid;
-  @JsonKey(name: 'updated_at')
   final String updatedAt;
-  @JsonKey(name: 'created_at')
   final DateTime createdAt;
 
   final String? error;
   final int? progress;
   final String? result;
-  @JsonKey(name: 'status_text')
   final String? statusText;
-  @JsonKey(name: 'finished_at')
   final String? finishedAt;
 }

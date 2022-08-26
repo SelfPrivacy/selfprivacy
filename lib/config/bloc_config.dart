@@ -8,6 +8,7 @@ import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
@@ -28,6 +29,8 @@ class BlocAndProviderConfig extends StatelessWidget {
     final recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
     final apiDevicesCubit = ApiDevicesCubit(serverInstallationCubit);
     final apiVolumesCubit = ApiProviderVolumeCubit(serverInstallationCubit);
+    final apiServerVolumesCubit = ApiServerVolumeCubit(serverInstallationCubit);
+
     return MultiProvider(
       providers: [
         BlocProvider(
@@ -40,7 +43,9 @@ class BlocAndProviderConfig extends StatelessWidget {
           create: (final _) => serverInstallationCubit,
           lazy: false,
         ),
-        BlocProvider(create: (final _) => ProvidersCubit()),
+        BlocProvider(
+          create: (final _) => ProvidersCubit(),
+        ),
         BlocProvider(
           create: (final _) => usersCubit..load(),
           lazy: false,
@@ -66,8 +71,13 @@ class BlocAndProviderConfig extends StatelessWidget {
           create: (final _) => apiVolumesCubit..load(),
         ),
         BlocProvider(
-          create: (final _) =>
-              JobsCubit(usersCubit: usersCubit, servicesCubit: servicesCubit),
+          create: (final _) => apiServerVolumesCubit..load(),
+        ),
+        BlocProvider(
+          create: (final _) => JobsCubit(
+            usersCubit: usersCubit,
+            servicesCubit: servicesCubit,
+          ),
         ),
       ],
       child: child,

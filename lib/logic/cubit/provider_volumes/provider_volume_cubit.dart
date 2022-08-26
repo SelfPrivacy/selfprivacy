@@ -5,7 +5,6 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_pro
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
 
 part 'provider_volume_state.dart';
@@ -54,14 +53,18 @@ class ApiProviderVolumeCubit
     emit(ApiProviderVolumeState(volumes, LoadingStatus.success));
   }
 
-  Future<void> attachVolume(final ServerVolume volume) async {
+  Future<void> attachVolume(final DiskVolume volume) async {
     final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
-    await providerApi!.getVolumeProvider().attachVolume(volume.id, server.id);
+    await providerApi!
+        .getVolumeProvider()
+        .attachVolume(volume.providerVolume!.id, server.id);
     refresh();
   }
 
-  Future<void> detachVolume(final ServerVolume volume) async {
-    await providerApi!.getVolumeProvider().detachVolume(volume.id);
+  Future<void> detachVolume(final DiskVolume volume) async {
+    await providerApi!
+        .getVolumeProvider()
+        .detachVolume(volume.providerVolume!.id);
     refresh();
   }
 
@@ -86,11 +89,14 @@ class ApiProviderVolumeCubit
   Future<void> createVolume() async {
     final ServerVolume? volume =
         await providerApi!.getVolumeProvider().createVolume();
-    await attachVolume(volume!);
+
+    final diskVolume = DiskVolume();
+    diskVolume.providerVolume = volume;
+    await attachVolume(diskVolume);
 
     await Future.delayed(const Duration(seconds: 10));
 
-    await ServerApi().mountVolume(volume.name);
+    await ServerApi().mountVolume(volume!.name);
     refresh();
   }
 

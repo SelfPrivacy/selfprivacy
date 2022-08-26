@@ -11,6 +11,7 @@ import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
 
 class JobsContent extends StatelessWidget {
   const JobsContent({final super.key});
@@ -117,7 +118,15 @@ class JobsContent extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              ...widgets
+              ...widgets,
+              const SizedBox(height: 8),
+              const Divider(),
+              const SizedBox(height: 8),
+              ...state.serverJobList.map(
+                (final job) => ServerJobCard(
+                  serverJob: job,
+                ),
+              ),
             ],
           );
         },

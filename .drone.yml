@@ -5,4 +5,4 @@ name: default
 steps:
   - name: build
     commands:
-      - nix-shell --pure --run "flutter build apk --split-per-abi"
+      - nix-shell --run "flutter build apk --split-per-abi"

@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> {} }:
 
 pkgs.mkShell {
-  nativeBuildInputs = [ pkgs.flutter ];
+  nativeBuildInputs = with pkgs; [ flutter dart ];
 }

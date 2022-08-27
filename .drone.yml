@@ -13,4 +13,4 @@ steps:
       NIXPKGS_ALLOW_UNFREE: 1
 
 node:
-  server: builder
+  server: ci

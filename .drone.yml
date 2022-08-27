@@ -9,5 +9,5 @@ steps:
       #- nix-shell --pure --run "dart --version"
       - nix-shell --pure --run "flutter build apk --split-per-abi"
     environment:
-      NIX_PATH: "unstable=/nix/var/nix/profiles/per-user/root/channels/unstable"
+      NIX_PATH: "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:unstable=/nix/var/nix/profiles/per-user/root/channels/unstable"
       NIXPKGS_ALLOW_UNFREE: 1

@@ -6,3 +6,5 @@ steps:
   - name: build
     commands:
       - nix-shell --run "flutter build apk --split-per-abi"
+    environment:
+      - NIX_PATH="nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:/nix/var/nix/profiles/per-user/root/channels"

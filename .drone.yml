@@ -5,12 +5,11 @@ name: default
 steps:
   - name: build
     commands:
-      #- nix-shell --pure --run "flutter doctor -v"
-      #- nix-shell --pure --run "dart --version"
       - nix-shell --pure --run "flutter build apk --split-per-abi"
+      - scp build/app/outputs/apk/release/*.apk 10.0.0.3:/var/lib/fdroid/repo
     environment:
       NIX_PATH: "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:unstable=/nix/var/nix/profiles/per-user/root/channels/unstable"
       NIXPKGS_ALLOW_UNFREE: 1
 
 node:
-  server: ci
+  server: builder

@@ -10,5 +10,5 @@ in
 pkgs.mkShell {
   ANDROID_HOME= "${androidComposition.androidsdk}/libexec/android-sdk";
   ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
-  nativeBuildInputs = with pkgs; [ flutter ];
+  nativeBuildInputs = with pkgs; [ flutter openjdk11_headless ];
 }

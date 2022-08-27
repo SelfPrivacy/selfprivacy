@@ -11,3 +11,6 @@ steps:
     environment:
       NIX_PATH: "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:unstable=/nix/var/nix/profiles/per-user/root/channels/unstable"
       NIXPKGS_ALLOW_UNFREE: 1
+
+node:
+  server: builder

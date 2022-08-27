@@ -5,9 +5,9 @@ name: default
 steps:
   - name: build
     commands:
-      - nix-shell --pure --run "flutter doctor -v"
-      - nix-shell --pure --run "dart --version"
-      #- nix-shell --pure --run "flutter build apk --split-per-abi"
+      #- nix-shell --pure --run "flutter doctor -v"
+      #- nix-shell --pure --run "dart --version"
+      - nix-shell --pure --run "flutter build apk --split-per-abi"
     environment:
-      NIX_PATH: "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:/nix/var/nix/profiles/per-user/root/channels"
+      NIX_PATH: "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixpkgs"
       NIXPKGS_ALLOW_UNFREE: 1

@@ -41,7 +41,7 @@ class ServerStorageListItem extends StatelessWidget {
               Text(
                 'providers.storage.disk_usage'.tr(
                   args: [
-                    volume.sizeUsed.asGb().toStringAsPrecision(3),
+                    volume.sizeUsed.toString(),
                   ],
                 ),
                 style: titleStyle,
@@ -59,7 +59,7 @@ class ServerStorageListItem extends StatelessWidget {
               Text(
                 'providers.storage.disk_total'.tr(
                   args: [
-                    volume.sizeTotal.asGb().toStringAsPrecision(3),
+                    volume.sizeTotal.toString(),
                     volume.name,
                   ],
                 ),

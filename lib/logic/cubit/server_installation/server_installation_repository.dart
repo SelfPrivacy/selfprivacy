@@ -398,7 +398,7 @@ class ServerInstallationRepository {
 
     String dkimRecordString = '';
     try {
-      dkimRecordString = await api.getDkim();
+      dkimRecordString = (await api.getDkim())!;
     } catch (e) {
       print(e);
       rethrow;

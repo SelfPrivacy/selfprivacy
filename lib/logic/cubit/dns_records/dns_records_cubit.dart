@@ -139,7 +139,7 @@ class DnsRecordsCubit
     final String? ipAddress,
     final String? dkimPublicKey,
   ) {
-    if (domainName == null || ipAddress == null || dkimPublicKey == null) {
+    if (domainName == null || ipAddress == null) {
       return [];
     }
     return [
@@ -204,13 +204,14 @@ class DnsRecordsCubit
         type: 'TXT',
         category: DnsRecordsCategory.email,
       ),
-      DesiredDnsRecord(
-        name: 'selector._domainkey.$domainName',
-        content: dkimPublicKey,
-        description: 'providers.domain.record_description.dkim',
-        type: 'TXT',
-        category: DnsRecordsCategory.email,
-      ),
+      if (dkimPublicKey != null)
+        DesiredDnsRecord(
+          name: 'selector._domainkey.$domainName',
+          content: dkimPublicKey,
+          description: 'providers.domain.record_description.dkim',
+          type: 'TXT',
+          category: DnsRecordsCategory.email,
+        ),
     ];
   }
 }

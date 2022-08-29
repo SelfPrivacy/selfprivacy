@@ -625,38 +625,25 @@ class ServerApi extends ApiMap {
     }
   }
 
-  Future<String> getDkim() async {
+  Future<String?> getDkim() async {
     Response response;
-
+    String? dkim;
     final Dio client = await getClient();
     try {
       response = await client.get('/services/mailserver/dkim');
+      final Codec<String, String> base64toString = utf8.fuse(base64);
+      dkim = base64toString
+          .decode(response.data)
+          .split('(')[1]
+          .split(')')[0]
+          .replaceAll('"', '');
     } on DioError catch (e) {
       print(e.message);
-      throw Exception('No DKIM key found');
     } finally {
       close(client);
     }
 
-    if (response.statusCode == null) {
-      throw Exception('No DKIM key found');
-    }
-
-    if (response.statusCode == HttpStatus.notFound || response.data == null) {
-      throw Exception('No DKIM key found');
-    }
-
-    if (response.statusCode != HttpStatus.ok) {
-      throw Exception('No DKIM key found');
-    }
-
-    final Codec<String, String> base64toString = utf8.fuse(base64);
-
-    return base64toString
-        .decode(response.data)
-        .split('(')[1]
-        .split(')')[0]
-        .replaceAll('"', '');
+    return dkim;
   }
 
   Future<ApiResponse<RecoveryKeyStatus?>> getRecoveryTokenStatus() async {

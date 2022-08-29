@@ -59,7 +59,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           _sizeController.text = _currentSliderGbValue.truncate().toString();
           _priceController.text =
               (_euroPerGb * double.parse(_sizeController.text))
-                  .toStringAsPrecision(2);
+                  .toStringAsFixed(2);
           minSize = widget.diskVolumeToResize.sizeTotal;
           if (_currentSliderGbValue < 0) {
             _currentSliderGbValue = minSize.asGb();

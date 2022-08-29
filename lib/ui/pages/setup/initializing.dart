@@ -32,18 +32,21 @@ class InitializingPage extends StatelessWidget {
     if (cubit.state is ServerInstallationRecovery) {
       return const RecoveryRouting();
     } else {
-      final actualInitializingPage = [
-        () => _stepHetzner(cubit),
-        () => _stepCloudflare(cubit),
-        () => _stepBackblaze(cubit),
-        () => _stepDomain(cubit),
-        () => _stepUser(cubit),
-        () => _stepServer(cubit),
-        () => _stepCheck(cubit),
-        () => _stepCheck(cubit),
-        () => _stepCheck(cubit),
-        () => _stepCheck(cubit)
-      ][cubit.state.progress.index]();
+      Widget? actualInitializingPage;
+      if (cubit.state is! ServerInstallationFinished) {
+        actualInitializingPage = [
+          () => _stepHetzner(cubit),
+          () => _stepCloudflare(cubit),
+          () => _stepBackblaze(cubit),
+          () => _stepDomain(cubit),
+          () => _stepUser(cubit),
+          () => _stepServer(cubit),
+          () => _stepCheck(cubit),
+          () => _stepCheck(cubit),
+          () => _stepCheck(cubit),
+          () => _stepCheck(cubit)
+        ][cubit.state.progress.index]();
+      }
 
       return BlocListener<ServerInstallationCubit, ServerInstallationState>(
         listener: (final context, final state) {

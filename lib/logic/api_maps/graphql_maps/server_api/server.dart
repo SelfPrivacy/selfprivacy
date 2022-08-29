@@ -1,6 +1,7 @@
 import 'package:graphql/client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/api_map.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
@@ -8,11 +9,33 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 
 part 'volume_api.dart';
 part 'jobs_api.dart';
 part 'server_actions_api.dart';
 part 'services_api.dart';
+
+class GenericMutationResult {
+  GenericMutationResult({
+    required this.success,
+    required this.code,
+    this.message,
+  });
+  final bool success;
+  final int code;
+  final String? message;
+}
+
+class GenericJobMutationReturn extends GenericMutationResult {
+  GenericJobMutationReturn({
+    required final super.success,
+    required final super.code,
+    final super.message,
+    this.job,
+  });
+  final ServerJob? job;
+}
 
 class ServerApi extends ApiMap with VolumeApi, JobsApi, ServerActionsApi {
   ServerApi({

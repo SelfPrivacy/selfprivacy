@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 
 part 'dns_records.g.dart';
 
@@ -12,6 +13,16 @@ class DnsRecord {
     this.priority = 10,
     this.proxied = false,
   });
+
+  DnsRecord.fromGraphQL(
+    final Query$AllServices$services$allServices$dnsRecords record,
+  ) : this(
+          type: record.recordType,
+          name: record.name,
+          content: record.content,
+          ttl: record.ttl,
+          priority: record.priority ?? 10,
+        );
 
   final String type;
   final String? name;

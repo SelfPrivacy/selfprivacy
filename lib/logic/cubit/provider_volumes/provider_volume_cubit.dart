@@ -12,20 +12,19 @@ part 'provider_volume_state.dart';
 class ApiProviderVolumeCubit
     extends ServerInstallationDependendCubit<ApiProviderVolumeState> {
   ApiProviderVolumeCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(serverInstallationCubit, const ApiProviderVolumeState.initial()) {
-    final serverDetails = getIt<ApiConfigModel>().serverDetails;
-    providerApi = serverDetails == null
-        ? null
-        : VolumeApiFactoryCreator.createVolumeProviderApiFactory(
-            getIt<ApiConfigModel>().serverDetails!.provider,
-          );
-  }
+      : super(serverInstallationCubit, const ApiProviderVolumeState.initial());
 
   VolumeProviderApiFactory? providerApi;
 
   @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
+      final serverDetails = getIt<ApiConfigModel>().serverDetails;
+      providerApi = serverDetails == null
+          ? null
+          : VolumeApiFactoryCreator.createVolumeProviderApiFactory(
+              getIt<ApiConfigModel>().serverDetails!.provider,
+            );
       _refetch();
     }
   }

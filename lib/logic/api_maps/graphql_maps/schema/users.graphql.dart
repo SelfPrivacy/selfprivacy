@@ -61,13 +61,62 @@ class Fragment$basicMutationReturnFields {
 
 extension UtilityExtension$Fragment$basicMutationReturnFields
     on Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Fragment$basicMutationReturnFields(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Fragment$basicMutationReturnFields<
+          Fragment$basicMutationReturnFields>
+      get copyWith =>
+          CopyWith$Fragment$basicMutationReturnFields(this, (i) => i);
+}
+
+abstract class CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  factory CopyWith$Fragment$basicMutationReturnFields(
+          Fragment$basicMutationReturnFields instance,
+          TRes Function(Fragment$basicMutationReturnFields) then) =
+      _CopyWithImpl$Fragment$basicMutationReturnFields;
+
+  factory CopyWith$Fragment$basicMutationReturnFields.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$basicMutationReturnFields;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Fragment$basicMutationReturnFields<TRes>
+    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  _CopyWithImpl$Fragment$basicMutationReturnFields(this._instance, this._then);
+
+  final Fragment$basicMutationReturnFields _instance;
+
+  final TRes Function(Fragment$basicMutationReturnFields) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Fragment$basicMutationReturnFields(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields<TRes>
+    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 const fragmentDefinitionbasicMutationReturnFields = FragmentDefinitionNode(
@@ -164,8 +213,45 @@ class Variables$Mutation$CreateUser {
     return true;
   }
 
-  Variables$Mutation$CreateUser copyWith({Input$UserMutationInput? user}) =>
-      Variables$Mutation$CreateUser(user: user == null ? this.user : user);
+  CopyWith$Variables$Mutation$CreateUser<Variables$Mutation$CreateUser>
+      get copyWith => CopyWith$Variables$Mutation$CreateUser(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$CreateUser<TRes> {
+  factory CopyWith$Variables$Mutation$CreateUser(
+          Variables$Mutation$CreateUser instance,
+          TRes Function(Variables$Mutation$CreateUser) then) =
+      _CopyWithImpl$Variables$Mutation$CreateUser;
+
+  factory CopyWith$Variables$Mutation$CreateUser.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$CreateUser;
+
+  TRes call({Input$UserMutationInput? user});
+}
+
+class _CopyWithImpl$Variables$Mutation$CreateUser<TRes>
+    implements CopyWith$Variables$Mutation$CreateUser<TRes> {
+  _CopyWithImpl$Variables$Mutation$CreateUser(this._instance, this._then);
+
+  final Variables$Mutation$CreateUser _instance;
+
+  final TRes Function(Variables$Mutation$CreateUser) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? user = _undefined}) => _then(Variables$Mutation$CreateUser(
+      user: user == _undefined || user == null
+          ? _instance.user
+          : (user as Input$UserMutationInput)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$CreateUser<TRes>
+    implements CopyWith$Variables$Mutation$CreateUser<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$CreateUser(this._res);
+
+  TRes _res;
+
+  call({Input$UserMutationInput? user}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -204,11 +290,59 @@ class Mutation$CreateUser {
 }
 
 extension UtilityExtension$Mutation$CreateUser on Mutation$CreateUser {
-  Mutation$CreateUser copyWith(
-          {Mutation$CreateUser$createUser? createUser, String? $__typename}) =>
-      Mutation$CreateUser(
-          createUser: createUser == null ? this.createUser : createUser,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$CreateUser<Mutation$CreateUser> get copyWith =>
+      CopyWith$Mutation$CreateUser(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$CreateUser<TRes> {
+  factory CopyWith$Mutation$CreateUser(Mutation$CreateUser instance,
+          TRes Function(Mutation$CreateUser) then) =
+      _CopyWithImpl$Mutation$CreateUser;
+
+  factory CopyWith$Mutation$CreateUser.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$CreateUser;
+
+  TRes call({Mutation$CreateUser$createUser? createUser, String? $__typename});
+  CopyWith$Mutation$CreateUser$createUser<TRes> get createUser;
+}
+
+class _CopyWithImpl$Mutation$CreateUser<TRes>
+    implements CopyWith$Mutation$CreateUser<TRes> {
+  _CopyWithImpl$Mutation$CreateUser(this._instance, this._then);
+
+  final Mutation$CreateUser _instance;
+
+  final TRes Function(Mutation$CreateUser) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? createUser = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$CreateUser(
+          createUser: createUser == _undefined || createUser == null
+              ? _instance.createUser
+              : (createUser as Mutation$CreateUser$createUser),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$CreateUser$createUser<TRes> get createUser {
+    final local$createUser = _instance.createUser;
+    return CopyWith$Mutation$CreateUser$createUser(
+        local$createUser, (e) => call(createUser: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$CreateUser<TRes>
+    implements CopyWith$Mutation$CreateUser<TRes> {
+  _CopyWithStubImpl$Mutation$CreateUser(this._res);
+
+  TRes _res;
+
+  call({Mutation$CreateUser$createUser? createUser, String? $__typename}) =>
+      _res;
+  CopyWith$Mutation$CreateUser$createUser<TRes> get createUser =>
+      CopyWith$Mutation$CreateUser$createUser.stub(_res);
 }
 
 const documentNodeMutationCreateUser = DocumentNode(definitions: [
@@ -433,18 +567,84 @@ class Mutation$CreateUser$createUser
 
 extension UtilityExtension$Mutation$CreateUser$createUser
     on Mutation$CreateUser$createUser {
-  Mutation$CreateUser$createUser copyWith(
+  CopyWith$Mutation$CreateUser$createUser<Mutation$CreateUser$createUser>
+      get copyWith => CopyWith$Mutation$CreateUser$createUser(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$CreateUser$createUser<TRes> {
+  factory CopyWith$Mutation$CreateUser$createUser(
+          Mutation$CreateUser$createUser instance,
+          TRes Function(Mutation$CreateUser$createUser) then) =
+      _CopyWithImpl$Mutation$CreateUser$createUser;
+
+  factory CopyWith$Mutation$CreateUser$createUser.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$CreateUser$createUser;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      Mutation$CreateUser$createUser$user? user});
+  CopyWith$Mutation$CreateUser$createUser$user<TRes> get user;
+}
+
+class _CopyWithImpl$Mutation$CreateUser$createUser<TRes>
+    implements CopyWith$Mutation$CreateUser$createUser<TRes> {
+  _CopyWithImpl$Mutation$CreateUser$createUser(this._instance, this._then);
+
+  final Mutation$CreateUser$createUser _instance;
+
+  final TRes Function(Mutation$CreateUser$createUser) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? user = _undefined}) =>
+      _then(Mutation$CreateUser$createUser(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          user: user == _undefined
+              ? _instance.user
+              : (user as Mutation$CreateUser$createUser$user?)));
+  CopyWith$Mutation$CreateUser$createUser$user<TRes> get user {
+    final local$user = _instance.user;
+    return local$user == null
+        ? CopyWith$Mutation$CreateUser$createUser$user.stub(_then(_instance))
+        : CopyWith$Mutation$CreateUser$createUser$user(
+            local$user, (e) => call(user: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$CreateUser$createUser<TRes>
+    implements CopyWith$Mutation$CreateUser$createUser<TRes> {
+  _CopyWithStubImpl$Mutation$CreateUser$createUser(this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          Mutation$CreateUser$createUser$user? Function()? user}) =>
-      Mutation$CreateUser$createUser(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          user: user == null ? this.user : user());
+          Mutation$CreateUser$createUser$user? user}) =>
+      _res;
+  CopyWith$Mutation$CreateUser$createUser$user<TRes> get user =>
+      CopyWith$Mutation$CreateUser$createUser$user.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -514,16 +714,70 @@ class Mutation$CreateUser$createUser$user {
 
 extension UtilityExtension$Mutation$CreateUser$createUser$user
     on Mutation$CreateUser$createUser$user {
-  Mutation$CreateUser$createUser$user copyWith(
+  CopyWith$Mutation$CreateUser$createUser$user<
+          Mutation$CreateUser$createUser$user>
+      get copyWith =>
+          CopyWith$Mutation$CreateUser$createUser$user(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$CreateUser$createUser$user<TRes> {
+  factory CopyWith$Mutation$CreateUser$createUser$user(
+          Mutation$CreateUser$createUser$user instance,
+          TRes Function(Mutation$CreateUser$createUser$user) then) =
+      _CopyWithImpl$Mutation$CreateUser$createUser$user;
+
+  factory CopyWith$Mutation$CreateUser$createUser$user.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$CreateUser$createUser$user;
+
+  TRes call(
+      {String? username,
+      Enum$UserType? userType,
+      List<String>? sshKeys,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$CreateUser$createUser$user<TRes>
+    implements CopyWith$Mutation$CreateUser$createUser$user<TRes> {
+  _CopyWithImpl$Mutation$CreateUser$createUser$user(this._instance, this._then);
+
+  final Mutation$CreateUser$createUser$user _instance;
+
+  final TRes Function(Mutation$CreateUser$createUser$user) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? username = _undefined,
+          Object? userType = _undefined,
+          Object? sshKeys = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$CreateUser$createUser$user(
+          username: username == _undefined || username == null
+              ? _instance.username
+              : (username as String),
+          userType: userType == _undefined || userType == null
+              ? _instance.userType
+              : (userType as Enum$UserType),
+          sshKeys: sshKeys == _undefined || sshKeys == null
+              ? _instance.sshKeys
+              : (sshKeys as List<String>),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$CreateUser$createUser$user<TRes>
+    implements CopyWith$Mutation$CreateUser$createUser$user<TRes> {
+  _CopyWithStubImpl$Mutation$CreateUser$createUser$user(this._res);
+
+  TRes _res;
+
+  call(
           {String? username,
           Enum$UserType? userType,
           List<String>? sshKeys,
           String? $__typename}) =>
-      Mutation$CreateUser$createUser$user(
-          username: username == null ? this.username : username,
-          userType: userType == null ? this.userType : userType,
-          sshKeys: sshKeys == null ? this.sshKeys : sshKeys,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -562,10 +816,55 @@ class Query$AllUsers {
 }
 
 extension UtilityExtension$Query$AllUsers on Query$AllUsers {
-  Query$AllUsers copyWith({Query$AllUsers$users? users, String? $__typename}) =>
-      Query$AllUsers(
-          users: users == null ? this.users : users,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$AllUsers<Query$AllUsers> get copyWith =>
+      CopyWith$Query$AllUsers(this, (i) => i);
+}
+
+abstract class CopyWith$Query$AllUsers<TRes> {
+  factory CopyWith$Query$AllUsers(
+          Query$AllUsers instance, TRes Function(Query$AllUsers) then) =
+      _CopyWithImpl$Query$AllUsers;
+
+  factory CopyWith$Query$AllUsers.stub(TRes res) =
+      _CopyWithStubImpl$Query$AllUsers;
+
+  TRes call({Query$AllUsers$users? users, String? $__typename});
+  CopyWith$Query$AllUsers$users<TRes> get users;
+}
+
+class _CopyWithImpl$Query$AllUsers<TRes>
+    implements CopyWith$Query$AllUsers<TRes> {
+  _CopyWithImpl$Query$AllUsers(this._instance, this._then);
+
+  final Query$AllUsers _instance;
+
+  final TRes Function(Query$AllUsers) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$AllUsers(
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Query$AllUsers$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$AllUsers$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Query$AllUsers$users(local$users, (e) => call(users: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$AllUsers<TRes>
+    implements CopyWith$Query$AllUsers<TRes> {
+  _CopyWithStubImpl$Query$AllUsers(this._res);
+
+  TRes _res;
+
+  call({Query$AllUsers$users? users, String? $__typename}) => _res;
+  CopyWith$Query$AllUsers$users<TRes> get users =>
+      CopyWith$Query$AllUsers$users.stub(_res);
 }
 
 const documentNodeQueryAllUsers = DocumentNode(definitions: [
@@ -751,12 +1050,68 @@ class Query$AllUsers$users {
 }
 
 extension UtilityExtension$Query$AllUsers$users on Query$AllUsers$users {
-  Query$AllUsers$users copyWith(
-          {List<Query$AllUsers$users$allUsers>? allUsers,
-          String? $__typename}) =>
-      Query$AllUsers$users(
-          allUsers: allUsers == null ? this.allUsers : allUsers,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$AllUsers$users<Query$AllUsers$users> get copyWith =>
+      CopyWith$Query$AllUsers$users(this, (i) => i);
+}
+
+abstract class CopyWith$Query$AllUsers$users<TRes> {
+  factory CopyWith$Query$AllUsers$users(Query$AllUsers$users instance,
+          TRes Function(Query$AllUsers$users) then) =
+      _CopyWithImpl$Query$AllUsers$users;
+
+  factory CopyWith$Query$AllUsers$users.stub(TRes res) =
+      _CopyWithStubImpl$Query$AllUsers$users;
+
+  TRes call(
+      {List<Query$AllUsers$users$allUsers>? allUsers, String? $__typename});
+  TRes allUsers(
+      Iterable<Query$AllUsers$users$allUsers> Function(
+              Iterable<
+                  CopyWith$Query$AllUsers$users$allUsers<
+                      Query$AllUsers$users$allUsers>>)
+          _fn);
+}
+
+class _CopyWithImpl$Query$AllUsers$users<TRes>
+    implements CopyWith$Query$AllUsers$users<TRes> {
+  _CopyWithImpl$Query$AllUsers$users(this._instance, this._then);
+
+  final Query$AllUsers$users _instance;
+
+  final TRes Function(Query$AllUsers$users) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? allUsers = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$AllUsers$users(
+          allUsers: allUsers == _undefined || allUsers == null
+              ? _instance.allUsers
+              : (allUsers as List<Query$AllUsers$users$allUsers>),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  TRes allUsers(
+          Iterable<Query$AllUsers$users$allUsers> Function(
+                  Iterable<
+                      CopyWith$Query$AllUsers$users$allUsers<
+                          Query$AllUsers$users$allUsers>>)
+              _fn) =>
+      call(
+          allUsers: _fn(_instance.allUsers.map(
+                  (e) => CopyWith$Query$AllUsers$users$allUsers(e, (i) => i)))
+              .toList());
+}
+
+class _CopyWithStubImpl$Query$AllUsers$users<TRes>
+    implements CopyWith$Query$AllUsers$users<TRes> {
+  _CopyWithStubImpl$Query$AllUsers$users(this._res);
+
+  TRes _res;
+
+  call({List<Query$AllUsers$users$allUsers>? allUsers, String? $__typename}) =>
+      _res;
+  allUsers(_fn) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -824,16 +1179,68 @@ class Query$AllUsers$users$allUsers {
 
 extension UtilityExtension$Query$AllUsers$users$allUsers
     on Query$AllUsers$users$allUsers {
-  Query$AllUsers$users$allUsers copyWith(
+  CopyWith$Query$AllUsers$users$allUsers<Query$AllUsers$users$allUsers>
+      get copyWith => CopyWith$Query$AllUsers$users$allUsers(this, (i) => i);
+}
+
+abstract class CopyWith$Query$AllUsers$users$allUsers<TRes> {
+  factory CopyWith$Query$AllUsers$users$allUsers(
+          Query$AllUsers$users$allUsers instance,
+          TRes Function(Query$AllUsers$users$allUsers) then) =
+      _CopyWithImpl$Query$AllUsers$users$allUsers;
+
+  factory CopyWith$Query$AllUsers$users$allUsers.stub(TRes res) =
+      _CopyWithStubImpl$Query$AllUsers$users$allUsers;
+
+  TRes call(
+      {Enum$UserType? userType,
+      String? username,
+      List<String>? sshKeys,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Query$AllUsers$users$allUsers<TRes>
+    implements CopyWith$Query$AllUsers$users$allUsers<TRes> {
+  _CopyWithImpl$Query$AllUsers$users$allUsers(this._instance, this._then);
+
+  final Query$AllUsers$users$allUsers _instance;
+
+  final TRes Function(Query$AllUsers$users$allUsers) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? userType = _undefined,
+          Object? username = _undefined,
+          Object? sshKeys = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$AllUsers$users$allUsers(
+          userType: userType == _undefined || userType == null
+              ? _instance.userType
+              : (userType as Enum$UserType),
+          username: username == _undefined || username == null
+              ? _instance.username
+              : (username as String),
+          sshKeys: sshKeys == _undefined || sshKeys == null
+              ? _instance.sshKeys
+              : (sshKeys as List<String>),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$AllUsers$users$allUsers<TRes>
+    implements CopyWith$Query$AllUsers$users$allUsers<TRes> {
+  _CopyWithStubImpl$Query$AllUsers$users$allUsers(this._res);
+
+  TRes _res;
+
+  call(
           {Enum$UserType? userType,
           String? username,
           List<String>? sshKeys,
           String? $__typename}) =>
-      Query$AllUsers$users$allUsers(
-          userType: userType == null ? this.userType : userType,
-          username: username == null ? this.username : username,
-          sshKeys: sshKeys == null ? this.sshKeys : sshKeys,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -863,9 +1270,46 @@ class Variables$Mutation$AddSshKey {
     return true;
   }
 
-  Variables$Mutation$AddSshKey copyWith({Input$SshMutationInput? sshInput}) =>
-      Variables$Mutation$AddSshKey(
-          sshInput: sshInput == null ? this.sshInput : sshInput);
+  CopyWith$Variables$Mutation$AddSshKey<Variables$Mutation$AddSshKey>
+      get copyWith => CopyWith$Variables$Mutation$AddSshKey(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$AddSshKey<TRes> {
+  factory CopyWith$Variables$Mutation$AddSshKey(
+          Variables$Mutation$AddSshKey instance,
+          TRes Function(Variables$Mutation$AddSshKey) then) =
+      _CopyWithImpl$Variables$Mutation$AddSshKey;
+
+  factory CopyWith$Variables$Mutation$AddSshKey.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$AddSshKey;
+
+  TRes call({Input$SshMutationInput? sshInput});
+}
+
+class _CopyWithImpl$Variables$Mutation$AddSshKey<TRes>
+    implements CopyWith$Variables$Mutation$AddSshKey<TRes> {
+  _CopyWithImpl$Variables$Mutation$AddSshKey(this._instance, this._then);
+
+  final Variables$Mutation$AddSshKey _instance;
+
+  final TRes Function(Variables$Mutation$AddSshKey) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? sshInput = _undefined}) =>
+      _then(Variables$Mutation$AddSshKey(
+          sshInput: sshInput == _undefined || sshInput == null
+              ? _instance.sshInput
+              : (sshInput as Input$SshMutationInput)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$AddSshKey<TRes>
+    implements CopyWith$Variables$Mutation$AddSshKey<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$AddSshKey(this._res);
+
+  TRes _res;
+
+  call({Input$SshMutationInput? sshInput}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -904,11 +1348,57 @@ class Mutation$AddSshKey {
 }
 
 extension UtilityExtension$Mutation$AddSshKey on Mutation$AddSshKey {
-  Mutation$AddSshKey copyWith(
-          {Mutation$AddSshKey$addSshKey? addSshKey, String? $__typename}) =>
-      Mutation$AddSshKey(
-          addSshKey: addSshKey == null ? this.addSshKey : addSshKey,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$AddSshKey<Mutation$AddSshKey> get copyWith =>
+      CopyWith$Mutation$AddSshKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$AddSshKey<TRes> {
+  factory CopyWith$Mutation$AddSshKey(
+          Mutation$AddSshKey instance, TRes Function(Mutation$AddSshKey) then) =
+      _CopyWithImpl$Mutation$AddSshKey;
+
+  factory CopyWith$Mutation$AddSshKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$AddSshKey;
+
+  TRes call({Mutation$AddSshKey$addSshKey? addSshKey, String? $__typename});
+  CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey;
+}
+
+class _CopyWithImpl$Mutation$AddSshKey<TRes>
+    implements CopyWith$Mutation$AddSshKey<TRes> {
+  _CopyWithImpl$Mutation$AddSshKey(this._instance, this._then);
+
+  final Mutation$AddSshKey _instance;
+
+  final TRes Function(Mutation$AddSshKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? addSshKey = _undefined, Object? $__typename = _undefined}) =>
+      _then(Mutation$AddSshKey(
+          addSshKey: addSshKey == _undefined || addSshKey == null
+              ? _instance.addSshKey
+              : (addSshKey as Mutation$AddSshKey$addSshKey),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey {
+    final local$addSshKey = _instance.addSshKey;
+    return CopyWith$Mutation$AddSshKey$addSshKey(
+        local$addSshKey, (e) => call(addSshKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$AddSshKey<TRes>
+    implements CopyWith$Mutation$AddSshKey<TRes> {
+  _CopyWithStubImpl$Mutation$AddSshKey(this._res);
+
+  TRes _res;
+
+  call({Mutation$AddSshKey$addSshKey? addSshKey, String? $__typename}) => _res;
+  CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey =>
+      CopyWith$Mutation$AddSshKey$addSshKey.stub(_res);
 }
 
 const documentNodeMutationAddSshKey = DocumentNode(definitions: [
@@ -1133,18 +1623,84 @@ class Mutation$AddSshKey$addSshKey
 
 extension UtilityExtension$Mutation$AddSshKey$addSshKey
     on Mutation$AddSshKey$addSshKey {
-  Mutation$AddSshKey$addSshKey copyWith(
+  CopyWith$Mutation$AddSshKey$addSshKey<Mutation$AddSshKey$addSshKey>
+      get copyWith => CopyWith$Mutation$AddSshKey$addSshKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$AddSshKey$addSshKey<TRes> {
+  factory CopyWith$Mutation$AddSshKey$addSshKey(
+          Mutation$AddSshKey$addSshKey instance,
+          TRes Function(Mutation$AddSshKey$addSshKey) then) =
+      _CopyWithImpl$Mutation$AddSshKey$addSshKey;
+
+  factory CopyWith$Mutation$AddSshKey$addSshKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$AddSshKey$addSshKey;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      Mutation$AddSshKey$addSshKey$user? user});
+  CopyWith$Mutation$AddSshKey$addSshKey$user<TRes> get user;
+}
+
+class _CopyWithImpl$Mutation$AddSshKey$addSshKey<TRes>
+    implements CopyWith$Mutation$AddSshKey$addSshKey<TRes> {
+  _CopyWithImpl$Mutation$AddSshKey$addSshKey(this._instance, this._then);
+
+  final Mutation$AddSshKey$addSshKey _instance;
+
+  final TRes Function(Mutation$AddSshKey$addSshKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? user = _undefined}) =>
+      _then(Mutation$AddSshKey$addSshKey(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          user: user == _undefined
+              ? _instance.user
+              : (user as Mutation$AddSshKey$addSshKey$user?)));
+  CopyWith$Mutation$AddSshKey$addSshKey$user<TRes> get user {
+    final local$user = _instance.user;
+    return local$user == null
+        ? CopyWith$Mutation$AddSshKey$addSshKey$user.stub(_then(_instance))
+        : CopyWith$Mutation$AddSshKey$addSshKey$user(
+            local$user, (e) => call(user: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$AddSshKey$addSshKey<TRes>
+    implements CopyWith$Mutation$AddSshKey$addSshKey<TRes> {
+  _CopyWithStubImpl$Mutation$AddSshKey$addSshKey(this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          Mutation$AddSshKey$addSshKey$user? Function()? user}) =>
-      Mutation$AddSshKey$addSshKey(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          user: user == null ? this.user : user());
+          Mutation$AddSshKey$addSshKey$user? user}) =>
+      _res;
+  CopyWith$Mutation$AddSshKey$addSshKey$user<TRes> get user =>
+      CopyWith$Mutation$AddSshKey$addSshKey$user.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1214,16 +1770,69 @@ class Mutation$AddSshKey$addSshKey$user {
 
 extension UtilityExtension$Mutation$AddSshKey$addSshKey$user
     on Mutation$AddSshKey$addSshKey$user {
-  Mutation$AddSshKey$addSshKey$user copyWith(
+  CopyWith$Mutation$AddSshKey$addSshKey$user<Mutation$AddSshKey$addSshKey$user>
+      get copyWith =>
+          CopyWith$Mutation$AddSshKey$addSshKey$user(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$AddSshKey$addSshKey$user<TRes> {
+  factory CopyWith$Mutation$AddSshKey$addSshKey$user(
+          Mutation$AddSshKey$addSshKey$user instance,
+          TRes Function(Mutation$AddSshKey$addSshKey$user) then) =
+      _CopyWithImpl$Mutation$AddSshKey$addSshKey$user;
+
+  factory CopyWith$Mutation$AddSshKey$addSshKey$user.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$AddSshKey$addSshKey$user;
+
+  TRes call(
+      {List<String>? sshKeys,
+      Enum$UserType? userType,
+      String? username,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$AddSshKey$addSshKey$user<TRes>
+    implements CopyWith$Mutation$AddSshKey$addSshKey$user<TRes> {
+  _CopyWithImpl$Mutation$AddSshKey$addSshKey$user(this._instance, this._then);
+
+  final Mutation$AddSshKey$addSshKey$user _instance;
+
+  final TRes Function(Mutation$AddSshKey$addSshKey$user) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? sshKeys = _undefined,
+          Object? userType = _undefined,
+          Object? username = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$AddSshKey$addSshKey$user(
+          sshKeys: sshKeys == _undefined || sshKeys == null
+              ? _instance.sshKeys
+              : (sshKeys as List<String>),
+          userType: userType == _undefined || userType == null
+              ? _instance.userType
+              : (userType as Enum$UserType),
+          username: username == _undefined || username == null
+              ? _instance.username
+              : (username as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$AddSshKey$addSshKey$user<TRes>
+    implements CopyWith$Mutation$AddSshKey$addSshKey$user<TRes> {
+  _CopyWithStubImpl$Mutation$AddSshKey$addSshKey$user(this._res);
+
+  TRes _res;
+
+  call(
           {List<String>? sshKeys,
           Enum$UserType? userType,
           String? username,
           String? $__typename}) =>
-      Mutation$AddSshKey$addSshKey$user(
-          sshKeys: sshKeys == null ? this.sshKeys : sshKeys,
-          userType: userType == null ? this.userType : userType,
-          username: username == null ? this.username : username,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1253,9 +1862,44 @@ class Variables$Query$GetUser {
     return true;
   }
 
-  Variables$Query$GetUser copyWith({String? username}) =>
-      Variables$Query$GetUser(
-          username: username == null ? this.username : username);
+  CopyWith$Variables$Query$GetUser<Variables$Query$GetUser> get copyWith =>
+      CopyWith$Variables$Query$GetUser(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Query$GetUser<TRes> {
+  factory CopyWith$Variables$Query$GetUser(Variables$Query$GetUser instance,
+          TRes Function(Variables$Query$GetUser) then) =
+      _CopyWithImpl$Variables$Query$GetUser;
+
+  factory CopyWith$Variables$Query$GetUser.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Query$GetUser;
+
+  TRes call({String? username});
+}
+
+class _CopyWithImpl$Variables$Query$GetUser<TRes>
+    implements CopyWith$Variables$Query$GetUser<TRes> {
+  _CopyWithImpl$Variables$Query$GetUser(this._instance, this._then);
+
+  final Variables$Query$GetUser _instance;
+
+  final TRes Function(Variables$Query$GetUser) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? username = _undefined}) => _then(Variables$Query$GetUser(
+      username: username == _undefined || username == null
+          ? _instance.username
+          : (username as String)));
+}
+
+class _CopyWithStubImpl$Variables$Query$GetUser<TRes>
+    implements CopyWith$Variables$Query$GetUser<TRes> {
+  _CopyWithStubImpl$Variables$Query$GetUser(this._res);
+
+  TRes _res;
+
+  call({String? username}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1294,10 +1938,55 @@ class Query$GetUser {
 }
 
 extension UtilityExtension$Query$GetUser on Query$GetUser {
-  Query$GetUser copyWith({Query$GetUser$users? users, String? $__typename}) =>
-      Query$GetUser(
-          users: users == null ? this.users : users,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$GetUser<Query$GetUser> get copyWith =>
+      CopyWith$Query$GetUser(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetUser<TRes> {
+  factory CopyWith$Query$GetUser(
+          Query$GetUser instance, TRes Function(Query$GetUser) then) =
+      _CopyWithImpl$Query$GetUser;
+
+  factory CopyWith$Query$GetUser.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetUser;
+
+  TRes call({Query$GetUser$users? users, String? $__typename});
+  CopyWith$Query$GetUser$users<TRes> get users;
+}
+
+class _CopyWithImpl$Query$GetUser<TRes>
+    implements CopyWith$Query$GetUser<TRes> {
+  _CopyWithImpl$Query$GetUser(this._instance, this._then);
+
+  final Query$GetUser _instance;
+
+  final TRes Function(Query$GetUser) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$GetUser(
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Query$GetUser$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$GetUser$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Query$GetUser$users(local$users, (e) => call(users: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$GetUser<TRes>
+    implements CopyWith$Query$GetUser<TRes> {
+  _CopyWithStubImpl$Query$GetUser(this._res);
+
+  TRes _res;
+
+  call({Query$GetUser$users? users, String? $__typename}) => _res;
+  CopyWith$Query$GetUser$users<TRes> get users =>
+      CopyWith$Query$GetUser$users.stub(_res);
 }
 
 const documentNodeQueryGetUser = DocumentNode(definitions: [
@@ -1500,12 +2189,58 @@ class Query$GetUser$users {
 }
 
 extension UtilityExtension$Query$GetUser$users on Query$GetUser$users {
-  Query$GetUser$users copyWith(
-          {Query$GetUser$users$getUser? Function()? getUser,
-          String? $__typename}) =>
-      Query$GetUser$users(
-          getUser: getUser == null ? this.getUser : getUser(),
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$GetUser$users<Query$GetUser$users> get copyWith =>
+      CopyWith$Query$GetUser$users(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetUser$users<TRes> {
+  factory CopyWith$Query$GetUser$users(Query$GetUser$users instance,
+          TRes Function(Query$GetUser$users) then) =
+      _CopyWithImpl$Query$GetUser$users;
+
+  factory CopyWith$Query$GetUser$users.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetUser$users;
+
+  TRes call({Query$GetUser$users$getUser? getUser, String? $__typename});
+  CopyWith$Query$GetUser$users$getUser<TRes> get getUser;
+}
+
+class _CopyWithImpl$Query$GetUser$users<TRes>
+    implements CopyWith$Query$GetUser$users<TRes> {
+  _CopyWithImpl$Query$GetUser$users(this._instance, this._then);
+
+  final Query$GetUser$users _instance;
+
+  final TRes Function(Query$GetUser$users) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? getUser = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$GetUser$users(
+          getUser: getUser == _undefined
+              ? _instance.getUser
+              : (getUser as Query$GetUser$users$getUser?),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$GetUser$users$getUser<TRes> get getUser {
+    final local$getUser = _instance.getUser;
+    return local$getUser == null
+        ? CopyWith$Query$GetUser$users$getUser.stub(_then(_instance))
+        : CopyWith$Query$GetUser$users$getUser(
+            local$getUser, (e) => call(getUser: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$GetUser$users<TRes>
+    implements CopyWith$Query$GetUser$users<TRes> {
+  _CopyWithStubImpl$Query$GetUser$users(this._res);
+
+  TRes _res;
+
+  call({Query$GetUser$users$getUser? getUser, String? $__typename}) => _res;
+  CopyWith$Query$GetUser$users$getUser<TRes> get getUser =>
+      CopyWith$Query$GetUser$users$getUser.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1573,16 +2308,68 @@ class Query$GetUser$users$getUser {
 
 extension UtilityExtension$Query$GetUser$users$getUser
     on Query$GetUser$users$getUser {
-  Query$GetUser$users$getUser copyWith(
+  CopyWith$Query$GetUser$users$getUser<Query$GetUser$users$getUser>
+      get copyWith => CopyWith$Query$GetUser$users$getUser(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetUser$users$getUser<TRes> {
+  factory CopyWith$Query$GetUser$users$getUser(
+          Query$GetUser$users$getUser instance,
+          TRes Function(Query$GetUser$users$getUser) then) =
+      _CopyWithImpl$Query$GetUser$users$getUser;
+
+  factory CopyWith$Query$GetUser$users$getUser.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetUser$users$getUser;
+
+  TRes call(
+      {List<String>? sshKeys,
+      Enum$UserType? userType,
+      String? username,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Query$GetUser$users$getUser<TRes>
+    implements CopyWith$Query$GetUser$users$getUser<TRes> {
+  _CopyWithImpl$Query$GetUser$users$getUser(this._instance, this._then);
+
+  final Query$GetUser$users$getUser _instance;
+
+  final TRes Function(Query$GetUser$users$getUser) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? sshKeys = _undefined,
+          Object? userType = _undefined,
+          Object? username = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$GetUser$users$getUser(
+          sshKeys: sshKeys == _undefined || sshKeys == null
+              ? _instance.sshKeys
+              : (sshKeys as List<String>),
+          userType: userType == _undefined || userType == null
+              ? _instance.userType
+              : (userType as Enum$UserType),
+          username: username == _undefined || username == null
+              ? _instance.username
+              : (username as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$GetUser$users$getUser<TRes>
+    implements CopyWith$Query$GetUser$users$getUser<TRes> {
+  _CopyWithStubImpl$Query$GetUser$users$getUser(this._res);
+
+  TRes _res;
+
+  call(
           {List<String>? sshKeys,
           Enum$UserType? userType,
           String? username,
           String? $__typename}) =>
-      Query$GetUser$users$getUser(
-          sshKeys: sshKeys == null ? this.sshKeys : sshKeys,
-          userType: userType == null ? this.userType : userType,
-          username: username == null ? this.username : username,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1613,10 +2400,46 @@ class Variables$Mutation$RemoveSshKey {
     return true;
   }
 
-  Variables$Mutation$RemoveSshKey copyWith(
-          {Input$SshMutationInput? sshInput}) =>
-      Variables$Mutation$RemoveSshKey(
-          sshInput: sshInput == null ? this.sshInput : sshInput);
+  CopyWith$Variables$Mutation$RemoveSshKey<Variables$Mutation$RemoveSshKey>
+      get copyWith => CopyWith$Variables$Mutation$RemoveSshKey(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$RemoveSshKey<TRes> {
+  factory CopyWith$Variables$Mutation$RemoveSshKey(
+          Variables$Mutation$RemoveSshKey instance,
+          TRes Function(Variables$Mutation$RemoveSshKey) then) =
+      _CopyWithImpl$Variables$Mutation$RemoveSshKey;
+
+  factory CopyWith$Variables$Mutation$RemoveSshKey.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$RemoveSshKey;
+
+  TRes call({Input$SshMutationInput? sshInput});
+}
+
+class _CopyWithImpl$Variables$Mutation$RemoveSshKey<TRes>
+    implements CopyWith$Variables$Mutation$RemoveSshKey<TRes> {
+  _CopyWithImpl$Variables$Mutation$RemoveSshKey(this._instance, this._then);
+
+  final Variables$Mutation$RemoveSshKey _instance;
+
+  final TRes Function(Variables$Mutation$RemoveSshKey) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? sshInput = _undefined}) =>
+      _then(Variables$Mutation$RemoveSshKey(
+          sshInput: sshInput == _undefined || sshInput == null
+              ? _instance.sshInput
+              : (sshInput as Input$SshMutationInput)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$RemoveSshKey<TRes>
+    implements CopyWith$Variables$Mutation$RemoveSshKey<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$RemoveSshKey(this._res);
+
+  TRes _res;
+
+  call({Input$SshMutationInput? sshInput}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1656,12 +2479,62 @@ class Mutation$RemoveSshKey {
 }
 
 extension UtilityExtension$Mutation$RemoveSshKey on Mutation$RemoveSshKey {
-  Mutation$RemoveSshKey copyWith(
+  CopyWith$Mutation$RemoveSshKey<Mutation$RemoveSshKey> get copyWith =>
+      CopyWith$Mutation$RemoveSshKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RemoveSshKey<TRes> {
+  factory CopyWith$Mutation$RemoveSshKey(Mutation$RemoveSshKey instance,
+          TRes Function(Mutation$RemoveSshKey) then) =
+      _CopyWithImpl$Mutation$RemoveSshKey;
+
+  factory CopyWith$Mutation$RemoveSshKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveSshKey;
+
+  TRes call(
+      {Mutation$RemoveSshKey$removeSshKey? removeSshKey, String? $__typename});
+  CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey;
+}
+
+class _CopyWithImpl$Mutation$RemoveSshKey<TRes>
+    implements CopyWith$Mutation$RemoveSshKey<TRes> {
+  _CopyWithImpl$Mutation$RemoveSshKey(this._instance, this._then);
+
+  final Mutation$RemoveSshKey _instance;
+
+  final TRes Function(Mutation$RemoveSshKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? removeSshKey = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RemoveSshKey(
+          removeSshKey: removeSshKey == _undefined || removeSshKey == null
+              ? _instance.removeSshKey
+              : (removeSshKey as Mutation$RemoveSshKey$removeSshKey),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey {
+    final local$removeSshKey = _instance.removeSshKey;
+    return CopyWith$Mutation$RemoveSshKey$removeSshKey(
+        local$removeSshKey, (e) => call(removeSshKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RemoveSshKey<TRes>
+    implements CopyWith$Mutation$RemoveSshKey<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveSshKey(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$RemoveSshKey$removeSshKey? removeSshKey,
           String? $__typename}) =>
-      Mutation$RemoveSshKey(
-          removeSshKey: removeSshKey == null ? this.removeSshKey : removeSshKey,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey =>
+      CopyWith$Mutation$RemoveSshKey$removeSshKey.stub(_res);
 }
 
 const documentNodeMutationRemoveSshKey = DocumentNode(definitions: [
@@ -1892,18 +2765,87 @@ class Mutation$RemoveSshKey$removeSshKey
 
 extension UtilityExtension$Mutation$RemoveSshKey$removeSshKey
     on Mutation$RemoveSshKey$removeSshKey {
-  Mutation$RemoveSshKey$removeSshKey copyWith(
+  CopyWith$Mutation$RemoveSshKey$removeSshKey<
+          Mutation$RemoveSshKey$removeSshKey>
+      get copyWith =>
+          CopyWith$Mutation$RemoveSshKey$removeSshKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> {
+  factory CopyWith$Mutation$RemoveSshKey$removeSshKey(
+          Mutation$RemoveSshKey$removeSshKey instance,
+          TRes Function(Mutation$RemoveSshKey$removeSshKey) then) =
+      _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey;
+
+  factory CopyWith$Mutation$RemoveSshKey$removeSshKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      Mutation$RemoveSshKey$removeSshKey$user? user});
+  CopyWith$Mutation$RemoveSshKey$removeSshKey$user<TRes> get user;
+}
+
+class _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
+    implements CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> {
+  _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey(this._instance, this._then);
+
+  final Mutation$RemoveSshKey$removeSshKey _instance;
+
+  final TRes Function(Mutation$RemoveSshKey$removeSshKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? user = _undefined}) =>
+      _then(Mutation$RemoveSshKey$removeSshKey(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          user: user == _undefined
+              ? _instance.user
+              : (user as Mutation$RemoveSshKey$removeSshKey$user?)));
+  CopyWith$Mutation$RemoveSshKey$removeSshKey$user<TRes> get user {
+    final local$user = _instance.user;
+    return local$user == null
+        ? CopyWith$Mutation$RemoveSshKey$removeSshKey$user.stub(
+            _then(_instance))
+        : CopyWith$Mutation$RemoveSshKey$removeSshKey$user(
+            local$user, (e) => call(user: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
+    implements CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey(this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          Mutation$RemoveSshKey$removeSshKey$user? Function()? user}) =>
-      Mutation$RemoveSshKey$removeSshKey(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          user: user == null ? this.user : user());
+          Mutation$RemoveSshKey$removeSshKey$user? user}) =>
+      _res;
+  CopyWith$Mutation$RemoveSshKey$removeSshKey$user<TRes> get user =>
+      CopyWith$Mutation$RemoveSshKey$removeSshKey$user.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1973,16 +2915,71 @@ class Mutation$RemoveSshKey$removeSshKey$user {
 
 extension UtilityExtension$Mutation$RemoveSshKey$removeSshKey$user
     on Mutation$RemoveSshKey$removeSshKey$user {
-  Mutation$RemoveSshKey$removeSshKey$user copyWith(
+  CopyWith$Mutation$RemoveSshKey$removeSshKey$user<
+          Mutation$RemoveSshKey$removeSshKey$user>
+      get copyWith =>
+          CopyWith$Mutation$RemoveSshKey$removeSshKey$user(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RemoveSshKey$removeSshKey$user<TRes> {
+  factory CopyWith$Mutation$RemoveSshKey$removeSshKey$user(
+          Mutation$RemoveSshKey$removeSshKey$user instance,
+          TRes Function(Mutation$RemoveSshKey$removeSshKey$user) then) =
+      _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey$user;
+
+  factory CopyWith$Mutation$RemoveSshKey$removeSshKey$user.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey$user;
+
+  TRes call(
+      {List<String>? sshKeys,
+      Enum$UserType? userType,
+      String? username,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey$user<TRes>
+    implements CopyWith$Mutation$RemoveSshKey$removeSshKey$user<TRes> {
+  _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey$user(
+      this._instance, this._then);
+
+  final Mutation$RemoveSshKey$removeSshKey$user _instance;
+
+  final TRes Function(Mutation$RemoveSshKey$removeSshKey$user) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? sshKeys = _undefined,
+          Object? userType = _undefined,
+          Object? username = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RemoveSshKey$removeSshKey$user(
+          sshKeys: sshKeys == _undefined || sshKeys == null
+              ? _instance.sshKeys
+              : (sshKeys as List<String>),
+          userType: userType == _undefined || userType == null
+              ? _instance.userType
+              : (userType as Enum$UserType),
+          username: username == _undefined || username == null
+              ? _instance.username
+              : (username as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey$user<TRes>
+    implements CopyWith$Mutation$RemoveSshKey$removeSshKey$user<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey$user(this._res);
+
+  TRes _res;
+
+  call(
           {List<String>? sshKeys,
           Enum$UserType? userType,
           String? username,
           String? $__typename}) =>
-      Mutation$RemoveSshKey$removeSshKey$user(
-          sshKeys: sshKeys == null ? this.sshKeys : sshKeys,
-          userType: userType == null ? this.userType : userType,
-          username: username == null ? this.username : username,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2012,9 +3009,46 @@ class Variables$Mutation$DeleteUser {
     return true;
   }
 
-  Variables$Mutation$DeleteUser copyWith({String? username}) =>
+  CopyWith$Variables$Mutation$DeleteUser<Variables$Mutation$DeleteUser>
+      get copyWith => CopyWith$Variables$Mutation$DeleteUser(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$DeleteUser<TRes> {
+  factory CopyWith$Variables$Mutation$DeleteUser(
+          Variables$Mutation$DeleteUser instance,
+          TRes Function(Variables$Mutation$DeleteUser) then) =
+      _CopyWithImpl$Variables$Mutation$DeleteUser;
+
+  factory CopyWith$Variables$Mutation$DeleteUser.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$DeleteUser;
+
+  TRes call({String? username});
+}
+
+class _CopyWithImpl$Variables$Mutation$DeleteUser<TRes>
+    implements CopyWith$Variables$Mutation$DeleteUser<TRes> {
+  _CopyWithImpl$Variables$Mutation$DeleteUser(this._instance, this._then);
+
+  final Variables$Mutation$DeleteUser _instance;
+
+  final TRes Function(Variables$Mutation$DeleteUser) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? username = _undefined}) => _then(
       Variables$Mutation$DeleteUser(
-          username: username == null ? this.username : username);
+          username: username == _undefined || username == null
+              ? _instance.username
+              : (username as String)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$DeleteUser<TRes>
+    implements CopyWith$Variables$Mutation$DeleteUser<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$DeleteUser(this._res);
+
+  TRes _res;
+
+  call({String? username}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2053,11 +3087,59 @@ class Mutation$DeleteUser {
 }
 
 extension UtilityExtension$Mutation$DeleteUser on Mutation$DeleteUser {
-  Mutation$DeleteUser copyWith(
-          {Mutation$DeleteUser$deleteUser? deleteUser, String? $__typename}) =>
-      Mutation$DeleteUser(
-          deleteUser: deleteUser == null ? this.deleteUser : deleteUser,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$DeleteUser<Mutation$DeleteUser> get copyWith =>
+      CopyWith$Mutation$DeleteUser(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$DeleteUser<TRes> {
+  factory CopyWith$Mutation$DeleteUser(Mutation$DeleteUser instance,
+          TRes Function(Mutation$DeleteUser) then) =
+      _CopyWithImpl$Mutation$DeleteUser;
+
+  factory CopyWith$Mutation$DeleteUser.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteUser;
+
+  TRes call({Mutation$DeleteUser$deleteUser? deleteUser, String? $__typename});
+  CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser;
+}
+
+class _CopyWithImpl$Mutation$DeleteUser<TRes>
+    implements CopyWith$Mutation$DeleteUser<TRes> {
+  _CopyWithImpl$Mutation$DeleteUser(this._instance, this._then);
+
+  final Mutation$DeleteUser _instance;
+
+  final TRes Function(Mutation$DeleteUser) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? deleteUser = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$DeleteUser(
+          deleteUser: deleteUser == _undefined || deleteUser == null
+              ? _instance.deleteUser
+              : (deleteUser as Mutation$DeleteUser$deleteUser),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser {
+    final local$deleteUser = _instance.deleteUser;
+    return CopyWith$Mutation$DeleteUser$deleteUser(
+        local$deleteUser, (e) => call(deleteUser: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$DeleteUser<TRes>
+    implements CopyWith$Mutation$DeleteUser<TRes> {
+  _CopyWithStubImpl$Mutation$DeleteUser(this._res);
+
+  TRes _res;
+
+  call({Mutation$DeleteUser$deleteUser? deleteUser, String? $__typename}) =>
+      _res;
+  CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser =>
+      CopyWith$Mutation$DeleteUser$deleteUser.stub(_res);
 }
 
 const documentNodeMutationDeleteUser = DocumentNode(definitions: [
@@ -2243,13 +3325,60 @@ class Mutation$DeleteUser$deleteUser
 
 extension UtilityExtension$Mutation$DeleteUser$deleteUser
     on Mutation$DeleteUser$deleteUser {
-  Mutation$DeleteUser$deleteUser copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$DeleteUser$deleteUser(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$DeleteUser$deleteUser<Mutation$DeleteUser$deleteUser>
+      get copyWith => CopyWith$Mutation$DeleteUser$deleteUser(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$DeleteUser$deleteUser<TRes> {
+  factory CopyWith$Mutation$DeleteUser$deleteUser(
+          Mutation$DeleteUser$deleteUser instance,
+          TRes Function(Mutation$DeleteUser$deleteUser) then) =
+      _CopyWithImpl$Mutation$DeleteUser$deleteUser;
+
+  factory CopyWith$Mutation$DeleteUser$deleteUser.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteUser$deleteUser;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$DeleteUser$deleteUser<TRes>
+    implements CopyWith$Mutation$DeleteUser$deleteUser<TRes> {
+  _CopyWithImpl$Mutation$DeleteUser$deleteUser(this._instance, this._then);
+
+  final Mutation$DeleteUser$deleteUser _instance;
+
+  final TRes Function(Mutation$DeleteUser$deleteUser) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$DeleteUser$deleteUser(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$DeleteUser$deleteUser<TRes>
+    implements CopyWith$Mutation$DeleteUser$deleteUser<TRes> {
+  _CopyWithStubImpl$Mutation$DeleteUser$deleteUser(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2279,8 +3408,45 @@ class Variables$Mutation$UpdateUser {
     return true;
   }
 
-  Variables$Mutation$UpdateUser copyWith({Input$UserMutationInput? user}) =>
-      Variables$Mutation$UpdateUser(user: user == null ? this.user : user);
+  CopyWith$Variables$Mutation$UpdateUser<Variables$Mutation$UpdateUser>
+      get copyWith => CopyWith$Variables$Mutation$UpdateUser(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$UpdateUser<TRes> {
+  factory CopyWith$Variables$Mutation$UpdateUser(
+          Variables$Mutation$UpdateUser instance,
+          TRes Function(Variables$Mutation$UpdateUser) then) =
+      _CopyWithImpl$Variables$Mutation$UpdateUser;
+
+  factory CopyWith$Variables$Mutation$UpdateUser.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$UpdateUser;
+
+  TRes call({Input$UserMutationInput? user});
+}
+
+class _CopyWithImpl$Variables$Mutation$UpdateUser<TRes>
+    implements CopyWith$Variables$Mutation$UpdateUser<TRes> {
+  _CopyWithImpl$Variables$Mutation$UpdateUser(this._instance, this._then);
+
+  final Variables$Mutation$UpdateUser _instance;
+
+  final TRes Function(Variables$Mutation$UpdateUser) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? user = _undefined}) => _then(Variables$Mutation$UpdateUser(
+      user: user == _undefined || user == null
+          ? _instance.user
+          : (user as Input$UserMutationInput)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$UpdateUser<TRes>
+    implements CopyWith$Variables$Mutation$UpdateUser<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$UpdateUser(this._res);
+
+  TRes _res;
+
+  call({Input$UserMutationInput? user}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2319,11 +3485,59 @@ class Mutation$UpdateUser {
 }
 
 extension UtilityExtension$Mutation$UpdateUser on Mutation$UpdateUser {
-  Mutation$UpdateUser copyWith(
-          {Mutation$UpdateUser$updateUser? updateUser, String? $__typename}) =>
-      Mutation$UpdateUser(
-          updateUser: updateUser == null ? this.updateUser : updateUser,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$UpdateUser<Mutation$UpdateUser> get copyWith =>
+      CopyWith$Mutation$UpdateUser(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$UpdateUser<TRes> {
+  factory CopyWith$Mutation$UpdateUser(Mutation$UpdateUser instance,
+          TRes Function(Mutation$UpdateUser) then) =
+      _CopyWithImpl$Mutation$UpdateUser;
+
+  factory CopyWith$Mutation$UpdateUser.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UpdateUser;
+
+  TRes call({Mutation$UpdateUser$updateUser? updateUser, String? $__typename});
+  CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser;
+}
+
+class _CopyWithImpl$Mutation$UpdateUser<TRes>
+    implements CopyWith$Mutation$UpdateUser<TRes> {
+  _CopyWithImpl$Mutation$UpdateUser(this._instance, this._then);
+
+  final Mutation$UpdateUser _instance;
+
+  final TRes Function(Mutation$UpdateUser) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? updateUser = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$UpdateUser(
+          updateUser: updateUser == _undefined || updateUser == null
+              ? _instance.updateUser
+              : (updateUser as Mutation$UpdateUser$updateUser),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser {
+    final local$updateUser = _instance.updateUser;
+    return CopyWith$Mutation$UpdateUser$updateUser(
+        local$updateUser, (e) => call(updateUser: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$UpdateUser<TRes>
+    implements CopyWith$Mutation$UpdateUser<TRes> {
+  _CopyWithStubImpl$Mutation$UpdateUser(this._res);
+
+  TRes _res;
+
+  call({Mutation$UpdateUser$updateUser? updateUser, String? $__typename}) =>
+      _res;
+  CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser =>
+      CopyWith$Mutation$UpdateUser$updateUser.stub(_res);
 }
 
 const documentNodeMutationUpdateUser = DocumentNode(definitions: [
@@ -2548,18 +3762,84 @@ class Mutation$UpdateUser$updateUser
 
 extension UtilityExtension$Mutation$UpdateUser$updateUser
     on Mutation$UpdateUser$updateUser {
-  Mutation$UpdateUser$updateUser copyWith(
+  CopyWith$Mutation$UpdateUser$updateUser<Mutation$UpdateUser$updateUser>
+      get copyWith => CopyWith$Mutation$UpdateUser$updateUser(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$UpdateUser$updateUser<TRes> {
+  factory CopyWith$Mutation$UpdateUser$updateUser(
+          Mutation$UpdateUser$updateUser instance,
+          TRes Function(Mutation$UpdateUser$updateUser) then) =
+      _CopyWithImpl$Mutation$UpdateUser$updateUser;
+
+  factory CopyWith$Mutation$UpdateUser$updateUser.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UpdateUser$updateUser;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      Mutation$UpdateUser$updateUser$user? user});
+  CopyWith$Mutation$UpdateUser$updateUser$user<TRes> get user;
+}
+
+class _CopyWithImpl$Mutation$UpdateUser$updateUser<TRes>
+    implements CopyWith$Mutation$UpdateUser$updateUser<TRes> {
+  _CopyWithImpl$Mutation$UpdateUser$updateUser(this._instance, this._then);
+
+  final Mutation$UpdateUser$updateUser _instance;
+
+  final TRes Function(Mutation$UpdateUser$updateUser) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? user = _undefined}) =>
+      _then(Mutation$UpdateUser$updateUser(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          user: user == _undefined
+              ? _instance.user
+              : (user as Mutation$UpdateUser$updateUser$user?)));
+  CopyWith$Mutation$UpdateUser$updateUser$user<TRes> get user {
+    final local$user = _instance.user;
+    return local$user == null
+        ? CopyWith$Mutation$UpdateUser$updateUser$user.stub(_then(_instance))
+        : CopyWith$Mutation$UpdateUser$updateUser$user(
+            local$user, (e) => call(user: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$UpdateUser$updateUser<TRes>
+    implements CopyWith$Mutation$UpdateUser$updateUser<TRes> {
+  _CopyWithStubImpl$Mutation$UpdateUser$updateUser(this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          Mutation$UpdateUser$updateUser$user? Function()? user}) =>
-      Mutation$UpdateUser$updateUser(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          user: user == null ? this.user : user());
+          Mutation$UpdateUser$updateUser$user? user}) =>
+      _res;
+  CopyWith$Mutation$UpdateUser$updateUser$user<TRes> get user =>
+      CopyWith$Mutation$UpdateUser$updateUser$user.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2629,14 +3909,68 @@ class Mutation$UpdateUser$updateUser$user {
 
 extension UtilityExtension$Mutation$UpdateUser$updateUser$user
     on Mutation$UpdateUser$updateUser$user {
-  Mutation$UpdateUser$updateUser$user copyWith(
+  CopyWith$Mutation$UpdateUser$updateUser$user<
+          Mutation$UpdateUser$updateUser$user>
+      get copyWith =>
+          CopyWith$Mutation$UpdateUser$updateUser$user(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$UpdateUser$updateUser$user<TRes> {
+  factory CopyWith$Mutation$UpdateUser$updateUser$user(
+          Mutation$UpdateUser$updateUser$user instance,
+          TRes Function(Mutation$UpdateUser$updateUser$user) then) =
+      _CopyWithImpl$Mutation$UpdateUser$updateUser$user;
+
+  factory CopyWith$Mutation$UpdateUser$updateUser$user.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UpdateUser$updateUser$user;
+
+  TRes call(
+      {List<String>? sshKeys,
+      Enum$UserType? userType,
+      String? username,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$UpdateUser$updateUser$user<TRes>
+    implements CopyWith$Mutation$UpdateUser$updateUser$user<TRes> {
+  _CopyWithImpl$Mutation$UpdateUser$updateUser$user(this._instance, this._then);
+
+  final Mutation$UpdateUser$updateUser$user _instance;
+
+  final TRes Function(Mutation$UpdateUser$updateUser$user) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? sshKeys = _undefined,
+          Object? userType = _undefined,
+          Object? username = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$UpdateUser$updateUser$user(
+          sshKeys: sshKeys == _undefined || sshKeys == null
+              ? _instance.sshKeys
+              : (sshKeys as List<String>),
+          userType: userType == _undefined || userType == null
+              ? _instance.userType
+              : (userType as Enum$UserType),
+          username: username == _undefined || username == null
+              ? _instance.username
+              : (username as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$UpdateUser$updateUser$user<TRes>
+    implements CopyWith$Mutation$UpdateUser$updateUser$user<TRes> {
+  _CopyWithStubImpl$Mutation$UpdateUser$updateUser$user(this._res);
+
+  TRes _res;
+
+  call(
           {List<String>? sshKeys,
           Enum$UserType? userType,
           String? username,
           String? $__typename}) =>
-      Mutation$UpdateUser$updateUser$user(
-          sshKeys: sshKeys == null ? this.sshKeys : sshKeys,
-          userType: userType == null ? this.userType : userType,
-          username: username == null ? this.username : username,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }

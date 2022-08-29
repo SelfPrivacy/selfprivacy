@@ -39,7 +39,7 @@ class HetznerServerInfo {
 @JsonSerializable()
 class HetznerPublicNetInfo {
   HetznerPublicNetInfo(this.ipv4);
-  final HetznerIp4 ipv4;
+  final HetznerIp4? ipv4;
 
   static HetznerPublicNetInfo fromJson(final Map<String, dynamic> json) =>
       _$HetznerPublicNetInfoFromJson(json);

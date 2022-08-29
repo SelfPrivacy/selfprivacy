@@ -23,25 +23,22 @@ class DataMigrationPage extends StatefulWidget {
 
 class _DataMigrationPageState extends State<DataMigrationPage> {
   @override
-  Widget build(final BuildContext context) {
-    int a = 0;
-    return BrandHeroScreen(
-      hasBackButton: true,
-      heroTitle: 'providers.storage.data_migration_title'.tr(),
-      children: [
-        ...widget.diskStatus.diskVolumes
-            .map(
-              (final volume) => Column(
-                children: [
-                  ServerStorageListItem(
-                    volume: volume,
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            )
-            .toList(),
-      ],
-    );
-  }
+  Widget build(final BuildContext context) => BrandHeroScreen(
+        hasBackButton: true,
+        heroTitle: 'providers.storage.data_migration_title'.tr(),
+        children: [
+          ...widget.diskStatus.diskVolumes
+              .map(
+                (final volume) => Column(
+                  children: [
+                    ServerStorageListItem(
+                      volume: volume,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              )
+              .toList(),
+        ],
+      );
 }

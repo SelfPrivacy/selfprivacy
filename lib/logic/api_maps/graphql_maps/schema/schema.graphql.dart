@@ -35,14 +35,51 @@ class Input$AutoUpgradeSettingsInput {
     return true;
   }
 
-  Input$AutoUpgradeSettingsInput copyWith(
-          {bool? Function()? enableAutoUpgrade,
-          bool? Function()? allowReboot}) =>
-      Input$AutoUpgradeSettingsInput(
-          enableAutoUpgrade: enableAutoUpgrade == null
-              ? this.enableAutoUpgrade
-              : enableAutoUpgrade(),
-          allowReboot: allowReboot == null ? this.allowReboot : allowReboot());
+  CopyWith$Input$AutoUpgradeSettingsInput<Input$AutoUpgradeSettingsInput>
+      get copyWith => CopyWith$Input$AutoUpgradeSettingsInput(this, (i) => i);
+}
+
+abstract class CopyWith$Input$AutoUpgradeSettingsInput<TRes> {
+  factory CopyWith$Input$AutoUpgradeSettingsInput(
+          Input$AutoUpgradeSettingsInput instance,
+          TRes Function(Input$AutoUpgradeSettingsInput) then) =
+      _CopyWithImpl$Input$AutoUpgradeSettingsInput;
+
+  factory CopyWith$Input$AutoUpgradeSettingsInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$AutoUpgradeSettingsInput;
+
+  TRes call({bool? enableAutoUpgrade, bool? allowReboot});
+}
+
+class _CopyWithImpl$Input$AutoUpgradeSettingsInput<TRes>
+    implements CopyWith$Input$AutoUpgradeSettingsInput<TRes> {
+  _CopyWithImpl$Input$AutoUpgradeSettingsInput(this._instance, this._then);
+
+  final Input$AutoUpgradeSettingsInput _instance;
+
+  final TRes Function(Input$AutoUpgradeSettingsInput) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? enableAutoUpgrade = _undefined,
+          Object? allowReboot = _undefined}) =>
+      _then(Input$AutoUpgradeSettingsInput(
+          enableAutoUpgrade: enableAutoUpgrade == _undefined
+              ? _instance.enableAutoUpgrade
+              : (enableAutoUpgrade as bool?),
+          allowReboot: allowReboot == _undefined
+              ? _instance.allowReboot
+              : (allowReboot as bool?)));
+}
+
+class _CopyWithStubImpl$Input$AutoUpgradeSettingsInput<TRes>
+    implements CopyWith$Input$AutoUpgradeSettingsInput<TRes> {
+  _CopyWithStubImpl$Input$AutoUpgradeSettingsInput(this._res);
+
+  TRes _res;
+
+  call({bool? enableAutoUpgrade, bool? allowReboot}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -107,28 +144,78 @@ class Input$MigrateToBindsInput {
     return true;
   }
 
-  Input$MigrateToBindsInput copyWith(
+  CopyWith$Input$MigrateToBindsInput<Input$MigrateToBindsInput> get copyWith =>
+      CopyWith$Input$MigrateToBindsInput(this, (i) => i);
+}
+
+abstract class CopyWith$Input$MigrateToBindsInput<TRes> {
+  factory CopyWith$Input$MigrateToBindsInput(Input$MigrateToBindsInput instance,
+          TRes Function(Input$MigrateToBindsInput) then) =
+      _CopyWithImpl$Input$MigrateToBindsInput;
+
+  factory CopyWith$Input$MigrateToBindsInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$MigrateToBindsInput;
+
+  TRes call(
+      {String? emailBlockDevice,
+      String? bitwardenBlockDevice,
+      String? giteaBlockDevice,
+      String? nextcloudBlockDevice,
+      String? pleromaBlockDevice});
+}
+
+class _CopyWithImpl$Input$MigrateToBindsInput<TRes>
+    implements CopyWith$Input$MigrateToBindsInput<TRes> {
+  _CopyWithImpl$Input$MigrateToBindsInput(this._instance, this._then);
+
+  final Input$MigrateToBindsInput _instance;
+
+  final TRes Function(Input$MigrateToBindsInput) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? emailBlockDevice = _undefined,
+          Object? bitwardenBlockDevice = _undefined,
+          Object? giteaBlockDevice = _undefined,
+          Object? nextcloudBlockDevice = _undefined,
+          Object? pleromaBlockDevice = _undefined}) =>
+      _then(Input$MigrateToBindsInput(
+          emailBlockDevice:
+              emailBlockDevice == _undefined || emailBlockDevice == null
+                  ? _instance.emailBlockDevice
+                  : (emailBlockDevice as String),
+          bitwardenBlockDevice:
+              bitwardenBlockDevice == _undefined || bitwardenBlockDevice == null
+                  ? _instance.bitwardenBlockDevice
+                  : (bitwardenBlockDevice as String),
+          giteaBlockDevice:
+              giteaBlockDevice == _undefined || giteaBlockDevice == null
+                  ? _instance.giteaBlockDevice
+                  : (giteaBlockDevice as String),
+          nextcloudBlockDevice:
+              nextcloudBlockDevice == _undefined || nextcloudBlockDevice == null
+                  ? _instance.nextcloudBlockDevice
+                  : (nextcloudBlockDevice as String),
+          pleromaBlockDevice:
+              pleromaBlockDevice == _undefined || pleromaBlockDevice == null
+                  ? _instance.pleromaBlockDevice
+                  : (pleromaBlockDevice as String)));
+}
+
+class _CopyWithStubImpl$Input$MigrateToBindsInput<TRes>
+    implements CopyWith$Input$MigrateToBindsInput<TRes> {
+  _CopyWithStubImpl$Input$MigrateToBindsInput(this._res);
+
+  TRes _res;
+
+  call(
           {String? emailBlockDevice,
           String? bitwardenBlockDevice,
           String? giteaBlockDevice,
           String? nextcloudBlockDevice,
           String? pleromaBlockDevice}) =>
-      Input$MigrateToBindsInput(
-          emailBlockDevice: emailBlockDevice == null
-              ? this.emailBlockDevice
-              : emailBlockDevice,
-          bitwardenBlockDevice: bitwardenBlockDevice == null
-              ? this.bitwardenBlockDevice
-              : bitwardenBlockDevice,
-          giteaBlockDevice: giteaBlockDevice == null
-              ? this.giteaBlockDevice
-              : giteaBlockDevice,
-          nextcloudBlockDevice: nextcloudBlockDevice == null
-              ? this.nextcloudBlockDevice
-              : nextcloudBlockDevice,
-          pleromaBlockDevice: pleromaBlockDevice == null
-              ? this.pleromaBlockDevice
-              : pleromaBlockDevice);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -164,10 +251,48 @@ class Input$MoveServiceInput {
     return true;
   }
 
-  Input$MoveServiceInput copyWith({String? serviceId, String? location}) =>
-      Input$MoveServiceInput(
-          serviceId: serviceId == null ? this.serviceId : serviceId,
-          location: location == null ? this.location : location);
+  CopyWith$Input$MoveServiceInput<Input$MoveServiceInput> get copyWith =>
+      CopyWith$Input$MoveServiceInput(this, (i) => i);
+}
+
+abstract class CopyWith$Input$MoveServiceInput<TRes> {
+  factory CopyWith$Input$MoveServiceInput(Input$MoveServiceInput instance,
+          TRes Function(Input$MoveServiceInput) then) =
+      _CopyWithImpl$Input$MoveServiceInput;
+
+  factory CopyWith$Input$MoveServiceInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$MoveServiceInput;
+
+  TRes call({String? serviceId, String? location});
+}
+
+class _CopyWithImpl$Input$MoveServiceInput<TRes>
+    implements CopyWith$Input$MoveServiceInput<TRes> {
+  _CopyWithImpl$Input$MoveServiceInput(this._instance, this._then);
+
+  final Input$MoveServiceInput _instance;
+
+  final TRes Function(Input$MoveServiceInput) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? serviceId = _undefined, Object? location = _undefined}) =>
+      _then(Input$MoveServiceInput(
+          serviceId: serviceId == _undefined || serviceId == null
+              ? _instance.serviceId
+              : (serviceId as String),
+          location: location == _undefined || location == null
+              ? _instance.location
+              : (location as String)));
+}
+
+class _CopyWithStubImpl$Input$MoveServiceInput<TRes>
+    implements CopyWith$Input$MoveServiceInput<TRes> {
+  _CopyWithStubImpl$Input$MoveServiceInput(this._res);
+
+  TRes _res;
+
+  call({String? serviceId, String? location}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -205,12 +330,47 @@ class Input$RecoveryKeyLimitsInput {
     return true;
   }
 
-  Input$RecoveryKeyLimitsInput copyWith(
-          {DateTime? Function()? expirationDate, int? Function()? uses}) =>
-      Input$RecoveryKeyLimitsInput(
-          expirationDate:
-              expirationDate == null ? this.expirationDate : expirationDate(),
-          uses: uses == null ? this.uses : uses());
+  CopyWith$Input$RecoveryKeyLimitsInput<Input$RecoveryKeyLimitsInput>
+      get copyWith => CopyWith$Input$RecoveryKeyLimitsInput(this, (i) => i);
+}
+
+abstract class CopyWith$Input$RecoveryKeyLimitsInput<TRes> {
+  factory CopyWith$Input$RecoveryKeyLimitsInput(
+          Input$RecoveryKeyLimitsInput instance,
+          TRes Function(Input$RecoveryKeyLimitsInput) then) =
+      _CopyWithImpl$Input$RecoveryKeyLimitsInput;
+
+  factory CopyWith$Input$RecoveryKeyLimitsInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$RecoveryKeyLimitsInput;
+
+  TRes call({DateTime? expirationDate, int? uses});
+}
+
+class _CopyWithImpl$Input$RecoveryKeyLimitsInput<TRes>
+    implements CopyWith$Input$RecoveryKeyLimitsInput<TRes> {
+  _CopyWithImpl$Input$RecoveryKeyLimitsInput(this._instance, this._then);
+
+  final Input$RecoveryKeyLimitsInput _instance;
+
+  final TRes Function(Input$RecoveryKeyLimitsInput) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? expirationDate = _undefined, Object? uses = _undefined}) =>
+      _then(Input$RecoveryKeyLimitsInput(
+          expirationDate: expirationDate == _undefined
+              ? _instance.expirationDate
+              : (expirationDate as DateTime?),
+          uses: uses == _undefined ? _instance.uses : (uses as int?)));
+}
+
+class _CopyWithStubImpl$Input$RecoveryKeyLimitsInput<TRes>
+    implements CopyWith$Input$RecoveryKeyLimitsInput<TRes> {
+  _CopyWithStubImpl$Input$RecoveryKeyLimitsInput(this._res);
+
+  TRes _res;
+
+  call({DateTime? expirationDate, int? uses}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -246,10 +406,48 @@ class Input$SshMutationInput {
     return true;
   }
 
-  Input$SshMutationInput copyWith({String? username, String? sshKey}) =>
-      Input$SshMutationInput(
-          username: username == null ? this.username : username,
-          sshKey: sshKey == null ? this.sshKey : sshKey);
+  CopyWith$Input$SshMutationInput<Input$SshMutationInput> get copyWith =>
+      CopyWith$Input$SshMutationInput(this, (i) => i);
+}
+
+abstract class CopyWith$Input$SshMutationInput<TRes> {
+  factory CopyWith$Input$SshMutationInput(Input$SshMutationInput instance,
+          TRes Function(Input$SshMutationInput) then) =
+      _CopyWithImpl$Input$SshMutationInput;
+
+  factory CopyWith$Input$SshMutationInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$SshMutationInput;
+
+  TRes call({String? username, String? sshKey});
+}
+
+class _CopyWithImpl$Input$SshMutationInput<TRes>
+    implements CopyWith$Input$SshMutationInput<TRes> {
+  _CopyWithImpl$Input$SshMutationInput(this._instance, this._then);
+
+  final Input$SshMutationInput _instance;
+
+  final TRes Function(Input$SshMutationInput) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? username = _undefined, Object? sshKey = _undefined}) =>
+      _then(Input$SshMutationInput(
+          username: username == _undefined || username == null
+              ? _instance.username
+              : (username as String),
+          sshKey: sshKey == _undefined || sshKey == null
+              ? _instance.sshKey
+              : (sshKey as String)));
+}
+
+class _CopyWithStubImpl$Input$SshMutationInput<TRes>
+    implements CopyWith$Input$SshMutationInput<TRes> {
+  _CopyWithStubImpl$Input$SshMutationInput(this._res);
+
+  TRes _res;
+
+  call({String? username, String? sshKey}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -285,10 +483,49 @@ class Input$UseNewDeviceKeyInput {
     return true;
   }
 
-  Input$UseNewDeviceKeyInput copyWith({String? key, String? deviceName}) =>
-      Input$UseNewDeviceKeyInput(
-          key: key == null ? this.key : key,
-          deviceName: deviceName == null ? this.deviceName : deviceName);
+  CopyWith$Input$UseNewDeviceKeyInput<Input$UseNewDeviceKeyInput>
+      get copyWith => CopyWith$Input$UseNewDeviceKeyInput(this, (i) => i);
+}
+
+abstract class CopyWith$Input$UseNewDeviceKeyInput<TRes> {
+  factory CopyWith$Input$UseNewDeviceKeyInput(
+          Input$UseNewDeviceKeyInput instance,
+          TRes Function(Input$UseNewDeviceKeyInput) then) =
+      _CopyWithImpl$Input$UseNewDeviceKeyInput;
+
+  factory CopyWith$Input$UseNewDeviceKeyInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$UseNewDeviceKeyInput;
+
+  TRes call({String? key, String? deviceName});
+}
+
+class _CopyWithImpl$Input$UseNewDeviceKeyInput<TRes>
+    implements CopyWith$Input$UseNewDeviceKeyInput<TRes> {
+  _CopyWithImpl$Input$UseNewDeviceKeyInput(this._instance, this._then);
+
+  final Input$UseNewDeviceKeyInput _instance;
+
+  final TRes Function(Input$UseNewDeviceKeyInput) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? key = _undefined, Object? deviceName = _undefined}) =>
+      _then(Input$UseNewDeviceKeyInput(
+          key: key == _undefined || key == null
+              ? _instance.key
+              : (key as String),
+          deviceName: deviceName == _undefined || deviceName == null
+              ? _instance.deviceName
+              : (deviceName as String)));
+}
+
+class _CopyWithStubImpl$Input$UseNewDeviceKeyInput<TRes>
+    implements CopyWith$Input$UseNewDeviceKeyInput<TRes> {
+  _CopyWithStubImpl$Input$UseNewDeviceKeyInput(this._res);
+
+  TRes _res;
+
+  call({String? key, String? deviceName}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -324,10 +561,48 @@ class Input$UseRecoveryKeyInput {
     return true;
   }
 
-  Input$UseRecoveryKeyInput copyWith({String? key, String? deviceName}) =>
-      Input$UseRecoveryKeyInput(
-          key: key == null ? this.key : key,
-          deviceName: deviceName == null ? this.deviceName : deviceName);
+  CopyWith$Input$UseRecoveryKeyInput<Input$UseRecoveryKeyInput> get copyWith =>
+      CopyWith$Input$UseRecoveryKeyInput(this, (i) => i);
+}
+
+abstract class CopyWith$Input$UseRecoveryKeyInput<TRes> {
+  factory CopyWith$Input$UseRecoveryKeyInput(Input$UseRecoveryKeyInput instance,
+          TRes Function(Input$UseRecoveryKeyInput) then) =
+      _CopyWithImpl$Input$UseRecoveryKeyInput;
+
+  factory CopyWith$Input$UseRecoveryKeyInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$UseRecoveryKeyInput;
+
+  TRes call({String? key, String? deviceName});
+}
+
+class _CopyWithImpl$Input$UseRecoveryKeyInput<TRes>
+    implements CopyWith$Input$UseRecoveryKeyInput<TRes> {
+  _CopyWithImpl$Input$UseRecoveryKeyInput(this._instance, this._then);
+
+  final Input$UseRecoveryKeyInput _instance;
+
+  final TRes Function(Input$UseRecoveryKeyInput) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? key = _undefined, Object? deviceName = _undefined}) =>
+      _then(Input$UseRecoveryKeyInput(
+          key: key == _undefined || key == null
+              ? _instance.key
+              : (key as String),
+          deviceName: deviceName == _undefined || deviceName == null
+              ? _instance.deviceName
+              : (deviceName as String)));
+}
+
+class _CopyWithStubImpl$Input$UseRecoveryKeyInput<TRes>
+    implements CopyWith$Input$UseRecoveryKeyInput<TRes> {
+  _CopyWithStubImpl$Input$UseRecoveryKeyInput(this._res);
+
+  TRes _res;
+
+  call({String? key, String? deviceName}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -363,10 +638,48 @@ class Input$UserMutationInput {
     return true;
   }
 
-  Input$UserMutationInput copyWith({String? username, String? password}) =>
-      Input$UserMutationInput(
-          username: username == null ? this.username : username,
-          password: password == null ? this.password : password);
+  CopyWith$Input$UserMutationInput<Input$UserMutationInput> get copyWith =>
+      CopyWith$Input$UserMutationInput(this, (i) => i);
+}
+
+abstract class CopyWith$Input$UserMutationInput<TRes> {
+  factory CopyWith$Input$UserMutationInput(Input$UserMutationInput instance,
+          TRes Function(Input$UserMutationInput) then) =
+      _CopyWithImpl$Input$UserMutationInput;
+
+  factory CopyWith$Input$UserMutationInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$UserMutationInput;
+
+  TRes call({String? username, String? password});
+}
+
+class _CopyWithImpl$Input$UserMutationInput<TRes>
+    implements CopyWith$Input$UserMutationInput<TRes> {
+  _CopyWithImpl$Input$UserMutationInput(this._instance, this._then);
+
+  final Input$UserMutationInput _instance;
+
+  final TRes Function(Input$UserMutationInput) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? username = _undefined, Object? password = _undefined}) =>
+      _then(Input$UserMutationInput(
+          username: username == _undefined || username == null
+              ? _instance.username
+              : (username as String),
+          password: password == _undefined || password == null
+              ? _instance.password
+              : (password as String)));
+}
+
+class _CopyWithStubImpl$Input$UserMutationInput<TRes>
+    implements CopyWith$Input$UserMutationInput<TRes> {
+  _CopyWithStubImpl$Input$UserMutationInput(this._res);
+
+  TRes _res;
+
+  call({String? username, String? password}) => _res;
 }
 
 enum Enum$DnsProvider {

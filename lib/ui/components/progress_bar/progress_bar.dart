@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class ProgressBar extends StatefulWidget {
@@ -114,7 +113,6 @@ class _ProgressBarState extends State<ProgressBar> {
     final String? step,
   }) {
     final bool isActive = index == widget.activeIndex;
-    final bool checked = index < widget.activeIndex;
 
     style = isActive ? style!.copyWith(fontWeight: FontWeight.w700) : style;
     return Container(

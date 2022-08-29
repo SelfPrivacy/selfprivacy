@@ -23,7 +23,7 @@ Map<String, dynamic> _$HetznerServerInfoToJson(HetznerServerInfo instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'status': _$ServerStatusEnumMap[instance.status],
+      'status': _$ServerStatusEnumMap[instance.status]!,
       'created': instance.created.toIso8601String(),
       'volumes': instance.volumes,
       'server_type': instance.serverType,
@@ -46,7 +46,9 @@ const _$ServerStatusEnumMap = {
 HetznerPublicNetInfo _$HetznerPublicNetInfoFromJson(
         Map<String, dynamic> json) =>
     HetznerPublicNetInfo(
-      HetznerIp4.fromJson(json['ipv4'] as Map<String, dynamic>),
+      json['ipv4'] == null
+          ? null
+          : HetznerIp4.fromJson(json['ipv4'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$HetznerPublicNetInfoToJson(

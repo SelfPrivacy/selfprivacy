@@ -24,7 +24,7 @@ BackupStatus _$BackupStatusFromJson(Map<String, dynamic> json) => BackupStatus(
 
 Map<String, dynamic> _$BackupStatusToJson(BackupStatus instance) =>
     <String, dynamic>{
-      'status': _$BackupStatusEnumEnumMap[instance.status],
+      'status': _$BackupStatusEnumEnumMap[instance.status]!,
       'progress': instance.progress,
       'error_message': instance.errorMessage,
     };

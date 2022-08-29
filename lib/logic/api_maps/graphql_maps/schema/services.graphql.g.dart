@@ -89,7 +89,7 @@ Map<String, dynamic> _$Query$AllServices$services$allServicesToJson(
       'isEnabled': instance.isEnabled,
       'isMovable': instance.isMovable,
       'isRequired': instance.isRequired,
-      'status': _$Enum$ServiceStatusEnumEnumMap[instance.status],
+      'status': _$Enum$ServiceStatusEnumEnumMap[instance.status]!,
       'storageUsage': instance.storageUsage.toJson(),
       'svgIcon': instance.svgIcon,
       'url': instance.url,

@@ -498,13 +498,16 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/servers');
-      servers = (response.data!['servers'] as List)
-          .map(
+      servers = response.data!['servers']
+          .map<HetznerServerInfo>(
             (final e) => HetznerServerInfo.fromJson(e),
           )
           .toList()
-          .map(
-            (final HetznerServerInfo server) => ServerBasicInfo(
+          .where(
+            (final server) => server.publicNet.ipv4 != null,
+          )
+          .map<ServerBasicInfo>(
+            (final server) => ServerBasicInfo(
               id: server.id,
               name: server.name,
               ip: server.publicNet.ipv4.ip,
@@ -520,6 +523,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
+    print(servers);
     return servers;
   }
 

@@ -62,13 +62,62 @@ class Fragment$basicMutationReturnFields {
 
 extension UtilityExtension$Fragment$basicMutationReturnFields
     on Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Fragment$basicMutationReturnFields(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Fragment$basicMutationReturnFields<
+          Fragment$basicMutationReturnFields>
+      get copyWith =>
+          CopyWith$Fragment$basicMutationReturnFields(this, (i) => i);
+}
+
+abstract class CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  factory CopyWith$Fragment$basicMutationReturnFields(
+          Fragment$basicMutationReturnFields instance,
+          TRes Function(Fragment$basicMutationReturnFields) then) =
+      _CopyWithImpl$Fragment$basicMutationReturnFields;
+
+  factory CopyWith$Fragment$basicMutationReturnFields.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$basicMutationReturnFields;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Fragment$basicMutationReturnFields<TRes>
+    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  _CopyWithImpl$Fragment$basicMutationReturnFields(this._instance, this._then);
+
+  final Fragment$basicMutationReturnFields _instance;
+
+  final TRes Function(Fragment$basicMutationReturnFields) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Fragment$basicMutationReturnFields(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields<TRes>
+    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 const fragmentDefinitionbasicMutationReturnFields = FragmentDefinitionNode(
@@ -174,11 +223,57 @@ class Query$AllServices {
 }
 
 extension UtilityExtension$Query$AllServices on Query$AllServices {
-  Query$AllServices copyWith(
-          {Query$AllServices$services? services, String? $__typename}) =>
-      Query$AllServices(
-          services: services == null ? this.services : services,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$AllServices<Query$AllServices> get copyWith =>
+      CopyWith$Query$AllServices(this, (i) => i);
+}
+
+abstract class CopyWith$Query$AllServices<TRes> {
+  factory CopyWith$Query$AllServices(
+          Query$AllServices instance, TRes Function(Query$AllServices) then) =
+      _CopyWithImpl$Query$AllServices;
+
+  factory CopyWith$Query$AllServices.stub(TRes res) =
+      _CopyWithStubImpl$Query$AllServices;
+
+  TRes call({Query$AllServices$services? services, String? $__typename});
+  CopyWith$Query$AllServices$services<TRes> get services;
+}
+
+class _CopyWithImpl$Query$AllServices<TRes>
+    implements CopyWith$Query$AllServices<TRes> {
+  _CopyWithImpl$Query$AllServices(this._instance, this._then);
+
+  final Query$AllServices _instance;
+
+  final TRes Function(Query$AllServices) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? services = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$AllServices(
+          services: services == _undefined || services == null
+              ? _instance.services
+              : (services as Query$AllServices$services),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$AllServices$services<TRes> get services {
+    final local$services = _instance.services;
+    return CopyWith$Query$AllServices$services(
+        local$services, (e) => call(services: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$AllServices<TRes>
+    implements CopyWith$Query$AllServices<TRes> {
+  _CopyWithStubImpl$Query$AllServices(this._res);
+
+  TRes _res;
+
+  call({Query$AllServices$services? services, String? $__typename}) => _res;
+  CopyWith$Query$AllServices$services<TRes> get services =>
+      CopyWith$Query$AllServices$services.stub(_res);
 }
 
 const documentNodeQueryAllServices = DocumentNode(definitions: [
@@ -491,12 +586,73 @@ class Query$AllServices$services {
 
 extension UtilityExtension$Query$AllServices$services
     on Query$AllServices$services {
-  Query$AllServices$services copyWith(
+  CopyWith$Query$AllServices$services<Query$AllServices$services>
+      get copyWith => CopyWith$Query$AllServices$services(this, (i) => i);
+}
+
+abstract class CopyWith$Query$AllServices$services<TRes> {
+  factory CopyWith$Query$AllServices$services(
+          Query$AllServices$services instance,
+          TRes Function(Query$AllServices$services) then) =
+      _CopyWithImpl$Query$AllServices$services;
+
+  factory CopyWith$Query$AllServices$services.stub(TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services;
+
+  TRes call(
+      {List<Query$AllServices$services$allServices>? allServices,
+      String? $__typename});
+  TRes allServices(
+      Iterable<Query$AllServices$services$allServices> Function(
+              Iterable<
+                  CopyWith$Query$AllServices$services$allServices<
+                      Query$AllServices$services$allServices>>)
+          _fn);
+}
+
+class _CopyWithImpl$Query$AllServices$services<TRes>
+    implements CopyWith$Query$AllServices$services<TRes> {
+  _CopyWithImpl$Query$AllServices$services(this._instance, this._then);
+
+  final Query$AllServices$services _instance;
+
+  final TRes Function(Query$AllServices$services) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? allServices = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$AllServices$services(
+          allServices: allServices == _undefined || allServices == null
+              ? _instance.allServices
+              : (allServices as List<Query$AllServices$services$allServices>),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  TRes allServices(
+          Iterable<Query$AllServices$services$allServices> Function(
+                  Iterable<
+                      CopyWith$Query$AllServices$services$allServices<
+                          Query$AllServices$services$allServices>>)
+              _fn) =>
+      call(
+          allServices: _fn(_instance.allServices.map((e) =>
+                  CopyWith$Query$AllServices$services$allServices(e, (i) => i)))
+              .toList());
+}
+
+class _CopyWithStubImpl$Query$AllServices$services<TRes>
+    implements CopyWith$Query$AllServices$services<TRes> {
+  _CopyWithStubImpl$Query$AllServices$services(this._res);
+
+  TRes _res;
+
+  call(
           {List<Query$AllServices$services$allServices>? allServices,
           String? $__typename}) =>
-      Query$AllServices$services(
-          allServices: allServices == null ? this.allServices : allServices,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  allServices(_fn) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -634,11 +790,131 @@ class Query$AllServices$services$allServices {
 
 extension UtilityExtension$Query$AllServices$services$allServices
     on Query$AllServices$services$allServices {
-  Query$AllServices$services$allServices copyWith(
+  CopyWith$Query$AllServices$services$allServices<
+          Query$AllServices$services$allServices>
+      get copyWith =>
+          CopyWith$Query$AllServices$services$allServices(this, (i) => i);
+}
+
+abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
+  factory CopyWith$Query$AllServices$services$allServices(
+          Query$AllServices$services$allServices instance,
+          TRes Function(Query$AllServices$services$allServices) then) =
+      _CopyWithImpl$Query$AllServices$services$allServices;
+
+  factory CopyWith$Query$AllServices$services$allServices.stub(TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services$allServices;
+
+  TRes call(
+      {String? description,
+      String? displayName,
+      List<Query$AllServices$services$allServices$dnsRecords>? dnsRecords,
+      String? id,
+      bool? isEnabled,
+      bool? isMovable,
+      bool? isRequired,
+      Enum$ServiceStatusEnum? status,
+      Query$AllServices$services$allServices$storageUsage? storageUsage,
+      String? svgIcon,
+      String? url,
+      String? $__typename});
+  TRes dnsRecords(
+      Iterable<Query$AllServices$services$allServices$dnsRecords>? Function(
+              Iterable<
+                  CopyWith$Query$AllServices$services$allServices$dnsRecords<
+                      Query$AllServices$services$allServices$dnsRecords>>?)
+          _fn);
+  CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
+      get storageUsage;
+}
+
+class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
+    implements CopyWith$Query$AllServices$services$allServices<TRes> {
+  _CopyWithImpl$Query$AllServices$services$allServices(
+      this._instance, this._then);
+
+  final Query$AllServices$services$allServices _instance;
+
+  final TRes Function(Query$AllServices$services$allServices) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? description = _undefined,
+          Object? displayName = _undefined,
+          Object? dnsRecords = _undefined,
+          Object? id = _undefined,
+          Object? isEnabled = _undefined,
+          Object? isMovable = _undefined,
+          Object? isRequired = _undefined,
+          Object? status = _undefined,
+          Object? storageUsage = _undefined,
+          Object? svgIcon = _undefined,
+          Object? url = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$AllServices$services$allServices(
+          description: description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+          displayName: displayName == _undefined || displayName == null
+              ? _instance.displayName
+              : (displayName as String),
+          dnsRecords: dnsRecords == _undefined
+              ? _instance.dnsRecords
+              : (dnsRecords
+                  as List<Query$AllServices$services$allServices$dnsRecords>?),
+          id: id == _undefined || id == null ? _instance.id : (id as String),
+          isEnabled: isEnabled == _undefined || isEnabled == null
+              ? _instance.isEnabled
+              : (isEnabled as bool),
+          isMovable: isMovable == _undefined || isMovable == null
+              ? _instance.isMovable
+              : (isMovable as bool),
+          isRequired: isRequired == _undefined || isRequired == null
+              ? _instance.isRequired
+              : (isRequired as bool),
+          status: status == _undefined || status == null
+              ? _instance.status
+              : (status as Enum$ServiceStatusEnum),
+          storageUsage: storageUsage == _undefined || storageUsage == null
+              ? _instance.storageUsage
+              : (storageUsage
+                  as Query$AllServices$services$allServices$storageUsage),
+          svgIcon: svgIcon == _undefined || svgIcon == null
+              ? _instance.svgIcon
+              : (svgIcon as String),
+          url: url == _undefined ? _instance.url : (url as String?),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  TRes dnsRecords(
+          Iterable<Query$AllServices$services$allServices$dnsRecords>? Function(
+                  Iterable<
+                      CopyWith$Query$AllServices$services$allServices$dnsRecords<
+                          Query$AllServices$services$allServices$dnsRecords>>?)
+              _fn) =>
+      call(
+          dnsRecords: _fn(_instance.dnsRecords?.map((e) =>
+              CopyWith$Query$AllServices$services$allServices$dnsRecords(
+                  e, (i) => i)))?.toList());
+  CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
+      get storageUsage {
+    final local$storageUsage = _instance.storageUsage;
+    return CopyWith$Query$AllServices$services$allServices$storageUsage(
+        local$storageUsage, (e) => call(storageUsage: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
+    implements CopyWith$Query$AllServices$services$allServices<TRes> {
+  _CopyWithStubImpl$Query$AllServices$services$allServices(this._res);
+
+  TRes _res;
+
+  call(
           {String? description,
           String? displayName,
-          List<Query$AllServices$services$allServices$dnsRecords>? Function()?
-              dnsRecords,
+          List<Query$AllServices$services$allServices$dnsRecords>? dnsRecords,
           String? id,
           bool? isEnabled,
           bool? isMovable,
@@ -646,21 +922,14 @@ extension UtilityExtension$Query$AllServices$services$allServices
           Enum$ServiceStatusEnum? status,
           Query$AllServices$services$allServices$storageUsage? storageUsage,
           String? svgIcon,
-          String? Function()? url,
+          String? url,
           String? $__typename}) =>
-      Query$AllServices$services$allServices(
-          description: description == null ? this.description : description,
-          displayName: displayName == null ? this.displayName : displayName,
-          dnsRecords: dnsRecords == null ? this.dnsRecords : dnsRecords(),
-          id: id == null ? this.id : id,
-          isEnabled: isEnabled == null ? this.isEnabled : isEnabled,
-          isMovable: isMovable == null ? this.isMovable : isMovable,
-          isRequired: isRequired == null ? this.isRequired : isRequired,
-          status: status == null ? this.status : status,
-          storageUsage: storageUsage == null ? this.storageUsage : storageUsage,
-          svgIcon: svgIcon == null ? this.svgIcon : svgIcon,
-          url: url == null ? this.url : url(),
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  dnsRecords(_fn) => _res;
+  CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
+      get storageUsage =>
+          CopyWith$Query$AllServices$services$allServices$storageUsage.stub(
+              _res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -733,20 +1002,87 @@ class Query$AllServices$services$allServices$dnsRecords {
 
 extension UtilityExtension$Query$AllServices$services$allServices$dnsRecords
     on Query$AllServices$services$allServices$dnsRecords {
-  Query$AllServices$services$allServices$dnsRecords copyWith(
+  CopyWith$Query$AllServices$services$allServices$dnsRecords<
+          Query$AllServices$services$allServices$dnsRecords>
+      get copyWith =>
+          CopyWith$Query$AllServices$services$allServices$dnsRecords(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Query$AllServices$services$allServices$dnsRecords<
+    TRes> {
+  factory CopyWith$Query$AllServices$services$allServices$dnsRecords(
+          Query$AllServices$services$allServices$dnsRecords instance,
+          TRes Function(Query$AllServices$services$allServices$dnsRecords)
+              then) =
+      _CopyWithImpl$Query$AllServices$services$allServices$dnsRecords;
+
+  factory CopyWith$Query$AllServices$services$allServices$dnsRecords.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services$allServices$dnsRecords;
+
+  TRes call(
+      {String? content,
+      String? name,
+      int? priority,
+      String? recordType,
+      int? ttl,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Query$AllServices$services$allServices$dnsRecords<TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$dnsRecords<TRes> {
+  _CopyWithImpl$Query$AllServices$services$allServices$dnsRecords(
+      this._instance, this._then);
+
+  final Query$AllServices$services$allServices$dnsRecords _instance;
+
+  final TRes Function(Query$AllServices$services$allServices$dnsRecords) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? content = _undefined,
+          Object? name = _undefined,
+          Object? priority = _undefined,
+          Object? recordType = _undefined,
+          Object? ttl = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$AllServices$services$allServices$dnsRecords(
+          content: content == _undefined || content == null
+              ? _instance.content
+              : (content as String),
+          name: name == _undefined || name == null
+              ? _instance.name
+              : (name as String),
+          priority:
+              priority == _undefined ? _instance.priority : (priority as int?),
+          recordType: recordType == _undefined || recordType == null
+              ? _instance.recordType
+              : (recordType as String),
+          ttl: ttl == _undefined || ttl == null ? _instance.ttl : (ttl as int),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$AllServices$services$allServices$dnsRecords<TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$dnsRecords<TRes> {
+  _CopyWithStubImpl$Query$AllServices$services$allServices$dnsRecords(
+      this._res);
+
+  TRes _res;
+
+  call(
           {String? content,
           String? name,
-          int? Function()? priority,
+          int? priority,
           String? recordType,
           int? ttl,
           String? $__typename}) =>
-      Query$AllServices$services$allServices$dnsRecords(
-          content: content == null ? this.content : content,
-          name: name == null ? this.name : name,
-          priority: priority == null ? this.priority : priority(),
-          recordType: recordType == null ? this.recordType : recordType,
-          ttl: ttl == null ? this.ttl : ttl,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -804,18 +1140,96 @@ class Query$AllServices$services$allServices$storageUsage {
 
 extension UtilityExtension$Query$AllServices$services$allServices$storageUsage
     on Query$AllServices$services$allServices$storageUsage {
-  Query$AllServices$services$allServices$storageUsage copyWith(
+  CopyWith$Query$AllServices$services$allServices$storageUsage<
+          Query$AllServices$services$allServices$storageUsage>
+      get copyWith =>
+          CopyWith$Query$AllServices$services$allServices$storageUsage(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Query$AllServices$services$allServices$storageUsage<
+    TRes> {
+  factory CopyWith$Query$AllServices$services$allServices$storageUsage(
+          Query$AllServices$services$allServices$storageUsage instance,
+          TRes Function(Query$AllServices$services$allServices$storageUsage)
+              then) =
+      _CopyWithImpl$Query$AllServices$services$allServices$storageUsage;
+
+  factory CopyWith$Query$AllServices$services$allServices$storageUsage.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage;
+
+  TRes call(
+      {String? title,
+      String? usedSpace,
+      Query$AllServices$services$allServices$storageUsage$volume? volume,
+      String? $__typename});
+  CopyWith$Query$AllServices$services$allServices$storageUsage$volume<TRes>
+      get volume;
+}
+
+class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage<TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$storageUsage<TRes> {
+  _CopyWithImpl$Query$AllServices$services$allServices$storageUsage(
+      this._instance, this._then);
+
+  final Query$AllServices$services$allServices$storageUsage _instance;
+
+  final TRes Function(Query$AllServices$services$allServices$storageUsage)
+      _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? title = _undefined,
+          Object? usedSpace = _undefined,
+          Object? volume = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$AllServices$services$allServices$storageUsage(
+          title: title == _undefined || title == null
+              ? _instance.title
+              : (title as String),
+          usedSpace: usedSpace == _undefined || usedSpace == null
+              ? _instance.usedSpace
+              : (usedSpace as String),
+          volume: volume == _undefined
+              ? _instance.volume
+              : (volume
+                  as Query$AllServices$services$allServices$storageUsage$volume?),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$AllServices$services$allServices$storageUsage$volume<TRes>
+      get volume {
+    final local$volume = _instance.volume;
+    return local$volume == null
+        ? CopyWith$Query$AllServices$services$allServices$storageUsage$volume
+            .stub(_then(_instance))
+        : CopyWith$Query$AllServices$services$allServices$storageUsage$volume(
+            local$volume, (e) => call(volume: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$storageUsage<TRes> {
+  _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage(
+      this._res);
+
+  TRes _res;
+
+  call(
           {String? title,
           String? usedSpace,
-          Query$AllServices$services$allServices$storageUsage$volume?
-                  Function()?
-              volume,
+          Query$AllServices$services$allServices$storageUsage$volume? volume,
           String? $__typename}) =>
-      Query$AllServices$services$allServices$storageUsage(
-          title: title == null ? this.title : title,
-          usedSpace: usedSpace == null ? this.usedSpace : usedSpace,
-          volume: volume == null ? this.volume : volume(),
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Query$AllServices$services$allServices$storageUsage$volume<TRes>
+      get volume =>
+          CopyWith$Query$AllServices$services$allServices$storageUsage$volume
+              .stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -860,11 +1274,65 @@ class Query$AllServices$services$allServices$storageUsage$volume {
 
 extension UtilityExtension$Query$AllServices$services$allServices$storageUsage$volume
     on Query$AllServices$services$allServices$storageUsage$volume {
-  Query$AllServices$services$allServices$storageUsage$volume copyWith(
-          {String? name, String? $__typename}) =>
-      Query$AllServices$services$allServices$storageUsage$volume(
-          name: name == null ? this.name : name,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$AllServices$services$allServices$storageUsage$volume<
+          Query$AllServices$services$allServices$storageUsage$volume>
+      get copyWith =>
+          CopyWith$Query$AllServices$services$allServices$storageUsage$volume(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Query$AllServices$services$allServices$storageUsage$volume<
+    TRes> {
+  factory CopyWith$Query$AllServices$services$allServices$storageUsage$volume(
+          Query$AllServices$services$allServices$storageUsage$volume instance,
+          TRes Function(
+                  Query$AllServices$services$allServices$storageUsage$volume)
+              then) =
+      _CopyWithImpl$Query$AllServices$services$allServices$storageUsage$volume;
+
+  factory CopyWith$Query$AllServices$services$allServices$storageUsage$volume.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volume;
+
+  TRes call({String? name, String? $__typename});
+}
+
+class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage$volume<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$storageUsage$volume<
+            TRes> {
+  _CopyWithImpl$Query$AllServices$services$allServices$storageUsage$volume(
+      this._instance, this._then);
+
+  final Query$AllServices$services$allServices$storageUsage$volume _instance;
+
+  final TRes Function(
+      Query$AllServices$services$allServices$storageUsage$volume) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? name = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$AllServices$services$allServices$storageUsage$volume(
+          name: name == _undefined || name == null
+              ? _instance.name
+              : (name as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volume<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$storageUsage$volume<
+            TRes> {
+  _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volume(
+      this._res);
+
+  TRes _res;
+
+  call({String? name, String? $__typename}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -896,9 +1364,46 @@ class Variables$Mutation$EnableService {
     return true;
   }
 
-  Variables$Mutation$EnableService copyWith({String? serviceId}) =>
-      Variables$Mutation$EnableService(
-          serviceId: serviceId == null ? this.serviceId : serviceId);
+  CopyWith$Variables$Mutation$EnableService<Variables$Mutation$EnableService>
+      get copyWith => CopyWith$Variables$Mutation$EnableService(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$EnableService<TRes> {
+  factory CopyWith$Variables$Mutation$EnableService(
+          Variables$Mutation$EnableService instance,
+          TRes Function(Variables$Mutation$EnableService) then) =
+      _CopyWithImpl$Variables$Mutation$EnableService;
+
+  factory CopyWith$Variables$Mutation$EnableService.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$EnableService;
+
+  TRes call({String? serviceId});
+}
+
+class _CopyWithImpl$Variables$Mutation$EnableService<TRes>
+    implements CopyWith$Variables$Mutation$EnableService<TRes> {
+  _CopyWithImpl$Variables$Mutation$EnableService(this._instance, this._then);
+
+  final Variables$Mutation$EnableService _instance;
+
+  final TRes Function(Variables$Mutation$EnableService) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? serviceId = _undefined}) =>
+      _then(Variables$Mutation$EnableService(
+          serviceId: serviceId == _undefined || serviceId == null
+              ? _instance.serviceId
+              : (serviceId as String)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$EnableService<TRes>
+    implements CopyWith$Variables$Mutation$EnableService<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$EnableService(this._res);
+
+  TRes _res;
+
+  call({String? serviceId}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -938,13 +1443,63 @@ class Mutation$EnableService {
 }
 
 extension UtilityExtension$Mutation$EnableService on Mutation$EnableService {
-  Mutation$EnableService copyWith(
+  CopyWith$Mutation$EnableService<Mutation$EnableService> get copyWith =>
+      CopyWith$Mutation$EnableService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$EnableService<TRes> {
+  factory CopyWith$Mutation$EnableService(Mutation$EnableService instance,
+          TRes Function(Mutation$EnableService) then) =
+      _CopyWithImpl$Mutation$EnableService;
+
+  factory CopyWith$Mutation$EnableService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$EnableService;
+
+  TRes call(
+      {Mutation$EnableService$enableService? enableService,
+      String? $__typename});
+  CopyWith$Mutation$EnableService$enableService<TRes> get enableService;
+}
+
+class _CopyWithImpl$Mutation$EnableService<TRes>
+    implements CopyWith$Mutation$EnableService<TRes> {
+  _CopyWithImpl$Mutation$EnableService(this._instance, this._then);
+
+  final Mutation$EnableService _instance;
+
+  final TRes Function(Mutation$EnableService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? enableService = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$EnableService(
+          enableService: enableService == _undefined || enableService == null
+              ? _instance.enableService
+              : (enableService as Mutation$EnableService$enableService),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$EnableService$enableService<TRes> get enableService {
+    final local$enableService = _instance.enableService;
+    return CopyWith$Mutation$EnableService$enableService(
+        local$enableService, (e) => call(enableService: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$EnableService<TRes>
+    implements CopyWith$Mutation$EnableService<TRes> {
+  _CopyWithStubImpl$Mutation$EnableService(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$EnableService$enableService? enableService,
           String? $__typename}) =>
-      Mutation$EnableService(
-          enableService:
-              enableService == null ? this.enableService : enableService,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$EnableService$enableService<TRes> get enableService =>
+      CopyWith$Mutation$EnableService$enableService.stub(_res);
 }
 
 const documentNodeMutationEnableService = DocumentNode(definitions: [
@@ -1136,13 +1691,63 @@ class Mutation$EnableService$enableService
 
 extension UtilityExtension$Mutation$EnableService$enableService
     on Mutation$EnableService$enableService {
-  Mutation$EnableService$enableService copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$EnableService$enableService(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$EnableService$enableService<
+          Mutation$EnableService$enableService>
+      get copyWith =>
+          CopyWith$Mutation$EnableService$enableService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$EnableService$enableService<TRes> {
+  factory CopyWith$Mutation$EnableService$enableService(
+          Mutation$EnableService$enableService instance,
+          TRes Function(Mutation$EnableService$enableService) then) =
+      _CopyWithImpl$Mutation$EnableService$enableService;
+
+  factory CopyWith$Mutation$EnableService$enableService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$EnableService$enableService;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$EnableService$enableService<TRes>
+    implements CopyWith$Mutation$EnableService$enableService<TRes> {
+  _CopyWithImpl$Mutation$EnableService$enableService(
+      this._instance, this._then);
+
+  final Mutation$EnableService$enableService _instance;
+
+  final TRes Function(Mutation$EnableService$enableService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$EnableService$enableService(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$EnableService$enableService<TRes>
+    implements CopyWith$Mutation$EnableService$enableService<TRes> {
+  _CopyWithStubImpl$Mutation$EnableService$enableService(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1174,9 +1779,47 @@ class Variables$Mutation$DisableService {
     return true;
   }
 
-  Variables$Mutation$DisableService copyWith({String? serviceId}) =>
-      Variables$Mutation$DisableService(
-          serviceId: serviceId == null ? this.serviceId : serviceId);
+  CopyWith$Variables$Mutation$DisableService<Variables$Mutation$DisableService>
+      get copyWith =>
+          CopyWith$Variables$Mutation$DisableService(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$DisableService<TRes> {
+  factory CopyWith$Variables$Mutation$DisableService(
+          Variables$Mutation$DisableService instance,
+          TRes Function(Variables$Mutation$DisableService) then) =
+      _CopyWithImpl$Variables$Mutation$DisableService;
+
+  factory CopyWith$Variables$Mutation$DisableService.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$DisableService;
+
+  TRes call({String? serviceId});
+}
+
+class _CopyWithImpl$Variables$Mutation$DisableService<TRes>
+    implements CopyWith$Variables$Mutation$DisableService<TRes> {
+  _CopyWithImpl$Variables$Mutation$DisableService(this._instance, this._then);
+
+  final Variables$Mutation$DisableService _instance;
+
+  final TRes Function(Variables$Mutation$DisableService) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? serviceId = _undefined}) =>
+      _then(Variables$Mutation$DisableService(
+          serviceId: serviceId == _undefined || serviceId == null
+              ? _instance.serviceId
+              : (serviceId as String)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$DisableService<TRes>
+    implements CopyWith$Variables$Mutation$DisableService<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$DisableService(this._res);
+
+  TRes _res;
+
+  call({String? serviceId}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1216,13 +1859,63 @@ class Mutation$DisableService {
 }
 
 extension UtilityExtension$Mutation$DisableService on Mutation$DisableService {
-  Mutation$DisableService copyWith(
+  CopyWith$Mutation$DisableService<Mutation$DisableService> get copyWith =>
+      CopyWith$Mutation$DisableService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$DisableService<TRes> {
+  factory CopyWith$Mutation$DisableService(Mutation$DisableService instance,
+          TRes Function(Mutation$DisableService) then) =
+      _CopyWithImpl$Mutation$DisableService;
+
+  factory CopyWith$Mutation$DisableService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$DisableService;
+
+  TRes call(
+      {Mutation$DisableService$disableService? disableService,
+      String? $__typename});
+  CopyWith$Mutation$DisableService$disableService<TRes> get disableService;
+}
+
+class _CopyWithImpl$Mutation$DisableService<TRes>
+    implements CopyWith$Mutation$DisableService<TRes> {
+  _CopyWithImpl$Mutation$DisableService(this._instance, this._then);
+
+  final Mutation$DisableService _instance;
+
+  final TRes Function(Mutation$DisableService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? disableService = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$DisableService(
+          disableService: disableService == _undefined || disableService == null
+              ? _instance.disableService
+              : (disableService as Mutation$DisableService$disableService),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$DisableService$disableService<TRes> get disableService {
+    final local$disableService = _instance.disableService;
+    return CopyWith$Mutation$DisableService$disableService(
+        local$disableService, (e) => call(disableService: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$DisableService<TRes>
+    implements CopyWith$Mutation$DisableService<TRes> {
+  _CopyWithStubImpl$Mutation$DisableService(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$DisableService$disableService? disableService,
           String? $__typename}) =>
-      Mutation$DisableService(
-          disableService:
-              disableService == null ? this.disableService : disableService,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$DisableService$disableService<TRes> get disableService =>
+      CopyWith$Mutation$DisableService$disableService.stub(_res);
 }
 
 const documentNodeMutationDisableService = DocumentNode(definitions: [
@@ -1414,13 +2107,63 @@ class Mutation$DisableService$disableService
 
 extension UtilityExtension$Mutation$DisableService$disableService
     on Mutation$DisableService$disableService {
-  Mutation$DisableService$disableService copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$DisableService$disableService(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$DisableService$disableService<
+          Mutation$DisableService$disableService>
+      get copyWith =>
+          CopyWith$Mutation$DisableService$disableService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$DisableService$disableService<TRes> {
+  factory CopyWith$Mutation$DisableService$disableService(
+          Mutation$DisableService$disableService instance,
+          TRes Function(Mutation$DisableService$disableService) then) =
+      _CopyWithImpl$Mutation$DisableService$disableService;
+
+  factory CopyWith$Mutation$DisableService$disableService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$DisableService$disableService;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$DisableService$disableService<TRes>
+    implements CopyWith$Mutation$DisableService$disableService<TRes> {
+  _CopyWithImpl$Mutation$DisableService$disableService(
+      this._instance, this._then);
+
+  final Mutation$DisableService$disableService _instance;
+
+  final TRes Function(Mutation$DisableService$disableService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$DisableService$disableService(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$DisableService$disableService<TRes>
+    implements CopyWith$Mutation$DisableService$disableService<TRes> {
+  _CopyWithStubImpl$Mutation$DisableService$disableService(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1450,9 +2193,46 @@ class Variables$Mutation$StopService {
     return true;
   }
 
-  Variables$Mutation$StopService copyWith({String? serviceId}) =>
-      Variables$Mutation$StopService(
-          serviceId: serviceId == null ? this.serviceId : serviceId);
+  CopyWith$Variables$Mutation$StopService<Variables$Mutation$StopService>
+      get copyWith => CopyWith$Variables$Mutation$StopService(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$StopService<TRes> {
+  factory CopyWith$Variables$Mutation$StopService(
+          Variables$Mutation$StopService instance,
+          TRes Function(Variables$Mutation$StopService) then) =
+      _CopyWithImpl$Variables$Mutation$StopService;
+
+  factory CopyWith$Variables$Mutation$StopService.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$StopService;
+
+  TRes call({String? serviceId});
+}
+
+class _CopyWithImpl$Variables$Mutation$StopService<TRes>
+    implements CopyWith$Variables$Mutation$StopService<TRes> {
+  _CopyWithImpl$Variables$Mutation$StopService(this._instance, this._then);
+
+  final Variables$Mutation$StopService _instance;
+
+  final TRes Function(Variables$Mutation$StopService) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? serviceId = _undefined}) =>
+      _then(Variables$Mutation$StopService(
+          serviceId: serviceId == _undefined || serviceId == null
+              ? _instance.serviceId
+              : (serviceId as String)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$StopService<TRes>
+    implements CopyWith$Variables$Mutation$StopService<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$StopService(this._res);
+
+  TRes _res;
+
+  call({String? serviceId}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1491,12 +2271,60 @@ class Mutation$StopService {
 }
 
 extension UtilityExtension$Mutation$StopService on Mutation$StopService {
-  Mutation$StopService copyWith(
-          {Mutation$StopService$stopService? stopService,
-          String? $__typename}) =>
-      Mutation$StopService(
-          stopService: stopService == null ? this.stopService : stopService,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$StopService<Mutation$StopService> get copyWith =>
+      CopyWith$Mutation$StopService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$StopService<TRes> {
+  factory CopyWith$Mutation$StopService(Mutation$StopService instance,
+          TRes Function(Mutation$StopService) then) =
+      _CopyWithImpl$Mutation$StopService;
+
+  factory CopyWith$Mutation$StopService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$StopService;
+
+  TRes call(
+      {Mutation$StopService$stopService? stopService, String? $__typename});
+  CopyWith$Mutation$StopService$stopService<TRes> get stopService;
+}
+
+class _CopyWithImpl$Mutation$StopService<TRes>
+    implements CopyWith$Mutation$StopService<TRes> {
+  _CopyWithImpl$Mutation$StopService(this._instance, this._then);
+
+  final Mutation$StopService _instance;
+
+  final TRes Function(Mutation$StopService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? stopService = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$StopService(
+          stopService: stopService == _undefined || stopService == null
+              ? _instance.stopService
+              : (stopService as Mutation$StopService$stopService),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$StopService$stopService<TRes> get stopService {
+    final local$stopService = _instance.stopService;
+    return CopyWith$Mutation$StopService$stopService(
+        local$stopService, (e) => call(stopService: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$StopService<TRes>
+    implements CopyWith$Mutation$StopService<TRes> {
+  _CopyWithStubImpl$Mutation$StopService(this._res);
+
+  TRes _res;
+
+  call({Mutation$StopService$stopService? stopService, String? $__typename}) =>
+      _res;
+  CopyWith$Mutation$StopService$stopService<TRes> get stopService =>
+      CopyWith$Mutation$StopService$stopService.stub(_res);
 }
 
 const documentNodeMutationStopService = DocumentNode(definitions: [
@@ -1685,13 +2513,60 @@ class Mutation$StopService$stopService
 
 extension UtilityExtension$Mutation$StopService$stopService
     on Mutation$StopService$stopService {
-  Mutation$StopService$stopService copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$StopService$stopService(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$StopService$stopService<Mutation$StopService$stopService>
+      get copyWith => CopyWith$Mutation$StopService$stopService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$StopService$stopService<TRes> {
+  factory CopyWith$Mutation$StopService$stopService(
+          Mutation$StopService$stopService instance,
+          TRes Function(Mutation$StopService$stopService) then) =
+      _CopyWithImpl$Mutation$StopService$stopService;
+
+  factory CopyWith$Mutation$StopService$stopService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$StopService$stopService;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$StopService$stopService<TRes>
+    implements CopyWith$Mutation$StopService$stopService<TRes> {
+  _CopyWithImpl$Mutation$StopService$stopService(this._instance, this._then);
+
+  final Mutation$StopService$stopService _instance;
+
+  final TRes Function(Mutation$StopService$stopService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$StopService$stopService(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$StopService$stopService<TRes>
+    implements CopyWith$Mutation$StopService$stopService<TRes> {
+  _CopyWithStubImpl$Mutation$StopService$stopService(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1722,9 +2597,46 @@ class Variables$Mutation$StartService {
     return true;
   }
 
-  Variables$Mutation$StartService copyWith({String? serviceId}) =>
-      Variables$Mutation$StartService(
-          serviceId: serviceId == null ? this.serviceId : serviceId);
+  CopyWith$Variables$Mutation$StartService<Variables$Mutation$StartService>
+      get copyWith => CopyWith$Variables$Mutation$StartService(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$StartService<TRes> {
+  factory CopyWith$Variables$Mutation$StartService(
+          Variables$Mutation$StartService instance,
+          TRes Function(Variables$Mutation$StartService) then) =
+      _CopyWithImpl$Variables$Mutation$StartService;
+
+  factory CopyWith$Variables$Mutation$StartService.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$StartService;
+
+  TRes call({String? serviceId});
+}
+
+class _CopyWithImpl$Variables$Mutation$StartService<TRes>
+    implements CopyWith$Variables$Mutation$StartService<TRes> {
+  _CopyWithImpl$Variables$Mutation$StartService(this._instance, this._then);
+
+  final Variables$Mutation$StartService _instance;
+
+  final TRes Function(Variables$Mutation$StartService) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? serviceId = _undefined}) =>
+      _then(Variables$Mutation$StartService(
+          serviceId: serviceId == _undefined || serviceId == null
+              ? _instance.serviceId
+              : (serviceId as String)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$StartService<TRes>
+    implements CopyWith$Variables$Mutation$StartService<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$StartService(this._res);
+
+  TRes _res;
+
+  call({String? serviceId}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1764,12 +2676,62 @@ class Mutation$StartService {
 }
 
 extension UtilityExtension$Mutation$StartService on Mutation$StartService {
-  Mutation$StartService copyWith(
+  CopyWith$Mutation$StartService<Mutation$StartService> get copyWith =>
+      CopyWith$Mutation$StartService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$StartService<TRes> {
+  factory CopyWith$Mutation$StartService(Mutation$StartService instance,
+          TRes Function(Mutation$StartService) then) =
+      _CopyWithImpl$Mutation$StartService;
+
+  factory CopyWith$Mutation$StartService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$StartService;
+
+  TRes call(
+      {Mutation$StartService$startService? startService, String? $__typename});
+  CopyWith$Mutation$StartService$startService<TRes> get startService;
+}
+
+class _CopyWithImpl$Mutation$StartService<TRes>
+    implements CopyWith$Mutation$StartService<TRes> {
+  _CopyWithImpl$Mutation$StartService(this._instance, this._then);
+
+  final Mutation$StartService _instance;
+
+  final TRes Function(Mutation$StartService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? startService = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$StartService(
+          startService: startService == _undefined || startService == null
+              ? _instance.startService
+              : (startService as Mutation$StartService$startService),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$StartService$startService<TRes> get startService {
+    final local$startService = _instance.startService;
+    return CopyWith$Mutation$StartService$startService(
+        local$startService, (e) => call(startService: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$StartService<TRes>
+    implements CopyWith$Mutation$StartService<TRes> {
+  _CopyWithStubImpl$Mutation$StartService(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$StartService$startService? startService,
           String? $__typename}) =>
-      Mutation$StartService(
-          startService: startService == null ? this.startService : startService,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$StartService$startService<TRes> get startService =>
+      CopyWith$Mutation$StartService$startService.stub(_res);
 }
 
 const documentNodeMutationStartService = DocumentNode(definitions: [
@@ -1961,13 +2923,62 @@ class Mutation$StartService$startService
 
 extension UtilityExtension$Mutation$StartService$startService
     on Mutation$StartService$startService {
-  Mutation$StartService$startService copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$StartService$startService(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$StartService$startService<
+          Mutation$StartService$startService>
+      get copyWith =>
+          CopyWith$Mutation$StartService$startService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$StartService$startService<TRes> {
+  factory CopyWith$Mutation$StartService$startService(
+          Mutation$StartService$startService instance,
+          TRes Function(Mutation$StartService$startService) then) =
+      _CopyWithImpl$Mutation$StartService$startService;
+
+  factory CopyWith$Mutation$StartService$startService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$StartService$startService;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$StartService$startService<TRes>
+    implements CopyWith$Mutation$StartService$startService<TRes> {
+  _CopyWithImpl$Mutation$StartService$startService(this._instance, this._then);
+
+  final Mutation$StartService$startService _instance;
+
+  final TRes Function(Mutation$StartService$startService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$StartService$startService(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$StartService$startService<TRes>
+    implements CopyWith$Mutation$StartService$startService<TRes> {
+  _CopyWithStubImpl$Mutation$StartService$startService(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1999,9 +3010,47 @@ class Variables$Mutation$RestartService {
     return true;
   }
 
-  Variables$Mutation$RestartService copyWith({String? serviceId}) =>
-      Variables$Mutation$RestartService(
-          serviceId: serviceId == null ? this.serviceId : serviceId);
+  CopyWith$Variables$Mutation$RestartService<Variables$Mutation$RestartService>
+      get copyWith =>
+          CopyWith$Variables$Mutation$RestartService(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$RestartService<TRes> {
+  factory CopyWith$Variables$Mutation$RestartService(
+          Variables$Mutation$RestartService instance,
+          TRes Function(Variables$Mutation$RestartService) then) =
+      _CopyWithImpl$Variables$Mutation$RestartService;
+
+  factory CopyWith$Variables$Mutation$RestartService.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$RestartService;
+
+  TRes call({String? serviceId});
+}
+
+class _CopyWithImpl$Variables$Mutation$RestartService<TRes>
+    implements CopyWith$Variables$Mutation$RestartService<TRes> {
+  _CopyWithImpl$Variables$Mutation$RestartService(this._instance, this._then);
+
+  final Variables$Mutation$RestartService _instance;
+
+  final TRes Function(Variables$Mutation$RestartService) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? serviceId = _undefined}) =>
+      _then(Variables$Mutation$RestartService(
+          serviceId: serviceId == _undefined || serviceId == null
+              ? _instance.serviceId
+              : (serviceId as String)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$RestartService<TRes>
+    implements CopyWith$Variables$Mutation$RestartService<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$RestartService(this._res);
+
+  TRes _res;
+
+  call({String? serviceId}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2041,13 +3090,63 @@ class Mutation$RestartService {
 }
 
 extension UtilityExtension$Mutation$RestartService on Mutation$RestartService {
-  Mutation$RestartService copyWith(
+  CopyWith$Mutation$RestartService<Mutation$RestartService> get copyWith =>
+      CopyWith$Mutation$RestartService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RestartService<TRes> {
+  factory CopyWith$Mutation$RestartService(Mutation$RestartService instance,
+          TRes Function(Mutation$RestartService) then) =
+      _CopyWithImpl$Mutation$RestartService;
+
+  factory CopyWith$Mutation$RestartService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RestartService;
+
+  TRes call(
+      {Mutation$RestartService$restartService? restartService,
+      String? $__typename});
+  CopyWith$Mutation$RestartService$restartService<TRes> get restartService;
+}
+
+class _CopyWithImpl$Mutation$RestartService<TRes>
+    implements CopyWith$Mutation$RestartService<TRes> {
+  _CopyWithImpl$Mutation$RestartService(this._instance, this._then);
+
+  final Mutation$RestartService _instance;
+
+  final TRes Function(Mutation$RestartService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? restartService = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RestartService(
+          restartService: restartService == _undefined || restartService == null
+              ? _instance.restartService
+              : (restartService as Mutation$RestartService$restartService),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$RestartService$restartService<TRes> get restartService {
+    final local$restartService = _instance.restartService;
+    return CopyWith$Mutation$RestartService$restartService(
+        local$restartService, (e) => call(restartService: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RestartService<TRes>
+    implements CopyWith$Mutation$RestartService<TRes> {
+  _CopyWithStubImpl$Mutation$RestartService(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$RestartService$restartService? restartService,
           String? $__typename}) =>
-      Mutation$RestartService(
-          restartService:
-              restartService == null ? this.restartService : restartService,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$RestartService$restartService<TRes> get restartService =>
+      CopyWith$Mutation$RestartService$restartService.stub(_res);
 }
 
 const documentNodeMutationRestartService = DocumentNode(definitions: [
@@ -2239,13 +3338,63 @@ class Mutation$RestartService$restartService
 
 extension UtilityExtension$Mutation$RestartService$restartService
     on Mutation$RestartService$restartService {
-  Mutation$RestartService$restartService copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$RestartService$restartService(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$RestartService$restartService<
+          Mutation$RestartService$restartService>
+      get copyWith =>
+          CopyWith$Mutation$RestartService$restartService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RestartService$restartService<TRes> {
+  factory CopyWith$Mutation$RestartService$restartService(
+          Mutation$RestartService$restartService instance,
+          TRes Function(Mutation$RestartService$restartService) then) =
+      _CopyWithImpl$Mutation$RestartService$restartService;
+
+  factory CopyWith$Mutation$RestartService$restartService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RestartService$restartService;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$RestartService$restartService<TRes>
+    implements CopyWith$Mutation$RestartService$restartService<TRes> {
+  _CopyWithImpl$Mutation$RestartService$restartService(
+      this._instance, this._then);
+
+  final Mutation$RestartService$restartService _instance;
+
+  final TRes Function(Mutation$RestartService$restartService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RestartService$restartService(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$RestartService$restartService<TRes>
+    implements CopyWith$Mutation$RestartService$restartService<TRes> {
+  _CopyWithStubImpl$Mutation$RestartService$restartService(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2275,8 +3424,46 @@ class Variables$Mutation$MoveService {
     return true;
   }
 
-  Variables$Mutation$MoveService copyWith({Input$MoveServiceInput? input}) =>
-      Variables$Mutation$MoveService(input: input == null ? this.input : input);
+  CopyWith$Variables$Mutation$MoveService<Variables$Mutation$MoveService>
+      get copyWith => CopyWith$Variables$Mutation$MoveService(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$MoveService<TRes> {
+  factory CopyWith$Variables$Mutation$MoveService(
+          Variables$Mutation$MoveService instance,
+          TRes Function(Variables$Mutation$MoveService) then) =
+      _CopyWithImpl$Variables$Mutation$MoveService;
+
+  factory CopyWith$Variables$Mutation$MoveService.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$MoveService;
+
+  TRes call({Input$MoveServiceInput? input});
+}
+
+class _CopyWithImpl$Variables$Mutation$MoveService<TRes>
+    implements CopyWith$Variables$Mutation$MoveService<TRes> {
+  _CopyWithImpl$Variables$Mutation$MoveService(this._instance, this._then);
+
+  final Variables$Mutation$MoveService _instance;
+
+  final TRes Function(Variables$Mutation$MoveService) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? input = _undefined}) =>
+      _then(Variables$Mutation$MoveService(
+          input: input == _undefined || input == null
+              ? _instance.input
+              : (input as Input$MoveServiceInput)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$MoveService<TRes>
+    implements CopyWith$Variables$Mutation$MoveService<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$MoveService(this._res);
+
+  TRes _res;
+
+  call({Input$MoveServiceInput? input}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2315,12 +3502,60 @@ class Mutation$MoveService {
 }
 
 extension UtilityExtension$Mutation$MoveService on Mutation$MoveService {
-  Mutation$MoveService copyWith(
-          {Mutation$MoveService$moveService? moveService,
-          String? $__typename}) =>
-      Mutation$MoveService(
-          moveService: moveService == null ? this.moveService : moveService,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$MoveService<Mutation$MoveService> get copyWith =>
+      CopyWith$Mutation$MoveService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$MoveService<TRes> {
+  factory CopyWith$Mutation$MoveService(Mutation$MoveService instance,
+          TRes Function(Mutation$MoveService) then) =
+      _CopyWithImpl$Mutation$MoveService;
+
+  factory CopyWith$Mutation$MoveService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$MoveService;
+
+  TRes call(
+      {Mutation$MoveService$moveService? moveService, String? $__typename});
+  CopyWith$Mutation$MoveService$moveService<TRes> get moveService;
+}
+
+class _CopyWithImpl$Mutation$MoveService<TRes>
+    implements CopyWith$Mutation$MoveService<TRes> {
+  _CopyWithImpl$Mutation$MoveService(this._instance, this._then);
+
+  final Mutation$MoveService _instance;
+
+  final TRes Function(Mutation$MoveService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? moveService = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$MoveService(
+          moveService: moveService == _undefined || moveService == null
+              ? _instance.moveService
+              : (moveService as Mutation$MoveService$moveService),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$MoveService$moveService<TRes> get moveService {
+    final local$moveService = _instance.moveService;
+    return CopyWith$Mutation$MoveService$moveService(
+        local$moveService, (e) => call(moveService: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$MoveService<TRes>
+    implements CopyWith$Mutation$MoveService<TRes> {
+  _CopyWithStubImpl$Mutation$MoveService(this._res);
+
+  TRes _res;
+
+  call({Mutation$MoveService$moveService? moveService, String? $__typename}) =>
+      _res;
+  CopyWith$Mutation$MoveService$moveService<TRes> get moveService =>
+      CopyWith$Mutation$MoveService$moveService.stub(_res);
 }
 
 const documentNodeMutationMoveService = DocumentNode(definitions: [
@@ -2595,18 +3830,84 @@ class Mutation$MoveService$moveService
 
 extension UtilityExtension$Mutation$MoveService$moveService
     on Mutation$MoveService$moveService {
-  Mutation$MoveService$moveService copyWith(
+  CopyWith$Mutation$MoveService$moveService<Mutation$MoveService$moveService>
+      get copyWith => CopyWith$Mutation$MoveService$moveService(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$MoveService$moveService<TRes> {
+  factory CopyWith$Mutation$MoveService$moveService(
+          Mutation$MoveService$moveService instance,
+          TRes Function(Mutation$MoveService$moveService) then) =
+      _CopyWithImpl$Mutation$MoveService$moveService;
+
+  factory CopyWith$Mutation$MoveService$moveService.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$MoveService$moveService;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      Mutation$MoveService$moveService$job? job});
+  CopyWith$Mutation$MoveService$moveService$job<TRes> get job;
+}
+
+class _CopyWithImpl$Mutation$MoveService$moveService<TRes>
+    implements CopyWith$Mutation$MoveService$moveService<TRes> {
+  _CopyWithImpl$Mutation$MoveService$moveService(this._instance, this._then);
+
+  final Mutation$MoveService$moveService _instance;
+
+  final TRes Function(Mutation$MoveService$moveService) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? job = _undefined}) =>
+      _then(Mutation$MoveService$moveService(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          job: job == _undefined
+              ? _instance.job
+              : (job as Mutation$MoveService$moveService$job?)));
+  CopyWith$Mutation$MoveService$moveService$job<TRes> get job {
+    final local$job = _instance.job;
+    return local$job == null
+        ? CopyWith$Mutation$MoveService$moveService$job.stub(_then(_instance))
+        : CopyWith$Mutation$MoveService$moveService$job(
+            local$job, (e) => call(job: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$MoveService$moveService<TRes>
+    implements CopyWith$Mutation$MoveService$moveService<TRes> {
+  _CopyWithStubImpl$Mutation$MoveService$moveService(this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          Mutation$MoveService$moveService$job? Function()? job}) =>
-      Mutation$MoveService$moveService(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          job: job == null ? this.job : job());
+          Mutation$MoveService$moveService$job? job}) =>
+      _res;
+  CopyWith$Mutation$MoveService$moveService$job<TRes> get job =>
+      CopyWith$Mutation$MoveService$moveService$job.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2737,32 +4038,114 @@ class Mutation$MoveService$moveService$job {
 
 extension UtilityExtension$Mutation$MoveService$moveService$job
     on Mutation$MoveService$moveService$job {
-  Mutation$MoveService$moveService$job copyWith(
+  CopyWith$Mutation$MoveService$moveService$job<
+          Mutation$MoveService$moveService$job>
+      get copyWith =>
+          CopyWith$Mutation$MoveService$moveService$job(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$MoveService$moveService$job<TRes> {
+  factory CopyWith$Mutation$MoveService$moveService$job(
+          Mutation$MoveService$moveService$job instance,
+          TRes Function(Mutation$MoveService$moveService$job) then) =
+      _CopyWithImpl$Mutation$MoveService$moveService$job;
+
+  factory CopyWith$Mutation$MoveService$moveService$job.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$MoveService$moveService$job;
+
+  TRes call(
+      {DateTime? createdAt,
+      String? description,
+      String? error,
+      DateTime? finishedAt,
+      String? name,
+      int? progress,
+      String? result,
+      String? status,
+      String? statusText,
+      String? uid,
+      DateTime? updatedAt,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$MoveService$moveService$job<TRes>
+    implements CopyWith$Mutation$MoveService$moveService$job<TRes> {
+  _CopyWithImpl$Mutation$MoveService$moveService$job(
+      this._instance, this._then);
+
+  final Mutation$MoveService$moveService$job _instance;
+
+  final TRes Function(Mutation$MoveService$moveService$job) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? createdAt = _undefined,
+          Object? description = _undefined,
+          Object? error = _undefined,
+          Object? finishedAt = _undefined,
+          Object? name = _undefined,
+          Object? progress = _undefined,
+          Object? result = _undefined,
+          Object? status = _undefined,
+          Object? statusText = _undefined,
+          Object? uid = _undefined,
+          Object? updatedAt = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$MoveService$moveService$job(
+          createdAt: createdAt == _undefined || createdAt == null
+              ? _instance.createdAt
+              : (createdAt as DateTime),
+          description: description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+          error: error == _undefined ? _instance.error : (error as String?),
+          finishedAt: finishedAt == _undefined
+              ? _instance.finishedAt
+              : (finishedAt as DateTime?),
+          name: name == _undefined || name == null
+              ? _instance.name
+              : (name as String),
+          progress:
+              progress == _undefined ? _instance.progress : (progress as int?),
+          result: result == _undefined ? _instance.result : (result as String?),
+          status: status == _undefined || status == null
+              ? _instance.status
+              : (status as String),
+          statusText: statusText == _undefined
+              ? _instance.statusText
+              : (statusText as String?),
+          uid: uid == _undefined || uid == null
+              ? _instance.uid
+              : (uid as String),
+          updatedAt: updatedAt == _undefined || updatedAt == null
+              ? _instance.updatedAt
+              : (updatedAt as DateTime),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$MoveService$moveService$job<TRes>
+    implements CopyWith$Mutation$MoveService$moveService$job<TRes> {
+  _CopyWithStubImpl$Mutation$MoveService$moveService$job(this._res);
+
+  TRes _res;
+
+  call(
           {DateTime? createdAt,
           String? description,
-          String? Function()? error,
-          DateTime? Function()? finishedAt,
+          String? error,
+          DateTime? finishedAt,
           String? name,
-          int? Function()? progress,
-          String? Function()? result,
+          int? progress,
+          String? result,
           String? status,
-          String? Function()? statusText,
+          String? statusText,
           String? uid,
           DateTime? updatedAt,
           String? $__typename}) =>
-      Mutation$MoveService$moveService$job(
-          createdAt: createdAt == null ? this.createdAt : createdAt,
-          description: description == null ? this.description : description,
-          error: error == null ? this.error : error(),
-          finishedAt: finishedAt == null ? this.finishedAt : finishedAt(),
-          name: name == null ? this.name : name,
-          progress: progress == null ? this.progress : progress(),
-          result: result == null ? this.result : result(),
-          status: status == null ? this.status : status,
-          statusText: statusText == null ? this.statusText : statusText(),
-          uid: uid == null ? this.uid : uid,
-          updatedAt: updatedAt == null ? this.updatedAt : updatedAt,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 DateTime? _nullable$dateTimeFromJson(dynamic data) =>

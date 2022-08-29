@@ -161,7 +161,7 @@ Map<String, dynamic> _$Query$DomainInfo$system$domainInfoToJson(
     <String, dynamic>{
       'domain': instance.domain,
       'hostname': instance.hostname,
-      'provider': _$Enum$DnsProviderEnumMap[instance.provider],
+      'provider': _$Enum$DnsProviderEnumMap[instance.provider]!,
       'requiredDnsRecords':
           instance.requiredDnsRecords.map((e) => e.toJson()).toList(),
       '__typename': instance.$__typename,

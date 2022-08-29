@@ -62,13 +62,62 @@ class Fragment$basicMutationReturnFields {
 
 extension UtilityExtension$Fragment$basicMutationReturnFields
     on Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Fragment$basicMutationReturnFields(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Fragment$basicMutationReturnFields<
+          Fragment$basicMutationReturnFields>
+      get copyWith =>
+          CopyWith$Fragment$basicMutationReturnFields(this, (i) => i);
+}
+
+abstract class CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  factory CopyWith$Fragment$basicMutationReturnFields(
+          Fragment$basicMutationReturnFields instance,
+          TRes Function(Fragment$basicMutationReturnFields) then) =
+      _CopyWithImpl$Fragment$basicMutationReturnFields;
+
+  factory CopyWith$Fragment$basicMutationReturnFields.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$basicMutationReturnFields;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Fragment$basicMutationReturnFields<TRes>
+    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  _CopyWithImpl$Fragment$basicMutationReturnFields(this._instance, this._then);
+
+  final Fragment$basicMutationReturnFields _instance;
+
+  final TRes Function(Fragment$basicMutationReturnFields) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Fragment$basicMutationReturnFields(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields<TRes>
+    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 const fragmentDefinitionbasicMutationReturnFields = FragmentDefinitionNode(
@@ -174,11 +223,55 @@ class Query$GetApiVersion {
 }
 
 extension UtilityExtension$Query$GetApiVersion on Query$GetApiVersion {
-  Query$GetApiVersion copyWith(
-          {Query$GetApiVersion$api? api, String? $__typename}) =>
-      Query$GetApiVersion(
-          api: api == null ? this.api : api,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$GetApiVersion<Query$GetApiVersion> get copyWith =>
+      CopyWith$Query$GetApiVersion(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiVersion<TRes> {
+  factory CopyWith$Query$GetApiVersion(Query$GetApiVersion instance,
+          TRes Function(Query$GetApiVersion) then) =
+      _CopyWithImpl$Query$GetApiVersion;
+
+  factory CopyWith$Query$GetApiVersion.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiVersion;
+
+  TRes call({Query$GetApiVersion$api? api, String? $__typename});
+  CopyWith$Query$GetApiVersion$api<TRes> get api;
+}
+
+class _CopyWithImpl$Query$GetApiVersion<TRes>
+    implements CopyWith$Query$GetApiVersion<TRes> {
+  _CopyWithImpl$Query$GetApiVersion(this._instance, this._then);
+
+  final Query$GetApiVersion _instance;
+
+  final TRes Function(Query$GetApiVersion) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? api = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$GetApiVersion(
+          api: api == _undefined || api == null
+              ? _instance.api
+              : (api as Query$GetApiVersion$api),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$GetApiVersion$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Query$GetApiVersion$api(local$api, (e) => call(api: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$GetApiVersion<TRes>
+    implements CopyWith$Query$GetApiVersion<TRes> {
+  _CopyWithStubImpl$Query$GetApiVersion(this._res);
+
+  TRes _res;
+
+  call({Query$GetApiVersion$api? api, String? $__typename}) => _res;
+  CopyWith$Query$GetApiVersion$api<TRes> get api =>
+      CopyWith$Query$GetApiVersion$api.stub(_res);
 }
 
 const documentNodeQueryGetApiVersion = DocumentNode(definitions: [
@@ -336,10 +429,48 @@ class Query$GetApiVersion$api {
 }
 
 extension UtilityExtension$Query$GetApiVersion$api on Query$GetApiVersion$api {
-  Query$GetApiVersion$api copyWith({String? version, String? $__typename}) =>
-      Query$GetApiVersion$api(
-          version: version == null ? this.version : version,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$GetApiVersion$api<Query$GetApiVersion$api> get copyWith =>
+      CopyWith$Query$GetApiVersion$api(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiVersion$api<TRes> {
+  factory CopyWith$Query$GetApiVersion$api(Query$GetApiVersion$api instance,
+          TRes Function(Query$GetApiVersion$api) then) =
+      _CopyWithImpl$Query$GetApiVersion$api;
+
+  factory CopyWith$Query$GetApiVersion$api.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiVersion$api;
+
+  TRes call({String? version, String? $__typename});
+}
+
+class _CopyWithImpl$Query$GetApiVersion$api<TRes>
+    implements CopyWith$Query$GetApiVersion$api<TRes> {
+  _CopyWithImpl$Query$GetApiVersion$api(this._instance, this._then);
+
+  final Query$GetApiVersion$api _instance;
+
+  final TRes Function(Query$GetApiVersion$api) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? version = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$GetApiVersion$api(
+          version: version == _undefined || version == null
+              ? _instance.version
+              : (version as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$GetApiVersion$api<TRes>
+    implements CopyWith$Query$GetApiVersion$api<TRes> {
+  _CopyWithStubImpl$Query$GetApiVersion$api(this._res);
+
+  TRes _res;
+
+  call({String? version, String? $__typename}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -378,11 +509,55 @@ class Query$GetApiJobs {
 }
 
 extension UtilityExtension$Query$GetApiJobs on Query$GetApiJobs {
-  Query$GetApiJobs copyWith(
-          {Query$GetApiJobs$jobs? jobs, String? $__typename}) =>
-      Query$GetApiJobs(
-          jobs: jobs == null ? this.jobs : jobs,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$GetApiJobs<Query$GetApiJobs> get copyWith =>
+      CopyWith$Query$GetApiJobs(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiJobs<TRes> {
+  factory CopyWith$Query$GetApiJobs(
+          Query$GetApiJobs instance, TRes Function(Query$GetApiJobs) then) =
+      _CopyWithImpl$Query$GetApiJobs;
+
+  factory CopyWith$Query$GetApiJobs.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiJobs;
+
+  TRes call({Query$GetApiJobs$jobs? jobs, String? $__typename});
+  CopyWith$Query$GetApiJobs$jobs<TRes> get jobs;
+}
+
+class _CopyWithImpl$Query$GetApiJobs<TRes>
+    implements CopyWith$Query$GetApiJobs<TRes> {
+  _CopyWithImpl$Query$GetApiJobs(this._instance, this._then);
+
+  final Query$GetApiJobs _instance;
+
+  final TRes Function(Query$GetApiJobs) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? jobs = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$GetApiJobs(
+          jobs: jobs == _undefined || jobs == null
+              ? _instance.jobs
+              : (jobs as Query$GetApiJobs$jobs),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$GetApiJobs$jobs<TRes> get jobs {
+    final local$jobs = _instance.jobs;
+    return CopyWith$Query$GetApiJobs$jobs(local$jobs, (e) => call(jobs: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$GetApiJobs<TRes>
+    implements CopyWith$Query$GetApiJobs<TRes> {
+  _CopyWithStubImpl$Query$GetApiJobs(this._res);
+
+  TRes _res;
+
+  call({Query$GetApiJobs$jobs? jobs, String? $__typename}) => _res;
+  CopyWith$Query$GetApiJobs$jobs<TRes> get jobs =>
+      CopyWith$Query$GetApiJobs$jobs.stub(_res);
 }
 
 const documentNodeQueryGetApiJobs = DocumentNode(definitions: [
@@ -617,12 +792,67 @@ class Query$GetApiJobs$jobs {
 }
 
 extension UtilityExtension$Query$GetApiJobs$jobs on Query$GetApiJobs$jobs {
-  Query$GetApiJobs$jobs copyWith(
-          {List<Query$GetApiJobs$jobs$getJobs>? getJobs,
-          String? $__typename}) =>
-      Query$GetApiJobs$jobs(
-          getJobs: getJobs == null ? this.getJobs : getJobs,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$GetApiJobs$jobs<Query$GetApiJobs$jobs> get copyWith =>
+      CopyWith$Query$GetApiJobs$jobs(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiJobs$jobs<TRes> {
+  factory CopyWith$Query$GetApiJobs$jobs(Query$GetApiJobs$jobs instance,
+          TRes Function(Query$GetApiJobs$jobs) then) =
+      _CopyWithImpl$Query$GetApiJobs$jobs;
+
+  factory CopyWith$Query$GetApiJobs$jobs.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiJobs$jobs;
+
+  TRes call(
+      {List<Query$GetApiJobs$jobs$getJobs>? getJobs, String? $__typename});
+  TRes getJobs(
+      Iterable<Query$GetApiJobs$jobs$getJobs> Function(
+              Iterable<
+                  CopyWith$Query$GetApiJobs$jobs$getJobs<
+                      Query$GetApiJobs$jobs$getJobs>>)
+          _fn);
+}
+
+class _CopyWithImpl$Query$GetApiJobs$jobs<TRes>
+    implements CopyWith$Query$GetApiJobs$jobs<TRes> {
+  _CopyWithImpl$Query$GetApiJobs$jobs(this._instance, this._then);
+
+  final Query$GetApiJobs$jobs _instance;
+
+  final TRes Function(Query$GetApiJobs$jobs) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? getJobs = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$GetApiJobs$jobs(
+          getJobs: getJobs == _undefined || getJobs == null
+              ? _instance.getJobs
+              : (getJobs as List<Query$GetApiJobs$jobs$getJobs>),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  TRes getJobs(
+          Iterable<Query$GetApiJobs$jobs$getJobs> Function(
+                  Iterable<
+                      CopyWith$Query$GetApiJobs$jobs$getJobs<
+                          Query$GetApiJobs$jobs$getJobs>>)
+              _fn) =>
+      call(
+          getJobs: _fn(_instance.getJobs.map(
+                  (e) => CopyWith$Query$GetApiJobs$jobs$getJobs(e, (i) => i)))
+              .toList());
+}
+
+class _CopyWithStubImpl$Query$GetApiJobs$jobs<TRes>
+    implements CopyWith$Query$GetApiJobs$jobs<TRes> {
+  _CopyWithStubImpl$Query$GetApiJobs$jobs(this._res);
+
+  TRes _res;
+
+  call({List<Query$GetApiJobs$jobs$getJobs>? getJobs, String? $__typename}) =>
+      _res;
+  getJobs(_fn) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -751,32 +981,111 @@ class Query$GetApiJobs$jobs$getJobs {
 
 extension UtilityExtension$Query$GetApiJobs$jobs$getJobs
     on Query$GetApiJobs$jobs$getJobs {
-  Query$GetApiJobs$jobs$getJobs copyWith(
+  CopyWith$Query$GetApiJobs$jobs$getJobs<Query$GetApiJobs$jobs$getJobs>
+      get copyWith => CopyWith$Query$GetApiJobs$jobs$getJobs(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiJobs$jobs$getJobs<TRes> {
+  factory CopyWith$Query$GetApiJobs$jobs$getJobs(
+          Query$GetApiJobs$jobs$getJobs instance,
+          TRes Function(Query$GetApiJobs$jobs$getJobs) then) =
+      _CopyWithImpl$Query$GetApiJobs$jobs$getJobs;
+
+  factory CopyWith$Query$GetApiJobs$jobs$getJobs.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiJobs$jobs$getJobs;
+
+  TRes call(
+      {DateTime? createdAt,
+      String? description,
+      String? error,
+      DateTime? finishedAt,
+      String? name,
+      int? progress,
+      String? result,
+      String? status,
+      String? statusText,
+      String? uid,
+      DateTime? updatedAt,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Query$GetApiJobs$jobs$getJobs<TRes>
+    implements CopyWith$Query$GetApiJobs$jobs$getJobs<TRes> {
+  _CopyWithImpl$Query$GetApiJobs$jobs$getJobs(this._instance, this._then);
+
+  final Query$GetApiJobs$jobs$getJobs _instance;
+
+  final TRes Function(Query$GetApiJobs$jobs$getJobs) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? createdAt = _undefined,
+          Object? description = _undefined,
+          Object? error = _undefined,
+          Object? finishedAt = _undefined,
+          Object? name = _undefined,
+          Object? progress = _undefined,
+          Object? result = _undefined,
+          Object? status = _undefined,
+          Object? statusText = _undefined,
+          Object? uid = _undefined,
+          Object? updatedAt = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$GetApiJobs$jobs$getJobs(
+          createdAt: createdAt == _undefined || createdAt == null
+              ? _instance.createdAt
+              : (createdAt as DateTime),
+          description: description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+          error: error == _undefined ? _instance.error : (error as String?),
+          finishedAt: finishedAt == _undefined
+              ? _instance.finishedAt
+              : (finishedAt as DateTime?),
+          name: name == _undefined || name == null
+              ? _instance.name
+              : (name as String),
+          progress:
+              progress == _undefined ? _instance.progress : (progress as int?),
+          result: result == _undefined ? _instance.result : (result as String?),
+          status: status == _undefined || status == null
+              ? _instance.status
+              : (status as String),
+          statusText: statusText == _undefined
+              ? _instance.statusText
+              : (statusText as String?),
+          uid: uid == _undefined || uid == null
+              ? _instance.uid
+              : (uid as String),
+          updatedAt: updatedAt == _undefined || updatedAt == null
+              ? _instance.updatedAt
+              : (updatedAt as DateTime),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$GetApiJobs$jobs$getJobs<TRes>
+    implements CopyWith$Query$GetApiJobs$jobs$getJobs<TRes> {
+  _CopyWithStubImpl$Query$GetApiJobs$jobs$getJobs(this._res);
+
+  TRes _res;
+
+  call(
           {DateTime? createdAt,
           String? description,
-          String? Function()? error,
-          DateTime? Function()? finishedAt,
+          String? error,
+          DateTime? finishedAt,
           String? name,
-          int? Function()? progress,
-          String? Function()? result,
+          int? progress,
+          String? result,
           String? status,
-          String? Function()? statusText,
+          String? statusText,
           String? uid,
           DateTime? updatedAt,
           String? $__typename}) =>
-      Query$GetApiJobs$jobs$getJobs(
-          createdAt: createdAt == null ? this.createdAt : createdAt,
-          description: description == null ? this.description : description,
-          error: error == null ? this.error : error(),
-          finishedAt: finishedAt == null ? this.finishedAt : finishedAt(),
-          name: name == null ? this.name : name,
-          progress: progress == null ? this.progress : progress(),
-          result: result == null ? this.result : result(),
-          status: status == null ? this.status : status,
-          statusText: statusText == null ? this.statusText : statusText(),
-          uid: uid == null ? this.uid : uid,
-          updatedAt: updatedAt == null ? this.updatedAt : updatedAt,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -806,8 +1115,45 @@ class Variables$Mutation$RemoveJob {
     return true;
   }
 
-  Variables$Mutation$RemoveJob copyWith({String? jobId}) =>
-      Variables$Mutation$RemoveJob(jobId: jobId == null ? this.jobId : jobId);
+  CopyWith$Variables$Mutation$RemoveJob<Variables$Mutation$RemoveJob>
+      get copyWith => CopyWith$Variables$Mutation$RemoveJob(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$RemoveJob<TRes> {
+  factory CopyWith$Variables$Mutation$RemoveJob(
+          Variables$Mutation$RemoveJob instance,
+          TRes Function(Variables$Mutation$RemoveJob) then) =
+      _CopyWithImpl$Variables$Mutation$RemoveJob;
+
+  factory CopyWith$Variables$Mutation$RemoveJob.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$RemoveJob;
+
+  TRes call({String? jobId});
+}
+
+class _CopyWithImpl$Variables$Mutation$RemoveJob<TRes>
+    implements CopyWith$Variables$Mutation$RemoveJob<TRes> {
+  _CopyWithImpl$Variables$Mutation$RemoveJob(this._instance, this._then);
+
+  final Variables$Mutation$RemoveJob _instance;
+
+  final TRes Function(Variables$Mutation$RemoveJob) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? jobId = _undefined}) => _then(Variables$Mutation$RemoveJob(
+      jobId: jobId == _undefined || jobId == null
+          ? _instance.jobId
+          : (jobId as String)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$RemoveJob<TRes>
+    implements CopyWith$Variables$Mutation$RemoveJob<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$RemoveJob(this._res);
+
+  TRes _res;
+
+  call({String? jobId}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -846,11 +1192,57 @@ class Mutation$RemoveJob {
 }
 
 extension UtilityExtension$Mutation$RemoveJob on Mutation$RemoveJob {
-  Mutation$RemoveJob copyWith(
-          {Mutation$RemoveJob$removeJob? removeJob, String? $__typename}) =>
-      Mutation$RemoveJob(
-          removeJob: removeJob == null ? this.removeJob : removeJob,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$RemoveJob<Mutation$RemoveJob> get copyWith =>
+      CopyWith$Mutation$RemoveJob(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RemoveJob<TRes> {
+  factory CopyWith$Mutation$RemoveJob(
+          Mutation$RemoveJob instance, TRes Function(Mutation$RemoveJob) then) =
+      _CopyWithImpl$Mutation$RemoveJob;
+
+  factory CopyWith$Mutation$RemoveJob.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveJob;
+
+  TRes call({Mutation$RemoveJob$removeJob? removeJob, String? $__typename});
+  CopyWith$Mutation$RemoveJob$removeJob<TRes> get removeJob;
+}
+
+class _CopyWithImpl$Mutation$RemoveJob<TRes>
+    implements CopyWith$Mutation$RemoveJob<TRes> {
+  _CopyWithImpl$Mutation$RemoveJob(this._instance, this._then);
+
+  final Mutation$RemoveJob _instance;
+
+  final TRes Function(Mutation$RemoveJob) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? removeJob = _undefined, Object? $__typename = _undefined}) =>
+      _then(Mutation$RemoveJob(
+          removeJob: removeJob == _undefined || removeJob == null
+              ? _instance.removeJob
+              : (removeJob as Mutation$RemoveJob$removeJob),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$RemoveJob$removeJob<TRes> get removeJob {
+    final local$removeJob = _instance.removeJob;
+    return CopyWith$Mutation$RemoveJob$removeJob(
+        local$removeJob, (e) => call(removeJob: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RemoveJob<TRes>
+    implements CopyWith$Mutation$RemoveJob<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveJob(this._res);
+
+  TRes _res;
+
+  call({Mutation$RemoveJob$removeJob? removeJob, String? $__typename}) => _res;
+  CopyWith$Mutation$RemoveJob$removeJob<TRes> get removeJob =>
+      CopyWith$Mutation$RemoveJob$removeJob.stub(_res);
 }
 
 const documentNodeMutationRemoveJob = DocumentNode(definitions: [
@@ -1036,13 +1428,60 @@ class Mutation$RemoveJob$removeJob
 
 extension UtilityExtension$Mutation$RemoveJob$removeJob
     on Mutation$RemoveJob$removeJob {
-  Mutation$RemoveJob$removeJob copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$RemoveJob$removeJob(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$RemoveJob$removeJob<Mutation$RemoveJob$removeJob>
+      get copyWith => CopyWith$Mutation$RemoveJob$removeJob(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RemoveJob$removeJob<TRes> {
+  factory CopyWith$Mutation$RemoveJob$removeJob(
+          Mutation$RemoveJob$removeJob instance,
+          TRes Function(Mutation$RemoveJob$removeJob) then) =
+      _CopyWithImpl$Mutation$RemoveJob$removeJob;
+
+  factory CopyWith$Mutation$RemoveJob$removeJob.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveJob$removeJob;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$RemoveJob$removeJob<TRes>
+    implements CopyWith$Mutation$RemoveJob$removeJob<TRes> {
+  _CopyWithImpl$Mutation$RemoveJob$removeJob(this._instance, this._then);
+
+  final Mutation$RemoveJob$removeJob _instance;
+
+  final TRes Function(Mutation$RemoveJob$removeJob) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RemoveJob$removeJob(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$RemoveJob$removeJob<TRes>
+    implements CopyWith$Mutation$RemoveJob$removeJob<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveJob$removeJob(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1083,14 +1522,68 @@ class Mutation$RunSystemRebuild {
 
 extension UtilityExtension$Mutation$RunSystemRebuild
     on Mutation$RunSystemRebuild {
-  Mutation$RunSystemRebuild copyWith(
+  CopyWith$Mutation$RunSystemRebuild<Mutation$RunSystemRebuild> get copyWith =>
+      CopyWith$Mutation$RunSystemRebuild(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RunSystemRebuild<TRes> {
+  factory CopyWith$Mutation$RunSystemRebuild(Mutation$RunSystemRebuild instance,
+          TRes Function(Mutation$RunSystemRebuild) then) =
+      _CopyWithImpl$Mutation$RunSystemRebuild;
+
+  factory CopyWith$Mutation$RunSystemRebuild.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRebuild;
+
+  TRes call(
+      {Mutation$RunSystemRebuild$runSystemRebuild? runSystemRebuild,
+      String? $__typename});
+  CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
+      get runSystemRebuild;
+}
+
+class _CopyWithImpl$Mutation$RunSystemRebuild<TRes>
+    implements CopyWith$Mutation$RunSystemRebuild<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRebuild(this._instance, this._then);
+
+  final Mutation$RunSystemRebuild _instance;
+
+  final TRes Function(Mutation$RunSystemRebuild) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? runSystemRebuild = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RunSystemRebuild(
+          runSystemRebuild:
+              runSystemRebuild == _undefined || runSystemRebuild == null
+                  ? _instance.runSystemRebuild
+                  : (runSystemRebuild
+                      as Mutation$RunSystemRebuild$runSystemRebuild),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
+      get runSystemRebuild {
+    final local$runSystemRebuild = _instance.runSystemRebuild;
+    return CopyWith$Mutation$RunSystemRebuild$runSystemRebuild(
+        local$runSystemRebuild, (e) => call(runSystemRebuild: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemRebuild<TRes>
+    implements CopyWith$Mutation$RunSystemRebuild<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRebuild(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$RunSystemRebuild$runSystemRebuild? runSystemRebuild,
           String? $__typename}) =>
-      Mutation$RunSystemRebuild(
-          runSystemRebuild: runSystemRebuild == null
-              ? this.runSystemRebuild
-              : runSystemRebuild,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
+      get runSystemRebuild =>
+          CopyWith$Mutation$RunSystemRebuild$runSystemRebuild.stub(_res);
 }
 
 const documentNodeMutationRunSystemRebuild = DocumentNode(definitions: [
@@ -1269,13 +1762,63 @@ class Mutation$RunSystemRebuild$runSystemRebuild
 
 extension UtilityExtension$Mutation$RunSystemRebuild$runSystemRebuild
     on Mutation$RunSystemRebuild$runSystemRebuild {
-  Mutation$RunSystemRebuild$runSystemRebuild copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$RunSystemRebuild$runSystemRebuild(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<
+          Mutation$RunSystemRebuild$runSystemRebuild>
+      get copyWith =>
+          CopyWith$Mutation$RunSystemRebuild$runSystemRebuild(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes> {
+  factory CopyWith$Mutation$RunSystemRebuild$runSystemRebuild(
+          Mutation$RunSystemRebuild$runSystemRebuild instance,
+          TRes Function(Mutation$RunSystemRebuild$runSystemRebuild) then) =
+      _CopyWithImpl$Mutation$RunSystemRebuild$runSystemRebuild;
+
+  factory CopyWith$Mutation$RunSystemRebuild$runSystemRebuild.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRebuild$runSystemRebuild;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
+    implements CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRebuild$runSystemRebuild(
+      this._instance, this._then);
+
+  final Mutation$RunSystemRebuild$runSystemRebuild _instance;
+
+  final TRes Function(Mutation$RunSystemRebuild$runSystemRebuild) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RunSystemRebuild$runSystemRebuild(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
+    implements CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRebuild$runSystemRebuild(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1316,14 +1859,69 @@ class Mutation$RunSystemRollback {
 
 extension UtilityExtension$Mutation$RunSystemRollback
     on Mutation$RunSystemRollback {
-  Mutation$RunSystemRollback copyWith(
+  CopyWith$Mutation$RunSystemRollback<Mutation$RunSystemRollback>
+      get copyWith => CopyWith$Mutation$RunSystemRollback(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RunSystemRollback<TRes> {
+  factory CopyWith$Mutation$RunSystemRollback(
+          Mutation$RunSystemRollback instance,
+          TRes Function(Mutation$RunSystemRollback) then) =
+      _CopyWithImpl$Mutation$RunSystemRollback;
+
+  factory CopyWith$Mutation$RunSystemRollback.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRollback;
+
+  TRes call(
+      {Mutation$RunSystemRollback$runSystemRollback? runSystemRollback,
+      String? $__typename});
+  CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes>
+      get runSystemRollback;
+}
+
+class _CopyWithImpl$Mutation$RunSystemRollback<TRes>
+    implements CopyWith$Mutation$RunSystemRollback<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRollback(this._instance, this._then);
+
+  final Mutation$RunSystemRollback _instance;
+
+  final TRes Function(Mutation$RunSystemRollback) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? runSystemRollback = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RunSystemRollback(
+          runSystemRollback:
+              runSystemRollback == _undefined || runSystemRollback == null
+                  ? _instance.runSystemRollback
+                  : (runSystemRollback
+                      as Mutation$RunSystemRollback$runSystemRollback),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes>
+      get runSystemRollback {
+    final local$runSystemRollback = _instance.runSystemRollback;
+    return CopyWith$Mutation$RunSystemRollback$runSystemRollback(
+        local$runSystemRollback, (e) => call(runSystemRollback: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemRollback<TRes>
+    implements CopyWith$Mutation$RunSystemRollback<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRollback(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$RunSystemRollback$runSystemRollback? runSystemRollback,
           String? $__typename}) =>
-      Mutation$RunSystemRollback(
-          runSystemRollback: runSystemRollback == null
-              ? this.runSystemRollback
-              : runSystemRollback,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes>
+      get runSystemRollback =>
+          CopyWith$Mutation$RunSystemRollback$runSystemRollback.stub(_res);
 }
 
 const documentNodeMutationRunSystemRollback = DocumentNode(definitions: [
@@ -1502,13 +2100,63 @@ class Mutation$RunSystemRollback$runSystemRollback
 
 extension UtilityExtension$Mutation$RunSystemRollback$runSystemRollback
     on Mutation$RunSystemRollback$runSystemRollback {
-  Mutation$RunSystemRollback$runSystemRollback copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$RunSystemRollback$runSystemRollback(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$RunSystemRollback$runSystemRollback<
+          Mutation$RunSystemRollback$runSystemRollback>
+      get copyWith =>
+          CopyWith$Mutation$RunSystemRollback$runSystemRollback(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes> {
+  factory CopyWith$Mutation$RunSystemRollback$runSystemRollback(
+          Mutation$RunSystemRollback$runSystemRollback instance,
+          TRes Function(Mutation$RunSystemRollback$runSystemRollback) then) =
+      _CopyWithImpl$Mutation$RunSystemRollback$runSystemRollback;
+
+  factory CopyWith$Mutation$RunSystemRollback$runSystemRollback.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRollback$runSystemRollback;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$RunSystemRollback$runSystemRollback<TRes>
+    implements CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRollback$runSystemRollback(
+      this._instance, this._then);
+
+  final Mutation$RunSystemRollback$runSystemRollback _instance;
+
+  final TRes Function(Mutation$RunSystemRollback$runSystemRollback) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RunSystemRollback$runSystemRollback(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemRollback$runSystemRollback<TRes>
+    implements CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRollback$runSystemRollback(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1549,14 +2197,68 @@ class Mutation$RunSystemUpgrade {
 
 extension UtilityExtension$Mutation$RunSystemUpgrade
     on Mutation$RunSystemUpgrade {
-  Mutation$RunSystemUpgrade copyWith(
+  CopyWith$Mutation$RunSystemUpgrade<Mutation$RunSystemUpgrade> get copyWith =>
+      CopyWith$Mutation$RunSystemUpgrade(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RunSystemUpgrade<TRes> {
+  factory CopyWith$Mutation$RunSystemUpgrade(Mutation$RunSystemUpgrade instance,
+          TRes Function(Mutation$RunSystemUpgrade) then) =
+      _CopyWithImpl$Mutation$RunSystemUpgrade;
+
+  factory CopyWith$Mutation$RunSystemUpgrade.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemUpgrade;
+
+  TRes call(
+      {Mutation$RunSystemUpgrade$runSystemUpgrade? runSystemUpgrade,
+      String? $__typename});
+  CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
+      get runSystemUpgrade;
+}
+
+class _CopyWithImpl$Mutation$RunSystemUpgrade<TRes>
+    implements CopyWith$Mutation$RunSystemUpgrade<TRes> {
+  _CopyWithImpl$Mutation$RunSystemUpgrade(this._instance, this._then);
+
+  final Mutation$RunSystemUpgrade _instance;
+
+  final TRes Function(Mutation$RunSystemUpgrade) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? runSystemUpgrade = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RunSystemUpgrade(
+          runSystemUpgrade:
+              runSystemUpgrade == _undefined || runSystemUpgrade == null
+                  ? _instance.runSystemUpgrade
+                  : (runSystemUpgrade
+                      as Mutation$RunSystemUpgrade$runSystemUpgrade),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
+      get runSystemUpgrade {
+    final local$runSystemUpgrade = _instance.runSystemUpgrade;
+    return CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade(
+        local$runSystemUpgrade, (e) => call(runSystemUpgrade: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemUpgrade<TRes>
+    implements CopyWith$Mutation$RunSystemUpgrade<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemUpgrade(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$RunSystemUpgrade$runSystemUpgrade? runSystemUpgrade,
           String? $__typename}) =>
-      Mutation$RunSystemUpgrade(
-          runSystemUpgrade: runSystemUpgrade == null
-              ? this.runSystemUpgrade
-              : runSystemUpgrade,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
+      get runSystemUpgrade =>
+          CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade.stub(_res);
 }
 
 const documentNodeMutationRunSystemUpgrade = DocumentNode(definitions: [
@@ -1735,13 +2437,63 @@ class Mutation$RunSystemUpgrade$runSystemUpgrade
 
 extension UtilityExtension$Mutation$RunSystemUpgrade$runSystemUpgrade
     on Mutation$RunSystemUpgrade$runSystemUpgrade {
-  Mutation$RunSystemUpgrade$runSystemUpgrade copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$RunSystemUpgrade$runSystemUpgrade(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<
+          Mutation$RunSystemUpgrade$runSystemUpgrade>
+      get copyWith =>
+          CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes> {
+  factory CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade(
+          Mutation$RunSystemUpgrade$runSystemUpgrade instance,
+          TRes Function(Mutation$RunSystemUpgrade$runSystemUpgrade) then) =
+      _CopyWithImpl$Mutation$RunSystemUpgrade$runSystemUpgrade;
+
+  factory CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemUpgrade$runSystemUpgrade;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
+    implements CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes> {
+  _CopyWithImpl$Mutation$RunSystemUpgrade$runSystemUpgrade(
+      this._instance, this._then);
+
+  final Mutation$RunSystemUpgrade$runSystemUpgrade _instance;
+
+  final TRes Function(Mutation$RunSystemUpgrade$runSystemUpgrade) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RunSystemUpgrade$runSystemUpgrade(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
+    implements CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemUpgrade$runSystemUpgrade(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1783,15 +2535,72 @@ class Mutation$PullRepositoryChanges {
 
 extension UtilityExtension$Mutation$PullRepositoryChanges
     on Mutation$PullRepositoryChanges {
-  Mutation$PullRepositoryChanges copyWith(
+  CopyWith$Mutation$PullRepositoryChanges<Mutation$PullRepositoryChanges>
+      get copyWith => CopyWith$Mutation$PullRepositoryChanges(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$PullRepositoryChanges<TRes> {
+  factory CopyWith$Mutation$PullRepositoryChanges(
+          Mutation$PullRepositoryChanges instance,
+          TRes Function(Mutation$PullRepositoryChanges) then) =
+      _CopyWithImpl$Mutation$PullRepositoryChanges;
+
+  factory CopyWith$Mutation$PullRepositoryChanges.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$PullRepositoryChanges;
+
+  TRes call(
+      {Mutation$PullRepositoryChanges$pullRepositoryChanges?
+          pullRepositoryChanges,
+      String? $__typename});
+  CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
+      get pullRepositoryChanges;
+}
+
+class _CopyWithImpl$Mutation$PullRepositoryChanges<TRes>
+    implements CopyWith$Mutation$PullRepositoryChanges<TRes> {
+  _CopyWithImpl$Mutation$PullRepositoryChanges(this._instance, this._then);
+
+  final Mutation$PullRepositoryChanges _instance;
+
+  final TRes Function(Mutation$PullRepositoryChanges) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? pullRepositoryChanges = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$PullRepositoryChanges(
+          pullRepositoryChanges: pullRepositoryChanges == _undefined ||
+                  pullRepositoryChanges == null
+              ? _instance.pullRepositoryChanges
+              : (pullRepositoryChanges
+                  as Mutation$PullRepositoryChanges$pullRepositoryChanges),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
+      get pullRepositoryChanges {
+    final local$pullRepositoryChanges = _instance.pullRepositoryChanges;
+    return CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges(
+        local$pullRepositoryChanges, (e) => call(pullRepositoryChanges: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$PullRepositoryChanges<TRes>
+    implements CopyWith$Mutation$PullRepositoryChanges<TRes> {
+  _CopyWithStubImpl$Mutation$PullRepositoryChanges(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$PullRepositoryChanges$pullRepositoryChanges?
               pullRepositoryChanges,
           String? $__typename}) =>
-      Mutation$PullRepositoryChanges(
-          pullRepositoryChanges: pullRepositoryChanges == null
-              ? this.pullRepositoryChanges
-              : pullRepositoryChanges,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
+      get pullRepositoryChanges =>
+          CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges.stub(
+              _res);
 }
 
 const documentNodeMutationPullRepositoryChanges = DocumentNode(definitions: [
@@ -1974,13 +2783,72 @@ class Mutation$PullRepositoryChanges$pullRepositoryChanges
 
 extension UtilityExtension$Mutation$PullRepositoryChanges$pullRepositoryChanges
     on Mutation$PullRepositoryChanges$pullRepositoryChanges {
-  Mutation$PullRepositoryChanges$pullRepositoryChanges copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$PullRepositoryChanges$pullRepositoryChanges(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<
+          Mutation$PullRepositoryChanges$pullRepositoryChanges>
+      get copyWith =>
+          CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<
+    TRes> {
+  factory CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges(
+          Mutation$PullRepositoryChanges$pullRepositoryChanges instance,
+          TRes Function(Mutation$PullRepositoryChanges$pullRepositoryChanges)
+              then) =
+      _CopyWithImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges;
+
+  factory CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
+    implements
+        CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes> {
+  _CopyWithImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges(
+      this._instance, this._then);
+
+  final Mutation$PullRepositoryChanges$pullRepositoryChanges _instance;
+
+  final TRes Function(Mutation$PullRepositoryChanges$pullRepositoryChanges)
+      _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$PullRepositoryChanges$pullRepositoryChanges(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges<
+        TRes>
+    implements
+        CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes> {
+  _CopyWithStubImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges(
+      this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2020,12 +2888,62 @@ class Mutation$RebootSystem {
 }
 
 extension UtilityExtension$Mutation$RebootSystem on Mutation$RebootSystem {
-  Mutation$RebootSystem copyWith(
+  CopyWith$Mutation$RebootSystem<Mutation$RebootSystem> get copyWith =>
+      CopyWith$Mutation$RebootSystem(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RebootSystem<TRes> {
+  factory CopyWith$Mutation$RebootSystem(Mutation$RebootSystem instance,
+          TRes Function(Mutation$RebootSystem) then) =
+      _CopyWithImpl$Mutation$RebootSystem;
+
+  factory CopyWith$Mutation$RebootSystem.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RebootSystem;
+
+  TRes call(
+      {Mutation$RebootSystem$rebootSystem? rebootSystem, String? $__typename});
+  CopyWith$Mutation$RebootSystem$rebootSystem<TRes> get rebootSystem;
+}
+
+class _CopyWithImpl$Mutation$RebootSystem<TRes>
+    implements CopyWith$Mutation$RebootSystem<TRes> {
+  _CopyWithImpl$Mutation$RebootSystem(this._instance, this._then);
+
+  final Mutation$RebootSystem _instance;
+
+  final TRes Function(Mutation$RebootSystem) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? rebootSystem = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RebootSystem(
+          rebootSystem: rebootSystem == _undefined || rebootSystem == null
+              ? _instance.rebootSystem
+              : (rebootSystem as Mutation$RebootSystem$rebootSystem),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$RebootSystem$rebootSystem<TRes> get rebootSystem {
+    final local$rebootSystem = _instance.rebootSystem;
+    return CopyWith$Mutation$RebootSystem$rebootSystem(
+        local$rebootSystem, (e) => call(rebootSystem: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RebootSystem<TRes>
+    implements CopyWith$Mutation$RebootSystem<TRes> {
+  _CopyWithStubImpl$Mutation$RebootSystem(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$RebootSystem$rebootSystem? rebootSystem,
           String? $__typename}) =>
-      Mutation$RebootSystem(
-          rebootSystem: rebootSystem == null ? this.rebootSystem : rebootSystem,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$RebootSystem$rebootSystem<TRes> get rebootSystem =>
+      CopyWith$Mutation$RebootSystem$rebootSystem.stub(_res);
 }
 
 const documentNodeMutationRebootSystem = DocumentNode(definitions: [
@@ -2202,13 +3120,62 @@ class Mutation$RebootSystem$rebootSystem
 
 extension UtilityExtension$Mutation$RebootSystem$rebootSystem
     on Mutation$RebootSystem$rebootSystem {
-  Mutation$RebootSystem$rebootSystem copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$RebootSystem$rebootSystem(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$RebootSystem$rebootSystem<
+          Mutation$RebootSystem$rebootSystem>
+      get copyWith =>
+          CopyWith$Mutation$RebootSystem$rebootSystem(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RebootSystem$rebootSystem<TRes> {
+  factory CopyWith$Mutation$RebootSystem$rebootSystem(
+          Mutation$RebootSystem$rebootSystem instance,
+          TRes Function(Mutation$RebootSystem$rebootSystem) then) =
+      _CopyWithImpl$Mutation$RebootSystem$rebootSystem;
+
+  factory CopyWith$Mutation$RebootSystem$rebootSystem.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RebootSystem$rebootSystem;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$RebootSystem$rebootSystem<TRes>
+    implements CopyWith$Mutation$RebootSystem$rebootSystem<TRes> {
+  _CopyWithImpl$Mutation$RebootSystem$rebootSystem(this._instance, this._then);
+
+  final Mutation$RebootSystem$rebootSystem _instance;
+
+  final TRes Function(Mutation$RebootSystem$rebootSystem) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RebootSystem$rebootSystem(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$RebootSystem$rebootSystem<TRes>
+    implements CopyWith$Mutation$RebootSystem$rebootSystem<TRes> {
+  _CopyWithStubImpl$Mutation$RebootSystem$rebootSystem(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2247,11 +3214,55 @@ class Query$GetApiTokens {
 }
 
 extension UtilityExtension$Query$GetApiTokens on Query$GetApiTokens {
-  Query$GetApiTokens copyWith(
-          {Query$GetApiTokens$api? api, String? $__typename}) =>
-      Query$GetApiTokens(
-          api: api == null ? this.api : api,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$GetApiTokens<Query$GetApiTokens> get copyWith =>
+      CopyWith$Query$GetApiTokens(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiTokens<TRes> {
+  factory CopyWith$Query$GetApiTokens(
+          Query$GetApiTokens instance, TRes Function(Query$GetApiTokens) then) =
+      _CopyWithImpl$Query$GetApiTokens;
+
+  factory CopyWith$Query$GetApiTokens.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiTokens;
+
+  TRes call({Query$GetApiTokens$api? api, String? $__typename});
+  CopyWith$Query$GetApiTokens$api<TRes> get api;
+}
+
+class _CopyWithImpl$Query$GetApiTokens<TRes>
+    implements CopyWith$Query$GetApiTokens<TRes> {
+  _CopyWithImpl$Query$GetApiTokens(this._instance, this._then);
+
+  final Query$GetApiTokens _instance;
+
+  final TRes Function(Query$GetApiTokens) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? api = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$GetApiTokens(
+          api: api == _undefined || api == null
+              ? _instance.api
+              : (api as Query$GetApiTokens$api),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$GetApiTokens$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Query$GetApiTokens$api(local$api, (e) => call(api: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$GetApiTokens<TRes>
+    implements CopyWith$Query$GetApiTokens<TRes> {
+  _CopyWithStubImpl$Query$GetApiTokens(this._res);
+
+  TRes _res;
+
+  call({Query$GetApiTokens$api? api, String? $__typename}) => _res;
+  CopyWith$Query$GetApiTokens$api<TRes> get api =>
+      CopyWith$Query$GetApiTokens$api.stub(_res);
 }
 
 const documentNodeQueryGetApiTokens = DocumentNode(definitions: [
@@ -2441,12 +3452,67 @@ class Query$GetApiTokens$api {
 }
 
 extension UtilityExtension$Query$GetApiTokens$api on Query$GetApiTokens$api {
-  Query$GetApiTokens$api copyWith(
-          {List<Query$GetApiTokens$api$devices>? devices,
-          String? $__typename}) =>
-      Query$GetApiTokens$api(
-          devices: devices == null ? this.devices : devices,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$GetApiTokens$api<Query$GetApiTokens$api> get copyWith =>
+      CopyWith$Query$GetApiTokens$api(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiTokens$api<TRes> {
+  factory CopyWith$Query$GetApiTokens$api(Query$GetApiTokens$api instance,
+          TRes Function(Query$GetApiTokens$api) then) =
+      _CopyWithImpl$Query$GetApiTokens$api;
+
+  factory CopyWith$Query$GetApiTokens$api.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiTokens$api;
+
+  TRes call(
+      {List<Query$GetApiTokens$api$devices>? devices, String? $__typename});
+  TRes devices(
+      Iterable<Query$GetApiTokens$api$devices> Function(
+              Iterable<
+                  CopyWith$Query$GetApiTokens$api$devices<
+                      Query$GetApiTokens$api$devices>>)
+          _fn);
+}
+
+class _CopyWithImpl$Query$GetApiTokens$api<TRes>
+    implements CopyWith$Query$GetApiTokens$api<TRes> {
+  _CopyWithImpl$Query$GetApiTokens$api(this._instance, this._then);
+
+  final Query$GetApiTokens$api _instance;
+
+  final TRes Function(Query$GetApiTokens$api) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? devices = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$GetApiTokens$api(
+          devices: devices == _undefined || devices == null
+              ? _instance.devices
+              : (devices as List<Query$GetApiTokens$api$devices>),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  TRes devices(
+          Iterable<Query$GetApiTokens$api$devices> Function(
+                  Iterable<
+                      CopyWith$Query$GetApiTokens$api$devices<
+                          Query$GetApiTokens$api$devices>>)
+              _fn) =>
+      call(
+          devices: _fn(_instance.devices.map(
+                  (e) => CopyWith$Query$GetApiTokens$api$devices(e, (i) => i)))
+              .toList());
+}
+
+class _CopyWithStubImpl$Query$GetApiTokens$api<TRes>
+    implements CopyWith$Query$GetApiTokens$api<TRes> {
+  _CopyWithStubImpl$Query$GetApiTokens$api(this._res);
+
+  TRes _res;
+
+  call({List<Query$GetApiTokens$api$devices>? devices, String? $__typename}) =>
+      _res;
+  devices(_fn) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2503,16 +3569,68 @@ class Query$GetApiTokens$api$devices {
 
 extension UtilityExtension$Query$GetApiTokens$api$devices
     on Query$GetApiTokens$api$devices {
-  Query$GetApiTokens$api$devices copyWith(
+  CopyWith$Query$GetApiTokens$api$devices<Query$GetApiTokens$api$devices>
+      get copyWith => CopyWith$Query$GetApiTokens$api$devices(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiTokens$api$devices<TRes> {
+  factory CopyWith$Query$GetApiTokens$api$devices(
+          Query$GetApiTokens$api$devices instance,
+          TRes Function(Query$GetApiTokens$api$devices) then) =
+      _CopyWithImpl$Query$GetApiTokens$api$devices;
+
+  factory CopyWith$Query$GetApiTokens$api$devices.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiTokens$api$devices;
+
+  TRes call(
+      {DateTime? creationDate,
+      bool? isCaller,
+      String? name,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Query$GetApiTokens$api$devices<TRes>
+    implements CopyWith$Query$GetApiTokens$api$devices<TRes> {
+  _CopyWithImpl$Query$GetApiTokens$api$devices(this._instance, this._then);
+
+  final Query$GetApiTokens$api$devices _instance;
+
+  final TRes Function(Query$GetApiTokens$api$devices) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? creationDate = _undefined,
+          Object? isCaller = _undefined,
+          Object? name = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$GetApiTokens$api$devices(
+          creationDate: creationDate == _undefined || creationDate == null
+              ? _instance.creationDate
+              : (creationDate as DateTime),
+          isCaller: isCaller == _undefined || isCaller == null
+              ? _instance.isCaller
+              : (isCaller as bool),
+          name: name == _undefined || name == null
+              ? _instance.name
+              : (name as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$GetApiTokens$api$devices<TRes>
+    implements CopyWith$Query$GetApiTokens$api$devices<TRes> {
+  _CopyWithStubImpl$Query$GetApiTokens$api$devices(this._res);
+
+  TRes _res;
+
+  call(
           {DateTime? creationDate,
           bool? isCaller,
           String? name,
           String? $__typename}) =>
-      Query$GetApiTokens$api$devices(
-          creationDate: creationDate == null ? this.creationDate : creationDate,
-          isCaller: isCaller == null ? this.isCaller : isCaller,
-          name: name == null ? this.name : name,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2551,11 +3669,55 @@ class Query$RecoveryKey {
 }
 
 extension UtilityExtension$Query$RecoveryKey on Query$RecoveryKey {
-  Query$RecoveryKey copyWith(
-          {Query$RecoveryKey$api? api, String? $__typename}) =>
-      Query$RecoveryKey(
-          api: api == null ? this.api : api,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$RecoveryKey<Query$RecoveryKey> get copyWith =>
+      CopyWith$Query$RecoveryKey(this, (i) => i);
+}
+
+abstract class CopyWith$Query$RecoveryKey<TRes> {
+  factory CopyWith$Query$RecoveryKey(
+          Query$RecoveryKey instance, TRes Function(Query$RecoveryKey) then) =
+      _CopyWithImpl$Query$RecoveryKey;
+
+  factory CopyWith$Query$RecoveryKey.stub(TRes res) =
+      _CopyWithStubImpl$Query$RecoveryKey;
+
+  TRes call({Query$RecoveryKey$api? api, String? $__typename});
+  CopyWith$Query$RecoveryKey$api<TRes> get api;
+}
+
+class _CopyWithImpl$Query$RecoveryKey<TRes>
+    implements CopyWith$Query$RecoveryKey<TRes> {
+  _CopyWithImpl$Query$RecoveryKey(this._instance, this._then);
+
+  final Query$RecoveryKey _instance;
+
+  final TRes Function(Query$RecoveryKey) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? api = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$RecoveryKey(
+          api: api == _undefined || api == null
+              ? _instance.api
+              : (api as Query$RecoveryKey$api),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$RecoveryKey$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Query$RecoveryKey$api(local$api, (e) => call(api: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$RecoveryKey<TRes>
+    implements CopyWith$Query$RecoveryKey<TRes> {
+  _CopyWithStubImpl$Query$RecoveryKey(this._res);
+
+  TRes _res;
+
+  call({Query$RecoveryKey$api? api, String? $__typename}) => _res;
+  CopyWith$Query$RecoveryKey$api<TRes> get api =>
+      CopyWith$Query$RecoveryKey$api.stub(_res);
 }
 
 const documentNodeQueryRecoveryKey = DocumentNode(definitions: [
@@ -2748,12 +3910,60 @@ class Query$RecoveryKey$api {
 }
 
 extension UtilityExtension$Query$RecoveryKey$api on Query$RecoveryKey$api {
-  Query$RecoveryKey$api copyWith(
-          {Query$RecoveryKey$api$recoveryKey? recoveryKey,
-          String? $__typename}) =>
-      Query$RecoveryKey$api(
-          recoveryKey: recoveryKey == null ? this.recoveryKey : recoveryKey,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$RecoveryKey$api<Query$RecoveryKey$api> get copyWith =>
+      CopyWith$Query$RecoveryKey$api(this, (i) => i);
+}
+
+abstract class CopyWith$Query$RecoveryKey$api<TRes> {
+  factory CopyWith$Query$RecoveryKey$api(Query$RecoveryKey$api instance,
+          TRes Function(Query$RecoveryKey$api) then) =
+      _CopyWithImpl$Query$RecoveryKey$api;
+
+  factory CopyWith$Query$RecoveryKey$api.stub(TRes res) =
+      _CopyWithStubImpl$Query$RecoveryKey$api;
+
+  TRes call(
+      {Query$RecoveryKey$api$recoveryKey? recoveryKey, String? $__typename});
+  CopyWith$Query$RecoveryKey$api$recoveryKey<TRes> get recoveryKey;
+}
+
+class _CopyWithImpl$Query$RecoveryKey$api<TRes>
+    implements CopyWith$Query$RecoveryKey$api<TRes> {
+  _CopyWithImpl$Query$RecoveryKey$api(this._instance, this._then);
+
+  final Query$RecoveryKey$api _instance;
+
+  final TRes Function(Query$RecoveryKey$api) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? recoveryKey = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$RecoveryKey$api(
+          recoveryKey: recoveryKey == _undefined || recoveryKey == null
+              ? _instance.recoveryKey
+              : (recoveryKey as Query$RecoveryKey$api$recoveryKey),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$RecoveryKey$api$recoveryKey<TRes> get recoveryKey {
+    final local$recoveryKey = _instance.recoveryKey;
+    return CopyWith$Query$RecoveryKey$api$recoveryKey(
+        local$recoveryKey, (e) => call(recoveryKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$RecoveryKey$api<TRes>
+    implements CopyWith$Query$RecoveryKey$api<TRes> {
+  _CopyWithStubImpl$Query$RecoveryKey$api(this._res);
+
+  TRes _res;
+
+  call({Query$RecoveryKey$api$recoveryKey? recoveryKey, String? $__typename}) =>
+      _res;
+  CopyWith$Query$RecoveryKey$api$recoveryKey<TRes> get recoveryKey =>
+      CopyWith$Query$RecoveryKey$api$recoveryKey.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2836,22 +4046,80 @@ class Query$RecoveryKey$api$recoveryKey {
 
 extension UtilityExtension$Query$RecoveryKey$api$recoveryKey
     on Query$RecoveryKey$api$recoveryKey {
-  Query$RecoveryKey$api$recoveryKey copyWith(
-          {DateTime? Function()? creationDate,
+  CopyWith$Query$RecoveryKey$api$recoveryKey<Query$RecoveryKey$api$recoveryKey>
+      get copyWith =>
+          CopyWith$Query$RecoveryKey$api$recoveryKey(this, (i) => i);
+}
+
+abstract class CopyWith$Query$RecoveryKey$api$recoveryKey<TRes> {
+  factory CopyWith$Query$RecoveryKey$api$recoveryKey(
+          Query$RecoveryKey$api$recoveryKey instance,
+          TRes Function(Query$RecoveryKey$api$recoveryKey) then) =
+      _CopyWithImpl$Query$RecoveryKey$api$recoveryKey;
+
+  factory CopyWith$Query$RecoveryKey$api$recoveryKey.stub(TRes res) =
+      _CopyWithStubImpl$Query$RecoveryKey$api$recoveryKey;
+
+  TRes call(
+      {DateTime? creationDate,
+      bool? exists,
+      DateTime? expirationDate,
+      int? usesLeft,
+      bool? valid,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Query$RecoveryKey$api$recoveryKey<TRes>
+    implements CopyWith$Query$RecoveryKey$api$recoveryKey<TRes> {
+  _CopyWithImpl$Query$RecoveryKey$api$recoveryKey(this._instance, this._then);
+
+  final Query$RecoveryKey$api$recoveryKey _instance;
+
+  final TRes Function(Query$RecoveryKey$api$recoveryKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? creationDate = _undefined,
+          Object? exists = _undefined,
+          Object? expirationDate = _undefined,
+          Object? usesLeft = _undefined,
+          Object? valid = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$RecoveryKey$api$recoveryKey(
+          creationDate: creationDate == _undefined
+              ? _instance.creationDate
+              : (creationDate as DateTime?),
+          exists: exists == _undefined || exists == null
+              ? _instance.exists
+              : (exists as bool),
+          expirationDate: expirationDate == _undefined
+              ? _instance.expirationDate
+              : (expirationDate as DateTime?),
+          usesLeft:
+              usesLeft == _undefined ? _instance.usesLeft : (usesLeft as int?),
+          valid: valid == _undefined || valid == null
+              ? _instance.valid
+              : (valid as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$RecoveryKey$api$recoveryKey<TRes>
+    implements CopyWith$Query$RecoveryKey$api$recoveryKey<TRes> {
+  _CopyWithStubImpl$Query$RecoveryKey$api$recoveryKey(this._res);
+
+  TRes _res;
+
+  call(
+          {DateTime? creationDate,
           bool? exists,
-          DateTime? Function()? expirationDate,
-          int? Function()? usesLeft,
+          DateTime? expirationDate,
+          int? usesLeft,
           bool? valid,
           String? $__typename}) =>
-      Query$RecoveryKey$api$recoveryKey(
-          creationDate:
-              creationDate == null ? this.creationDate : creationDate(),
-          exists: exists == null ? this.exists : exists,
-          expirationDate:
-              expirationDate == null ? this.expirationDate : expirationDate(),
-          usesLeft: usesLeft == null ? this.usesLeft : usesLeft(),
-          valid: valid == null ? this.valid : valid,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2883,10 +4151,49 @@ class Variables$Mutation$GetNewRecoveryApiKey {
     return true;
   }
 
-  Variables$Mutation$GetNewRecoveryApiKey copyWith(
-          {Input$RecoveryKeyLimitsInput? Function()? limits}) =>
-      Variables$Mutation$GetNewRecoveryApiKey(
-          limits: limits == null ? this.limits : limits());
+  CopyWith$Variables$Mutation$GetNewRecoveryApiKey<
+          Variables$Mutation$GetNewRecoveryApiKey>
+      get copyWith =>
+          CopyWith$Variables$Mutation$GetNewRecoveryApiKey(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$GetNewRecoveryApiKey<TRes> {
+  factory CopyWith$Variables$Mutation$GetNewRecoveryApiKey(
+          Variables$Mutation$GetNewRecoveryApiKey instance,
+          TRes Function(Variables$Mutation$GetNewRecoveryApiKey) then) =
+      _CopyWithImpl$Variables$Mutation$GetNewRecoveryApiKey;
+
+  factory CopyWith$Variables$Mutation$GetNewRecoveryApiKey.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$GetNewRecoveryApiKey;
+
+  TRes call({Input$RecoveryKeyLimitsInput? limits});
+}
+
+class _CopyWithImpl$Variables$Mutation$GetNewRecoveryApiKey<TRes>
+    implements CopyWith$Variables$Mutation$GetNewRecoveryApiKey<TRes> {
+  _CopyWithImpl$Variables$Mutation$GetNewRecoveryApiKey(
+      this._instance, this._then);
+
+  final Variables$Mutation$GetNewRecoveryApiKey _instance;
+
+  final TRes Function(Variables$Mutation$GetNewRecoveryApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? limits = _undefined}) =>
+      _then(Variables$Mutation$GetNewRecoveryApiKey(
+          limits: limits == _undefined
+              ? _instance.limits
+              : (limits as Input$RecoveryKeyLimitsInput?)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$GetNewRecoveryApiKey<TRes>
+    implements CopyWith$Variables$Mutation$GetNewRecoveryApiKey<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$GetNewRecoveryApiKey(this._res);
+
+  TRes _res;
+
+  call({Input$RecoveryKeyLimitsInput? limits}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -2927,15 +4234,71 @@ class Mutation$GetNewRecoveryApiKey {
 
 extension UtilityExtension$Mutation$GetNewRecoveryApiKey
     on Mutation$GetNewRecoveryApiKey {
-  Mutation$GetNewRecoveryApiKey copyWith(
+  CopyWith$Mutation$GetNewRecoveryApiKey<Mutation$GetNewRecoveryApiKey>
+      get copyWith => CopyWith$Mutation$GetNewRecoveryApiKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$GetNewRecoveryApiKey<TRes> {
+  factory CopyWith$Mutation$GetNewRecoveryApiKey(
+          Mutation$GetNewRecoveryApiKey instance,
+          TRes Function(Mutation$GetNewRecoveryApiKey) then) =
+      _CopyWithImpl$Mutation$GetNewRecoveryApiKey;
+
+  factory CopyWith$Mutation$GetNewRecoveryApiKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey;
+
+  TRes call(
+      {Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey? getNewRecoveryApiKey,
+      String? $__typename});
+  CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
+      get getNewRecoveryApiKey;
+}
+
+class _CopyWithImpl$Mutation$GetNewRecoveryApiKey<TRes>
+    implements CopyWith$Mutation$GetNewRecoveryApiKey<TRes> {
+  _CopyWithImpl$Mutation$GetNewRecoveryApiKey(this._instance, this._then);
+
+  final Mutation$GetNewRecoveryApiKey _instance;
+
+  final TRes Function(Mutation$GetNewRecoveryApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? getNewRecoveryApiKey = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$GetNewRecoveryApiKey(
+          getNewRecoveryApiKey:
+              getNewRecoveryApiKey == _undefined || getNewRecoveryApiKey == null
+                  ? _instance.getNewRecoveryApiKey
+                  : (getNewRecoveryApiKey
+                      as Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
+      get getNewRecoveryApiKey {
+    final local$getNewRecoveryApiKey = _instance.getNewRecoveryApiKey;
+    return CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+        local$getNewRecoveryApiKey, (e) => call(getNewRecoveryApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey<TRes>
+    implements CopyWith$Mutation$GetNewRecoveryApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey?
               getNewRecoveryApiKey,
           String? $__typename}) =>
-      Mutation$GetNewRecoveryApiKey(
-          getNewRecoveryApiKey: getNewRecoveryApiKey == null
-              ? this.getNewRecoveryApiKey
-              : getNewRecoveryApiKey,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
+      get getNewRecoveryApiKey =>
+          CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey.stub(
+              _res);
 }
 
 const documentNodeMutationGetNewRecoveryApiKey = DocumentNode(definitions: [
@@ -3146,18 +4509,82 @@ class Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey
 
 extension UtilityExtension$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey
     on Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey {
-  Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey copyWith(
+  CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<
+          Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey>
+      get copyWith =>
+          CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<
+    TRes> {
+  factory CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+          Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey instance,
+          TRes Function(Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey)
+              then) =
+      _CopyWithImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey;
+
+  factory CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      String? key});
+}
+
+class _CopyWithImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
+    implements
+        CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes> {
+  _CopyWithImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+      this._instance, this._then);
+
+  final Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey _instance;
+
+  final TRes Function(Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? key = _undefined}) =>
+      _then(Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          key: key == _undefined ? _instance.key : (key as String?)));
+}
+
+class _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
+    implements
+        CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+      this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          String? Function()? key}) =>
-      Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          key: key == null ? this.key : key());
+          String? key}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -3189,10 +4616,49 @@ class Variables$Mutation$UseRecoveryApiKey {
     return true;
   }
 
-  Variables$Mutation$UseRecoveryApiKey copyWith(
-          {Input$UseRecoveryKeyInput? input}) =>
-      Variables$Mutation$UseRecoveryApiKey(
-          input: input == null ? this.input : input);
+  CopyWith$Variables$Mutation$UseRecoveryApiKey<
+          Variables$Mutation$UseRecoveryApiKey>
+      get copyWith =>
+          CopyWith$Variables$Mutation$UseRecoveryApiKey(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$UseRecoveryApiKey<TRes> {
+  factory CopyWith$Variables$Mutation$UseRecoveryApiKey(
+          Variables$Mutation$UseRecoveryApiKey instance,
+          TRes Function(Variables$Mutation$UseRecoveryApiKey) then) =
+      _CopyWithImpl$Variables$Mutation$UseRecoveryApiKey;
+
+  factory CopyWith$Variables$Mutation$UseRecoveryApiKey.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$UseRecoveryApiKey;
+
+  TRes call({Input$UseRecoveryKeyInput? input});
+}
+
+class _CopyWithImpl$Variables$Mutation$UseRecoveryApiKey<TRes>
+    implements CopyWith$Variables$Mutation$UseRecoveryApiKey<TRes> {
+  _CopyWithImpl$Variables$Mutation$UseRecoveryApiKey(
+      this._instance, this._then);
+
+  final Variables$Mutation$UseRecoveryApiKey _instance;
+
+  final TRes Function(Variables$Mutation$UseRecoveryApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? input = _undefined}) =>
+      _then(Variables$Mutation$UseRecoveryApiKey(
+          input: input == _undefined || input == null
+              ? _instance.input
+              : (input as Input$UseRecoveryKeyInput)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$UseRecoveryApiKey<TRes>
+    implements CopyWith$Variables$Mutation$UseRecoveryApiKey<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$UseRecoveryApiKey(this._res);
+
+  TRes _res;
+
+  call({Input$UseRecoveryKeyInput? input}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -3233,14 +4699,69 @@ class Mutation$UseRecoveryApiKey {
 
 extension UtilityExtension$Mutation$UseRecoveryApiKey
     on Mutation$UseRecoveryApiKey {
-  Mutation$UseRecoveryApiKey copyWith(
+  CopyWith$Mutation$UseRecoveryApiKey<Mutation$UseRecoveryApiKey>
+      get copyWith => CopyWith$Mutation$UseRecoveryApiKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$UseRecoveryApiKey<TRes> {
+  factory CopyWith$Mutation$UseRecoveryApiKey(
+          Mutation$UseRecoveryApiKey instance,
+          TRes Function(Mutation$UseRecoveryApiKey) then) =
+      _CopyWithImpl$Mutation$UseRecoveryApiKey;
+
+  factory CopyWith$Mutation$UseRecoveryApiKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UseRecoveryApiKey;
+
+  TRes call(
+      {Mutation$UseRecoveryApiKey$useRecoveryApiKey? useRecoveryApiKey,
+      String? $__typename});
+  CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
+      get useRecoveryApiKey;
+}
+
+class _CopyWithImpl$Mutation$UseRecoveryApiKey<TRes>
+    implements CopyWith$Mutation$UseRecoveryApiKey<TRes> {
+  _CopyWithImpl$Mutation$UseRecoveryApiKey(this._instance, this._then);
+
+  final Mutation$UseRecoveryApiKey _instance;
+
+  final TRes Function(Mutation$UseRecoveryApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? useRecoveryApiKey = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$UseRecoveryApiKey(
+          useRecoveryApiKey:
+              useRecoveryApiKey == _undefined || useRecoveryApiKey == null
+                  ? _instance.useRecoveryApiKey
+                  : (useRecoveryApiKey
+                      as Mutation$UseRecoveryApiKey$useRecoveryApiKey),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
+      get useRecoveryApiKey {
+    final local$useRecoveryApiKey = _instance.useRecoveryApiKey;
+    return CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey(
+        local$useRecoveryApiKey, (e) => call(useRecoveryApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$UseRecoveryApiKey<TRes>
+    implements CopyWith$Mutation$UseRecoveryApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$UseRecoveryApiKey(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$UseRecoveryApiKey$useRecoveryApiKey? useRecoveryApiKey,
           String? $__typename}) =>
-      Mutation$UseRecoveryApiKey(
-          useRecoveryApiKey: useRecoveryApiKey == null
-              ? this.useRecoveryApiKey
-              : useRecoveryApiKey,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
+      get useRecoveryApiKey =>
+          CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey.stub(_res);
 }
 
 const documentNodeMutationUseRecoveryApiKey = DocumentNode(definitions: [
@@ -3448,18 +4969,75 @@ class Mutation$UseRecoveryApiKey$useRecoveryApiKey
 
 extension UtilityExtension$Mutation$UseRecoveryApiKey$useRecoveryApiKey
     on Mutation$UseRecoveryApiKey$useRecoveryApiKey {
-  Mutation$UseRecoveryApiKey$useRecoveryApiKey copyWith(
+  CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<
+          Mutation$UseRecoveryApiKey$useRecoveryApiKey>
+      get copyWith =>
+          CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes> {
+  factory CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey(
+          Mutation$UseRecoveryApiKey$useRecoveryApiKey instance,
+          TRes Function(Mutation$UseRecoveryApiKey$useRecoveryApiKey) then) =
+      _CopyWithImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey;
+
+  factory CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      String? token});
+}
+
+class _CopyWithImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
+    implements CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes> {
+  _CopyWithImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey(
+      this._instance, this._then);
+
+  final Mutation$UseRecoveryApiKey$useRecoveryApiKey _instance;
+
+  final TRes Function(Mutation$UseRecoveryApiKey$useRecoveryApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? token = _undefined}) =>
+      _then(Mutation$UseRecoveryApiKey$useRecoveryApiKey(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          token: token == _undefined ? _instance.token : (token as String?)));
+}
+
+class _CopyWithStubImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
+    implements CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey(this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          String? Function()? token}) =>
-      Mutation$UseRecoveryApiKey$useRecoveryApiKey(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          token: token == null ? this.token : token());
+          String? token}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -3501,15 +5079,72 @@ class Mutation$RefreshDeviceApiToken {
 
 extension UtilityExtension$Mutation$RefreshDeviceApiToken
     on Mutation$RefreshDeviceApiToken {
-  Mutation$RefreshDeviceApiToken copyWith(
+  CopyWith$Mutation$RefreshDeviceApiToken<Mutation$RefreshDeviceApiToken>
+      get copyWith => CopyWith$Mutation$RefreshDeviceApiToken(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RefreshDeviceApiToken<TRes> {
+  factory CopyWith$Mutation$RefreshDeviceApiToken(
+          Mutation$RefreshDeviceApiToken instance,
+          TRes Function(Mutation$RefreshDeviceApiToken) then) =
+      _CopyWithImpl$Mutation$RefreshDeviceApiToken;
+
+  factory CopyWith$Mutation$RefreshDeviceApiToken.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RefreshDeviceApiToken;
+
+  TRes call(
+      {Mutation$RefreshDeviceApiToken$refreshDeviceApiToken?
+          refreshDeviceApiToken,
+      String? $__typename});
+  CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
+      get refreshDeviceApiToken;
+}
+
+class _CopyWithImpl$Mutation$RefreshDeviceApiToken<TRes>
+    implements CopyWith$Mutation$RefreshDeviceApiToken<TRes> {
+  _CopyWithImpl$Mutation$RefreshDeviceApiToken(this._instance, this._then);
+
+  final Mutation$RefreshDeviceApiToken _instance;
+
+  final TRes Function(Mutation$RefreshDeviceApiToken) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? refreshDeviceApiToken = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$RefreshDeviceApiToken(
+          refreshDeviceApiToken: refreshDeviceApiToken == _undefined ||
+                  refreshDeviceApiToken == null
+              ? _instance.refreshDeviceApiToken
+              : (refreshDeviceApiToken
+                  as Mutation$RefreshDeviceApiToken$refreshDeviceApiToken),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
+      get refreshDeviceApiToken {
+    final local$refreshDeviceApiToken = _instance.refreshDeviceApiToken;
+    return CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+        local$refreshDeviceApiToken, (e) => call(refreshDeviceApiToken: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RefreshDeviceApiToken<TRes>
+    implements CopyWith$Mutation$RefreshDeviceApiToken<TRes> {
+  _CopyWithStubImpl$Mutation$RefreshDeviceApiToken(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$RefreshDeviceApiToken$refreshDeviceApiToken?
               refreshDeviceApiToken,
           String? $__typename}) =>
-      Mutation$RefreshDeviceApiToken(
-          refreshDeviceApiToken: refreshDeviceApiToken == null
-              ? this.refreshDeviceApiToken
-              : refreshDeviceApiToken,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
+      get refreshDeviceApiToken =>
+          CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken.stub(
+              _res);
 }
 
 const documentNodeMutationRefreshDeviceApiToken = DocumentNode(definitions: [
@@ -3706,18 +5341,84 @@ class Mutation$RefreshDeviceApiToken$refreshDeviceApiToken
 
 extension UtilityExtension$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken
     on Mutation$RefreshDeviceApiToken$refreshDeviceApiToken {
-  Mutation$RefreshDeviceApiToken$refreshDeviceApiToken copyWith(
+  CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<
+          Mutation$RefreshDeviceApiToken$refreshDeviceApiToken>
+      get copyWith =>
+          CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<
+    TRes> {
+  factory CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+          Mutation$RefreshDeviceApiToken$refreshDeviceApiToken instance,
+          TRes Function(Mutation$RefreshDeviceApiToken$refreshDeviceApiToken)
+              then) =
+      _CopyWithImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken;
+
+  factory CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      String? token});
+}
+
+class _CopyWithImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
+    implements
+        CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes> {
+  _CopyWithImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+      this._instance, this._then);
+
+  final Mutation$RefreshDeviceApiToken$refreshDeviceApiToken _instance;
+
+  final TRes Function(Mutation$RefreshDeviceApiToken$refreshDeviceApiToken)
+      _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? token = _undefined}) =>
+      _then(Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          token: token == _undefined ? _instance.token : (token as String?)));
+}
+
+class _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<
+        TRes>
+    implements
+        CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes> {
+  _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+      this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          String? Function()? token}) =>
-      Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          token: token == null ? this.token : token());
+          String? token}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -3749,9 +5450,49 @@ class Variables$Mutation$DeleteDeviceApiToken {
     return true;
   }
 
-  Variables$Mutation$DeleteDeviceApiToken copyWith({String? device}) =>
-      Variables$Mutation$DeleteDeviceApiToken(
-          device: device == null ? this.device : device);
+  CopyWith$Variables$Mutation$DeleteDeviceApiToken<
+          Variables$Mutation$DeleteDeviceApiToken>
+      get copyWith =>
+          CopyWith$Variables$Mutation$DeleteDeviceApiToken(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$DeleteDeviceApiToken<TRes> {
+  factory CopyWith$Variables$Mutation$DeleteDeviceApiToken(
+          Variables$Mutation$DeleteDeviceApiToken instance,
+          TRes Function(Variables$Mutation$DeleteDeviceApiToken) then) =
+      _CopyWithImpl$Variables$Mutation$DeleteDeviceApiToken;
+
+  factory CopyWith$Variables$Mutation$DeleteDeviceApiToken.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$DeleteDeviceApiToken;
+
+  TRes call({String? device});
+}
+
+class _CopyWithImpl$Variables$Mutation$DeleteDeviceApiToken<TRes>
+    implements CopyWith$Variables$Mutation$DeleteDeviceApiToken<TRes> {
+  _CopyWithImpl$Variables$Mutation$DeleteDeviceApiToken(
+      this._instance, this._then);
+
+  final Variables$Mutation$DeleteDeviceApiToken _instance;
+
+  final TRes Function(Variables$Mutation$DeleteDeviceApiToken) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? device = _undefined}) =>
+      _then(Variables$Mutation$DeleteDeviceApiToken(
+          device: device == _undefined || device == null
+              ? _instance.device
+              : (device as String)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$DeleteDeviceApiToken<TRes>
+    implements CopyWith$Variables$Mutation$DeleteDeviceApiToken<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$DeleteDeviceApiToken(this._res);
+
+  TRes _res;
+
+  call({String? device}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -3792,15 +5533,71 @@ class Mutation$DeleteDeviceApiToken {
 
 extension UtilityExtension$Mutation$DeleteDeviceApiToken
     on Mutation$DeleteDeviceApiToken {
-  Mutation$DeleteDeviceApiToken copyWith(
+  CopyWith$Mutation$DeleteDeviceApiToken<Mutation$DeleteDeviceApiToken>
+      get copyWith => CopyWith$Mutation$DeleteDeviceApiToken(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$DeleteDeviceApiToken<TRes> {
+  factory CopyWith$Mutation$DeleteDeviceApiToken(
+          Mutation$DeleteDeviceApiToken instance,
+          TRes Function(Mutation$DeleteDeviceApiToken) then) =
+      _CopyWithImpl$Mutation$DeleteDeviceApiToken;
+
+  factory CopyWith$Mutation$DeleteDeviceApiToken.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteDeviceApiToken;
+
+  TRes call(
+      {Mutation$DeleteDeviceApiToken$deleteDeviceApiToken? deleteDeviceApiToken,
+      String? $__typename});
+  CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
+      get deleteDeviceApiToken;
+}
+
+class _CopyWithImpl$Mutation$DeleteDeviceApiToken<TRes>
+    implements CopyWith$Mutation$DeleteDeviceApiToken<TRes> {
+  _CopyWithImpl$Mutation$DeleteDeviceApiToken(this._instance, this._then);
+
+  final Mutation$DeleteDeviceApiToken _instance;
+
+  final TRes Function(Mutation$DeleteDeviceApiToken) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? deleteDeviceApiToken = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$DeleteDeviceApiToken(
+          deleteDeviceApiToken:
+              deleteDeviceApiToken == _undefined || deleteDeviceApiToken == null
+                  ? _instance.deleteDeviceApiToken
+                  : (deleteDeviceApiToken
+                      as Mutation$DeleteDeviceApiToken$deleteDeviceApiToken),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
+      get deleteDeviceApiToken {
+    final local$deleteDeviceApiToken = _instance.deleteDeviceApiToken;
+    return CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+        local$deleteDeviceApiToken, (e) => call(deleteDeviceApiToken: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$DeleteDeviceApiToken<TRes>
+    implements CopyWith$Mutation$DeleteDeviceApiToken<TRes> {
+  _CopyWithStubImpl$Mutation$DeleteDeviceApiToken(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$DeleteDeviceApiToken$deleteDeviceApiToken?
               deleteDeviceApiToken,
           String? $__typename}) =>
-      Mutation$DeleteDeviceApiToken(
-          deleteDeviceApiToken: deleteDeviceApiToken == null
-              ? this.deleteDeviceApiToken
-              : deleteDeviceApiToken,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
+      get deleteDeviceApiToken =>
+          CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken.stub(
+              _res);
 }
 
 const documentNodeMutationDeleteDeviceApiToken = DocumentNode(definitions: [
@@ -3996,13 +5793,70 @@ class Mutation$DeleteDeviceApiToken$deleteDeviceApiToken
 
 extension UtilityExtension$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken
     on Mutation$DeleteDeviceApiToken$deleteDeviceApiToken {
-  Mutation$DeleteDeviceApiToken$deleteDeviceApiToken copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<
+          Mutation$DeleteDeviceApiToken$deleteDeviceApiToken>
+      get copyWith =>
+          CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<
+    TRes> {
+  factory CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+          Mutation$DeleteDeviceApiToken$deleteDeviceApiToken instance,
+          TRes Function(Mutation$DeleteDeviceApiToken$deleteDeviceApiToken)
+              then) =
+      _CopyWithImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken;
+
+  factory CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
+    implements
+        CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes> {
+  _CopyWithImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+      this._instance, this._then);
+
+  final Mutation$DeleteDeviceApiToken$deleteDeviceApiToken _instance;
+
+  final TRes Function(Mutation$DeleteDeviceApiToken$deleteDeviceApiToken) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
+    implements
+        CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes> {
+  _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+      this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -4043,14 +5897,69 @@ class Mutation$GetNewDeviceApiKey {
 
 extension UtilityExtension$Mutation$GetNewDeviceApiKey
     on Mutation$GetNewDeviceApiKey {
-  Mutation$GetNewDeviceApiKey copyWith(
+  CopyWith$Mutation$GetNewDeviceApiKey<Mutation$GetNewDeviceApiKey>
+      get copyWith => CopyWith$Mutation$GetNewDeviceApiKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$GetNewDeviceApiKey<TRes> {
+  factory CopyWith$Mutation$GetNewDeviceApiKey(
+          Mutation$GetNewDeviceApiKey instance,
+          TRes Function(Mutation$GetNewDeviceApiKey) then) =
+      _CopyWithImpl$Mutation$GetNewDeviceApiKey;
+
+  factory CopyWith$Mutation$GetNewDeviceApiKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$GetNewDeviceApiKey;
+
+  TRes call(
+      {Mutation$GetNewDeviceApiKey$getNewDeviceApiKey? getNewDeviceApiKey,
+      String? $__typename});
+  CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
+      get getNewDeviceApiKey;
+}
+
+class _CopyWithImpl$Mutation$GetNewDeviceApiKey<TRes>
+    implements CopyWith$Mutation$GetNewDeviceApiKey<TRes> {
+  _CopyWithImpl$Mutation$GetNewDeviceApiKey(this._instance, this._then);
+
+  final Mutation$GetNewDeviceApiKey _instance;
+
+  final TRes Function(Mutation$GetNewDeviceApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? getNewDeviceApiKey = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$GetNewDeviceApiKey(
+          getNewDeviceApiKey:
+              getNewDeviceApiKey == _undefined || getNewDeviceApiKey == null
+                  ? _instance.getNewDeviceApiKey
+                  : (getNewDeviceApiKey
+                      as Mutation$GetNewDeviceApiKey$getNewDeviceApiKey),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
+      get getNewDeviceApiKey {
+    final local$getNewDeviceApiKey = _instance.getNewDeviceApiKey;
+    return CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
+        local$getNewDeviceApiKey, (e) => call(getNewDeviceApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$GetNewDeviceApiKey<TRes>
+    implements CopyWith$Mutation$GetNewDeviceApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$GetNewDeviceApiKey(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$GetNewDeviceApiKey$getNewDeviceApiKey? getNewDeviceApiKey,
           String? $__typename}) =>
-      Mutation$GetNewDeviceApiKey(
-          getNewDeviceApiKey: getNewDeviceApiKey == null
-              ? this.getNewDeviceApiKey
-              : getNewDeviceApiKey,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
+      get getNewDeviceApiKey =>
+          CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey.stub(_res);
 }
 
 const documentNodeMutationGetNewDeviceApiKey = DocumentNode(definitions: [
@@ -4242,18 +6151,76 @@ class Mutation$GetNewDeviceApiKey$getNewDeviceApiKey
 
 extension UtilityExtension$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey
     on Mutation$GetNewDeviceApiKey$getNewDeviceApiKey {
-  Mutation$GetNewDeviceApiKey$getNewDeviceApiKey copyWith(
+  CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<
+          Mutation$GetNewDeviceApiKey$getNewDeviceApiKey>
+      get copyWith => CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
+          this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes> {
+  factory CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
+          Mutation$GetNewDeviceApiKey$getNewDeviceApiKey instance,
+          TRes Function(Mutation$GetNewDeviceApiKey$getNewDeviceApiKey) then) =
+      _CopyWithImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey;
+
+  factory CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      String? key});
+}
+
+class _CopyWithImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
+    implements CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes> {
+  _CopyWithImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
+      this._instance, this._then);
+
+  final Mutation$GetNewDeviceApiKey$getNewDeviceApiKey _instance;
+
+  final TRes Function(Mutation$GetNewDeviceApiKey$getNewDeviceApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? key = _undefined}) =>
+      _then(Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          key: key == _undefined ? _instance.key : (key as String?)));
+}
+
+class _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
+    implements CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          String? Function()? key}) =>
-      Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          key: key == null ? this.key : key());
+          String? key}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -4298,15 +6265,75 @@ class Mutation$InvalidateNewDeviceApiKey {
 
 extension UtilityExtension$Mutation$InvalidateNewDeviceApiKey
     on Mutation$InvalidateNewDeviceApiKey {
-  Mutation$InvalidateNewDeviceApiKey copyWith(
+  CopyWith$Mutation$InvalidateNewDeviceApiKey<
+          Mutation$InvalidateNewDeviceApiKey>
+      get copyWith =>
+          CopyWith$Mutation$InvalidateNewDeviceApiKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$InvalidateNewDeviceApiKey<TRes> {
+  factory CopyWith$Mutation$InvalidateNewDeviceApiKey(
+          Mutation$InvalidateNewDeviceApiKey instance,
+          TRes Function(Mutation$InvalidateNewDeviceApiKey) then) =
+      _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey;
+
+  factory CopyWith$Mutation$InvalidateNewDeviceApiKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey;
+
+  TRes call(
+      {Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey?
+          invalidateNewDeviceApiKey,
+      String? $__typename});
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<TRes>
+      get invalidateNewDeviceApiKey;
+}
+
+class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey<TRes>
+    implements CopyWith$Mutation$InvalidateNewDeviceApiKey<TRes> {
+  _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey(this._instance, this._then);
+
+  final Mutation$InvalidateNewDeviceApiKey _instance;
+
+  final TRes Function(Mutation$InvalidateNewDeviceApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? invalidateNewDeviceApiKey = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$InvalidateNewDeviceApiKey(
+          invalidateNewDeviceApiKey: invalidateNewDeviceApiKey == _undefined ||
+                  invalidateNewDeviceApiKey == null
+              ? _instance.invalidateNewDeviceApiKey
+              : (invalidateNewDeviceApiKey
+                  as Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<TRes>
+      get invalidateNewDeviceApiKey {
+    final local$invalidateNewDeviceApiKey = _instance.invalidateNewDeviceApiKey;
+    return CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+        local$invalidateNewDeviceApiKey,
+        (e) => call(invalidateNewDeviceApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey<TRes>
+    implements CopyWith$Mutation$InvalidateNewDeviceApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey?
               invalidateNewDeviceApiKey,
           String? $__typename}) =>
-      Mutation$InvalidateNewDeviceApiKey(
-          invalidateNewDeviceApiKey: invalidateNewDeviceApiKey == null
-              ? this.invalidateNewDeviceApiKey
-              : invalidateNewDeviceApiKey,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<TRes>
+      get invalidateNewDeviceApiKey =>
+          CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
+              .stub(_res);
 }
 
 const documentNodeMutationInvalidateNewDeviceApiKey =
@@ -4493,13 +6520,76 @@ class Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
 
 extension UtilityExtension$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
     on Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey {
-  Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+          Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey>
+      get copyWith =>
+          CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+    TRes> {
+  factory CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+          Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey instance,
+          TRes Function(
+                  Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey)
+              then) =
+      _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey;
+
+  factory CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+        TRes>
+    implements
+        CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+            TRes> {
+  _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+      this._instance, this._then);
+
+  final Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey _instance;
+
+  final TRes Function(
+      Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+        TRes>
+    implements
+        CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+            TRes> {
+  _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+      this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -4531,10 +6621,50 @@ class Variables$Mutation$AuthorizeWithNewDeviceApiKey {
     return true;
   }
 
-  Variables$Mutation$AuthorizeWithNewDeviceApiKey copyWith(
-          {Input$UseNewDeviceKeyInput? input}) =>
-      Variables$Mutation$AuthorizeWithNewDeviceApiKey(
-          input: input == null ? this.input : input);
+  CopyWith$Variables$Mutation$AuthorizeWithNewDeviceApiKey<
+          Variables$Mutation$AuthorizeWithNewDeviceApiKey>
+      get copyWith => CopyWith$Variables$Mutation$AuthorizeWithNewDeviceApiKey(
+          this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$AuthorizeWithNewDeviceApiKey<TRes> {
+  factory CopyWith$Variables$Mutation$AuthorizeWithNewDeviceApiKey(
+          Variables$Mutation$AuthorizeWithNewDeviceApiKey instance,
+          TRes Function(Variables$Mutation$AuthorizeWithNewDeviceApiKey) then) =
+      _CopyWithImpl$Variables$Mutation$AuthorizeWithNewDeviceApiKey;
+
+  factory CopyWith$Variables$Mutation$AuthorizeWithNewDeviceApiKey.stub(
+          TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$AuthorizeWithNewDeviceApiKey;
+
+  TRes call({Input$UseNewDeviceKeyInput? input});
+}
+
+class _CopyWithImpl$Variables$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
+    implements CopyWith$Variables$Mutation$AuthorizeWithNewDeviceApiKey<TRes> {
+  _CopyWithImpl$Variables$Mutation$AuthorizeWithNewDeviceApiKey(
+      this._instance, this._then);
+
+  final Variables$Mutation$AuthorizeWithNewDeviceApiKey _instance;
+
+  final TRes Function(Variables$Mutation$AuthorizeWithNewDeviceApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? input = _undefined}) =>
+      _then(Variables$Mutation$AuthorizeWithNewDeviceApiKey(
+          input: input == _undefined || input == null
+              ? _instance.input
+              : (input as Input$UseNewDeviceKeyInput)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
+    implements CopyWith$Variables$Mutation$AuthorizeWithNewDeviceApiKey<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$AuthorizeWithNewDeviceApiKey(this._res);
+
+  TRes _res;
+
+  call({Input$UseNewDeviceKeyInput? input}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -4580,15 +6710,79 @@ class Mutation$AuthorizeWithNewDeviceApiKey {
 
 extension UtilityExtension$Mutation$AuthorizeWithNewDeviceApiKey
     on Mutation$AuthorizeWithNewDeviceApiKey {
-  Mutation$AuthorizeWithNewDeviceApiKey copyWith(
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey<
+          Mutation$AuthorizeWithNewDeviceApiKey>
+      get copyWith =>
+          CopyWith$Mutation$AuthorizeWithNewDeviceApiKey(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$AuthorizeWithNewDeviceApiKey<TRes> {
+  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey(
+          Mutation$AuthorizeWithNewDeviceApiKey instance,
+          TRes Function(Mutation$AuthorizeWithNewDeviceApiKey) then) =
+      _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey;
+
+  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey;
+
+  TRes call(
+      {Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey?
+          authorizeWithNewDeviceApiKey,
+      String? $__typename});
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+      TRes> get authorizeWithNewDeviceApiKey;
+}
+
+class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
+    implements CopyWith$Mutation$AuthorizeWithNewDeviceApiKey<TRes> {
+  _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey(
+      this._instance, this._then);
+
+  final Mutation$AuthorizeWithNewDeviceApiKey _instance;
+
+  final TRes Function(Mutation$AuthorizeWithNewDeviceApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? authorizeWithNewDeviceApiKey = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$AuthorizeWithNewDeviceApiKey(
+          authorizeWithNewDeviceApiKey: authorizeWithNewDeviceApiKey ==
+                      _undefined ||
+                  authorizeWithNewDeviceApiKey == null
+              ? _instance.authorizeWithNewDeviceApiKey
+              : (authorizeWithNewDeviceApiKey
+                  as Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+      TRes> get authorizeWithNewDeviceApiKey {
+    final local$authorizeWithNewDeviceApiKey =
+        _instance.authorizeWithNewDeviceApiKey;
+    return CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+        local$authorizeWithNewDeviceApiKey,
+        (e) => call(authorizeWithNewDeviceApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
+    implements CopyWith$Mutation$AuthorizeWithNewDeviceApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey?
               authorizeWithNewDeviceApiKey,
           String? $__typename}) =>
-      Mutation$AuthorizeWithNewDeviceApiKey(
-          authorizeWithNewDeviceApiKey: authorizeWithNewDeviceApiKey == null
-              ? this.authorizeWithNewDeviceApiKey
-              : authorizeWithNewDeviceApiKey,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+          TRes>
+      get authorizeWithNewDeviceApiKey =>
+          CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
+              .stub(_res);
 }
 
 const documentNodeMutationAuthorizeWithNewDeviceApiKey =
@@ -4804,18 +6998,90 @@ class Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
 
 extension UtilityExtension$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
     on Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey {
-  Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey copyWith(
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+          Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey>
+      get copyWith =>
+          CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+    TRes> {
+  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+          Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
+              instance,
+          TRes Function(
+                  Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey)
+              then) =
+      _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey;
+
+  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      String? token});
+}
+
+class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+        TRes>
+    implements
+        CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+            TRes> {
+  _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+      this._instance, this._then);
+
+  final Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
+      _instance;
+
+  final TRes Function(
+      Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? token = _undefined}) =>
+      _then(Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          token: token == _undefined ? _instance.token : (token as String?)));
+}
+
+class _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+        TRes>
+    implements
+        CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+            TRes> {
+  _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+      this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          String? Function()? token}) =>
-      Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          token: token == null ? this.token : token());
+          String? token}) =>
+      _res;
 }
 
 DateTime? _nullable$dateTimeFromJson(dynamic data) =>

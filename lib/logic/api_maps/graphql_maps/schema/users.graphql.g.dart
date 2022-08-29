@@ -90,7 +90,7 @@ Map<String, dynamic> _$Mutation$CreateUser$createUser$userToJson(
         Mutation$CreateUser$createUser$user instance) =>
     <String, dynamic>{
       'username': instance.username,
-      'userType': _$Enum$UserTypeEnumMap[instance.userType],
+      'userType': _$Enum$UserTypeEnumMap[instance.userType]!,
       'sshKeys': instance.sshKeys,
       '__typename': instance.$__typename,
     };
@@ -146,7 +146,7 @@ Query$AllUsers$users$allUsers _$Query$AllUsers$users$allUsersFromJson(
 Map<String, dynamic> _$Query$AllUsers$users$allUsersToJson(
         Query$AllUsers$users$allUsers instance) =>
     <String, dynamic>{
-      'userType': _$Enum$UserTypeEnumMap[instance.userType],
+      'userType': _$Enum$UserTypeEnumMap[instance.userType]!,
       'username': instance.username,
       'sshKeys': instance.sshKeys,
       '__typename': instance.$__typename,
@@ -216,7 +216,7 @@ Map<String, dynamic> _$Mutation$AddSshKey$addSshKey$userToJson(
         Mutation$AddSshKey$addSshKey$user instance) =>
     <String, dynamic>{
       'sshKeys': instance.sshKeys,
-      'userType': _$Enum$UserTypeEnumMap[instance.userType],
+      'userType': _$Enum$UserTypeEnumMap[instance.userType]!,
       'username': instance.username,
       '__typename': instance.$__typename,
     };
@@ -277,7 +277,7 @@ Map<String, dynamic> _$Query$GetUser$users$getUserToJson(
         Query$GetUser$users$getUser instance) =>
     <String, dynamic>{
       'sshKeys': instance.sshKeys,
-      'userType': _$Enum$UserTypeEnumMap[instance.userType],
+      'userType': _$Enum$UserTypeEnumMap[instance.userType]!,
       'username': instance.username,
       '__typename': instance.$__typename,
     };
@@ -350,7 +350,7 @@ Map<String, dynamic> _$Mutation$RemoveSshKey$removeSshKey$userToJson(
         Mutation$RemoveSshKey$removeSshKey$user instance) =>
     <String, dynamic>{
       'sshKeys': instance.sshKeys,
-      'userType': _$Enum$UserTypeEnumMap[instance.userType],
+      'userType': _$Enum$UserTypeEnumMap[instance.userType]!,
       'username': instance.username,
       '__typename': instance.$__typename,
     };
@@ -465,7 +465,7 @@ Map<String, dynamic> _$Mutation$UpdateUser$updateUser$userToJson(
         Mutation$UpdateUser$updateUser$user instance) =>
     <String, dynamic>{
       'sshKeys': instance.sshKeys,
-      'userType': _$Enum$UserTypeEnumMap[instance.userType],
+      'userType': _$Enum$UserTypeEnumMap[instance.userType]!,
       'username': instance.username,
       '__typename': instance.$__typename,
     };

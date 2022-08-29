@@ -61,13 +61,62 @@ class Fragment$basicMutationReturnFields {
 
 extension UtilityExtension$Fragment$basicMutationReturnFields
     on Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields copyWith(
-          {int? code, String? message, bool? success, String? $__typename}) =>
-      Fragment$basicMutationReturnFields(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Fragment$basicMutationReturnFields<
+          Fragment$basicMutationReturnFields>
+      get copyWith =>
+          CopyWith$Fragment$basicMutationReturnFields(this, (i) => i);
+}
+
+abstract class CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  factory CopyWith$Fragment$basicMutationReturnFields(
+          Fragment$basicMutationReturnFields instance,
+          TRes Function(Fragment$basicMutationReturnFields) then) =
+      _CopyWithImpl$Fragment$basicMutationReturnFields;
+
+  factory CopyWith$Fragment$basicMutationReturnFields.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$basicMutationReturnFields;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Fragment$basicMutationReturnFields<TRes>
+    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  _CopyWithImpl$Fragment$basicMutationReturnFields(this._instance, this._then);
+
+  final Fragment$basicMutationReturnFields _instance;
+
+  final TRes Function(Fragment$basicMutationReturnFields) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Fragment$basicMutationReturnFields(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields<TRes>
+    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields(this._res);
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }
 
 const fragmentDefinitionbasicMutationReturnFields = FragmentDefinitionNode(
@@ -173,11 +222,56 @@ class Query$SystemSettings {
 }
 
 extension UtilityExtension$Query$SystemSettings on Query$SystemSettings {
-  Query$SystemSettings copyWith(
-          {Query$SystemSettings$system? system, String? $__typename}) =>
-      Query$SystemSettings(
-          system: system == null ? this.system : system,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$SystemSettings<Query$SystemSettings> get copyWith =>
+      CopyWith$Query$SystemSettings(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemSettings<TRes> {
+  factory CopyWith$Query$SystemSettings(Query$SystemSettings instance,
+          TRes Function(Query$SystemSettings) then) =
+      _CopyWithImpl$Query$SystemSettings;
+
+  factory CopyWith$Query$SystemSettings.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemSettings;
+
+  TRes call({Query$SystemSettings$system? system, String? $__typename});
+  CopyWith$Query$SystemSettings$system<TRes> get system;
+}
+
+class _CopyWithImpl$Query$SystemSettings<TRes>
+    implements CopyWith$Query$SystemSettings<TRes> {
+  _CopyWithImpl$Query$SystemSettings(this._instance, this._then);
+
+  final Query$SystemSettings _instance;
+
+  final TRes Function(Query$SystemSettings) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? system = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$SystemSettings(
+          system: system == _undefined || system == null
+              ? _instance.system
+              : (system as Query$SystemSettings$system),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$SystemSettings$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Query$SystemSettings$system(
+        local$system, (e) => call(system: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$SystemSettings<TRes>
+    implements CopyWith$Query$SystemSettings<TRes> {
+  _CopyWithStubImpl$Query$SystemSettings(this._res);
+
+  TRes _res;
+
+  call({Query$SystemSettings$system? system, String? $__typename}) => _res;
+  CopyWith$Query$SystemSettings$system<TRes> get system =>
+      CopyWith$Query$SystemSettings$system.stub(_res);
 }
 
 const documentNodeQuerySystemSettings = DocumentNode(definitions: [
@@ -408,12 +502,60 @@ class Query$SystemSettings$system {
 
 extension UtilityExtension$Query$SystemSettings$system
     on Query$SystemSettings$system {
-  Query$SystemSettings$system copyWith(
-          {Query$SystemSettings$system$settings? settings,
-          String? $__typename}) =>
-      Query$SystemSettings$system(
-          settings: settings == null ? this.settings : settings,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$SystemSettings$system<Query$SystemSettings$system>
+      get copyWith => CopyWith$Query$SystemSettings$system(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemSettings$system<TRes> {
+  factory CopyWith$Query$SystemSettings$system(
+          Query$SystemSettings$system instance,
+          TRes Function(Query$SystemSettings$system) then) =
+      _CopyWithImpl$Query$SystemSettings$system;
+
+  factory CopyWith$Query$SystemSettings$system.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemSettings$system;
+
+  TRes call(
+      {Query$SystemSettings$system$settings? settings, String? $__typename});
+  CopyWith$Query$SystemSettings$system$settings<TRes> get settings;
+}
+
+class _CopyWithImpl$Query$SystemSettings$system<TRes>
+    implements CopyWith$Query$SystemSettings$system<TRes> {
+  _CopyWithImpl$Query$SystemSettings$system(this._instance, this._then);
+
+  final Query$SystemSettings$system _instance;
+
+  final TRes Function(Query$SystemSettings$system) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? settings = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$SystemSettings$system(
+          settings: settings == _undefined || settings == null
+              ? _instance.settings
+              : (settings as Query$SystemSettings$system$settings),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$SystemSettings$system$settings<TRes> get settings {
+    final local$settings = _instance.settings;
+    return CopyWith$Query$SystemSettings$system$settings(
+        local$settings, (e) => call(settings: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$SystemSettings$system<TRes>
+    implements CopyWith$Query$SystemSettings$system<TRes> {
+  _CopyWithStubImpl$Query$SystemSettings$system(this._res);
+
+  TRes _res;
+
+  call({Query$SystemSettings$system$settings? settings, String? $__typename}) =>
+      _res;
+  CopyWith$Query$SystemSettings$system$settings<TRes> get settings =>
+      CopyWith$Query$SystemSettings$system$settings.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -471,16 +613,92 @@ class Query$SystemSettings$system$settings {
 
 extension UtilityExtension$Query$SystemSettings$system$settings
     on Query$SystemSettings$system$settings {
-  Query$SystemSettings$system$settings copyWith(
+  CopyWith$Query$SystemSettings$system$settings<
+          Query$SystemSettings$system$settings>
+      get copyWith =>
+          CopyWith$Query$SystemSettings$system$settings(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemSettings$system$settings<TRes> {
+  factory CopyWith$Query$SystemSettings$system$settings(
+          Query$SystemSettings$system$settings instance,
+          TRes Function(Query$SystemSettings$system$settings) then) =
+      _CopyWithImpl$Query$SystemSettings$system$settings;
+
+  factory CopyWith$Query$SystemSettings$system$settings.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemSettings$system$settings;
+
+  TRes call(
+      {Query$SystemSettings$system$settings$autoUpgrade? autoUpgrade,
+      Query$SystemSettings$system$settings$ssh? ssh,
+      String? timezone,
+      String? $__typename});
+  CopyWith$Query$SystemSettings$system$settings$autoUpgrade<TRes>
+      get autoUpgrade;
+  CopyWith$Query$SystemSettings$system$settings$ssh<TRes> get ssh;
+}
+
+class _CopyWithImpl$Query$SystemSettings$system$settings<TRes>
+    implements CopyWith$Query$SystemSettings$system$settings<TRes> {
+  _CopyWithImpl$Query$SystemSettings$system$settings(
+      this._instance, this._then);
+
+  final Query$SystemSettings$system$settings _instance;
+
+  final TRes Function(Query$SystemSettings$system$settings) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? autoUpgrade = _undefined,
+          Object? ssh = _undefined,
+          Object? timezone = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$SystemSettings$system$settings(
+          autoUpgrade: autoUpgrade == _undefined || autoUpgrade == null
+              ? _instance.autoUpgrade
+              : (autoUpgrade
+                  as Query$SystemSettings$system$settings$autoUpgrade),
+          ssh: ssh == _undefined || ssh == null
+              ? _instance.ssh
+              : (ssh as Query$SystemSettings$system$settings$ssh),
+          timezone: timezone == _undefined || timezone == null
+              ? _instance.timezone
+              : (timezone as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$SystemSettings$system$settings$autoUpgrade<TRes>
+      get autoUpgrade {
+    final local$autoUpgrade = _instance.autoUpgrade;
+    return CopyWith$Query$SystemSettings$system$settings$autoUpgrade(
+        local$autoUpgrade, (e) => call(autoUpgrade: e));
+  }
+
+  CopyWith$Query$SystemSettings$system$settings$ssh<TRes> get ssh {
+    final local$ssh = _instance.ssh;
+    return CopyWith$Query$SystemSettings$system$settings$ssh(
+        local$ssh, (e) => call(ssh: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$SystemSettings$system$settings<TRes>
+    implements CopyWith$Query$SystemSettings$system$settings<TRes> {
+  _CopyWithStubImpl$Query$SystemSettings$system$settings(this._res);
+
+  TRes _res;
+
+  call(
           {Query$SystemSettings$system$settings$autoUpgrade? autoUpgrade,
           Query$SystemSettings$system$settings$ssh? ssh,
           String? timezone,
           String? $__typename}) =>
-      Query$SystemSettings$system$settings(
-          autoUpgrade: autoUpgrade == null ? this.autoUpgrade : autoUpgrade,
-          ssh: ssh == null ? this.ssh : ssh,
-          timezone: timezone == null ? this.timezone : timezone,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Query$SystemSettings$system$settings$autoUpgrade<TRes>
+      get autoUpgrade =>
+          CopyWith$Query$SystemSettings$system$settings$autoUpgrade.stub(_res);
+  CopyWith$Query$SystemSettings$system$settings$ssh<TRes> get ssh =>
+      CopyWith$Query$SystemSettings$system$settings$ssh.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -531,12 +749,60 @@ class Query$SystemSettings$system$settings$autoUpgrade {
 
 extension UtilityExtension$Query$SystemSettings$system$settings$autoUpgrade
     on Query$SystemSettings$system$settings$autoUpgrade {
-  Query$SystemSettings$system$settings$autoUpgrade copyWith(
-          {bool? allowReboot, bool? enable, String? $__typename}) =>
-      Query$SystemSettings$system$settings$autoUpgrade(
-          allowReboot: allowReboot == null ? this.allowReboot : allowReboot,
-          enable: enable == null ? this.enable : enable,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$SystemSettings$system$settings$autoUpgrade<
+          Query$SystemSettings$system$settings$autoUpgrade>
+      get copyWith => CopyWith$Query$SystemSettings$system$settings$autoUpgrade(
+          this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemSettings$system$settings$autoUpgrade<TRes> {
+  factory CopyWith$Query$SystemSettings$system$settings$autoUpgrade(
+          Query$SystemSettings$system$settings$autoUpgrade instance,
+          TRes Function(Query$SystemSettings$system$settings$autoUpgrade)
+              then) =
+      _CopyWithImpl$Query$SystemSettings$system$settings$autoUpgrade;
+
+  factory CopyWith$Query$SystemSettings$system$settings$autoUpgrade.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$SystemSettings$system$settings$autoUpgrade;
+
+  TRes call({bool? allowReboot, bool? enable, String? $__typename});
+}
+
+class _CopyWithImpl$Query$SystemSettings$system$settings$autoUpgrade<TRes>
+    implements CopyWith$Query$SystemSettings$system$settings$autoUpgrade<TRes> {
+  _CopyWithImpl$Query$SystemSettings$system$settings$autoUpgrade(
+      this._instance, this._then);
+
+  final Query$SystemSettings$system$settings$autoUpgrade _instance;
+
+  final TRes Function(Query$SystemSettings$system$settings$autoUpgrade) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? allowReboot = _undefined,
+          Object? enable = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$SystemSettings$system$settings$autoUpgrade(
+          allowReboot: allowReboot == _undefined || allowReboot == null
+              ? _instance.allowReboot
+              : (allowReboot as bool),
+          enable: enable == _undefined || enable == null
+              ? _instance.enable
+              : (enable as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$SystemSettings$system$settings$autoUpgrade<TRes>
+    implements CopyWith$Query$SystemSettings$system$settings$autoUpgrade<TRes> {
+  _CopyWithStubImpl$Query$SystemSettings$system$settings$autoUpgrade(this._res);
+
+  TRes _res;
+
+  call({bool? allowReboot, bool? enable, String? $__typename}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -605,18 +871,72 @@ class Query$SystemSettings$system$settings$ssh {
 
 extension UtilityExtension$Query$SystemSettings$system$settings$ssh
     on Query$SystemSettings$system$settings$ssh {
-  Query$SystemSettings$system$settings$ssh copyWith(
+  CopyWith$Query$SystemSettings$system$settings$ssh<
+          Query$SystemSettings$system$settings$ssh>
+      get copyWith =>
+          CopyWith$Query$SystemSettings$system$settings$ssh(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemSettings$system$settings$ssh<TRes> {
+  factory CopyWith$Query$SystemSettings$system$settings$ssh(
+          Query$SystemSettings$system$settings$ssh instance,
+          TRes Function(Query$SystemSettings$system$settings$ssh) then) =
+      _CopyWithImpl$Query$SystemSettings$system$settings$ssh;
+
+  factory CopyWith$Query$SystemSettings$system$settings$ssh.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemSettings$system$settings$ssh;
+
+  TRes call(
+      {bool? enable,
+      bool? passwordAuthentication,
+      List<String>? rootSshKeys,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Query$SystemSettings$system$settings$ssh<TRes>
+    implements CopyWith$Query$SystemSettings$system$settings$ssh<TRes> {
+  _CopyWithImpl$Query$SystemSettings$system$settings$ssh(
+      this._instance, this._then);
+
+  final Query$SystemSettings$system$settings$ssh _instance;
+
+  final TRes Function(Query$SystemSettings$system$settings$ssh) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? enable = _undefined,
+          Object? passwordAuthentication = _undefined,
+          Object? rootSshKeys = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$SystemSettings$system$settings$ssh(
+          enable: enable == _undefined || enable == null
+              ? _instance.enable
+              : (enable as bool),
+          passwordAuthentication: passwordAuthentication == _undefined ||
+                  passwordAuthentication == null
+              ? _instance.passwordAuthentication
+              : (passwordAuthentication as bool),
+          rootSshKeys: rootSshKeys == _undefined || rootSshKeys == null
+              ? _instance.rootSshKeys
+              : (rootSshKeys as List<String>),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$SystemSettings$system$settings$ssh<TRes>
+    implements CopyWith$Query$SystemSettings$system$settings$ssh<TRes> {
+  _CopyWithStubImpl$Query$SystemSettings$system$settings$ssh(this._res);
+
+  TRes _res;
+
+  call(
           {bool? enable,
           bool? passwordAuthentication,
           List<String>? rootSshKeys,
           String? $__typename}) =>
-      Query$SystemSettings$system$settings$ssh(
-          enable: enable == null ? this.enable : enable,
-          passwordAuthentication: passwordAuthentication == null
-              ? this.passwordAuthentication
-              : passwordAuthentication,
-          rootSshKeys: rootSshKeys == null ? this.rootSshKeys : rootSshKeys,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -655,11 +975,56 @@ class Query$DomainInfo {
 }
 
 extension UtilityExtension$Query$DomainInfo on Query$DomainInfo {
-  Query$DomainInfo copyWith(
-          {Query$DomainInfo$system? system, String? $__typename}) =>
-      Query$DomainInfo(
-          system: system == null ? this.system : system,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$DomainInfo<Query$DomainInfo> get copyWith =>
+      CopyWith$Query$DomainInfo(this, (i) => i);
+}
+
+abstract class CopyWith$Query$DomainInfo<TRes> {
+  factory CopyWith$Query$DomainInfo(
+          Query$DomainInfo instance, TRes Function(Query$DomainInfo) then) =
+      _CopyWithImpl$Query$DomainInfo;
+
+  factory CopyWith$Query$DomainInfo.stub(TRes res) =
+      _CopyWithStubImpl$Query$DomainInfo;
+
+  TRes call({Query$DomainInfo$system? system, String? $__typename});
+  CopyWith$Query$DomainInfo$system<TRes> get system;
+}
+
+class _CopyWithImpl$Query$DomainInfo<TRes>
+    implements CopyWith$Query$DomainInfo<TRes> {
+  _CopyWithImpl$Query$DomainInfo(this._instance, this._then);
+
+  final Query$DomainInfo _instance;
+
+  final TRes Function(Query$DomainInfo) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? system = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$DomainInfo(
+          system: system == _undefined || system == null
+              ? _instance.system
+              : (system as Query$DomainInfo$system),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$DomainInfo$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Query$DomainInfo$system(
+        local$system, (e) => call(system: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$DomainInfo<TRes>
+    implements CopyWith$Query$DomainInfo<TRes> {
+  _CopyWithStubImpl$Query$DomainInfo(this._res);
+
+  TRes _res;
+
+  call({Query$DomainInfo$system? system, String? $__typename}) => _res;
+  CopyWith$Query$DomainInfo$system<TRes> get system =>
+      CopyWith$Query$DomainInfo$system.stub(_res);
 }
 
 const documentNodeQueryDomainInfo = DocumentNode(definitions: [
@@ -883,12 +1248,60 @@ class Query$DomainInfo$system {
 }
 
 extension UtilityExtension$Query$DomainInfo$system on Query$DomainInfo$system {
-  Query$DomainInfo$system copyWith(
-          {Query$DomainInfo$system$domainInfo? domainInfo,
-          String? $__typename}) =>
-      Query$DomainInfo$system(
-          domainInfo: domainInfo == null ? this.domainInfo : domainInfo,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+  CopyWith$Query$DomainInfo$system<Query$DomainInfo$system> get copyWith =>
+      CopyWith$Query$DomainInfo$system(this, (i) => i);
+}
+
+abstract class CopyWith$Query$DomainInfo$system<TRes> {
+  factory CopyWith$Query$DomainInfo$system(Query$DomainInfo$system instance,
+          TRes Function(Query$DomainInfo$system) then) =
+      _CopyWithImpl$Query$DomainInfo$system;
+
+  factory CopyWith$Query$DomainInfo$system.stub(TRes res) =
+      _CopyWithStubImpl$Query$DomainInfo$system;
+
+  TRes call(
+      {Query$DomainInfo$system$domainInfo? domainInfo, String? $__typename});
+  CopyWith$Query$DomainInfo$system$domainInfo<TRes> get domainInfo;
+}
+
+class _CopyWithImpl$Query$DomainInfo$system<TRes>
+    implements CopyWith$Query$DomainInfo$system<TRes> {
+  _CopyWithImpl$Query$DomainInfo$system(this._instance, this._then);
+
+  final Query$DomainInfo$system _instance;
+
+  final TRes Function(Query$DomainInfo$system) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? domainInfo = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$DomainInfo$system(
+          domainInfo: domainInfo == _undefined || domainInfo == null
+              ? _instance.domainInfo
+              : (domainInfo as Query$DomainInfo$system$domainInfo),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$DomainInfo$system$domainInfo<TRes> get domainInfo {
+    final local$domainInfo = _instance.domainInfo;
+    return CopyWith$Query$DomainInfo$system$domainInfo(
+        local$domainInfo, (e) => call(domainInfo: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$DomainInfo$system<TRes>
+    implements CopyWith$Query$DomainInfo$system<TRes> {
+  _CopyWithStubImpl$Query$DomainInfo$system(this._res);
+
+  TRes _res;
+
+  call({Query$DomainInfo$system$domainInfo? domainInfo, String? $__typename}) =>
+      _res;
+  CopyWith$Query$DomainInfo$system$domainInfo<TRes> get domainInfo =>
+      CopyWith$Query$DomainInfo$system$domainInfo.stub(_res);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -969,21 +1382,97 @@ class Query$DomainInfo$system$domainInfo {
 
 extension UtilityExtension$Query$DomainInfo$system$domainInfo
     on Query$DomainInfo$system$domainInfo {
-  Query$DomainInfo$system$domainInfo copyWith(
+  CopyWith$Query$DomainInfo$system$domainInfo<
+          Query$DomainInfo$system$domainInfo>
+      get copyWith =>
+          CopyWith$Query$DomainInfo$system$domainInfo(this, (i) => i);
+}
+
+abstract class CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
+  factory CopyWith$Query$DomainInfo$system$domainInfo(
+          Query$DomainInfo$system$domainInfo instance,
+          TRes Function(Query$DomainInfo$system$domainInfo) then) =
+      _CopyWithImpl$Query$DomainInfo$system$domainInfo;
+
+  factory CopyWith$Query$DomainInfo$system$domainInfo.stub(TRes res) =
+      _CopyWithStubImpl$Query$DomainInfo$system$domainInfo;
+
+  TRes call(
+      {String? domain,
+      String? hostname,
+      Enum$DnsProvider? provider,
+      List<Query$DomainInfo$system$domainInfo$requiredDnsRecords>?
+          requiredDnsRecords,
+      String? $__typename});
+  TRes requiredDnsRecords(
+      Iterable<Query$DomainInfo$system$domainInfo$requiredDnsRecords> Function(
+              Iterable<
+                  CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
+                      Query$DomainInfo$system$domainInfo$requiredDnsRecords>>)
+          _fn);
+}
+
+class _CopyWithImpl$Query$DomainInfo$system$domainInfo<TRes>
+    implements CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
+  _CopyWithImpl$Query$DomainInfo$system$domainInfo(this._instance, this._then);
+
+  final Query$DomainInfo$system$domainInfo _instance;
+
+  final TRes Function(Query$DomainInfo$system$domainInfo) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? domain = _undefined,
+          Object? hostname = _undefined,
+          Object? provider = _undefined,
+          Object? requiredDnsRecords = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$DomainInfo$system$domainInfo(
+          domain: domain == _undefined || domain == null
+              ? _instance.domain
+              : (domain as String),
+          hostname: hostname == _undefined || hostname == null
+              ? _instance.hostname
+              : (hostname as String),
+          provider: provider == _undefined || provider == null
+              ? _instance.provider
+              : (provider as Enum$DnsProvider),
+          requiredDnsRecords:
+              requiredDnsRecords == _undefined || requiredDnsRecords == null
+                  ? _instance.requiredDnsRecords
+                  : (requiredDnsRecords as List<
+                      Query$DomainInfo$system$domainInfo$requiredDnsRecords>),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  TRes requiredDnsRecords(
+          Iterable<Query$DomainInfo$system$domainInfo$requiredDnsRecords> Function(
+                  Iterable<
+                      CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
+                          Query$DomainInfo$system$domainInfo$requiredDnsRecords>>)
+              _fn) =>
+      call(
+          requiredDnsRecords: _fn(_instance.requiredDnsRecords.map((e) =>
+              CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
+                  e, (i) => i))).toList());
+}
+
+class _CopyWithStubImpl$Query$DomainInfo$system$domainInfo<TRes>
+    implements CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
+  _CopyWithStubImpl$Query$DomainInfo$system$domainInfo(this._res);
+
+  TRes _res;
+
+  call(
           {String? domain,
           String? hostname,
           Enum$DnsProvider? provider,
           List<Query$DomainInfo$system$domainInfo$requiredDnsRecords>?
               requiredDnsRecords,
           String? $__typename}) =>
-      Query$DomainInfo$system$domainInfo(
-          domain: domain == null ? this.domain : domain,
-          hostname: hostname == null ? this.hostname : hostname,
-          provider: provider == null ? this.provider : provider,
-          requiredDnsRecords: requiredDnsRecords == null
-              ? this.requiredDnsRecords
-              : requiredDnsRecords,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  requiredDnsRecords(_fn) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1056,20 +1545,89 @@ class Query$DomainInfo$system$domainInfo$requiredDnsRecords {
 
 extension UtilityExtension$Query$DomainInfo$system$domainInfo$requiredDnsRecords
     on Query$DomainInfo$system$domainInfo$requiredDnsRecords {
-  Query$DomainInfo$system$domainInfo$requiredDnsRecords copyWith(
+  CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
+          Query$DomainInfo$system$domainInfo$requiredDnsRecords>
+      get copyWith =>
+          CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
+    TRes> {
+  factory CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
+          Query$DomainInfo$system$domainInfo$requiredDnsRecords instance,
+          TRes Function(Query$DomainInfo$system$domainInfo$requiredDnsRecords)
+              then) =
+      _CopyWithImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords;
+
+  factory CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords;
+
+  TRes call(
+      {String? content,
+      String? name,
+      int? priority,
+      String? recordType,
+      int? ttl,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords<TRes>
+    implements
+        CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<TRes> {
+  _CopyWithImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
+      this._instance, this._then);
+
+  final Query$DomainInfo$system$domainInfo$requiredDnsRecords _instance;
+
+  final TRes Function(Query$DomainInfo$system$domainInfo$requiredDnsRecords)
+      _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? content = _undefined,
+          Object? name = _undefined,
+          Object? priority = _undefined,
+          Object? recordType = _undefined,
+          Object? ttl = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$DomainInfo$system$domainInfo$requiredDnsRecords(
+          content: content == _undefined || content == null
+              ? _instance.content
+              : (content as String),
+          name: name == _undefined || name == null
+              ? _instance.name
+              : (name as String),
+          priority:
+              priority == _undefined ? _instance.priority : (priority as int?),
+          recordType: recordType == _undefined || recordType == null
+              ? _instance.recordType
+              : (recordType as String),
+          ttl: ttl == _undefined || ttl == null ? _instance.ttl : (ttl as int),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
+        TRes>
+    implements
+        CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<TRes> {
+  _CopyWithStubImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
+      this._res);
+
+  TRes _res;
+
+  call(
           {String? content,
           String? name,
-          int? Function()? priority,
+          int? priority,
           String? recordType,
           int? ttl,
           String? $__typename}) =>
-      Query$DomainInfo$system$domainInfo$requiredDnsRecords(
-          content: content == null ? this.content : content,
-          name: name == null ? this.name : name,
-          priority: priority == null ? this.priority : priority(),
-          recordType: recordType == null ? this.recordType : recordType,
-          ttl: ttl == null ? this.ttl : ttl,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1101,9 +1659,47 @@ class Variables$Mutation$ChangeTimezone {
     return true;
   }
 
-  Variables$Mutation$ChangeTimezone copyWith({String? timezone}) =>
-      Variables$Mutation$ChangeTimezone(
-          timezone: timezone == null ? this.timezone : timezone);
+  CopyWith$Variables$Mutation$ChangeTimezone<Variables$Mutation$ChangeTimezone>
+      get copyWith =>
+          CopyWith$Variables$Mutation$ChangeTimezone(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$ChangeTimezone<TRes> {
+  factory CopyWith$Variables$Mutation$ChangeTimezone(
+          Variables$Mutation$ChangeTimezone instance,
+          TRes Function(Variables$Mutation$ChangeTimezone) then) =
+      _CopyWithImpl$Variables$Mutation$ChangeTimezone;
+
+  factory CopyWith$Variables$Mutation$ChangeTimezone.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$ChangeTimezone;
+
+  TRes call({String? timezone});
+}
+
+class _CopyWithImpl$Variables$Mutation$ChangeTimezone<TRes>
+    implements CopyWith$Variables$Mutation$ChangeTimezone<TRes> {
+  _CopyWithImpl$Variables$Mutation$ChangeTimezone(this._instance, this._then);
+
+  final Variables$Mutation$ChangeTimezone _instance;
+
+  final TRes Function(Variables$Mutation$ChangeTimezone) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? timezone = _undefined}) =>
+      _then(Variables$Mutation$ChangeTimezone(
+          timezone: timezone == _undefined || timezone == null
+              ? _instance.timezone
+              : (timezone as String)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$ChangeTimezone<TRes>
+    implements CopyWith$Variables$Mutation$ChangeTimezone<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$ChangeTimezone(this._res);
+
+  TRes _res;
+
+  call({String? timezone}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1143,13 +1739,63 @@ class Mutation$ChangeTimezone {
 }
 
 extension UtilityExtension$Mutation$ChangeTimezone on Mutation$ChangeTimezone {
-  Mutation$ChangeTimezone copyWith(
+  CopyWith$Mutation$ChangeTimezone<Mutation$ChangeTimezone> get copyWith =>
+      CopyWith$Mutation$ChangeTimezone(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$ChangeTimezone<TRes> {
+  factory CopyWith$Mutation$ChangeTimezone(Mutation$ChangeTimezone instance,
+          TRes Function(Mutation$ChangeTimezone) then) =
+      _CopyWithImpl$Mutation$ChangeTimezone;
+
+  factory CopyWith$Mutation$ChangeTimezone.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeTimezone;
+
+  TRes call(
+      {Mutation$ChangeTimezone$changeTimezone? changeTimezone,
+      String? $__typename});
+  CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> get changeTimezone;
+}
+
+class _CopyWithImpl$Mutation$ChangeTimezone<TRes>
+    implements CopyWith$Mutation$ChangeTimezone<TRes> {
+  _CopyWithImpl$Mutation$ChangeTimezone(this._instance, this._then);
+
+  final Mutation$ChangeTimezone _instance;
+
+  final TRes Function(Mutation$ChangeTimezone) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? changeTimezone = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$ChangeTimezone(
+          changeTimezone: changeTimezone == _undefined || changeTimezone == null
+              ? _instance.changeTimezone
+              : (changeTimezone as Mutation$ChangeTimezone$changeTimezone),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> get changeTimezone {
+    final local$changeTimezone = _instance.changeTimezone;
+    return CopyWith$Mutation$ChangeTimezone$changeTimezone(
+        local$changeTimezone, (e) => call(changeTimezone: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ChangeTimezone<TRes>
+    implements CopyWith$Mutation$ChangeTimezone<TRes> {
+  _CopyWithStubImpl$Mutation$ChangeTimezone(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$ChangeTimezone$changeTimezone? changeTimezone,
           String? $__typename}) =>
-      Mutation$ChangeTimezone(
-          changeTimezone:
-              changeTimezone == null ? this.changeTimezone : changeTimezone,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> get changeTimezone =>
+      CopyWith$Mutation$ChangeTimezone$changeTimezone.stub(_res);
 }
 
 const documentNodeMutationChangeTimezone = DocumentNode(definitions: [
@@ -1355,18 +2001,77 @@ class Mutation$ChangeTimezone$changeTimezone
 
 extension UtilityExtension$Mutation$ChangeTimezone$changeTimezone
     on Mutation$ChangeTimezone$changeTimezone {
-  Mutation$ChangeTimezone$changeTimezone copyWith(
+  CopyWith$Mutation$ChangeTimezone$changeTimezone<
+          Mutation$ChangeTimezone$changeTimezone>
+      get copyWith =>
+          CopyWith$Mutation$ChangeTimezone$changeTimezone(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> {
+  factory CopyWith$Mutation$ChangeTimezone$changeTimezone(
+          Mutation$ChangeTimezone$changeTimezone instance,
+          TRes Function(Mutation$ChangeTimezone$changeTimezone) then) =
+      _CopyWithImpl$Mutation$ChangeTimezone$changeTimezone;
+
+  factory CopyWith$Mutation$ChangeTimezone$changeTimezone.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeTimezone$changeTimezone;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      String? timezone});
+}
+
+class _CopyWithImpl$Mutation$ChangeTimezone$changeTimezone<TRes>
+    implements CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> {
+  _CopyWithImpl$Mutation$ChangeTimezone$changeTimezone(
+      this._instance, this._then);
+
+  final Mutation$ChangeTimezone$changeTimezone _instance;
+
+  final TRes Function(Mutation$ChangeTimezone$changeTimezone) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? timezone = _undefined}) =>
+      _then(Mutation$ChangeTimezone$changeTimezone(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          timezone: timezone == _undefined
+              ? _instance.timezone
+              : (timezone as String?)));
+}
+
+class _CopyWithStubImpl$Mutation$ChangeTimezone$changeTimezone<TRes>
+    implements CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> {
+  _CopyWithStubImpl$Mutation$ChangeTimezone$changeTimezone(this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
-          String? Function()? timezone}) =>
-      Mutation$ChangeTimezone$changeTimezone(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          timezone: timezone == null ? this.timezone : timezone());
+          String? timezone}) =>
+      _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1398,10 +2103,49 @@ class Variables$Mutation$ChangeAutoUpgradeSettings {
     return true;
   }
 
-  Variables$Mutation$ChangeAutoUpgradeSettings copyWith(
-          {Input$AutoUpgradeSettingsInput? settings}) =>
-      Variables$Mutation$ChangeAutoUpgradeSettings(
-          settings: settings == null ? this.settings : settings);
+  CopyWith$Variables$Mutation$ChangeAutoUpgradeSettings<
+          Variables$Mutation$ChangeAutoUpgradeSettings>
+      get copyWith =>
+          CopyWith$Variables$Mutation$ChangeAutoUpgradeSettings(this, (i) => i);
+}
+
+abstract class CopyWith$Variables$Mutation$ChangeAutoUpgradeSettings<TRes> {
+  factory CopyWith$Variables$Mutation$ChangeAutoUpgradeSettings(
+          Variables$Mutation$ChangeAutoUpgradeSettings instance,
+          TRes Function(Variables$Mutation$ChangeAutoUpgradeSettings) then) =
+      _CopyWithImpl$Variables$Mutation$ChangeAutoUpgradeSettings;
+
+  factory CopyWith$Variables$Mutation$ChangeAutoUpgradeSettings.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$ChangeAutoUpgradeSettings;
+
+  TRes call({Input$AutoUpgradeSettingsInput? settings});
+}
+
+class _CopyWithImpl$Variables$Mutation$ChangeAutoUpgradeSettings<TRes>
+    implements CopyWith$Variables$Mutation$ChangeAutoUpgradeSettings<TRes> {
+  _CopyWithImpl$Variables$Mutation$ChangeAutoUpgradeSettings(
+      this._instance, this._then);
+
+  final Variables$Mutation$ChangeAutoUpgradeSettings _instance;
+
+  final TRes Function(Variables$Mutation$ChangeAutoUpgradeSettings) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? settings = _undefined}) =>
+      _then(Variables$Mutation$ChangeAutoUpgradeSettings(
+          settings: settings == _undefined || settings == null
+              ? _instance.settings
+              : (settings as Input$AutoUpgradeSettingsInput)));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$ChangeAutoUpgradeSettings<TRes>
+    implements CopyWith$Variables$Mutation$ChangeAutoUpgradeSettings<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$ChangeAutoUpgradeSettings(this._res);
+
+  TRes _res;
+
+  call({Input$AutoUpgradeSettingsInput? settings}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1446,15 +2190,75 @@ class Mutation$ChangeAutoUpgradeSettings {
 
 extension UtilityExtension$Mutation$ChangeAutoUpgradeSettings
     on Mutation$ChangeAutoUpgradeSettings {
-  Mutation$ChangeAutoUpgradeSettings copyWith(
+  CopyWith$Mutation$ChangeAutoUpgradeSettings<
+          Mutation$ChangeAutoUpgradeSettings>
+      get copyWith =>
+          CopyWith$Mutation$ChangeAutoUpgradeSettings(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$ChangeAutoUpgradeSettings<TRes> {
+  factory CopyWith$Mutation$ChangeAutoUpgradeSettings(
+          Mutation$ChangeAutoUpgradeSettings instance,
+          TRes Function(Mutation$ChangeAutoUpgradeSettings) then) =
+      _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings;
+
+  factory CopyWith$Mutation$ChangeAutoUpgradeSettings.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings;
+
+  TRes call(
+      {Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings?
+          changeAutoUpgradeSettings,
+      String? $__typename});
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<TRes>
+      get changeAutoUpgradeSettings;
+}
+
+class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings<TRes>
+    implements CopyWith$Mutation$ChangeAutoUpgradeSettings<TRes> {
+  _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings(this._instance, this._then);
+
+  final Mutation$ChangeAutoUpgradeSettings _instance;
+
+  final TRes Function(Mutation$ChangeAutoUpgradeSettings) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? changeAutoUpgradeSettings = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Mutation$ChangeAutoUpgradeSettings(
+          changeAutoUpgradeSettings: changeAutoUpgradeSettings == _undefined ||
+                  changeAutoUpgradeSettings == null
+              ? _instance.changeAutoUpgradeSettings
+              : (changeAutoUpgradeSettings
+                  as Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<TRes>
+      get changeAutoUpgradeSettings {
+    final local$changeAutoUpgradeSettings = _instance.changeAutoUpgradeSettings;
+    return CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+        local$changeAutoUpgradeSettings,
+        (e) => call(changeAutoUpgradeSettings: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings<TRes>
+    implements CopyWith$Mutation$ChangeAutoUpgradeSettings<TRes> {
+  _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings(this._res);
+
+  TRes _res;
+
+  call(
           {Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings?
               changeAutoUpgradeSettings,
           String? $__typename}) =>
-      Mutation$ChangeAutoUpgradeSettings(
-          changeAutoUpgradeSettings: changeAutoUpgradeSettings == null
-              ? this.changeAutoUpgradeSettings
-              : changeAutoUpgradeSettings,
-          $__typename: $__typename == null ? this.$__typename : $__typename);
+      _res;
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<TRes>
+      get changeAutoUpgradeSettings =>
+          CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
+              .stub(_res);
 }
 
 const documentNodeMutationChangeAutoUpgradeSettings =
@@ -1688,20 +2492,95 @@ class Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
 
 extension UtilityExtension$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
     on Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings {
-  Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings copyWith(
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+          Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings>
+      get copyWith =>
+          CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+              this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+    TRes> {
+  factory CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+          Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings instance,
+          TRes Function(
+                  Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings)
+              then) =
+      _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings;
+
+  factory CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings;
+
+  TRes call(
+      {int? code,
+      String? message,
+      bool? success,
+      String? $__typename,
+      bool? allowReboot,
+      bool? enableAutoUpgrade});
+}
+
+class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+        TRes>
+    implements
+        CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+            TRes> {
+  _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+      this._instance, this._then);
+
+  final Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings _instance;
+
+  final TRes Function(
+      Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? code = _undefined,
+          Object? message = _undefined,
+          Object? success = _undefined,
+          Object? $__typename = _undefined,
+          Object? allowReboot = _undefined,
+          Object? enableAutoUpgrade = _undefined}) =>
+      _then(Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+          code: code == _undefined || code == null
+              ? _instance.code
+              : (code as int),
+          message: message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+          success: success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+          allowReboot: allowReboot == _undefined || allowReboot == null
+              ? _instance.allowReboot
+              : (allowReboot as bool),
+          enableAutoUpgrade:
+              enableAutoUpgrade == _undefined || enableAutoUpgrade == null
+                  ? _instance.enableAutoUpgrade
+                  : (enableAutoUpgrade as bool)));
+}
+
+class _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+        TRes>
+    implements
+        CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+            TRes> {
+  _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+      this._res);
+
+  TRes _res;
+
+  call(
           {int? code,
           String? message,
           bool? success,
           String? $__typename,
           bool? allowReboot,
           bool? enableAutoUpgrade}) =>
-      Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
-          code: code == null ? this.code : code,
-          message: message == null ? this.message : message,
-          success: success == null ? this.success : success,
-          $__typename: $__typename == null ? this.$__typename : $__typename,
-          allowReboot: allowReboot == null ? this.allowReboot : allowReboot,
-          enableAutoUpgrade: enableAutoUpgrade == null
-              ? this.enableAutoUpgrade
-              : enableAutoUpgrade);
+      _res;
 }

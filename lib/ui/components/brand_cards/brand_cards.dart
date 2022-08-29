@@ -25,9 +25,11 @@ class BrandCards {
   static Widget filled({
     required final Widget child,
     final bool tertiary = false,
+    final bool error = false,
   }) =>
       _FilledCard(
         tertiary: tertiary,
+        error: error,
         child: child,
       );
 }
@@ -81,10 +83,12 @@ class _FilledCard extends StatelessWidget {
   const _FilledCard({
     required this.child,
     required this.tertiary,
+    required this.error,
   });
 
   final Widget child;
   final bool tertiary;
+  final bool error;
   @override
   Widget build(final BuildContext context) => Card(
         elevation: 0.0,
@@ -92,7 +96,8 @@ class _FilledCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         clipBehavior: Clip.antiAlias,
-        color: tertiary
+        color: error ? Theme.of(context).colorScheme.errorContainer
+            : tertiary
             ? Theme.of(context).colorScheme.tertiaryContainer
             : Theme.of(context).colorScheme.surfaceVariant,
         child: child,

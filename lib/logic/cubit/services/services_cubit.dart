@@ -1,31 +1,48 @@
-import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
+import 'dart:async';
+
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 
 part 'services_state.dart';
 
 class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
   ServicesCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(serverInstallationCubit, ServicesState.allOff());
+      : super(serverInstallationCubit, const ServicesState.empty());
   final ServerApi api = ServerApi();
+  Timer? timer;
   @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
-      final Map<ServiceTypes, bool> statuses = await api.servicesPowerCheck();
+      final List<Service> services = await api.getAllServices();
       emit(
         ServicesState(
-          isPasswordManagerEnable: statuses[ServiceTypes.passwordManager]!,
-          isCloudEnable: statuses[ServiceTypes.cloud]!,
-          isGitEnable: statuses[ServiceTypes.git]!,
-          isSocialNetworkEnable: statuses[ServiceTypes.socialNetwork]!,
-          isVpnEnable: statuses[ServiceTypes.vpn]!,
+          services: services,
         ),
       );
+      timer = Timer(const Duration(seconds: 10), () => reload(useTimer: true));
+    }
+  }
+
+  Future<void> reload({final bool useTimer = false}) async {
+    final List<Service> services = await api.getAllServices();
+    emit(
+      ServicesState(
+        services: services,
+      ),
+    );
+    if (useTimer) {
+      timer = Timer(const Duration(seconds: 60), () => reload(useTimer: true));
     }
   }
 
   @override
   void clear() async {
-    emit(ServicesState.allOff());
+    emit(const ServicesState.empty());
+    if (timer != null && timer!.isActive) {
+      timer!.cancel();
+      timer = null;
+    }
   }
 }

@@ -114,7 +114,7 @@ class JobsCubit extends Cubit<JobsState> {
         }
         if (job is ServiceToggleJob) {
           hasServiceJobs = true;
-          await api.switchService(job.type, job.needToTurnOn);
+          await api.switchService(job.type.name, job.needToTurnOn);
         }
         if (job is CreateSSHKeyJob) {
           await usersCubit.addSshKey(job.user, job.publicKey);

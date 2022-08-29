@@ -37,7 +37,8 @@ class GenericJobMutationReturn extends GenericMutationResult {
   final ServerJob? job;
 }
 
-class ServerApi extends ApiMap with VolumeApi, JobsApi, ServerActionsApi {
+class ServerApi extends ApiMap
+    with VolumeApi, JobsApi, ServerActionsApi, ServicesApi {
   ServerApi({
     this.hasLogger = false,
     this.isWithToken = true,

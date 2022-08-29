@@ -1,90 +1,43 @@
 part of 'services_cubit.dart';
 
 class ServicesState extends ServerInstallationDependendState {
-  factory ServicesState.allOn() => const ServicesState(
-        isPasswordManagerEnable: true,
-        isCloudEnable: true,
-        isGitEnable: true,
-        isSocialNetworkEnable: true,
-        isVpnEnable: true,
-      );
-
-  factory ServicesState.allOff() => const ServicesState(
-        isPasswordManagerEnable: false,
-        isCloudEnable: false,
-        isGitEnable: false,
-        isSocialNetworkEnable: false,
-        isVpnEnable: false,
-      );
   const ServicesState({
-    required this.isPasswordManagerEnable,
-    required this.isCloudEnable,
-    required this.isGitEnable,
-    required this.isSocialNetworkEnable,
-    required this.isVpnEnable,
+    required this.services,
   });
 
-  final bool isPasswordManagerEnable;
-  final bool isCloudEnable;
-  final bool isGitEnable;
-  final bool isSocialNetworkEnable;
-  final bool isVpnEnable;
+  const ServicesState.empty() : this(services: const []);
 
-  ServicesState enableList(
-    final List<ServiceTypes> list,
-  ) =>
-      ServicesState(
-        isPasswordManagerEnable: list.contains(ServiceTypes.passwordManager)
-            ? true
-            : isPasswordManagerEnable,
-        isCloudEnable: list.contains(ServiceTypes.cloud) ? true : isCloudEnable,
-        isGitEnable:
-            list.contains(ServiceTypes.git) ? true : isPasswordManagerEnable,
-        isSocialNetworkEnable: list.contains(ServiceTypes.socialNetwork)
-            ? true
-            : isPasswordManagerEnable,
-        isVpnEnable:
-            list.contains(ServiceTypes.vpn) ? true : isPasswordManagerEnable,
-      );
+  final List<Service> services;
+  bool get isPasswordManagerEnable => services.firstWhere((final service) => service.id == 'bitwarden', orElse: () => Service.empty).isEnabled;
+  bool get isCloudEnable => services.firstWhere((final service) => service.id == 'nextcloud', orElse: () => Service.empty).isEnabled;
+  bool get isGitEnable => services.firstWhere((final service) => service.id == 'gitea', orElse: () => Service.empty).isEnabled;
+  bool get isSocialNetworkEnable => services.firstWhere((final service) => service.id == 'pleroma', orElse: () => Service.empty).isEnabled;
+  bool get isVpnEnable => services.firstWhere((final service) => service.id == 'ocserv', orElse: () => Service.empty).isEnabled;
 
-  ServicesState disableList(
-    final List<ServiceTypes> list,
-  ) =>
-      ServicesState(
-        isPasswordManagerEnable: list.contains(ServiceTypes.passwordManager)
-            ? false
-            : isPasswordManagerEnable,
-        isCloudEnable:
-            list.contains(ServiceTypes.cloud) ? false : isCloudEnable,
-        isGitEnable:
-            list.contains(ServiceTypes.git) ? false : isPasswordManagerEnable,
-        isSocialNetworkEnable: list.contains(ServiceTypes.socialNetwork)
-            ? false
-            : isPasswordManagerEnable,
-        isVpnEnable:
-            list.contains(ServiceTypes.vpn) ? false : isPasswordManagerEnable,
-      );
+  Service? getServiceById(final String id) {
+    final service = services.firstWhere((final service) => service.id == id, orElse: () => Service.empty);
+    if (service.id == 'empty') {
+      return null;
+    }
+    return service;
+  }
 
   @override
   List<Object> get props => [
-        isPasswordManagerEnable,
-        isCloudEnable,
-        isGitEnable,
-        isSocialNetworkEnable,
-        isVpnEnable
+        services,
       ];
 
   bool isEnableByType(final ServiceTypes type) {
     switch (type) {
-      case ServiceTypes.passwordManager:
+      case ServiceTypes.bitwarden:
         return isPasswordManagerEnable;
-      case ServiceTypes.cloud:
+      case ServiceTypes.nextcloud:
         return isCloudEnable;
-      case ServiceTypes.socialNetwork:
+      case ServiceTypes.pleroma:
         return isSocialNetworkEnable;
-      case ServiceTypes.git:
+      case ServiceTypes.gitea:
         return isGitEnable;
-      case ServiceTypes.vpn:
+      case ServiceTypes.ocserv:
         return isVpnEnable;
       default:
         throw Exception('wrong state');

@@ -409,11 +409,11 @@ class ServerApi extends ApiMap {
     }
 
     return {
-      ServiceTypes.passwordManager: response.data['bitwarden'] == 0,
-      ServiceTypes.git: response.data['gitea'] == 0,
-      ServiceTypes.cloud: response.data['nextcloud'] == 0,
-      ServiceTypes.vpn: response.data['ocserv'] == 0,
-      ServiceTypes.socialNetwork: response.data['pleroma'] == 0,
+      ServiceTypes.bitwarden: response.data['bitwarden'] == 0,
+      ServiceTypes.gitea: response.data['gitea'] == 0,
+      ServiceTypes.nextcloud: response.data['nextcloud'] == 0,
+      ServiceTypes.ocserv: response.data['ocserv'] == 0,
+      ServiceTypes.pleroma: response.data['pleroma'] == 0,
     };
   }
 
@@ -907,15 +907,15 @@ extension UrlServerExt on ServiceTypes {
       //   return ''; // external service
       // case ServiceTypes.video:
       // return ''; // jitsi meet not working
-      case ServiceTypes.passwordManager:
+      case ServiceTypes.bitwarden:
         return 'bitwarden';
-      case ServiceTypes.cloud:
+      case ServiceTypes.nextcloud:
         return 'nextcloud';
-      case ServiceTypes.socialNetwork:
+      case ServiceTypes.pleroma:
         return 'pleroma';
-      case ServiceTypes.git:
+      case ServiceTypes.gitea:
         return 'gitea';
-      case ServiceTypes.vpn:
+      case ServiceTypes.ocserv:
         return 'ocserv';
       default:
         throw Exception('wrong state');

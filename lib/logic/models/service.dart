@@ -12,6 +12,7 @@ class Service {
     required this.description,
     required this.isEnabled,
     required this.isRequired,
+    required this.isMovable,
     required this.status,
     required this.storageUsage,
     required this.svgIcon,
@@ -26,6 +27,7 @@ class Service {
           description: service.description,
           isEnabled: service.isEnabled,
           isRequired: service.isRequired,
+          isMovable: service.isMovable,
           status: ServiceStatus.fromGraphQL(service.status),
           storageUsage: ServiceStorageUsage(
             used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
@@ -40,11 +42,29 @@ class Service {
           url: service.url,
         );
 
+  static Service empty = Service(
+    id: 'empty',
+    displayName: '',
+    description: '',
+    isEnabled: false,
+    isRequired: false,
+    isMovable: false,
+    status: ServiceStatus.off,
+    storageUsage: ServiceStorageUsage(
+      used: DiskSize(byte: 0),
+      volume: '',
+    ),
+    svgIcon: '',
+    dnsRecords: [],
+    url: '',
+  );
+
   final String id;
   final String displayName;
   final String description;
   final bool isEnabled;
   final bool isRequired;
+  final bool isMovable;
   final ServiceStatus status;
   final ServiceStorageUsage storageUsage;
   final String svgIcon;

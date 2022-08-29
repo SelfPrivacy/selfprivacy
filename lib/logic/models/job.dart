@@ -48,7 +48,7 @@ class ToggleJob extends ClientJob {
     required final super.title,
   });
 
-  final dynamic type;
+  final ServiceTypes type;
 
   @override
   List<Object> get props => [...super.props, type];
@@ -56,7 +56,7 @@ class ToggleJob extends ClientJob {
 
 class ServiceToggleJob extends ToggleJob {
   ServiceToggleJob({
-    required final ServiceTypes super.type,
+    required final super.type,
     required this.needToTurnOn,
   }) : super(
           title:

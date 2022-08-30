@@ -1,9 +1,9 @@
 kind: pipeline
 type: exec
-name: debug
+name: release
 
 steps:
-  - name: test
+  - name: build
     commands:
       - nixos-container stop isolated
       - nixos-container start isolated

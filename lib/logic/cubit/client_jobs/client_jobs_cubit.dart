@@ -8,17 +8,16 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
-import 'package:selfprivacy/logic/models/json/server_job.dart';
 
 export 'package:provider/provider.dart';
 
-part 'jobs_state.dart';
+part 'client_jobs_state.dart';
 
 class JobsCubit extends Cubit<JobsState> {
   JobsCubit({
     required this.usersCubit,
     required this.servicesCubit,
-  }) : super(const JobsStateEmpty([]));
+  }) : super(JobsStateEmpty());
 
   final ServerApi api = ServerApi();
   final UsersCubit usersCubit;
@@ -32,7 +31,7 @@ class JobsCubit extends Cubit<JobsState> {
     }
     newJobsList.add(job);
     getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
-    emit(JobsStateWithJobs(newJobsList, state.serverJobList));
+    emit(JobsStateWithJobs(newJobsList));
   }
 
   void removeJob(final String id) {
@@ -55,7 +54,7 @@ class JobsCubit extends Cubit<JobsState> {
     } else {
       newJobsList.add(job);
       getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
-      emit(JobsStateWithJobs(newJobsList, state.serverJobList));
+      emit(JobsStateWithJobs(newJobsList));
     }
   }
 
@@ -69,23 +68,23 @@ class JobsCubit extends Cubit<JobsState> {
     if (!isExistInJobList) {
       newJobsList.add(job);
       getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
-      emit(JobsStateWithJobs(newJobsList, state.serverJobList));
+      emit(JobsStateWithJobs(newJobsList));
     }
   }
 
   Future<void> rebootServer() async {
-    emit(JobsStateLoading(state.serverJobList));
+    emit(JobsStateLoading());
     final bool isSuccessful = await api.reboot();
     if (isSuccessful) {
       getIt<NavigationService>().showSnackBar('jobs.rebootSuccess'.tr());
     } else {
       getIt<NavigationService>().showSnackBar('jobs.rebootFailed'.tr());
     }
-    emit(JobsStateEmpty(state.serverJobList));
+    emit(JobsStateEmpty());
   }
 
   Future<void> upgradeServer() async {
-    emit(JobsStateLoading(state.serverJobList));
+    emit(JobsStateLoading());
     final bool isPullSuccessful = await api.pullConfigurationUpdate();
     final bool isSuccessful = await api.upgrade();
     if (isSuccessful) {
@@ -97,13 +96,13 @@ class JobsCubit extends Cubit<JobsState> {
     } else {
       getIt<NavigationService>().showSnackBar('jobs.upgradeFailed'.tr());
     }
-    emit(JobsStateEmpty(state.serverJobList));
+    emit(JobsStateEmpty());
   }
 
   Future<void> applyAll() async {
     if (state is JobsStateWithJobs) {
       final List<ClientJob> jobs = (state as JobsStateWithJobs).clientJobList;
-      emit(JobsStateLoading(state.serverJobList));
+      emit(JobsStateLoading());
       bool hasServiceJobs = false;
       for (final ClientJob job in jobs) {
         if (job is CreateUserJob) {
@@ -131,40 +130,7 @@ class JobsCubit extends Cubit<JobsState> {
         await servicesCubit.load();
       }
 
-      emit(JobsStateEmpty(state.serverJobList));
+      emit(JobsStateEmpty());
     }
-  }
-
-  Future<void> resetRequestsTimer() async {
-    const duration = Duration(seconds: 1);
-    Timer.periodic(
-      duration,
-      (final timer) async {
-        if (timer.tick >= 10) {
-          final List<ServerJob> serverJobs = await api.getServerJobs();
-          final List<ServerJob> newServerJobs = [];
-          for (final ServerJob job in serverJobs) {
-            if (job.status == 'FINISHED') {
-              await api.removeApiJob(job.uid);
-            } else {
-              newServerJobs.add(job);
-            }
-          }
-
-          if (state is JobsStateWithJobs) {
-            emit(
-              JobsStateWithJobs(
-                (state as JobsStateWithJobs).clientJobList,
-                newServerJobs,
-              ),
-            );
-          } else {
-            emit(
-              JobsStateEmpty(newServerJobs),
-            );
-          }
-        }
-      },
-    );
   }
 }

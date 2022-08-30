@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
@@ -115,11 +115,8 @@ class _Card extends StatelessWidget {
     final domainName = UiHelpers.getDomainName(config);
 
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        materialRoute(
-          ServicePage(serviceId: serviceType.name)
-        )
-      ),
+      onTap: () => Navigator.of(context)
+          .push(materialRoute(ServicePage(serviceId: serviceType.name))),
       child: BrandCards.big(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

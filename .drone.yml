@@ -1,18 +1,12 @@
 kind: pipeline
 type: exec
-name: default
+name: debug
 
 steps:
-  - name: build
+  - name: test
     commands:
-      - nix-shell --pure --run "flutter build apk --split-per-abi"
-    environment:
-      NIX_PATH: "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:unstable=/nix/var/nix/profiles/per-user/root/channels/unstable"
-      NIXPKGS_ALLOW_UNFREE: 1
-
-  - name: deploy
-    commands:
-      - scp build/app/outputs/apk/release/*.apk 10.0.0.3:/var/lib/fdroid/repo
+      - ssh-add - <<< "${SSH_PRIVATE_KEY}"
+      - ssh isolated echo hello
 
 node:
   server: builder

@@ -7,7 +7,8 @@ steps:
     commands:
       - eval `ssh-agent -s`
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
-      - ssh isolated echo hello
+      - scp -r `pwd`/. isolated:/var/lib/builder/
+      - ssh isolated flutter doctor
     environment:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY

@@ -5,8 +5,8 @@ name: debug
 steps:
   - name: test
     commands:
-      - sudo nixos-container stop isolated
-      - sudo nixos-container start isolated
+      - nixos-container stop isolated
+      - nixos-container start isolated
       - eval `ssh-agent -s`
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
       - scp -r `pwd` isolated:/var/lib/builder

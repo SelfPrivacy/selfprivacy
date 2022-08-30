@@ -5,6 +5,7 @@ name: debug
 steps:
   - name: test
     commands:
+      - eval `ssh-agent -s`
       - ssh-add - <<< "${SSH_PRIVATE_KEY}"
       - ssh isolated echo hello
 

@@ -163,7 +163,25 @@
       "refresh": "Обновить статус",
       "refetchBackups": "Обновить список копий",
       "refetchingList": "Через несколько минут список будет обновлён"
-
+    },
+    "storage": {
+      "card_title": "Хранилище",
+      "status_ok": "Проблем на диске не обнаружено",
+      "status_error": "Заканчивается место на диске",
+      "disk_usage": "{} использовано",
+      "disk_total": "{} всего · {}",
+      "gb": "{} GB",
+      "mb": "{} MB",
+      "kb": "{} KB",
+      "extend_volume_button": "Расширить хранилище",
+      "extending_volume_title": "Расширение хранилища",
+      "extending_volume_description": "Изменение размера хранилища позволит вам держать больше данных на вашем сервере без расширения самого сервера. Объем можно только увеличить: уменьшить нельзя.",
+      "extending_volume_price_info": "Цена включает НДС и рассчитана на основе данных о ценах, предоставленных Hetzner.",
+      "size": "Размер",
+      "euro": "Евро",
+      "data_migration_title": "Миграция данных",
+      "data_migration_notice": "На время миграции данных все сервисы будут выключены.",
+      "start_migration_button": "Начать миграцию"
     }
   },
   "not_ready_card": {
@@ -239,6 +257,15 @@
       "bottom_sheet": {
         "1": "Создать подключиться к VPN-серверу. Движок для безопасной и масштабируемой инфраструктуры VPN"
       }
+    },
+    "page": {
+      "up_and_running": "Запущен и работает",
+      "resource_usage": "Потребление ресурсов",
+      "disk_used": "{} использовано места на диске",
+      "users": "Пользователи",
+      "controlled_by": "Контролируется {}",
+      "apps": "Приложения",
+      "settings": "Настройки"
     }
   },
   "users": {
@@ -322,6 +349,10 @@
     "domain_not_available_on_token": "Введённый токен не имеет доступа к нужному домену.",
     "modal_confirmation_title": "Это действительно ваш сервер?",
     "modal_confirmation_description": "Подключение к неправильному серверу может привести к деструктивным последствиям.",
+    "modal_confirmation_dns_valid": "Обратный DNS корректен",
+    "modal_confirmation_dns_invalid": "Обратный DNS указывает на другой домен",
+    "modal_confirmation_ip_valid": "IP совпадает с указанным в DNS записи",
+    "modal_confirmation_ip_invalid": "IP не совпадает с указанным в DNS записи",
     "confirm_cloudflare": "Подключение к Cloudflare",
     "confirm_cloudflare_description": "Введите токен Cloudflare, который имеет права на {}:",
     "confirm_backblze": "Подключение к Backblaze",

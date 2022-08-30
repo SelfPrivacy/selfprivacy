@@ -6,7 +6,7 @@ steps:
   - name: test
     commands:
       - eval `ssh-agent -s`
-      - echo "${SSH_PRIVATE_KEY}" | ssh-add -
+      - echo "$SSH_PRIVATE_KEY" | ssh-add -
       - ssh isolated echo hello
     environment:
       SSH_PRIVATE_KEY:

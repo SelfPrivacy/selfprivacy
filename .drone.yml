@@ -11,14 +11,15 @@ steps:
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
       - scp -r `pwd` isolated:/var/lib/builder
       - ssh isolated "cd src && flutter build apk --split-per-abi"
-      - scp isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/*.apk `pwd`
+      - scp isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/*-release.apk `pwd`
+      - rename app pro.kherel.selfprivacy *.apk && rename release `git rev-parse --short HEAD` *.apk
     environment:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY
 
   - name: deploy
     commands:
-      - ls
+      - ls *.apk
 
 node:
   server: builder

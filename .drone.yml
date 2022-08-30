@@ -8,6 +8,9 @@ steps:
       - eval `ssh-agent -s`
       - echo "${SSH_PRIVATE_KEY}" | ssh-add -
       - ssh isolated echo hello
+    environment:
+      SSH_SECRET_KEY:
+        from_secret: SSH_SECRET_KEY
 
 node:
   server: builder

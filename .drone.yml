@@ -11,9 +11,14 @@ steps:
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
       - scp -r `pwd` isolated:/var/lib/builder
       - ssh isolated "cd src && flutter build apk --split-per-abi"
+      - scp isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/*.apk `pwd`
     environment:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY
+
+  - name: deploy
+    commands:
+      - ls
 
 node:
   server: builder

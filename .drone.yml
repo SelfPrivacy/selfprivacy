@@ -5,10 +5,11 @@ name: ci
 steps:
   - name: build
     commands:
-      - flutter build apk --debug --split-per-abi
-      - mv build/app/outputs/flutter-apk/*-debug.apk `pwd`
-      - rename app pro.kherel.selfprivacy *.apk && rename debug "$DRONE_COMMIT" *.apk
-      - ls *.apk
+#      - flutter build apk --debug --split-per-abi
+#      - mv build/app/outputs/flutter-apk/*-debug.apk `pwd`
+#      - rename app pro.kherel.selfprivacy *.apk && rename debug "$DRONE_COMMIT" *.apk
+#      - ls *.apk
+       - echo $JAVA_HOME $ANDROID_HOME $ANDROID_SDK_ROOT
 
 node:
   server: builder

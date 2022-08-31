@@ -34,7 +34,7 @@ steps:
 
   - name: deploy
     commands:
-      - rename app pro.kherel.selfprivacy *.apk && rename release "$DRONE_TAG" *.apk
+      - rename app pro.kherel.selfprivacy *.apk && rename release "$DRONE_SEMVER" *.apk
       - ls *.apk
 
 trigger:

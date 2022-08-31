@@ -25,24 +25,33 @@ type: exec
 name: Release
 
 steps:
-  - name: Build Release Artifacts
+  - name: Prepare for Build
+    commands:
+      # Reset building environment
+      - nixos-container stop isolated
+      - nixos-container start isolated
+      # Prepare SSH keys
+      - eval `ssh-agent -s`
+      - echo "$SSH_PRIVATE_KEY" | ssh-add -
+      # Copy sources to the building environment
+      - scp -r `pwd` builder@isolated:/var/lib/builder
+
+  - name: Build and Sign Release Artifact for F-Droid Repository
     commands:
       # Prepare SSH keys
       - eval `ssh-agent -s`
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
-      # Reset building environment
-      - nixos-container stop isolated
-      - nixos-container start isolated
-      # Copy sources to the building environment
-      - scp -r `pwd` isolated:/var/lib/builder
-      # Build release artifacts
-      - ssh isolated "cd src && flutter build apk --release"
-      # Fetch the release artifacts
-      - scp isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/app-release.apk `pwd`
-      # Rename the artifacts in a more informative way
+      # Build release artifact
+      - ssh builder@isolated "cd src && flutter build apk --release"
+      # Fetch the release artifact
+      - scp builder@isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/app-release.apk `pwd`
+      # Rename the artifact in a more informative way
       - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
       - mv app-release.apk "pro.kherel.selfprivacy_$APP_BUILD_ID.apk"
-      - ls *.apk
+      # Upload and sign the artifact
+      - scp "pro.kherel.selfprivacy_$APP_BUILD_ID.apk" fdroid@isolated:/var/lib/fdroid/unsigned
+      - ssh fdroid@isolated "fdroid publish && fdroid update"
+      - scp -r fdroid@isolated:/var/lib/fdroid/repo `pwd`
     environment:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY
@@ -53,7 +62,7 @@ steps:
       - eval `ssh-agent -s`
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
       # Copy the artifacts to the F-Droid repository
-      - scp *.apk ci:/var/lib/fdroid/unsigned
+      - ls repo/
     environment:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY

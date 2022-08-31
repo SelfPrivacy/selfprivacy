@@ -10,6 +10,11 @@ steps:
       - rename app pro.kherel.selfprivacy *.apk && rename debug "$DRONE_COMMIT" *.apk
       - ls *.apk
 
+trigger:
+  event:
+    - push
+    - pull_request
+
 node:
   server: builder
 

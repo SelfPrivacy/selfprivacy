@@ -5,10 +5,15 @@ name: ci
 steps:
   - name: build
     commands:
-      - flutter build apk --debug --split-per-abi
-      - mv build/app/outputs/flutter-apk/*-debug.apk `pwd`
-      - rename app pro.kherel.selfprivacy *.apk && rename debug "$DRONE_COMMIT" *.apk
-      - ls *.apk
+#      - flutter build apk --debug --split-per-abi
+#      - mv build/app/outputs/flutter-apk/*-debug.apk `pwd`
+#      - rename app pro.kherel.selfprivacy *.apk && rename debug "$DRONE_COMMIT" *.apk
+#      - ls *.apk
+      - echo $JAVA_HOME $ANDROID_HOME $ANDROID_SDK_ROOT
+    environment:
+     JAVA_HOME: /nix/store/i9bbniszl2g4pkjy1lbcchg0lnk69xn6-openjdk-headless-11.0.15+10/lib/openjdk
+     ANDROID_HOME: /nix/store/xvr502awmkzaw29gv0nmg2yr29ksz5wy-androidsdk/libexec/android-sdk
+     ANDROID_SDK_ROOT: /nix/store/xvr502awmkzaw29gv0nmg2yr29ksz5wy-androidsdk/libexec/android-sdk
 
 node:
   server: builder
@@ -44,4 +49,3 @@ trigger:
 
 node:
   server: builder
-

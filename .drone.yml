@@ -1,9 +1,9 @@
 kind: pipeline
 type: exec
-name: ci
+name: Continuous Integration
 
 steps:
-  - name: build
+  - name: Build Debug Artifacts
     commands:
       - flutter build apk --debug --split-per-abi
       - mv build/app/outputs/flutter-apk/*-debug.apk `pwd`
@@ -19,17 +19,21 @@ node:
   server: builder
 
 ---
+
 kind: pipeline
 type: exec
-name: release
+name: Release
 
 steps:
-  - name: build
+  - name: Prepare for Build
     commands:
       - nixos-container stop isolated
       - nixos-container start isolated
       - eval `ssh-agent -s`
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
+
+  - name: Build Release Artifacts
+    commands:
       - scp -r `pwd` isolated:/var/lib/builder
       - ssh isolated "cd src && flutter build apk --release --split-per-abi"
       - scp isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/*-release.apk `pwd`
@@ -37,10 +41,17 @@ steps:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY
 
-  - name: deploy
+  - name: Prepare for Deploy
     commands:
       - rename app pro.kherel.selfprivacy *.apk && rename release "$DRONE_SEMVER" *.apk
       - ls *.apk
+
+  - name: Deploy on F-Droid Repository
+    commands:
+      - ls *.apk
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
 
 trigger:
   event:

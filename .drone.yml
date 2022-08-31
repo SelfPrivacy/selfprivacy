@@ -24,30 +24,33 @@ kind: pipeline
 type: exec
 name: Release
 
-steps:
-  - name: Prepare for Build
-    commands:
-      - nixos-container stop isolated
-      - nixos-container start isolated
-      - eval `ssh-agent -s`
-      - echo "$SSH_PRIVATE_KEY" | ssh-add -
-    environment:
-      SSH_PRIVATE_KEY:
-        from_secret: SSH_PRIVATE_KEY
+environment:
+  SSH_PRIVATE_KEY:
+    from_secret: SSH_PRIVATE_KEY
 
+steps:
   - name: Build Release Artifacts
     commands:
+      # Prepare SSH keys
+      - eval `ssh-agent -s`
+      - echo "$SSH_PRIVATE_KEY" | ssh-add -
+      # Reset building environment
+      - nixos-container stop isolated
+      - nixos-container start isolated
+      # Copy sources to the building environment
       - scp -r `pwd` isolated:/var/lib/builder
+      # Build release artifacts
       - ssh isolated "cd src && flutter build apk --release --split-per-abi"
+      # Fetch the release artifacts
       - scp isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/*-release.apk `pwd`
-
-  - name: Prepare for Deploy
-    commands:
-      - rename app pro.kherel.selfprivacy *.apk && rename release "$DRONE_SEMVER" *.apk
-      - ls *.apk
 
   - name: Deploy on F-Droid Repository
     commands:
+      # Prepare SSH keys
+      - eval `ssh-agent -s`
+      - echo "$SSH_PRIVATE_KEY" | ssh-add -
+      # Rename the artifacts in a more informative way
+      - rename app pro.kherel.selfprivacy *.apk && rename release "$DRONE_SEMVER" *.apk
       - ls *.apk
 
 trigger:

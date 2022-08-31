@@ -35,6 +35,9 @@ steps:
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
       # Copy sources to the building environment
       - scp -r `pwd` builder@isolated:/var/lib/builder
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
 
   - name: Build and Sign Release Artifact for F-Droid Repository
     commands:

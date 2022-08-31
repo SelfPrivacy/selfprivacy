@@ -24,10 +24,6 @@ kind: pipeline
 type: exec
 name: Release
 
-environment:
-  SSH_PRIVATE_KEY:
-    from_secret: SSH_PRIVATE_KEY
-
 steps:
   - name: Build Release Artifacts
     commands:
@@ -43,6 +39,9 @@ steps:
       - ssh isolated "cd src && flutter build apk --release --split-per-abi"
       # Fetch the release artifacts
       - scp isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/*-release.apk `pwd`
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
 
   - name: Deploy on F-Droid Repository
     commands:
@@ -52,6 +51,9 @@ steps:
       # Rename the artifacts in a more informative way
       - rename app pro.kherel.selfprivacy *.apk && rename release "$DRONE_SEMVER" *.apk
       - ls *.apk
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
 
 trigger:
   event:

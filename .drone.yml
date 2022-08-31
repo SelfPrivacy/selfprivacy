@@ -36,11 +36,12 @@ steps:
       # Copy sources to the building environment
       - scp -r `pwd` isolated:/var/lib/builder
       # Build release artifacts
-      - ssh isolated "cd src && flutter build apk --release --split-per-abi"
+      - ssh isolated "cd src && flutter build apk --release"
       # Fetch the release artifacts
-      - scp isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/*-release.apk `pwd`
+      - scp isolated:/var/lib/builder/src/build/app/outputs/flutter-apk/app-release.apk `pwd`
       # Rename the artifacts in a more informative way
-      - rename app pro.kherel.selfprivacy *.apk && rename release "$DRONE_SEMVER" *.apk
+      - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
+      - mv app-release.apk "pro.kherel.selfprivacy_$APP_BUILD_ID.apk"
       - ls *.apk
     environment:
       SSH_PRIVATE_KEY:

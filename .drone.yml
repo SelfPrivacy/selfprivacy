@@ -53,7 +53,7 @@ steps:
       - mv app-release.apk "pro.kherel.selfprivacy_$APP_BUILD_ID.apk"
       # Upload and sign the artifact
       - scp "pro.kherel.selfprivacy_$APP_BUILD_ID.apk" fdroid@isolated:/var/lib/fdroid/unsigned
-      - ssh fdroid@isolated "fdroid publish && fdroid update"
+      - ssh fdroid@isolated "export FDROID_KEY_STORE_PASS=`cat .store-key` FDROID_KEY_PASS=`.repo-key` && fdroid publish && fdroid update"
       - scp -r fdroid@isolated:/var/lib/fdroid/repo `pwd`
     environment:
       SSH_PRIVATE_KEY:

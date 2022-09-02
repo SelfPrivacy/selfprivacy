@@ -8,11 +8,7 @@ class ApiServerVolumeState extends ServerInstallationDependendState {
   );
 
   const ApiServerVolumeState.initial()
-      : this(
-          const [],
-          LoadingStatus.uninitialized,
-          null,
-        );
+      : this(const [], LoadingStatus.uninitialized, null);
 
   final List<ServerDiskVolume> _volumes;
   final bool? usesBinds;

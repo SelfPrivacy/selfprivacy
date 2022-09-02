@@ -84,6 +84,18 @@ steps:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY
 
+  - name: Create release on Gitea Repository
+    commands:
+      # Prepare tea CLI
+      - tea login add --token "$GITEA_RELEASE_TOKEN" --url https://git.selfprivacy.org
+      # Create release and push artifacts
+      - tea releases --repo "$DRONE_REPO" create --tag "$DRONE_SEMVER" --title "$DRONE_SEMVER" --asset standalone_"pro.kherel.selfprivacy_$APP_BUILD_ID.apk" --asset standalone_"pro.kherel.selfprivacy_$APP_BUILD_ID.apk".idsig
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
+      GITEA_RELEASE_TOKEN:
+        from_secret: GITEA_RELEASE_TOKEN
+
   - name: Deploy on F-Droid Repository
     commands:
       # Prepare SSH keys

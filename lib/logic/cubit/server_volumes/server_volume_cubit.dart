@@ -20,13 +20,15 @@ class ApiServerVolumeCubit
   }
 
   Future<void> _refetch() async {
-    final List<ServerDiskVolume> volumes =
-        await serverApi.getServerDiskVolumes();
+    final volumes = await serverApi.getServerDiskVolumes();
+    final usesBinds = await serverApi.isUsingBinds();
+    var status = LoadingStatus.error;
+
     if (volumes.isNotEmpty) {
-      emit(ApiServerVolumeState(volumes, LoadingStatus.success));
-    } else {
-      emit(const ApiServerVolumeState([], LoadingStatus.error));
+      status = LoadingStatus.success;
     }
+
+    emit(ApiServerVolumeState(volumes, status, usesBinds));
   }
 
   @override

@@ -113,6 +113,50 @@ Map<String, dynamic> _$Query$SystemSettings$system$settings$sshToJson(
       '__typename': instance.$__typename,
     };
 
+Query$SystemIsUsingBinds _$Query$SystemIsUsingBindsFromJson(
+        Map<String, dynamic> json) =>
+    Query$SystemIsUsingBinds(
+      system: Query$SystemIsUsingBinds$system.fromJson(
+          json['system'] as Map<String, dynamic>),
+      $__typename: json['__typename'] as String,
+    );
+
+Map<String, dynamic> _$Query$SystemIsUsingBindsToJson(
+        Query$SystemIsUsingBinds instance) =>
+    <String, dynamic>{
+      'system': instance.system.toJson(),
+      '__typename': instance.$__typename,
+    };
+
+Query$SystemIsUsingBinds$system _$Query$SystemIsUsingBinds$systemFromJson(
+        Map<String, dynamic> json) =>
+    Query$SystemIsUsingBinds$system(
+      info: Query$SystemIsUsingBinds$system$info.fromJson(
+          json['info'] as Map<String, dynamic>),
+      $__typename: json['__typename'] as String,
+    );
+
+Map<String, dynamic> _$Query$SystemIsUsingBinds$systemToJson(
+        Query$SystemIsUsingBinds$system instance) =>
+    <String, dynamic>{
+      'info': instance.info.toJson(),
+      '__typename': instance.$__typename,
+    };
+
+Query$SystemIsUsingBinds$system$info
+    _$Query$SystemIsUsingBinds$system$infoFromJson(Map<String, dynamic> json) =>
+        Query$SystemIsUsingBinds$system$info(
+          usingBinds: json['usingBinds'] as bool,
+          $__typename: json['__typename'] as String,
+        );
+
+Map<String, dynamic> _$Query$SystemIsUsingBinds$system$infoToJson(
+        Query$SystemIsUsingBinds$system$info instance) =>
+    <String, dynamic>{
+      'usingBinds': instance.usingBinds,
+      '__typename': instance.$__typename,
+    };
+
 Query$DomainInfo _$Query$DomainInfoFromJson(Map<String, dynamic> json) =>
     Query$DomainInfo(
       system: Query$DomainInfo$system.fromJson(

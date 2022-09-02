@@ -2,6 +2,7 @@ import 'package:graphql/client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/api_map.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
@@ -73,6 +74,23 @@ class ServerApi extends ApiMap
     return apiVersion;
   }
 
+  Future<bool> isUsingBinds() async {
+    QueryResult response;
+    bool usesBinds = false;
+
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$SystemIsUsingBinds();
+      if (response.hasException) {
+        print(response.exception.toString());
+      }
+      usesBinds = response.data!['system']['info']['usingBinds'];
+    } catch (e) {
+      print(e);
+    }
+    return usesBinds;
+  }
+
   Future<List<ApiToken>> getApiTokens() async {
     QueryResult response;
     List<ApiToken> tokens = [];
@@ -89,7 +107,6 @@ class ServerApi extends ApiMap
     } catch (e) {
       print(e);
     }
-
     return tokens;
   }
 

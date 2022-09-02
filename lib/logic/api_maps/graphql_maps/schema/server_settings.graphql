@@ -21,6 +21,14 @@ query SystemSettings {
   }
 }
 
+query SystemIsUsingBinds {
+  system {
+    info {
+      usingBinds
+    }
+  }
+}
+
 query DomainInfo {
   system {
     domainInfo {

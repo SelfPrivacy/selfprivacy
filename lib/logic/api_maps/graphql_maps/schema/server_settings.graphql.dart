@@ -940,6 +940,416 @@ class _CopyWithStubImpl$Query$SystemSettings$system$settings$ssh<TRes>
 }
 
 @JsonSerializable(explicitToJson: true)
+class Query$SystemIsUsingBinds {
+  Query$SystemIsUsingBinds({required this.system, required this.$__typename});
+
+  @override
+  factory Query$SystemIsUsingBinds.fromJson(Map<String, dynamic> json) =>
+      _$Query$SystemIsUsingBindsFromJson(json);
+
+  final Query$SystemIsUsingBinds$system system;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() => _$Query$SystemIsUsingBindsToJson(this);
+  int get hashCode {
+    final l$system = system;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$system, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$SystemIsUsingBinds) ||
+        runtimeType != other.runtimeType) return false;
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$SystemIsUsingBinds
+    on Query$SystemIsUsingBinds {
+  CopyWith$Query$SystemIsUsingBinds<Query$SystemIsUsingBinds> get copyWith =>
+      CopyWith$Query$SystemIsUsingBinds(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemIsUsingBinds<TRes> {
+  factory CopyWith$Query$SystemIsUsingBinds(Query$SystemIsUsingBinds instance,
+          TRes Function(Query$SystemIsUsingBinds) then) =
+      _CopyWithImpl$Query$SystemIsUsingBinds;
+
+  factory CopyWith$Query$SystemIsUsingBinds.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemIsUsingBinds;
+
+  TRes call({Query$SystemIsUsingBinds$system? system, String? $__typename});
+  CopyWith$Query$SystemIsUsingBinds$system<TRes> get system;
+}
+
+class _CopyWithImpl$Query$SystemIsUsingBinds<TRes>
+    implements CopyWith$Query$SystemIsUsingBinds<TRes> {
+  _CopyWithImpl$Query$SystemIsUsingBinds(this._instance, this._then);
+
+  final Query$SystemIsUsingBinds _instance;
+
+  final TRes Function(Query$SystemIsUsingBinds) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? system = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$SystemIsUsingBinds(
+          system: system == _undefined || system == null
+              ? _instance.system
+              : (system as Query$SystemIsUsingBinds$system),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$SystemIsUsingBinds$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Query$SystemIsUsingBinds$system(
+        local$system, (e) => call(system: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$SystemIsUsingBinds<TRes>
+    implements CopyWith$Query$SystemIsUsingBinds<TRes> {
+  _CopyWithStubImpl$Query$SystemIsUsingBinds(this._res);
+
+  TRes _res;
+
+  call({Query$SystemIsUsingBinds$system? system, String? $__typename}) => _res;
+  CopyWith$Query$SystemIsUsingBinds$system<TRes> get system =>
+      CopyWith$Query$SystemIsUsingBinds$system.stub(_res);
+}
+
+const documentNodeQuerySystemIsUsingBinds = DocumentNode(definitions: [
+  OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'SystemIsUsingBinds'),
+      variableDefinitions: [],
+      directives: [],
+      selectionSet: SelectionSetNode(selections: [
+        FieldNode(
+            name: NameNode(value: 'system'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FieldNode(
+                  name: NameNode(value: 'info'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: SelectionSetNode(selections: [
+                    FieldNode(
+                        name: NameNode(value: 'usingBinds'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null)
+                  ])),
+              FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null)
+            ])),
+        FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null)
+      ])),
+]);
+Query$SystemIsUsingBinds _parserFn$Query$SystemIsUsingBinds(
+        Map<String, dynamic> data) =>
+    Query$SystemIsUsingBinds.fromJson(data);
+
+class Options$Query$SystemIsUsingBinds
+    extends graphql.QueryOptions<Query$SystemIsUsingBinds> {
+  Options$Query$SystemIsUsingBinds(
+      {String? operationName,
+      graphql.FetchPolicy? fetchPolicy,
+      graphql.ErrorPolicy? errorPolicy,
+      graphql.CacheRereadPolicy? cacheRereadPolicy,
+      Object? optimisticResult,
+      Duration? pollInterval,
+      graphql.Context? context})
+      : super(
+            operationName: operationName,
+            fetchPolicy: fetchPolicy,
+            errorPolicy: errorPolicy,
+            cacheRereadPolicy: cacheRereadPolicy,
+            optimisticResult: optimisticResult,
+            pollInterval: pollInterval,
+            context: context,
+            document: documentNodeQuerySystemIsUsingBinds,
+            parserFn: _parserFn$Query$SystemIsUsingBinds);
+}
+
+class WatchOptions$Query$SystemIsUsingBinds
+    extends graphql.WatchQueryOptions<Query$SystemIsUsingBinds> {
+  WatchOptions$Query$SystemIsUsingBinds(
+      {String? operationName,
+      graphql.FetchPolicy? fetchPolicy,
+      graphql.ErrorPolicy? errorPolicy,
+      graphql.CacheRereadPolicy? cacheRereadPolicy,
+      Object? optimisticResult,
+      graphql.Context? context,
+      Duration? pollInterval,
+      bool? eagerlyFetchResults,
+      bool carryForwardDataOnException = true,
+      bool fetchResults = false})
+      : super(
+            operationName: operationName,
+            fetchPolicy: fetchPolicy,
+            errorPolicy: errorPolicy,
+            cacheRereadPolicy: cacheRereadPolicy,
+            optimisticResult: optimisticResult,
+            context: context,
+            document: documentNodeQuerySystemIsUsingBinds,
+            pollInterval: pollInterval,
+            eagerlyFetchResults: eagerlyFetchResults,
+            carryForwardDataOnException: carryForwardDataOnException,
+            fetchResults: fetchResults,
+            parserFn: _parserFn$Query$SystemIsUsingBinds);
+}
+
+class FetchMoreOptions$Query$SystemIsUsingBinds
+    extends graphql.FetchMoreOptions {
+  FetchMoreOptions$Query$SystemIsUsingBinds(
+      {required graphql.UpdateQuery updateQuery})
+      : super(
+            updateQuery: updateQuery,
+            document: documentNodeQuerySystemIsUsingBinds);
+}
+
+extension ClientExtension$Query$SystemIsUsingBinds on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Query$SystemIsUsingBinds>>
+      query$SystemIsUsingBinds(
+              [Options$Query$SystemIsUsingBinds? options]) async =>
+          await this.query(options ?? Options$Query$SystemIsUsingBinds());
+  graphql.ObservableQuery<Query$SystemIsUsingBinds>
+      watchQuery$SystemIsUsingBinds(
+              [WatchOptions$Query$SystemIsUsingBinds? options]) =>
+          this.watchQuery(options ?? WatchOptions$Query$SystemIsUsingBinds());
+  void writeQuery$SystemIsUsingBinds(
+          {required Query$SystemIsUsingBinds data, bool broadcast = true}) =>
+      this.writeQuery(
+          graphql.Request(
+              operation: graphql.Operation(
+                  document: documentNodeQuerySystemIsUsingBinds)),
+          data: data.toJson(),
+          broadcast: broadcast);
+  Query$SystemIsUsingBinds? readQuery$SystemIsUsingBinds(
+      {bool optimistic = true}) {
+    final result = this.readQuery(
+        graphql.Request(
+            operation: graphql.Operation(
+                document: documentNodeQuerySystemIsUsingBinds)),
+        optimistic: optimistic);
+    return result == null ? null : Query$SystemIsUsingBinds.fromJson(result);
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$SystemIsUsingBinds$system {
+  Query$SystemIsUsingBinds$system(
+      {required this.info, required this.$__typename});
+
+  @override
+  factory Query$SystemIsUsingBinds$system.fromJson(Map<String, dynamic> json) =>
+      _$Query$SystemIsUsingBinds$systemFromJson(json);
+
+  final Query$SystemIsUsingBinds$system$info info;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() =>
+      _$Query$SystemIsUsingBinds$systemToJson(this);
+  int get hashCode {
+    final l$info = info;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$info, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$SystemIsUsingBinds$system) ||
+        runtimeType != other.runtimeType) return false;
+    final l$info = info;
+    final lOther$info = other.info;
+    if (l$info != lOther$info) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$SystemIsUsingBinds$system
+    on Query$SystemIsUsingBinds$system {
+  CopyWith$Query$SystemIsUsingBinds$system<Query$SystemIsUsingBinds$system>
+      get copyWith => CopyWith$Query$SystemIsUsingBinds$system(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemIsUsingBinds$system<TRes> {
+  factory CopyWith$Query$SystemIsUsingBinds$system(
+          Query$SystemIsUsingBinds$system instance,
+          TRes Function(Query$SystemIsUsingBinds$system) then) =
+      _CopyWithImpl$Query$SystemIsUsingBinds$system;
+
+  factory CopyWith$Query$SystemIsUsingBinds$system.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemIsUsingBinds$system;
+
+  TRes call({Query$SystemIsUsingBinds$system$info? info, String? $__typename});
+  CopyWith$Query$SystemIsUsingBinds$system$info<TRes> get info;
+}
+
+class _CopyWithImpl$Query$SystemIsUsingBinds$system<TRes>
+    implements CopyWith$Query$SystemIsUsingBinds$system<TRes> {
+  _CopyWithImpl$Query$SystemIsUsingBinds$system(this._instance, this._then);
+
+  final Query$SystemIsUsingBinds$system _instance;
+
+  final TRes Function(Query$SystemIsUsingBinds$system) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? info = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$SystemIsUsingBinds$system(
+          info: info == _undefined || info == null
+              ? _instance.info
+              : (info as Query$SystemIsUsingBinds$system$info),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$SystemIsUsingBinds$system$info<TRes> get info {
+    final local$info = _instance.info;
+    return CopyWith$Query$SystemIsUsingBinds$system$info(
+        local$info, (e) => call(info: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$SystemIsUsingBinds$system<TRes>
+    implements CopyWith$Query$SystemIsUsingBinds$system<TRes> {
+  _CopyWithStubImpl$Query$SystemIsUsingBinds$system(this._res);
+
+  TRes _res;
+
+  call({Query$SystemIsUsingBinds$system$info? info, String? $__typename}) =>
+      _res;
+  CopyWith$Query$SystemIsUsingBinds$system$info<TRes> get info =>
+      CopyWith$Query$SystemIsUsingBinds$system$info.stub(_res);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$SystemIsUsingBinds$system$info {
+  Query$SystemIsUsingBinds$system$info(
+      {required this.usingBinds, required this.$__typename});
+
+  @override
+  factory Query$SystemIsUsingBinds$system$info.fromJson(
+          Map<String, dynamic> json) =>
+      _$Query$SystemIsUsingBinds$system$infoFromJson(json);
+
+  final bool usingBinds;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() =>
+      _$Query$SystemIsUsingBinds$system$infoToJson(this);
+  int get hashCode {
+    final l$usingBinds = usingBinds;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$usingBinds, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$SystemIsUsingBinds$system$info) ||
+        runtimeType != other.runtimeType) return false;
+    final l$usingBinds = usingBinds;
+    final lOther$usingBinds = other.usingBinds;
+    if (l$usingBinds != lOther$usingBinds) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$SystemIsUsingBinds$system$info
+    on Query$SystemIsUsingBinds$system$info {
+  CopyWith$Query$SystemIsUsingBinds$system$info<
+          Query$SystemIsUsingBinds$system$info>
+      get copyWith =>
+          CopyWith$Query$SystemIsUsingBinds$system$info(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemIsUsingBinds$system$info<TRes> {
+  factory CopyWith$Query$SystemIsUsingBinds$system$info(
+          Query$SystemIsUsingBinds$system$info instance,
+          TRes Function(Query$SystemIsUsingBinds$system$info) then) =
+      _CopyWithImpl$Query$SystemIsUsingBinds$system$info;
+
+  factory CopyWith$Query$SystemIsUsingBinds$system$info.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemIsUsingBinds$system$info;
+
+  TRes call({bool? usingBinds, String? $__typename});
+}
+
+class _CopyWithImpl$Query$SystemIsUsingBinds$system$info<TRes>
+    implements CopyWith$Query$SystemIsUsingBinds$system$info<TRes> {
+  _CopyWithImpl$Query$SystemIsUsingBinds$system$info(
+      this._instance, this._then);
+
+  final Query$SystemIsUsingBinds$system$info _instance;
+
+  final TRes Function(Query$SystemIsUsingBinds$system$info) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? usingBinds = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$SystemIsUsingBinds$system$info(
+          usingBinds: usingBinds == _undefined || usingBinds == null
+              ? _instance.usingBinds
+              : (usingBinds as bool),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$SystemIsUsingBinds$system$info<TRes>
+    implements CopyWith$Query$SystemIsUsingBinds$system$info<TRes> {
+  _CopyWithStubImpl$Query$SystemIsUsingBinds$system$info(this._res);
+
+  TRes _res;
+
+  call({bool? usingBinds, String? $__typename}) => _res;
+}
+
+@JsonSerializable(explicitToJson: true)
 class Query$DomainInfo {
   Query$DomainInfo({required this.system, required this.$__typename});
 

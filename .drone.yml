@@ -96,14 +96,13 @@ steps:
       GITEA_RELEASE_TOKEN:
         from_secret: GITEA_RELEASE_TOKEN
 
-  - name: Deploy on F-Droid Repository
+  - name: Deploy F-Droid Repository
     commands:
       # Prepare SSH keys
       - eval `ssh-agent -s`
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
-      # Copy the artifacts to the F-Droid repository
-      - ls
-      - ls repo/
+      # Copy the repository to the production server
+      - scp -r repo/* deployer@production:/var/www/fdroid.selfprivacy.org
     environment:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY

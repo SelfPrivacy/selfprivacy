@@ -70,6 +70,7 @@ steps:
         from_secret: SSH_PRIVATE_KEY
 
   - name: Sign Release Artifact for F-Droid Repository
+    commands:
       # Get app build ID
       - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
       # Prepare SSH keys

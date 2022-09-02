@@ -78,7 +78,7 @@ steps:
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
       # Upload and sign the artifact
       - scp app-release.apk fdroid@isolated:/var/lib/fdroid/unsigned/"pro.kherel.selfprivacy_$APP_BUILD_ID.apk"
-      - ssh fdroid@isolated 'FDROID_KEY_STORE_PASS=`cat /run/secrets/fdroid-keystore-pass` fdroid publish && fdroid update'
+      - ssh fdroid@isolated 'export FDROID_KEY_STORE_PASS=`cat /run/secrets/fdroid-keystore-pass` && fdroid publish && fdroid update'
       - scp -r fdroid@isolated:/var/lib/fdroid/repo `pwd`
     environment:
       SSH_PRIVATE_KEY:

@@ -63,8 +63,8 @@ steps:
       - scp app-release.apk builder@isolated:/var/lib/builder
       - ssh builder@isolated "zipalign -f -v 4 app-release.apk standalone_app-release.apk && apksigner sign --ks /run/secrets/standalone-keystore --ks-key-alias standalone --ks-pass file:/run/secrets/standalone-keystore-pass standalone_app-release.apk"
       # Fetch the signed artifact
-      - scp builder@isolated:/var/lib/builder/standalone_app-release.apk `pwd`/"standalone_pro.kherel.selfprivacy_$APP_BUILD_ID.apk"
-      - scp builder@isolated:/var/lib/builder/standalone_app-release.apk `pwd`/"standalone_pro.kherel.selfprivacy_$APP_BUILD_ID.apk.idsig"
+      - scp builder@isolated:/var/lib/builder/standalone_app-release.apk `pwd`/standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk"
+      - scp builder@isolated:/var/lib/builder/standalone_app-release.apk.idsig `pwd`/standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk.idsig"
     environment:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY
@@ -77,7 +77,7 @@ steps:
       - eval `ssh-agent -s`
       - echo "$SSH_PRIVATE_KEY" | ssh-add -
       # Upload and sign the artifact
-      - scp app-release.apk fdroid@isolated:/var/lib/fdroid/unsigned/"pro.kherel.selfprivacy_$APP_BUILD_ID.apk"
+      - scp app-release.apk fdroid@isolated:/var/lib/fdroid/unsigned/pro.kherel.selfprivacy_"$APP_BUILD_ID".apk
       - ssh fdroid@isolated 'export FDROID_KEY_STORE_PASS=`cat /run/secrets/fdroid-keystore-pass` && fdroid publish && fdroid update'
       - scp -r fdroid@isolated:/var/lib/fdroid/repo `pwd`
     environment:
@@ -86,10 +86,12 @@ steps:
 
   - name: Create Release on Gitea Repository
     commands:
+      # Get app build ID
+      - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
       # Prepare tea CLI
       - tea login add --token "$GITEA_RELEASE_TOKEN" --url https://git.selfprivacy.org
       # Create release and push artifacts
-      - tea releases create --repo "$DRONE_REPO" --tag "$DRONE_SEMVER" --title "$DRONE_SEMVER" --asset standalone_"pro.kherel.selfprivacy_$APP_BUILD_ID.apk" --asset standalone_"pro.kherel.selfprivacy_$APP_BUILD_ID.apk".idsig
+      - tea releases create --repo "$DRONE_REPO" --tag "$DRONE_SEMVER" --title "$DRONE_SEMVER" --asset standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk --asset standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk.idsig
     environment:
       GITEA_RELEASE_TOKEN:
         from_secret: GITEA_RELEASE_TOKEN

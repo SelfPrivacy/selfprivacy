@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/utils/color_utils.dart';
 
@@ -11,6 +12,7 @@ part 'user.g.dart';
 class User extends Equatable {
   const User({
     required this.login,
+    required this.type,
     this.password,
     this.sshKeys = const [],
     this.isFoundOnServer = true,
@@ -20,6 +22,7 @@ class User extends Equatable {
   User.fromGraphQL(final Fragment$userFields user)
       : this(
           login: user.username,
+          type: UserType.fromGraphQL(user.userType),
           sshKeys: user.sshKeys,
           isFoundOnServer: true,
         );
@@ -39,6 +42,9 @@ class User extends Equatable {
   @HiveField(4)
   final String? note;
 
+  @HiveField(5, defaultValue: UserType.normal)
+  final UserType type;
+
   @override
   List<Object?> get props => [login, password, sshKeys, isFoundOnServer, note];
 
@@ -46,4 +52,27 @@ class User extends Equatable {
 
   @override
   String toString() => '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
+}
+
+@HiveType(typeId: 102)
+enum UserType {
+  @HiveField(0)
+  root,
+  @HiveField(1)
+  primary,
+  @HiveField(2)
+  normal;
+
+  factory UserType.fromGraphQL(final Enum$UserType type) {
+    switch (type) {
+      case Enum$UserType.ROOT:
+        return root;
+      case Enum$UserType.PRIMARY:
+        return primary;
+      case Enum$UserType.NORMAL:
+        return normal;
+      case Enum$UserType.$unknown:
+        return normal;
+    }
+  }
 }

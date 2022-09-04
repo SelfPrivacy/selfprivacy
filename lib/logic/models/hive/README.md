@@ -7,7 +7,8 @@
 5. ServerVolume
 6. BackblazeBucket
 
-
 ## Enums
+
 100. DnsProvider
 101. ServerProvider
+102. UserType

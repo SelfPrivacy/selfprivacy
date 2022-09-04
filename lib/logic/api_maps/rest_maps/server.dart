@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -14,8 +15,6 @@ import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
-
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 
 class ApiResponse<D> {
   ApiResponse({
@@ -71,9 +70,7 @@ class ServerApi extends ApiMap {
         baseUrl: 'https://api.$overrideDomain',
         connectTimeout: 10000,
         receiveTimeout: 10000,
-        headers: customToken != null
-            ? {'Authorization': 'Bearer $customToken'}
-            : null,
+        headers: customToken != null ? {'Authorization': 'Bearer $customToken'} : null,
       );
     }
 
@@ -132,6 +129,7 @@ class ServerApi extends ApiMap {
         statusCode: e.response?.statusCode ?? HttpStatus.internalServerError,
         data: User(
           login: user.login,
+          type: UserType.normal,
           password: user.password,
           isFoundOnServer: false,
         ),
@@ -143,8 +141,7 @@ class ServerApi extends ApiMap {
     bool isFoundOnServer = false;
     int code = 0;
 
-    final bool isUserCreated = (response.statusCode != null) &&
-        (response.statusCode == HttpStatus.created);
+    final bool isUserCreated = (response.statusCode != null) && (response.statusCode == HttpStatus.created);
 
     if (isUserCreated) {
       isFoundOnServer = true;
@@ -158,6 +155,7 @@ class ServerApi extends ApiMap {
       statusCode: code,
       data: User(
         login: user.login,
+        type: UserType.normal,
         password: user.password,
         isFoundOnServer: isFoundOnServer,
       ),
@@ -273,9 +271,7 @@ class ServerApi extends ApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get('/services/ssh/keys/${user.login}');
-      res = (response.data as List<dynamic>)
-          .map((final e) => e as String)
-          .toList();
+      res = (response.data as List<dynamic>).map((final e) => e as String).toList();
     } on DioError catch (e) {
       print(e.message);
       return ApiResponse<List<String>>(
@@ -334,9 +330,7 @@ class ServerApi extends ApiMap {
     return ApiResponse<void>(
       statusCode: code,
       data: null,
-      errorMessage: response.data?.containsKey('error') ?? false
-          ? response.data['error']
-          : null,
+      errorMessage: response.data?.containsKey('error') ?? false ? response.data['error'] : null,
     );
   }
 
@@ -347,8 +341,7 @@ class ServerApi extends ApiMap {
     final Dio client = await getClient();
     try {
       response = await client.delete('/users/${user.login}');
-      res = response.statusCode == HttpStatus.ok ||
-          response.statusCode == HttpStatus.notFound;
+      res = response.statusCode == HttpStatus.ok || response.statusCode == HttpStatus.notFound;
     } on DioError catch (e) {
       print(e.message);
       res = false;
@@ -359,8 +352,7 @@ class ServerApi extends ApiMap {
   }
 
   @override
-  String get rootAddress =>
-      throw UnimplementedError('not used in with implementation');
+  String get rootAddress => throw UnimplementedError('not used in with implementation');
 
   Future<bool> apply() async {
     bool res = false;
@@ -453,8 +445,7 @@ class ServerApi extends ApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get('/services/restic/backup/list');
-      backups =
-          response.data.map<Backup>((final e) => Backup.fromJson(e)).toList();
+      backups = response.data.map<Backup>((final e) => Backup.fromJson(e)).toList();
     } on DioError catch (e) {
       print(e.message);
     } catch (e) {
@@ -517,9 +508,7 @@ class ServerApi extends ApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get('/system/configuration/pull');
-      result = (response.statusCode != null)
-          ? (response.statusCode == HttpStatus.ok)
-          : false;
+      result = (response.statusCode != null) ? (response.statusCode == HttpStatus.ok) : false;
     } on DioError catch (e) {
       print(e.message);
     } finally {
@@ -535,9 +524,7 @@ class ServerApi extends ApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get('/system/reboot');
-      result = (response.statusCode != null)
-          ? (response.statusCode == HttpStatus.ok)
-          : false;
+      result = (response.statusCode != null) ? (response.statusCode == HttpStatus.ok) : false;
     } on DioError catch (e) {
       print(e.message);
     } finally {
@@ -553,9 +540,7 @@ class ServerApi extends ApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get('/system/configuration/upgrade');
-      result = (response.statusCode != null)
-          ? (response.statusCode == HttpStatus.ok)
-          : false;
+      result = (response.statusCode != null) ? (response.statusCode == HttpStatus.ok) : false;
     } on DioError catch (e) {
       print(e.message);
     } finally {
@@ -604,8 +589,7 @@ class ServerApi extends ApiMap {
   Future<TimeZoneSettings> getServerTimezone() async {
     // I am not sure how to initialize TimeZoneSettings with default value...
     final Dio client = await getClient();
-    final Response response =
-        await client.get('/system/configuration/timezone');
+    final Response response = await client.get('/system/configuration/timezone');
     close(client);
 
     return TimeZoneSettings.fromString(response.data);
@@ -632,11 +616,7 @@ class ServerApi extends ApiMap {
     try {
       response = await client.get('/services/mailserver/dkim');
       final Codec<String, String> base64toString = utf8.fuse(base64);
-      dkim = base64toString
-          .decode(response.data)
-          .split('(')[1]
-          .split(')')[0]
-          .replaceAll('"', '');
+      dkim = base64toString.decode(response.data).split('(')[1].split(')')[0].replaceAll('"', '');
     } on DioError catch (e) {
       print(e.message);
     } finally {
@@ -667,9 +647,7 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
       statusCode: code,
-      data: response.data != null
-          ? RecoveryKeyStatus.fromJson(response.data)
-          : null,
+      data: response.data != null ? RecoveryKeyStatus.fromJson(response.data) : null,
     );
   }
 
@@ -839,11 +817,7 @@ class ServerApi extends ApiMap {
 
     return ApiResponse(
       statusCode: code,
-      data: (response.data != null)
-          ? response.data
-              .map<ApiToken>((final e) => ApiToken.fromJson(e))
-              .toList()
-          : [],
+      data: (response.data != null) ? response.data.map<ApiToken>((final e) => ApiToken.fromJson(e)).toList() : [],
     );
   }
 

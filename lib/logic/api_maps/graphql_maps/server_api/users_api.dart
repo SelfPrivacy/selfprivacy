@@ -37,12 +37,9 @@ mixin UsersApi on ApiMap {
       if (response.hasException) {
         print(response.exception.toString());
       }
-      if (response.parsedData?.users.getUser != null) {
-        user = User(
-          login: response.parsedData!.users.getUser!.username,
-          sshKeys: response.parsedData!.users.getUser?.sshKeys ?? const [],
-          isFoundOnServer: true,
-        );
+      final responseUser = response.parsedData?.users.getUser;
+      if (responseUser != null) {
+        user = User.fromGraphQL(responseUser);
       }
     } catch (e) {
       print(e);

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class UserFormCubit extends FormCubit {
@@ -29,6 +29,7 @@ class UserFormCubit extends FormCubit {
   FutureOr<void> onSubmit() {
     final User user = User(
       login: login.state.value,
+      type: UserType.normal,
       password: password.state.value,
     );
     jobsCubit.addJob(CreateUserJob(user: user));

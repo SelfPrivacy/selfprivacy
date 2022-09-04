@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/utils/color_utils.dart';
 
 part 'user.g.dart';
@@ -15,6 +16,13 @@ class User extends Equatable {
     this.isFoundOnServer = true,
     this.note,
   });
+
+  User.fromGraphQL(final Fragment$userFields user)
+      : this(
+          login: user.username,
+          sshKeys: user.sshKeys,
+          isFoundOnServer: true,
+        );
 
   @HiveField(0)
   final String login;
@@ -37,6 +45,5 @@ class User extends Equatable {
   Color get color => stringToColor(login);
 
   @override
-  String toString() =>
-      '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
+  String toString() => '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
 }

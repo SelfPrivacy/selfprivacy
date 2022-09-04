@@ -4,35 +4,16 @@ fragment basicMutationReturnFields on MutationReturnInterface{
   success
 }
 
-
-mutation CreateUser($user: UserMutationInput!) {
-  createUser(user: $user) {
-    ...basicMutationReturnFields
-    user {
-      username
-      userType
-      sshKeys
-    }
-  }
+fragment userFields on User{
+  username
+  userType
+  sshKeys
 }
 
 query AllUsers {
   users {
     allUsers {
-      userType
-      username
-      sshKeys
-    }
-  }
-}
-
-mutation AddSshKey($sshInput: SshMutationInput!) {
-  addSshKey(sshInput: $sshInput) {
-    ...basicMutationReturnFields
-    user {
-      sshKeys
-      userType
-      username
+      ...userFields
     }
   }
 }
@@ -40,20 +21,16 @@ mutation AddSshKey($sshInput: SshMutationInput!) {
 query GetUser($username: String!) {
   users {
     getUser(username: $username) {
-      sshKeys
-      userType
-      username
+      ...userFields
     }
   }
 }
 
-mutation RemoveSshKey($sshInput: SshMutationInput!) {
-  removeSshKey(sshInput: $sshInput) {
+mutation CreateUser($user: UserMutationInput!) {
+  createUser(user: $user) {
     ...basicMutationReturnFields
     user {
-      sshKeys
-      userType
-      username
+      ...userFields
     }
   }
 }
@@ -68,9 +45,25 @@ mutation UpdateUser($user: UserMutationInput!) {
   updateUser(user: $user) {
     ...basicMutationReturnFields
     user {
-      sshKeys
-      userType
-      username
+      ...userFields
+    }
+  }
+}
+
+mutation AddSshKey($sshInput: SshMutationInput!) {
+  addSshKey(sshInput: $sshInput) {
+    ...basicMutationReturnFields
+    user {
+      ...userFields
+    }
+  }
+}
+
+mutation RemoveSshKey($sshInput: SshMutationInput!) {
+  removeSshKey(sshInput: $sshInput) {
+    ...basicMutationReturnFields
+    user {
+      ...userFields
     }
   }
 }

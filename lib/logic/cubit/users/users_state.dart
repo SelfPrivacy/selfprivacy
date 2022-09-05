@@ -1,9 +1,10 @@
 part of 'users_cubit.dart';
 
 class UsersState extends ServerInstallationDependendState {
-  const UsersState(this.users);
+  const UsersState(this.users, this.isLoading);
 
   final List<User> users;
+  final bool isLoading;
 
   User get rootUser =>
       users.firstWhere((final user) => user.type == UserType.root);
@@ -15,13 +16,15 @@ class UsersState extends ServerInstallationDependendState {
       users.where((final user) => user.type == UserType.normal).toList();
 
   @override
-  List<Object> get props => [users];
+  List<Object> get props => [users, isLoading];
 
   UsersState copyWith({
     final List<User>? users,
+    final bool? isLoading,
   }) =>
       UsersState(
         users ?? this.users,
+        isLoading ?? this.isLoading,
       );
 
   bool isLoginRegistered(final String login) =>

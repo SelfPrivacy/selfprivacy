@@ -14,6 +14,7 @@ import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
 import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
@@ -46,10 +47,47 @@ class UsersPage extends StatelessWidget {
     } else {
       child = BlocBuilder<UsersCubit, UsersState>(
         builder: (final BuildContext context, final UsersState state) {
-          print('Rebuild users page');
-          final primaryUser = state.primaryUser;
-          final users = [primaryUser, ...state.users];
+          final List<User> users = state.users
+              .where((final user) => user.type != UserType.root)
+              .toList();
+          // final List<User> users = [];
+          users.sort(
+            (final User a, final User b) =>
+                a.login.toLowerCase().compareTo(b.login.toLowerCase()),
+          );
 
+          if (users.isEmpty) {
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<UsersCubit>().refresh();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _CouldNotLoadUsers(
+                        text: 'users.could_not_fetch_description'.tr(),
+                      ),
+                      const SizedBox(height: 18),
+                      BrandOutlinedButton(
+                        onPressed: () {
+                          context.read<UsersCubit>().refresh();
+                        },
+                        title: 'users.refresh_users'.tr(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
           return RefreshIndicator(
             onRefresh: () async {
               context.read<UsersCubit>().refresh();
@@ -59,7 +97,7 @@ class UsersPage extends StatelessWidget {
               itemBuilder: (final BuildContext context, final int index) =>
                   _User(
                 user: users[index],
-                isRootUser: index == 0,
+                isRootUser: users[index].type == UserType.primary,
               ),
             ),
           );

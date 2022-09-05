@@ -283,6 +283,8 @@
     "account": "Account",
     "send_registration_data": "Share login credentials",
     "could_not_fetch_users": "Couldn't fetch users list",
+    "could_not_fetch_description": "Please check your internet connection and try again",
+    "refresh_users": "Refresh users list",
     "could_not_create_user": "Couldn't create user",
     "could_not_delete_user": "Couldn't delete user",
     "could_not_add_ssh_key": "Couldn't add SSH key"

@@ -31,7 +31,6 @@ mixin UsersApi on ApiMap {
       }
     } catch (e) {
       print(e);
-      print("Could not");
     }
     return users;
   }

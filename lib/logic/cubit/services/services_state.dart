@@ -9,29 +9,41 @@ class ServicesState extends ServerInstallationDependendState {
 
   final List<Service> services;
   bool get isPasswordManagerEnable => services
-      .firstWhere((final service) => service.id == 'bitwarden',
-          orElse: () => Service.empty)
+      .firstWhere(
+        (final service) => service.id == 'bitwarden',
+        orElse: () => Service.empty,
+      )
       .isEnabled;
   bool get isCloudEnable => services
-      .firstWhere((final service) => service.id == 'nextcloud',
-          orElse: () => Service.empty)
+      .firstWhere(
+        (final service) => service.id == 'nextcloud',
+        orElse: () => Service.empty,
+      )
       .isEnabled;
   bool get isGitEnable => services
-      .firstWhere((final service) => service.id == 'gitea',
-          orElse: () => Service.empty)
+      .firstWhere(
+        (final service) => service.id == 'gitea',
+        orElse: () => Service.empty,
+      )
       .isEnabled;
   bool get isSocialNetworkEnable => services
-      .firstWhere((final service) => service.id == 'pleroma',
-          orElse: () => Service.empty)
+      .firstWhere(
+        (final service) => service.id == 'pleroma',
+        orElse: () => Service.empty,
+      )
       .isEnabled;
   bool get isVpnEnable => services
-      .firstWhere((final service) => service.id == 'ocserv',
-          orElse: () => Service.empty)
+      .firstWhere(
+        (final service) => service.id == 'ocserv',
+        orElse: () => Service.empty,
+      )
       .isEnabled;
 
   Service? getServiceById(final String id) {
-    final service = services.firstWhere((final service) => service.id == id,
-        orElse: () => Service.empty);
+    final service = services.firstWhere(
+      (final service) => service.id == id,
+      orElse: () => Service.empty,
+    );
     if (service.id == 'empty') {
       return null;
     }

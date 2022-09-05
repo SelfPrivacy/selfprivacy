@@ -16,6 +16,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
           serverInstallationCubit,
           const UsersState(
             <User>[],
+            false,
           ),
         );
   Box<User> box = Hive.box<User>(BNames.usersBox);
@@ -33,6 +34,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       emit(
         UsersState(
           loadedUsers,
+          false,
         ),
       );
     }
@@ -44,11 +46,15 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
     if (serverInstallationCubit.state is! ServerInstallationFinished) {
       return;
     }
+    emit(state.copyWith(isLoading: true));
+    // sleep for 10 seconds to simulate a slow connection
+    await Future<void>.delayed(const Duration(seconds: 10));
     final List<User> usersFromServer = await api.getAllUsers();
     if (usersFromServer.isNotEmpty) {
       emit(
         UsersState(
           usersFromServer,
+          false,
         ),
       );
       // Update the users it the box
@@ -57,6 +63,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
     } else {
       getIt<NavigationService>()
           .showSnackBar('users.could_not_fetch_users'.tr());
+      emit(state.copyWith(isLoading: false));
     }
   }
 
@@ -110,7 +117,9 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   }
 
   Future<void> changeUserPassword(
-      final User user, final String newPassword) async {
+    final User user,
+    final String newPassword,
+  ) async {
     if (user.type == UserType.root) {
       getIt<NavigationService>()
           .showSnackBar('users.could_not_change_password'.tr());
@@ -120,7 +129,8 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
         await api.updateUser(user.login, newPassword);
     if (!result.success) {
       getIt<NavigationService>().showSnackBar(
-          result.message ?? 'users.could_not_change_password'.tr());
+        result.message ?? 'users.could_not_change_password'.tr(),
+      );
     }
   }
 
@@ -160,6 +170,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
     emit(
       const UsersState(
         <User>[],
+        false,
       ),
     );
   }

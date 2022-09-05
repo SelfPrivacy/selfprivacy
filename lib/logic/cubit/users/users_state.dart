@@ -1,30 +1,27 @@
 part of 'users_cubit.dart';
 
 class UsersState extends ServerInstallationDependendState {
-  const UsersState(this.users, this.rootUser, this.primaryUser);
+  const UsersState(this.users);
 
   final List<User> users;
-  final User rootUser;
-  final User primaryUser;
+
+  User get rootUser => users.firstWhere((final user) => user.type == UserType.root);
+
+  User get primaryUser => users.firstWhere((final user) => user.type == UserType.primary);
+
+  List<User> get normalUsers => users.where((final user) => user.type == UserType.normal).toList();
 
   @override
-  List<Object> get props => [users, rootUser, primaryUser];
+  List<Object> get props => [users];
 
   UsersState copyWith({
     final List<User>? users,
-    final User? rootUser,
-    final User? primaryUser,
   }) =>
       UsersState(
         users ?? this.users,
-        rootUser ?? this.rootUser,
-        primaryUser ?? this.primaryUser,
       );
 
-  bool isLoginRegistered(final String login) =>
-      users.any((final User user) => user.login == login) ||
-      login == rootUser.login ||
-      login == primaryUser.login;
+  bool isLoginRegistered(final String login) => users.any((final User user) => user.login == login);
 
   bool get isEmpty => users.isEmpty;
 }

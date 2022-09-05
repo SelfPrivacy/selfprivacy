@@ -21,6 +21,10 @@ mixin UsersApi on ApiMap {
         print(response.exception.toString());
       }
       users = response.parsedData?.users.allUsers.map<User>((final user) => User.fromGraphQL(user)).toList() ?? [];
+      final rootUser = response.parsedData?.users.rootUser;
+      if (rootUser != null) {
+        users.add(User.fromGraphQL(rootUser));
+      }
     } catch (e) {
       print(e);
     }

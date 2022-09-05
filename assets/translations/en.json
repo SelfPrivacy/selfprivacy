@@ -272,6 +272,7 @@
     "_comment": "'Users' tab",
     "add_new_user": "Add a first user",
     "new_user": "New user",
+    "delete_user": "Delete user",
     "not_ready": "Please connect server, domain and DNS in the Providers tab, to be able to add a first user",
     "nobody_here": "Nobody here",
     "login": "Login",
@@ -287,7 +288,9 @@
     "refresh_users": "Refresh users list",
     "could_not_create_user": "Couldn't create user",
     "could_not_delete_user": "Couldn't delete user",
-    "could_not_add_ssh_key": "Couldn't add SSH key"
+    "could_not_add_ssh_key": "Couldn't add SSH key",
+    "email_login": "Email login",
+    "no_sso_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon."
   },
   "initializing": {
     "_comment": "initializing page",

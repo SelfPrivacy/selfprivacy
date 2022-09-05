@@ -1,10 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
@@ -15,15 +13,14 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
-import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
+import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/ssh_keys/ssh_keys.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 

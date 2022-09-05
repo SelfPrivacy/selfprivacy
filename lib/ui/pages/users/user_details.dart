@@ -15,179 +15,192 @@ class _UserDetails extends StatelessWidget {
 
     final String domainName = UiHelpers.getDomainName(config);
 
-    return BrandBottomSheet(
-      isExpended: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-              color: user.color,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(20),
+    return BrandHeroScreen(
+      hasBackButton: true,
+      heroTitle: user.login,
+      children: [
+        BrandCards.filled(
+          child: Column(
+            children: [
+              ListTile(
+                title: Text('${user.login}@$domainName'),
+                subtitle: Text('users.email_login'.tr()),
+                textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                leading: const Icon(Icons.alternate_email_outlined),
+                iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (!isRootUser)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 4,
-                        horizontal: 2,
-                      ),
-                      child: PopupMenuButton<PopupMenuItemType>(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        onSelected: (final PopupMenuItemType result) {
-                          switch (result) {
-                            case PopupMenuItemType.delete:
-                              showDialog(
-                                context: context,
-                                builder: (final BuildContext context) =>
-                                    AlertDialog(
-                                  title: Text('basis.confirmation'.tr()),
-                                  content: SingleChildScrollView(
-                                    child: ListBody(
-                                      children: <Widget>[
-                                        Text(
-                                          'users.delete_confirm_question'.tr(),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text('basis.cancel'.tr()),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text(
-                                        'basis.delete'.tr(),
-                                        style: const TextStyle(
-                                          color: BrandColors.red1,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        context
-                                            .read<JobsCubit>()
-                                            .addJob(DeleteUserJob(user: user));
-                                        Navigator.of(context)
-                                          ..pop()
-                                          ..pop();
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                              break;
-                          }
-                        },
-                        icon: const Icon(Icons.more_vert),
-                        itemBuilder: (final BuildContext context) => [
-                          PopupMenuItem<PopupMenuItemType>(
-                            value: PopupMenuItemType.delete,
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 5),
-                              child: Text(
-                                'basis.delete'.tr(),
-                                style: const TextStyle(color: BrandColors.red1),
-                              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        BrandCards.filled(
+          child: Column(
+            children: [
+              ListTile(
+                title: Text('ssh.title'.tr()),
+                textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              const Divider(height: 0),
+              ListTile(
+                iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                title: Text(
+                  'ssh.create'.tr(),
+                ),
+                leading: const Icon(Icons.add_circle_outlined),
+                onTap: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (final BuildContext context) => Padding(
+                      padding: MediaQuery.of(context).viewInsets,
+                      child: NewSshKey(user),
+                    ),
+                  );
+                },
+              ),
+              Column(
+                children: user.sshKeys.map((final String key) {
+                  final publicKey =
+                      key.split(' ').length > 1 ? key.split(' ')[1] : key;
+                  final keyType = key.split(' ')[0];
+                  final keyName = key.split(' ').length > 2
+                      ? key.split(' ')[2]
+                      : 'ssh.no_key_name'.tr();
+                  return ListTile(
+                    textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                    title: Text('$keyName ($keyType)'),
+                    // do not overflow text
+                    subtitle: Text(
+                      publicKey,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (final BuildContext context) => AlertDialog(
+                          title: Text('ssh.delete'.tr()),
+                          content: SingleChildScrollView(
+                            child: ListBody(
+                              children: <Widget>[
+                                Text('ssh.delete_confirm_question'.tr()),
+                                Text('$keyName ($keyType)'),
+                                Text(publicKey),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('basis.cancel'.tr()),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text(
+                                'basis.delete'.tr(),
+                                style: const TextStyle(
+                                  color: BrandColors.red1,
+                                ),
+                              ),
+                              onPressed: () {
+                                context.read<JobsCubit>().addJob(
+                                      DeleteSSHKeyJob(
+                                        user: user,
+                                        publicKey: key,
+                                      ),
+                                    );
+                                Navigator.of(context)
+                                  ..pop()
+                                  ..pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        ListTile(
+          iconColor: Theme.of(context).colorScheme.onBackground,
+          onTap: () => {},
+          leading: const Icon(Icons.lock_reset_outlined),
+          title: Text(
+            'users.reset_password'.tr(),
+          ),
+        ),
+        if (!isRootUser)
+          ListTile(
+            iconColor: Theme.of(context).colorScheme.error,
+            textColor: Theme.of(context).colorScheme.error,
+            onTap: () => {
+              showDialog(
+                context: context,
+                builder: (final BuildContext context) => AlertDialog(
+                  title: Text('basis.confirmation'.tr()),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text(
+                          'users.delete_confirm_question'.tr(),
+                        ),
+                      ],
                     ),
                   ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 15,
-                  ),
-                  child: AutoSizeText(
-                    user.login,
-                    style: headline1Style,
-                    softWrap: true,
-                    minFontSize: 9,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('basis.cancel'.tr()),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text(
+                        'basis.delete'.tr(),
+                        style: const TextStyle(
+                          color: BrandColors.red1,
+                        ),
+                      ),
+                      onPressed: () {
+                        context
+                            .read<JobsCubit>()
+                            .addJob(DeleteUserJob(user: user));
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop();
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              )
+            },
+            leading: const Icon(Icons.person_remove_outlined),
+            title: Text(
+              'users.delete_user'.tr(),
             ),
           ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: paddingH15V0.copyWith(bottom: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BrandText.small('users.account'.tr()),
-                Container(
-                  height: 40,
-                  alignment: Alignment.centerLeft,
-                  child: BrandText.h4('${user.login}@$domainName'),
-                ),
-                if (user.password != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 14),
-                      BrandText.small('basis.password'.tr()),
-                      Container(
-                        height: 40,
-                        alignment: Alignment.centerLeft,
-                        child: BrandText.h4(user.password),
-                      ),
-                    ],
-                  ),
-                const SizedBox(height: 24),
-                const BrandDivider(),
-                const SizedBox(height: 20),
-                ListTile(
-                  onTap: () {
-                    Navigator.of(context)
-                        .push(materialRoute(SshKeysPage(user: user)));
-                  },
-                  title: Text('ssh.title'.tr()),
-                  subtitle: user.sshKeys.isNotEmpty
-                      ? Text(
-                          'ssh.subtitle_with_keys'
-                              .tr(args: [user.sshKeys.length.toString()]),
-                        )
-                      : Text('ssh.subtitle_without_keys'.tr()),
-                  trailing: const Icon(BrandIcons.key),
-                ),
-                const SizedBox(height: 20),
-                ListTile(
-                  onTap: () {
-                    Share.share(
-                      'login: ${user.login}, password: ${user.password}',
-                    );
-                  },
-                  title: Text(
-                    'users.send_registration_data'.tr(),
-                  ),
-                  trailing: const Icon(BrandIcons.share),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+        const Divider(height: 8),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.warning_amber_outlined, size: 24),
+              const SizedBox(height: 16),
+              Text(
+                'users.no_sso_notice'.tr(),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
-}
-
-enum PopupMenuItemType {
-  // reset,
-  delete,
 }

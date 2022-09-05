@@ -11,10 +11,8 @@ class _User extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => InkWell(
         onTap: () {
-          showBrandBottomSheet<void>(
-            context: context,
-            builder: (final BuildContext context) =>
-                _UserDetails(user: user, isRootUser: isRootUser),
+          Navigator.of(context).push(
+            materialRoute(_UserDetails(user: user, isRootUser: isRootUser)),
           );
         },
         child: Container(

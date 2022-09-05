@@ -65,7 +65,7 @@ class _SshKeysPageState extends State<SshKeysPage> {
                       backgroundColor: Colors.transparent,
                       builder: (final BuildContext context) => Padding(
                         padding: MediaQuery.of(context).viewInsets,
-                        child: _NewSshKey(widget.user),
+                        child: NewSshKey(widget.user),
                       ),
                     );
                   },

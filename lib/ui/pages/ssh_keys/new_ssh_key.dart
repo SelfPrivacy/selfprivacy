@@ -1,7 +1,7 @@
 part of 'ssh_keys.dart';
 
-class _NewSshKey extends StatelessWidget {
-  const _NewSshKey(this.user);
+class NewSshKey extends StatelessWidget {
+  const NewSshKey(this.user, {final super.key});
   final User user;
 
   @override

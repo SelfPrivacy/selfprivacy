@@ -40,10 +40,12 @@ class ServerAuthorizationException implements Exception {
 class ServerInstallationRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
   Box<User> usersBox = Hive.box(BNames.usersBox);
-  ServerProviderApiFactory? serverProviderApiFactory = ApiFactoryCreator.createServerProviderApiFactory(
+  ServerProviderApiFactory? serverProviderApiFactory =
+      ApiFactoryCreator.createServerProviderApiFactory(
     ServerProvider.hetzner, // TODO: HARDCODE FOR NOW!!!
   ); // TODO: Remove when provider selection is implemented.
-  DnsProviderApiFactory? dnsProviderApiFactory = ApiFactoryCreator.createDnsProviderApiFactory(
+  DnsProviderApiFactory? dnsProviderApiFactory =
+      ApiFactoryCreator.createDnsProviderApiFactory(
     DnsProvider.cloudflare, // TODO: HARDCODE FOR NOW!!!
   );
 
@@ -51,11 +53,15 @@ class ServerInstallationRepository {
     final String? providerApiToken = getIt<ApiConfigModel>().hetznerKey;
     final String? cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
-    final BackblazeCredential? backblazeCredential = getIt<ApiConfigModel>().backblazeCredential;
-    final ServerHostingDetails? serverDetails = getIt<ApiConfigModel>().serverDetails;
+    final BackblazeCredential? backblazeCredential =
+        getIt<ApiConfigModel>().backblazeCredential;
+    final ServerHostingDetails? serverDetails =
+        getIt<ApiConfigModel>().serverDetails;
 
-    if (serverDetails != null && serverDetails.provider != ServerProvider.unknown) {
-      serverProviderApiFactory = ApiFactoryCreator.createServerProviderApiFactory(
+    if (serverDetails != null &&
+        serverDetails.provider != ServerProvider.unknown) {
+      serverProviderApiFactory =
+          ApiFactoryCreator.createServerProviderApiFactory(
         serverDetails.provider,
       );
     }
@@ -75,12 +81,15 @@ class ServerInstallationRepository {
         serverDetails: serverDetails!,
         rootUser: box.get(BNames.rootUser),
         isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
-        isServerResetedFirstTime: box.get(BNames.isServerResetedFirstTime, defaultValue: false),
-        isServerResetedSecondTime: box.get(BNames.isServerResetedSecondTime, defaultValue: false),
+        isServerResetedFirstTime:
+            box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+        isServerResetedSecondTime:
+            box.get(BNames.isServerResetedSecondTime, defaultValue: false),
       );
     }
 
-    if (box.get(BNames.isRecoveringServer, defaultValue: false) && serverDomain != null) {
+    if (box.get(BNames.isRecoveringServer, defaultValue: false) &&
+        serverDomain != null) {
       return ServerInstallationRecovery(
         providerApiToken: providerApiToken,
         cloudFlareKey: cloudflareToken,
@@ -106,8 +115,10 @@ class ServerInstallationRepository {
       serverDetails: serverDetails,
       rootUser: box.get(BNames.rootUser),
       isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
-      isServerResetedFirstTime: box.get(BNames.isServerResetedFirstTime, defaultValue: false),
-      isServerResetedSecondTime: box.get(BNames.isServerResetedSecondTime, defaultValue: false),
+      isServerResetedFirstTime:
+          box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+      isServerResetedSecondTime:
+          box.get(BNames.isServerResetedSecondTime, defaultValue: false),
       isLoading: box.get(BNames.isLoading, defaultValue: false),
       dnsMatches: null,
     );
@@ -171,7 +182,13 @@ class ServerInstallationRepository {
     final String? ip4,
     final Map<String, bool> skippedMatches,
   ) async {
-    final List<String> addresses = <String>['$domainName', 'api.$domainName', 'cloud.$domainName', 'meet.$domainName', 'password.$domainName'];
+    final List<String> addresses = <String>[
+      '$domainName',
+      'api.$domainName',
+      'cloud.$domainName',
+      'meet.$domainName',
+      'password.$domainName'
+    ];
 
     final Map<String, bool> matches = <String, bool>{};
 
@@ -187,15 +204,19 @@ class ServerInstallationRepository {
       );
       getIt.get<ConsoleModel>().addMessage(
             Message(
-              text: 'DnsLookup: address: $address, $RRecordType, provider: CLOUDFLARE, ip4: $ip4',
+              text:
+                  'DnsLookup: address: $address, $RRecordType, provider: CLOUDFLARE, ip4: $ip4',
             ),
           );
       getIt.get<ConsoleModel>().addMessage(
             Message(
-              text: 'DnsLookup: ${lookupRecordRes == null ? 'empty' : (lookupRecordRes[0].data != ip4 ? 'wrong ip4' : 'right ip4')}',
+              text:
+                  'DnsLookup: ${lookupRecordRes == null ? 'empty' : (lookupRecordRes[0].data != ip4 ? 'wrong ip4' : 'right ip4')}',
             ),
           );
-      if (lookupRecordRes == null || lookupRecordRes.isEmpty || lookupRecordRes[0].data != ip4) {
+      if (lookupRecordRes == null ||
+          lookupRecordRes.isEmpty ||
+          lookupRecordRes[0].data != ip4) {
         matches[address] = false;
       } else {
         matches[address] = true;
@@ -211,7 +232,8 @@ class ServerInstallationRepository {
     final String cloudFlareKey,
     final BackblazeCredential backblazeCredential, {
     required final void Function() onCancel,
-    required final Future<void> Function(ServerHostingDetails serverDetails) onSuccess,
+    required final Future<void> Function(ServerHostingDetails serverDetails)
+        onSuccess,
   }) async {
     final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     try {
@@ -315,8 +337,10 @@ class ServerInstallationRepository {
     final ServerDomain domain, {
     required final void Function() onCancel,
   }) async {
-    final DnsProviderApi dnsProviderApi = dnsProviderApiFactory!.getDnsProvider();
-    final ServerProviderApi serverApi = serverProviderApiFactory!.getServerProvider();
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
+    final ServerProviderApi serverApi =
+        serverProviderApiFactory!.getServerProvider();
 
     await dnsProviderApi.removeSimilarRecords(
       ip4: serverDetails.ip4,
@@ -332,7 +356,9 @@ class ServerInstallationRepository {
       final NavigationService nav = getIt.get<NavigationService>();
       nav.showPopUpDialog(
         BrandAlert(
-          title: e.response!.data['errors'][0]['code'] == 1038 ? 'modals.10'.tr() : 'providers.domain.states.error'.tr(),
+          title: e.response!.data['errors'][0]['code'] == 1038
+              ? 'modals.10'.tr()
+              : 'providers.domain.states.error'.tr(),
           contentText: 'modals.6'.tr(),
           actions: [
             ActionButton(
@@ -365,7 +391,8 @@ class ServerInstallationRepository {
   }
 
   Future<void> createDkimRecord(final ServerDomain cloudFlareDomain) async {
-    final DnsProviderApi dnsProviderApi = dnsProviderApiFactory!.getDnsProvider();
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
     final ServerApi api = ServerApi();
 
     String dkimRecordString = '';
@@ -432,25 +459,31 @@ class ServerInstallationRepository {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (kIsWeb) {
       return deviceInfo.webBrowserInfo.then(
-        (final WebBrowserInfo value) => '${value.browserName} ${value.platform}',
+        (final WebBrowserInfo value) =>
+            '${value.browserName} ${value.platform}',
       );
     } else {
       if (Platform.isAndroid) {
         return deviceInfo.androidInfo.then(
-          (final AndroidDeviceInfo value) => '${value.model} ${value.version.release}',
+          (final AndroidDeviceInfo value) =>
+              '${value.model} ${value.version.release}',
         );
       } else if (Platform.isIOS) {
         return deviceInfo.iosInfo.then(
-          (final IosDeviceInfo value) => '${value.utsname.machine} ${value.systemName} ${value.systemVersion}',
+          (final IosDeviceInfo value) =>
+              '${value.utsname.machine} ${value.systemName} ${value.systemVersion}',
         );
       } else if (Platform.isLinux) {
-        return deviceInfo.linuxInfo.then((final LinuxDeviceInfo value) => value.prettyName);
+        return deviceInfo.linuxInfo
+            .then((final LinuxDeviceInfo value) => value.prettyName);
       } else if (Platform.isMacOS) {
         return deviceInfo.macOsInfo.then(
-          (final MacOsDeviceInfo value) => '${value.hostName} ${value.computerName}',
+          (final MacOsDeviceInfo value) =>
+              '${value.hostName} ${value.computerName}',
         );
       } else if (Platform.isWindows) {
-        return deviceInfo.windowsInfo.then((final WindowsDeviceInfo value) => value.computerName);
+        return deviceInfo.windowsInfo
+            .then((final WindowsDeviceInfo value) => value.computerName);
       }
     }
     return 'Unidentified';
@@ -542,7 +575,8 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     if (recoveryCapabilities == ServerRecoveryCapabilities.legacy) {
-      final Map<ServiceTypes, bool> apiResponse = await serverApi.servicesPowerCheck();
+      final Map<ServiceTypes, bool> apiResponse =
+          await serverApi.servicesPowerCheck();
       if (apiResponse.isNotEmpty) {
         return ServerHostingDetails(
           apiToken: apiToken,
@@ -565,7 +599,8 @@ class ServerInstallationRepository {
         );
       }
     }
-    final ApiResponse<String> deviceAuthKey = await serverApi.createDeviceToken();
+    final ApiResponse<String> deviceAuthKey =
+        await serverApi.createDeviceToken();
     final ApiResponse<String> apiResponse = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
     );
@@ -604,7 +639,8 @@ class ServerInstallationRepository {
     );
 
     final String? serverApiVersion = await serverApi.getApiVersion();
-    final ApiResponse<List<String>> users = await serverApi.getUsersList(withMainUser: true);
+    final ApiResponse<List<String>> users =
+        await serverApi.getUsersList(withMainUser: true);
     if (serverApiVersion == null || !users.isSuccess) {
       return fallbackUser;
     }
@@ -704,7 +740,8 @@ class ServerInstallationRepository {
 
   Future<void> deleteServer(final ServerDomain serverDomain) async {
     final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
-    final DnsProviderApi dnsProviderApi = dnsProviderApiFactory!.getDnsProvider();
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
 
     await api.deleteServer(
       domainName: serverDomain.domainName,

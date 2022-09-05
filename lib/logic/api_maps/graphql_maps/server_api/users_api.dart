@@ -7,6 +7,7 @@ class UserMutationResult extends GenericMutationResult {
     final super.message,
     this.user,
   });
+
   final User? user;
 }
 
@@ -20,13 +21,17 @@ mixin UsersApi on ApiMap {
       if (response.hasException) {
         print(response.exception.toString());
       }
-      users = response.parsedData?.users.allUsers.map<User>((final user) => User.fromGraphQL(user)).toList() ?? [];
+      users = response.parsedData?.users.allUsers
+              .map<User>((final user) => User.fromGraphQL(user))
+              .toList() ??
+          [];
       final rootUser = response.parsedData?.users.rootUser;
       if (rootUser != null) {
         users.add(User.fromGraphQL(rootUser));
       }
     } catch (e) {
       print(e);
+      print("Could not");
     }
     return users;
   }
@@ -37,7 +42,8 @@ mixin UsersApi on ApiMap {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Query$GetUser(username: login);
-      response = await client.query$GetUser(Options$Query$GetUser(variables: variables));
+      response = await client
+          .query$GetUser(Options$Query$GetUser(variables: variables));
       if (response.hasException) {
         print(response.exception.toString());
       }
@@ -66,7 +72,9 @@ mixin UsersApi on ApiMap {
         success: response.parsedData?.createUser.success ?? false,
         code: response.parsedData?.createUser.code ?? 500,
         message: response.parsedData?.createUser.message,
-        user: response.parsedData?.createUser.user != null ? User.fromGraphQL(response.parsedData!.createUser.user!) : null,
+        user: response.parsedData?.createUser.user != null
+            ? User.fromGraphQL(response.parsedData!.createUser.user!)
+            : null,
       );
     } catch (e) {
       print(e);
@@ -116,7 +124,9 @@ mixin UsersApi on ApiMap {
         success: response.parsedData?.updateUser.success ?? false,
         code: response.parsedData?.updateUser.code ?? 500,
         message: response.parsedData?.updateUser.message,
-        user: response.parsedData?.updateUser.user != null ? User.fromGraphQL(response.parsedData!.updateUser.user!) : null,
+        user: response.parsedData?.updateUser.user != null
+            ? User.fromGraphQL(response.parsedData!.updateUser.user!)
+            : null,
       );
     } catch (e) {
       print(e);
@@ -146,7 +156,9 @@ mixin UsersApi on ApiMap {
         success: response.parsedData?.addSshKey.success ?? false,
         code: response.parsedData?.addSshKey.code ?? 500,
         message: response.parsedData?.addSshKey.message,
-        user: response.parsedData?.addSshKey.user != null ? User.fromGraphQL(response.parsedData!.addSshKey.user!) : null,
+        user: response.parsedData?.addSshKey.user != null
+            ? User.fromGraphQL(response.parsedData!.addSshKey.user!)
+            : null,
       );
     } catch (e) {
       print(e);
@@ -176,7 +188,9 @@ mixin UsersApi on ApiMap {
         success: response.parsedData?.removeSshKey.success ?? false,
         code: response.parsedData?.removeSshKey.code ?? 500,
         message: response.parsedData?.removeSshKey.message,
-        user: response.parsedData?.removeSshKey.user != null ? User.fromGraphQL(response.parsedData!.removeSshKey.user!) : null,
+        user: response.parsedData?.removeSshKey.user != null
+            ? User.fromGraphQL(response.parsedData!.removeSshKey.user!)
+            : null,
       );
     } catch (e) {
       print(e);

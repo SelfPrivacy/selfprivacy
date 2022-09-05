@@ -55,25 +55,30 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       box.clear();
       box.addAll(usersFromServer);
     } else {
-      getIt<NavigationService>().showSnackBar('users.could_not_fetch_users'.tr());
+      getIt<NavigationService>()
+          .showSnackBar('users.could_not_fetch_users'.tr());
     }
   }
 
   Future<void> createUser(final User user) async {
     // If user exists on server, do nothing
-    if (state.users.any((final User u) => u.login == user.login && u.isFoundOnServer)) {
+    if (state.users
+        .any((final User u) => u.login == user.login && u.isFoundOnServer)) {
       return;
     }
     final String? password = user.password;
     if (password == null) {
-      getIt<NavigationService>().showSnackBar('users.could_not_create_user'.tr());
+      getIt<NavigationService>()
+          .showSnackBar('users.could_not_create_user'.tr());
       return;
     }
     // If API returned error, do nothing
-    final UserMutationResult result = await api.createUser(user.login, password);
+    final UserMutationResult result =
+        await api.createUser(user.login, password);
     final User? createdUser = result.user;
     if (!result.success || createdUser == null) {
-      getIt<NavigationService>().showSnackBar(result.message ?? 'users.could_not_create_user'.tr());
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'users.could_not_create_user'.tr());
       return;
     }
 
@@ -87,7 +92,8 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   Future<void> deleteUser(final User user) async {
     // If user is primary or root, don't delete
     if (user.type != UserType.normal) {
-      getIt<NavigationService>().showSnackBar('users.could_not_delete_user'.tr());
+      getIt<NavigationService>()
+          .showSnackBar('users.could_not_delete_user'.tr());
       return;
     }
     final List<User> loadedUsers = List<User>.from(state.users);
@@ -98,23 +104,29 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       await box.addAll(loadedUsers);
       emit(state.copyWith(users: loadedUsers));
     } else {
-      getIt<NavigationService>().showSnackBar(result.message ?? 'users.could_not_delete_user'.tr());
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'users.could_not_delete_user'.tr());
     }
   }
 
-  Future<void> changeUserPassword(final User user, final String newPassword) async {
+  Future<void> changeUserPassword(
+      final User user, final String newPassword) async {
     if (user.type == UserType.root) {
-      getIt<NavigationService>().showSnackBar('users.could_not_change_password'.tr());
+      getIt<NavigationService>()
+          .showSnackBar('users.could_not_change_password'.tr());
       return;
     }
-    final UserMutationResult result = await api.updateUser(user.login, newPassword);
+    final UserMutationResult result =
+        await api.updateUser(user.login, newPassword);
     if (!result.success) {
-      getIt<NavigationService>().showSnackBar(result.message ?? 'users.could_not_change_password'.tr());
+      getIt<NavigationService>().showSnackBar(
+          result.message ?? 'users.could_not_change_password'.tr());
     }
   }
 
   Future<void> addSshKey(final User user, final String publicKey) async {
-    final UserMutationResult result = await api.addSshKey(user.login, publicKey);
+    final UserMutationResult result =
+        await api.addSshKey(user.login, publicKey);
     if (result.success) {
       final User updatedUser = result.user!;
       await box.putAt(box.values.toList().indexOf(user), updatedUser);
@@ -124,12 +136,14 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
         ),
       );
     } else {
-      getIt<NavigationService>().showSnackBar(result.message ?? 'users.could_not_add_ssh_key'.tr());
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'users.could_not_add_ssh_key'.tr());
     }
   }
 
   Future<void> deleteSshKey(final User user, final String publicKey) async {
-    final UserMutationResult result = await api.removeSshKey(user.login, publicKey);
+    final UserMutationResult result =
+        await api.removeSshKey(user.login, publicKey);
     if (result.success) {
       final User updatedUser = result.user!;
       await box.putAt(box.values.toList().indexOf(user), updatedUser);

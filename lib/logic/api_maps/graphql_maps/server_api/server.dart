@@ -1,10 +1,10 @@
 import 'package:graphql/client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/api_map.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -14,11 +14,11 @@ import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
-part 'volume_api.dart';
 part 'jobs_api.dart';
 part 'server_actions_api.dart';
 part 'services_api.dart';
 part 'users_api.dart';
+part 'volume_api.dart';
 
 class GenericMutationResult {
   GenericMutationResult({
@@ -42,7 +42,7 @@ class GenericJobMutationReturn extends GenericMutationResult {
 }
 
 class ServerApi extends ApiMap
-    with VolumeApi, JobsApi, ServerActionsApi, ServicesApi {
+    with VolumeApi, JobsApi, ServerActionsApi, ServicesApi, UsersApi {
   ServerApi({
     this.hasLogger = false,
     this.isWithToken = true,

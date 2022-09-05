@@ -51,7 +51,8 @@ class User extends Equatable {
   Color get color => stringToColor(login);
 
   @override
-  String toString() => '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
+  String toString() =>
+      '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
 }
 
 @HiveType(typeId: 102)

@@ -5,11 +5,14 @@ class UsersState extends ServerInstallationDependendState {
 
   final List<User> users;
 
-  User get rootUser => users.firstWhere((final user) => user.type == UserType.root);
+  User get rootUser =>
+      users.firstWhere((final user) => user.type == UserType.root);
 
-  User get primaryUser => users.firstWhere((final user) => user.type == UserType.primary);
+  User get primaryUser =>
+      users.firstWhere((final user) => user.type == UserType.primary);
 
-  List<User> get normalUsers => users.where((final user) => user.type == UserType.normal).toList();
+  List<User> get normalUsers =>
+      users.where((final user) => user.type == UserType.normal).toList();
 
   @override
   List<Object> get props => [users];
@@ -21,7 +24,8 @@ class UsersState extends ServerInstallationDependendState {
         users ?? this.users,
       );
 
-  bool isLoginRegistered(final String login) => users.any((final User user) => user.login == login);
+  bool isLoginRegistered(final String login) =>
+      users.any((final User user) => user.login == login);
 
   bool get isEmpty => users.isEmpty;
 }

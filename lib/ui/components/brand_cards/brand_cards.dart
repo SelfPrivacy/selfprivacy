@@ -96,10 +96,11 @@ class _FilledCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         clipBehavior: Clip.antiAlias,
-        color: error ? Theme.of(context).colorScheme.errorContainer
+        color: error
+            ? Theme.of(context).colorScheme.errorContainer
             : tertiary
-            ? Theme.of(context).colorScheme.tertiaryContainer
-            : Theme.of(context).colorScheme.surfaceVariant,
+                ? Theme.of(context).colorScheme.tertiaryContainer
+                : Theme.of(context).colorScheme.surfaceVariant,
         child: child,
       );
 }

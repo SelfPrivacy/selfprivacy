@@ -150,7 +150,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       final List<dynamic> rawVolumes = dbGetResponse.data['volumes'];
       for (final rawVolume in rawVolumes) {
         final int dbId = rawVolume['id'];
-        final int dbSize = rawVolume['size'];
+        final int dbSize = rawVolume['size'] * 1024 * 1024 * 1024;
         final dbServer = rawVolume['server'];
         final String dbName = rawVolume['name'];
         final dbDevice = rawVolume['linux_device'];

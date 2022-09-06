@@ -78,7 +78,8 @@ class DiskStatus {
           continue;
         }
 
-        final String deviceId = iterableProviderVolume.linuxDevice!.split('/').last;
+        final String deviceId =
+            iterableProviderVolume.linuxDevice!.split('/').last;
         if (deviceId.contains(volume.model!) &&
             deviceId.contains(volume.serial!)) {
           providerVolume = iterableProviderVolume;
@@ -86,8 +87,8 @@ class DiskStatus {
         }
       }
 
-      final DiskVolume diskVolume = DiskVolume.fromServerDiscVolume(volume, providerVolume);
-
+      final DiskVolume diskVolume =
+          DiskVolume.fromServerDiscVolume(volume, providerVolume);
 
       return diskVolume;
     }).toList();

@@ -24,7 +24,7 @@ class ExtendingVolumePage extends StatefulWidget {
 class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   @override
   void initState() {
-    minSize = widget.diskVolumeToResize.sizeTotal;
+    minSize = widget.diskVolumeToResize.sizeTotal + DiskSize.fromGibibyte(2);
     _currentSliderGbValue = minSize.gibibyte;
     super.initState();
   }
@@ -70,7 +70,8 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           _priceController.text =
               (_euroPerGb * double.parse(_sizeController.text))
                   .toStringAsFixed(2);
-          minSize = widget.diskVolumeToResize.sizeTotal;
+          minSize =
+              widget.diskVolumeToResize.sizeTotal + DiskSize.fromGibibyte(2);
           if (_currentSliderGbValue < 0) {
             _currentSliderGbValue = minSize.gibibyte;
           }

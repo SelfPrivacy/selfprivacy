@@ -12,25 +12,16 @@ class DiskVolume {
   ServerVolume? providerVolume;
 
   /// from 0.0 to 1.0
-  double percentage = 0.0;
+  double get percentage => sizeTotal.byte == 0 ? 0 : sizeUsed.byte / sizeTotal.byte;
+  bool get isDiskOkay => percentage < 0.8 && sizeTotal.gibibyte - sizeUsed.gibibyte > 2.0;
 }
 
 class DiskStatus {
-  DiskStatus() {
-    isDiskOkay = false;
-    diskVolumes = [];
-  }
 
   DiskStatus.fromVolumes(
     final List<ServerDiskVolume> serverVolumes,
     final List<ServerVolume> providerVolumes,
   ) {
-    isDiskOkay = true;
-
-    if (providerVolumes.isEmpty || serverVolumes.isEmpty) {
-      isDiskOkay = false;
-    }
-
     diskVolumes = serverVolumes.map((
       final ServerDiskVolume volume,
     ) {
@@ -60,18 +51,15 @@ class DiskStatus {
 
       diskVolume.name = volume.name;
       diskVolume.root = volume.root;
-      diskVolume.percentage =
-          volume.usedSpace != 'None' && volume.totalSpace != 'None'
-              ? 1.0 / diskVolume.sizeTotal.byte * diskVolume.sizeUsed.byte
-              : 0.0;
-      if (diskVolume.percentage >= 0.8 ||
-          diskVolume.sizeTotal.asGb() - diskVolume.sizeUsed.asGb() <= 2.0) {
-        isDiskOkay = false;
-      }
+
       return diskVolume;
     }).toList();
   }
+  DiskStatus() {
+    diskVolumes = [];
+  }
 
-  bool isDiskOkay = false;
+  bool get isDiskOkay => diskVolumes.every((final volume) => volume.isDiskOkay);
+
   List<DiskVolume> diskVolumes = [];
 }

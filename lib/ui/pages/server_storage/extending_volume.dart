@@ -34,7 +34,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   final TextEditingController _priceController = TextEditingController();
 
   void _updateErrorStatuses() {
-    _isError = minSize.asGb() > _currentSliderGbValue;
+    _isError = minSize.gibibyte > _currentSliderGbValue;
   }
 
   @override
@@ -62,7 +62,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                   .toStringAsFixed(2);
           minSize = widget.diskVolumeToResize.sizeTotal;
           if (_currentSliderGbValue < 0) {
-            _currentSliderGbValue = minSize.asGb();
+            _currentSliderGbValue = minSize.gibibyte;
           }
 
           return BrandHeroScreen(
@@ -111,9 +111,9 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               ),
               const SizedBox(height: 16),
               Slider(
-                min: minSize.asGb(),
+                min: minSize.gibibyte,
                 value: _currentSliderGbValue,
-                max: maxSize.asGb(),
+                max: maxSize.gibibyte,
                 onChanged: (final double value) {
                   setState(() {
                     _currentSliderGbValue = value;

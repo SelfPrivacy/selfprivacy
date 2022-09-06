@@ -89,8 +89,7 @@ class ApiProviderVolumeCubit
     final ServerVolume? volume =
         await providerApi!.getVolumeProvider().createVolume();
 
-    final diskVolume = DiskVolume();
-    diskVolume.providerVolume = volume;
+    final diskVolume = DiskVolume(providerVolume: volume);
     await attachVolume(diskVolume);
 
     await Future.delayed(const Duration(seconds: 10));

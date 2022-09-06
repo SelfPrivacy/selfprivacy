@@ -22,13 +22,20 @@ class ExtendingVolumePage extends StatefulWidget {
 }
 
 class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
+  @override
+  void initState() {
+    minSize = widget.diskVolumeToResize.sizeTotal;
+    _currentSliderGbValue = minSize.gibibyte;
+    super.initState();
+  }
+
   bool _isError = false;
 
-  double _currentSliderGbValue = -1;
+  late double _currentSliderGbValue;
   double _euroPerGb = 1.0;
 
-  final DiskSize maxSize = DiskSize(byte: 500000000000);
-  DiskSize minSize = DiskSize();
+  final DiskSize maxSize = const DiskSize(byte: 500000000000);
+  late DiskSize minSize;
 
   final TextEditingController _sizeController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
@@ -52,6 +59,9 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                   'providers.storage.extending_volume_description'.tr(),
               children: const [
                 SizedBox(height: 16),
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
               ],
             );
           }

@@ -51,7 +51,7 @@ class Service {
     isMovable: false,
     status: ServiceStatus.off,
     storageUsage: ServiceStorageUsage(
-      used: DiskSize(byte: 0),
+      used: const DiskSize(byte: 0),
       volume: '',
     ),
     svgIcon: '',

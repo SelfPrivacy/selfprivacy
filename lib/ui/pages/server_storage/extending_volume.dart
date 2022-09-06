@@ -135,7 +135,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               const SizedBox(height: 16),
               FilledButton(
                 title: 'providers.storage.extend_volume_button.title'.tr(),
-                onPressed: null,
+                onPressed: _isError ? null : () => {},
                 disabled: _isError,
               ),
               const SizedBox(height: 16),

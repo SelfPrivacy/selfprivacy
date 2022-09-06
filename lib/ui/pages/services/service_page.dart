@@ -1,7 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
@@ -32,6 +35,10 @@ class _ServicePageState extends State<ServicePage> {
         ],
       );
     }
+
+    final bool serviceDisabled = service.status == ServiceStatus.inactive ||
+        service.status == ServiceStatus.off;
+
     return BrandHeroScreen(
       hasBackButton: true,
       children: [
@@ -73,19 +80,30 @@ class _ServicePageState extends State<ServicePage> {
         const SizedBox(height: 8),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => {},
+          onTap: () => {
+            context.read<ServicesCubit>().restart(service.id),
+          },
           leading: const Icon(Icons.restart_alt_outlined),
           title: Text(
-            'Restart service',
+            'services.service_page.restart'.tr(),
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => {},
+          onTap: () => {
+            context.read<JobsCubit>().createOrRemoveServiceToggleJob(
+                  ServiceToggleJob(
+                    type: _idToLegacyType(service.id),
+                    needToTurnOn: serviceDisabled,
+                  ),
+                ),
+          },
           leading: const Icon(Icons.power_settings_new),
           title: Text(
-            'Disable service',
+            serviceDisabled
+                ? 'services.service_page.enable'.tr()
+                : 'services.service_page.disable'.tr(),
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
@@ -95,12 +113,34 @@ class _ServicePageState extends State<ServicePage> {
             onTap: () => {},
             leading: const Icon(Icons.drive_file_move_outlined),
             title: Text(
-              'Move to another volume',
+              'services.service_page.move'.tr(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
       ],
     );
+  }
+
+// TODO: Get rid as soon as possible
+  ServiceTypes _idToLegacyType(final String serviceId) {
+    switch (serviceId) {
+      case 'mailserver':
+        return ServiceTypes.mailserver;
+      case 'jitsi':
+        return ServiceTypes.jitsi;
+      case 'bitwarden':
+        return ServiceTypes.bitwarden;
+      case 'nextcloud':
+        return ServiceTypes.nextcloud;
+      case 'pleroma':
+        return ServiceTypes.pleroma;
+      case 'gitea':
+        return ServiceTypes.gitea;
+      case 'ocserv':
+        return ServiceTypes.ocserv;
+      default:
+        throw Exception('wrong state');
+    }
   }
 }
 

@@ -192,8 +192,14 @@
     "in_menu": "Server is not set up yet. Please finish setup using setup wizard for further work."
   },
   "services": {
-    "_comment": "Вкладка сервисы",
+    "_comment": "Services",
     "title": "Your personal, private and independent services.",
+    "service_page": {
+      "restart": "Restart service",
+      "disable": "Disable service",
+      "enable": "Enable service",
+      "move": "Move to another volume"
+    },
     "mail": {
       "title": "E-Mail",
       "subtitle": "E-Mail for company and family.",

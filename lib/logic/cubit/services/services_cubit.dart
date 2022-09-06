@@ -37,6 +37,10 @@ class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
     }
   }
 
+  Future<void> restart(final String serviceId) async {
+    await api.restartService(serviceId);
+  }
+
   @override
   void clear() async {
     emit(const ServicesState.empty());

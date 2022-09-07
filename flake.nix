@@ -60,6 +60,7 @@
           autoPatchelfHook
           androidComposition.androidsdk
           openjdk11_headless
+          clang
         ];
   
         releaseDerivation = pkgs.flutter.mkFlutterApp rec {

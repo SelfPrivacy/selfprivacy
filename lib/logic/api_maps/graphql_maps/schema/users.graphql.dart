@@ -1,11 +1,9 @@
 import 'dart:async';
-
+import 'disk_volumes.graphql.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:json_annotation/json_annotation.dart';
-
 import 'schema.graphql.dart';
-
 part 'users.graphql.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -173,7 +171,6 @@ extension ClientExtension$Fragment$basicMutationReturnFields
                   document: documentNodeFragmentbasicMutationReturnFields)),
           data: data.toJson(),
           broadcast: broadcast);
-
   Fragment$basicMutationReturnFields? readFragment$basicMutationReturnFields(
       {required Map<String, dynamic> idFields, bool optimistic = true}) {
     final result = this.readFragment(
@@ -364,7 +361,6 @@ extension ClientExtension$Fragment$userFields on graphql.GraphQLClient {
                   document: documentNodeFragmentuserFields)),
           data: data.toJson(),
           broadcast: broadcast);
-
   Fragment$userFields? readFragment$userFields(
       {required Map<String, dynamic> idFields, bool optimistic = true}) {
     final result = this.readFragment(
@@ -448,7 +444,6 @@ class _CopyWithImpl$Query$AllUsers<TRes>
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
-
   CopyWith$Query$AllUsers$users<TRes> get users {
     final local$users = _instance.users;
     return CopyWith$Query$AllUsers$users(local$users, (e) => call(users: e));
@@ -462,7 +457,6 @@ class _CopyWithStubImpl$Query$AllUsers<TRes>
   TRes _res;
 
   call({Query$AllUsers$users? users, String? $__typename}) => _res;
-
   CopyWith$Query$AllUsers$users<TRes> get users =>
       CopyWith$Query$AllUsers$users.stub(_res);
 }
@@ -530,7 +524,6 @@ const documentNodeQueryAllUsers = DocumentNode(definitions: [
       ])),
   fragmentDefinitionuserFields,
 ]);
-
 Query$AllUsers _parserFn$Query$AllUsers(Map<String, dynamic> data) =>
     Query$AllUsers.fromJson(data);
 
@@ -592,11 +585,9 @@ extension ClientExtension$Query$AllUsers on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$AllUsers>> query$AllUsers(
           [Options$Query$AllUsers? options]) async =>
       await this.query(options ?? Options$Query$AllUsers());
-
   graphql.ObservableQuery<Query$AllUsers> watchQuery$AllUsers(
           [WatchOptions$Query$AllUsers? options]) =>
       this.watchQuery(options ?? WatchOptions$Query$AllUsers());
-
   void writeQuery$AllUsers(
           {required Query$AllUsers data, bool broadcast = true}) =>
       this.writeQuery(
@@ -605,7 +596,6 @@ extension ClientExtension$Query$AllUsers on graphql.GraphQLClient {
                   graphql.Operation(document: documentNodeQueryAllUsers)),
           data: data.toJson(),
           broadcast: broadcast);
-
   Query$AllUsers? readQuery$AllUsers({bool optimistic = true}) {
     final result = this.readQuery(
         graphql.Request(
@@ -632,7 +622,6 @@ class Query$AllUsers$users {
   final String $__typename;
 
   Map<String, dynamic> toJson() => _$Query$AllUsers$usersToJson(this);
-
   int get hashCode {
     final l$allUsers = allUsers;
     final l$rootUser = rootUser;
@@ -682,12 +671,10 @@ abstract class CopyWith$Query$AllUsers$users<TRes> {
       {List<Fragment$userFields>? allUsers,
       Fragment$userFields? rootUser,
       String? $__typename});
-
   TRes allUsers(
       Iterable<Fragment$userFields> Function(
               Iterable<CopyWith$Fragment$userFields<Fragment$userFields>>)
           _fn);
-
   CopyWith$Fragment$userFields<TRes> get rootUser;
 }
 
@@ -715,7 +702,6 @@ class _CopyWithImpl$Query$AllUsers$users<TRes>
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
-
   TRes allUsers(
           Iterable<Fragment$userFields> Function(
                   Iterable<CopyWith$Fragment$userFields<Fragment$userFields>>)
@@ -723,7 +709,6 @@ class _CopyWithImpl$Query$AllUsers$users<TRes>
       call(
           allUsers: _fn(_instance.allUsers
               .map((e) => CopyWith$Fragment$userFields(e, (i) => i))).toList());
-
   CopyWith$Fragment$userFields<TRes> get rootUser {
     final local$rootUser = _instance.rootUser;
     return local$rootUser == null
@@ -744,9 +729,7 @@ class _CopyWithStubImpl$Query$AllUsers$users<TRes>
           Fragment$userFields? rootUser,
           String? $__typename}) =>
       _res;
-
   allUsers(_fn) => _res;
-
   CopyWith$Fragment$userFields<TRes> get rootUser =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -888,7 +871,6 @@ class _CopyWithImpl$Query$GetUser<TRes>
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
-
   CopyWith$Query$GetUser$users<TRes> get users {
     final local$users = _instance.users;
     return CopyWith$Query$GetUser$users(local$users, (e) => call(users: e));
@@ -902,7 +884,6 @@ class _CopyWithStubImpl$Query$GetUser<TRes>
   TRes _res;
 
   call({Query$GetUser$users? users, String? $__typename}) => _res;
-
   CopyWith$Query$GetUser$users<TRes> get users =>
       CopyWith$Query$GetUser$users.stub(_res);
 }
@@ -962,7 +943,6 @@ const documentNodeQueryGetUser = DocumentNode(definitions: [
       ])),
   fragmentDefinitionuserFields,
 ]);
-
 Query$GetUser _parserFn$Query$GetUser(Map<String, dynamic> data) =>
     Query$GetUser.fromJson(data);
 
@@ -1033,11 +1013,9 @@ extension ClientExtension$Query$GetUser on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$GetUser>> query$GetUser(
           Options$Query$GetUser options) async =>
       await this.query(options);
-
   graphql.ObservableQuery<Query$GetUser> watchQuery$GetUser(
           WatchOptions$Query$GetUser options) =>
       this.watchQuery(options);
-
   void writeQuery$GetUser(
           {required Query$GetUser data,
           required Variables$Query$GetUser variables,
@@ -1048,7 +1026,6 @@ extension ClientExtension$Query$GetUser on graphql.GraphQLClient {
               variables: variables.toJson()),
           data: data.toJson(),
           broadcast: broadcast);
-
   Query$GetUser? readQuery$GetUser(
       {required Variables$Query$GetUser variables, bool optimistic = true}) {
     final result = this.readQuery(
@@ -1130,7 +1107,6 @@ class _CopyWithImpl$Query$GetUser$users<TRes>
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
-
   CopyWith$Fragment$userFields<TRes> get getUser {
     final local$getUser = _instance.getUser;
     return local$getUser == null
@@ -1146,7 +1122,6 @@ class _CopyWithStubImpl$Query$GetUser$users<TRes>
   TRes _res;
 
   call({Fragment$userFields? getUser, String? $__typename}) => _res;
-
   CopyWith$Fragment$userFields<TRes> get getUser =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -1291,7 +1266,6 @@ class _CopyWithImpl$Mutation$CreateUser<TRes>
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
-
   CopyWith$Mutation$CreateUser$createUser<TRes> get createUser {
     final local$createUser = _instance.createUser;
     return CopyWith$Mutation$CreateUser$createUser(
@@ -1307,7 +1281,6 @@ class _CopyWithStubImpl$Mutation$CreateUser<TRes>
 
   call({Mutation$CreateUser$createUser? createUser, String? $__typename}) =>
       _res;
-
   CopyWith$Mutation$CreateUser$createUser<TRes> get createUser =>
       CopyWith$Mutation$CreateUser$createUser.stub(_res);
 }
@@ -1371,10 +1344,8 @@ const documentNodeMutationCreateUser = DocumentNode(definitions: [
   fragmentDefinitionbasicMutationReturnFields,
   fragmentDefinitionuserFields,
 ]);
-
 Mutation$CreateUser _parserFn$Mutation$CreateUser(Map<String, dynamic> data) =>
     Mutation$CreateUser.fromJson(data);
-
 typedef OnMutationCompleted$Mutation$CreateUser = FutureOr<void> Function(
     dynamic, Mutation$CreateUser?);
 
@@ -1454,7 +1425,6 @@ extension ClientExtension$Mutation$CreateUser on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$CreateUser>> mutate$CreateUser(
           Options$Mutation$CreateUser options) async =>
       await this.mutate(options);
-
   graphql.ObservableQuery<Mutation$CreateUser> watchMutation$CreateUser(
           WatchOptions$Mutation$CreateUser options) =>
       this.watchMutation(options);
@@ -1597,7 +1567,6 @@ class _CopyWithStubImpl$Mutation$CreateUser$createUser<TRes>
           String? $__typename,
           Fragment$userFields? user}) =>
       _res;
-
   CopyWith$Fragment$userFields<TRes> get user =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -1743,7 +1712,6 @@ class _CopyWithImpl$Mutation$DeleteUser<TRes>
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
-
   CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser {
     final local$deleteUser = _instance.deleteUser;
     return CopyWith$Mutation$DeleteUser$deleteUser(
@@ -1759,7 +1727,6 @@ class _CopyWithStubImpl$Mutation$DeleteUser<TRes>
 
   call({Mutation$DeleteUser$deleteUser? deleteUser, String? $__typename}) =>
       _res;
-
   CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser =>
       CopyWith$Mutation$DeleteUser$deleteUser.stub(_res);
 }
@@ -1807,10 +1774,8 @@ const documentNodeMutationDeleteUser = DocumentNode(definitions: [
       ])),
   fragmentDefinitionbasicMutationReturnFields,
 ]);
-
 Mutation$DeleteUser _parserFn$Mutation$DeleteUser(Map<String, dynamic> data) =>
     Mutation$DeleteUser.fromJson(data);
-
 typedef OnMutationCompleted$Mutation$DeleteUser = FutureOr<void> Function(
     dynamic, Mutation$DeleteUser?);
 
@@ -1890,7 +1855,6 @@ extension ClientExtension$Mutation$DeleteUser on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$DeleteUser>> mutate$DeleteUser(
           Options$Mutation$DeleteUser options) async =>
       await this.mutate(options);
-
   graphql.ObservableQuery<Mutation$DeleteUser> watchMutation$DeleteUser(
           WatchOptions$Mutation$DeleteUser options) =>
       this.watchMutation(options);
@@ -2146,7 +2110,6 @@ class _CopyWithImpl$Mutation$UpdateUser<TRes>
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
-
   CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser {
     final local$updateUser = _instance.updateUser;
     return CopyWith$Mutation$UpdateUser$updateUser(
@@ -2162,7 +2125,6 @@ class _CopyWithStubImpl$Mutation$UpdateUser<TRes>
 
   call({Mutation$UpdateUser$updateUser? updateUser, String? $__typename}) =>
       _res;
-
   CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser =>
       CopyWith$Mutation$UpdateUser$updateUser.stub(_res);
 }
@@ -2226,10 +2188,8 @@ const documentNodeMutationUpdateUser = DocumentNode(definitions: [
   fragmentDefinitionbasicMutationReturnFields,
   fragmentDefinitionuserFields,
 ]);
-
 Mutation$UpdateUser _parserFn$Mutation$UpdateUser(Map<String, dynamic> data) =>
     Mutation$UpdateUser.fromJson(data);
-
 typedef OnMutationCompleted$Mutation$UpdateUser = FutureOr<void> Function(
     dynamic, Mutation$UpdateUser?);
 
@@ -2309,7 +2269,6 @@ extension ClientExtension$Mutation$UpdateUser on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$UpdateUser>> mutate$UpdateUser(
           Options$Mutation$UpdateUser options) async =>
       await this.mutate(options);
-
   graphql.ObservableQuery<Mutation$UpdateUser> watchMutation$UpdateUser(
           WatchOptions$Mutation$UpdateUser options) =>
       this.watchMutation(options);
@@ -2452,7 +2411,6 @@ class _CopyWithStubImpl$Mutation$UpdateUser$updateUser<TRes>
           String? $__typename,
           Fragment$userFields? user}) =>
       _res;
-
   CopyWith$Fragment$userFields<TRes> get user =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -2597,7 +2555,6 @@ class _CopyWithImpl$Mutation$AddSshKey<TRes>
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
-
   CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey {
     final local$addSshKey = _instance.addSshKey;
     return CopyWith$Mutation$AddSshKey$addSshKey(
@@ -2612,7 +2569,6 @@ class _CopyWithStubImpl$Mutation$AddSshKey<TRes>
   TRes _res;
 
   call({Mutation$AddSshKey$addSshKey? addSshKey, String? $__typename}) => _res;
-
   CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey =>
       CopyWith$Mutation$AddSshKey$addSshKey.stub(_res);
 }
@@ -2676,10 +2632,8 @@ const documentNodeMutationAddSshKey = DocumentNode(definitions: [
   fragmentDefinitionbasicMutationReturnFields,
   fragmentDefinitionuserFields,
 ]);
-
 Mutation$AddSshKey _parserFn$Mutation$AddSshKey(Map<String, dynamic> data) =>
     Mutation$AddSshKey.fromJson(data);
-
 typedef OnMutationCompleted$Mutation$AddSshKey = FutureOr<void> Function(
     dynamic, Mutation$AddSshKey?);
 
@@ -2759,7 +2713,6 @@ extension ClientExtension$Mutation$AddSshKey on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$AddSshKey>> mutate$AddSshKey(
           Options$Mutation$AddSshKey options) async =>
       await this.mutate(options);
-
   graphql.ObservableQuery<Mutation$AddSshKey> watchMutation$AddSshKey(
           WatchOptions$Mutation$AddSshKey options) =>
       this.watchMutation(options);
@@ -2902,7 +2855,6 @@ class _CopyWithStubImpl$Mutation$AddSshKey$addSshKey<TRes>
           String? $__typename,
           Fragment$userFields? user}) =>
       _res;
-
   CopyWith$Fragment$userFields<TRes> get user =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -3051,7 +3003,6 @@ class _CopyWithImpl$Mutation$RemoveSshKey<TRes>
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
-
   CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey {
     final local$removeSshKey = _instance.removeSshKey;
     return CopyWith$Mutation$RemoveSshKey$removeSshKey(
@@ -3069,7 +3020,6 @@ class _CopyWithStubImpl$Mutation$RemoveSshKey<TRes>
           {Mutation$RemoveSshKey$removeSshKey? removeSshKey,
           String? $__typename}) =>
       _res;
-
   CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey =>
       CopyWith$Mutation$RemoveSshKey$removeSshKey.stub(_res);
 }
@@ -3133,11 +3083,9 @@ const documentNodeMutationRemoveSshKey = DocumentNode(definitions: [
   fragmentDefinitionbasicMutationReturnFields,
   fragmentDefinitionuserFields,
 ]);
-
 Mutation$RemoveSshKey _parserFn$Mutation$RemoveSshKey(
         Map<String, dynamic> data) =>
     Mutation$RemoveSshKey.fromJson(data);
-
 typedef OnMutationCompleted$Mutation$RemoveSshKey = FutureOr<void> Function(
     dynamic, Mutation$RemoveSshKey?);
 
@@ -3220,7 +3168,6 @@ extension ClientExtension$Mutation$RemoveSshKey on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$RemoveSshKey>> mutate$RemoveSshKey(
           Options$Mutation$RemoveSshKey options) async =>
       await this.mutate(options);
-
   graphql.ObservableQuery<Mutation$RemoveSshKey> watchMutation$RemoveSshKey(
           WatchOptions$Mutation$RemoveSshKey options) =>
       this.watchMutation(options);
@@ -3367,7 +3314,6 @@ class _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
           String? $__typename,
           Fragment$userFields? user}) =>
       _res;
-
   CopyWith$Fragment$userFields<TRes> get user =>
       CopyWith$Fragment$userFields.stub(_res);
 }

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 
 part 'server_job.g.dart';
 
@@ -20,16 +21,30 @@ class ServerJob {
     final this.finishedAt,
   });
 
+  ServerJob.fromGraphQL(final Query$GetApiJobs$jobs$getJobs serverJob)
+      : this(
+          createdAt: serverJob.createdAt,
+          description: serverJob.description,
+          error: serverJob.error,
+          finishedAt: serverJob.finishedAt,
+          name: serverJob.name,
+          progress: serverJob.progress,
+          result: serverJob.result,
+          status: serverJob.status,
+          statusText: serverJob.statusText,
+          uid: serverJob.uid,
+          updatedAt: serverJob.updatedAt,
+        );
   final String name;
   final String description;
   final String status;
   final String uid;
-  final String updatedAt;
+  final DateTime updatedAt;
   final DateTime createdAt;
 
   final String? error;
   final int? progress;
   final String? result;
   final String? statusText;
-  final String? finishedAt;
+  final DateTime? finishedAt;
 }

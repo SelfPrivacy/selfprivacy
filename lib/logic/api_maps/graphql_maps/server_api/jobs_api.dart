@@ -2,8 +2,8 @@ part of 'server.dart';
 
 mixin JobsApi on ApiMap {
   Future<List<ServerJob>> getServerJobs() async {
-    QueryResult response;
-    List<ServerJob> jobs = [];
+    QueryResult<Query$GetApiJobs> response;
+    List<ServerJob> jobsList = [];
 
     try {
       final GraphQLClient client = await getClient();
@@ -11,14 +11,15 @@ mixin JobsApi on ApiMap {
       if (response.hasException) {
         print(response.exception.toString());
       }
-      jobs = response.data!['jobs']
-          .map<ServerJob>((final e) => ServerJob.fromJson(e))
-          .toList();
+      jobsList = jobsList = response.parsedData?.jobs.getJobs
+              .map<ServerJob>((final job) => ServerJob.fromGraphQL(job))
+              .toList() ??
+          [];
     } catch (e) {
       print(e);
     }
 
-    return jobs;
+    return jobsList;
   }
 
   Future<void> removeApiJob(final String uid) async {

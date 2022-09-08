@@ -126,32 +126,37 @@ class CloudflareApi extends DnsProviderApi {
   Future<List<DnsRecord>> getDnsRecords({
     required final ServerDomain domain,
   }) async {
+    Response response;
     final String domainName = domain.domainName;
     final String domainZoneId = domain.zoneId;
+    final List<DnsRecord> allRecords = <DnsRecord>[];
 
     final String url = '/zones/$domainZoneId/dns_records';
 
     final Dio client = await getClient();
-    final Response response = await client.get(url);
+    try {
+      response = await client.get(url);
+      final List records = response.data['result'] ?? [];
 
-    final List records = response.data['result'] ?? [];
-    final List<DnsRecord> allRecords = <DnsRecord>[];
-
-    for (final record in records) {
-      if (record['zone_name'] == domainName) {
-        allRecords.add(
-          DnsRecord(
-            name: record['name'],
-            type: record['type'],
-            content: record['content'],
-            ttl: record['ttl'],
-            proxied: record['proxied'],
-          ),
-        );
+      for (final record in records) {
+        if (record['zone_name'] == domainName) {
+          allRecords.add(
+            DnsRecord(
+              name: record['name'],
+              type: record['type'],
+              content: record['content'],
+              ttl: record['ttl'],
+              proxied: record['proxied'],
+            ),
+          );
+        }
       }
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
     }
 
-    close(client);
     return allRecords;
   }
 

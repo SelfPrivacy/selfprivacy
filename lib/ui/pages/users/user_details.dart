@@ -25,24 +25,10 @@ class UserDetails extends StatelessWidget {
     if (user.type == UserType.root) {
       return BrandHeroScreen(
         hasBackButton: true,
-        heroTitle: user.login,
-        heroSubtitle: 'ssh.root.title'.tr(),
+        heroTitle: 'ssh.root.title'.tr(),
+        heroSubtitle: 'ssh.root.subtitle'.tr(),
         children: [
           _SshKeysCard(user: user),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(Icons.warning_amber_outlined, size: 24),
-                const SizedBox(height: 16),
-                Text(
-                  'ssh.root.subtitle'.tr(),
-                ),
-              ],
-            ),
-          ),
         ],
       );
     }

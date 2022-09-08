@@ -47,8 +47,6 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       return;
     }
     emit(state.copyWith(isLoading: true));
-    // sleep for 10 seconds to simulate a slow connection
-    await Future<void>.delayed(const Duration(seconds: 10));
     final List<User> usersFromServer = await api.getAllUsers();
     if (usersFromServer.isNotEmpty) {
       emit(
@@ -58,8 +56,8 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
         ),
       );
       // Update the users it the box
-      box.clear();
-      box.addAll(usersFromServer);
+      await box.clear();
+      await box.addAll(usersFromServer);
     } else {
       getIt<NavigationService>()
           .showSnackBar('users.could_not_fetch_users'.tr());
@@ -139,7 +137,9 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
         await api.addSshKey(user.login, publicKey);
     if (result.success) {
       final User updatedUser = result.user!;
-      await box.putAt(box.values.toList().indexOf(user), updatedUser);
+      final int index =
+          state.users.indexWhere((final User u) => u.login == user.login);
+      await box.putAt(index, updatedUser);
       emit(
         state.copyWith(
           users: box.values.toList(),
@@ -156,7 +156,9 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
         await api.removeSshKey(user.login, publicKey);
     if (result.success) {
       final User updatedUser = result.user!;
-      await box.putAt(box.values.toList().indexOf(user), updatedUser);
+      final int index =
+          state.users.indexWhere((final User u) => u.login == user.login);
+      await box.putAt(index, updatedUser);
       emit(
         state.copyWith(
           users: box.values.toList(),

@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
@@ -19,7 +20,6 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
-import 'package:selfprivacy/ui/pages/ssh_keys/ssh_keys.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 import 'package:selfprivacy/utils/route_transitions/basic.dart';

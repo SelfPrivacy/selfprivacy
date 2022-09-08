@@ -11,10 +11,9 @@ import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:selfprivacy/ui/pages/ssh_keys/ssh_keys.dart';
+import 'package:selfprivacy/ui/pages/users/users.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
-import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/ui/pages/more/about/about.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/app_setting.dart';
 import 'package:selfprivacy/ui/pages/more/console/console.dart';
@@ -53,8 +52,8 @@ class MorePage extends StatelessWidget {
                   _MoreMenuItem(
                     title: 'more.create_ssh_key'.tr(),
                     iconData: Ionicons.key_outline,
-                    goTo: SshKeysPage(
-                      user: context.read<UsersCubit>().state.rootUser,
+                    goTo: const UserDetails(
+                      login: 'root',
                     ),
                   ),
                 if (isReady)

@@ -22,46 +22,59 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
     String description = '';
     String subtitle = '';
     Icon icon = const Icon(
-      Icons.check,
-      color: Colors.green,
+      Icons.check_circle_outline,
+      size: 24.0,
     );
+    bool isError = false;
     switch (dnsState) {
       case DnsRecordsStatus.uninitialized:
         description = 'providers.domain.states.uninitialized'.tr();
         icon = const Icon(
           Icons.refresh,
+          size: 24.0,
         );
+        isError = false;
         break;
       case DnsRecordsStatus.refreshing:
         description = 'providers.domain.states.refreshing'.tr();
         icon = const Icon(
           Icons.refresh,
+          size: 24.0,
         );
+        isError = false;
         break;
       case DnsRecordsStatus.good:
         description = 'providers.domain.states.ok'.tr();
         icon = const Icon(
-          Icons.check,
-          color: Colors.green,
+          Icons.check_circle_outline,
+          size: 24.0,
         );
+        isError = false;
         break;
       case DnsRecordsStatus.error:
         description = 'providers.domain.states.error'.tr();
         subtitle = 'providers.domain.states.error_subtitle'.tr();
         icon = const Icon(
-          Icons.error,
-          color: Colors.red,
+          Icons.error_outline,
+          size: 24.0,
         );
+        isError = true;
         break;
     }
-    return ListTile(
-      onTap: dnsState == DnsRecordsStatus.error ? () => fixCallback() : null,
-      title: Text(
-        description,
-        style: Theme.of(context).textTheme.headline6,
+    return BrandCards.filled(
+      child: ListTile(
+        onTap: dnsState == DnsRecordsStatus.error ? () => fixCallback() : null,
+        leading: icon,
+        title: Text(description),
+        subtitle: subtitle != '' ? Text(subtitle) : null,
+        textColor: isError
+            ? Theme.of(context).colorScheme.error
+            : Theme.of(context).colorScheme.onSurfaceVariant,
+        iconColor: isError
+            ? Theme.of(context).colorScheme.error
+            : Theme.of(context).colorScheme.onSurfaceVariant,
       ),
-      subtitle: subtitle != '' ? Text(subtitle) : null,
-      leading: icon,
+      error: isError,
     );
   }
 
@@ -94,132 +107,106 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       );
     }
 
+    final Color goodColor = Theme.of(context).colorScheme.onBackground;
+    final Color errorColor = Theme.of(context).colorScheme.error;
+    final Color neutralColor = Theme.of(context).colorScheme.onBackground;
+
     return BrandHeroScreen(
       hasBackButton: true,
       heroSubtitle: domain,
       heroIcon: BrandIcons.globe,
       heroTitle: 'providers.domain.screen_title'.tr(),
       children: <Widget>[
-        BrandCards.outlined(
-          child: Column(
-            children: [
-              _getStateCard(dnsCubit.dnsState, () {
-                context.read<DnsRecordsCubit>().fix();
-              }),
-            ],
-          ),
-        ),
-
+        _getStateCard(dnsCubit.dnsState, () {
+          context.read<DnsRecordsCubit>().fix();
+        }),
         const SizedBox(height: 16.0),
-        // Outlined card with a list of A records and their
-        // status.
-        BrandCards.outlined(
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                title: Text(
-                  'providers.domain.cards.services.title'.tr(),
-                  style: Theme.of(context).textTheme.headline6,
+        ListTile(
+          title: Text(
+            'providers.domain.cards.services.title'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
-                subtitle: Text(
-                  'providers.domain.cards.services.subtitle'.tr(),
-                  style: Theme.of(context).textTheme.caption,
-                ),
-              ),
-              ...dnsCubit.dnsRecords
-                  .where(
-                    (final dnsRecord) =>
-                        dnsRecord.category == DnsRecordsCategory.services,
-                  )
-                  .map(
-                    (final dnsRecord) => Column(
-                      children: [
-                        const Divider(
-                          height: 1.0,
-                        ),
-                        ListTile(
-                          leading: Icon(
-                            dnsRecord.isSatisfied
-                                ? Icons.check
-                                : dnsCubit.dnsState ==
-                                        DnsRecordsStatus.refreshing
-                                    ? Icons.refresh
-                                    : Icons.error,
-                            color: dnsRecord.isSatisfied
-                                ? Colors.green
-                                : dnsCubit.dnsState ==
-                                        DnsRecordsStatus.refreshing
-                                    ? Colors.grey
-                                    : Colors.red,
-                          ),
-                          title: Text(
-                            dnsRecord.description.tr(),
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          subtitle: Text(
-                            dnsRecord.name,
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ],
+          ),
+          subtitle: Text(
+            'providers.domain.cards.services.subtitle'.tr(),
+            style: Theme.of(context).textTheme.labelMedium,
           ),
         ),
+        ...dnsCubit.dnsRecords
+            .where(
+              (final dnsRecord) =>
+                  dnsRecord.category == DnsRecordsCategory.services,
+            )
+            .map(
+              (final dnsRecord) => Column(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      dnsRecord.isSatisfied
+                          ? Icons.check_circle_outline
+                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
+                              ? Icons.refresh
+                              : Icons.error_outline,
+                      color: dnsRecord.isSatisfied
+                          ? goodColor
+                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
+                              ? neutralColor
+                              : errorColor,
+                    ),
+                    title: Text(
+                      dnsRecord.description.tr(),
+                    ),
+                    subtitle: Text(
+                      dnsRecord.name,
+                    ),
+                  ),
+                ],
+              ),
+            )
+            .toList(),
         const SizedBox(height: 16.0),
-        BrandCards.outlined(
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                title: Text(
-                  'providers.domain.cards.email.title'.tr(),
-                  style: Theme.of(context).textTheme.headline6,
+        ListTile(
+          title: Text(
+            'providers.domain.cards.email.title'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
-                subtitle: Text(
-                  'providers.domain.cards.email.subtitle'.tr(),
-                  style: Theme.of(context).textTheme.caption,
-                ),
-              ),
-              ...dnsCubit.dnsRecords
-                  .where(
-                    (final dnsRecord) =>
-                        dnsRecord.category == DnsRecordsCategory.email,
-                  )
-                  .map(
-                    (final dnsRecord) => Column(
-                      children: [
-                        const Divider(
-                          height: 1.0,
-                        ),
-                        ListTile(
-                          leading: Icon(
-                            dnsRecord.isSatisfied
-                                ? Icons.check
-                                : dnsCubit.dnsState ==
-                                        DnsRecordsStatus.refreshing
-                                    ? Icons.refresh
-                                    : Icons.error,
-                            color: dnsRecord.isSatisfied
-                                ? Colors.green
-                                : dnsCubit.dnsState ==
-                                        DnsRecordsStatus.refreshing
-                                    ? Colors.grey
-                                    : Colors.red,
-                          ),
-                          title: Text(
-                            dnsRecord.description.tr(),
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ],
+          ),
+          subtitle: Text(
+            'providers.domain.cards.email.subtitle'.tr(),
+            style: Theme.of(context).textTheme.labelMedium,
           ),
         ),
+        ...dnsCubit.dnsRecords
+            .where(
+              (final dnsRecord) =>
+                  dnsRecord.category == DnsRecordsCategory.email,
+            )
+            .map(
+              (final dnsRecord) => Column(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      dnsRecord.isSatisfied
+                          ? Icons.check_circle_outline
+                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
+                              ? Icons.refresh
+                              : Icons.error_outline,
+                      color: dnsRecord.isSatisfied
+                          ? goodColor
+                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
+                              ? neutralColor
+                              : errorColor,
+                    ),
+                    title: Text(
+                      dnsRecord.description.tr(),
+                    ),
+                  ),
+                ],
+              ),
+            )
+            .toList(),
       ],
     );
   }

@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
@@ -110,9 +109,9 @@ class _BackupDetailsState extends State<BackupDetails>
                   ),
                 if (backupStatus == BackupStatusEnum.error)
                   ListTile(
-                    leading: const Icon(
+                    leading: Icon(
                       Icons.error_outline,
-                      color: BrandColors.red1,
+                      color: Theme.of(context).colorScheme.error,
                     ),
                     title: Text(
                       'providers.backup.error_pending'.tr(),

@@ -25,11 +25,15 @@ class BrandCards {
   static Widget filled({
     required final Widget child,
     final bool tertiary = false,
+    final bool secondary = false,
     final bool error = false,
+    final bool clipped = true,
   }) =>
       _FilledCard(
         tertiary: tertiary,
+        secondary: secondary,
         error: error,
+        clipped: clipped,
         child: child,
       );
 }
@@ -82,25 +86,31 @@ class _OutlinedCard extends StatelessWidget {
 class _FilledCard extends StatelessWidget {
   const _FilledCard({
     required this.child,
+    required this.secondary,
     required this.tertiary,
     required this.error,
+    required this.clipped,
   });
 
   final Widget child;
   final bool tertiary;
   final bool error;
+  final bool clipped;
+  final bool secondary;
   @override
   Widget build(final BuildContext context) => Card(
         elevation: 0.0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
-        clipBehavior: Clip.antiAlias,
+        clipBehavior: clipped ? Clip.antiAlias : Clip.none,
         color: error
             ? Theme.of(context).colorScheme.errorContainer
-            : tertiary
-                ? Theme.of(context).colorScheme.tertiaryContainer
-                : Theme.of(context).colorScheme.surfaceVariant,
+            : secondary
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : tertiary
+                    ? Theme.of(context).colorScheme.tertiaryContainer
+                    : Theme.of(context).colorScheme.surfaceVariant,
         child: child,
       );
 }

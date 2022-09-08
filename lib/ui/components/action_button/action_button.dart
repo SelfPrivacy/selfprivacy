@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 
 class ActionButton extends StatelessWidget {
   const ActionButton({
@@ -20,7 +19,9 @@ class ActionButton extends StatelessWidget {
     return TextButton(
       child: Text(
         text!,
-        style: isRed ? const TextStyle(color: BrandColors.red1) : null,
+        style: isRed
+            ? TextStyle(color: Theme.of(context).colorScheme.error)
+            : null,
       ),
       onPressed: () {
         navigator.pop();

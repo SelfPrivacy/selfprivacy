@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail -o noclobber -o nounset
 
-CONTAINER_IMAGE="flutter-build-env"
+CONTAINER_IMAGE="localhost/flutter-build-env"
 OPTS=$(getopt -o "" --long "build-linux,build-apk,sign-apk-standalone,sign-apk-fdroid,package-linux-appimage,package-linux-flatpak,package-linux-archive" -- "$@")
 eval set -- "$OPTS"
 

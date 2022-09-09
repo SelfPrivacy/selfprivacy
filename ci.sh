@@ -38,8 +38,8 @@ sign_apk_standalone () {
 }
 
 sign_apk_fdroid () {
-  podman_offline "/var/lib/builder/fdroid" rm -rf unsigned/*
-  podman_offline "/var/lib/builder/fdroid" test ! -f repo/"$APP_NAME"_"$APP_BUILD_ID".apk && cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned/"$APP_NAME"_"$APP_BUILD_ID".apk
+  podman_offline "/var/lib/builder/fdroid" "rm -rf /var/lib/builder/fdroid/unsigned/*"
+  podman_offline "/var/lib/builder/fdroid" "test ! -f /var/lib/builder/fdroid/repo/"$APP_NAME"_"$APP_BUILD_ID".apk && cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned/"$APP_NAME"_"$APP_BUILD_ID".apk || echo exist"
   podman_offline "/var/lib/builder/fdroid" fdroid publish
   podman_offline "/var/lib/builder/fdroid" fdroid update
 }

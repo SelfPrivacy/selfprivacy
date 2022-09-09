@@ -33,12 +33,12 @@ build_apk () {
 }
 
 sign_apk_standalone () {
-  podman_offline "/var/lib/builder/fdroid" "zipalign -f -v 4 ../src/build/app/outputs/flutter-apk/app-release.apk standalone_$APP_NAME-$APP_SEMVER.apk"
-  podman_offline "/var/lib/builder/fdroid" "apksigner sign --ks standalone-keystore --ks-key-alias standalone --ks-pass env:STANDALONE_KEYSTORE_PASS standalone_$APP_NAME-$APP_SEMVER.apk"
+  podman_offline "/var/lib/builder/fdroid" "zipalign -f -v 4 ../src/build/app/outputs/flutter-apk/app-release.apk standalone_"$APP_NAME"-"$APP_SEMVER".apk"
+  podman_offline "/var/lib/builder/fdroid" "apksigner sign --ks standalone-keystore --ks-key-alias standalone --ks-pass env:STANDALONE_KEYSTORE_PASS standalone_"$APP_NAME"-"$APP_SEMVER".apk"
 }
 
 sign_apk_fdroid () {
-  podman_offline "/var/lib/builder/fdroid" "if [[ ! -f repo/$APP_NAME_$APP_BUILD_ID.apk ]]; then cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned; fi"
+  podman_offline "/var/lib/builder/fdroid" "if [[ ! -f repo/"$APP_NAME"_"$APP_BUILD_ID".apk ]]; then cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned; fi"
   podman_offline "/var/lib/builder/fdroid" "fdroid publish"
   podman_offline "/var/lib/builder/fdroid" "fdroid update"
 }

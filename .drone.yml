@@ -21,6 +21,7 @@ name: Release
 steps:
   - name: Debug
     commands:
+      - podman images
       - ls -la
 
   - name: Build Intermediate Linux Release Artifact (Binary)

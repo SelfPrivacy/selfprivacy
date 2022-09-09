@@ -18,10 +18,12 @@ podman_online () {
 }
 
 build_linux () {
+  podman_offline "/var/lib/builder/src" "flutter pub get --offline"
   podman_offline "/var/lib/builder/src" "flutter build linux"
 }
 
 build_apk () {
+  podman_offline "/var/lib/builder/src" "flutter pub get --offline"
   podman_offline "/var/lib/builder/src" "flutter build apk"
 }
 

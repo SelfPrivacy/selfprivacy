@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -o errexit -o pipefail -o noclobber -o nounset
 
 CONTAINER_IMAGE="flutter-build-env"

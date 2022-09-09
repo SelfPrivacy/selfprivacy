@@ -22,10 +22,11 @@ steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+      - podman unshare chown -R 999:999 .
 
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:
-      - podman unshare ./ci.sh --build-linux
+      - ./ci.sh --build-linux
     environment:
       STANDALONE_KEYSTORE_PASS:
         from_secret: STANDALONE_KEYSTORE_PASS
@@ -34,7 +35,7 @@ steps:
 
   - name: Build Intermediate Android Release Artifact (.APK)
     commands:
-      - podman unshare ./ci.sh --build-apk
+      - ./ci.sh --build-apk
     environment:
       STANDALONE_KEYSTORE_PASS:
         from_secret: STANDALONE_KEYSTORE_PASS

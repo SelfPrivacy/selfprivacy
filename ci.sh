@@ -38,7 +38,9 @@ sign_apk_standalone () {
 }
 
 sign_apk_fdroid () {
-  podman_offline "/var/lib/builder/fdroid" "sh -c "if [[ ! -f repo/"$APP_NAME"_"$APP_BUILD_ID".apk ]]; then cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned; fi""
+  if [[ ! -f /var/lib/drone-runner-exec/fdroid/repo/"$APP_NAME"_"$APP_BUILD_ID".apk ]]; then
+    podman_offline "/var/lib/builder/fdroid" "cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned/"$APP_NAME"_"$APP_BUILD_ID".apk"
+  fi
   podman_offline "/var/lib/builder/fdroid" "fdroid publish"
   podman_offline "/var/lib/builder/fdroid" "fdroid update"
 }

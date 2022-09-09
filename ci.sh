@@ -54,31 +54,38 @@ while true; do
   case "$1" in
     --build-linux )
       build_linux
+      shift
       ;;
     --build-apk )
       build_apk
+      shift
       ;;
     --sign-apk-standalone )
       sign_apk_standalone
+      shift
       ;;
     --sign-apk-fdroid )
       sign_apk_fdroid
+      shift
       ;;
     --package-linux-appimage )
       package_linux_appimage
+      shift
       ;;
     --package-linux-flatpak )
       package_linux_flatpak
+      shift
       ;;
     --package-linux-archive )
       package_linux_archive
+      shift
       ;;
     -- )
+      shift
       break
       ;;
     *)
       usage
       ;;
   esac
-  shift
 done

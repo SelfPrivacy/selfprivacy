@@ -25,22 +25,16 @@ steps:
 
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:
-      - bash ci.sh --build-linux
+      - podman unshare ./ci.sh --build-linux
     environment:
       STANDALONE_KEYSTORE_PASS:
         from_secret: STANDALONE_KEYSTORE_PASS
       FDROID_KEYSTORE_PASS:
         from_secret: FDROID_KEYSTORE_PASS
 
-  - name: Debug
-    commands:
-      - ls -la
-      - cat ci.sh
-      - bash ci.sh
-
   - name: Build Intermediate Android Release Artifact (.APK)
     commands:
-      - bash ci.sh --build-apk
+      - podman unshare ./ci.sh --build-apk
     environment:
       STANDALONE_KEYSTORE_PASS:
         from_secret: STANDALONE_KEYSTORE_PASS

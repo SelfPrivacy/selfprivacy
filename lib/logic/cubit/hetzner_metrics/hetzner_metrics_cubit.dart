@@ -45,6 +45,10 @@ class HetznerMetricsCubit extends Cubit<HetznerMetricsState> {
       () => load(newState.period),
     );
 
-    emit(newState);
+    try {
+      emit(newState);
+    } on StateError {
+      print('Tried to emit Hetzner metrics when cubit is closed');
+    }
   }
 }

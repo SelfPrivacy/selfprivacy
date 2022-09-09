@@ -28,10 +28,10 @@ class ServerStorageListItem extends StatelessWidget {
     return Row(
       children: [
         if (showIcon)
-          const Icon(
+          Icon(
             Icons.storage_outlined,
             size: 24,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onBackground,
           ),
         if (showIcon) const SizedBox(width: 16),
         Expanded(
@@ -60,7 +60,7 @@ class ServerStorageListItem extends StatelessWidget {
                 'providers.storage.disk_total'.tr(
                   args: [
                     volume.sizeTotal.toString(),
-                    volume.name,
+                    volume.displayName,
                   ],
                 ),
                 style: subtitleStyle,

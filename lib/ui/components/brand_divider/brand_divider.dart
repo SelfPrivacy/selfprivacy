@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 
 class BrandDivider extends StatelessWidget {
   const BrandDivider({final super.key});
@@ -8,6 +7,6 @@ class BrandDivider extends StatelessWidget {
   Widget build(final BuildContext context) => Container(
         width: double.infinity,
         height: 1,
-        color: BrandColors.dividerColor,
+        color: Theme.of(context).colorScheme.onSurface.withAlpha(30),
       );
 }

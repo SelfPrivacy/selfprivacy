@@ -22,8 +22,7 @@ steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
-      - podman volume exists src || podman volume rm -f src
-      - podman volume create src
+      - if podman volume exists src; then podman volume rm -f src; podman volume create src; else podman volume create src; fi
       - git archive --format=tar HEAD | podman volume import src -
 
   - name: Build Intermediate Linux Release Artifact (Binary)

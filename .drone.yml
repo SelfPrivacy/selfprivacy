@@ -18,10 +18,11 @@ kind: pipeline
 type: exec
 name: Release
 
-environment:
-  HOME: /var/lib/drone-runner-exec
-
 steps:
+  - name: Prepare
+    commands:
+      - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+
   - name: Debug
     commands:
       - echo $HOME

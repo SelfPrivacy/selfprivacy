@@ -15,11 +15,11 @@ usage () {
 }
 
 podman_offline () {
-  podman run --rm -v "src:/var/lib/builder/src:U" -v "/var/lib/drone-runner-exec/fdroid:/var/lib/builder/fdroid:U" -v "/var/lib/drone-runner-exec/fdroid-keystore:/var/lib/builder/fdroid/fdroid-keystore:U" -v "/var/lib/drone-runner-exec/standalone-keystore:/var/lib/builder/fdroid/standalone-keystore:U" --env FDROID_KEYSTORE_PASS="$FDROID_KEYSTORE_PASS" --env STANDALONE_KEYSTORE_PASS="$STANDALONE_KEYSTORE_PASS" --network=none --workdir $1 "$CONTAINER_IMAGE" ${@:2}
+  podman run --rm -v "src:/var/lib/builder/src:U" -v "/var/lib/drone-runner-exec/fdroid:/var/lib/builder/fdroid:U" -v "/var/lib/drone-runner-exec/fdroid-keystore:/var/lib/builder/fdroid/fdroid-keystore:U" -v "/var/lib/drone-runner-exec/standalone-keystore:/var/lib/builder/fdroid/standalone-keystore:U" --env FDROID_KEYSTORE_PASS="$FDROID_KEYSTORE_PASS" --env STANDALONE_KEYSTORE_PASS="$STANDALONE_KEYSTORE_PASS" --network=none --workdir $1 "$CONTAINER_IMAGE" "${@:2}"
 }
 
 podman_online () {
-  podman run --rm -v "src:/var/lib/builder/src:U" --privileged --workdir $1 "$CONTAINER_IMAGE" ${@:2}
+  podman run --rm -v "src:/var/lib/builder/src:U" --privileged --workdir $1 "$CONTAINER_IMAGE" "${@:2}"
 }
 
 build_linux () {
@@ -39,7 +39,7 @@ sign_apk_standalone () {
 
 sign_apk_fdroid () {
   podman_offline "/var/lib/builder/fdroid" "rm -rf unsigned/*"
-  podman_offline "/var/lib/builder/fdroid" bash -c "if [[ ! -f repo/"$APP_NAME"_"$APP_BUILD_ID".apk ]]; then cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned/"$APP_NAME"_"$APP_BUILD_ID".apk; else echo hello; fi"
+  podman_offline "/var/lib/builder/fdroid" bash -c "if [[ ! -f repo/"$APP_NAME"_"$APP_BUILD_ID".apk ]]; then cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned/"$APP_NAME"_"$APP_BUILD_ID".apk; fi"
   podman_offline "/var/lib/builder/fdroid" "fdroid publish"
   podman_offline "/var/lib/builder/fdroid" "fdroid update"
 }

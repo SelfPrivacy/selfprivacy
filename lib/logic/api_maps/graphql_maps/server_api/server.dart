@@ -7,7 +7,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
@@ -47,10 +46,8 @@ class ServerApi extends ApiMap
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken = '',
-  }) {
-    final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
-    rootAddress = serverDomain?.domainName ?? '';
-  }
+  });
+
   @override
   bool hasLogger;
   @override
@@ -58,7 +55,7 @@ class ServerApi extends ApiMap
   @override
   String customToken;
   @override
-  String? rootAddress;
+  String? get rootAddress => getIt<ApiConfigModel>().serverDomain?.domainName;
 
   Future<String?> getApiVersion() async {
     QueryResult response;

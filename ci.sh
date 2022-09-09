@@ -39,7 +39,7 @@ sign_apk_standalone () {
 
 sign_apk_fdroid () {
   podman_offline "/var/lib/builder/fdroid" "rm -rf unsigned/*"
-  podman_offline "/var/lib/builder/fdroid" bash -c "if [[ ! -f repo/"$APP_NAME"_"$APP_BUILD_ID".apk ]]; then cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned/"$APP_NAME"_"$APP_BUILD_ID".apk; else echo hello; fi"
+  podman_offline "/var/lib/builder/fdroid" "bash -c "if [[ ! -f repo/"$APP_NAME"_"$APP_BUILD_ID".apk ]]; then echo hello; else echo bye; fi""
   podman_offline "/var/lib/builder/fdroid" "fdroid publish"
   podman_offline "/var/lib/builder/fdroid" "fdroid update"
 }

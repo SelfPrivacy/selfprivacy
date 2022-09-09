@@ -19,6 +19,10 @@ type: exec
 name: Release
 
 steps:
+  - name: Debug
+    commands:
+      - ls -la
+
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:
       - ./ci.sh --build-linux

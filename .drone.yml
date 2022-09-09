@@ -23,12 +23,6 @@ steps:
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
 
-  - name: Debug
-    commands:
-      - echo $HOME
-      - podman images
-      - ls -la
-
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:
       - ./ci.sh --build-linux

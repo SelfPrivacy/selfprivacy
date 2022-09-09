@@ -10,7 +10,7 @@ usage () {
 }
 
 podman_offline () {
-  podman run --rm -v "`pwd`:/var/lib/builder/src:U" -v "$HOME/fdroid:/var/lib/builder/repo:U" -v "$HOME/fdroid-keystore:/var/lib/builder/repo/fdroid-keystore:U" -v "$HOME/standalone-keystore:/var/lib/builder/repo/standalone-keystore:U" --env FDROID_KEYSTORE_PASS="$FDROID_KEYSTORE_PASS" --env STANDALONE_KEYSTORE_PASS="$STANDALONE_KEYSTORE_PASS" --network=none --workdir "$1" "$CONTAINER_IMAGE" "$2"
+  podman run --rm -v "`pwd`:/var/lib/builder/src:U" -v "/var/lib/drone-runner-exec/fdroid:/var/lib/builder/repo:U" -v "/var/lib/drone-runner-exec/fdroid-keystore:/var/lib/builder/repo/fdroid-keystore:U" -v "/var/lib/drone-runner-exec/standalone-keystore:/var/lib/builder/repo/standalone-keystore:U" --env FDROID_KEYSTORE_PASS="$FDROID_KEYSTORE_PASS" --env STANDALONE_KEYSTORE_PASS="$STANDALONE_KEYSTORE_PASS" --network=none --workdir "$1" "$CONTAINER_IMAGE" "$2"
 }
 
 podman_online () {

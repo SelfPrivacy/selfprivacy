@@ -2,13 +2,13 @@ kind: pipeline
 type: exec
 name: Continuous Integration
 
+environment:
+  test: echo hi
+
 steps:
-  - name: Build Debug Artifacts
+  - name: Test
     commands:
-      - flutter build apk --debug --split-per-abi
-      - mv build/app/outputs/flutter-apk/*-debug.apk .
-      - rename app pro.kherel.selfprivacy *.apk && rename debug "$DRONE_COMMIT" *.apk
-      - ls *.apk
+      - "$test"
 
 trigger:
   event:
@@ -18,98 +18,81 @@ trigger:
 node:
   server: builder
 
----
+#---
 
-kind: pipeline
-type: exec
-name: Release
-
-steps:
-  - name: Prepare for Build
-    commands:
-      # Reset building environment
-      - nixos-container stop isolated
-      - nixos-container start isolated
-      # Prepare SSH keys
-      - eval `ssh-agent -s`
-      - echo "$SSH_PRIVATE_KEY" | ssh-add -
-      # Copy sources to the building environment
-      - scp -r `pwd` builder@isolated:~
-    environment:
-      SSH_PRIVATE_KEY:
-        from_secret: SSH_PRIVATE_KEY
-
-  - name: Build Intermediate Release Artifact
-    commands:
-      # Prepare SSH keys
-      - eval `ssh-agent -s`
-      - echo "$SSH_PRIVATE_KEY" | ssh-add -
-      # Build intermediate release artifact
-      - ssh builder@isolated "cd src && flutter build apk --release"
-      # Fetch the release artifact
-      - scp builder@isolated:src/build/app/outputs/flutter-apk/app-release.apk .
-    environment:
-      SSH_PRIVATE_KEY:
-        from_secret: SSH_PRIVATE_KEY
-
-  - name: Sign Release Artifact for Standalone Use
-    commands:
-      # Get app build ID
-      - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
-      # Prepare SSH keys
-      - eval `ssh-agent -s`
-      - echo "$SSH_PRIVATE_KEY" | ssh-add -
-      # Upload and sign the artifact
-      - scp app-release.apk builder@isolated:~
-      - ssh builder@isolated "zipalign -f -v 4 app-release.apk standalone_app-release.apk && apksigner sign --ks /run/secrets/standalone-keystore --ks-key-alias standalone --ks-pass file:/run/secrets/standalone-keystore-pass standalone_app-release.apk"
-      # Fetch the signed artifact
-      - scp builder@isolated:standalone_app-release.apk standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk
-      - scp builder@isolated:standalone_app-release.apk.idsig standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk.idsig
-    environment:
-      SSH_PRIVATE_KEY:
-        from_secret: SSH_PRIVATE_KEY
-
-  - name: Sign Release Artifact for F-Droid Repository
-    commands:
-      # Get app build ID
-      - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
-      # Prepare SSH keys
-      - eval `ssh-agent -s`
-      - echo "$SSH_PRIVATE_KEY" | ssh-add -
-      # Upload and sign the artifact
-      - scp app-release.apk fdroid@isolated:unsigned/pro.kherel.selfprivacy_"$APP_BUILD_ID".apk
-      - ssh fdroid@isolated 'export FDROID_KEY_STORE_PASS=`cat /run/secrets/fdroid-keystore-pass` && fdroid publish && fdroid update'
-      - scp -r fdroid@isolated:repo .
-    environment:
-      SSH_PRIVATE_KEY:
-        from_secret: SSH_PRIVATE_KEY
-
-  - name: Create Release on Gitea Repository
-    commands:
-      # Get app build ID
-      - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
-      # Prepare tea CLI
-      - tea login add --token "$GITEA_RELEASE_TOKEN" --url https://git.selfprivacy.org
-      # Create release and push artifacts
-      - tea releases create --repo "$DRONE_REPO" --tag "$DRONE_SEMVER" --title "$DRONE_SEMVER" --asset standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk --asset standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk.idsig
-    environment:
-      GITEA_RELEASE_TOKEN:
-        from_secret: GITEA_RELEASE_TOKEN
-
-  - name: Deploy F-Droid Repository
-    commands:
-      # Prepare SSH keys
-      - eval `ssh-agent -s`
-      - echo "$SSH_PRIVATE_KEY" | ssh-add -
-      # Copy the repository to the production server
-      - scp -r repo/* deployer@production:/var/www/fdroid.selfprivacy.org
-    environment:
-      SSH_PRIVATE_KEY:
-        from_secret: SSH_PRIVATE_KEY
-
-trigger:
-  event:
-    - tag
-
-node:
-  server: builder
+#kind: pipeline
+#type: exec
+#name: Release
+#
+#steps:
+#  - name: Build Intermediate Release Artifact
+#    commands:
+#      # Prepare SSH keys
+#      - eval `ssh-agent -s`
+#      - echo "$SSH_PRIVATE_KEY" | ssh-add -
+#      # Build intermediate release artifact
+#      - ssh builder@isolated "cd src && flutter build apk --release"
+#      # Fetch the release artifact
+#      - scp builder@isolated:src/build/app/outputs/flutter-apk/app-release.apk .
+#
+#  - name: Sign Release Artifact for Standalone Use
+#    commands:
+#      # Get app build ID
+#      - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
+#      # Prepare SSH keys
+#      - eval `ssh-agent -s`
+#      - echo "$SSH_PRIVATE_KEY" | ssh-add -
+#      # Upload and sign the artifact
+#      - scp app-release.apk builder@isolated:~
+#      - ssh builder@isolated "zipalign -f -v 4 app-release.apk standalone_app-release.apk && apksigner sign --ks /run/secrets/standalone-keystore --ks-key-alias standalone --ks-pass file:/run/secrets/standalone-keystore-pass standalone_app-release.apk"
+#      # Fetch the signed artifact
+#      - scp builder@isolated:standalone_app-release.apk standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk
+#      - scp builder@isolated:standalone_app-release.apk.idsig standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk.idsig
+#    environment:
+#      SSH_PRIVATE_KEY:
+#        from_secret: SSH_PRIVATE_KEY
+#
+#  - name: Sign Release Artifact for F-Droid Repository
+#    commands:
+#      # Get app build ID
+#      - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
+#      # Prepare SSH keys
+#      - eval `ssh-agent -s`
+#      - echo "$SSH_PRIVATE_KEY" | ssh-add -
+#      # Upload and sign the artifact
+#      - scp app-release.apk fdroid@isolated:unsigned/pro.kherel.selfprivacy_"$APP_BUILD_ID".apk
+#      - ssh fdroid@isolated 'export FDROID_KEY_STORE_PASS=`cat /run/secrets/fdroid-keystore-pass` && fdroid publish && fdroid update'
+#      - scp -r fdroid@isolated:repo .
+#    environment:
+#      SSH_PRIVATE_KEY:
+#        from_secret: SSH_PRIVATE_KEY
+#
+#  - name: Create Release on Gitea Repository
+#    commands:
+#      # Get app build ID
+#      - export APP_BUILD_ID=`yq '.version' pubspec.yaml | cut -d "+" -f2`
+#      # Prepare tea CLI
+#      - tea login add --token "$GITEA_RELEASE_TOKEN" --url https://git.selfprivacy.org
+#      # Create release and push artifacts
+#      - tea releases create --repo "$DRONE_REPO" --tag "$DRONE_SEMVER" --title "$DRONE_SEMVER" --asset standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk --asset standalone_pro.kherel.selfprivacy_"$APP_BUILD_ID".apk.idsig
+#    environment:
+#      GITEA_RELEASE_TOKEN:
+#        from_secret: GITEA_RELEASE_TOKEN
+#
+#  - name: Deploy F-Droid Repository
+#    commands:
+#      # Prepare SSH keys
+#      - eval `ssh-agent -s`
+#      - echo "$SSH_PRIVATE_KEY" | ssh-add -
+#      # Copy the repository to the production server
+#      - scp -r repo/* deployer@production:/var/www/fdroid.selfprivacy.org
+#    environment:
+#      SSH_PRIVATE_KEY:
+#        from_secret: SSH_PRIVATE_KEY
+#
+#trigger:
+#  event:
+#    - tag
+#
+#node:
+#  server: builder

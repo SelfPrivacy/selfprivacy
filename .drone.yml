@@ -26,18 +26,38 @@ steps:
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:
       - ./ci.sh --build-linux
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
 
   - name: Build Intermediate Android Release Artifact (.APK)
     commands:
       - ./ci.sh --build-apk
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
 
   - name: Sign Android Release Artifact (.APK) for Standalone Use
     commands:
       - ./ci.sh --sign-apk-standalone
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
 
   - name: Sign Android Release Artifact (.APK) for F-Droid Repository
     commands:
       - ./ci.sh --sign-apk-fdroid
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
 
   - name: Package Linux AppImage Artifact
     commands:

@@ -73,6 +73,9 @@ while true; do
     --package-linux-archive )
       package_linux_archive
       ;;
+    -- )
+      break
+      ;;
     *)
       usage
       ;;

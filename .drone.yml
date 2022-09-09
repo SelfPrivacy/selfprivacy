@@ -8,7 +8,7 @@ environment:
 steps:
   - name: Test
     commands:
-      - `$test`
+      - $($test)
 
 trigger:
   event:

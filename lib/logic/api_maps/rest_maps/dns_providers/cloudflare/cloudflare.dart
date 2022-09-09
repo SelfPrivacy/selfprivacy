@@ -76,22 +76,23 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<String> getZoneId(final String domain) async {
-    validateStatus = (final status) =>
-        status == HttpStatus.ok || status == HttpStatus.forbidden;
+  Future<String?> getZoneId(final String domain) async {
+    String? zoneId;
+
     final Dio client = await getClient();
-    final Response response = await client.get(
-      '/zones',
-      queryParameters: {'name': domain},
-    );
-
-    close(client);
-
-    if (response.data['result'].isEmpty) {
-      throw DomainNotFoundException('No domains found');
-    } else {
-      return response.data['result'][0]['id'];
+    try {
+      final Response response = await client.get(
+        '/zones',
+        queryParameters: {'name': domain},
+      );
+      zoneId = response.data['result'][0]['id'];
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
     }
+
+    return zoneId;
   }
 
   @override
@@ -105,21 +106,25 @@ class CloudflareApi extends DnsProviderApi {
     final String url = '/zones/$domainZoneId/dns_records';
 
     final Dio client = await getClient();
-    final Response response = await client.get(url);
+    try {
+      final Response response = await client.get(url);
 
-    final List records = response.data['result'] ?? [];
-    final List<Future> allDeleteFutures = <Future>[];
+      final List records = response.data['result'] ?? [];
+      final List<Future> allDeleteFutures = <Future>[];
 
-    for (final record in records) {
-      if (record['zone_name'] == domainName) {
-        allDeleteFutures.add(
-          client.delete('$url/${record["id"]}'),
-        );
+      for (final record in records) {
+        if (record['zone_name'] == domainName) {
+          allDeleteFutures.add(
+            client.delete('$url/${record["id"]}'),
+          );
+        }
       }
+      await Future.wait(allDeleteFutures);
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
     }
-
-    await Future.wait(allDeleteFutures);
-    close(client);
   }
 
   @override
@@ -252,27 +257,38 @@ class CloudflareApi extends DnsProviderApi {
     );
 
     final Dio client = await getClient();
-    await client.post(
-      url,
-      data: dkimRecord.toJson(),
-    );
-
-    client.close();
+    try {
+      await client.post(
+        url,
+        data: dkimRecord.toJson(),
+      );
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
   }
 
   @override
   Future<List<String>> domainList() async {
     final String url = '$rootAddress/zones';
+    List<String> domains = [];
+
     final Dio client = await getClient();
+    try {
+      final Response response = await client.get(
+        url,
+        queryParameters: {'per_page': 50},
+      );
+      domains = response.data['result']
+          .map<String>((final el) => el['name'] as String)
+          .toList();
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
 
-    final Response response = await client.get(
-      url,
-      queryParameters: {'per_page': 50},
-    );
-
-    close(client);
-    return response.data['result']
-        .map<String>((final el) => el['name'] as String)
-        .toList();
+    return domains;
   }
 }

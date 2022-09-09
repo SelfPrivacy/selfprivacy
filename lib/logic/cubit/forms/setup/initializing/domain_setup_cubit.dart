@@ -31,19 +31,21 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
     emit(Loading(LoadingTypes.saving));
 
-    final String zoneId = await serverInstallationCubit
+    final String? zoneId = await serverInstallationCubit
         .repository.dnsProviderApiFactory!
         .getDnsProvider()
         .getZoneId(domainName);
 
-    final ServerDomain domain = ServerDomain(
-      domainName: domainName,
-      zoneId: zoneId,
-      provider: DnsProvider.cloudflare,
-    );
+    if (zoneId != null) {
+      final ServerDomain domain = ServerDomain(
+        domainName: domainName,
+        zoneId: zoneId,
+        provider: DnsProvider.cloudflare,
+      );
 
-    serverInstallationCubit.setDomain(domain);
-    emit(DomainSet());
+      serverInstallationCubit.setDomain(domain);
+      emit(DomainSet());
+    }
   }
 }
 

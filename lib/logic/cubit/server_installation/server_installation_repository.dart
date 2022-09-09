@@ -169,12 +169,8 @@ class ServerInstallationRepository {
       ),
     );
 
-    try {
-      final String domainId = await dnsProviderApi.getZoneId(domain);
-      return domainId;
-    } on DomainNotFoundException {
-      return null;
-    }
+    final String? domainId = await dnsProviderApi.getZoneId(domain);
+    return domainId;
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(

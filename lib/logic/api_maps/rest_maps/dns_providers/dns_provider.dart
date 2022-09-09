@@ -23,7 +23,7 @@ abstract class DnsProviderApi extends ApiMap {
     final String dkimRecordString,
     final ServerDomain domain,
   );
-  Future<String> getZoneId(final String domain);
+  Future<String?> getZoneId(final String domain);
   Future<List<String>> domainList();
 
   Future<bool> isApiTokenValid(final String token);

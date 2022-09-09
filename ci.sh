@@ -2,7 +2,7 @@
 set -o errexit -o pipefail -o noclobber -o nounset -x
 
 CONTAINER_IMAGE="localhost/flutter-build-env"
-OPTS=$(getopt -o "" --long "build-linux,build-apk,sign-apk-standalone,sign-apk-fdroid,package-linux-appimage,package-linux-flatpak,package-linux-archive" -- "$@")
+OPTS=$(getopt -o "" --long "test,test2,test3,build-linux,build-apk,sign-apk-standalone,sign-apk-fdroid,package-linux-appimage,package-linux-flatpak,package-linux-archive" -- "$@")
 eval set -- "$OPTS"
 
 usage () {
@@ -52,8 +52,16 @@ package_linux_archive () {
 
 while true; do
   case "$1" in
-    --build-linux )
-      build_linux
+    --test )
+      echo 1
+      shift
+      ;;
+    --test2 )
+      echo 2
+      shift
+      ;;
+    --test3 )
+      echo 3
       shift
       ;;
     --build-apk )

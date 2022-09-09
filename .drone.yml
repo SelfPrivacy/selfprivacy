@@ -23,59 +23,65 @@ steps:
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
 
-  - name: Build Intermediate Linux Release Artifact (Binary)
+  - name: Test 1
     commands:
-      - bash ci.sh --build-linux
-    environment:
-      STANDALONE_KEYSTORE_PASS:
-        from_secret: STANDALONE_KEYSTORE_PASS
-      FDROID_KEYSTORE_PASS:
-        from_secret: FDROID_KEYSTORE_PASS
+      - ./ci.sh --test
 
-  - name: Debug
+  - name: Test 2
     commands:
-      - ls -la
-      - cat ci.sh
-      - bash ci.sh
+      - ./ci.sh --test2
 
-  - name: Build Intermediate Android Release Artifact (.APK)
+  - name: Test 3
     commands:
-      - bash ci.sh --build-apk
-    environment:
-      STANDALONE_KEYSTORE_PASS:
-        from_secret: STANDALONE_KEYSTORE_PASS
-      FDROID_KEYSTORE_PASS:
-        from_secret: FDROID_KEYSTORE_PASS
+      - ./ci.sh --test3
 
-  - name: Sign Android Release Artifact (.APK) for Standalone Use
-    commands:
-      - ./ci.sh --sign-apk-standalone
-    environment:
-      STANDALONE_KEYSTORE_PASS:
-        from_secret: STANDALONE_KEYSTORE_PASS
-      FDROID_KEYSTORE_PASS:
-        from_secret: FDROID_KEYSTORE_PASS
+#  - name: Build Intermediate Linux Release Artifact (Binary)
+#    commands:
+#      - bash ci.sh --build-linux
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
 
-  - name: Sign Android Release Artifact (.APK) for F-Droid Repository
-    commands:
-      - ./ci.sh --sign-apk-fdroid
-    environment:
-      STANDALONE_KEYSTORE_PASS:
-        from_secret: STANDALONE_KEYSTORE_PASS
-      FDROID_KEYSTORE_PASS:
-        from_secret: FDROID_KEYSTORE_PASS
+#  - name: Build Intermediate Android Release Artifact (.APK)
+#    commands:
+#      - bash ci.sh --build-apk
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
 
-  - name: Package Linux AppImage Artifact
-    commands:
-      - ./ci.sh --package-linux-appimage
+#  - name: Sign Android Release Artifact (.APK) for Standalone Use
+#    commands:
+#      - ./ci.sh --sign-apk-standalone
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
 
-  - name: Package Linux Flatpak Artifact
-    commands:
-      - ./ci.sh --package-linux-flatpak
+#  - name: Sign Android Release Artifact (.APK) for F-Droid Repository
+#    commands:
+#      - ./ci.sh --sign-apk-fdroid
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
 
-  - name: Package Linux Archive Artifact
-    commands:
-      - ./ci.sh --package-linux-archive
+#  - name: Package Linux AppImage Artifact
+#    commands:
+#      - ./ci.sh --package-linux-appimage
+
+#  - name: Package Linux Flatpak Artifact
+#    commands:
+#      - ./ci.sh --package-linux-flatpak
+
+#  - name: Package Linux Archive Artifact
+#    commands:
+#      - ./ci.sh --package-linux-archive
 
 trigger:
   event:

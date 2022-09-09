@@ -15,46 +15,46 @@ usage () {
 }
 
 podman_offline () {
-  podman run --rm -v "src:/var/lib/builder/src:U" -v "/var/lib/drone-runner-exec/fdroid:/var/lib/builder/fdroid:U" -v "/var/lib/drone-runner-exec/fdroid-keystore:/var/lib/builder/fdroid/fdroid-keystore:U" -v "/var/lib/drone-runner-exec/standalone-keystore:/var/lib/builder/fdroid/standalone-keystore:U" --env FDROID_KEYSTORE_PASS="$FDROID_KEYSTORE_PASS" --env STANDALONE_KEYSTORE_PASS="$STANDALONE_KEYSTORE_PASS" --network=none --workdir $1 "$CONTAINER_IMAGE" "${@:2}"
+  podman run --rm -v src:/var/lib/builder/src:U -v /var/lib/drone-runner-exec/fdroid:/var/lib/builder/fdroid:U -v /var/lib/drone-runner-exec/fdroid-keystore:/var/lib/builder/fdroid/fdroid-keystore:U -v /var/lib/drone-runner-exec/standalone-keystore:/var/lib/builder/fdroid/standalone-keystore:U --env FDROID_KEYSTORE_PASS="$FDROID_KEYSTORE_PASS" --env STANDALONE_KEYSTORE_PASS="$STANDALONE_KEYSTORE_PASS" --network=none --workdir $1 "$CONTAINER_IMAGE" ${@:2}
 }
 
 podman_online () {
-  podman run --rm -v "src:/var/lib/builder/src:U" --privileged --workdir $1 "$CONTAINER_IMAGE" "${@:2}"
+  podman run --rm -v src:/var/lib/builder/src:U --privileged --workdir $1 "$CONTAINER_IMAGE" ${@:2}
 }
 
 build_linux () {
-  podman_offline "/var/lib/builder/src" "flutter pub get --offline"
-  podman_offline "/var/lib/builder/src" "flutter build linux"
+  podman_offline "/var/lib/builder/src" flutter pub get --offline
+  podman_offline "/var/lib/builder/src" flutter build linux
 }
 
 build_apk () {
-  podman_offline "/var/lib/builder/src" "flutter pub get --offline"
-  podman_offline "/var/lib/builder/src" "flutter build apk"
+  podman_offline "/var/lib/builder/src" flutter pub get --offline
+  podman_offline "/var/lib/builder/src" flutter build apk
 }
 
 sign_apk_standalone () {
-  podman_offline "/var/lib/builder/fdroid" "zipalign -f -v 4 ../src/build/app/outputs/flutter-apk/app-release.apk standalone_"$APP_NAME"-"$APP_SEMVER".apk"
-  podman_offline "/var/lib/builder/fdroid" "apksigner sign --ks standalone-keystore --ks-key-alias standalone --ks-pass env:STANDALONE_KEYSTORE_PASS standalone_"$APP_NAME"-"$APP_SEMVER".apk"
+  podman_offline "/var/lib/builder/fdroid" zipalign -f -v 4 ../src/build/app/outputs/flutter-apk/app-release.apk standalone_"$APP_NAME"-"$APP_SEMVER".apk
+  podman_offline "/var/lib/builder/fdroid" apksigner sign --ks standalone-keystore --ks-key-alias standalone --ks-pass env:STANDALONE_KEYSTORE_PASS standalone_"$APP_NAME"-"$APP_SEMVER".apk
 }
 
 sign_apk_fdroid () {
-  podman_offline "/var/lib/builder/fdroid" "rm -rf unsigned/*"
+  podman_offline "/var/lib/builder/fdroid" rm -rf unsigned/*
   podman_offline "/var/lib/builder/fdroid" bash -c "if [[ ! -f repo/"$APP_NAME"_"$APP_BUILD_ID".apk ]]; then cp ../src/build/app/outputs/flutter-apk/app-release.apk unsigned/"$APP_NAME"_"$APP_BUILD_ID".apk; fi"
-  podman_offline "/var/lib/builder/fdroid" "fdroid publish"
-  podman_offline "/var/lib/builder/fdroid" "fdroid update"
+  podman_offline "/var/lib/builder/fdroid" fdroid publish
+  podman_offline "/var/lib/builder/fdroid" fdroid update
 }
 
 package_linux_appimage () {
-  podman_online "/var/lib/builder/src" "appimage-builder --recipe appimage.yml"
+  podman_online "/var/lib/builder/src" appimage-builder --recipe appimage.yml
 }
 
 package_linux_flatpak () {
-  podman_online "/var/lib/builder/src" "flatpak-builder --disable-rofiles-fuse --force-clean --repo=flatpak-repo flatpak-build flatpak.yml"
-  podman_online "/var/lib/builder/src" "flatpak build-bundle flatpak-repo $APP_NAME-$APP_SEMVER.flatpak pro.kherel.selfprivacy"
+  podman_online "/var/lib/builder/src" flatpak-builder --disable-rofiles-fuse --force-clean --repo=flatpak-repo flatpak-build flatpak.yml
+  podman_online "/var/lib/builder/src" flatpak build-bundle flatpak-repo $APP_NAME-$APP_SEMVER.flatpak pro.kherel.selfprivacy
 }
 
 package_linux_archive () {
-  podman_online "/var/lib/builder/src" "tar -C build/linux/x64/release/bundle -vacf $APP_NAME-$APP_SEMVER.tar.zstd ."
+  podman_online "/var/lib/builder/src" tar -C build/linux/x64/release/bundle -vacf $APP_NAME-$APP_SEMVER.tar.zstd .
 }
 
 while true; do

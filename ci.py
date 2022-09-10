@@ -14,7 +14,7 @@ APP_VERSION_FULL = yaml.safe_load(open("pubspec.yaml", "r"))['version']
 APP_SEMVER = APP_VERSION_FULL[:APP_VERSION_FULL.find("+")]
 APP_BUILD_ID = APP_VERSION_FULL[APP_VERSION_FULL.find("+"):][1::]
 
-HOST_MOUNTED_VOLUME = t"{HOST_HOME}/.local/share/containers/storage/volumes/src/_data"
+HOST_MOUNTED_VOLUME = f"{HOST_HOME}/.local/share/containers/storage/volumes/src/_data"
 
 def podman_offline(dir, *args):
   subprocess.run(["podman", "run", "--rm", "--network=none", f"--workdir={dir}",

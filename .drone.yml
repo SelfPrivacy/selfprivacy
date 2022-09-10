@@ -101,8 +101,6 @@ steps:
 
   - name: Deploy F-Droid Repo
     commands:
-      - eval `ssh-agent -s`
-      - echo "$SSH_PRIVATE_KEY" | ssh-add -
       - podman unshare ./ci.py --deploy-fdroid-repo
     environment:
       SSH_PRIVATE_KEY:

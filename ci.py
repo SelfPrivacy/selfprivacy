@@ -46,7 +46,10 @@ def deploy_gitea_release():
                   "--asset", f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.tar.zstd"])
 
 def deploy_fdroid_repo():
-  subprocess.run(["scp", "-r", f"{HOST_HOME}/fdroid/repo/*",
+  subprocess.run(["eval $(ssh-agent -s)"], shell=True)
+  subprocess.run(["printf " + os.environ.get('SSH_PRIVATE_KEY') + " | ssh-add -"], shell=True)
+  subprocess.run(["scp", "-oStrictHostKeyChecking=no", "-oUserKnownHostsFile=/dev/null",
+                  "-r", f"{HOST_HOME}/fdroid/repo/*",
                   "deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org"])
 
 if __name__ == "__main__":

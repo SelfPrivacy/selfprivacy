@@ -1,0 +1,46 @@
+app-id: pro.kherel.selfprivacy
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
+command: selfprivacy
+finish-args:
+  - "--share=ipc"
+  - "--socket=x11"
+  - "--socket=fallback-x11"
+  - "--socket=wayland"
+  - "--share=network"
+  - "--own-name=pro.kherel.selfprivacy"
+modules:
+  - name: selfprivacy
+    buildsystem: simple
+    build-commands:
+      - cp -r * /app
+      - mkdir /app/bin
+      - ln -s /app/selfprivacy /app/bin/selfprivacy
+      - install -Dm644 logo.svg /app/share/icons/hicolor/scalable/apps/pro.kherel.selfprivacy.svg
+      - install -Dm644 pro.kherel.selfprivacy.desktop /app/share/applications/pro.kherel.selfprivacy.desktop
+    sources:
+      - type: dir
+        path: build/linux/x64/release/bundle
+      - type: file
+        path: assets/images/icon/logo.svg
+      - type: file
+        path: pro.kherel.selfprivacy.desktop
+  - name: libsecret
+    buildsystem: meson
+    config-opts:
+      - "-Dvapi=false"
+      - "-Dgtk_doc=false"
+    sources:
+      - type: git
+        url: https://gitlab.gnome.org/GNOME/libsecret.git
+        tag: 0.20.5
+  - name: libjsoncpp
+    buildsystem: meson
+    config-opts:
+      - "--buildtype=release"
+      - "--default-library=shared"
+    sources:
+      - type: git
+        url: https://github.com/open-source-parsers/jsoncpp.git
+        tag: 1.9.5

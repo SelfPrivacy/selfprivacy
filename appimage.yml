@@ -1,0 +1,53 @@
+# appimage-builder recipe see https://appimage-builder.readthedocs.io for details
+version: 1
+script:
+  - rm -rf AppDir || true
+  - cp -r build/linux/x64/release/bundle AppDir
+  - install -Dm644 assets/images/icon/logo.svg AppDir/usr/share/icons/hicolor/scalable/apps/pro.kherel.selfprivacy.svg
+AppDir:
+  path: AppDir
+  app_info:
+    id: pro.kherel.selfprivacy
+    name: SelfPrivacy
+    icon: pro.kherel.selfprivacy
+    version: 0.6.0
+    exec: selfprivacy
+    exec_args: $@
+  apt:
+    arch:
+      - amd64
+    allow_unauthenticated: true
+    sources:
+      - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy main restricted
+      - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted
+      - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy universe
+      - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy-updates universe
+      - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy multiverse
+      - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy-updates multiverse
+      - sourceline: deb http://archive.ubuntu.com/ubuntu/ jammy-backports main restricted universe multiverse
+      - sourceline: deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted
+      - sourceline: deb http://security.ubuntu.com/ubuntu/ jammy-security universe
+      - sourceline: deb http://security.ubuntu.com/ubuntu/ jammy-security multiverse
+    include:
+      - libjsoncpp-dev
+      - libsecret-1-0
+      - xdg-desktop-portal
+  test:
+    fedora-30:
+      image: appimagecrafters/tests-env:fedora-30
+      command: ./AppRun
+    debian-stable:
+      image: appimagecrafters/tests-env:debian-stable
+      command: ./AppRun
+    archlinux-latest:
+      image: appimagecrafters/tests-env:archlinux-latest
+      command: ./AppRun
+    centos-7:
+      image: appimagecrafters/tests-env:centos-7
+      command: ./AppRun
+    ubuntu-xenial:
+      image: appimagecrafters/tests-env:ubuntu-xenial
+      command: ./AppRun
+AppImage:
+  arch: x86_64
+  update-information: guess

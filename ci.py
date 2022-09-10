@@ -14,6 +14,8 @@ APP_VERSION_FULL = yaml.safe_load(open("pubspec.yaml", "r"))['version']
 APP_SEMVER = APP_VERSION_FULL[:APP_VERSION_FULL.find("+")]
 APP_BUILD_ID = APP_VERSION_FULL[APP_VERSION_FULL.find("+"):][1::]
 
+HOST_MOUNTED_VOLUME = t"{HOST_HOME}/.local/share/containers/storage/volumes/src/_data"
+
 def podman_offline(dir, *args):
   subprocess.run(["podman", "run", "--rm", "--network=none", f"--workdir={dir}",
                   "-v", f"src:{CONTAINER_HOME}/src:U",
@@ -31,6 +33,22 @@ def podman_online(dir, *args):
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ])
 
+def deploy_gitea_release():
+  subprocess.run(["tea", "login", "add", "--token", os.environ.get('GITEA_RELEASE_TOKEN'),
+                  "--url", "https://git.selfprivacy.org"])
+  subprocess.run(["tea", "releases", "create", "--repo", os.environ.get('DRONE_REPO'),
+                  "--tag", os.environ.get('DRONE_SEMVER'), "--title", os.environ.get('DRONE_SEMVER'),
+                  "--asset", f"{HOST_HOME}/fdroid/standalone_{APP_NAME}-{APP_SEMVER}.apk",
+                  "--asset", f"{HOST_HOME}/fdroid/standalone_{APP_NAME}-{APP_SEMVER}.apk.idsig",
+                  "--asset", f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage",
+                  "--asset", f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage.zsync",
+                  "--asset", f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.flatpak",
+                  "--asset", f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.tar.zstd"])
+
+def deploy_fdroid_repo():
+  subprocess.run(["scp", "-r", f"{HOST_HOME}/fdroid/repo/*",
+                  "deployer@production:/var/www/fdroid.selfprivacy.org"])
+
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   group = parser.add_mutually_exclusive_group()
@@ -41,6 +59,8 @@ if __name__ == "__main__":
   group.add_argument("--package-linux-appimage", action="store_true")
   group.add_argument("--package-linux-flatpak", action="store_true")
   group.add_argument("--package-linux-archive", action="store_true")
+  group.add_argument("--deploy-gitea-release", action="store_true")
+  group.add_argument("--deploy-fdroid-repo", action="store_true")
   args = parser.parse_args()
 
 if args.build_linux:
@@ -71,3 +91,7 @@ elif args.package_linux_flatpak:
   podman_online(f"{CONTAINER_HOME}/src", f"flatpak build-bundle flatpak-repo {APP_NAME}-{APP_SEMVER}.flatpak pro.kherel.selfprivacy")
 elif args.package_linux_archive:
   podman_online(f"{CONTAINER_HOME}/src", f"tar -C build/linux/x64/release/bundle -vacf {APP_NAME}-{APP_SEMVER}.tar.zstd .")
+elif args.deploy_gitea_release:
+  deploy_gitea_release()
+elif args.deploy_fdroid_repo:
+  deploy_fdroid_repo()

@@ -79,3 +79,40 @@ trigger:
 
 node:
   server: builder
+
+---
+
+kind: pipeline
+type: exec
+name: Deploy
+
+steps:
+  - name: Prepare
+    commands:
+      - podman unshare podman volume mount src
+
+  - name: Create Release and Deploy Artifacts
+    commands:
+      - podman unshare ./ci.py --deploy-gitea-release
+    environment:
+      GITEA_RELEASE_TOKEN:
+        from_secret: GITEA_RELEASE_TOKEN
+
+  - name: Deploy F-Droid Repo
+    commands:
+      - eval `ssh-agent -s`
+      - echo "$SSH_PRIVATE_KEY" | ssh-add -
+      - podman unshare ./ci.py --deploy-fdroid-repo
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
+
+trigger:
+  event:
+    - tag
+
+node:
+  server: builder
+
+depends_on:
+  - Release

@@ -36,7 +36,7 @@ def podman_online(dir, *args):
                  ])
 
 def podman_ci(dir, *args):
-  subprocess.run(["podman", "run", "-it", "--rm", "--privileged", f"--workdir={dir}",
+  subprocess.run(["podman", "run", "--rm", "--privileged", f"--workdir={dir}",
                   "-v", os.getcwd() + f":{CONTAINER_HOME}/src:U",
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ])

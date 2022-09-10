@@ -3,6 +3,10 @@ type: exec
 name: Continuous Integration
 
 steps:
+  - name: Prepare
+    commands:
+      - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+
   - name: Build
     commands:
       - ./ci.py --run-ci-build

@@ -17,9 +17,15 @@ modules:
       - cp -r * /app
       - mkdir /app/bin
       - ln -s /app/selfprivacy /app/bin/selfprivacy
+      - install -Dm644 logo.svg /app/share/icons/hicolor/scalable/apps/pro.kherel.selfprivacy.svg
+      - install -Dm644 pro.kherel.selfprivacy.desktop /app/share/applications/pro.kherel.selfprivacy.desktop
     sources:
       - type: dir
         path: build/linux/x64/release/bundle
+      - type: file
+        path: assets/images/icon/logo.svg
+      - type: file
+        path: pro.kherel.selfprivacy.desktop
   - name: libsecret
     buildsystem: meson
     config-opts:

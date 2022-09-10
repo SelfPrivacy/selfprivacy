@@ -27,7 +27,7 @@ steps:
 
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:
-      - ./ci.sh --build-linux
+      - ./ci.py --build-linux
     environment:
       STANDALONE_KEYSTORE_PASS:
         from_secret: STANDALONE_KEYSTORE_PASS
@@ -36,7 +36,7 @@ steps:
 
   - name: Build Intermediate Android Release Artifact (.APK)
     commands:
-      - ./ci.sh --build-apk
+      - ./ci.py --build-apk
     environment:
       STANDALONE_KEYSTORE_PASS:
         from_secret: STANDALONE_KEYSTORE_PASS
@@ -45,7 +45,7 @@ steps:
 
   - name: Sign Android Release Artifact (.APK) for Standalone Use
     commands:
-      - ./ci.sh --sign-apk-standalone
+      - ./ci.py --sign-apk-standalone
     environment:
       STANDALONE_KEYSTORE_PASS:
         from_secret: STANDALONE_KEYSTORE_PASS
@@ -54,7 +54,7 @@ steps:
 
   - name: Sign Android Release Artifact (.APK) for F-Droid Repository
     commands:
-      - ./ci.sh --sign-apk-fdroid
+      - ./ci.py --sign-apk-fdroid
     environment:
       STANDALONE_KEYSTORE_PASS:
         from_secret: STANDALONE_KEYSTORE_PASS
@@ -63,15 +63,15 @@ steps:
 
   - name: Package Linux AppImage Artifact
     commands:
-      - ./ci.sh --package-linux-appimage
+      - ./ci.py --package-linux-appimage
 
   - name: Package Linux Flatpak Artifact
     commands:
-      - ./ci.sh --package-linux-flatpak
+      - ./ci.py --package-linux-flatpak
 
   - name: Package Linux Archive Artifact
     commands:
-      - ./ci.sh --package-linux-archive
+      - ./ci.py --package-linux-archive
 
 trigger:
   event:

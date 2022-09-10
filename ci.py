@@ -47,7 +47,7 @@ def deploy_gitea_release():
 
 def deploy_fdroid_repo():
   subprocess.run(["scp", "-r", f"{HOST_HOME}/fdroid/repo/*",
-                  "deployer@production:/var/www/fdroid.selfprivacy.org"])
+                  "deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org"])
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()

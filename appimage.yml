@@ -32,6 +32,7 @@ AppDir:
     include:
       - libjsoncpp-dev
       - libsecret-1-0
+      - xdg-desktop-portal
   test:
     fedora-30:
       image: appimagecrafters/tests-env:fedora-30

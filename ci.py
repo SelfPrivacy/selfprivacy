@@ -16,6 +16,8 @@ APP_BUILD_ID = APP_VERSION_FULL[APP_VERSION_FULL.find("+"):][1::]
 
 HOST_MOUNTED_VOLUME = f"{HOST_HOME}/.local/share/containers/storage/volumes/src/_data"
 
+# Environments
+
 def podman_offline(dir, *args):
   subprocess.run(["podman", "run", "--rm", "--network=none", f"--workdir={dir}",
                   "-v", f"src:{CONTAINER_HOME}/src:U",
@@ -33,6 +35,43 @@ def podman_online(dir, *args):
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ])
 
+# Targets
+
+def build_linux():
+  podman_offline(f"{CONTAINER_HOME}/src", "flutter pub get --offline")
+  podman_offline(f"{CONTAINER_HOME}/src", "flutter build linux")
+
+def build_apk():
+  podman_offline(f"{CONTAINER_HOME}/src", "flutter pub get --offline")
+  podman_offline(f"{CONTAINER_HOME}/src", "flutter build apk")
+
+def sign_apk_standalone():
+  podman_offline(f"{CONTAINER_HOME}/fdroid",
+                 "zipalign -f -v 4 ../src/build/app/outputs/flutter-apk/app-release.apk",
+                 f"standalone_{APP_NAME}-{APP_SEMVER}.apk")
+  podman_offline(f"{CONTAINER_HOME}/fdroid",
+                 "apksigner sign --ks standalone-keystore --ks-key-alias standalone --ks-pass",
+                 f"env:STANDALONE_KEYSTORE_PASS standalone_{APP_NAME}-{APP_SEMVER}.apk")
+
+def sign_apk_fdroid():
+  podman_offline(f"{CONTAINER_HOME}/fdroid", f"rm -rf {CONTAINER_HOME}/fdroid/unsigned/*")
+  podman_offline(f"{CONTAINER_HOME}/fdroid",
+                 f"test ! -f {CONTAINER_HOME}/fdroid/repo/{APP_NAME}_{APP_BUILD_ID}.apk",
+                 "&& cp ../src/build/app/outputs/flutter-apk/app-release.apk",
+                 f"unsigned/{APP_NAME}_{APP_BUILD_ID}.apk || echo exist")
+  podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid publish")
+  podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid update")
+
+def package_linux_appimage():
+  podman_online(f"{CONTAINER_HOME}/src", "appimage-builder --recipe appimage.yml")
+
+def package_linux_flatpak():
+  podman_online(f"{CONTAINER_HOME}/src", "flatpak-builder --disable-rofiles-fuse --force-clean --repo=flatpak-repo flatpak-build flatpak.yml")
+  podman_online(f"{CONTAINER_HOME}/src", f"flatpak build-bundle flatpak-repo {APP_NAME}-{APP_SEMVER}.flatpak pro.kherel.selfprivacy")
+
+def package_linux_archive():
+  podman_online(f"{CONTAINER_HOME}/src", f"tar -C build/linux/x64/release/bundle -vacf {APP_NAME}-{APP_SEMVER}.tar.zstd .")
+
 def deploy_gitea_release():
   subprocess.run(["tea", "login", "add", "--token", os.environ.get('GITEA_RELEASE_TOKEN'),
                   "--url", "https://git.selfprivacy.org"])
@@ -47,10 +86,12 @@ def deploy_gitea_release():
 
 def deploy_fdroid_repo():
   subprocess.run(["eval $(ssh-agent -s)"], shell=True)
-  subprocess.run(["printf " + os.environ.get('SSH_PRIVATE_KEY') + " | ssh-add -"], shell=True)
+  subprocess.run(["echo \"$SSH_PRIVATE_KEY\" | tr -d '\r' | ssh-add -"], shell=True)
   subprocess.run(["scp", "-oStrictHostKeyChecking=no", "-oUserKnownHostsFile=/dev/null",
                   "-r", f"{HOST_HOME}/fdroid/repo/*",
                   "deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org"])
+
+# Arguments
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -67,33 +108,19 @@ if __name__ == "__main__":
   args = parser.parse_args()
 
 if args.build_linux:
-  podman_offline(f"{CONTAINER_HOME}/src", "flutter pub get --offline")
-  podman_offline(f"{CONTAINER_HOME}/src", "flutter build linux")
+  build_linux()
 elif args.build_apk:
-  podman_offline(f"{CONTAINER_HOME}/src", "flutter pub get --offline")
-  podman_offline(f"{CONTAINER_HOME}/src", "flutter build apk")
+  build_apk()
 elif args.sign_apk_standalone:
-  podman_offline(f"{CONTAINER_HOME}/fdroid",
-                 "zipalign -f -v 4 ../src/build/app/outputs/flutter-apk/app-release.apk",
-                 f"standalone_{APP_NAME}-{APP_SEMVER}.apk")
-  podman_offline(f"{CONTAINER_HOME}/fdroid",
-                 "apksigner sign --ks standalone-keystore --ks-key-alias standalone --ks-pass",
-                 f"env:STANDALONE_KEYSTORE_PASS standalone_{APP_NAME}-{APP_SEMVER}.apk")
+  sign_apk_standalone()
 elif args.sign_apk_fdroid:
-  podman_offline(f"{CONTAINER_HOME}/fdroid", f"rm -rf {CONTAINER_HOME}/fdroid/unsigned/*")
-  podman_offline(f"{CONTAINER_HOME}/fdroid",
-                 f"test ! -f {CONTAINER_HOME}/fdroid/repo/{APP_NAME}_{APP_BUILD_ID}.apk",
-                 "&& cp ../src/build/app/outputs/flutter-apk/app-release.apk",
-                 f"unsigned/{APP_NAME}_{APP_BUILD_ID}.apk || echo exist")
-  podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid publish")
-  podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid update")
+  sign_apk_fdroid()
 elif args.package_linux_appimage:
-  podman_online(f"{CONTAINER_HOME}/src", "appimage-builder --recipe appimage.yml")
+  package_linux_appimage()
 elif args.package_linux_flatpak:
-  podman_online(f"{CONTAINER_HOME}/src", "flatpak-builder --disable-rofiles-fuse --force-clean --repo=flatpak-repo flatpak-build flatpak.yml")
-  podman_online(f"{CONTAINER_HOME}/src", f"flatpak build-bundle flatpak-repo {APP_NAME}-{APP_SEMVER}.flatpak pro.kherel.selfprivacy")
+  package_linux_flatpak()
 elif args.package_linux_archive:
-  podman_online(f"{CONTAINER_HOME}/src", f"tar -C build/linux/x64/release/bundle -vacf {APP_NAME}-{APP_SEMVER}.tar.zstd .")
+  package_linux_archive()
 elif args.deploy_gitea_release:
   deploy_gitea_release()
 elif args.deploy_fdroid_repo:

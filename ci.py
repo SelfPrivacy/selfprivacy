@@ -85,11 +85,12 @@ def deploy_gitea_release():
                   "--asset", f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.tar.zstd"])
 
 def deploy_fdroid_repo():
-  subprocess.run(["eval $(ssh-agent -s)"], shell=True)
-  subprocess.run(["echo \"$SSH_PRIVATE_KEY\" | tr -d '\r' | ssh-add -"], shell=True)
-  subprocess.run(["scp", "-oStrictHostKeyChecking=no", "-oUserKnownHostsFile=/dev/null",
-                  "-r", f"{HOST_HOME}/fdroid/repo/*",
-                  "deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org"])
+#  subprocess.run(["eval $(ssh-agent -s)"], shell=True)
+#  subprocess.run(["echo \"$SSH_PRIVATE_KEY\" | tr -d '\r' | ssh-add -"], shell=True)
+#  subprocess.run(["scp", "-oStrictHostKeyChecking=no", "-oUserKnownHostsFile=/dev/null",
+#                  "-r", f"{HOST_HOME}/fdroid/repo/*",
+#                  "deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org"])
+  subprocess.run([f"eval $(ssh-agent -s) && echo \"$SSH_PRIVATE_KEY\" | tr -d '\r' | ssh-add - && scp -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -r {HOST_HOME}/fdroid/repo/* deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org"], shell=True)
 
 # Arguments
 

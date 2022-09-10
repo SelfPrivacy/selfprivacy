@@ -89,6 +89,7 @@ name: Deploy
 steps:
   - name: Prepare
     commands:
+      - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
       - podman unshare podman volume mount src
 
   - name: Create Release and Deploy Artifacts

@@ -1,18 +1,21 @@
-#kind: pipeline
-#type: exec
-#name: Continuous Integration
-#
-#steps:
-#
-#trigger:
-#  event:
-#    - push
-#    - pull_request
-#
-#node:
-#  server: builder
-#
-#---
+kind: pipeline
+type: exec
+name: Continuous Integration
+
+steps:
+  - name: Build
+    commands:
+      - ./ci.py --run-ci-build
+
+trigger:
+  event:
+    - push
+    - pull_request
+
+node:
+  server: builder
+
+---
 
 kind: pipeline
 type: exec

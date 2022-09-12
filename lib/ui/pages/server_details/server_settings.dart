@@ -11,7 +11,7 @@ class _ServerSettings extends StatelessWidget {
   Widget build(final BuildContext context) {
     final serverDetailsState = context.watch<ServerDetailsCubit>().state;
     if (serverDetailsState is ServerDetailsNotReady) {
-      return const Text('not ready');
+      return Text('basis.loading'.tr());
     } else if (serverDetailsState is! Loaded) {
       return BrandLoader.horizontal();
     }
@@ -38,19 +38,17 @@ class _ServerSettings extends StatelessWidget {
         SwitcherBlock(
           onChange: (final _) {},
           isActive: serverDetailsState.autoUpgradeSettings.enable,
-          child: const _TextColumn(
-            title: 'Allow Auto-upgrade',
-            value: 'Wether to allow automatic packages upgrades',
-            hasWarning: false,
+          child: _TextColumn(
+            title: 'providers.server.settings.allow_autoupgrade'.tr(),
+            value: 'providers.server.settings.allow_autoupgrade_hint'.tr(),
           ),
         ),
         SwitcherBlock(
           onChange: (final _) {},
           isActive: serverDetailsState.autoUpgradeSettings.allowReboot,
-          child: const _TextColumn(
-            title: 'Reboot after upgrade',
-            value: 'Reboot without prompt after applying updates',
-            hasWarning: false,
+          child: _TextColumn(
+            title: 'providers.server.settings.reboot_after_upgrade'.tr(),
+            value: 'providers.server.settings.reboot_after_upgrade_hint'.tr(),
           ),
         ),
         _Button(
@@ -58,9 +56,8 @@ class _ServerSettings extends StatelessWidget {
             Navigator.of(context).push(materialRoute(const SelectTimezone()));
           },
           child: _TextColumn(
-            title: 'Server Timezone',
-            value: serverDetailsState.serverTimezone.timezone.name,
-            hasWarning: false,
+            title: 'providers.server.settings.server_timezone'.tr(),
+            value: serverDetailsState.serverTimezone.toString(),
           ),
         ),
       ],
@@ -108,16 +105,12 @@ class _TextColumn extends StatelessWidget {
         children: [
           BrandText.body1(
             title,
-            style: TextStyle(color: hasWarning ? BrandColors.warning : null),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
           const SizedBox(height: 5),
           BrandText.body1(
             value,
-            style: TextStyle(
-              fontSize: 13,
-              height: 1.53,
-              color: hasWarning ? BrandColors.warning : BrandColors.gray1,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       );

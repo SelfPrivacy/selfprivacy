@@ -101,6 +101,13 @@
         "month": "Month",
         "day": "Day",
         "hour": "Hour"
+      },
+      "settings": {
+        "allow_autoupgrade": "Allow auto-upgrade",
+        "allow_autoupgrade_hint": "Allow automatic packages upgrades on server",
+        "reboot_after_upgrade": "Reboot after upgrade",
+        "reboot_after_upgrade_hint": "Reboot without prompt after applying changes on server",
+        "server_timezone": "Server timezone"
       }
     },
     "domain": {

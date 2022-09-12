@@ -5,17 +5,14 @@ import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 
 class ServerDetailsRepository {
-  HetznerApi hetznerAPi = HetznerApi();
-  ServerApi selfprivacyServer = ServerApi();
+  HetznerApi hetzner = HetznerApi();
+  ServerApi server = ServerApi();
 
-  Future<ServerDetailsRepositoryDto> load() async {
-    print('load');
-    return ServerDetailsRepositoryDto(
-      autoUpgradeSettings: await selfprivacyServer.getAutoUpgradeSettings(),
-      hetznerServerInfo: await hetznerAPi.getInfo(),
-      serverTimezone: await selfprivacyServer.getServerTimezone(),
-    );
-  }
+  Future<ServerDetailsRepositoryDto> load() async => ServerDetailsRepositoryDto(
+        autoUpgradeSettings: await server.getAutoUpgradeSettings(),
+        hetznerServerInfo: await hetzner.getInfo(),
+        serverTimezone: await server.getServerTimezone(),
+      );
 }
 
 class ServerDetailsRepositoryDto {

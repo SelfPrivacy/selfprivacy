@@ -126,4 +126,26 @@ class ServerApi extends ApiMap
       print(e);
     }
   }
+
+  Future<void> setAutoUpgradeSettings(
+    final bool allowReboot,
+    final bool enableAutoUpgrade,
+  ) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final input = Input$AutoUpgradeSettingsInput(
+        allowReboot: allowReboot,
+        enableAutoUpgrade: enableAutoUpgrade,
+      );
+      final variables = Variables$Mutation$ChangeAutoUpgradeSettings(
+        settings: input,
+      );
+      final mutation = Options$Mutation$ChangeAutoUpgradeSettings(
+        variables: variables,
+      );
+      await client.mutate$ChangeAutoUpgradeSettings(mutation);
+    } catch (e) {
+      print(e);
+    }
+  }
 }

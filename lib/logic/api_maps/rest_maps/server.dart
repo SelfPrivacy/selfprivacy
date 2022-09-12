@@ -603,13 +603,20 @@ class ServerApi extends ApiMap {
   }
 
   Future<TimeZoneSettings> getServerTimezone() async {
-    // I am not sure how to initialize TimeZoneSettings with default value...
+    TimeZoneSettings settings = TimeZoneSettings();
     final Dio client = await getClient();
-    final Response response =
-        await client.get('/system/configuration/timezone');
-    close(client);
+    try {
+      final Response response = await client.get(
+        '/system/configuration/timezone',
+      );
+      settings = TimeZoneSettings.fromString(response.data);
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
 
-    return TimeZoneSettings.fromString(response.data);
+    return settings;
   }
 
   Future<void> updateServerTimezone(final TimeZoneSettings settings) async {

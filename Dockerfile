@@ -36,7 +36,7 @@ RUN git config --system --add safe.directory $FLUTTER_HOME
 
 ENV ANDROID_HOME "/opt/android-sdk"
 ENV ANDROID_SDK_ROOT "${ANDROID_HOME}"
-ENV PATH "$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:/opt/flutter/bin"
+ENV PATH "$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/build-tools/30.0.3:/opt/flutter/bin"
 
 # Install needed Android SDK packages
 RUN yes | sdkmanager 'build-tools;30.0.3' 'platforms;android-29' 'platforms;android-30' 'platforms;android-31'
@@ -54,5 +54,5 @@ WORKDIR /tmp
 RUN rm -rf deps
 RUN find $GRADLE_USER_HOME/daemon -exec chmod 777 {} \;
 
-# Install AppImage Builder
-RUN pip3 install appimage-builder
+# Install AppImage Builder and F-Droid Server
+RUN pip3 install appimage-builder fdroidserver

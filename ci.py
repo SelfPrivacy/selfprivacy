@@ -53,7 +53,7 @@ def sign_apk_standalone():
   podman_offline(f"{CONTAINER_HOME}/src",
                  "zipalign -f -v 4 build/app/outputs/flutter-apk/app-release.apk",
                  f"standalone_{APP_NAME}-{APP_SEMVER}.apk")
-  podman_offline(f"{CONTAINER_HOME}/fdroid",
+  podman_offline(f"{CONTAINER_HOME}/src",
                  "apksigner sign --ks ../fdroid/standalone-keystore --ks-key-alias standalone --ks-pass",
                  f"env:STANDALONE_KEYSTORE_PASS standalone_{APP_NAME}-{APP_SEMVER}.apk")
 

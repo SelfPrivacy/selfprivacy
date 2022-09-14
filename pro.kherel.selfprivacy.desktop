@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=SelfPrivacy
+Icon=pro.kherel.selfprivacy
+Exec=selfprivacy %U

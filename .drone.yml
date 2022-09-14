@@ -7,9 +7,17 @@ steps:
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
 
-  - name: Build
+  - name: Run Tests
     commands:
-      - ./ci.py --run-ci-build
+      - ./ci.py --ci-run-tests
+
+  - name: Build Linux Target
+    commands:
+      - ./ci.py --ci-build-linux
+
+  - name: Build APK Target
+    commands:
+      - ./ci.py --ci-build-apk
 
 trigger:
   event:
@@ -29,8 +37,9 @@ steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
-      - if podman volume exists src; then podman volume rm -f src; podman volume create src; else podman volume create src; fi
-      - git archive --format=tar HEAD | podman volume import src -
+      - if podman volume exists release; then podman volume rm -f release; podman volume create release; else podman volume create release; fi
+      - git config user.email "builder@selfprivacy.org"
+      - git config user.name "Builder"
 
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:
@@ -80,6 +89,12 @@ steps:
     commands:
       - ./ci.py --package-linux-archive
 
+  - name: Push Artifacts to the Release Volume
+    commands:
+      - git add -v *.AppImage *.flatpak *.apk *.apk.idsig *.tar.zstd
+      - git commit -m Release
+      - git archive --format=tar HEAD | podman volume import release -
+
 trigger:
   event:
     - tag
@@ -97,18 +112,18 @@ steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
-      - podman unshare podman volume mount src
+      - podman unshare podman volume mount release
 
   - name: Create Release and Deploy Artifacts
     commands:
-      - podman unshare ./ci.py --deploy-gitea-release
+      - ./ci.py --deploy-gitea-release
     environment:
       GITEA_RELEASE_TOKEN:
         from_secret: GITEA_RELEASE_TOKEN
 
   - name: Deploy F-Droid Repo
     commands:
-      - podman unshare ./ci.py --deploy-fdroid-repo
+      - ./ci.py --deploy-fdroid-repo
     environment:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY

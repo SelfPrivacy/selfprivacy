@@ -5,7 +5,6 @@ import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
-import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_switch/brand_switch.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
@@ -38,15 +37,9 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           body: ListView(
             padding: paddingH15V0,
             children: [
-              const BrandDivider(),
+              const Divider(height: 1),
               Container(
-                padding: const EdgeInsets.only(top: 20, bottom: 5),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom:
-                        BorderSide(width: 1, color: BrandColors.dividerColor),
-                  ),
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,14 +61,9 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   ],
                 ),
               ),
+              const Divider(height: 0),
               Container(
-                padding: const EdgeInsets.only(top: 20, bottom: 5),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom:
-                        BorderSide(width: 1, color: BrandColors.dividerColor),
-                  ),
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -127,7 +115,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   ],
                 ),
               ),
-              deleteServer(context)
+              const Divider(height: 0),
+              _DeleteServer(context)
             ],
           ),
         ),
@@ -135,16 +124,11 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     );
   }
 
-  Widget deleteServer(final BuildContext context) {
+  Widget _DeleteServer(final BuildContext context) {
     final bool isDisabled =
         context.watch<ServerInstallationCubit>().state.serverDetails == null;
     return Container(
-      padding: const EdgeInsets.only(top: 20, bottom: 5),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-        ),
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

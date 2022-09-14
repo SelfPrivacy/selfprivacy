@@ -34,7 +34,6 @@ class _ServerSettings extends StatelessWidget {
             ],
           ),
         ),
-        const BrandDivider(),
         SwitcherBlock(
           onChange: (final _) {},
           isActive: serverDetailsState.autoUpgradeSettings.enable,
@@ -43,6 +42,7 @@ class _ServerSettings extends StatelessWidget {
             value: 'providers.server.settings.allow_autoupgrade_hint'.tr(),
           ),
         ),
+        const Divider(height: 0),
         SwitcherBlock(
           onChange: (final _) {},
           isActive: serverDetailsState.autoUpgradeSettings.allowReboot,
@@ -51,6 +51,7 @@ class _ServerSettings extends StatelessWidget {
             value: 'providers.server.settings.reboot_after_upgrade_hint'.tr(),
           ),
         ),
+        const Divider(height: 0),
         _Button(
           onTap: () {
             Navigator.of(context).push(materialRoute(const SelectTimezone()));
@@ -78,12 +79,7 @@ class _Button extends StatelessWidget {
   Widget build(final BuildContext context) => InkWell(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.only(top: 20, bottom: 5),
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-            ),
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           child: child,
         ),
       );

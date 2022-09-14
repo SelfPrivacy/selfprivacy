@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/message.dart';
-import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 
 class Console extends StatefulWidget {
@@ -37,8 +36,7 @@ class _ConsoleState extends State<Console> {
             preferredSize: const Size.fromHeight(53),
             child: Column(
               children: const [
-                BrandHeader(title: 'Console', hasBackButton: true),
-                BrandDivider(),
+                BrandHeader(title: 'Console', hasBackButton: true)
               ],
             ),
           ),

@@ -8,7 +8,6 @@ import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.da
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
-import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
@@ -78,7 +77,6 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: BrandText.h4('basis.details'.tr()),
               ),
-              const BrandDivider(),
             ],
           ),
         ),

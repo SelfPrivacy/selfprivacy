@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/pages/devices/new_device.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -51,20 +52,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
             const SizedBox(height: 16),
             const Divider(height: 1),
             const SizedBox(height: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'devices.main_screen.tip'.tr(),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
+            InfoBox(text: 'devices.main_screen.tip'.tr(),),
           ],
           const SizedBox(height: 24),
         ],

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 
 class RecoveryKeyReceiving extends StatelessWidget {
   const RecoveryKeyReceiving({required this.recoveryKey, final super.key});
@@ -28,14 +29,7 @@ class RecoveryKeyReceiving extends StatelessWidget {
           const SizedBox(height: 16),
           const Divider(),
           const SizedBox(height: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.info_outlined, size: 24),
-              const SizedBox(height: 16),
-              Text('recovery_key.key_receiving_info'.tr()),
-            ],
-          ),
+          InfoBox(text: 'recovery_key.key_receiving_info'.tr(),),
           const SizedBox(height: 16),
           FilledButton(
             title: 'recovery_key.key_receiving_done'.tr(),

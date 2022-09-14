@@ -53,15 +53,9 @@ class UserDetails extends StatelessWidget {
         const Divider(height: 8),
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.warning_amber_outlined, size: 24),
-              const SizedBox(height: 16),
-              Text(
-                'users.no_sso_notice'.tr(),
-              ),
-            ],
+          child: InfoBox(
+            text: 'users.no_sso_notice'.tr(),
+            isWarning: true,
           ),
         ),
       ],

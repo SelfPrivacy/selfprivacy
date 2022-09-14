@@ -48,6 +48,7 @@ class _ServicePageState extends State<ServicePage> {
             service.svgIcon,
             width: 48.0,
             height: 48.0,
+            color: Theme.of(context).colorScheme.onBackground,
           ),
         ),
         const SizedBox(height: 16),

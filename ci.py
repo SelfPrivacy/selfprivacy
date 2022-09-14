@@ -71,7 +71,7 @@ def package_linux_appimage():
 
 def package_linux_flatpak():
   subprocess.run(["flatpak-builder", "--force-clean", "--repo=flatpak-repo", "flatpak-build", "flatpak.yml"], check=True)
-  subprocess.run(["flatpak", "build-bundle", "flatpak-repo", f"{APP_NAME}-{APP_SEMVER}.flatpak", "pro.kherel.selfprivacy"], check=True)
+  subprocess.run(["flatpak", "build-bundle", "flatpak-repo", f"{APP_NAME}-{APP_SEMVER}.flatpak", f"{APP_NAME}"], check=True)
 
 def package_linux_archive():
   podman_online(f"{CONTAINER_HOME}/src", f"tar -C build/linux/x64/release/bundle -vacf {APP_NAME}-{APP_SEMVER}.tar.zstd .")

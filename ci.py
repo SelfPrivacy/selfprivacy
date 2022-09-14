@@ -5,7 +5,7 @@ import subprocess
 import yaml
 import argparse
 
-CONTAINER_IMAGE = "docker.io/alyasirko/flutter-build-env"
+CONTAINER_IMAGE = "localhost/flutter-build-env"
 HOST_HOME = "/var/lib/drone-runner-exec"
 CONTAINER_HOME = "/tmp/builder"
 
@@ -19,7 +19,7 @@ HOST_MOUNTED_VOLUME = f"{HOST_HOME}/.local/share/containers/storage/volumes/rele
 # Environments
 
 def podman_offline(dir, *args):
-  subprocess.run(["podman", "run", "--rm", "--network=none", f"--workdir={dir}",
+  subprocess.run(["podman", "run", "--rm", "--network=none", "--cap-add=CHOWN", f"--workdir={dir}",
                   "-v", os.getcwd() + f":{CONTAINER_HOME}/src",
                   "-v", f"{HOST_HOME}/fdroid:{CONTAINER_HOME}/fdroid",
                   "-v", f"{HOST_HOME}/fdroid-keystore:{CONTAINER_HOME}/fdroid/fdroid-keystore",
@@ -31,7 +31,7 @@ def podman_offline(dir, *args):
                  ])
 
 def podman_online(dir, *args):
-  subprocess.run(["podman", "run", "--rm", "--privileged", f"--workdir={dir}",
+  subprocess.run(["podman", "run", "--rm", "--cap-add=CHOWN", f"--workdir={dir}",
                   "-v", os.getcwd() + f":{CONTAINER_HOME}/src",
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
@@ -40,12 +40,13 @@ def podman_online(dir, *args):
 # Targets
 
 def build_linux():
-  podman_offline(f"{CONTAINER_HOME}/src", "flutter pub get --offline")
-  podman_offline(f"{CONTAINER_HOME}/src", "flutter build linux")
+  podman_offline(f"{CONTAINER_HOME}/src", "flutter pub get --offline",
+                                          "&& flutter build linux")
 
 def build_apk():
-  podman_offline(f"{CONTAINER_HOME}/src", "flutter pub get --offline")
-  podman_offline(f"{CONTAINER_HOME}/src", "flutter build apk")
+  podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle",
+                                          "&& flutter pub get --offline",
+                                          "&& flutter build apk")
 
 def sign_apk_standalone():
   podman_offline(f"{CONTAINER_HOME}/src",
@@ -68,8 +69,8 @@ def package_linux_appimage():
   podman_online(f"{CONTAINER_HOME}/src", "appimage-builder --recipe appimage.yml")
 
 def package_linux_flatpak():
-  podman_online(f"{CONTAINER_HOME}/src", "flatpak-builder --disable-rofiles-fuse --force-clean --repo=flatpak-repo flatpak-build flatpak.yml")
-  podman_online(f"{CONTAINER_HOME}/src", f"flatpak build-bundle flatpak-repo {APP_NAME}-{APP_SEMVER}.flatpak pro.kherel.selfprivacy")
+  subprocess.run(["flatpak-builder", "--force-clean", "--repo=flatpak-repo", "flatpak-build", "flatpak.yml"])
+  subprocess.run(["flatpak", "build-bundle", "flatpak-repo", f"{APP_NAME}-{APP_SEMVER}.flatpak", "pro.kherel.selfprivacy"])
 
 def package_linux_archive():
   podman_online(f"{CONTAINER_HOME}/src", f"tar -C build/linux/x64/release/bundle -vacf {APP_NAME}-{APP_SEMVER}.tar.zstd .")
@@ -96,7 +97,8 @@ def ci_build_linux():
   podman_online(f"{CONTAINER_HOME}/src", "flutter build linux --debug")
 
 def ci_build_apk():
-  podman_online(f"{CONTAINER_HOME}/src", "flutter build apk --debug")
+  podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle",
+                                         "&& flutter build apk --debug")
 
 def ci_run_tests():
   podman_online(f"{CONTAINER_HOME}/src", "flutter test")
@@ -106,8 +108,8 @@ def ci_run_tests():
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   group = parser.add_mutually_exclusive_group()
-  group.add_argument("--build-linux", action="store_true", help="depends on podman src volume")
-  group.add_argument("--build-apk", action="store_true", help="depends on podman src volume")
+  group.add_argument("--build-linux", action="store_true")
+  group.add_argument("--build-apk", action="store_true")
   group.add_argument("--sign-apk-standalone", action="store_true", help="depends on $STANDALONE_KEYSTORE_PASS")
   group.add_argument("--sign-apk-fdroid", action="store_true", help="depends on $FDROID_KEYSTORE_PASS")
   group.add_argument("--package-linux-appimage", action="store_true")

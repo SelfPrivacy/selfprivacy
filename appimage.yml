@@ -3,13 +3,13 @@ version: 1
 script:
   - rm -rf AppDir || true
   - cp -r build/linux/x64/release/bundle AppDir
-  - install -Dm644 assets/images/icon/logo.svg AppDir/usr/share/icons/hicolor/scalable/apps/pro.kherel.selfprivacy.svg
+  - install -Dm644 assets/images/icon/logo.svg AppDir/usr/share/icons/hicolor/scalable/apps/org.selfprivacy.app.svg
 AppDir:
   path: AppDir
   app_info:
-    id: pro.kherel.selfprivacy
+    id: org.selfprivacy.app
     name: SelfPrivacy
-    icon: pro.kherel.selfprivacy
+    icon: org.selfprivacy.app
     version: 0.6.0
     exec: selfprivacy
     exec_args: $@

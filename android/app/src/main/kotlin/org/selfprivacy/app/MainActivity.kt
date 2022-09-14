@@ -1,4 +1,4 @@
-package pro.kherel.selfprivacy
+package org.selfprivacy.app
 
 import io.flutter.embedding.android.FlutterActivity
 

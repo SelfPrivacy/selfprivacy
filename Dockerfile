@@ -26,12 +26,13 @@ RUN mkdir -p android-sdk/cmdline-tools && unzip commandlinetools-linux-${ANDROID
     && rm commandlinetools-linux-${ANDROID_SDK_TOOLS_VERSION}_latest.zip && mv cmdline-tools android-sdk/cmdline-tools/latest
 
 # Install Flutter
+ENV FLUTTER_HOME "/opt/flutter"
 ADD $FLUTTER_URL .
 RUN tar -vxf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz && \
     rm flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 # Flutter doesn't work without write permissions, so fuck it, fuck.
-RUN chmod -R 777 /opt/flutter
-RUN git config --system --add safe.directory /opt/flutter
+RUN chmod -R 777 $FLUTTER_HOME
+RUN git config --system --add safe.directory $FLUTTER_HOME
 
 ENV ANDROID_HOME "/opt/android-sdk"
 ENV ANDROID_SDK_ROOT "${ANDROID_HOME}"
@@ -43,20 +44,15 @@ RUN yes | sdkmanager 'build-tools;30.0.3' 'platforms;android-29' 'platforms;andr
 WORKDIR /tmp
 
 # Prepare dependencies for offline build
+ENV PUB_CACHE "/tmp/flutter_pub_cache"
+ENV GRADLE_USER_HOME "/tmp/gradle"
 RUN git clone --depth=1 --single-branch https://git.selfprivacy.org/kherel/selfprivacy.org.app.git deps
 WORKDIR /tmp/deps
 RUN flutter build linux
 RUN flutter build apk
 WORKDIR /tmp
 RUN rm -rf deps
+RUN chmod -R 777 $PUB_CACHE $GRADLE_USER_HOME
 
-# Install Python dependencies
-RUN pip3 install appimage-builder bandit setuptools portalocker pytz pytest pytest-mock \
-                 pytest-datadir huey gevent mnemonic coverage pylint pydantic \
-                 typing-extensions psutil black fastapi uvicorn strawberry-graphql \
-                 python-multipart python-dateutil pygments poetry graphql-core
-
-# Install Flatpak dependencies
-RUN flatpak remote-add flathub https://flathub.org/repo/flathub.flatpakrepo \
-    && flatpak install -y org.freedesktop.Sdk/x86_64/${FREEDESKTOP_SDK_VERSION} \
-                          org.freedesktop.Platform/x86_64/${FREEDESKTOP_SDK_VERSION}
+# Install AppImage Builder
+RUN pip3 install appimage-builder

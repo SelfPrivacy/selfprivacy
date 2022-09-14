@@ -59,6 +59,24 @@ class DiskVolume {
       sizeTotal.byte == 0 ? 0 : sizeUsed.byte / sizeTotal.byte;
   bool get isDiskOkay =>
       percentage < 0.8 && sizeTotal.gibibyte - sizeUsed.gibibyte > 2.0;
+
+  DiskVolume copyWith({
+    final DiskSize? sizeUsed,
+    final DiskSize? sizeTotal,
+    final String? name,
+    final bool? root,
+    final bool? isResizable,
+    final ServerDiskVolume? serverDiskVolume,
+    final ServerVolume? providerVolume,
+  }) => DiskVolume(
+      sizeUsed: sizeUsed ?? this.sizeUsed,
+      sizeTotal: sizeTotal ?? this.sizeTotal,
+      name: name ?? this.name,
+      root: root ?? this.root,
+      isResizable: isResizable ?? this.isResizable,
+      serverDiskVolume: serverDiskVolume ?? this.serverDiskVolume,
+      providerVolume: providerVolume ?? this.providerVolume,
+    );
 }
 
 class DiskStatus {

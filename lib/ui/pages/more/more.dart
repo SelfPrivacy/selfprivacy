@@ -2,12 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
+import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
+import 'package:selfprivacy/ui/pages/server_storage/data_migration.dart';
+import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
@@ -27,6 +32,9 @@ class MorePage extends StatelessWidget {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
 
+    final bool? usesBinds =
+        context.watch<ApiServerVolumeCubit>().state.usesBinds;
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(52),
@@ -40,6 +48,32 @@ class MorePage extends StatelessWidget {
             padding: paddingH15V0,
             child: Column(
               children: [
+                if (isReady && usesBinds != null && !usesBinds)
+                  _MoreMenuItem(
+                    title: 'providers.storage.start_migration_button'.tr(),
+                    iconData: Icons.drive_file_move_outline,
+                    goTo: DataMigrationPage(
+                      diskStatus: DiskStatus.fromVolumes(
+                        context.read<ApiServerVolumeCubit>().state.volumes,
+                        context.read<ApiProviderVolumeCubit>().state.volumes,
+                      ),
+                      services: context
+                          .read<ServicesCubit>()
+                          .state
+                          .services
+                          .where(
+                            (final service) =>
+                                service.id == 'bitwarden' ||
+                                service.id == 'gitea' ||
+                                service.id == 'pleroma' ||
+                                service.id == 'mailserver' ||
+                                service.id == 'nextcloud',
+                          )
+                          .toList(),
+                    ),
+                    subtitle: 'not_ready_card.in_menu'.tr(),
+                    accent: true,
+                  ),
                 if (!isReady)
                   _MoreMenuItem(
                     title: 'more.configuration_wizard'.tr(),

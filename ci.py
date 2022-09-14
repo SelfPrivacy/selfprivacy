@@ -28,14 +28,14 @@ def podman_offline(dir, *args):
                   "--env", "STANDALONE_KEYSTORE_PASS=" + os.environ.get('STANDALONE_KEYSTORE_PASS'),
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
-                 ])
+                 ], check=True)
 
 def podman_online(dir, *args):
   subprocess.run(["podman", "run", "--rm", "--cap-add=CHOWN", f"--workdir={dir}",
                   "-v", os.getcwd() + f":{CONTAINER_HOME}/src",
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
-                 ])
+                 ], check=True)
 
 # Targets
 
@@ -69,15 +69,15 @@ def package_linux_appimage():
   podman_online(f"{CONTAINER_HOME}/src", "appimage-builder --recipe appimage.yml")
 
 def package_linux_flatpak():
-  subprocess.run(["flatpak-builder", "--force-clean", "--repo=flatpak-repo", "flatpak-build", "flatpak.yml"])
-  subprocess.run(["flatpak", "build-bundle", "flatpak-repo", f"{APP_NAME}-{APP_SEMVER}.flatpak", "pro.kherel.selfprivacy"])
+  subprocess.run(["flatpak-builder", "--force-clean", "--repo=flatpak-repo", "flatpak-build", "flatpak.yml"], check=True)
+  subprocess.run(["flatpak", "build-bundle", "flatpak-repo", f"{APP_NAME}-{APP_SEMVER}.flatpak", "pro.kherel.selfprivacy"], check=True)
 
 def package_linux_archive():
   podman_online(f"{CONTAINER_HOME}/src", f"tar -C build/linux/x64/release/bundle -vacf {APP_NAME}-{APP_SEMVER}.tar.zstd .")
 
 def deploy_gitea_release():
   subprocess.run(["tea", "login", "add", "--token", os.environ.get('GITEA_RELEASE_TOKEN'),
-                  "--url", "https://git.selfprivacy.org"])
+                  "--url", "https://git.selfprivacy.org"], check=True)
   subprocess.run(["tea", "releases", "create", "--repo", os.environ.get('DRONE_REPO'),
                   "--tag", os.environ.get('DRONE_SEMVER'), "--title", os.environ.get('DRONE_SEMVER'),
                   "--asset", f"{HOST_MOUNTED_VOLUME}/standalone_{APP_NAME}-{APP_SEMVER}.apk",
@@ -85,13 +85,13 @@ def deploy_gitea_release():
                   "--asset", f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage",
                   "--asset", f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage.zsync",
                   "--asset", f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.flatpak",
-                  "--asset", f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.tar.zstd"])
+                  "--asset", f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.tar.zstd"], check=True)
 
 def deploy_fdroid_repo():
   subprocess.run([f"""eval $(ssh-agent -s) &&
                       echo \"$SSH_PRIVATE_KEY\" | tr -d '\r' | ssh-add - &&
                       scp -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -r {HOST_HOME}/fdroid/repo/* deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org
-                  """], shell=True)
+                  """], shell=True, check=True)
 
 def ci_build_linux():
   podman_online(f"{CONTAINER_HOME}/src", "flutter build linux --debug")

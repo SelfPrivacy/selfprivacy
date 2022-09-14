@@ -47,11 +47,11 @@ def build_linux():
 def build_apk():
   podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
                                           "&& flutter pub get --offline",
-                                          "&& flutter build apk")
+                                          "&& flutter build apk --flavor production")
 
 def sign_apk_standalone():
   podman_offline(f"{CONTAINER_HOME}/src",
-                 "zipalign -f -v 4 build/app/outputs/flutter-apk/app-release.apk",
+                 "zipalign -f -v 4 build/app/outputs/flutter-apk/app-production-release.apk",
                  f"standalone_{APP_NAME}-{APP_SEMVER}.apk")
   podman_offline(f"{CONTAINER_HOME}/src",
                  "apksigner sign --ks ../fdroid/standalone-keystore --ks-key-alias standalone --ks-pass",
@@ -61,7 +61,7 @@ def sign_apk_fdroid():
   podman_offline(f"{CONTAINER_HOME}/fdroid", f"rm -rf {CONTAINER_HOME}/fdroid/unsigned/*")
   podman_offline(f"{CONTAINER_HOME}/fdroid",
                  f"test ! -f {CONTAINER_HOME}/fdroid/repo/{APP_NAME}_{APP_BUILD_ID}.apk",
-                 "&& cp ../src/build/app/outputs/flutter-apk/app-release.apk",
+                 "&& cp ../src/build/app/outputs/flutter-apk/app-production-release.apk",
                  f"unsigned/{APP_NAME}_{APP_BUILD_ID}.apk || echo exist")
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid publish")
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid update")

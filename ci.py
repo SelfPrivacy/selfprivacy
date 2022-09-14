@@ -9,7 +9,7 @@ CONTAINER_IMAGE = "localhost/flutter-build-env"
 HOST_HOME = "/var/lib/drone-runner-exec"
 CONTAINER_HOME = "/tmp/builder"
 
-APP_NAME = "pro.kherel.selfprivacy"
+APP_NAME = "org.selfprivacy.app"
 APP_VERSION_FULL = yaml.safe_load(open("pubspec.yaml", "r"))['version']
 APP_SEMVER = APP_VERSION_FULL[:APP_VERSION_FULL.find("+")]
 APP_BUILD_ID = APP_VERSION_FULL[APP_VERSION_FULL.find("+"):][1::]
@@ -100,7 +100,7 @@ def ci_build_linux():
 
 def ci_build_apk():
   podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
-                                         "&& flutter build apk --debug")
+                                         "&& flutter build apk --flavor nightly --debug")
 
 def ci_run_tests():
   podman_online(f"{CONTAINER_HOME}/src", "flutter test",

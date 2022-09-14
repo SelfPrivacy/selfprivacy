@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 export 'package:selfprivacy/utils/extensions/text_extensions.dart';
 
+// TODO: Delete this file
+
 enum TextType {
   h1, // right now only at onboarding and opened providers
   h2, // cards titles

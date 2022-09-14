@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_radio/brand_radio.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
+// TODO: Delete this file
+
 class BrandRadioTile extends StatelessWidget {
   const BrandRadioTile({
     required this.isChecked,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 
+// TODO: Delete this file.
+
 class BrandRadio extends StatelessWidget {
   const BrandRadio({
     required this.isChecked,

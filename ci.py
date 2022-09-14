@@ -45,7 +45,7 @@ def build_linux():
                                           "&& flutter build linux")
 
 def build_apk():
-  podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle",
+  podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
                                           "&& flutter pub get --offline",
                                           "&& flutter build apk")
 
@@ -99,7 +99,7 @@ def ci_build_linux():
                                          "&& flutter build linux --debug")
 
 def ci_build_apk():
-  podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle",
+  podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
                                          "&& flutter build apk --debug")
 
 def ci_run_tests():

@@ -103,7 +103,8 @@ def ci_build_apk():
                                          "&& flutter build apk --debug")
 
 def ci_run_tests():
-  podman_online(f"{CONTAINER_HOME}/src", "flutter test")
+  podman_online(f"{CONTAINER_HOME}/src", "flutter test",
+                                         "&& flutter test --machine --coverage > tests.output")
 
 # Arguments
 

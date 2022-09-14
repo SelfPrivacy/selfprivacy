@@ -26,14 +26,14 @@ def podman_offline(dir, *args):
                   "-v", f"{HOST_HOME}/standalone-keystore:{CONTAINER_HOME}/fdroid/standalone-keystore",
                   "--env", "FDROID_KEYSTORE_PASS=" + os.environ.get('FDROID_KEYSTORE_PASS'),
                   "--env", "STANDALONE_KEYSTORE_PASS=" + os.environ.get('STANDALONE_KEYSTORE_PASS'),
-                  "--user", os.getuid() + ":" + os.getgid(), "--userns=keep-id",
+                  "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ])
 
 def podman_online(dir, *args):
   subprocess.run(["podman", "run", "--rm", "--privileged", f"--workdir={dir}",
                   "-v", os.getcwd() + f":{CONTAINER_HOME}/src",
-                  "--user", os.getuid() + ":" + os.getgid(), "--userns=keep-id",
+                  "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ])
 

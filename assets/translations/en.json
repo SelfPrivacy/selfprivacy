@@ -107,7 +107,8 @@
         "allow_autoupgrade_hint": "Allow automatic packages upgrades on server",
         "reboot_after_upgrade": "Reboot after upgrade",
         "reboot_after_upgrade_hint": "Reboot without prompt after applying changes on server",
-        "server_timezone": "Server timezone"
+        "server_timezone": "Server timezone",
+        "select_timezone": "Select timezone"
       }
     },
     "domain": {

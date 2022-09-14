@@ -1,11 +1,17 @@
 part of 'server_details_screen.dart';
 
-class _ServerSettings extends StatelessWidget {
-  const _ServerSettings({
-    required this.tabController,
-  });
+class _ServerSettings extends StatefulWidget {
+  const _ServerSettings({required this.tabController});
 
   final TabController tabController;
+
+  @override
+  State<_ServerSettings> createState() => _ServerSettingsState();
+}
+
+class _ServerSettingsState extends State<_ServerSettings> {
+  bool? allowAutoUpgrade;
+  bool? rebootAfterUpgrade;
 
   @override
   Widget build(final BuildContext context) {
@@ -15,6 +21,11 @@ class _ServerSettings extends StatelessWidget {
     } else if (serverDetailsState is! Loaded) {
       return BrandLoader.horizontal();
     }
+    if (allowAutoUpgrade == null || rebootAfterUpgrade == null) {
+      allowAutoUpgrade = serverDetailsState.autoUpgradeSettings.enable;
+      rebootAfterUpgrade = serverDetailsState.autoUpgradeSettings.allowReboot;
+    }
+
     return ListView(
       padding: paddingH15V0,
       children: [
@@ -27,7 +38,7 @@ class _ServerSettings extends StatelessWidget {
             children: [
               IconButton(
                 icon: const Icon(BrandIcons.arrowLeft),
-                onPressed: () => tabController.animateTo(0),
+                onPressed: () => widget.tabController.animateTo(0),
               ),
               const SizedBox(width: 10),
               BrandText.h4('basis.settings'.tr()),
@@ -35,8 +46,21 @@ class _ServerSettings extends StatelessWidget {
           ),
         ),
         SwitcherBlock(
-          onChange: (final _) {},
-          isActive: serverDetailsState.autoUpgradeSettings.enable,
+          onChange: (final switched) {
+            context
+                .read<ServerDetailsCubit>()
+                .repository
+                .setAutoUpgradeSettings(
+                  AutoUpgradeSettings(
+                    enable: switched,
+                    allowReboot: rebootAfterUpgrade ?? false,
+                  ),
+                );
+            setState(() {
+              allowAutoUpgrade = switched;
+            });
+          },
+          isActive: allowAutoUpgrade ?? false,
           child: _TextColumn(
             title: 'providers.server.settings.allow_autoupgrade'.tr(),
             value: 'providers.server.settings.allow_autoupgrade_hint'.tr(),
@@ -44,8 +68,23 @@ class _ServerSettings extends StatelessWidget {
         ),
         const Divider(height: 0),
         SwitcherBlock(
-          onChange: (final _) {},
-          isActive: serverDetailsState.autoUpgradeSettings.allowReboot,
+          onChange: (final switched) {
+            context
+                .read<ServerDetailsCubit>()
+                .repository
+                .setAutoUpgradeSettings(
+                  AutoUpgradeSettings(
+                    enable: allowAutoUpgrade ?? false,
+                    allowReboot: switched,
+                  ),
+                );
+            setState(
+              () {
+                rebootAfterUpgrade = switched;
+              },
+            );
+          },
+          isActive: rebootAfterUpgrade ?? false,
           child: _TextColumn(
             title: 'providers.server.settings.reboot_after_upgrade'.tr(),
             value: 'providers.server.settings.reboot_after_upgrade_hint'.tr(),
@@ -54,7 +93,11 @@ class _ServerSettings extends StatelessWidget {
         const Divider(height: 0),
         _Button(
           onTap: () {
-            Navigator.of(context).push(materialRoute(const SelectTimezone()));
+            Navigator.of(context).push(
+              materialRoute(
+                const SelectTimezone(),
+              ),
+            );
           },
           child: _TextColumn(
             title: 'providers.server.settings.server_timezone'.tr(),
@@ -89,12 +132,10 @@ class _TextColumn extends StatelessWidget {
   const _TextColumn({
     required this.title,
     required this.value,
-    this.hasWarning = false,
   });
 
   final String title;
   final String value;
-  final bool hasWarning;
   @override
   Widget build(final BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -337,12 +337,6 @@ const documentNodeQuerySystemSettings = DocumentNode(definitions: [
                               directives: [],
                               selectionSet: null),
                           FieldNode(
-                              name: NameNode(value: 'rootSshKeys'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
-                          FieldNode(
                               name: NameNode(value: '__typename'),
                               alias: null,
                               arguments: [],
@@ -810,7 +804,6 @@ class Query$SystemSettings$system$settings$ssh {
   Query$SystemSettings$system$settings$ssh(
       {required this.enable,
       required this.passwordAuthentication,
-      required this.rootSshKeys,
       required this.$__typename});
 
   @override
@@ -822,8 +815,6 @@ class Query$SystemSettings$system$settings$ssh {
 
   final bool passwordAuthentication;
 
-  final List<String> rootSshKeys;
-
   @JsonKey(name: '__typename')
   final String $__typename;
 
@@ -832,14 +823,8 @@ class Query$SystemSettings$system$settings$ssh {
   int get hashCode {
     final l$enable = enable;
     final l$passwordAuthentication = passwordAuthentication;
-    final l$rootSshKeys = rootSshKeys;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$enable,
-      l$passwordAuthentication,
-      Object.hashAll(l$rootSshKeys.map((v) => v)),
-      l$$__typename
-    ]);
+    return Object.hashAll([l$enable, l$passwordAuthentication, l$$__typename]);
   }
 
   @override
@@ -853,15 +838,6 @@ class Query$SystemSettings$system$settings$ssh {
     final l$passwordAuthentication = passwordAuthentication;
     final lOther$passwordAuthentication = other.passwordAuthentication;
     if (l$passwordAuthentication != lOther$passwordAuthentication) return false;
-    final l$rootSshKeys = rootSshKeys;
-    final lOther$rootSshKeys = other.rootSshKeys;
-    if (l$rootSshKeys.length != lOther$rootSshKeys.length) return false;
-    for (int i = 0; i < l$rootSshKeys.length; i++) {
-      final l$rootSshKeys$entry = l$rootSshKeys[i];
-      final lOther$rootSshKeys$entry = lOther$rootSshKeys[i];
-      if (l$rootSshKeys$entry != lOther$rootSshKeys$entry) return false;
-    }
-
     final l$$__typename = $__typename;
     final lOther$$__typename = other.$__typename;
     if (l$$__typename != lOther$$__typename) return false;
@@ -886,11 +862,7 @@ abstract class CopyWith$Query$SystemSettings$system$settings$ssh<TRes> {
   factory CopyWith$Query$SystemSettings$system$settings$ssh.stub(TRes res) =
       _CopyWithStubImpl$Query$SystemSettings$system$settings$ssh;
 
-  TRes call(
-      {bool? enable,
-      bool? passwordAuthentication,
-      List<String>? rootSshKeys,
-      String? $__typename});
+  TRes call({bool? enable, bool? passwordAuthentication, String? $__typename});
 }
 
 class _CopyWithImpl$Query$SystemSettings$system$settings$ssh<TRes>
@@ -907,7 +879,6 @@ class _CopyWithImpl$Query$SystemSettings$system$settings$ssh<TRes>
   TRes call(
           {Object? enable = _undefined,
           Object? passwordAuthentication = _undefined,
-          Object? rootSshKeys = _undefined,
           Object? $__typename = _undefined}) =>
       _then(Query$SystemSettings$system$settings$ssh(
           enable: enable == _undefined || enable == null
@@ -917,9 +888,6 @@ class _CopyWithImpl$Query$SystemSettings$system$settings$ssh<TRes>
                   passwordAuthentication == null
               ? _instance.passwordAuthentication
               : (passwordAuthentication as bool),
-          rootSshKeys: rootSshKeys == _undefined || rootSshKeys == null
-              ? _instance.rootSshKeys
-              : (rootSshKeys as List<String>),
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
@@ -931,11 +899,7 @@ class _CopyWithStubImpl$Query$SystemSettings$system$settings$ssh<TRes>
 
   TRes _res;
 
-  call(
-          {bool? enable,
-          bool? passwordAuthentication,
-          List<String>? rootSshKeys,
-          String? $__typename}) =>
+  call({bool? enable, bool? passwordAuthentication, String? $__typename}) =>
       _res;
 }
 

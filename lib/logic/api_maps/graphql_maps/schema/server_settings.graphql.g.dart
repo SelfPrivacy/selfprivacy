@@ -98,9 +98,6 @@ Query$SystemSettings$system$settings$ssh
         Query$SystemSettings$system$settings$ssh(
           enable: json['enable'] as bool,
           passwordAuthentication: json['passwordAuthentication'] as bool,
-          rootSshKeys: (json['rootSshKeys'] as List<dynamic>)
-              .map((e) => e as String)
-              .toList(),
           $__typename: json['__typename'] as String,
         );
 
@@ -109,7 +106,6 @@ Map<String, dynamic> _$Query$SystemSettings$system$settings$sshToJson(
     <String, dynamic>{
       'enable': instance.enable,
       'passwordAuthentication': instance.passwordAuthentication,
-      'rootSshKeys': instance.rootSshKeys,
       '__typename': instance.$__typename,
     };
 

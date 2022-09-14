@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';

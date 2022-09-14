@@ -7,11 +7,14 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
+import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/models/ssh_settings.dart';
+import 'package:selfprivacy/logic/models/system_settings.dart';
 
 part 'jobs_api.dart';
 part 'server_actions_api.dart';
@@ -128,14 +131,13 @@ class ServerApi extends ApiMap
   }
 
   Future<void> setAutoUpgradeSettings(
-    final bool allowReboot,
-    final bool enableAutoUpgrade,
+    final AutoUpgradeSettings settings,
   ) async {
     try {
       final GraphQLClient client = await getClient();
       final input = Input$AutoUpgradeSettingsInput(
-        allowReboot: allowReboot,
-        enableAutoUpgrade: enableAutoUpgrade,
+        allowReboot: settings.allowReboot,
+        enableAutoUpgrade: settings.enable,
       );
       final variables = Variables$Mutation$ChangeAutoUpgradeSettings(
         settings: input,
@@ -147,5 +149,48 @@ class ServerApi extends ApiMap
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> setTimezone(final String timezone) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Mutation$ChangeTimezone(
+        timezone: timezone,
+      );
+      final mutation = Options$Mutation$ChangeTimezone(
+        variables: variables,
+      );
+      await client.mutate$ChangeTimezone(mutation);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<SystemSettings> getSystemSettings() async {
+    QueryResult<Query$SystemSettings> response;
+    SystemSettings settings = SystemSettings(
+      autoUpgradeSettings: AutoUpgradeSettings(
+        allowReboot: false,
+        enable: false,
+      ),
+      sshSettings: SshSettings(
+        enable: false,
+        passwordAuthentication: false,
+      ),
+      timezone: 'Unknown',
+    );
+
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$SystemSettings();
+      if (response.hasException) {
+        print(response.exception.toString());
+      }
+      settings = SystemSettings.fromGraphQL(response.parsedData!.system);
+    } catch (e) {
+      print(e);
+    }
+
+    return settings;
   }
 }

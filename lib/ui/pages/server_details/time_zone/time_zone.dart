@@ -47,10 +47,10 @@ class _SelectTimezoneState extends State<SelectTimezone> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(52),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(52),
           child: BrandHeader(
-            title: 'select timezone',
+            title: 'providers.server.settings.select_timezone'.tr(),
             hasBackButton: true,
           ),
         ),
@@ -76,7 +76,7 @@ class _SelectTimezoneState extends State<SelectTimezone> {
                 return MapEntry(
                   key,
                   Container(
-                    height: 60,
+                    height: 75,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: const BoxDecoration(
                       border: Border(
@@ -85,24 +85,38 @@ class _SelectTimezoneState extends State<SelectTimezone> {
                         ),
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        BrandText.body1(
-                          timezoneName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    child: InkWell(
+                      onTap: () {
+                        context
+                            .read<ServerDetailsCubit>()
+                            .repository
+                            .setTimezone(
+                              timezoneName,
+                            );
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            BrandText.body1(
+                              timezoneName,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            BrandText.small(
+                              'GMT ${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
                         ),
-                        BrandText.small(
-                          'GMT ${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}',
-                          style: const TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 );

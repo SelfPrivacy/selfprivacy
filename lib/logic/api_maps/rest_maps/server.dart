@@ -10,7 +10,6 @@ import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
-import 'package:selfprivacy/logic/models/json/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
@@ -563,43 +562,6 @@ class ServerApi extends ApiMap {
       close(client);
     }
     return result;
-  }
-
-  Future<AutoUpgradeSettings> getAutoUpgradeSettings() async {
-    Response response;
-    AutoUpgradeSettings settings = const AutoUpgradeSettings(
-      enable: false,
-      allowReboot: false,
-    );
-
-    final Dio client = await getClient();
-    try {
-      response = await client.get('/system/configuration/autoUpgrade');
-      if (response.data != null) {
-        settings = AutoUpgradeSettings.fromJson(response.data);
-      }
-    } on DioError catch (e) {
-      print(e.message);
-    } finally {
-      close(client);
-    }
-    return settings;
-  }
-
-  Future<void> updateAutoUpgradeSettings(
-    final AutoUpgradeSettings settings,
-  ) async {
-    final Dio client = await getClient();
-    try {
-      await client.put(
-        '/system/configuration/autoUpgrade',
-        data: settings.toJson(),
-      );
-    } on DioError catch (e) {
-      print(e.message);
-    } finally {
-      close(client);
-    }
   }
 
   Future<TimeZoneSettings> getServerTimezone() async {

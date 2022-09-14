@@ -40,7 +40,8 @@ def podman_online(dir, *args):
 # Targets
 
 def build_linux():
-  podman_offline(f"{CONTAINER_HOME}/src", "flutter pub get --offline",
+  podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/flutter_pub_cache",
+                                          "&& flutter pub get --offline",
                                           "&& flutter build linux")
 
 def build_apk():
@@ -94,7 +95,8 @@ def deploy_fdroid_repo():
                   """], shell=True, check=True)
 
 def ci_build_linux():
-  podman_online(f"{CONTAINER_HOME}/src", "flutter build linux --debug")
+  podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/flutter_pub_cache",
+                                         "&& flutter build linux --debug")
 
 def ci_build_apk():
   podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle",

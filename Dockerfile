@@ -52,7 +52,7 @@ RUN flutter build linux
 RUN flutter build apk
 WORKDIR /tmp
 RUN rm -rf deps
-RUN chmod -R 777 $PUB_CACHE $GRADLE_USER_HOME
+RUN find $GRADLE_USER_HOME/daemon -exec chmod 777 {} \;
 
 # Install AppImage Builder
 RUN pip3 install appimage-builder

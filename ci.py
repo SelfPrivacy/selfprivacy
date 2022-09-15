@@ -51,13 +51,6 @@ def build_apk():
                                           "&& flutter pub get --offline",
                                           "&& flutter build apk --flavor production")
 def build_bundle():
-  config = open("android/key.properties", "w")
-  config.write(f"""storePassword={os.environ.get("GOOGLE_KEYSTORE_PASS")}
-keyPassword={os.environ.get("GOOGLE_KEYSTORE_PASS")}
-keyAlias=google
-storeFile={CONTAINER_HOME}/google-keystore
-""")
-  config.close()
   podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
                                           "&& flutter pub get --offline",
                                           "&& flutter build appbundle --flavor production")
@@ -78,6 +71,11 @@ def sign_apk_fdroid():
                  f"unsigned/{APP_NAME}_{APP_BUILD_ID}.apk || echo exist")
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid publish")
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid update")
+
+def sign_bundle():
+  podman_offline(f"{CONTAINER_HOME}/src",
+                 f"jarsigner -sigalg SHA256withRSA -digestalg SHA-256 -keystore {CONTAINER_HOME}/google-keystore -signedjar {APP_NAME}-{APP_SEMVER}.aab build/app/outputs/bundle/productionRelease/app-production-release.aab google",
+                 f"env:STANDALONE_KEYSTORE_PASS standalone_{APP_NAME}-{APP_SEMVER}.apk")
 
 def package_linux_appimage():
   podman_online(f"{CONTAINER_HOME}/src", "appimage-builder --recipe appimage.yml")
@@ -126,9 +124,10 @@ if __name__ == "__main__":
   group = parser.add_mutually_exclusive_group()
   group.add_argument("--build-linux", action="store_true")
   group.add_argument("--build-apk", action="store_true")
-  group.add_argument("--build-bundle", action="store_true", help="depends on $GOOGLE_KEYSTORE_CONF")
+  group.add_argument("--build-bundle", action="store_true")
   group.add_argument("--sign-apk-standalone", action="store_true", help="depends on $STANDALONE_KEYSTORE_PASS")
   group.add_argument("--sign-apk-fdroid", action="store_true", help="depends on $FDROID_KEYSTORE_PASS")
+  group.add_argument("--sign-bundle", action="store_true", help="depends on $GOOGLE_KEYSTORE_PASS")
   group.add_argument("--package-linux-appimage", action="store_true")
   group.add_argument("--package-linux-flatpak", action="store_true")
   group.add_argument("--package-linux-archive", action="store_true")

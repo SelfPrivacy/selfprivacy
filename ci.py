@@ -25,9 +25,9 @@ def podman_offline(dir, *args):
                   "-v", f"{HOST_HOME}/fdroid-keystore:{CONTAINER_HOME}/fdroid-keystore",
                   "-v", f"{HOST_HOME}/standalone-keystore:{CONTAINER_HOME}/standalone-keystore",
                   "-v", f"{HOST_HOME}/google-keystore:{CONTAINER_HOME}/google-keystore",
-                  "--env", "FDROID_KEYSTORE_PASS=" + os.environ.get('FDROID_KEYSTORE_PASS'),
-                  "--env", "STANDALONE_KEYSTORE_PASS=" + os.environ.get('STANDALONE_KEYSTORE_PASS'),
-                  "--env", "GOOGLE_KEYSTORE_PASS=" + os.environ.get('GOOGLE_KEYSTORE_PASS'),
+                  "--env", "FDROID_KEYSTORE_PASS=" + os.environ.get("FDROID_KEYSTORE_PASS"),
+                  "--env", "STANDALONE_KEYSTORE_PASS=" + os.environ.get("STANDALONE_KEYSTORE_PASS"),
+                  "--env", "GOOGLE_KEYSTORE_PASS=" + os.environ.get("GOOGLE_KEYSTORE_PASS"),
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ], check=True)
@@ -51,8 +51,14 @@ def build_apk():
                                           "&& flutter pub get --offline",
                                           "&& flutter build apk --flavor production")
 def build_bundle():
+  config = open("android/key.properties", "w")
+  config.write(f"""storePassword={os.environ.get("GOOGLE_KEYSTORE_PASS")}
+keyPassword={os.environ.get("GOOGLE_KEYSTORE_PASS")}
+keyAlias=google
+storeFile={CONTAINER_HOME}/google-keystore
+""")
+  config.close()
   podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
-                                          "&& sed -i s/changeme/$GOOGLE_KEYSTORE_PASS/ android/key.properties",
                                           "&& flutter pub get --offline",
                                           "&& flutter build appbundle --flavor production")
 

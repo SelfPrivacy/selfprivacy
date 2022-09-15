@@ -182,6 +182,3 @@ steps:
   - name: Build Windows Binary
     commands:
       - flutter build windows
-
-node:
-  server: windows

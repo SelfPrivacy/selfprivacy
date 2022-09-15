@@ -1,37 +1,37 @@
-kind: pipeline
-type: exec
-name: Continuous Integration
-
-steps:
-  - name: Prepare
-    commands:
-      - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
-
-  - name: Run Tests
-    commands:
-      - ./ci.py --ci-run-tests
-      - sonar-scanner -Dsonar.projectKey=SelfPrivacy-Flutter-App -Dsonar.sources=. -Dsonar.host.url=http://analyzer.lan:9000 -Dsonar.login="$SONARQUBE_TOKEN"
-    environment:
-      SONARQUBE_TOKEN:
-        from_secret: SONARQUBE_TOKEN
-
-  - name: Build Linux Target
-    commands:
-      - ./ci.py --ci-build-linux
-
-  - name: Build APK Target
-    commands:
-      - ./ci.py --ci-build-apk
-
-trigger:
-  event:
-    - push
-    - pull_request
-
-node:
-  server: builder
-
----
+#kind: pipeline
+#type: exec
+#name: Continuous Integration
+#
+#steps:
+#  - name: Prepare
+#    commands:
+#      - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+#
+#  - name: Run Tests
+#    commands:
+#      - ./ci.py --ci-run-tests
+#      - sonar-scanner -Dsonar.projectKey=SelfPrivacy-Flutter-App -Dsonar.sources=. -Dsonar.host.url=http://analyzer.lan:9000 -Dsonar.login="$SONARQUBE_TOKEN"
+#    environment:
+#      SONARQUBE_TOKEN:
+#        from_secret: SONARQUBE_TOKEN
+#
+#  - name: Build Linux Target
+#    commands:
+#      - ./ci.py --ci-build-linux
+#
+#  - name: Build APK Target
+#    commands:
+#      - ./ci.py --ci-build-apk
+#
+#trigger:
+#  event:
+#    - push
+#    - pull_request
+#
+#node:
+#  server: builder
+#
+#---
 
 kind: pipeline
 type: exec

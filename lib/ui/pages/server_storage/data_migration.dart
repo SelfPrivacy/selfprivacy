@@ -52,7 +52,9 @@ class _DataMigrationPageState extends State<DataMigrationPage> {
   /// subtract the used storage from the old volume and add it to the new volume.
   /// The old volume is the volume the service is currently on, shown in services list.
   DiskVolume recalculatedDiskUsages(
-      final DiskVolume volume, final List<Service> services) {
+    final DiskVolume volume,
+    final List<Service> services,
+  ) {
     DiskSize used = volume.sizeUsed;
 
     for (final Service service in services) {
@@ -105,7 +107,9 @@ class _DataMigrationPageState extends State<DataMigrationPage> {
                             children: [
                               ServerStorageListItem(
                                 volume: recalculatedDiskUsages(
-                                    volume, widget.services),
+                                  volume,
+                                  widget.services,
+                                ),
                                 dense: true,
                               ),
                               const SizedBox(height: headerVerticalPadding),

@@ -56,28 +56,30 @@ class _Chart extends StatelessWidget {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              BrandRadioTile(
-                isChecked: period == Period.month,
-                text: 'providers.server.chart.month'.tr(),
-                onPress: () => cubit.changePeriod(Period.month),
-              ),
-              BrandRadioTile(
-                isChecked: period == Period.day,
-                text: 'providers.server.chart.day'.tr(),
-                onPress: () => cubit.changePeriod(Period.day),
-              ),
-              BrandRadioTile(
-                isChecked: period == Period.hour,
-                text: 'providers.server.chart.hour'.tr(),
-                onPress: () => cubit.changePeriod(Period.hour),
-              ),
-            ],
-          ),
+        SegmentedButtons(
+          isSelected: [
+            period == Period.month,
+            period == Period.day,
+            period == Period.hour,
+          ],
+          onPressed: (final index) {
+            switch (index) {
+              case 0:
+                cubit.changePeriod(Period.month);
+                break;
+              case 1:
+                cubit.changePeriod(Period.day);
+                break;
+              case 2:
+                cubit.changePeriod(Period.hour);
+                break;
+            }
+          },
+          titles: [
+            'providers.server.chart.month'.tr(),
+            'providers.server.chart.day'.tr(),
+            'providers.server.chart.hour'.tr()
+          ],
         ),
         ...charts,
       ],

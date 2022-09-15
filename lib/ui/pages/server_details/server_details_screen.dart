@@ -9,12 +9,12 @@ import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_inf
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
+import 'package:selfprivacy/ui/components/brand_button/segmented_buttons.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
-import 'package:selfprivacy/ui/components/brand_radio_tile/brand_radio_tile.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
 import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';

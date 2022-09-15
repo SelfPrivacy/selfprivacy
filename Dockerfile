@@ -49,7 +49,7 @@ ENV GRADLE_USER_HOME "/tmp/gradle"
 RUN git clone --depth=1 --single-branch https://git.selfprivacy.org/kherel/selfprivacy.org.app.git deps
 WORKDIR /tmp/deps
 RUN flutter build linux
-RUN flutter build apk
+RUN flutter build apk --flavor production
 WORKDIR /tmp
 RUN rm -rf deps
 RUN find $GRADLE_USER_HOME/daemon -exec chmod 777 {} \;

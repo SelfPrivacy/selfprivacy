@@ -1,9 +1,7 @@
 part of 'server_details_screen.dart';
 
 class _ServerSettings extends StatefulWidget {
-  const _ServerSettings({required this.tabController});
-
-  final TabController tabController;
+  const _ServerSettings();
 
   @override
   State<_ServerSettings> createState() => _ServerSettingsState();
@@ -26,25 +24,8 @@ class _ServerSettingsState extends State<_ServerSettings> {
       rebootAfterUpgrade = serverDetailsState.autoUpgradeSettings.allowReboot;
     }
 
-    return ListView(
-      padding: paddingH15V0,
+    return Column(
       children: [
-        const SizedBox(height: 10),
-        Container(
-          height: 52,
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.only(left: 1),
-          child: Row(
-            children: [
-              IconButton(
-                icon: const Icon(BrandIcons.arrowLeft),
-                onPressed: () => widget.tabController.animateTo(0),
-              ),
-              const SizedBox(width: 10),
-              BrandText.h4('basis.settings'.tr()),
-            ],
-          ),
-        ),
         SwitcherBlock(
           onChange: (final switched) {
             context

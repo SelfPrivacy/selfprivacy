@@ -17,7 +17,7 @@ class _Chart extends StatelessWidget {
       ];
     } else if (state is HetznerMetricsLoaded) {
       charts = [
-        BrandCards.filled(
+        FilledCard(
           clipped: false,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -36,18 +36,6 @@ class _Chart extends StatelessWidget {
             ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            BrandText.small('Public Network interface packets per sec'),
-            const SizedBox(width: 10),
-            const Legend(color: Colors.red, text: 'IN'),
-            const SizedBox(width: 5),
-            const Legend(color: Colors.green, text: 'OUT'),
-          ],
-        ),
-        const SizedBox(height: 20),
-        getPpsChart(state),
         const SizedBox(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -66,36 +54,33 @@ class _Chart extends StatelessWidget {
       throw 'wrong state';
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BrandRadioTile(
-                  isChecked: period == Period.month,
-                  text: 'providers.server.chart.month'.tr(),
-                  onPress: () => cubit.changePeriod(Period.month),
-                ),
-                BrandRadioTile(
-                  isChecked: period == Period.day,
-                  text: 'providers.server.chart.day'.tr(),
-                  onPress: () => cubit.changePeriod(Period.day),
-                ),
-                BrandRadioTile(
-                  isChecked: period == Period.hour,
-                  text: 'providers.server.chart.hour'.tr(),
-                  onPress: () => cubit.changePeriod(Period.hour),
-                ),
-              ],
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BrandRadioTile(
+                isChecked: period == Period.month,
+                text: 'providers.server.chart.month'.tr(),
+                onPress: () => cubit.changePeriod(Period.month),
+              ),
+              BrandRadioTile(
+                isChecked: period == Period.day,
+                text: 'providers.server.chart.day'.tr(),
+                onPress: () => cubit.changePeriod(Period.day),
+              ),
+              BrandRadioTile(
+                isChecked: period == Period.hour,
+                text: 'providers.server.chart.hour'.tr(),
+                onPress: () => cubit.changePeriod(Period.hour),
+              ),
+            ],
           ),
-          ...charts,
-        ],
-      ),
+        ),
+        ...charts,
+      ],
     );
   }
 
@@ -106,20 +91,6 @@ class _Chart extends StatelessWidget {
       height: 200,
       child: CpuChart(
         data: data,
-        period: state.period,
-        start: state.start,
-      ),
-    );
-  }
-
-  Widget getPpsChart(final HetznerMetricsLoaded state) {
-    final ppsIn = state.ppsIn;
-    final ppsOut = state.ppsOut;
-
-    return SizedBox(
-      height: 200,
-      child: NetworkChart(
-        listData: [ppsIn, ppsOut],
         period: state.period,
         start: state.start,
       ),

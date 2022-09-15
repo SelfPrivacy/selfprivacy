@@ -8,11 +8,11 @@ import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
+import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -63,7 +63,7 @@ class _BackupDetailsState extends State<BackupDetails>
           BrandText.body1('providers.backup.waitingForRebuild'.tr()),
         if (backupStatus != BackupStatusEnum.initializing &&
             backupStatus != BackupStatusEnum.noKey)
-          BrandCards.outlined(
+          OutlinedCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -127,7 +127,7 @@ class _BackupDetailsState extends State<BackupDetails>
         // When clicked, starts the restore action
         if (backupStatus != BackupStatusEnum.initializing &&
             backupStatus != BackupStatusEnum.noKey)
-          BrandCards.outlined(
+          OutlinedCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -195,7 +195,7 @@ class _BackupDetailsState extends State<BackupDetails>
             ),
           ),
         const SizedBox(height: 16),
-        BrandCards.outlined(
+        OutlinedCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

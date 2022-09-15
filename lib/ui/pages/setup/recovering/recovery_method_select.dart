@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
@@ -20,7 +20,7 @@ class RecoveryMethodSelect extends StatelessWidget {
         onBackButtonPressed:
             context.read<ServerInstallationCubit>().revertRecoveryStep,
         children: [
-          BrandCards.outlined(
+          OutlinedCard(
             child: ListTile(
               title: Text(
                 'recovering.method_select_other_device'.tr(),
@@ -33,7 +33,7 @@ class RecoveryMethodSelect extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          BrandCards.outlined(
+          OutlinedCard(
             child: ListTile(
               title: Text(
                 'recovering.method_select_recovery_key'.tr(),
@@ -75,7 +75,7 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
           hasBackButton: true,
           hasFlashButton: false,
           children: [
-            BrandCards.outlined(
+            OutlinedCard(
               child: ListTile(
                 title: Text(
                   'recovering.fallback_select_token_copy'.tr(),
@@ -92,7 +92,7 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            BrandCards.outlined(
+            OutlinedCard(
               child: ListTile(
                 title: Text(
                   'recovering.fallback_select_root_ssh'.tr(),
@@ -109,7 +109,7 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            BrandCards.outlined(
+            OutlinedCard(
               child: ListTile(
                 title: Text(
                   'recovering.fallback_select_provider_console'.tr(),

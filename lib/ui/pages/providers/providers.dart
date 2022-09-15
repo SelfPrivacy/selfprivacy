@@ -8,13 +8,11 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/provider.dart';
-import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
 import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/providers/storage_card.dart';
@@ -122,14 +120,7 @@ class _Card extends StatelessWidget {
       case ProviderType.server:
         title = 'providers.server.card_title'.tr();
         stableText = 'providers.server.status'.tr();
-        onTap = () => showBrandBottomSheet(
-              context: context,
-              builder: (final BuildContext context) => const BrandBottomSheet(
-                isExpended: true,
-                child: ServerDetailsScreen(),
-              ),
-            );
-
+        onTap = () => Navigator.of(context).push(materialRoute(const ServerDetailsScreen()));
         break;
       case ProviderType.domain:
         title = 'providers.domain.screen_title'.tr();

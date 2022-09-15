@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.d
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
@@ -157,7 +157,7 @@ class _MoreMenuItem extends StatelessWidget {
     final Color color = accent
         ? Theme.of(context).colorScheme.onTertiaryContainer
         : Theme.of(context).colorScheme.onSurface;
-    return BrandCards.filled(
+    return FilledCard(
       tertiary: accent,
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

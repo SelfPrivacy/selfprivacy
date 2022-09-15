@@ -130,7 +130,7 @@ class _UserLogins extends StatelessWidget {
   final String domainName;
 
   @override
-  Widget build(final BuildContext context) => BrandCards.filled(
+  Widget build(final BuildContext context) => FilledCard(
         child: Column(
           children: [
             ListTile(
@@ -153,7 +153,7 @@ class _SshKeysCard extends StatelessWidget {
   final User user;
 
   @override
-  Widget build(final BuildContext context) => BrandCards.filled(
+  Widget build(final BuildContext context) => FilledCard(
         child: Column(
           children: [
             ListTile(

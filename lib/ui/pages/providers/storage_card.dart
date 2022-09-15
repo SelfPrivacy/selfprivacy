@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
 import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
@@ -42,7 +41,9 @@ class StorageCard extends StatelessWidget {
       state = StateType.error;
     }
 
-    return GestureDetector(
+    return Card(
+      child: InkResponse(
+        highlightShape: BoxShape.rectangle,
       onTap: () => Navigator.of(context).push(
         materialRoute(
           ServerStoragePage(
@@ -50,49 +51,49 @@ class StorageCard extends StatelessWidget {
           ),
         ),
       ),
-      child: BrandCards.big(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconStatusMask(
-                  status: state,
-                  child: const Icon(
-                    Icons.storage_outlined,
-                    size: 30,
-                    color: Colors.white,
+
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'providers.storage.card_title'.tr(),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      if (state != StateType.uninitialized)
+                        Text(
+                          diskStatus.isDiskOkay
+                              ? 'providers.storage.status_ok'.tr()
+                              : 'providers.storage.status_error'.tr(),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                    ],
                   ),
-                ),
-                if (state != StateType.uninitialized)
-                  IconStatusMask(
-                    status: state,
-                    child: Icon(
-                      diskStatus.isDiskOkay
-                          ? Icons.check_circle_outline
-                          : Icons.error_outline,
-                      size: 24,
-                      color: Colors.white,
+                  if (state != StateType.uninitialized)
+                    IconStatusMask(
+                      status: state,
+                      child: Icon(
+                        diskStatus.isDiskOkay
+                            ? Icons.check_circle_outline
+                            : Icons.error_outline,
+                        size: 24,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'providers.storage.card_title'.tr(),
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            if (state != StateType.uninitialized)
-              Text(
-                diskStatus.isDiskOkay
-                    ? 'providers.storage.status_ok'.tr()
-                    : 'providers.storage.status_error'.tr(),
-                style: Theme.of(context).textTheme.bodyLarge,
+                ],
               ),
-            ...sections,
-            const SizedBox(height: 8),
-          ],
+              ...sections,
+              const SizedBox(height: 8),
+            ],
+          ),
         ),
       ),
     );

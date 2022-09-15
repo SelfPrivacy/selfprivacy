@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
@@ -61,7 +61,8 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         isError = true;
         break;
     }
-    return BrandCards.filled(
+    return FilledCard(
+      error: isError,
       child: ListTile(
         onTap: dnsState == DnsRecordsStatus.error ? () => fixCallback() : null,
         leading: icon,
@@ -74,7 +75,6 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
             ? Theme.of(context).colorScheme.error
             : Theme.of(context).colorScheme.onSurfaceVariant,
       ),
-      error: isError,
     );
   }
 
@@ -95,7 +95,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         heroIcon: BrandIcons.globe,
         heroTitle: 'providers.domain.screen_title'.tr(),
         children: <Widget>[
-          BrandCards.outlined(
+          FilledCard(
             child: ListTile(
               title: Text(
                 'not_ready_card.in_menu'.tr(),

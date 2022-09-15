@@ -19,23 +19,6 @@ class BrandCards {
         borderRadius: BorderRadius.circular(10),
         child: child,
       );
-  static Widget outlined({required final Widget child}) => _OutlinedCard(
-        child: child,
-      );
-  static Widget filled({
-    required final Widget child,
-    final bool tertiary = false,
-    final bool secondary = false,
-    final bool error = false,
-    final bool clipped = true,
-  }) =>
-      _FilledCard(
-        tertiary: tertiary,
-        secondary: secondary,
-        error: error,
-        clipped: clipped,
-        child: child,
-      );
 }
 
 class _BrandCard extends StatelessWidget {
@@ -59,58 +42,6 @@ class _BrandCard extends StatelessWidget {
           boxShadow: shadow,
         ),
         padding: padding,
-        child: child,
-      );
-}
-
-class _OutlinedCard extends StatelessWidget {
-  const _OutlinedCard({
-    required this.child,
-  });
-
-  final Widget child;
-  @override
-  Widget build(final BuildContext context) => Card(
-        elevation: 0.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-          ),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: child,
-      );
-}
-
-class _FilledCard extends StatelessWidget {
-  const _FilledCard({
-    required this.child,
-    required this.secondary,
-    required this.tertiary,
-    required this.error,
-    required this.clipped,
-  });
-
-  final Widget child;
-  final bool tertiary;
-  final bool error;
-  final bool clipped;
-  final bool secondary;
-  @override
-  Widget build(final BuildContext context) => Card(
-        elevation: 0.0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-        clipBehavior: clipped ? Clip.antiAlias : Clip.none,
-        color: error
-            ? Theme.of(context).colorScheme.errorContainer
-            : secondary
-                ? Theme.of(context).colorScheme.secondaryContainer
-                : tertiary
-                    ? Theme.of(context).colorScheme.tertiaryContainer
-                    : Theme.of(context).colorScheme.surfaceVariant,
         child: child,
       );
 }

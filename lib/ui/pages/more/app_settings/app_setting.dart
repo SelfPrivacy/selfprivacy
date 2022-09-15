@@ -116,7 +116,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                 ),
               ),
               const Divider(height: 0),
-              _DeleteServer(context)
+              _deleteServer(context)
             ],
           ),
         ),
@@ -124,7 +124,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     );
   }
 
-  Widget _DeleteServer(final BuildContext context) {
+  Widget _deleteServer(final BuildContext context) {
     final bool isDisabled =
         context.watch<ServerInstallationCubit>().state.serverDetails == null;
     return Container(

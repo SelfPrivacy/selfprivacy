@@ -8,7 +8,7 @@ import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key_receiving.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
@@ -112,7 +112,7 @@ class RecoveryKeyStatusCard extends StatelessWidget {
   final bool isValid;
 
   @override
-  Widget build(final BuildContext context) => BrandCards.filled(
+  Widget build(final BuildContext context) => FilledCard(
         child: ListTile(
           title: isValid
               ? Text(

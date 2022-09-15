@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -156,8 +156,8 @@ class ServiceStatusCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     switch (status) {
       case ServiceStatus.active:
-        return BrandCards.filled(
-          child: const ListTile(
+        return const FilledCard(
+          child: ListTile(
             leading: Icon(
               Icons.check_circle_outline,
               size: 24,
@@ -166,70 +166,70 @@ class ServiceStatusCard extends StatelessWidget {
           ),
         );
       case ServiceStatus.inactive:
-        return BrandCards.filled(
-          child: const ListTile(
+        return const FilledCard(
+          tertiary: true,
+          child: ListTile(
             leading: Icon(
               Icons.stop_circle_outlined,
               size: 24,
             ),
             title: Text('Stopped'),
           ),
-          tertiary: true,
         );
       case ServiceStatus.failed:
-        return BrandCards.filled(
-          child: const ListTile(
+        return const FilledCard(
+          error: true,
+          child: ListTile(
             leading: Icon(
               Icons.error_outline,
               size: 24,
             ),
             title: Text('Failed to start'),
           ),
-          error: true,
         );
       case ServiceStatus.off:
-        return BrandCards.filled(
-          child: const ListTile(
+        return const FilledCard(
+          tertiary: true,
+          child: ListTile(
             leading: Icon(
               Icons.power_settings_new,
               size: 24,
             ),
             title: Text('Disabled'),
           ),
-          tertiary: true,
         );
       case ServiceStatus.activating:
-        return BrandCards.filled(
-          child: const ListTile(
+        return const FilledCard(
+          tertiary: true,
+          child: ListTile(
             leading: Icon(
               Icons.restart_alt_outlined,
               size: 24,
             ),
             title: Text('Activating'),
           ),
-          tertiary: true,
         );
       case ServiceStatus.deactivating:
-        return BrandCards.filled(
-          child: const ListTile(
+        return const FilledCard(
+          tertiary: true,
+          child: ListTile(
             leading: Icon(
               Icons.restart_alt_outlined,
               size: 24,
             ),
             title: Text('Deactivating'),
           ),
-          tertiary: true,
         );
       case ServiceStatus.reloading:
-        return BrandCards.filled(
-          child: const ListTile(
+        return const FilledCard(
+          tertiary: true,
+          child: ListTile(
             leading: Icon(
               Icons.restart_alt_outlined,
               size: 24,
             ),
             title: Text('Restarting'),
           ),
-          tertiary: true,
         );
     }
   }

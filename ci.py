@@ -137,6 +137,8 @@ if args.build_linux:
   build_linux()
 elif args.build_apk:
   build_apk()
+elif args.build_bundle:
+  build_bundle()
 elif args.sign_apk_standalone:
   sign_apk_standalone()
 elif args.sign_apk_fdroid:

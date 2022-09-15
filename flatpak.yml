@@ -10,6 +10,7 @@ finish-args:
   - "--socket=wayland"
   - "--share=network"
   - "--own-name=org.selfprivacy.app"
+  - "--device=dri"
 modules:
   - name: selfprivacy
     buildsystem: simple

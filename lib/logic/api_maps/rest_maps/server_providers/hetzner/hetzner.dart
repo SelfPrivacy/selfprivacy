@@ -466,19 +466,27 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   ) async {
     final ServerHostingDetails? hetznerServer =
         getIt<ApiConfigModel>().serverDetails;
-    final Dio client = await getClient();
 
-    final Map<String, dynamic> queryParameters = {
-      'start': start.toUtc().toIso8601String(),
-      'end': end.toUtc().toIso8601String(),
-      'type': type
-    };
-    final Response res = await client.get(
-      '/servers/${hetznerServer!.id}/metrics',
-      queryParameters: queryParameters,
-    );
-    close(client);
-    return res.data;
+    Map<String, dynamic> metrics = {};
+    final Dio client = await getClient();
+    try {
+      final Map<String, dynamic> queryParameters = {
+        'start': start.toUtc().toIso8601String(),
+        'end': end.toUtc().toIso8601String(),
+        'type': type
+      };
+      final Response res = await client.get(
+        '/servers/${hetznerServer!.id}/metrics',
+        queryParameters: queryParameters,
+      );
+      metrics = res.data;
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return metrics;
   }
 
   Future<HetznerServerInfo> getInfo() async {

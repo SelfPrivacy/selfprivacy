@@ -1,4 +1,4 @@
-part of 'server_details_screen.dart';
+part of '../server_details_screen.dart';
 
 class _Chart extends StatelessWidget {
   @override
@@ -17,9 +17,25 @@ class _Chart extends StatelessWidget {
       ];
     } else if (state is HetznerMetricsLoaded) {
       charts = [
-        const Legend(color: Colors.red, text: 'CPU %'),
-        const SizedBox(height: 20),
-        getCpuChart(state),
+        BrandCards.filled(
+          clipped: false,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'CPU Usage',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+                const SizedBox(height: 16),
+                getCpuChart(state),
+              ],
+            ),
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

@@ -6,7 +6,7 @@ import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
-import 'package:intl/intl.dart';
+import 'package:selfprivacy/ui/pages/server_details/charts/bottom_title.dart';
 
 class NetworkChart extends StatelessWidget {
   const NetworkChart({
@@ -77,7 +77,11 @@ class NetworkChart extends StatelessWidget {
                     child: RotatedBox(
                       quarterTurns: 1,
                       child: Text(
-                        bottomTitle(value.toInt()),
+                        bottomTitle(
+                          value.toInt(),
+                          listData[0],
+                          period,
+                        ),
                         style: const TextStyle(
                           fontSize: 10,
                           color: Colors.purple,
@@ -134,27 +138,5 @@ class NetworkChart extends StatelessWidget {
     final diff = value - minValue;
     final finalValue = diff / 20;
     return finalValue - finalValue.floor() == 0;
-  }
-
-  String bottomTitle(final int value) {
-    final hhmm = DateFormat('HH:mm');
-    final day = DateFormat('MMMd');
-    String res;
-
-    if (value <= 0) {
-      return '';
-    }
-
-    final time = listData[0][value].time;
-    switch (period) {
-      case Period.hour:
-      case Period.day:
-        res = hhmm.format(time);
-        break;
-      case Period.month:
-        res = day.format(time);
-    }
-
-    return res;
   }
 }

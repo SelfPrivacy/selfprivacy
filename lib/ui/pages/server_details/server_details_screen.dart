@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_inf
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
+import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
@@ -22,10 +23,10 @@ import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:timezone/timezone.dart';
 
-import 'package:selfprivacy/ui/pages/server_details/cpu_chart.dart';
-import 'package:selfprivacy/ui/pages/server_details/network_charts.dart';
+import 'package:selfprivacy/ui/pages/server_details/charts/cpu_chart.dart';
+import 'package:selfprivacy/ui/pages/server_details/charts/network_charts.dart';
 
-part 'chart.dart';
+part 'charts/chart.dart';
 part 'header.dart';
 part 'server_settings.dart';
 part 'text_details.dart';

@@ -23,6 +23,10 @@ steps:
     commands:
       - ./ci.py --ci-build-apk
 
+  - name: Build Bundle Target
+    commands:
+      - ./ci.py --ci-build-bundle
+
 trigger:
   event:
     - push
@@ -45,59 +49,70 @@ steps:
       - git config user.email "builder@selfprivacy.org"
       - git config user.name "Builder"
 
-  - name: Build Intermediate Linux Release Artifact (Binary)
+#  - name: Build Intermediate Linux Release Artifact (Binary)
+#    commands:
+#      - ./ci.py --build-linux
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
+
+#  - name: Build Intermediate Android Release Artifact (.APK)
+#    commands:
+#      - ./ci.py --build-apk
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
+
+  - name: Build and Sign Android Release Artifact (Bundle)
     commands:
-      - ./ci.py --build-linux
+      - ./ci.py --build-bundle
     environment:
       STANDALONE_KEYSTORE_PASS:
         from_secret: STANDALONE_KEYSTORE_PASS
       FDROID_KEYSTORE_PASS:
         from_secret: FDROID_KEYSTORE_PASS
+      GOOGLE_KEYSTORE_CONF:
+        from_secret: GOOGLE_KEYSTORE_CONF
 
-  - name: Build Intermediate Android Release Artifact (.APK)
-    commands:
-      - ./ci.py --build-apk
-    environment:
-      STANDALONE_KEYSTORE_PASS:
-        from_secret: STANDALONE_KEYSTORE_PASS
-      FDROID_KEYSTORE_PASS:
-        from_secret: FDROID_KEYSTORE_PASS
+#  - name: Sign Android Release Artifact (.APK) for Standalone Use
+#    commands:
+#      - ./ci.py --sign-apk-standalone
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
 
-  - name: Sign Android Release Artifact (.APK) for Standalone Use
-    commands:
-      - ./ci.py --sign-apk-standalone
-    environment:
-      STANDALONE_KEYSTORE_PASS:
-        from_secret: STANDALONE_KEYSTORE_PASS
-      FDROID_KEYSTORE_PASS:
-        from_secret: FDROID_KEYSTORE_PASS
+#  - name: Sign Android Release Artifact (.APK) for F-Droid Repository
+#    commands:
+#      - ./ci.py --sign-apk-fdroid
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
 
-  - name: Sign Android Release Artifact (.APK) for F-Droid Repository
-    commands:
-      - ./ci.py --sign-apk-fdroid
-    environment:
-      STANDALONE_KEYSTORE_PASS:
-        from_secret: STANDALONE_KEYSTORE_PASS
-      FDROID_KEYSTORE_PASS:
-        from_secret: FDROID_KEYSTORE_PASS
+#  - name: Package Linux AppImage Artifact
+#    commands:
+#      - ./ci.py --package-linux-appimage
 
-  - name: Package Linux AppImage Artifact
-    commands:
-      - ./ci.py --package-linux-appimage
+#  - name: Package Linux Flatpak Artifact
+#    commands:
+#      - ./ci.py --package-linux-flatpak
 
-  - name: Package Linux Flatpak Artifact
-    commands:
-      - ./ci.py --package-linux-flatpak
+#  - name: Package Linux Archive Artifact
+#    commands:
+#      - ./ci.py --package-linux-archive
 
-  - name: Package Linux Archive Artifact
-    commands:
-      - ./ci.py --package-linux-archive
-
-  - name: Push Artifacts to the Release Volume
-    commands:
-      - git add -v *.AppImage *.AppImage.zsync *.flatpak *.apk *.apk.idsig *.tar.zstd
-      - git commit -m Release
-      - git archive --format=tar HEAD | podman volume import release -
+#  - name: Push Artifacts to the Release Volume
+#    commands:
+#      - git add -v *.AppImage *.AppImage.zsync *.flatpak *.apk *.apk.idsig *.tar.zstd
+#      - git commit -m Release
+#      - git archive --format=tar HEAD | podman volume import release -
 
 trigger:
   event:

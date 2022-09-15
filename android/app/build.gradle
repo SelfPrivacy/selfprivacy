@@ -61,18 +61,18 @@ android {
         versionName flutterVersionName
     }
 
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+    flavorDimensions "default"
+    productFlavors {
+        fdroid {
+            applicationId "pro.kherel.selfprivacy"
         }
-    }
-
-    buildTypes {
-        release {
-            signingConfig signingConfigs.release
+        production {
+            applicationIdSuffix ""
+        }
+        nightly {
+            applicationIdSuffix ".nightly"
+            versionCode project.getVersionCode()
+            versionName "nightly-" + project.getVersionCode()
         }
     }
 }

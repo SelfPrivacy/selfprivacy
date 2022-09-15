@@ -44,14 +44,13 @@ class StorageCard extends StatelessWidget {
     return Card(
       child: InkResponse(
         highlightShape: BoxShape.rectangle,
-      onTap: () => Navigator.of(context).push(
-        materialRoute(
-          ServerStoragePage(
-            diskStatus: diskStatus,
+        onTap: () => Navigator.of(context).push(
+          materialRoute(
+            ServerStoragePage(
+              diskStatus: diskStatus,
+            ),
           ),
         ),
-      ),
-
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

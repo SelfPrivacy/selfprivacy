@@ -17,7 +17,7 @@ import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/brand_radio_tile/brand_radio_tile.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
-import 'package:selfprivacy/ui/pages/providers/storage_card.dart';
+import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';
 import 'package:selfprivacy/ui/pages/server_details/time_zone/lang.dart';
 import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';

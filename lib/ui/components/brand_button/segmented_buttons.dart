@@ -30,19 +30,34 @@ class SegmentedButtons extends StatelessWidget {
           children: titles.asMap().entries.map((final entry) {
             final index = entry.key;
             final title = entry.value;
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            return Stack(
+              alignment: Alignment.centerLeft,
               children: [
-                if (isSelected[index])
-                  Icon(
-                    Icons.check,
-                    size: 18,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: isSelected[index] ? 1 : 0,
+                  child: AnimatedScale(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                    alignment: Alignment.centerLeft,
+                    scale: isSelected[index] ? 1 : 0,
+                    child: Icon(
+                      Icons.check,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
                   ),
-                if (isSelected[index]) const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                AnimatedPadding(
+                  padding: isSelected[index]
+                      ? const EdgeInsets.only(left: 24)
+                      : EdgeInsets.zero,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
                 ),
               ],
             );

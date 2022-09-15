@@ -23,10 +23,6 @@ steps:
     commands:
       - ./ci.py --ci-build-apk
 
-  - name: Build Bundle Target
-    commands:
-      - ./ci.py --ci-build-bundle
-
 trigger:
   event:
     - push

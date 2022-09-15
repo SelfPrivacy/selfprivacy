@@ -1,0 +1,9 @@
+- Server storage management
+- New screen for service management
+- New users management screen
+- User passwords can be changed
+- Server auto upgrade settings can be changed now
+- Server timezone can be changed
+- Fixed bugs related to users list synchronization
+- UI fixes
+- Minor bug fixes

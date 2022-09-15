@@ -22,10 +22,12 @@ def podman_offline(dir, *args):
   subprocess.run(["podman", "run", "--rm", "--network=none", "--cap-add=CHOWN", f"--workdir={dir}",
                   "-v", os.getcwd() + f":{CONTAINER_HOME}/src",
                   "-v", f"{HOST_HOME}/fdroid:{CONTAINER_HOME}/fdroid",
-                  "-v", f"{HOST_HOME}/fdroid-keystore:{CONTAINER_HOME}/fdroid/fdroid-keystore",
-                  "-v", f"{HOST_HOME}/standalone-keystore:{CONTAINER_HOME}/fdroid/standalone-keystore",
+                  "-v", f"{HOST_HOME}/fdroid-keystore:{CONTAINER_HOME}/fdroid-keystore",
+                  "-v", f"{HOST_HOME}/standalone-keystore:{CONTAINER_HOME}/standalone-keystore",
+                  "-v", f"{HOST_HOME}/google-keystore:{CONTAINER_HOME}/google-keystore",
                   "--env", "FDROID_KEYSTORE_PASS=" + os.environ.get('FDROID_KEYSTORE_PASS'),
                   "--env", "STANDALONE_KEYSTORE_PASS=" + os.environ.get('STANDALONE_KEYSTORE_PASS'),
+                  "--env", "GOOGLE_KEYSTORE_CONF=" + os.environ.get('GOOGLE_KEYSTORE_CONF'),
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ], check=True)
@@ -48,13 +50,18 @@ def build_apk():
   podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
                                           "&& flutter pub get --offline",
                                           "&& flutter build apk --flavor production")
+def build_bundle():
+  podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
+                                          "&& echo $GOOGLE_KEYSTORE_CONF > android/key.properties",
+                                          "&& flutter pub get --offline",
+                                          "&& flutter build appbundle --flavor production")
 
 def sign_apk_standalone():
   podman_offline(f"{CONTAINER_HOME}/src",
                  "zipalign -f -v 4 build/app/outputs/flutter-apk/app-production-release.apk",
                  f"standalone_{APP_NAME}-{APP_SEMVER}.apk")
   podman_offline(f"{CONTAINER_HOME}/src",
-                 "apksigner sign --ks ../fdroid/standalone-keystore --ks-key-alias standalone --ks-pass",
+                 f"apksigner sign --ks {CONTAINER_HOME}/standalone-keystore --ks-key-alias standalone --ks-pass",
                  f"env:STANDALONE_KEYSTORE_PASS standalone_{APP_NAME}-{APP_SEMVER}.apk")
 
 def sign_apk_fdroid():
@@ -113,6 +120,7 @@ if __name__ == "__main__":
   group = parser.add_mutually_exclusive_group()
   group.add_argument("--build-linux", action="store_true")
   group.add_argument("--build-apk", action="store_true")
+  group.add_argument("--build-bundle", action="store_true", help="depends on $GOOGLE_KEYSTORE_CONF")
   group.add_argument("--sign-apk-standalone", action="store_true", help="depends on $STANDALONE_KEYSTORE_PASS")
   group.add_argument("--sign-apk-fdroid", action="store_true", help="depends on $FDROID_KEYSTORE_PASS")
   group.add_argument("--package-linux-appimage", action="store_true")

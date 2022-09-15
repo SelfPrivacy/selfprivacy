@@ -144,6 +144,7 @@ class _Card extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Card(
+        clipBehavior: Clip.antiAlias,
         child: InkResponse(
           highlightShape: BoxShape.rectangle,
           onTap: onTap,

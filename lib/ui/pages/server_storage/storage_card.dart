@@ -42,6 +42,7 @@ class StorageCard extends StatelessWidget {
     }
 
     return Card(
+      clipBehavior: Clip.antiAlias,
       child: InkResponse(
         highlightShape: BoxShape.rectangle,
         onTap: () => Navigator.of(context).push(

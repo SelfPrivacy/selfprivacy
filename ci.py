@@ -74,7 +74,7 @@ def sign_apk_fdroid():
 
 def sign_bundle():
   podman_offline(f"{CONTAINER_HOME}/src",
-                 f"jarsigner -sigalg SHA256withRSA -digestalg SHA-256 -keystore {CONTAINER_HOME}/google-keystore -signedjar {APP_NAME}-{APP_SEMVER}.aab -storepass:env GOOGLE_KEYSTORE_PASS build/app/outputs/bundle/productionRelease/app-production-release.aab google",
+                 f"jarsigner -sigalg SHA256withRSA -digestalg SHA-256 -keystore {CONTAINER_HOME}/google-keystore -signedjar {APP_NAME}-{APP_SEMVER}.aab -storepass:env GOOGLE_KEYSTORE_PASS build/app/outputs/bundle/productionRelease/app-production-release.aab google")
 
 def package_linux_appimage():
   podman_online(f"{CONTAINER_HOME}/src", "appimage-builder --recipe appimage.yml")

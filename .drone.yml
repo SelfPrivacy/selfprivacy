@@ -179,7 +179,9 @@ type: exec
 name: Windows
 
 steps:
-  - flutter build windows
+  name: Build Windows Binary
+  commands:
+    - flutter build windows
 
 node:
   server: windows

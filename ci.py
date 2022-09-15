@@ -148,6 +148,8 @@ elif args.sign_apk_standalone:
   sign_apk_standalone()
 elif args.sign_apk_fdroid:
   sign_apk_fdroid()
+elif args.sign_bundle:
+  sign_sign_bundle()
 elif args.package_linux_appimage:
   package_linux_appimage()
 elif args.package_linux_flatpak:

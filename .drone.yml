@@ -171,3 +171,15 @@ node:
 
 depends_on:
   - Release
+
+---
+
+kind: pipeline
+type: exec
+name: Windows
+
+steps:
+  - flutter build windows
+
+node:
+  server: windows

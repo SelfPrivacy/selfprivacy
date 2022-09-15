@@ -51,17 +51,20 @@ class _DataMigrationPageState extends State<DataMigrationPage> {
   /// Check the services and if a service is moved (in a serviceToDisk entry)
   /// subtract the used storage from the old volume and add it to the new volume.
   /// The old volume is the volume the service is currently on, shown in services list.
-  DiskVolume recalculatedDiskUsages(final DiskVolume volume, final List<Service> services) {
+  DiskVolume recalculatedDiskUsages(
+      final DiskVolume volume, final List<Service> services) {
     DiskSize used = volume.sizeUsed;
 
     for (final Service service in services) {
       if (service.storageUsage.volume != null) {
         if (service.storageUsage.volume == volume.name) {
-          if (serviceToDisk[service.id] != null && serviceToDisk[service.id] != volume.name) {
+          if (serviceToDisk[service.id] != null &&
+              serviceToDisk[service.id] != volume.name) {
             used -= service.storageUsage.used;
           }
         } else {
-          if (serviceToDisk[service.id] != null && serviceToDisk[service.id] == volume.name) {
+          if (serviceToDisk[service.id] != null &&
+              serviceToDisk[service.id] == volume.name) {
             used += service.storageUsage.used;
           }
         }
@@ -101,7 +104,8 @@ class _DataMigrationPageState extends State<DataMigrationPage> {
                           (final volume) => Column(
                             children: [
                               ServerStorageListItem(
-                                volume: recalculatedDiskUsages(volume, widget.services),
+                                volume: recalculatedDiskUsages(
+                                    volume, widget.services),
                                 dense: true,
                               ),
                               const SizedBox(height: headerVerticalPadding),
@@ -119,7 +123,8 @@ class _DataMigrationPageState extends State<DataMigrationPage> {
         body: ListView(
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            if (widget.services.isEmpty) const Center(child: CircularProgressIndicator()),
+            if (widget.services.isEmpty)
+              const Center(child: CircularProgressIndicator()),
             ...widget.services
                 .map(
                   (final service) => Column(
@@ -139,7 +144,10 @@ class _DataMigrationPageState extends State<DataMigrationPage> {
                 .toList(),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: InfoBox(text: 'providers.storage.data_migration_notice'.tr(), isWarning: true,),
+              child: InfoBox(
+                text: 'providers.storage.data_migration_notice'.tr(),
+                isWarning: true,
+              ),
             ),
             const SizedBox(height: 16),
             FilledButton(

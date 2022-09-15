@@ -68,15 +68,16 @@ class DiskVolume {
     final bool? isResizable,
     final ServerDiskVolume? serverDiskVolume,
     final ServerVolume? providerVolume,
-  }) => DiskVolume(
-      sizeUsed: sizeUsed ?? this.sizeUsed,
-      sizeTotal: sizeTotal ?? this.sizeTotal,
-      name: name ?? this.name,
-      root: root ?? this.root,
-      isResizable: isResizable ?? this.isResizable,
-      serverDiskVolume: serverDiskVolume ?? this.serverDiskVolume,
-      providerVolume: providerVolume ?? this.providerVolume,
-    );
+  }) =>
+      DiskVolume(
+        sizeUsed: sizeUsed ?? this.sizeUsed,
+        sizeTotal: sizeTotal ?? this.sizeTotal,
+        name: name ?? this.name,
+        root: root ?? this.root,
+        isResizable: isResizable ?? this.isResizable,
+        serverDiskVolume: serverDiskVolume ?? this.serverDiskVolume,
+        providerVolume: providerVolume ?? this.providerVolume,
+      );
 }
 
 class DiskStatus {

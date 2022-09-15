@@ -17,18 +17,18 @@ class FilledCard extends StatelessWidget {
   final bool secondary;
   @override
   Widget build(final BuildContext context) => Card(
-    elevation: 0.0,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(12)),
-    ),
-    clipBehavior: clipped ? Clip.antiAlias : Clip.none,
-    color: error
-        ? Theme.of(context).colorScheme.errorContainer
-        : secondary
-        ? Theme.of(context).colorScheme.secondaryContainer
-        : tertiary
-        ? Theme.of(context).colorScheme.tertiaryContainer
-        : Theme.of(context).colorScheme.surfaceVariant,
-    child: child,
-  );
+        elevation: 0.0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        clipBehavior: clipped ? Clip.antiAlias : Clip.none,
+        color: error
+            ? Theme.of(context).colorScheme.errorContainer
+            : secondary
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : tertiary
+                    ? Theme.of(context).colorScheme.tertiaryContainer
+                    : Theme.of(context).colorScheme.surfaceVariant,
+        child: child,
+      );
 }

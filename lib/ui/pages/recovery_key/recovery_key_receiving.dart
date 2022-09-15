@@ -29,7 +29,9 @@ class RecoveryKeyReceiving extends StatelessWidget {
           const SizedBox(height: 16),
           const Divider(),
           const SizedBox(height: 16),
-          InfoBox(text: 'recovery_key.key_receiving_info'.tr(),),
+          InfoBox(
+            text: 'recovery_key.key_receiving_info'.tr(),
+          ),
           const SizedBox(height: 16),
           FilledButton(
             title: 'recovery_key.key_receiving_done'.tr(),

@@ -52,7 +52,9 @@ class _DevicesScreenState extends State<DevicesScreen> {
             const SizedBox(height: 16),
             const Divider(height: 1),
             const SizedBox(height: 16),
-            InfoBox(text: 'devices.main_screen.tip'.tr(),),
+            InfoBox(
+              text: 'devices.main_screen.tip'.tr(),
+            ),
           ],
           const SizedBox(height: 24),
         ],

@@ -17,7 +17,7 @@ class SegmentedButtons extends StatelessWidget {
         builder: (final context, final constraints) => ToggleButtons(
           constraints: BoxConstraints(
             minWidth: (constraints.maxWidth - 8) / 3,
-            minHeight: 40,
+            minHeight: 40 + Theme.of(context).visualDensity.vertical * 4,
           ),
           borderRadius: BorderRadius.circular(48),
           borderColor: Theme.of(context).colorScheme.outline,

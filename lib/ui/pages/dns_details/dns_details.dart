@@ -94,16 +94,8 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         headerTitle: '',
         heroIcon: BrandIcons.globe,
         heroTitle: 'providers.domain.screen_title'.tr(),
-        children: <Widget>[
-          FilledCard(
-            child: ListTile(
-              title: Text(
-                'not_ready_card.in_menu'.tr(),
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            ),
-          ),
-        ],
+        heroSubtitle: 'not_ready_card.in_menu'.tr(),
+        children: const [],
       );
     }
 

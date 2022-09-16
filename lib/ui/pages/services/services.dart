@@ -115,8 +115,10 @@ class _Card extends StatelessWidget {
     final domainName = UiHelpers.getDomainName(config);
 
     return GestureDetector(
-      onTap: () => Navigator.of(context)
-          .push(materialRoute(ServicePage(serviceId: serviceType.name))),
+      onTap: isReady
+          ? () => Navigator.of(context)
+              .push(materialRoute(ServicePage(serviceId: serviceType.name)))
+          : null,
       child: BrandCards.big(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

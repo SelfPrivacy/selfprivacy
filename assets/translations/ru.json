@@ -189,7 +189,9 @@
       "euro": "Евро",
       "data_migration_title": "Миграция данных",
       "data_migration_notice": "На время миграции данных все сервисы будут выключены.",
-      "start_migration_button": "Начать миграцию"
+      "start_migration_button": "Начать миграцию",
+      "migration_process": "Мигрируем...",
+      "migration_done": "Завершить"
     }
   },
   "not_ready_card": {

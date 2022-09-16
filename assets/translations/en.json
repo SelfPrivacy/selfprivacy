@@ -189,7 +189,9 @@
       "euro": "Euro",
       "data_migration_title": "Data migration",
       "data_migration_notice": "During migration all services will be turned off.",
-      "start_migration_button": "Start migration"
+      "start_migration_button": "Start migration",
+      "migration_process": "Migrating...",
+      "migration_done": "Finish"
     }
   },
   "not_ready_card": {

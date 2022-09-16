@@ -56,4 +56,23 @@ mixin VolumeApi on ApiMap {
       print(e);
     }
   }
+
+  Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final input = Input$MigrateToBindsInput(
+        bitwardenBlockDevice: serviceToDisk['bitwarden']!,
+        emailBlockDevice: serviceToDisk['mailserver']!,
+        giteaBlockDevice: serviceToDisk['gitea']!,
+        nextcloudBlockDevice: serviceToDisk['nextcloud']!,
+        pleromaBlockDevice: serviceToDisk['pleroma']!,
+      );
+      final variables = Variables$Mutation$MigrateToBinds(input: input);
+      final migrateMutation =
+          Options$Mutation$MigrateToBinds(variables: variables);
+      await client.mutate$MigrateToBinds(migrateMutation);
+    } catch (e) {
+      print(e);
+    }
+  }
 }

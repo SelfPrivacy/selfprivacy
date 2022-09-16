@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
-import 'package:selfprivacy/ui/pages/server_storage/server_storage_list_item.dart';
+import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class StorageCard extends StatelessWidget {

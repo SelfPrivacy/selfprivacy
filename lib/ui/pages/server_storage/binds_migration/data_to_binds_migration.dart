@@ -6,11 +6,11 @@ import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
-import 'package:selfprivacy/ui/pages/server_storage/server_storage_list_item.dart';
-import 'package:selfprivacy/ui/pages/server_storage/service_migration_list_item.dart';
+import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
+import 'package:selfprivacy/ui/components/storage_list_items/service_migration_list_item.dart';
 
-class DataMigrationPage extends StatefulWidget {
-  const DataMigrationPage({
+class DataToBindsMigrationPage extends StatefulWidget {
+  const DataToBindsMigrationPage({
     required this.services,
     required this.diskStatus,
     final super.key,
@@ -20,10 +20,11 @@ class DataMigrationPage extends StatefulWidget {
   final List<Service> services;
 
   @override
-  State<DataMigrationPage> createState() => _DataMigrationPageState();
+  State<DataToBindsMigrationPage> createState() =>
+      _DataToBindsMigrationPageState();
 }
 
-class _DataMigrationPageState extends State<DataMigrationPage> {
+class _DataToBindsMigrationPageState extends State<DataToBindsMigrationPage> {
   /// Service id to target migration disk name
   final Map<String, String> serviceToDisk = {};
 

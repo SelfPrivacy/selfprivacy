@@ -19,9 +19,10 @@ class ApiServerVolumeState extends ServerInstallationDependendState {
   List<DiskVolume> get volumes => _diskStatus.diskVolumes;
   DiskStatus get diskStatus => _diskStatus;
 
-  DiskVolume getVolume(final String volumeName) =>
-      volumes.firstWhere((final volume) => volume.name == volumeName,
-          orElse: () => DiskVolume());
+  DiskVolume getVolume(final String volumeName) => volumes.firstWhere(
+        (final volume) => volume.name == volumeName,
+        orElse: () => DiskVolume(),
+      );
 
   ApiServerVolumeState copyWith({
     final List<ServerDiskVolume>? volumes,

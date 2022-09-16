@@ -42,7 +42,7 @@ class _MigrationProcessPageState extends State<MigrationProcessPage> {
           value: value,
           color: Theme.of(context).colorScheme.primary,
           backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-          height: 14.0,
+          height: 4.0,
         ),
         const SizedBox(height: 16),
         if (job.finishedAt != null)

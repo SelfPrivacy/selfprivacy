@@ -10,7 +10,7 @@ import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
-import 'package:selfprivacy/ui/pages/server_storage/data_migration.dart';
+import 'package:selfprivacy/ui/pages/server_storage/binds_migration/data_to_binds_migration.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
@@ -50,7 +50,7 @@ class MorePage extends StatelessWidget {
                   _MoreMenuItem(
                     title: 'providers.storage.start_migration_button'.tr(),
                     iconData: Icons.drive_file_move_outline,
-                    goTo: DataMigrationPage(
+                    goTo: DataToBindsMigrationPage(
                       diskStatus: context
                           .watch<ApiServerVolumeCubit>()
                           .state

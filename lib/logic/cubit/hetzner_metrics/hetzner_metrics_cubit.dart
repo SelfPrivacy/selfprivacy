@@ -39,16 +39,20 @@ class HetznerMetricsCubit extends Cubit<HetznerMetricsState> {
   }
 
   void load(final Period period) async {
-    final HetznerMetricsLoaded newState = await repository.getMetrics(period);
-    timer = Timer(
-      Duration(seconds: newState.stepInSeconds.toInt()),
-      () => load(newState.period),
-    );
-
     try {
+      final HetznerMetricsLoaded newState = await repository.getMetrics(period);
+      timer = Timer(
+        Duration(seconds: newState.stepInSeconds.toInt()),
+        () => load(newState.period),
+      );
       emit(newState);
     } on StateError {
       print('Tried to emit Hetzner metrics when cubit is closed');
+    } on MetricsLoadException {
+      timer = Timer(
+        Duration(seconds: state.period.stepPeriodInSeconds),
+        () => load(state.period),
+      );
     }
   }
 }

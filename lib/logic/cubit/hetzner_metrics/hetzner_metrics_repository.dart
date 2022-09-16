@@ -4,6 +4,11 @@ import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 
 import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.dart';
 
+class MetricsLoadException implements Exception {
+  MetricsLoadException(this.message);
+  final String message;
+}
+
 class HetznerMetricsRepository {
   Future<HetznerMetricsLoaded> getMetrics(final Period period) async {
     final DateTime end = DateTime.now();
@@ -30,6 +35,10 @@ class HetznerMetricsRepository {
 
     final cpuMetricsData = results[0]['metrics'];
     final networkMetricsData = results[1]['metrics'];
+
+    if (cpuMetricsData == null || networkMetricsData == null) {
+      throw MetricsLoadException('Metrics data is null');
+    }
 
     return HetznerMetricsLoaded(
       period: period,

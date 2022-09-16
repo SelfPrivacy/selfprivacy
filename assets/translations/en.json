@@ -106,6 +106,7 @@
         "in": "In",
         "out": "Out"
       },
+      "resource_usage": "Resource usage",
       "settings": {
         "allow_autoupgrade": "Allow auto-upgrade",
         "allow_autoupgrade_hint": "Allow automatic packages upgrades on server",

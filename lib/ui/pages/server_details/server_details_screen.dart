@@ -88,11 +88,17 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
               context.read<ApiProviderVolumeCubit>().state.volumes,
             ),
           ),
+          const Divider(height: 32),
+          Text(
+            'providers.server.resource_usage'.tr(),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 8),
           BlocProvider(
             create: (final context) => HetznerMetricsCubit()..restart(),
             child: _Chart(),
           ),
-          const SizedBox(height: 20),
+          const Divider(height: 32),
           _TextDetails(),
           const _ServerSettings(),
         ],

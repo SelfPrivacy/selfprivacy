@@ -11,7 +11,6 @@ class SimpleBlocObserver extends BlocObserver {
     final Object error,
     final StackTrace stackTrace,
   ) {
-
     getIt<NavigationService>().showSnackBar(
       'Bloc error: ${error.toString()}',
     );

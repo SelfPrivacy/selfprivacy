@@ -7,15 +7,7 @@ class _Chart extends StatelessWidget {
     final Period period = cubit.state.period;
     final HetznerMetricsState state = cubit.state;
     List<Widget> charts;
-    if (state is HetznerMetricsLoading) {
-      charts = [
-        Container(
-          height: 200,
-          alignment: Alignment.center,
-          child: Text('basis.loading'.tr()),
-        )
-      ];
-    } else if (state is HetznerMetricsLoaded) {
+    if (state is HetznerMetricsLoaded || state is HetznerMetricsLoading) {
       charts = [
         FilledCard(
           clipped: false,
@@ -31,7 +23,17 @@ class _Chart extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: 16),
-                getCpuChart(state),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (state is HetznerMetricsLoaded) getCpuChart(state),
+                    AnimatedOpacity(
+                      duration: const Duration(milliseconds: 200),
+                      opacity: state is HetznerMetricsLoading ? 1 : 0,
+                      child: const _GraphLoadingCardContent(),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -56,16 +58,28 @@ class _Chart extends StatelessWidget {
                     ),
                     const Spacer(),
                     Legend(
-                        color: Theme.of(context).colorScheme.primary,
-                        text: 'providers.server.chart.in'.tr()),
+                      color: Theme.of(context).colorScheme.primary,
+                      text: 'providers.server.chart.in'.tr(),
+                    ),
                     const SizedBox(width: 5),
                     Legend(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        text: 'providers.server.chart.out'.tr()),
+                      color: Theme.of(context).colorScheme.tertiary,
+                      text: 'providers.server.chart.out'.tr(),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
-                getBandwidthChart(state),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (state is HetznerMetricsLoaded) getBandwidthChart(state),
+                    AnimatedOpacity(
+                      duration: const Duration(milliseconds: 200),
+                      opacity: state is HetznerMetricsLoading ? 1 : 0,
+                      child: const _GraphLoadingCardContent(),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -134,6 +148,16 @@ class _Chart extends StatelessWidget {
       ),
     );
   }
+}
+
+class _GraphLoadingCardContent extends StatelessWidget {
+  const _GraphLoadingCardContent();
+
+  @override
+  Widget build(final BuildContext context) => const SizedBox(
+        height: 200,
+        child: Center(child: CircularProgressIndicator()),
+      );
 }
 
 class Legend extends StatelessWidget {

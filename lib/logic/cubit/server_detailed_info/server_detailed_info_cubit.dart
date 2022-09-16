@@ -36,21 +36,6 @@ class ServerDetailsCubit
     }
   }
 
-  Future<void> setTimezone(
-    final String timezone,
-  ) async {
-    final ServerDetailsRepositoryDto data = await repository.load();
-    await repository.setTimezone(timezone);
-    emit(
-      Loaded(
-        serverInfo: data.hetznerServerInfo,
-        autoUpgradeSettings: data.autoUpgradeSettings,
-        serverTimezone: TimeZoneSettings.fromString(timezone),
-        checkTime: DateTime.now(),
-      ),
-    );
-  }
-
   @override
   void clear() {
     emit(ServerDetailsNotReady());

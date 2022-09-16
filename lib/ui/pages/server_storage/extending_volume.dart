@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.d
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 
 class ExtendingVolumePage extends StatefulWidget {
   const ExtendingVolumePage({

@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
-import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/ui/pages/server_storage/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/pages/server_storage/service_migration_list_item.dart';
 

@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_pro
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 
 part 'provider_volume_state.dart';
 

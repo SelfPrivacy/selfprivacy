@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.dart';
-import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
@@ -19,7 +18,6 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
 import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';
 import 'package:selfprivacy/ui/pages/server_details/time_zone/lang.dart';
-import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
@@ -83,10 +81,7 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
         heroSubtitle: 'providers.server.bottom_sheet.1'.tr(),
         children: [
           StorageCard(
-            diskStatus: DiskStatus.fromVolumes(
-              context.read<ApiServerVolumeCubit>().state.volumes,
-              context.read<ApiProviderVolumeCubit>().state.volumes,
-            ),
+            diskStatus: context.watch<ApiServerVolumeCubit>().state.diskStatus,
           ),
           const Divider(height: 32),
           Text(

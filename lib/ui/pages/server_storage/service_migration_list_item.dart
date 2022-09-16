@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 
 class ServiceMigrationListItem extends StatelessWidget {
   const ServiceMigrationListItem({

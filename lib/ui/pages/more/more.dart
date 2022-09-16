@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
@@ -12,7 +11,6 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
 import 'package:selfprivacy/ui/pages/server_storage/data_migration.dart';
-import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
@@ -53,10 +51,7 @@ class MorePage extends StatelessWidget {
                     title: 'providers.storage.start_migration_button'.tr(),
                     iconData: Icons.drive_file_move_outline,
                     goTo: DataMigrationPage(
-                      diskStatus: DiskStatus.fromVolumes(
-                        context.read<ApiServerVolumeCubit>().state.volumes,
-                        context.read<ApiProviderVolumeCubit>().state.volumes,
-                      ),
+                      diskStatus: context.watch<ApiServerVolumeCubit>().state.diskStatus,
                       services: context
                           .read<ServicesCubit>()
                           .state

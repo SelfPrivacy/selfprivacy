@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
-import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
@@ -16,7 +13,6 @@ import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
 import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
-import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -38,11 +34,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
     final DnsRecordsStatus dnsStatus =
         context.watch<DnsRecordsCubit>().state.dnsState;
 
-    final List<ServerDiskVolume> serverVolumes =
-        context.watch<ApiServerVolumeCubit>().state.volumes;
-    final List<ServerVolume> providerVolumes =
-        context.watch<ApiProviderVolumeCubit>().state.volumes;
-    final diskStatus = DiskStatus.fromVolumes(serverVolumes, providerVolumes);
+    final diskStatus = context.watch<ApiServerVolumeCubit>().state.diskStatus;
 
     final ServerInstallationState appConfig =
         context.watch<ServerInstallationCubit>().state;

@@ -117,6 +117,10 @@ class _ServicePageState extends State<ServicePage> {
               'services.service_page.move'.tr(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
+            // subtitle: Text(
+            //   'Uses ${service.storageUsage.used} on ${context.read<ApiServerVolumeCubit>().state.totalStorage}',
+            //   style: Theme.of(context).textTheme.bodyMedium,
+            // ),
           ),
       ],
     );

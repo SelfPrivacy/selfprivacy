@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_linear_indicator/brand_linear_indicator.dart';
-import 'package:selfprivacy/ui/pages/server_storage/disk_status.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 
 class ServerStorageListItem extends StatelessWidget {
   const ServerStorageListItem({

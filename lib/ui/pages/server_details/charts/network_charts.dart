@@ -1,10 +1,10 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
-import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/bottom_title.dart';
 
@@ -33,91 +33,174 @@ class NetworkChart extends StatelessWidget {
   }
 
   @override
-  Widget build(final BuildContext context) => SizedBox(
-        height: 150,
-        width: MediaQuery.of(context).size.width,
-        child: LineChart(
-          LineChartData(
-            lineTouchData: LineTouchData(enabled: false),
-            lineBarsData: [
-              LineChartBarData(
-                spots: getSpots(listData[0]),
-                isCurved: true,
-                barWidth: 1,
-                color: Colors.red,
-                dotData: FlDotData(
-                  show: false,
-                ),
-              ),
-              LineChartBarData(
-                spots: getSpots(listData[1]),
-                isCurved: true,
-                barWidth: 1,
-                color: Colors.green,
-                dotData: FlDotData(
-                  show: false,
-                ),
-              ),
-            ],
-            minY: 0,
-            maxY: [
-                  ...listData[0].map((final e) => e.value),
-                  ...listData[1].map((final e) => e.value)
-                ].reduce(max) *
-                1.2,
-            minX: listData[0].length - 200,
-            titlesData: FlTitlesData(
-              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  interval: 20,
-                  reservedSize: 50,
-                  getTitlesWidget: (final value, final titleMeta) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RotatedBox(
-                      quarterTurns: 1,
-                      child: Text(
-                        bottomTitle(
-                          value.toInt(),
-                          listData[0],
-                          period,
-                        ),
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: Colors.purple,
-                          fontWeight: FontWeight.bold,
-                        ),
+  Widget build(final BuildContext context) => LineChart(
+        LineChartData(
+          lineTouchData: LineTouchData(
+            enabled: true,
+            touchTooltipData: LineTouchTooltipData(
+              tooltipBgColor: Theme.of(context).colorScheme.surface,
+              tooltipPadding: const EdgeInsets.all(8),
+              getTooltipItems: (final List<LineBarSpot> touchedBarSpots) {
+                final List<LineTooltipItem> res = [];
+
+                bool timeShown = false;
+
+                for (final spot in touchedBarSpots) {
+                  final value = spot.y;
+                  final date = listData[0][spot.x.toInt()].time;
+
+                  res.add(
+                    LineTooltipItem(
+                      '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${spot.barIndex == 0 ? 'providers.server.chart.in'.tr() : 'providers.server.chart.out'.tr()} ${DiskSize(byte: value.toInt()).toString()}',
+                      TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  showTitles: true,
-                ),
+                  );
+
+                  timeShown = true;
+                }
+
+                return res;
+              },
+            ),
+          ),
+          lineBarsData: [
+            // IN
+            LineChartBarData(
+              spots: getSpots(listData[0]),
+              isCurved: false,
+              barWidth: 2,
+              color: Theme.of(context).colorScheme.primary,
+              dotData: FlDotData(
+                show: false,
               ),
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  reservedSize: 50,
-                  getTitlesWidget: (final value, final titleMeta) => Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Text(
-                      value.toInt().toString(),
-                      style: progressTextStyleLight.copyWith(
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? BrandColors.gray4
-                            : null,
-                      ),
-                    ),
-                  ),
-                  interval: [
-                        ...listData[0].map((final e) => e.value),
-                        ...listData[1].map((final e) => e.value)
-                      ].reduce(max) *
-                      2 /
-                      10,
-                  showTitles: false,
+              belowBarData: BarAreaData(
+                show: true,
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                    Theme.of(context).colorScheme.primary.withOpacity(0.0),
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
                 ),
               ),
             ),
-            gridData: FlGridData(show: true),
+            // OUT
+            LineChartBarData(
+              spots: getSpots(listData[1]),
+              isCurved: false,
+              barWidth: 2,
+              color: Theme.of(context).colorScheme.tertiary,
+              dotData: FlDotData(
+                show: false,
+              ),
+              belowBarData: BarAreaData(
+                show: true,
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
+                    Theme.of(context).colorScheme.tertiary.withOpacity(0.0),
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
+            ),
+          ],
+          minY: 0,
+          maxY: [
+                ...listData[0].map((final e) => e.value),
+                ...listData[1].map((final e) => e.value)
+              ].reduce(max) *
+              1.2,
+          minX: listData[0].length - 200,
+          titlesData: FlTitlesData(
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                interval: 40,
+                reservedSize: 30,
+                getTitlesWidget: (final value, final titleMeta) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    bottomTitle(
+                      value.toInt(),
+                      listData[0],
+                      period,
+                    ),
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                ),
+                showTitles: true,
+              ),
+            ),
+            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: AxisTitles(
+              sideTitles: SideTitles(
+                reservedSize: 50,
+                getTitlesWidget: (final value, final titleMeta) => Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Text(
+                    DiskSize(byte: value.toInt()).toString(),
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                ),
+                interval: [
+                      ...listData[0].map((final e) => e.value),
+                      ...listData[1].map((final e) => e.value)
+                    ].reduce(max) *
+                    2 /
+                    6.5,
+                showTitles: true,
+              ),
+            ),
+          ),
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: true,
+            verticalInterval: 40,
+            horizontalInterval: [
+                  ...listData[0].map((final e) => e.value),
+                  ...listData[1].map((final e) => e.value)
+                ].reduce(max) *
+                2 /
+                6.5,
+            getDrawingHorizontalLine: (final value) => FlLine(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+              strokeWidth: 1,
+            ),
+            getDrawingVerticalLine: (final value) => FlLine(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+              strokeWidth: 1,
+            ),
+          ),
+          borderData: FlBorderData(
+            show: true,
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                width: 1,
+              ),
+              left: BorderSide(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                width: 1,
+              ),
+              right: BorderSide(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                width: 1,
+              ),
+              top: BorderSide(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                width: 1,
+              ),
+            ),
           ),
         ),
       );

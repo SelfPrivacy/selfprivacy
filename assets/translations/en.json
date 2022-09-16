@@ -100,7 +100,11 @@
       "chart": {
         "month": "Month",
         "day": "Day",
-        "hour": "Hour"
+        "hour": "Hour",
+        "cpu_title": "CPU Usage",
+        "network_title": "Network Usage",
+        "in": "In",
+        "out": "Out"
       },
       "settings": {
         "allow_autoupgrade": "Allow auto-upgrade",

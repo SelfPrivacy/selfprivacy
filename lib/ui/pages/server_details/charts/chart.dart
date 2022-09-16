@@ -25,7 +25,7 @@ class _Chart extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'CPU Usage',
+                  'providers.server.chart.cpu_title'.tr(),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -36,19 +36,40 @@ class _Chart extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 1),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            BrandText.small('Public Network interface bytes per sec'),
-            const SizedBox(width: 10),
-            const Legend(color: Colors.red, text: 'IN'),
-            const SizedBox(width: 5),
-            const Legend(color: Colors.green, text: 'OUT'),
-          ],
+        const SizedBox(height: 8),
+        FilledCard(
+          clipped: false,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'providers.server.chart.network_title'.tr(),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                    ),
+                    const Spacer(),
+                    Legend(
+                        color: Theme.of(context).colorScheme.primary,
+                        text: 'providers.server.chart.in'.tr()),
+                    const SizedBox(width: 5),
+                    Legend(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        text: 'providers.server.chart.out'.tr()),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                getBandwidthChart(state),
+              ],
+            ),
+          ),
         ),
-        const SizedBox(height: 20),
-        getBandwidthChart(state),
       ];
     } else {
       throw 'wrong state';
@@ -81,6 +102,7 @@ class _Chart extends StatelessWidget {
             'providers.server.chart.hour'.tr()
           ],
         ),
+        const SizedBox(height: 8),
         ...charts,
       ],
     );
@@ -129,7 +151,10 @@ class Legend extends StatelessWidget {
         children: [
           _ColoredBox(color: color),
           const SizedBox(width: 5),
-          BrandText.small(text),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
         ],
       );
 }
@@ -146,9 +171,11 @@ class _ColoredBox extends StatelessWidget {
         width: 10,
         height: 10,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(5),
+          color: color.withOpacity(0.4),
           border: Border.all(
             color: color,
+            width: 1.5,
           ),
         ),
       );

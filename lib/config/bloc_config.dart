@@ -32,6 +32,7 @@ class BlocAndProviderConfig extends StatelessWidget {
     final apiVolumesCubit = ApiProviderVolumeCubit(serverInstallationCubit);
     final apiServerVolumesCubit = ApiServerVolumeCubit(serverInstallationCubit);
     final serverJobsCubit = ServerJobsCubit(serverInstallationCubit);
+    final serverDetailsCubit = ServerDetailsCubit(serverInstallationCubit);
 
     return MultiProvider(
       providers: [
@@ -77,6 +78,9 @@ class BlocAndProviderConfig extends StatelessWidget {
         ),
         BlocProvider(
           create: (final _) => serverJobsCubit..load(),
+        ),
+        BlocProvider(
+          create: (final _) => serverDetailsCubit..load(),
         ),
         BlocProvider(
           create: (final _) => JobsCubit(

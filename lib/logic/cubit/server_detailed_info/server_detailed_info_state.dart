@@ -1,6 +1,6 @@
 part of 'server_detailed_info_cubit.dart';
 
-abstract class ServerDetailsState extends Equatable {
+abstract class ServerDetailsState extends ServerInstallationDependendState {
   const ServerDetailsState();
 
   @override

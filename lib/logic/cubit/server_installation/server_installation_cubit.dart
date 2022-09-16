@@ -608,24 +608,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   @override
   void onChange(final Change<ServerInstallationState> change) {
     super.onChange(change);
-    print('================================');
-    print('ServerInstallationState changed!');
-    print('Current type: ${change.nextState.runtimeType}');
-    print('Hetzner key: ${change.nextState.providerApiToken}');
-    print('Cloudflare key: ${change.nextState.cloudFlareKey}');
-    print('Domain: ${change.nextState.serverDomain}');
-    print('BackblazeCredential: ${change.nextState.backblazeCredential}');
-    if (change.nextState is ServerInstallationRecovery) {
-      print(
-        'Recovery Step: ${(change.nextState as ServerInstallationRecovery).currentStep}',
-      );
-      print(
-        'Recovery Capabilities: ${(change.nextState as ServerInstallationRecovery).recoveryCapabilities}',
-      );
-    }
-    if (change.nextState is TimerState) {
-      print('Timer: ${(change.nextState as TimerState).duration}');
-    }
   }
 
   void clearAppConfig() {

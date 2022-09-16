@@ -51,7 +51,10 @@ class MorePage extends StatelessWidget {
                     title: 'providers.storage.start_migration_button'.tr(),
                     iconData: Icons.drive_file_move_outline,
                     goTo: DataMigrationPage(
-                      diskStatus: context.watch<ApiServerVolumeCubit>().state.diskStatus,
+                      diskStatus: context
+                          .watch<ApiServerVolumeCubit>()
+                          .state
+                          .diskStatus,
                       services: context
                           .read<ServicesCubit>()
                           .state

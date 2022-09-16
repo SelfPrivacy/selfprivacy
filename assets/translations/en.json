@@ -210,10 +210,12 @@
     "_comment": "Services",
     "title": "Your personal, private and independent services.",
     "service_page": {
+      "open_in_browser": "Open in browser",
       "restart": "Restart service",
       "disable": "Disable service",
       "enable": "Enable service",
-      "move": "Move to another volume"
+      "move": "Move to another volume",
+      "uses": "Uses {usage} on {volume}"
     },
     "mail": {
       "title": "E-Mail",

@@ -31,7 +31,8 @@ class BlocAndProviderConfig extends StatelessWidget {
     final recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
     final apiDevicesCubit = ApiDevicesCubit(serverInstallationCubit);
     final apiVolumesCubit = ApiProviderVolumeCubit(serverInstallationCubit);
-    final apiServerVolumesCubit = ApiServerVolumeCubit(serverInstallationCubit, apiVolumesCubit);
+    final apiServerVolumesCubit =
+        ApiServerVolumeCubit(serverInstallationCubit, apiVolumesCubit);
     final serverJobsCubit = ServerJobsCubit(serverInstallationCubit);
     final serverDetailsCubit = ServerDetailsCubit(serverInstallationCubit);
 

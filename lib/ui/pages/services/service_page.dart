@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -68,7 +69,7 @@ class _ServicePageState extends State<ServicePage> {
             onTap: () => _launchURL(service.url),
             leading: const Icon(Icons.open_in_browser),
             title: Text(
-              'Open in browser',
+              'services.service_page.open_in_browser'.tr(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             subtitle: Text(
@@ -117,10 +118,19 @@ class _ServicePageState extends State<ServicePage> {
               'services.service_page.move'.tr(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            // subtitle: Text(
-            //   'Uses ${service.storageUsage.used} on ${context.read<ApiServerVolumeCubit>().state.totalStorage}',
-            //   style: Theme.of(context).textTheme.bodyMedium,
-            // ),
+            subtitle: Text(
+              'services.service_page.uses'.tr(
+                namedArgs: {
+                  'usage': service.storageUsage.used.toString(),
+                  'volume': context
+                      .read<ApiServerVolumeCubit>()
+                      .state
+                      .getVolume(service.storageUsage.volume ?? '')
+                      .displayName
+                },
+              ),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
       ],
     );

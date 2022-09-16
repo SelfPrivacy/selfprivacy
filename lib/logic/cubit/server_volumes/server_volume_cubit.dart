@@ -12,7 +12,8 @@ part 'server_volume_state.dart';
 class ApiServerVolumeCubit
     extends ServerInstallationDependendCubit<ApiServerVolumeState> {
   ApiServerVolumeCubit(
-    final ServerInstallationCubit serverInstallationCubit, this.providerVolumeCubit,
+    final ServerInstallationCubit serverInstallationCubit,
+    this.providerVolumeCubit,
   ) : super(serverInstallationCubit, ApiServerVolumeState.initial()) {
     _providerVolumeSubscription =
         providerVolumeCubit.stream.listen(checkProviderVolumes);

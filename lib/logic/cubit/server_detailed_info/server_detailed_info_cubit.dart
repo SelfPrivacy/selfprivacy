@@ -15,19 +15,23 @@ class ServerDetailsCubit extends Cubit<ServerDetailsState> {
 
   void check() async {
     final bool isReadyToCheck = getIt<ApiConfigModel>().serverDetails != null;
-    if (isReadyToCheck) {
-      emit(ServerDetailsLoading());
-      final ServerDetailsRepositoryDto data = await repository.load();
-      emit(
-        Loaded(
-          serverInfo: data.hetznerServerInfo,
-          autoUpgradeSettings: data.autoUpgradeSettings,
-          serverTimezone: data.serverTimezone,
-          checkTime: DateTime.now(),
-        ),
-      );
-    } else {
-      emit(ServerDetailsNotReady());
+    try {
+      if (isReadyToCheck) {
+        emit(ServerDetailsLoading());
+        final ServerDetailsRepositoryDto data = await repository.load();
+        emit(
+          Loaded(
+            serverInfo: data.hetznerServerInfo,
+            autoUpgradeSettings: data.autoUpgradeSettings,
+            serverTimezone: data.serverTimezone,
+            checkTime: DateTime.now(),
+          ),
+        );
+      } else {
+        emit(ServerDetailsNotReady());
+      }
+    } on StateError {
+      print('Tried to emit server info state when cubit is closed');
     }
   }
 }

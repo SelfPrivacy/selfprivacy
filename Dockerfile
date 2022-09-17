@@ -30,7 +30,7 @@ ENV FLUTTER_HOME "/opt/flutter"
 ADD $FLUTTER_URL .
 RUN tar -vxf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz && \
     rm flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
-# Flutter doesn't work without write permissions, so fuck it, fuck.
+# Flutter doesn't work without write permissions, so fuck it, fuck
 RUN chmod -R 777 $FLUTTER_HOME
 RUN git config --system --add safe.directory $FLUTTER_HOME
 

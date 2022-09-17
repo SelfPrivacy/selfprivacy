@@ -174,7 +174,7 @@ steps:
       GITEA_RELEASE_TOKEN:
         from_secret: GITEA_RELEASE_TOKEN
 
-  - name: Deploy F-Droid Repo
+  - name: Deploy F-Droid Repository
     commands:
       - ./ci.py --deploy-fdroid-repo
     environment:

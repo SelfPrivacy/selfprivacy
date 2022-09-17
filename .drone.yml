@@ -1,6 +1,6 @@
 kind: pipeline
 type: exec
-name: Continuous Integration
+name: Nightly
 
 steps:
   - name: Prepare
@@ -23,7 +23,7 @@ steps:
     commands:
       - ./ci.py --ci-build-apk
 
-  - name: Sign and Deploy Nightly Android Release Artifact (.APK) for F-Droid Repository
+  - name: Sign and Commit Nightly Android Release Artifact (.APK) for F-Droid Repository
     commands:
       - ./ci.py --sign-apk-fdroid-nightly
     environment:
@@ -34,10 +34,18 @@ steps:
       GOOGLE_KEYSTORE_PASS:
         from_secret: GOOGLE_KEYSTORE_PASS
 
+  - name: Deploy F-Droid Repo
+    commands:
+      - ./ci.py --deploy-fdroid-repo
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
+
 trigger:
   event:
     - push
-    - pull_request
+  branch:
+    - master
 
 node:
   server: builder
@@ -100,7 +108,7 @@ steps:
       GOOGLE_KEYSTORE_PASS:
         from_secret: GOOGLE_KEYSTORE_PASS
 
-  - name: Sign and Deploy Android Release Artifact (.APK) for F-Droid Repository
+  - name: Sign and Commit Android Release Artifact (.APK) for F-Droid Repository
     commands:
       - ./ci.py --sign-apk-fdroid
     environment:
@@ -183,17 +191,17 @@ node:
 depends_on:
   - Release
 
----
-
-kind: pipeline
-type: exec
-name: Windows
-
-platform:
-  os: windows
-  arch: amd64
-
-steps:
-  - name: Build Windows Binary
-    commands:
-      - flutter build windows
+#---
+#
+#kind: pipeline
+#type: exec
+#name: Windows
+#
+#platform:
+#  os: windows
+#  arch: amd64
+#
+#steps:
+#  - name: Build Windows Binary
+#    commands:
+#      - flutter build windows

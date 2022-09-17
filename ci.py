@@ -14,7 +14,7 @@ APP_NAME_NIGHTLY = "org.selfprivacy.app.nightly"
 APP_VERSION_FULL = yaml.safe_load(open("pubspec.yaml", "r"))['version']
 APP_SEMVER = APP_VERSION_FULL[:APP_VERSION_FULL.find("+")]
 APP_BUILD_ID = APP_VERSION_FULL[APP_VERSION_FULL.find("+"):][1::]
-APP_BUILD_ID_NIGHTLY = subprocess.run(["git", "rev-list", "--first-parent", "--count", "HEAD"], check=True, stdout=subprocess.PIPE).stdout.decode()
+APP_BUILD_ID_NIGHTLY = subprocess.run(["git", "rev-list", "--first-parent", "--count", "HEAD"], check=True, stdout=subprocess.PIPE).stdout.decode().strip()
 
 HOST_MOUNTED_VOLUME = f"{HOST_HOME}/.local/share/containers/storage/volumes/release/_data"
 

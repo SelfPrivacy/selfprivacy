@@ -78,7 +78,7 @@ def sign_apk_fdroid_nightly():
   podman_offline(f"{CONTAINER_HOME}/fdroid", f"rm -rf {CONTAINER_HOME}/fdroid/unsigned/*")
   podman_offline(f"{CONTAINER_HOME}/fdroid",
                  f"test ! -f {CONTAINER_HOME}/fdroid/repo/{APP_NAME_NIGHTLY}_{APP_BUILD_ID_NIGHTLY}.apk",
-                 "&& cp ../src/build/app/outputs/flutter-apk/app-nightly-release.apk",
+                 "&& cp ../src/build/app/outputs/flutter-apk/app-nightly-debug.apk",
                  f"unsigned/{APP_NAME_NIGHTLY}_{APP_BUILD_ID_NIGTLY}.apk || echo exist")
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid publish")
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid update")

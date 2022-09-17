@@ -10,9 +10,11 @@ HOST_HOME = "/var/lib/drone-runner-exec"
 CONTAINER_HOME = "/tmp/builder"
 
 APP_NAME = "org.selfprivacy.app"
+APP_NAME_NIGHTLY = "org.selfprivacy.app.nightly"
 APP_VERSION_FULL = yaml.safe_load(open("pubspec.yaml", "r"))['version']
 APP_SEMVER = APP_VERSION_FULL[:APP_VERSION_FULL.find("+")]
 APP_BUILD_ID = APP_VERSION_FULL[APP_VERSION_FULL.find("+"):][1::]
+APP_BUILD_ID_NIGHTLY = subprocess.run(["git", "rev-list", "--first-parent", "--count", "HEAD"], check=True, stdout=subprocess.PIPE).stdout.decode()
 
 HOST_MOUNTED_VOLUME = f"{HOST_HOME}/.local/share/containers/storage/volumes/release/_data"
 
@@ -72,6 +74,15 @@ def sign_apk_fdroid():
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid publish")
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid update")
 
+def sign_apk_fdroid_nightly():
+  podman_offline(f"{CONTAINER_HOME}/fdroid", f"rm -rf {CONTAINER_HOME}/fdroid/unsigned/*")
+  podman_offline(f"{CONTAINER_HOME}/fdroid",
+                 f"test ! -f {CONTAINER_HOME}/fdroid/repo/{APP_NAME_NIGHTLY}_{APP_BUILD_ID_NIGHTLY}.apk",
+                 "&& cp ../src/build/app/outputs/flutter-apk/app-nightly-release.apk",
+                 f"unsigned/{APP_NAME_NIGHTLY}_{APP_BUILD_ID_NIGTLY}.apk || echo exist")
+  podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid publish")
+  podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid update")
+
 def sign_bundle():
   podman_offline(f"{CONTAINER_HOME}/src",
                  f"jarsigner -sigalg SHA256withRSA -digestalg SHA-256 -keystore {CONTAINER_HOME}/google-keystore -signedjar {APP_NAME}-{APP_SEMVER}.aab -storepass:env GOOGLE_KEYSTORE_PASS build/app/outputs/bundle/productionRelease/app-production-release.aab google")
@@ -126,6 +137,7 @@ if __name__ == "__main__":
   group.add_argument("--build-bundle", action="store_true")
   group.add_argument("--sign-apk-standalone", action="store_true", help="depends on $STANDALONE_KEYSTORE_PASS")
   group.add_argument("--sign-apk-fdroid", action="store_true", help="depends on $FDROID_KEYSTORE_PASS")
+  group.add_argument("--sign-apk-fdroid-nightly", action="store_true", help="depends on $FDROID_KEYSTORE_PASS")
   group.add_argument("--sign-bundle", action="store_true", help="depends on $GOOGLE_KEYSTORE_PASS")
   group.add_argument("--package-linux-appimage", action="store_true")
   group.add_argument("--package-linux-flatpak", action="store_true")
@@ -147,6 +159,8 @@ elif args.sign_apk_standalone:
   sign_apk_standalone()
 elif args.sign_apk_fdroid:
   sign_apk_fdroid()
+elif args.sign_apk_fdroid_nightly:
+  sign_apk_fdroid_nightly()
 elif args.sign_bundle:
   sign_bundle()
 elif args.package_linux_appimage:

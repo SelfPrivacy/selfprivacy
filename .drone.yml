@@ -15,13 +15,24 @@ steps:
       SONARQUBE_TOKEN:
         from_secret: SONARQUBE_TOKEN
 
-  - name: Build Linux Target
+  - name: Build Nightly Linux Release Artifact (Binary)
     commands:
       - ./ci.py --ci-build-linux
 
-  - name: Build APK Target
+  - name: Build Nightly Release Artifact (.APK)
     commands:
       - ./ci.py --ci-build-apk
+
+  - name: Sign and Deploy Nightly Android Release Artifact (.APK) for F-Droid Repository
+    commands:
+      - ./ci.py --sign-apk-fdroid-nightly
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
+      GOOGLE_KEYSTORE_PASS:
+        from_secret: GOOGLE_KEYSTORE_PASS
 
 trigger:
   event:
@@ -89,7 +100,7 @@ steps:
       GOOGLE_KEYSTORE_PASS:
         from_secret: GOOGLE_KEYSTORE_PASS
 
-  - name: Sign Android Release Artifact (.APK) for F-Droid Repository
+  - name: Sign and Deploy Android Release Artifact (.APK) for F-Droid Repository
     commands:
       - ./ci.py --sign-apk-fdroid
     environment:

@@ -114,6 +114,19 @@
         "reboot_after_upgrade_hint": "Reboot without prompt after applying changes on server",
         "server_timezone": "Server timezone",
         "select_timezone": "Select timezone"
+      },
+      "info": {
+        "server_id": "Server ID",
+        "status": "Status",
+        "cpu": "CPU",
+        "ram": "Memory",
+        "disk": "Disk local",
+        "monthly_cost": "Monthly cost",
+        "location": "Location",
+        "core_count": {
+          "one": "{} core",
+          "other": "{} cores"
+        }
       }
     },
     "domain": {

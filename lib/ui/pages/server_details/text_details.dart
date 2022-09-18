@@ -11,115 +11,53 @@ class _TextDetails extends StatelessWidget {
       return _TempMessage(message: 'basis.no_data'.tr());
     } else if (details is Loaded) {
       final data = details.serverInfo;
-      final checkTime = details.checkTime;
-      return Column(
-        children: [
-          Center(child: BrandText.h3('providers.server.bottom_sheet.2'.tr())),
-          const SizedBox(height: 10),
-          Table(
-            columnWidths: const {
-              0: FractionColumnWidth(.5),
-              1: FractionColumnWidth(.5),
-            },
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            children: [
-              TableRow(
-                children: [
-                  getRowTitle('Last check:'),
-                  getRowValue(formatter.format(checkTime)),
-                ],
+      return FilledCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'providers.server.bottom_sheet.2'.tr(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
-              TableRow(
-                children: [
-                  getRowTitle('Server Id:'),
-                  getRowValue(data.id.toString()),
-                ],
-              ),
-              TableRow(
-                children: [
-                  getRowTitle('Status:'),
-                  getRowValue(
-                    data.status.toString().split('.')[1].toUpperCase(),
-                    isBold: true,
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  getRowTitle('CPU:'),
-                  getRowValue(
-                    data.serverType.cores.toString(),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  getRowTitle('Memory:'),
-                  getRowValue(
-                    '${data.serverType.memory.toString()} GB',
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  getRowTitle('Disk Local:'),
-                  getRowValue(
-                    '${data.serverType.disk.toString()} GB',
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  getRowTitle('Price monthly:'),
-                  getRowValue(
-                    data.serverType.prices[1].monthly.toString(),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  getRowTitle('Price hourly:'),
-                  getRowValue(
-                    data.serverType.prices[1].hourly.toString(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 30),
-          Center(child: BrandText.h3('providers.server.bottom_sheet.3'.tr())),
-          const SizedBox(height: 10),
-          Table(
-            columnWidths: const {
-              0: FractionColumnWidth(.5),
-              1: FractionColumnWidth(.5),
-            },
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            children: [
-              TableRow(
-                children: [
-                  getRowTitle('Country:'),
-                  getRowValue(
-                    data.location.country,
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  getRowTitle('City:'),
-                  getRowValue(data.location.city),
-                ],
-              ),
-              TableRow(
-                children: [
-                  getRowTitle('Description:'),
-                  getRowValue(data.location.description),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-        ],
+            ),
+            ListTileOnSurfaceVariant(
+              leadingIcon: Icons.numbers_outlined,
+              title: data.id.toString(),
+              subtitle: 'providers.server.info.server_id'.tr(),
+            ),
+            ListTileOnSurfaceVariant(
+              leadingIcon: Icons.mode_standby_outlined,
+              title: data.status.toString().split('.')[1].capitalize(),
+              subtitle: 'providers.server.info.status'.tr(),
+            ),
+            ListTileOnSurfaceVariant(
+              leadingIcon: Icons.memory_outlined,
+              title: 'providers.server.info.core_count'
+                  .plural(data.serverType.cores),
+              subtitle: 'providers.server.info.cpu'.tr(),
+            ),
+            ListTileOnSurfaceVariant(
+              leadingIcon: Icons.memory_outlined,
+              title: '${data.serverType.memory.toString()} GB',
+              subtitle: 'providers.server.info.ram'.tr(),
+            ),
+            ListTileOnSurfaceVariant(
+              leadingIcon: Icons.euro_outlined,
+              title: data.serverType.prices[1].monthly.toStringAsFixed(2),
+              subtitle: 'providers.server.info.monthly_cost'.tr(),
+            ),
+            // Server location
+            ListTileOnSurfaceVariant(
+              leadingIcon: Icons.location_on_outlined,
+              title: '${data.location.city}, ${data.location.country}',
+              subtitle: 'providers.server.info.location'.tr(),
+            ),
+          ],
+        ),
       );
     } else {
       throw Exception('wrong state');

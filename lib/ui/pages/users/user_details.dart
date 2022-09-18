@@ -133,12 +133,10 @@ class _UserLogins extends StatelessWidget {
   Widget build(final BuildContext context) => FilledCard(
         child: Column(
           children: [
-            ListTile(
-              title: Text('${user.login}@$domainName'),
-              subtitle: Text('users.email_login'.tr()),
-              textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-              leading: const Icon(Icons.alternate_email_outlined),
-              iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+            ListTileOnSurfaceVariant(
+              title: '${user.login}@$domainName',
+              subtitle: 'users.email_login'.tr(),
+              leadingIcon: Icons.alternate_email_outlined,
             ),
           ],
         ),
@@ -156,18 +154,13 @@ class _SshKeysCard extends StatelessWidget {
   Widget build(final BuildContext context) => FilledCard(
         child: Column(
           children: [
-            ListTile(
-              title: Text('ssh.title'.tr()),
-              textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+            ListTileOnSurfaceVariant(
+              title: 'ssh.title'.tr(),
             ),
             const Divider(height: 0),
-            ListTile(
-              iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-              textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-              title: Text(
-                'ssh.create'.tr(),
-              ),
-              leading: const Icon(Icons.add_circle_outlined),
+            ListTileOnSurfaceVariant(
+              title: 'ssh.create'.tr(),
+              leadingIcon: Icons.add_circle_outline,
               onTap: () {
                 showModalBottomSheet<void>(
                   context: context,
@@ -188,15 +181,11 @@ class _SshKeysCard extends StatelessWidget {
                 final keyName = key.split(' ').length > 2
                     ? key.split(' ')[2]
                     : 'ssh.no_key_name'.tr();
-                return ListTile(
-                  textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                  title: Text('$keyName ($keyType)'),
+                return ListTileOnSurfaceVariant(
+                  title: '$keyName ($keyType)',
+                  disableSubtitleOverflow: true,
                   // do not overflow text
-                  subtitle: Text(
-                    publicKey,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  subtitle: publicKey,
                   onTap: () {
                     showDialog(
                       context: context,

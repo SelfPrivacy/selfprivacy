@@ -16,6 +16,55 @@ class ServerStorageListItem extends StatelessWidget {
   final bool dense;
 
   @override
+  Widget build(final BuildContext context) => ConsumptionListItem(
+        title: 'providers.storage.disk_usage'.tr(
+          args: [
+            volume.sizeUsed.toString(),
+          ],
+        ),
+        subtitle: 'providers.storage.disk_total'.tr(
+          args: [
+            volume.sizeTotal.toString(),
+            volume.displayName,
+          ],
+        ),
+        dense: dense,
+        color: volume.root
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+        percentage: volume.percentage,
+        icon: Icon(
+          Icons.storage_outlined,
+          size: 24,
+          color: Theme.of(context).colorScheme.onBackground,
+        ),
+      );
+}
+
+class ConsumptionListItem extends StatelessWidget {
+  const ConsumptionListItem({
+    required this.title,
+    required this.color,
+    required this.backgroundColor,
+    required this.percentage,
+    this.subtitle,
+    this.rightSideText,
+    this.icon,
+    this.dense = false,
+    final super.key,
+  });
+
+  final String title;
+  final String? subtitle;
+  final String? rightSideText;
+  final Color color;
+  final Color backgroundColor;
+  final double percentage;
+  final Widget? icon;
+  final bool dense;
+
+  @override
   Widget build(final BuildContext context) {
     final TextStyle? titleStyle = dense
         ? Theme.of(context).textTheme.titleMedium
@@ -26,45 +75,46 @@ class ServerStorageListItem extends StatelessWidget {
         : Theme.of(context).textTheme.bodyMedium;
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (showIcon)
-          Icon(
-            Icons.storage_outlined,
-            size: 24,
-            color: Theme.of(context).colorScheme.onBackground,
-          ),
-        if (showIcon) const SizedBox(width: 16),
+        if (icon != null) icon!,
+        if (icon != null) const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'providers.storage.disk_usage'.tr(
-                  args: [
-                    volume.sizeUsed.toString(),
-                  ],
-                ),
-                style: titleStyle,
+              Row(
+                mainAxisAlignment: rightSideText != null
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: titleStyle,
+                    textAlign: TextAlign.start,
+                  ),
+                  if (rightSideText != null)
+                    Text(
+                      rightSideText!,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.end,
+                    ),
+                ],
               ),
               const SizedBox(height: 4),
               BrandLinearIndicator(
-                value: volume.percentage,
-                color: volume.root
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.secondary,
-                backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-                height: 14.0,
+                value: percentage,
+                color: color,
+                backgroundColor: backgroundColor,
+                height: dense ? 8.0 : 14.0,
               ),
               const SizedBox(height: 4),
-              Text(
-                'providers.storage.disk_total'.tr(
-                  args: [
-                    volume.sizeTotal.toString(),
-                    volume.displayName,
-                  ],
+              if (subtitle != null)
+                Text(
+                  subtitle!,
+                  style: subtitleStyle,
+                  textAlign: TextAlign.start,
                 ),
-                style: subtitleStyle,
-              ),
             ],
           ),
         ),

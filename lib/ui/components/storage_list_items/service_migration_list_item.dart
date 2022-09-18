@@ -20,13 +20,47 @@ class ServiceMigrationListItem extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => Column(
         children: [
-          _headerRow(context),
+          ServiceConsumptionTitle(service: service),
           const SizedBox(height: 16),
           ..._radioRows(context),
         ],
       );
 
-  Widget _headerRow(final BuildContext context) => SizedBox(
+  List<Widget> _radioRows(final BuildContext context) {
+    final List<Widget> volumeRows = [];
+
+    for (final DiskVolume volume in diskStatus.diskVolumes) {
+      volumeRows.add(
+        RadioListTile(
+          title: Text(
+            volume.displayName,
+          ),
+          contentPadding: EdgeInsets.zero,
+          activeColor: Theme.of(context).colorScheme.secondary,
+          dense: true,
+          value: volume.name,
+          groupValue: selectedVolume,
+          onChanged: (final value) {
+            onChange(value, service.id);
+          },
+        ),
+      );
+    }
+
+    return volumeRows;
+  }
+}
+
+class ServiceConsumptionTitle extends StatelessWidget {
+  const ServiceConsumptionTitle({
+    required this.service,
+    final super.key,
+  });
+
+  final Service service;
+
+  @override
+  Widget build(final BuildContext context) => SizedBox(
         height: 24,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -63,28 +97,4 @@ class ServiceMigrationListItem extends StatelessWidget {
           ),
         ),
       );
-
-  List<Widget> _radioRows(final BuildContext context) {
-    final List<Widget> volumeRows = [];
-
-    for (final DiskVolume volume in diskStatus.diskVolumes) {
-      volumeRows.add(
-        RadioListTile(
-          title: Text(
-            volume.displayName,
-          ),
-          contentPadding: EdgeInsets.zero,
-          activeColor: Theme.of(context).colorScheme.secondary,
-          dense: true,
-          value: volume.name,
-          groupValue: selectedVolume,
-          onChanged: (final value) {
-            onChange(value, service.id);
-          },
-        ),
-      );
-    }
-
-    return volumeRows;
-  }
 }

@@ -105,6 +105,7 @@ class JobsCubit extends Cubit<JobsState> {
       emit(JobsStateLoading());
       bool hasServiceJobs = false;
       for (final ClientJob job in jobs) {
+        // TODO: Rewrite to polymorphism
         if (job is CreateUserJob) {
           await usersCubit.createUser(job.user);
         }
@@ -123,6 +124,9 @@ class JobsCubit extends Cubit<JobsState> {
         }
         if (job is ResetUserPasswordJob) {
           await usersCubit.changeUserPassword(job.user, job.user.password!);
+        }
+        if (job is RebuildServerJob) {
+          await upgradeServer();
         }
       }
 

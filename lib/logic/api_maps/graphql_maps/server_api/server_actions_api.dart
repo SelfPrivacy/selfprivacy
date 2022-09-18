@@ -24,9 +24,7 @@ mixin ServerActionsApi on ApiMap {
     try {
       final GraphQLClient client = await getClient();
       return await _commonBoolRequest(
-        () async {
-          await client.mutate$RebootSystem();
-        },
+        () async => client.mutate$RebootSystem(),
       );
     } catch (e) {
       return false;
@@ -37,9 +35,7 @@ mixin ServerActionsApi on ApiMap {
     try {
       final GraphQLClient client = await getClient();
       return await _commonBoolRequest(
-        () async {
-          await client.mutate$PullRepositoryChanges();
-        },
+        () async => client.mutate$PullRepositoryChanges(),
       );
     } catch (e) {
       return false;
@@ -49,10 +45,8 @@ mixin ServerActionsApi on ApiMap {
   Future<bool> upgrade() async {
     try {
       final GraphQLClient client = await getClient();
-      return await _commonBoolRequest(
-        () async {
-          await client.mutate$RunSystemUpgrade();
-        },
+      return _commonBoolRequest(
+        () async => client.mutate$RunSystemUpgrade(),
       );
     } catch (e) {
       return false;

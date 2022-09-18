@@ -10,6 +10,7 @@ class _ServerSettings extends StatefulWidget {
 class _ServerSettingsState extends State<_ServerSettings> {
   bool? allowAutoUpgrade;
   bool? rebootAfterUpgrade;
+  bool? didSomethingChange;
 
   @override
   Widget build(final BuildContext context) {
@@ -24,11 +25,18 @@ class _ServerSettingsState extends State<_ServerSettings> {
       rebootAfterUpgrade = serverDetailsState.autoUpgradeSettings.allowReboot;
     }
 
+    didSomethingChange ??= false;
+
     return Column(
       children: [
         SwitchListTile(
           value: allowAutoUpgrade ?? false,
           onChanged: (final switched) {
+            if (didSomethingChange == false) {
+              context.read<JobsCubit>().addJob(
+                    RebuildServerJob(title: 'jobs.upgradeServer'.tr()),
+                  );
+            }
             context
                 .read<ServerDetailsCubit>()
                 .repository
@@ -40,6 +48,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
                 );
             setState(() {
               allowAutoUpgrade = switched;
+              didSomethingChange = true;
             });
           },
           title: Text('providers.server.settings.allow_autoupgrade'.tr()),
@@ -51,6 +60,11 @@ class _ServerSettingsState extends State<_ServerSettings> {
         SwitchListTile(
           value: rebootAfterUpgrade ?? false,
           onChanged: (final switched) {
+            if (didSomethingChange == false) {
+              context.read<JobsCubit>().addJob(
+                    RebuildServerJob(title: 'jobs.upgradeServer'.tr()),
+                  );
+            }
             context
                 .read<ServerDetailsCubit>()
                 .repository
@@ -62,6 +76,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
                 );
             setState(() {
               rebootAfterUpgrade = switched;
+              didSomethingChange = true;
             });
           },
           title: Text('providers.server.settings.reboot_after_upgrade'.tr()),
@@ -76,6 +91,14 @@ class _ServerSettingsState extends State<_ServerSettings> {
             serverDetailsState.serverTimezone.toString(),
           ),
           onTap: () {
+            if (didSomethingChange == false) {
+              context.read<JobsCubit>().addJob(
+                    RebuildServerJob(title: 'jobs.upgradeServer'.tr()),
+                  );
+            }
+            setState(() {
+              didSomethingChange = true;
+            });
             Navigator.of(context).push(
               materialRoute(
                 const SelectTimezone(),

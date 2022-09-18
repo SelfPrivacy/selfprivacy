@@ -20,6 +20,13 @@ class ClientJob extends Equatable {
   List<Object> get props => [id, title];
 }
 
+class RebuildServerJob extends ClientJob {
+  RebuildServerJob({
+    required final super.title,
+    final super.id,
+  });
+}
+
 class CreateUserJob extends ClientJob {
   CreateUserJob({
     required this.user,

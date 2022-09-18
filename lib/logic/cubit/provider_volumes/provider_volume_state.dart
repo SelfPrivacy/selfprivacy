@@ -23,5 +23,5 @@ class ApiProviderVolumeState extends ServerInstallationDependendState {
       );
 
   @override
-  List<Object?> get props => [_volumes];
+  List<Object?> get props => [_volumes, status, isResizing];
 }

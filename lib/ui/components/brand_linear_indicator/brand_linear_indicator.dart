@@ -32,7 +32,9 @@ class BrandLinearIndicator extends StatelessWidget {
               -(1 - value),
               0,
             ),
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
               width: constraints.maxWidth,
               decoration: BoxDecoration(
                 color: color,

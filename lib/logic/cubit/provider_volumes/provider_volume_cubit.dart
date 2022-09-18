@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
@@ -77,6 +78,9 @@ class ApiProviderVolumeCubit
         );
 
     if (!resized) {
+      getIt<NavigationService>().showSnackBar(
+        'providers.storage.extending_volume_error'.tr(),
+      );
       return false;
     }
 

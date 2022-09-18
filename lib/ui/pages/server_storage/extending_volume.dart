@@ -135,7 +135,14 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               const SizedBox(height: 16),
               FilledButton(
                 title: 'providers.storage.extend_volume_button.title'.tr(),
-                onPressed: _isError ? null : () => {},
+                onPressed: _isError
+                    ? null
+                    : () => {
+                          context.read<ApiProviderVolumeCubit>().resizeVolume(
+                                widget.diskVolumeToResize,
+                                _currentSliderGbValue.round(),
+                              ),
+                        },
                 disabled: _isError,
               ),
               const SizedBox(height: 16),

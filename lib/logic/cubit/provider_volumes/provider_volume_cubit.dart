@@ -84,6 +84,8 @@ class ApiProviderVolumeCubit
       return false;
     }
 
+    await Future.delayed(const Duration(seconds: 10));
+
     await ServerApi().resizeVolume(volume.name);
     refresh();
     return true;

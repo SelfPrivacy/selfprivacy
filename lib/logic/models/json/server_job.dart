@@ -47,6 +47,7 @@ class ServerJob {
   final String? result;
   final String? statusText;
   final DateTime? finishedAt;
+  bool isHidden = false;
 }
 
 enum JobStatusEnum {

@@ -1,22 +1,28 @@
 part of 'server_jobs_cubit.dart';
 
 class ServerJobsState extends ServerInstallationDependendState {
-  const ServerJobsState({
-    this.serverJobList = const [],
+  ServerJobsState({
+    final serverJobList = const <ServerJob>[],
     this.migrationJobUid,
-  });
-  final List<ServerJob> serverJobList;
+  }) {
+    _serverJobList = serverJobList;
+  }
+
+  late final List<ServerJob> _serverJobList;
   final String? migrationJobUid;
 
+  List<ServerJob> get serverJobList =>
+      _serverJobList.where((final ServerJob job) => !job.isHidden).toList();
+
   @override
-  List<Object?> get props => [migrationJobUid, ...serverJobList];
+  List<Object?> get props => [migrationJobUid, ..._serverJobList];
 
   ServerJobsState copyWith({
     final List<ServerJob>? serverJobList,
     final String? migrationJobUid,
   }) =>
       ServerJobsState(
-        serverJobList: serverJobList ?? this.serverJobList,
+        serverJobList: serverJobList ?? _serverJobList,
         migrationJobUid: migrationJobUid ?? this.migrationJobUid,
       );
 }

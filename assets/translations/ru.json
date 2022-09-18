@@ -482,7 +482,8 @@
     "upgradeServer": "Обновить сервер",
     "rebootServer": "Перезагрузить сервер",
     "create_ssh_key": "Создать SSH ключ для {}",
-    "delete_ssh_key": "Удалить SSH ключ для {}"
+    "delete_ssh_key": "Удалить SSH ключ для {}",
+    "server_jobs": "Задачи на сервере"
   },
   "validations": {
     "required": "Обязательное поле.",

@@ -22,14 +22,24 @@ mixin JobsApi on ApiMap {
     return jobsList;
   }
 
-  Future<void> removeApiJob(final String uid) async {
+  Future<GenericMutationResult> removeApiJob(final String uid) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$RemoveJob(jobId: uid);
       final mutation = Options$Mutation$RemoveJob(variables: variables);
-      await client.mutate$RemoveJob(mutation);
+      final response = await client.mutate$RemoveJob(mutation);
+      return GenericMutationResult(
+        success: response.parsedData?.removeJob.success ?? false,
+        code: response.parsedData?.removeJob.code ?? 0,
+        message: response.parsedData?.removeJob.message,
+      );
     } catch (e) {
       print(e);
+      return GenericMutationResult(
+        success: false,
+        code: 0,
+        message: e.toString(),
+      );
     }
   }
 }

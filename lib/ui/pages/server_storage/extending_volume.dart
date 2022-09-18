@@ -6,6 +6,8 @@ import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
+import 'package:selfprivacy/ui/pages/root_route.dart';
+import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class ExtendingVolumePage extends StatefulWidget {
   const ExtendingVolumePage({
@@ -137,12 +139,16 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                 title: 'providers.storage.extend_volume_button.title'.tr(),
                 onPressed: _isError
                     ? null
-                    : () => {
-                          context.read<ApiProviderVolumeCubit>().resizeVolume(
-                                widget.diskVolumeToResize,
-                                _currentSliderGbValue.round(),
-                              ),
-                        },
+                    : () {
+                        context.read<ApiProviderVolumeCubit>().resizeVolume(
+                              widget.diskVolumeToResize,
+                              _currentSliderGbValue.round(),
+                            );
+                        Navigator.of(context).pushAndRemoveUntil(
+                          materialRoute(const RootPage()),
+                          (final predicate) => false,
+                        );
+                      },
                 disabled: _isError,
               ),
               const SizedBox(height: 16),

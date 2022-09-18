@@ -31,6 +31,17 @@ class CreateUserJob extends ClientJob {
   List<Object> get props => [id, title, user];
 }
 
+class ResetUserPasswordJob extends ClientJob {
+  ResetUserPasswordJob({
+    required this.user,
+  }) : super(title: '${"jobs.resetUserPassword".tr()} ${user.login}');
+
+  final User user;
+
+  @override
+  List<Object> get props => [id, title, user];
+}
+
 class DeleteUserJob extends ClientJob {
   DeleteUserJob({
     required this.user,

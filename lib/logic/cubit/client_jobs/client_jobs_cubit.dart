@@ -121,6 +121,9 @@ class JobsCubit extends Cubit<JobsState> {
         if (job is DeleteSSHKeyJob) {
           await usersCubit.deleteSshKey(job.user, job.publicKey);
         }
+        if (job is ResetUserPasswordJob) {
+          await usersCubit.changeUserPassword(job.user, job.user.password!);
+        }
       }
 
       await api.pullConfigurationUpdate();

@@ -31,6 +31,7 @@ part 'new_user.dart';
 part 'user.dart';
 part 'user_details.dart';
 part 'add_user_fab.dart';
+part 'reset_password.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({final super.key});

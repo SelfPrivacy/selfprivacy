@@ -43,7 +43,17 @@ class UserDetails extends StatelessWidget {
         const SizedBox(height: 8),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => {},
+          onTap: () => {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (final BuildContext context) => Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: ResetPassword(user: user),
+              ),
+            ),
+          },
           leading: const Icon(Icons.lock_reset_outlined),
           title: Text(
             'users.reset_password'.tr(),

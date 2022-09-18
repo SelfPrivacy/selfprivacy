@@ -13,9 +13,7 @@ class ServerJobsCubit
   ServerJobsCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(
           serverInstallationCubit,
-          const ServerJobsState(
-            serverJobList: [],
-          ),
+          const ServerJobsState(),
         );
 
   Timer? timer;
@@ -24,9 +22,7 @@ class ServerJobsCubit
   @override
   void clear() async {
     emit(
-      const ServerJobsState(
-        serverJobList: [],
-      ),
+      const ServerJobsState(),
     );
     if (timer != null && timer!.isActive) {
       timer!.cancel();
@@ -45,6 +41,29 @@ class ServerJobsCubit
       );
       timer = Timer(const Duration(seconds: 10), () => reload(useTimer: true));
     }
+  }
+
+  Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
+    final String? jobUid = await api.migrateToBinds(serviceToDisk);
+    emit(
+      ServerJobsState(
+        migrationJobUid: jobUid,
+      ),
+    );
+  }
+
+  ServerJob? getServerJobByUid(final String uid) {
+    ServerJob? job;
+
+    try {
+      job = state.serverJobList.firstWhere(
+        (final ServerJob job) => job.uid == uid,
+      );
+    } catch (e) {
+      print(e);
+    }
+
+    return job;
   }
 
   Future<void> reload({final bool useTimer = false}) async {

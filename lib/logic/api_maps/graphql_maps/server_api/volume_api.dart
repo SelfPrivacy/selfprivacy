@@ -57,7 +57,10 @@ mixin VolumeApi on ApiMap {
     }
   }
 
-  Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
+  Future<String?> migrateToBinds(
+    final Map<String, String> serviceToDisk,
+  ) async {
+    String? jobUid;
     try {
       final GraphQLClient client = await getClient();
       final input = Input$MigrateToBindsInput(
@@ -70,9 +73,16 @@ mixin VolumeApi on ApiMap {
       final variables = Variables$Mutation$MigrateToBinds(input: input);
       final migrateMutation =
           Options$Mutation$MigrateToBinds(variables: variables);
-      await client.mutate$MigrateToBinds(migrateMutation);
+      final QueryResult<Mutation$MigrateToBinds> result =
+          await client.mutate$MigrateToBinds(
+        migrateMutation,
+      );
+
+      jobUid = result.parsedData!.migrateToBinds.job!.uid;
     } catch (e) {
       print(e);
     }
+
+    return jobUid;
   }
 }

@@ -10,11 +10,8 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class MigrationProcessPage extends StatefulWidget {
   const MigrationProcessPage({
-    required this.jobUid,
     final super.key,
   });
-
-  final String jobUid;
 
   @override
   State<MigrationProcessPage> createState() => _MigrationProcessPageState();
@@ -28,22 +25,25 @@ class _MigrationProcessPageState extends State<MigrationProcessPage> {
 
   @override
   Widget build(final BuildContext context) {
+    ServerJob? job;
+    String? subtitle = '';
+    double value = 0.0;
+    List<Widget> children = [];
+
     final serverJobsState = context.watch<ServerJobsCubit>().state;
-    final ServerJob job = serverJobsState.serverJobList.firstWhere(
-      (final ServerJob job) => job.uid == widget.jobUid,
-    );
-    final double value = job.progress == null ? 0.0 : job.progress! / 100;
-    return BrandHeroScreen(
-      hasBackButton: false,
-      heroTitle: 'providers.storage.migration_process'.tr(),
-      heroSubtitle: job.statusText,
-      children: [
-        BrandLinearIndicator(
-          value: value,
-          color: Theme.of(context).colorScheme.primary,
-          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-          height: 4.0,
-        ),
+    if (serverJobsState.migrationJobUid != null) {
+      job = context.read<ServerJobsCubit>().getServerJobByUid(
+            serverJobsState.migrationJobUid!,
+          );
+    }
+
+    if (job == null) {
+      subtitle = 'basis.loading'.tr();
+    } else {
+      value = job.progress == null ? 0.0 : job.progress! / 100;
+      subtitle = job.statusText;
+      children = [
+        ...children,
         const SizedBox(height: 16),
         if (job.finishedAt != null)
           Text(
@@ -60,7 +60,21 @@ class _MigrationProcessPageState extends State<MigrationProcessPage> {
                 (final predicate) => false,
               );
             },
-          )
+          ),
+      ];
+    }
+    return BrandHeroScreen(
+      hasBackButton: false,
+      heroTitle: 'providers.storage.migration_process'.tr(),
+      heroSubtitle: subtitle,
+      children: [
+        BrandLinearIndicator(
+          value: value,
+          color: Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+          height: 4.0,
+        ),
+        ...children,
       ],
     );
   }

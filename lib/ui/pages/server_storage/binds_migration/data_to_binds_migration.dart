@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
@@ -8,6 +9,8 @@ import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/service_migration_list_item.dart';
+import 'package:selfprivacy/ui/pages/server_storage/binds_migration/migration_process_page.dart';
+import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class DataToBindsMigrationPage extends StatefulWidget {
   const DataToBindsMigrationPage({
@@ -158,7 +161,10 @@ class _DataToBindsMigrationPageState extends State<DataToBindsMigrationPage> {
             FilledButton(
               title: 'providers.storage.start_migration_button'.tr(),
               onPressed: () {
-                // TODO: Implement migration
+                context.read<ServerJobsCubit>().migrateToBinds(serviceToDisk);
+                Navigator.of(context).push(
+                  materialRoute(const MigrationProcessPage()),
+                );
               },
             ),
             const SizedBox(height: 32),

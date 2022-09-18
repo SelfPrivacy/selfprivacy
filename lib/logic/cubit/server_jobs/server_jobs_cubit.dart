@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -44,10 +45,15 @@ class ServerJobsCubit
   }
 
   Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
-    final String? jobUid = await api.migrateToBinds(serviceToDisk);
+    final result = await api.migrateToBinds(serviceToDisk);
+    if (!result.success || result.jobUid == null) {
+      getIt<NavigationService>().showSnackBar(result.message!);
+      return;
+    }
+
     emit(
       ServerJobsState(
-        migrationJobUid: jobUid,
+        migrationJobUid: result.jobUid,
       ),
     );
   }

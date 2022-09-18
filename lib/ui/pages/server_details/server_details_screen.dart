@@ -16,7 +16,6 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
-import 'package:selfprivacy/ui/components/switch_block/switch_bloc.dart';
 import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';
 import 'package:selfprivacy/ui/pages/server_details/time_zone/lang.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
@@ -85,6 +84,8 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
           StorageCard(
             diskStatus: context.watch<ApiServerVolumeCubit>().state.diskStatus,
           ),
+          const SizedBox(height: 16),
+          const _ServerSettings(),
           const Divider(height: 32),
           Text(
             'providers.server.resource_usage'.tr(),
@@ -95,9 +96,8 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
             create: (final context) => HetznerMetricsCubit()..restart(),
             child: _Chart(),
           ),
-          const Divider(height: 32),
+          const SizedBox(height: 8),
           _TextDetails(),
-          const _ServerSettings(),
         ],
       ),
     );

@@ -26,8 +26,9 @@ class _ServerSettingsState extends State<_ServerSettings> {
 
     return Column(
       children: [
-        SwitcherBlock(
-          onChange: (final switched) {
+        SwitchListTile(
+          value: allowAutoUpgrade ?? false,
+          onChanged: (final switched) {
             context
                 .read<ServerDetailsCubit>()
                 .repository
@@ -41,15 +42,15 @@ class _ServerSettingsState extends State<_ServerSettings> {
               allowAutoUpgrade = switched;
             });
           },
-          isActive: allowAutoUpgrade ?? false,
-          child: _TextColumn(
-            title: 'providers.server.settings.allow_autoupgrade'.tr(),
-            value: 'providers.server.settings.allow_autoupgrade_hint'.tr(),
+          title: Text('providers.server.settings.allow_autoupgrade'.tr()),
+          subtitle: Text(
+            'providers.server.settings.allow_autoupgrade_hint'.tr(),
           ),
+          activeColor: Theme.of(context).colorScheme.primary,
         ),
-        const Divider(height: 0),
-        SwitcherBlock(
-          onChange: (final switched) {
+        SwitchListTile(
+          value: rebootAfterUpgrade ?? false,
+          onChanged: (final switched) {
             context
                 .read<ServerDetailsCubit>()
                 .repository
@@ -59,20 +60,21 @@ class _ServerSettingsState extends State<_ServerSettings> {
                     allowReboot: switched,
                   ),
                 );
-            setState(
-              () {
-                rebootAfterUpgrade = switched;
-              },
-            );
+            setState(() {
+              rebootAfterUpgrade = switched;
+            });
           },
-          isActive: rebootAfterUpgrade ?? false,
-          child: _TextColumn(
-            title: 'providers.server.settings.reboot_after_upgrade'.tr(),
-            value: 'providers.server.settings.reboot_after_upgrade_hint'.tr(),
+          title: Text('providers.server.settings.reboot_after_upgrade'.tr()),
+          subtitle: Text(
+            'providers.server.settings.reboot_after_upgrade_hint'.tr(),
           ),
+          activeColor: Theme.of(context).colorScheme.primary,
         ),
-        const Divider(height: 0),
-        _Button(
+        ListTile(
+          title: Text('providers.server.settings.server_timezone'.tr()),
+          subtitle: Text(
+            serverDetailsState.serverTimezone.toString(),
+          ),
           onTap: () {
             Navigator.of(context).push(
               materialRoute(
@@ -80,56 +82,8 @@ class _ServerSettingsState extends State<_ServerSettings> {
               ),
             );
           },
-          child: _TextColumn(
-            title: 'providers.server.settings.server_timezone'.tr(),
-            value: serverDetailsState.serverTimezone.toString(),
-          ),
         ),
       ],
     );
   }
-}
-
-class _Button extends StatelessWidget {
-  const _Button({
-    required this.onTap,
-    required this.child,
-  });
-
-  final Widget child;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(final BuildContext context) => InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: child,
-        ),
-      );
-}
-
-class _TextColumn extends StatelessWidget {
-  const _TextColumn({
-    required this.title,
-    required this.value,
-  });
-
-  final String title;
-  final String value;
-  @override
-  Widget build(final BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BrandText.body1(
-            title,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          const SizedBox(height: 5),
-          BrandText.body1(
-            value,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
-      );
 }

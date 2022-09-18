@@ -17,6 +17,8 @@ class ApiProviderVolumeCubit
 
   VolumeProviderApiFactory? providerApi;
 
+  final ServerApi serverApi = ServerApi();
+
   @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
@@ -34,23 +36,23 @@ class ApiProviderVolumeCubit
       providerApi!.getVolumeProvider().getPricePerGb();
 
   Future<void> refresh() async {
-    emit(const ApiProviderVolumeState([], LoadingStatus.refreshing));
+    emit(const ApiProviderVolumeState([], LoadingStatus.refreshing, false));
     _refetch();
   }
 
   Future<void> _refetch() async {
     if (providerApi == null) {
-      return emit(const ApiProviderVolumeState([], LoadingStatus.error));
+      return emit(const ApiProviderVolumeState([], LoadingStatus.error, false));
     }
 
     final List<ServerVolume> volumes =
         await providerApi!.getVolumeProvider().getVolumes();
 
     if (volumes.isEmpty) {
-      return emit(const ApiProviderVolumeState([], LoadingStatus.error));
+      return emit(const ApiProviderVolumeState([], LoadingStatus.error, false));
     }
 
-    emit(ApiProviderVolumeState(volumes, LoadingStatus.success));
+    emit(ApiProviderVolumeState(volumes, LoadingStatus.success, false));
   }
 
   Future<void> attachVolume(final DiskVolume volume) async {
@@ -71,7 +73,12 @@ class ApiProviderVolumeCubit
   Future<bool> resizeVolume(
     final DiskVolume volume,
     final int newSizeGb,
+    final Function() callback,
   ) async {
+    getIt<NavigationService>().showSnackBar(
+      'Starting resize',
+    );
+    emit(state.copyWith(isResizing: true));
     final bool resized = await providerApi!.getVolumeProvider().resizeVolume(
           volume.providerVolume!.id,
           newSizeGb,
@@ -81,13 +88,29 @@ class ApiProviderVolumeCubit
       getIt<NavigationService>().showSnackBar(
         'providers.storage.extending_volume_error'.tr(),
       );
+      emit(state.copyWith(isResizing: false));
       return false;
     }
 
+    getIt<NavigationService>().showSnackBar(
+      'Hetzner resized, waiting 10 seconds',
+    );
     await Future.delayed(const Duration(seconds: 10));
 
     await ServerApi().resizeVolume(volume.name);
-    refresh();
+    getIt<NavigationService>().showSnackBar(
+      'Server api resized, waiting 20 seconds',
+    );
+
+    await Future.delayed(const Duration(seconds: 20));
+    getIt<NavigationService>().showSnackBar(
+      'Restarting server',
+    );
+
+    await refresh();
+    emit(state.copyWith(isResizing: false));
+    await callback();
+    await serverApi.reboot();
     return true;
   }
 

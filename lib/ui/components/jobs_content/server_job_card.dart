@@ -46,21 +46,23 @@ class ServerJobCard extends StatelessWidget {
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        serverJob.name,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      Text(
-                        serverJob.description,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          serverJob.name,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        Text(
+                          serverJob.description,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
                   ),
-                  const Spacer(),
                   Icon(
                     icon,
                     color: color,

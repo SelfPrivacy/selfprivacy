@@ -24,7 +24,7 @@ class ApiServerVolumeCubit
   @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
-      _refetch();
+      reload();
     }
   }
 
@@ -43,7 +43,7 @@ class ApiServerVolumeCubit
     return;
   }
 
-  Future<void> _refetch() async {
+  Future<void> reload() async {
     final volumes = await serverApi.getServerDiskVolumes();
     final usesBinds = await serverApi.isUsingBinds();
     var status = LoadingStatus.error;

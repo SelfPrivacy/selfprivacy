@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
@@ -26,7 +27,7 @@ class ExtendingVolumePage extends StatefulWidget {
 class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   @override
   void initState() {
-    minSize = widget.diskVolumeToResize.sizeTotal + DiskSize.fromGibibyte(2);
+    minSize = widget.diskVolumeToResize.sizeTotal + DiskSize.fromGibibyte(3);
     _currentSliderGbValue = minSize.gibibyte;
     super.initState();
   }
@@ -73,10 +74,13 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               (_euroPerGb * double.parse(_sizeController.text))
                   .toStringAsFixed(2);
           minSize =
-              widget.diskVolumeToResize.sizeTotal + DiskSize.fromGibibyte(2);
+              widget.diskVolumeToResize.sizeTotal + DiskSize.fromGibibyte(3);
           if (_currentSliderGbValue < 0) {
             _currentSliderGbValue = minSize.gibibyte;
           }
+
+          final isAlreadyResizing =
+              context.watch<ApiProviderVolumeCubit>().state.isResizing;
 
           return BrandHeroScreen(
             hasBackButton: true,
@@ -143,13 +147,14 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                         context.read<ApiProviderVolumeCubit>().resizeVolume(
                               widget.diskVolumeToResize,
                               _currentSliderGbValue.round(),
+                              context.read<ApiServerVolumeCubit>().reload,
                             );
                         Navigator.of(context).pushAndRemoveUntil(
                           materialRoute(const RootPage()),
                           (final predicate) => false,
                         );
                       },
-                disabled: _isError,
+                disabled: _isError || isAlreadyResizing,
               ),
               const SizedBox(height: 16),
               const Divider(

@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
+import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/service_migration_list_item.dart';
-import 'package:selfprivacy/ui/pages/server_storage/binds_migration/migration_process_page.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
+import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class DataToBindsMigrationPage extends StatefulWidget {
@@ -162,8 +165,17 @@ class _DataToBindsMigrationPageState extends State<DataToBindsMigrationPage> {
               title: 'providers.storage.start_migration_button'.tr(),
               onPressed: () {
                 context.read<ServerJobsCubit>().migrateToBinds(serviceToDisk);
-                Navigator.of(context).push(
-                  materialRoute(const MigrationProcessPage()),
+                Navigator.of(context).pushAndRemoveUntil(
+                  materialRoute(const RootPage()),
+                  (final predicate) => false,
+                );
+                showBrandBottomSheet(
+                  context: context,
+                  builder: (final BuildContext context) =>
+                      const BrandBottomSheet(
+                    isExpended: true,
+                    child: JobsContent(),
+                  ),
                 );
               },
             ),

@@ -9,7 +9,7 @@ part of 'server_job.dart';
 ServerJob _$ServerJobFromJson(Map<String, dynamic> json) => ServerJob(
       name: json['name'] as String,
       description: json['description'] as String,
-      status: json['status'] as String,
+      status: $enumDecode(_$JobStatusEnumEnumMap, json['status']),
       uid: json['uid'] as String,
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       createdAt: DateTime.parse(json['createdAt'] as String),
@@ -25,7 +25,7 @@ ServerJob _$ServerJobFromJson(Map<String, dynamic> json) => ServerJob(
 Map<String, dynamic> _$ServerJobToJson(ServerJob instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
-      'status': instance.status,
+      'status': _$JobStatusEnumEnumMap[instance.status]!,
       'uid': instance.uid,
       'updatedAt': instance.updatedAt.toIso8601String(),
       'createdAt': instance.createdAt.toIso8601String(),
@@ -35,3 +35,10 @@ Map<String, dynamic> _$ServerJobToJson(ServerJob instance) => <String, dynamic>{
       'statusText': instance.statusText,
       'finishedAt': instance.finishedAt?.toIso8601String(),
     };
+
+const _$JobStatusEnumEnumMap = {
+  JobStatusEnum.created: 'CREATED',
+  JobStatusEnum.running: 'RUNNING',
+  JobStatusEnum.finished: 'FINISHED',
+  JobStatusEnum.error: 'ERROR',
+};

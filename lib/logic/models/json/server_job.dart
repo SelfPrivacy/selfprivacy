@@ -30,14 +30,14 @@ class ServerJob {
           name: serverJob.name,
           progress: serverJob.progress,
           result: serverJob.result,
-          status: serverJob.status,
+          status: JobStatusEnum.fromString(serverJob.status),
           statusText: serverJob.statusText,
           uid: serverJob.uid,
           updatedAt: serverJob.updatedAt,
         );
   final String name;
   final String description;
-  final String status;
+  final JobStatusEnum status;
   final String uid;
   final DateTime updatedAt;
   final DateTime createdAt;
@@ -47,4 +47,30 @@ class ServerJob {
   final String? result;
   final String? statusText;
   final DateTime? finishedAt;
+}
+
+enum JobStatusEnum {
+  @JsonValue('CREATED')
+  created,
+  @JsonValue('RUNNING')
+  running,
+  @JsonValue('FINISHED')
+  finished,
+  @JsonValue('ERROR')
+  error;
+
+  factory JobStatusEnum.fromString(final String status) {
+    switch (status) {
+      case 'CREATED':
+        return created;
+      case 'RUNNING':
+        return running;
+      case 'FINISHED':
+        return finished;
+      case 'ERROR':
+        return error;
+      default:
+        throw Exception('Unknown status: $status');
+    }
+  }
 }

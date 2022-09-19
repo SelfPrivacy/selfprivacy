@@ -11,8 +11,11 @@ class ServerJobsState extends ServerInstallationDependendState {
   late final List<ServerJob> _serverJobList;
   final String? migrationJobUid;
 
-  List<ServerJob> get serverJobList =>
-      _serverJobList.where((final ServerJob job) => !job.isHidden).toList();
+  List<ServerJob> get serverJobList {
+    final List<ServerJob> list = _serverJobList;
+    list.sort((final a, final b) => b.createdAt.compareTo(a.createdAt));
+    return list;
+  }
 
   @override
   List<Object?> get props => [migrationJobUid, ..._serverJobList];

@@ -19,6 +19,7 @@ class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
       emit(
         ServicesState(
           services: services,
+          lockedServices: const [],
         ),
       );
       timer = Timer(const Duration(seconds: 10), () => reload(useTimer: true));
@@ -28,7 +29,7 @@ class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
   Future<void> reload({final bool useTimer = false}) async {
     final List<Service> services = await api.getAllServices();
     emit(
-      ServicesState(
+      state.copyWith(
         services: services,
       ),
     );
@@ -38,7 +39,26 @@ class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
   }
 
   Future<void> restart(final String serviceId) async {
+    emit(state.copyWith(lockedServices: [...state.lockedServices, serviceId]));
     await api.restartService(serviceId);
+    await Future.delayed(const Duration(seconds: 2));
+    reload();
+    await Future.delayed(const Duration(seconds: 10));
+    emit(
+      state.copyWith(
+        lockedServices: state.lockedServices
+            .where((final element) => element != serviceId)
+            .toList(),
+      ),
+    );
+    reload();
+  }
+
+  Future<void> moveService(
+    final String serviceId,
+    final String destination,
+  ) async {
+    await api.moveService(serviceId, destination);
   }
 
   @override

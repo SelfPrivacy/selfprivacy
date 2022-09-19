@@ -3,11 +3,18 @@ part of 'services_cubit.dart';
 class ServicesState extends ServerInstallationDependendState {
   const ServicesState({
     required this.services,
+    required this.lockedServices,
   });
 
-  const ServicesState.empty() : this(services: const []);
+  const ServicesState.empty()
+      : this(services: const [], lockedServices: const []);
 
   final List<Service> services;
+  final List<String> lockedServices;
+
+  bool isServiceLocked(final String serviceId) =>
+      lockedServices.contains(serviceId);
+
   bool get isPasswordManagerEnable => services
       .firstWhere(
         (final service) => service.id == 'bitwarden',
@@ -53,6 +60,7 @@ class ServicesState extends ServerInstallationDependendState {
   @override
   List<Object> get props => [
         services,
+        lockedServices,
       ];
 
   bool isEnableByType(final ServiceTypes type) {
@@ -71,4 +79,13 @@ class ServicesState extends ServerInstallationDependendState {
         throw Exception('wrong state');
     }
   }
+
+  ServicesState copyWith({
+    final List<Service>? services,
+    final List<String>? lockedServices,
+  }) =>
+      ServicesState(
+        services: services ?? this.services,
+        lockedServices: lockedServices ?? this.lockedServices,
+      );
 }

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
@@ -15,22 +16,23 @@ import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
-class DataToBindsMigrationPage extends StatefulWidget {
-  const DataToBindsMigrationPage({
+class ServicesMigrationPage extends StatefulWidget {
+  const ServicesMigrationPage({
     required this.services,
     required this.diskStatus,
+    required this.isMigration,
     final super.key,
   });
 
   final DiskStatus diskStatus;
   final List<Service> services;
+  final bool isMigration;
 
   @override
-  State<DataToBindsMigrationPage> createState() =>
-      _DataToBindsMigrationPageState();
+  State<ServicesMigrationPage> createState() => _ServicesMigrationPageState();
 }
 
-class _DataToBindsMigrationPageState extends State<DataToBindsMigrationPage> {
+class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
   /// Service id to target migration disk name
   final Map<String, String> serviceToDisk = {};
 
@@ -164,7 +166,20 @@ class _DataToBindsMigrationPageState extends State<DataToBindsMigrationPage> {
             FilledButton(
               title: 'providers.storage.start_migration_button'.tr(),
               onPressed: () {
-                context.read<ServerJobsCubit>().migrateToBinds(serviceToDisk);
+                if (widget.isMigration) {
+                  context.read<ServerJobsCubit>().migrateToBinds(
+                        serviceToDisk,
+                      );
+                } else {
+                  for (final service in widget.services) {
+                    if (serviceToDisk[service.id] != null) {
+                      context.read<ServicesCubit>().moveService(
+                            service.id,
+                            serviceToDisk[service.id]!,
+                          );
+                    }
+                  }
+                }
                 Navigator.of(context).pushAndRemoveUntil(
                   materialRoute(const RootPage()),
                   (final predicate) => false,

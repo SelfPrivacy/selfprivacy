@@ -9,6 +9,8 @@ import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
+import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ServicePage extends StatefulWidget {
@@ -39,6 +41,9 @@ class _ServicePageState extends State<ServicePage> {
 
     final bool serviceDisabled = service.status == ServiceStatus.inactive ||
         service.status == ServiceStatus.off;
+
+    final bool serviceLocked =
+        context.watch<ServicesCubit>().state.isServiceLocked(service.id);
 
     return BrandHeroScreen(
       hasBackButton: true,
@@ -90,6 +95,7 @@ class _ServicePageState extends State<ServicePage> {
             'services.service_page.restart'.tr(),
             style: Theme.of(context).textTheme.titleMedium,
           ),
+          enabled: !serviceDisabled && !serviceLocked,
         ),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
@@ -108,11 +114,22 @@ class _ServicePageState extends State<ServicePage> {
                 : 'services.service_page.disable'.tr(),
             style: Theme.of(context).textTheme.titleMedium,
           ),
+          enabled: !serviceLocked,
         ),
         if (service.isMovable)
           ListTile(
             iconColor: Theme.of(context).colorScheme.onBackground,
-            onTap: () => {},
+            // Open page ServicesMigrationPage
+            onTap: () => Navigator.of(context).push(
+              materialRoute(
+                ServicesMigrationPage(
+                  services: [service],
+                  diskStatus:
+                      context.read<ApiServerVolumeCubit>().state.diskStatus,
+                  isMigration: false,
+                ),
+              ),
+            ),
             leading: const Icon(Icons.drive_file_move_outlined),
             title: Text(
               'services.service_page.move'.tr(),
@@ -131,6 +148,7 @@ class _ServicePageState extends State<ServicePage> {
               ),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
+            enabled: !serviceDisabled && !serviceLocked,
           ),
       ],
     );

@@ -126,13 +126,14 @@ class JobsContent extends StatelessWidget {
             const SizedBox(height: 8),
             const Divider(height: 0),
             const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'jobs.server_jobs'.tr(),
-                style: Theme.of(context).textTheme.titleMedium,
+            if (serverJobs.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'jobs.server_jobs'.tr(),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
-            ),
             ...serverJobs.map(
               (final job) => Dismissible(
                 key: ValueKey(job.uid),

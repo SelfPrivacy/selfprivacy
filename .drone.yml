@@ -1,0 +1,124 @@
+kind: pipeline
+type: exec
+name: Continuous Integration
+
+steps:
+  - name: Prepare
+    commands:
+      - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+
+  - name: Build
+    commands:
+      - ./ci.py --run-ci-build
+
+trigger:
+  event:
+    - push
+    - pull_request
+
+node:
+  server: builder
+
+---
+
+kind: pipeline
+type: exec
+name: Release
+
+steps:
+  - name: Prepare
+    commands:
+      - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+      - if podman volume exists src; then podman volume rm -f src; podman volume create src; else podman volume create src; fi
+      - git archive --format=tar HEAD | podman volume import src -
+
+  - name: Build Intermediate Linux Release Artifact (Binary)
+    commands:
+      - ./ci.py --build-linux
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
+
+  - name: Build Intermediate Android Release Artifact (.APK)
+    commands:
+      - ./ci.py --build-apk
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
+
+  - name: Sign Android Release Artifact (.APK) for Standalone Use
+    commands:
+      - ./ci.py --sign-apk-standalone
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
+
+  - name: Sign Android Release Artifact (.APK) for F-Droid Repository
+    commands:
+      - ./ci.py --sign-apk-fdroid
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
+
+  - name: Package Linux AppImage Artifact
+    commands:
+      - ./ci.py --package-linux-appimage
+
+  - name: Package Linux Flatpak Artifact
+    commands:
+      - ./ci.py --package-linux-flatpak
+
+  - name: Package Linux Archive Artifact
+    commands:
+      - ./ci.py --package-linux-archive
+
+trigger:
+  event:
+    - tag
+
+node:
+  server: builder
+
+---
+
+kind: pipeline
+type: exec
+name: Deploy
+
+steps:
+  - name: Prepare
+    commands:
+      - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+      - podman unshare podman volume mount src
+
+  - name: Create Release and Deploy Artifacts
+    commands:
+      - podman unshare ./ci.py --deploy-gitea-release
+    environment:
+      GITEA_RELEASE_TOKEN:
+        from_secret: GITEA_RELEASE_TOKEN
+
+  - name: Deploy F-Droid Repo
+    commands:
+      - podman unshare ./ci.py --deploy-fdroid-repo
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
+
+trigger:
+  event:
+    - tag
+
+node:
+  server: builder
+
+depends_on:
+  - Release

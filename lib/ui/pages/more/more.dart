@@ -70,7 +70,7 @@ class MorePage extends StatelessWidget {
                           .toList(),
                       isMigration: true,
                     ),
-                    subtitle: 'not_ready_card.in_menu'.tr(),
+                    subtitle: 'providers.storage.data_migration_notice'.tr(),
                     accent: true,
                   ),
                 if (!isReady)

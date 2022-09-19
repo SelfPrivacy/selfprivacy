@@ -23,6 +23,9 @@ class JobsContent extends StatelessWidget {
     final List<ServerJob> serverJobs =
         context.watch<ServerJobsCubit>().state.serverJobList;
 
+    final bool hasRemovableJobs =
+        context.watch<ServerJobsCubit>().state.hasRemovableJobs;
+
     return BlocBuilder<JobsCubit, JobsState>(
       builder: (final context, final state) {
         late List<Widget> widgets;
@@ -129,9 +132,23 @@ class JobsContent extends StatelessWidget {
             if (serverJobs.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'jobs.server_jobs'.tr(),
-                  style: Theme.of(context).textTheme.titleMedium,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'jobs.server_jobs'.tr(),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    IconButton(
+                      onPressed: hasRemovableJobs
+                          ? () => context
+                              .read<ServerJobsCubit>()
+                              .removeAllFinishedJobs()
+                          : null,
+                      icon: const Icon(Icons.clear_all),
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
+                  ],
                 ),
               ),
             ...serverJobs.map(

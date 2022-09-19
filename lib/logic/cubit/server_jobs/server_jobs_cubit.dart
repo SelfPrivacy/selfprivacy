@@ -72,42 +72,35 @@ class ServerJobsCubit
     return job;
   }
 
-  /// Get the job object and change its isHidden to true.
-  /// Emit the new state.
-  /// Call the api to remove the job.
-  /// If the api call fails, change the isHidden to false and emit the new state.
-  /// If the api call succeeds, remove the job from the list and emit the new state.
   Future<void> removeServerJob(final String uid) async {
-    final ServerJob? job = getServerJobByUid(uid);
-    if (job == null) {
-      return;
-    }
-
-    job.isHidden = true;
-    emit(
-      ServerJobsState(
-        serverJobList: state.serverJobList,
-      ),
-    );
-
     final result = await api.removeApiJob(uid);
     if (!result.success) {
-      job.isHidden = false;
-      emit(
-        ServerJobsState(
-          serverJobList: state.serverJobList,
-        ),
-      );
       getIt<NavigationService>().showSnackBar(result.message!);
       return;
     }
 
-    state.serverJobList.remove(job);
     emit(
       ServerJobsState(
-        serverJobList: state.serverJobList,
+        serverJobList: [
+          for (final ServerJob job in state.serverJobList)
+            if (job.uid != uid) job
+        ],
       ),
     );
+    print('removed job $uid');
+  }
+
+  Future<void> removeAllFinishedJobs() async {
+    final List<ServerJob> finishedJobs = state.serverJobList
+        .where(
+          (final ServerJob job) =>
+              job.status == JobStatusEnum.finished ||
+              job.status == JobStatusEnum.error,
+        )
+        .toList();
+    for (final ServerJob job in finishedJobs) {
+      await removeServerJob(job.uid);
+    }
   }
 
   Future<void> reload({final bool useTimer = false}) async {

@@ -17,8 +17,14 @@ class ServerJobsState extends ServerInstallationDependendState {
     return list;
   }
 
+  bool get hasRemovableJobs => serverJobList.any(
+        (final job) =>
+            job.status == JobStatusEnum.finished ||
+            job.status == JobStatusEnum.error,
+      );
+
   @override
-  List<Object?> get props => [migrationJobUid, ..._serverJobList];
+  List<Object?> get props => [migrationJobUid, _serverJobList];
 
   ServerJobsState copyWith({
     final List<ServerJob>? serverJobList,

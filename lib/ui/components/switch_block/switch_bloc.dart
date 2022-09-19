@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 
+// TODO: Delete this file.
+
 class SwitcherBlock extends StatelessWidget {
   const SwitcherBlock({
     required this.child,
@@ -15,12 +17,7 @@ class SwitcherBlock extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Container(
-        padding: const EdgeInsets.only(top: 20, bottom: 5),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(width: 1, color: BrandColors.dividerColor),
-          ),
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

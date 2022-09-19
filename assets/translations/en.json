@@ -52,7 +52,8 @@
     "copied_ssh": "SSH copied to clipboard",
     "delete_ssh_text": "Delete SSH key?",
     "about_app_page": {
-      "text": "Application version v.{}"
+      "application_version_text": "Application version v.{}",
+      "api_version_text": "Server API version v.{}"
     },
     "settings": {
       "title": "Application settings",
@@ -99,7 +100,33 @@
       "chart": {
         "month": "Month",
         "day": "Day",
-        "hour": "Hour"
+        "hour": "Hour",
+        "cpu_title": "CPU Usage",
+        "network_title": "Network Usage",
+        "in": "In",
+        "out": "Out"
+      },
+      "resource_usage": "Resource usage",
+      "settings": {
+        "allow_autoupgrade": "Allow auto-upgrade",
+        "allow_autoupgrade_hint": "Allow automatic packages upgrades on server",
+        "reboot_after_upgrade": "Reboot after upgrade",
+        "reboot_after_upgrade_hint": "Reboot without prompt after applying changes on server",
+        "server_timezone": "Server timezone",
+        "select_timezone": "Select timezone"
+      },
+      "info": {
+        "server_id": "Server ID",
+        "status": "Status",
+        "cpu": "CPU",
+        "ram": "Memory",
+        "disk": "Disk local",
+        "monthly_cost": "Monthly cost",
+        "location": "Location",
+        "core_count": {
+          "one": "{} core",
+          "other": "{} cores"
+        }
       }
     },
     "domain": {
@@ -162,6 +189,28 @@
       "refresh": "Refresh status",
       "refetchBackups": "Refetch backup list",
       "refetchingList": "In a few minutes list will be updated"
+    },
+    "storage": {
+      "card_title": "Server Storage",
+      "status_ok": "Disk usage is OK",
+      "status_error": "Low disk space",
+      "disk_usage": "{} used",
+      "disk_total": "{} total · {}",
+      "gb": "{} GB",
+      "mb": "{} MB",
+      "kb": "{} KB",
+      "extend_volume_button": "Extend volume",
+      "extending_volume_title": "Extending volume",
+      "extending_volume_description": "Resizing volume will allow you to store more data on your server without extending the server itself. Volume can only be extended: shrinking is not possible.",
+      "extending_volume_price_info": "Price includes VAT and is estimated from pricing data provided by Hetzner. Server will be rebooted after resizing.",
+      "extending_volume_error": "Couldn't initialize volume extending.",
+      "size": "Size",
+      "euro": "Euro",
+      "data_migration_title": "Data migration",
+      "data_migration_notice": "During migration all services will be turned off.",
+      "start_migration_button": "Start migration",
+      "migration_process": "Migrating...",
+      "migration_done": "Finish"
     }
   },
   "not_ready_card": {
@@ -172,8 +221,16 @@
     "in_menu": "Server is not set up yet. Please finish setup using setup wizard for further work."
   },
   "services": {
-    "_comment": "Вкладка сервисы",
+    "_comment": "Services",
     "title": "Your personal, private and independent services.",
+    "service_page": {
+      "open_in_browser": "Open in browser",
+      "restart": "Restart service",
+      "disable": "Disable service",
+      "enable": "Enable service",
+      "move": "Move to another volume",
+      "uses": "Uses {usage} on {volume}"
+    },
     "mail": {
       "title": "E-Mail",
       "subtitle": "E-Mail for company and family.",
@@ -237,12 +294,22 @@
       "bottom_sheet": {
         "1": "Openconnect VPN Server. Engine for secure and scalable VPN infrastructure"
       }
+    },
+    "page": {
+      "up_and_running": "Up and running",
+      "resource_usage": "Resource usage",
+      "disk_used": "{} of disk space used",
+      "users": "Users",
+      "controlled_by": "Controlled by {}",
+      "apps": "Apps",
+      "settings": "Settings and maintenance"
     }
   },
   "users": {
     "_comment": "'Users' tab",
     "add_new_user": "Add a first user",
     "new_user": "New user",
+    "delete_user": "Delete user",
     "not_ready": "Please connect server, domain and DNS in the Providers tab, to be able to add a first user",
     "nobody_here": "Nobody here",
     "login": "Login",
@@ -252,13 +319,24 @@
     "delete_confirm_question": "Are you sure?",
     "reset_password": "Reset password",
     "account": "Account",
-    "send_registration_data": "Share login credentials"
+    "send_registration_data": "Share login credentials",
+    "could_not_fetch_users": "Couldn't fetch users list",
+    "could_not_fetch_description": "Please check your internet connection and try again",
+    "refresh_users": "Refresh users list",
+    "could_not_create_user": "Couldn't create user",
+    "could_not_delete_user": "Couldn't delete user",
+    "could_not_add_ssh_key": "Couldn't add SSH key",
+    "email_login": "Email login",
+    "no_sso_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon."
   },
   "initializing": {
     "_comment": "initializing page",
     "1": "Connect a server",
     "2": "A place where your data and SelfPrivacy services will reside:",
     "how": "How to obtain API token",
+    "hetzner_bad_key_error": "Hetzner API key is invalid",
+    "cloudflare_bad_key_error": "Cloudflare API key is invalid",
+    "backblaze_bad_key_error": "Backblaze storage information is invalid",
     "3": "Connect CloudFlare",
     "4": "To manage your domain's DNS",
     "5": "CloudFlare API Token",
@@ -275,13 +353,14 @@
     "15": "Server created. DNS checks and server boot in progress...",
     "16": "Until the next check: ",
     "17": "Check",
+    "18": "How to obtain Hetzner API Token:'",
     "19": "1 Go via this link ",
     "20": "\n",
     "21": "One more restart to apply your security certificates.",
     "22": "Create master account",
     "23": "Enter a nickname and strong password",
     "finish": "Everything is initialized",
-    "checks": "Checks have been completed \n{} ouf of {}"
+    "checks": "Checks have been completed \n{} out of {}"
   },
   "recovering": {
     "recovery_main_header": "Connect to an existing server",
@@ -373,8 +452,10 @@
   },
   "modals": {
     "_comment": "messages in modals",
-    "1": "Server with such name, already exist",
+    "1": "Server with such name, already exist.",
+    "1_1": "Unexpected error during placement from the provider side.",
     "2": "Destroy server and create a new one?",
+    "2_2": "Try again?",
     "3": "Are you sure?",
     "4": "Purge all authentication keys?",
     "5": "Yes, purge all my tokens",
@@ -408,7 +489,9 @@
     "upgradeServer": "Upgrade server",
     "rebootServer": "Reboot server",
     "create_ssh_key": "Create SSH key for {}",
-    "delete_ssh_key": "Delete SSH key for {}"
+    "delete_ssh_key": "Delete SSH key for {}",
+    "server_jobs": "Jobs on the server",
+    "resetUserPassword": "Reset password of user"
   },
   "validations": {
     "required": "Required.",

@@ -20,97 +20,104 @@ enum InitializingSteps {
   checkSystemDnsAndDkimSet,
 }
 
-enum Period { hour, day, month }
+enum Period {
+  hour,
+  day,
+  month;
+
+  int get stepPeriodInSeconds {
+    switch (this) {
+      case Period.hour:
+        return 18;
+      case Period.day:
+        return 432;
+      case Period.month:
+        return 6480;
+    }
+  }
+}
 
 enum ServiceTypes {
-  mail,
-  messenger,
-  passwordManager,
-  video,
-  cloud,
-  socialNetwork,
-  git,
-  vpn,
+  mailserver,
+  bitwarden,
+  jitsi,
+  nextcloud,
+  pleroma,
+  gitea,
+  ocserv,
 }
 
 extension ServiceTypesExt on ServiceTypes {
   String get title {
     switch (this) {
-      case ServiceTypes.mail:
+      case ServiceTypes.mailserver:
         return 'services.mail.title'.tr();
-      case ServiceTypes.messenger:
-        return 'services.messenger.title'.tr();
-      case ServiceTypes.passwordManager:
+      case ServiceTypes.bitwarden:
         return 'services.password_manager.title'.tr();
-      case ServiceTypes.video:
+      case ServiceTypes.jitsi:
         return 'services.video.title'.tr();
-      case ServiceTypes.cloud:
+      case ServiceTypes.nextcloud:
         return 'services.cloud.title'.tr();
-      case ServiceTypes.socialNetwork:
+      case ServiceTypes.pleroma:
         return 'services.social_network.title'.tr();
-      case ServiceTypes.git:
+      case ServiceTypes.gitea:
         return 'services.git.title'.tr();
-      case ServiceTypes.vpn:
+      case ServiceTypes.ocserv:
         return 'services.vpn.title'.tr();
     }
   }
 
   String get subtitle {
     switch (this) {
-      case ServiceTypes.mail:
+      case ServiceTypes.mailserver:
         return 'services.mail.subtitle'.tr();
-      case ServiceTypes.messenger:
-        return 'services.messenger.subtitle'.tr();
-      case ServiceTypes.passwordManager:
+      case ServiceTypes.bitwarden:
         return 'services.password_manager.subtitle'.tr();
-      case ServiceTypes.video:
+      case ServiceTypes.jitsi:
         return 'services.video.subtitle'.tr();
-      case ServiceTypes.cloud:
+      case ServiceTypes.nextcloud:
         return 'services.cloud.subtitle'.tr();
-      case ServiceTypes.socialNetwork:
+      case ServiceTypes.pleroma:
         return 'services.social_network.subtitle'.tr();
-      case ServiceTypes.git:
+      case ServiceTypes.gitea:
         return 'services.git.subtitle'.tr();
-      case ServiceTypes.vpn:
+      case ServiceTypes.ocserv:
         return 'services.vpn.subtitle'.tr();
     }
   }
 
   String get loginInfo {
     switch (this) {
-      case ServiceTypes.mail:
+      case ServiceTypes.mailserver:
         return 'services.mail.login_info'.tr();
-      case ServiceTypes.messenger:
-        return 'services.messenger.login_info'.tr();
-      case ServiceTypes.passwordManager:
+      case ServiceTypes.bitwarden:
         return 'services.password_manager.login_info'.tr();
-      case ServiceTypes.video:
+      case ServiceTypes.jitsi:
         return 'services.video.login_info'.tr();
-      case ServiceTypes.cloud:
+      case ServiceTypes.nextcloud:
         return 'services.cloud.login_info'.tr();
-      case ServiceTypes.socialNetwork:
+      case ServiceTypes.pleroma:
         return 'services.social_network.login_info'.tr();
-      case ServiceTypes.git:
+      case ServiceTypes.gitea:
         return 'services.git.login_info'.tr();
-      case ServiceTypes.vpn:
+      case ServiceTypes.ocserv:
         return '';
     }
   }
 
   String get subdomain {
     switch (this) {
-      case ServiceTypes.passwordManager:
+      case ServiceTypes.bitwarden:
         return 'password';
-      case ServiceTypes.video:
+      case ServiceTypes.jitsi:
         return 'meet';
-      case ServiceTypes.cloud:
+      case ServiceTypes.nextcloud:
         return 'cloud';
-      case ServiceTypes.socialNetwork:
+      case ServiceTypes.pleroma:
         return 'social';
-      case ServiceTypes.git:
+      case ServiceTypes.gitea:
         return 'git';
-      case ServiceTypes.vpn:
-      case ServiceTypes.messenger:
+      case ServiceTypes.ocserv:
       default:
         return '';
     }
@@ -118,21 +125,19 @@ extension ServiceTypesExt on ServiceTypes {
 
   IconData get icon {
     switch (this) {
-      case ServiceTypes.mail:
+      case ServiceTypes.mailserver:
         return BrandIcons.envelope;
-      case ServiceTypes.messenger:
-        return BrandIcons.messanger;
-      case ServiceTypes.passwordManager:
+      case ServiceTypes.bitwarden:
         return BrandIcons.key;
-      case ServiceTypes.video:
+      case ServiceTypes.jitsi:
         return BrandIcons.webcam;
-      case ServiceTypes.cloud:
+      case ServiceTypes.nextcloud:
         return BrandIcons.upload;
-      case ServiceTypes.socialNetwork:
+      case ServiceTypes.pleroma:
         return BrandIcons.social;
-      case ServiceTypes.git:
+      case ServiceTypes.gitea:
         return BrandIcons.git;
-      case ServiceTypes.vpn:
+      case ServiceTypes.ocserv:
         return Icons.vpn_lock_outlined;
     }
   }

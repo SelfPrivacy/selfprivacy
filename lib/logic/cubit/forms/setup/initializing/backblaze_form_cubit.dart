@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/api_maps/backblaze.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -55,10 +55,11 @@ class BackblazeFormCubit extends FormCubit {
     }
 
     if (!isKeyValid) {
-      keyId.setError('bad key');
-      applicationKey.setError('bad key');
+      keyId.setError('initializing.backblaze_bad_key_error'.tr());
+      applicationKey.setError('initializing.backblaze_bad_key_error'.tr());
       return false;
     }
+
     return true;
   }
 }

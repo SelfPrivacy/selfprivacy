@@ -9,22 +9,23 @@ import 'package:hive/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
-import 'package:selfprivacy/logic/api_maps/hetzner.dart';
-import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
-import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
-
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 
 class IpNotFoundException implements Exception {
   IpNotFoundException(this.message);
@@ -39,9 +40,17 @@ class ServerAuthorizationException implements Exception {
 class ServerInstallationRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
   Box<User> usersBox = Hive.box(BNames.usersBox);
+  ServerProviderApiFactory? serverProviderApiFactory =
+      ApiFactoryCreator.createServerProviderApiFactory(
+    ServerProvider.hetzner, // TODO: HARDCODE FOR NOW!!!
+  ); // TODO: Remove when provider selection is implemented.
+  DnsProviderApiFactory? dnsProviderApiFactory =
+      ApiFactoryCreator.createDnsProviderApiFactory(
+    DnsProvider.cloudflare, // TODO: HARDCODE FOR NOW!!!
+  );
 
   Future<ServerInstallationState> load() async {
-    final String? hetznerToken = getIt<ApiConfigModel>().hetznerKey;
+    final String? providerApiToken = getIt<ApiConfigModel>().hetznerKey;
     final String? cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
     final BackblazeCredential? backblazeCredential =
@@ -49,9 +58,23 @@ class ServerInstallationRepository {
     final ServerHostingDetails? serverDetails =
         getIt<ApiConfigModel>().serverDetails;
 
+    if (serverDetails != null &&
+        serverDetails.provider != ServerProvider.unknown) {
+      serverProviderApiFactory =
+          ApiFactoryCreator.createServerProviderApiFactory(
+        serverDetails.provider,
+      );
+    }
+
+    if (serverDomain != null && serverDomain.provider != DnsProvider.unknown) {
+      dnsProviderApiFactory = ApiFactoryCreator.createDnsProviderApiFactory(
+        serverDomain.provider,
+      );
+    }
+
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
       return ServerInstallationFinished(
-        hetznerKey: hetznerToken!,
+        providerApiToken: providerApiToken!,
         cloudFlareKey: cloudflareToken!,
         serverDomain: serverDomain!,
         backblazeCredential: backblazeCredential!,
@@ -68,14 +91,14 @@ class ServerInstallationRepository {
     if (box.get(BNames.isRecoveringServer, defaultValue: false) &&
         serverDomain != null) {
       return ServerInstallationRecovery(
-        hetznerKey: hetznerToken,
+        providerApiToken: providerApiToken,
         cloudFlareKey: cloudflareToken,
         serverDomain: serverDomain,
         backblazeCredential: backblazeCredential,
         serverDetails: serverDetails,
         rootUser: box.get(BNames.rootUser),
         currentStep: _getCurrentRecoveryStep(
-          hetznerToken,
+          providerApiToken,
           cloudflareToken,
           serverDomain,
           serverDetails,
@@ -85,7 +108,7 @@ class ServerInstallationRepository {
     }
 
     return ServerInstallationNotFinished(
-      hetznerKey: hetznerToken,
+      providerApiToken: providerApiToken,
       cloudFlareKey: cloudflareToken,
       serverDomain: serverDomain,
       backblazeCredential: backblazeCredential,
@@ -130,24 +153,24 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> startServer(
     final ServerHostingDetails hetznerServer,
   ) async {
-    final HetznerApi hetznerApi = HetznerApi();
-    final ServerHostingDetails serverDetails = await hetznerApi.powerOn();
+    ServerHostingDetails serverDetails;
+
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    serverDetails = await api.powerOn();
 
     return serverDetails;
   }
 
   Future<String?> getDomainId(final String token, final String domain) async {
-    final CloudflareApi cloudflareApi = CloudflareApi(
-      isWithToken: false,
-      customToken: token,
+    final DnsProviderApi dnsProviderApi = dnsProviderApiFactory!.getDnsProvider(
+      settings: DnsProviderApiSettings(
+        isWithToken: false,
+        customToken: token,
+      ),
     );
 
-    try {
-      final String domainId = await cloudflareApi.getZoneId(domain);
-      return domainId;
-    } on DomainNotFoundException {
-      return null;
-    }
+    final String? domainId = await dnsProviderApi.getZoneId(domain);
+    return domainId;
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(
@@ -208,18 +231,14 @@ class ServerInstallationRepository {
     required final Future<void> Function(ServerHostingDetails serverDetails)
         onSuccess,
   }) async {
-    final HetznerApi hetznerApi = HetznerApi();
-    late ServerVolume dataBase;
-
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     try {
-      dataBase = await hetznerApi.createVolume();
-
-      final ServerHostingDetails? serverDetails = await hetznerApi.createServer(
-        cloudFlareKey: cloudFlareKey,
+      final ServerHostingDetails? serverDetails = await api.createServer(
+        dnsApiToken: cloudFlareKey,
         rootUser: rootUser,
         domainName: domainName,
-        dataBase: dataBase,
       );
+
       if (serverDetails == null) {
         print('Server is not initialized!');
         return;
@@ -238,17 +257,58 @@ class ServerInstallationRepository {
                 text: 'basis.delete'.tr(),
                 isRed: true,
                 onPressed: () async {
-                  await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
+                  await api.deleteServer(
                     domainName: domainName,
                   );
 
-                  final ServerHostingDetails? serverDetails =
-                      await hetznerApi.createServer(
-                    cloudFlareKey: cloudFlareKey,
-                    rootUser: rootUser,
-                    domainName: domainName,
-                    dataBase: dataBase,
-                  );
+                  ServerHostingDetails? serverDetails;
+                  try {
+                    serverDetails = await api.createServer(
+                      dnsApiToken: cloudFlareKey,
+                      rootUser: rootUser,
+                      domainName: domainName,
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
+
+                  if (serverDetails == null) {
+                    print('Server is not initialized!');
+                    return;
+                  }
+                  await saveServerDetails(serverDetails);
+                  onSuccess(serverDetails);
+                },
+              ),
+              ActionButton(
+                text: 'basis.cancel'.tr(),
+                onPressed: onCancel,
+              ),
+            ],
+          ),
+        );
+      } else if (e.response!.data['error']['code'] == 'resource_unavailable') {
+        final NavigationService nav = getIt.get<NavigationService>();
+        nav.showPopUpDialog(
+          BrandAlert(
+            title: 'modals.1_1'.tr(),
+            contentText: 'modals.2_2'.tr(),
+            actions: [
+              ActionButton(
+                text: 'modals.7'.tr(),
+                isRed: true,
+                onPressed: () async {
+                  ServerHostingDetails? serverDetails;
+                  try {
+                    serverDetails = await api.createServer(
+                      dnsApiToken: cloudFlareKey,
+                      rootUser: rootUser,
+                      domainName: domainName,
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
+
                   if (serverDetails == null) {
                     print('Server is not initialized!');
                     return;
@@ -268,25 +328,27 @@ class ServerInstallationRepository {
     }
   }
 
-  Future<void> createDnsRecords(
-    final String ip4,
-    final ServerDomain cloudFlareDomain, {
+  Future<bool> createDnsRecords(
+    final ServerHostingDetails serverDetails,
+    final ServerDomain domain, {
     required final void Function() onCancel,
   }) async {
-    final CloudflareApi cloudflareApi = CloudflareApi();
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
+    final ServerProviderApi serverApi =
+        serverProviderApiFactory!.getServerProvider();
 
-    await cloudflareApi.removeSimilarRecords(
-      ip4: ip4,
-      cloudFlareDomain: cloudFlareDomain,
+    await dnsProviderApi.removeSimilarRecords(
+      ip4: serverDetails.ip4,
+      domain: domain,
     );
 
     try {
-      await cloudflareApi.createMultipleDnsRecords(
-        ip4: ip4,
-        cloudFlareDomain: cloudFlareDomain,
+      await dnsProviderApi.createMultipleDnsRecords(
+        ip4: serverDetails.ip4,
+        domain: domain,
       );
     } on DioError catch (e) {
-      final HetznerApi hetznerApi = HetznerApi();
       final NavigationService nav = getIt.get<NavigationService>();
       nav.showPopUpDialog(
         BrandAlert(
@@ -299,8 +361,8 @@ class ServerInstallationRepository {
               text: 'basis.delete'.tr(),
               isRed: true,
               onPressed: () async {
-                await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
-                  domainName: cloudFlareDomain.domainName,
+                await serverApi.deleteServer(
+                  domainName: domain.domainName,
                 );
 
                 onCancel();
@@ -313,42 +375,46 @@ class ServerInstallationRepository {
           ],
         ),
       );
+      return false;
     }
 
-    await HetznerApi().createReverseDns(
-      ip4: ip4,
-      domainName: cloudFlareDomain.domainName,
+    await serverApi.createReverseDns(
+      serverDetails: serverDetails,
+      domain: domain,
     );
+
+    return true;
   }
 
   Future<void> createDkimRecord(final ServerDomain cloudFlareDomain) async {
-    final CloudflareApi cloudflareApi = CloudflareApi();
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
     final ServerApi api = ServerApi();
 
-    final String? dkimRecordString = await api.getDkim();
+    String dkimRecordString = '';
+    try {
+      dkimRecordString = (await api.getDkim())!;
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
 
-    await cloudflareApi.setDkim(dkimRecordString ?? '', cloudFlareDomain);
+    await dnsProviderApi.setDkim(dkimRecordString, cloudFlareDomain);
   }
 
   Future<bool> isHttpServerWorking() async {
     final ServerApi api = ServerApi();
-    final bool isHttpServerWorking = await api.isHttpServerWorking();
-    try {
-      await api.getDkim();
-    } catch (e) {
-      return false;
-    }
-    return isHttpServerWorking;
+    return api.isHttpServerWorking();
   }
 
   Future<ServerHostingDetails> restart() async {
-    final HetznerApi hetznerApi = HetznerApi();
-    return hetznerApi.reset();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    return api.restart();
   }
 
   Future<ServerHostingDetails> powerOn() async {
-    final HetznerApi hetznerApi = HetznerApi();
-    return hetznerApi.powerOn();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    return api.powerOn();
   }
 
   Future<ServerRecoveryCapabilities> getRecoveryCapabilities(
@@ -439,6 +505,9 @@ class ServerInstallationRepository {
         volume: ServerVolume(
           id: 0,
           name: '',
+          sizeByte: 0,
+          serverId: 0,
+          linuxDevice: '',
         ),
         provider: ServerProvider.unknown,
         id: 0,
@@ -473,6 +542,9 @@ class ServerInstallationRepository {
         volume: ServerVolume(
           id: 0,
           name: '',
+          sizeByte: 0,
+          serverId: 0,
+          linuxDevice: '',
         ),
         provider: ServerProvider.unknown,
         id: 0,
@@ -507,6 +579,9 @@ class ServerInstallationRepository {
           volume: ServerVolume(
             id: 0,
             name: '',
+            serverId: 0,
+            sizeByte: 0,
+            linuxDevice: '',
           ),
           provider: ServerProvider.unknown,
           id: 0,
@@ -532,6 +607,9 @@ class ServerInstallationRepository {
         volume: ServerVolume(
           id: 0,
           name: '',
+          sizeByte: 0,
+          serverId: 0,
+          linuxDevice: '',
         ),
         provider: ServerProvider.unknown,
         id: 0,
@@ -550,6 +628,7 @@ class ServerInstallationRepository {
     final ServerApi serverApi = ServerApi();
     const User fallbackUser = User(
       isFoundOnServer: false,
+      type: UserType.primary,
       note: "Couldn't find main user on server, API is outdated",
       login: 'UNKNOWN',
       sshKeys: [],
@@ -569,33 +648,27 @@ class ServerInstallationRepository {
       return User(
         isFoundOnServer: true,
         login: users.data[0],
+        type: UserType.primary,
       );
     } on FormatException {
       return fallbackUser;
     }
   }
 
-  Future<List<ServerBasicInfo>> getServersOnHetznerAccount() async {
-    final HetznerApi hetznerApi = HetznerApi();
-    final List<HetznerServerInfo> servers = await hetznerApi.getServers();
-    return servers
-        .map(
-          (final HetznerServerInfo server) => ServerBasicInfo(
-            id: server.id,
-            name: server.name,
-            ip: server.publicNet.ipv4.ip,
-            reverseDns: server.publicNet.ipv4.reverseDns,
-            created: server.created,
-            volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
-          ),
-        )
-        .toList();
+  Future<List<ServerBasicInfo>> getServersOnProviderAccount() async {
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    return api.getServers();
   }
 
   Future<void> saveServerDetails(
     final ServerHostingDetails serverDetails,
   ) async {
     await getIt<ApiConfigModel>().storeServerDetails(serverDetails);
+  }
+
+  Future<void> deleteServerDetails() async {
+    await box.delete(BNames.serverDetails);
+    getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveHetznerKey(final String key) async {
@@ -614,8 +687,18 @@ class ServerInstallationRepository {
     await getIt<ApiConfigModel>().storeBackblazeCredential(backblazeCredential);
   }
 
+  Future<void> deleteBackblazeKey() async {
+    await box.delete(BNames.backblazeCredential);
+    getIt<ApiConfigModel>().init();
+  }
+
   Future<void> saveCloudFlareKey(final String key) async {
     await getIt<ApiConfigModel>().storeCloudFlareKey(key);
+  }
+
+  Future<void> deleteCloudFlareKey() async {
+    await box.delete(BNames.cloudFlareKey);
+    getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveDomain(final ServerDomain serverDomain) async {
@@ -652,10 +735,11 @@ class ServerInstallationRepository {
   }
 
   Future<void> deleteServer(final ServerDomain serverDomain) async {
-    final HetznerApi hetznerApi = HetznerApi();
-    final CloudflareApi cloudFlare = CloudflareApi();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
 
-    await hetznerApi.deleteSelfprivacyServerAndAllVolumes(
+    await api.deleteServer(
       domainName: serverDomain.domainName,
     );
 
@@ -666,7 +750,7 @@ class ServerInstallationRepository {
     await box.put(BNames.isLoading, false);
     await box.put(BNames.serverDetails, null);
 
-    await cloudFlare.removeSimilarRecords(cloudFlareDomain: serverDomain);
+    await dnsProviderApi.removeSimilarRecords(domain: serverDomain);
   }
 
   Future<void> deleteServerRelatedRecords() async {

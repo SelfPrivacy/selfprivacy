@@ -11,11 +11,23 @@ Backup _$BackupFromJson(Map<String, dynamic> json) => Backup(
       id: json['short_id'] as String,
     );
 
+Map<String, dynamic> _$BackupToJson(Backup instance) => <String, dynamic>{
+      'time': instance.time.toIso8601String(),
+      'short_id': instance.id,
+    };
+
 BackupStatus _$BackupStatusFromJson(Map<String, dynamic> json) => BackupStatus(
       status: $enumDecode(_$BackupStatusEnumEnumMap, json['status']),
       progress: (json['progress'] as num).toDouble(),
       errorMessage: json['error_message'] as String?,
     );
+
+Map<String, dynamic> _$BackupStatusToJson(BackupStatus instance) =>
+    <String, dynamic>{
+      'status': _$BackupStatusEnumEnumMap[instance.status]!,
+      'progress': instance.progress,
+      'error_message': instance.errorMessage,
+    };
 
 const _$BackupStatusEnumEnumMap = {
   BackupStatusEnum.noKey: 'NO_KEY',

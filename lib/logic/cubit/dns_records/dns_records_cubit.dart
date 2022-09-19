@@ -1,10 +1,12 @@
 import 'package:cubit_form/cubit_form.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-import 'package:selfprivacy/logic/api_maps/cloudflare.dart';
-import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
 
 part 'dns_records_state.dart';
 
@@ -16,8 +18,12 @@ class DnsRecordsCubit
           const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing),
         );
 
+  DnsProviderApiFactory? dnsProviderApiFactory =
+      ApiFactoryCreator.createDnsProviderApiFactory(
+    DnsProvider.cloudflare, // TODO: HARDCODE FOR NOW!!!
+  ); // TODO: Remove when provider selection is implemented.
+
   final ServerApi api = ServerApi();
-  final CloudflareApi cloudflare = CloudflareApi();
 
   @override
   Future<void> load() async {
@@ -31,14 +37,15 @@ class DnsRecordsCubit
         ),
       ),
     );
-    print('Loading DNS status');
+
     if (serverInstallationCubit.state is ServerInstallationFinished) {
       final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
       final String? ipAddress =
           serverInstallationCubit.state.serverDetails?.ip4;
       if (domain != null && ipAddress != null) {
-        final List<DnsRecord> records =
-            await cloudflare.getDnsRecords(cloudFlareDomain: domain);
+        final List<DnsRecord> records = await dnsProviderApiFactory!
+            .getDnsProvider()
+            .getDnsRecords(domain: domain);
         final String? dkimPublicKey = await api.getDkim();
         final List<DesiredDnsRecord> desiredRecords =
             _getDesiredDnsRecords(domain.domainName, ipAddress, dkimPublicKey);
@@ -116,12 +123,14 @@ class DnsRecordsCubit
     final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
     final String? ipAddress = serverInstallationCubit.state.serverDetails?.ip4;
     final String? dkimPublicKey = await api.getDkim();
-    await cloudflare.removeSimilarRecords(cloudFlareDomain: domain!);
-    await cloudflare.createMultipleDnsRecords(
-      cloudFlareDomain: domain,
+    final DnsProviderApi dnsProviderApi =
+        dnsProviderApiFactory!.getDnsProvider();
+    await dnsProviderApi.removeSimilarRecords(domain: domain!);
+    await dnsProviderApi.createMultipleDnsRecords(
+      domain: domain,
       ip4: ipAddress,
     );
-    await cloudflare.setDkim(dkimPublicKey ?? '', domain);
+    await dnsProviderApi.setDkim(dkimPublicKey ?? '', domain);
     await load();
   }
 
@@ -130,7 +139,7 @@ class DnsRecordsCubit
     final String? ipAddress,
     final String? dkimPublicKey,
   ) {
-    if (domainName == null || ipAddress == null || dkimPublicKey == null) {
+    if (domainName == null || ipAddress == null) {
       return [];
     }
     return [
@@ -195,13 +204,14 @@ class DnsRecordsCubit
         type: 'TXT',
         category: DnsRecordsCategory.email,
       ),
-      DesiredDnsRecord(
-        name: 'selector._domainkey.$domainName',
-        content: dkimPublicKey,
-        description: 'providers.domain.record_description.dkim',
-        type: 'TXT',
-        category: DnsRecordsCategory.email,
-      ),
+      if (dkimPublicKey != null)
+        DesiredDnsRecord(
+          name: 'selector._domainkey.$domainName',
+          content: dkimPublicKey,
+          description: 'providers.domain.record_description.dkim',
+          type: 'TXT',
+          category: DnsRecordsCategory.email,
+        ),
     ];
   }
 }

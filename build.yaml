@@ -1,7 +1,17 @@
 targets:
   $default:
     builders:
+      graphql_codegen:
+        options:
+          scalars:
+            DateTime:
+              type: DateTime
+              fromJsonFunctionName: dateTimeFromJson
+              toJsonFunctionName: dateTimeToJson
+              import: package:selfprivacy/utils/scalars.dart
+          clients:
+            - graphql
       json_serializable:
         options:
           create_factory: true
-          create_to_json: false
+          create_to_json: true

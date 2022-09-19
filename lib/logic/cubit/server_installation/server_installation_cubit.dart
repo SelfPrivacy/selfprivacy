@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -49,13 +51,40 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
+  RegExp getServerProviderApiTokenValidation() =>
+      repository.serverProviderApiFactory!
+          .getServerProvider()
+          .getApiTokenValidation();
+
+  RegExp getDnsProviderApiTokenValidation() => repository.dnsProviderApiFactory!
+      .getDnsProvider()
+      .getApiTokenValidation();
+
+  Future<bool> isServerProviderApiTokenValid(
+    final String providerToken,
+  ) async =>
+      repository.serverProviderApiFactory!
+          .getServerProvider(
+            settings: const ProviderApiSettings(isWithToken: false),
+          )
+          .isApiTokenValid(providerToken);
+
+  Future<bool> isDnsProviderApiTokenValid(
+    final String providerToken,
+  ) async =>
+      repository.dnsProviderApiFactory!
+          .getDnsProvider(
+            settings: const DnsProviderApiSettings(isWithToken: false),
+          )
+          .isApiTokenValid(providerToken);
+
   void setHetznerKey(final String hetznerKey) async {
     await repository.saveHetznerKey(hetznerKey);
 
     if (state is ServerInstallationRecovery) {
       emit(
         (state as ServerInstallationRecovery).copyWith(
-          hetznerKey: hetznerKey,
+          providerApiToken: hetznerKey,
           currentStep: RecoveryStep.serverSelection,
         ),
       );
@@ -63,7 +92,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
 
     emit(
-      (state as ServerInstallationNotFinished).copyWith(hetznerKey: hetznerKey),
+      (state as ServerInstallationNotFinished).copyWith(
+        providerApiToken: hetznerKey,
+      ),
     );
   }
 
@@ -117,7 +148,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     Future<void> onSuccess(final ServerHostingDetails serverDetails) async {
       await repository.createDnsRecords(
-        serverDetails.ip4,
+        serverDetails,
         state.serverDomain!,
         onCancel: onCancel,
       );
@@ -167,6 +198,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       final ServerHostingDetails server = await repository.startServer(
         dataState.serverDetails!,
       );
+
       await repository.saveServerDetails(server);
       await repository.saveIsServerStarted(true);
 
@@ -292,10 +324,22 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final bool isServerWorking = await repository.isHttpServerWorking();
 
     if (isServerWorking) {
-      await repository.createDkimRecord(dataState.serverDomain!);
-      await repository.saveHasFinalChecked(true);
-
-      emit(dataState.finish());
+      bool dkimCreated = true;
+      try {
+        await repository.createDkimRecord(dataState.serverDomain!);
+      } catch (e) {
+        dkimCreated = false;
+      }
+      if (dkimCreated) {
+        await repository.saveHasFinalChecked(true);
+        emit(dataState.finish());
+      } else {
+        runDelayed(
+          finishCheckIfServerIsOkay,
+          const Duration(seconds: 60),
+          dataState,
+        );
+      }
     } else {
       runDelayed(
         finishCheckIfServerIsOkay,
@@ -417,11 +461,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           ),
         );
         break;
-      case RecoveryStep.serverSelection:
-        repository.deleteHetznerKey();
+      case RecoveryStep.cloudflareToken:
+        repository.deleteServerDetails();
         emit(
           dataState.copyWith(
-            currentStep: RecoveryStep.hetznerToken,
+            currentStep: RecoveryStep.serverSelection,
           ),
         );
         break;
@@ -464,7 +508,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
     final List<ServerBasicInfo> servers =
-        await repository.getServersOnHetznerAccount();
+        await repository.getServersOnProviderAccount();
     final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
       (final ServerBasicInfo server) =>
           ServerBasicInfoWithValidators.fromServerBasicInfo(
@@ -491,6 +535,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       volume: ServerVolume(
         id: server.volumeId,
         name: 'recovered_volume',
+        sizeByte: 0,
+        serverId: server.id,
+        linuxDevice: '',
       ),
       apiToken: dataState.serverDetails!.apiToken,
       provider: ServerProvider.hetzner,
@@ -561,24 +608,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   @override
   void onChange(final Change<ServerInstallationState> change) {
     super.onChange(change);
-    print('================================');
-    print('ServerInstallationState changed!');
-    print('Current type: ${change.nextState.runtimeType}');
-    print('Hetzner key: ${change.nextState.hetznerKey}');
-    print('Cloudflare key: ${change.nextState.cloudFlareKey}');
-    print('Domain: ${change.nextState.serverDomain}');
-    print('BackblazeCredential: ${change.nextState.backblazeCredential}');
-    if (change.nextState is ServerInstallationRecovery) {
-      print(
-        'Recovery Step: ${(change.nextState as ServerInstallationRecovery).currentStep}',
-      );
-      print(
-        'Recovery Capabilities: ${(change.nextState as ServerInstallationRecovery).recoveryCapabilities}',
-      );
-    }
-    if (change.nextState is TimerState) {
-      print('Timer: ${(change.nextState as TimerState).duration}');
-    }
   }
 
   void clearAppConfig() {
@@ -597,7 +626,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.deleteServerRelatedRecords();
     emit(
       ServerInstallationNotFinished(
-        hetznerKey: state.hetznerKey,
+        providerApiToken: state.providerApiToken,
         serverDomain: state.serverDomain,
         cloudFlareKey: state.cloudFlareKey,
         backblazeCredential: state.backblazeCredential,

@@ -1,28 +1,28 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/config/text_themes.dart';
+import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_divider/brand_divider.dart';
+import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
+import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/ui/components/info_box/info_box.dart';
+import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
-import 'package:selfprivacy/ui/pages/ssh_keys/ssh_keys.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -31,6 +31,7 @@ part 'new_user.dart';
 part 'user.dart';
 part 'user_details.dart';
 part 'add_user_fab.dart';
+part 'reset_password.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({final super.key});
@@ -46,10 +47,47 @@ class UsersPage extends StatelessWidget {
     } else {
       child = BlocBuilder<UsersCubit, UsersState>(
         builder: (final BuildContext context, final UsersState state) {
-          print('Rebuild users page');
-          final primaryUser = state.primaryUser;
-          final users = [primaryUser, ...state.users];
+          final List<User> users = state.users
+              .where((final user) => user.type != UserType.root)
+              .toList();
+          // final List<User> users = [];
+          users.sort(
+            (final User a, final User b) =>
+                a.login.toLowerCase().compareTo(b.login.toLowerCase()),
+          );
 
+          if (users.isEmpty) {
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<UsersCubit>().refresh();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _CouldNotLoadUsers(
+                        text: 'users.could_not_fetch_description'.tr(),
+                      ),
+                      const SizedBox(height: 18),
+                      BrandOutlinedButton(
+                        onPressed: () {
+                          context.read<UsersCubit>().refresh();
+                        },
+                        title: 'users.refresh_users'.tr(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
           return RefreshIndicator(
             onRefresh: () async {
               context.read<UsersCubit>().refresh();
@@ -59,7 +97,7 @@ class UsersPage extends StatelessWidget {
               itemBuilder: (final BuildContext context, final int index) =>
                   _User(
                 user: users[index],
-                isRootUser: index == 0,
+                isRootUser: users[index].type == UserType.primary,
               ),
             ),
           );

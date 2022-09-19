@@ -1,1 +1,1 @@
-enum StateType { uninitialized, stable, warning }
+enum StateType { uninitialized, stable, warning, error }

@@ -19,6 +19,18 @@ HetznerServerInfo _$HetznerServerInfoFromJson(Map<String, dynamic> json) =>
       (json['volumes'] as List<dynamic>).map((e) => e as int).toList(),
     );
 
+Map<String, dynamic> _$HetznerServerInfoToJson(HetznerServerInfo instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'status': _$ServerStatusEnumMap[instance.status]!,
+      'created': instance.created.toIso8601String(),
+      'volumes': instance.volumes,
+      'server_type': instance.serverType,
+      'datacenter': instance.location,
+      'public_net': instance.publicNet,
+    };
+
 const _$ServerStatusEnumMap = {
   ServerStatus.running: 'running',
   ServerStatus.initializing: 'initializing',
@@ -34,8 +46,16 @@ const _$ServerStatusEnumMap = {
 HetznerPublicNetInfo _$HetznerPublicNetInfoFromJson(
         Map<String, dynamic> json) =>
     HetznerPublicNetInfo(
-      HetznerIp4.fromJson(json['ipv4'] as Map<String, dynamic>),
+      json['ipv4'] == null
+          ? null
+          : HetznerIp4.fromJson(json['ipv4'] as Map<String, dynamic>),
     );
+
+Map<String, dynamic> _$HetznerPublicNetInfoToJson(
+        HetznerPublicNetInfo instance) =>
+    <String, dynamic>{
+      'ipv4': instance.ipv4,
+    };
 
 HetznerIp4 _$HetznerIp4FromJson(Map<String, dynamic> json) => HetznerIp4(
       json['id'] as int,
@@ -43,6 +63,14 @@ HetznerIp4 _$HetznerIp4FromJson(Map<String, dynamic> json) => HetznerIp4(
       json['blocked'] as bool,
       json['dns_ptr'] as String,
     );
+
+Map<String, dynamic> _$HetznerIp4ToJson(HetznerIp4 instance) =>
+    <String, dynamic>{
+      'blocked': instance.blocked,
+      'dns_ptr': instance.reverseDns,
+      'id': instance.id,
+      'ip': instance.ip,
+    };
 
 HetznerServerTypeInfo _$HetznerServerTypeInfoFromJson(
         Map<String, dynamic> json) =>
@@ -55,11 +83,26 @@ HetznerServerTypeInfo _$HetznerServerTypeInfoFromJson(
           .toList(),
     );
 
+Map<String, dynamic> _$HetznerServerTypeInfoToJson(
+        HetznerServerTypeInfo instance) =>
+    <String, dynamic>{
+      'cores': instance.cores,
+      'memory': instance.memory,
+      'disk': instance.disk,
+      'prices': instance.prices,
+    };
+
 HetznerPriceInfo _$HetznerPriceInfoFromJson(Map<String, dynamic> json) =>
     HetznerPriceInfo(
       HetznerPriceInfo.getPrice(json['price_hourly'] as Map),
       HetznerPriceInfo.getPrice(json['price_monthly'] as Map),
     );
+
+Map<String, dynamic> _$HetznerPriceInfoToJson(HetznerPriceInfo instance) =>
+    <String, dynamic>{
+      'price_hourly': instance.hourly,
+      'price_monthly': instance.monthly,
+    };
 
 HetznerLocation _$HetznerLocationFromJson(Map<String, dynamic> json) =>
     HetznerLocation(
@@ -68,3 +111,11 @@ HetznerLocation _$HetznerLocationFromJson(Map<String, dynamic> json) =>
       json['description'] as String,
       json['network_zone'] as String,
     );
+
+Map<String, dynamic> _$HetznerLocationToJson(HetznerLocation instance) =>
+    <String, dynamic>{
+      'country': instance.country,
+      'city': instance.city,
+      'description': instance.description,
+      'network_zone': instance.zone,
+    };

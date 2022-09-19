@@ -11,3 +11,9 @@ ApiToken _$ApiTokenFromJson(Map<String, dynamic> json) => ApiToken(
       date: DateTime.parse(json['date'] as String),
       isCaller: json['is_caller'] as bool,
     );
+
+Map<String, dynamic> _$ApiTokenToJson(ApiToken instance) => <String, dynamic>{
+      'name': instance.name,
+      'date': instance.date.toIso8601String(),
+      'is_caller': instance.isCaller,
+    };

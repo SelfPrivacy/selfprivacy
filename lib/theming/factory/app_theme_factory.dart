@@ -60,6 +60,7 @@ abstract class AppThemeFactory {
     final Typography appTypography = Typography.material2021();
 
     final ThemeData materialThemeData = ThemeData(
+      visualDensity: VisualDensity.adaptivePlatformDensity,
       colorScheme: colorScheme,
       brightness: colorScheme.brightness,
       typography: appTypography,

@@ -4,5 +4,5 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 
 class UiHelpers {
   static String getDomainName(final ServerInstallationState config) =>
-      config.isDomainFilled ? config.serverDomain!.domainName : 'example.com';
+      config.isDomainSelected ? config.serverDomain!.domainName : 'example.com';
 }

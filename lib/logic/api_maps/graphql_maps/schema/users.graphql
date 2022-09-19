@@ -1,0 +1,72 @@
+fragment basicMutationReturnFields on MutationReturnInterface{
+  code
+  message
+  success
+}
+
+fragment userFields on User{
+  username
+  userType
+  sshKeys
+}
+
+query AllUsers {
+  users {
+    allUsers {
+      ...userFields
+    }
+    rootUser: getUser(username: "root") {
+      ...userFields
+    }
+  }
+}
+
+query GetUser($username: String!) {
+  users {
+    getUser(username: $username) {
+      ...userFields
+    }
+  }
+}
+
+mutation CreateUser($user: UserMutationInput!) {
+  createUser(user: $user) {
+    ...basicMutationReturnFields
+    user {
+      ...userFields
+    }
+  }
+}
+
+mutation DeleteUser($username: String!) {
+  deleteUser(username: $username) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation UpdateUser($user: UserMutationInput!) {
+  updateUser(user: $user) {
+    ...basicMutationReturnFields
+    user {
+      ...userFields
+    }
+  }
+}
+
+mutation AddSshKey($sshInput: SshMutationInput!) {
+  addSshKey(sshInput: $sshInput) {
+    ...basicMutationReturnFields
+    user {
+      ...userFields
+    }
+  }
+}
+
+mutation RemoveSshKey($sshInput: SshMutationInput!) {
+  removeSshKey(sshInput: $sshInput) {
+    ...basicMutationReturnFields
+    user {
+      ...userFields
+    }
+  }
+}

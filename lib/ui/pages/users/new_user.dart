@@ -18,7 +18,7 @@ class NewUser extends StatelessWidget {
           final users = <User>[];
           users.addAll(context.read<UsersCubit>().state.users);
           if (jobState is JobsStateWithJobs) {
-            final jobs = jobState.jobList;
+            final jobs = jobState.clientJobList;
             for (final job in jobs) {
               if (job is CreateUserJob) {
                 users.add(job.user);

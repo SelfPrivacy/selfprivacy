@@ -1,0 +1,3 @@
+- Fixed routing errors and broken "back" buttons on recovery stages
+- Fixed broken validation on api token fields
+- Minor improvements

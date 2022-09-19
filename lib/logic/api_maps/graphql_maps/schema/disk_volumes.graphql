@@ -1,0 +1,69 @@
+fragment basicMutationReturnFields on MutationReturnInterface{
+  code
+  message
+  success
+}
+
+query GetServerDiskVolumes {
+  storage {
+    volumes {
+      freeSpace
+      model
+      name
+      root
+      serial
+      totalSpace
+      type
+      usages {
+        title
+        usedSpace
+        __typename
+        ... on ServiceStorageUsage {
+          service {
+            id
+            isMovable
+            displayName
+          }
+        }
+      }
+      usedSpace
+    }
+  }
+}
+
+mutation MountVolume($name: String!) {
+  mountVolume(name: $name) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation ResizeVolume($name: String!) {
+  resizeVolume(name: $name) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation UnmountVolume($name: String!) {
+  unmountVolume(name: $name) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation MigrateToBinds($input: MigrateToBindsInput!) {
+  migrateToBinds(input: $input) {
+    ...basicMutationReturnFields
+    job {
+      createdAt
+      description
+      error
+      finishedAt
+      name
+      progress
+      result
+      status
+      statusText
+      uid
+      updatedAt
+    }
+  }
+}

@@ -1,20 +1,36 @@
-import 'package:selfprivacy/logic/api_maps/hetzner.dart';
-import 'package:selfprivacy/logic/api_maps/server.dart';
-import 'package:selfprivacy/logic/models/json/auto_upgrade_settings.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
+import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 
 class ServerDetailsRepository {
-  HetznerApi hetznerAPi = HetznerApi();
-  ServerApi selfprivacyServer = ServerApi();
+  HetznerApi hetzner = HetznerApi();
+  ServerApi server = ServerApi();
 
   Future<ServerDetailsRepositoryDto> load() async {
-    print('load');
+    final settings = await server.getSystemSettings();
     return ServerDetailsRepositoryDto(
-      autoUpgradeSettings: await selfprivacyServer.getAutoUpgradeSettings(),
-      hetznerServerInfo: await hetznerAPi.getInfo(),
-      serverTimezone: await selfprivacyServer.getServerTimezone(),
+      autoUpgradeSettings: settings.autoUpgradeSettings,
+      hetznerServerInfo: await hetzner.getInfo(),
+      serverTimezone: TimeZoneSettings.fromString(
+        settings.timezone,
+      ),
     );
+  }
+
+  Future<void> setAutoUpgradeSettings(
+    final AutoUpgradeSettings settings,
+  ) async {
+    await server.setAutoUpgradeSettings(settings);
+  }
+
+  Future<void> setTimezone(
+    final String timezone,
+  ) async {
+    if (timezone.isNotEmpty) {
+      await server.setTimezone(timezone);
+    }
   }
 }
 

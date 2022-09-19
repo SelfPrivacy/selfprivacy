@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
@@ -16,8 +17,13 @@ class AboutPage extends StatelessWidget {
               hasBackButton: true,
             ),
           ),
-          body: const BrandMarkdown(
-            fileName: 'about',
+          body: ListView(
+            padding: paddingH15V0,
+            children: const [
+              BrandMarkdown(
+                fileName: 'about',
+              ),
+            ],
           ),
         ),
       );

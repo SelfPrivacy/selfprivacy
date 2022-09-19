@@ -7,8 +7,8 @@ import 'package:selfprivacy/utils/password_generator.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 @immutable
-class Job extends Equatable {
-  Job({
+class ClientJob extends Equatable {
+  ClientJob({
     required this.title,
     final String? id,
   }) : id = id ?? StringGenerators.simpleId();
@@ -20,7 +20,14 @@ class Job extends Equatable {
   List<Object> get props => [id, title];
 }
 
-class CreateUserJob extends Job {
+class RebuildServerJob extends ClientJob {
+  RebuildServerJob({
+    required final super.title,
+    final super.id,
+  });
+}
+
+class CreateUserJob extends ClientJob {
   CreateUserJob({
     required this.user,
   }) : super(title: '${"jobs.createUser".tr()} ${user.login}');
@@ -31,7 +38,18 @@ class CreateUserJob extends Job {
   List<Object> get props => [id, title, user];
 }
 
-class DeleteUserJob extends Job {
+class ResetUserPasswordJob extends ClientJob {
+  ResetUserPasswordJob({
+    required this.user,
+  }) : super(title: '${"jobs.resetUserPassword".tr()} ${user.login}');
+
+  final User user;
+
+  @override
+  List<Object> get props => [id, title, user];
+}
+
+class DeleteUserJob extends ClientJob {
   DeleteUserJob({
     required this.user,
   }) : super(title: '${"jobs.deleteUser".tr()} ${user.login}');
@@ -42,13 +60,13 @@ class DeleteUserJob extends Job {
   List<Object> get props => [id, title, user];
 }
 
-class ToggleJob extends Job {
+class ToggleJob extends ClientJob {
   ToggleJob({
     required this.type,
     required final super.title,
   });
 
-  final dynamic type;
+  final ServiceTypes type;
 
   @override
   List<Object> get props => [...super.props, type];
@@ -56,7 +74,7 @@ class ToggleJob extends Job {
 
 class ServiceToggleJob extends ToggleJob {
   ServiceToggleJob({
-    required final ServiceTypes super.type,
+    required final super.type,
     required this.needToTurnOn,
   }) : super(
           title:
@@ -66,7 +84,7 @@ class ServiceToggleJob extends ToggleJob {
   final bool needToTurnOn;
 }
 
-class CreateSSHKeyJob extends Job {
+class CreateSSHKeyJob extends ClientJob {
   CreateSSHKeyJob({
     required this.user,
     required this.publicKey,
@@ -79,7 +97,7 @@ class CreateSSHKeyJob extends Job {
   List<Object> get props => [id, title, user, publicKey];
 }
 
-class DeleteSSHKeyJob extends Job {
+class DeleteSSHKeyJob extends ClientJob {
   DeleteSSHKeyJob({
     required this.user,
     required this.publicKey,

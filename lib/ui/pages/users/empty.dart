@@ -31,3 +31,35 @@ class _NoUsers extends StatelessWidget {
         ),
       );
 }
+
+class _CouldNotLoadUsers extends StatelessWidget {
+  const _CouldNotLoadUsers({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(BrandIcons.users, size: 50, color: BrandColors.grey7),
+            const SizedBox(height: 20),
+            BrandText.h2(
+              'users.could_not_fetch_users'.tr(),
+              style: const TextStyle(
+                color: BrandColors.grey7,
+              ),
+            ),
+            const SizedBox(height: 10),
+            BrandText.medium(
+              text,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: BrandColors.grey7,
+              ),
+            ),
+          ],
+        ),
+      );
+}

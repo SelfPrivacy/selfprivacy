@@ -19,17 +19,6 @@ class BrandCards {
         borderRadius: BorderRadius.circular(10),
         child: child,
       );
-  static Widget outlined({required final Widget child}) => _OutlinedCard(
-        child: child,
-      );
-  static Widget filled({
-    required final Widget child,
-    final bool tertiary = false,
-  }) =>
-      _FilledCard(
-        tertiary: tertiary,
-        child: child,
-      );
 }
 
 class _BrandCard extends StatelessWidget {
@@ -53,48 +42,6 @@ class _BrandCard extends StatelessWidget {
           boxShadow: shadow,
         ),
         padding: padding,
-        child: child,
-      );
-}
-
-class _OutlinedCard extends StatelessWidget {
-  const _OutlinedCard({
-    required this.child,
-  });
-
-  final Widget child;
-  @override
-  Widget build(final BuildContext context) => Card(
-        elevation: 0.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-          ),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: child,
-      );
-}
-
-class _FilledCard extends StatelessWidget {
-  const _FilledCard({
-    required this.child,
-    required this.tertiary,
-  });
-
-  final Widget child;
-  final bool tertiary;
-  @override
-  Widget build(final BuildContext context) => Card(
-        elevation: 0.0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-        clipBehavior: Clip.antiAlias,
-        color: tertiary
-            ? Theme.of(context).colorScheme.tertiaryContainer
-            : Theme.of(context).colorScheme.surfaceVariant,
         child: child,
       );
 }

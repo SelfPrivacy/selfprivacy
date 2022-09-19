@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:selfprivacy/logic/cubit/jobs/jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
@@ -41,7 +41,8 @@ class SshFormCubit extends FormCubit {
   @override
   FutureOr<void> onSubmit() {
     print(key.state.isValid);
-    jobsCubit.addJob(CreateSSHKeyJob(user: user, publicKey: key.state.value));
+    jobsCubit
+        .addJob(CreateSSHKeyJob(user: user, publicKey: key.state.value.trim()));
   }
 
   late FieldCubit<String> key;

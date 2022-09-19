@@ -1,5 +1,5 @@
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
@@ -16,17 +16,16 @@ class ApiDevicesCubit
   @override
   void load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
-      final List<ApiToken>? devices = await _getApiTokens();
-      if (devices != null) {
-        emit(ApiDevicesState(devices, LoadingStatus.success));
-      } else {
-        emit(const ApiDevicesState([], LoadingStatus.error));
-      }
+      _refetch();
     }
   }
 
   Future<void> refresh() async {
     emit(const ApiDevicesState([], LoadingStatus.refreshing));
+    _refetch();
+  }
+
+  void _refetch() async {
     final List<ApiToken>? devices = await _getApiTokens();
     if (devices != null) {
       emit(ApiDevicesState(devices, LoadingStatus.success));

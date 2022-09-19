@@ -4,7 +4,7 @@ import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_depe
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
 class RecoveryConfirmServer extends StatefulWidget {
@@ -39,6 +39,9 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
             ? 'recovering.choose_server_description'.tr()
             : 'recovering.confirm_server_description'.tr(),
         hasBackButton: true,
+        onBackButtonPressed: () {
+          Navigator.of(context).popUntil((final route) => route.isFirst);
+        },
         hasFlashButton: false,
         children: [
           FutureBuilder<List<ServerBasicInfoWithValidators>>(
@@ -132,7 +135,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     required final ServerBasicInfoWithValidators server,
     final VoidCallback? onTap,
   }) =>
-      BrandCards.filled(
+      FilledCard(
         child: ListTile(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

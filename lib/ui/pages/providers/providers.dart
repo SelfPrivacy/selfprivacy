@@ -5,14 +5,11 @@ import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/models/provider.dart';
-import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
 import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
@@ -37,6 +34,21 @@ class _ProvidersPageState extends State<ProvidersPage> {
     final DnsRecordsStatus dnsStatus =
         context.watch<DnsRecordsCubit>().state.dnsState;
 
+    final diskStatus = context.watch<ApiServerVolumeCubit>().state.diskStatus;
+
+    final ServerInstallationState appConfig =
+        context.watch<ServerInstallationCubit>().state;
+
+    StateType getServerStatus() {
+      if (!isReady) {
+        return StateType.uninitialized;
+      }
+      if (!diskStatus.isDiskOkay) {
+        return StateType.warning;
+      }
+      return StateType.stable;
+    }
+
     StateType getDnsStatus() {
       if (dnsStatus == DnsRecordsStatus.uninitialized ||
           dnsStatus == DnsRecordsStatus.refreshing) {
@@ -48,25 +60,6 @@ class _ProvidersPageState extends State<ProvidersPage> {
       return StateType.stable;
     }
 
-    final List<Padding> cards = ProviderType.values
-        .map(
-          (final ProviderType type) => Padding(
-            padding: const EdgeInsets.only(bottom: 30),
-            child: _Card(
-              provider: ProviderModel(
-                state: isReady
-                    ? (type == ProviderType.backup && !isBackupInitialized
-                        ? StateType.uninitialized
-                        : (type == ProviderType.domain)
-                            ? getDnsStatus()
-                            : StateType.stable)
-                    : StateType.uninitialized,
-                type: type,
-              ),
-            ),
-          ),
-        )
-        .toList();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(52),
@@ -81,7 +74,45 @@ class _ProvidersPageState extends State<ProvidersPage> {
             const NotReadyCard(),
             const SizedBox(height: 24),
           ],
-          ...cards,
+          _Card(
+            state: getServerStatus(),
+            icon: BrandIcons.server,
+            title: 'providers.server.card_title'.tr(),
+            subtitle: diskStatus.isDiskOkay
+                ? 'providers.storage.status_ok'.tr()
+                : 'providers.storage.status_error'.tr(),
+            onTap: () => Navigator.of(context)
+                .push(materialRoute(const ServerDetailsScreen())),
+          ),
+          const SizedBox(height: 16),
+          _Card(
+            state: getDnsStatus(),
+            icon: BrandIcons.globe,
+            title: 'providers.domain.screen_title'.tr(),
+            subtitle: appConfig.isDomainSelected
+                ? appConfig.serverDomain!.domainName
+                : '',
+            onTap: () => Navigator.of(context).push(
+              materialRoute(
+                const DnsDetailsPage(),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // TODO: When backups are fixed, show this card
+          if (isBackupInitialized)
+            _Card(
+              state: isBackupInitialized
+                  ? StateType.stable
+                  : StateType.uninitialized,
+              icon: BrandIcons.save,
+              title: 'providers.backup.card_title'.tr(),
+              subtitle: isBackupInitialized
+                  ? 'providers.backup.card_subtitle'.tr()
+                  : '',
+              onTap: () => Navigator.of(context)
+                  .push(materialRoute(const BackupDetails())),
+            ),
         ],
       ),
     );
@@ -89,79 +120,65 @@ class _ProvidersPageState extends State<ProvidersPage> {
 }
 
 class _Card extends StatelessWidget {
-  const _Card({required this.provider});
+  const _Card({
+    required final this.state,
+    required final this.icon,
+    required final this.title,
+    required final this.subtitle,
+    final this.onTap,
+  });
 
-  final ProviderModel provider;
+  final Function()? onTap;
+  final StateType state;
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
   @override
-  Widget build(final BuildContext context) {
-    late String title;
-    String? message;
-    late String stableText;
-    late VoidCallback onTap;
-    final bool isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
-    final ServerInstallationState appConfig =
-        context.watch<ServerInstallationCubit>().state;
-
-    final String domainName =
-        appConfig.isDomainFilled ? appConfig.serverDomain!.domainName : '';
-
-    switch (provider.type) {
-      case ProviderType.server:
-        title = 'providers.server.card_title'.tr();
-        stableText = 'providers.server.status'.tr();
-        onTap = () => showBrandBottomSheet(
-              context: context,
-              builder: (final BuildContext context) => const BrandBottomSheet(
-                isExpended: true,
-                child: ServerDetailsScreen(),
-              ),
-            );
-
-        break;
-      case ProviderType.domain:
-        title = 'providers.domain.screen_title'.tr();
-        message = domainName;
-        stableText = 'providers.domain.status'.tr();
-
-        onTap = () => Navigator.of(context).push(
-              materialRoute(
-                const DnsDetailsPage(),
-              ),
-            );
-        break;
-      case ProviderType.backup:
-        title = 'providers.backup.card_title'.tr();
-        stableText = 'providers.backup.status'.tr();
-
-        onTap = () => Navigator.of(context).push(
-              materialRoute(
-                const BackupDetails(),
-              ),
-            );
-        break;
-    }
-    return GestureDetector(
-      onTap: isReady ? onTap : null,
-      child: BrandCards.big(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            IconStatusMask(
-              status: provider.state,
-              child: Icon(provider.icon, size: 30, color: Colors.white),
+  Widget build(final BuildContext context) => Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkResponse(
+          highlightShape: BoxShape.rectangle,
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconStatusMask(
+                      status: state,
+                      child: Icon(icon, size: 30, color: Colors.white),
+                    ),
+                    if (state != StateType.uninitialized)
+                      IconStatusMask(
+                        status: state,
+                        child: Icon(
+                          state == StateType.stable
+                              ? Icons.check_circle_outline
+                              : state == StateType.warning
+                                  ? Icons.warning_amber_outlined
+                                  : Icons.error_outline,
+                          color: Colors.white,
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                if (state != StateType.uninitialized)
+                  Text(
+                    subtitle,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+              ],
             ),
-            const SizedBox(height: 10),
-            BrandText.h2(title),
-            const SizedBox(height: 10),
-            if (message != null) ...[
-              BrandText.body2(message),
-              const SizedBox(height: 10),
-            ],
-            if (provider.state == StateType.stable) BrandText.body2(stableText),
-          ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

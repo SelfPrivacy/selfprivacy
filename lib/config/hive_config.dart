@@ -21,6 +21,7 @@ class HiveConfig {
 
     Hive.registerAdapter(DnsProviderAdapter());
     Hive.registerAdapter(ServerProviderAdapter());
+    Hive.registerAdapter(UserTypeAdapter());
 
     await Hive.openBox(BNames.appSettingsBox);
 

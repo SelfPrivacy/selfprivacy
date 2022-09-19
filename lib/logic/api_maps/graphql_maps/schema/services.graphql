@@ -1,0 +1,84 @@
+fragment basicMutationReturnFields on MutationReturnInterface{
+  code
+  message
+  success
+}
+
+query AllServices {
+  services {
+    allServices {
+      description
+      displayName
+      dnsRecords {
+        content
+        name
+        priority
+        recordType
+        ttl
+      }
+      id
+      isEnabled
+      isMovable
+      isRequired
+      status
+      storageUsage {
+        title
+        usedSpace
+        volume {
+          name
+        }
+      }
+      svgIcon
+      url
+    }
+  }
+}
+
+mutation EnableService($serviceId: String!) {
+  enableService(serviceId: $serviceId) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation DisableService($serviceId: String!) {
+  disableService(serviceId: $serviceId) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation StopService($serviceId: String!) {
+  stopService(serviceId: $serviceId) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation StartService($serviceId: String!) {
+  startService(serviceId: $serviceId) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation RestartService($serviceId: String!) {
+  restartService(serviceId: $serviceId) {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation MoveService($input: MoveServiceInput!) {
+  moveService(input: $input) {
+    ...basicMutationReturnFields
+    job {
+      createdAt
+      description
+      error
+      finishedAt
+      name
+      progress
+      result
+      status
+      statusText
+      uid
+      updatedAt
+    }
+  }
+}

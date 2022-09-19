@@ -55,12 +55,21 @@ class ServerVolume {
   ServerVolume({
     required this.id,
     required this.name,
+    required this.sizeByte,
+    required this.serverId,
+    required this.linuxDevice,
   });
 
   @HiveField(1)
   int id;
   @HiveField(2)
   String name;
+  @HiveField(3, defaultValue: 10737418240) // 10 Gb
+  int sizeByte;
+  @HiveField(4, defaultValue: null)
+  int? serverId;
+  @HiveField(5, defaultValue: null)
+  String? linuxDevice;
 }
 
 @HiveType(typeId: 101)

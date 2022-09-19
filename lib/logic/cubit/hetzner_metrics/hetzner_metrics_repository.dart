@@ -1,8 +1,13 @@
-import 'package:selfprivacy/logic/api_maps/hetzner.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
 
 import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.dart';
+
+class MetricsLoadException implements Exception {
+  MetricsLoadException(this.message);
+  final String message;
+}
 
 class HetznerMetricsRepository {
   Future<HetznerMetricsLoaded> getMetrics(final Period period) async {
@@ -21,7 +26,7 @@ class HetznerMetricsRepository {
         break;
     }
 
-    final HetznerApi api = HetznerApi(hasLogger: true);
+    final HetznerApi api = HetznerApi(hasLogger: false);
 
     final List<Map<String, dynamic>> results = await Future.wait([
       api.getMetrics(start, end, 'cpu'),
@@ -30,6 +35,10 @@ class HetznerMetricsRepository {
 
     final cpuMetricsData = results[0]['metrics'];
     final networkMetricsData = results[1]['metrics'];
+
+    if (cpuMetricsData == null || networkMetricsData == null) {
+      throw MetricsLoadException('Metrics data is null');
+    }
 
     return HetznerMetricsLoaded(
       period: period,

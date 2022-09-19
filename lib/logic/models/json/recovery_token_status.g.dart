@@ -17,3 +17,12 @@ RecoveryKeyStatus _$RecoveryKeyStatusFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['expiration'] as String),
       usesLeft: json['uses_left'] as int?,
     );
+
+Map<String, dynamic> _$RecoveryKeyStatusToJson(RecoveryKeyStatus instance) =>
+    <String, dynamic>{
+      'exists': instance.exists,
+      'date': instance.date?.toIso8601String(),
+      'expiration': instance.expiration?.toIso8601String(),
+      'uses_left': instance.usesLeft,
+      'valid': instance.valid,
+    };

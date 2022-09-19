@@ -1,0 +1,351 @@
+type Alert {
+  message: String!
+  severity: Severity!
+  timestamp: DateTime
+  title: String!
+}
+
+type Api {
+  devices: [ApiDevice!]!
+  recoveryKey: ApiRecoveryKeyStatus!
+  version: String!
+}
+
+type ApiDevice {
+  creationDate: DateTime!
+  isCaller: Boolean!
+  name: String!
+}
+
+type ApiJob {
+  createdAt: DateTime!
+  description: String!
+  error: String
+  finishedAt: DateTime
+  name: String!
+  progress: Int
+  result: String
+  status: String!
+  statusText: String
+  uid: String!
+  updatedAt: DateTime!
+}
+
+type ApiKeyMutationReturn implements MutationReturnInterface {
+  code: Int!
+  key: String
+  message: String!
+  success: Boolean!
+}
+
+type ApiRecoveryKeyStatus {
+  creationDate: DateTime
+  exists: Boolean!
+  expirationDate: DateTime
+  usesLeft: Int
+  valid: Boolean!
+}
+
+type AutoUpgradeOptions {
+  allowReboot: Boolean!
+  enable: Boolean!
+}
+
+input AutoUpgradeSettingsInput {
+  enableAutoUpgrade: Boolean = null
+  allowReboot: Boolean = null
+}
+
+type AutoUpgradeSettingsMutationReturn implements MutationReturnInterface {
+  allowReboot: Boolean!
+  code: Int!
+  enableAutoUpgrade: Boolean!
+  message: String!
+  success: Boolean!
+}
+
+"""Date with time (isoformat)"""
+scalar DateTime
+
+type DeviceApiTokenMutationReturn implements MutationReturnInterface {
+  code: Int!
+  message: String!
+  success: Boolean!
+  token: String
+}
+
+enum DnsProvider {
+  CLOUDFLARE
+}
+
+type DnsRecord {
+  content: String!
+  name: String!
+  priority: Int
+  recordType: String!
+  ttl: Int!
+}
+
+type GenericJobButationReturn implements MutationReturnInterface {
+  code: Int!
+  job: ApiJob
+  message: String!
+  success: Boolean!
+}
+
+type GenericMutationReturn implements MutationReturnInterface {
+  code: Int!
+  message: String!
+  success: Boolean!
+}
+
+type Job {
+  getJob(jobId: String!): ApiJob
+  getJobs: [ApiJob!]!
+}
+
+input MigrateToBindsInput {
+  emailBlockDevice: String!
+  bitwardenBlockDevice: String!
+  giteaBlockDevice: String!
+  nextcloudBlockDevice: String!
+  pleromaBlockDevice: String!
+}
+
+input MoveServiceInput {
+  serviceId: String!
+  location: String!
+}
+
+type Mutation {
+  addSshKey(sshInput: SshMutationInput!): UserMutationReturn!
+  authorizeWithNewDeviceApiKey(input: UseNewDeviceKeyInput!): DeviceApiTokenMutationReturn!
+  changeAutoUpgradeSettings(settings: AutoUpgradeSettingsInput!): AutoUpgradeSettingsMutationReturn!
+  changeTimezone(timezone: String!): TimezoneMutationReturn!
+  createUser(user: UserMutationInput!): UserMutationReturn!
+  deleteDeviceApiToken(device: String!): GenericMutationReturn!
+  deleteUser(username: String!): GenericMutationReturn!
+  disableService(serviceId: String!): ServiceMutationReturn!
+  enableService(serviceId: String!): ServiceMutationReturn!
+  getNewDeviceApiKey: ApiKeyMutationReturn!
+  getNewRecoveryApiKey(limits: RecoveryKeyLimitsInput = null): ApiKeyMutationReturn!
+  invalidateNewDeviceApiKey: GenericMutationReturn!
+  migrateToBinds(input: MigrateToBindsInput!): GenericJobButationReturn!
+  mountVolume(name: String!): GenericMutationReturn!
+  moveService(input: MoveServiceInput!): ServiceJobMutationReturn!
+  pullRepositoryChanges: GenericMutationReturn!
+  rebootSystem: GenericMutationReturn!
+  refreshDeviceApiToken: DeviceApiTokenMutationReturn!
+  removeJob(jobId: String!): GenericMutationReturn!
+  removeSshKey(sshInput: SshMutationInput!): UserMutationReturn!
+  resizeVolume(name: String!): GenericMutationReturn!
+  restartService(serviceId: String!): ServiceMutationReturn!
+  runSystemRebuild: GenericMutationReturn!
+  runSystemRollback: GenericMutationReturn!
+  runSystemUpgrade: GenericMutationReturn!
+  startService(serviceId: String!): ServiceMutationReturn!
+  stopService(serviceId: String!): ServiceMutationReturn!
+  testMutation: GenericMutationReturn!
+  unmountVolume(name: String!): GenericMutationReturn!
+  updateUser(user: UserMutationInput!): UserMutationReturn!
+  useRecoveryApiKey(input: UseRecoveryKeyInput!): DeviceApiTokenMutationReturn!
+}
+
+interface MutationReturnInterface {
+  code: Int!
+  message: String!
+  success: Boolean!
+}
+
+type Query {
+  api: Api!
+  jobs: Job!
+  services: Services!
+  storage: Storage!
+  system: System!
+  users: Users!
+}
+
+input RecoveryKeyLimitsInput {
+  expirationDate: DateTime = null
+  uses: Int = null
+}
+
+enum ServerProvider {
+  HETZNER
+}
+
+type Service {
+  description: String!
+  displayName: String!
+  dnsRecords: [DnsRecord!]
+  id: String!
+  isEnabled: Boolean!
+  isMovable: Boolean!
+  isRequired: Boolean!
+  status: ServiceStatusEnum!
+  storageUsage: ServiceStorageUsage!
+  svgIcon: String!
+  url: String
+}
+
+type ServiceJobMutationReturn implements MutationReturnInterface {
+  code: Int!
+  job: ApiJob
+  message: String!
+  service: Service
+  success: Boolean!
+}
+
+type ServiceMutationReturn implements MutationReturnInterface {
+  code: Int!
+  message: String!
+  service: Service
+  success: Boolean!
+}
+
+enum ServiceStatusEnum {
+  ACTIVATING
+  ACTIVE
+  DEACTIVATING
+  FAILED
+  INACTIVE
+  OFF
+  RELOADING
+}
+
+type ServiceStorageUsage implements StorageUsageInterface {
+  service: Service
+  title: String!
+  usedSpace: String!
+  volume: StorageVolume
+}
+
+type Services {
+  allServices: [Service!]!
+}
+
+enum Severity {
+  CRITICAL
+  ERROR
+  INFO
+  SUCCESS
+  WARNING
+}
+
+input SshMutationInput {
+  username: String!
+  sshKey: String!
+}
+
+type SshSettings {
+  enable: Boolean!
+  passwordAuthentication: Boolean!
+  rootSshKeys: [String!]!
+}
+
+type Storage {
+  volumes: [StorageVolume!]!
+}
+
+interface StorageUsageInterface {
+  title: String!
+  usedSpace: String!
+  volume: StorageVolume
+}
+
+type StorageVolume {
+  freeSpace: String!
+  model: String
+  name: String!
+  root: Boolean!
+  serial: String
+  totalSpace: String!
+  type: String!
+  usages: [StorageUsageInterface!]!
+  usedSpace: String!
+}
+
+type Subscription {
+  count(target: Int! = 100): Int!
+}
+
+type System {
+  busy: Boolean!
+  domainInfo: SystemDomainInfo!
+  info: SystemInfo!
+  provider: SystemProviderInfo!
+  settings: SystemSettings!
+  status: Alert!
+  workingDirectory: String!
+}
+
+type SystemDomainInfo {
+  domain: String!
+  hostname: String!
+  provider: DnsProvider!
+  requiredDnsRecords: [DnsRecord!]!
+}
+
+type SystemInfo {
+  pythonVersion: String!
+  systemVersion: String!
+  usingBinds: Boolean!
+}
+
+type SystemProviderInfo {
+  id: String!
+  provider: ServerProvider!
+}
+
+type SystemSettings {
+  autoUpgrade: AutoUpgradeOptions!
+  ssh: SshSettings!
+  timezone: String!
+}
+
+type TimezoneMutationReturn implements MutationReturnInterface {
+  code: Int!
+  message: String!
+  success: Boolean!
+  timezone: String
+}
+
+input UseNewDeviceKeyInput {
+  key: String!
+  deviceName: String!
+}
+
+input UseRecoveryKeyInput {
+  key: String!
+  deviceName: String!
+}
+
+type User {
+  sshKeys: [String!]!
+  userType: UserType!
+  username: String!
+}
+
+input UserMutationInput {
+  username: String!
+  password: String!
+}
+
+type UserMutationReturn implements MutationReturnInterface {
+  code: Int!
+  message: String!
+  success: Boolean!
+  user: User
+}
+
+enum UserType {
+  NORMAL
+  PRIMARY
+  ROOT
+}
+
+type Users {
+  allUsers: [User!]!
+  getUser(username: String!): User
+}

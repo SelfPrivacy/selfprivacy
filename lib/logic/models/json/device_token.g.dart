@@ -10,3 +10,9 @@ DeviceToken _$DeviceTokenFromJson(Map<String, dynamic> json) => DeviceToken(
       device: json['device'] as String,
       token: json['token'] as String,
     );
+
+Map<String, dynamic> _$DeviceTokenToJson(DeviceToken instance) =>
+    <String, dynamic>{
+      'device': instance.device,
+      'token': instance.token,
+    };

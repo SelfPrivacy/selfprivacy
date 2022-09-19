@@ -52,7 +52,8 @@
     "copied_ssh": "SSH ключ cкопирован в буфер",
     "delete_ssh_text": "Удалить SSH ключ?",
     "about_app_page": {
-      "text": "Версия приложения: v.{}"
+      "application_version_text": "Версия приложения v.{}",
+      "api_version_text": "Версия API сервера v.{}"
     },
     "settings": {
       "title": "Настройки приложения",
@@ -99,7 +100,35 @@
       "chart": {
         "month": "Месяц",
         "day": "День",
-        "hour": "Час"
+        "hour": "Час",
+        "cpu_title": "Использование процессора",
+        "network_title": "Использование сети",
+        "in": "Получено",
+        "out": "Отправлено"
+      },
+      "settings": {
+        "allow_autoupgrade": "Разрешить авто-обноления",
+        "allow_autoupgrade_hint": "Разрешить автоматичесую установку обновлений на сервер",
+        "reboot_after_upgrade": "Перезагружать после обновлений",
+        "reboot_after_upgrade_hint": "Автоматически перезагружать сервер после применения обновлений",
+        "server_timezone": "Часовой пояс сервера",
+        "select_timezone": "Выберите часовой пояс"
+      },
+      "info": {
+        "server_id": "ID сервера",
+        "status": "Статус",
+        "cpu": "Процессор",
+        "ram": "Операивная память",
+        "disk": "Диск",
+        "monthly_cost": "Ежемесячная стоимость",
+        "location": "Размещение",
+        "core_count": {
+          "one": "{} ядро",
+          "two": "{} ядра",
+          "few": "{} ядра",
+          "many": "{} ядер",
+          "other": "{} ядер"
+        }
       }
     },
     "domain": {
@@ -162,7 +191,28 @@
       "refresh": "Обновить статус",
       "refetchBackups": "Обновить список копий",
       "refetchingList": "Через несколько минут список будет обновлён"
-
+    },
+    "storage": {
+      "card_title": "Хранилище",
+      "status_ok": "Проблем на диске не обнаружено",
+      "status_error": "Заканчивается место на диске",
+      "disk_usage": "{} использовано",
+      "disk_total": "{} всего · {}",
+      "gb": "{} GB",
+      "mb": "{} MB",
+      "kb": "{} KB",
+      "extend_volume_button": "Расширить хранилище",
+      "extending_volume_title": "Расширение хранилища",
+      "extending_volume_description": "Изменение размера хранилища позволит вам держать больше данных на вашем сервере без расширения самого сервера. Объем можно только увеличить: уменьшить нельзя.",
+      "extending_volume_price_info": "Цена включает НДС и рассчитана на основе данных о ценах, предоставленных Hetzner. Сервер будет перезагружен во время процесса.",
+      "extending_volume_error": "Не удалось начать расширение хранилища.",
+      "size": "Размер",
+      "euro": "Евро",
+      "data_migration_title": "Миграция данных",
+      "data_migration_notice": "На время миграции данных все сервисы будут выключены.",
+      "start_migration_button": "Начать миграцию",
+      "migration_process": "Мигрируем...",
+      "migration_done": "Завершить"
     }
   },
   "not_ready_card": {
@@ -175,6 +225,14 @@
   "services": {
     "_comment": "Вкладка сервисы",
     "title": "Ваши личные, приватные и независимые сервисы:",
+    "service_page": {
+      "open_in_browser": "Открыть в браузере",
+      "restart": "Перезапустить сервис",
+      "disable": "Выключить сервис",
+      "enable": "Включить сервис",
+      "move": "Переместить на другой диск",
+      "uses": "Использует {usage} на {volume}"
+    },
     "mail": {
       "title": "Почта",
       "subtitle": "Электронная почта для семьи или компании.",
@@ -238,6 +296,15 @@
       "bottom_sheet": {
         "1": "Создать подключиться к VPN-серверу. Движок для безопасной и масштабируемой инфраструктуры VPN"
       }
+    },
+    "page": {
+      "up_and_running": "Запущен и работает",
+      "resource_usage": "Потребление ресурсов",
+      "disk_used": "{} использовано места на диске",
+      "users": "Пользователи",
+      "controlled_by": "Контролируется {}",
+      "apps": "Приложения",
+      "settings": "Настройки"
     }
   },
   "users": {
@@ -260,6 +327,9 @@
     "1": "Подключите сервер",
     "2": "Здесь будут жить наши данные и SelfPrivacy-сервисы",
     "how": "Как получить API Token",
+    "hetzner_bad_key_error": "Hetzner API ключ неверен",
+    "cloudflare_bad_key_error": "Cloudflare API ключ неверен",
+    "backblaze_bad_key_error": "Информация о Backblaze хранилище неверна",
     "3": "Подключите CloudFlare",
     "4": "Для управления DNS вашего домена",
     "5": "CloudFlare API Token",
@@ -318,6 +388,10 @@
     "domain_not_available_on_token": "Введённый токен не имеет доступа к нужному домену.",
     "modal_confirmation_title": "Это действительно ваш сервер?",
     "modal_confirmation_description": "Подключение к неправильному серверу может привести к деструктивным последствиям.",
+    "modal_confirmation_dns_valid": "Обратный DNS корректен",
+    "modal_confirmation_dns_invalid": "Обратный DNS указывает на другой домен",
+    "modal_confirmation_ip_valid": "IP совпадает с указанным в DNS записи",
+    "modal_confirmation_ip_invalid": "IP не совпадает с указанным в DNS записи",
     "confirm_cloudflare": "Подключение к Cloudflare",
     "confirm_cloudflare_description": "Введите токен Cloudflare, который имеет права на {}:",
     "confirm_backblze": "Подключение к Backblaze",
@@ -371,8 +445,10 @@
   },
   "modals": {
     "_comment": "messages in modals",
-    "1": "Сервер с таким именем уже существует",
+    "1": "Сервер с таким именем уже существует.",
+    "1.1": "Непредвиденная ошибка при создании со стороны провайдера.",
     "2": "Уничтожить сервер и создать новый?",
+    "2.2": "Попробовать ещё раз?",
     "3": "Подтвердите",
     "4": "Сбросить все ключи?",
     "5": "Да, сбросить",
@@ -406,7 +482,9 @@
     "upgradeServer": "Обновить сервер",
     "rebootServer": "Перезагрузить сервер",
     "create_ssh_key": "Создать SSH ключ для {}",
-    "delete_ssh_key": "Удалить SSH ключ для {}"
+    "delete_ssh_key": "Удалить SSH ключ для {}",
+    "server_jobs": "Задачи на сервере",
+    "resetUserPassword": "Сбросить пароль пользователя"
   },
   "validations": {
     "required": "Обязательное поле.",

@@ -5,9 +5,9 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/cloudflare_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_cloudflare.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/hetzner_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -21,7 +21,9 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class InitializingPage extends StatelessWidget {
-  const InitializingPage({final super.key});
+  const InitializingPage({
+    final super.key,
+  });
 
   @override
   Widget build(final BuildContext context) {
@@ -30,18 +32,21 @@ class InitializingPage extends StatelessWidget {
     if (cubit.state is ServerInstallationRecovery) {
       return const RecoveryRouting();
     } else {
-      final actualInitializingPage = [
-        () => _stepHetzner(cubit),
-        () => _stepCloudflare(cubit),
-        () => _stepBackblaze(cubit),
-        () => _stepDomain(cubit),
-        () => _stepUser(cubit),
-        () => _stepServer(cubit),
-        () => _stepCheck(cubit),
-        () => _stepCheck(cubit),
-        () => _stepCheck(cubit),
-        () => Center(child: Text('initializing.finish'.tr()))
-      ][cubit.state.progress.index]();
+      Widget? actualInitializingPage;
+      if (cubit.state is! ServerInstallationFinished) {
+        actualInitializingPage = [
+          () => _stepHetzner(cubit),
+          () => _stepCloudflare(cubit),
+          () => _stepBackblaze(cubit),
+          () => _stepDomain(cubit),
+          () => _stepUser(cubit),
+          () => _stepServer(cubit),
+          () => _stepCheck(cubit),
+          () => _stepCheck(cubit),
+          () => _stepCheck(cubit),
+          () => _stepCheck(cubit)
+        ][cubit.state.progress.index]();
+      }
 
       return BlocListener<ServerInstallationCubit, ServerInstallationState>(
         listener: (final context, final state) {
@@ -58,7 +63,7 @@ class InitializingPage extends StatelessWidget {
                 children: [
                   Padding(
                     padding: paddingH15V0.copyWith(top: 10, bottom: 10),
-                    child: cubit.state.isFullyInitilized
+                    child: cubit.state is ServerInstallationFinished
                         ? const SizedBox(
                             height: 80,
                           )
@@ -70,7 +75,7 @@ class InitializingPage extends StatelessWidget {
                               'Domain',
                               'User',
                               'Server',
-                              '✅ Check',
+                              'Check',
                             ],
                             activeIndex: cubit.state.porgressBar,
                           ),
@@ -135,10 +140,12 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepHetzner(final ServerInstallationCubit serverInstallationCubit) =>
       BlocProvider(
-        create: (final context) => HetznerFormCubit(serverInstallationCubit),
+        create: (final context) => ProviderFormCubit(
+          serverInstallationCubit,
+        ),
         child: Builder(
           builder: (final context) {
-            final formCubitState = context.watch<HetznerFormCubit>().state;
+            final formCubitState = context.watch<ProviderFormCubit>().state;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -152,7 +159,7 @@ class InitializingPage extends StatelessWidget {
                 BrandText.body2('initializing.2'.tr()),
                 const Spacer(),
                 CubitFormTextField(
-                  formFieldCubit: context.read<HetznerFormCubit>().apiKey,
+                  formFieldCubit: context.read<ProviderFormCubit>().apiKey,
                   textAlign: TextAlign.center,
                   scrollPadding: const EdgeInsets.only(bottom: 70),
                   decoration: const InputDecoration(
@@ -163,7 +170,7 @@ class InitializingPage extends StatelessWidget {
                 BrandButton.rised(
                   onPressed: formCubitState.isSubmitting
                       ? null
-                      : () => context.read<HetznerFormCubit>().trySubmit(),
+                      : () => context.read<ProviderFormCubit>().trySubmit(),
                   text: 'basis.connect'.tr(),
                 ),
                 const SizedBox(height: 10),
@@ -191,10 +198,10 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepCloudflare(final ServerInstallationCubit initializingCubit) =>
       BlocProvider(
-        create: (final context) => CloudFlareFormCubit(initializingCubit),
+        create: (final context) => DnsProviderFormCubit(initializingCubit),
         child: Builder(
           builder: (final context) {
-            final formCubitState = context.watch<CloudFlareFormCubit>().state;
+            final formCubitState = context.watch<DnsProviderFormCubit>().state;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +216,7 @@ class InitializingPage extends StatelessWidget {
                 BrandText.body2('initializing.4'.tr()),
                 const Spacer(),
                 CubitFormTextField(
-                  formFieldCubit: context.read<CloudFlareFormCubit>().apiKey,
+                  formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
                   textAlign: TextAlign.center,
                   scrollPadding: const EdgeInsets.only(bottom: 70),
                   decoration: InputDecoration(
@@ -220,7 +227,7 @@ class InitializingPage extends StatelessWidget {
                 BrandButton.rised(
                   onPressed: formCubitState.isSubmitting
                       ? null
-                      : () => context.read<CloudFlareFormCubit>().trySubmit(),
+                      : () => context.read<DnsProviderFormCubit>().trySubmit(),
                   text: 'basis.connect'.tr(),
                 ),
                 const SizedBox(height: 10),

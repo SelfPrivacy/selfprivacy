@@ -67,6 +67,9 @@ steps:
   - name: Create an Empty Release
     commands:
       - ./ci.py --gitea-create-release
+    environment:
+      GITEA_RELEASE_TOKEN:
+        from_secret: GITEA_RELEASE_TOKEN
 
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:

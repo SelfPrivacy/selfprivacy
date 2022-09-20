@@ -12,9 +12,13 @@ class ServerJobsState extends ServerInstallationDependendState {
   final String? migrationJobUid;
 
   List<ServerJob> get serverJobList {
-    final List<ServerJob> list = _serverJobList;
-    list.sort((final a, final b) => b.createdAt.compareTo(a.createdAt));
-    return list;
+    try {
+      final List<ServerJob> list = _serverJobList;
+      list.sort((final a, final b) => b.createdAt.compareTo(a.createdAt));
+      return list;
+    } on UnsupportedError {
+      return _serverJobList;
+    }
   }
 
   bool get hasRemovableJobs => serverJobList.any(

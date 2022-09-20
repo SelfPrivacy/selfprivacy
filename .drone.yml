@@ -126,16 +126,16 @@ steps:
       GOOGLE_KEYSTORE_PASS:
         from_secret: GOOGLE_KEYSTORE_PASS
 
-  - name: Sign Android Release Artifact (Bundle) for Google Play
-    commands:
-      - ./ci.py --sign-bundle
-    environment:
-      STANDALONE_KEYSTORE_PASS:
-        from_secret: STANDALONE_KEYSTORE_PASS
-      FDROID_KEYSTORE_PASS:
-        from_secret: FDROID_KEYSTORE_PASS
-      GOOGLE_KEYSTORE_PASS:
-        from_secret: GOOGLE_KEYSTORE_PASS
+#  - name: Sign Android Release Artifact (Bundle) for Google Play
+#    commands:
+#      - ./ci.py --sign-bundle
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
+#      GOOGLE_KEYSTORE_PASS:
+#        from_secret: GOOGLE_KEYSTORE_PASS
 
   - name: Package Linux AppImage Artifact
     commands:

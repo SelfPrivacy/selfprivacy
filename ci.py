@@ -63,7 +63,7 @@ def gitea_create_release():
     return error
 
 def gitea_get_release_id():
-  url = f"{GITEA_HOST_URL}/api/v1/repos/{GITEA_REPO_FULL}/releases/tags/{APP_SEMVER}"
+  url = f"{GITEA_HOST_URL}/api/v1/repos/{GITEA_REPO_FULL}/releases/tags/{os.environ.get('DRONE_SEMVER') or APP_SEMVER}"
 
   request = requests.get(url)
 

@@ -1,4 +1,4 @@
-app-id: pro.kherel.selfprivacy
+app-id: org.selfprivacy.app
 runtime: org.freedesktop.Platform
 runtime-version: '22.08'
 sdk: org.freedesktop.Sdk
@@ -9,7 +9,8 @@ finish-args:
   - "--socket=fallback-x11"
   - "--socket=wayland"
   - "--share=network"
-  - "--own-name=pro.kherel.selfprivacy"
+  - "--own-name=org.selfprivacy.app"
+  - "--device=dri"
 modules:
   - name: selfprivacy
     buildsystem: simple
@@ -17,15 +18,15 @@ modules:
       - cp -r * /app
       - mkdir /app/bin
       - ln -s /app/selfprivacy /app/bin/selfprivacy
-      - install -Dm644 logo.svg /app/share/icons/hicolor/scalable/apps/pro.kherel.selfprivacy.svg
-      - install -Dm644 pro.kherel.selfprivacy.desktop /app/share/applications/pro.kherel.selfprivacy.desktop
+      - install -Dm644 logo.svg /app/share/icons/hicolor/scalable/apps/org.selfprivacy.app.svg
+      - install -Dm644 org.selfprivacy.app.desktop /app/share/applications/org.selfprivacy.app.desktop
     sources:
       - type: dir
         path: build/linux/x64/release/bundle
       - type: file
         path: assets/images/icon/logo.svg
       - type: file
-        path: pro.kherel.selfprivacy.desktop
+        path: org.selfprivacy.app.desktop
   - name: libsecret
     buildsystem: meson
     config-opts:

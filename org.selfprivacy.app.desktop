@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=SelfPrivacy
+Icon=org.selfprivacy.app
+Exec=selfprivacy %U

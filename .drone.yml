@@ -1,20 +1,51 @@
 kind: pipeline
 type: exec
-name: Continuous Integration
+name: Nightly
 
 steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
 
-  - name: Build
+  - name: Run Tests
     commands:
-      - ./ci.py --run-ci-build
+      - ./ci.py --ci-run-tests
+      - sonar-scanner -Dsonar.projectKey=SelfPrivacy-Flutter-App -Dsonar.sources=. -Dsonar.host.url=http://analyzer.lan:9000 -Dsonar.login="$SONARQUBE_TOKEN"
+    environment:
+      SONARQUBE_TOKEN:
+        from_secret: SONARQUBE_TOKEN
+
+  - name: Build Nightly Linux Release Artifact (Binary)
+    commands:
+      - ./ci.py --ci-build-linux
+
+  - name: Build Nightly Release Artifact (.APK)
+    commands:
+      - ./ci.py --ci-build-apk
+
+  - name: Sign and Commit Nightly Android Release Artifact (.APK) for F-Droid Repository
+    commands:
+      - ./ci.py --sign-apk-fdroid-nightly
+    environment:
+      STANDALONE_KEYSTORE_PASS:
+        from_secret: STANDALONE_KEYSTORE_PASS
+      FDROID_KEYSTORE_PASS:
+        from_secret: FDROID_KEYSTORE_PASS
+      GOOGLE_KEYSTORE_PASS:
+        from_secret: GOOGLE_KEYSTORE_PASS
+
+  - name: Deploy F-Droid Repo
+    commands:
+      - ./ci.py --deploy-fdroid-repo
+    environment:
+      SSH_PRIVATE_KEY:
+        from_secret: SSH_PRIVATE_KEY
 
 trigger:
   event:
     - push
-    - pull_request
+  branch:
+    - master
 
 node:
   server: builder
@@ -29,8 +60,16 @@ steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
-      - if podman volume exists src; then podman volume rm -f src; podman volume create src; else podman volume create src; fi
-      - git archive --format=tar HEAD | podman volume import src -
+      - if podman volume exists release; then podman volume rm -f release; podman volume create release; else podman volume create release; fi
+      - git config user.email "builder@selfprivacy.org"
+      - git config user.name "Builder"
+
+  - name: Create an Empty Gitea Release
+    commands:
+      - ./ci.py --gitea-create-release
+    environment:
+      GITEA_RELEASE_TOKEN:
+        from_secret: GITEA_RELEASE_TOKEN
 
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:
@@ -40,6 +79,8 @@ steps:
         from_secret: STANDALONE_KEYSTORE_PASS
       FDROID_KEYSTORE_PASS:
         from_secret: FDROID_KEYSTORE_PASS
+      GOOGLE_KEYSTORE_PASS:
+        from_secret: GOOGLE_KEYSTORE_PASS
 
   - name: Build Intermediate Android Release Artifact (.APK)
     commands:
@@ -49,6 +90,19 @@ steps:
         from_secret: STANDALONE_KEYSTORE_PASS
       FDROID_KEYSTORE_PASS:
         from_secret: FDROID_KEYSTORE_PASS
+      GOOGLE_KEYSTORE_PASS:
+        from_secret: GOOGLE_KEYSTORE_PASS
+
+#  - name: Build Intermediate Android Release Artifact (Bundle)
+#    commands:
+#      - ./ci.py --build-bundle
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
+#      GOOGLE_KEYSTORE_PASS:
+#        from_secret: GOOGLE_KEYSTORE_PASS
 
   - name: Sign Android Release Artifact (.APK) for Standalone Use
     commands:
@@ -58,8 +112,10 @@ steps:
         from_secret: STANDALONE_KEYSTORE_PASS
       FDROID_KEYSTORE_PASS:
         from_secret: FDROID_KEYSTORE_PASS
+      GOOGLE_KEYSTORE_PASS:
+        from_secret: GOOGLE_KEYSTORE_PASS
 
-  - name: Sign Android Release Artifact (.APK) for F-Droid Repository
+  - name: Sign and Commit Android Release Artifact (.APK) for F-Droid Repository
     commands:
       - ./ci.py --sign-apk-fdroid
     environment:
@@ -67,6 +123,19 @@ steps:
         from_secret: STANDALONE_KEYSTORE_PASS
       FDROID_KEYSTORE_PASS:
         from_secret: FDROID_KEYSTORE_PASS
+      GOOGLE_KEYSTORE_PASS:
+        from_secret: GOOGLE_KEYSTORE_PASS
+
+#  - name: Sign Android Release Artifact (Bundle) for Google Play
+#    commands:
+#      - ./ci.py --sign-bundle
+#    environment:
+#      STANDALONE_KEYSTORE_PASS:
+#        from_secret: STANDALONE_KEYSTORE_PASS
+#      FDROID_KEYSTORE_PASS:
+#        from_secret: FDROID_KEYSTORE_PASS
+#      GOOGLE_KEYSTORE_PASS:
+#        from_secret: GOOGLE_KEYSTORE_PASS
 
   - name: Package Linux AppImage Artifact
     commands:
@@ -79,6 +148,13 @@ steps:
   - name: Package Linux Archive Artifact
     commands:
       - ./ci.py --package-linux-archive
+
+  - name: Push Artifacts to the Release Volume
+    commands:
+#      - git add -v *.AppImage *.AppImage.zsync *.flatpak *.apk *.apk.idsig *.aab *.tar.zstd
+      - git add -v *.AppImage *.AppImage.zsync *.flatpak *.apk *.apk.idsig *.tar.zstd
+      - git commit -m Release
+      - git archive --format=tar HEAD | podman volume import release -
 
 trigger:
   event:
@@ -97,18 +173,18 @@ steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
-      - podman unshare podman volume mount src
+      - podman unshare podman volume mount release
 
   - name: Create Release and Deploy Artifacts
     commands:
-      - podman unshare ./ci.py --deploy-gitea-release
+      - ./ci.py --deploy-gitea-release
     environment:
       GITEA_RELEASE_TOKEN:
         from_secret: GITEA_RELEASE_TOKEN
 
-  - name: Deploy F-Droid Repo
+  - name: Deploy F-Droid Repository
     commands:
-      - podman unshare ./ci.py --deploy-fdroid-repo
+      - ./ci.py --deploy-fdroid-repo
     environment:
       SSH_PRIVATE_KEY:
         from_secret: SSH_PRIVATE_KEY

@@ -1,5 +1,8 @@
 on: push
 
+env: # Or as an environment variable
+  GITEA_RELEASE_TOKEN: ${{ secrets.GITEA_RELEASE_TOKEN }}
+
 jobs:
   windows:
     runs-on: windows-latest
@@ -33,12 +36,12 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: windows
-          path: windows
+          path: windows-release
       - uses: actions/download-artifact@v3
         with:
           name: macos
-          path: selfprivacy.app
-      - run: pushd windows; zip -r ../selfprivacy-windows.zip .; popd
-      - run: zip -r selfprivacy-macos.zip selfprivacy.app
+          path: macos-release/selfprivacy.app
+      - run: pushd windows-release; zip -r ../selfprivacy-windows.zip .; popd
+      - run: pushd macos-release; zip -r ../selfprivacy-macos.zip .; popd
       - run: ./ci.py --gitea-upload-attachment selfprivacy-windows.zip
       - run: ./ci.py --gitea-upload-attachment selfprivacy-macos.zip

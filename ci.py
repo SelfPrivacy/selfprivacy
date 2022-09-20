@@ -52,7 +52,7 @@ def gitea_create_release():
   url = f"{GITEA_HOST_URL}/api/v1/repos/{GITEA_REPO_FULL}/releases"
   token = os.environ.get("GITEA_RELEASE_TOKEN")
   params = {"access_token": f"{token}"}
-  json = {"tag_name": f"{APP_SEMVER}", "name": f"{APP_SEMVER}", "prerelease": True}
+  json = {"tag_name": f"{os.environ.get('DRONE_SEMVER') or APP_SEMVER}", "name": f"{os.environ.get('DRONE_SEMVER' or APP_SEMVER)}", "prerelease": True}
 
   request = requests.post(url, params=params, json=json)
 

@@ -26,7 +26,9 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+  namespace 'org.selfprivacy.app'
+
+  compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     sourceSets {
@@ -48,11 +50,26 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "pro.kherel.selfprivacy"
+        applicationId "org.selfprivacy.app"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+        fdroid {
+            applicationId "pro.kherel.selfprivacy"
+        }
+        production {
+            applicationIdSuffix ""
+        }
+        nightly {
+            applicationIdSuffix ".nightly"
+            versionCode project.getVersionCode()
+            versionName "nightly-" + project.getVersionCode()
+        }
     }
 
     flavorDimensions "default"

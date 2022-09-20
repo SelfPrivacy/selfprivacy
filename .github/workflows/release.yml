@@ -1,0 +1,42 @@
+on: push
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - run: flutter build windows
+      - uses: actions/upload-artifact@v3
+        with:
+          name: windows
+          path: build/windows/runner/Release
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - run: flutter build macos
+      - uses: actions/upload-artifact@v3
+        with:
+          name: macos
+          path: build/macos/Build/Products/Release/selfprivacy.app
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - windows
+      - macos
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: windows
+          path: windows
+      - uses: actions/download-artifact@v3
+        with:
+          name: macos
+          path: selfprivacy.app
+      - run: pushd windows; zip -r ../selfprivacy-windows.zip .; popd
+      - run: zip -r selfprivacy-macos.zip selfprivacy.app
+      - run: ls -la

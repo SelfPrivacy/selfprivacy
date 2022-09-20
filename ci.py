@@ -2,12 +2,14 @@
 
 import os
 import subprocess
+import requests
 import yaml
 import argparse
 
 CONTAINER_IMAGE = "localhost/flutter-build-env"
 HOST_HOME = "/var/lib/drone-runner-exec"
 CONTAINER_HOME = "/tmp/builder"
+HOST_MOUNTED_VOLUME = f"{HOST_HOME}/.local/share/containers/storage/volumes/release/_data"
 
 APP_NAME = "org.selfprivacy.app"
 APP_NAME_NIGHTLY = "org.selfprivacy.app.nightly"
@@ -16,7 +18,10 @@ APP_SEMVER = APP_VERSION_FULL[:APP_VERSION_FULL.find("+")]
 APP_BUILD_ID = APP_VERSION_FULL[APP_VERSION_FULL.find("+"):][1::]
 APP_BUILD_ID_NIGHTLY = subprocess.run(["git", "rev-list", "--first-parent", "--count", "HEAD"], check=True, stdout=subprocess.PIPE).stdout.decode().strip()
 
-HOST_MOUNTED_VOLUME = f"{HOST_HOME}/.local/share/containers/storage/volumes/release/_data"
+GITEA_HOST_URL = "https://git.selfprivacy.org"
+GITEA_REPO_FULL = os.environ.get("DRONE_REPO") or "kherel/selfprivacy.org.app"
+GITEA_REPO_OWNER = os.environ.get("DRONE_REPO_OWNER") or "kherel"
+GITEA_REPO_NAME = os.environ.get("DRONE_REPO_NAME") or "selfprivacy.org.app"
 
 # Environments
 
@@ -40,6 +45,50 @@ def podman_online(dir, *args):
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
                   CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ], check=True)
+
+# Utilities
+
+def gitea_create_release():
+  url = f"{GITEA_HOST_URL}/api/v1/repos/{GITEA_REPO_FULL}/releases"
+  token = os.environ.get("GITEA_RELEASE_TOKEN")
+  params = {"access_token": f"{token}"}
+  json = {"tag_name": f"{APP_SEMVER}", "name": f"{APP_SEMVER}", "prerelease": True}
+
+  request = requests.post(url, params=params, json=json)
+
+  try:
+    request.raise_for_status()
+  except requests.exceptions.HTTPError as error:
+    print(error)
+    return error
+
+def gitea_get_release_id():
+  url = f"{GITEA_HOST_URL}/api/v1/repos/{GITEA_REPO_FULL}/releases/tags/{APP_SEMVER}"
+
+  request = requests.get(url)
+
+  try:
+    request.raise_for_status()
+  except requests.exceptions.HTTPError as error:
+    print(error)
+    return error
+
+  return request.json()['id']
+
+def gitea_upload_attachment(file):
+  id = gitea_get_release_id()
+  url = f"{GITEA_HOST_URL}/api/v1/repos/{GITEA_REPO_FULL}/releases/{id}/assets"
+  token = os.environ.get("GITEA_RELEASE_TOKEN")
+  params = {"access_token": f"{token}", "name": f"{file}"}
+  files = {"attachment": open(f"{file}", "br")}
+
+  request = requests.post(url, params=params, files=files)
+
+  try:
+    request.raise_for_status()
+  except requests.exceptions.HTTPError as error:
+    print(error)
+    return error
 
 # Targets
 
@@ -98,16 +147,12 @@ def package_linux_archive():
   podman_online(f"{CONTAINER_HOME}/src", f"tar -C build/linux/x64/release/bundle -vacf {APP_NAME}-{APP_SEMVER}.tar.zstd .")
 
 def deploy_gitea_release():
-  subprocess.run(["tea", "login", "add", "--token", os.environ.get('GITEA_RELEASE_TOKEN'),
-                  "--url", "https://git.selfprivacy.org"], check=True)
-  subprocess.run(["tea", "releases", "create", "--repo", os.environ.get('DRONE_REPO'),
-                  "--tag", os.environ.get('DRONE_SEMVER'), "--title", os.environ.get('DRONE_SEMVER'),
-                  "--asset", f"{HOST_MOUNTED_VOLUME}/standalone_{APP_NAME}-{APP_SEMVER}.apk",
-                  "--asset", f"{HOST_MOUNTED_VOLUME}/standalone_{APP_NAME}-{APP_SEMVER}.apk.idsig",
-                  "--asset", f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage",
-                  "--asset", f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage.zsync",
-                  "--asset", f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.flatpak",
-                  "--asset", f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.tar.zstd"], check=True)
+  gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/standalone_{APP_NAME}-{APP_SEMVER}.apk")
+  gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/standalone_{APP_NAME}-{APP_SEMVER}.apk.idsig")
+  gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage")
+  gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage.zsync")
+  gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.flatpak")
+  gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.tar.zstd")
 
 def deploy_fdroid_repo():
   subprocess.run([f"""eval $(ssh-agent -s) &&
@@ -147,6 +192,8 @@ if __name__ == "__main__":
   group.add_argument("--ci-build-linux", action="store_true")
   group.add_argument("--ci-build-apk", action="store_true")
   group.add_argument("--ci-run-tests", action="store_true")
+  group.add_argument("--gitea-create-release", action="store_true")
+  group.add_argument("--gitea-upload-attachment", action="store")
   args = parser.parse_args()
 
 if args.build_linux:
@@ -179,3 +226,7 @@ elif args.ci_build_apk:
   ci_build_apk()
 elif args.ci_run_tests:
   ci_run_tests()
+elif args.gitea_create_release:
+  gitea_create_release()
+elif args.gitea_upload_attachment:
+  gitea_upload_attachment(args.gitea_upload_attachment)

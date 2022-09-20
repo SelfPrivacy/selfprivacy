@@ -64,6 +64,10 @@ steps:
       - git config user.email "builder@selfprivacy.org"
       - git config user.name "Builder"
 
+  - name: Create an Empty Release
+    commands:
+      - ./ci.py --gitea-create-release
+
   - name: Build Intermediate Linux Release Artifact (Binary)
     commands:
       - ./ci.py --build-linux

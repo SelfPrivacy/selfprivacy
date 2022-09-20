@@ -10,7 +10,7 @@ AppDir:
     id: org.selfprivacy.app
     name: SelfPrivacy
     icon: org.selfprivacy.app
-    version: 0.6.0
+    version: 0.7.0
     exec: selfprivacy
     exec_args: $@
   apt:

@@ -79,7 +79,7 @@ def gitea_upload_attachment(file):
   id = gitea_get_release_id()
   url = f"{GITEA_HOST_URL}/api/v1/repos/{GITEA_REPO_FULL}/releases/{id}/assets"
   token = os.environ.get("GITEA_RELEASE_TOKEN")
-  params = {"access_token": f"{token}", "name": f"{file}"}
+  params = {"access_token": f"{token}", "name": f"{os.path.basename(file)}"}
   files = {"attachment": open(f"{file}", "br")}
 
   request = requests.post(url, params=params, files=files)

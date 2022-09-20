@@ -64,7 +64,7 @@ steps:
       - git config user.email "builder@selfprivacy.org"
       - git config user.name "Builder"
 
-  - name: Create an Empty Release
+  - name: Create an Empty Gitea Release
     commands:
       - ./ci.py --gitea-create-release
     environment:

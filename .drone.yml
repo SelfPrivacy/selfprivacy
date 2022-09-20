@@ -198,18 +198,3 @@ node:
 
 depends_on:
   - Release
-
-#---
-#
-#kind: pipeline
-#type: exec
-#name: Windows
-#
-#platform:
-#  os: windows
-#  arch: amd64
-#
-#steps:
-#  - name: Build Windows Binary
-#    commands:
-#      - flutter build windows

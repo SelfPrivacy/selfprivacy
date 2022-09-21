@@ -127,7 +127,7 @@ def sign_apk_fdroid_nightly():
   podman_offline(f"{CONTAINER_HOME}/fdroid", f"rm -rf {CONTAINER_HOME}/fdroid/unsigned/*")
   podman_offline(f"{CONTAINER_HOME}/fdroid",
                  f"test ! -f {CONTAINER_HOME}/fdroid/repo/{APP_NAME_NIGHTLY}_{APP_BUILD_ID_NIGHTLY}.apk",
-                 "&& cp ../src/build/app/outputs/flutter-apk/app-nightly-debug.apk",
+                 "&& cp ../src/build/app/outputs/flutter-apk/app-nightly-release.apk",
                  f"unsigned/{APP_NAME_NIGHTLY}_{APP_BUILD_ID_NIGHTLY}.apk || echo exist")
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid publish")
   podman_offline(f"{CONTAINER_HOME}/fdroid", "fdroid update")
@@ -166,7 +166,7 @@ def ci_build_linux():
 
 def ci_build_apk():
   podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
-                                         "&& flutter build apk --flavor nightly --debug")
+                                         "&& flutter build apk --flavor nightly")
 
 def ci_run_tests():
   podman_online(f"{CONTAINER_HOME}/src", "flutter test",

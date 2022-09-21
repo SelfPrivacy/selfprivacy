@@ -120,6 +120,8 @@ steps:
 
   - name: Sign and Commit Android Release Artifact (.APK) for F-Droid Repository
     commands:
+      - rm -rf $HOME/fdroid/build/org.selfprivacy.app && mkdir $HOME/fdroid/build/org.selfprivacy.app
+      - git archive --format=tar HEAD | tar x -C $HOME/fdroid/build/org.selfprivacy.app
       - ./ci.py --sign-apk-fdroid
     environment:
       STANDALONE_KEYSTORE_PASS:

@@ -6,6 +6,7 @@ steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+      - ln -s /var/lib/drone-runner-exec/fdroid $HOME/fdroid
 
   - name: Run Tests
     commands:
@@ -25,6 +26,8 @@ steps:
 
   - name: Sign and Commit Nightly Android Release Artifact (.APK) for F-Droid Repository
     commands:
+      - rm -rf $HOME/fdroid/build/org.selfprivacy.app.nightly && mkdir $HOME/fdroid/build/org.selfprivacy.app.nightly
+      - git archive --format=tar HEAD | tar x -C $HOME/fdroid/build/org.selfprivacy.app.nightly
       - ./ci.py --sign-apk-fdroid-nightly
     environment:
       STANDALONE_KEYSTORE_PASS:
@@ -34,7 +37,7 @@ steps:
       GOOGLE_KEYSTORE_PASS:
         from_secret: GOOGLE_KEYSTORE_PASS
 
-  - name: Deploy F-Droid Repo
+  - name: Deploy F-Droid Repository
     commands:
       - ./ci.py --deploy-fdroid-repo
     environment:
@@ -44,8 +47,8 @@ steps:
 trigger:
   event:
     - push
-  branch:
-    - master
+#  branch:
+#    - master
 
 node:
   server: builder

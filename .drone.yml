@@ -47,8 +47,8 @@ steps:
 trigger:
   event:
     - push
-#  branch:
-#    - master
+  branch:
+    - master
 
 node:
   server: builder
@@ -63,6 +63,7 @@ steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+      - ln -s /var/lib/drone-runner-exec/fdroid $HOME/fdroid
       - if podman volume exists release; then podman volume rm -f release; podman volume create release; else podman volume create release; fi
       - git config user.email "builder@selfprivacy.org"
       - git config user.name "Builder"
@@ -180,7 +181,7 @@ steps:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
       - podman unshare podman volume mount release
 
-  - name: Create Release and Deploy Artifacts
+  - name: Deploy Artifacts to Gitea
     commands:
       - ./ci.py --deploy-gitea-release
     environment:

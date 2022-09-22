@@ -47,8 +47,8 @@ steps:
 trigger:
   event:
     - push
-#  branch:
-#    - master
+  branch:
+    - master
 
 node:
   server: builder

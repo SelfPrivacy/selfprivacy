@@ -1,17 +1,48 @@
 # SelfPrivacy App
 
-- [Official site](https://selfprivacy.org)
-- [SelfPrivacy App (F-Droid)](https://f-droid.org/en/packages/pro.kherel.selfprivacy/)
+SelfPrivacy — is a platform on your cloud hosting, that allows to deploy your own private services and control them using mobile application.
 
-## Getting Started
+To use this application, you'll be required to create accounts of different service providers. Please reffer to this manual: https://selfprivacy.org/en/second
 
-This project is a starting point for a Flutter application.
+Application will do the following things for you:
 
-A few resources to get you started if this is your first Flutter project:
+1. Create your personal server
+2. Setup NixOS
+3. Bring all services to the ready-to-use state. Services include:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+* E-mail, ready to use with DeltaChat
+* NextCloud - your personal cloud storage
+* Bitwarden — secure and private password manager
+* Pleroma — your private fediverse space for blogging
+* Jitsi — awesome Zoom alternative
+* Gitea — your own Git server
+* OpenConnect — Personal VPN server
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Project is currently in open beta state**. Feel free to try it. It would be much appreciated if you would provide us with some feedback. 
+
+## Building
+
+Supported platforms are Android, Linux, and Windows. We are looking forward to support iOS and macOS builds.
+
+```
+flutter pub get
+
+# Build .APK for Android
+flutter build --flavor production apk
+# Build AAB bundle for Google Play
+flutter build --flavor production aab
+# Build Linux binaries
+flutter build linux
+# Build Windows binaries
+flutter build windows
+
+# Package AppImage
+appimage-builder --recipe appimage.yml
+# Package Flatpak
+flatpak-builder --force-clean --repo=flatpak-repo flatpak-build flatpak.yml
+flatpak build-bundle flatpak-repo org.selfprivacy.app.flatpak org.selfprivacy.app
+```
+
+## Translations
+
+Translations are stored in `assets/translations/*.json` and can be edited on <https://weblate.selfprivacy.org/projects/selfprivacy/selfprivacy-app/>.

@@ -74,7 +74,7 @@ class _ServicePageState extends State<ServicePage> {
             onTap: () => _launchURL(service.url),
             leading: const Icon(Icons.open_in_browser),
             title: Text(
-              'services.service_page.open_in_browser'.tr(),
+              'service_page.open_in_browser'.tr(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             subtitle: Text(
@@ -92,7 +92,7 @@ class _ServicePageState extends State<ServicePage> {
           },
           leading: const Icon(Icons.restart_alt_outlined),
           title: Text(
-            'services.service_page.restart'.tr(),
+            'service_page.restart'.tr(),
             style: Theme.of(context).textTheme.titleMedium,
           ),
           enabled: !serviceDisabled && !serviceLocked,
@@ -110,8 +110,8 @@ class _ServicePageState extends State<ServicePage> {
           leading: const Icon(Icons.power_settings_new),
           title: Text(
             serviceDisabled
-                ? 'services.service_page.enable'.tr()
-                : 'services.service_page.disable'.tr(),
+                ? 'service_page.enable'.tr()
+                : 'service_page.disable'.tr(),
             style: Theme.of(context).textTheme.titleMedium,
           ),
           enabled: !serviceLocked,
@@ -132,11 +132,11 @@ class _ServicePageState extends State<ServicePage> {
             ),
             leading: const Icon(Icons.drive_file_move_outlined),
             title: Text(
-              'services.service_page.move'.tr(),
+              'service_page.move'.tr(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             subtitle: Text(
-              'services.service_page.uses'.tr(
+              'service_page.uses'.tr(
                 namedArgs: {
                   'usage': service.storageUsage.used.toString(),
                   'volume': context

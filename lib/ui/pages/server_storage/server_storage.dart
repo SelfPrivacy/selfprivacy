@@ -32,14 +32,14 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
     if (!isReady) {
       return BrandHeroScreen(
         hasBackButton: true,
-        heroTitle: 'providers.storage.card_title'.tr(),
+        heroTitle: 'storage.card_title'.tr(),
         children: const [],
       );
     }
 
     return BrandHeroScreen(
       hasBackButton: true,
-      heroTitle: 'providers.storage.card_title'.tr(),
+      heroTitle: 'storage.card_title'.tr(),
       children: [
         // ...sections,
         ...widget.diskStatus.diskVolumes
@@ -101,7 +101,7 @@ class ServerStorageSection extends StatelessWidget {
           if (volume.isResizable) ...[
             const SizedBox(height: 16),
             BrandOutlinedButton(
-              title: 'providers.storage.extend_volume_button.title'.tr(),
+              title: 'storage.extend_volume_button.title'.tr(),
               onPressed: () => Navigator.of(context).push(
                 materialRoute(
                   ExtendingVolumePage(

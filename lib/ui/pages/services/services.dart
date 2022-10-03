@@ -67,7 +67,7 @@ class _ServicesPageState extends State<ServicesPage> {
         child: ListView(
           padding: paddingH15V0,
           children: [
-            BrandText.body1('services.title'.tr()),
+            BrandText.body1('basis.services_title'.tr()),
             const SizedBox(height: 24),
             if (!isReady) ...[const NotReadyCard(), const SizedBox(height: 24)],
             ...ServiceTypes.values
@@ -218,7 +218,7 @@ class _Card extends StatelessWidget {
                           sigmaY: 2,
                         ),
                         child: BrandText.h2(
-                          'jobs.runJobs'.tr(),
+                          'jobs.run_jobs'.tr(),
                           textAlign: TextAlign.center,
                         ),
                       ),

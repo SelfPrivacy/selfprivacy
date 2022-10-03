@@ -70,7 +70,7 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
     if (!isReady) {
       return BrandHeroScreen(
         heroIcon: BrandIcons.server,
-        heroTitle: 'providers.server.card_title'.tr(),
+        heroTitle: 'server.card_title'.tr(),
         heroSubtitle: 'not_ready_card.in_menu'.tr(),
         children: const [],
       );
@@ -80,8 +80,8 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
       create: (final context) => context.read<ServerDetailsCubit>()..check(),
       child: BrandHeroScreen(
         heroIcon: BrandIcons.server,
-        heroTitle: 'providers.server.card_title'.tr(),
-        heroSubtitle: 'providers.server.bottom_sheet.1'.tr(),
+        heroTitle: 'server.card_title'.tr(),
+        heroSubtitle: 'server.description'.tr(),
         children: [
           StorageCard(
             diskStatus: context.watch<ApiServerVolumeCubit>().state.diskStatus,
@@ -90,7 +90,7 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
           const _ServerSettings(),
           const Divider(height: 32),
           Text(
-            'providers.server.resource_usage'.tr(),
+            'server.resource_usage'.tr(),
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),

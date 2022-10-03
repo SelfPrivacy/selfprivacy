@@ -45,7 +45,7 @@ class RecoveryHetznerConnected extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               FilledButton(
-                title: 'more.continue'.tr(),
+                title: 'basis.continue'.tr(),
                 onPressed: formCubitState.isSubmitting
                     ? null
                     : () => context.read<ProviderFormCubit>().trySubmit(),

@@ -28,11 +28,11 @@ class DiskSize {
     if (byte < 1024) {
       return '${byte.toStringAsFixed(0)} ${tr('bytes')}';
     } else if (byte < 1024 * 1024) {
-      return 'providers.storage.kb'.tr(args: [kibibyte.toStringAsFixed(1)]);
+      return 'storage.kb'.tr(args: [kibibyte.toStringAsFixed(1)]);
     } else if (byte < 1024 * 1024 * 1024) {
-      return 'providers.storage.mb'.tr(args: [mebibyte.toStringAsFixed(1)]);
+      return 'storage.mb'.tr(args: [mebibyte.toStringAsFixed(1)]);
     } else {
-      return 'providers.storage.gb'.tr(args: [gibibyte.toStringAsFixed(1)]);
+      return 'storage.gb'.tr(args: [gibibyte.toStringAsFixed(1)]);
     }
   }
 }

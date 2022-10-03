@@ -53,7 +53,7 @@ class _MigrationProcessPageState extends State<MigrationProcessPage> {
         if (job.finishedAt != null) const SizedBox(height: 16),
         if (job.finishedAt != null)
           FilledButton(
-            title: 'providers.storage.migration_done'.tr(),
+            title: 'storage.migration_done'.tr(),
             onPressed: () {
               Navigator.of(context).pushAndRemoveUntil(
                 materialRoute(const RootPage()),
@@ -65,7 +65,7 @@ class _MigrationProcessPageState extends State<MigrationProcessPage> {
     }
     return BrandHeroScreen(
       hasBackButton: false,
-      heroTitle: 'providers.storage.migration_process'.tr(),
+      heroTitle: 'storage.migration_process'.tr(),
       heroSubtitle: subtitle,
       children: [
         BrandLinearIndicator(

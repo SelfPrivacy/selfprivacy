@@ -18,7 +18,7 @@ class _TextDetails extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'providers.server.bottom_sheet.2'.tr(),
+                'server.general_information'.tr(),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -27,34 +27,33 @@ class _TextDetails extends StatelessWidget {
             ListTileOnSurfaceVariant(
               leadingIcon: Icons.numbers_outlined,
               title: data.id.toString(),
-              subtitle: 'providers.server.info.server_id'.tr(),
+              subtitle: 'server.server_id'.tr(),
             ),
             ListTileOnSurfaceVariant(
               leadingIcon: Icons.mode_standby_outlined,
               title: data.status.toString().split('.')[1].capitalize(),
-              subtitle: 'providers.server.info.status'.tr(),
+              subtitle: 'server.status'.tr(),
             ),
             ListTileOnSurfaceVariant(
               leadingIcon: Icons.memory_outlined,
-              title: 'providers.server.info.core_count'
-                  .plural(data.serverType.cores),
-              subtitle: 'providers.server.info.cpu'.tr(),
+              title: 'server.core_count'.plural(data.serverType.cores),
+              subtitle: 'server.cpu'.tr(),
             ),
             ListTileOnSurfaceVariant(
               leadingIcon: Icons.memory_outlined,
               title: '${data.serverType.memory.toString()} GB',
-              subtitle: 'providers.server.info.ram'.tr(),
+              subtitle: 'server.ram'.tr(),
             ),
             ListTileOnSurfaceVariant(
               leadingIcon: Icons.euro_outlined,
               title: data.serverType.prices[1].monthly.toStringAsFixed(2),
-              subtitle: 'providers.server.info.monthly_cost'.tr(),
+              subtitle: 'server.monthly_cost'.tr(),
             ),
             // Server location
             ListTileOnSurfaceVariant(
               leadingIcon: Icons.location_on_outlined,
               title: '${data.location.city}, ${data.location.country}',
-              subtitle: 'providers.server.info.location'.tr(),
+              subtitle: 'server.location'.tr(),
             ),
           ],
         ),

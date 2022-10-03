@@ -135,7 +135,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     } else {
       await api.uploadBackblazeConfig(bucket);
       emit(state.copyWith(isInitialized: true, preventActions: false));
-      getIt<NavigationService>().showSnackBar('providers.backup.reuploadedKey');
+      getIt<NavigationService>().showSnackBar('backup.reuploaded_key');
     }
   }
 
@@ -173,8 +173,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
   Future<void> forceUpdateBackups() async {
     emit(state.copyWith(preventActions: true));
     await api.forceBackupListReload();
-    getIt<NavigationService>()
-        .showSnackBar('providers.backup.refetchingList'.tr());
+    getIt<NavigationService>().showSnackBar('backup.refetching_list'.tr());
     emit(state.copyWith(preventActions: false));
   }
 

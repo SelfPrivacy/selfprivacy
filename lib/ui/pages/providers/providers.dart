@@ -64,7 +64,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(52),
         child: BrandHeader(
-          title: 'providers.page_title'.tr(),
+          title: 'basis.providers_title'.tr(),
         ),
       ),
       body: ListView(
@@ -77,10 +77,10 @@ class _ProvidersPageState extends State<ProvidersPage> {
           _Card(
             state: getServerStatus(),
             icon: BrandIcons.server,
-            title: 'providers.server.card_title'.tr(),
+            title: 'server.card_title'.tr(),
             subtitle: diskStatus.isDiskOkay
-                ? 'providers.storage.status_ok'.tr()
-                : 'providers.storage.status_error'.tr(),
+                ? 'storage.status_ok'.tr()
+                : 'storage.status_error'.tr(),
             onTap: () => Navigator.of(context)
                 .push(materialRoute(const ServerDetailsScreen())),
           ),
@@ -88,7 +88,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
           _Card(
             state: getDnsStatus(),
             icon: BrandIcons.globe,
-            title: 'providers.domain.screen_title'.tr(),
+            title: 'domain.screen_title'.tr(),
             subtitle: appConfig.isDomainSelected
                 ? appConfig.serverDomain!.domainName
                 : '',
@@ -106,10 +106,8 @@ class _ProvidersPageState extends State<ProvidersPage> {
                   ? StateType.stable
                   : StateType.uninitialized,
               icon: BrandIcons.save,
-              title: 'providers.backup.card_title'.tr(),
-              subtitle: isBackupInitialized
-                  ? 'providers.backup.card_subtitle'.tr()
-                  : '',
+              title: 'backup.card_title'.tr(),
+              subtitle: isBackupInitialized ? 'backup.card_subtitle'.tr() : '',
               onTap: () => Navigator.of(context)
                   .push(materialRoute(const BackupDetails())),
             ),

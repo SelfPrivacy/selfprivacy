@@ -57,9 +57,8 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           if (!snapshot.hasData) {
             return BrandHeroScreen(
               hasBackButton: true,
-              heroTitle: 'providers.storage.extending_volume_title'.tr(),
-              heroSubtitle:
-                  'providers.storage.extending_volume_description'.tr(),
+              heroTitle: 'storage.extending_volume_title'.tr(),
+              heroSubtitle: 'storage.extending_volume_description'.tr(),
               children: const [
                 SizedBox(height: 16),
                 Center(
@@ -84,8 +83,8 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
 
           return BrandHeroScreen(
             hasBackButton: true,
-            heroTitle: 'providers.storage.extending_volume_title'.tr(),
-            heroSubtitle: 'providers.storage.extending_volume_description'.tr(),
+            heroTitle: 'storage.extending_volume_title'.tr(),
+            heroSubtitle: 'storage.extending_volume_description'.tr(),
             children: [
               const SizedBox(height: 16),
               Row(
@@ -104,7 +103,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         errorText: _isError ? ' ' : null,
-                        labelText: 'providers.storage.size'.tr(),
+                        labelText: 'storage.size'.tr(),
                       ),
                     ),
                   ),
@@ -120,7 +119,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         errorText: _isError ? ' ' : null,
-                        labelText: 'providers.storage.euro'.tr(),
+                        labelText: 'storage.euro'.tr(),
                       ),
                     ),
                   ),
@@ -140,7 +139,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               ),
               const SizedBox(height: 16),
               FilledButton(
-                title: 'providers.storage.extend_volume_button.title'.tr(),
+                title: 'storage.extend_volume_button.title'.tr(),
                 onPressed: _isError
                     ? null
                     : () {
@@ -169,7 +168,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                 ),
               ),
               const SizedBox(height: 16),
-              Text('providers.storage.extending_volume_price_info'.tr()),
+              Text('storage.extending_volume_price_info'.tr()),
               const SizedBox(height: 16),
             ],
           );

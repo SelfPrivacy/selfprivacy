@@ -17,12 +17,12 @@ class ServerStorageListItem extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ConsumptionListItem(
-        title: 'providers.storage.disk_usage'.tr(
+        title: 'storage.disk_usage'.tr(
           args: [
             volume.sizeUsed.toString(),
           ],
         ),
-        subtitle: 'providers.storage.disk_total'.tr(
+        subtitle: 'storage.disk_total'.tr(
           args: [
             volume.sizeTotal.toString(),
             volume.displayName,

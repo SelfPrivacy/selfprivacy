@@ -34,7 +34,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
           onChanged: (final switched) {
             if (didSomethingChange == false) {
               context.read<JobsCubit>().addJob(
-                    RebuildServerJob(title: 'jobs.upgradeServer'.tr()),
+                    RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
                   );
             }
             context
@@ -51,9 +51,9 @@ class _ServerSettingsState extends State<_ServerSettings> {
               didSomethingChange = true;
             });
           },
-          title: Text('providers.server.settings.allow_autoupgrade'.tr()),
+          title: Text('server.allow_autoupgrade'.tr()),
           subtitle: Text(
-            'providers.server.settings.allow_autoupgrade_hint'.tr(),
+            'server.allow_autoupgrade_hint'.tr(),
           ),
           activeColor: Theme.of(context).colorScheme.primary,
         ),
@@ -62,7 +62,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
           onChanged: (final switched) {
             if (didSomethingChange == false) {
               context.read<JobsCubit>().addJob(
-                    RebuildServerJob(title: 'jobs.upgradeServer'.tr()),
+                    RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
                   );
             }
             context
@@ -79,21 +79,21 @@ class _ServerSettingsState extends State<_ServerSettings> {
               didSomethingChange = true;
             });
           },
-          title: Text('providers.server.settings.reboot_after_upgrade'.tr()),
+          title: Text('server.reboot_after_upgrade'.tr()),
           subtitle: Text(
-            'providers.server.settings.reboot_after_upgrade_hint'.tr(),
+            'server.reboot_after_upgrade_hint'.tr(),
           ),
           activeColor: Theme.of(context).colorScheme.primary,
         ),
         ListTile(
-          title: Text('providers.server.settings.server_timezone'.tr()),
+          title: Text('server.server_timezone'.tr()),
           subtitle: Text(
             serverDetailsState.serverTimezone.toString(),
           ),
           onTap: () {
             if (didSomethingChange == false) {
               context.read<JobsCubit>().addJob(
-                    RebuildServerJob(title: 'jobs.upgradeServer'.tr()),
+                    RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
                   );
             }
             setState(() {

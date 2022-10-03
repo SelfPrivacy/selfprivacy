@@ -19,7 +19,7 @@ class NotReadyCard extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: 'not_ready_card.1'.tr(),
+                text: 'not_ready_card.begin'.tr(),
                 style: const TextStyle(color: BrandColors.white),
               ),
               WidgetSpan(
@@ -32,7 +32,7 @@ class NotReadyCard extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'not_ready_card.2'.tr(),
+                      'not_ready_card.insertion'.tr(),
                       style: body1Style.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -44,7 +44,7 @@ class NotReadyCard extends StatelessWidget {
                 ),
               ),
               TextSpan(
-                text: 'not_ready_card.3'.tr(),
+                text: 'not_ready_card.end'.tr(),
                 style: const TextStyle(color: BrandColors.white),
               ),
             ],

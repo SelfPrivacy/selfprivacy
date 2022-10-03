@@ -6,16 +6,17 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:package_info/package_info.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class InfoPage extends StatelessWidget {
-  const InfoPage({final super.key});
+class AboutApplicationPage extends StatelessWidget {
+  const AboutApplicationPage({final super.key});
 
   @override
   Widget build(final BuildContext context) => SafeArea(
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(52),
-            child:
-                BrandHeader(title: 'more.about_app'.tr(), hasBackButton: true),
+            child: BrandHeader(
+                title: 'about_application_page.title'.tr(),
+                hasBackButton: true),
           ),
           body: ListView(
             padding: paddingH15V0,
@@ -24,14 +25,14 @@ class InfoPage extends StatelessWidget {
               FutureBuilder(
                 future: _packageVersion(),
                 builder: (final context, final snapshot) => BrandText.body1(
-                  'more.about_app_page.application_version_text'
+                  'about_application_page.application_version_text'
                       .tr(args: [snapshot.data.toString()]),
                 ),
               ),
               FutureBuilder(
                 future: _apiVersion(),
                 builder: (final context, final snapshot) => BrandText.body1(
-                  'more.about_app_page.api_version_text'
+                  'about_application_page.api_version_text'
                       .tr(args: [snapshot.data.toString()]),
                 ),
               ),

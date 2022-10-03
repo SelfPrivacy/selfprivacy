@@ -38,7 +38,7 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
                 formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: 'initializing.5'.tr(),
+                  labelText: 'initializing.cloudflare_api_token'.tr(),
                 ),
               ),
               const SizedBox(height: 16),

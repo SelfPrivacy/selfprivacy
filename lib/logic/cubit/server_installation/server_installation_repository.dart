@@ -250,8 +250,8 @@ class ServerInstallationRepository {
         final NavigationService nav = getIt.get<NavigationService>();
         nav.showPopUpDialog(
           BrandAlert(
-            title: 'modals.1'.tr(),
-            contentText: 'modals.2'.tr(),
+            title: 'modals.already_exists'.tr(),
+            contentText: 'modals.destroy_server'.tr(),
             actions: [
               ActionButton(
                 text: 'basis.delete'.tr(),
@@ -291,11 +291,11 @@ class ServerInstallationRepository {
         final NavigationService nav = getIt.get<NavigationService>();
         nav.showPopUpDialog(
           BrandAlert(
-            title: 'modals.1_1'.tr(),
-            contentText: 'modals.2_2'.tr(),
+            title: 'modals.unexpected_error'.tr(),
+            contentText: 'modals.try_again'.tr(),
             actions: [
               ActionButton(
-                text: 'modals.7'.tr(),
+                text: 'modals.yes'.tr(),
                 isRed: true,
                 onPressed: () async {
                   ServerHostingDetails? serverDetails;
@@ -353,9 +353,9 @@ class ServerInstallationRepository {
       nav.showPopUpDialog(
         BrandAlert(
           title: e.response!.data['errors'][0]['code'] == 1038
-              ? 'modals.10'.tr()
-              : 'providers.domain.states.error'.tr(),
-          contentText: 'modals.6'.tr(),
+              ? 'modals.you_cant_use_this_api'.tr()
+              : 'domain.states.error'.tr(),
+          contentText: 'modals.delete_server_volume'.tr(),
           actions: [
             ActionButton(
               text: 'basis.delete'.tr(),

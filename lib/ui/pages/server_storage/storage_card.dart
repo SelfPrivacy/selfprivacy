@@ -65,14 +65,14 @@ class StorageCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'providers.storage.card_title'.tr(),
+                        'storage.card_title'.tr(),
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       if (state != StateType.uninitialized)
                         Text(
                           diskStatus.isDiskOkay
-                              ? 'providers.storage.status_ok'.tr()
-                              : 'providers.storage.status_error'.tr(),
+                              ? 'storage.status_ok'.tr()
+                              : 'storage.status_error'.tr(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                     ],

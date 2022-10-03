@@ -17,10 +17,10 @@ import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
-import 'package:selfprivacy/ui/pages/more/about/about.dart';
+import 'package:selfprivacy/ui/pages/more/about_us.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/app_setting.dart';
-import 'package:selfprivacy/ui/pages/more/console/console.dart';
-import 'package:selfprivacy/ui/pages/more/info/info.dart';
+import 'package:selfprivacy/ui/pages/more/console.dart';
+import 'package:selfprivacy/ui/pages/more/about_application.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({final super.key});
@@ -48,7 +48,7 @@ class MorePage extends StatelessWidget {
               children: [
                 if (isReady && usesBinds != null && !usesBinds)
                   _MoreMenuItem(
-                    title: 'providers.storage.start_migration_button'.tr(),
+                    title: 'storage.start_migration_button'.tr(),
                     iconData: Icons.drive_file_move_outline,
                     goTo: ServicesMigrationPage(
                       diskStatus: context
@@ -70,12 +70,12 @@ class MorePage extends StatelessWidget {
                           .toList(),
                       isMigration: true,
                     ),
-                    subtitle: 'providers.storage.data_migration_notice'.tr(),
+                    subtitle: 'storage.data_migration_notice'.tr(),
                     accent: true,
                   ),
                 if (!isReady)
                   _MoreMenuItem(
-                    title: 'more.configuration_wizard'.tr(),
+                    title: 'more_page.configuration_wizard'.tr(),
                     iconData: Icons.change_history_outlined,
                     goTo: const InitializingPage(),
                     subtitle: 'not_ready_card.in_menu'.tr(),
@@ -83,7 +83,7 @@ class MorePage extends StatelessWidget {
                   ),
                 if (isReady)
                   _MoreMenuItem(
-                    title: 'more.create_ssh_key'.tr(),
+                    title: 'more_page.create_ssh_key'.tr(),
                     iconData: Ionicons.key_outline,
                     goTo: const UserDetails(
                       login: 'root',
@@ -102,28 +102,28 @@ class MorePage extends StatelessWidget {
                     title: 'devices.main_screen.header'.tr(),
                   ),
                 _MoreMenuItem(
-                  title: 'more.settings.title'.tr(),
+                  title: 'more_page.application_settings'.tr(),
                   iconData: Icons.settings_outlined,
                   goTo: const AppSettingsPage(),
                 ),
                 _MoreMenuItem(
-                  title: 'more.about_project'.tr(),
+                  title: 'more_page.about_project'.tr(),
                   iconData: BrandIcons.engineer,
-                  goTo: const AboutPage(),
+                  goTo: const AboutUsPage(),
                 ),
                 _MoreMenuItem(
-                  title: 'more.about_app'.tr(),
+                  title: 'more_page.about_application'.tr(),
                   iconData: BrandIcons.fire,
-                  goTo: const InfoPage(),
+                  goTo: const AboutApplicationPage(),
                 ),
                 if (!isReady)
                   _MoreMenuItem(
-                    title: 'more.onboarding'.tr(),
+                    title: 'more_page.onboarding'.tr(),
                     iconData: BrandIcons.start,
                     goTo: const OnboardingPage(nextPage: RootPage()),
                   ),
                 _MoreMenuItem(
-                  title: 'more.console'.tr(),
+                  title: 'more_page.console'.tr(),
                   iconData: BrandIcons.terminal,
                   goTo: const Console(),
                 ),

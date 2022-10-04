@@ -110,6 +110,9 @@
         "location": "Location",
         "core_count": {
             "one": "{} core",
+            "two": "{} cores",
+            "few": "{} cores",
+            "many": "{} cores",
             "other": "{} cores"
         }
     },

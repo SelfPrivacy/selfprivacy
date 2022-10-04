@@ -15,8 +15,9 @@ class AboutApplicationPage extends StatelessWidget {
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(52),
             child: BrandHeader(
-                title: 'about_application_page.title'.tr(),
-                hasBackButton: true),
+              title: 'about_application_page.title'.tr(),
+              hasBackButton: true,
+            ),
           ),
           body: ListView(
             padding: paddingH15V0,

@@ -47,25 +47,14 @@ class _ServicePageState extends State<ServicePage> {
 
     return BrandHeroScreen(
       hasBackButton: true,
+      heroIconWidget: SvgPicture.string(
+        service.svgIcon,
+        width: 48.0,
+        height: 48.0,
+        color: Theme.of(context).colorScheme.onBackground,
+      ),
+      heroTitle: service.displayName,
       children: [
-        Container(
-          alignment: Alignment.center,
-          child: SvgPicture.string(
-            service.svgIcon,
-            width: 48.0,
-            height: 48.0,
-            color: Theme.of(context).colorScheme.onBackground,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          service.displayName,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
-        ),
-        const SizedBox(height: 16),
         ServiceStatusCard(status: service.status),
         const SizedBox(height: 16),
         if (service.url != null)

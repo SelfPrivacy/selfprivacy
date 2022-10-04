@@ -66,11 +66,6 @@ abstract class AppThemeFactory {
       typography: appTypography,
       useMaterial3: true,
       scaffoldBackgroundColor: colorScheme.background,
-      appBarTheme: AppBarTheme(
-        elevation: 0,
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
-      ),
     );
 
     return materialThemeData;

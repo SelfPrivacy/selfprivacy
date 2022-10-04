@@ -47,82 +47,87 @@ class _SelectTimezoneState extends State<SelectTimezone> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(52),
-          child: BrandHeader(
-            title: 'server.select_timezone'.tr(),
-            hasBackButton: true,
+        appBar: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Text('server.select_timezone'.tr()),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: ListView(
-          controller: controller,
-          children: locations
-              .asMap()
-              .map((final key, final value) {
-                final duration =
-                    Duration(milliseconds: value.currentTimeZone.offset);
-                final area = value.currentTimeZone.abbreviation
-                    .replaceAll(RegExp(r'[\d+()-]'), '');
+        body: SafeArea(
+          child: ListView(
+            controller: controller,
+            children: locations
+                .asMap()
+                .map((final key, final value) {
+                  final duration =
+                      Duration(milliseconds: value.currentTimeZone.offset);
+                  final area = value.currentTimeZone.abbreviation
+                      .replaceAll(RegExp(r'[\d+()-]'), '');
 
-                String timezoneName = value.name;
-                if (context.locale.toString() == 'ru') {
-                  timezoneName = russian[value.name] ??
-                      () {
-                        final arr = value.name.split('/')..removeAt(0);
-                        return arr.join('/');
-                      }();
-                }
+                  String timezoneName = value.name;
+                  if (context.locale.toString() == 'ru') {
+                    timezoneName = russian[value.name] ??
+                        () {
+                          final arr = value.name.split('/')..removeAt(0);
+                          return arr.join('/');
+                        }();
+                  }
 
-                return MapEntry(
-                  key,
-                  Container(
-                    height: 75,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: BrandColors.dividerColor,
+                  return MapEntry(
+                    key,
+                    Container(
+                      height: 75,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: BrandColors.dividerColor,
+                          ),
+                        ),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          context
+                              .read<ServerDetailsCubit>()
+                              .repository
+                              .setTimezone(
+                                timezoneName,
+                              );
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              BrandText.body1(
+                                timezoneName,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              BrandText.small(
+                                'GMT ${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    child: InkWell(
-                      onTap: () {
-                        context
-                            .read<ServerDetailsCubit>()
-                            .repository
-                            .setTimezone(
-                              timezoneName,
-                            );
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            BrandText.body1(
-                              timezoneName,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            BrandText.small(
-                              'GMT ${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}',
-                              style: const TextStyle(
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              })
-              .values
-              .toList(),
+                  );
+                })
+                .values
+                .toList(),
+          ),
         ),
       );
 }

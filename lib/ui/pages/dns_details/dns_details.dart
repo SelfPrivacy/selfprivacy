@@ -91,7 +91,6 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
     if (!isReady) {
       return BrandHeroScreen(
         hasBackButton: true,
-        headerTitle: '',
         heroIcon: BrandIcons.globe,
         heroTitle: 'domain.screen_title'.tr(),
         heroSubtitle: 'not_ready_card.in_menu'.tr(),

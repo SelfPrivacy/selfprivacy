@@ -45,4 +45,6 @@ flatpak build-bundle flatpak-repo org.selfprivacy.app.flatpak org.selfprivacy.ap
 
 ## Translations
 
+[![Translation status](http://weblate.selfprivacy.org/widgets/selfprivacy/-/selfprivacy-app/multi-auto.svg)](http://weblate.selfprivacy.org/engage/selfprivacy/)
+
 Translations are stored in `assets/translations/*.json` and can be edited on <https://weblate.selfprivacy.org/projects/selfprivacy/selfprivacy-app/>.

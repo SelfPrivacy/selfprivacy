@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -35,8 +36,11 @@ class _ConsoleState extends State<Console> {
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(53),
             child: Column(
-              children: const [
-                BrandHeader(title: 'Console', hasBackButton: true)
+              children: [
+                BrandHeader(
+                  title: 'console_page.title'.tr(),
+                  hasBackButton: true,
+                ),
               ],
             ),
           ),
@@ -90,12 +94,12 @@ class _ConsoleState extends State<Console> {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text('Waiting for initialisation'),
-                    SizedBox(
+                  children: [
+                    Text('console_page.waiting'.tr()),
+                    const SizedBox(
                       height: 16,
                     ),
-                    CircularProgressIndicator(),
+                    const CircularProgressIndicator(),
                   ],
                 );
               }

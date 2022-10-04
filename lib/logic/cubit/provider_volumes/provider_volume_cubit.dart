@@ -86,7 +86,7 @@ class ApiProviderVolumeCubit
 
     if (!resized) {
       getIt<NavigationService>().showSnackBar(
-        'providers.storage.extending_volume_error'.tr(),
+        'storage.extending_volume_error'.tr(),
       );
       emit(state.copyWith(isResizing: false));
       return false;

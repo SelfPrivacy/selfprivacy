@@ -30,7 +30,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(52),
             child: BrandHeader(
-              title: 'more.settings.title'.tr(),
+              title: 'application_settings.title'.tr(),
               hasBackButton: true,
             ),
           ),
@@ -46,8 +46,9 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   children: [
                     Flexible(
                       child: _TextColumn(
-                        title: 'more.settings.1'.tr(),
-                        value: 'more.settings.2'.tr(),
+                        title: 'application_settings.dark_theme_title'.tr(),
+                        value:
+                            'application_settings.dark_theme_description'.tr(),
                         hasWarning: false,
                       ),
                     ),
@@ -70,8 +71,9 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   children: [
                     Flexible(
                       child: _TextColumn(
-                        title: 'more.settings.3'.tr(),
-                        value: 'more.settings.4'.tr(),
+                        title: 'application_settings.reset_config_title'.tr(),
+                        value: 'application_settings.reset_config_description'
+                            .tr(),
                         hasWarning: false,
                       ),
                     ),
@@ -91,11 +93,11 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                         showDialog(
                           context: context,
                           builder: (final _) => BrandAlert(
-                            title: 'modals.3'.tr(),
-                            contentText: 'modals.4'.tr(),
+                            title: 'modals.are_you_sure'.tr(),
+                            contentText: 'modals.purge_all_keys'.tr(),
                             actions: [
                               ActionButton(
-                                text: 'modals.5'.tr(),
+                                text: 'modals.purge_all_keys_confirm'.tr(),
                                 isRed: true,
                                 onPressed: () {
                                   context
@@ -135,8 +137,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
         children: [
           Flexible(
             child: _TextColumn(
-              title: 'more.settings.5'.tr(),
-              value: 'more.settings.6'.tr(),
+              title: 'application_settings.delete_server_title'.tr(),
+              value: 'application_settings.delete_server_description'.tr(),
               hasWarning: false,
             ),
           ),
@@ -151,11 +153,11 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                     showDialog(
                       context: context,
                       builder: (final _) => BrandAlert(
-                        title: 'modals.3'.tr(),
-                        contentText: 'modals.6'.tr(),
+                        title: 'modals.are_you_sure'.tr(),
+                        contentText: 'modals.delete_server_volume'.tr(),
                         actions: [
                           ActionButton(
-                            text: 'modals.7'.tr(),
+                            text: 'modals.yes'.tr(),
                             isRed: true,
                             onPressed: () async {
                               showDialog(

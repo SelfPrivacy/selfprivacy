@@ -17,7 +17,7 @@ class _Chart extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'providers.server.chart.cpu_title'.tr(),
+                  'resource_chart.cpu_title'.tr(),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -50,7 +50,7 @@ class _Chart extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'providers.server.chart.network_title'.tr(),
+                      'resource_chart.network_title'.tr(),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
@@ -59,12 +59,12 @@ class _Chart extends StatelessWidget {
                     const Spacer(),
                     Legend(
                       color: Theme.of(context).colorScheme.primary,
-                      text: 'providers.server.chart.in'.tr(),
+                      text: 'resource_chart.in'.tr(),
                     ),
                     const SizedBox(width: 5),
                     Legend(
                       color: Theme.of(context).colorScheme.tertiary,
-                      text: 'providers.server.chart.out'.tr(),
+                      text: 'resource_chart.out'.tr(),
                     ),
                   ],
                 ),
@@ -111,9 +111,9 @@ class _Chart extends StatelessWidget {
             }
           },
           titles: [
-            'providers.server.chart.month'.tr(),
-            'providers.server.chart.day'.tr(),
-            'providers.server.chart.hour'.tr()
+            'resource_chart.month'.tr(),
+            'resource_chart.day'.tr(),
+            'resource_chart.hour'.tr()
           ],
         ),
         const SizedBox(height: 8),

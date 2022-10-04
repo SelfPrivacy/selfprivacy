@@ -13,6 +13,7 @@ class Localization extends StatelessWidget {
         supportedLocales: const [Locale('ru'), Locale('en')],
         path: 'assets/translations',
         fallbackLocale: const Locale('en'),
+        useFallbackTranslations: true,
         saveLocale: false,
         useOnlyLangCode: true,
         child: child!,

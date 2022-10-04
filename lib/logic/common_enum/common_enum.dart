@@ -51,55 +51,55 @@ extension ServiceTypesExt on ServiceTypes {
   String get title {
     switch (this) {
       case ServiceTypes.mailserver:
-        return 'services.mail.title'.tr();
+        return 'mail.title'.tr();
       case ServiceTypes.bitwarden:
-        return 'services.password_manager.title'.tr();
+        return 'password_manager.title'.tr();
       case ServiceTypes.jitsi:
-        return 'services.video.title'.tr();
+        return 'video.title'.tr();
       case ServiceTypes.nextcloud:
-        return 'services.cloud.title'.tr();
+        return 'cloud.title'.tr();
       case ServiceTypes.pleroma:
-        return 'services.social_network.title'.tr();
+        return 'social_network.title'.tr();
       case ServiceTypes.gitea:
-        return 'services.git.title'.tr();
+        return 'git.title'.tr();
       case ServiceTypes.ocserv:
-        return 'services.vpn.title'.tr();
+        return 'vpn.title'.tr();
     }
   }
 
   String get subtitle {
     switch (this) {
       case ServiceTypes.mailserver:
-        return 'services.mail.subtitle'.tr();
+        return 'mail.subtitle'.tr();
       case ServiceTypes.bitwarden:
-        return 'services.password_manager.subtitle'.tr();
+        return 'password_manager.subtitle'.tr();
       case ServiceTypes.jitsi:
-        return 'services.video.subtitle'.tr();
+        return 'video.subtitle'.tr();
       case ServiceTypes.nextcloud:
-        return 'services.cloud.subtitle'.tr();
+        return 'cloud.subtitle'.tr();
       case ServiceTypes.pleroma:
-        return 'services.social_network.subtitle'.tr();
+        return 'social_network.subtitle'.tr();
       case ServiceTypes.gitea:
-        return 'services.git.subtitle'.tr();
+        return 'git.subtitle'.tr();
       case ServiceTypes.ocserv:
-        return 'services.vpn.subtitle'.tr();
+        return 'vpn.subtitle'.tr();
     }
   }
 
   String get loginInfo {
     switch (this) {
       case ServiceTypes.mailserver:
-        return 'services.mail.login_info'.tr();
+        return 'mail.login_info'.tr();
       case ServiceTypes.bitwarden:
-        return 'services.password_manager.login_info'.tr();
+        return 'password_manager.login_info'.tr();
       case ServiceTypes.jitsi:
-        return 'services.video.login_info'.tr();
+        return 'video.login_info'.tr();
       case ServiceTypes.nextcloud:
-        return 'services.cloud.login_info'.tr();
+        return 'cloud.login_info'.tr();
       case ServiceTypes.pleroma:
-        return 'services.social_network.login_info'.tr();
+        return 'social_network.login_info'.tr();
       case ServiceTypes.gitea:
-        return 'services.git.login_info'.tr();
+        return 'git.login_info'.tr();
       case ServiceTypes.ocserv:
         return '';
     }

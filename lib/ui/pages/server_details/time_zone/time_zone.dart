@@ -50,7 +50,7 @@ class _SelectTimezoneState extends State<SelectTimezone> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(52),
           child: BrandHeader(
-            title: 'providers.server.settings.select_timezone'.tr(),
+            title: 'server.select_timezone'.tr(),
             hasBackButton: true,
           ),
         ),

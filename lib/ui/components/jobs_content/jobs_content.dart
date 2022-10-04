@@ -43,7 +43,7 @@ class JobsContent extends StatelessWidget {
               const SizedBox(height: 80),
               BrandButton.rised(
                 onPressed: () => context.read<JobsCubit>().upgradeServer(),
-                text: 'jobs.upgradeServer'.tr(),
+                text: 'jobs.upgrade_server'.tr(),
               ),
               const SizedBox(height: 10),
               BrandButton.text(
@@ -51,8 +51,8 @@ class JobsContent extends StatelessWidget {
                   final NavigationService nav = getIt<NavigationService>();
                   nav.showPopUpDialog(
                     BrandAlert(
-                      title: 'jobs.rebootServer'.tr(),
-                      contentText: 'modals.3'.tr(),
+                      title: 'jobs.reboot_server'.tr(),
+                      contentText: 'modals.are_you_sure'.tr(),
                       actions: [
                         ActionButton(
                           text: 'basis.cancel'.tr(),
@@ -60,13 +60,13 @@ class JobsContent extends StatelessWidget {
                         ActionButton(
                           onPressed: () =>
                               {context.read<JobsCubit>().rebootServer()},
-                          text: 'modals.9'.tr(),
+                          text: 'modals.reboot'.tr(),
                         )
                       ],
                     ),
                   );
                 },
-                title: 'jobs.rebootServer'.tr(),
+                title: 'jobs.reboot_server'.tr(),
               ),
             ];
           }

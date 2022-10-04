@@ -154,9 +154,9 @@ class InitializingPage extends StatelessWidget {
                   width: 150,
                 ),
                 const SizedBox(height: 10),
-                BrandText.h2('initializing.1'.tr()),
+                BrandText.h2('initializing.connect_to_server'.tr()),
                 const SizedBox(height: 10),
-                BrandText.body2('initializing.2'.tr()),
+                BrandText.body2('initializing.place_where_data'.tr()),
                 const Spacer(),
                 CubitFormTextField(
                   formFieldCubit: context.read<ProviderFormCubit>().apiKey,
@@ -211,16 +211,16 @@ class InitializingPage extends StatelessWidget {
                   width: 150,
                 ),
                 const SizedBox(height: 10),
-                BrandText.h2('initializing.3'.tr()),
+                BrandText.h2('initializing.connect_cloudflare'.tr()),
                 const SizedBox(height: 10),
-                BrandText.body2('initializing.4'.tr()),
+                BrandText.body2('initializing.manage_domain_dns'.tr()),
                 const Spacer(),
                 CubitFormTextField(
                   formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
                   textAlign: TextAlign.center,
                   scrollPadding: const EdgeInsets.only(bottom: 70),
                   decoration: InputDecoration(
-                    hintText: 'initializing.5'.tr(),
+                    hintText: 'initializing.cloudflare_api_token'.tr(),
                   ),
                 ),
                 const Spacer(),
@@ -260,7 +260,7 @@ class InitializingPage extends StatelessWidget {
                   height: 50,
                 ),
                 const SizedBox(height: 10),
-                BrandText.h2('initializing.6'.tr()),
+                BrandText.h2('initializing.connect_backblaze_storage'.tr()),
                 const SizedBox(height: 10),
                 const Spacer(),
                 CubitFormTextField(
@@ -321,16 +321,17 @@ class InitializingPage extends StatelessWidget {
                 const SizedBox(height: 30),
                 BrandText.h2('basis.domain'.tr()),
                 const SizedBox(height: 10),
-                if (state is Empty) BrandText.body2('initializing.7'.tr()),
+                if (state is Empty)
+                  BrandText.body2('initializing.no_connected_domains'.tr()),
                 if (state is Loading)
                   BrandText.body2(
                     state.type == LoadingTypes.loadingDomain
-                        ? 'initializing.8'.tr()
+                        ? 'initializing.loading_domain_list'.tr()
                         : 'basis.saving'.tr(),
                   ),
                 if (state is MoreThenOne)
                   BrandText.body2(
-                    'initializing.9'.tr(),
+                    'initializing.found_more_domains'.tr(),
                   ),
                 if (state is Loaded) ...[
                   const SizedBox(height: 10),
@@ -387,7 +388,7 @@ class InitializingPage extends StatelessWidget {
                   BrandButton.rised(
                     onPressed: () =>
                         context.read<DomainSetupCubit>().saveDomain(),
-                    text: 'initializing.10'.tr(),
+                    text: 'initializing.save_domain'.tr(),
                   ),
                 ],
                 const SizedBox(
@@ -411,9 +412,10 @@ class InitializingPage extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BrandText.h2('initializing.22'.tr()),
+                BrandText.h2('initializing.create_master_account'.tr()),
                 const SizedBox(height: 10),
-                BrandText.body2('initializing.23'.tr()),
+                BrandText.body2(
+                    'initializing.enter_nickname_and_password'.tr()),
                 const Spacer(),
                 CubitFormTextField(
                   formFieldCubit: context.read<RootUserFormCubit>().userName,
@@ -477,12 +479,14 @@ class InitializingPage extends StatelessWidget {
           const Spacer(flex: 2),
           BrandText.h2('initializing.final'.tr()),
           const SizedBox(height: 10),
-          BrandText.body2('initializing.11'.tr()),
+          BrandText.body2('initializing.create_server'.tr()),
           const Spacer(),
           BrandButton.rised(
             onPressed:
                 isLoading ? null : appConfigCubit.createServerAndSetDnsRecords,
-            text: isLoading ? 'basis.loading'.tr() : 'initializing.11'.tr(),
+            text: isLoading
+                ? 'basis.loading'.tr()
+                : 'initializing.create_server'.tr(),
           ),
         ],
       ),
@@ -498,16 +502,16 @@ class InitializingPage extends StatelessWidget {
     late int doneCount;
     late String? text;
     if (state.isServerResetedSecondTime) {
-      text = 'initializing.13'.tr();
+      text = 'initializing.server_rebooted'.tr();
       doneCount = 3;
     } else if (state.isServerResetedFirstTime) {
-      text = 'initializing.21'.tr();
+      text = 'initializing.one_more_restart'.tr();
       doneCount = 2;
     } else if (state.isServerStarted) {
-      text = 'initializing.14'.tr();
+      text = 'initializing.server_started'.tr();
       doneCount = 1;
     } else if (state.isServerCreated) {
-      text = 'initializing.15'.tr();
+      text = 'initializing.server_created'.tr();
       doneCount = 0;
     }
     return Builder(
@@ -542,14 +546,14 @@ class InitializingPage extends StatelessWidget {
           if (!state.isLoading)
             Row(
               children: [
-                BrandText.body2('initializing.16'.tr()),
+                BrandText.body2('initializing.until_the_next_check'.tr()),
                 BrandTimer(
                   startDateTime: state.timerStart!,
                   duration: state.duration!,
                 )
               ],
             ),
-          if (state.isLoading) BrandText.body2('initializing.17'.tr()),
+          if (state.isLoading) BrandText.body2('initializing.check'.tr()),
         ],
       ),
     );

@@ -127,7 +127,7 @@ class SelectDomainToRecover extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 FilledButton(
-                  title: 'more.continue'.tr(),
+                  title: 'basis.continue'.tr(),
                   onPressed: formCubitState.isSubmitting
                       ? null
                       : () =>

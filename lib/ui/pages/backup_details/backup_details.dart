@@ -46,8 +46,8 @@ class _BackupDetailsState extends State<BackupDetails>
 
     return BrandHeroScreen(
       heroIcon: BrandIcons.save,
-      heroTitle: 'providers.backup.card_title'.tr(),
-      heroSubtitle: 'providers.backup.bottom_sheet.1'.tr(),
+      heroTitle: 'backup.card_title'.tr(),
+      heroSubtitle: 'backup.description'.tr(),
       children: [
         if (isReady && !isBackupInitialized)
           BrandButton.rised(
@@ -56,10 +56,10 @@ class _BackupDetailsState extends State<BackupDetails>
                 : () async {
                     await context.read<BackupsCubit>().createBucket();
                   },
-            text: 'providers.backup.initialize'.tr(),
+            text: 'backup.initialize'.tr(),
           ),
         if (backupStatus == BackupStatusEnum.initializing)
-          BrandText.body1('providers.backup.waitingForRebuild'.tr()),
+          BrandText.body1('backup.waiting_for_rebuild'.tr()),
         if (backupStatus != BackupStatusEnum.initializing &&
             backupStatus != BackupStatusEnum.noKey)
           OutlinedCard(
@@ -77,14 +77,14 @@ class _BackupDetailsState extends State<BackupDetails>
                       Icons.add_circle_outline_rounded,
                     ),
                     title: Text(
-                      'providers.backup.create_new'.tr(),
+                      'backup.create_new'.tr(),
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
                 if (backupStatus == BackupStatusEnum.backingUp)
                   ListTile(
                     title: Text(
-                      'providers.backup.creating'.tr(
+                      'backup.creating'.tr(
                         args: [(backupProgress * 100).round().toString()],
                       ),
                       style: Theme.of(context).textTheme.headline6,
@@ -97,7 +97,7 @@ class _BackupDetailsState extends State<BackupDetails>
                 if (backupStatus == BackupStatusEnum.restoring)
                   ListTile(
                     title: Text(
-                      'providers.backup.restoring'.tr(
+                      'backup.restoring'.tr(
                         args: [(backupProgress * 100).round().toString()],
                       ),
                       style: Theme.of(context).textTheme.headline6,
@@ -113,7 +113,7 @@ class _BackupDetailsState extends State<BackupDetails>
                       color: Theme.of(context).colorScheme.error,
                     ),
                     title: Text(
-                      'providers.backup.error_pending'.tr(),
+                      'backup.error_pending'.tr(),
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
@@ -135,7 +135,7 @@ class _BackupDetailsState extends State<BackupDetails>
                     Icons.refresh,
                   ),
                   title: Text(
-                    'providers.backup.restore'.tr(),
+                    'backup.restore'.tr(),
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
@@ -147,7 +147,7 @@ class _BackupDetailsState extends State<BackupDetails>
                     leading: const Icon(
                       Icons.error_outline,
                     ),
-                    title: Text('providers.backup.no_backups'.tr()),
+                    title: Text('backup.no_backups'.tr()),
                   ),
                 if (backups.isNotEmpty)
                   Column(
@@ -161,10 +161,8 @@ class _BackupDetailsState extends State<BackupDetails>
                                         getIt<NavigationService>();
                                     nav.showPopUpDialog(
                                       BrandAlert(
-                                        title:
-                                            'providers.backup.restoring'.tr(),
-                                        contentText:
-                                            'providers.backup.restore_alert'.tr(
+                                        title: 'backup.restoring'.tr(),
+                                        contentText: 'backup.restore_alert'.tr(
                                           args: [backup.time.toString()],
                                         ),
                                         actions: [
@@ -200,7 +198,7 @@ class _BackupDetailsState extends State<BackupDetails>
             children: [
               ListTile(
                 title: Text(
-                  'providers.backup.refresh'.tr(),
+                  'backup.refresh'.tr(),
                 ),
                 onTap: refreshing
                     ? null
@@ -215,7 +213,7 @@ class _BackupDetailsState extends State<BackupDetails>
                     ),
                     ListTile(
                       title: Text(
-                        'providers.backup.refetchBackups'.tr(),
+                        'backup.refetch_backups'.tr(),
                       ),
                       onTap: preventActions
                           ? null
@@ -230,7 +228,7 @@ class _BackupDetailsState extends State<BackupDetails>
                     ),
                     ListTile(
                       title: Text(
-                        'providers.backup.reuploadKey'.tr(),
+                        'backup.reupload_key'.tr(),
                       ),
                       onTap: preventActions
                           ? null

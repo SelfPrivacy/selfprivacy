@@ -25,8 +25,8 @@ class UserDetails extends StatelessWidget {
     if (user.type == UserType.root) {
       return BrandHeroScreen(
         hasBackButton: true,
-        heroTitle: 'ssh.root.title'.tr(),
-        heroSubtitle: 'ssh.root.subtitle'.tr(),
+        heroTitle: 'ssh.root_title'.tr(),
+        heroSubtitle: 'ssh.root_subtitle'.tr(),
         children: [
           _SshKeysCard(user: user),
         ],
@@ -64,7 +64,7 @@ class UserDetails extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: InfoBox(
-            text: 'users.no_sso_notice'.tr(),
+            text: 'users.no_ssh_notice'.tr(),
             isWarning: true,
           ),
         ),

@@ -30,7 +30,7 @@ class RebuildServerJob extends ClientJob {
 class CreateUserJob extends ClientJob {
   CreateUserJob({
     required this.user,
-  }) : super(title: '${"jobs.createUser".tr()} ${user.login}');
+  }) : super(title: '${"jobs.create_user".tr()} ${user.login}');
 
   final User user;
 
@@ -41,7 +41,7 @@ class CreateUserJob extends ClientJob {
 class ResetUserPasswordJob extends ClientJob {
   ResetUserPasswordJob({
     required this.user,
-  }) : super(title: '${"jobs.resetUserPassword".tr()} ${user.login}');
+  }) : super(title: '${"jobs.reset_user_password".tr()} ${user.login}');
 
   final User user;
 
@@ -52,7 +52,7 @@ class ResetUserPasswordJob extends ClientJob {
 class DeleteUserJob extends ClientJob {
   DeleteUserJob({
     required this.user,
-  }) : super(title: '${"jobs.deleteUser".tr()} ${user.login}');
+  }) : super(title: '${"jobs.delete_user".tr()} ${user.login}');
 
   final User user;
 
@@ -78,7 +78,7 @@ class ServiceToggleJob extends ToggleJob {
     required this.needToTurnOn,
   }) : super(
           title:
-              '${needToTurnOn ? "jobs.serviceTurnOn".tr() : "jobs.serviceTurnOff".tr()} ${type.title}',
+              '${needToTurnOn ? "jobs.service_turn_on".tr() : "jobs.service_turn_off".tr()} ${type.title}',
         );
 
   final bool needToTurnOn;

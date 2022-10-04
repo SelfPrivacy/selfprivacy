@@ -28,7 +28,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
     bool isError = false;
     switch (dnsState) {
       case DnsRecordsStatus.uninitialized:
-        description = 'providers.domain.states.uninitialized'.tr();
+        description = 'domain.states.uninitialized'.tr();
         icon = const Icon(
           Icons.refresh,
           size: 24.0,
@@ -36,7 +36,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         isError = false;
         break;
       case DnsRecordsStatus.refreshing:
-        description = 'providers.domain.states.refreshing'.tr();
+        description = 'domain.states.refreshing'.tr();
         icon = const Icon(
           Icons.refresh,
           size: 24.0,
@@ -44,7 +44,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         isError = false;
         break;
       case DnsRecordsStatus.good:
-        description = 'providers.domain.states.ok'.tr();
+        description = 'domain.states.ok'.tr();
         icon = const Icon(
           Icons.check_circle_outline,
           size: 24.0,
@@ -52,8 +52,8 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         isError = false;
         break;
       case DnsRecordsStatus.error:
-        description = 'providers.domain.states.error'.tr();
-        subtitle = 'providers.domain.states.error_subtitle'.tr();
+        description = 'domain.states.error'.tr();
+        subtitle = 'domain.states.error_subtitle'.tr();
         icon = const Icon(
           Icons.error_outline,
           size: 24.0,
@@ -93,7 +93,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         hasBackButton: true,
         headerTitle: '',
         heroIcon: BrandIcons.globe,
-        heroTitle: 'providers.domain.screen_title'.tr(),
+        heroTitle: 'domain.screen_title'.tr(),
         heroSubtitle: 'not_ready_card.in_menu'.tr(),
         children: const [],
       );
@@ -107,7 +107,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       hasBackButton: true,
       heroSubtitle: domain,
       heroIcon: BrandIcons.globe,
-      heroTitle: 'providers.domain.screen_title'.tr(),
+      heroTitle: 'domain.screen_title'.tr(),
       children: <Widget>[
         _getStateCard(dnsCubit.dnsState, () {
           context.read<DnsRecordsCubit>().fix();
@@ -115,13 +115,13 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         const SizedBox(height: 16.0),
         ListTile(
           title: Text(
-            'providers.domain.cards.services.title'.tr(),
+            'domain.services_title'.tr(),
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
           ),
           subtitle: Text(
-            'providers.domain.cards.services.subtitle'.tr(),
+            'domain.services_subtitle'.tr(),
             style: Theme.of(context).textTheme.labelMedium,
           ),
         ),
@@ -160,13 +160,13 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         const SizedBox(height: 16.0),
         ListTile(
           title: Text(
-            'providers.domain.cards.email.title'.tr(),
+            'domain.email_title'.tr(),
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
           ),
           subtitle: Text(
-            'providers.domain.cards.email.subtitle'.tr(),
+            'domain.email_subtitle'.tr(),
             style: Theme.of(context).textTheme.labelMedium,
           ),
         ),

@@ -51,8 +51,7 @@ class DnsRecordsCubit
             _getDesiredDnsRecords(domain.domainName, ipAddress, dkimPublicKey);
         final List<DesiredDnsRecord> foundRecords = [];
         for (final DesiredDnsRecord record in desiredRecords) {
-          if (record.description ==
-              'providers.domain.record_description.dkim') {
+          if (record.description == 'record.dkim') {
             final DnsRecord foundRecord = records.firstWhere(
               (final r) => r.name == record.name && r.type == record.type,
               orElse: () => DnsRecord(
@@ -146,61 +145,61 @@ class DnsRecordsCubit
       DesiredDnsRecord(
         name: domainName,
         content: ipAddress,
-        description: 'providers.domain.record_description.root',
+        description: 'record.root',
       ),
       DesiredDnsRecord(
         name: 'api.$domainName',
         content: ipAddress,
-        description: 'providers.domain.record_description.api',
+        description: 'record.api',
       ),
       DesiredDnsRecord(
         name: 'cloud.$domainName',
         content: ipAddress,
-        description: 'providers.domain.record_description.cloud',
+        description: 'record.cloud',
       ),
       DesiredDnsRecord(
         name: 'git.$domainName',
         content: ipAddress,
-        description: 'providers.domain.record_description.git',
+        description: 'record.git',
       ),
       DesiredDnsRecord(
         name: 'meet.$domainName',
         content: ipAddress,
-        description: 'providers.domain.record_description.meet',
+        description: 'record.meet',
       ),
       DesiredDnsRecord(
         name: 'social.$domainName',
         content: ipAddress,
-        description: 'providers.domain.record_description.social',
+        description: 'record.social',
       ),
       DesiredDnsRecord(
         name: 'password.$domainName',
         content: ipAddress,
-        description: 'providers.domain.record_description.password',
+        description: 'record.password',
       ),
       DesiredDnsRecord(
         name: 'vpn.$domainName',
         content: ipAddress,
-        description: 'providers.domain.record_description.vpn',
+        description: 'record.vpn',
       ),
       DesiredDnsRecord(
         name: domainName,
         content: domainName,
-        description: 'providers.domain.record_description.mx',
+        description: 'record.mx',
         type: 'MX',
         category: DnsRecordsCategory.email,
       ),
       DesiredDnsRecord(
         name: '_dmarc.$domainName',
         content: 'v=DMARC1; p=none',
-        description: 'providers.domain.record_description.dmarc',
+        description: 'record.dmarc',
         type: 'TXT',
         category: DnsRecordsCategory.email,
       ),
       DesiredDnsRecord(
         name: domainName,
         content: 'v=spf1 a mx ip4:$ipAddress -all',
-        description: 'providers.domain.record_description.spf',
+        description: 'record.spf',
         type: 'TXT',
         category: DnsRecordsCategory.email,
       ),
@@ -208,7 +207,7 @@ class DnsRecordsCubit
         DesiredDnsRecord(
           name: 'selector._domainkey.$domainName',
           content: dkimPublicKey,
-          description: 'providers.domain.record_description.dkim',
+          description: 'record.dkim',
           type: 'TXT',
           category: DnsRecordsCategory.email,
         ),

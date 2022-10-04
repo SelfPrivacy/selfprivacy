@@ -30,7 +30,7 @@ class JobsCubit extends Cubit<JobsState> {
       newJobsList.addAll(jobsState.clientJobList);
     }
     newJobsList.add(job);
-    getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
+    getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
     emit(JobsStateWithJobs(newJobsList));
   }
 
@@ -53,7 +53,7 @@ class JobsCubit extends Cubit<JobsState> {
       removeJob(removingJob.id);
     } else {
       newJobsList.add(job);
-      getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
+      getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
       emit(JobsStateWithJobs(newJobsList));
     }
   }
@@ -67,7 +67,7 @@ class JobsCubit extends Cubit<JobsState> {
         newJobsList.any((final el) => el is CreateSSHKeyJob);
     if (!isExistInJobList) {
       newJobsList.add(job);
-      getIt<NavigationService>().showSnackBar('jobs.jobAdded'.tr());
+      getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
       emit(JobsStateWithJobs(newJobsList));
     }
   }
@@ -76,9 +76,9 @@ class JobsCubit extends Cubit<JobsState> {
     emit(JobsStateLoading());
     final bool isSuccessful = await api.reboot();
     if (isSuccessful) {
-      getIt<NavigationService>().showSnackBar('jobs.rebootSuccess'.tr());
+      getIt<NavigationService>().showSnackBar('jobs.reboot_success'.tr());
     } else {
-      getIt<NavigationService>().showSnackBar('jobs.rebootFailed'.tr());
+      getIt<NavigationService>().showSnackBar('jobs.reboot_failed'.tr());
     }
     emit(JobsStateEmpty());
   }
@@ -89,12 +89,12 @@ class JobsCubit extends Cubit<JobsState> {
     final bool isSuccessful = await api.upgrade();
     if (isSuccessful) {
       if (!isPullSuccessful) {
-        getIt<NavigationService>().showSnackBar('jobs.configPullFailed'.tr());
+        getIt<NavigationService>().showSnackBar('jobs.config_pull_failed'.tr());
       } else {
-        getIt<NavigationService>().showSnackBar('jobs.upgradeSuccess'.tr());
+        getIt<NavigationService>().showSnackBar('jobs.upgrade_success'.tr());
       }
     } else {
-      getIt<NavigationService>().showSnackBar('jobs.upgradeFailed'.tr());
+      getIt<NavigationService>().showSnackBar('jobs.upgrade_failed'.tr());
     }
     emit(JobsStateEmpty());
   }

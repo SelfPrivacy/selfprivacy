@@ -100,7 +100,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
           child: Column(
             children: [
               BrandHeader(
-                title: 'providers.storage.data_migration_title'.tr(),
+                title: 'storage.data_migration_title'.tr(),
                 hasBackButton: true,
               ),
               Padding(
@@ -158,13 +158,13 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InfoBox(
-                text: 'providers.storage.data_migration_notice'.tr(),
+                text: 'storage.data_migration_notice'.tr(),
                 isWarning: true,
               ),
             ),
             const SizedBox(height: 16),
             FilledButton(
-              title: 'providers.storage.start_migration_button'.tr(),
+              title: 'storage.start_migration_button'.tr(),
               onPressed: () {
                 if (widget.isMigration) {
                   context.read<ServerJobsCubit>().migrateToBinds(

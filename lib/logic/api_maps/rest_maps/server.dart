@@ -13,6 +13,7 @@ import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 
 class ApiResponse<D> {
@@ -380,13 +381,13 @@ class ServerApi extends ApiMap {
   }
 
   Future<void> switchService(
-    final ServiceTypes type,
+    final Service service,
     final bool needToTurnOn,
   ) async {
     final Dio client = await getClient();
     try {
       client.post(
-        '/services/${type.url}/${needToTurnOn ? 'enable' : 'disable'}',
+        '/services/${service.id}/${needToTurnOn ? 'enable' : 'disable'}',
       );
     } on DioError catch (e) {
       print(e.message);
@@ -395,7 +396,7 @@ class ServerApi extends ApiMap {
     }
   }
 
-  Future<Map<ServiceTypes, bool>> servicesPowerCheck() async {
+  Future<Map<String, bool>> servicesPowerCheck() async {
     Response response;
 
     final Dio client = await getClient();
@@ -409,11 +410,11 @@ class ServerApi extends ApiMap {
     }
 
     return {
-      ServiceTypes.bitwarden: response.data['bitwarden'] == 0,
-      ServiceTypes.gitea: response.data['gitea'] == 0,
-      ServiceTypes.nextcloud: response.data['nextcloud'] == 0,
-      ServiceTypes.ocserv: response.data['ocserv'] == 0,
-      ServiceTypes.pleroma: response.data['pleroma'] == 0,
+      'bitwarden': response.data['bitwarden'] == 0,
+      'gitea': response.data['gitea'] == 0,
+      'nextcloud': response.data['nextcloud'] == 0,
+      'ocserv': response.data['ocserv'] == 0,
+      'pleroma': response.data['pleroma'] == 0,
     };
   }
 
@@ -865,30 +866,5 @@ class ServerApi extends ApiMap {
 
     final int code = response.statusCode ?? HttpStatus.internalServerError;
     return ApiResponse(statusCode: code, data: null);
-  }
-}
-
-extension UrlServerExt on ServiceTypes {
-  String get url {
-    switch (this) {
-      // case ServiceTypes.mail:
-      //   return ''; // cannot be switch off
-      // case ServiceTypes.messenger:
-      //   return ''; // external service
-      // case ServiceTypes.video:
-      // return ''; // jitsi meet not working
-      case ServiceTypes.bitwarden:
-        return 'bitwarden';
-      case ServiceTypes.nextcloud:
-        return 'nextcloud';
-      case ServiceTypes.pleroma:
-        return 'pleroma';
-      case ServiceTypes.gitea:
-        return 'gitea';
-      case ServiceTypes.ocserv:
-        return 'ocserv';
-      default:
-        throw Exception('wrong state');
-    }
   }
 }

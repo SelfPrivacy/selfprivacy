@@ -91,7 +91,7 @@ class _ServicePageState extends State<ServicePage> {
           onTap: () => {
             context.read<JobsCubit>().createOrRemoveServiceToggleJob(
                   ServiceToggleJob(
-                    type: _idToLegacyType(service.id),
+                    service: service,
                     needToTurnOn: serviceDisabled,
                   ),
                 ),
@@ -141,28 +141,6 @@ class _ServicePageState extends State<ServicePage> {
           ),
       ],
     );
-  }
-
-// TODO: Get rid as soon as possible
-  ServiceTypes _idToLegacyType(final String serviceId) {
-    switch (serviceId) {
-      case 'mailserver':
-        return ServiceTypes.mailserver;
-      case 'jitsi':
-        return ServiceTypes.jitsi;
-      case 'bitwarden':
-        return ServiceTypes.bitwarden;
-      case 'nextcloud':
-        return ServiceTypes.nextcloud;
-      case 'pleroma':
-        return ServiceTypes.pleroma;
-      case 'gitea':
-        return ServiceTypes.gitea;
-      case 'ocserv':
-        return ServiceTypes.ocserv;
-      default:
-        throw Exception('wrong state');
-    }
   }
 }
 

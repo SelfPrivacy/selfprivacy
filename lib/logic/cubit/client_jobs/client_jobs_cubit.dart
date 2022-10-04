@@ -45,10 +45,10 @@ class JobsCubit extends Cubit<JobsState> {
       newJobsList.addAll((state as JobsStateWithJobs).clientJobList);
     }
     final bool needToRemoveJob = newJobsList
-        .any((final el) => el is ServiceToggleJob && el.type == job.type);
+        .any((final el) => el is ServiceToggleJob && el.id == job.id);
     if (needToRemoveJob) {
       final ClientJob removingJob = newJobsList.firstWhere(
-        (final el) => el is ServiceToggleJob && el.type == job.type,
+        (final el) => el is ServiceToggleJob && el.id == job.id,
       );
       removeJob(removingJob.id);
     } else {
@@ -114,7 +114,7 @@ class JobsCubit extends Cubit<JobsState> {
         }
         if (job is ServiceToggleJob) {
           hasServiceJobs = true;
-          await api.switchService(job.type.name, job.needToTurnOn);
+          await api.switchService(job.service.id, job.needToTurnOn);
         }
         if (job is CreateSSHKeyJob) {
           await usersCubit.addSshKey(job.user, job.publicKey);

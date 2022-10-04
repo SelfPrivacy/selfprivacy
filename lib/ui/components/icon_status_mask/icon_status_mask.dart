@@ -4,11 +4,11 @@ import 'package:selfprivacy/logic/models/state_types.dart';
 
 class IconStatusMask extends StatelessWidget {
   const IconStatusMask({
-    required this.child,
+    required this.icon,
     required this.status,
     final super.key,
   });
-  final Icon child;
+  final Widget icon;
 
   final StateType status;
 
@@ -42,7 +42,7 @@ class IconStatusMask extends StatelessWidget {
         colors: colors,
         tileMode: TileMode.mirror,
       ).createShader(bounds),
-      child: child,
+      child: icon,
     );
   }
 }

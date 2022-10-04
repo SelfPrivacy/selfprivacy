@@ -1,12 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
@@ -21,11 +23,11 @@ import 'package:selfprivacy/utils/ui_helpers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const switchableServices = [
-  ServiceTypes.bitwarden,
-  ServiceTypes.nextcloud,
-  ServiceTypes.pleroma,
-  ServiceTypes.gitea,
-  ServiceTypes.ocserv,
+  'bitwarden',
+  'nextcloud',
+  'pleroma',
+  'gitea',
+  'ocserv',
 ];
 
 class ServicesPage extends StatefulWidget {
@@ -70,13 +72,16 @@ class _ServicesPageState extends State<ServicesPage> {
             BrandText.body1('basis.services_title'.tr()),
             const SizedBox(height: 24),
             if (!isReady) ...[const NotReadyCard(), const SizedBox(height: 24)],
-            ...ServiceTypes.values
+            ...context
+                .read<ServicesCubit>()
+                .state
+                .services
                 .map(
-                  (final t) => Padding(
+                  (final service) => Padding(
                     padding: const EdgeInsets.only(
                       bottom: 30,
                     ),
-                    child: _Card(serviceType: t),
+                    child: _Card(service: service),
                   ),
                 )
                 .toList()
@@ -88,9 +93,9 @@ class _ServicesPageState extends State<ServicesPage> {
 }
 
 class _Card extends StatelessWidget {
-  const _Card({required this.serviceType});
+  const _Card({required this.service});
 
-  final ServiceTypes serviceType;
+  final Service service;
   @override
   Widget build(final BuildContext context) {
     final isReady = context.watch<ServerInstallationCubit>().state
@@ -100,16 +105,16 @@ class _Card extends StatelessWidget {
     final jobsCubit = context.watch<JobsCubit>();
     final jobState = jobsCubit.state;
 
-    final switchableService = switchableServices.contains(serviceType);
+    final switchableService = switchableServices.contains(service.id);
     final hasSwitchJob = switchableService &&
         jobState is JobsStateWithJobs &&
         jobState.clientJobList.any(
-          (final el) => el is ServiceToggleJob && el.type == serviceType,
+          (final el) => el is ServiceToggleJob && el.id == service.id,
         );
 
     final isSwitchOn = isReady &&
-        (!switchableServices.contains(serviceType) ||
-            serviceState.isEnableByType(serviceType));
+        (!switchableServices.contains(service.id) ||
+            serviceState.isEnableByType(service));
 
     final config = context.watch<ServerInstallationCubit>().state;
     final domainName = UiHelpers.getDomainName(config);
@@ -117,7 +122,7 @@ class _Card extends StatelessWidget {
     return GestureDetector(
       onTap: isReady
           ? () => Navigator.of(context)
-              .push(materialRoute(ServicePage(serviceId: serviceType.name)))
+              .push(materialRoute(ServicePage(serviceId: service.id)))
           : null,
       child: BrandCards.big(
         child: Column(
@@ -128,7 +133,12 @@ class _Card extends StatelessWidget {
                 IconStatusMask(
                   status:
                       isSwitchOn ? StateType.stable : StateType.uninitialized,
-                  child: Icon(serviceType.icon, size: 30, color: Colors.white),
+                  icon: SvgPicture.string(
+                    service.svgIcon,
+                    width: 30.0,
+                    height: 30.0,
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
                 ),
                 if (isReady && switchableService) ...[
                   const Spacer(),
@@ -138,11 +148,11 @@ class _Card extends StatelessWidget {
                       if (hasSwitchJob) {
                         isActive = (jobState.clientJobList.firstWhere(
                           (final el) =>
-                              el is ServiceToggleJob && el.type == serviceType,
+                              el is ServiceToggleJob && el.id == service.id,
                         ) as ServiceToggleJob)
                             .needToTurnOn;
                       } else {
-                        isActive = serviceState.isEnableByType(serviceType);
+                        isActive = serviceState.isEnableByType(service);
                       }
 
                       return BrandSwitch(
@@ -150,7 +160,7 @@ class _Card extends StatelessWidget {
                         onChanged: (final value) =>
                             jobsCubit.createOrRemoveServiceToggleJob(
                           ServiceToggleJob(
-                            type: serviceType,
+                            service: service,
                             needToTurnOn: value,
                           ),
                         ),
@@ -167,17 +177,17 @@ class _Card extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      BrandText.h2(serviceType.title),
+                      BrandText.h2(service.displayName),
                       const SizedBox(height: 10),
-                      if (serviceType.subdomain != '')
+                      if (service.url != '' && service.url != null)
                         Column(
                           children: [
                             GestureDetector(
                               onTap: () => _launchURL(
-                                'https://${serviceType.subdomain}.$domainName',
+                                'https://${service.url}',
                               ),
                               child: Text(
-                                '${serviceType.subdomain}.$domainName',
+                                '${service.url}',
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
@@ -188,7 +198,7 @@ class _Card extends StatelessWidget {
                             const SizedBox(height: 10),
                           ],
                         ),
-                      if (serviceType == ServiceTypes.mailserver)
+                      if (service.id == 'mailserver')
                         Column(
                           children: [
                             Text(
@@ -201,9 +211,9 @@ class _Card extends StatelessWidget {
                             const SizedBox(height: 10),
                           ],
                         ),
-                      BrandText.body2(serviceType.loginInfo),
+                      BrandText.body2(service.loginInfo),
                       const SizedBox(height: 10),
-                      BrandText.body2(serviceType.subtitle),
+                      BrandText.body2(service.description),
                       const SizedBox(height: 10),
                     ],
                   ),

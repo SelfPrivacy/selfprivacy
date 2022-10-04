@@ -188,79 +188,79 @@ class ServiceStatusCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     switch (status) {
       case ServiceStatus.active:
-        return const FilledCard(
+        return FilledCard(
           child: ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.check_circle_outline,
               size: 24,
             ),
-            title: Text('Up and running'),
+            title: Text('service_page.status.active'.tr()),
           ),
         );
       case ServiceStatus.inactive:
-        return const FilledCard(
+        return FilledCard(
           tertiary: true,
           child: ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.stop_circle_outlined,
               size: 24,
             ),
-            title: Text('Stopped'),
+            title: Text('service_page.status.inactive'.tr()),
           ),
         );
       case ServiceStatus.failed:
-        return const FilledCard(
+        return FilledCard(
           error: true,
           child: ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.error_outline,
               size: 24,
             ),
-            title: Text('Failed to start'),
+            title: Text('service_page.status.failed'.tr()),
           ),
         );
       case ServiceStatus.off:
-        return const FilledCard(
+        return FilledCard(
           tertiary: true,
           child: ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.power_settings_new,
               size: 24,
             ),
-            title: Text('Disabled'),
+            title: Text('service_page.status.off'.tr()),
           ),
         );
       case ServiceStatus.activating:
-        return const FilledCard(
+        return FilledCard(
           tertiary: true,
           child: ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.restart_alt_outlined,
               size: 24,
             ),
-            title: Text('Activating'),
+            title: Text('service_page.status.activating'.tr()),
           ),
         );
       case ServiceStatus.deactivating:
-        return const FilledCard(
+        return FilledCard(
           tertiary: true,
           child: ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.restart_alt_outlined,
               size: 24,
             ),
-            title: Text('Deactivating'),
+            title: Text('service_page.status.deactivating'.tr()),
           ),
         );
       case ServiceStatus.reloading:
-        return const FilledCard(
+        return FilledCard(
           tertiary: true,
           child: ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.restart_alt_outlined,
               size: 24,
             ),
-            title: Text('Restarting'),
+            title: Text('service_page.status.reloading'.tr()),
           ),
         );
     }

@@ -192,7 +192,16 @@
     "disable": "Disable service",
     "enable": "Enable service",
     "move": "Move to another volume",
-    "uses": "Uses {usage} on {volume}"
+    "uses": "Uses {usage} on {volume}",
+    "status": {
+      "active": "Up and running",
+      "inactive": "Stopped",
+      "failed": "Failed to start",
+      "off": "Disabled",
+      "activating": "Activating",
+      "deactivating": "Deactivating",
+      "reloading": "Restarting"
+    }
   },
   "mail": {
     "title": "E-Mail",

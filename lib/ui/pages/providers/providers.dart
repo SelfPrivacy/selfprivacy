@@ -148,12 +148,12 @@ class _Card extends StatelessWidget {
                   children: [
                     IconStatusMask(
                       status: state,
-                      child: Icon(icon, size: 30, color: Colors.white),
+                      icon: Icon(icon, size: 30, color: Colors.white),
                     ),
                     if (state != StateType.uninitialized)
                       IconStatusMask(
                         status: state,
-                        child: Icon(
+                        icon: Icon(
                           state == StateType.stable
                               ? Icons.check_circle_outline
                               : state == StateType.warning

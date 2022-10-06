@@ -23,6 +23,8 @@ class JobsCubit extends Cubit<JobsState> {
   final UsersCubit usersCubit;
   final ServicesCubit servicesCubit;
 
+  bool hasServiceJobs = false;
+
   void addJob(final ClientJob job) {
     final List<ClientJob> newJobsList = [];
     if (state is JobsStateWithJobs) {
@@ -103,31 +105,9 @@ class JobsCubit extends Cubit<JobsState> {
     if (state is JobsStateWithJobs) {
       final List<ClientJob> jobs = (state as JobsStateWithJobs).clientJobList;
       emit(JobsStateLoading());
-      bool hasServiceJobs = false;
+
       for (final ClientJob job in jobs) {
-        // TODO: Rewrite to polymorphism
-        if (job is CreateUserJob) {
-          await usersCubit.createUser(job.user);
-        }
-        if (job is DeleteUserJob) {
-          await usersCubit.deleteUser(job.user);
-        }
-        if (job is ServiceToggleJob) {
-          hasServiceJobs = true;
-          await api.switchService(job.service.id, job.needToTurnOn);
-        }
-        if (job is CreateSSHKeyJob) {
-          await usersCubit.addSshKey(job.user, job.publicKey);
-        }
-        if (job is DeleteSSHKeyJob) {
-          await usersCubit.deleteSshKey(job.user, job.publicKey);
-        }
-        if (job is ResetUserPasswordJob) {
-          await usersCubit.changeUserPassword(job.user, job.user.password!);
-        }
-        if (job is RebuildServerJob) {
-          await upgradeServer();
-        }
+        job.execute(this);
       }
 
       await api.pullConfigurationUpdate();
@@ -136,6 +116,8 @@ class JobsCubit extends Cubit<JobsState> {
       if (hasServiceJobs) {
         await servicesCubit.load();
       }
+
+      hasServiceJobs = false;
 
       emit(JobsStateEmpty());
     }

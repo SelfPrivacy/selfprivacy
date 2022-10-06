@@ -106,7 +106,6 @@ class ServiceToggleJob extends ToggleJob {
 
   @override
   void execute(final JobsCubit cubit) async {
-    cubit.hasServiceJobs = true;
     await cubit.api.switchService(service.id, needToTurnOn);
   }
 

@@ -23,8 +23,6 @@ class JobsCubit extends Cubit<JobsState> {
   final UsersCubit usersCubit;
   final ServicesCubit servicesCubit;
 
-  bool hasServiceJobs = false;
-
   void addJob(final ClientJob job) {
     final List<ClientJob> newJobsList = [];
     if (state is JobsStateWithJobs) {
@@ -112,12 +110,7 @@ class JobsCubit extends Cubit<JobsState> {
 
       await api.pullConfigurationUpdate();
       await api.apply();
-
-      if (hasServiceJobs) {
-        await servicesCubit.load();
-      }
-
-      hasServiceJobs = false;
+      await servicesCubit.load();
 
       emit(JobsStateEmpty());
     }

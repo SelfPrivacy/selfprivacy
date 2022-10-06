@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -62,23 +63,23 @@ class DeleteUserJob extends ClientJob {
 
 class ToggleJob extends ClientJob {
   ToggleJob({
-    required this.type,
+    required final this.service,
     required final super.title,
   });
 
-  final ServiceTypes type;
+  final Service service;
 
   @override
-  List<Object> get props => [...super.props, type];
+  List<Object> get props => [...super.props, service];
 }
 
 class ServiceToggleJob extends ToggleJob {
   ServiceToggleJob({
-    required final super.type,
+    required super.service,
     required this.needToTurnOn,
   }) : super(
           title:
-              '${needToTurnOn ? "jobs.service_turn_on".tr() : "jobs.service_turn_off".tr()} ${type.title}',
+              '${needToTurnOn ? "jobs.service_turn_on".tr() : "jobs.service_turn_off".tr()} ${service.displayName}',
         );
 
   final bool needToTurnOn;

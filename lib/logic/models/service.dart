@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -19,6 +20,25 @@ class Service {
     required this.dnsRecords,
     this.url,
   });
+
+  /// TODO Turn loginInfo into dynamic data, not static!
+  String get loginInfo {
+    switch (id) {
+      case 'mailserver':
+        return 'mail.login_info'.tr();
+      case 'bitwarden':
+        return 'password_manager.login_info'.tr();
+      case 'jitsi':
+        return 'video.login_info'.tr();
+      case 'nextcloud':
+        return 'cloud.login_info'.tr();
+      case 'pleroma':
+        return 'social_network.login_info'.tr();
+      case 'gitea':
+        return 'git.login_info'.tr();
+    }
+    return '';
+  }
 
   Service.fromGraphQL(final Query$AllServices$services$allServices service)
       : this(

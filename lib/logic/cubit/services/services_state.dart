@@ -63,17 +63,17 @@ class ServicesState extends ServerInstallationDependendState {
         lockedServices,
       ];
 
-  bool isEnableByType(final ServiceTypes type) {
-    switch (type) {
-      case ServiceTypes.bitwarden:
+  bool isEnableByType(final Service service) {
+    switch (service.id) {
+      case 'bitwarden':
         return isPasswordManagerEnable;
-      case ServiceTypes.nextcloud:
+      case 'nextcloud':
         return isCloudEnable;
-      case ServiceTypes.pleroma:
+      case 'pleroma':
         return isSocialNetworkEnable;
-      case ServiceTypes.gitea:
+      case 'gitea':
         return isGitEnable;
-      case ServiceTypes.ocserv:
+      case 'ocserv':
         return isVpnEnable;
       default:
         throw Exception('wrong state');

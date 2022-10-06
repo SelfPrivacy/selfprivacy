@@ -80,7 +80,7 @@ class StorageCard extends StatelessWidget {
                   if (state != StateType.uninitialized)
                     IconStatusMask(
                       status: state,
-                      child: Icon(
+                      icon: Icon(
                         diskStatus.isDiskOkay
                             ? Icons.check_circle_outline
                             : Icons.error_outline,

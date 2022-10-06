@@ -341,7 +341,6 @@
         "modal_confirmation_ip_invalid": "IP не совпадает с указанным в DNS записи",
         "confirm_cloudflare": "Подключение к Cloudflare",
         "confirm_cloudflare_description": "Введите токен Cloudflare, который имеет права на {}:",
-        "confirm_backblze": "Подключение к Backblaze",
         "confirm_backblaze_description": "Введите токен Backblaze, который имеет права на хранилище резервных копий:",
         "confirm_backblaze": "Подключение к Backblaze"
     },

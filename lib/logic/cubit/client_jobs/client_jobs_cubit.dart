@@ -24,14 +24,10 @@ class JobsCubit extends Cubit<JobsState> {
   final ServicesCubit servicesCubit;
 
   void addJob(final ClientJob job) {
-    final List<ClientJob> newJobsList = [];
-    if (state is JobsStateWithJobs) {
-      final JobsStateWithJobs jobsState = state as JobsStateWithJobs;
-      newJobsList.addAll(jobsState.clientJobList);
-    }
-    newJobsList.add(job);
-    getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
-    emit(JobsStateWithJobs(newJobsList));
+    _updateJobsState([
+      ...currentJobList,
+      ...[job]
+    ]);
   }
 
   void removeJob(final String id) {
@@ -58,17 +54,28 @@ class JobsCubit extends Cubit<JobsState> {
     }
   }
 
-  void createShhJobIfNotExist(final CreateSSHKeyJob job) {
-    final List<ClientJob> newJobsList = <ClientJob>[];
+  List<ClientJob> get currentJobList {
+    final List<ClientJob> jobs = <ClientJob>[];
     if (state is JobsStateWithJobs) {
-      newJobsList.addAll((state as JobsStateWithJobs).clientJobList);
+      jobs.addAll((state as JobsStateWithJobs).clientJobList);
     }
-    final bool isExistInJobList =
-        newJobsList.any((final el) => el is CreateSSHKeyJob);
-    if (!isExistInJobList) {
-      newJobsList.add(job);
-      getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
-      emit(JobsStateWithJobs(newJobsList));
+
+    return jobs;
+  }
+
+  void _updateJobsState(final List<ClientJob> newJobs) {
+    getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
+    emit(JobsStateWithJobs(newJobs));
+  }
+
+  void addUniqueJob<J extends ClientJob>(final J job) {
+    final List<ClientJob> jobs = currentJobList;
+    final bool exists = jobs.any((final el) => el is J);
+    if (!exists) {
+      _updateJobsState([
+        ...jobs,
+        ...[job]
+      ]);
     }
   }
 

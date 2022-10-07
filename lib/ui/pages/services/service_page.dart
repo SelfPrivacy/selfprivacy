@@ -89,7 +89,7 @@ class _ServicePageState extends State<ServicePage> {
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
           onTap: () => {
-            context.read<JobsCubit>().createOrRemoveServiceToggleJob(
+            context.read<JobsCubit>().addJob(
                   ServiceToggleJob(
                     service: service,
                     needToTurnOn: serviceDisabled,

@@ -24,34 +24,18 @@ class JobsCubit extends Cubit<JobsState> {
   final ServicesCubit servicesCubit;
 
   void addJob(final ClientJob job) {
-    _updateJobsState([
-      ...currentJobList,
-      ...[job]
-    ]);
+    final jobs = currentJobList;
+    if (job.canAddTo(jobs)) {
+      _updateJobsState([
+        ...jobs,
+        ...[job],
+      ]);
+    }
   }
 
   void removeJob(final String id) {
     final JobsState newState = (state as JobsStateWithJobs).removeById(id);
     emit(newState);
-  }
-
-  void createOrRemoveServiceToggleJob(final ToggleJob job) {
-    final List<ClientJob> newJobsList = <ClientJob>[];
-    if (state is JobsStateWithJobs) {
-      newJobsList.addAll((state as JobsStateWithJobs).clientJobList);
-    }
-    final bool needToRemoveJob = newJobsList
-        .any((final el) => el is ServiceToggleJob && el.id == job.id);
-    if (needToRemoveJob) {
-      final ClientJob removingJob = newJobsList.firstWhere(
-        (final el) => el is ServiceToggleJob && el.id == job.id,
-      );
-      removeJob(removingJob.id);
-    } else {
-      newJobsList.add(job);
-      getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
-      emit(JobsStateWithJobs(newJobsList));
-    }
   }
 
   List<ClientJob> get currentJobList {
@@ -66,17 +50,6 @@ class JobsCubit extends Cubit<JobsState> {
   void _updateJobsState(final List<ClientJob> newJobs) {
     getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
     emit(JobsStateWithJobs(newJobs));
-  }
-
-  void addUniqueJob<J extends ClientJob>(final J job) {
-    final List<ClientJob> jobs = currentJobList;
-    final bool exists = jobs.any((final el) => el is J);
-    if (!exists) {
-      _updateJobsState([
-        ...jobs,
-        ...[job]
-      ]);
-    }
   }
 
   Future<void> rebootServer() async {

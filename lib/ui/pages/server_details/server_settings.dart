@@ -29,7 +29,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
         SwitchListTile(
           value: allowAutoUpgrade ?? false,
           onChanged: (final switched) {
-            context.read<JobsCubit>().addUniqueJob(
+            context.read<JobsCubit>().addJob(
                   RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
                 );
             context
@@ -54,7 +54,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
         SwitchListTile(
           value: rebootAfterUpgrade ?? false,
           onChanged: (final switched) {
-            context.read<JobsCubit>().addUniqueJob(
+            context.read<JobsCubit>().addJob(
                   RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
                 );
             context
@@ -82,7 +82,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
             serverDetailsState.serverTimezone.toString(),
           ),
           onTap: () {
-            context.read<JobsCubit>().addUniqueJob(
+            context.read<JobsCubit>().addJob(
                   RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
                 );
             Navigator.of(context).push(

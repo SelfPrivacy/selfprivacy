@@ -55,6 +55,14 @@ class NewUser extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (context.read<UserFormCubit>().state.isErrorShown)
+                          Text(
+                            'users.username_rule'.tr(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        const SizedBox(width: 14),
                         IntrinsicHeight(
                           child: CubitFormTextField(
                             formFieldCubit: context.read<UserFormCubit>().login,

@@ -14,7 +14,7 @@ class DnsProviderFormCubit extends FormCubit {
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
           regExp.hasMatch,
-          'validations.key_format'.tr(),
+          'validations.invalid_format'.tr(),
         ),
         LengthStringNotEqualValidation(40)
       ],

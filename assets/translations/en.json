@@ -258,6 +258,7 @@
         "could_not_create_user": "Couldn't create user",
         "could_not_delete_user": "Couldn't delete user",
         "could_not_add_ssh_key": "Couldn't add SSH key",
+        "username_rule": "Must contain only lowercase latin letters, digits and underscores, should not start with a digit",
         "email_login": "Email login",
         "no_ssh_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon."
     },
@@ -418,13 +419,13 @@
         "reset_user_password": "Reset password of user"
     },
     "validations": {
-        "required": "Required.",
-        "invalid_format": "Invalid format.",
-        "root_name": "User name cannot be 'root'.",
-        "key_format": "Invalid key format.",
-        "length_not_equal": "Length is []. Should be {}.",
-        "length_longer": "Length is []. Should be shorter than or equal to {}.",
-        "user_already_exist": "This user already exists.",
-        "key_already_exists": "This key already exists."
+        "required": "Required",
+        "already_exist": "Already exists",
+        "invalid_format": "Invalid format",
+        "invalid_format_password": "Must not contain empty characters",
+        "invalid_format_ssh": "Must follow the SSH key format",
+        "root_name": "Cannot be 'root'",
+        "length_not_equal": "Length is [], should be {}",
+        "length_longer": "Length is [], should be shorter than or equal to {}"
     }
 }

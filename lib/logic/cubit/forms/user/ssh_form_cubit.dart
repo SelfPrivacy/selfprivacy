@@ -21,7 +21,7 @@ class SshFormCubit extends FormCubit {
         ValidationModel(
           (final String newKey) =>
               user.sshKeys.any((final String key) => key == newKey),
-          'validations.key_already_exists'.tr(),
+          'validations.already_exists'.tr(),
         ),
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
@@ -30,7 +30,7 @@ class SshFormCubit extends FormCubit {
             print(keyRegExp.hasMatch(s));
             return !keyRegExp.hasMatch(s);
           },
-          'validations.invalid_format'.tr(),
+          'validations.invalid_format_ssh'.tr(),
         ),
       ],
     );

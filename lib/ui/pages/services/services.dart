@@ -157,8 +157,7 @@ class _Card extends StatelessWidget {
 
                       return BrandSwitch(
                         value: isActive,
-                        onChanged: (final value) =>
-                            jobsCubit.createOrRemoveServiceToggleJob(
+                        onChanged: (final value) => jobsCubit.addJob(
                           ServiceToggleJob(
                             service: service,
                             needToTurnOn: value,

@@ -20,7 +20,7 @@
         "connect": "Connect",
         "domain": "Domain",
         "saving": "Saving…",
-        "nickname": "Nickname",
+        "username": "Username",
         "loading": "Loading…",
         "later": "Skip to setup later",
         "connect_to_existing": "Connect to an existing server",
@@ -258,7 +258,7 @@
         "could_not_create_user": "Couldn't create user",
         "could_not_delete_user": "Couldn't delete user",
         "could_not_add_ssh_key": "Couldn't add SSH key",
-        "username_rule": "Must contain only lowercase latin letters, digits and underscores, should not start with a digit",
+        "username_rule": "Username must contain only lowercase latin letters, digits and underscores, should not start with a digit",
         "email_login": "Email login",
         "no_ssh_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon."
     },
@@ -287,7 +287,7 @@
         "check": "Check",
         "one_more_restart": "One more restart to apply your security certificates.",
         "create_master_account": "Create master account",
-        "enter_nickname_and_password": "Enter a nickname and strong password",
+        "enter_username_and_password": "Enter username and strong password",
         "finish": "Everything is initialized",
         "checks": "Checks have been completed \n{} out of {}"
     },

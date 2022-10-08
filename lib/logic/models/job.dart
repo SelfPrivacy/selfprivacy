@@ -32,7 +32,7 @@ class RebuildServerJob extends ClientJob {
 
   @override
   bool canAddTo(final List<ClientJob> jobs) =>
-      super.canAddTo(jobs) && !jobs.any((final job) => job is RebuildServerJob);
+      !jobs.any((final job) => job is RebuildServerJob);
 
   @override
   void execute(final JobsCubit cubit) async {
@@ -80,10 +80,9 @@ class DeleteUserJob extends ClientJob {
   final User user;
 
   @override
-  bool canAddTo(final List<ClientJob> jobs) =>
-      super.canAddTo(jobs) &&
-      !jobs.any(
-          (final job) => job is DeleteUserJob && job.user.login == user.login);
+  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+        (final job) => job is DeleteUserJob && job.user.login == user.login,
+      );
 
   @override
   void execute(final JobsCubit cubit) async {
@@ -107,10 +106,9 @@ class ServiceToggleJob extends ClientJob {
   final Service service;
 
   @override
-  bool canAddTo(final List<ClientJob> jobs) =>
-      super.canAddTo(jobs) &&
-      !jobs.any((final job) =>
-          job is ServiceToggleJob && job.service.id == service.id);
+  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+        (final job) => job is ServiceToggleJob && job.service.id == service.id,
+      );
 
   @override
   void execute(final JobsCubit cubit) async {
@@ -149,12 +147,12 @@ class DeleteSSHKeyJob extends ClientJob {
   final String publicKey;
 
   @override
-  bool canAddTo(final List<ClientJob> jobs) =>
-      super.canAddTo(jobs) &&
-      !jobs.any((final job) =>
-          job is DeleteSSHKeyJob &&
-          job.publicKey == publicKey &&
-          job.user.login == user.login);
+  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+        (final job) =>
+            job is DeleteSSHKeyJob &&
+            job.publicKey == publicKey &&
+            job.user.login == user.login,
+      );
 
   @override
   void execute(final JobsCubit cubit) async {

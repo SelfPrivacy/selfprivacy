@@ -418,6 +418,14 @@ class InitializingPage extends StatelessWidget {
                   'initializing.enter_nickname_and_password'.tr(),
                 ),
                 const Spacer(),
+                if (formCubitState.isErrorShown)
+                          Text(
+                            'users.username_rule'.tr(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                const SizedBox(height: 10),   
                 CubitFormTextField(
                   formFieldCubit: context.read<RootUserFormCubit>().userName,
                   textAlign: TextAlign.center,

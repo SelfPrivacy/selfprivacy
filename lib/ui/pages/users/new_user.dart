@@ -55,7 +55,7 @@ class NewUser extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (context.read<UserFormCubit>().state.isErrorShown)
+                        if (formCubitState.isErrorShown)
                           Text(
                             'users.username_rule'.tr(),
                             style: TextStyle(

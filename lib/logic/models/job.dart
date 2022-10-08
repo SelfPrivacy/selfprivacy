@@ -17,6 +17,7 @@ abstract class ClientJob extends Equatable {
   final String title;
   final String id;
 
+  bool canAddTo(final List<ClientJob> jobs) => true;
   void execute(final JobsCubit cubit);
 
   @override
@@ -25,9 +26,13 @@ abstract class ClientJob extends Equatable {
 
 class RebuildServerJob extends ClientJob {
   RebuildServerJob({
-    required final super.title,
-    final super.id,
+    required super.title,
+    super.id,
   });
+
+  @override
+  bool canAddTo(final List<ClientJob> jobs) =>
+      !jobs.any((final job) => job is RebuildServerJob);
 
   @override
   void execute(final JobsCubit cubit) async {
@@ -75,6 +80,11 @@ class DeleteUserJob extends ClientJob {
   final User user;
 
   @override
+  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+        (final job) => job is DeleteUserJob && job.user.login == user.login,
+      );
+
+  @override
   void execute(final JobsCubit cubit) async {
     await cubit.usersCubit.deleteUser(user);
   }
@@ -83,33 +93,30 @@ class DeleteUserJob extends ClientJob {
   List<Object> get props => [id, title, user];
 }
 
-abstract class ToggleJob extends ClientJob {
-  ToggleJob({
-    required final this.service,
-    required final super.title,
-  });
-
-  final Service service;
-
-  @override
-  List<Object> get props => [...super.props, service];
-}
-
-class ServiceToggleJob extends ToggleJob {
+class ServiceToggleJob extends ClientJob {
   ServiceToggleJob({
-    required super.service,
+    required this.service,
     required this.needToTurnOn,
   }) : super(
           title:
               '${needToTurnOn ? "jobs.service_turn_on".tr() : "jobs.service_turn_off".tr()} ${service.displayName}',
         );
 
+  final bool needToTurnOn;
+  final Service service;
+
+  @override
+  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+        (final job) => job is ServiceToggleJob && job.service.id == service.id,
+      );
+
   @override
   void execute(final JobsCubit cubit) async {
     await cubit.api.switchService(service.id, needToTurnOn);
   }
 
-  final bool needToTurnOn;
+  @override
+  List<Object> get props => [...super.props, service];
 }
 
 class CreateSSHKeyJob extends ClientJob {
@@ -138,6 +145,14 @@ class DeleteSSHKeyJob extends ClientJob {
 
   final User user;
   final String publicKey;
+
+  @override
+  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+        (final job) =>
+            job is DeleteSSHKeyJob &&
+            job.publicKey == publicKey &&
+            job.user.login == user.login,
+      );
 
   @override
   void execute(final JobsCubit cubit) async {

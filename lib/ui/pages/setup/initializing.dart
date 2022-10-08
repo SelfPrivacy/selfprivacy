@@ -415,15 +415,23 @@ class InitializingPage extends StatelessWidget {
                 BrandText.h2('initializing.create_master_account'.tr()),
                 const SizedBox(height: 10),
                 BrandText.body2(
-                  'initializing.enter_nickname_and_password'.tr(),
+                  'initializing.enter_username_and_password'.tr(),
                 ),
                 const Spacer(),
+                if (formCubitState.isErrorShown)
+                  Text(
+                    'users.username_rule'.tr(),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                const SizedBox(height: 10),
                 CubitFormTextField(
                   formFieldCubit: context.read<RootUserFormCubit>().userName,
                   textAlign: TextAlign.center,
                   scrollPadding: const EdgeInsets.only(bottom: 70),
                   decoration: InputDecoration(
-                    hintText: 'basis.nickname'.tr(),
+                    hintText: 'basis.username'.tr(),
                   ),
                 ),
                 const SizedBox(height: 10),

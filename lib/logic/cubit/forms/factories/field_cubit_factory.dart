@@ -28,7 +28,7 @@ class FieldCubitFactory {
         ValidationModel(
           (final String login) =>
               context.read<UsersCubit>().state.isLoginRegistered(login),
-          'validations.user_already_exist'.tr(),
+          'validations.already_exist'.tr(),
         ),
         RequiredStringValidation('validations.required'.tr()),
         LengthStringLongerValidation(userMaxLength),
@@ -52,7 +52,7 @@ class FieldCubitFactory {
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
           passwordForbiddenRegExp.hasMatch,
-          'validations.invalid_format'.tr(),
+          'validations.invalid_format_password'.tr(),
         ),
       ],
     );

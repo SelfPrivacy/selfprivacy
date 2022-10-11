@@ -12,8 +12,9 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
-class HetznerApi extends ServerProviderApi with VolumeProviderApi {
-  HetznerApi({final this.hasLogger = false, final this.isWithToken = true});
+class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
+  DigitalOceanApi(
+      {final this.hasLogger = false, final this.isWithToken = true});
   @override
   bool hasLogger;
   @override
@@ -36,7 +37,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  String rootAddress = 'https://api.hetzner.cloud/v1';
+  String rootAddress = 'https://api.digitalocean.com/v2';
 
   @override
   Future<bool> isApiTokenValid(final String token) async {

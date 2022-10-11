@@ -266,7 +266,7 @@
         "connect_to_server": "Подключите сервер",
         "place_where_data": "Здесь будут жить ваши данные и SelfPrivacy-сервисы:",
         "how": "Как получить API Token",
-        "hetzner_bad_key_error": "Hetzner API ключ неверен",
+        "provider_bad_key_error": "API ключ провайдера неверен",
         "cloudflare_bad_key_error": "Cloudflare API ключ неверен",
         "backblaze_bad_key_error": "Информация о Backblaze хранилище неверна",
         "connect_cloudflare": "Подключите CloudFlare",

@@ -17,6 +17,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -139,52 +140,8 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepHetzner(final ServerInstallationCubit serverInstallationCubit) =>
-      BlocProvider(
-        create: (final context) => ProviderFormCubit(
-          serverInstallationCubit,
-        ),
-        child: Builder(
-          builder: (final context) {
-            final formCubitState = context.watch<ProviderFormCubit>().state;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  'assets/images/logos/hetzner.png',
-                  width: 150,
-                ),
-                const SizedBox(height: 10),
-                BrandText.h2('initializing.connect_to_server'.tr()),
-                const SizedBox(height: 10),
-                BrandText.body2('initializing.place_where_data'.tr()),
-                const Spacer(),
-                CubitFormTextField(
-                  formFieldCubit: context.read<ProviderFormCubit>().apiKey,
-                  textAlign: TextAlign.center,
-                  scrollPadding: const EdgeInsets.only(bottom: 70),
-                  decoration: const InputDecoration(
-                    hintText: 'Hetzner API Token',
-                  ),
-                ),
-                const Spacer(),
-                BrandButton.rised(
-                  onPressed: formCubitState.isSubmitting
-                      ? null
-                      : () => context.read<ProviderFormCubit>().trySubmit(),
-                  text: 'basis.connect'.tr(),
-                ),
-                const SizedBox(height: 10),
-                BrandButton.text(
-                  onPressed: () => _showModal(
-                    context,
-                    const _HowTo(fileName: 'how_hetzner'),
-                  ),
-                  title: 'initializing.how'.tr(),
-                ),
-              ],
-            );
-          },
-        ),
+      ProviderPicker(
+        serverInstallationCubit: serverInstallationCubit,
       );
 
   void _showModal(final BuildContext context, final Widget widget) {

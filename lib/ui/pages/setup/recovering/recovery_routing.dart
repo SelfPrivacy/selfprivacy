@@ -47,7 +47,7 @@ class RecoveryRouting extends StatelessWidget {
         case RecoveryStep.oldToken:
           currentPage = const RecoverByOldToken();
           break;
-        case RecoveryStep.hetznerToken:
+        case RecoveryStep.serverProviderToken:
           currentPage = const RecoveryHetznerConnected();
           break;
         case RecoveryStep.serverSelection:

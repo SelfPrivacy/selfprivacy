@@ -11,7 +11,7 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
-import 'package:selfprivacy/ui/pages/setup/initializing.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';

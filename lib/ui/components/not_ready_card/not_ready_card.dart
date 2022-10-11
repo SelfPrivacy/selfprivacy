@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/text_themes.dart';
-import 'package:selfprivacy/ui/pages/setup/initializing.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
 

@@ -26,7 +26,7 @@ class ProviderFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    serverInstallationCubit.setHetznerKey(apiKey.state.value);
+    serverInstallationCubit.setServerProviderKey(apiKey.state.value);
   }
 
   final ServerInstallationCubit serverInstallationCubit;
@@ -45,7 +45,7 @@ class ProviderFormCubit extends FormCubit {
     }
 
     if (!isKeyValid) {
-      apiKey.setError('initializing.hetzner_bad_key_error'.tr());
+      apiKey.setError('initializing.provider_bad_key_error'.tr());
       return false;
     }
 

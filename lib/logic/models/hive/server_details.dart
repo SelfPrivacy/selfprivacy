@@ -78,4 +78,6 @@ enum ServerProvider {
   unknown,
   @HiveField(1)
   hetzner,
+  @HiveField(2)
+  digitalOcean,
 }

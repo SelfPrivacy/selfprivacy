@@ -264,9 +264,10 @@
     },
     "initializing": {
         "connect_to_server": "Connect a server",
+        "select_provider": "Select your provider",
         "place_where_data": "A place where your data and SelfPrivacy services will reside:",
         "how": "How to obtain API token",
-        "hetzner_bad_key_error": "Hetzner API key is invalid",
+        "provider_bad_key_error": "Provider API key is invalid",
         "cloudflare_bad_key_error": "Cloudflare API key is invalid",
         "backblaze_bad_key_error": "Backblaze storage information is invalid",
         "connect_cloudflare": "Connect CloudFlare",

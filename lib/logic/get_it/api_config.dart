@@ -9,22 +9,22 @@ class ApiConfigModel {
   final Box _box = Hive.box(BNames.serverInstallationBox);
 
   ServerHostingDetails? get serverDetails => _serverDetails;
-  String? get hetznerKey => _hetznerKey;
+  String? get serverProviderKey => _serverProviderKey;
   String? get cloudFlareKey => _cloudFlareKey;
   BackblazeCredential? get backblazeCredential => _backblazeCredential;
   ServerDomain? get serverDomain => _serverDomain;
   BackblazeBucket? get backblazeBucket => _backblazeBucket;
 
-  String? _hetznerKey;
+  String? _serverProviderKey;
   String? _cloudFlareKey;
   ServerHostingDetails? _serverDetails;
   BackblazeCredential? _backblazeCredential;
   ServerDomain? _serverDomain;
   BackblazeBucket? _backblazeBucket;
 
-  Future<void> storeHetznerKey(final String value) async {
+  Future<void> storeServerProviderKey(final String value) async {
     await _box.put(BNames.hetznerKey, value);
-    _hetznerKey = value;
+    _serverProviderKey = value;
   }
 
   Future<void> storeCloudFlareKey(final String value) async {
@@ -53,7 +53,7 @@ class ApiConfigModel {
   }
 
   void clear() {
-    _hetznerKey = null;
+    _serverProviderKey = null;
     _cloudFlareKey = null;
     _backblazeCredential = null;
     _serverDomain = null;
@@ -62,7 +62,7 @@ class ApiConfigModel {
   }
 
   void init() {
-    _hetznerKey = _box.get(BNames.hetznerKey);
+    _serverProviderKey = _box.get(BNames.hetznerKey);
     _cloudFlareKey = _box.get(BNames.cloudFlareKey);
     _backblazeCredential = _box.get(BNames.backblazeCredential);
     _serverDomain = _box.get(BNames.serverDomain);

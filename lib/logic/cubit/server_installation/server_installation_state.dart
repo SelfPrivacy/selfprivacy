@@ -238,7 +238,7 @@ enum RecoveryStep {
   recoveryKey,
   newDeviceKey,
   oldToken,
-  hetznerToken,
+  serverProviderToken,
   serverSelection,
   cloudflareToken,
   backblazeToken,

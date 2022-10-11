@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
@@ -51,6 +52,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
+  void setServerProviderType(final ServerProvider providerType) {
+    repository.serverProviderApiFactory =
+        ApiFactoryCreator.createServerProviderApiFactory(
+      providerType,
+    );
+  }
+
   RegExp getServerProviderApiTokenValidation() =>
       repository.serverProviderApiFactory!
           .getServerProvider()
@@ -78,13 +86,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           )
           .isApiTokenValid(providerToken);
 
-  void setHetznerKey(final String hetznerKey) async {
-    await repository.saveHetznerKey(hetznerKey);
+  void setServerProviderKey(final String serverProviderKey) async {
+    await repository.saveServerProviderKey(serverProviderKey);
 
     if (state is ServerInstallationRecovery) {
       emit(
         (state as ServerInstallationRecovery).copyWith(
-          providerApiToken: hetznerKey,
+          providerApiToken: serverProviderKey,
           currentStep: RecoveryStep.serverSelection,
         ),
       );
@@ -93,7 +101,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(
-        providerApiToken: hetznerKey,
+        providerApiToken: serverProviderKey,
       ),
     );
   }
@@ -427,7 +435,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       emit(
         dataState.copyWith(
           serverDetails: serverDetails,
-          currentStep: RecoveryStep.hetznerToken,
+          currentStep: RecoveryStep.serverProviderToken,
         ),
       );
     } on ServerAuthorizationException {

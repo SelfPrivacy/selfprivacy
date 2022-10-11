@@ -39,17 +39,14 @@ class ServerAuthorizationException implements Exception {
 class ServerInstallationRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
   Box<User> usersBox = Hive.box(BNames.usersBox);
-  ServerProviderApiFactory? serverProviderApiFactory =
-      ApiFactoryCreator.createServerProviderApiFactory(
-    ServerProvider.hetzner, // TODO: HARDCODE FOR NOW!!!
-  ); // TODO: Remove when provider selection is implemented.
+  ServerProviderApiFactory? serverProviderApiFactory;
   DnsProviderApiFactory? dnsProviderApiFactory =
       ApiFactoryCreator.createDnsProviderApiFactory(
     DnsProvider.cloudflare, // TODO: HARDCODE FOR NOW!!!
   );
 
   Future<ServerInstallationState> load() async {
-    final String? providerApiToken = getIt<ApiConfigModel>().hetznerKey;
+    final String? providerApiToken = getIt<ApiConfigModel>().serverProviderKey;
     final String? cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
     final BackblazeCredential? backblazeCredential =
@@ -124,13 +121,13 @@ class ServerInstallationRepository {
   }
 
   RecoveryStep _getCurrentRecoveryStep(
-    final String? hetznerToken,
+    final String? serverProviderToken,
     final String? cloudflareToken,
     final ServerDomain serverDomain,
     final ServerHostingDetails? serverDetails,
   ) {
     if (serverDetails != null) {
-      if (hetznerToken != null) {
+      if (serverProviderToken != null) {
         if (serverDetails.provider != ServerProvider.unknown) {
           if (serverDomain.provider != DnsProvider.unknown) {
             return RecoveryStep.backblazeToken;
@@ -139,7 +136,7 @@ class ServerInstallationRepository {
         }
         return RecoveryStep.serverSelection;
       }
-      return RecoveryStep.hetznerToken;
+      return RecoveryStep.serverProviderToken;
     }
     return RecoveryStep.selecting;
   }
@@ -150,7 +147,7 @@ class ServerInstallationRepository {
   }
 
   Future<ServerHostingDetails> startServer(
-    final ServerHostingDetails hetznerServer,
+    final ServerHostingDetails server,
   ) async {
     ServerHostingDetails serverDetails;
 
@@ -670,12 +667,11 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
-  Future<void> saveHetznerKey(final String key) async {
-    print('saved');
-    await getIt<ApiConfigModel>().storeHetznerKey(key);
+  Future<void> saveServerProviderKey(final String key) async {
+    await getIt<ApiConfigModel>().storeServerProviderKey(key);
   }
 
-  Future<void> deleteHetznerKey() async {
+  Future<void> deleteServerProviderKey() async {
     await box.delete(BNames.hetznerKey);
     getIt<ApiConfigModel>().init();
   }

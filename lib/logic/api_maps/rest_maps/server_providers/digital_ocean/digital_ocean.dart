@@ -23,6 +23,8 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   @override
   bool isWithToken;
 
+  final String region = 'fra1';
+
   @override
   BaseOptions get options {
     final BaseOptions options = BaseOptions(baseUrl: rootAddress);
@@ -92,25 +94,22 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       dbCreateResponse = await client.post(
         '/volumes',
         data: {
-          'size': 10,
+          'size_gigabytes': 10,
           'name': StringGenerators.dbStorageName(),
           'labels': {'labelkey': 'value'},
-          'location': 'fsn1',
-          'automount': false,
-          'format': 'ext4'
+          'region': region,
+          'filesystem_type': 'ext4',
         },
       );
       final dbId = dbCreateResponse.data['volume']['id'];
-      final dbSize = dbCreateResponse.data['volume']['size'];
-      final dbServer = dbCreateResponse.data['volume']['server'];
+      final dbSize = dbCreateResponse.data['volume']['size_gigabytes'];
       final dbName = dbCreateResponse.data['volume']['name'];
-      final dbDevice = dbCreateResponse.data['volume']['linux_device'];
       volume = ServerVolume(
         id: dbId,
         name: dbName,
         sizeByte: dbSize,
-        serverId: dbServer,
-        linuxDevice: dbDevice,
+        serverId: null,
+        linuxDevice: null,
       );
     } catch (e) {
       print(e);
@@ -135,18 +134,19 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         },
       );
       final List<dynamic> rawVolumes = dbGetResponse.data['volumes'];
+      int id = 0;
       for (final rawVolume in rawVolumes) {
-        final int dbId = rawVolume['id'];
-        final int dbSize = rawVolume['size'] * 1024 * 1024 * 1024;
-        final dbServer = rawVolume['server'];
+        final dbId = rawVolume['id'];
+        final int dbSize = rawVolume['size_gigabytes'] * 1024 * 1024 * 1024;
+        final dbDropletIds = rawVolume['droplet_ids'];
         final String dbName = rawVolume['name'];
-        final dbDevice = rawVolume['linux_device'];
         final volume = ServerVolume(
-          id: dbId,
+          id: id++,
           name: dbName,
           sizeByte: dbSize,
-          serverId: dbServer,
-          linuxDevice: dbDevice,
+          serverId: dbDropletIds.isNotEmpty ? dbDropletIds[0] : null,
+          linuxDevice: null,
+          uuid: dbId,
         );
         volumes.add(volume);
       }
@@ -160,39 +160,29 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<ServerVolume?> getVolume(final int id) async {
-    ServerVolume? volume;
 
-    final Response dbGetResponse;
-    final Dio client = await getClient();
-    try {
-      dbGetResponse = await client.get('/volumes/$id');
-      final int dbId = dbGetResponse.data['volume']['id'];
-      final int dbSize = dbGetResponse.data['volume']['size'];
-      final int dbServer = dbGetResponse.data['volume']['server'];
-      final String dbName = dbGetResponse.data['volume']['name'];
-      final dbDevice = dbGetResponse.data['volume']['linux_device'];
-      volume = ServerVolume(
-        id: dbId,
-        name: dbName,
-        sizeByte: dbSize,
-        serverId: dbServer,
-        linuxDevice: dbDevice,
-      );
-    } catch (e) {
-      print(e);
-    } finally {
-      client.close();
+  /// volumeId is storage's UUID for Digital Ocean
+  Future<ServerVolume?> getVolume(final String volumeId) async {
+    ServerVolume? neededVolume;
+
+    final List<ServerVolume> volumes = await getVolumes();
+
+    for (final volume in volumes) {
+      if (volume.uuid == volumeId) {
+        neededVolume = volume;
+      }
     }
 
-    return volume;
+    return neededVolume;
   }
 
   @override
-  Future<void> deleteVolume(final int id) async {
+
+  /// volumeId is storage's UUID for Digital Ocean
+  Future<void> deleteVolume(final String volumeId) async {
     final Dio client = await getClient();
     try {
-      await client.delete('/volumes/$id');
+      await client.delete('/volumes/$volumeId');
     } catch (e) {
       print(e);
     } finally {
@@ -201,20 +191,30 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> attachVolume(final int volumeId, final int serverId) async {
+
+  /// volumeId is storage's UUID for Digital Ocean
+  Future<bool> attachVolume(final String volumeId, final int serverId) async {
     bool success = false;
+
+    final ServerVolume? volumeToAttach = await getVolume(volumeId);
+    if (volumeToAttach == null) {
+      return success;
+    }
 
     final Response dbPostResponse;
     final Dio client = await getClient();
     try {
       dbPostResponse = await client.post(
-        '/volumes/$volumeId/actions/attach',
+        '/volumes/actions',
         data: {
-          'automount': true,
-          'server': serverId,
+          'type': 'attach',
+          'volume_name': volumeToAttach.name,
+          'region': region,
+          'droplet_id': serverId,
         },
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          dbPostResponse.data['action']['status'].toString() == 'completed';
     } catch (e) {
       print(e);
     } finally {
@@ -225,14 +225,29 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> detachVolume(final int volumeId) async {
+
+  /// volumeId is storage's UUID for Digital Ocean
+  Future<bool> detachVolume(final String volumeId) async {
     bool success = false;
+
+    final ServerVolume? volumeToAttach = await getVolume(volumeId);
+    if (volumeToAttach == null) {
+      return success;
+    }
 
     final Response dbPostResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post('/volumes/$volumeId/actions/detach');
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      dbPostResponse = await client.post(
+        '/volumes/actions',
+        data: {
+          'type': 'detach',
+          'droplet_id': volumeToAttach.serverId,
+          'region': region,
+        },
+      );
+      success =
+          dbPostResponse.data['action']['status'].toString() == 'completed';
     } catch (e) {
       print(e);
     } finally {
@@ -243,19 +258,24 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> resizeVolume(final int volumeId, final int sizeGb) async {
+
+  /// volumeId is storage's UUID for Digital Ocean
+  Future<bool> resizeVolume(final String volumeId, final int sizeGb) async {
     bool success = false;
 
     final Response dbPostResponse;
     final Dio client = await getClient();
     try {
       dbPostResponse = await client.post(
-        '/volumes/$volumeId/actions/resize',
+        '/volumes/actions',
         data: {
-          'size': sizeGb,
+          'type': 'resize',
+          'size_gigabytes': sizeGb,
+          'region': region,
         },
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          dbPostResponse.data['action']['status'].toString() == 'completed';
     } catch (e) {
       print(e);
     } finally {
@@ -300,17 +320,11 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final int dbId = dataBase.id;
 
     final String apiToken = StringGenerators.apiToken();
-
     final String hostname = getHostnameFromDomain(domainName);
 
     final String base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
-    print('hostname: $hostname');
-
-    /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
-    /// check the branch name, it could be "development" or "master".
-    ///
     final String userdataString =
         "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);

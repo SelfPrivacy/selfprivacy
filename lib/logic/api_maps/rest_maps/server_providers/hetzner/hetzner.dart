@@ -179,13 +179,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<ServerVolume?> getVolume(final int id) async {
+  Future<ServerVolume?> getVolume(final String volumeId) async {
     ServerVolume? volume;
 
     final Response dbGetResponse;
     final Dio client = await getClient();
     try {
-      dbGetResponse = await client.get('/volumes/$id');
+      dbGetResponse = await client.get('/volumes/$volumeId');
       final int dbId = dbGetResponse.data['volume']['id'];
       final int dbSize = dbGetResponse.data['volume']['size'];
       final int dbServer = dbGetResponse.data['volume']['server'];
@@ -208,10 +208,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<void> deleteVolume(final int id) async {
+  Future<void> deleteVolume(final String volumeId) async {
     final Dio client = await getClient();
     try {
-      await client.delete('/volumes/$id');
+      await client.delete('/volumes/$volumeId');
     } catch (e) {
       print(e);
     } finally {
@@ -220,7 +220,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> attachVolume(final int volumeId, final int serverId) async {
+  Future<bool> attachVolume(final String volumeId, final int serverId) async {
     bool success = false;
 
     final Response dbPostResponse;
@@ -244,7 +244,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> detachVolume(final int volumeId) async {
+  Future<bool> detachVolume(final String volumeId) async {
     bool success = false;
 
     final Response dbPostResponse;
@@ -262,7 +262,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> resizeVolume(final int volumeId, final int sizeGb) async {
+  Future<bool> resizeVolume(final String volumeId, final int sizeGb) async {
     bool success = false;
 
     final Response dbPostResponse;
@@ -319,20 +319,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final int dbId = dataBase.id;
 
     final String apiToken = StringGenerators.apiToken();
-
     final String hostname = getHostnameFromDomain(domainName);
 
     final String base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
-    print('hostname: $hostname');
-
-    /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
-    /// check the branch name, it could be "development" or "master".
-    ///
     final String userdataString =
         "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
-    print(userdataString);
 
     final Map<String, Object> data = {
       'name': hostname,
@@ -378,7 +371,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     if (!success) {
       await Future.delayed(const Duration(seconds: 10));
-      await deleteVolume(dbId);
+      await deleteVolume(dbId.toString());
     }
 
     if (hetznerError != null) {

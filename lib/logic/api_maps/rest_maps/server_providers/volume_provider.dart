@@ -1,5 +1,6 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 
 mixin VolumeProviderApi on ApiMap {
   Future<ServerVolume?> createVolume();
@@ -9,5 +10,5 @@ mixin VolumeProviderApi on ApiMap {
   Future<bool> detachVolume(final int volumeId);
   Future<bool> resizeVolume(final int volumeId, final int sizeGb);
   Future<void> deleteVolume(final int id);
-  Future<double?> getPricePerGb();
+  Future<Price?> getPricePerGb();
 }

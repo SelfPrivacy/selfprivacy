@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 
 part 'provider_volume_state.dart';
 
@@ -32,7 +33,7 @@ class ApiProviderVolumeCubit
     }
   }
 
-  Future<double?> getPricePerGb() async =>
+  Future<Price?> getPricePerGb() async =>
       providerApi!.getVolumeProvider().getPricePerGb();
 
   Future<void> refresh() async {

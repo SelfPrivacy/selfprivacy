@@ -4,6 +4,7 @@ import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_depe
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
@@ -67,7 +68,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               ],
             );
           }
-          _euroPerGb = snapshot.data as double;
+          _euroPerGb = (snapshot.data as Price).value;
           _sizeController.text = _currentSliderGbValue.truncate().toString();
           _priceController.text =
               (_euroPerGb * double.parse(_sizeController.text))

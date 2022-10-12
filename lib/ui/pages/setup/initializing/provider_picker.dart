@@ -180,7 +180,9 @@ class ProviderSelectionPage extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    context.read<ServerInstallationCubit>().setServerProviderType(ServerProvider.hetzner);
+                    context
+                        .read<ServerInstallationCubit>()
+                        .setServerProviderType(ServerProvider.hetzner);
                     callback(ServerProvider.hetzner);
                   },
                   child: Image.asset(
@@ -193,7 +195,9 @@ class ProviderSelectionPage extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    context.read<ServerInstallationCubit>().setServerProviderType(ServerProvider.digitalOcean);
+                    context
+                        .read<ServerInstallationCubit>()
+                        .setServerProviderType(ServerProvider.digitalOcean);
                     callback(ServerProvider.digitalOcean);
                   },
                   child: Image.asset(

@@ -9,12 +9,15 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
-  DigitalOceanApi(
-      {final this.hasLogger = false, final this.isWithToken = true});
+  DigitalOceanApi({
+    this.hasLogger = false,
+    this.isWithToken = true,
+  });
   @override
   bool hasLogger;
   @override
@@ -46,7 +49,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final Dio client = await getClient();
     try {
       response = await client.get(
-        '/servers',
+        '/account',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -71,30 +74,13 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return isValid;
   }
 
+  /// Hardcoded on their documentation and there is no pricing API at all
+  /// Probably we should scrap the doc page manually
   @override
-  RegExp getApiTokenValidation() =>
-      RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
-
-  @override
-  Future<double?> getPricePerGb() async {
-    double? price;
-
-    final Response dbGetResponse;
-    final Dio client = await getClient();
-    try {
-      dbGetResponse = await client.get('/pricing');
-
-      final volume = dbGetResponse.data['pricing']['volume'];
-      final volumePrice = volume['price_per_gb_month']['gross'];
-      price = double.parse(volumePrice);
-    } catch (e) {
-      print(e);
-    } finally {
-      client.close();
-    }
-
-    return price;
-  }
+  Future<Price?> getPricePerGb() async => Price(
+        value: 0.10,
+        currency: 'USD',
+      );
 
   @override
   Future<ServerVolume?> createVolume() async {

@@ -22,5 +22,7 @@ abstract class ServerProviderApi extends ApiMap {
   });
 
   Future<bool> isApiTokenValid(final String token);
-  RegExp getApiTokenValidation();
+  RegExp getApiTokenValidation() => RegExp(
+        r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]',
+      );
 }

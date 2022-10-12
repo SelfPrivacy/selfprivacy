@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
@@ -75,7 +76,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
 
   @override
-  Future<double?> getPricePerGb() async {
+  Future<Price?> getPricePerGb() async {
     double? price;
 
     final Response dbGetResponse;
@@ -92,7 +93,12 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       client.close();
     }
 
-    return price;
+    return price == null
+        ? null
+        : Price(
+            value: price,
+            currency: 'EUR',
+          );
   }
 
   @override

@@ -3,9 +3,11 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
+import 'package:selfprivacy/logic/models/server_provider_location.dart';
 
 abstract class ServerProviderApi extends ApiMap {
   Future<List<ServerBasicInfo>> getServers();
+  Future<List<ServerProviderLocation>> getAvailableLocations();
 
   Future<ServerHostingDetails> restart();
   Future<ServerHostingDetails> powerOn();

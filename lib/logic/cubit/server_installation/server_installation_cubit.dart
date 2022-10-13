@@ -63,7 +63,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   RegExp getServerProviderApiTokenValidation() =>
       repository.serverProviderApiFactory!
-          .getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),)
+          .getServerProvider(
+            settings: const ServerProviderApiSettings(
+              region: 'fra1',
+            ),
+          )
           .getApiTokenValidation();
 
   RegExp getDnsProviderApiTokenValidation() => repository.dnsProviderApiFactory!
@@ -75,7 +79,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   ) async =>
       repository.serverProviderApiFactory!
           .getServerProvider(
-            settings: const ServerProviderApiSettings(region: 'fra1', isWithToken: false),
+            settings: const ServerProviderApiSettings(
+                region: 'fra1', isWithToken: false),
           )
           .isApiTokenValid(providerToken);
 

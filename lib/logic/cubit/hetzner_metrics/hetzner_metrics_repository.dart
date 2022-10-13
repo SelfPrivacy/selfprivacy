@@ -26,7 +26,10 @@ class HetznerMetricsRepository {
         break;
     }
 
-    final HetznerApi api = HetznerApi(hasLogger: false, region: 'fra1',);
+    final HetznerApi api = HetznerApi(
+      hasLogger: false,
+      region: 'fra1',
+    );
 
     final List<Map<String, dynamic>> results = await Future.wait([
       api.getMetrics(start, end, 'cpu'),

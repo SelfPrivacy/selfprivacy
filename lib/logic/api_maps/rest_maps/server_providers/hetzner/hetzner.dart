@@ -11,10 +11,15 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
+import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
-  HetznerApi({required this.region, this.hasLogger = false, this.isWithToken = true,});
+  HetznerApi({
+    required this.region,
+    this.hasLogger = false,
+    this.isWithToken = true,
+  });
   @override
   bool hasLogger;
   @override
@@ -534,6 +539,52 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     print(servers);
     return servers;
+  }
+
+  String? getEmojiFlag(final String query) {
+    String? emoji;
+
+    switch (query.toLowerCase()) {
+      case 'de':
+        emoji = '🇩🇪';
+        break;
+
+      case 'fi':
+        emoji = '🇫🇮';
+        break;
+
+      case 'us':
+        emoji = '🇺🇸';
+        break;
+    }
+
+    return emoji;
+  }
+
+  @override
+  Future<List<ServerProviderLocation>> getAvailableLocations() async {
+    List<ServerProviderLocation> locations = [];
+
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.post(
+        '/locations',
+      );
+
+      locations = response.data!['locations'].map<ServerProviderLocation>(
+        (final location) => ServerProviderLocation(
+          title: location['city'],
+          description: location['description'],
+          flag: getEmojiFlag(location['country']),
+        ),
+      );
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return locations;
   }
 
   @override

@@ -153,7 +153,11 @@ class ServerInstallationRepository {
   ) async {
     ServerHostingDetails serverDetails;
 
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
+      settings: const ServerProviderApiSettings(
+        region: 'fra1',
+      ),
+    );
     serverDetails = await api.powerOn();
 
     return serverDetails;
@@ -229,7 +233,11 @@ class ServerInstallationRepository {
     required final Future<void> Function(ServerHostingDetails serverDetails)
         onSuccess,
   }) async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
+      settings: const ServerProviderApiSettings(
+        region: 'fra1',
+      ),
+    );
     try {
       final ServerHostingDetails? serverDetails = await api.createServer(
         dnsApiToken: cloudFlareKey,
@@ -334,7 +342,11 @@ class ServerInstallationRepository {
     final DnsProviderApi dnsProviderApi =
         dnsProviderApiFactory!.getDnsProvider();
     final ServerProviderApi serverApi =
-        serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
+        serverProviderApiFactory!.getServerProvider(
+      settings: const ServerProviderApiSettings(
+        region: 'fra1',
+      ),
+    );
 
     await dnsProviderApi.removeSimilarRecords(
       ip4: serverDetails.ip4,
@@ -406,12 +418,20 @@ class ServerInstallationRepository {
   }
 
   Future<ServerHostingDetails> restart() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
+      settings: const ServerProviderApiSettings(
+        region: 'fra1',
+      ),
+    );
     return api.restart();
   }
 
   Future<ServerHostingDetails> powerOn() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
+      settings: const ServerProviderApiSettings(
+        region: 'fra1',
+      ),
+    );
     return api.powerOn();
   }
 
@@ -654,7 +674,11 @@ class ServerInstallationRepository {
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
+      settings: const ServerProviderApiSettings(
+        region: 'fra1',
+      ),
+    );
     return api.getServers();
   }
 
@@ -732,7 +756,11 @@ class ServerInstallationRepository {
   }
 
   Future<void> deleteServer(final ServerDomain serverDomain) async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
+      settings: const ServerProviderApiSettings(
+        region: 'fra1',
+      ),
+    );
     final DnsProviderApi dnsProviderApi =
         dnsProviderApiFactory!.getDnsProvider();
 

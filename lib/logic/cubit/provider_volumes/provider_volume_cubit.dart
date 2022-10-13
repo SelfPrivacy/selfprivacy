@@ -34,8 +34,13 @@ class ApiProviderVolumeCubit
     }
   }
 
-  Future<Price?> getPricePerGb() async =>
-      providerApi!.getVolumeProvider(settings: const ServerProviderApiSettings(region: 'fra1',),).getPricePerGb();
+  Future<Price?> getPricePerGb() async => providerApi!
+      .getVolumeProvider(
+        settings: const ServerProviderApiSettings(
+          region: 'fra1',
+        ),
+      )
+      .getPricePerGb();
 
   Future<void> refresh() async {
     emit(const ApiProviderVolumeState([], LoadingStatus.refreshing, false));
@@ -47,8 +52,13 @@ class ApiProviderVolumeCubit
       return emit(const ApiProviderVolumeState([], LoadingStatus.error, false));
     }
 
-    final List<ServerVolume> volumes =
-        await providerApi!.getVolumeProvider(settings: const ServerProviderApiSettings(region: 'fra1',),).getVolumes();
+    final List<ServerVolume> volumes = await providerApi!
+        .getVolumeProvider(
+          settings: const ServerProviderApiSettings(
+            region: 'fra1',
+          ),
+        )
+        .getVolumes();
 
     if (volumes.isEmpty) {
       return emit(const ApiProviderVolumeState([], LoadingStatus.error, false));
@@ -60,14 +70,22 @@ class ApiProviderVolumeCubit
   Future<void> attachVolume(final DiskVolume volume) async {
     final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
     await providerApi!
-        .getVolumeProvider(settings: const ServerProviderApiSettings(region: 'fra1',),)
+        .getVolumeProvider(
+          settings: const ServerProviderApiSettings(
+            region: 'fra1',
+          ),
+        )
         .attachVolume(volume.providerVolume!.id.toString(), server.id);
     refresh();
   }
 
   Future<void> detachVolume(final DiskVolume volume) async {
     await providerApi!
-        .getVolumeProvider(settings: const ServerProviderApiSettings(region: 'fra1',),)
+        .getVolumeProvider(
+          settings: const ServerProviderApiSettings(
+            region: 'fra1',
+          ),
+        )
         .detachVolume(volume.providerVolume!.id.toString());
     refresh();
   }
@@ -81,7 +99,13 @@ class ApiProviderVolumeCubit
       'Starting resize',
     );
     emit(state.copyWith(isResizing: true));
-    final bool resized = await providerApi!.getVolumeProvider(settings: const ServerProviderApiSettings(region: 'fra1',),).resizeVolume(
+    final bool resized = await providerApi!
+        .getVolumeProvider(
+          settings: const ServerProviderApiSettings(
+            region: 'fra1',
+          ),
+        )
+        .resizeVolume(
           volume.providerVolume!.id.toString(),
           newSizeGb,
         );
@@ -117,8 +141,13 @@ class ApiProviderVolumeCubit
   }
 
   Future<void> createVolume() async {
-    final ServerVolume? volume =
-        await providerApi!.getVolumeProvider(settings: const ServerProviderApiSettings(region: 'fra1',),).createVolume();
+    final ServerVolume? volume = await providerApi!
+        .getVolumeProvider(
+          settings: const ServerProviderApiSettings(
+            region: 'fra1',
+          ),
+        )
+        .createVolume();
 
     final diskVolume = DiskVolume(providerVolume: volume);
     await attachVolume(diskVolume);
@@ -131,7 +160,11 @@ class ApiProviderVolumeCubit
 
   Future<void> deleteVolume(final DiskVolume volume) async {
     await providerApi!
-        .getVolumeProvider(settings: const ServerProviderApiSettings(region: 'fra1',),)
+        .getVolumeProvider(
+          settings: const ServerProviderApiSettings(
+            region: 'fra1',
+          ),
+        )
         .deleteVolume(volume.providerVolume!.id.toString());
     refresh();
   }

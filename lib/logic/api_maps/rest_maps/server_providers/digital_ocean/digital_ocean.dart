@@ -11,6 +11,7 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
+import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
@@ -536,6 +537,69 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     print(servers);
     return servers;
+  }
+
+  String? getEmojiFlag(final String query) {
+    String? emoji;
+
+    switch (query.toLowerCase().substring(0, 2)) {
+      case 'fra':
+        emoji = '🇩🇪';
+        break;
+
+      case 'ams':
+        emoji = '🇳🇱';
+        break;
+
+      case 'sgp':
+        emoji = '🇸🇬';
+        break;
+
+      case 'lon':
+        emoji = '🇬🇧';
+        break;
+
+      case 'tor':
+        emoji = '🇨🇦';
+        break;
+
+      case 'blr':
+        emoji = '🇮🇳';
+        break;
+
+      case 'nyc':
+      case 'sfo':
+        emoji = '🇺🇸';
+        break;
+    }
+
+    return emoji;
+  }
+
+  @override
+  Future<List<ServerProviderLocation>> getAvailableLocations() async {
+    List<ServerProviderLocation> locations = [];
+
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.post(
+        '/locations',
+      );
+
+      locations = response.data!['locations'].map<ServerProviderLocation>(
+        (final location) => ServerProviderLocation(
+          title: location['slug'],
+          description: location['name'],
+          flag: getEmojiFlag(location['slug']),
+        ),
+      );
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return locations;
   }
 
   @override

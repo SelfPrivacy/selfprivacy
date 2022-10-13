@@ -11,9 +11,11 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
@@ -151,7 +153,7 @@ class ServerInstallationRepository {
   ) async {
     ServerHostingDetails serverDetails;
 
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
     serverDetails = await api.powerOn();
 
     return serverDetails;
@@ -227,7 +229,7 @@ class ServerInstallationRepository {
     required final Future<void> Function(ServerHostingDetails serverDetails)
         onSuccess,
   }) async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
     try {
       final ServerHostingDetails? serverDetails = await api.createServer(
         dnsApiToken: cloudFlareKey,
@@ -332,7 +334,7 @@ class ServerInstallationRepository {
     final DnsProviderApi dnsProviderApi =
         dnsProviderApiFactory!.getDnsProvider();
     final ServerProviderApi serverApi =
-        serverProviderApiFactory!.getServerProvider();
+        serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
 
     await dnsProviderApi.removeSimilarRecords(
       ip4: serverDetails.ip4,
@@ -404,12 +406,12 @@ class ServerInstallationRepository {
   }
 
   Future<ServerHostingDetails> restart() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
     return api.restart();
   }
 
   Future<ServerHostingDetails> powerOn() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
     return api.powerOn();
   }
 
@@ -652,7 +654,7 @@ class ServerInstallationRepository {
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
     return api.getServers();
   }
 
@@ -730,7 +732,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> deleteServer(final ServerDomain serverDomain) async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),);
     final DnsProviderApi dnsProviderApi =
         dnsProviderApiFactory!.getDnsProvider();
 

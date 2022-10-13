@@ -14,11 +14,13 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
-  HetznerApi({final this.hasLogger = false, final this.isWithToken = true});
+  HetznerApi({required this.region, this.hasLogger = false, this.isWithToken = true,});
   @override
   bool hasLogger;
   @override
   bool isWithToken;
+
+  final String region;
 
   @override
   BaseOptions get options {
@@ -114,7 +116,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           'size': 10,
           'name': StringGenerators.dbStorageName(),
           'labels': {'labelkey': 'value'},
-          'location': 'fsn1',
+          'location': region,
           'automount': false,
           'format': 'ext4'
         },
@@ -337,7 +339,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       'user_data': userdataString,
       'labels': {},
       'automount': true,
-      'location': 'fsn1'
+      'location': region,
     };
     print('Decoded data: $data');
 

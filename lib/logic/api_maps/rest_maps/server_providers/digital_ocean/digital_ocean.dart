@@ -15,6 +15,7 @@ import 'package:selfprivacy/utils/password_generator.dart';
 
 class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   DigitalOceanApi({
+    required this.region,
     this.hasLogger = false,
     this.isWithToken = true,
   });
@@ -23,7 +24,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   @override
   bool isWithToken;
 
-  final String region = 'fra1';
+  final String region;
 
   @override
   BaseOptions get options {
@@ -318,6 +319,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     final String dbPassword = StringGenerators.dbPassword();
     final int dbId = dataBase.id;
+    final String? dbUuid = dataBase.uuid;
 
     final String apiToken = StringGenerators.apiToken();
     final String hostname = getHostnameFromDomain(domainName);
@@ -334,7 +336,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       'server_type': 'cx11',
       'start_after_create': false,
       'image': 'ubuntu-20.04',
-      'volumes': [dbId],
+      'volumes': dbUuid == null ? [dbId] : [dbUuid],
       'networks': [],
       'user_data': userdataString,
       'labels': {},
@@ -373,7 +375,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     if (!success) {
       await Future.delayed(const Duration(seconds: 10));
-      await deleteVolume(dbId);
+      await deleteVolume(dbUuid ?? dbId.toString());
     }
 
     if (hetznerError != null) {

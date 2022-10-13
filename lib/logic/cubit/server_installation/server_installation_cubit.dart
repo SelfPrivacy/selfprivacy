@@ -5,8 +5,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/provider_api_settings.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -61,7 +63,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   RegExp getServerProviderApiTokenValidation() =>
       repository.serverProviderApiFactory!
-          .getServerProvider()
+          .getServerProvider(settings: const ServerProviderApiSettings(region: 'fra1',),)
           .getApiTokenValidation();
 
   RegExp getDnsProviderApiTokenValidation() => repository.dnsProviderApiFactory!
@@ -73,7 +75,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   ) async =>
       repository.serverProviderApiFactory!
           .getServerProvider(
-            settings: const ProviderApiSettings(isWithToken: false),
+            settings: const ServerProviderApiSettings(region: 'fra1', isWithToken: false),
           )
           .isApiTokenValid(providerToken);
 

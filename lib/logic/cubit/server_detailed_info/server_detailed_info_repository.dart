@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 
 class ServerDetailsRepository {
-  HetznerApi hetzner = HetznerApi();
+  HetznerApi hetzner = HetznerApi(region: 'fra1');
   ServerApi server = ServerApi();
 
   Future<ServerDetailsRepositoryDto> load() async {

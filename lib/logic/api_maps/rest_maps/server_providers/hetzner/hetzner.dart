@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -12,6 +13,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
+import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
@@ -567,7 +569,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.post(
+      final Response response = await client.get(
         '/locations',
       );
 
@@ -576,6 +578,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           title: location['city'],
           description: location['description'],
           flag: getEmojiFlag(location['country']),
+          identifier: location['name'],
         ),
       );
     } catch (e) {
@@ -585,6 +588,46 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     return locations;
+  }
+
+  @override
+  Future<List<ServerType>> getServerTypesByLocation({
+    required final ServerProviderLocation location,
+  }) async {
+    final List<ServerType> types = [];
+
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get(
+        '/server_types',
+      );
+      final rawTypes = response.data!['server_types'];
+      for (final rawType in rawTypes) {
+        for (final rawPrice in rawType['prices']) {
+          if (rawPrice['location'].toString() == location.identifier) {
+            types.add(
+              ServerType(
+                title: rawType['description'],
+                identifier: rawType['name'],
+                ram: rawType['memory'],
+                cores: rawType['cores'],
+                disk: DiskSize(byte: rawType['disk'] * 1024 * 1024 * 1024),
+                price: Price(
+                  value: rawPrice['price_monthly']['gross'],
+                  currency: 'EUR',
+                ),
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return types;
   }
 
   @override

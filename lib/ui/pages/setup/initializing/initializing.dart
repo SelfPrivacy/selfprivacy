@@ -140,15 +140,17 @@ class InitializingPage extends StatelessWidget {
     }
   }
 
-  Widget _stepServerProviderToken(final ServerInstallationCubit serverInstallationCubit) =>
+  Widget _stepServerProviderToken(
+          final ServerInstallationCubit serverInstallationCubit) =>
       ServerProviderPicker(
         serverInstallationCubit: serverInstallationCubit,
       );
 
-  Widget _stepServerType(final ServerInstallationCubit serverInstallationCubit) =>
-    ServerTypePicker(
-      serverInstallationCubit: serverInstallationCubit,
-    );
+  Widget _stepServerType(
+          final ServerInstallationCubit serverInstallationCubit) =>
+      ServerTypePicker(
+        serverInstallationCubit: serverInstallationCubit,
+      );
 
   void _showModal(final BuildContext context, final Widget widget) {
     showModalBottomSheet<void>(

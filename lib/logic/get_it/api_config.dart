@@ -10,6 +10,7 @@ class ApiConfigModel {
 
   ServerHostingDetails? get serverDetails => _serverDetails;
   String? get serverProviderKey => _serverProviderKey;
+  String? get serverType => _serverType;
   String? get cloudFlareKey => _cloudFlareKey;
   BackblazeCredential? get backblazeCredential => _backblazeCredential;
   ServerDomain? get serverDomain => _serverDomain;
@@ -17,6 +18,7 @@ class ApiConfigModel {
 
   String? _serverProviderKey;
   String? _cloudFlareKey;
+  String? _serverType;
   ServerHostingDetails? _serverDetails;
   BackblazeCredential? _backblazeCredential;
   ServerDomain? _serverDomain;
@@ -30,6 +32,11 @@ class ApiConfigModel {
   Future<void> storeCloudFlareKey(final String value) async {
     await _box.put(BNames.cloudFlareKey, value);
     _cloudFlareKey = value;
+  }
+
+  Future<void> storeServerTypeIdentifier(final String typeIdentifier) async {
+    await _box.put(BNames.serverTypeIdentifier, typeIdentifier);
+    _serverType = typeIdentifier;
   }
 
   Future<void> storeBackblazeCredential(final BackblazeCredential value) async {

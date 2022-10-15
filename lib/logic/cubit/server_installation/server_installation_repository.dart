@@ -50,6 +50,7 @@ class ServerInstallationRepository {
   Future<ServerInstallationState> load() async {
     final String? providerApiToken = getIt<ApiConfigModel>().serverProviderKey;
     final String? cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
+    final String? serverTypeIdentificator = getIt<ApiConfigModel>().serverType;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
     final BackblazeCredential? backblazeCredential =
         getIt<ApiConfigModel>().backblazeCredential;
@@ -73,6 +74,7 @@ class ServerInstallationRepository {
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
       return ServerInstallationFinished(
         providerApiToken: providerApiToken!,
+        serverTypeIdentificator: serverTypeIdentificator!,
         cloudFlareKey: cloudflareToken!,
         serverDomain: serverDomain!,
         backblazeCredential: backblazeCredential!,
@@ -695,6 +697,10 @@ class ServerInstallationRepository {
 
   Future<void> saveServerProviderKey(final String key) async {
     await getIt<ApiConfigModel>().storeServerProviderKey(key);
+  }
+
+  Future<void> saveServerType(final String serverType) async {
+    await getIt<ApiConfigModel>().storeServerTypeIdentifier(serverType);
   }
 
   Future<void> deleteServerProviderKey() async {

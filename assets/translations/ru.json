@@ -267,6 +267,8 @@
         "place_where_data": "Здесь будут жить ваши данные и SelfPrivacy-сервисы:",
         "how": "Как получить API Token",
         "provider_bad_key_error": "API ключ провайдера неверен",
+        "no_locations_found": "Не найдено локаций. Убедитесь, что ваш аккаунт доступен.",
+        "no_server_types_found": "Не удалось получить список серверов. Убедитесь, что ваш аккаунт доступен и попытайтесь сменить локацию сервера.",
         "cloudflare_bad_key_error": "Cloudflare API ключ неверен",
         "backblaze_bad_key_error": "Информация о Backblaze хранилище неверна",
         "connect_cloudflare": "Подключите CloudFlare",

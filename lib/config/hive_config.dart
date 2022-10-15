@@ -90,6 +90,9 @@ class BNames {
   /// A String field of [serverInstallationBox] box.
   static String cloudFlareKey = 'cloudFlareKey';
 
+  /// A String field of [serverTypeIdentifier] box.
+  static String serverTypeIdentifier = 'serverTypeIdentifier';
+
   /// A [User] field of [serverInstallationBox] box.
   static String rootUser = 'rootUser';
 

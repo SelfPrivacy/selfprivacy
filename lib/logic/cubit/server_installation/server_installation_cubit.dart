@@ -6,8 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -82,7 +80,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       repository.serverProviderApiFactory!
           .getServerProvider(
             settings: const ServerProviderApiSettings(
-                region: 'fra1', isWithToken: false),
+              region: 'fra1',
+              isWithToken: false,
+            ),
           )
           .isApiTokenValid(providerToken);
 
@@ -101,12 +101,25 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
 
     return repository.serverProviderApiFactory!
-          .getServerProvider(
-            settings: const ServerProviderApiSettings(region: 'fra1'),
-          )
-          .getAvailableLocations();
+        .getServerProvider(
+          settings: const ServerProviderApiSettings(region: 'fra1'),
+        )
+        .getAvailableLocations();
   }
-  
+
+  Future<List<ServerType>> fetchAvailableTypesByLocation(
+    final ServerProviderLocation location,
+  ) async {
+    if (repository.serverProviderApiFactory == null) {
+      return [];
+    }
+
+    return repository.serverProviderApiFactory!
+        .getServerProvider(
+          settings: const ServerProviderApiSettings(region: 'fra1'),
+        )
+        .getServerTypesByLocation(location: location);
+  }
 
   void setServerProviderKey(final String serverProviderKey) async {
     await repository.saveServerProviderKey(serverProviderKey);
@@ -124,6 +137,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(
       (state as ServerInstallationNotFinished).copyWith(
         providerApiToken: serverProviderKey,
+      ),
+    );
+  }
+
+  void setServerType(final String serverTypeId) async {
+    await repository.saveServerType(serverTypeId);
+
+    emit(
+      (state as ServerInstallationNotFinished).copyWith(
+        serverTypeIdentificator: serverTypeId,
       ),
     );
   }

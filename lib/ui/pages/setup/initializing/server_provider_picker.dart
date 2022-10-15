@@ -9,8 +9,8 @@ import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
-class ProviderPicker extends StatefulWidget {
-  const ProviderPicker({
+class ServerProviderPicker extends StatefulWidget {
+  const ServerProviderPicker({
     required this.serverInstallationCubit,
     super.key,
   });
@@ -18,10 +18,10 @@ class ProviderPicker extends StatefulWidget {
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
-  State<ProviderPicker> createState() => _ProviderPickerState();
+  State<ServerProviderPicker> createState() => _ServerProviderPickerState();
 }
 
-class _ProviderPickerState extends State<ProviderPicker> {
+class _ServerProviderPickerState extends State<ServerProviderPicker> {
   ServerProvider selectedProvider = ServerProvider.unknown;
 
   void setProvider(final ServerProvider provider) {

@@ -16,6 +16,8 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
+import 'package:selfprivacy/logic/models/server_provider_location.dart';
+import 'package:selfprivacy/logic/models/server_type.dart';
 
 export 'package:provider/provider.dart';
 
@@ -92,6 +94,19 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
             settings: const DnsProviderApiSettings(isWithToken: false),
           )
           .isApiTokenValid(providerToken);
+
+  Future<List<ServerProviderLocation>> fetchAvailableLocations() async {
+    if (repository.serverProviderApiFactory == null) {
+      return [];
+    }
+
+    return repository.serverProviderApiFactory!
+          .getServerProvider(
+            settings: const ServerProviderApiSettings(region: 'fra1'),
+          )
+          .getAvailableLocations();
+  }
+  
 
   void setServerProviderKey(final String serverProviderKey) async {
     await repository.saveServerProviderKey(serverProviderKey);

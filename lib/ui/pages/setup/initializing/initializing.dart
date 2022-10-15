@@ -7,7 +7,6 @@ import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -17,13 +16,14 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:selfprivacy/ui/pages/setup/initializing/provider_picker.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/server_provider_picker.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/server_type_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class InitializingPage extends StatelessWidget {
   const InitializingPage({
-    final super.key,
+    super.key,
   });
 
   @override
@@ -36,7 +36,8 @@ class InitializingPage extends StatelessWidget {
       Widget? actualInitializingPage;
       if (cubit.state is! ServerInstallationFinished) {
         actualInitializingPage = [
-          () => _stepHetzner(cubit),
+          () => _stepServerProviderToken(cubit),
+          () => _stepServerType(cubit),
           () => _stepCloudflare(cubit),
           () => _stepBackblaze(cubit),
           () => _stepDomain(cubit),
@@ -139,10 +140,15 @@ class InitializingPage extends StatelessWidget {
     }
   }
 
-  Widget _stepHetzner(final ServerInstallationCubit serverInstallationCubit) =>
-      ProviderPicker(
+  Widget _stepServerProviderToken(final ServerInstallationCubit serverInstallationCubit) =>
+      ServerProviderPicker(
         serverInstallationCubit: serverInstallationCubit,
       );
+
+  Widget _stepServerType(final ServerInstallationCubit serverInstallationCubit) =>
+    ServerTypePicker(
+      serverInstallationCubit: serverInstallationCubit,
+    );
 
   void _showModal(final BuildContext context, final Widget widget) {
     showModalBottomSheet<void>(

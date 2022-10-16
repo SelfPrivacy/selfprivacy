@@ -8,7 +8,8 @@ class DigitalOceanApiFactory extends ServerProviderApiFactory
     with VolumeProviderApiFactory {
   @override
   ServerProviderApi getServerProvider({
-    required final ServerProviderApiSettings settings,
+    final ServerProviderApiSettings settings =
+        const ServerProviderApiSettings(),
   }) =>
       DigitalOceanApi(
         region: settings.region,
@@ -18,7 +19,8 @@ class DigitalOceanApiFactory extends ServerProviderApiFactory
 
   @override
   VolumeProviderApi getVolumeProvider({
-    required final ServerProviderApiSettings settings,
+    final ServerProviderApiSettings settings =
+        const ServerProviderApiSettings(),
   }) =>
       DigitalOceanApi(
         region: settings.region,

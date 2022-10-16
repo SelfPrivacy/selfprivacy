@@ -6,22 +6,28 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_pro
 
 class HetznerApiFactory extends ServerProviderApiFactory
     with VolumeProviderApiFactory {
+  HetznerApiFactory({this.region});
+
+  final String? region;
+
   @override
   ServerProviderApi getServerProvider({
-    required final ServerProviderApiSettings settings,
+    final ServerProviderApiSettings settings =
+        const ServerProviderApiSettings(),
   }) =>
       HetznerApi(
-        region: settings.region,
+        region: settings.region ?? region,
         hasLogger: settings.hasLogger,
         isWithToken: settings.isWithToken,
       );
 
   @override
   VolumeProviderApi getVolumeProvider({
-    required final ServerProviderApiSettings settings,
+    final ServerProviderApiSettings settings =
+        const ServerProviderApiSettings(),
   }) =>
       HetznerApi(
-        region: settings.region,
+        region: settings.region ?? region,
         hasLogger: settings.hasLogger,
         isWithToken: settings.isWithToken,
       );

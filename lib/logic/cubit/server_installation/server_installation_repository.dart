@@ -10,6 +10,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
@@ -25,6 +26,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
+import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 
@@ -44,11 +46,14 @@ class ServerInstallationRepository {
   ServerProviderApiFactory? serverProviderApiFactory;
   DnsProviderApiFactory? dnsProviderApiFactory =
       ApiFactoryCreator.createDnsProviderApiFactory(
-    DnsProvider.cloudflare, // TODO: HARDCODE FOR NOW!!!
+    DnsProviderApiFactorySettings(
+      provider: DnsProvider.cloudflare,
+    ), // TODO: HARDCODE FOR NOW!!!
   );
 
   Future<ServerInstallationState> load() async {
     final String? providerApiToken = getIt<ApiConfigModel>().serverProviderKey;
+    final String? location = getIt<ApiConfigModel>().serverLocation;
     final String? cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
     final String? serverTypeIdentificator = getIt<ApiConfigModel>().serverType;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
@@ -61,13 +66,18 @@ class ServerInstallationRepository {
         serverDetails.provider != ServerProvider.unknown) {
       serverProviderApiFactory =
           ApiFactoryCreator.createServerProviderApiFactory(
-        serverDetails.provider,
+        ServerProviderApiFactorySettings(
+          provider: serverDetails.provider,
+          location: location,
+        ),
       );
     }
 
     if (serverDomain != null && serverDomain.provider != DnsProvider.unknown) {
       dnsProviderApiFactory = ApiFactoryCreator.createDnsProviderApiFactory(
-        serverDomain.provider,
+        DnsProviderApiFactorySettings(
+          provider: serverDomain.provider,
+        ),
       );
     }
 
@@ -155,11 +165,7 @@ class ServerInstallationRepository {
   ) async {
     ServerHostingDetails serverDetails;
 
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
-      settings: const ServerProviderApiSettings(
-        region: 'fra1',
-      ),
-    );
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     serverDetails = await api.powerOn();
 
     return serverDetails;
@@ -235,11 +241,7 @@ class ServerInstallationRepository {
     required final Future<void> Function(ServerHostingDetails serverDetails)
         onSuccess,
   }) async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
-      settings: const ServerProviderApiSettings(
-        region: 'fra1',
-      ),
-    );
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     try {
       final ServerHostingDetails? serverDetails = await api.createServer(
         dnsApiToken: cloudFlareKey,
@@ -344,11 +346,7 @@ class ServerInstallationRepository {
     final DnsProviderApi dnsProviderApi =
         dnsProviderApiFactory!.getDnsProvider();
     final ServerProviderApi serverApi =
-        serverProviderApiFactory!.getServerProvider(
-      settings: const ServerProviderApiSettings(
-        region: 'fra1',
-      ),
-    );
+        serverProviderApiFactory!.getServerProvider();
 
     await dnsProviderApi.removeSimilarRecords(
       ip4: serverDetails.ip4,
@@ -420,20 +418,12 @@ class ServerInstallationRepository {
   }
 
   Future<ServerHostingDetails> restart() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
-      settings: const ServerProviderApiSettings(
-        region: 'fra1',
-      ),
-    );
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     return api.restart();
   }
 
   Future<ServerHostingDetails> powerOn() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
-      settings: const ServerProviderApiSettings(
-        region: 'fra1',
-      ),
-    );
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     return api.powerOn();
   }
 
@@ -676,11 +666,7 @@ class ServerInstallationRepository {
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
-      settings: const ServerProviderApiSettings(
-        region: 'fra1',
-      ),
-    );
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     return api.getServers();
   }
 
@@ -699,8 +685,13 @@ class ServerInstallationRepository {
     await getIt<ApiConfigModel>().storeServerProviderKey(key);
   }
 
-  Future<void> saveServerType(final String serverType) async {
-    await getIt<ApiConfigModel>().storeServerTypeIdentifier(serverType);
+  Future<void> saveServerType(final ServerType serverType) async {
+    await getIt<ApiConfigModel>().storeServerTypeIdentifier(
+      serverType.identifier,
+    );
+    await getIt<ApiConfigModel>().storeServerLocation(
+      serverType.location.identifier,
+    );
   }
 
   Future<void> deleteServerProviderKey() async {
@@ -762,11 +753,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> deleteServer(final ServerDomain serverDomain) async {
-    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider(
-      settings: const ServerProviderApiSettings(
-        region: 'fra1',
-      ),
-    );
+    final ServerProviderApi api = serverProviderApiFactory!.getServerProvider();
     final DnsProviderApi dnsProviderApi =
         dnsProviderApiFactory!.getDnsProvider();
 

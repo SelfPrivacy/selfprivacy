@@ -1,3 +1,4 @@
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
@@ -5,7 +6,10 @@ import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 
 class ServerDetailsRepository {
-  HetznerApi hetzner = HetznerApi(region: 'fra1');
+  HetznerApi hetzner = HetznerApi(
+    /// TODO: Hetzner hardcode (???)
+    region: getIt<ApiConfigModel>().serverLocation,
+  );
   ServerApi server = ServerApi();
 
   Future<ServerDetailsRepositoryDto> load() async {

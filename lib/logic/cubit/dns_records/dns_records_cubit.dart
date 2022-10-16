@@ -1,5 +1,6 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
@@ -20,8 +21,9 @@ class DnsRecordsCubit
 
   DnsProviderApiFactory? dnsProviderApiFactory =
       ApiFactoryCreator.createDnsProviderApiFactory(
-    DnsProvider.cloudflare, // TODO: HARDCODE FOR NOW!!!
-  ); // TODO: Remove when provider selection is implemented.
+    DnsProviderApiFactorySettings(provider: DnsProvider.cloudflare),
+  ); // TODO: HARDCODE FOR NOW!!!
+  // TODO: Remove when provider selection is implemented.
 
   final ServerApi api = ServerApi();
 

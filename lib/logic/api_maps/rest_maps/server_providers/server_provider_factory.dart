@@ -4,12 +4,12 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_pro
 
 abstract class ServerProviderApiFactory {
   ServerProviderApi getServerProvider({
-    required final ServerProviderApiSettings settings,
+    final ServerProviderApiSettings settings,
   });
 }
 
 mixin VolumeProviderApiFactory {
   VolumeProviderApi getVolumeProvider({
-    required final ServerProviderApiSettings settings,
+    final ServerProviderApiSettings settings,
   });
 }

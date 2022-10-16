@@ -1,3 +1,4 @@
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/cloudflare/cloudflare_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/digital_ocean/digital_ocean_factory.dart';
@@ -13,9 +14,9 @@ class UnknownApiProviderException implements Exception {
 
 class ApiFactoryCreator {
   static ServerProviderApiFactory createServerProviderApiFactory(
-    final ServerProvider provider,
+    final ServerProviderApiFactorySettings settings,
   ) {
-    switch (provider) {
+    switch (settings.provider) {
       case ServerProvider.hetzner:
         return HetznerApiFactory();
       case ServerProvider.digitalOcean:
@@ -26,9 +27,9 @@ class ApiFactoryCreator {
   }
 
   static DnsProviderApiFactory createDnsProviderApiFactory(
-    final DnsProvider provider,
+    final DnsProviderApiFactorySettings settings,
   ) {
-    switch (provider) {
+    switch (settings.provider) {
       case DnsProvider.cloudflare:
         return CloudflareApiFactory();
       case DnsProvider.unknown:
@@ -39,9 +40,9 @@ class ApiFactoryCreator {
 
 class VolumeApiFactoryCreator {
   static VolumeProviderApiFactory createVolumeProviderApiFactory(
-    final ServerProvider provider,
+    final ServerProviderApiFactorySettings settings,
   ) {
-    switch (provider) {
+    switch (settings.provider) {
       case ServerProvider.hetzner:
         return HetznerApiFactory();
       case ServerProvider.digitalOcean:

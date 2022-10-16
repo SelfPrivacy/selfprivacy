@@ -133,7 +133,7 @@ class SelectTypePage extends StatelessWidget {
                 ...(snapshot.data! as List<ServerType>).map(
                   (final type) => InkWell(
                     onTap: () {
-                      serverInstallationCubit.setServerType(type.identifier);
+                      serverInstallationCubit.setServerType(type);
                     },
                     child: Card(
                       child: Padding(
@@ -153,7 +153,8 @@ class SelectTypePage extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 Text('disk: $type.disk.gibibyte'),
                                 const SizedBox(height: 8),
-                                Text('price: $type.price.value $type.price.currency'),
+                                Text(
+                                    'price: $type.price.value $type.price.currency'),
                               ],
                             ),
                           ],

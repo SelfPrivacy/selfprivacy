@@ -1,3 +1,4 @@
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
@@ -27,8 +28,9 @@ class HetznerMetricsRepository {
     }
 
     final HetznerApi api = HetznerApi(
+      /// TODO: Hetzner hardcode (???)
       hasLogger: false,
-      region: 'fra1',
+      region: getIt<ApiConfigModel>().serverLocation,
     );
 
     final List<Map<String, dynamic>> results = await Future.wait([

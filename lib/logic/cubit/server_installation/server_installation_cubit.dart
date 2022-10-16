@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
@@ -57,17 +58,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void setServerProviderType(final ServerProvider providerType) {
     repository.serverProviderApiFactory =
         ApiFactoryCreator.createServerProviderApiFactory(
-      providerType,
+      ServerProviderApiFactorySettings(
+        provider: providerType,
+      ),
     );
   }
 
   RegExp getServerProviderApiTokenValidation() =>
       repository.serverProviderApiFactory!
-          .getServerProvider(
-            settings: const ServerProviderApiSettings(
-              region: 'fra1',
-            ),
-          )
+          .getServerProvider()
           .getApiTokenValidation();
 
   RegExp getDnsProviderApiTokenValidation() => repository.dnsProviderApiFactory!
@@ -80,7 +79,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       repository.serverProviderApiFactory!
           .getServerProvider(
             settings: const ServerProviderApiSettings(
-              region: 'fra1',
               isWithToken: false,
             ),
           )
@@ -101,9 +99,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
 
     return repository.serverProviderApiFactory!
-        .getServerProvider(
-          settings: const ServerProviderApiSettings(region: 'fra1'),
-        )
+        .getServerProvider()
         .getAvailableLocations();
   }
 
@@ -115,9 +111,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
 
     return repository.serverProviderApiFactory!
-        .getServerProvider(
-          settings: const ServerProviderApiSettings(region: 'fra1'),
-        )
+        .getServerProvider()
         .getServerTypesByLocation(location: location);
   }
 
@@ -141,12 +135,20 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  void setServerType(final String serverTypeId) async {
-    await repository.saveServerType(serverTypeId);
+  void setServerType(final ServerType serverType) async {
+    await repository.saveServerType(serverType);
+
+    repository.serverProviderApiFactory =
+        ApiFactoryCreator.createServerProviderApiFactory(
+      ServerProviderApiFactorySettings(
+        provider: getIt<ApiConfigModel>().serverDetails!.provider,
+        location: serverType.location.identifier,
+      ),
+    );
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(
-        serverTypeIdentificator: serverTypeId,
+        serverTypeIdentificator: serverType.identifier,
       ),
     );
   }

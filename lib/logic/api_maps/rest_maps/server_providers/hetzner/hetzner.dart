@@ -18,7 +18,7 @@ import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   HetznerApi({
-    required this.region,
+    this.region,
     this.hasLogger = false,
     this.isWithToken = true,
   });
@@ -27,7 +27,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   @override
   bool isWithToken;
 
-  final String region;
+  final String? region;
 
   @override
   BaseOptions get options {
@@ -336,25 +336,25 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final String userdataString =
         "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
 
-    final Map<String, Object> data = {
-      'name': hostname,
-      'server_type': 'cx11',
-      'start_after_create': false,
-      'image': 'ubuntu-20.04',
-      'volumes': [dbId],
-      'networks': [],
-      'user_data': userdataString,
-      'labels': {},
-      'automount': true,
-      'location': region,
-    };
-    print('Decoded data: $data');
-
     ServerHostingDetails? serverDetails;
     DioError? hetznerError;
     bool success = false;
 
     try {
+      final Map<String, Object> data = {
+        'name': hostname,
+        'server_type': 'cx11',
+        'start_after_create': false,
+        'image': 'ubuntu-20.04',
+        'volumes': [dbId],
+        'networks': [],
+        'user_data': userdataString,
+        'labels': {},
+        'automount': true,
+        'location': region!,
+      };
+      print('Decoded data: $data');
+
       final Response serverCreateResponse = await client.post(
         '/servers',
         data: data,
@@ -616,6 +616,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
                   value: rawPrice['price_monthly']['gross'],
                   currency: 'EUR',
                 ),
+                location: location,
               ),
             );
           }

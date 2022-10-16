@@ -27,7 +27,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   @override
   bool isWithToken;
 
-  final String region;
+  final String? region;
 
   @override
   BaseOptions get options {
@@ -631,6 +631,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
                   value: rawSize['price_monthly'],
                   currency: 'USD',
                 ),
+                location: location,
               ),
             );
           }

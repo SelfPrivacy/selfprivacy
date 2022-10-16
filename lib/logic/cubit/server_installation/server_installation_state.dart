@@ -172,7 +172,8 @@ class ServerInstallationNotFinished extends ServerInstallationState {
   }) =>
       ServerInstallationNotFinished(
         providerApiToken: providerApiToken ?? this.providerApiToken,
-        serverTypeIdentificator: serverTypeIdentificator ?? this.serverTypeIdentificator,
+        serverTypeIdentificator:
+            serverTypeIdentificator ?? this.serverTypeIdentificator,
         cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
         backblazeCredential: backblazeCredential ?? this.backblazeCredential,
         serverDomain: serverDomain ?? this.serverDomain,
@@ -316,7 +317,8 @@ class ServerInstallationRecovery extends ServerInstallationState {
   }) =>
       ServerInstallationRecovery(
         providerApiToken: providerApiToken ?? this.providerApiToken,
-        serverTypeIdentificator: serverTypeIdentificator ?? this.serverTypeIdentificator,
+        serverTypeIdentificator:
+            serverTypeIdentificator ?? this.serverTypeIdentificator,
         cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
         backblazeCredential: backblazeCredential ?? this.backblazeCredential,
         serverDomain: serverDomain ?? this.serverDomain,

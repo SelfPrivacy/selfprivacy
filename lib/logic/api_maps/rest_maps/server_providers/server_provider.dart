@@ -21,6 +21,7 @@ abstract class ServerProviderApi extends ApiMap {
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
+    required final String serverType,
   });
   Future<void> createReverseDns({
     required final ServerHostingDetails serverDetails,

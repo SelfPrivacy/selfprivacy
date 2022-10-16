@@ -298,6 +298,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
+    required final String serverType,
   }) async {
     ServerHostingDetails? details;
 
@@ -311,6 +312,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       rootUser: rootUser,
       domainName: domainName,
       dataBase: newVolume,
+      serverType: serverType,
     );
 
     return details;
@@ -321,6 +323,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final User rootUser,
     required final String domainName,
     required final ServerVolume dataBase,
+    required final String serverType,
   }) async {
     final Dio client = await getClient();
 
@@ -343,7 +346,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     try {
       final Map<String, Object> data = {
         'name': hostname,
-        'server_type': 'cx11',
+        'server_type': serverType,
         'start_after_create': false,
         'image': 'ubuntu-20.04',
         'volumes': [dbId],

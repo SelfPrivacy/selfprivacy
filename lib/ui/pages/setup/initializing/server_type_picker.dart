@@ -154,7 +154,8 @@ class SelectTypePage extends StatelessWidget {
                                 Text('disk: $type.disk.gibibyte'),
                                 const SizedBox(height: 8),
                                 Text(
-                                    'price: $type.price.value $type.price.currency'),
+                                  'price: $type.price.value $type.price.currency',
+                                ),
                               ],
                             ),
                           ],

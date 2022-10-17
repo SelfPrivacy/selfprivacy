@@ -588,7 +588,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       id: server.id,
       createTime: server.created,
       volume: ServerVolume(
-        id: server.volumeId,
+        id: 0,
         name: 'recovered_volume',
         sizeByte: 0,
         serverId: server.id,

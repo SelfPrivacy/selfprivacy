@@ -532,7 +532,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
               ip: server.publicNet.ipv4.ip,
               reverseDns: server.publicNet.ipv4.reverseDns,
               created: server.created,
-              volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
             ),
           )
           .toList();

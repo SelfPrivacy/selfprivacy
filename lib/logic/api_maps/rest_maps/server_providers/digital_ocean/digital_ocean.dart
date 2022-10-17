@@ -95,6 +95,9 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final Response dbCreateResponse;
     final Dio client = await getClient();
     try {
+      final List<ServerVolume> volumes = await getVolumes();
+      await Future.delayed(const Duration(seconds: 6));
+
       dbCreateResponse = await client.post(
         '/volumes',
         data: {
@@ -109,11 +112,12 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       final dbSize = dbCreateResponse.data['volume']['size_gigabytes'];
       final dbName = dbCreateResponse.data['volume']['name'];
       volume = ServerVolume(
-        id: dbId,
+        id: volumes.length,
         name: dbName,
         sizeByte: dbSize,
         serverId: null,
         linuxDevice: null,
+        uuid: dbId,
       );
     } catch (e) {
       print(e);
@@ -296,36 +300,9 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     required final String domainName,
     required final String serverType,
   }) async {
-    ServerHostingDetails? details;
-
-    final ServerVolume? newVolume = await createVolume();
-    if (newVolume == null) {
-      return details;
-    }
-
-    details = await createServerWithVolume(
-      dnsApiToken: dnsApiToken,
-      rootUser: rootUser,
-      domainName: domainName,
-      dataBase: newVolume,
-      serverType: serverType,
-    );
-
-    return details;
-  }
-
-  Future<ServerHostingDetails?> createServerWithVolume({
-    required final String dnsApiToken,
-    required final User rootUser,
-    required final String domainName,
-    required final ServerVolume dataBase,
-    required final String serverType,
-  }) async {
-    final Dio client = await getClient();
+    ServerHostingDetails? serverDetails;
 
     final String dbPassword = StringGenerators.dbPassword();
-    final int dbId = dataBase.id;
-    final String? dbUuid = dataBase.uuid;
 
     final String apiToken = StringGenerators.apiToken();
     final String hostname = getHostnameFromDomain(domainName);
@@ -334,58 +311,44 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=digital-ocean NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
-    final Map<String, Object> data = {
-      'name': hostname,
-      'server_type': serverType,
-      'start_after_create': false,
-      'image': 'ubuntu-20.04',
-      'volumes': dbUuid == null ? [dbId] : [dbUuid],
-      'networks': [],
-      'user_data': userdataString,
-      'labels': {},
-      'automount': true,
-      'location': 'fsn1'
-    };
-    print('Decoded data: $data');
-
-    ServerHostingDetails? serverDetails;
-    DioError? hetznerError;
-    bool success = false;
-
+    final Dio client = await getClient();
     try {
+      final Map<String, Object> data = {
+        'name': hostname,
+        'size': serverType,
+        'image': 'ubuntu-20-04-x64',
+        'user_data': userdataString,
+        'region': region!,
+      };
+      print('Decoded data: $data');
+
       final Response serverCreateResponse = await client.post(
-        '/servers',
+        '/droplets',
         data: data,
       );
-      print(serverCreateResponse.data);
-      serverDetails = ServerHostingDetails(
-        id: serverCreateResponse.data['server']['id'],
-        ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
-        createTime: DateTime.now(),
-        volume: dataBase,
-        apiToken: apiToken,
-        provider: ServerProvider.hetzner,
-      );
-      success = true;
-    } on DioError catch (e) {
-      print(e);
-      hetznerError = e;
+
+      final int serverId = serverCreateResponse.data['server']['id'];
+      final ServerVolume? newVolume = await createVolume();
+      final bool attachedVolume =
+          await attachVolume(newVolume!.uuid!, serverId);
+
+      if (attachedVolume) {
+        serverDetails = ServerHostingDetails(
+          id: serverId,
+          ip4: serverCreateResponse.data['droplet']['networks']['v4'][0],
+          createTime: DateTime.now(),
+          volume: newVolume,
+          apiToken: apiToken,
+          provider: ServerProvider.digitalOcean,
+        );
+      }
     } catch (e) {
       print(e);
     } finally {
-      client.close();
-    }
-
-    if (!success) {
-      await Future.delayed(const Duration(seconds: 10));
-      await deleteVolume(dbUuid ?? dbId.toString());
-    }
-
-    if (hetznerError != null) {
-      throw hetznerError;
+      close(client);
     }
 
     return serverDetails;
@@ -416,24 +379,26 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     final String hostname = getHostnameFromDomain(domainName);
 
-    final Response serversReponse = await client.get('/servers');
-    final List servers = serversReponse.data['servers'];
-    final Map server = servers.firstWhere((final el) => el['name'] == hostname);
-    final List volumes = server['volumes'];
+    final ServerBasicInfo serverToRemove = (await getServers()).firstWhere(
+      (final el) => el.name == hostname,
+    );
+    final ServerVolume volumeToRemove = (await getVolumes()).firstWhere(
+      (final el) => el.serverId == serverToRemove.id,
+    );
     final List<Future> laterFutures = <Future>[];
 
-    for (final volumeId in volumes) {
-      await client.post('/volumes/$volumeId/actions/detach');
-    }
+    await detachVolume(volumeToRemove.uuid!);
     await Future.delayed(const Duration(seconds: 10));
 
-    for (final volumeId in volumes) {
-      laterFutures.add(client.delete('/volumes/$volumeId'));
+    try {
+      laterFutures.add(deleteVolume(volumeToRemove.uuid!));
+      laterFutures.add(client.delete('/droplets/$serverToRemove.id'));
+      await Future.wait(laterFutures);
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
     }
-    laterFutures.add(client.delete('/servers/${server['id']}'));
-
-    await Future.wait(laterFutures);
-    close(client);
   }
 
   @override
@@ -530,7 +495,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
               ip: server.publicNet.ipv4.ip,
               reverseDns: server.publicNet.ipv4.reverseDns,
               created: server.created,
-              volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
             ),
           )
           .toList();

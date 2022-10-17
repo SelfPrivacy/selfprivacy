@@ -5,10 +5,9 @@ import 'package:selfprivacy/logic/models/price.dart';
 mixin VolumeProviderApi on ApiMap {
   Future<ServerVolume?> createVolume();
   Future<List<ServerVolume>> getVolumes({final String? status});
-  Future<ServerVolume?> getVolume(final String volumeId);
-  Future<bool> attachVolume(final String volumeId, final int serverId);
-  Future<bool> detachVolume(final String volumeId);
-  Future<bool> resizeVolume(final String volumeId, final int sizeGb);
-  Future<void> deleteVolume(final String volumeId);
+  Future<bool> attachVolume(final ServerVolume volume, final int serverId);
+  Future<bool> detachVolume(final ServerVolume volume);
+  Future<bool> resizeVolume(final ServerVolume volume, final int sizeGb);
+  Future<void> deleteVolume(final ServerVolume volume);
   Future<Price?> getPricePerGb();
 }

@@ -66,14 +66,14 @@ class ApiProviderVolumeCubit
     final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
     await providerApi!
         .getVolumeProvider()
-        .attachVolume(volume.providerVolume!.id.toString(), server.id);
+        .attachVolume(volume.providerVolume!, server.id);
     refresh();
   }
 
   Future<void> detachVolume(final DiskVolume volume) async {
     await providerApi!
         .getVolumeProvider()
-        .detachVolume(volume.providerVolume!.id.toString());
+        .detachVolume(volume.providerVolume!);
     refresh();
   }
 
@@ -87,7 +87,7 @@ class ApiProviderVolumeCubit
     );
     emit(state.copyWith(isResizing: true));
     final bool resized = await providerApi!.getVolumeProvider().resizeVolume(
-          volume.providerVolume!.id.toString(),
+          volume.providerVolume!,
           newSizeGb,
         );
 
@@ -137,7 +137,7 @@ class ApiProviderVolumeCubit
   Future<void> deleteVolume(final DiskVolume volume) async {
     await providerApi!
         .getVolumeProvider()
-        .deleteVolume(volume.providerVolume!.id.toString());
+        .deleteVolume(volume.providerVolume!);
     refresh();
   }
 

@@ -11,11 +11,8 @@ import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class ServerProviderPicker extends StatefulWidget {
   const ServerProviderPicker({
-    required this.serverInstallationCubit,
     super.key,
   });
-
-  final ServerInstallationCubit serverInstallationCubit;
 
   @override
   State<ServerProviderPicker> createState() => _ServerProviderPickerState();
@@ -40,7 +37,6 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
 
       case ServerProvider.hetzner:
         return ProviderInputDataPage(
-          serverInstallationCubit: widget.serverInstallationCubit,
           providerInfo: ProviderPageInfo(
             providerType: ServerProvider.hetzner,
             pathToHow: 'hetzner_how',
@@ -53,7 +49,6 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
 
       case ServerProvider.digitalOcean:
         return ProviderInputDataPage(
-          serverInstallationCubit: widget.serverInstallationCubit,
           providerInfo: ProviderPageInfo(
             providerType: ServerProvider.digitalOcean,
             pathToHow: 'hetzner_how',
@@ -82,17 +77,15 @@ class ProviderPageInfo {
 class ProviderInputDataPage extends StatelessWidget {
   const ProviderInputDataPage({
     required this.providerInfo,
-    required this.serverInstallationCubit,
     super.key,
   });
 
   final ProviderPageInfo providerInfo;
-  final ServerInstallationCubit serverInstallationCubit;
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
         create: (final context) => ProviderFormCubit(
-          serverInstallationCubit,
+          context.watch<ServerInstallationCubit>(),
         ),
         child: Builder(
           builder: (final context) {

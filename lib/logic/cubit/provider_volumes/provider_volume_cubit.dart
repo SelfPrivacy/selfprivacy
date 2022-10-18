@@ -71,9 +71,7 @@ class ApiProviderVolumeCubit
   }
 
   Future<void> detachVolume(final DiskVolume volume) async {
-    await providerApi!
-        .getVolumeProvider()
-        .detachVolume(volume.providerVolume!);
+    await providerApi!.getVolumeProvider().detachVolume(volume.providerVolume!);
     refresh();
   }
 
@@ -135,9 +133,7 @@ class ApiProviderVolumeCubit
   }
 
   Future<void> deleteVolume(final DiskVolume volume) async {
-    await providerApi!
-        .getVolumeProvider()
-        .deleteVolume(volume.providerVolume!);
+    await providerApi!.getVolumeProvider().deleteVolume(volume.providerVolume!);
     refresh();
   }
 

@@ -141,13 +141,13 @@ class InitializingPage extends StatelessWidget {
   }
 
   Widget _stepServerProviderToken(
-          final ServerInstallationCubit serverInstallationCubit) =>
-      ServerProviderPicker(
-        serverInstallationCubit: serverInstallationCubit,
-      );
+    final ServerInstallationCubit serverInstallationCubit,
+  ) =>
+      const ServerProviderPicker();
 
   Widget _stepServerType(
-          final ServerInstallationCubit serverInstallationCubit) =>
+    final ServerInstallationCubit serverInstallationCubit,
+  ) =>
       ServerTypePicker(
         serverInstallationCubit: serverInstallationCubit,
       );

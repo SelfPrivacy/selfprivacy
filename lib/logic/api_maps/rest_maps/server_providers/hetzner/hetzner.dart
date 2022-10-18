@@ -229,7 +229,8 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> attachVolume(final ServerVolume volume, final int serverId) async {
+  Future<bool> attachVolume(
+      final ServerVolume volume, final int serverId) async {
     bool success = false;
 
     final Response dbPostResponse;

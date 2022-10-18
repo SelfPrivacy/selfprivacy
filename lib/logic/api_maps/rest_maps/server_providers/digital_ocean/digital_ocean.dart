@@ -194,7 +194,8 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> attachVolume(final ServerVolume volume, final int serverId) async {
+  Future<bool> attachVolume(
+      final ServerVolume volume, final int serverId) async {
     bool success = false;
 
     final Response dbPostResponse;
@@ -311,8 +312,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
       final int serverId = serverCreateResponse.data['server']['id'];
       final ServerVolume? newVolume = await createVolume();
-      final bool attachedVolume =
-          await attachVolume(newVolume!, serverId);
+      final bool attachedVolume = await attachVolume(newVolume!, serverId);
 
       if (attachedVolume) {
         serverDetails = ServerHostingDetails(
@@ -367,10 +367,12 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     final Dio client = await getClient();
     try {
-      await client.post('/droplets/${server.id}/actions', 
-      data: {
-        'type': 'reboot',
-      },);
+      await client.post(
+        '/droplets/${server.id}/actions',
+        data: {
+          'type': 'reboot',
+        },
+      );
     } catch (e) {
       print(e);
     } finally {
@@ -386,10 +388,11 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     final Dio client = await getClient();
     try {
-      await client.post('/droplets/${server.id}/actions',
-      data: {
-        'type': 'power_on',
-      },
+      await client.post(
+        '/droplets/${server.id}/actions',
+        data: {
+          'type': 'power_on',
+        },
       );
     } catch (e) {
       print(e);

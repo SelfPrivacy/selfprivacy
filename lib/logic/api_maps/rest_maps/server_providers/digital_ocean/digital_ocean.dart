@@ -197,11 +197,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   Future<bool> attachVolume(final ServerVolume volume, final int serverId) async {
     bool success = false;
 
-    final ServerVolume? volumeToAttach = await getVolume(volume.uuid!);
-    if (volumeToAttach == null) {
-      return success;
-    }
-
     final Response dbPostResponse;
     final Dio client = await getClient();
     try {
@@ -209,7 +204,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/volumes/actions',
         data: {
           'type': 'attach',
-          'volume_name': volumeToAttach.name,
+          'volume_name': volume.name,
           'region': region,
           'droplet_id': serverId,
         },
@@ -229,11 +224,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   Future<bool> detachVolume(final ServerVolume volume) async {
     bool success = false;
 
-    final ServerVolume? volumeToAttach = await getVolume(volume.uuid!);
-    if (volumeToAttach == null) {
-      return success;
-    }
-
     final Response dbPostResponse;
     final Dio client = await getClient();
     try {
@@ -241,7 +231,8 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/volumes/actions',
         data: {
           'type': 'detach',
-          'droplet_id': volumeToAttach.serverId,
+          'volume_name': volume.name,
+          'droplet_id': volume.serverId,
           'region': region,
         },
       );
@@ -267,6 +258,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/volumes/actions',
         data: {
           'type': 'resize',
+          'volume_name': volume.name,
           'size_gigabytes': sizeGb,
           'region': region,
         },
@@ -375,7 +367,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     final Dio client = await getClient();
     try {
-      await client.post('/servers/${server.id}/actions/reset');
+      await client.post('/droplets/${server.id}/actions', 
+      data: {
+        'type': 'reboot',
+      },);
     } catch (e) {
       print(e);
     } finally {
@@ -391,7 +386,11 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     final Dio client = await getClient();
     try {
-      await client.post('/servers/${server.id}/actions/poweron');
+      await client.post('/droplets/${server.id}/actions',
+      data: {
+        'type': 'power_on',
+      },
+      );
     } catch (e) {
       print(e);
     } finally {
@@ -582,19 +581,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     required final ServerHostingDetails serverDetails,
     required final ServerDomain domain,
   }) async {
-    final Dio client = await getClient();
-    try {
-      await client.post(
-        '/servers/${serverDetails.id}/actions/change_dns_ptr',
-        data: {
-          'ip': serverDetails.ip4,
-          'dns_ptr': domain.domainName,
-        },
-      );
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
-    }
+    /// TODO remove from provider interface
   }
 }

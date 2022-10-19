@@ -378,7 +378,7 @@ class InitializingPage extends StatelessWidget {
                           color: Colors.white,
                         ),
                         const SizedBox(width: 10),
-                        BrandText.buttonTitleText('Обновить cписок'),
+                        BrandText.buttonTitleText('domain.update_list'.tr()),
                       ],
                     ),
                   ),

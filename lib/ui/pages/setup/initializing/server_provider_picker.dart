@@ -11,8 +11,13 @@ import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class ServerProviderPicker extends StatefulWidget {
   const ServerProviderPicker({
+    required this.formCubit,
+    required this.serverInstallationCubit,
     super.key,
   });
+
+  final ProviderFormCubit formCubit;
+  final ServerInstallationCubit serverInstallationCubit;
 
   @override
   State<ServerProviderPicker> createState() => _ServerProviderPickerState();
@@ -32,11 +37,13 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
     switch (selectedProvider) {
       case ServerProvider.unknown:
         return ProviderSelectionPage(
+          serverInstallationCubit: widget.serverInstallationCubit,
           callback: setProvider,
         );
 
       case ServerProvider.hetzner:
         return ProviderInputDataPage(
+          providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
             providerType: ServerProvider.hetzner,
             pathToHow: 'hetzner_how',
@@ -49,6 +56,7 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
 
       case ServerProvider.digitalOcean:
         return ProviderInputDataPage(
+          providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
             providerType: ServerProvider.digitalOcean,
             pathToHow: 'hetzner_how',
@@ -77,81 +85,75 @@ class ProviderPageInfo {
 class ProviderInputDataPage extends StatelessWidget {
   const ProviderInputDataPage({
     required this.providerInfo,
+    required this.providerCubit,
     super.key,
   });
 
   final ProviderPageInfo providerInfo;
+  final ProviderFormCubit providerCubit;
 
   @override
-  Widget build(final BuildContext context) => BlocProvider(
-        create: (final context) => ProviderFormCubit(
-          context.watch<ServerInstallationCubit>(),
-        ),
-        child: Builder(
-          builder: (final context) {
-            final formCubitState = context.watch<ProviderFormCubit>().state;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                providerInfo.image,
-                const SizedBox(height: 10),
-                Text(
-                  'initializing.connect_to_server'.tr(),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const Spacer(),
-                CubitFormTextField(
-                  formFieldCubit: context.read<ProviderFormCubit>().apiKey,
-                  textAlign: TextAlign.center,
-                  scrollPadding: const EdgeInsets.only(bottom: 70),
-                  decoration: const InputDecoration(
-                    hintText: 'Provider API Token',
-                  ),
-                ),
-                const Spacer(),
-                FilledButton(
-                  title: 'basis.connect'.tr(),
-                  onPressed: () => formCubitState.isSubmitting
-                      ? null
-                      : () => context.read<ProviderFormCubit>().trySubmit(),
-                ),
-                const SizedBox(height: 10),
-                OutlinedButton(
-                  child: Text('initializing.how'.tr()),
-                  onPressed: () => showModalBottomSheet<void>(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (final BuildContext context) => BrandBottomSheet(
-                      isExpended: true,
-                      child: Padding(
-                        padding: paddingH15V0,
-                        child: ListView(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          children: [
-                            BrandMarkdown(
-                              fileName: providerInfo.pathToHow,
-                            ),
-                          ],
-                        ),
+  Widget build(final BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          providerInfo.image,
+          const SizedBox(height: 10),
+          Text(
+            'initializing.connect_to_server'.tr(),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const Spacer(),
+          CubitFormTextField(
+            formFieldCubit: providerCubit.apiKey,
+            textAlign: TextAlign.center,
+            scrollPadding: const EdgeInsets.only(bottom: 70),
+            decoration: const InputDecoration(
+              hintText: 'Provider API Token',
+            ),
+          ),
+          const Spacer(),
+          FilledButton(
+            title: 'basis.connect'.tr(),
+            onPressed: () => providerCubit.state.isSubmitting
+                ? null
+                : () => providerCubit.trySubmit(),
+          ),
+          const SizedBox(height: 10),
+          OutlinedButton(
+            child: Text('initializing.how'.tr()),
+            onPressed: () => showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (final BuildContext context) => BrandBottomSheet(
+                isExpended: true,
+                child: Padding(
+                  padding: paddingH15V0,
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    children: [
+                      BrandMarkdown(
+                        fileName: providerInfo.pathToHow,
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+            ),
+          ),
+        ],
       );
 }
 
 class ProviderSelectionPage extends StatelessWidget {
   const ProviderSelectionPage({
     required this.callback,
+    required this.serverInstallationCubit,
     super.key,
   });
 
   final Function callback;
+  final ServerInstallationCubit serverInstallationCubit;
 
   @override
   Widget build(final BuildContext context) => Column(
@@ -173,8 +175,7 @@ class ProviderSelectionPage extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    context
-                        .read<ServerInstallationCubit>()
+                    serverInstallationCubit
                         .setServerProviderType(ServerProvider.hetzner);
                     callback(ServerProvider.hetzner);
                   },
@@ -188,8 +189,7 @@ class ProviderSelectionPage extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    context
-                        .read<ServerInstallationCubit>()
+                    serverInstallationCubit
                         .setServerProviderType(ServerProvider.digitalOcean);
                     callback(ServerProvider.digitalOcean);
                   },

@@ -18,6 +18,7 @@ class _SelectTimezoneState extends State<SelectTimezone> {
   final TextEditingController searchController = TextEditingController();
 
   String? timezoneFilterValue;
+  bool isSearching = false;
 
   @override
   void initState() {
@@ -57,38 +58,36 @@ class _SelectTimezoneState extends State<SelectTimezone> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(156),
-          child: Column(
-            children: [
-              BrandHeader(
-                title: 'server.select_timezone'.tr(),
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 16),
-                  SizedBox(
-                    height: 52,
-                    child: TextField(
-                      readOnly: false,
-                      textAlign: TextAlign.start,
-                      textInputAction: TextInputAction.next,
-                      enabled: true,
-                      controller: searchController,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        errorText: null,
-                        labelText: 'server.timezone_search_bar'.tr(),
-                      ),
-                    ),
+        appBar: AppBar(
+          title: isSearching
+              ? TextField(
+                  readOnly: false,
+                  textAlign: TextAlign.start,
+                  textInputAction: TextInputAction.next,
+                  enabled: true,
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    errorText: null,
+                    hintText: 'server.timezone_search_bar'.tr(),
                   ),
-                  const SizedBox(width: 16),
-                  const Icon(Icons.search_outlined),
-                  const SizedBox(width: 16),
-                ],
-              ),
-            ],
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Text('server.select_timezone'.tr()),
+                ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: isSearching
+                ? () => setState(() => isSearching = false)
+                : () => Navigator.of(context).pop(),
           ),
+          actions: [
+            if (!isSearching)
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () => setState(() => isSearching = true),
+              ),
+          ],
         ),
         body: SafeArea(
           child: ListView(

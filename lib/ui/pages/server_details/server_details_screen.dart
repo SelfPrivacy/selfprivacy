@@ -12,22 +12,19 @@ import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/ui/components/brand_button/segmented_buttons.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
-import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
+import 'package:selfprivacy/ui/pages/server_details/charts/cpu_chart.dart';
+import 'package:selfprivacy/ui/pages/server_details/charts/network_charts.dart';
 import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';
-import 'package:selfprivacy/ui/pages/server_details/time_zone/lang.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:timezone/timezone.dart';
-
-import 'package:selfprivacy/ui/pages/server_details/charts/cpu_chart.dart';
-import 'package:selfprivacy/ui/pages/server_details/charts/network_charts.dart';
 
 part 'charts/chart.dart';
 part 'server_settings.dart';

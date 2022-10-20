@@ -55,7 +55,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  void setServerProviderType(final ServerProvider providerType) {
+  void setServerProviderType(final ServerProvider providerType) async {
+    await repository.saveServerProviderType(providerType);
     repository.serverProviderApiFactory =
         ApiFactoryCreator.createServerProviderApiFactory(
       ServerProviderApiFactorySettings(
@@ -117,7 +118,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void setServerProviderKey(final String serverProviderKey) async {
     await repository.saveServerProviderKey(serverProviderKey);
-
     if (state is ServerInstallationRecovery) {
       emit(
         (state as ServerInstallationRecovery).copyWith(
@@ -141,7 +141,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     repository.serverProviderApiFactory =
         ApiFactoryCreator.createServerProviderApiFactory(
       ServerProviderApiFactorySettings(
-        provider: getIt<ApiConfigModel>().serverDetails!.provider,
+        provider: getIt<ApiConfigModel>().serverProvider!,
         location: serverType.location.identifier,
       ),
     );

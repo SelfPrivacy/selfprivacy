@@ -6,13 +6,17 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_pro
 
 class DigitalOceanApiFactory extends ServerProviderApiFactory
     with VolumeProviderApiFactory {
+  DigitalOceanApiFactory({this.region});
+
+  final String? region;
+
   @override
   ServerProviderApi getServerProvider({
     final ServerProviderApiSettings settings =
         const ServerProviderApiSettings(),
   }) =>
       DigitalOceanApi(
-        region: settings.region,
+        region: settings.region ?? region,
         hasLogger: settings.hasLogger,
         isWithToken: settings.isWithToken,
       );
@@ -23,7 +27,7 @@ class DigitalOceanApiFactory extends ServerProviderApiFactory
         const ServerProviderApiSettings(),
   }) =>
       DigitalOceanApi(
-        region: settings.region,
+        region: settings.region ?? region,
         hasLogger: settings.hasLogger,
         isWithToken: settings.isWithToken,
       );

@@ -114,9 +114,7 @@ class ProviderInputDataPage extends StatelessWidget {
           const Spacer(),
           FilledButton(
             title: 'basis.connect'.tr(),
-            onPressed: () => providerCubit.state.isSubmitting
-                ? null
-                : () => providerCubit.trySubmit(),
+            onPressed: () => providerCubit.trySubmit(),
           ),
           const SizedBox(height: 10),
           OutlinedButton(

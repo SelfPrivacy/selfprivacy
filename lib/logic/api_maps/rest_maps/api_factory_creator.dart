@@ -18,9 +18,9 @@ class ApiFactoryCreator {
   ) {
     switch (settings.provider) {
       case ServerProvider.hetzner:
-        return HetznerApiFactory();
+        return HetznerApiFactory(region: settings.location);
       case ServerProvider.digitalOcean:
-        return DigitalOceanApiFactory();
+        return DigitalOceanApiFactory(region: settings.location);
       case ServerProvider.unknown:
         throw UnknownApiProviderException('Unknown server provider');
     }

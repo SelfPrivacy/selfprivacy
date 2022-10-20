@@ -147,14 +147,14 @@ class SelectTypePage extends StatelessWidget {
                               children: [
                                 Text(type.title),
                                 const SizedBox(height: 8),
-                                Text('cores: $type.cores'),
+                                Text('cores: $type.cores.toString()'),
                                 const SizedBox(height: 8),
-                                Text('ram: $type.ram'),
+                                Text('ram: $type.ram.toString()'),
                                 const SizedBox(height: 8),
-                                Text('disk: $type.disk.gibibyte'),
+                                Text('disk: $type.disk.gibibyte.toString()'),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'price: $type.price.value $type.price.currency',
+                                  'price: $type.price.value.toString() $type.price.currency',
                                 ),
                               ],
                             ),

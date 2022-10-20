@@ -72,7 +72,8 @@ class InitializingPage extends StatelessWidget {
                           )
                         : ProgressBar(
                             steps: const [
-                              'Hetzner',
+                              'Hosting',
+                              'Server Type',
                               'CloudFlare',
                               'Backblaze',
                               'Domain',

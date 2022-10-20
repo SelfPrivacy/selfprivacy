@@ -87,6 +87,9 @@ class BNames {
   /// A String field of [serverInstallationBox] box.
   static String hetznerKey = 'hetznerKey';
 
+  /// A String field of [serverInstallationBox] box.
+  static String serverProvider = 'serverProvider';
+
   /// A String field of [serverLocation] box.
   static String serverLocation = 'serverLocation';
 

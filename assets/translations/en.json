@@ -141,7 +141,8 @@
         "services_title": "Services",
         "services_subtitle": "Type “A” records required for each service.",
         "email_title": "Email",
-        "email_subtitle": "Records necessary for secure email exchange."
+        "email_subtitle": "Records necessary for secure email exchange.",
+        "update_list": "Update list"
     },
     "backup": {
         "card_title": "Backup",

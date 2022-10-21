@@ -56,17 +56,20 @@ class ServerInstallationRepository {
     final String? cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
     final String? serverTypeIdentificator = getIt<ApiConfigModel>().serverType;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
+    final ServerProvider? serverProvider =
+        getIt<ApiConfigModel>().serverProvider;
     final BackblazeCredential? backblazeCredential =
         getIt<ApiConfigModel>().backblazeCredential;
     final ServerHostingDetails? serverDetails =
         getIt<ApiConfigModel>().serverDetails;
 
-    if (serverDetails != null &&
-        serverDetails.provider != ServerProvider.unknown) {
+    if (serverProvider != null ||
+        (serverDetails != null &&
+            serverDetails.provider != ServerProvider.unknown)) {
       serverProviderApiFactory =
           ApiFactoryCreator.createServerProviderApiFactory(
         ServerProviderApiFactorySettings(
-          provider: serverDetails.provider,
+          provider: serverProvider ?? serverDetails!.provider,
           location: location,
         ),
       );

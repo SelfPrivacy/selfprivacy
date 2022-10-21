@@ -82,6 +82,7 @@ class ApiConfigModel {
     _serverDetails = null;
     _backblazeBucket = null;
     _serverType = null;
+    _serverProvider = null;
   }
 
   void init() {
@@ -93,5 +94,6 @@ class ApiConfigModel {
     _serverDetails = _box.get(BNames.serverDetails);
     _backblazeBucket = _box.get(BNames.backblazeBucket);
     _serverType = _box.get(BNames.serverTypeIdentifier);
+    _serverProvider = _box.get(BNames.serverProvider);
   }
 }

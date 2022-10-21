@@ -118,6 +118,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void setServerProviderKey(final String serverProviderKey) async {
     await repository.saveServerProviderKey(serverProviderKey);
+
     if (state is ServerInstallationRecovery) {
       emit(
         (state as ServerInstallationRecovery).copyWith(

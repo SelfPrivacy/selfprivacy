@@ -112,7 +112,8 @@ class TimerState extends ServerInstallationNotFinished {
 
 enum ServerSetupProgress {
   nothingYet,
-  hetznerFilled,
+  serverProviderFilled,
+  servertTypeFilled,
   cloudFlareFilled,
   backblazeFilled,
   domainFilled,

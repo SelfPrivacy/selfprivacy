@@ -101,6 +101,7 @@
         "reboot_after_upgrade_hint": "Reboot without prompt after applying changes on server",
         "server_timezone": "Server timezone",
         "select_timezone": "Select timezone",
+        "timezone_search_bar": "Timezone name or time shift value",
         "server_id": "Server ID",
         "status": "Status",
         "cpu": "CPU",

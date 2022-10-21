@@ -78,18 +78,12 @@ class SelectLocationPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                if (location.flag != null) Text(location.flag!),
-                                const SizedBox(height: 8),
-                                Text(location.title),
-                                const SizedBox(height: 8),
-                                if (location.description != null)
-                                  Text(location.description!),
-                              ],
-                            ),
+                            if (location.flag != null) Text(location.flag!),
+                            const SizedBox(height: 8),
+                            Text(location.title),
+                            const SizedBox(height: 8),
+                            if (location.description != null)
+                              Text(location.description!),
                           ],
                         ),
                       ),
@@ -141,22 +135,29 @@ class SelectTypePage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(type.title),
-                                const SizedBox(height: 8),
-                                Text('cores: $type.cores.toString()'),
-                                const SizedBox(height: 8),
-                                Text('ram: $type.ram.toString()'),
-                                const SizedBox(height: 8),
-                                Text('disk: $type.disk.gibibyte.toString()'),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'price: $type.price.value.toString() $type.price.currency',
-                                ),
-                              ],
+                            Text(
+                              type.title,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'cores: ${type.cores.toString()}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'ram: ${type.ram.toString()}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'disk: ${type.disk.gibibyte.toString()}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'price: ${type.price.value.toString()} ${type.price.currency}',
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
                         ),

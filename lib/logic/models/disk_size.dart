@@ -26,7 +26,7 @@ class DiskSize {
   @override
   String toString() {
     if (byte < 1024) {
-      return '${byte.toStringAsFixed(0)} ${tr('bytes')}';
+      return '${byte.toStringAsFixed(0)} ${tr('storage.bytes')}';
     } else if (byte < 1024 * 1024) {
       return 'storage.kb'.tr(args: [kibibyte.toStringAsFixed(1)]);
     } else if (byte < 1024 * 1024 * 1024) {

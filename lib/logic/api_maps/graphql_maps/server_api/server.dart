@@ -8,8 +8,12 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.g
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:selfprivacy/logic/models/json/backup.dart';
+import 'package:selfprivacy/logic/models/json/device_token.dart';
+import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -35,12 +39,25 @@ class GenericMutationResult {
 
 class GenericJobMutationReturn extends GenericMutationResult {
   GenericJobMutationReturn({
-    required final super.success,
-    required final super.code,
-    final super.message,
+    required super.success,
+    required super.code,
+    super.message,
     this.job,
   });
   final ServerJob? job;
+}
+
+class ApiResponse<D> {
+  ApiResponse({
+    required this.statusCode,
+    required this.data,
+    this.errorMessage,
+  });
+  final int statusCode;
+  final String? errorMessage;
+  final D data;
+
+  bool get isSuccess => statusCode >= 200 && statusCode < 300;
 }
 
 class ServerApi extends ApiMap
@@ -49,6 +66,7 @@ class ServerApi extends ApiMap
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken = '',
+    this.overrideDomain,
   });
 
   @override
@@ -58,7 +76,9 @@ class ServerApi extends ApiMap
   @override
   String customToken;
   @override
-  String? get rootAddress => getIt<ApiConfigModel>().serverDomain?.domainName;
+  String? get rootAddress =>
+      overrideDomain ?? getIt<ApiConfigModel>().serverDomain?.domainName;
+  String? overrideDomain;
 
   Future<String?> getApiVersion() async {
     QueryResult response;
@@ -193,4 +213,43 @@ class ServerApi extends ApiMap
 
     return settings;
   }
+
+  Future<ApiResponse<RecoveryKeyStatus?>> getRecoveryTokenStatus() async {}
+
+  Future<ApiResponse<String>> generateRecoveryToken(
+    final DateTime? expirationDate,
+    final int? numberOfUses,
+  ) async {}
+
+  Future<String?> getDkim() async {}
+
+  Future<ApiResponse<List<ApiToken>>> getApiTokens() async {}
+
+  Future<ApiResponse<void>> deleteApiToken(final String name) async {}
+
+  Future<ApiResponse<String>> createDeviceToken() async {}
+
+  Future<BackupStatus> getBackupStatus() async {}
+
+  Future<List<Backup>> getBackups() async {}
+
+  Future<void> uploadBackblazeConfig(final BackblazeBucket bucket) async {}
+
+  Future<void> forceBackupListReload() async {}
+
+  Future<void> startBackup() async {}
+
+  Future<void> restoreBackup(final String backupId) async {}
+
+  Future<bool> isHttpServerWorking() async {}
+
+  Future<ApiResponse<String>> authorizeDevice(final DeviceToken token) async {}
+
+  Future<ApiResponse<String>> useRecoveryToken(final DeviceToken token) async {}
+
+  Future<Map<String, bool>> servicesPowerCheck() async {}
+
+  Future<ApiResponse<List<String>>> getUsersList({
+    required final bool withMainUser,
+  }) async {}
 }

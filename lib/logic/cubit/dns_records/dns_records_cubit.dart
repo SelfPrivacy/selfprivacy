@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_depe
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 
 part 'dns_records_state.dart';
 

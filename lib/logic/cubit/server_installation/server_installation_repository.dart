@@ -570,9 +570,7 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     if (recoveryCapabilities == ServerRecoveryCapabilities.legacy) {
-      final Map<String, bool> apiResponse =
-          await serverApi.servicesPowerCheck();
-      if (apiResponse.isNotEmpty) {
+      if (await serverApi.isHttpServerWorking()) {
         return ServerHostingDetails(
           apiToken: apiToken,
           volume: ServerVolume(
@@ -634,9 +632,8 @@ class ServerInstallationRepository {
     );
 
     final String? serverApiVersion = await serverApi.getApiVersion();
-    final ApiResponse<List<String>> users =
-        await serverApi.getUsersList(withMainUser: true);
-    if (serverApiVersion == null || !users.success) {
+    final users = await serverApi.getAllUsers();
+    if (serverApiVersion == null || users.isEmpty) {
       return fallbackUser;
     }
     try {
@@ -644,10 +641,8 @@ class ServerInstallationRepository {
       if (!VersionConstraint.parse('>=1.2.5').allows(parsedVersion)) {
         return fallbackUser;
       }
-      return User(
-        isFoundOnServer: true,
-        login: users.data[0],
-        type: UserType.primary,
+      return users.firstWhere(
+        (final User user) => user.type == UserType.primary,
       );
     } on FormatException {
       return fallbackUser;

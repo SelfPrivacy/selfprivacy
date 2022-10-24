@@ -112,25 +112,6 @@ class ServerApi extends ApiMap
     return usesBinds;
   }
 
-  Future<List<ApiToken>> getApiTokens() async {
-    QueryResult response;
-    List<ApiToken> tokens = [];
-
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$GetApiTokens();
-      if (response.hasException) {
-        print(response.exception.toString());
-      }
-      tokens = response.data!['api']['devices']
-          .map<ApiToken>((final e) => ApiToken.fromJson(e))
-          .toList();
-    } catch (e) {
-      print(e);
-    }
-    return tokens;
-  }
-
   Future<void> switchService(final String uid, final bool needTurnOn) async {
     try {
       final GraphQLClient client = await getClient();
@@ -283,17 +264,253 @@ class ServerApi extends ApiMap
     return key;
   }
 
-  Future<String?> getDkim() async {}
+  Future<String?> getDkim() async {
+    String? dkim;
+    QueryResult<Query$DomainInfo> response;
 
-  Future<ApiResponse<List<ApiToken>>> getApiTokens() async {}
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$DomainInfo();
+      if (response.hasException) {
+        print(response.exception.toString());
+      }
+      dkim = response.parsedData!.system.domainInfo.requiredDnsRecords
+          .firstWhere(
+            (
+              final Query$DomainInfo$system$domainInfo$requiredDnsRecords
+                  dnsRecord,
+            ) =>
+                dnsRecord.name == 'selector._domainkey' &&
+                dnsRecord.recordType == 'TXT',
+          )
+          .content;
+    } catch (e) {
+      print(e);
+    }
 
-  Future<ApiResponse<void>> deleteApiToken(final String name) async {}
+    return dkim;
+  }
 
-  Future<ApiResponse<String>> createDeviceToken() async {}
+  Future<ApiResponse<List<ApiToken>>> getApiTokens() async {
+    ApiResponse<List<ApiToken>> tokens;
+    QueryResult<Query$GetApiTokens> response;
 
-  Future<BackupStatus> getBackupStatus() async {}
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$GetApiTokens();
+      if (response.hasException) {
+        final message = response.exception.toString();
+        print(message);
+        tokens = ApiResponse<List<ApiToken>>(
+          success: false,
+          data: [],
+          message: message,
+        );
+      }
+      final List<ApiToken> parsed = response.parsedData!.api.devices
+          .map(
+            (
+              final Query$GetApiTokens$api$devices device,
+            ) =>
+                ApiToken.fromGraphQL(device),
+          )
+          .toList();
+      tokens = ApiResponse<List<ApiToken>>(
+        success: true,
+        data: parsed,
+      );
+    } catch (e) {
+      print(e);
+      tokens = ApiResponse<List<ApiToken>>(
+        success: false,
+        data: [],
+        message: e.toString(),
+      );
+    }
 
-  Future<List<Backup>> getBackups() async {}
+    return tokens;
+  }
+
+  Future<ApiResponse<void>> deleteApiToken(final String name) async {
+    ApiResponse<void> returnable;
+    QueryResult<Mutation$DeleteDeviceApiToken> response;
+
+    try {
+      final GraphQLClient client = await getClient();
+
+      final variables = Variables$Mutation$DeleteDeviceApiToken(
+        device: name,
+      );
+      final mutation = Options$Mutation$DeleteDeviceApiToken(
+        variables: variables,
+      );
+      response = await client.mutate$DeleteDeviceApiToken(
+        mutation,
+      );
+      if (response.hasException) {
+        print(response.exception.toString());
+        returnable = ApiResponse<void>(
+          success: false,
+          data: null,
+          message: response.exception.toString(),
+        );
+      }
+      returnable = ApiResponse<void>(
+        success: true,
+        data: null,
+      );
+    } catch (e) {
+      print(e);
+      returnable = ApiResponse<void>(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+
+    return returnable;
+  }
+
+  Future<ApiResponse<String>> createDeviceToken() async {
+    ApiResponse<String> token;
+    QueryResult<Mutation$GetNewDeviceApiKey> response;
+
+    try {
+      final GraphQLClient client = await getClient();
+
+      final mutation = Options$Mutation$GetNewDeviceApiKey();
+      response = await client.mutate$GetNewDeviceApiKey(
+        mutation,
+      );
+      if (response.hasException) {
+        print(response.exception.toString());
+        token = ApiResponse<String>(
+          success: false,
+          data: '',
+          message: response.exception.toString(),
+        );
+      }
+      token = ApiResponse<String>(
+        success: true,
+        data: response.parsedData!.getNewDeviceApiKey.key!,
+      );
+    } catch (e) {
+      print(e);
+      token = ApiResponse<String>(
+        success: false,
+        data: '',
+        message: e.toString(),
+      );
+    }
+
+    return token;
+  }
+
+  Future<bool> isHttpServerWorking() async => (await getApiVersion()) != null;
+
+  Future<ApiResponse<String>> authorizeDevice(
+    final DeviceToken deviceToken,
+  ) async {
+    ApiResponse<String> token;
+    QueryResult<Mutation$AuthorizeWithNewDeviceApiKey> response;
+
+    try {
+      final GraphQLClient client = await getClient();
+
+      final input = Input$UseNewDeviceKeyInput(
+        deviceName: deviceToken.device,
+        key: deviceToken.token,
+      );
+
+      final variables = Variables$Mutation$AuthorizeWithNewDeviceApiKey(
+        input: input,
+      );
+      final mutation = Options$Mutation$AuthorizeWithNewDeviceApiKey(
+        variables: variables,
+      );
+      response = await client.mutate$AuthorizeWithNewDeviceApiKey(
+        mutation,
+      );
+      if (response.hasException) {
+        print(response.exception.toString());
+        token = ApiResponse<String>(
+          success: false,
+          data: '',
+          message: response.exception.toString(),
+        );
+      }
+      token = ApiResponse<String>(
+        success: true,
+        data: response.parsedData!.authorizeWithNewDeviceApiKey.token!,
+      );
+    } catch (e) {
+      print(e);
+      token = ApiResponse<String>(
+        success: false,
+        data: '',
+        message: e.toString(),
+      );
+    }
+
+    return token;
+  }
+
+  Future<ApiResponse<String>> useRecoveryToken(
+    final DeviceToken deviceToken,
+  ) async {
+    ApiResponse<String> token;
+    QueryResult<Mutation$UseRecoveryApiKey> response;
+
+    try {
+      final GraphQLClient client = await getClient();
+
+      final input = Input$UseRecoveryKeyInput(
+        deviceName: deviceToken.device,
+        key: deviceToken.token,
+      );
+
+      final variables = Variables$Mutation$UseRecoveryApiKey(
+        input: input,
+      );
+      final mutation = Options$Mutation$UseRecoveryApiKey(
+        variables: variables,
+      );
+      response = await client.mutate$UseRecoveryApiKey(
+        mutation,
+      );
+      if (response.hasException) {
+        print(response.exception.toString());
+        token = ApiResponse<String>(
+          success: false,
+          data: '',
+          message: response.exception.toString(),
+        );
+      }
+      token = ApiResponse<String>(
+        success: true,
+        data: response.parsedData!.useRecoveryApiKey.token!,
+      );
+    } catch (e) {
+      print(e);
+      token = ApiResponse<String>(
+        success: false,
+        data: '',
+        message: e.toString(),
+      );
+    }
+
+    return token;
+  }
+
+  /// TODO: backups're not implemented on server side
+
+  Future<BackupStatus> getBackupStatus() async => BackupStatus(
+        progress: 0.0,
+        status: BackupStatusEnum.error,
+        errorMessage: null,
+      );
+
+  Future<List<Backup>> getBackups() async => [];
 
   Future<void> uploadBackblazeConfig(final BackblazeBucket bucket) async {}
 
@@ -302,16 +519,4 @@ class ServerApi extends ApiMap
   Future<void> startBackup() async {}
 
   Future<void> restoreBackup(final String backupId) async {}
-
-  Future<bool> isHttpServerWorking() async {}
-
-  Future<ApiResponse<String>> authorizeDevice(final DeviceToken token) async {}
-
-  Future<ApiResponse<String>> useRecoveryToken(final DeviceToken token) async {}
-
-  Future<Map<String, bool>> servicesPowerCheck() async {}
-
-  Future<ApiResponse<List<String>>> getUsersList({
-    required final bool withMainUser,
-  }) async {}
 }

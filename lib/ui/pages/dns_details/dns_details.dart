@@ -28,7 +28,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
     bool isError = false;
     switch (dnsState) {
       case DnsRecordsStatus.uninitialized:
-        description = 'domain.states.uninitialized'.tr();
+        description = 'domain.uninitialized'.tr();
         icon = const Icon(
           Icons.refresh,
           size: 24.0,
@@ -36,7 +36,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         isError = false;
         break;
       case DnsRecordsStatus.refreshing:
-        description = 'domain.states.refreshing'.tr();
+        description = 'domain.refreshing'.tr();
         icon = const Icon(
           Icons.refresh,
           size: 24.0,
@@ -44,7 +44,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         isError = false;
         break;
       case DnsRecordsStatus.good:
-        description = 'domain.states.ok'.tr();
+        description = 'domain.ok'.tr();
         icon = const Icon(
           Icons.check_circle_outline,
           size: 24.0,
@@ -52,8 +52,8 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
         isError = false;
         break;
       case DnsRecordsStatus.error:
-        description = 'domain.states.error'.tr();
-        subtitle = 'domain.states.error_subtitle'.tr();
+        description = 'domain.error'.tr();
+        subtitle = 'domain.error_subtitle'.tr();
         icon = const Icon(
           Icons.error_outline,
           size: 24.0,

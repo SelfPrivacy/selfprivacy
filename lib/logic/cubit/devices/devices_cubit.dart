@@ -36,7 +36,7 @@ class ApiDevicesCubit
 
   Future<List<ApiToken>?> _getApiTokens() async {
     final ApiResponse<List<ApiToken>> response = await api.getApiTokens();
-    if (response.isSuccess) {
+    if (response.success) {
       return response.data;
     } else {
       return null;
@@ -45,7 +45,7 @@ class ApiDevicesCubit
 
   Future<void> deleteDevice(final ApiToken device) async {
     final ApiResponse<void> response = await api.deleteApiToken(device.name);
-    if (response.isSuccess) {
+    if (response.success) {
       emit(
         ApiDevicesState(
           state.devices.where((final d) => d.name != device.name).toList(),
@@ -54,17 +54,17 @@ class ApiDevicesCubit
       );
     } else {
       getIt<NavigationService>()
-          .showSnackBar(response.errorMessage ?? 'Error deleting device');
+          .showSnackBar(response.message ?? 'Error deleting device');
     }
   }
 
   Future<String?> getNewDeviceKey() async {
     final ApiResponse<String> response = await api.createDeviceToken();
-    if (response.isSuccess) {
+    if (response.success) {
       return response.data;
     } else {
       getIt<NavigationService>().showSnackBar(
-        response.errorMessage ?? 'Error getting new device key',
+        response.message ?? 'Error getting new device key',
       );
       return null;
     }

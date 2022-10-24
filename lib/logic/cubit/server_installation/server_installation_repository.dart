@@ -498,7 +498,7 @@ class ServerInstallationRepository {
       DeviceToken(device: await getDeviceName(), token: newDeviceKey),
     );
 
-    if (apiResponse.isSuccess) {
+    if (apiResponse.success) {
       return ServerHostingDetails(
         apiToken: apiResponse.data,
         volume: ServerVolume(
@@ -517,7 +517,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.errorMessage ?? apiResponse.data,
+      apiResponse.message ?? apiResponse.data,
     );
   }
 
@@ -535,7 +535,7 @@ class ServerInstallationRepository {
       DeviceToken(device: await getDeviceName(), token: recoveryKey),
     );
 
-    if (apiResponse.isSuccess) {
+    if (apiResponse.success) {
       return ServerHostingDetails(
         apiToken: apiResponse.data,
         volume: ServerVolume(
@@ -554,7 +554,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.errorMessage ?? apiResponse.data,
+      apiResponse.message ?? apiResponse.data,
     );
   }
 
@@ -600,7 +600,7 @@ class ServerInstallationRepository {
       DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
     );
 
-    if (apiResponse.isSuccess) {
+    if (apiResponse.success) {
       return ServerHostingDetails(
         apiToken: apiResponse.data,
         volume: ServerVolume(
@@ -619,7 +619,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.errorMessage ?? apiResponse.data,
+      apiResponse.message ?? apiResponse.data,
     );
   }
 
@@ -636,7 +636,7 @@ class ServerInstallationRepository {
     final String? serverApiVersion = await serverApi.getApiVersion();
     final ApiResponse<List<String>> users =
         await serverApi.getUsersList(withMainUser: true);
-    if (serverApiVersion == null || !users.isSuccess) {
+    if (serverApiVersion == null || !users.success) {
       return fallbackUser;
     }
     try {

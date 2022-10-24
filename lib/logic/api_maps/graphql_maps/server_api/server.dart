@@ -49,15 +49,13 @@ class GenericJobMutationReturn extends GenericMutationResult {
 
 class ApiResponse<D> {
   ApiResponse({
-    required this.statusCode,
+    required this.success,
     required this.data,
-    this.errorMessage,
+    this.message,
   });
-  final int statusCode;
-  final String? errorMessage;
+  final bool success;
+  final String? message;
   final D data;
-
-  bool get isSuccess => statusCode >= 200 && statusCode < 300;
 }
 
 class ServerApi extends ApiMap
@@ -214,12 +212,76 @@ class ServerApi extends ApiMap
     return settings;
   }
 
-  Future<ApiResponse<RecoveryKeyStatus?>> getRecoveryTokenStatus() async {}
+  Future<ApiResponse<RecoveryKeyStatus?>> getRecoveryTokenStatus() async {
+    RecoveryKeyStatus? key;
+    QueryResult<Query$RecoveryKey> response;
+    String? error;
+
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$RecoveryKey();
+      if (response.hasException) {
+        print(response.exception.toString());
+        error = response.exception.toString();
+      }
+      key = RecoveryKeyStatus.fromGraphQL(response.parsedData!.api.recoveryKey);
+    } catch (e) {
+      print(e);
+    }
+
+    return ApiResponse<RecoveryKeyStatus?>(
+      success: error == null,
+      data: key,
+      message: error,
+    );
+  }
 
   Future<ApiResponse<String>> generateRecoveryToken(
     final DateTime? expirationDate,
     final int? numberOfUses,
-  ) async {}
+  ) async {
+    ApiResponse<String> key;
+    QueryResult<Mutation$GetNewRecoveryApiKey> response;
+
+    try {
+      final GraphQLClient client = await getClient();
+
+      final input = Input$RecoveryKeyLimitsInput(
+        expirationDate: expirationDate,
+        uses: numberOfUses,
+      );
+      final variables = Variables$Mutation$GetNewRecoveryApiKey(
+        limits: input,
+      );
+      final mutation = Options$Mutation$GetNewRecoveryApiKey(
+        variables: variables,
+      );
+      response = await client.mutate$GetNewRecoveryApiKey(
+        mutation,
+      );
+      if (response.hasException) {
+        print(response.exception.toString());
+        key = ApiResponse<String>(
+          success: false,
+          data: '',
+          message: response.exception.toString(),
+        );
+      }
+      key = ApiResponse<String>(
+        success: true,
+        data: response.parsedData!.getNewRecoveryApiKey.key!,
+      );
+    } catch (e) {
+      print(e);
+      key = ApiResponse<String>(
+        success: false,
+        data: '',
+        message: e.toString(),
+      );
+    }
+
+    return key;
+  }
 
   Future<String?> getDkim() async {}
 

@@ -34,7 +34,7 @@ class RecoveryKeyCubit
   Future<RecoveryKeyStatus?> _getRecoveryKeyStatus() async {
     final ApiResponse<RecoveryKeyStatus?> response =
         await api.getRecoveryTokenStatus();
-    if (response.isSuccess) {
+    if (response.success) {
       return response.data;
     } else {
       return null;
@@ -59,11 +59,11 @@ class RecoveryKeyCubit
   }) async {
     final ApiResponse<String> response =
         await api.generateRecoveryToken(expirationDate, numberOfUses);
-    if (response.isSuccess) {
+    if (response.success) {
       refresh();
       return response.data;
     } else {
-      throw GenerationError(response.errorMessage ?? 'Unknown error');
+      throw GenerationError(response.message ?? 'Unknown error');
     }
   }
 

@@ -33,6 +33,13 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _sizeController.dispose();
+    _priceController.dispose();
+    super.dispose();
+  }
+
   bool _isError = false;
 
   late double _currentSliderGbValue;

@@ -369,7 +369,7 @@ class ServerInstallationRepository {
         BrandAlert(
           title: e.response!.data['errors'][0]['code'] == 1038
               ? 'modals.you_cant_use_this_api'.tr()
-              : 'domain.states.error'.tr(),
+              : 'domain.error'.tr(),
           contentText: 'modals.delete_server_volume'.tr(),
           actions: [
             ActionButton(

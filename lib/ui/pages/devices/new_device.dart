@@ -7,7 +7,7 @@ import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
 class NewDeviceScreen extends StatelessWidget {
-  const NewDeviceScreen({final super.key});
+  const NewDeviceScreen({super.key});
 
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(

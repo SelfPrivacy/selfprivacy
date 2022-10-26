@@ -5,7 +5,7 @@ class WidgetSize extends StatefulWidget {
   const WidgetSize({
     required this.onChange,
     required this.child,
-    final super.key,
+    super.key,
   });
   final Widget child;
   final Function onChange;
@@ -27,12 +27,11 @@ class _WidgetSizeState extends State<WidgetSize> {
   var widgetKey = GlobalKey();
   Size? oldSize;
 
-  void postFrameCallback(_) {
+  void postFrameCallback(final _) {
     final context = widgetKey.currentContext;
     if (context == null) {
       return;
     }
-    ;
 
     final newSize = context.size;
     if (oldSize == newSize) {

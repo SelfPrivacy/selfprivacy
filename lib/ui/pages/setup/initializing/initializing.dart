@@ -23,9 +23,7 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class InitializingPage extends StatelessWidget {
-  const InitializingPage({
-    super.key,
-  });
+  const InitializingPage({super.key});
 
   @override
   Widget build(final BuildContext context) {

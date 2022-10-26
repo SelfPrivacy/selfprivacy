@@ -7,6 +7,27 @@ import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 class Service {
+  Service.fromGraphQL(final Query$AllServices$services$allServices service)
+      : this(
+          id: service.id,
+          displayName: service.displayName,
+          description: service.description,
+          isEnabled: service.isEnabled,
+          isRequired: service.isRequired,
+          isMovable: service.isMovable,
+          status: ServiceStatus.fromGraphQL(service.status),
+          storageUsage: ServiceStorageUsage(
+            used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
+            volume: service.storageUsage.volume?.name,
+          ),
+          // Decode the base64 encoded svg icon to text.
+          svgIcon: utf8.decode(base64.decode(service.svgIcon)),
+          dnsRecords: service.dnsRecords
+                  ?.map((final record) => DnsRecord.fromGraphQL(record))
+                  .toList() ??
+              [],
+          url: service.url,
+        );
   Service({
     required this.id,
     required this.displayName,
@@ -39,28 +60,6 @@ class Service {
     }
     return '';
   }
-
-  Service.fromGraphQL(final Query$AllServices$services$allServices service)
-      : this(
-          id: service.id,
-          displayName: service.displayName,
-          description: service.description,
-          isEnabled: service.isEnabled,
-          isRequired: service.isRequired,
-          isMovable: service.isMovable,
-          status: ServiceStatus.fromGraphQL(service.status),
-          storageUsage: ServiceStorageUsage(
-            used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
-            volume: service.storageUsage.volume?.name,
-          ),
-          // Decode the base64 encoded svg icon to text.
-          svgIcon: utf8.decode(base64.decode(service.svgIcon)),
-          dnsRecords: service.dnsRecords
-                  ?.map((final record) => DnsRecord.fromGraphQL(record))
-                  .toList() ??
-              [],
-          url: service.url,
-        );
 
   static Service empty = Service(
     id: 'empty',

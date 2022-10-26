@@ -14,11 +14,11 @@ class ServerJob {
     required this.uid,
     required this.updatedAt,
     required this.createdAt,
-    final this.error,
-    final this.progress,
-    final this.result,
-    final this.statusText,
-    final this.finishedAt,
+    this.error,
+    this.progress,
+    this.result,
+    this.statusText,
+    this.finishedAt,
   });
 
   ServerJob.fromGraphQL(final Query$GetApiJobs$jobs$getJobs serverJob)

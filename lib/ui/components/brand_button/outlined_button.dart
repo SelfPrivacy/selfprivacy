@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BrandOutlinedButton extends StatelessWidget {
   const BrandOutlinedButton({
-    final super.key,
+    super.key,
     this.onPressed,
     this.title,
     this.child,

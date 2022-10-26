@@ -13,7 +13,7 @@ class NetworkChart extends StatelessWidget {
     required this.listData,
     required this.period,
     required this.start,
-    final super.key,
+    super.key,
   });
 
   final List<List<TimeSeriesData>> listData;

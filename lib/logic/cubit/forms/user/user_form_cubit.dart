@@ -11,7 +11,7 @@ class UserFormCubit extends FormCubit {
   UserFormCubit({
     required this.jobsCubit,
     required final FieldCubitFactory fieldFactory,
-    final this.initialUser,
+    this.initialUser,
   }) {
     if (initialUser == null) {
       login = fieldFactory.createUserLoginField();

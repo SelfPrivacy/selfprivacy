@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 class BrandMarkdown extends StatefulWidget {
   const BrandMarkdown({
     required this.fileName,
-    final super.key,
+    super.key,
   });
 
   final String fileName;

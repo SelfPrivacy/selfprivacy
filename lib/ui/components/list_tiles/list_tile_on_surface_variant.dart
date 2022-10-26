@@ -7,7 +7,7 @@ class ListTileOnSurfaceVariant extends StatelessWidget {
     this.leadingIcon,
     this.onTap,
     this.disableSubtitleOverflow = false,
-    final super.key,
+    super.key,
   });
 
   final String title;

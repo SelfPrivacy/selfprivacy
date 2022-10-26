@@ -18,7 +18,7 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dar
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class RecoveryRouting extends StatelessWidget {
-  const RecoveryRouting({final super.key});
+  const RecoveryRouting({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -77,7 +77,7 @@ class RecoveryRouting extends StatelessWidget {
 }
 
 class SelectDomainToRecover extends StatelessWidget {
-  const SelectDomainToRecover({final super.key});
+  const SelectDomainToRecover({super.key});
 
   @override
   Widget build(final BuildContext context) {

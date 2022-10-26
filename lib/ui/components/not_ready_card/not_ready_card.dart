@@ -6,7 +6,7 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class NotReadyCard extends StatelessWidget {
-  const NotReadyCard({final super.key});
+  const NotReadyCard({super.key});
 
   @override
   Widget build(final BuildContext context) => Container(

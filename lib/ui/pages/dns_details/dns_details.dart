@@ -8,7 +8,7 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
 class DnsDetailsPage extends StatefulWidget {
-  const DnsDetailsPage({final super.key});
+  const DnsDetailsPage({super.key});
 
   @override
   State<DnsDetailsPage> createState() => _DnsDetailsPageState();

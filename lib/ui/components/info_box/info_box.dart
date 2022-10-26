@@ -4,7 +4,7 @@ class InfoBox extends StatelessWidget {
   const InfoBox({
     required this.text,
     this.isWarning = false,
-    final super.key,
+    super.key,
   });
 
   final String text;

@@ -16,7 +16,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
 
 class JobsContent extends StatelessWidget {
-  const JobsContent({final super.key});
+  const JobsContent({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -89,7 +89,8 @@ class JobsContent extends StatelessWidget {
                       const SizedBox(width: 10),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).colorScheme.errorContainer,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.errorContainer,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),

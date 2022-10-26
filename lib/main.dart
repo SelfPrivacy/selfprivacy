@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
   const MyApp({
     required this.lightThemeData,
     required this.darkThemeData,
-    final super.key,
+    super.key,
   });
 
   final ThemeData lightThemeData;

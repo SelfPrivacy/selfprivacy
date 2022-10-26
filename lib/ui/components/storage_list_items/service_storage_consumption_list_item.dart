@@ -8,7 +8,7 @@ class ServiceStorageConsumptionListItem extends StatelessWidget {
     required this.storageConsumptionText,
     required this.color,
     required this.icon,
-    final super.key,
+    super.key,
   });
 
   final String title;

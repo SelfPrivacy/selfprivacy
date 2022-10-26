@@ -47,6 +47,8 @@ class GenericJobMutationReturn extends GenericMutationResult {
   final ServerJob? job;
 }
 
+@Deprecated(
+    'Extend GenericMutationResult for mutations, return data for queries')
 class ApiResponse<D> {
   ApiResponse({
     required this.success,

@@ -3,7 +3,7 @@ part of 'users.dart';
 class ResetPassword extends StatelessWidget {
   const ResetPassword({
     required this.user,
-    final super.key,
+    super.key,
   });
 
   final User user;

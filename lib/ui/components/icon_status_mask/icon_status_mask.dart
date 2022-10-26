@@ -6,7 +6,7 @@ class IconStatusMask extends StatelessWidget {
   const IconStatusMask({
     required this.icon,
     required this.status,
-    final super.key,
+    super.key,
   });
   final Widget icon;
 

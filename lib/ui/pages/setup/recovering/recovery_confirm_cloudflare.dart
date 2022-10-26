@@ -10,7 +10,7 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryConfirmCloudflare extends StatelessWidget {
-  const RecoveryConfirmCloudflare({final super.key});
+  const RecoveryConfirmCloudflare({super.key});
 
   @override
   Widget build(final BuildContext context) {

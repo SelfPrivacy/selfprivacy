@@ -18,7 +18,7 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class ProvidersPage extends StatefulWidget {
-  const ProvidersPage({final super.key});
+  const ProvidersPage({super.key});
 
   @override
   State<ProvidersPage> createState() => _ProvidersPageState();
@@ -119,11 +119,11 @@ class _ProvidersPageState extends State<ProvidersPage> {
 
 class _Card extends StatelessWidget {
   const _Card({
-    required final this.state,
-    required final this.icon,
-    required final this.title,
-    required final this.subtitle,
-    final this.onTap,
+    required this.state,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.onTap,
   });
 
   final Function()? onTap;

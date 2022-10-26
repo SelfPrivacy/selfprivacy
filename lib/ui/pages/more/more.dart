@@ -23,7 +23,7 @@ import 'package:selfprivacy/ui/pages/more/console.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
 
 class MorePage extends StatelessWidget {
-  const MorePage({final super.key});
+  const MorePage({super.key});
 
   @override
   Widget build(final BuildContext context) {

@@ -35,9 +35,9 @@ class GenericMutationResult {
 
 class GenericJobMutationReturn extends GenericMutationResult {
   GenericJobMutationReturn({
-    required final super.success,
-    required final super.code,
-    final super.message,
+    required super.success,
+    required super.code,
+    super.message,
     this.job,
   });
   final ServerJob? job;

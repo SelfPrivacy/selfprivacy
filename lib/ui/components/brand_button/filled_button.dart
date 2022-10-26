@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class FilledButton extends StatelessWidget {
   const FilledButton({
-    final super.key,
+    super.key,
     this.onPressed,
     this.title,
     this.child,
@@ -17,13 +17,13 @@ class FilledButton extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final ButtonStyle enabledStyle = ElevatedButton.styleFrom(
-      onPrimary: Theme.of(context).colorScheme.onPrimary,
-      primary: Theme.of(context).colorScheme.primary,
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
     ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0));
 
     final ButtonStyle disabledStyle = ElevatedButton.styleFrom(
-      onPrimary: Theme.of(context).colorScheme.onSurface.withAlpha(30),
-      primary: Theme.of(context).colorScheme.onSurface.withAlpha(98),
+      foregroundColor: Theme.of(context).colorScheme.onSurface.withAlpha(30),
+      backgroundColor: Theme.of(context).colorScheme.onSurface.withAlpha(98),
     ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0));
 
     return ConstrainedBox(

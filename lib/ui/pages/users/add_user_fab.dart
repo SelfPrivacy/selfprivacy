@@ -1,7 +1,7 @@
 part of 'users.dart';
 
 class AddUserFab extends StatelessWidget {
-  const AddUserFab({final super.key});
+  const AddUserFab({super.key});
 
   @override
   Widget build(final BuildContext context) => FloatingActionButton.small(

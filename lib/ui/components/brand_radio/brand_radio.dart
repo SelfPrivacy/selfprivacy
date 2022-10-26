@@ -6,7 +6,7 @@ import 'package:selfprivacy/config/brand_colors.dart';
 class BrandRadio extends StatelessWidget {
   const BrandRadio({
     required this.isChecked,
-    final super.key,
+    super.key,
   });
 
   final bool isChecked;

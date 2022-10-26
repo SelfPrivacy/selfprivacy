@@ -14,7 +14,7 @@ class ExtendingVolumePage extends StatefulWidget {
   const ExtendingVolumePage({
     required this.diskVolumeToResize,
     required this.diskStatus,
-    final super.key,
+    super.key,
   });
 
   final DiskVolume diskVolumeToResize;

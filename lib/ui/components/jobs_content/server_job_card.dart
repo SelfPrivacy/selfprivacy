@@ -4,8 +4,8 @@ import 'package:selfprivacy/ui/components/brand_linear_indicator/brand_linear_in
 
 class ServerJobCard extends StatelessWidget {
   const ServerJobCard({
-    required final this.serverJob,
-    final super.key,
+    required this.serverJob,
+    super.key,
   });
 
   final ServerJob serverJob;

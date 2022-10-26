@@ -3,7 +3,7 @@ part of 'users.dart';
 class UserDetails extends StatelessWidget {
   const UserDetails({
     required this.login,
-    final super.key,
+    super.key,
   });
 
   final String login;
@@ -249,7 +249,7 @@ class _SshKeysCard extends StatelessWidget {
 }
 
 class NewSshKey extends StatelessWidget {
-  const NewSshKey(this.user, {final super.key});
+  const NewSshKey(this.user, {super.key});
   final User user;
 
   @override

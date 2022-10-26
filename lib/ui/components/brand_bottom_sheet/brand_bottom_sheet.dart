@@ -4,7 +4,7 @@ import 'package:selfprivacy/config/brand_colors.dart';
 class BrandBottomSheet extends StatelessWidget {
   const BrandBottomSheet({
     required this.child,
-    final super.key,
+    super.key,
     this.isExpended = false,
   });
 

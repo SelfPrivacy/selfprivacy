@@ -9,7 +9,7 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart'
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class RecoveryMethodSelect extends StatelessWidget {
-  const RecoveryMethodSelect({final super.key});
+  const RecoveryMethodSelect({super.key});
 
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
@@ -56,7 +56,7 @@ class RecoveryMethodSelect extends StatelessWidget {
 }
 
 class RecoveryFallbackMethodSelect extends StatelessWidget {
-  const RecoveryFallbackMethodSelect({final super.key});
+  const RecoveryFallbackMethodSelect({super.key});
 
   @override
   Widget build(final BuildContext context) =>

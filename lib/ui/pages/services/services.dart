@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
@@ -31,7 +30,7 @@ const switchableServices = [
 ];
 
 class ServicesPage extends StatefulWidget {
-  const ServicesPage({final super.key});
+  const ServicesPage({super.key});
 
   @override
   State<ServicesPage> createState() => _ServicesPageState();

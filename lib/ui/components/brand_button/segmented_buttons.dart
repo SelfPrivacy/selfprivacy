@@ -5,7 +5,7 @@ class SegmentedButtons extends StatelessWidget {
     required this.isSelected,
     required this.onPressed,
     required this.titles,
-    final super.key,
+    super.key,
   });
 
   final List<bool> isSelected;

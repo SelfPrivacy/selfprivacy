@@ -11,7 +11,7 @@ import 'package:selfprivacy/ui/pages/devices/new_device.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class DevicesScreen extends StatefulWidget {
-  const DevicesScreen({final super.key});
+  const DevicesScreen({super.key});
 
   @override
   State<DevicesScreen> createState() => _DevicesScreenState();

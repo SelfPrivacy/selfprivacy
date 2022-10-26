@@ -9,7 +9,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 
 class RecoverByNewDeviceKeyInstruction extends StatelessWidget {
-  const RecoverByNewDeviceKeyInstruction({final super.key});
+  const RecoverByNewDeviceKeyInstruction({super.key});
 
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
@@ -30,7 +30,7 @@ class RecoverByNewDeviceKeyInstruction extends StatelessWidget {
 }
 
 class RecoverByNewDeviceKeyInput extends StatelessWidget {
-  const RecoverByNewDeviceKeyInput({final super.key});
+  const RecoverByNewDeviceKeyInput({super.key});
 
   @override
   Widget build(final BuildContext context) {

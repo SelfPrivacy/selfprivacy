@@ -6,6 +6,15 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 
+class ProviderApiTokenValidation {
+  ProviderApiTokenValidation({
+    required this.length,
+    required this.regexp,
+  });
+  final int length;
+  final RegExp regexp;
+}
+
 abstract class ServerProviderApi extends ApiMap {
   Future<List<ServerBasicInfo>> getServers();
   Future<List<ServerProviderLocation>> getAvailableLocations();
@@ -29,7 +38,5 @@ abstract class ServerProviderApi extends ApiMap {
   });
 
   Future<bool> isApiTokenValid(final String token);
-  RegExp getApiTokenValidation() => RegExp(
-        r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]',
-      );
+  ProviderApiTokenValidation getApiTokenValidation();
 }

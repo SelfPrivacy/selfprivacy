@@ -195,7 +195,9 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
   @override
   Future<bool> attachVolume(
-      final ServerVolume volume, final int serverId) async {
+    final ServerVolume volume,
+    final int serverId,
+  ) async {
     bool success = false;
 
     final Response dbPostResponse;
@@ -518,10 +520,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final Dio client = await getClient();
     try {
       final Response response = await client.get(
-        '/locations',
+        '/regions',
       );
 
-      locations = response.data!['locations'].map<ServerProviderLocation>(
+      locations = response.data!['regions'].map<ServerProviderLocation>(
         (final location) => ServerProviderLocation(
           title: location['slug'],
           description: location['name'],
@@ -586,4 +588,11 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }) async {
     /// TODO remove from provider interface
   }
+
+  @override
+  ProviderApiTokenValidation getApiTokenValidation() =>
+      ProviderApiTokenValidation(
+        regexp: RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]'),
+        length: 71,
+      );
 }

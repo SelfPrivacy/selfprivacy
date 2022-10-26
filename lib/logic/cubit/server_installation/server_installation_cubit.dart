@@ -7,6 +7,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -65,7 +66,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  RegExp getServerProviderApiTokenValidation() =>
+  ProviderApiTokenValidation serverProviderApiTokenValidation() =>
       repository.serverProviderApiFactory!
           .getServerProvider()
           .getApiTokenValidation();

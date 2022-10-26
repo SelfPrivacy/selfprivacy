@@ -7,11 +7,13 @@ import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class ProviderFormCubit extends FormCubit {
   ProviderFormCubit(this.serverInstallationCubit) {
+    //final int tokenLength =
+    //    serverInstallationCubit.serverProviderApiTokenValidation().length;
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
-        LengthStringNotEqualValidation(64)
+        //LengthStringNotEqualValidation(tokenLength),
       ],
     );
 

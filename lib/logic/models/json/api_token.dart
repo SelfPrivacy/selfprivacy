@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 
 part 'api_token.g.dart';
 
@@ -11,6 +12,14 @@ class ApiToken {
     required this.date,
     required this.isCaller,
   });
+
+  ApiToken.fromGraphQL(
+    final Query$GetApiTokens$api$devices device,
+  ) : this(
+          name: device.name,
+          date: device.creationDate,
+          isCaller: device.isCaller,
+        );
 
   final String name;
   final DateTime date;

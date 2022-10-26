@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 
 part 'recovery_token_status.g.dart';
 
@@ -14,6 +15,16 @@ class RecoveryKeyStatus extends Equatable {
     this.expiration,
     this.usesLeft,
   });
+
+  RecoveryKeyStatus.fromGraphQL(
+    final Query$RecoveryKey$api$recoveryKey recoveryKey,
+  ) : this(
+          exists: recoveryKey.exists,
+          date: recoveryKey.creationDate,
+          expiration: recoveryKey.expirationDate,
+          usesLeft: recoveryKey.usesLeft,
+          valid: recoveryKey.valid,
+        );
 
   final bool exists;
   final DateTime? date;

@@ -7,7 +7,7 @@ final List<Location> locations = timeZoneDatabase.locations.values.toList()
   );
 
 class SelectTimezone extends StatefulWidget {
-  const SelectTimezone({final super.key});
+  const SelectTimezone({super.key});
 
   @override
   State<SelectTimezone> createState() => _SelectTimezoneState();
@@ -117,7 +117,9 @@ class _SelectTimezoneState extends State<SelectTimezone> {
       );
 
   MapEntry<int, Container> locationToListTile(
-      final int key, final Location location) {
+    final int key,
+    final Location location,
+  ) {
     final duration = Duration(milliseconds: location.currentTimeZone.offset);
     final area = location.currentTimeZone.abbreviation
         .replaceAll(RegExp(r'[\d+()-]'), '');

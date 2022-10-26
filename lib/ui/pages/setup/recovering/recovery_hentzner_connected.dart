@@ -11,7 +11,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryHetznerConnected extends StatelessWidget {
-  const RecoveryHetznerConnected({final super.key});
+  const RecoveryHetznerConnected({super.key});
 
   @override
   Widget build(final BuildContext context) {

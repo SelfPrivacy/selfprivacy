@@ -16,7 +16,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class BackupDetails extends StatefulWidget {
-  const BackupDetails({final super.key});
+  const BackupDetails({super.key});
 
   @override
   State<BackupDetails> createState() => _BackupDetailsState();

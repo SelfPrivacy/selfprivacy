@@ -12,7 +12,7 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
   @override
   const RecoverByOldTokenInstruction({
     required this.instructionFilename,
-    final super.key,
+    super.key,
   });
 
   @override
@@ -49,7 +49,7 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
 }
 
 class RecoverByOldToken extends StatelessWidget {
-  const RecoverByOldToken({final super.key});
+  const RecoverByOldToken({super.key});
 
   @override
   Widget build(final BuildContext context) {

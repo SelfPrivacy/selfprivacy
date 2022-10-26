@@ -147,7 +147,7 @@ class BrandText extends StatelessWidget {
   const BrandText(
     this.text, {
     required this.type,
-    final super.key,
+    super.key,
     this.style,
     this.overflow,
     this.softWrap,

@@ -56,7 +56,7 @@ class BrandButton {
 
 class IconTextButton extends StatelessWidget {
   const IconTextButton({
-    final super.key,
+    super.key,
     this.onPressed,
     this.title,
     this.icon,

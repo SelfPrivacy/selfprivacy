@@ -5,7 +5,7 @@ import 'package:selfprivacy/ui/helpers/widget_size.dart';
 class BrandHeroScreen extends StatelessWidget {
   const BrandHeroScreen({
     required this.children,
-    final super.key,
+    super.key,
     this.hasBackButton = true,
     this.hasFlashButton = true,
     this.heroIcon,
@@ -82,7 +82,7 @@ class HeroSliverAppBar extends StatefulWidget {
     required this.hasBackButton,
     required this.onBackButtonPressed,
     required this.heroIconWidget,
-    final super.key,
+    super.key,
   });
 
   final String heroTitle;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BrandError extends StatelessWidget {
-  const BrandError({final super.key, this.error, this.stackTrace});
+  const BrandError({super.key, this.error, this.stackTrace});
 
   final Object? error;
   final StackTrace? stackTrace;

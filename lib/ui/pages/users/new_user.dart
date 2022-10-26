@@ -1,7 +1,7 @@
 part of 'users.dart';
 
 class NewUser extends StatelessWidget {
-  const NewUser({final super.key});
+  const NewUser({super.key});
 
   @override
   Widget build(final BuildContext context) {

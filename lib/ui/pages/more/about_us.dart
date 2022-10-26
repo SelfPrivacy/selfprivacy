@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class AboutUsPage extends StatelessWidget {
-  const AboutUsPage({final super.key});
+  const AboutUsPage({super.key});
 
   @override
   Widget build(final BuildContext context) => SafeArea(

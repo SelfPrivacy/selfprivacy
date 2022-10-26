@@ -6,7 +6,7 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({required this.nextPage, final super.key});
+  const OnboardingPage({required this.nextPage, super.key});
 
   final Widget nextPage;
   @override

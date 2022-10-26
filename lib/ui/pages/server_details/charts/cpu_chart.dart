@@ -10,7 +10,7 @@ class CpuChart extends StatelessWidget {
     required this.data,
     required this.period,
     required this.start,
-    final super.key,
+    super.key,
   });
 
   final List<TimeSeriesData> data;

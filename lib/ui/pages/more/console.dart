@@ -8,7 +8,7 @@ import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 
 class Console extends StatefulWidget {
-  const Console({final super.key});
+  const Console({super.key});
 
   @override
   State<Console> createState() => _ConsoleState();

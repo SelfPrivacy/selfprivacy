@@ -13,7 +13,7 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
-  HetznerApi({final this.hasLogger = false, final this.isWithToken = true});
+  HetznerApi({this.hasLogger = false, this.isWithToken = true});
   @override
   bool hasLogger;
   @override

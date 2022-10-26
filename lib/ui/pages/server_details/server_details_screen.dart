@@ -34,7 +34,7 @@ part 'time_zone/time_zone.dart';
 var navigatorKey = GlobalKey<NavigatorState>();
 
 class ServerDetailsScreen extends StatefulWidget {
-  const ServerDetailsScreen({final super.key});
+  const ServerDetailsScreen({super.key});
 
   @override
   State<ServerDetailsScreen> createState() => _ServerDetailsScreenState();

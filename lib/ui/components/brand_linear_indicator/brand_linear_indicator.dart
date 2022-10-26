@@ -6,7 +6,7 @@ class BrandLinearIndicator extends StatelessWidget {
     required this.color,
     required this.backgroundColor,
     required this.height,
-    final super.key,
+    super.key,
   });
 
   final double value;

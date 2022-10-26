@@ -34,7 +34,7 @@ part 'add_user_fab.dart';
 part 'reset_password.dart';
 
 class UsersPage extends StatelessWidget {
-  const UsersPage({final super.key});
+  const UsersPage({super.key});
 
   @override
   Widget build(final BuildContext context) {

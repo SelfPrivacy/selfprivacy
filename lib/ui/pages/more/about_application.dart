@@ -7,7 +7,7 @@ import 'package:package_info/package_info.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class AboutApplicationPage extends StatelessWidget {
-  const AboutApplicationPage({final super.key});
+  const AboutApplicationPage({super.key});
 
   @override
   Widget build(final BuildContext context) => SafeArea(

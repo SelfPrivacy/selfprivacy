@@ -7,7 +7,7 @@ class FilledCard extends StatelessWidget {
     this.tertiary = false,
     this.error = false,
     this.clipped = true,
-    final super.key,
+    super.key,
   });
 
   final Widget child;

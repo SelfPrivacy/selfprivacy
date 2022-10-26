@@ -9,7 +9,7 @@ class BrandTimer extends StatefulWidget {
   const BrandTimer({
     required this.startDateTime,
     required this.duration,
-    final super.key,
+    super.key,
   });
 
   final DateTime startDateTime;

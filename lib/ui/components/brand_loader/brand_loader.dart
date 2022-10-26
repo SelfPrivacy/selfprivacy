@@ -6,7 +6,7 @@ class BrandLoader {
 }
 
 class HorizontalLoader extends StatelessWidget {
-  const HorizontalLoader({final super.key});
+  const HorizontalLoader({super.key});
 
   @override
   Widget build(final BuildContext context) => Column(

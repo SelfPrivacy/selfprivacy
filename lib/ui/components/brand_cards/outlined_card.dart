@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class OutlinedCard extends StatelessWidget {
   const OutlinedCard({
     required this.child,
-    final super.key,
+    super.key,
   });
 
   final Widget child;

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Localization extends StatelessWidget {
   const Localization({
-    final super.key,
+    super.key,
     this.child,
   });
 

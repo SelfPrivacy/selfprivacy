@@ -164,7 +164,7 @@ class Legend extends StatelessWidget {
   const Legend({
     required this.color,
     required this.text,
-    final super.key,
+    super.key,
   });
 
   final String text;

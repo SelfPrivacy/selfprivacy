@@ -6,9 +6,9 @@ import 'package:selfprivacy/logic/models/disk_status.dart';
 class ServerStorageListItem extends StatelessWidget {
   const ServerStorageListItem({
     required this.volume,
-    final this.showIcon = true,
-    final this.dense = false,
-    final super.key,
+    this.showIcon = true,
+    this.dense = false,
+    super.key,
   });
 
   final DiskVolume volume;
@@ -52,7 +52,7 @@ class ConsumptionListItem extends StatelessWidget {
     this.rightSideText,
     this.icon,
     this.dense = false,
-    final super.key,
+    super.key,
   });
 
   final String title;

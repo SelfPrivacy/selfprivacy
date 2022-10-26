@@ -9,7 +9,7 @@ import 'package:selfprivacy/ui/pages/users/users.dart';
 import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
 
 class RootPage extends StatefulWidget {
-  const RootPage({final super.key});
+  const RootPage({super.key});
 
   @override
   State<RootPage> createState() => _RootPageState();

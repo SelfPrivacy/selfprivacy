@@ -4,7 +4,7 @@ class BrandSwitch extends StatelessWidget {
   const BrandSwitch({
     required this.onChanged,
     required this.value,
-    final super.key,
+    super.key,
   });
 
   final ValueChanged<bool> onChanged;

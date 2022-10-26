@@ -8,7 +8,7 @@ class ProgressBar extends StatefulWidget {
   const ProgressBar({
     required this.steps,
     required this.activeIndex,
-    final super.key,
+    super.key,
   });
 
   final int activeIndex;

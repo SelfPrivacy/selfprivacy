@@ -76,7 +76,7 @@ abstract class ServerInstallationState extends Equatable {
 class TimerState extends ServerInstallationNotFinished {
   TimerState({
     required this.dataState,
-    required final super.isLoading,
+    required super.isLoading,
     this.timerStart,
     this.duration,
   }) : super(
@@ -119,17 +119,17 @@ enum ServerSetupProgress {
 
 class ServerInstallationNotFinished extends ServerInstallationState {
   const ServerInstallationNotFinished({
-    required final super.isServerStarted,
-    required final super.isServerResetedFirstTime,
-    required final super.isServerResetedSecondTime,
-    required final this.isLoading,
+    required super.isServerStarted,
+    required super.isServerResetedFirstTime,
+    required super.isServerResetedSecondTime,
+    required this.isLoading,
     required this.dnsMatches,
-    final super.providerApiToken,
-    final super.cloudFlareKey,
-    final super.backblazeCredential,
-    final super.serverDomain,
-    final super.rootUser,
-    final super.serverDetails,
+    super.providerApiToken,
+    super.cloudFlareKey,
+    super.backblazeCredential,
+    super.serverDomain,
+    super.rootUser,
+    super.serverDetails,
   });
   final bool isLoading;
   final Map<String, bool>? dnsMatches;
@@ -209,15 +209,15 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
 
 class ServerInstallationFinished extends ServerInstallationState {
   const ServerInstallationFinished({
-    required final String super.providerApiToken,
-    required final String super.cloudFlareKey,
-    required final BackblazeCredential super.backblazeCredential,
-    required final ServerDomain super.serverDomain,
-    required final User super.rootUser,
-    required final ServerHostingDetails super.serverDetails,
-    required final super.isServerStarted,
-    required final super.isServerResetedFirstTime,
-    required final super.isServerResetedSecondTime,
+    required String super.providerApiToken,
+    required String super.cloudFlareKey,
+    required BackblazeCredential super.backblazeCredential,
+    required ServerDomain super.serverDomain,
+    required User super.rootUser,
+    required ServerHostingDetails super.serverDetails,
+    required super.isServerStarted,
+    required super.isServerResetedFirstTime,
+    required super.isServerResetedSecondTime,
   });
 
   @override
@@ -260,12 +260,12 @@ class ServerInstallationRecovery extends ServerInstallationState {
   const ServerInstallationRecovery({
     required this.currentStep,
     required this.recoveryCapabilities,
-    final super.providerApiToken,
-    final super.cloudFlareKey,
-    final super.backblazeCredential,
-    final super.serverDomain,
-    final super.rootUser,
-    final super.serverDetails,
+    super.providerApiToken,
+    super.cloudFlareKey,
+    super.backblazeCredential,
+    super.serverDomain,
+    super.rootUser,
+    super.serverDetails,
   }) : super(
           isServerStarted: true,
           isServerResetedFirstTime: true,

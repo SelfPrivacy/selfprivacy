@@ -5,7 +5,7 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 
 class RecoveryKeyReceiving extends StatelessWidget {
-  const RecoveryKeyReceiving({required this.recoveryKey, final super.key});
+  const RecoveryKeyReceiving({required this.recoveryKey, super.key});
 
   final String recoveryKey;
 

@@ -12,7 +12,7 @@ import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class AppSettingsPage extends StatefulWidget {
-  const AppSettingsPage({final super.key});
+  const AppSettingsPage({super.key});
 
   @override
   State<AppSettingsPage> createState() => _AppSettingsPageState();
@@ -80,7 +80,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                     const SizedBox(width: 5),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: BrandColors.red1,
+                        backgroundColor: BrandColors.red1,
                       ),
                       child: Text(
                         'basis.reset'.tr(),
@@ -145,7 +145,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           const SizedBox(width: 5),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: BrandColors.red1,
+              backgroundColor: BrandColors.red1,
             ),
             onPressed: isDisabled
                 ? null

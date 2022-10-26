@@ -9,7 +9,7 @@ class ServiceMigrationListItem extends StatelessWidget {
     required this.diskStatus,
     required this.selectedVolume,
     required this.onChange,
-    final super.key,
+    super.key,
   });
 
   final Service service;
@@ -54,7 +54,7 @@ class ServiceMigrationListItem extends StatelessWidget {
 class ServiceConsumptionTitle extends StatelessWidget {
   const ServiceConsumptionTitle({
     required this.service,
-    final super.key,
+    super.key,
   });
 
   final Service service;

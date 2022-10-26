@@ -32,12 +32,12 @@ class ServerBasicInfoWithValidators extends ServerBasicInfo {
         );
 
   ServerBasicInfoWithValidators({
-    required final super.id,
-    required final super.name,
-    required final super.reverseDns,
-    required final super.ip,
-    required final super.created,
-    required final super.volumeId,
+    required super.id,
+    required super.name,
+    required super.reverseDns,
+    required super.ip,
+    required super.created,
+    required super.volumeId,
     required this.isIpValid,
     required this.isReverseDnsValid,
   });

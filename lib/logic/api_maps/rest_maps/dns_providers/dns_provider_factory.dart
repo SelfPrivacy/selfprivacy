@@ -3,9 +3,9 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/provider_api_settings.dart'
 
 class DnsProviderApiSettings extends ProviderApiSettings {
   const DnsProviderApiSettings({
-    final super.hasLogger = false,
-    final super.isWithToken = true,
-    final this.customToken,
+    super.hasLogger = false,
+    super.isWithToken = true,
+    this.customToken,
   });
   final String? customToken;
 }

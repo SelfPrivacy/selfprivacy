@@ -14,7 +14,7 @@ import 'package:selfprivacy/ui/pages/recovery_key/recovery_key_receiving.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class RecoveryKey extends StatefulWidget {
-  const RecoveryKey({final super.key});
+  const RecoveryKey({super.key});
 
   @override
   State<RecoveryKey> createState() => _RecoveryKeyState();
@@ -61,7 +61,7 @@ class _RecoveryKeyState extends State<RecoveryKey> {
 }
 
 class RecoveryKeyContent extends StatefulWidget {
-  const RecoveryKeyContent({final super.key});
+  const RecoveryKeyContent({super.key});
 
   @override
   State<RecoveryKeyContent> createState() => _RecoveryKeyContentState();
@@ -107,7 +107,7 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
 }
 
 class RecoveryKeyStatusCard extends StatelessWidget {
-  const RecoveryKeyStatusCard({required this.isValid, final super.key});
+  const RecoveryKeyStatusCard({required this.isValid, super.key});
 
   final bool isValid;
 
@@ -144,7 +144,7 @@ class RecoveryKeyStatusCard extends StatelessWidget {
 }
 
 class RecoveryKeyInformation extends StatelessWidget {
-  const RecoveryKeyInformation({required this.state, final super.key});
+  const RecoveryKeyInformation({required this.state, super.key});
 
   final RecoveryKeyState state;
 
@@ -201,7 +201,7 @@ class RecoveryKeyInformation extends StatelessWidget {
 }
 
 class RecoveryKeyConfiguration extends StatefulWidget {
-  const RecoveryKeyConfiguration({final super.key});
+  const RecoveryKeyConfiguration({super.key});
 
   @override
   State<StatefulWidget> createState() => _RecoveryKeyConfigurationState();

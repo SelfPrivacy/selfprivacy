@@ -7,7 +7,7 @@ import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
 class BrandFab extends StatefulWidget {
-  const BrandFab({final super.key});
+  const BrandFab({super.key});
 
   @override
   State<BrandFab> createState() => _BrandFabState();

@@ -10,8 +10,8 @@ import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class StorageCard extends StatelessWidget {
   const StorageCard({
-    required final this.diskStatus,
-    final super.key,
+    required this.diskStatus,
+    super.key,
   });
 
   final DiskStatus diskStatus;

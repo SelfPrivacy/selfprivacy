@@ -8,7 +8,7 @@ class SwitcherBlock extends StatelessWidget {
     required this.child,
     required this.isActive,
     required this.onChange,
-    final super.key,
+    super.key,
   });
 
   final Widget child;

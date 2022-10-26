@@ -2,9 +2,9 @@ part of 'server.dart';
 
 class MigrateToBindsMutationReturn extends GenericMutationResult {
   MigrateToBindsMutationReturn({
-    required final super.success,
-    required final super.code,
-    final super.message,
+    required super.success,
+    required super.code,
+    super.message,
     this.jobUid,
   });
   final String? jobUid;

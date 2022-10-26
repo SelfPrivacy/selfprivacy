@@ -21,7 +21,7 @@ class ServicesMigrationPage extends StatefulWidget {
     required this.services,
     required this.diskStatus,
     required this.isMigration,
-    final super.key,
+    super.key,
   });
 
   final DiskStatus diskStatus;

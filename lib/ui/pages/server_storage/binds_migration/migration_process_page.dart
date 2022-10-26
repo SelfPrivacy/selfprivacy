@@ -9,9 +9,7 @@ import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class MigrationProcessPage extends StatefulWidget {
-  const MigrationProcessPage({
-    final super.key,
-  });
+  const MigrationProcessPage({super.key});
 
   @override
   State<MigrationProcessPage> createState() => _MigrationProcessPageState();

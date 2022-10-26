@@ -12,7 +12,10 @@ import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class ServerStoragePage extends StatefulWidget {
-  const ServerStoragePage({required this.diskStatus, final super.key});
+  const ServerStoragePage({
+    required this.diskStatus,
+    super.key,
+  });
 
   final DiskStatus diskStatus;
 
@@ -75,7 +78,7 @@ class ServerStorageSection extends StatelessWidget {
     required this.volume,
     required this.diskStatus,
     required this.services,
-    final super.key,
+    super.key,
   });
 
   final DiskVolume volume;
@@ -120,7 +123,7 @@ class ServerConsumptionListTile extends StatelessWidget {
   const ServerConsumptionListTile({
     required this.service,
     required this.volume,
-    final super.key,
+    super.key,
   });
 
   final Service service;

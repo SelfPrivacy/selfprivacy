@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 
 class DiskSize {
-  const DiskSize({final this.byte = 0});
+  const DiskSize({this.byte = 0});
 
   DiskSize.fromKibibyte(final double kibibyte)
       : this(byte: (kibibyte * 1024).round());

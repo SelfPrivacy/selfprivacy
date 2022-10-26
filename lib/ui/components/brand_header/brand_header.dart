@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BrandHeader extends StatelessWidget {
   const BrandHeader({
-    final super.key,
+    super.key,
     this.title = '',
     this.hasBackButton = false,
     this.onBackButtonPressed,

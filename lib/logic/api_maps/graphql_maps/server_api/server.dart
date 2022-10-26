@@ -48,7 +48,8 @@ class GenericJobMutationReturn extends GenericMutationResult {
 }
 
 @Deprecated(
-    'Extend GenericMutationResult for mutations, return data for queries')
+  'Extend GenericMutationResult for mutations, return data for queries',
+)
 class ApiResponse<D> {
   ApiResponse({
     required this.success,
@@ -266,6 +267,9 @@ class ServerApi extends ApiMap
     return key;
   }
 
+  @Deprecated(
+    'Server now aware of all required DNS records. More general approach has to be implemented',
+  )
   Future<String?> getDkim() async {
     String? dkim;
     QueryResult<Query$DomainInfo> response;

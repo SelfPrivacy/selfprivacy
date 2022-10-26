@@ -14,7 +14,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -514,7 +514,7 @@ class ServerInstallationRepository {
       DeviceToken(device: await getDeviceName(), token: newDeviceKey),
     );
 
-    if (apiResponse.isSuccess) {
+    if (apiResponse.success) {
       return ServerHostingDetails(
         apiToken: apiResponse.data,
         volume: ServerVolume(
@@ -533,7 +533,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.errorMessage ?? apiResponse.data,
+      apiResponse.message ?? apiResponse.data,
     );
   }
 
@@ -551,7 +551,7 @@ class ServerInstallationRepository {
       DeviceToken(device: await getDeviceName(), token: recoveryKey),
     );
 
-    if (apiResponse.isSuccess) {
+    if (apiResponse.success) {
       return ServerHostingDetails(
         apiToken: apiResponse.data,
         volume: ServerVolume(
@@ -570,7 +570,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.errorMessage ?? apiResponse.data,
+      apiResponse.message ?? apiResponse.data,
     );
   }
 
@@ -586,9 +586,7 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     if (recoveryCapabilities == ServerRecoveryCapabilities.legacy) {
-      final Map<String, bool> apiResponse =
-          await serverApi.servicesPowerCheck();
-      if (apiResponse.isNotEmpty) {
+      if (await serverApi.isHttpServerWorking()) {
         return ServerHostingDetails(
           apiToken: apiToken,
           volume: ServerVolume(
@@ -616,7 +614,7 @@ class ServerInstallationRepository {
       DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
     );
 
-    if (apiResponse.isSuccess) {
+    if (apiResponse.success) {
       return ServerHostingDetails(
         apiToken: apiResponse.data,
         volume: ServerVolume(
@@ -635,7 +633,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.errorMessage ?? apiResponse.data,
+      apiResponse.message ?? apiResponse.data,
     );
   }
 
@@ -650,9 +648,8 @@ class ServerInstallationRepository {
     );
 
     final String? serverApiVersion = await serverApi.getApiVersion();
-    final ApiResponse<List<String>> users =
-        await serverApi.getUsersList(withMainUser: true);
-    if (serverApiVersion == null || !users.isSuccess) {
+    final users = await serverApi.getAllUsers();
+    if (serverApiVersion == null || users.isEmpty) {
       return fallbackUser;
     }
     try {
@@ -660,10 +657,8 @@ class ServerInstallationRepository {
       if (!VersionConstraint.parse('>=1.2.5').allows(parsedVersion)) {
         return fallbackUser;
       }
-      return User(
-        isFoundOnServer: true,
-        login: users.data[0],
-        type: UserType.primary,
+      return users.firstWhere(
+        (final User user) => user.type == UserType.primary,
       );
     } on FormatException {
       return fallbackUser;

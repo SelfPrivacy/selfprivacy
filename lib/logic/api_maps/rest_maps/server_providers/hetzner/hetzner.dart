@@ -608,36 +608,36 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final List<ServerType> types = [];
 
     final Dio client = await getClient();
-    //try {
-    final Response response = await client.get(
-      '/server_types',
-    );
-    final rawTypes = response.data!['server_types'];
-    for (final rawType in rawTypes) {
-      for (final rawPrice in rawType['prices']) {
-        if (rawPrice['location'].toString() == location.identifier) {
-          types.add(
-            ServerType(
-              title: rawType['description'],
-              identifier: rawType['name'],
-              ram: rawType['memory'],
-              cores: rawType['cores'],
-              disk: DiskSize(byte: rawType['disk'] * 1024 * 1024 * 1024),
-              price: Price(
-                value: double.parse(rawPrice['price_monthly']['gross']),
-                currency: 'EUR',
+    try {
+      final Response response = await client.get(
+        '/server_types',
+      );
+      final rawTypes = response.data!['server_types'];
+      for (final rawType in rawTypes) {
+        for (final rawPrice in rawType['prices']) {
+          if (rawPrice['location'].toString() == location.identifier) {
+            types.add(
+              ServerType(
+                title: rawType['description'],
+                identifier: rawType['name'],
+                ram: rawType['memory'],
+                cores: rawType['cores'],
+                disk: DiskSize(byte: rawType['disk'] * 1024 * 1024 * 1024),
+                price: Price(
+                  value: double.parse(rawPrice['price_monthly']['gross']),
+                  currency: 'EUR',
+                ),
+                location: location,
               ),
-              location: location,
-            ),
-          );
+            );
+          }
         }
       }
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
     }
-    //} catch (e) {
-    //print(e);
-    //} finally {
-    close(client);
-    //}
 
     return types;
   }

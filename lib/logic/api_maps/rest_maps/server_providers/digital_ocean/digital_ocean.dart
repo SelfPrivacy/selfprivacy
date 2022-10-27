@@ -102,7 +102,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/volumes',
         data: {
           'size_gigabytes': 10,
-          'name': StringGenerators.dbStorageName(),
+          'name': 'volume${StringGenerators.dbStorageName()}',
           'labels': {'labelkey': 'value'},
           'region': region,
           'filesystem_type': 'ext4',
@@ -212,12 +212,11 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'droplet_id': serverId,
         },
       );
-      success =
-          dbPostResponse.data['action']['status'].toString() == 'completed';
+      success = dbPostResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
-      client.close();
+      close(client);
     }
 
     return success;
@@ -277,6 +276,23 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return success;
   }
 
+  static String getHostnameFromDomain(final String domain) {
+    // Replace all non-alphanumeric characters with an underscore
+    String hostname =
+        domain.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+    if (hostname.endsWith('-')) {
+      hostname = hostname.substring(0, hostname.length - 1);
+    }
+    if (hostname.startsWith('-')) {
+      hostname = hostname.substring(1);
+    }
+    if (hostname.isEmpty) {
+      hostname = 'selfprivacy-server';
+    }
+
+    return hostname;
+  }
+
   @override
   Future<ServerHostingDetails?> createServer({
     required final String dnsApiToken,
@@ -292,14 +308,16 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final String base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
+    final String formattedHostname = getHostnameFromDomain(domainName);
+
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=digital-ocean NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$domainName bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=digital-ocean NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     final Dio client = await getClient();
     try {
       final Map<String, Object> data = {
-        'name': domainName,
+        'name': formattedHostname,
         'size': serverType,
         'image': 'ubuntu-20-04-x64',
         'user_data': userdataString,
@@ -312,14 +330,28 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         data: data,
       );
 
-      final int serverId = serverCreateResponse.data['server']['id'];
+      final int serverId = serverCreateResponse.data['droplet']['id'];
       final ServerVolume? newVolume = await createVolume();
       final bool attachedVolume = await attachVolume(newVolume!, serverId);
 
-      if (attachedVolume) {
+      String? ipv4;
+      int attempts = 0;
+      while (attempts < 5 && ipv4 == null) {
+        await Future.delayed(const Duration(seconds: 20));
+        final List<ServerBasicInfo> servers = await getServers();
+        for (final server in servers) {
+          if (server.name == formattedHostname && server.ip != '0.0.0.0') {
+            ipv4 = server.ip;
+            break;
+          }
+        }
+        ++attempts;
+      }
+
+      if (attachedVolume && ipv4 != null) {
         serverDetails = ServerHostingDetails(
           id: serverId,
-          ip4: serverCreateResponse.data['droplet']['networks']['v4'][0],
+          ip4: ipv4,
           createTime: DateTime.now(),
           volume: newVolume,
           apiToken: apiToken,
@@ -452,20 +484,26 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/droplets');
-      servers = response.data!['droplets']
-          .where(
-            (final server) => server['networks']['v4'].isNotEmpty,
-          )
-          .map<ServerBasicInfo>(
-            (final server) => ServerBasicInfo(
-              id: server['id'],
-              reverseDns: server['name'],
-              created: DateTime.now(),
-              ip: server['networks']['v4'][0],
-              name: server['name'],
-            ),
-          )
-          .toList();
+      servers = response.data!['droplets'].map<ServerBasicInfo>(
+        (final server) {
+          String ipv4 = '0.0.0.0';
+          if (server['networks']['v4'].isNotEmpty) {
+            for (final v4 in server['networks']['v4']) {
+              if (v4['type'].toString() == 'public') {
+                ipv4 = v4['ip_address'].toString();
+              }
+            }
+          }
+
+          return ServerBasicInfo(
+            id: server['id'],
+            reverseDns: server['name'],
+            created: DateTime.now(),
+            ip: ipv4,
+            name: server['name'],
+          );
+        },
+      ).toList();
     } catch (e) {
       print(e);
     } finally {
@@ -523,14 +561,16 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/regions',
       );
 
-      locations = response.data!['regions'].map<ServerProviderLocation>(
-        (final location) => ServerProviderLocation(
-          title: location['slug'],
-          description: location['name'],
-          flag: getEmojiFlag(location['slug']),
-          identifier: location['slug'],
-        ),
-      );
+      locations = response.data!['regions']
+          .map<ServerProviderLocation>(
+            (final location) => ServerProviderLocation(
+              title: location['slug'],
+              description: location['name'],
+              flag: getEmojiFlag(location['slug']),
+              identifier: location['slug'],
+            ),
+          )
+          .toList();
     } catch (e) {
       print(e);
     } finally {
@@ -559,7 +599,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
               ServerType(
                 title: rawSize['description'],
                 identifier: rawSize['slug'],
-                ram: rawSize['memory'],
+                ram: rawSize['memory'].toDouble(),
                 cores: rawSize['vcpus'],
                 disk: DiskSize(byte: rawSize['disk'] * 1024 * 1024 * 1024),
                 price: Price(

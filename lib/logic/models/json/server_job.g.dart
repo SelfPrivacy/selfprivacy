@@ -20,7 +20,7 @@ ServerJob _$ServerJobFromJson(Map<String, dynamic> json) => ServerJob(
       finishedAt: json['finishedAt'] == null
           ? null
           : DateTime.parse(json['finishedAt'] as String),
-    );
+    )..isHidden = json['isHidden'] as bool;
 
 Map<String, dynamic> _$ServerJobToJson(ServerJob instance) => <String, dynamic>{
       'name': instance.name,
@@ -34,6 +34,7 @@ Map<String, dynamic> _$ServerJobToJson(ServerJob instance) => <String, dynamic>{
       'result': instance.result,
       'statusText': instance.statusText,
       'finishedAt': instance.finishedAt?.toIso8601String(),
+      'isHidden': instance.isHidden,
     };
 
 const _$JobStatusEnumEnumMap = {

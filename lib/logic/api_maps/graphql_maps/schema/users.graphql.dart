@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'disk_volumes.graphql.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:json_annotation/json_annotation.dart';
 import 'schema.graphql.dart';
+import 'services.graphql.dart';
 part 'users.graphql.g.dart';
 
 @JsonSerializable(explicitToJson: true)

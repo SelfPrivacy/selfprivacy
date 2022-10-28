@@ -1,15 +1,5 @@
 part of 'server.dart';
 
-class MigrateToBindsMutationReturn extends GenericMutationResult {
-  MigrateToBindsMutationReturn({
-    required super.success,
-    required super.code,
-    super.message,
-    this.jobUid,
-  });
-  final String? jobUid;
-}
-
 mixin VolumeApi on ApiMap {
   Future<List<ServerDiskVolume>> getServerDiskVolumes() async {
     QueryResult response;
@@ -67,10 +57,10 @@ mixin VolumeApi on ApiMap {
     }
   }
 
-  Future<MigrateToBindsMutationReturn> migrateToBinds(
+  Future<GenericMutationResult<String?>> migrateToBinds(
     final Map<String, String> serviceToDisk,
   ) async {
-    MigrateToBindsMutationReturn? mutation;
+    GenericMutationResult<String?>? mutation;
 
     try {
       final GraphQLClient client = await getClient();
@@ -88,19 +78,19 @@ mixin VolumeApi on ApiMap {
           await client.mutate$MigrateToBinds(
         migrateMutation,
       );
-      mutation = mutation = MigrateToBindsMutationReturn(
-        success: result.parsedData!.migrateToBinds.success,
+      mutation = mutation = GenericMutationResult(
+        success: true,
         code: result.parsedData!.migrateToBinds.code,
         message: result.parsedData!.migrateToBinds.message,
-        jobUid: result.parsedData!.migrateToBinds.job?.uid,
+        data: result.parsedData!.migrateToBinds.job?.uid,
       );
     } catch (e) {
       print(e);
-      mutation = MigrateToBindsMutationReturn(
+      mutation = GenericMutationResult(
         success: false,
         code: 0,
         message: e.toString(),
-        jobUid: null,
+        data: null,
       );
     }
 

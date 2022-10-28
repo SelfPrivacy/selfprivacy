@@ -494,13 +494,13 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final ApiResponse<String> apiResponse = await serverApi.authorizeDevice(
+    final GenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: newDeviceKey),
     );
 
-    if (apiResponse.success) {
+    if (result.success) {
       return ServerHostingDetails(
-        apiToken: apiResponse.data,
+        apiToken: result.data,
         volume: ServerVolume(
           id: 0,
           name: '',
@@ -517,7 +517,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.message ?? apiResponse.data,
+      result.message ?? result.data,
     );
   }
 
@@ -531,13 +531,13 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final ApiResponse<String> apiResponse = await serverApi.useRecoveryToken(
+    final GenericResult<String> result = await serverApi.useRecoveryToken(
       DeviceToken(device: await getDeviceName(), token: recoveryKey),
     );
 
-    if (apiResponse.success) {
+    if (result.success) {
       return ServerHostingDetails(
-        apiToken: apiResponse.data,
+        apiToken: result.data,
         volume: ServerVolume(
           id: 0,
           name: '',
@@ -554,7 +554,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.message ?? apiResponse.data,
+      result.message ?? result.data,
     );
   }
 
@@ -592,15 +592,15 @@ class ServerInstallationRepository {
         );
       }
     }
-    final ApiResponse<String> deviceAuthKey =
+    final GenericResult<String> deviceAuthKey =
         await serverApi.createDeviceToken();
-    final ApiResponse<String> apiResponse = await serverApi.authorizeDevice(
+    final GenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
     );
 
-    if (apiResponse.success) {
+    if (result.success) {
       return ServerHostingDetails(
-        apiToken: apiResponse.data,
+        apiToken: result.data,
         volume: ServerVolume(
           id: 0,
           name: '',
@@ -617,7 +617,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.message ?? apiResponse.data,
+      result.message ?? result.data,
     );
   }
 

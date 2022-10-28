@@ -420,7 +420,8 @@
         "create_ssh_key": "Создать SSH ключ для {}",
         "delete_ssh_key": "Удалить SSH ключ для {}",
         "server_jobs": "Задачи на сервере",
-        "reset_user_password": "Сбросить пароль пользователя"
+        "reset_user_password": "Сбросить пароль пользователя",
+        "generic_error": "Не удалось подключиться к серверу!"
     },
     "validations": {
         "required": "Обязательное поле",

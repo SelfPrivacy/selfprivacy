@@ -78,17 +78,16 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       return;
     }
     // If API returned error, do nothing
-    final UserMutationResult result =
+    final GenericMutationResult<User?> result =
         await api.createUser(user.login, password);
-    final User? createdUser = result.user;
-    if (!result.success || createdUser == null) {
+    if (result.data == null) {
       getIt<NavigationService>()
           .showSnackBar(result.message ?? 'users.could_not_create_user'.tr());
       return;
     }
 
     final List<User> loadedUsers = List<User>.from(state.users);
-    loadedUsers.add(createdUser);
+    loadedUsers.add(result.data!);
     await box.clear();
     await box.addAll(loadedUsers);
     emit(state.copyWith(users: loadedUsers));
@@ -103,14 +102,20 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
     }
     final List<User> loadedUsers = List<User>.from(state.users);
     final GenericMutationResult result = await api.deleteUser(user.login);
-    if (result.success) {
+    if (result.success && result.data) {
       loadedUsers.removeWhere((final User u) => u.login == user.login);
       await box.clear();
       await box.addAll(loadedUsers);
       emit(state.copyWith(users: loadedUsers));
-    } else {
+    }
+
+    if (!result.success) {
+      getIt<NavigationService>().showSnackBar('jobs.generic_error'.tr());
+    }
+
+    if (!result.data) {
       getIt<NavigationService>()
-          .showSnackBar(result.message ?? 'users.could_not_delete_user'.tr());
+          .showSnackBar(result.message ?? 'jobs.generic_error'.tr());
     }
   }
 
@@ -123,9 +128,9 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
           .showSnackBar('users.could_not_change_password'.tr());
       return;
     }
-    final UserMutationResult result =
+    final GenericMutationResult<User?> result =
         await api.updateUser(user.login, newPassword);
-    if (!result.success) {
+    if (result.data == null) {
       getIt<NavigationService>().showSnackBar(
         result.message ?? 'users.could_not_change_password'.tr(),
       );
@@ -133,10 +138,10 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   }
 
   Future<void> addSshKey(final User user, final String publicKey) async {
-    final UserMutationResult result =
+    final GenericMutationResult<User?> result =
         await api.addSshKey(user.login, publicKey);
-    if (result.success) {
-      final User updatedUser = result.user!;
+    if (result.data != null) {
+      final User updatedUser = result.data!;
       final int index =
           state.users.indexWhere((final User u) => u.login == user.login);
       await box.putAt(index, updatedUser);
@@ -152,10 +157,10 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   }
 
   Future<void> deleteSshKey(final User user, final String publicKey) async {
-    final UserMutationResult result =
+    final GenericMutationResult<User?> result =
         await api.removeSshKey(user.login, publicKey);
-    if (result.success) {
-      final User updatedUser = result.user!;
+    if (result.data != null) {
+      final User updatedUser = result.data!;
       final int index =
           state.users.indexWhere((final User u) => u.login == user.login);
       await box.putAt(index, updatedUser);

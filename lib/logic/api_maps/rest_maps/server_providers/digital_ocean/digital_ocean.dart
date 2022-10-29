@@ -46,7 +46,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  String rootAddress = 'https://api.digitalocean.com/v2';
+  final String rootAddress = 'https://api.digitalocean.com/v2';
+
+  @override
+  final String infectProviderName = 'digitalocean';
 
   @override
   Future<bool> isApiTokenValid(final String token) async {
@@ -311,7 +314,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final String formattedHostname = getHostnameFromDomain(domainName);
 
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=digital-ocean NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=$infectProviderName NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     final Dio client = await getClient();

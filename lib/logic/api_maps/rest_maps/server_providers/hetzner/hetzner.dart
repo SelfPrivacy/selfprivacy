@@ -46,7 +46,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  String rootAddress = 'https://api.hetzner.cloud/v1';
+  final String rootAddress = 'https://api.hetzner.cloud/v1';
+
+  @override
+  final String infectProviderName = 'hetzner';
 
   @override
   Future<bool> isApiTokenValid(final String token) async {
@@ -344,7 +347,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=$infectProviderName NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
 
     ServerHostingDetails? serverDetails;
     DioError? hetznerError;

@@ -39,4 +39,6 @@ abstract class ServerProviderApi extends ApiMap {
 
   Future<bool> isApiTokenValid(final String token);
   ProviderApiTokenValidation getApiTokenValidation();
+
+  abstract final String infectProviderName;
 }

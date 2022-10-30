@@ -190,8 +190,7 @@ Query$DomainInfo$system$domainInfo _$Query$DomainInfo$system$domainInfoFromJson(
           unknownValue: Enum$DnsProvider.$unknown),
       requiredDnsRecords: (json['requiredDnsRecords'] as List<dynamic>)
           .map((e) =>
-              Query$DomainInfo$system$domainInfo$requiredDnsRecords.fromJson(
-                  e as Map<String, dynamic>))
+              Fragment$dnsRecordFields.fromJson(e as Map<String, dynamic>))
           .toList(),
       $__typename: json['__typename'] as String,
     );
@@ -211,30 +210,6 @@ const _$Enum$DnsProviderEnumMap = {
   Enum$DnsProvider.CLOUDFLARE: 'CLOUDFLARE',
   Enum$DnsProvider.$unknown: r'$unknown',
 };
-
-Query$DomainInfo$system$domainInfo$requiredDnsRecords
-    _$Query$DomainInfo$system$domainInfo$requiredDnsRecordsFromJson(
-            Map<String, dynamic> json) =>
-        Query$DomainInfo$system$domainInfo$requiredDnsRecords(
-          content: json['content'] as String,
-          name: json['name'] as String,
-          priority: json['priority'] as int?,
-          recordType: json['recordType'] as String,
-          ttl: json['ttl'] as int,
-          $__typename: json['__typename'] as String,
-        );
-
-Map<String, dynamic>
-    _$Query$DomainInfo$system$domainInfo$requiredDnsRecordsToJson(
-            Query$DomainInfo$system$domainInfo$requiredDnsRecords instance) =>
-        <String, dynamic>{
-          'content': instance.content,
-          'name': instance.name,
-          'priority': instance.priority,
-          'recordType': instance.recordType,
-          'ttl': instance.ttl,
-          '__typename': instance.$__typename,
-        };
 
 Variables$Mutation$ChangeTimezone _$Variables$Mutation$ChangeTimezoneFromJson(
         Map<String, dynamic> json) =>

@@ -13,6 +13,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -256,11 +257,8 @@ class ServerApi extends ApiMap
     return key;
   }
 
-  @Deprecated(
-    'Server now aware of all required DNS records. More general approach has to be implemented',
-  )
-  Future<String?> getDkim() async {
-    String? dkim;
+  Future<List<DnsRecord>> getDnsRecords() async {
+    List<DnsRecord> records = [];
     QueryResult<Query$DomainInfo> response;
 
     try {
@@ -269,21 +267,17 @@ class ServerApi extends ApiMap
       if (response.hasException) {
         print(response.exception.toString());
       }
-      dkim = response.parsedData!.system.domainInfo.requiredDnsRecords
-          .firstWhere(
-            (
-              final Query$DomainInfo$system$domainInfo$requiredDnsRecords
-                  dnsRecord,
-            ) =>
-                dnsRecord.name == 'selector._domainkey' &&
-                dnsRecord.recordType == 'TXT',
+      records = response.parsedData!.system.domainInfo.requiredDnsRecords
+          .map<DnsRecord>(
+            (final Fragment$dnsRecordFields fragment) =>
+                DnsRecord.fromGraphQL(fragment),
           )
-          .content;
+          .toList();
     } catch (e) {
       print(e);
     }
 
-    return dkim;
+    return records;
   }
 
   Future<GenericResult<List<ApiToken>>> getApiTokens() async {

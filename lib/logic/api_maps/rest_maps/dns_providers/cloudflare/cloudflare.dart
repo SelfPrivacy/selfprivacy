@@ -242,25 +242,18 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<void> setDkim(
-    final String dkimRecordString,
+  Future<void> setDnsRecord(
+    final DnsRecord record,
     final ServerDomain domain,
   ) async {
     final String domainZoneId = domain.zoneId;
     final String url = '$rootAddress/zones/$domainZoneId/dns_records';
 
-    final DnsRecord dkimRecord = DnsRecord(
-      type: 'TXT',
-      name: 'selector._domainkey',
-      content: dkimRecordString,
-      ttl: 18000,
-    );
-
     final Dio client = await getClient();
     try {
       await client.post(
         url,
-        data: dkimRecord.toJson(),
+        data: record.toJson(),
       );
     } catch (e) {
       print(e);

@@ -10,11 +10,7 @@ query AllServices {
       description
       displayName
       dnsRecords {
-        content
-        name
-        priority
-        recordType
-        ttl
+        ...dnsRecordFields
       }
       id
       isEnabled

@@ -1444,36 +1444,9 @@ const documentNodeQueryDomainInfo = DocumentNode(definitions: [
                         arguments: [],
                         directives: [],
                         selectionSet: SelectionSetNode(selections: [
-                          FieldNode(
-                              name: NameNode(value: 'content'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
-                          FieldNode(
-                              name: NameNode(value: 'name'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
-                          FieldNode(
-                              name: NameNode(value: 'priority'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
-                          FieldNode(
-                              name: NameNode(value: 'recordType'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
-                          FieldNode(
-                              name: NameNode(value: 'ttl'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
+                          FragmentSpreadNode(
+                              name: NameNode(value: 'dnsRecordFields'),
+                              directives: []),
                           FieldNode(
                               name: NameNode(value: '__typename'),
                               alias: null,
@@ -1502,6 +1475,7 @@ const documentNodeQueryDomainInfo = DocumentNode(definitions: [
             directives: [],
             selectionSet: null)
       ])),
+  fragmentDefinitiondnsRecordFields,
 ]);
 Query$DomainInfo _parserFn$Query$DomainInfo(Map<String, dynamic> data) =>
     Query$DomainInfo.fromJson(data);
@@ -1699,8 +1673,7 @@ class Query$DomainInfo$system$domainInfo {
   @JsonKey(unknownEnumValue: Enum$DnsProvider.$unknown)
   final Enum$DnsProvider provider;
 
-  final List<Query$DomainInfo$system$domainInfo$requiredDnsRecords>
-      requiredDnsRecords;
+  final List<Fragment$dnsRecordFields> requiredDnsRecords;
 
   @JsonKey(name: '__typename')
   final String $__typename;
@@ -1775,14 +1748,12 @@ abstract class CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
       {String? domain,
       String? hostname,
       Enum$DnsProvider? provider,
-      List<Query$DomainInfo$system$domainInfo$requiredDnsRecords>?
-          requiredDnsRecords,
+      List<Fragment$dnsRecordFields>? requiredDnsRecords,
       String? $__typename});
   TRes requiredDnsRecords(
-      Iterable<Query$DomainInfo$system$domainInfo$requiredDnsRecords> Function(
+      Iterable<Fragment$dnsRecordFields> Function(
               Iterable<
-                  CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
-                      Query$DomainInfo$system$domainInfo$requiredDnsRecords>>)
+                  CopyWith$Fragment$dnsRecordFields<Fragment$dnsRecordFields>>)
           _fn);
 }
 
@@ -1815,21 +1786,20 @@ class _CopyWithImpl$Query$DomainInfo$system$domainInfo<TRes>
           requiredDnsRecords:
               requiredDnsRecords == _undefined || requiredDnsRecords == null
                   ? _instance.requiredDnsRecords
-                  : (requiredDnsRecords as List<
-                      Query$DomainInfo$system$domainInfo$requiredDnsRecords>),
+                  : (requiredDnsRecords as List<Fragment$dnsRecordFields>),
           $__typename: $__typename == _undefined || $__typename == null
               ? _instance.$__typename
               : ($__typename as String)));
   TRes requiredDnsRecords(
-          Iterable<Query$DomainInfo$system$domainInfo$requiredDnsRecords> Function(
+          Iterable<Fragment$dnsRecordFields> Function(
                   Iterable<
-                      CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
-                          Query$DomainInfo$system$domainInfo$requiredDnsRecords>>)
+                      CopyWith$Fragment$dnsRecordFields<
+                          Fragment$dnsRecordFields>>)
               _fn) =>
       call(
-          requiredDnsRecords: _fn(_instance.requiredDnsRecords.map((e) =>
-              CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
-                  e, (i) => i))).toList());
+          requiredDnsRecords: _fn(_instance.requiredDnsRecords
+                  .map((e) => CopyWith$Fragment$dnsRecordFields(e, (i) => i)))
+              .toList());
 }
 
 class _CopyWithStubImpl$Query$DomainInfo$system$domainInfo<TRes>
@@ -1842,166 +1812,10 @@ class _CopyWithStubImpl$Query$DomainInfo$system$domainInfo<TRes>
           {String? domain,
           String? hostname,
           Enum$DnsProvider? provider,
-          List<Query$DomainInfo$system$domainInfo$requiredDnsRecords>?
-              requiredDnsRecords,
+          List<Fragment$dnsRecordFields>? requiredDnsRecords,
           String? $__typename}) =>
       _res;
   requiredDnsRecords(_fn) => _res;
-}
-
-@JsonSerializable(explicitToJson: true)
-class Query$DomainInfo$system$domainInfo$requiredDnsRecords {
-  Query$DomainInfo$system$domainInfo$requiredDnsRecords(
-      {required this.content,
-      required this.name,
-      this.priority,
-      required this.recordType,
-      required this.ttl,
-      required this.$__typename});
-
-  @override
-  factory Query$DomainInfo$system$domainInfo$requiredDnsRecords.fromJson(
-          Map<String, dynamic> json) =>
-      _$Query$DomainInfo$system$domainInfo$requiredDnsRecordsFromJson(json);
-
-  final String content;
-
-  final String name;
-
-  final int? priority;
-
-  final String recordType;
-
-  final int ttl;
-
-  @JsonKey(name: '__typename')
-  final String $__typename;
-
-  Map<String, dynamic> toJson() =>
-      _$Query$DomainInfo$system$domainInfo$requiredDnsRecordsToJson(this);
-  int get hashCode {
-    final l$content = content;
-    final l$name = name;
-    final l$priority = priority;
-    final l$recordType = recordType;
-    final l$ttl = ttl;
-    final l$$__typename = $__typename;
-    return Object.hashAll(
-        [l$content, l$name, l$priority, l$recordType, l$ttl, l$$__typename]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (!(other is Query$DomainInfo$system$domainInfo$requiredDnsRecords) ||
-        runtimeType != other.runtimeType) return false;
-    final l$content = content;
-    final lOther$content = other.content;
-    if (l$content != lOther$content) return false;
-    final l$name = name;
-    final lOther$name = other.name;
-    if (l$name != lOther$name) return false;
-    final l$priority = priority;
-    final lOther$priority = other.priority;
-    if (l$priority != lOther$priority) return false;
-    final l$recordType = recordType;
-    final lOther$recordType = other.recordType;
-    if (l$recordType != lOther$recordType) return false;
-    final l$ttl = ttl;
-    final lOther$ttl = other.ttl;
-    if (l$ttl != lOther$ttl) return false;
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) return false;
-    return true;
-  }
-}
-
-extension UtilityExtension$Query$DomainInfo$system$domainInfo$requiredDnsRecords
-    on Query$DomainInfo$system$domainInfo$requiredDnsRecords {
-  CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
-          Query$DomainInfo$system$domainInfo$requiredDnsRecords>
-      get copyWith =>
-          CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
-              this, (i) => i);
-}
-
-abstract class CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
-    TRes> {
-  factory CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
-          Query$DomainInfo$system$domainInfo$requiredDnsRecords instance,
-          TRes Function(Query$DomainInfo$system$domainInfo$requiredDnsRecords)
-              then) =
-      _CopyWithImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords;
-
-  factory CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords;
-
-  TRes call(
-      {String? content,
-      String? name,
-      int? priority,
-      String? recordType,
-      int? ttl,
-      String? $__typename});
-}
-
-class _CopyWithImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords<TRes>
-    implements
-        CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<TRes> {
-  _CopyWithImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
-      this._instance, this._then);
-
-  final Query$DomainInfo$system$domainInfo$requiredDnsRecords _instance;
-
-  final TRes Function(Query$DomainInfo$system$domainInfo$requiredDnsRecords)
-      _then;
-
-  static const _undefined = {};
-
-  TRes call(
-          {Object? content = _undefined,
-          Object? name = _undefined,
-          Object? priority = _undefined,
-          Object? recordType = _undefined,
-          Object? ttl = _undefined,
-          Object? $__typename = _undefined}) =>
-      _then(Query$DomainInfo$system$domainInfo$requiredDnsRecords(
-          content: content == _undefined || content == null
-              ? _instance.content
-              : (content as String),
-          name: name == _undefined || name == null
-              ? _instance.name
-              : (name as String),
-          priority:
-              priority == _undefined ? _instance.priority : (priority as int?),
-          recordType: recordType == _undefined || recordType == null
-              ? _instance.recordType
-              : (recordType as String),
-          ttl: ttl == _undefined || ttl == null ? _instance.ttl : (ttl as int),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-}
-
-class _CopyWithStubImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords<
-        TRes>
-    implements
-        CopyWith$Query$DomainInfo$system$domainInfo$requiredDnsRecords<TRes> {
-  _CopyWithStubImpl$Query$DomainInfo$system$domainInfo$requiredDnsRecords(
-      this._res);
-
-  TRes _res;
-
-  call(
-          {String? content,
-          String? name,
-          int? priority,
-          String? recordType,
-          int? ttl,
-          String? $__typename}) =>
-      _res;
 }
 
 @JsonSerializable(explicitToJson: true)

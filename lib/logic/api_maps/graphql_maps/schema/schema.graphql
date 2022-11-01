@@ -349,3 +349,11 @@ type Users {
   allUsers: [User!]!
   getUser(username: String!): User
 }
+
+fragment dnsRecordFields on DnsRecord {
+  content
+  name
+  priority
+  recordType
+  ttl
+}

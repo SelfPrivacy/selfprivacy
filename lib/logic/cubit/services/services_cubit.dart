@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -39,7 +41,17 @@ class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
 
   Future<void> restart(final String serviceId) async {
     emit(state.copyWith(lockedServices: [...state.lockedServices, serviceId]));
-    await api.restartService(serviceId);
+    final result = await api.restartService(serviceId);
+    if (!result.success) {
+      getIt<NavigationService>().showSnackBar('jobs.generic_error'.tr());
+      return;
+    }
+    if (!result.data) {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'jobs.generic_error'.tr());
+      return;
+    }
+
     await Future.delayed(const Duration(seconds: 2));
     reload();
     await Future.delayed(const Duration(seconds: 10));

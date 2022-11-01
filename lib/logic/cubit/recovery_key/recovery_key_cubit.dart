@@ -32,7 +32,7 @@ class RecoveryKeyCubit
   }
 
   Future<RecoveryKeyStatus?> _getRecoveryKeyStatus() async {
-    final ApiResponse<RecoveryKeyStatus?> response =
+    final GenericResult<RecoveryKeyStatus?> response =
         await api.getRecoveryTokenStatus();
     if (response.success) {
       return response.data;
@@ -57,7 +57,7 @@ class RecoveryKeyCubit
     final DateTime? expirationDate,
     final int? numberOfUses,
   }) async {
-    final ApiResponse<String> response =
+    final GenericResult<String> response =
         await api.generateRecoveryToken(expirationDate, numberOfUses);
     if (response.success) {
       refresh();

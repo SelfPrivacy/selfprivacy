@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 part 'dns_records_state.dart';
 
@@ -30,7 +31,7 @@ class DnsRecordsCubit
     emit(
       DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
-        dnsRecords: _getDesiredDnsRecords(
+        dnsRecords: getDesiredDnsRecords(
           serverInstallationCubit.state.serverDomain?.domainName,
           '',
           '',
@@ -46,9 +47,10 @@ class DnsRecordsCubit
         final List<DnsRecord> records = await dnsProviderApiFactory!
             .getDnsProvider()
             .getDnsRecords(domain: domain);
-        final String? dkimPublicKey = await api.getDkim();
+        final String? dkimPublicKey =
+            extractDkimRecord(await api.getDnsRecords())?.content;
         final List<DesiredDnsRecord> desiredRecords =
-            _getDesiredDnsRecords(domain.domainName, ipAddress, dkimPublicKey);
+            getDesiredDnsRecords(domain.domainName, ipAddress, dkimPublicKey);
         final List<DesiredDnsRecord> foundRecords = [];
         for (final DesiredDnsRecord record in desiredRecords) {
           if (record.description == 'record.dkim') {
@@ -121,7 +123,6 @@ class DnsRecordsCubit
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
     final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
     final String? ipAddress = serverInstallationCubit.state.serverDetails?.ip4;
-    final String? dkimPublicKey = await api.getDkim();
     final DnsProviderApi dnsProviderApi =
         dnsProviderApiFactory!.getDnsProvider();
     await dnsProviderApi.removeSimilarRecords(domain: domain!);
@@ -129,88 +130,13 @@ class DnsRecordsCubit
       domain: domain,
       ip4: ipAddress,
     );
-    await dnsProviderApi.setDkim(dkimPublicKey ?? '', domain);
-    await load();
-  }
 
-  List<DesiredDnsRecord> _getDesiredDnsRecords(
-    final String? domainName,
-    final String? ipAddress,
-    final String? dkimPublicKey,
-  ) {
-    if (domainName == null || ipAddress == null) {
-      return [];
+    final List<DnsRecord> records = await api.getDnsRecords();
+    final DnsRecord? dkimRecord = extractDkimRecord(records);
+    if (dkimRecord != null) {
+      await dnsProviderApi.setDnsRecord(dkimRecord, domain);
     }
-    return [
-      DesiredDnsRecord(
-        name: domainName,
-        content: ipAddress,
-        description: 'record.root',
-      ),
-      DesiredDnsRecord(
-        name: 'api.$domainName',
-        content: ipAddress,
-        description: 'record.api',
-      ),
-      DesiredDnsRecord(
-        name: 'cloud.$domainName',
-        content: ipAddress,
-        description: 'record.cloud',
-      ),
-      DesiredDnsRecord(
-        name: 'git.$domainName',
-        content: ipAddress,
-        description: 'record.git',
-      ),
-      DesiredDnsRecord(
-        name: 'meet.$domainName',
-        content: ipAddress,
-        description: 'record.meet',
-      ),
-      DesiredDnsRecord(
-        name: 'social.$domainName',
-        content: ipAddress,
-        description: 'record.social',
-      ),
-      DesiredDnsRecord(
-        name: 'password.$domainName',
-        content: ipAddress,
-        description: 'record.password',
-      ),
-      DesiredDnsRecord(
-        name: 'vpn.$domainName',
-        content: ipAddress,
-        description: 'record.vpn',
-      ),
-      DesiredDnsRecord(
-        name: domainName,
-        content: domainName,
-        description: 'record.mx',
-        type: 'MX',
-        category: DnsRecordsCategory.email,
-      ),
-      DesiredDnsRecord(
-        name: '_dmarc.$domainName',
-        content: 'v=DMARC1; p=none',
-        description: 'record.dmarc',
-        type: 'TXT',
-        category: DnsRecordsCategory.email,
-      ),
-      DesiredDnsRecord(
-        name: domainName,
-        content: 'v=spf1 a mx ip4:$ipAddress -all',
-        description: 'record.spf',
-        type: 'TXT',
-        category: DnsRecordsCategory.email,
-      ),
-      if (dkimPublicKey != null)
-        DesiredDnsRecord(
-          name: 'selector._domainkey.$domainName',
-          content: dkimPublicKey,
-          description: 'record.dkim',
-          type: 'TXT',
-          category: DnsRecordsCategory.email,
-        ),
-    ];
+
+    await load();
   }
 }

@@ -419,7 +419,8 @@
         "create_ssh_key": "Create SSH key for {}",
         "delete_ssh_key": "Delete SSH key for {}",
         "server_jobs": "Jobs on the server",
-        "reset_user_password": "Reset password of user"
+        "reset_user_password": "Reset password of user",
+        "generic_error": "Couldn't connect to the server!"
     },
     "validations": {
         "required": "Required",

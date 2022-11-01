@@ -19,8 +19,8 @@ abstract class DnsProviderApi extends ApiMap {
     required final ServerDomain domain,
     final String? ip4,
   });
-  Future<void> setDkim(
-    final String dkimRecordString,
+  Future<void> setDnsRecord(
+    final DnsRecord record,
     final ServerDomain domain,
   );
   Future<String?> getZoneId(final String domain);

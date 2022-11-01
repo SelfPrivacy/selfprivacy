@@ -1,16 +1,5 @@
 part of 'server.dart';
 
-class UserMutationResult extends GenericMutationResult {
-  UserMutationResult({
-    required super.success,
-    required super.code,
-    super.message,
-    this.user,
-  });
-
-  final User? user;
-}
-
 mixin UsersApi on ApiMap {
   Future<List<User>> getAllUsers() async {
     QueryResult<Query$AllUsers> response;
@@ -56,7 +45,7 @@ mixin UsersApi on ApiMap {
     return user;
   }
 
-  Future<UserMutationResult> createUser(
+  Future<GenericMutationResult<User?>> createUser(
     final String username,
     final String password,
   ) async {
@@ -67,25 +56,26 @@ mixin UsersApi on ApiMap {
       );
       final mutation = Options$Mutation$CreateUser(variables: variables);
       final response = await client.mutate$CreateUser(mutation);
-      return UserMutationResult(
-        success: response.parsedData?.createUser.success ?? false,
+      return GenericMutationResult(
+        success: true,
         code: response.parsedData?.createUser.code ?? 500,
         message: response.parsedData?.createUser.message,
-        user: response.parsedData?.createUser.user != null
+        data: response.parsedData?.createUser.user != null
             ? User.fromGraphQL(response.parsedData!.createUser.user!)
             : null,
       );
     } catch (e) {
       print(e);
-      return UserMutationResult(
+      return GenericMutationResult(
         success: false,
         code: 0,
         message: e.toString(),
+        data: null,
       );
     }
   }
 
-  Future<GenericMutationResult> deleteUser(
+  Future<GenericMutationResult<bool>> deleteUser(
     final String username,
   ) async {
     try {
@@ -94,13 +84,15 @@ mixin UsersApi on ApiMap {
       final mutation = Options$Mutation$DeleteUser(variables: variables);
       final response = await client.mutate$DeleteUser(mutation);
       return GenericMutationResult(
-        success: response.parsedData?.deleteUser.success ?? false,
+        data: response.parsedData?.deleteUser.success ?? false,
+        success: true,
         code: response.parsedData?.deleteUser.code ?? 500,
         message: response.parsedData?.deleteUser.message,
       );
     } catch (e) {
       print(e);
       return GenericMutationResult(
+        data: false,
         success: false,
         code: 500,
         message: e.toString(),
@@ -108,7 +100,7 @@ mixin UsersApi on ApiMap {
     }
   }
 
-  Future<UserMutationResult> updateUser(
+  Future<GenericMutationResult<User?>> updateUser(
     final String username,
     final String password,
   ) async {
@@ -119,17 +111,18 @@ mixin UsersApi on ApiMap {
       );
       final mutation = Options$Mutation$UpdateUser(variables: variables);
       final response = await client.mutate$UpdateUser(mutation);
-      return UserMutationResult(
-        success: response.parsedData?.updateUser.success ?? false,
+      return GenericMutationResult(
+        success: true,
         code: response.parsedData?.updateUser.code ?? 500,
         message: response.parsedData?.updateUser.message,
-        user: response.parsedData?.updateUser.user != null
+        data: response.parsedData?.updateUser.user != null
             ? User.fromGraphQL(response.parsedData!.updateUser.user!)
             : null,
       );
     } catch (e) {
       print(e);
-      return UserMutationResult(
+      return GenericMutationResult(
+        data: null,
         success: false,
         code: 0,
         message: e.toString(),
@@ -137,7 +130,7 @@ mixin UsersApi on ApiMap {
     }
   }
 
-  Future<UserMutationResult> addSshKey(
+  Future<GenericMutationResult<User?>> addSshKey(
     final String username,
     final String sshKey,
   ) async {
@@ -151,17 +144,18 @@ mixin UsersApi on ApiMap {
       );
       final mutation = Options$Mutation$AddSshKey(variables: variables);
       final response = await client.mutate$AddSshKey(mutation);
-      return UserMutationResult(
-        success: response.parsedData?.addSshKey.success ?? false,
+      return GenericMutationResult(
+        success: true,
         code: response.parsedData?.addSshKey.code ?? 500,
         message: response.parsedData?.addSshKey.message,
-        user: response.parsedData?.addSshKey.user != null
+        data: response.parsedData?.addSshKey.user != null
             ? User.fromGraphQL(response.parsedData!.addSshKey.user!)
             : null,
       );
     } catch (e) {
       print(e);
-      return UserMutationResult(
+      return GenericMutationResult(
+        data: null,
         success: false,
         code: 0,
         message: e.toString(),
@@ -169,7 +163,7 @@ mixin UsersApi on ApiMap {
     }
   }
 
-  Future<UserMutationResult> removeSshKey(
+  Future<GenericMutationResult<User?>> removeSshKey(
     final String username,
     final String sshKey,
   ) async {
@@ -183,17 +177,18 @@ mixin UsersApi on ApiMap {
       );
       final mutation = Options$Mutation$RemoveSshKey(variables: variables);
       final response = await client.mutate$RemoveSshKey(mutation);
-      return UserMutationResult(
+      return GenericMutationResult(
         success: response.parsedData?.removeSshKey.success ?? false,
         code: response.parsedData?.removeSshKey.code ?? 500,
         message: response.parsedData?.removeSshKey.message,
-        user: response.parsedData?.removeSshKey.user != null
+        data: response.parsedData?.removeSshKey.user != null
             ? User.fromGraphQL(response.parsedData!.removeSshKey.user!)
             : null,
       );
     } catch (e) {
       print(e);
-      return UserMutationResult(
+      return GenericMutationResult(
+        data: null,
         success: false,
         code: 0,
         message: e.toString(),

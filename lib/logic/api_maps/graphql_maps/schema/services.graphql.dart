@@ -312,36 +312,9 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
                         arguments: [],
                         directives: [],
                         selectionSet: SelectionSetNode(selections: [
-                          FieldNode(
-                              name: NameNode(value: 'content'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
-                          FieldNode(
-                              name: NameNode(value: 'name'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
-                          FieldNode(
-                              name: NameNode(value: 'priority'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
-                          FieldNode(
-                              name: NameNode(value: 'recordType'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
-                          FieldNode(
-                              name: NameNode(value: 'ttl'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null),
+                          FragmentSpreadNode(
+                              name: NameNode(value: 'dnsRecordFields'),
+                              directives: []),
                           FieldNode(
                               name: NameNode(value: '__typename'),
                               alias: null,
@@ -456,6 +429,7 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
             directives: [],
             selectionSet: null)
       ])),
+  fragmentDefinitiondnsRecordFields,
 ]);
 Query$AllServices _parserFn$Query$AllServices(Map<String, dynamic> data) =>
     Query$AllServices.fromJson(data);
@@ -679,7 +653,7 @@ class Query$AllServices$services$allServices {
 
   final String displayName;
 
-  final List<Query$AllServices$services$allServices$dnsRecords>? dnsRecords;
+  final List<Fragment$dnsRecordFields>? dnsRecords;
 
   final String id;
 
@@ -807,7 +781,7 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
   TRes call(
       {String? description,
       String? displayName,
-      List<Query$AllServices$services$allServices$dnsRecords>? dnsRecords,
+      List<Fragment$dnsRecordFields>? dnsRecords,
       String? id,
       bool? isEnabled,
       bool? isMovable,
@@ -818,10 +792,9 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
       String? url,
       String? $__typename});
   TRes dnsRecords(
-      Iterable<Query$AllServices$services$allServices$dnsRecords>? Function(
+      Iterable<Fragment$dnsRecordFields>? Function(
               Iterable<
-                  CopyWith$Query$AllServices$services$allServices$dnsRecords<
-                      Query$AllServices$services$allServices$dnsRecords>>?)
+                  CopyWith$Fragment$dnsRecordFields<Fragment$dnsRecordFields>>?)
           _fn);
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
       get storageUsage;
@@ -860,8 +833,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
               : (displayName as String),
           dnsRecords: dnsRecords == _undefined
               ? _instance.dnsRecords
-              : (dnsRecords
-                  as List<Query$AllServices$services$allServices$dnsRecords>?),
+              : (dnsRecords as List<Fragment$dnsRecordFields>?),
           id: id == _undefined || id == null ? _instance.id : (id as String),
           isEnabled: isEnabled == _undefined || isEnabled == null
               ? _instance.isEnabled
@@ -887,15 +859,15 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
               ? _instance.$__typename
               : ($__typename as String)));
   TRes dnsRecords(
-          Iterable<Query$AllServices$services$allServices$dnsRecords>? Function(
+          Iterable<Fragment$dnsRecordFields>? Function(
                   Iterable<
-                      CopyWith$Query$AllServices$services$allServices$dnsRecords<
-                          Query$AllServices$services$allServices$dnsRecords>>?)
+                      CopyWith$Fragment$dnsRecordFields<
+                          Fragment$dnsRecordFields>>?)
               _fn) =>
       call(
-          dnsRecords: _fn(_instance.dnsRecords?.map((e) =>
-              CopyWith$Query$AllServices$services$allServices$dnsRecords(
-                  e, (i) => i)))?.toList());
+          dnsRecords: _fn(_instance.dnsRecords
+                  ?.map((e) => CopyWith$Fragment$dnsRecordFields(e, (i) => i)))
+              ?.toList());
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
       get storageUsage {
     final local$storageUsage = _instance.storageUsage;
@@ -913,7 +885,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
   call(
           {String? description,
           String? displayName,
-          List<Query$AllServices$services$allServices$dnsRecords>? dnsRecords,
+          List<Fragment$dnsRecordFields>? dnsRecords,
           String? id,
           bool? isEnabled,
           bool? isMovable,
@@ -929,159 +901,6 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
       get storageUsage =>
           CopyWith$Query$AllServices$services$allServices$storageUsage.stub(
               _res);
-}
-
-@JsonSerializable(explicitToJson: true)
-class Query$AllServices$services$allServices$dnsRecords {
-  Query$AllServices$services$allServices$dnsRecords(
-      {required this.content,
-      required this.name,
-      this.priority,
-      required this.recordType,
-      required this.ttl,
-      required this.$__typename});
-
-  @override
-  factory Query$AllServices$services$allServices$dnsRecords.fromJson(
-          Map<String, dynamic> json) =>
-      _$Query$AllServices$services$allServices$dnsRecordsFromJson(json);
-
-  final String content;
-
-  final String name;
-
-  final int? priority;
-
-  final String recordType;
-
-  final int ttl;
-
-  @JsonKey(name: '__typename')
-  final String $__typename;
-
-  Map<String, dynamic> toJson() =>
-      _$Query$AllServices$services$allServices$dnsRecordsToJson(this);
-  int get hashCode {
-    final l$content = content;
-    final l$name = name;
-    final l$priority = priority;
-    final l$recordType = recordType;
-    final l$ttl = ttl;
-    final l$$__typename = $__typename;
-    return Object.hashAll(
-        [l$content, l$name, l$priority, l$recordType, l$ttl, l$$__typename]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (!(other is Query$AllServices$services$allServices$dnsRecords) ||
-        runtimeType != other.runtimeType) return false;
-    final l$content = content;
-    final lOther$content = other.content;
-    if (l$content != lOther$content) return false;
-    final l$name = name;
-    final lOther$name = other.name;
-    if (l$name != lOther$name) return false;
-    final l$priority = priority;
-    final lOther$priority = other.priority;
-    if (l$priority != lOther$priority) return false;
-    final l$recordType = recordType;
-    final lOther$recordType = other.recordType;
-    if (l$recordType != lOther$recordType) return false;
-    final l$ttl = ttl;
-    final lOther$ttl = other.ttl;
-    if (l$ttl != lOther$ttl) return false;
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) return false;
-    return true;
-  }
-}
-
-extension UtilityExtension$Query$AllServices$services$allServices$dnsRecords
-    on Query$AllServices$services$allServices$dnsRecords {
-  CopyWith$Query$AllServices$services$allServices$dnsRecords<
-          Query$AllServices$services$allServices$dnsRecords>
-      get copyWith =>
-          CopyWith$Query$AllServices$services$allServices$dnsRecords(
-              this, (i) => i);
-}
-
-abstract class CopyWith$Query$AllServices$services$allServices$dnsRecords<
-    TRes> {
-  factory CopyWith$Query$AllServices$services$allServices$dnsRecords(
-          Query$AllServices$services$allServices$dnsRecords instance,
-          TRes Function(Query$AllServices$services$allServices$dnsRecords)
-              then) =
-      _CopyWithImpl$Query$AllServices$services$allServices$dnsRecords;
-
-  factory CopyWith$Query$AllServices$services$allServices$dnsRecords.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$AllServices$services$allServices$dnsRecords;
-
-  TRes call(
-      {String? content,
-      String? name,
-      int? priority,
-      String? recordType,
-      int? ttl,
-      String? $__typename});
-}
-
-class _CopyWithImpl$Query$AllServices$services$allServices$dnsRecords<TRes>
-    implements
-        CopyWith$Query$AllServices$services$allServices$dnsRecords<TRes> {
-  _CopyWithImpl$Query$AllServices$services$allServices$dnsRecords(
-      this._instance, this._then);
-
-  final Query$AllServices$services$allServices$dnsRecords _instance;
-
-  final TRes Function(Query$AllServices$services$allServices$dnsRecords) _then;
-
-  static const _undefined = {};
-
-  TRes call(
-          {Object? content = _undefined,
-          Object? name = _undefined,
-          Object? priority = _undefined,
-          Object? recordType = _undefined,
-          Object? ttl = _undefined,
-          Object? $__typename = _undefined}) =>
-      _then(Query$AllServices$services$allServices$dnsRecords(
-          content: content == _undefined || content == null
-              ? _instance.content
-              : (content as String),
-          name: name == _undefined || name == null
-              ? _instance.name
-              : (name as String),
-          priority:
-              priority == _undefined ? _instance.priority : (priority as int?),
-          recordType: recordType == _undefined || recordType == null
-              ? _instance.recordType
-              : (recordType as String),
-          ttl: ttl == _undefined || ttl == null ? _instance.ttl : (ttl as int),
-          $__typename: $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String)));
-}
-
-class _CopyWithStubImpl$Query$AllServices$services$allServices$dnsRecords<TRes>
-    implements
-        CopyWith$Query$AllServices$services$allServices$dnsRecords<TRes> {
-  _CopyWithStubImpl$Query$AllServices$services$allServices$dnsRecords(
-      this._res);
-
-  TRes _res;
-
-  call(
-          {String? content,
-          String? name,
-          int? priority,
-          String? recordType,
-          int? ttl,
-          String? $__typename}) =>
-      _res;
 }
 
 @JsonSerializable(explicitToJson: true)

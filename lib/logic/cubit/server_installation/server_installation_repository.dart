@@ -21,10 +21,12 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/ui/components/action_button/action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 class IpNotFoundException implements Exception {
   IpNotFoundException(this.message);
@@ -286,7 +288,7 @@ class ServerInstallationRepository {
             ],
           ),
         );
-      } else if (e.response!.data['error']['code'] == 'resource_unavailable') {
+      } else {
         final NavigationService nav = getIt.get<NavigationService>();
         nav.showPopUpDialog(
           BrandAlert(
@@ -390,15 +392,15 @@ class ServerInstallationRepository {
         dnsProviderApiFactory!.getDnsProvider();
     final ServerApi api = ServerApi();
 
-    String dkimRecordString = '';
+    late DnsRecord record;
     try {
-      dkimRecordString = (await api.getDkim())!;
+      record = extractDkimRecord(await api.getDnsRecords())!;
     } catch (e) {
       print(e);
       rethrow;
     }
 
-    await dnsProviderApi.setDkim(dkimRecordString, cloudFlareDomain);
+    await dnsProviderApi.setDnsRecord(record, cloudFlareDomain);
   }
 
   Future<bool> isHttpServerWorking() async {
@@ -494,13 +496,13 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final ApiResponse<String> apiResponse = await serverApi.authorizeDevice(
+    final GenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: newDeviceKey),
     );
 
-    if (apiResponse.success) {
+    if (result.success) {
       return ServerHostingDetails(
-        apiToken: apiResponse.data,
+        apiToken: result.data,
         volume: ServerVolume(
           id: 0,
           name: '',
@@ -517,7 +519,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.message ?? apiResponse.data,
+      result.message ?? result.data,
     );
   }
 
@@ -531,13 +533,13 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final ApiResponse<String> apiResponse = await serverApi.useRecoveryToken(
+    final GenericResult<String> result = await serverApi.useRecoveryToken(
       DeviceToken(device: await getDeviceName(), token: recoveryKey),
     );
 
-    if (apiResponse.success) {
+    if (result.success) {
       return ServerHostingDetails(
-        apiToken: apiResponse.data,
+        apiToken: result.data,
         volume: ServerVolume(
           id: 0,
           name: '',
@@ -554,7 +556,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.message ?? apiResponse.data,
+      result.message ?? result.data,
     );
   }
 
@@ -592,15 +594,15 @@ class ServerInstallationRepository {
         );
       }
     }
-    final ApiResponse<String> deviceAuthKey =
+    final GenericResult<String> deviceAuthKey =
         await serverApi.createDeviceToken();
-    final ApiResponse<String> apiResponse = await serverApi.authorizeDevice(
+    final GenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
     );
 
-    if (apiResponse.success) {
+    if (result.success) {
       return ServerHostingDetails(
-        apiToken: apiResponse.data,
+        apiToken: result.data,
         volume: ServerVolume(
           id: 0,
           name: '',
@@ -617,7 +619,7 @@ class ServerInstallationRepository {
     }
 
     throw ServerAuthorizationException(
-      apiResponse.message ?? apiResponse.data,
+      result.message ?? result.data,
     );
   }
 

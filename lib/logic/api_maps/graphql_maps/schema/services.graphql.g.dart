@@ -62,8 +62,7 @@ Query$AllServices$services$allServices
           displayName: json['displayName'] as String,
           dnsRecords: (json['dnsRecords'] as List<dynamic>?)
               ?.map((e) =>
-                  Query$AllServices$services$allServices$dnsRecords.fromJson(
-                      e as Map<String, dynamic>))
+                  Fragment$dnsRecordFields.fromJson(e as Map<String, dynamic>))
               .toList(),
           id: json['id'] as String,
           isEnabled: json['isEnabled'] as bool,
@@ -106,29 +105,6 @@ const _$Enum$ServiceStatusEnumEnumMap = {
   Enum$ServiceStatusEnum.RELOADING: 'RELOADING',
   Enum$ServiceStatusEnum.$unknown: r'$unknown',
 };
-
-Query$AllServices$services$allServices$dnsRecords
-    _$Query$AllServices$services$allServices$dnsRecordsFromJson(
-            Map<String, dynamic> json) =>
-        Query$AllServices$services$allServices$dnsRecords(
-          content: json['content'] as String,
-          name: json['name'] as String,
-          priority: json['priority'] as int?,
-          recordType: json['recordType'] as String,
-          ttl: json['ttl'] as int,
-          $__typename: json['__typename'] as String,
-        );
-
-Map<String, dynamic> _$Query$AllServices$services$allServices$dnsRecordsToJson(
-        Query$AllServices$services$allServices$dnsRecords instance) =>
-    <String, dynamic>{
-      'content': instance.content,
-      'name': instance.name,
-      'priority': instance.priority,
-      'recordType': instance.recordType,
-      'ttl': instance.ttl,
-      '__typename': instance.$__typename,
-    };
 
 Query$AllServices$services$allServices$storageUsage
     _$Query$AllServices$services$allServices$storageUsageFromJson(

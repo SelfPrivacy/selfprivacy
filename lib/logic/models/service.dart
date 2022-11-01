@@ -23,7 +23,10 @@ class Service {
           // Decode the base64 encoded svg icon to text.
           svgIcon: utf8.decode(base64.decode(service.svgIcon)),
           dnsRecords: service.dnsRecords
-                  ?.map((final record) => DnsRecord.fromGraphQL(record))
+                  ?.map(
+                    (final Fragment$dnsRecordFields record) =>
+                        DnsRecord.fromGraphQL(record),
+                  )
                   .toList() ??
               [],
           url: service.url,

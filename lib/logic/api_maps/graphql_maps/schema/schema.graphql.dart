@@ -1,3 +1,5 @@
+import 'package:gql/ast.dart';
+import 'package:graphql/client.dart' as graphql;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selfprivacy/utils/scalars.dart';
 part 'schema.graphql.g.dart';
@@ -734,6 +736,220 @@ enum Enum$UserType {
   @JsonValue('ROOT')
   ROOT,
   $unknown
+}
+
+@JsonSerializable(explicitToJson: true)
+class Fragment$dnsRecordFields {
+  Fragment$dnsRecordFields(
+      {required this.content,
+      required this.name,
+      this.priority,
+      required this.recordType,
+      required this.ttl,
+      required this.$__typename});
+
+  @override
+  factory Fragment$dnsRecordFields.fromJson(Map<String, dynamic> json) =>
+      _$Fragment$dnsRecordFieldsFromJson(json);
+
+  final String content;
+
+  final String name;
+
+  final int? priority;
+
+  final String recordType;
+
+  final int ttl;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() => _$Fragment$dnsRecordFieldsToJson(this);
+  int get hashCode {
+    final l$content = content;
+    final l$name = name;
+    final l$priority = priority;
+    final l$recordType = recordType;
+    final l$ttl = ttl;
+    final l$$__typename = $__typename;
+    return Object.hashAll(
+        [l$content, l$name, l$priority, l$recordType, l$ttl, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Fragment$dnsRecordFields) ||
+        runtimeType != other.runtimeType) return false;
+    final l$content = content;
+    final lOther$content = other.content;
+    if (l$content != lOther$content) return false;
+    final l$name = name;
+    final lOther$name = other.name;
+    if (l$name != lOther$name) return false;
+    final l$priority = priority;
+    final lOther$priority = other.priority;
+    if (l$priority != lOther$priority) return false;
+    final l$recordType = recordType;
+    final lOther$recordType = other.recordType;
+    if (l$recordType != lOther$recordType) return false;
+    final l$ttl = ttl;
+    final lOther$ttl = other.ttl;
+    if (l$ttl != lOther$ttl) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$dnsRecordFields
+    on Fragment$dnsRecordFields {
+  CopyWith$Fragment$dnsRecordFields<Fragment$dnsRecordFields> get copyWith =>
+      CopyWith$Fragment$dnsRecordFields(this, (i) => i);
+}
+
+abstract class CopyWith$Fragment$dnsRecordFields<TRes> {
+  factory CopyWith$Fragment$dnsRecordFields(Fragment$dnsRecordFields instance,
+          TRes Function(Fragment$dnsRecordFields) then) =
+      _CopyWithImpl$Fragment$dnsRecordFields;
+
+  factory CopyWith$Fragment$dnsRecordFields.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$dnsRecordFields;
+
+  TRes call(
+      {String? content,
+      String? name,
+      int? priority,
+      String? recordType,
+      int? ttl,
+      String? $__typename});
+}
+
+class _CopyWithImpl$Fragment$dnsRecordFields<TRes>
+    implements CopyWith$Fragment$dnsRecordFields<TRes> {
+  _CopyWithImpl$Fragment$dnsRecordFields(this._instance, this._then);
+
+  final Fragment$dnsRecordFields _instance;
+
+  final TRes Function(Fragment$dnsRecordFields) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? content = _undefined,
+          Object? name = _undefined,
+          Object? priority = _undefined,
+          Object? recordType = _undefined,
+          Object? ttl = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Fragment$dnsRecordFields(
+          content: content == _undefined || content == null
+              ? _instance.content
+              : (content as String),
+          name: name == _undefined || name == null
+              ? _instance.name
+              : (name as String),
+          priority:
+              priority == _undefined ? _instance.priority : (priority as int?),
+          recordType: recordType == _undefined || recordType == null
+              ? _instance.recordType
+              : (recordType as String),
+          ttl: ttl == _undefined || ttl == null ? _instance.ttl : (ttl as int),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Fragment$dnsRecordFields<TRes>
+    implements CopyWith$Fragment$dnsRecordFields<TRes> {
+  _CopyWithStubImpl$Fragment$dnsRecordFields(this._res);
+
+  TRes _res;
+
+  call(
+          {String? content,
+          String? name,
+          int? priority,
+          String? recordType,
+          int? ttl,
+          String? $__typename}) =>
+      _res;
+}
+
+const fragmentDefinitiondnsRecordFields = FragmentDefinitionNode(
+    name: NameNode(value: 'dnsRecordFields'),
+    typeCondition: TypeConditionNode(
+        on: NamedTypeNode(
+            name: NameNode(value: 'DnsRecord'), isNonNull: false)),
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+          name: NameNode(value: 'content'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null),
+      FieldNode(
+          name: NameNode(value: 'name'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null),
+      FieldNode(
+          name: NameNode(value: 'priority'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null),
+      FieldNode(
+          name: NameNode(value: 'recordType'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null),
+      FieldNode(
+          name: NameNode(value: 'ttl'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null),
+      FieldNode(
+          name: NameNode(value: '__typename'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null)
+    ]));
+const documentNodeFragmentdnsRecordFields = DocumentNode(definitions: [
+  fragmentDefinitiondnsRecordFields,
+]);
+
+extension ClientExtension$Fragment$dnsRecordFields on graphql.GraphQLClient {
+  void writeFragment$dnsRecordFields(
+          {required Fragment$dnsRecordFields data,
+          required Map<String, dynamic> idFields,
+          bool broadcast = true}) =>
+      this.writeFragment(
+          graphql.FragmentRequest(
+              idFields: idFields,
+              fragment: const graphql.Fragment(
+                  fragmentName: 'dnsRecordFields',
+                  document: documentNodeFragmentdnsRecordFields)),
+          data: data.toJson(),
+          broadcast: broadcast);
+  Fragment$dnsRecordFields? readFragment$dnsRecordFields(
+      {required Map<String, dynamic> idFields, bool optimistic = true}) {
+    final result = this.readFragment(
+        graphql.FragmentRequest(
+            idFields: idFields,
+            fragment: const graphql.Fragment(
+                fragmentName: 'dnsRecordFields',
+                document: documentNodeFragmentdnsRecordFields)),
+        optimistic: optimistic);
+    return result == null ? null : Fragment$dnsRecordFields.fromJson(result);
+  }
 }
 
 const possibleTypesMap = {

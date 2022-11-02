@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 
 part 'dns_records.g.dart';
 
@@ -15,7 +15,7 @@ class DnsRecord {
   });
 
   DnsRecord.fromGraphQL(
-    final Query$AllServices$services$allServices$dnsRecords record,
+    final Fragment$dnsRecordFields record,
   ) : this(
           type: record.recordType,
           name: record.name,

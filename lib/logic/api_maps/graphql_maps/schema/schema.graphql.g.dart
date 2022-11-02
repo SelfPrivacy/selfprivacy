@@ -123,3 +123,25 @@ Map<String, dynamic> _$Input$UserMutationInputToJson(
       'username': instance.username,
       'password': instance.password,
     };
+
+Fragment$dnsRecordFields _$Fragment$dnsRecordFieldsFromJson(
+        Map<String, dynamic> json) =>
+    Fragment$dnsRecordFields(
+      content: json['content'] as String,
+      name: json['name'] as String,
+      priority: json['priority'] as int?,
+      recordType: json['recordType'] as String,
+      ttl: json['ttl'] as int,
+      $__typename: json['__typename'] as String,
+    );
+
+Map<String, dynamic> _$Fragment$dnsRecordFieldsToJson(
+        Fragment$dnsRecordFields instance) =>
+    <String, dynamic>{
+      'content': instance.content,
+      'name': instance.name,
+      'priority': instance.priority,
+      'recordType': instance.recordType,
+      'ttl': instance.ttl,
+      '__typename': instance.$__typename,
+    };

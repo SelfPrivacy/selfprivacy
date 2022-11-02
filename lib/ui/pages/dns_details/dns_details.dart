@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 class DnsDetailsPage extends StatefulWidget {
   const DnsDetailsPage({super.key});

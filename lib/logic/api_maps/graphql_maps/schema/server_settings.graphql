@@ -35,11 +35,7 @@ query DomainInfo {
       hostname
       provider
       requiredDnsRecords {
-        content
-        name
-        priority
-        recordType
-        ttl
+        ...dnsRecordFields
       }
     }
   }

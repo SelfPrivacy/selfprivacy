@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
@@ -46,14 +47,14 @@ class ServerJobsCubit
 
   Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
     final result = await api.migrateToBinds(serviceToDisk);
-    if (!result.success || result.jobUid == null) {
+    if (result.data == null) {
       getIt<NavigationService>().showSnackBar(result.message!);
       return;
     }
 
     emit(
       ServerJobsState(
-        migrationJobUid: result.jobUid,
+        migrationJobUid: result.data,
       ),
     );
   }
@@ -75,7 +76,13 @@ class ServerJobsCubit
   Future<void> removeServerJob(final String uid) async {
     final result = await api.removeApiJob(uid);
     if (!result.success) {
-      getIt<NavigationService>().showSnackBar(result.message!);
+      getIt<NavigationService>().showSnackBar('jobs.generic_error'.tr());
+      return;
+    }
+
+    if (!result.data) {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'jobs.generic_error'.tr());
       return;
     }
 
@@ -87,7 +94,6 @@ class ServerJobsCubit
         ],
       ),
     );
-    print('removed job $uid');
   }
 
   Future<void> removeAllFinishedJobs() async {

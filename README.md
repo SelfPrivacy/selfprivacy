@@ -24,6 +24,13 @@ Application will do the following things for you:
 
 Supported platforms are Android, Linux, and Windows. We are looking forward to support iOS and macOS builds.
 
+For Linux builds, make sure you have these packages installed:
+|Arch-based|Debian-based|
+|----------|------------|
+|pacman -S ninja xdg-user-dirs gnome-keyring unzip xz-utils zip|apt install ninja-build xdg-user-dirs gnome-keyring unzip xz-utils zip|
+
+Install [Flutter](https://docs.flutter.dev/get-started/install/linux) and [Android SDK tools](https://developer.android.com/studio/command-line/sdkmanager), then try your setup:
+
 ```
 flutter pub get
 

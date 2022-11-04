@@ -252,7 +252,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> resizeVolume(final ServerVolume volume, final int sizeGb) async {
+  Future<bool> resizeVolume(
+    final ServerVolume volume,
+    final DiskSize size,
+  ) async {
     bool success = false;
 
     final Response dbPostResponse;
@@ -263,7 +266,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         data: {
           'type': 'resize',
           'volume_name': volume.name,
-          'size_gigabytes': sizeGb,
+          'size_gigabytes': size.gibibyte,
           'region': region,
         },
       );

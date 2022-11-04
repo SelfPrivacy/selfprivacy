@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/price.dart';
@@ -76,7 +77,7 @@ class ApiProviderVolumeCubit
 
   Future<bool> resizeVolume(
     final DiskVolume volume,
-    final int newSizeGb,
+    final DiskSize newSize,
     final Function() callback,
   ) async {
     getIt<NavigationService>().showSnackBar(
@@ -85,7 +86,7 @@ class ApiProviderVolumeCubit
     emit(state.copyWith(isResizing: true));
     final bool resized = await providerApi!.getVolumeProvider().resizeVolume(
           volume.providerVolume!,
-          newSizeGb,
+          newSize,
         );
 
     if (!resized) {

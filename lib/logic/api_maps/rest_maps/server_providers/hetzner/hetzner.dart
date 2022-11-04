@@ -281,7 +281,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> resizeVolume(final ServerVolume volume, final int sizeGb) async {
+  Future<bool> resizeVolume(
+    final ServerVolume volume,
+    final DiskSize size,
+  ) async {
     bool success = false;
 
     final Response dbPostResponse;
@@ -290,7 +293,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       dbPostResponse = await client.post(
         '/volumes/$volume.id/actions/resize',
         data: {
-          'size': sizeGb,
+          'size': size.gibibyte,
         },
       );
       success = dbPostResponse.data['action']['status'].toString() != 'error';

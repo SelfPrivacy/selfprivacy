@@ -523,7 +523,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   String? getEmojiFlag(final String query) {
     String? emoji;
 
-    switch (query.toLowerCase().substring(0, 2)) {
+    switch (query.toLowerCase().substring(0, 3)) {
       case 'fra':
         emoji = '🇩🇪';
         break;

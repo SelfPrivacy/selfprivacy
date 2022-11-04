@@ -241,8 +241,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'region': region,
         },
       );
-      success =
-          dbPostResponse.data['action']['status'].toString() == 'completed';
+      success = dbPostResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -268,8 +267,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'region': region,
         },
       );
-      success =
-          dbPostResponse.data['action']['status'].toString() == 'completed';
+      success = dbPostResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {

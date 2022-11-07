@@ -1,6 +1,11 @@
 {
     "test": "en-test",
     "locale": "en",
+    "error": {
+        "page_title": "Oops, something happened...",
+        "page_description": "We couldn't handle an exception, but it is important for us to know what just happened. Please share this log to our support!",
+        "page_share": "Share:"
+    },
     "basis": {
         "providers": "Providers",
         "providers_title": "Your Data Center",

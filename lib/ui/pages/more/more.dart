@@ -33,6 +33,18 @@ class MorePage extends StatelessWidget {
     final bool? usesBinds =
         context.watch<ApiServerVolumeCubit>().state.usesBinds;
 
+    return ListView(
+      children: [
+        ListView(
+          children: [
+            Row(
+              children: [Text("jfkhskdjfhdkjs")],
+            )
+          ],
+        )
+      ],
+    );
+/*
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(52),
@@ -132,7 +144,7 @@ class MorePage extends StatelessWidget {
           )
         ],
       ),
-    );
+    ); */
   }
 }
 

@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/theming/factory/app_theme_factory.dart';
+import 'package:selfprivacy/ui/pages/error_page.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
@@ -93,13 +95,15 @@ class MyApp extends StatelessWidget {
                     ? const OnboardingPage(nextPage: InitializingPage())
                     : const RootPage(),
                 builder: (final BuildContext context, final Widget? widget) {
-                  Widget error = const Text('...rendering error...');
-                  if (widget is Scaffold || widget is Navigator) {
-                    error = Scaffold(body: Center(child: error));
-                  }
                   ErrorWidget.builder =
-                      (final FlutterErrorDetails errorDetails) => error;
-                  return widget!;
+                      (final FlutterErrorDetails errorDetails) => ErrorPage(
+                            log:
+                                '${errorDetails.stack?.toString() ?? ''}\n\n${errorDetails.exception}',
+                          );
+                  if (widget != null) {
+                    return widget;
+                  }
+                  throw 'widget is null';
                 },
               ),
             ),

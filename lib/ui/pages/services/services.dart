@@ -19,7 +19,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/pages/services/service_page.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const switchableServices = [
   'bitwarden',
@@ -34,18 +33,6 @@ class ServicesPage extends StatefulWidget {
 
   @override
   State<ServicesPage> createState() => _ServicesPageState();
-}
-
-void _launchURL(final url) async {
-  try {
-    final Uri uri = Uri.parse(url);
-    await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
-  } catch (e) {
-    print(e);
-  }
 }
 
 class _ServicesPageState extends State<ServicesPage> {
@@ -181,7 +168,8 @@ class _Card extends StatelessWidget {
                         Column(
                           children: [
                             GestureDetector(
-                              onTap: () => _launchURL(
+                              onTap: () async =>
+                                  UiHelpers.launchExternalApplicationURL(
                                 'https://${service.url}',
                               ),
                               child: Text(

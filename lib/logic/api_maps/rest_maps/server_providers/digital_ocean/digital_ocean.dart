@@ -315,10 +315,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final String formattedHostname = getHostnameFromDomain(domainName);
 
     // TODO: change to 'master' change to 'master' change to 'master'
-    const String infectBranch = 'digital-ocean';
+    const String infectBranch = 'providers/digital-ocean';
 
     final String userdataString =
-        "#cloud-config\nwrite_files:\n- path: /etc/nixos/host.nix\n  permissions: '0644'\n  content: |\n    {pkgs, ...}:\n    {\n      environment.systemPackages = with pkgs; [ vim ];\n    }\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | PROVIDER=$infectProviderName NIXOS_IMPORT=./host.nix NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | PROVIDER=$infectProviderName DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     final Dio client = await getClient();

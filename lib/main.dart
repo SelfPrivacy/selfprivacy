@@ -2,20 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
-import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/theming/factory/app_theme_factory.dart';
-import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
-import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
-import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:wakelock/wakelock.dart';
-import 'package:timezone/data/latest.dart' as tz;
-
 import 'package:selfprivacy/config/bloc_config.dart';
 import 'package:selfprivacy/config/bloc_observer.dart';
+import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/config/localization.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
+import 'package:selfprivacy/router.dart';
+import 'package:selfprivacy/theming/factory/app_theme_factory.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:wakelock/wakelock.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -76,10 +73,10 @@ class MyApp extends StatelessWidget {
                 final BuildContext context,
                 final AppSettingsState appSettings,
               ) =>
-                  MaterialApp(
+                  MaterialApp.router(
                 scaffoldMessengerKey:
                     getIt.get<NavigationService>().scaffoldMessengerKey,
-                navigatorKey: getIt.get<NavigationService>().navigatorKey,
+                // navigatorKey: getIt.get<NavigationService>().navigatorKey,
                 localizationsDelegates: context.localizationDelegates,
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
@@ -89,9 +86,8 @@ class MyApp extends StatelessWidget {
                 darkTheme: darkThemeData,
                 themeMode:
                     appSettings.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
-                home: appSettings.isOnboardingShowing
-                    ? const OnboardingPage(nextPage: InitializingPage())
-                    : const RootPage(),
+                routerConfig: router,
+                // home: appSettings.isOnboardingShowing ? const OnboardingPage(nextPage: InitializingPage()) : const RootPage(),
                 builder: (final BuildContext context, final Widget? widget) {
                   Widget error = const Text('...rendering error...');
                   if (widget is Scaffold || widget is Navigator) {

@@ -1,10 +1,12 @@
 import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -15,9 +17,6 @@ import 'package:selfprivacy/ui/components/brand_switch/brand_switch.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:selfprivacy/ui/pages/services/service_page.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -119,10 +118,7 @@ class _Card extends StatelessWidget {
     final domainName = UiHelpers.getDomainName(config);
 
     return GestureDetector(
-      onTap: isReady
-          ? () => Navigator.of(context)
-              .push(materialRoute(ServicePage(serviceId: service.id)))
-          : null,
+      onTap: isReady ? () => context.go('/services/${service.id}') : null,
       child: BrandCards.big(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

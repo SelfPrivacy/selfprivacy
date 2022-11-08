@@ -1,13 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
-import 'package:package_info/package_info.dart';
-import 'package:easy_localization/easy_localization.dart';
 
-class AboutApplicationPage extends StatelessWidget {
-  const AboutApplicationPage({super.key});
+class AboutPage extends StatelessWidget {
+  const AboutPage({super.key});
 
   @override
   Widget build(final BuildContext context) => SafeArea(
@@ -22,7 +23,7 @@ class AboutApplicationPage extends StatelessWidget {
           body: ListView(
             padding: paddingH15V0,
             children: [
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               FutureBuilder(
                 future: _packageVersion(),
                 builder: (final context, final snapshot) => BrandText.body1(
@@ -36,6 +37,10 @@ class AboutApplicationPage extends StatelessWidget {
                   'about_application_page.api_version_text'
                       .tr(args: [snapshot.data.toString()]),
                 ),
+              ),
+              const SizedBox(height: 16),
+              const BrandMarkdown(
+                fileName: 'about',
               ),
             ],
           ),

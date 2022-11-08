@@ -1,25 +1,23 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
-import 'package:selfprivacy/logic/models/disk_status.dart';
-import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 
 class ExtendingVolumePage extends StatefulWidget {
   const ExtendingVolumePage({
     required this.diskVolumeToResize,
-    required this.diskStatus,
     super.key,
   });
 
   final DiskVolume diskVolumeToResize;
-  final DiskStatus diskStatus;
 
   @override
   State<ExtendingVolumePage> createState() => _ExtendingVolumePageState();
@@ -156,10 +154,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                               DiskSize.fromGibibyte(_currentSliderGbValue),
                               context.read<ApiServerVolumeCubit>().reload,
                             );
-                        Navigator.of(context).pushAndRemoveUntil(
-                          materialRoute(const RootPage()),
-                          (final predicate) => false,
-                        );
+                        context.go('/');
                       },
                 disabled: _isError || isAlreadyResizing,
               ),
@@ -168,15 +163,9 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                 height: 1.0,
               ),
               const SizedBox(height: 16),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Icon(
-                  Icons.info_outlined,
-                  size: 24,
-                ),
+              InfoBox(
+                text: 'storage.extending_volume_price_info'.tr(),
               ),
-              const SizedBox(height: 16),
-              Text('storage.extending_volume_price_info'.tr()),
               const SizedBox(height: 16),
             ],
           );

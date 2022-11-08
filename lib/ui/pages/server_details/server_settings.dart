@@ -85,11 +85,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
             context.read<JobsCubit>().addJob(
                   RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
                 );
-            Navigator.of(context).push(
-              materialRoute(
-                const SelectTimezone(),
-              ),
-            );
+            context.go('/server/settings/timezone');
           },
         ),
       ],

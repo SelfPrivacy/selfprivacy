@@ -2,6 +2,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
@@ -10,17 +11,15 @@ import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/pages/recovery_key/recovery_key_receiving.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
-class RecoveryKey extends StatefulWidget {
-  const RecoveryKey({super.key});
+class RecoveryKeyPage extends StatefulWidget {
+  const RecoveryKeyPage({super.key});
 
   @override
-  State<RecoveryKey> createState() => _RecoveryKeyState();
+  State<RecoveryKeyPage> createState() => _RecoveryKeyPageState();
 }
 
-class _RecoveryKeyState extends State<RecoveryKey> {
+class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
   @override
   Widget build(final BuildContext context) {
     final RecoveryKeyState keyStatus = context.watch<RecoveryKeyCubit>().state;
@@ -240,11 +239,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).push(
-        materialRoute(
-          RecoveryKeyReceiving(recoveryKey: token), // TO DO
-        ),
-      );
+      context.go('/recovery-key/new', extra: token);
     } on GenerationError catch (e) {
       setState(() {
         _isLoading = false;

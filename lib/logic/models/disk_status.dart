@@ -119,4 +119,13 @@ class DiskStatus {
   bool get isDiskOkay => diskVolumes.every((final volume) => volume.isDiskOkay);
 
   List<DiskVolume> diskVolumes = [];
+
+  DiskVolume getVolumeByName(final String name) {
+    for (final DiskVolume volume in diskVolumes) {
+      if (volume.name == name) {
+        return volume;
+      }
+    }
+    throw Exception('Volume $name not found');
+  }
 }

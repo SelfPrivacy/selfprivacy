@@ -26,6 +26,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   flutter_svg: ^1.1.4
   get_it: ^7.2.0
+  go_router: ^5.1.5
   gql: ^0.13.1
   graphql: ^5.1.1
   graphql_codegen: ^0.10.2

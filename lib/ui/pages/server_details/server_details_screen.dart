@@ -1,6 +1,7 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
@@ -23,7 +24,6 @@ import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:timezone/timezone.dart';
 
 part 'charts/chart.dart';

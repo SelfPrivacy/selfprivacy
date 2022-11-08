@@ -1,30 +1,28 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
-import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/service_migration_list_item.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
-import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class ServicesMigrationPage extends StatefulWidget {
   const ServicesMigrationPage({
     required this.services,
-    required this.diskStatus,
     required this.isMigration,
     super.key,
   });
 
-  final DiskStatus diskStatus;
   final List<Service> services;
   final bool isMigration;
 
@@ -87,11 +85,13 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
 
   @override
   Widget build(final BuildContext context) {
+    final DiskStatus diskStatus =
+        context.watch<ApiServerVolumeCubit>().state.diskStatus;
     final Size appBarHeight = Size.fromHeight(
       headerHeight +
           headerVerticalPadding * 2 +
-          listItemHeight * widget.diskStatus.diskVolumes.length +
-          headerVerticalPadding * widget.diskStatus.diskVolumes.length,
+          listItemHeight * diskStatus.diskVolumes.length +
+          headerVerticalPadding * diskStatus.diskVolumes.length,
     );
     return SafeArea(
       child: Scaffold(
@@ -110,7 +110,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                 ),
                 child: Column(
                   children: [
-                    ...widget.diskStatus.diskVolumes
+                    ...diskStatus.diskVolumes
                         .map(
                           (final volume) => Column(
                             children: [
@@ -145,7 +145,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                       const SizedBox(height: 8),
                       ServiceMigrationListItem(
                         service: service,
-                        diskStatus: widget.diskStatus,
+                        diskStatus: diskStatus,
                         selectedVolume: serviceToDisk[service.id]!,
                         onChange: onChange,
                       ),
@@ -180,10 +180,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                     }
                   }
                 }
-                Navigator.of(context).pushAndRemoveUntil(
-                  materialRoute(const RootPage()),
-                  (final predicate) => false,
-                );
+                context.go('/');
                 showBrandBottomSheet(
                   context: context,
                   builder: (final BuildContext context) =>

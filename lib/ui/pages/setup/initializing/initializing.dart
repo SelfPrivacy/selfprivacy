@@ -1,14 +1,15 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
@@ -16,11 +17,9 @@ import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
-import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_type_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class InitializingPage extends StatelessWidget {
   const InitializingPage({super.key});
@@ -52,8 +51,7 @@ class InitializingPage extends StatelessWidget {
       return BlocListener<ServerInstallationCubit, ServerInstallationState>(
         listener: (final context, final state) {
           if (cubit.state is ServerInstallationFinished) {
-            Navigator.of(context)
-                .pushReplacement(materialRoute(const RootPage()));
+            context.go('/');
           }
         },
         child: SafeArea(
@@ -105,10 +103,7 @@ class InitializingPage extends StatelessWidget {
                                 ? 'basis.close'.tr()
                                 : 'basis.later'.tr(),
                             onPressed: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                materialRoute(const RootPage()),
-                                (final predicate) => false,
-                              );
+                              context.go('/');
                             },
                           ),
                         ),
@@ -120,11 +115,7 @@ class InitializingPage extends StatelessWidget {
                             child: BrandButton.text(
                               title: 'basis.connect_to_existing'.tr(),
                               onPressed: () {
-                                Navigator.of(context).push(
-                                  materialRoute(
-                                    const RecoveryRouting(),
-                                  ),
-                                );
+                                context.go('/recover-access');
                               },
                             ),
                           )

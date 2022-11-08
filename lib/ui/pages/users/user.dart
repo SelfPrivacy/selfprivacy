@@ -11,9 +11,7 @@ class _User extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => InkWell(
         onTap: () {
-          Navigator.of(context).push(
-            materialRoute(UserDetails(login: user.login)),
-          );
+          context.go('/users/${user.login}');
         },
         child: Container(
           padding: paddingH15V0,

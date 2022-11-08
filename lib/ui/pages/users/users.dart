@@ -1,16 +1,17 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
-import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
+import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
-import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
@@ -24,14 +25,12 @@ import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_varian
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
-
+part 'add_user_fab.dart';
 part 'empty.dart';
 part 'new_user.dart';
+part 'reset_password.dart';
 part 'user.dart';
 part 'user_details.dart';
-part 'add_user_fab.dart';
-part 'reset_password.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({super.key});
@@ -50,7 +49,6 @@ class UsersPage extends StatelessWidget {
           final List<User> users = state.users
               .where((final user) => user.type != UserType.root)
               .toList();
-          // final List<User> users = [];
           users.sort(
             (final User a, final User b) =>
                 a.login.toLowerCase().compareTo(b.login.toLowerCase()),

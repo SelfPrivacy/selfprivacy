@@ -1,23 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
-import 'package:selfprivacy/logic/models/disk_status.dart';
-import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class ServerStoragePage extends StatefulWidget {
   const ServerStoragePage({
-    required this.diskStatus,
     super.key,
   });
-
-  final DiskStatus diskStatus;
 
   @override
   State<ServerStoragePage> createState() => _ServerStoragePageState();
@@ -32,6 +29,9 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
     final List<Service> services =
         context.watch<ServicesCubit>().state.services;
 
+    final DiskStatus diskStatus =
+        context.watch<ApiServerVolumeCubit>().state.diskStatus;
+
     if (!isReady) {
       return BrandHeroScreen(
         hasBackButton: true,
@@ -45,14 +45,14 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
       heroTitle: 'storage.card_title'.tr(),
       children: [
         // ...sections,
-        ...widget.diskStatus.diskVolumes
+        ...diskStatus.diskVolumes
             .map(
               (final volume) => Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ServerStorageSection(
                     volume: volume,
-                    diskStatus: widget.diskStatus,
+                    diskStatus: diskStatus,
                     services: services
                         .where(
                           (final service) =>
@@ -105,14 +105,8 @@ class ServerStorageSection extends StatelessWidget {
             const SizedBox(height: 16),
             BrandOutlinedButton(
               title: 'storage.extend_volume_button.title'.tr(),
-              onPressed: () => Navigator.of(context).push(
-                materialRoute(
-                  ExtendingVolumePage(
-                    diskVolumeToResize: volume,
-                    diskStatus: diskStatus,
-                  ),
-                ),
-              ),
+              onPressed: () =>
+                  context.go('/server/storage/extend/${volume.name}'),
             ),
           ],
         ],

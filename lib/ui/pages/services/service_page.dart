@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
@@ -8,8 +9,6 @@ import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ServicePage extends StatefulWidget {
@@ -108,15 +107,9 @@ class _ServicePageState extends State<ServicePage> {
           ListTile(
             iconColor: Theme.of(context).colorScheme.onBackground,
             // Open page ServicesMigrationPage
-            onTap: () => Navigator.of(context).push(
-              materialRoute(
-                ServicesMigrationPage(
-                  services: [service],
-                  diskStatus:
-                      context.read<ApiServerVolumeCubit>().state.diskStatus,
-                  isMigration: false,
-                ),
-              ),
+            onTap: () => context.go(
+              '/services/${service.id}/migration',
+              extra: [service],
             ),
             leading: const Icon(Icons.drive_file_move_outlined),
             title: Text(

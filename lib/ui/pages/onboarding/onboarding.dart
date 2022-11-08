@@ -1,14 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({required this.nextPage, super.key});
-
-  final Widget nextPage;
+  const OnboardingPage({super.key});
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
 }
@@ -117,10 +115,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             BrandButton.rised(
               onPressed: () {
                 context.read<AppSettingsCubit>().turnOffOnboarding();
-                Navigator.of(context).pushAndRemoveUntil(
-                  materialRoute(widget.nextPage),
-                  (final route) => false,
-                );
+                context.go('/initial-setup');
               },
               text: 'basis.got_it'.tr(),
             ),

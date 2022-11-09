@@ -27,8 +27,7 @@ import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
-import 'package:selfprivacy/ui/components/action_button/action_button.dart';
-import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 
 class IpNotFoundException implements Exception {
@@ -262,84 +261,62 @@ class ServerInstallationRepository {
       onSuccess(serverDetails);
     } on DioError catch (e) {
       if (e.response!.data['error']['code'] == 'uniqueness_error') {
-        final NavigationService nav = getIt.get<NavigationService>();
-        nav.showPopUpDialog(
-          BrandAlert(
-            title: 'modals.already_exists'.tr(),
-            contentText: 'modals.destroy_server'.tr(),
-            actions: [
-              ActionButton(
-                text: 'basis.delete'.tr(),
-                isRed: true,
-                onPressed: () async {
-                  await api.deleteServer(
-                    domainName: domainName,
-                  );
+        showPopUpAlert(
+          alertTitle: 'modals.already_exists'.tr(),
+          description: 'modals.destroy_server'.tr(),
+          actionButtonTitle: 'modals.yes'.tr(),
+          actionButtonOnPressed: () async {
+            await api.deleteServer(
+              domainName: domainName,
+            );
 
-                  ServerHostingDetails? serverDetails;
-                  try {
-                    serverDetails = await api.createServer(
-                      dnsApiToken: cloudFlareKey,
-                      rootUser: rootUser,
-                      domainName: domainName,
-                      serverType: getIt<ApiConfigModel>().serverType!,
-                    );
-                  } catch (e) {
-                    print(e);
-                  }
+            ServerHostingDetails? serverDetails;
+            try {
+              serverDetails = await api.createServer(
+                dnsApiToken: cloudFlareKey,
+                rootUser: rootUser,
+                domainName: domainName,
+                serverType: getIt<ApiConfigModel>().serverType!,
+              );
+            } catch (e) {
+              print(e);
+            }
 
-                  if (serverDetails == null) {
-                    print('Server is not initialized!');
-                    return;
-                  }
-                  await saveServerDetails(serverDetails);
-                  onSuccess(serverDetails);
-                },
-              ),
-              ActionButton(
-                text: 'basis.cancel'.tr(),
-                onPressed: onCancel,
-              ),
-            ],
-          ),
+            if (serverDetails == null) {
+              print('Server is not initialized!');
+              return;
+            }
+            await saveServerDetails(serverDetails);
+            onSuccess(serverDetails);
+          },
+          cancelButtonOnPressed: onCancel,
         );
       } else {
-        final NavigationService nav = getIt.get<NavigationService>();
-        nav.showPopUpDialog(
-          BrandAlert(
-            title: 'modals.unexpected_error'.tr(),
-            contentText: 'modals.try_again'.tr(),
-            actions: [
-              ActionButton(
-                text: 'modals.yes'.tr(),
-                isRed: true,
-                onPressed: () async {
-                  ServerHostingDetails? serverDetails;
-                  try {
-                    serverDetails = await api.createServer(
-                      dnsApiToken: cloudFlareKey,
-                      rootUser: rootUser,
-                      domainName: domainName,
-                      serverType: getIt<ApiConfigModel>().serverType!,
-                    );
-                  } catch (e) {
-                    print(e);
-                  }
+        showPopUpAlert(
+          alertTitle: 'modals.unexpected_error'.tr(),
+          description: 'modals.try_again'.tr(),
+          actionButtonTitle: 'modals.yes'.tr(),
+          actionButtonOnPressed: () async {
+            ServerHostingDetails? serverDetails;
+            try {
+              serverDetails = await api.createServer(
+                dnsApiToken: cloudFlareKey,
+                rootUser: rootUser,
+                domainName: domainName,
+                serverType: getIt<ApiConfigModel>().serverType!,
+              );
+            } catch (e) {
+              print(e);
+            }
 
-                  if (serverDetails == null) {
-                    print('Server is not initialized!');
-                    return;
-                  }
-                  await saveServerDetails(serverDetails);
-                  onSuccess(serverDetails);
-                },
-              ),
-              ActionButton(
-                text: 'basis.cancel'.tr(),
-                onPressed: onCancel,
-              ),
-            ],
-          ),
+            if (serverDetails == null) {
+              print('Server is not initialized!');
+              return;
+            }
+            await saveServerDetails(serverDetails);
+            onSuccess(serverDetails);
+          },
+          cancelButtonOnPressed: onCancel,
         );
       }
     }
@@ -366,31 +343,19 @@ class ServerInstallationRepository {
         domain: domain,
       );
     } on DioError catch (e) {
-      final NavigationService nav = getIt.get<NavigationService>();
-      nav.showPopUpDialog(
-        BrandAlert(
-          title: e.response!.data['errors'][0]['code'] == 1038
-              ? 'modals.you_cant_use_this_api'.tr()
-              : 'domain.error'.tr(),
-          contentText: 'modals.delete_server_volume'.tr(),
-          actions: [
-            ActionButton(
-              text: 'basis.delete'.tr(),
-              isRed: true,
-              onPressed: () async {
-                await serverApi.deleteServer(
-                  domainName: domain.domainName,
-                );
-
-                onCancel();
-              },
-            ),
-            ActionButton(
-              text: 'basis.cancel'.tr(),
-              onPressed: onCancel,
-            ),
-          ],
-        ),
+      showPopUpAlert(
+        alertTitle: e.response!.data['errors'][0]['code'] == 1038
+            ? 'modals.you_cant_use_this_api'.tr()
+            : 'domain.error'.tr(),
+        description: 'modals.delete_server_volume'.tr(),
+        cancelButtonOnPressed: onCancel,
+        actionButtonTitle: 'basis.delete'.tr(),
+        actionButtonOnPressed: () async {
+          await serverApi.deleteServer(
+            domainName: domain.domainName,
+          );
+          onCancel();
+        },
       );
       return false;
     }

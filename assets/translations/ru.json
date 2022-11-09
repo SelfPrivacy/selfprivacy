@@ -31,7 +31,8 @@
         "remove": "Удалить",
         "apply": "Применить",
         "done": "Готово",
-        "continue": "Продолжить"
+        "continue": "Продолжить",
+        "alert": "Уведомление"
     },
     "more_page": {
         "configuration_wizard": "Мастер настройки",

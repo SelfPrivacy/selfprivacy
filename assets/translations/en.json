@@ -31,7 +31,8 @@
         "remove": "Remove",
         "apply": "Apply",
         "done": "Done",
-        "continue": "Continue"
+        "continue": "Continue",
+        "alert": "Alert"
     },
     "more_page": {
         "configuration_wizard": "Setup wizard",

@@ -1,17 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
-import 'package:selfprivacy/ui/components/action_button/action_button.dart';
-import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -157,28 +155,17 @@ class _BackupDetailsState extends State<BackupDetails>
                             onTap: preventActions
                                 ? null
                                 : () {
-                                    final NavigationService nav =
-                                        getIt<NavigationService>();
-                                    nav.showPopUpDialog(
-                                      BrandAlert(
-                                        title: 'backup.restoring'.tr(),
-                                        contentText: 'backup.restore_alert'.tr(
-                                          args: [backup.time.toString()],
-                                        ),
-                                        actions: [
-                                          ActionButton(
-                                            text: 'basis.cancel'.tr(),
-                                          ),
-                                          ActionButton(
-                                            onPressed: () => {
-                                              context
-                                                  .read<BackupsCubit>()
-                                                  .restoreBackup(backup.id)
-                                            },
-                                            text: 'modals.yes'.tr(),
-                                          )
-                                        ],
+                                    showPopUpAlert(
+                                      alertTitle: 'backup.restoring'.tr(),
+                                      description: 'backup.restore_alert'.tr(
+                                        args: [backup.time.toString()],
                                       ),
+                                      actionButtonTitle: 'modals.yes'.tr(),
+                                      actionButtonOnPressed: () => {
+                                        context
+                                            .read<BackupsCubit>()
+                                            .restoreBackup(backup.id)
+                                      },
                                     );
                                   },
                             title: Text(

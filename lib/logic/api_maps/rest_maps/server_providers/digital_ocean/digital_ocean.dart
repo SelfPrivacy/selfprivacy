@@ -119,7 +119,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         name: dbName,
         sizeByte: dbSize,
         serverId: null,
-        linuxDevice: null,
+        linuxDevice: 'scsi-0DO_Volume_$dbName',
         uuid: dbId,
       );
     } catch (e) {
@@ -156,7 +156,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           name: dbName,
           sizeByte: dbSize,
           serverId: dbDropletIds.isNotEmpty ? dbDropletIds[0] : null,
-          linuxDevice: null,
+          linuxDevice: 'scsi-0DO_Volume_$dbName',
           uuid: dbId,
         );
         volumes.add(volume);

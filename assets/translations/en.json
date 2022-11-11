@@ -110,6 +110,7 @@
         "disk": "Disk local",
         "monthly_cost": "Monthly cost",
         "location": "Location",
+        "provider": "Provider",
         "core_count": {
             "one": "{} core",
             "two": "{} cores",

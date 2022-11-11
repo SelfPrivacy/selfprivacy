@@ -2,18 +2,20 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
+import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
@@ -313,8 +315,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
     final String formattedHostname = getHostnameFromDomain(domainName);
-
-    // TODO: change to 'master' change to 'master' change to 'master'
     const String infectBranch = 'providers/digital-ocean';
 
     final String userdataString =
@@ -474,14 +474,59 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return metrics;
   }
 
-  Future<HetznerServerInfo> getInfo() async {
-    final ServerHostingDetails? hetznerServer =
-        getIt<ApiConfigModel>().serverDetails;
-    final Dio client = await getClient();
-    final Response response = await client.get('/servers/${hetznerServer!.id}');
-    close(client);
+  @override
+  Future<List<ServerMetadataEntity>> getMetadata(final int serverId) async {
+    List<ServerMetadataEntity> metadata = [];
 
-    return HetznerServerInfo.fromJson(response.data!['server']);
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get('/droplets/$serverId');
+      final droplet = response.data!['droplet'];
+      metadata = [
+        ServerMetadataEntity(
+          type: MetadataType.id,
+          name: 'server.server_id'.tr(),
+          value: droplet['id'].toString(),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.status,
+          name: 'server.status'.tr(),
+          value: droplet['status'].toString().capitalize(),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.cpu,
+          name: 'server.cpu'.tr(),
+          value: 'server.core_count'.plural(droplet['vcpus']),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.ram,
+          name: 'server.ram'.tr(),
+          value: "${droplet['memory'].toString()} MB",
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.cost,
+          name: 'server.monthly_cost'.tr(),
+          value: droplet['size']['price_monthly'].toString(),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.location,
+          name: 'server.location'.tr(),
+          value:
+              '${droplet['region']['name']} ${getEmojiFlag(droplet['region']['slug'].toString()) ?? ''}',
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.other,
+          name: 'server.provider'.tr(),
+          value: 'Digital Ocean',
+        ),
+      ];
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return metadata;
   }
 
   @override

@@ -1,6 +1,16 @@
 part of 'server_details_screen.dart';
 
 class _TextDetails extends StatelessWidget {
+  final Map<MetadataType, IconData> metadataToIcon = const {
+    MetadataType.id: Icons.numbers_outlined,
+    MetadataType.status: Icons.mode_standby_outlined,
+    MetadataType.cpu: Icons.memory_outlined,
+    MetadataType.ram: Icons.memory_outlined,
+    MetadataType.cost: Icons.euro_outlined,
+    MetadataType.location: Icons.location_on_outlined,
+    MetadataType.other: Icons.info_outlined,
+  };
+
   @override
   Widget build(final BuildContext context) {
     final details = context.watch<ServerDetailsCubit>().state;
@@ -10,7 +20,6 @@ class _TextDetails extends StatelessWidget {
     } else if (details is ServerDetailsNotReady) {
       return _TempMessage(message: 'basis.no_data'.tr());
     } else if (details is Loaded) {
-      final data = details.serverInfo;
       return FilledCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,37 +33,15 @@ class _TextDetails extends StatelessWidget {
                     ),
               ),
             ),
-            ListTileOnSurfaceVariant(
-              leadingIcon: Icons.numbers_outlined,
-              title: data.id.toString(),
-              subtitle: 'server.server_id'.tr(),
-            ),
-            ListTileOnSurfaceVariant(
-              leadingIcon: Icons.mode_standby_outlined,
-              title: data.status.toString().split('.')[1].capitalize(),
-              subtitle: 'server.status'.tr(),
-            ),
-            ListTileOnSurfaceVariant(
-              leadingIcon: Icons.memory_outlined,
-              title: 'server.core_count'.plural(data.serverType.cores),
-              subtitle: 'server.cpu'.tr(),
-            ),
-            ListTileOnSurfaceVariant(
-              leadingIcon: Icons.memory_outlined,
-              title: '${data.serverType.memory.toString()} GB',
-              subtitle: 'server.ram'.tr(),
-            ),
-            ListTileOnSurfaceVariant(
-              leadingIcon: Icons.euro_outlined,
-              title: data.serverType.prices[1].monthly.toStringAsFixed(2),
-              subtitle: 'server.monthly_cost'.tr(),
-            ),
-            // Server location
-            ListTileOnSurfaceVariant(
-              leadingIcon: Icons.location_on_outlined,
-              title: '${data.location.city}, ${data.location.country}',
-              subtitle: 'server.location'.tr(),
-            ),
+            ...details.metadata
+                .map(
+                  (final metadata) => ListTileOnSurfaceVariant(
+                    leadingIcon: metadataToIcon[metadata.type],
+                    title: metadata.name,
+                    subtitle: metadata.value,
+                  ),
+                )
+                .toList(),
           ],
         ),
       );

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
@@ -12,8 +13,10 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
+import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
@@ -513,14 +516,59 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return metrics;
   }
 
-  Future<HetznerServerInfo> getInfo() async {
-    final ServerHostingDetails? hetznerServer =
-        getIt<ApiConfigModel>().serverDetails;
-    final Dio client = await getClient();
-    final Response response = await client.get('/servers/${hetznerServer!.id}');
-    close(client);
+  @override
+  Future<List<ServerMetadataEntity>> getMetadata(final int serverId) async {
+    List<ServerMetadataEntity> metadata = [];
 
-    return HetznerServerInfo.fromJson(response.data!['server']);
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get('/servers/$serverId');
+      final hetznerInfo = HetznerServerInfo.fromJson(response.data!['server']);
+      metadata = [
+        ServerMetadataEntity(
+          type: MetadataType.id,
+          name: 'server.server_id'.tr(),
+          value: hetznerInfo.id.toString(),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.status,
+          name: 'server.status'.tr(),
+          value: hetznerInfo.status.toString().split('.')[1].capitalize(),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.cpu,
+          name: 'server.cpu'.tr(),
+          value: 'server.core_count'.plural(hetznerInfo.serverType.cores),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.ram,
+          name: 'server.ram'.tr(),
+          value: '${hetznerInfo.serverType.memory.toString()} GB',
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.cost,
+          name: 'server.monthly_cost'.tr(),
+          value: hetznerInfo.serverType.prices[1].monthly.toStringAsFixed(2),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.location,
+          name: 'server.location'.tr(),
+          value:
+              '${hetznerInfo.location.city}, ${hetznerInfo.location.country}',
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.other,
+          name: 'server.provider'.tr(),
+          value: 'Hetzner',
+        ),
+      ];
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return metadata;
   }
 
   @override

@@ -555,14 +555,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         rawCpuMetrics,
         'cpu',
       ),
-      ppsIn: timeSeriesSerializer(
-        rawNetworkMetrics,
-        'network.0.pps.in',
-      ),
-      ppsOut: timeSeriesSerializer(
-        rawNetworkMetrics,
-        'network.0.pps.out',
-      ),
       bandwidthIn: timeSeriesSerializer(
         rawNetworkMetrics,
         'network.0.bandwidth.in',

@@ -14,8 +14,6 @@ class ServerMetrics {
   ServerMetrics({
     required this.stepsInSecond,
     required this.cpu,
-    required this.ppsIn,
-    required this.ppsOut,
     required this.bandwidthIn,
     required this.bandwidthOut,
     required this.start,
@@ -24,8 +22,6 @@ class ServerMetrics {
 
   final num stepsInSecond;
   final List<TimeSeriesData> cpu;
-  final List<TimeSeriesData> ppsIn;
-  final List<TimeSeriesData> ppsOut;
   final List<TimeSeriesData> bandwidthIn;
   final List<TimeSeriesData> bandwidthOut;
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_cubit.dart';
+import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
@@ -22,7 +22,6 @@ import 'package:selfprivacy/ui/pages/server_details/charts/cpu_chart.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/network_charts.dart';
 import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
-import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:timezone/timezone.dart';
@@ -93,7 +92,7 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
           ),
           const SizedBox(height: 8),
           BlocProvider(
-            create: (final context) => HetznerMetricsCubit()..restart(),
+            create: (final context) => MetricsCubit()..restart(),
             child: _Chart(),
           ),
           const SizedBox(height: 8),

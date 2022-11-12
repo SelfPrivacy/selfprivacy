@@ -305,14 +305,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         ),
       );
       timer = Timer(pauseDuration, () async {
-        final ServerHostingDetails hetznerServerDetails =
-            await repository.restart();
+        final ServerHostingDetails serverDetails = await repository.restart();
         await repository.saveIsServerResetedFirstTime(true);
-        await repository.saveServerDetails(hetznerServerDetails);
+        await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
           isServerResetedFirstTime: true,
-          serverDetails: hetznerServerDetails,
+          serverDetails: serverDetails,
           isLoading: false,
         );
 
@@ -347,14 +346,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         ),
       );
       timer = Timer(pauseDuration, () async {
-        final ServerHostingDetails hetznerServerDetails =
-            await repository.restart();
+        final ServerHostingDetails serverDetails = await repository.restart();
         await repository.saveIsServerResetedSecondTime(true);
-        await repository.saveServerDetails(hetznerServerDetails);
+        await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
           isServerResetedSecondTime: true,
-          serverDetails: hetznerServerDetails,
+          serverDetails: serverDetails,
           isLoading: false,
         );
 
@@ -560,8 +558,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  Future<List<ServerBasicInfoWithValidators>>
-      getServersOnHetznerAccount() async {
+  Future<List<ServerBasicInfoWithValidators>> getAvailableServers() async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
     final List<ServerBasicInfo> servers =

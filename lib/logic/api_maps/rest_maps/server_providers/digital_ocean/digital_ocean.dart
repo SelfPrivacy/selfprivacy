@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
@@ -444,34 +445,14 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return server.copyWith(startTime: DateTime.now());
   }
 
-  Future<Map<String, dynamic>> getMetrics(
+  @override
+  Future<ServerMetrics?> getMetrics(
+    final int serverId,
     final DateTime start,
     final DateTime end,
-    final String type,
   ) async {
-    final ServerHostingDetails? hetznerServer =
-        getIt<ApiConfigModel>().serverDetails;
-
-    Map<String, dynamic> metrics = {};
-    final Dio client = await getClient();
-    try {
-      final Map<String, dynamic> queryParameters = {
-        'start': start.toUtc().toIso8601String(),
-        'end': end.toUtc().toIso8601String(),
-        'type': type
-      };
-      final Response res = await client.get(
-        '/servers/${hetznerServer!.id}/metrics',
-        queryParameters: queryParameters,
-      );
-      metrics = res.data;
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
-    }
-
-    return metrics;
+    ServerMetrics? metrics;
+    return metrics!;
   }
 
   @override

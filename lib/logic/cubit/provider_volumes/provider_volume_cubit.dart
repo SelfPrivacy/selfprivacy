@@ -98,13 +98,13 @@ class ApiProviderVolumeCubit
     }
 
     getIt<NavigationService>().showSnackBar(
-      'Hetzner resized, waiting 10 seconds',
+      'Provider volume resized, waiting 10 seconds',
     );
     await Future.delayed(const Duration(seconds: 10));
 
     await ServerApi().resizeVolume(volume.name);
     getIt<NavigationService>().showSnackBar(
-      'Server api resized, waiting 20 seconds',
+      'Server volume resized, waiting 20 seconds',
     );
 
     await Future.delayed(const Duration(seconds: 20));

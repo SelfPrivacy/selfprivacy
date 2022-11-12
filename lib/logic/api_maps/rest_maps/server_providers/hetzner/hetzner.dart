@@ -11,6 +11,7 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
@@ -486,14 +487,12 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return server.copyWith(startTime: DateTime.now());
   }
 
-  Future<Map<String, dynamic>> getMetrics(
+  Future<Map<String, dynamic>> requestRawMetrics(
+    final int serverId,
     final DateTime start,
     final DateTime end,
     final String type,
   ) async {
-    final ServerHostingDetails? hetznerServer =
-        getIt<ApiConfigModel>().serverDetails;
-
     Map<String, dynamic> metrics = {};
     final Dio client = await getClient();
     try {
@@ -503,15 +502,79 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         'type': type
       };
       final Response res = await client.get(
-        '/servers/${hetznerServer!.id}/metrics',
+        '/servers/$serverId/metrics',
         queryParameters: queryParameters,
       );
-      metrics = res.data;
+      metrics = res.data['metrics'];
     } catch (e) {
       print(e);
     } finally {
       close(client);
     }
+
+    return metrics;
+  }
+
+  List<TimeSeriesData> timeSeriesSerializer(
+    final Map<String, dynamic> json,
+    final String type,
+  ) {
+    final List list = json['time_series'][type]['values'];
+    return list
+        .map((final el) => TimeSeriesData(el[0], double.parse(el[1])))
+        .toList();
+  }
+
+  @override
+  Future<ServerMetrics?> getMetrics(
+    final int serverId,
+    final DateTime start,
+    final DateTime end,
+  ) async {
+    ServerMetrics? metrics;
+
+    final Map<String, dynamic> rawCpuMetrics = await requestRawMetrics(
+      serverId,
+      start,
+      end,
+      'cpu',
+    );
+    final Map<String, dynamic> rawNetworkMetrics = await requestRawMetrics(
+      serverId,
+      start,
+      end,
+      'network',
+    );
+
+    if (rawNetworkMetrics.isEmpty || rawCpuMetrics.isEmpty) {
+      return metrics;
+    }
+
+    metrics = ServerMetrics(
+      cpu: timeSeriesSerializer(
+        rawCpuMetrics,
+        'cpu',
+      ),
+      ppsIn: timeSeriesSerializer(
+        rawNetworkMetrics,
+        'network.0.pps.in',
+      ),
+      ppsOut: timeSeriesSerializer(
+        rawNetworkMetrics,
+        'network.0.pps.out',
+      ),
+      bandwidthIn: timeSeriesSerializer(
+        rawNetworkMetrics,
+        'network.0.bandwidth.in',
+      ),
+      bandwidthOut: timeSeriesSerializer(
+        rawNetworkMetrics,
+        'network.0.bandwidth.out',
+      ),
+      end: end,
+      start: start,
+      stepsInSecond: rawCpuMetrics['step'],
+    );
 
     return metrics;
   }

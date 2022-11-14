@@ -41,7 +41,8 @@ abstract class ApiMap {
 
   FutureOr<BaseOptions> get options;
 
-  abstract final String rootAddress;
+  String get rootAddress;
+
   abstract final bool hasLogger;
   abstract final bool isWithToken;
 

@@ -49,10 +49,13 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  final String rootAddress = 'https://api.digitalocean.com/v2';
+  String get rootAddress => 'https://api.digitalocean.com/v2';
 
   @override
-  final String infectProviderName = 'digitalocean';
+  String get infectProviderName => 'digitalocean';
+
+  @override
+  String get appearanceProviderName => 'Digital Ocean';
 
   @override
   Future<bool> isApiTokenValid(final String token) async {
@@ -452,7 +455,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final DateTime end,
   ) async {
     ServerMetrics? metrics;
-    return metrics!;
+    return metrics;
   }
 
   @override
@@ -498,7 +501,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         ServerMetadataEntity(
           type: MetadataType.other,
           name: 'server.provider'.tr(),
-          value: 'Digital Ocean',
+          value: appearanceProviderName,
         ),
       ];
     } catch (e) {

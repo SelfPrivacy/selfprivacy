@@ -50,10 +50,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  final String rootAddress = 'https://api.hetzner.cloud/v1';
+  String get rootAddress => 'https://api.hetzner.cloud/v1';
 
   @override
-  final String infectProviderName = 'hetzner';
+  String get infectProviderName => 'hetzner';
+
+  @override
+  String get appearanceProviderName => 'Hetzner';
 
   @override
   Future<bool> isApiTokenValid(final String token) async {
@@ -349,12 +352,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     final String apiToken = StringGenerators.apiToken();
     final String hostname = getHostnameFromDomain(domainName);
+    const String infectBranch = 'providers/hetzner';
 
     final String base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=$infectProviderName NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | PROVIDER=$infectProviderName NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
 
     ServerHostingDetails? serverDetails;
     DioError? hetznerError;
@@ -614,7 +618,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         ServerMetadataEntity(
           type: MetadataType.other,
           name: 'server.provider'.tr(),
-          value: 'Hetzner',
+          value: appearanceProviderName,
         ),
       ];
     } catch (e) {

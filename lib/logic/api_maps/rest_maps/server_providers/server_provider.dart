@@ -48,5 +48,11 @@ abstract class ServerProviderApi extends ApiMap {
     final DateTime end,
   );
 
-  abstract final String infectProviderName;
+  /// Provider name key which lets infect understand what kind of installation
+  /// it requires, for example 'digitaloceal' for Digital Ocean
+  String get infectProviderName;
+
+  /// Actual provider name to render on information page for user,
+  /// for example 'Digital Ocean' for Digital Ocean
+  String get appearanceProviderName;
 }

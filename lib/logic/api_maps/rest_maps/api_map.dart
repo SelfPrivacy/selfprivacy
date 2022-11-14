@@ -9,8 +9,8 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 
 abstract class ApiMap {
-  Future<Dio> getClient() async {
-    final Dio dio = Dio(await options);
+  Future<Dio> getClient({final BaseOptions? customOptions}) async {
+    final Dio dio = Dio(customOptions ?? (await options));
     if (hasLogger) {
       dio.interceptors.add(PrettyDioLogger());
     }

@@ -448,6 +448,46 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return server.copyWith(startTime: DateTime.now());
   }
 
+  /// Digital Ocean returns a map of lists of /proc/state values,
+  /// so here we are trying to implement average CPU
+  /// load calculation for each point in time on a given interval.
+  ///
+  /// For each point of time:
+  ///
+  /// `Average Load = 100 * (1 - (Idle Load / Total Load))`
+  ///
+  /// For more info please proceed to read:
+  /// https://rosettacode.org/wiki/Linux_CPU_utilization
+  List<TimeSeriesData> calculateCpuLoadMetrics(final List rawProcStatMetrics) {
+    final List<TimeSeriesData> cpuLoads = [];
+
+    final int pointsInTime = (rawProcStatMetrics[0]['values'] as List).length;
+    for (int i = 0; i < pointsInTime; ++i) {
+      double currentMetricLoad = 0.0;
+      double? currentMetricIdle;
+      for (final rawProcStat in rawProcStatMetrics) {
+        final String rawProcValue = rawProcStat['values'][i][1];
+        // Converting MBit into bit
+        final double procValue = double.parse(rawProcValue) * 1000000;
+        currentMetricLoad += procValue;
+        if (currentMetricIdle == null &&
+            rawProcStat['metric']['mode'] == 'idle') {
+          currentMetricIdle = procValue;
+        }
+      }
+      currentMetricIdle ??= 0.0;
+      currentMetricLoad = 100.0 * (1 - (currentMetricIdle / currentMetricLoad));
+      cpuLoads.add(
+        TimeSeriesData(
+          rawProcStatMetrics[0]['values'][i][0],
+          currentMetricLoad,
+        ),
+      );
+    }
+
+    return cpuLoads;
+  }
+
   @override
   Future<ServerMetrics?> getMetrics(
     final int serverId,
@@ -455,6 +495,67 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final DateTime end,
   ) async {
     ServerMetrics? metrics;
+
+    const int step = 15;
+    final Dio client = await getClient();
+    //try {
+    Response response = await client.get(
+      '/monitoring/metrics/droplet/bandwidth',
+      queryParameters: {
+        'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
+        'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
+        'host_id': '$serverId',
+        'interface': 'public',
+        'direction': 'inbound',
+      },
+    );
+
+    final List inbound = response.data['data']['result'][0]['values'];
+
+    response = await client.get(
+      '/monitoring/metrics/droplet/bandwidth',
+      queryParameters: {
+        'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
+        'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
+        'host_id': '$serverId',
+        'interface': 'public',
+        'direction': 'outbound',
+      },
+    );
+
+    final List outbound = response.data['data']['result'][0]['values'];
+
+    response = await client.get(
+      '/monitoring/metrics/droplet/cpu',
+      queryParameters: {
+        'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
+        'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
+        'host_id': '$serverId',
+      },
+    );
+
+    metrics = ServerMetrics(
+      bandwidthIn: inbound
+          .map(
+            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+          )
+          .toList(),
+      bandwidthOut: outbound
+          .map(
+            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+          )
+          .toList(),
+      cpu: calculateCpuLoadMetrics(response.data['data']['result']),
+      start: start,
+      end: end,
+      stepsInSecond: step,
+    );
+    /* } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }*/
+
     return metrics;
   }
 

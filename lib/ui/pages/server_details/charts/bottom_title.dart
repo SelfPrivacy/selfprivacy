@@ -11,7 +11,7 @@ String bottomTitle(
   final day = DateFormat('MMMd');
   String res;
 
-  if (value <= 0) {
+  if (value <= 0 || value >= data.length) {
     return '';
   }
 

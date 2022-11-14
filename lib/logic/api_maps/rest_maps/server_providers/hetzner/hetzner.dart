@@ -519,7 +519,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return metrics;
   }
 
-  List<TimeSeriesData> timeSeriesSerializer(
+  List<TimeSeriesData> serializeTimeSeries(
     final Map<String, dynamic> json,
     final String type,
   ) {
@@ -555,15 +555,15 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     metrics = ServerMetrics(
-      cpu: timeSeriesSerializer(
+      cpu: serializeTimeSeries(
         rawCpuMetrics,
         'cpu',
       ),
-      bandwidthIn: timeSeriesSerializer(
+      bandwidthIn: serializeTimeSeries(
         rawNetworkMetrics,
         'network.0.bandwidth.in',
       ),
-      bandwidthOut: timeSeriesSerializer(
+      bandwidthOut: serializeTimeSeries(
         rawNetworkMetrics,
         'network.0.bandwidth.out',
       ),

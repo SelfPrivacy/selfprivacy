@@ -234,7 +234,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   Future<void> deleteVolume(final ServerVolume volume) async {
     final Dio client = await getClient();
     try {
-      await client.delete('/volumes/$volume.id');
+      await client.delete('/volumes/${volume.id}');
     } catch (e) {
       print(e);
     } finally {
@@ -253,7 +253,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final Dio client = await getClient();
     try {
       dbPostResponse = await client.post(
-        '/volumes/$volume.id/actions/attach',
+        '/volumes/${volume.id}/actions/attach',
         data: {
           'automount': true,
           'server': serverId,
@@ -276,7 +276,9 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final Response dbPostResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post('/volumes/$volume.id/actions/detach');
+      dbPostResponse = await client.post(
+        '/volumes/${volume.id}/actions/detach',
+      );
       success = dbPostResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
@@ -298,7 +300,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final Dio client = await getClient();
     try {
       dbPostResponse = await client.post(
-        '/volumes/$volume.id/actions/resize',
+        '/volumes/${volume.id}/actions/resize',
         data: {
           'size': size.gibibyte,
         },

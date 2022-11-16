@@ -116,7 +116,7 @@ class NetworkChart extends StatelessWidget {
                 ...listData[1].map((final e) => e.value)
               ].reduce(max) *
               1.2,
-          minX: listData[0].length - 200,
+          minX: 0,
           titlesData: FlTitlesData(
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(

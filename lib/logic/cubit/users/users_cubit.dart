@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 

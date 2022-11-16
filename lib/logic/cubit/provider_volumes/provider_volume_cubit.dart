@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';

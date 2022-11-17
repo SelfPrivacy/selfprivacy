@@ -322,7 +322,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     const String infectBranch = 'providers/digital-ocean';
 
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | PROVIDER=$infectProviderName DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     final Dio client = await getClient();

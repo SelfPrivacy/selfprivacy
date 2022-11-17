@@ -55,4 +55,9 @@ abstract class ServerProviderApi extends ApiMap {
   /// Actual provider name to render on information page for user,
   /// for example 'Digital Ocean' for Digital Ocean
   String get appearanceProviderName;
+
+  /// Whether we request for staging temprorary certificates.
+  /// Hardcode to 'true' in the middle of testing to not
+  /// get your domain banned but constant certificate renewal
+  String get stagingAcme => 'false';
 }

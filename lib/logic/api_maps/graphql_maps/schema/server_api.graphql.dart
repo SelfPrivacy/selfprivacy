@@ -4,7 +4,6 @@ import 'package:graphql/client.dart' as graphql;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
-import 'services.graphql.dart';
 part 'server_api.graphql.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -3176,6 +3175,425 @@ class _CopyWithStubImpl$Mutation$RebootSystem$rebootSystem<TRes>
 
   call({int? code, String? message, bool? success, String? $__typename}) =>
       _res;
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$SystemServerProvider {
+  Query$SystemServerProvider({required this.system, required this.$__typename});
+
+  @override
+  factory Query$SystemServerProvider.fromJson(Map<String, dynamic> json) =>
+      _$Query$SystemServerProviderFromJson(json);
+
+  final Query$SystemServerProvider$system system;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() => _$Query$SystemServerProviderToJson(this);
+  int get hashCode {
+    final l$system = system;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$system, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$SystemServerProvider) ||
+        runtimeType != other.runtimeType) return false;
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$SystemServerProvider
+    on Query$SystemServerProvider {
+  CopyWith$Query$SystemServerProvider<Query$SystemServerProvider>
+      get copyWith => CopyWith$Query$SystemServerProvider(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemServerProvider<TRes> {
+  factory CopyWith$Query$SystemServerProvider(
+          Query$SystemServerProvider instance,
+          TRes Function(Query$SystemServerProvider) then) =
+      _CopyWithImpl$Query$SystemServerProvider;
+
+  factory CopyWith$Query$SystemServerProvider.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemServerProvider;
+
+  TRes call({Query$SystemServerProvider$system? system, String? $__typename});
+  CopyWith$Query$SystemServerProvider$system<TRes> get system;
+}
+
+class _CopyWithImpl$Query$SystemServerProvider<TRes>
+    implements CopyWith$Query$SystemServerProvider<TRes> {
+  _CopyWithImpl$Query$SystemServerProvider(this._instance, this._then);
+
+  final Query$SystemServerProvider _instance;
+
+  final TRes Function(Query$SystemServerProvider) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? system = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$SystemServerProvider(
+          system: system == _undefined || system == null
+              ? _instance.system
+              : (system as Query$SystemServerProvider$system),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$SystemServerProvider$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Query$SystemServerProvider$system(
+        local$system, (e) => call(system: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$SystemServerProvider<TRes>
+    implements CopyWith$Query$SystemServerProvider<TRes> {
+  _CopyWithStubImpl$Query$SystemServerProvider(this._res);
+
+  TRes _res;
+
+  call({Query$SystemServerProvider$system? system, String? $__typename}) =>
+      _res;
+  CopyWith$Query$SystemServerProvider$system<TRes> get system =>
+      CopyWith$Query$SystemServerProvider$system.stub(_res);
+}
+
+const documentNodeQuerySystemServerProvider = DocumentNode(definitions: [
+  OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'SystemServerProvider'),
+      variableDefinitions: [],
+      directives: [],
+      selectionSet: SelectionSetNode(selections: [
+        FieldNode(
+            name: NameNode(value: 'system'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FieldNode(
+                  name: NameNode(value: 'provider'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: SelectionSetNode(selections: [
+                    FieldNode(
+                        name: NameNode(value: 'provider'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null)
+                  ])),
+              FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null)
+            ])),
+        FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null)
+      ])),
+]);
+Query$SystemServerProvider _parserFn$Query$SystemServerProvider(
+        Map<String, dynamic> data) =>
+    Query$SystemServerProvider.fromJson(data);
+
+class Options$Query$SystemServerProvider
+    extends graphql.QueryOptions<Query$SystemServerProvider> {
+  Options$Query$SystemServerProvider(
+      {String? operationName,
+      graphql.FetchPolicy? fetchPolicy,
+      graphql.ErrorPolicy? errorPolicy,
+      graphql.CacheRereadPolicy? cacheRereadPolicy,
+      Object? optimisticResult,
+      Duration? pollInterval,
+      graphql.Context? context})
+      : super(
+            operationName: operationName,
+            fetchPolicy: fetchPolicy,
+            errorPolicy: errorPolicy,
+            cacheRereadPolicy: cacheRereadPolicy,
+            optimisticResult: optimisticResult,
+            pollInterval: pollInterval,
+            context: context,
+            document: documentNodeQuerySystemServerProvider,
+            parserFn: _parserFn$Query$SystemServerProvider);
+}
+
+class WatchOptions$Query$SystemServerProvider
+    extends graphql.WatchQueryOptions<Query$SystemServerProvider> {
+  WatchOptions$Query$SystemServerProvider(
+      {String? operationName,
+      graphql.FetchPolicy? fetchPolicy,
+      graphql.ErrorPolicy? errorPolicy,
+      graphql.CacheRereadPolicy? cacheRereadPolicy,
+      Object? optimisticResult,
+      graphql.Context? context,
+      Duration? pollInterval,
+      bool? eagerlyFetchResults,
+      bool carryForwardDataOnException = true,
+      bool fetchResults = false})
+      : super(
+            operationName: operationName,
+            fetchPolicy: fetchPolicy,
+            errorPolicy: errorPolicy,
+            cacheRereadPolicy: cacheRereadPolicy,
+            optimisticResult: optimisticResult,
+            context: context,
+            document: documentNodeQuerySystemServerProvider,
+            pollInterval: pollInterval,
+            eagerlyFetchResults: eagerlyFetchResults,
+            carryForwardDataOnException: carryForwardDataOnException,
+            fetchResults: fetchResults,
+            parserFn: _parserFn$Query$SystemServerProvider);
+}
+
+class FetchMoreOptions$Query$SystemServerProvider
+    extends graphql.FetchMoreOptions {
+  FetchMoreOptions$Query$SystemServerProvider(
+      {required graphql.UpdateQuery updateQuery})
+      : super(
+            updateQuery: updateQuery,
+            document: documentNodeQuerySystemServerProvider);
+}
+
+extension ClientExtension$Query$SystemServerProvider on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Query$SystemServerProvider>>
+      query$SystemServerProvider(
+              [Options$Query$SystemServerProvider? options]) async =>
+          await this.query(options ?? Options$Query$SystemServerProvider());
+  graphql.ObservableQuery<Query$SystemServerProvider>
+      watchQuery$SystemServerProvider(
+              [WatchOptions$Query$SystemServerProvider? options]) =>
+          this.watchQuery(options ?? WatchOptions$Query$SystemServerProvider());
+  void writeQuery$SystemServerProvider(
+          {required Query$SystemServerProvider data, bool broadcast = true}) =>
+      this.writeQuery(
+          graphql.Request(
+              operation: graphql.Operation(
+                  document: documentNodeQuerySystemServerProvider)),
+          data: data.toJson(),
+          broadcast: broadcast);
+  Query$SystemServerProvider? readQuery$SystemServerProvider(
+      {bool optimistic = true}) {
+    final result = this.readQuery(
+        graphql.Request(
+            operation: graphql.Operation(
+                document: documentNodeQuerySystemServerProvider)),
+        optimistic: optimistic);
+    return result == null ? null : Query$SystemServerProvider.fromJson(result);
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$SystemServerProvider$system {
+  Query$SystemServerProvider$system(
+      {required this.provider, required this.$__typename});
+
+  @override
+  factory Query$SystemServerProvider$system.fromJson(
+          Map<String, dynamic> json) =>
+      _$Query$SystemServerProvider$systemFromJson(json);
+
+  final Query$SystemServerProvider$system$provider provider;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() =>
+      _$Query$SystemServerProvider$systemToJson(this);
+  int get hashCode {
+    final l$provider = provider;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$provider, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$SystemServerProvider$system) ||
+        runtimeType != other.runtimeType) return false;
+    final l$provider = provider;
+    final lOther$provider = other.provider;
+    if (l$provider != lOther$provider) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$SystemServerProvider$system
+    on Query$SystemServerProvider$system {
+  CopyWith$Query$SystemServerProvider$system<Query$SystemServerProvider$system>
+      get copyWith =>
+          CopyWith$Query$SystemServerProvider$system(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemServerProvider$system<TRes> {
+  factory CopyWith$Query$SystemServerProvider$system(
+          Query$SystemServerProvider$system instance,
+          TRes Function(Query$SystemServerProvider$system) then) =
+      _CopyWithImpl$Query$SystemServerProvider$system;
+
+  factory CopyWith$Query$SystemServerProvider$system.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemServerProvider$system;
+
+  TRes call(
+      {Query$SystemServerProvider$system$provider? provider,
+      String? $__typename});
+  CopyWith$Query$SystemServerProvider$system$provider<TRes> get provider;
+}
+
+class _CopyWithImpl$Query$SystemServerProvider$system<TRes>
+    implements CopyWith$Query$SystemServerProvider$system<TRes> {
+  _CopyWithImpl$Query$SystemServerProvider$system(this._instance, this._then);
+
+  final Query$SystemServerProvider$system _instance;
+
+  final TRes Function(Query$SystemServerProvider$system) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? provider = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$SystemServerProvider$system(
+          provider: provider == _undefined || provider == null
+              ? _instance.provider
+              : (provider as Query$SystemServerProvider$system$provider),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$SystemServerProvider$system$provider<TRes> get provider {
+    final local$provider = _instance.provider;
+    return CopyWith$Query$SystemServerProvider$system$provider(
+        local$provider, (e) => call(provider: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$SystemServerProvider$system<TRes>
+    implements CopyWith$Query$SystemServerProvider$system<TRes> {
+  _CopyWithStubImpl$Query$SystemServerProvider$system(this._res);
+
+  TRes _res;
+
+  call(
+          {Query$SystemServerProvider$system$provider? provider,
+          String? $__typename}) =>
+      _res;
+  CopyWith$Query$SystemServerProvider$system$provider<TRes> get provider =>
+      CopyWith$Query$SystemServerProvider$system$provider.stub(_res);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$SystemServerProvider$system$provider {
+  Query$SystemServerProvider$system$provider(
+      {required this.provider, required this.$__typename});
+
+  @override
+  factory Query$SystemServerProvider$system$provider.fromJson(
+          Map<String, dynamic> json) =>
+      _$Query$SystemServerProvider$system$providerFromJson(json);
+
+  @JsonKey(unknownEnumValue: Enum$ServerProvider.$unknown)
+  final Enum$ServerProvider provider;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() =>
+      _$Query$SystemServerProvider$system$providerToJson(this);
+  int get hashCode {
+    final l$provider = provider;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$provider, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$SystemServerProvider$system$provider) ||
+        runtimeType != other.runtimeType) return false;
+    final l$provider = provider;
+    final lOther$provider = other.provider;
+    if (l$provider != lOther$provider) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$SystemServerProvider$system$provider
+    on Query$SystemServerProvider$system$provider {
+  CopyWith$Query$SystemServerProvider$system$provider<
+          Query$SystemServerProvider$system$provider>
+      get copyWith =>
+          CopyWith$Query$SystemServerProvider$system$provider(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemServerProvider$system$provider<TRes> {
+  factory CopyWith$Query$SystemServerProvider$system$provider(
+          Query$SystemServerProvider$system$provider instance,
+          TRes Function(Query$SystemServerProvider$system$provider) then) =
+      _CopyWithImpl$Query$SystemServerProvider$system$provider;
+
+  factory CopyWith$Query$SystemServerProvider$system$provider.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemServerProvider$system$provider;
+
+  TRes call({Enum$ServerProvider? provider, String? $__typename});
+}
+
+class _CopyWithImpl$Query$SystemServerProvider$system$provider<TRes>
+    implements CopyWith$Query$SystemServerProvider$system$provider<TRes> {
+  _CopyWithImpl$Query$SystemServerProvider$system$provider(
+      this._instance, this._then);
+
+  final Query$SystemServerProvider$system$provider _instance;
+
+  final TRes Function(Query$SystemServerProvider$system$provider) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? provider = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$SystemServerProvider$system$provider(
+          provider: provider == _undefined || provider == null
+              ? _instance.provider
+              : (provider as Enum$ServerProvider),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$SystemServerProvider$system$provider<TRes>
+    implements CopyWith$Query$SystemServerProvider$system$provider<TRes> {
+  _CopyWithStubImpl$Query$SystemServerProvider$system$provider(this._res);
+
+  TRes _res;
+
+  call({Enum$ServerProvider? provider, String? $__typename}) => _res;
 }
 
 @JsonSerializable(explicitToJson: true)

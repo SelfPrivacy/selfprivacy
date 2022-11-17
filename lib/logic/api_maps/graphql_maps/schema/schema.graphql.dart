@@ -693,6 +693,8 @@ enum Enum$DnsProvider {
 enum Enum$ServerProvider {
   @JsonValue('HETZNER')
   HETZNER,
+  @JsonValue('DIGITALOCEAN')
+  DIGITALOCEAN,
   $unknown
 }
 

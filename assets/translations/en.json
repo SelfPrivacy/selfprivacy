@@ -300,6 +300,7 @@
         "checks": "Checks have been completed \n{} out of {}"
     },
     "recovering": {
+        "generic_error": "Operation failed, please try again.",
         "recovery_main_header": "Connect to an existing server",
         "domain_recovery_description": "Enter a server domain you want to get access for:",
         "domain_recover_placeholder": "Your domain",
@@ -319,9 +320,9 @@
         "fallback_select_provider_console": "Access to the server console of my prodiver.",
         "authorization_failed": "Couldn't log in with this key",
         "fallback_select_provider_console_hint": "For example: Hetzner.",
-        "hetzner_connected": "Connect to Hetzner",
-        "hetzner_connected_description": "Communication established. Enter Hetzner token with access to {}:",
-        "hetzner_connected_placeholder": "Hetzner token",
+        "server_provider_connected": "Connect to your Server Provider",
+        "server_provider_connected_description": "Communication established. Enter you token with access to {}:",
+        "server_provider_connected_placeholder": "Server Provider token",
         "confirm_server": "Confirm server",
         "confirm_server_description": "Found your server! Confirm it is the right one:",
         "confirm_server_accept": "Yes! That's it",

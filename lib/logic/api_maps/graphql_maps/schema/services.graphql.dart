@@ -4,6 +4,7 @@ import 'package:graphql/client.dart' as graphql;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
+import 'server_api.graphql.dart';
 part 'services.graphql.g.dart';
 
 @JsonSerializable(explicitToJson: true)

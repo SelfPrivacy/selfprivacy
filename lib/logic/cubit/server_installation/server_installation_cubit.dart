@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
@@ -478,6 +479,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         token,
         dataState.recoveryCapabilities,
       );
+      final ServerProvider provider = await ServerApi(
+        customToken: token,
+        isWithToken: true,
+      ).getServerProviderType();
+      if (provider == ServerProvider.unknown) {
+        getIt<NavigationService>()
+            .showSnackBar('recovering.generic_error'.tr());
+        return;
+      }
+      setServerProviderType(provider);
       await repository.saveServerDetails(serverDetails);
       emit(
         dataState.copyWith(

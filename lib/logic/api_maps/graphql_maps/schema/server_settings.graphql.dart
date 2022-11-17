@@ -3,7 +3,7 @@ import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:json_annotation/json_annotation.dart';
 import 'schema.graphql.dart';
-import 'services.graphql.dart';
+import 'server_api.graphql.dart';
 part 'server_settings.graphql.g.dart';
 
 @JsonSerializable(explicitToJson: true)

@@ -480,7 +480,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         dataState.recoveryCapabilities,
       );
       final ServerProvider provider = await ServerApi(
-        customToken: token,
+        customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getServerProviderType();
       if (provider == ServerProvider.unknown) {

@@ -181,48 +181,44 @@ class InitializingPage extends StatelessWidget {
       BlocProvider(
         create: (final context) => DnsProviderFormCubit(initializingCubit),
         child: Builder(
-          builder: (final context) {
-            final formCubitState = context.watch<DnsProviderFormCubit>().state;
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  'assets/images/logos/cloudflare.png',
-                  width: 150,
+          builder: (final context) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                'assets/images/logos/cloudflare.png',
+                width: 150,
+              ),
+              const SizedBox(height: 10),
+              BrandText.h2('initializing.connect_cloudflare'.tr()),
+              const SizedBox(height: 10),
+              BrandText.body2('initializing.manage_domain_dns'.tr()),
+              const Spacer(),
+              CubitFormTextField(
+                formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
+                textAlign: TextAlign.center,
+                scrollPadding: const EdgeInsets.only(bottom: 70),
+                decoration: InputDecoration(
+                  hintText: 'initializing.cloudflare_api_token'.tr(),
                 ),
-                const SizedBox(height: 10),
-                BrandText.h2('initializing.connect_cloudflare'.tr()),
-                const SizedBox(height: 10),
-                BrandText.body2('initializing.manage_domain_dns'.tr()),
-                const Spacer(),
-                CubitFormTextField(
-                  formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
-                  textAlign: TextAlign.center,
-                  scrollPadding: const EdgeInsets.only(bottom: 70),
-                  decoration: InputDecoration(
-                    hintText: 'initializing.cloudflare_api_token'.tr(),
+              ),
+              const Spacer(),
+              BrandButton.rised(
+                onPressed: () =>
+                    context.read<DnsProviderFormCubit>().trySubmit(),
+                text: 'basis.connect'.tr(),
+              ),
+              const SizedBox(height: 10),
+              BrandButton.text(
+                onPressed: () => _showModal(
+                  context,
+                  const _HowTo(
+                    fileName: 'how_cloudflare',
                   ),
                 ),
-                const Spacer(),
-                BrandButton.rised(
-                  onPressed: () =>
-                      context.read<DnsProviderFormCubit>().trySubmit(),
-                  text: 'basis.connect'.tr(),
-                ),
-                const SizedBox(height: 10),
-                BrandButton.text(
-                  onPressed: () => _showModal(
-                    context,
-                    const _HowTo(
-                      fileName: 'how_cloudflare',
-                    ),
-                  ),
-                  title: 'initializing.how'.tr(),
-                ),
-              ],
-            );
-          },
+                title: 'initializing.how'.tr(),
+              ),
+            ],
+          ),
         ),
       );
 

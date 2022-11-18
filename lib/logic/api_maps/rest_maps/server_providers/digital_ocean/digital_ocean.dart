@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -320,6 +321,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     final String formattedHostname = getHostnameFromDomain(domainName);
     const String infectBranch = 'providers/digital-ocean';
+    final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
 
     final String userdataString =
         "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";

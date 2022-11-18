@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
@@ -355,7 +356,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final String apiToken = StringGenerators.apiToken();
     final String hostname = getHostnameFromDomain(domainName);
     const String infectBranch = 'providers/hetzner';
-
+    final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
     final String base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 

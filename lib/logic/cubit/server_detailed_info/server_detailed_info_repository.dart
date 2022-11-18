@@ -1,38 +1,19 @@
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 
 class ServerDetailsRepository {
   ServerApi server = ServerApi();
-  ServerProviderApiFactory? serverProviderApiFactory;
-
-  void _buildServerProviderFactory() {
-    final ServerProvider? providerType = getIt<ApiConfigModel>().serverProvider;
-    final String? location = getIt<ApiConfigModel>().serverLocation;
-    serverProviderApiFactory = ApiFactoryCreator.createServerProviderApiFactory(
-      ServerProviderApiFactorySettings(
-        provider: providerType ?? ServerProvider.unknown,
-        location: location,
-      ),
-    );
-  }
 
   Future<ServerDetailsRepositoryDto> load() async {
-    if (serverProviderApiFactory == null) {
-      _buildServerProviderFactory();
-    }
-
+    final serverProviderApi = ApiController.currentServerProviderApiFactory;
     final settings = await server.getSystemSettings();
     final serverId = getIt<ApiConfigModel>().serverDetails!.id;
-    final metadata = await serverProviderApiFactory!
-        .getServerProvider()
-        .getMetadata(serverId);
+    final metadata =
+        await serverProviderApi!.getServerProvider().getMetadata(serverId);
 
     return ServerDetailsRepositoryDto(
       autoUpgradeSettings: settings.autoUpgradeSettings,

@@ -1,11 +1,8 @@
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 
 class MetricsLoadException implements Exception {
@@ -14,22 +11,10 @@ class MetricsLoadException implements Exception {
 }
 
 class MetricsRepository {
-  ServerProviderApiFactory? serverProviderApiFactory;
-
-  void _buildServerProviderFactory() {
-    final ServerProvider? providerType = getIt<ApiConfigModel>().serverProvider;
-    final String? location = getIt<ApiConfigModel>().serverLocation;
-    serverProviderApiFactory = ApiFactoryCreator.createServerProviderApiFactory(
-      ServerProviderApiFactorySettings(
-        provider: providerType ?? ServerProvider.unknown,
-        location: location,
-      ),
-    );
-  }
-
   Future<MetricsLoaded> getMetrics(final Period period) async {
-    if (serverProviderApiFactory == null) {
-      _buildServerProviderFactory();
+    final providerApiFactory = ApiController.currentServerProviderApiFactory;
+    if (providerApiFactory == null) {
+      throw MetricsLoadException('Server Provider data is null');
     }
 
     final DateTime end = DateTime.now();
@@ -49,7 +34,7 @@ class MetricsRepository {
 
     final serverId = getIt<ApiConfigModel>().serverDetails!.id;
     final ServerMetrics? metrics =
-        await serverProviderApiFactory!.getServerProvider().getMetrics(
+        await providerApiFactory.getServerProvider().getMetrics(
               serverId,
               start,
               end,

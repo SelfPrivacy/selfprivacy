@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
@@ -59,8 +59,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void setServerProviderType(final ServerProvider providerType) async {
     await repository.saveServerProviderType(providerType);
-    repository.serverProviderApiFactory =
-        ApiFactoryCreator.createServerProviderApiFactory(
+    ApiController.initServerProviderApiFactory(
       ServerProviderApiFactorySettings(
         provider: providerType,
       ),
@@ -68,18 +67,19 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   ProviderApiTokenValidation serverProviderApiTokenValidation() =>
-      repository.serverProviderApiFactory!
+      ApiController.currentServerProviderApiFactory!
           .getServerProvider()
           .getApiTokenValidation();
 
-  RegExp getDnsProviderApiTokenValidation() => repository.dnsProviderApiFactory!
-      .getDnsProvider()
-      .getApiTokenValidation();
+  RegExp getDnsProviderApiTokenValidation() =>
+      ApiController.currentDnsProviderApiFactory!
+          .getDnsProvider()
+          .getApiTokenValidation();
 
   Future<bool> isServerProviderApiTokenValid(
     final String providerToken,
   ) async =>
-      repository.serverProviderApiFactory!
+      ApiController.currentServerProviderApiFactory!
           .getServerProvider(
             settings: const ServerProviderApiSettings(
               isWithToken: false,
@@ -89,19 +89,30 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   Future<bool> isDnsProviderApiTokenValid(
     final String providerToken,
-  ) async =>
-      repository.dnsProviderApiFactory!
-          .getDnsProvider(
-            settings: const DnsProviderApiSettings(isWithToken: false),
-          )
-          .isApiTokenValid(providerToken);
+  ) async {
+    if (ApiController.currentDnsProviderApiFactory == null) {
+      // No other DNS provider is supported for now,
+      //    so it's safe to hardcode Cloudflare
+      ApiController.initDnsProviderApiFactory(
+        DnsProviderApiFactorySettings(
+          provider: DnsProvider.cloudflare,
+        ),
+      );
+    }
+
+    return ApiController.currentDnsProviderApiFactory!
+        .getDnsProvider(
+          settings: const DnsProviderApiSettings(isWithToken: false),
+        )
+        .isApiTokenValid(providerToken);
+  }
 
   Future<List<ServerProviderLocation>> fetchAvailableLocations() async {
-    if (repository.serverProviderApiFactory == null) {
+    if (ApiController.currentServerProviderApiFactory == null) {
       return [];
     }
 
-    return repository.serverProviderApiFactory!
+    return ApiController.currentServerProviderApiFactory!
         .getServerProvider()
         .getAvailableLocations();
   }
@@ -109,11 +120,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<List<ServerType>> fetchAvailableTypesByLocation(
     final ServerProviderLocation location,
   ) async {
-    if (repository.serverProviderApiFactory == null) {
+    if (ApiController.currentServerProviderApiFactory == null) {
       return [];
     }
 
-    return repository.serverProviderApiFactory!
+    return ApiController.currentServerProviderApiFactory!
         .getServerProvider()
         .getServerTypesByLocation(location: location);
   }
@@ -141,8 +152,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void setServerType(final ServerType serverType) async {
     await repository.saveServerType(serverType);
 
-    repository.serverProviderApiFactory =
-        ApiFactoryCreator.createServerProviderApiFactory(
+    ApiController.initServerProviderApiFactory(
+      ServerProviderApiFactorySettings(
+        provider: getIt<ApiConfigModel>().serverProvider!,
+        location: serverType.location.identifier,
+      ),
+    );
+
+    // All server providers support volumes for now,
+    //   so it's safe to initialize.
+    ApiController.initVolumeProviderApiFactory(
       ServerProviderApiFactorySettings(
         provider: getIt<ApiConfigModel>().serverProvider!,
         location: serverType.location.identifier,
@@ -162,6 +181,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return;
     }
     await repository.saveCloudFlareKey(cloudFlareKey);
+
     emit(
       (state as ServerInstallationNotFinished)
           .copyWith(cloudFlareKey: cloudFlareKey),
@@ -677,7 +697,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void clearAppConfig() {
     closeTimer();
-
+    ApiController.clearProviderApiFactories();
     repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }

@@ -1,4 +1,5 @@
 import 'package:cubit_form/cubit_form.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
@@ -9,8 +10,7 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));
-    final List<String> list = await serverInstallationCubit
-        .repository.dnsProviderApiFactory!
+    final List<String> list = await ApiController.currentDnsProviderApiFactory!
         .getDnsProvider()
         .domainList();
     if (list.isEmpty) {
@@ -31,8 +31,7 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
     emit(Loading(LoadingTypes.saving));
 
-    final String? zoneId = await serverInstallationCubit
-        .repository.dnsProviderApiFactory!
+    final String? zoneId = await ApiController.currentDnsProviderApiFactory!
         .getDnsProvider()
         .getZoneId(domainName);
 

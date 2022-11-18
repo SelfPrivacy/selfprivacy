@@ -206,9 +206,8 @@ class InitializingPage extends StatelessWidget {
                 ),
                 const Spacer(),
                 BrandButton.rised(
-                  onPressed: formCubitState.isSubmitting
-                      ? null
-                      : () => context.read<DnsProviderFormCubit>().trySubmit(),
+                  onPressed: () =>
+                      context.read<DnsProviderFormCubit>().trySubmit(),
                   text: 'basis.connect'.tr(),
                 ),
                 const SizedBox(height: 10),

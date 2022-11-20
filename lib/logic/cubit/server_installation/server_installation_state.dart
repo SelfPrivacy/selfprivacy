@@ -331,7 +331,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
         providerApiToken: providerApiToken!,
-        serverTypeIdentificator: serverTypeIdentificator!,
+        serverTypeIdentificator: serverTypeIdentificator ?? '',
         cloudFlareKey: cloudFlareKey!,
         backblazeCredential: backblazeCredential!,
         serverDomain: serverDomain!,

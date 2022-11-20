@@ -508,8 +508,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
             .showSnackBar('recovering.generic_error'.tr());
         return;
       }
-      setServerProviderType(provider);
       await repository.saveServerDetails(serverDetails);
+      setServerProviderType(provider);
       emit(
         dataState.copyWith(
           serverDetails: serverDetails,
@@ -600,7 +600,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         serverBasicInfo: server,
         isIpValid: server.ip == dataState.serverDetails?.ip4,
         isReverseDnsValid:
-            server.reverseDns == dataState.serverDomain?.domainName,
+            server.reverseDns == dataState.serverDomain?.domainName ||
+                server.reverseDns ==
+                    dataState.serverDomain?.domainName.split('.')[0],
       ),
     );
     return validated.toList();

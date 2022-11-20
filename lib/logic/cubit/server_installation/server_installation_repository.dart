@@ -86,7 +86,7 @@ class ServerInstallationRepository {
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
       return ServerInstallationFinished(
         providerApiToken: providerApiToken!,
-        serverTypeIdentificator: serverTypeIdentificator!,
+        serverTypeIdentificator: serverTypeIdentificator ?? '',
         cloudFlareKey: cloudflareToken!,
         serverDomain: serverDomain!,
         backblazeCredential: backblazeCredential!,

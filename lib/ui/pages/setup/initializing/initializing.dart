@@ -82,6 +82,11 @@ class InitializingPage extends StatelessWidget {
                             activeIndex: cubit.state.porgressBar,
                           ),
                   ),
+                  if (cubit.state.porgressBar ==
+                      ServerSetupProgress.serverProviderFilled.index)
+                    BrandText.h2(
+                      'initializing.choose_location_type'.tr(),
+                    ),
                   _addCard(
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),

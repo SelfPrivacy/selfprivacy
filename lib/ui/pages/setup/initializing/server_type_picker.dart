@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 
 class ServerTypePicker extends StatefulWidget {
   const ServerTypePicker({
@@ -21,7 +22,7 @@ class _ServerTypePickerState extends State<ServerTypePicker> {
   ServerProviderLocation? serverProviderLocation;
   ServerType? serverType;
 
-  void setServerProviderLocation(final ServerProviderLocation location) {
+  void setServerProviderLocation(final ServerProviderLocation? location) {
     setState(() {
       serverProviderLocation = location;
     });
@@ -39,6 +40,9 @@ class _ServerTypePickerState extends State<ServerTypePicker> {
     return SelectTypePage(
       location: serverProviderLocation!,
       serverInstallationCubit: widget.serverInstallationCubit,
+      backToLocationPickingCallback: () {
+        setServerProviderLocation(null);
+      },
     );
   }
 }
@@ -102,6 +106,7 @@ class SelectLocationPage extends StatelessWidget {
 
 class SelectTypePage extends StatelessWidget {
   const SelectTypePage({
+    required this.backToLocationPickingCallback,
     required this.location,
     required this.serverInstallationCubit,
     super.key,
@@ -109,6 +114,7 @@ class SelectTypePage extends StatelessWidget {
 
   final ServerProviderLocation location;
   final ServerInstallationCubit serverInstallationCubit;
+  final Function backToLocationPickingCallback;
 
   @override
   Widget build(final BuildContext context) => FutureBuilder(
@@ -119,7 +125,20 @@ class SelectTypePage extends StatelessWidget {
         ) {
           if (snapshot.hasData) {
             if ((snapshot.data as List<ServerType>).isEmpty) {
-              return Text('initializing.no_server_types_found'.tr());
+              return Column(
+                children: [
+                  Text(
+                    'initializing.no_server_types_found'.tr(),
+                  ),
+                  const SizedBox(height: 10),
+                  BrandButton.rised(
+                    onPressed: () {
+                      backToLocationPickingCallback();
+                    },
+                    text: 'initializing.back_to_locations'.tr(),
+                  ),
+                ],
+              );
             }
             return ListView(
               padding: paddingH15V0,

@@ -4,5 +4,5 @@ class StagingOptions {
   /// Whether we request for staging temprorary certificates.
   /// Hardcode to 'true' in the middle of testing to not
   /// get your domain banned but constant certificate renewal
-  static bool get stagingAcme => true;
+  static bool get stagingAcme => false;
 }

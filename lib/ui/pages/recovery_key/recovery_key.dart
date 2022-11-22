@@ -22,6 +22,12 @@ class RecoveryKey extends StatefulWidget {
 
 class _RecoveryKeyState extends State<RecoveryKey> {
   @override
+  void initState() {
+    super.initState();
+    context.read<RecoveryKeyCubit>().load();
+  }
+
+  @override
   Widget build(final BuildContext context) {
     final RecoveryKeyState keyStatus = context.watch<RecoveryKeyCubit>().state;
 
@@ -50,12 +56,17 @@ class _RecoveryKeyState extends State<RecoveryKey> {
         break;
     }
 
-    return BrandHeroScreen(
-      heroTitle: 'recovery_key.key_main_header'.tr(),
-      heroSubtitle: subtitle,
-      hasBackButton: true,
-      hasFlashButton: false,
-      children: widgets,
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<RecoveryKeyCubit>().load();
+      },
+      child: BrandHeroScreen(
+        heroTitle: 'recovery_key.key_main_header'.tr(),
+        heroSubtitle: subtitle,
+        hasBackButton: true,
+        hasFlashButton: false,
+        children: widgets,
+      ),
     );
   }
 }

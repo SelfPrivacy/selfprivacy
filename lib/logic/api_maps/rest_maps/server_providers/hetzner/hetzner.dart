@@ -2,28 +2,43 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/metrics.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
+import 'package:selfprivacy/logic/models/server_metadata.dart';
+import 'package:selfprivacy/logic/models/server_provider_location.dart';
+import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
-  HetznerApi({this.hasLogger = false, this.isWithToken = true});
+  HetznerApi({
+    this.region,
+    this.hasLogger = false,
+    this.isWithToken = true,
+  });
   @override
   bool hasLogger;
   @override
   bool isWithToken;
 
+  final String? region;
+
   @override
   BaseOptions get options {
     final BaseOptions options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
-      final String? token = getIt<ApiConfigModel>().hetznerKey;
+      final String? token = getIt<ApiConfigModel>().serverProviderKey;
       assert(token != null);
       options.headers = {'Authorization': 'Bearer $token'};
     }
@@ -36,7 +51,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  String rootAddress = 'https://api.hetzner.cloud/v1';
+  String get rootAddress => 'https://api.hetzner.cloud/v1';
+
+  @override
+  String get infectProviderName => 'hetzner';
+
+  @override
+  String get displayProviderName => 'Hetzner';
 
   @override
   Future<bool> isApiTokenValid(final String token) async {
@@ -71,19 +92,22 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  RegExp getApiTokenValidation() =>
-      RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
+  ProviderApiTokenValidation getApiTokenValidation() =>
+      ProviderApiTokenValidation(
+        regexp: RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]'),
+        length: 64,
+      );
 
   @override
-  Future<double?> getPricePerGb() async {
+  Future<Price?> getPricePerGb() async {
     double? price;
 
-    final Response dbGetResponse;
+    final Response pricingResponse;
     final Dio client = await getClient();
     try {
-      dbGetResponse = await client.get('/pricing');
+      pricingResponse = await client.get('/pricing');
 
-      final volume = dbGetResponse.data['pricing']['volume'];
+      final volume = pricingResponse.data['pricing']['volume'];
       final volumePrice = volume['price_per_gb_month']['gross'];
       price = double.parse(volumePrice);
     } catch (e) {
@@ -92,38 +116,43 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       client.close();
     }
 
-    return price;
+    return price == null
+        ? null
+        : Price(
+            value: price,
+            currency: 'EUR',
+          );
   }
 
   @override
   Future<ServerVolume?> createVolume() async {
     ServerVolume? volume;
 
-    final Response dbCreateResponse;
+    final Response createVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbCreateResponse = await client.post(
+      createVolumeResponse = await client.post(
         '/volumes',
         data: {
           'size': 10,
-          'name': StringGenerators.dbStorageName(),
+          'name': StringGenerators.storageName(),
           'labels': {'labelkey': 'value'},
-          'location': 'fsn1',
+          'location': region,
           'automount': false,
           'format': 'ext4'
         },
       );
-      final dbId = dbCreateResponse.data['volume']['id'];
-      final dbSize = dbCreateResponse.data['volume']['size'];
-      final dbServer = dbCreateResponse.data['volume']['server'];
-      final dbName = dbCreateResponse.data['volume']['name'];
-      final dbDevice = dbCreateResponse.data['volume']['linux_device'];
+      final volumeId = createVolumeResponse.data['volume']['id'];
+      final volumeSize = createVolumeResponse.data['volume']['size'];
+      final volumeServer = createVolumeResponse.data['volume']['server'];
+      final volumeName = createVolumeResponse.data['volume']['name'];
+      final volumeDevice = createVolumeResponse.data['volume']['linux_device'];
       volume = ServerVolume(
-        id: dbId,
-        name: dbName,
-        sizeByte: dbSize,
-        serverId: dbServer,
-        linuxDevice: dbDevice,
+        id: volumeId,
+        name: volumeName,
+        sizeByte: volumeSize,
+        serverId: volumeServer,
+        linuxDevice: volumeDevice,
       );
     } catch (e) {
       print(e);
@@ -138,28 +167,28 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   Future<List<ServerVolume>> getVolumes({final String? status}) async {
     final List<ServerVolume> volumes = [];
 
-    final Response dbGetResponse;
+    final Response getVolumesResonse;
     final Dio client = await getClient();
     try {
-      dbGetResponse = await client.get(
+      getVolumesResonse = await client.get(
         '/volumes',
         queryParameters: {
           'status': status,
         },
       );
-      final List<dynamic> rawVolumes = dbGetResponse.data['volumes'];
+      final List<dynamic> rawVolumes = getVolumesResonse.data['volumes'];
       for (final rawVolume in rawVolumes) {
-        final int dbId = rawVolume['id'];
-        final int dbSize = rawVolume['size'] * 1024 * 1024 * 1024;
-        final dbServer = rawVolume['server'];
-        final String dbName = rawVolume['name'];
-        final dbDevice = rawVolume['linux_device'];
+        final int volumeId = rawVolume['id'];
+        final int volumeSize = rawVolume['size'] * 1024 * 1024 * 1024;
+        final volumeServer = rawVolume['server'];
+        final String volumeName = rawVolume['name'];
+        final volumeDevice = rawVolume['linux_device'];
         final volume = ServerVolume(
-          id: dbId,
-          name: dbName,
-          sizeByte: dbSize,
-          serverId: dbServer,
-          linuxDevice: dbDevice,
+          id: volumeId,
+          name: volumeName,
+          sizeByte: volumeSize,
+          serverId: volumeServer,
+          linuxDevice: volumeDevice,
         );
         volumes.add(volume);
       }
@@ -172,25 +201,26 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return volumes;
   }
 
-  @override
-  Future<ServerVolume?> getVolume(final int id) async {
+  Future<ServerVolume?> getVolume(
+    final String volumeId,
+  ) async {
     ServerVolume? volume;
 
-    final Response dbGetResponse;
+    final Response getVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbGetResponse = await client.get('/volumes/$id');
-      final int dbId = dbGetResponse.data['volume']['id'];
-      final int dbSize = dbGetResponse.data['volume']['size'];
-      final int dbServer = dbGetResponse.data['volume']['server'];
-      final String dbName = dbGetResponse.data['volume']['name'];
-      final dbDevice = dbGetResponse.data['volume']['linux_device'];
+      getVolumeResponse = await client.get('/volumes/$volumeId');
+      final int responseVolumeId = getVolumeResponse.data['volume']['id'];
+      final int volumeSize = getVolumeResponse.data['volume']['size'];
+      final int volumeServer = getVolumeResponse.data['volume']['server'];
+      final String volumeName = getVolumeResponse.data['volume']['name'];
+      final volumeDevice = getVolumeResponse.data['volume']['linux_device'];
       volume = ServerVolume(
-        id: dbId,
-        name: dbName,
-        sizeByte: dbSize,
-        serverId: dbServer,
-        linuxDevice: dbDevice,
+        id: responseVolumeId,
+        name: volumeName,
+        sizeByte: volumeSize,
+        serverId: volumeServer,
+        linuxDevice: volumeDevice,
       );
     } catch (e) {
       print(e);
@@ -202,10 +232,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<void> deleteVolume(final int id) async {
+  Future<void> deleteVolume(final ServerVolume volume) async {
     final Dio client = await getClient();
     try {
-      await client.delete('/volumes/$id');
+      await client.delete('/volumes/${volume.id}');
     } catch (e) {
       print(e);
     } finally {
@@ -214,20 +244,24 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> attachVolume(final int volumeId, final int serverId) async {
+  Future<bool> attachVolume(
+    final ServerVolume volume,
+    final int serverId,
+  ) async {
     bool success = false;
 
-    final Response dbPostResponse;
+    final Response attachVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post(
-        '/volumes/$volumeId/actions/attach',
+      attachVolumeResponse = await client.post(
+        '/volumes/${volume.id}/actions/attach',
         data: {
           'automount': true,
           'server': serverId,
         },
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          attachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -238,14 +272,17 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> detachVolume(final int volumeId) async {
+  Future<bool> detachVolume(final ServerVolume volume) async {
     bool success = false;
 
-    final Response dbPostResponse;
+    final Response detachVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post('/volumes/$volumeId/actions/detach');
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      detachVolumeResponse = await client.post(
+        '/volumes/${volume.id}/actions/detach',
+      );
+      success =
+          detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -256,19 +293,23 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> resizeVolume(final int volumeId, final int sizeGb) async {
+  Future<bool> resizeVolume(
+    final ServerVolume volume,
+    final DiskSize size,
+  ) async {
     bool success = false;
 
-    final Response dbPostResponse;
+    final Response resizeVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post(
-        '/volumes/$volumeId/actions/resize',
+      resizeVolumeResponse = await client.post(
+        '/volumes/${volume.id}/actions/resize',
         data: {
-          'size': sizeGb,
+          'size': size.gibibyte,
         },
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -283,6 +324,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
+    required final String serverType,
   }) async {
     ServerHostingDetails? details;
 
@@ -295,7 +337,8 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       dnsApiToken: dnsApiToken,
       rootUser: rootUser,
       domainName: domainName,
-      dataBase: newVolume,
+      volume: newVolume,
+      serverType: serverType,
     );
 
     return details;
@@ -305,48 +348,43 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
-    required final ServerVolume dataBase,
+    required final ServerVolume volume,
+    required final String serverType,
   }) async {
     final Dio client = await getClient();
 
     final String dbPassword = StringGenerators.dbPassword();
-    final int dbId = dataBase.id;
+    final int volumeId = volume.id;
 
     final String apiToken = StringGenerators.apiToken();
-
     final String hostname = getHostnameFromDomain(domainName);
-
+    const String infectBranch = 'providers/hetzner';
+    final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
     final String base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
-    print('hostname: $hostname');
-
-    /// add ssh key when you need it: e.g. "ssh_keys":["kherel"]
-    /// check the branch name, it could be "development" or "master".
-    ///
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | PROVIDER=hetzner NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
-    print(userdataString);
-
-    final Map<String, Object> data = {
-      'name': hostname,
-      'server_type': 'cx11',
-      'start_after_create': false,
-      'image': 'ubuntu-20.04',
-      'volumes': [dbId],
-      'networks': [],
-      'user_data': userdataString,
-      'labels': {},
-      'automount': true,
-      'location': 'fsn1'
-    };
-    print('Decoded data: $data');
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
 
     ServerHostingDetails? serverDetails;
     DioError? hetznerError;
     bool success = false;
 
     try {
+      final Map<String, Object> data = {
+        'name': hostname,
+        'server_type': serverType,
+        'start_after_create': false,
+        'image': 'ubuntu-20.04',
+        'volumes': [volumeId],
+        'networks': [],
+        'user_data': userdataString,
+        'labels': {},
+        'automount': true,
+        'location': region!,
+      };
+      print('Decoded data: $data');
+
       final Response serverCreateResponse = await client.post(
         '/servers',
         data: data,
@@ -356,7 +394,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         id: serverCreateResponse.data['server']['id'],
         ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
         createTime: DateTime.now(),
-        volume: dataBase,
+        volume: volume,
         apiToken: apiToken,
         provider: ServerProvider.hetzner,
       );
@@ -372,7 +410,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     if (!success) {
       await Future.delayed(const Duration(seconds: 10));
-      await deleteVolume(dbId);
+      await deleteVolume(volume);
     }
 
     if (hetznerError != null) {
@@ -459,14 +497,12 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return server.copyWith(startTime: DateTime.now());
   }
 
-  Future<Map<String, dynamic>> getMetrics(
+  Future<Map<String, dynamic>> requestRawMetrics(
+    final int serverId,
     final DateTime start,
     final DateTime end,
     final String type,
   ) async {
-    final ServerHostingDetails? hetznerServer =
-        getIt<ApiConfigModel>().serverDetails;
-
     Map<String, dynamic> metrics = {};
     final Dio client = await getClient();
     try {
@@ -476,10 +512,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         'type': type
       };
       final Response res = await client.get(
-        '/servers/${hetznerServer!.id}/metrics',
+        '/servers/$serverId/metrics',
         queryParameters: queryParameters,
       );
-      metrics = res.data;
+      metrics = res.data['metrics'];
     } catch (e) {
       print(e);
     } finally {
@@ -489,14 +525,115 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return metrics;
   }
 
-  Future<HetznerServerInfo> getInfo() async {
-    final ServerHostingDetails? hetznerServer =
-        getIt<ApiConfigModel>().serverDetails;
-    final Dio client = await getClient();
-    final Response response = await client.get('/servers/${hetznerServer!.id}');
-    close(client);
+  List<TimeSeriesData> serializeTimeSeries(
+    final Map<String, dynamic> json,
+    final String type,
+  ) {
+    final List list = json['time_series'][type]['values'];
+    return list
+        .map((final el) => TimeSeriesData(el[0], double.parse(el[1])))
+        .toList();
+  }
 
-    return HetznerServerInfo.fromJson(response.data!['server']);
+  @override
+  Future<ServerMetrics?> getMetrics(
+    final int serverId,
+    final DateTime start,
+    final DateTime end,
+  ) async {
+    ServerMetrics? metrics;
+
+    final Map<String, dynamic> rawCpuMetrics = await requestRawMetrics(
+      serverId,
+      start,
+      end,
+      'cpu',
+    );
+    final Map<String, dynamic> rawNetworkMetrics = await requestRawMetrics(
+      serverId,
+      start,
+      end,
+      'network',
+    );
+
+    if (rawNetworkMetrics.isEmpty || rawCpuMetrics.isEmpty) {
+      return metrics;
+    }
+
+    metrics = ServerMetrics(
+      cpu: serializeTimeSeries(
+        rawCpuMetrics,
+        'cpu',
+      ),
+      bandwidthIn: serializeTimeSeries(
+        rawNetworkMetrics,
+        'network.0.bandwidth.in',
+      ),
+      bandwidthOut: serializeTimeSeries(
+        rawNetworkMetrics,
+        'network.0.bandwidth.out',
+      ),
+      end: end,
+      start: start,
+      stepsInSecond: rawCpuMetrics['step'],
+    );
+
+    return metrics;
+  }
+
+  @override
+  Future<List<ServerMetadataEntity>> getMetadata(final int serverId) async {
+    List<ServerMetadataEntity> metadata = [];
+
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get('/servers/$serverId');
+      final hetznerInfo = HetznerServerInfo.fromJson(response.data!['server']);
+      metadata = [
+        ServerMetadataEntity(
+          type: MetadataType.id,
+          name: 'server.server_id'.tr(),
+          value: hetznerInfo.id.toString(),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.status,
+          name: 'server.status'.tr(),
+          value: hetznerInfo.status.toString().split('.')[1].capitalize(),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.cpu,
+          name: 'server.cpu'.tr(),
+          value: 'server.core_count'.plural(hetznerInfo.serverType.cores),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.ram,
+          name: 'server.ram'.tr(),
+          value: '${hetznerInfo.serverType.memory.toString()} GB',
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.cost,
+          name: 'server.monthly_cost'.tr(),
+          value: hetznerInfo.serverType.prices[1].monthly.toStringAsFixed(2),
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.location,
+          name: 'server.location'.tr(),
+          value:
+              '${hetznerInfo.location.city}, ${hetznerInfo.location.country}',
+        ),
+        ServerMetadataEntity(
+          type: MetadataType.other,
+          name: 'server.provider'.tr(),
+          value: displayProviderName,
+        ),
+      ];
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return metadata;
   }
 
   @override
@@ -521,7 +658,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
               ip: server.publicNet.ipv4.ip,
               reverseDns: server.publicNet.ipv4.reverseDns,
               created: server.created,
-              volumeId: server.volumes.isNotEmpty ? server.volumes[0] : 0,
             ),
           )
           .toList();
@@ -533,6 +669,96 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     print(servers);
     return servers;
+  }
+
+  String? getEmojiFlag(final String query) {
+    String? emoji;
+
+    switch (query.toLowerCase()) {
+      case 'de':
+        emoji = '🇩🇪';
+        break;
+
+      case 'fi':
+        emoji = '🇫🇮';
+        break;
+
+      case 'us':
+        emoji = '🇺🇸';
+        break;
+    }
+
+    return emoji;
+  }
+
+  @override
+  Future<List<ServerProviderLocation>> getAvailableLocations() async {
+    List<ServerProviderLocation> locations = [];
+
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get(
+        '/locations',
+      );
+
+      locations = response.data!['locations']
+          .map<ServerProviderLocation>(
+            (final location) => ServerProviderLocation(
+              title: location['city'],
+              description: location['description'],
+              flag: getEmojiFlag(location['country']),
+              identifier: location['name'],
+            ),
+          )
+          .toList();
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return locations;
+  }
+
+  @override
+  Future<List<ServerType>> getServerTypesByLocation({
+    required final ServerProviderLocation location,
+  }) async {
+    final List<ServerType> types = [];
+
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get(
+        '/server_types',
+      );
+      final rawTypes = response.data!['server_types'];
+      for (final rawType in rawTypes) {
+        for (final rawPrice in rawType['prices']) {
+          if (rawPrice['location'].toString() == location.identifier) {
+            types.add(
+              ServerType(
+                title: rawType['description'],
+                identifier: rawType['name'],
+                ram: rawType['memory'],
+                cores: rawType['cores'],
+                disk: DiskSize(byte: rawType['disk'] * 1024 * 1024 * 1024),
+                price: Price(
+                  value: double.parse(rawPrice['price_monthly']['gross']),
+                  currency: 'EUR',
+                ),
+                location: location,
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
+    }
+
+    return types;
   }
 
   @override

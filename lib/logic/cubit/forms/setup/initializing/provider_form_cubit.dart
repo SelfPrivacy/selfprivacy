@@ -3,21 +3,16 @@ import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class ProviderFormCubit extends FormCubit {
   ProviderFormCubit(this.serverInstallationCubit) {
-    final RegExp regExp =
-        serverInstallationCubit.getServerProviderApiTokenValidation();
+    //final int tokenLength =
+    //    serverInstallationCubit.serverProviderApiTokenValidation().length;
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
-        ValidationModel<String>(
-          regExp.hasMatch,
-          'validations.invalid_format'.tr(),
-        ),
-        LengthStringNotEqualValidation(64)
+        //LengthStringNotEqualValidation(tokenLength),
       ],
     );
 
@@ -26,7 +21,7 @@ class ProviderFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    serverInstallationCubit.setHetznerKey(apiKey.state.value);
+    serverInstallationCubit.setServerProviderKey(apiKey.state.value);
   }
 
   final ServerInstallationCubit serverInstallationCubit;
@@ -45,7 +40,7 @@ class ProviderFormCubit extends FormCubit {
     }
 
     if (!isKeyValid) {
-      apiKey.setError('initializing.hetzner_bad_key_error'.tr());
+      apiKey.setError('initializing.provider_bad_key_error'.tr());
       return false;
     }
 

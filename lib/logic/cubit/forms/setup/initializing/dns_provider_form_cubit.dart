@@ -7,15 +7,10 @@ import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class DnsProviderFormCubit extends FormCubit {
   DnsProviderFormCubit(this.initializingCubit) {
-    final RegExp regExp = initializingCubit.getDnsProviderApiTokenValidation();
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
-        ValidationModel<String>(
-          regExp.hasMatch,
-          'validations.invalid_format'.tr(),
-        ),
         LengthStringNotEqualValidation(40)
       ],
     );

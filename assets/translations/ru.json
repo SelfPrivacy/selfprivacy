@@ -31,7 +31,8 @@
         "remove": "Удалить",
         "apply": "Применить",
         "done": "Готово",
-        "continue": "Продолжить"
+        "continue": "Продолжить",
+        "alert": "Уведомление"
     },
     "more_page": {
         "configuration_wizard": "Мастер настройки",
@@ -109,6 +110,7 @@
         "disk": "Диск",
         "monthly_cost": "Ежемесячная стоимость",
         "location": "Размещение",
+        "provider": "Провайдер",
         "core_count": {
             "one": "{} ядро",
             "two": "{} ядра",
@@ -269,7 +271,11 @@
         "connect_to_server": "Подключите сервер",
         "place_where_data": "Здесь будут жить ваши данные и SelfPrivacy-сервисы:",
         "how": "Как получить API Token",
-        "hetzner_bad_key_error": "Hetzner API ключ неверен",
+        "provider_bad_key_error": "API ключ провайдера неверен",
+        "choose_location_type": "Выберите локацию и тип вашего сервера:",
+        "back_to_locations": "Назад к доступным локациям!",
+        "no_locations_found": "Не найдено локаций. Убедитесь, что ваш аккаунт доступен.",
+        "no_server_types_found": "Не удалось получить список серверов. Убедитесь, что ваш аккаунт доступен и попытайтесь сменить локацию сервера.",
         "cloudflare_bad_key_error": "Cloudflare API ключ неверен",
         "backblaze_bad_key_error": "Информация о Backblaze хранилище неверна",
         "connect_cloudflare": "Подключите CloudFlare",
@@ -295,6 +301,7 @@
         "checks": "Проверок выполнено: \n{} / {}"
     },
     "recovering": {
+        "generic_error": "Ошибка проведения операции, попробуйте ещё раз.",
         "recovery_main_header": "Подключиться к существующему серверу",
         "domain_recovery_description": "Введите домен, по которому вы хотите получить доступ к серверу:",
         "domain_recover_placeholder": "Домен",

@@ -101,10 +101,10 @@ class StringGenerators {
         hasSymbols: true,
       );
 
-  static StringGeneratorFunction dbStorageName = () => getRandomString(
+  static StringGeneratorFunction storageName = () => getRandomString(
         6,
         hasLowercaseLetters: true,
-        hasUppercaseLetters: true,
+        hasUppercaseLetters: false,
         hasNumbers: true,
       );
 

@@ -4,8 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/provider_api_settings.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -13,6 +17,8 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
+import 'package:selfprivacy/logic/models/server_provider_location.dart';
+import 'package:selfprivacy/logic/models/server_type.dart';
 
 export 'package:provider/provider.dart';
 
@@ -51,40 +57,85 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  RegExp getServerProviderApiTokenValidation() =>
-      repository.serverProviderApiFactory!
+  void setServerProviderType(final ServerProvider providerType) async {
+    await repository.saveServerProviderType(providerType);
+    ApiController.initServerProviderApiFactory(
+      ServerProviderApiFactorySettings(
+        provider: providerType,
+      ),
+    );
+  }
+
+  ProviderApiTokenValidation serverProviderApiTokenValidation() =>
+      ApiController.currentServerProviderApiFactory!
           .getServerProvider()
           .getApiTokenValidation();
 
-  RegExp getDnsProviderApiTokenValidation() => repository.dnsProviderApiFactory!
-      .getDnsProvider()
-      .getApiTokenValidation();
+  RegExp getDnsProviderApiTokenValidation() =>
+      ApiController.currentDnsProviderApiFactory!
+          .getDnsProvider()
+          .getApiTokenValidation();
 
   Future<bool> isServerProviderApiTokenValid(
     final String providerToken,
   ) async =>
-      repository.serverProviderApiFactory!
+      ApiController.currentServerProviderApiFactory!
           .getServerProvider(
-            settings: const ProviderApiSettings(isWithToken: false),
+            settings: const ServerProviderApiSettings(
+              isWithToken: false,
+            ),
           )
           .isApiTokenValid(providerToken);
 
   Future<bool> isDnsProviderApiTokenValid(
     final String providerToken,
-  ) async =>
-      repository.dnsProviderApiFactory!
-          .getDnsProvider(
-            settings: const DnsProviderApiSettings(isWithToken: false),
-          )
-          .isApiTokenValid(providerToken);
+  ) async {
+    if (ApiController.currentDnsProviderApiFactory == null) {
+      // No other DNS provider is supported for now,
+      //    so it's safe to hardcode Cloudflare
+      ApiController.initDnsProviderApiFactory(
+        DnsProviderApiFactorySettings(
+          provider: DnsProvider.cloudflare,
+        ),
+      );
+    }
 
-  void setHetznerKey(final String hetznerKey) async {
-    await repository.saveHetznerKey(hetznerKey);
+    return ApiController.currentDnsProviderApiFactory!
+        .getDnsProvider(
+          settings: const DnsProviderApiSettings(isWithToken: false),
+        )
+        .isApiTokenValid(providerToken);
+  }
+
+  Future<List<ServerProviderLocation>> fetchAvailableLocations() async {
+    if (ApiController.currentServerProviderApiFactory == null) {
+      return [];
+    }
+
+    return ApiController.currentServerProviderApiFactory!
+        .getServerProvider()
+        .getAvailableLocations();
+  }
+
+  Future<List<ServerType>> fetchAvailableTypesByLocation(
+    final ServerProviderLocation location,
+  ) async {
+    if (ApiController.currentServerProviderApiFactory == null) {
+      return [];
+    }
+
+    return ApiController.currentServerProviderApiFactory!
+        .getServerProvider()
+        .getServerTypesByLocation(location: location);
+  }
+
+  void setServerProviderKey(final String serverProviderKey) async {
+    await repository.saveServerProviderKey(serverProviderKey);
 
     if (state is ServerInstallationRecovery) {
       emit(
         (state as ServerInstallationRecovery).copyWith(
-          providerApiToken: hetznerKey,
+          providerApiToken: serverProviderKey,
           currentStep: RecoveryStep.serverSelection,
         ),
       );
@@ -93,7 +144,33 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(
-        providerApiToken: hetznerKey,
+        providerApiToken: serverProviderKey,
+      ),
+    );
+  }
+
+  void setServerType(final ServerType serverType) async {
+    await repository.saveServerType(serverType);
+
+    ApiController.initServerProviderApiFactory(
+      ServerProviderApiFactorySettings(
+        provider: getIt<ApiConfigModel>().serverProvider!,
+        location: serverType.location.identifier,
+      ),
+    );
+
+    // All server providers support volumes for now,
+    //   so it's safe to initialize.
+    ApiController.initVolumeProviderApiFactory(
+      ServerProviderApiFactorySettings(
+        provider: getIt<ApiConfigModel>().serverProvider!,
+        location: serverType.location.identifier,
+      ),
+    );
+
+    emit(
+      (state as ServerInstallationNotFinished).copyWith(
+        serverTypeIdentificator: serverType.identifier,
       ),
     );
   }
@@ -104,6 +181,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return;
     }
     await repository.saveCloudFlareKey(cloudFlareKey);
+
     emit(
       (state as ServerInstallationNotFinished)
           .copyWith(cloudFlareKey: cloudFlareKey),
@@ -248,14 +326,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         ),
       );
       timer = Timer(pauseDuration, () async {
-        final ServerHostingDetails hetznerServerDetails =
-            await repository.restart();
+        final ServerHostingDetails serverDetails = await repository.restart();
         await repository.saveIsServerResetedFirstTime(true);
-        await repository.saveServerDetails(hetznerServerDetails);
+        await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
           isServerResetedFirstTime: true,
-          serverDetails: hetznerServerDetails,
+          serverDetails: serverDetails,
           isLoading: false,
         );
 
@@ -290,14 +367,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         ),
       );
       timer = Timer(pauseDuration, () async {
-        final ServerHostingDetails hetznerServerDetails =
-            await repository.restart();
+        final ServerHostingDetails serverDetails = await repository.restart();
         await repository.saveIsServerResetedSecondTime(true);
-        await repository.saveServerDetails(hetznerServerDetails);
+        await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
           isServerResetedSecondTime: true,
-          serverDetails: hetznerServerDetails,
+          serverDetails: serverDetails,
           isLoading: false,
         );
 
@@ -423,11 +499,21 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         token,
         dataState.recoveryCapabilities,
       );
+      final ServerProvider provider = await ServerApi(
+        customToken: serverDetails.apiToken,
+        isWithToken: true,
+      ).getServerProviderType();
+      if (provider == ServerProvider.unknown) {
+        getIt<NavigationService>()
+            .showSnackBar('recovering.generic_error'.tr());
+        return;
+      }
       await repository.saveServerDetails(serverDetails);
+      setServerProviderType(provider);
       emit(
         dataState.copyWith(
           serverDetails: serverDetails,
-          currentStep: RecoveryStep.hetznerToken,
+          currentStep: RecoveryStep.serverProviderToken,
         ),
       );
     } on ServerAuthorizationException {
@@ -503,8 +589,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  Future<List<ServerBasicInfoWithValidators>>
-      getServersOnHetznerAccount() async {
+  Future<List<ServerBasicInfoWithValidators>> getAvailableServers() async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
     final List<ServerBasicInfo> servers =
@@ -515,7 +600,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         serverBasicInfo: server,
         isIpValid: server.ip == dataState.serverDetails?.ip4,
         isReverseDnsValid:
-            server.reverseDns == dataState.serverDomain?.domainName,
+            server.reverseDns == dataState.serverDomain?.domainName ||
+                server.reverseDns ==
+                    dataState.serverDomain?.domainName.split('.')[0],
       ),
     );
     return validated.toList();
@@ -533,7 +620,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       id: server.id,
       createTime: server.created,
       volume: ServerVolume(
-        id: server.volumeId,
+        id: 0,
         name: 'recovered_volume',
         sizeByte: 0,
         serverId: server.id,
@@ -612,7 +699,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void clearAppConfig() {
     closeTimer();
-
+    ApiController.clearProviderApiFactories();
     repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }

@@ -10,8 +10,8 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
-class RecoveryHetznerConnected extends StatelessWidget {
-  const RecoveryHetznerConnected({super.key});
+class RecoveryServerProviderConnected extends StatelessWidget {
+  const RecoveryServerProviderConnected({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -26,8 +26,8 @@ class RecoveryHetznerConnected extends StatelessWidget {
               context.watch<ProviderFormCubit>().state;
 
           return BrandHeroScreen(
-            heroTitle: 'recovering.hetzner_connected'.tr(),
-            heroSubtitle: 'recovering.hetzner_connected_description'.tr(
+            heroTitle: 'recovering.server_provider_connected'.tr(),
+            heroSubtitle: 'recovering.server_provider_connected_description'.tr(
               args: [appConfig.state.serverDomain?.domainName ?? 'your domain'],
             ),
             hasBackButton: true,
@@ -40,7 +40,8 @@ class RecoveryHetznerConnected extends StatelessWidget {
                 formFieldCubit: context.read<ProviderFormCubit>().apiKey,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: 'recovering.hetzner_connected_placeholder'.tr(),
+                  labelText:
+                      'recovering.server_provider_connected_placeholder'.tr(),
                 ),
               ),
               const SizedBox(height: 16),

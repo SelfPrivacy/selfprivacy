@@ -76,13 +76,14 @@ class ServerVolumeAdapter extends TypeAdapter<ServerVolume> {
       sizeByte: fields[3] == null ? 10737418240 : fields[3] as int,
       serverId: fields[4] as int?,
       linuxDevice: fields[5] as String?,
+      uuid: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ServerVolume obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
@@ -92,7 +93,9 @@ class ServerVolumeAdapter extends TypeAdapter<ServerVolume> {
       ..writeByte(4)
       ..write(obj.serverId)
       ..writeByte(5)
-      ..write(obj.linuxDevice);
+      ..write(obj.linuxDevice)
+      ..writeByte(6)
+      ..write(obj.uuid);
   }
 
   @override
@@ -117,6 +120,8 @@ class ServerProviderAdapter extends TypeAdapter<ServerProvider> {
         return ServerProvider.unknown;
       case 1:
         return ServerProvider.hetzner;
+      case 2:
+        return ServerProvider.digitalOcean;
       default:
         return ServerProvider.unknown;
     }
@@ -130,6 +135,9 @@ class ServerProviderAdapter extends TypeAdapter<ServerProvider> {
         break;
       case ServerProvider.hetzner:
         writer.writeByte(1);
+        break;
+      case ServerProvider.digitalOcean:
+        writer.writeByte(2);
         break;
     }
   }

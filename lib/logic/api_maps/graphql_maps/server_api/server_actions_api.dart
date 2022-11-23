@@ -1,4 +1,4 @@
-part of 'server.dart';
+part of 'server_api.dart';
 
 mixin ServerActionsApi on ApiMap {
   Future<bool> _commonBoolRequest(final Function graphQLMethod) async {

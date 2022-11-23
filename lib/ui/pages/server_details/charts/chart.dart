@@ -3,11 +3,11 @@ part of '../server_details_screen.dart';
 class _Chart extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
-    final HetznerMetricsCubit cubit = context.watch<HetznerMetricsCubit>();
+    final MetricsCubit cubit = context.watch<MetricsCubit>();
     final Period period = cubit.state.period;
-    final HetznerMetricsState state = cubit.state;
+    final MetricsState state = cubit.state;
     List<Widget> charts;
-    if (state is HetznerMetricsLoaded || state is HetznerMetricsLoading) {
+    if (state is MetricsLoaded || state is MetricsLoading) {
       charts = [
         FilledCard(
           clipped: false,
@@ -26,10 +26,10 @@ class _Chart extends StatelessWidget {
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    if (state is HetznerMetricsLoaded) getCpuChart(state),
+                    if (state is MetricsLoaded) getCpuChart(state),
                     AnimatedOpacity(
                       duration: const Duration(milliseconds: 200),
-                      opacity: state is HetznerMetricsLoading ? 1 : 0,
+                      opacity: state is MetricsLoading ? 1 : 0,
                       child: const _GraphLoadingCardContent(),
                     ),
                   ],
@@ -72,10 +72,10 @@ class _Chart extends StatelessWidget {
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    if (state is HetznerMetricsLoaded) getBandwidthChart(state),
+                    if (state is MetricsLoaded) getBandwidthChart(state),
                     AnimatedOpacity(
                       duration: const Duration(milliseconds: 200),
-                      opacity: state is HetznerMetricsLoading ? 1 : 0,
+                      opacity: state is MetricsLoading ? 1 : 0,
                       child: const _GraphLoadingCardContent(),
                     ),
                   ],
@@ -122,29 +122,29 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  Widget getCpuChart(final HetznerMetricsLoaded state) {
-    final data = state.cpu;
+  Widget getCpuChart(final MetricsLoaded state) {
+    final data = state.metrics.cpu;
 
     return SizedBox(
       height: 200,
       child: CpuChart(
         data: data,
         period: state.period,
-        start: state.start,
+        start: state.metrics.start,
       ),
     );
   }
 
-  Widget getBandwidthChart(final HetznerMetricsLoaded state) {
-    final ppsIn = state.bandwidthIn;
-    final ppsOut = state.bandwidthOut;
+  Widget getBandwidthChart(final MetricsLoaded state) {
+    final ppsIn = state.metrics.bandwidthIn;
+    final ppsOut = state.metrics.bandwidthOut;
 
     return SizedBox(
       height: 200,
       child: NetworkChart(
         listData: [ppsIn, ppsOut],
         period: state.period,
-        start: state.start,
+        start: state.metrics.start,
       ),
     );
   }

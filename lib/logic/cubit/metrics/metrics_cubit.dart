@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
+import 'package:selfprivacy/logic/models/metrics.dart';
 
-import 'package:selfprivacy/logic/cubit/hetzner_metrics/hetzner_metrics_repository.dart';
+import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 
-part 'hetzner_metrics_state.dart';
+part 'metrics_state.dart';
 
-class HetznerMetricsCubit extends Cubit<HetznerMetricsState> {
-  HetznerMetricsCubit() : super(const HetznerMetricsLoading(Period.day));
+class MetricsCubit extends Cubit<MetricsState> {
+  MetricsCubit() : super(const MetricsLoading(Period.day));
 
-  final HetznerMetricsRepository repository = HetznerMetricsRepository();
+  final MetricsRepository repository = MetricsRepository();
 
   Timer? timer;
 
@@ -30,7 +30,7 @@ class HetznerMetricsCubit extends Cubit<HetznerMetricsState> {
 
   void changePeriod(final Period period) async {
     closeTimer();
-    emit(HetznerMetricsLoading(period));
+    emit(MetricsLoading(period));
     load(period);
   }
 
@@ -40,14 +40,14 @@ class HetznerMetricsCubit extends Cubit<HetznerMetricsState> {
 
   void load(final Period period) async {
     try {
-      final HetznerMetricsLoaded newState = await repository.getMetrics(period);
+      final MetricsLoaded newState = await repository.getMetrics(period);
       timer = Timer(
-        Duration(seconds: newState.stepInSeconds.toInt()),
+        Duration(seconds: newState.metrics.stepsInSecond.toInt()),
         () => load(newState.period),
       );
       emit(newState);
     } on StateError {
-      print('Tried to emit Hetzner metrics when cubit is closed');
+      print('Tried to emit metrics when cubit is closed');
     } on MetricsLoadException {
       timer = Timer(
         Duration(seconds: state.period.stepPeriodInSeconds),

@@ -5,14 +5,12 @@ class ServerBasicInfo {
     required this.reverseDns,
     required this.ip,
     required this.created,
-    required this.volumeId,
   });
   final int id;
   final String name;
   final String reverseDns;
   final String ip;
   final DateTime created;
-  final int volumeId;
 }
 
 class ServerBasicInfoWithValidators extends ServerBasicInfo {
@@ -26,7 +24,6 @@ class ServerBasicInfoWithValidators extends ServerBasicInfo {
           reverseDns: serverBasicInfo.reverseDns,
           ip: serverBasicInfo.ip,
           created: serverBasicInfo.created,
-          volumeId: serverBasicInfo.volumeId,
           isIpValid: isIpValid,
           isReverseDnsValid: isReverseDnsValid,
         );
@@ -37,7 +34,6 @@ class ServerBasicInfoWithValidators extends ServerBasicInfo {
     required super.reverseDns,
     required super.ip,
     required super.created,
-    required super.volumeId,
     required this.isIpValid,
     required this.isReverseDnsValid,
   });

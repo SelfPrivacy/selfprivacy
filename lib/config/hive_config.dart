@@ -88,7 +88,16 @@ class BNames {
   static String hetznerKey = 'hetznerKey';
 
   /// A String field of [serverInstallationBox] box.
+  static String serverProvider = 'serverProvider';
+
+  /// A String field of [serverLocation] box.
+  static String serverLocation = 'serverLocation';
+
+  /// A String field of [serverInstallationBox] box.
   static String cloudFlareKey = 'cloudFlareKey';
+
+  /// A String field of [serverTypeIdentifier] box.
+  static String serverTypeIdentifier = 'serverTypeIdentifier';
 
   /// A [User] field of [serverInstallationBox] box.
   static String rootUser = 'rootUser';

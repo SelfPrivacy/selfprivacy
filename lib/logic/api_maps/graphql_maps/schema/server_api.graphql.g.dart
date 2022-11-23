@@ -330,6 +330,58 @@ Map<String, dynamic> _$Mutation$RebootSystem$rebootSystemToJson(
       '__typename': instance.$__typename,
     };
 
+Query$SystemServerProvider _$Query$SystemServerProviderFromJson(
+        Map<String, dynamic> json) =>
+    Query$SystemServerProvider(
+      system: Query$SystemServerProvider$system.fromJson(
+          json['system'] as Map<String, dynamic>),
+      $__typename: json['__typename'] as String,
+    );
+
+Map<String, dynamic> _$Query$SystemServerProviderToJson(
+        Query$SystemServerProvider instance) =>
+    <String, dynamic>{
+      'system': instance.system.toJson(),
+      '__typename': instance.$__typename,
+    };
+
+Query$SystemServerProvider$system _$Query$SystemServerProvider$systemFromJson(
+        Map<String, dynamic> json) =>
+    Query$SystemServerProvider$system(
+      provider: Query$SystemServerProvider$system$provider.fromJson(
+          json['provider'] as Map<String, dynamic>),
+      $__typename: json['__typename'] as String,
+    );
+
+Map<String, dynamic> _$Query$SystemServerProvider$systemToJson(
+        Query$SystemServerProvider$system instance) =>
+    <String, dynamic>{
+      'provider': instance.provider.toJson(),
+      '__typename': instance.$__typename,
+    };
+
+Query$SystemServerProvider$system$provider
+    _$Query$SystemServerProvider$system$providerFromJson(
+            Map<String, dynamic> json) =>
+        Query$SystemServerProvider$system$provider(
+          provider: $enumDecode(_$Enum$ServerProviderEnumMap, json['provider'],
+              unknownValue: Enum$ServerProvider.$unknown),
+          $__typename: json['__typename'] as String,
+        );
+
+Map<String, dynamic> _$Query$SystemServerProvider$system$providerToJson(
+        Query$SystemServerProvider$system$provider instance) =>
+    <String, dynamic>{
+      'provider': _$Enum$ServerProviderEnumMap[instance.provider]!,
+      '__typename': instance.$__typename,
+    };
+
+const _$Enum$ServerProviderEnumMap = {
+  Enum$ServerProvider.HETZNER: 'HETZNER',
+  Enum$ServerProvider.DIGITALOCEAN: 'DIGITALOCEAN',
+  Enum$ServerProvider.$unknown: r'$unknown',
+};
+
 Query$GetApiTokens _$Query$GetApiTokensFromJson(Map<String, dynamic> json) =>
     Query$GetApiTokens(
       api: Query$GetApiTokens$api.fromJson(json['api'] as Map<String, dynamic>),

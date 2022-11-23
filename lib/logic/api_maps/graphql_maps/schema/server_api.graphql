@@ -64,6 +64,14 @@ mutation RebootSystem {
   }
 }
 
+query SystemServerProvider {
+  system {
+    provider {
+      provider
+    }
+  }
+}
+
 query GetApiTokens {
   api {
     devices {

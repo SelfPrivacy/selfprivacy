@@ -13,7 +13,7 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_new_device_key.
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_backblaze.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_cloudflare.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_server.dart';
-import 'package:selfprivacy/ui/pages/setup/recovering/recovery_hentzner_connected.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_server_provider_connected.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -47,8 +47,8 @@ class RecoveryRouting extends StatelessWidget {
         case RecoveryStep.oldToken:
           currentPage = const RecoverByOldToken();
           break;
-        case RecoveryStep.hetznerToken:
-          currentPage = const RecoveryHetznerConnected();
+        case RecoveryStep.serverProviderToken:
+          currentPage = const RecoveryServerProviderConnected();
           break;
         case RecoveryStep.serverSelection:
           currentPage = const RecoveryConfirmServer();

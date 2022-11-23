@@ -5,17 +5,6 @@ enum LoadingStatus {
   error,
 }
 
-enum InitializingSteps {
-  setHetznerKey,
-  setCloudFlareKey,
-  setDomainName,
-  setRootUser,
-  createServer,
-  checkCloudFlareDns,
-  startServer,
-  checkSystemDnsAndDkimSet,
-}
-
 enum Period {
   hour,
   day,

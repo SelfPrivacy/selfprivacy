@@ -1,10 +1,27 @@
+import 'dart:io';
+
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:http/io_client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 
 abstract class ApiMap {
   Future<GraphQLClient> getClient() async {
+    IOClient? ioClient;
+    if (StagingOptions.stagingAcme) {
+      final HttpClient httpClient = HttpClient();
+      httpClient.badCertificateCallback = (
+        final cert,
+        final host,
+        final port,
+      ) =>
+          true;
+      ioClient = IOClient(httpClient);
+    }
+
     final httpLink = HttpLink(
       'https://api.$rootAddress/graphql',
+      httpClient: ioClient,
     );
 
     final String token = _getApiToken();

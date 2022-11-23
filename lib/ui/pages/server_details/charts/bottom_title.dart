@@ -1,5 +1,5 @@
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
+import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:intl/intl.dart';
 
 String bottomTitle(
@@ -11,7 +11,7 @@ String bottomTitle(
   final day = DateFormat('MMMd');
   String res;
 
-  if (value <= 0) {
+  if (value <= 0 || value >= data.length) {
     return '';
   }
 

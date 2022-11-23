@@ -1,4 +1,4 @@
-part of 'server.dart';
+part of 'server_api.dart';
 
 mixin VolumeApi on ApiMap {
   Future<List<ServerDiskVolume>> getServerDiskVolumes() async {

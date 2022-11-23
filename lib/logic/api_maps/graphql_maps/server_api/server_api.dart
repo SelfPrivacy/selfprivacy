@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
@@ -86,6 +87,25 @@ class ServerApi extends ApiMap
       print(e);
     }
     return apiVersion;
+  }
+
+  Future<ServerProvider> getServerProviderType() async {
+    QueryResult<Query$SystemServerProvider> response;
+    ServerProvider providerType = ServerProvider.unknown;
+
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$SystemServerProvider();
+      if (response.hasException) {
+        print(response.exception.toString());
+      }
+      providerType = ServerProvider.fromGraphQL(
+        response.parsedData!.system.provider.provider,
+      );
+    } catch (e) {
+      print(e);
+    }
+    return providerType;
   }
 
   Future<bool> isUsingBinds() async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/models/hetzner_metrics.dart';
+import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:intl/intl.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/bottom_title.dart';
 
@@ -83,7 +83,7 @@ class CpuChart extends StatelessWidget {
           ],
           minY: 0,
           maxY: 100,
-          minX: data.length - 200,
+          minX: 0,
           titlesData: FlTitlesData(
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(

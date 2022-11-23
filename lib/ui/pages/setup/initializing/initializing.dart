@@ -2,12 +2,12 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -17,6 +17,8 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/server_provider_picker.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/server_type_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -33,7 +35,8 @@ class InitializingPage extends StatelessWidget {
       Widget? actualInitializingPage;
       if (cubit.state is! ServerInstallationFinished) {
         actualInitializingPage = [
-          () => _stepHetzner(cubit),
+          () => _stepServerProviderToken(cubit),
+          () => _stepServerType(cubit),
           () => _stepCloudflare(cubit),
           () => _stepBackblaze(cubit),
           () => _stepDomain(cubit),
@@ -67,7 +70,8 @@ class InitializingPage extends StatelessWidget {
                           )
                         : ProgressBar(
                             steps: const [
-                              'Hetzner',
+                              'Hosting',
+                              'Server Type',
                               'CloudFlare',
                               'Backblaze',
                               'Domain',
@@ -78,6 +82,11 @@ class InitializingPage extends StatelessWidget {
                             activeIndex: cubit.state.porgressBar,
                           ),
                   ),
+                  if (cubit.state.porgressBar ==
+                      ServerSetupProgress.serverProviderFilled.index)
+                    BrandText.h2(
+                      'initializing.choose_location_type'.tr(),
+                    ),
                   _addCard(
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
@@ -136,52 +145,31 @@ class InitializingPage extends StatelessWidget {
     }
   }
 
-  Widget _stepHetzner(final ServerInstallationCubit serverInstallationCubit) =>
+  Widget _stepServerProviderToken(
+    final ServerInstallationCubit serverInstallationCubit,
+  ) =>
       BlocProvider(
-        create: (final context) => ProviderFormCubit(
-          serverInstallationCubit,
-        ),
+        create: (final context) => ProviderFormCubit(serverInstallationCubit),
         child: Builder(
           builder: (final context) {
-            final formCubitState = context.watch<ProviderFormCubit>().state;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  'assets/images/logos/hetzner.png',
-                  width: 150,
-                ),
-                const SizedBox(height: 10),
-                BrandText.h2('initializing.connect_to_server'.tr()),
-                const SizedBox(height: 10),
-                BrandText.body2('initializing.place_where_data'.tr()),
-                const Spacer(),
-                CubitFormTextField(
-                  formFieldCubit: context.read<ProviderFormCubit>().apiKey,
-                  textAlign: TextAlign.center,
-                  scrollPadding: const EdgeInsets.only(bottom: 70),
-                  decoration: const InputDecoration(
-                    hintText: 'Hetzner API Token',
-                  ),
-                ),
-                const Spacer(),
-                BrandButton.rised(
-                  onPressed: formCubitState.isSubmitting
-                      ? null
-                      : () => context.read<ProviderFormCubit>().trySubmit(),
-                  text: 'basis.connect'.tr(),
-                ),
-                const SizedBox(height: 10),
-                BrandButton.text(
-                  onPressed: () => _showModal(
-                    context,
-                    const _HowTo(fileName: 'how_hetzner'),
-                  ),
-                  title: 'initializing.how'.tr(),
-                ),
-              ],
+            final providerCubit = context.watch<ProviderFormCubit>();
+            return ServerProviderPicker(
+              formCubit: providerCubit,
+              serverInstallationCubit: serverInstallationCubit,
             );
           },
+        ),
+      );
+
+  Widget _stepServerType(
+    final ServerInstallationCubit serverInstallationCubit,
+  ) =>
+      BlocProvider(
+        create: (final context) => ProviderFormCubit(serverInstallationCubit),
+        child: Builder(
+          builder: (final context) => ServerTypePicker(
+            serverInstallationCubit: serverInstallationCubit,
+          ),
         ),
       );
 
@@ -198,49 +186,44 @@ class InitializingPage extends StatelessWidget {
       BlocProvider(
         create: (final context) => DnsProviderFormCubit(initializingCubit),
         child: Builder(
-          builder: (final context) {
-            final formCubitState = context.watch<DnsProviderFormCubit>().state;
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  'assets/images/logos/cloudflare.png',
-                  width: 150,
+          builder: (final context) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                'assets/images/logos/cloudflare.png',
+                width: 150,
+              ),
+              const SizedBox(height: 10),
+              BrandText.h2('initializing.connect_cloudflare'.tr()),
+              const SizedBox(height: 10),
+              BrandText.body2('initializing.manage_domain_dns'.tr()),
+              const Spacer(),
+              CubitFormTextField(
+                formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
+                textAlign: TextAlign.center,
+                scrollPadding: const EdgeInsets.only(bottom: 70),
+                decoration: InputDecoration(
+                  hintText: 'initializing.cloudflare_api_token'.tr(),
                 ),
-                const SizedBox(height: 10),
-                BrandText.h2('initializing.connect_cloudflare'.tr()),
-                const SizedBox(height: 10),
-                BrandText.body2('initializing.manage_domain_dns'.tr()),
-                const Spacer(),
-                CubitFormTextField(
-                  formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
-                  textAlign: TextAlign.center,
-                  scrollPadding: const EdgeInsets.only(bottom: 70),
-                  decoration: InputDecoration(
-                    hintText: 'initializing.cloudflare_api_token'.tr(),
+              ),
+              const Spacer(),
+              BrandButton.rised(
+                onPressed: () =>
+                    context.read<DnsProviderFormCubit>().trySubmit(),
+                text: 'basis.connect'.tr(),
+              ),
+              const SizedBox(height: 10),
+              BrandButton.text(
+                onPressed: () => _showModal(
+                  context,
+                  const _HowTo(
+                    fileName: 'how_cloudflare',
                   ),
                 ),
-                const Spacer(),
-                BrandButton.rised(
-                  onPressed: formCubitState.isSubmitting
-                      ? null
-                      : () => context.read<DnsProviderFormCubit>().trySubmit(),
-                  text: 'basis.connect'.tr(),
-                ),
-                const SizedBox(height: 10),
-                BrandButton.text(
-                  onPressed: () => _showModal(
-                    context,
-                    const _HowTo(
-                      fileName: 'how_cloudflare',
-                    ),
-                  ),
-                  title: 'initializing.how'.tr(),
-                ),
-              ],
-            );
-          },
+                title: 'initializing.how'.tr(),
+              ),
+            ],
+          ),
         ),
       );
 

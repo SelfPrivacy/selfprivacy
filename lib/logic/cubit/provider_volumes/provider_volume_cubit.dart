@@ -1,12 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 
 part 'provider_volume_state.dart';
 
@@ -14,26 +15,19 @@ class ApiProviderVolumeCubit
     extends ServerInstallationDependendCubit<ApiProviderVolumeState> {
   ApiProviderVolumeCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(serverInstallationCubit, const ApiProviderVolumeState.initial());
-
-  VolumeProviderApiFactory? providerApi;
-
   final ServerApi serverApi = ServerApi();
 
   @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
-      final serverDetails = getIt<ApiConfigModel>().serverDetails;
-      providerApi = serverDetails == null
-          ? null
-          : VolumeApiFactoryCreator.createVolumeProviderApiFactory(
-              getIt<ApiConfigModel>().serverDetails!.provider,
-            );
       _refetch();
     }
   }
 
-  Future<double?> getPricePerGb() async =>
-      providerApi!.getVolumeProvider().getPricePerGb();
+  Future<Price?> getPricePerGb() async =>
+      ApiController.currentVolumeProviderApiFactory!
+          .getVolumeProvider()
+          .getPricePerGb();
 
   Future<void> refresh() async {
     emit(const ApiProviderVolumeState([], LoadingStatus.refreshing, false));
@@ -41,12 +35,14 @@ class ApiProviderVolumeCubit
   }
 
   Future<void> _refetch() async {
-    if (providerApi == null) {
+    if (ApiController.currentVolumeProviderApiFactory == null) {
       return emit(const ApiProviderVolumeState([], LoadingStatus.error, false));
     }
 
-    final List<ServerVolume> volumes =
-        await providerApi!.getVolumeProvider().getVolumes();
+    final List<ServerVolume> volumes = await ApiController
+        .currentVolumeProviderApiFactory!
+        .getVolumeProvider()
+        .getVolumes();
 
     if (volumes.isEmpty) {
       return emit(const ApiProviderVolumeState([], LoadingStatus.error, false));
@@ -57,31 +53,33 @@ class ApiProviderVolumeCubit
 
   Future<void> attachVolume(final DiskVolume volume) async {
     final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
-    await providerApi!
+    await ApiController.currentVolumeProviderApiFactory!
         .getVolumeProvider()
-        .attachVolume(volume.providerVolume!.id, server.id);
+        .attachVolume(volume.providerVolume!, server.id);
     refresh();
   }
 
   Future<void> detachVolume(final DiskVolume volume) async {
-    await providerApi!
+    await ApiController.currentVolumeProviderApiFactory!
         .getVolumeProvider()
-        .detachVolume(volume.providerVolume!.id);
+        .detachVolume(volume.providerVolume!);
     refresh();
   }
 
   Future<bool> resizeVolume(
     final DiskVolume volume,
-    final int newSizeGb,
+    final DiskSize newSize,
     final Function() callback,
   ) async {
     getIt<NavigationService>().showSnackBar(
       'Starting resize',
     );
     emit(state.copyWith(isResizing: true));
-    final bool resized = await providerApi!.getVolumeProvider().resizeVolume(
-          volume.providerVolume!.id,
-          newSizeGb,
+    final bool resized = await ApiController.currentVolumeProviderApiFactory!
+        .getVolumeProvider()
+        .resizeVolume(
+          volume.providerVolume!,
+          newSize,
         );
 
     if (!resized) {
@@ -93,13 +91,13 @@ class ApiProviderVolumeCubit
     }
 
     getIt<NavigationService>().showSnackBar(
-      'Hetzner resized, waiting 10 seconds',
+      'Provider volume resized, waiting 10 seconds',
     );
     await Future.delayed(const Duration(seconds: 10));
 
     await ServerApi().resizeVolume(volume.name);
     getIt<NavigationService>().showSnackBar(
-      'Server api resized, waiting 20 seconds',
+      'Server volume resized, waiting 20 seconds',
     );
 
     await Future.delayed(const Duration(seconds: 20));
@@ -115,8 +113,10 @@ class ApiProviderVolumeCubit
   }
 
   Future<void> createVolume() async {
-    final ServerVolume? volume =
-        await providerApi!.getVolumeProvider().createVolume();
+    final ServerVolume? volume = await ApiController
+        .currentVolumeProviderApiFactory!
+        .getVolumeProvider()
+        .createVolume();
 
     final diskVolume = DiskVolume(providerVolume: volume);
     await attachVolume(diskVolume);
@@ -128,9 +128,9 @@ class ApiProviderVolumeCubit
   }
 
   Future<void> deleteVolume(final DiskVolume volume) async {
-    await providerApi!
+    await ApiController.currentVolumeProviderApiFactory!
         .getVolumeProvider()
-        .deleteVolume(volume.providerVolume!.id);
+        .deleteVolume(volume.providerVolume!);
     refresh();
   }
 

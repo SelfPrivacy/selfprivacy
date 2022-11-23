@@ -1,18 +1,23 @@
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
-import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
+import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 
 class ServerDetailsRepository {
-  HetznerApi hetzner = HetznerApi();
   ServerApi server = ServerApi();
 
   Future<ServerDetailsRepositoryDto> load() async {
+    final serverProviderApi = ApiController.currentServerProviderApiFactory;
     final settings = await server.getSystemSettings();
+    final serverId = getIt<ApiConfigModel>().serverDetails!.id;
+    final metadata =
+        await serverProviderApi!.getServerProvider().getMetadata(serverId);
+
     return ServerDetailsRepositoryDto(
       autoUpgradeSettings: settings.autoUpgradeSettings,
-      hetznerServerInfo: await hetzner.getInfo(),
+      metadata: metadata,
       serverTimezone: TimeZoneSettings.fromString(
         settings.timezone,
       ),
@@ -36,13 +41,11 @@ class ServerDetailsRepository {
 
 class ServerDetailsRepositoryDto {
   ServerDetailsRepositoryDto({
-    required this.hetznerServerInfo,
+    required this.metadata,
     required this.serverTimezone,
     required this.autoUpgradeSettings,
   });
-  final HetznerServerInfo hetznerServerInfo;
-
+  final List<ServerMetadataEntity> metadata;
   final TimeZoneSettings serverTimezone;
-
   final AutoUpgradeSettings autoUpgradeSettings;
 }

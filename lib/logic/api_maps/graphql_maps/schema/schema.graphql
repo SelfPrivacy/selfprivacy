@@ -173,6 +173,7 @@ input RecoveryKeyLimitsInput {
 
 enum ServerProvider {
   HETZNER
+  DIGITALOCEAN
 }
 
 type Service {

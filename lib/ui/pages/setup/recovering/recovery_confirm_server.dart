@@ -45,9 +45,8 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
         hasFlashButton: false,
         children: [
           FutureBuilder<List<ServerBasicInfoWithValidators>>(
-            future: context
-                .read<ServerInstallationCubit>()
-                .getServersOnHetznerAccount(),
+            future:
+                context.read<ServerInstallationCubit>().getAvailableServers(),
             builder: (final context, final snapshot) {
               if (snapshot.hasData) {
                 final servers = snapshot.data;

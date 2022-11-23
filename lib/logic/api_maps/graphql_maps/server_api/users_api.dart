@@ -1,4 +1,4 @@
-part of 'server.dart';
+part of 'server_api.dart';
 
 mixin UsersApi on ApiMap {
   Future<List<User>> getAllUsers() async {

@@ -31,7 +31,8 @@
         "remove": "Remove",
         "apply": "Apply",
         "done": "Done",
-        "continue": "Continue"
+        "continue": "Continue",
+        "alert": "Alert"
     },
     "more_page": {
         "configuration_wizard": "Setup wizard",
@@ -109,6 +110,7 @@
         "disk": "Disk local",
         "monthly_cost": "Monthly cost",
         "location": "Location",
+        "provider": "Provider",
         "core_count": {
             "one": "{} core",
             "two": "{} cores",
@@ -267,9 +269,14 @@
     },
     "initializing": {
         "connect_to_server": "Connect a server",
+        "select_provider": "Select your provider",
         "place_where_data": "A place where your data and SelfPrivacy services will reside:",
         "how": "How to obtain API token",
-        "hetzner_bad_key_error": "Hetzner API key is invalid",
+        "provider_bad_key_error": "Provider API key is invalid",
+        "choose_location_type": "Choose your server location and type:",
+        "back_to_locations": "Go back to available locations!",
+        "no_locations_found": "No available locations found. Make sure your account is accessible.",
+        "no_server_types_found": "No available server types found. Make sure your account is accessible and try to change your server location.",
         "cloudflare_bad_key_error": "Cloudflare API key is invalid",
         "backblaze_bad_key_error": "Backblaze storage information is invalid",
         "connect_cloudflare": "Connect CloudFlare",
@@ -295,6 +302,7 @@
         "checks": "Checks have been completed \n{} out of {}"
     },
     "recovering": {
+        "generic_error": "Operation failed, please try again.",
         "recovery_main_header": "Connect to an existing server",
         "domain_recovery_description": "Enter a server domain you want to get access for:",
         "domain_recover_placeholder": "Your domain",
@@ -314,9 +322,9 @@
         "fallback_select_provider_console": "Access to the server console of my prodiver.",
         "authorization_failed": "Couldn't log in with this key",
         "fallback_select_provider_console_hint": "For example: Hetzner.",
-        "hetzner_connected": "Connect to Hetzner",
-        "hetzner_connected_description": "Communication established. Enter Hetzner token with access to {}:",
-        "hetzner_connected_placeholder": "Hetzner token",
+        "server_provider_connected": "Connect to your Server Provider",
+        "server_provider_connected_description": "Communication established. Enter you token with access to {}:",
+        "server_provider_connected_placeholder": "Server Provider token",
         "confirm_server": "Confirm server",
         "confirm_server_description": "Found your server! Confirm it is the right one:",
         "confirm_server_accept": "Yes! That's it",

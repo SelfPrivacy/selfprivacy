@@ -3,6 +3,7 @@ part of '../server_installation/server_installation_cubit.dart';
 abstract class ServerInstallationState extends Equatable {
   const ServerInstallationState({
     required this.providerApiToken,
+    required this.serverTypeIdentificator,
     required this.cloudFlareKey,
     required this.backblazeCredential,
     required this.serverDomain,
@@ -16,6 +17,7 @@ abstract class ServerInstallationState extends Equatable {
   @override
   List<Object?> get props => [
         providerApiToken,
+        serverTypeIdentificator,
         cloudFlareKey,
         backblazeCredential,
         serverDomain,
@@ -27,6 +29,7 @@ abstract class ServerInstallationState extends Equatable {
 
   final String? providerApiToken;
   final String? cloudFlareKey;
+  final String? serverTypeIdentificator;
   final BackblazeCredential? backblazeCredential;
   final ServerDomain? serverDomain;
   final User? rootUser;
@@ -35,7 +38,8 @@ abstract class ServerInstallationState extends Equatable {
   final bool isServerResetedFirstTime;
   final bool isServerResetedSecondTime;
 
-  bool get isServerProviderFilled => providerApiToken != null;
+  bool get isServerProviderApiKeyFilled => providerApiToken != null;
+  bool get isServerTypeFilled => serverTypeIdentificator != null;
   bool get isDnsProviderFilled => cloudFlareKey != null;
   bool get isBackupsProviderFilled => backblazeCredential != null;
   bool get isDomainSelected => serverDomain != null;
@@ -58,7 +62,8 @@ abstract class ServerInstallationState extends Equatable {
 
   List<bool?> get _fulfilementList {
     final List<bool> res = [
-      isServerProviderFilled,
+      isServerProviderApiKeyFilled,
+      isServerTypeFilled,
       isDnsProviderFilled,
       isBackupsProviderFilled,
       isDomainSelected,
@@ -81,6 +86,7 @@ class TimerState extends ServerInstallationNotFinished {
     this.duration,
   }) : super(
           providerApiToken: dataState.providerApiToken,
+          serverTypeIdentificator: dataState.serverTypeIdentificator,
           cloudFlareKey: dataState.cloudFlareKey,
           backblazeCredential: dataState.backblazeCredential,
           serverDomain: dataState.serverDomain,
@@ -106,7 +112,8 @@ class TimerState extends ServerInstallationNotFinished {
 
 enum ServerSetupProgress {
   nothingYet,
-  hetznerFilled,
+  serverProviderFilled,
+  servertTypeFilled,
   cloudFlareFilled,
   backblazeFilled,
   domainFilled,
@@ -125,6 +132,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     required this.isLoading,
     required this.dnsMatches,
     super.providerApiToken,
+    super.serverTypeIdentificator,
     super.cloudFlareKey,
     super.backblazeCredential,
     super.serverDomain,
@@ -137,6 +145,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
   @override
   List<Object?> get props => [
         providerApiToken,
+        serverTypeIdentificator,
         cloudFlareKey,
         backblazeCredential,
         serverDomain,
@@ -150,6 +159,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
 
   ServerInstallationNotFinished copyWith({
     final String? providerApiToken,
+    final String? serverTypeIdentificator,
     final String? cloudFlareKey,
     final BackblazeCredential? backblazeCredential,
     final ServerDomain? serverDomain,
@@ -163,6 +173,8 @@ class ServerInstallationNotFinished extends ServerInstallationState {
   }) =>
       ServerInstallationNotFinished(
         providerApiToken: providerApiToken ?? this.providerApiToken,
+        serverTypeIdentificator:
+            serverTypeIdentificator ?? this.serverTypeIdentificator,
         cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
         backblazeCredential: backblazeCredential ?? this.backblazeCredential,
         serverDomain: serverDomain ?? this.serverDomain,
@@ -179,6 +191,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
         providerApiToken: providerApiToken!,
+        serverTypeIdentificator: serverTypeIdentificator ?? '',
         cloudFlareKey: cloudFlareKey!,
         backblazeCredential: backblazeCredential!,
         serverDomain: serverDomain!,
@@ -194,6 +207,7 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
   const ServerInstallationEmpty()
       : super(
           providerApiToken: null,
+          serverTypeIdentificator: null,
           cloudFlareKey: null,
           backblazeCredential: null,
           serverDomain: null,
@@ -210,6 +224,7 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
 class ServerInstallationFinished extends ServerInstallationState {
   const ServerInstallationFinished({
     required String super.providerApiToken,
+    required String super.serverTypeIdentificator,
     required String super.cloudFlareKey,
     required BackblazeCredential super.backblazeCredential,
     required ServerDomain super.serverDomain,
@@ -223,6 +238,7 @@ class ServerInstallationFinished extends ServerInstallationState {
   @override
   List<Object?> get props => [
         providerApiToken,
+        serverTypeIdentificator,
         cloudFlareKey,
         backblazeCredential,
         serverDomain,
@@ -238,7 +254,7 @@ enum RecoveryStep {
   recoveryKey,
   newDeviceKey,
   oldToken,
-  hetznerToken,
+  serverProviderToken,
   serverSelection,
   cloudflareToken,
   backblazeToken,
@@ -261,6 +277,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     required this.currentStep,
     required this.recoveryCapabilities,
     super.providerApiToken,
+    super.serverTypeIdentificator,
     super.cloudFlareKey,
     super.backblazeCredential,
     super.serverDomain,
@@ -277,6 +294,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
   @override
   List<Object?> get props => [
         providerApiToken,
+        serverTypeIdentificator,
         cloudFlareKey,
         backblazeCredential,
         serverDomain,
@@ -289,6 +307,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
 
   ServerInstallationRecovery copyWith({
     final String? providerApiToken,
+    final String? serverTypeIdentificator,
     final String? cloudFlareKey,
     final BackblazeCredential? backblazeCredential,
     final ServerDomain? serverDomain,
@@ -299,6 +318,8 @@ class ServerInstallationRecovery extends ServerInstallationState {
   }) =>
       ServerInstallationRecovery(
         providerApiToken: providerApiToken ?? this.providerApiToken,
+        serverTypeIdentificator:
+            serverTypeIdentificator ?? this.serverTypeIdentificator,
         cloudFlareKey: cloudFlareKey ?? this.cloudFlareKey,
         backblazeCredential: backblazeCredential ?? this.backblazeCredential,
         serverDomain: serverDomain ?? this.serverDomain,
@@ -310,6 +331,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
         providerApiToken: providerApiToken!,
+        serverTypeIdentificator: serverTypeIdentificator ?? '',
         cloudFlareKey: cloudFlareKey!,
         backblazeCredential: backblazeCredential!,
         serverDomain: serverDomain!,

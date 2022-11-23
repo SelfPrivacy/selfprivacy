@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/ui/components/action_button/action_button.dart';
-import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 
 class JobsContent extends StatelessWidget {
   const JobsContent({super.key});
@@ -47,26 +45,16 @@ class JobsContent extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               BrandButton.text(
+                title: 'jobs.reboot_server'.tr(),
                 onPressed: () {
-                  final NavigationService nav = getIt<NavigationService>();
-                  nav.showPopUpDialog(
-                    BrandAlert(
-                      title: 'jobs.reboot_server'.tr(),
-                      contentText: 'modals.are_you_sure'.tr(),
-                      actions: [
-                        ActionButton(
-                          text: 'basis.cancel'.tr(),
-                        ),
-                        ActionButton(
-                          onPressed: () =>
-                              {context.read<JobsCubit>().rebootServer()},
-                          text: 'modals.reboot'.tr(),
-                        )
-                      ],
-                    ),
+                  showPopUpAlert(
+                    alertTitle: 'jobs.reboot_server'.tr(),
+                    description: 'modals.are_you_sure'.tr(),
+                    actionButtonTitle: 'modals.reboot'.tr(),
+                    actionButtonOnPressed: () =>
+                        {context.read<JobsCubit>().rebootServer()},
                   );
                 },
-                title: 'jobs.reboot_server'.tr(),
               ),
             ];
           }

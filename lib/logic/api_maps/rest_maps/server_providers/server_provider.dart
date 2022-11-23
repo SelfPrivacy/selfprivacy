@@ -54,5 +54,5 @@ abstract class ServerProviderApi extends ApiMap {
 
   /// Actual provider name to render on information page for user,
   /// for example 'Digital Ocean' for Digital Ocean
-  String get appearanceProviderName;
+  String get displayProviderName;
 }

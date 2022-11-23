@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 
 part 'server_details.g.dart';
 
@@ -82,5 +83,16 @@ enum ServerProvider {
   @HiveField(1)
   hetzner,
   @HiveField(2)
-  digitalOcean,
+  digitalOcean;
+
+  factory ServerProvider.fromGraphQL(final Enum$ServerProvider provider) {
+    switch (provider) {
+      case Enum$ServerProvider.HETZNER:
+        return hetzner;
+      case Enum$ServerProvider.DIGITALOCEAN:
+        return digitalOcean;
+      default:
+        return unknown;
+    }
+  }
 }

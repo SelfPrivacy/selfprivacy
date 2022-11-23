@@ -57,7 +57,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   String get infectProviderName => 'hetzner';
 
   @override
-  String get appearanceProviderName => 'Hetzner';
+  String get displayProviderName => 'Hetzner';
 
   @override
   Future<bool> isApiTokenValid(final String token) async {
@@ -102,12 +102,12 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   Future<Price?> getPricePerGb() async {
     double? price;
 
-    final Response dbGetResponse;
+    final Response pricingResponse;
     final Dio client = await getClient();
     try {
-      dbGetResponse = await client.get('/pricing');
+      pricingResponse = await client.get('/pricing');
 
-      final volume = dbGetResponse.data['pricing']['volume'];
+      final volume = pricingResponse.data['pricing']['volume'];
       final volumePrice = volume['price_per_gb_month']['gross'];
       price = double.parse(volumePrice);
     } catch (e) {
@@ -128,31 +128,31 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   Future<ServerVolume?> createVolume() async {
     ServerVolume? volume;
 
-    final Response dbCreateResponse;
+    final Response createVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbCreateResponse = await client.post(
+      createVolumeResponse = await client.post(
         '/volumes',
         data: {
           'size': 10,
-          'name': StringGenerators.dbStorageName(),
+          'name': StringGenerators.storageName(),
           'labels': {'labelkey': 'value'},
           'location': region,
           'automount': false,
           'format': 'ext4'
         },
       );
-      final dbId = dbCreateResponse.data['volume']['id'];
-      final dbSize = dbCreateResponse.data['volume']['size'];
-      final dbServer = dbCreateResponse.data['volume']['server'];
-      final dbName = dbCreateResponse.data['volume']['name'];
-      final dbDevice = dbCreateResponse.data['volume']['linux_device'];
+      final volumeId = createVolumeResponse.data['volume']['id'];
+      final volumeSize = createVolumeResponse.data['volume']['size'];
+      final volumeServer = createVolumeResponse.data['volume']['server'];
+      final volumeName = createVolumeResponse.data['volume']['name'];
+      final volumeDevice = createVolumeResponse.data['volume']['linux_device'];
       volume = ServerVolume(
-        id: dbId,
-        name: dbName,
-        sizeByte: dbSize,
-        serverId: dbServer,
-        linuxDevice: dbDevice,
+        id: volumeId,
+        name: volumeName,
+        sizeByte: volumeSize,
+        serverId: volumeServer,
+        linuxDevice: volumeDevice,
       );
     } catch (e) {
       print(e);
@@ -167,28 +167,28 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   Future<List<ServerVolume>> getVolumes({final String? status}) async {
     final List<ServerVolume> volumes = [];
 
-    final Response dbGetResponse;
+    final Response getVolumesResonse;
     final Dio client = await getClient();
     try {
-      dbGetResponse = await client.get(
+      getVolumesResonse = await client.get(
         '/volumes',
         queryParameters: {
           'status': status,
         },
       );
-      final List<dynamic> rawVolumes = dbGetResponse.data['volumes'];
+      final List<dynamic> rawVolumes = getVolumesResonse.data['volumes'];
       for (final rawVolume in rawVolumes) {
-        final int dbId = rawVolume['id'];
-        final int dbSize = rawVolume['size'] * 1024 * 1024 * 1024;
-        final dbServer = rawVolume['server'];
-        final String dbName = rawVolume['name'];
-        final dbDevice = rawVolume['linux_device'];
+        final int volumeId = rawVolume['id'];
+        final int volumeSize = rawVolume['size'] * 1024 * 1024 * 1024;
+        final volumeServer = rawVolume['server'];
+        final String volumeName = rawVolume['name'];
+        final volumeDevice = rawVolume['linux_device'];
         final volume = ServerVolume(
-          id: dbId,
-          name: dbName,
-          sizeByte: dbSize,
-          serverId: dbServer,
-          linuxDevice: dbDevice,
+          id: volumeId,
+          name: volumeName,
+          sizeByte: volumeSize,
+          serverId: volumeServer,
+          linuxDevice: volumeDevice,
         );
         volumes.add(volume);
       }
@@ -206,21 +206,21 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   ) async {
     ServerVolume? volume;
 
-    final Response dbGetResponse;
+    final Response getVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbGetResponse = await client.get('/volumes/$volumeId');
-      final int dbId = dbGetResponse.data['volume']['id'];
-      final int dbSize = dbGetResponse.data['volume']['size'];
-      final int dbServer = dbGetResponse.data['volume']['server'];
-      final String dbName = dbGetResponse.data['volume']['name'];
-      final dbDevice = dbGetResponse.data['volume']['linux_device'];
+      getVolumeResponse = await client.get('/volumes/$volumeId');
+      final int responseVolumeId = getVolumeResponse.data['volume']['id'];
+      final int volumeSize = getVolumeResponse.data['volume']['size'];
+      final int volumeServer = getVolumeResponse.data['volume']['server'];
+      final String volumeName = getVolumeResponse.data['volume']['name'];
+      final volumeDevice = getVolumeResponse.data['volume']['linux_device'];
       volume = ServerVolume(
-        id: dbId,
-        name: dbName,
-        sizeByte: dbSize,
-        serverId: dbServer,
-        linuxDevice: dbDevice,
+        id: responseVolumeId,
+        name: volumeName,
+        sizeByte: volumeSize,
+        serverId: volumeServer,
+        linuxDevice: volumeDevice,
       );
     } catch (e) {
       print(e);
@@ -250,17 +250,18 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   ) async {
     bool success = false;
 
-    final Response dbPostResponse;
+    final Response attachVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post(
+      attachVolumeResponse = await client.post(
         '/volumes/${volume.id}/actions/attach',
         data: {
           'automount': true,
           'server': serverId,
         },
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          attachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -274,13 +275,14 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   Future<bool> detachVolume(final ServerVolume volume) async {
     bool success = false;
 
-    final Response dbPostResponse;
+    final Response detachVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post(
+      detachVolumeResponse = await client.post(
         '/volumes/${volume.id}/actions/detach',
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -297,16 +299,17 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   ) async {
     bool success = false;
 
-    final Response dbPostResponse;
+    final Response resizeVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post(
+      resizeVolumeResponse = await client.post(
         '/volumes/${volume.id}/actions/resize',
         data: {
           'size': size.gibibyte,
         },
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -334,7 +337,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       dnsApiToken: dnsApiToken,
       rootUser: rootUser,
       domainName: domainName,
-      dataBase: newVolume,
+      volume: newVolume,
       serverType: serverType,
     );
 
@@ -345,13 +348,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
-    required final ServerVolume dataBase,
+    required final ServerVolume volume,
     required final String serverType,
   }) async {
     final Dio client = await getClient();
 
     final String dbPassword = StringGenerators.dbPassword();
-    final int dbId = dataBase.id;
+    final int volumeId = volume.id;
 
     final String apiToken = StringGenerators.apiToken();
     final String hostname = getHostnameFromDomain(domainName);
@@ -373,7 +376,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         'server_type': serverType,
         'start_after_create': false,
         'image': 'ubuntu-20.04',
-        'volumes': [dbId],
+        'volumes': [volumeId],
         'networks': [],
         'user_data': userdataString,
         'labels': {},
@@ -391,7 +394,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         id: serverCreateResponse.data['server']['id'],
         ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
         createTime: DateTime.now(),
-        volume: dataBase,
+        volume: volume,
         apiToken: apiToken,
         provider: ServerProvider.hetzner,
       );
@@ -407,7 +410,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     if (!success) {
       await Future.delayed(const Duration(seconds: 10));
-      await deleteVolume(dataBase);
+      await deleteVolume(volume);
     }
 
     if (hetznerError != null) {
@@ -621,7 +624,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         ServerMetadataEntity(
           type: MetadataType.other,
           name: 'server.provider'.tr(),
-          value: appearanceProviderName,
+          value: displayProviderName,
         ),
       ];
     } catch (e) {

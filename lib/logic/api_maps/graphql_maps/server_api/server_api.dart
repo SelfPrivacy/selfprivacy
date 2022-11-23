@@ -90,7 +90,7 @@ class ServerApi extends ApiMap
   }
 
   Future<ServerProvider> getServerProviderType() async {
-    QueryResult response;
+    QueryResult<Query$SystemServerProvider> response;
     ServerProvider providerType = ServerProvider.unknown;
 
     try {
@@ -99,15 +99,9 @@ class ServerApi extends ApiMap
       if (response.hasException) {
         print(response.exception.toString());
       }
-      final rawProviderValue = response.data!['system']['provider']['provider'];
-      switch (rawProviderValue) {
-        case 'HETZNER':
-          providerType = ServerProvider.hetzner;
-          break;
-        case 'DIGITALOCEAN':
-          providerType = ServerProvider.digitalOcean;
-          break;
-      }
+      providerType = ServerProvider.fromGraphQL(
+        response.parsedData!.system.provider.provider,
+      );
     } catch (e) {
       print(e);
     }

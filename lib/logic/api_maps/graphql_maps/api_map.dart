@@ -7,19 +7,21 @@ import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 
 abstract class ApiMap {
   Future<GraphQLClient> getClient() async {
-    final HttpClient httpClient = HttpClient();
+    IOClient? ioClient;
     if (StagingOptions.stagingAcme) {
+      final HttpClient httpClient = HttpClient();
       httpClient.badCertificateCallback = (
         final cert,
         final host,
         final port,
       ) =>
           true;
+      ioClient = IOClient(httpClient);
     }
 
     final httpLink = HttpLink(
       'https://api.$rootAddress/graphql',
-      httpClient: IOClient(httpClient),
+      httpClient: ioClient,
     );
 
     final String token = _getApiToken();

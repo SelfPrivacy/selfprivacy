@@ -56,7 +56,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   String get infectProviderName => 'digitalocean';
 
   @override
-  String get appearanceProviderName => 'Digital Ocean';
+  String get displayProviderName => 'Digital Ocean';
 
   @override
   Future<bool> isApiTokenValid(final String token) async {
@@ -102,32 +102,32 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   Future<ServerVolume?> createVolume() async {
     ServerVolume? volume;
 
-    final Response dbCreateResponse;
+    final Response createVolumeResponse;
     final Dio client = await getClient();
     try {
       final List<ServerVolume> volumes = await getVolumes();
       await Future.delayed(const Duration(seconds: 6));
 
-      dbCreateResponse = await client.post(
+      createVolumeResponse = await client.post(
         '/volumes',
         data: {
           'size_gigabytes': 10,
-          'name': 'volume${StringGenerators.dbStorageName()}',
+          'name': 'volume${StringGenerators.storageName()}',
           'labels': {'labelkey': 'value'},
           'region': region,
           'filesystem_type': 'ext4',
         },
       );
-      final dbId = dbCreateResponse.data['volume']['id'];
-      final dbSize = dbCreateResponse.data['volume']['size_gigabytes'];
-      final dbName = dbCreateResponse.data['volume']['name'];
+      final volumeId = createVolumeResponse.data['volume']['id'];
+      final volumeSize = createVolumeResponse.data['volume']['size_gigabytes'];
+      final volumeName = createVolumeResponse.data['volume']['name'];
       volume = ServerVolume(
         id: volumes.length,
-        name: dbName,
-        sizeByte: dbSize,
+        name: volumeName,
+        sizeByte: volumeSize,
         serverId: null,
-        linuxDevice: 'scsi-0DO_Volume_$dbName',
-        uuid: dbId,
+        linuxDevice: '/dev/disk/by-id/scsi-0DO_Volume_$volumeName',
+        uuid: volumeId,
       );
     } catch (e) {
       print(e);
@@ -142,29 +142,29 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   Future<List<ServerVolume>> getVolumes({final String? status}) async {
     final List<ServerVolume> volumes = [];
 
-    final Response dbGetResponse;
+    final Response getVolumesResponse;
     final Dio client = await getClient();
     try {
-      dbGetResponse = await client.get(
+      getVolumesResponse = await client.get(
         '/volumes',
         queryParameters: {
           'status': status,
         },
       );
-      final List<dynamic> rawVolumes = dbGetResponse.data['volumes'];
+      final List<dynamic> rawVolumes = getVolumesResponse.data['volumes'];
       int id = 0;
       for (final rawVolume in rawVolumes) {
-        final dbId = rawVolume['id'];
-        final int dbSize = rawVolume['size_gigabytes'] * 1024 * 1024 * 1024;
-        final dbDropletIds = rawVolume['droplet_ids'];
-        final String dbName = rawVolume['name'];
+        final volumeId = rawVolume['id'];
+        final int volumeSize = rawVolume['size_gigabytes'] * 1024 * 1024 * 1024;
+        final volumeDropletIds = rawVolume['droplet_ids'];
+        final String volumeName = rawVolume['name'];
         final volume = ServerVolume(
           id: id++,
-          name: dbName,
-          sizeByte: dbSize,
-          serverId: dbDropletIds.isNotEmpty ? dbDropletIds[0] : null,
-          linuxDevice: 'scsi-0DO_Volume_$dbName',
-          uuid: dbId,
+          name: volumeName,
+          sizeByte: volumeSize,
+          serverId: volumeDropletIds.isNotEmpty ? volumeDropletIds[0] : null,
+          linuxDevice: 'scsi-0DO_Volume_$volumeName',
+          uuid: volumeId,
         );
         volumes.add(volume);
       }
@@ -178,24 +178,24 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   Future<ServerVolume?> getVolume(final String volumeUuid) async {
-    ServerVolume? neededVolume;
+    ServerVolume? requestedVolume;
 
     final List<ServerVolume> volumes = await getVolumes();
 
     for (final volume in volumes) {
       if (volume.uuid == volumeUuid) {
-        neededVolume = volume;
+        requestedVolume = volume;
       }
     }
 
-    return neededVolume;
+    return requestedVolume;
   }
 
   @override
   Future<void> deleteVolume(final ServerVolume volume) async {
     final Dio client = await getClient();
     try {
-      await client.delete('/volumes/$volume.uuid');
+      await client.delete('/volumes/${volume.uuid}');
     } catch (e) {
       print(e);
     } finally {
@@ -210,10 +210,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   ) async {
     bool success = false;
 
-    final Response dbPostResponse;
+    final Response attachVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post(
+      attachVolumeResponse = await client.post(
         '/volumes/actions',
         data: {
           'type': 'attach',
@@ -222,7 +222,8 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'droplet_id': serverId,
         },
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          attachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -236,10 +237,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   Future<bool> detachVolume(final ServerVolume volume) async {
     bool success = false;
 
-    final Response dbPostResponse;
+    final Response detachVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post(
+      detachVolumeResponse = await client.post(
         '/volumes/actions',
         data: {
           'type': 'detach',
@@ -248,7 +249,8 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'region': region,
         },
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -265,10 +267,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   ) async {
     bool success = false;
 
-    final Response dbPostResponse;
+    final Response resizeVolumeResponse;
     final Dio client = await getClient();
     try {
-      dbPostResponse = await client.post(
+      resizeVolumeResponse = await client.post(
         '/volumes/actions',
         data: {
           'type': 'resize',
@@ -277,7 +279,8 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'region': region,
         },
       );
-      success = dbPostResponse.data['action']['status'].toString() != 'error';
+      success =
+          resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
     } finally {
@@ -450,7 +453,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return server.copyWith(startTime: DateTime.now());
   }
 
-  /// Digital Ocean returns a map of lists of /proc/state values,
+  /// Digital Ocean returns a map of lists of /proc/stat values,
   /// so here we are trying to implement average CPU
   /// load calculation for each point in time on a given interval.
   ///
@@ -500,63 +503,63 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     const int step = 15;
     final Dio client = await getClient();
-    //try {
-    Response response = await client.get(
-      '/monitoring/metrics/droplet/bandwidth',
-      queryParameters: {
-        'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
-        'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
-        'host_id': '$serverId',
-        'interface': 'public',
-        'direction': 'inbound',
-      },
-    );
+    try {
+      Response response = await client.get(
+        '/monitoring/metrics/droplet/bandwidth',
+        queryParameters: {
+          'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
+          'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
+          'host_id': '$serverId',
+          'interface': 'public',
+          'direction': 'inbound',
+        },
+      );
 
-    final List inbound = response.data['data']['result'][0]['values'];
+      final List inbound = response.data['data']['result'][0]['values'];
 
-    response = await client.get(
-      '/monitoring/metrics/droplet/bandwidth',
-      queryParameters: {
-        'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
-        'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
-        'host_id': '$serverId',
-        'interface': 'public',
-        'direction': 'outbound',
-      },
-    );
+      response = await client.get(
+        '/monitoring/metrics/droplet/bandwidth',
+        queryParameters: {
+          'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
+          'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
+          'host_id': '$serverId',
+          'interface': 'public',
+          'direction': 'outbound',
+        },
+      );
 
-    final List outbound = response.data['data']['result'][0]['values'];
+      final List outbound = response.data['data']['result'][0]['values'];
 
-    response = await client.get(
-      '/monitoring/metrics/droplet/cpu',
-      queryParameters: {
-        'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
-        'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
-        'host_id': '$serverId',
-      },
-    );
+      response = await client.get(
+        '/monitoring/metrics/droplet/cpu',
+        queryParameters: {
+          'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
+          'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
+          'host_id': '$serverId',
+        },
+      );
 
-    metrics = ServerMetrics(
-      bandwidthIn: inbound
-          .map(
-            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
-          )
-          .toList(),
-      bandwidthOut: outbound
-          .map(
-            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
-          )
-          .toList(),
-      cpu: calculateCpuLoadMetrics(response.data['data']['result']),
-      start: start,
-      end: end,
-      stepsInSecond: step,
-    );
-    /* } catch (e) {
+      metrics = ServerMetrics(
+        bandwidthIn: inbound
+            .map(
+              (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+            )
+            .toList(),
+        bandwidthOut: outbound
+            .map(
+              (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+            )
+            .toList(),
+        cpu: calculateCpuLoadMetrics(response.data['data']['result']),
+        start: start,
+        end: end,
+        stepsInSecond: step,
+      );
+    } catch (e) {
       print(e);
     } finally {
       close(client);
-    }*/
+    }
 
     return metrics;
   }
@@ -604,7 +607,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         ServerMetadataEntity(
           type: MetadataType.other,
           name: 'server.provider'.tr(),
-          value: appearanceProviderName,
+          value: displayProviderName,
         ),
       ];
     } catch (e) {

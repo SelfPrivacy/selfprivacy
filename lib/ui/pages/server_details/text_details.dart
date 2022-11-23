@@ -1,16 +1,6 @@
 part of 'server_details_screen.dart';
 
 class _TextDetails extends StatelessWidget {
-  final Map<MetadataType, IconData> metadataToIcon = const {
-    MetadataType.id: Icons.numbers_outlined,
-    MetadataType.status: Icons.mode_standby_outlined,
-    MetadataType.cpu: Icons.memory_outlined,
-    MetadataType.ram: Icons.memory_outlined,
-    MetadataType.cost: Icons.euro_outlined,
-    MetadataType.location: Icons.location_on_outlined,
-    MetadataType.other: Icons.info_outlined,
-  };
-
   @override
   Widget build(final BuildContext context) {
     final details = context.watch<ServerDetailsCubit>().state;
@@ -36,7 +26,7 @@ class _TextDetails extends StatelessWidget {
             ...details.metadata
                 .map(
                   (final metadata) => ListTileOnSurfaceVariant(
-                    leadingIcon: metadataToIcon[metadata.type],
+                    leadingIcon: metadata.type.icon,
                     title: metadata.name,
                     subtitle: metadata.value,
                   ),

@@ -10,7 +10,6 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/job.dart';
-import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/ui/components/brand_button/segmented_buttons.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';

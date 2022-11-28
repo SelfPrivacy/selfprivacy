@@ -707,7 +707,8 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<List<ServerProviderLocation>> getAvailableLocations() async {
+  Future<APIGenericResult<List<ServerProviderLocation>>>
+      getAvailableLocations() async {
     List<ServerProviderLocation> locations = [];
 
     final Dio client = await getClient();
@@ -728,15 +729,20 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           .toList();
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        success: false,
+        data: [],
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return locations;
+    return APIGenericResult(success: true, data: locations);
   }
 
   @override
-  Future<List<ServerType>> getServerTypesByLocation({
+  Future<APIGenericResult<List<ServerType>>> getServerTypesByLocation({
     required final ServerProviderLocation location,
   }) async {
     final List<ServerType> types = [];
@@ -769,11 +775,16 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       }
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return types;
+    return APIGenericResult(data: types, success: true);
   }
 
   @override

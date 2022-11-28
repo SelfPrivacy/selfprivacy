@@ -22,8 +22,9 @@ class ProviderApiTokenValidation {
 
 abstract class ServerProviderApi extends ApiMap {
   Future<List<ServerBasicInfo>> getServers();
-  Future<List<ServerProviderLocation>> getAvailableLocations();
-  Future<List<ServerType>> getServerTypesByLocation({
+  Future<APIGenericResult<List<ServerProviderLocation>>>
+      getAvailableLocations();
+  Future<APIGenericResult<List<ServerType>>> getServerTypesByLocation({
     required final ServerProviderLocation location,
   });
 

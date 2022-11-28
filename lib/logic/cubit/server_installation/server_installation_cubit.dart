@@ -123,9 +123,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    return ApiController.currentServerProviderApiFactory!
+    final APIGenericResult apiResult = await ApiController
+        .currentServerProviderApiFactory!
         .getServerProvider()
         .getAvailableLocations();
+
+    if (!apiResult.success) {
+      getIt<NavigationService>().showSnackBar(
+        'initializing.could_not_connect'.tr(),
+      );
+    }
+
+    return apiResult.data;
   }
 
   Future<List<ServerType>> fetchAvailableTypesByLocation(
@@ -135,9 +144,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    return ApiController.currentServerProviderApiFactory!
+    final APIGenericResult apiResult = await ApiController
+        .currentServerProviderApiFactory!
         .getServerProvider()
         .getServerTypesByLocation(location: location);
+
+    if (!apiResult.success) {
+      getIt<NavigationService>().showSnackBar(
+        'initializing.could_not_connect'.tr(),
+      );
+    }
+
+    return apiResult.data;
   }
 
   void setServerProviderKey(final String serverProviderKey) async {

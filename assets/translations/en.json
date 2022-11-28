@@ -273,6 +273,7 @@
         "place_where_data": "A place where your data and SelfPrivacy services will reside:",
         "how": "How to obtain API token",
         "provider_bad_key_error": "Provider API key is invalid",
+        "could_not_connect": "Counldn't connect to the provider, please check your connection.",
         "choose_location_type": "Choose your server location and type:",
         "back_to_locations": "Go back to available locations!",
         "no_locations_found": "No available locations found. Make sure your account is accessible.",

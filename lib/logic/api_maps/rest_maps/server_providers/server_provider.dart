@@ -1,3 +1,4 @@
+import 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -7,6 +8,8 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+
+export 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 
 class ProviderApiTokenValidation {
   ProviderApiTokenValidation({
@@ -39,7 +42,7 @@ abstract class ServerProviderApi extends ApiMap {
     required final ServerDomain domain,
   });
 
-  Future<bool> isApiTokenValid(final String token);
+  Future<APIGenericResult<bool>> isApiTokenValid(final String token);
   ProviderApiTokenValidation getApiTokenValidation();
   Future<List<ServerMetadataEntity>> getMetadata(final int serverId);
   Future<ServerMetrics?> getMetrics(

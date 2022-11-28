@@ -479,7 +479,7 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final GenericResult<String> result = await serverApi.authorizeDevice(
+    final APIGenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: newDeviceKey),
     );
 
@@ -516,7 +516,7 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final GenericResult<String> result = await serverApi.useRecoveryToken(
+    final APIGenericResult<String> result = await serverApi.useRecoveryToken(
       DeviceToken(device: await getDeviceName(), token: recoveryKey),
     );
 
@@ -577,9 +577,9 @@ class ServerInstallationRepository {
         );
       }
     }
-    final GenericResult<String> deviceAuthKey =
+    final APIGenericResult<String> deviceAuthKey =
         await serverApi.createDeviceToken();
-    final GenericResult<String> result = await serverApi.authorizeDevice(
+    final APIGenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
     );
 

@@ -76,16 +76,27 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           .getDnsProvider()
           .getApiTokenValidation();
 
-  Future<bool> isServerProviderApiTokenValid(
+  Future<bool?> isServerProviderApiTokenValid(
     final String providerToken,
-  ) async =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider(
-            settings: const ServerProviderApiSettings(
-              isWithToken: false,
-            ),
-          )
-          .isApiTokenValid(providerToken);
+  ) async {
+    final APIGenericResult<bool> apiResponse =
+        await ApiController.currentServerProviderApiFactory!
+            .getServerProvider(
+              settings: const ServerProviderApiSettings(
+                isWithToken: false,
+              ),
+            )
+            .isApiTokenValid(providerToken);
+
+    if (!apiResponse.success) {
+      getIt<NavigationService>().showSnackBar(
+        'initializing.could_not_connect'.tr(),
+      );
+      return null;
+    }
+
+    return apiResponse.data;
+  }
 
   Future<bool> isDnsProviderApiTokenValid(
     final String providerToken,

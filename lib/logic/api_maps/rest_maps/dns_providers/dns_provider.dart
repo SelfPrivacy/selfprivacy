@@ -1,6 +1,9 @@
+import 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
+
+export 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 
 class DomainNotFoundException implements Exception {
   DomainNotFoundException(this.message);
@@ -26,6 +29,6 @@ abstract class DnsProviderApi extends ApiMap {
   Future<String?> getZoneId(final String domain);
   Future<List<String>> domainList();
 
-  Future<bool> isApiTokenValid(final String token);
+  Future<APIGenericResult<bool>> isApiTokenValid(final String token);
   RegExp getApiTokenValidation();
 }

@@ -28,21 +28,24 @@ class DnsProviderFormCubit extends FormCubit {
 
   @override
   FutureOr<bool> asyncValidation() async {
-    late bool isKeyValid;
+    bool? isKeyValid;
 
     try {
       isKeyValid = await initializingCubit
           .isDnsProviderApiTokenValid(apiKey.state.value);
     } catch (e) {
       addError(e);
-      isKeyValid = false;
+    }
+
+    if (isKeyValid == null) {
+      apiKey.setError('');
+      return false;
     }
 
     if (!isKeyValid) {
       apiKey.setError('initializing.cloudflare_bad_key_error'.tr());
-      return false;
     }
 
-    return true;
+    return isKeyValid;
   }
 }

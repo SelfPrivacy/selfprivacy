@@ -98,7 +98,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     return apiResponse.data;
   }
 
-  Future<bool> isDnsProviderApiTokenValid(
+  Future<bool?> isDnsProviderApiTokenValid(
     final String providerToken,
   ) async {
     if (ApiController.currentDnsProviderApiFactory == null) {
@@ -111,11 +111,21 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
     }
 
-    return ApiController.currentDnsProviderApiFactory!
-        .getDnsProvider(
-          settings: const DnsProviderApiSettings(isWithToken: false),
-        )
-        .isApiTokenValid(providerToken);
+    final APIGenericResult<bool> apiResponse =
+        await ApiController.currentDnsProviderApiFactory!
+            .getDnsProvider(
+              settings: const DnsProviderApiSettings(isWithToken: false),
+            )
+            .isApiTokenValid(providerToken);
+
+    if (!apiResponse.success) {
+      getIt<NavigationService>().showSnackBar(
+        'initializing.could_not_connect'.tr(),
+      );
+      return null;
+    }
+
+    return apiResponse.data;
   }
 
   Future<List<ServerProviderLocation>> fetchAvailableLocations() async {

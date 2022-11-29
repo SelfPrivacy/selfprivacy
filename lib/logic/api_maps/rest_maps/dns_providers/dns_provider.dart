@@ -14,11 +14,11 @@ abstract class DnsProviderApi extends ApiMap {
   Future<List<DnsRecord>> getDnsRecords({
     required final ServerDomain domain,
   });
-  Future<void> removeSimilarRecords({
+  Future<APIGenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
     final String? ip4,
   });
-  Future<void> createMultipleDnsRecords({
+  Future<APIGenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
     final String? ip4,
   });

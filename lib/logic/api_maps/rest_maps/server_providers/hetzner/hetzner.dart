@@ -788,7 +788,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<void> createReverseDns({
+  Future<APIGenericResult<void>> createReverseDns({
     required final ServerHostingDetails serverDetails,
     required final ServerDomain domain,
   }) async {
@@ -803,8 +803,15 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       );
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
+
+    return APIGenericResult(success: true, data: null);
   }
 }

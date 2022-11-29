@@ -790,11 +790,13 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<void> createReverseDns({
+  Future<APIGenericResult<void>> createReverseDns({
     required final ServerHostingDetails serverDetails,
     required final ServerDomain domain,
   }) async {
     /// TODO remove from provider interface
+    const bool success = true;
+    return APIGenericResult(success: success, data: null);
   }
 
   @override

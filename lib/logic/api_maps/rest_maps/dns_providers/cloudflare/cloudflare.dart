@@ -113,7 +113,7 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<void> removeSimilarRecords({
+  Future<APIGenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
     final String? ip4,
   }) async {
@@ -139,9 +139,16 @@ class CloudflareApi extends DnsProviderApi {
       await Future.wait(allDeleteFutures);
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
+
+    return APIGenericResult(success: true, data: null);
   }
 
   @override
@@ -183,7 +190,7 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<void> createMultipleDnsRecords({
+  Future<APIGenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
     final String? ip4,
   }) async {
@@ -206,9 +213,18 @@ class CloudflareApi extends DnsProviderApi {
     } on DioError catch (e) {
       print(e.message);
       rethrow;
+    } catch (e) {
+      print(e);
+      return APIGenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
+
+    return APIGenericResult(success: true, data: null);
   }
 
   List<DnsRecord> projectDnsRecords(

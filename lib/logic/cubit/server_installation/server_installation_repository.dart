@@ -334,21 +334,9 @@ class ServerInstallationRepository {
     final ServerProviderApi serverApi =
         ApiController.currentServerProviderApiFactory!.getServerProvider();
 
-    await dnsProviderApi.removeSimilarRecords(
-      ip4: serverDetails.ip4,
-      domain: domain,
-    );
-
-    try {
-      await dnsProviderApi.createMultipleDnsRecords(
-        ip4: serverDetails.ip4,
-        domain: domain,
-      );
-    } on DioError catch (e) {
+    void showDomainErrorPopUp(final String error) {
       showPopUpAlert(
-        alertTitle: e.response!.data['errors'][0]['code'] == 1038
-            ? 'modals.you_cant_use_this_api'.tr()
-            : 'domain.error'.tr(),
+        alertTitle: error,
         description: 'modals.delete_server_volume'.tr(),
         cancelButtonOnPressed: onCancel,
         actionButtonTitle: 'basis.delete'.tr(),
@@ -359,13 +347,49 @@ class ServerInstallationRepository {
           onCancel();
         },
       );
+    }
+
+    final APIGenericResult removingResult =
+        await dnsProviderApi.removeSimilarRecords(
+      ip4: serverDetails.ip4,
+      domain: domain,
+    );
+
+    if (!removingResult.success) {
+      showDomainErrorPopUp('domain.error'.tr());
       return false;
     }
 
-    await serverApi.createReverseDns(
+    bool createdSuccessfully = false;
+    String errorMessage = 'domain.error'.tr();
+    try {
+      final APIGenericResult createResult =
+          await dnsProviderApi.createMultipleDnsRecords(
+        ip4: serverDetails.ip4,
+        domain: domain,
+      );
+      createdSuccessfully = createResult.success;
+    } on DioError catch (e) {
+      if (e.response!.data['errors'][0]['code'] == 1038) {
+        errorMessage = 'modals.you_cant_use_this_api'.tr();
+      }
+    }
+
+    if (!createdSuccessfully) {
+      showDomainErrorPopUp(errorMessage);
+      return false;
+    }
+
+    final APIGenericResult createReverseResult =
+        await serverApi.createReverseDns(
       serverDetails: serverDetails,
       domain: domain,
     );
+
+    if (!createReverseResult.success) {
+      showDomainErrorPopUp(errorMessage);
+      return false;
+    }
 
     return true;
   }

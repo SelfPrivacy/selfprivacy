@@ -75,13 +75,12 @@ class ServerInstallationRepository {
       );
     }
 
-    if (serverDomain != null && serverDomain.provider != DnsProvider.unknown) {
-      ApiController.initDnsProviderApiFactory(
-        DnsProviderApiFactorySettings(
-          provider: serverDomain.provider,
-        ),
-      );
-    }
+    // No other DNS provider is supported for now, so it's fine.
+    ApiController.initDnsProviderApiFactory(
+      DnsProviderApiFactorySettings(
+        provider: DnsProvider.cloudflare,
+      ),
+    );
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
       return ServerInstallationFinished(

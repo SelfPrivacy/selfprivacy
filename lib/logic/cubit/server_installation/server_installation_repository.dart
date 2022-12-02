@@ -323,6 +323,7 @@ class ServerInstallationRepository {
           },
           cancelButtonOnPressed: onCancel,
         );
+        return;
       }
 
       saveServerDetails(createServerResult.data!);

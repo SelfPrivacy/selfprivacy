@@ -48,7 +48,7 @@ abstract class ServerInstallationState extends Equatable {
 
   bool get isFullyInitilized => _fulfilementList.every((final el) => el!);
   ServerSetupProgress get progress => ServerSetupProgress
-      .values[_fulfilementList.where((final el) => el!).length + 1];
+      .values[_fulfilementList.where((final el) => el!).length];
 
   int get porgressBar {
     if (progress.index < 6) {

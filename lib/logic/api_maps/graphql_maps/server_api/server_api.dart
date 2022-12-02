@@ -31,16 +31,6 @@ part 'services_api.dart';
 part 'users_api.dart';
 part 'volume_api.dart';
 
-class GenericMutationResult<T> extends APIGenericResult<T> {
-  GenericMutationResult({
-    required super.success,
-    required this.code,
-    required super.data,
-    super.message,
-  });
-  final int code;
-}
-
 class ServerApi extends ApiMap
     with VolumeApi, JobsApi, ServerActionsApi, ServicesApi, UsersApi {
   ServerApi({

@@ -20,7 +20,7 @@ mixin ServicesApi on ApiMap {
     return services;
   }
 
-  Future<GenericMutationResult<bool>> enableService(
+  Future<APIGenericResult<bool>> enableService(
     final String serviceId,
   ) async {
     try {
@@ -28,7 +28,7 @@ mixin ServicesApi on ApiMap {
       final variables = Variables$Mutation$EnableService(serviceId: serviceId);
       final mutation = Options$Mutation$EnableService(variables: variables);
       final response = await client.mutate$EnableService(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: response.parsedData?.enableService.success ?? false,
         success: true,
         code: response.parsedData?.enableService.code ?? 0,
@@ -36,7 +36,7 @@ mixin ServicesApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: false,
         success: false,
         code: 0,
@@ -45,7 +45,7 @@ mixin ServicesApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult<void>> disableService(
+  Future<APIGenericResult<void>> disableService(
     final String serviceId,
   ) async {
     try {
@@ -53,7 +53,7 @@ mixin ServicesApi on ApiMap {
       final variables = Variables$Mutation$DisableService(serviceId: serviceId);
       final mutation = Options$Mutation$DisableService(variables: variables);
       final response = await client.mutate$DisableService(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: null,
         success: response.parsedData?.disableService.success ?? false,
         code: response.parsedData?.disableService.code ?? 0,
@@ -61,7 +61,7 @@ mixin ServicesApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: null,
         success: false,
         code: 0,
@@ -70,7 +70,7 @@ mixin ServicesApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult<bool>> stopService(
+  Future<APIGenericResult<bool>> stopService(
     final String serviceId,
   ) async {
     try {
@@ -78,7 +78,7 @@ mixin ServicesApi on ApiMap {
       final variables = Variables$Mutation$StopService(serviceId: serviceId);
       final mutation = Options$Mutation$StopService(variables: variables);
       final response = await client.mutate$StopService(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: response.parsedData?.stopService.success ?? false,
         success: true,
         code: response.parsedData?.stopService.code ?? 0,
@@ -86,7 +86,7 @@ mixin ServicesApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: false,
         success: false,
         code: 0,
@@ -95,13 +95,13 @@ mixin ServicesApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult> startService(final String serviceId) async {
+  Future<APIGenericResult> startService(final String serviceId) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$StartService(serviceId: serviceId);
       final mutation = Options$Mutation$StartService(variables: variables);
       final response = await client.mutate$StartService(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: null,
         success: response.parsedData?.startService.success ?? false,
         code: response.parsedData?.startService.code ?? 0,
@@ -109,7 +109,7 @@ mixin ServicesApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: null,
         success: false,
         code: 0,
@@ -118,7 +118,7 @@ mixin ServicesApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult<bool>> restartService(
+  Future<APIGenericResult<bool>> restartService(
     final String serviceId,
   ) async {
     try {
@@ -126,7 +126,7 @@ mixin ServicesApi on ApiMap {
       final variables = Variables$Mutation$RestartService(serviceId: serviceId);
       final mutation = Options$Mutation$RestartService(variables: variables);
       final response = await client.mutate$RestartService(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: response.parsedData?.restartService.success ?? false,
         success: true,
         code: response.parsedData?.restartService.code ?? 0,
@@ -134,7 +134,7 @@ mixin ServicesApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: false,
         success: false,
         code: 0,
@@ -143,7 +143,7 @@ mixin ServicesApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult<ServerJob?>> moveService(
+  Future<APIGenericResult<ServerJob?>> moveService(
     final String serviceId,
     final String destination,
   ) async {
@@ -158,7 +158,7 @@ mixin ServicesApi on ApiMap {
       final mutation = Options$Mutation$MoveService(variables: variables);
       final response = await client.mutate$MoveService(mutation);
       final jobJson = response.parsedData?.moveService.job?.toJson();
-      return GenericMutationResult(
+      return APIGenericResult(
         success: true,
         code: response.parsedData?.moveService.code ?? 0,
         message: response.parsedData?.moveService.message,
@@ -166,7 +166,7 @@ mixin ServicesApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         success: false,
         code: 0,
         message: e.toString(),

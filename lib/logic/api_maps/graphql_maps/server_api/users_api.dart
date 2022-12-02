@@ -45,7 +45,7 @@ mixin UsersApi on ApiMap {
     return user;
   }
 
-  Future<GenericMutationResult<User?>> createUser(
+  Future<APIGenericResult<User?>> createUser(
     final String username,
     final String password,
   ) async {
@@ -56,7 +56,7 @@ mixin UsersApi on ApiMap {
       );
       final mutation = Options$Mutation$CreateUser(variables: variables);
       final response = await client.mutate$CreateUser(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         success: true,
         code: response.parsedData?.createUser.code ?? 500,
         message: response.parsedData?.createUser.message,
@@ -66,7 +66,7 @@ mixin UsersApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         success: false,
         code: 0,
         message: e.toString(),
@@ -75,7 +75,7 @@ mixin UsersApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult<bool>> deleteUser(
+  Future<APIGenericResult<bool>> deleteUser(
     final String username,
   ) async {
     try {
@@ -83,7 +83,7 @@ mixin UsersApi on ApiMap {
       final variables = Variables$Mutation$DeleteUser(username: username);
       final mutation = Options$Mutation$DeleteUser(variables: variables);
       final response = await client.mutate$DeleteUser(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: response.parsedData?.deleteUser.success ?? false,
         success: true,
         code: response.parsedData?.deleteUser.code ?? 500,
@@ -91,7 +91,7 @@ mixin UsersApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: false,
         success: false,
         code: 500,
@@ -100,7 +100,7 @@ mixin UsersApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult<User?>> updateUser(
+  Future<APIGenericResult<User?>> updateUser(
     final String username,
     final String password,
   ) async {
@@ -111,7 +111,7 @@ mixin UsersApi on ApiMap {
       );
       final mutation = Options$Mutation$UpdateUser(variables: variables);
       final response = await client.mutate$UpdateUser(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         success: true,
         code: response.parsedData?.updateUser.code ?? 500,
         message: response.parsedData?.updateUser.message,
@@ -121,7 +121,7 @@ mixin UsersApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: null,
         success: false,
         code: 0,
@@ -130,7 +130,7 @@ mixin UsersApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult<User?>> addSshKey(
+  Future<APIGenericResult<User?>> addSshKey(
     final String username,
     final String sshKey,
   ) async {
@@ -144,7 +144,7 @@ mixin UsersApi on ApiMap {
       );
       final mutation = Options$Mutation$AddSshKey(variables: variables);
       final response = await client.mutate$AddSshKey(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         success: true,
         code: response.parsedData?.addSshKey.code ?? 500,
         message: response.parsedData?.addSshKey.message,
@@ -154,7 +154,7 @@ mixin UsersApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: null,
         success: false,
         code: 0,
@@ -163,7 +163,7 @@ mixin UsersApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult<User?>> removeSshKey(
+  Future<APIGenericResult<User?>> removeSshKey(
     final String username,
     final String sshKey,
   ) async {
@@ -177,7 +177,7 @@ mixin UsersApi on ApiMap {
       );
       final mutation = Options$Mutation$RemoveSshKey(variables: variables);
       final response = await client.mutate$RemoveSshKey(mutation);
-      return GenericMutationResult(
+      return APIGenericResult(
         success: response.parsedData?.removeSshKey.success ?? false,
         code: response.parsedData?.removeSshKey.code ?? 500,
         message: response.parsedData?.removeSshKey.message,
@@ -187,7 +187,7 @@ mixin UsersApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      return GenericMutationResult(
+      return APIGenericResult(
         data: null,
         success: false,
         code: 0,

@@ -3,6 +3,7 @@ class APIGenericResult<T> {
     required this.success,
     required this.data,
     this.message,
+    this.code,
   });
 
   /// Whether was a response successfully received,
@@ -10,4 +11,5 @@ class APIGenericResult<T> {
   final bool success;
   final String? message;
   final T data;
+  final int? code;
 }

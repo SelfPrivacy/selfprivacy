@@ -32,7 +32,7 @@ abstract class ServerProviderApi extends ApiMap {
   Future<ServerHostingDetails> powerOn();
 
   Future<void> deleteServer({required final String domainName});
-  Future<ServerHostingDetails?> createServer({
+  Future<APIGenericResult<ServerHostingDetails?>> createServer({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,

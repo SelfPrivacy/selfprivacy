@@ -114,10 +114,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       );
 
   @override
-  Future<ServerVolume?> createVolume() async {
+  Future<APIGenericResult<ServerVolume?>> createVolume() async {
     ServerVolume? volume;
 
-    final Response createVolumeResponse;
+    Response? createVolumeResponse;
     final Dio client = await getClient();
     try {
       final List<ServerVolume> volumes = await getVolumes();
@@ -146,11 +146,21 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       );
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        data: null,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return volume;
+    return APIGenericResult(
+      data: volume,
+      success: true,
+      code: createVolumeResponse.statusCode,
+      message: createVolumeResponse.statusMessage,
+    );
   }
 
   @override
@@ -219,13 +229,13 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> attachVolume(
+  Future<APIGenericResult<bool>> attachVolume(
     final ServerVolume volume,
     final int serverId,
   ) async {
     bool success = false;
 
-    final Response attachVolumeResponse;
+    Response? attachVolumeResponse;
     final Dio client = await getClient();
     try {
       attachVolumeResponse = await client.post(
@@ -241,11 +251,21 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           attachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        data: false,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return success;
+    return APIGenericResult(
+      data: success,
+      success: true,
+      code: attachVolumeResponse.statusCode,
+      message: attachVolumeResponse.statusMessage,
+    );
   }
 
   @override
@@ -323,7 +343,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<ServerHostingDetails?> createServer({
+  Future<APIGenericResult<ServerHostingDetails?>> createServer({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
@@ -345,6 +365,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
+    Response? serverCreateResponse;
     final Dio client = await getClient();
     try {
       final Map<String, Object> data = {
@@ -356,14 +377,15 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       };
       print('Decoded data: $data');
 
-      final Response serverCreateResponse = await client.post(
+      serverCreateResponse = await client.post(
         '/droplets',
         data: data,
       );
 
       final int serverId = serverCreateResponse.data['droplet']['id'];
-      final ServerVolume? newVolume = await createVolume();
-      final bool attachedVolume = await attachVolume(newVolume!, serverId);
+      final ServerVolume? newVolume = (await createVolume()).data;
+      final bool attachedVolume =
+          (await attachVolume(newVolume!, serverId)).data;
 
       String? ipv4;
       int attempts = 0;
@@ -391,11 +413,21 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       }
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return serverDetails;
+    return APIGenericResult(
+      data: serverDetails,
+      success: true,
+      code: serverCreateResponse.statusCode,
+      message: serverCreateResponse.statusMessage,
+    );
   }
 
   @override

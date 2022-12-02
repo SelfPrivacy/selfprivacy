@@ -246,22 +246,52 @@ class ServerInstallationRepository {
   }) async {
     final ServerProviderApi api =
         ApiController.currentServerProviderApiFactory!.getServerProvider();
+
+    void showInstallationErrorPopUp() {
+      showPopUpAlert(
+        alertTitle: 'modals.unexpected_error'.tr(),
+        description: 'modals.try_again'.tr(),
+        actionButtonTitle: 'modals.yes'.tr(),
+        actionButtonOnPressed: () async {
+          ServerHostingDetails? serverDetails;
+          try {
+            final APIGenericResult createResult = await api.createServer(
+              dnsApiToken: cloudFlareKey,
+              rootUser: rootUser,
+              domainName: domainName,
+              serverType: getIt<ApiConfigModel>().serverType!,
+            );
+            serverDetails = createResult.data;
+          } catch (e) {
+            print(e);
+          }
+
+          if (serverDetails == null) {
+            print('Server is not initialized!');
+            return;
+          }
+          await saveServerDetails(serverDetails);
+          onSuccess(serverDetails);
+        },
+        cancelButtonOnPressed: onCancel,
+      );
+    }
+
     try {
-      final ServerHostingDetails? serverDetails = await api.createServer(
+      final APIGenericResult<ServerHostingDetails?> createServerResult =
+          await api.createServer(
         dnsApiToken: cloudFlareKey,
         rootUser: rootUser,
         domainName: domainName,
         serverType: getIt<ApiConfigModel>().serverType!,
       );
 
-      if (serverDetails == null) {
-        print('Server is not initialized!');
-        return;
+      if (createServerResult.data == null) {
+        const String e = 'Server is not initialized!';
+        print(e);
       }
-      saveServerDetails(serverDetails);
-      onSuccess(serverDetails);
-    } on DioError catch (e) {
-      if (e.response!.data['error']['code'] == 'uniqueness_error') {
+
+      if (createServerResult.message == 'uniqueness_error') {
         showPopUpAlert(
           alertTitle: 'modals.already_exists'.tr(),
           description: 'modals.destroy_server'.tr(),
@@ -273,39 +303,13 @@ class ServerInstallationRepository {
 
             ServerHostingDetails? serverDetails;
             try {
-              serverDetails = await api.createServer(
+              final APIGenericResult createResult = await api.createServer(
                 dnsApiToken: cloudFlareKey,
                 rootUser: rootUser,
                 domainName: domainName,
                 serverType: getIt<ApiConfigModel>().serverType!,
               );
-            } catch (e) {
-              print(e);
-            }
-
-            if (serverDetails == null) {
-              print('Server is not initialized!');
-              return;
-            }
-            await saveServerDetails(serverDetails);
-            onSuccess(serverDetails);
-          },
-          cancelButtonOnPressed: onCancel,
-        );
-      } else {
-        showPopUpAlert(
-          alertTitle: 'modals.unexpected_error'.tr(),
-          description: 'modals.try_again'.tr(),
-          actionButtonTitle: 'modals.yes'.tr(),
-          actionButtonOnPressed: () async {
-            ServerHostingDetails? serverDetails;
-            try {
-              serverDetails = await api.createServer(
-                dnsApiToken: cloudFlareKey,
-                rootUser: rootUser,
-                domainName: domainName,
-                serverType: getIt<ApiConfigModel>().serverType!,
-              );
+              serverDetails = createResult.data;
             } catch (e) {
               print(e);
             }
@@ -320,6 +324,12 @@ class ServerInstallationRepository {
           cancelButtonOnPressed: onCancel,
         );
       }
+
+      saveServerDetails(createServerResult.data!);
+      onSuccess(createServerResult.data!);
+    } catch (e) {
+      print(e);
+      showInstallationErrorPopUp();
     }
   }
 

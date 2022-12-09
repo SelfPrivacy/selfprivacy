@@ -85,34 +85,26 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 .push(materialRoute(const ServerDetailsScreen())),
           ),
           const SizedBox(height: 16),
-          if (dnsStatus == DnsRecordsStatus.refreshing)
-            const SizedBox(
-              height: 35,
-              width: 35,
-              child: CircularProgressIndicator(),
-            ),
-          _Card(
-            state: getDnsStatus(),
-            icon: BrandIcons.globe,
-            title: 'domain.screen_title'.tr(),
-            subtitle: appConfig.isDomainSelected
-                ? appConfig.serverDomain!.domainName
-                : '',
-            onTap: () => Navigator.of(context).push(
-              materialRoute(
-                const DnsDetailsPage(),
+          if (dnsStatus == DnsRecordsStatus.refreshing) _LoadingCard(),
+          if (dnsStatus != DnsRecordsStatus.refreshing)
+            _Card(
+              state: getDnsStatus(),
+              icon: BrandIcons.globe,
+              title: 'domain.screen_title'.tr(),
+              subtitle: appConfig.isDomainSelected
+                  ? appConfig.serverDomain!.domainName
+                  : '',
+              onTap: () => Navigator.of(context).push(
+                materialRoute(
+                  const DnsDetailsPage(),
+                ),
               ),
             ),
-          ),
           const SizedBox(height: 16),
           // TODO: When backups are fixed, show this card
           if (backupState.status == BackupStatusEnum.initializing ||
               backupState.status == BackupStatusEnum.restoring)
-            const SizedBox(
-              height: 35,
-              width: 35,
-              child: CircularProgressIndicator(),
-            ),
+            _LoadingCard(),
           if (backupState.isInitialized)
             _Card(
               state: backupState.isInitialized
@@ -129,6 +121,26 @@ class _ProvidersPageState extends State<ProvidersPage> {
       ),
     );
   }
+}
+
+class _LoadingCard extends StatelessWidget {
+  @override
+  Widget build(final BuildContext context) => Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkResponse(
+          highlightShape: BoxShape.rectangle,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 }
 
 class _Card extends StatelessWidget {

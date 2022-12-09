@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
@@ -7,7 +8,6 @@ import 'package:easy_localization/easy_localization.dart';
 
 class BackblazeFormCubit extends FormCubit {
   BackblazeFormCubit(this.serverInstallationCubit) {
-    //var regExp = RegExp(r"\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]");
     keyId = FieldCubit(
       initalValue: '',
       validations: [
@@ -40,7 +40,7 @@ class BackblazeFormCubit extends FormCubit {
 
   @override
   FutureOr<bool> asyncValidation() async {
-    late bool isKeyValid;
+    late APIGenericResult<bool> backblazeResponse;
     final BackblazeApi apiClient = BackblazeApi(isWithToken: false);
 
     try {
@@ -48,18 +48,30 @@ class BackblazeFormCubit extends FormCubit {
         keyId.state.value,
         applicationKey.state.value,
       );
-      isKeyValid = await apiClient.isValid(encodedApiKey);
+      backblazeResponse = await apiClient.isApiTokenValid(encodedApiKey);
     } catch (e) {
       addError(e);
-      isKeyValid = false;
+      backblazeResponse = APIGenericResult(
+        success: false,
+        data: false,
+        message: e.toString(),
+      );
     }
 
-    if (!isKeyValid) {
-      keyId.setError('initializing.backblaze_bad_key_error'.tr());
-      applicationKey.setError('initializing.backblaze_bad_key_error'.tr());
+    if (!backblazeResponse.success) {
+      getIt<NavigationService>().showSnackBar(
+        'initializing.could_not_connect'.tr(),
+      );
+      keyId.setError('');
+      applicationKey.setError('');
       return false;
     }
 
-    return true;
+    if (!backblazeResponse.data) {
+      keyId.setError('initializing.backblaze_bad_key_error'.tr());
+      applicationKey.setError('initializing.backblaze_bad_key_error'.tr());
+    }
+
+    return backblazeResponse.data;
   }
 }

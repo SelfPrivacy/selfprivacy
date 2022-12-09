@@ -78,7 +78,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       return;
     }
     // If API returned error, do nothing
-    final GenericMutationResult<User?> result =
+    final APIGenericResult<User?> result =
         await api.createUser(user.login, password);
     if (result.data == null) {
       getIt<NavigationService>()
@@ -101,7 +101,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       return;
     }
     final List<User> loadedUsers = List<User>.from(state.users);
-    final GenericMutationResult result = await api.deleteUser(user.login);
+    final APIGenericResult result = await api.deleteUser(user.login);
     if (result.success && result.data) {
       loadedUsers.removeWhere((final User u) => u.login == user.login);
       await box.clear();
@@ -128,7 +128,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
           .showSnackBar('users.could_not_change_password'.tr());
       return;
     }
-    final GenericMutationResult<User?> result =
+    final APIGenericResult<User?> result =
         await api.updateUser(user.login, newPassword);
     if (result.data == null) {
       getIt<NavigationService>().showSnackBar(
@@ -138,7 +138,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   }
 
   Future<void> addSshKey(final User user, final String publicKey) async {
-    final GenericMutationResult<User?> result =
+    final APIGenericResult<User?> result =
         await api.addSshKey(user.login, publicKey);
     if (result.data != null) {
       final User updatedUser = result.data!;
@@ -157,7 +157,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   }
 
   Future<void> deleteSshKey(final User user, final String publicKey) async {
-    final GenericMutationResult<User?> result =
+    final APIGenericResult<User?> result =
         await api.removeSshKey(user.login, publicKey);
     if (result.data != null) {
       final User updatedUser = result.data!;

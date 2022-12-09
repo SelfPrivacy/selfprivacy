@@ -57,10 +57,10 @@ mixin VolumeApi on ApiMap {
     }
   }
 
-  Future<GenericMutationResult<String?>> migrateToBinds(
+  Future<APIGenericResult<String?>> migrateToBinds(
     final Map<String, String> serviceToDisk,
   ) async {
-    GenericMutationResult<String?>? mutation;
+    APIGenericResult<String?>? mutation;
 
     try {
       final GraphQLClient client = await getClient();
@@ -78,7 +78,7 @@ mixin VolumeApi on ApiMap {
           await client.mutate$MigrateToBinds(
         migrateMutation,
       );
-      mutation = mutation = GenericMutationResult(
+      mutation = mutation = APIGenericResult(
         success: true,
         code: result.parsedData!.migrateToBinds.code,
         message: result.parsedData!.migrateToBinds.message,
@@ -86,7 +86,7 @@ mixin VolumeApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      mutation = GenericMutationResult(
+      mutation = APIGenericResult(
         success: false,
         code: 0,
         message: e.toString(),

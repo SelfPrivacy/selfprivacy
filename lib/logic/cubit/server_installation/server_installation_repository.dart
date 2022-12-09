@@ -75,13 +75,12 @@ class ServerInstallationRepository {
       );
     }
 
-    if (serverDomain != null && serverDomain.provider != DnsProvider.unknown) {
-      ApiController.initDnsProviderApiFactory(
-        DnsProviderApiFactorySettings(
-          provider: serverDomain.provider,
-        ),
-      );
-    }
+    // No other DNS provider is supported for now, so it's fine.
+    ApiController.initDnsProviderApiFactory(
+      DnsProviderApiFactorySettings(
+        provider: DnsProvider.cloudflare,
+      ),
+    );
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
       return ServerInstallationFinished(
@@ -247,22 +246,52 @@ class ServerInstallationRepository {
   }) async {
     final ServerProviderApi api =
         ApiController.currentServerProviderApiFactory!.getServerProvider();
+
+    void showInstallationErrorPopUp() {
+      showPopUpAlert(
+        alertTitle: 'modals.unexpected_error'.tr(),
+        description: 'modals.try_again'.tr(),
+        actionButtonTitle: 'modals.yes'.tr(),
+        actionButtonOnPressed: () async {
+          ServerHostingDetails? serverDetails;
+          try {
+            final APIGenericResult createResult = await api.createServer(
+              dnsApiToken: cloudFlareKey,
+              rootUser: rootUser,
+              domainName: domainName,
+              serverType: getIt<ApiConfigModel>().serverType!,
+            );
+            serverDetails = createResult.data;
+          } catch (e) {
+            print(e);
+          }
+
+          if (serverDetails == null) {
+            print('Server is not initialized!');
+            return;
+          }
+          await saveServerDetails(serverDetails);
+          onSuccess(serverDetails);
+        },
+        cancelButtonOnPressed: onCancel,
+      );
+    }
+
     try {
-      final ServerHostingDetails? serverDetails = await api.createServer(
+      final APIGenericResult<ServerHostingDetails?> createServerResult =
+          await api.createServer(
         dnsApiToken: cloudFlareKey,
         rootUser: rootUser,
         domainName: domainName,
         serverType: getIt<ApiConfigModel>().serverType!,
       );
 
-      if (serverDetails == null) {
-        print('Server is not initialized!');
-        return;
+      if (createServerResult.data == null) {
+        const String e = 'Server is not initialized!';
+        print(e);
       }
-      saveServerDetails(serverDetails);
-      onSuccess(serverDetails);
-    } on DioError catch (e) {
-      if (e.response!.data['error']['code'] == 'uniqueness_error') {
+
+      if (createServerResult.message == 'uniqueness_error') {
         showPopUpAlert(
           alertTitle: 'modals.already_exists'.tr(),
           description: 'modals.destroy_server'.tr(),
@@ -274,12 +303,13 @@ class ServerInstallationRepository {
 
             ServerHostingDetails? serverDetails;
             try {
-              serverDetails = await api.createServer(
+              final APIGenericResult createResult = await api.createServer(
                 dnsApiToken: cloudFlareKey,
                 rootUser: rootUser,
                 domainName: domainName,
                 serverType: getIt<ApiConfigModel>().serverType!,
               );
+              serverDetails = createResult.data;
             } catch (e) {
               print(e);
             }
@@ -293,34 +323,14 @@ class ServerInstallationRepository {
           },
           cancelButtonOnPressed: onCancel,
         );
-      } else {
-        showPopUpAlert(
-          alertTitle: 'modals.unexpected_error'.tr(),
-          description: 'modals.try_again'.tr(),
-          actionButtonTitle: 'modals.yes'.tr(),
-          actionButtonOnPressed: () async {
-            ServerHostingDetails? serverDetails;
-            try {
-              serverDetails = await api.createServer(
-                dnsApiToken: cloudFlareKey,
-                rootUser: rootUser,
-                domainName: domainName,
-                serverType: getIt<ApiConfigModel>().serverType!,
-              );
-            } catch (e) {
-              print(e);
-            }
-
-            if (serverDetails == null) {
-              print('Server is not initialized!');
-              return;
-            }
-            await saveServerDetails(serverDetails);
-            onSuccess(serverDetails);
-          },
-          cancelButtonOnPressed: onCancel,
-        );
+        return;
       }
+
+      saveServerDetails(createServerResult.data!);
+      onSuccess(createServerResult.data!);
+    } catch (e) {
+      print(e);
+      showInstallationErrorPopUp();
     }
   }
 
@@ -334,21 +344,9 @@ class ServerInstallationRepository {
     final ServerProviderApi serverApi =
         ApiController.currentServerProviderApiFactory!.getServerProvider();
 
-    await dnsProviderApi.removeSimilarRecords(
-      ip4: serverDetails.ip4,
-      domain: domain,
-    );
-
-    try {
-      await dnsProviderApi.createMultipleDnsRecords(
-        ip4: serverDetails.ip4,
-        domain: domain,
-      );
-    } on DioError catch (e) {
+    void showDomainErrorPopUp(final String error) {
       showPopUpAlert(
-        alertTitle: e.response!.data['errors'][0]['code'] == 1038
-            ? 'modals.you_cant_use_this_api'.tr()
-            : 'domain.error'.tr(),
+        alertTitle: error,
         description: 'modals.delete_server_volume'.tr(),
         cancelButtonOnPressed: onCancel,
         actionButtonTitle: 'basis.delete'.tr(),
@@ -359,13 +357,49 @@ class ServerInstallationRepository {
           onCancel();
         },
       );
+    }
+
+    final APIGenericResult removingResult =
+        await dnsProviderApi.removeSimilarRecords(
+      ip4: serverDetails.ip4,
+      domain: domain,
+    );
+
+    if (!removingResult.success) {
+      showDomainErrorPopUp('domain.error'.tr());
       return false;
     }
 
-    await serverApi.createReverseDns(
+    bool createdSuccessfully = false;
+    String errorMessage = 'domain.error'.tr();
+    try {
+      final APIGenericResult createResult =
+          await dnsProviderApi.createMultipleDnsRecords(
+        ip4: serverDetails.ip4,
+        domain: domain,
+      );
+      createdSuccessfully = createResult.success;
+    } on DioError catch (e) {
+      if (e.response!.data['errors'][0]['code'] == 1038) {
+        errorMessage = 'modals.you_cant_use_this_api'.tr();
+      }
+    }
+
+    if (!createdSuccessfully) {
+      showDomainErrorPopUp(errorMessage);
+      return false;
+    }
+
+    final APIGenericResult createReverseResult =
+        await serverApi.createReverseDns(
       serverDetails: serverDetails,
       domain: domain,
     );
+
+    if (!createReverseResult.success) {
+      showDomainErrorPopUp(errorMessage);
+      return false;
+    }
 
     return true;
   }
@@ -479,7 +513,7 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final GenericResult<String> result = await serverApi.authorizeDevice(
+    final APIGenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: newDeviceKey),
     );
 
@@ -516,7 +550,7 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final GenericResult<String> result = await serverApi.useRecoveryToken(
+    final APIGenericResult<String> result = await serverApi.useRecoveryToken(
       DeviceToken(device: await getDeviceName(), token: recoveryKey),
     );
 
@@ -577,9 +611,9 @@ class ServerInstallationRepository {
         );
       }
     }
-    final GenericResult<String> deviceAuthKey =
+    final APIGenericResult<String> deviceAuthKey =
         await serverApi.createDeviceToken();
-    final GenericResult<String> result = await serverApi.authorizeDevice(
+    final APIGenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
     );
 

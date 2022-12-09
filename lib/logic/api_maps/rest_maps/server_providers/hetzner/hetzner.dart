@@ -60,35 +60,50 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   String get displayProviderName => 'Hetzner';
 
   @override
-  Future<bool> isApiTokenValid(final String token) async {
+  Future<APIGenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
+    String message = '';
     final Dio client = await getClient();
     try {
       response = await client.get(
         '/servers',
         options: Options(
+          followRedirects: false,
+          validateStatus: (final status) =>
+              status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
     } catch (e) {
       print(e);
       isValid = false;
+      message = e.toString();
     } finally {
       close(client);
     }
 
-    if (response != null) {
-      if (response.statusCode == HttpStatus.ok) {
-        isValid = true;
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        isValid = false;
-      } else {
-        throw Exception('code: ${response.statusCode}');
-      }
+    if (response == null) {
+      return APIGenericResult(
+        data: isValid,
+        success: false,
+        message: message,
+      );
     }
 
-    return isValid;
+    if (response.statusCode == HttpStatus.ok) {
+      isValid = true;
+    } else if (response.statusCode == HttpStatus.unauthorized) {
+      isValid = false;
+    } else {
+      throw Exception('code: ${response.statusCode}');
+    }
+
+    return APIGenericResult(
+      data: isValid,
+      success: true,
+      message: response.statusMessage,
+    );
   }
 
   @override
@@ -125,10 +140,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<ServerVolume?> createVolume() async {
+  Future<APIGenericResult<ServerVolume?>> createVolume() async {
     ServerVolume? volume;
 
-    final Response createVolumeResponse;
+    Response? createVolumeResponse;
     final Dio client = await getClient();
     try {
       createVolumeResponse = await client.post(
@@ -156,11 +171,21 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       );
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        data: null,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return volume;
+    return APIGenericResult(
+      data: volume,
+      success: true,
+      code: createVolumeResponse.statusCode,
+      message: createVolumeResponse.statusMessage,
+    );
   }
 
   @override
@@ -244,13 +269,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<bool> attachVolume(
+  Future<APIGenericResult<bool>> attachVolume(
     final ServerVolume volume,
     final int serverId,
   ) async {
     bool success = false;
 
-    final Response attachVolumeResponse;
+    Response? attachVolumeResponse;
     final Dio client = await getClient();
     try {
       attachVolumeResponse = await client.post(
@@ -268,7 +293,12 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       client.close();
     }
 
-    return success;
+    return APIGenericResult(
+      data: success,
+      success: true,
+      code: attachVolumeResponse?.statusCode,
+      message: attachVolumeResponse?.statusMessage,
+    );
   }
 
   @override
@@ -320,31 +350,33 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<ServerHostingDetails?> createServer({
+  Future<APIGenericResult<ServerHostingDetails?>> createServer({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
     required final String serverType,
   }) async {
-    ServerHostingDetails? details;
+    final APIGenericResult<ServerVolume?> newVolumeResponse =
+        await createVolume();
 
-    final ServerVolume? newVolume = await createVolume();
-    if (newVolume == null) {
-      return details;
+    if (!newVolumeResponse.success || newVolumeResponse.data == null) {
+      return APIGenericResult(
+        data: null,
+        success: false,
+        message: newVolumeResponse.message,
+        code: newVolumeResponse.code,
+      );
     }
-
-    details = await createServerWithVolume(
+    return createServerWithVolume(
       dnsApiToken: dnsApiToken,
       rootUser: rootUser,
       domainName: domainName,
-      volume: newVolume,
+      volume: newVolumeResponse.data!,
       serverType: serverType,
     );
-
-    return details;
   }
 
-  Future<ServerHostingDetails?> createServerWithVolume({
+  Future<APIGenericResult<ServerHostingDetails?>> createServerWithVolume({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
@@ -366,6 +398,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final String userdataString =
         "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
 
+    Response? serverCreateResponse;
     ServerHostingDetails? serverDetails;
     DioError? hetznerError;
     bool success = false;
@@ -385,7 +418,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       };
       print('Decoded data: $data');
 
-      final Response serverCreateResponse = await client.post(
+      serverCreateResponse = await client.post(
         '/servers',
         data: data,
       );
@@ -413,11 +446,19 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       await deleteVolume(volume);
     }
 
-    if (hetznerError != null) {
-      throw hetznerError;
+    String? apiResultMessage = serverCreateResponse?.statusMessage;
+    if (hetznerError != null &&
+        hetznerError.response!.data['error']['code'] == 'uniqueness_error') {
+      apiResultMessage = 'uniqueness_error';
     }
 
-    return serverDetails;
+    return APIGenericResult(
+      data: serverDetails,
+      success: success && hetznerError == null,
+      code: serverCreateResponse?.statusCode ??
+          hetznerError?.response?.statusCode,
+      message: apiResultMessage,
+    );
   }
 
   static String getHostnameFromDomain(final String domain) {
@@ -692,7 +733,8 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<List<ServerProviderLocation>> getAvailableLocations() async {
+  Future<APIGenericResult<List<ServerProviderLocation>>>
+      getAvailableLocations() async {
     List<ServerProviderLocation> locations = [];
 
     final Dio client = await getClient();
@@ -713,15 +755,20 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           .toList();
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        success: false,
+        data: [],
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return locations;
+    return APIGenericResult(success: true, data: locations);
   }
 
   @override
-  Future<List<ServerType>> getServerTypesByLocation({
+  Future<APIGenericResult<List<ServerType>>> getServerTypesByLocation({
     required final ServerProviderLocation location,
   }) async {
     final List<ServerType> types = [];
@@ -754,15 +801,20 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       }
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return types;
+    return APIGenericResult(data: types, success: true);
   }
 
   @override
-  Future<void> createReverseDns({
+  Future<APIGenericResult<void>> createReverseDns({
     required final ServerHostingDetails serverDetails,
     required final ServerDomain domain,
   }) async {
@@ -777,8 +829,15 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       );
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
+
+    return APIGenericResult(success: true, data: null);
   }
 }

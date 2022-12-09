@@ -35,7 +35,7 @@ class ApiDevicesCubit
   }
 
   Future<List<ApiToken>?> _getApiTokens() async {
-    final GenericResult<List<ApiToken>> response = await api.getApiTokens();
+    final APIGenericResult<List<ApiToken>> response = await api.getApiTokens();
     if (response.success) {
       return response.data;
     } else {
@@ -44,7 +44,8 @@ class ApiDevicesCubit
   }
 
   Future<void> deleteDevice(final ApiToken device) async {
-    final GenericResult<void> response = await api.deleteApiToken(device.name);
+    final APIGenericResult<void> response =
+        await api.deleteApiToken(device.name);
     if (response.success) {
       emit(
         ApiDevicesState(
@@ -59,7 +60,7 @@ class ApiDevicesCubit
   }
 
   Future<String?> getNewDeviceKey() async {
-    final GenericResult<String> response = await api.createDeviceToken();
+    final APIGenericResult<String> response = await api.createDeviceToken();
     if (response.success) {
       return response.data;
     } else {

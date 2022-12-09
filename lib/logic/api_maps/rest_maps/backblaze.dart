@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+
+export 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 
 class BackblazeApiAuth {
   BackblazeApiAuth({required this.authorizationToken, required this.apiUrl});
@@ -71,28 +74,43 @@ class BackblazeApi extends ApiMap {
     );
   }
 
-  Future<bool> isValid(final String encodedApiKey) async {
+  Future<APIGenericResult<bool>> isApiTokenValid(
+    final String encodedApiKey,
+  ) async {
     final Dio client = await getClient();
+    bool isTokenValid = false;
     try {
       final Response response = await client.get(
         'b2_authorize_account',
-        options: Options(headers: {'Authorization': 'Basic $encodedApiKey'}),
+        options: Options(
+          followRedirects: false,
+          validateStatus: (final status) =>
+              status != null && (status >= 200 || status == 401),
+          headers: {'Authorization': 'Basic $encodedApiKey'},
+        ),
       );
       if (response.statusCode == HttpStatus.ok) {
-        if (response.data['allowed']['capabilities'].contains('listBuckets')) {
-          return true;
-        }
-        return false;
+        isTokenValid = response.data['allowed']['capabilities'].contains('listBuckets');
       } else if (response.statusCode == HttpStatus.unauthorized) {
-        return false;
+        isTokenValid = false;
       } else {
         throw Exception('code: ${response.statusCode}');
       }
-    } on DioError {
-      return false;
+    } on DioError catch (e) {
+      print(e);
+      return APIGenericResult(
+        data: false,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
+
+    return APIGenericResult(
+      data: isTokenValid,
+      success: true,
+    );
   }
 
   // Create bucket

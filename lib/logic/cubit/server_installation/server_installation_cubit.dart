@@ -76,18 +76,29 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           .getDnsProvider()
           .getApiTokenValidation();
 
-  Future<bool> isServerProviderApiTokenValid(
+  Future<bool?> isServerProviderApiTokenValid(
     final String providerToken,
-  ) async =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider(
-            settings: const ServerProviderApiSettings(
-              isWithToken: false,
-            ),
-          )
-          .isApiTokenValid(providerToken);
+  ) async {
+    final APIGenericResult<bool> apiResponse =
+        await ApiController.currentServerProviderApiFactory!
+            .getServerProvider(
+              settings: const ServerProviderApiSettings(
+                isWithToken: false,
+              ),
+            )
+            .isApiTokenValid(providerToken);
 
-  Future<bool> isDnsProviderApiTokenValid(
+    if (!apiResponse.success) {
+      getIt<NavigationService>().showSnackBar(
+        'initializing.could_not_connect'.tr(),
+      );
+      return null;
+    }
+
+    return apiResponse.data;
+  }
+
+  Future<bool?> isDnsProviderApiTokenValid(
     final String providerToken,
   ) async {
     if (ApiController.currentDnsProviderApiFactory == null) {
@@ -100,11 +111,21 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
     }
 
-    return ApiController.currentDnsProviderApiFactory!
-        .getDnsProvider(
-          settings: const DnsProviderApiSettings(isWithToken: false),
-        )
-        .isApiTokenValid(providerToken);
+    final APIGenericResult<bool> apiResponse =
+        await ApiController.currentDnsProviderApiFactory!
+            .getDnsProvider(
+              settings: const DnsProviderApiSettings(isWithToken: false),
+            )
+            .isApiTokenValid(providerToken);
+
+    if (!apiResponse.success) {
+      getIt<NavigationService>().showSnackBar(
+        'initializing.could_not_connect'.tr(),
+      );
+      return null;
+    }
+
+    return apiResponse.data;
   }
 
   Future<List<ServerProviderLocation>> fetchAvailableLocations() async {
@@ -112,9 +133,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    return ApiController.currentServerProviderApiFactory!
+    final APIGenericResult apiResult = await ApiController
+        .currentServerProviderApiFactory!
         .getServerProvider()
         .getAvailableLocations();
+
+    if (!apiResult.success) {
+      getIt<NavigationService>().showSnackBar(
+        'initializing.could_not_connect'.tr(),
+      );
+    }
+
+    return apiResult.data;
   }
 
   Future<List<ServerType>> fetchAvailableTypesByLocation(
@@ -124,9 +154,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    return ApiController.currentServerProviderApiFactory!
+    final APIGenericResult apiResult = await ApiController
+        .currentServerProviderApiFactory!
         .getServerProvider()
         .getServerTypesByLocation(location: location);
+
+    if (!apiResult.success) {
+      getIt<NavigationService>().showSnackBar(
+        'initializing.could_not_connect'.tr(),
+      );
+    }
+
+    return apiResult.data;
   }
 
   void setServerProviderKey(final String serverProviderKey) async {

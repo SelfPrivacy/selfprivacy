@@ -46,33 +46,50 @@ class CloudflareApi extends DnsProviderApi {
   String rootAddress = 'https://api.cloudflare.com/client/v4';
 
   @override
-  Future<bool> isApiTokenValid(final String token) async {
+  Future<APIGenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
+    String message = '';
     final Dio client = await getClient();
     try {
       response = await client.get(
         '/user/tokens/verify',
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
+        options: Options(
+          followRedirects: false,
+          validateStatus: (final status) =>
+              status != null && (status >= 200 || status == 401),
+          headers: {'Authorization': 'Bearer $token'},
+        ),
       );
     } catch (e) {
       print(e);
       isValid = false;
+      message = e.toString();
     } finally {
       close(client);
     }
 
-    if (response != null) {
-      if (response.statusCode == HttpStatus.ok) {
-        isValid = true;
-      } else if (response.statusCode == HttpStatus.unauthorized) {
-        isValid = false;
-      } else {
-        throw Exception('code: ${response.statusCode}');
-      }
+    if (response == null) {
+      return APIGenericResult(
+        data: isValid,
+        success: false,
+        message: message,
+      );
     }
 
-    return isValid;
+    if (response.statusCode == HttpStatus.ok) {
+      isValid = true;
+    } else if (response.statusCode == HttpStatus.unauthorized) {
+      isValid = false;
+    } else {
+      throw Exception('code: ${response.statusCode}');
+    }
+
+    return APIGenericResult(
+      data: isValid,
+      success: true,
+      message: response.statusMessage,
+    );
   }
 
   @override
@@ -96,7 +113,7 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<void> removeSimilarRecords({
+  Future<APIGenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
     final String? ip4,
   }) async {
@@ -122,9 +139,16 @@ class CloudflareApi extends DnsProviderApi {
       await Future.wait(allDeleteFutures);
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
+
+    return APIGenericResult(success: true, data: null);
   }
 
   @override
@@ -166,7 +190,7 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<void> createMultipleDnsRecords({
+  Future<APIGenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
     final String? ip4,
   }) async {
@@ -189,9 +213,18 @@ class CloudflareApi extends DnsProviderApi {
     } on DioError catch (e) {
       print(e.message);
       rethrow;
+    } catch (e) {
+      print(e);
+      return APIGenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
+
+    return APIGenericResult(success: true, data: null);
   }
 
   List<DnsRecord> projectDnsRecords(

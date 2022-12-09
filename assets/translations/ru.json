@@ -322,7 +322,6 @@
         "fallback_select_provider_console": "Доступ к консоли хостинга.",
         "authorization_failed": "Не удалось войти с этим ключом",
         "fallback_select_provider_console_hint": "Например, Hetzner.",
-        "hetzner_connected_description": "Связь с сервером установлена. Введите токен Hetzner с доступом к {}:",
         "confirm_server": "Подтвердите сервер",
         "confirm_server_description": "Нашли сервер! Подтвердите, что это он:",
         "confirm_server_accept": "Да, это он",

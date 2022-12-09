@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
+import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
@@ -29,8 +30,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
   Widget build(final BuildContext context) {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    final bool isBackupInitialized =
-        context.watch<BackupsCubit>().state.isInitialized;
+    final backupState = context.watch<BackupsCubit>().state;
     final DnsRecordsStatus dnsStatus =
         context.watch<DnsRecordsCubit>().state.dnsState;
 
@@ -85,6 +85,12 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 .push(materialRoute(const ServerDetailsScreen())),
           ),
           const SizedBox(height: 16),
+          if (dnsStatus == DnsRecordsStatus.refreshing)
+            const SizedBox(
+              height: 35,
+              width: 35,
+              child: CircularProgressIndicator(),
+            ),
           _Card(
             state: getDnsStatus(),
             icon: BrandIcons.globe,
@@ -100,14 +106,22 @@ class _ProvidersPageState extends State<ProvidersPage> {
           ),
           const SizedBox(height: 16),
           // TODO: When backups are fixed, show this card
-          if (isBackupInitialized)
+          if (backupState.status == BackupStatusEnum.initializing ||
+              backupState.status == BackupStatusEnum.restoring)
+            const SizedBox(
+              height: 35,
+              width: 35,
+              child: CircularProgressIndicator(),
+            ),
+          if (backupState.isInitialized)
             _Card(
-              state: isBackupInitialized
+              state: backupState.isInitialized
                   ? StateType.stable
                   : StateType.uninitialized,
               icon: BrandIcons.save,
               title: 'backup.card_title'.tr(),
-              subtitle: isBackupInitialized ? 'backup.card_subtitle'.tr() : '',
+              subtitle:
+                  backupState.isInitialized ? 'backup.card_subtitle'.tr() : '',
               onTap: () => Navigator.of(context)
                   .push(materialRoute(const BackupDetails())),
             ),

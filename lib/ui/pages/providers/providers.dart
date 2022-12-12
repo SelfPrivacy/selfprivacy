@@ -85,7 +85,11 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 .push(materialRoute(const ServerDetailsScreen())),
           ),
           const SizedBox(height: 16),
-          if (dnsStatus == DnsRecordsStatus.refreshing) _LoadingCard(),
+          if (dnsStatus == DnsRecordsStatus.refreshing)
+            _LoadingCard(
+              secondValue: Theme.of(context).colorScheme.secondary,
+              mainValue: Theme.of(context).colorScheme.primary,
+            ),
           if (dnsStatus != DnsRecordsStatus.refreshing)
             _Card(
               state: getDnsStatus(),
@@ -104,7 +108,10 @@ class _ProvidersPageState extends State<ProvidersPage> {
           // TODO: When backups are fixed, show this card
           if (backupState.status == BackupStatusEnum.initializing ||
               backupState.status == BackupStatusEnum.restoring)
-            _LoadingCard(),
+            _LoadingCard(
+              secondValue: Theme.of(context).colorScheme.secondary,
+              mainValue: Theme.of(context).colorScheme.primary,
+            ),
           if (backupState.isInitialized)
             _Card(
               state: backupState.isInitialized
@@ -124,19 +131,34 @@ class _ProvidersPageState extends State<ProvidersPage> {
 }
 
 class _LoadingCard extends StatelessWidget {
+  const _LoadingCard({
+    required this.mainValue,
+    required this.secondValue,
+  });
+
+  final Color mainValue;
+  final Color secondValue;
+
   @override
-  Widget build(final BuildContext context) => Card(
-        clipBehavior: Clip.antiAlias,
-        child: InkResponse(
-          highlightShape: BoxShape.rectangle,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ],
+  Widget build(final BuildContext context) => ShaderMask(
+        shaderCallback: (final Rect bounds) => LinearGradient(
+          colors: <Color>[
+            mainValue,
+            secondValue,
+          ],
+          tileMode: TileMode.repeated,
+        ).createShader(bounds),
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: InkResponse(
+            highlightShape: BoxShape.rectangle,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: const [
+                  SizedBox(height: 50),
+                ],
+              ),
             ),
           ),
         ),

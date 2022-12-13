@@ -583,7 +583,7 @@ class ServerInstallationRepository {
     final ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
     final ServerApi serverApi = ServerApi(
-      isWithToken: false,
+      isWithToken: true,
       overrideDomain: serverDomain.domainName,
       customToken: apiToken,
     );

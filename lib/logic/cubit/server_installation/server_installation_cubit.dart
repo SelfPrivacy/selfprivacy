@@ -214,16 +214,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  void setCloudflareKey(final String cloudFlareKey) async {
+  void setDnsApiToken(final String dnsApiToken) async {
     if (state is ServerInstallationRecovery) {
-      setAndValidateCloudflareToken(cloudFlareKey);
+      setAndValidateCloudflareToken(dnsApiToken);
       return;
     }
-    await repository.saveCloudFlareKey(cloudFlareKey);
+    await repository.setDnsApiToken(dnsApiToken);
 
     emit(
       (state as ServerInstallationNotFinished)
-          .copyWith(cloudFlareKey: cloudFlareKey),
+          .copyWith(dnsApiToken: dnsApiToken),
     );
   }
 
@@ -284,7 +284,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       await repository.createServer(
         state.rootUser!,
         state.serverDomain!.domainName,
-        state.cloudFlareKey!,
+        state.dnsApiToken!,
         state.backblazeCredential!,
         onCancel: onCancel,
         onSuccess: onSuccess,
@@ -586,7 +586,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           ),
         );
         break;
-      case RecoveryStep.cloudflareToken:
+      case RecoveryStep.dnsProviderToken:
         repository.deleteServerDetails();
         emit(
           dataState.copyWith(
@@ -673,7 +673,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(
       dataState.copyWith(
         serverDetails: serverDetails,
-        currentStep: RecoveryStep.cloudflareToken,
+        currentStep: RecoveryStep.dnsProviderToken,
       ),
     );
   }
@@ -699,7 +699,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         provider: DnsProvider.cloudflare,
       ),
     );
-    await repository.saveCloudFlareKey(token);
+    await repository.setDnsApiToken(token);
     emit(
       dataState.copyWith(
         serverDomain: ServerDomain(
@@ -707,7 +707,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           zoneId: zoneId,
           provider: DnsProvider.cloudflare,
         ),
-        cloudFlareKey: token,
+        dnsApiToken: token,
         currentStep: RecoveryStep.backblazeToken,
       ),
     );
@@ -754,7 +754,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ServerInstallationNotFinished(
         providerApiToken: state.providerApiToken,
         serverDomain: state.serverDomain,
-        cloudFlareKey: state.cloudFlareKey,
+        dnsApiToken: state.dnsApiToken,
         backblazeCredential: state.backblazeCredential,
         rootUser: state.rootUser,
         serverDetails: null,

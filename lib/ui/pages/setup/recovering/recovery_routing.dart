@@ -53,7 +53,7 @@ class RecoveryRouting extends StatelessWidget {
         case RecoveryStep.serverSelection:
           currentPage = const RecoveryConfirmServer();
           break;
-        case RecoveryStep.cloudflareToken:
+        case RecoveryStep.dnsProviderToken:
           currentPage = const RecoveryConfirmCloudflare();
           break;
         case RecoveryStep.backblazeToken:

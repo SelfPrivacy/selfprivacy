@@ -6,8 +6,8 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-class CloudflareApi extends DnsProviderApi {
-  CloudflareApi({
+class DigitalOceanDnsApi extends DnsProviderApi {
+  DigitalOceanDnsApi({
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
@@ -43,7 +43,7 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  String rootAddress = 'https://api.cloudflare.com/client/v4';
+  String rootAddress = 'https://api.digitalocean.com/v2';
 
   @override
   Future<APIGenericResult<bool>> isApiTokenValid(final String token) async {
@@ -53,7 +53,7 @@ class CloudflareApi extends DnsProviderApi {
     final Dio client = await getClient();
     try {
       response = await client.get(
-        '/user/tokens/verify',
+        '/account',
         options: Options(
           followRedirects: false,
           validateStatus: (final status) =>
@@ -93,24 +93,8 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<String?> getZoneId(final String domain) async {
-    String? zoneId;
-
-    final Dio client = await getClient();
-    try {
-      final Response response = await client.get(
-        '/zones',
-        queryParameters: {'name': domain},
-      );
-      zoneId = response.data['result'][0]['id'];
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
-    }
-
-    return zoneId;
-  }
+  // TODO: Remove from DnsProviderInterface, stub for now
+  Future<String?> getZoneId(final String domain) async => domain;
 
   @override
   Future<APIGenericResult<void>> removeSimilarRecords({

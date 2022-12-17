@@ -45,7 +45,7 @@ class ServerInstallationRepository {
   Future<ServerInstallationState> load() async {
     final String? providerApiToken = getIt<ApiConfigModel>().serverProviderKey;
     final String? location = getIt<ApiConfigModel>().serverLocation;
-    final String? cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
+    final String? cloudflareToken = getIt<ApiConfigModel>().dnsProviderKey;
     final String? serverTypeIdentificator = getIt<ApiConfigModel>().serverType;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
     final ServerProvider? serverProvider =
@@ -86,7 +86,7 @@ class ServerInstallationRepository {
       return ServerInstallationFinished(
         providerApiToken: providerApiToken!,
         serverTypeIdentificator: serverTypeIdentificator ?? '',
-        cloudFlareKey: cloudflareToken!,
+        dnsApiToken: cloudflareToken!,
         serverDomain: serverDomain!,
         backblazeCredential: backblazeCredential!,
         serverDetails: serverDetails!,
@@ -103,7 +103,7 @@ class ServerInstallationRepository {
         serverDomain != null) {
       return ServerInstallationRecovery(
         providerApiToken: providerApiToken,
-        cloudFlareKey: cloudflareToken,
+        dnsApiToken: cloudflareToken,
         serverDomain: serverDomain,
         backblazeCredential: backblazeCredential,
         serverDetails: serverDetails,
@@ -120,7 +120,7 @@ class ServerInstallationRepository {
 
     return ServerInstallationNotFinished(
       providerApiToken: providerApiToken,
-      cloudFlareKey: cloudflareToken,
+      dnsApiToken: cloudflareToken,
       serverDomain: serverDomain,
       backblazeCredential: backblazeCredential,
       serverDetails: serverDetails,
@@ -147,7 +147,7 @@ class ServerInstallationRepository {
           if (serverDomain.provider != DnsProvider.unknown) {
             return RecoveryStep.backblazeToken;
           }
-          return RecoveryStep.cloudflareToken;
+          return RecoveryStep.dnsProviderToken;
         }
         return RecoveryStep.serverSelection;
       }
@@ -717,8 +717,8 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
-  Future<void> saveCloudFlareKey(final String key) async {
-    await getIt<ApiConfigModel>().storeCloudFlareKey(key);
+  Future<void> setDnsApiToken(final String key) async {
+    await getIt<ApiConfigModel>().storeDnsProviderKey(key);
   }
 
   Future<void> deleteCloudFlareKey() async {

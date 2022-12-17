@@ -20,7 +20,7 @@ class DnsProviderFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    initializingCubit.setCloudflareKey(apiKey.state.value);
+    initializingCubit.setDnsApiToken(apiKey.state.value);
   }
 
   final ServerInstallationCubit initializingCubit;

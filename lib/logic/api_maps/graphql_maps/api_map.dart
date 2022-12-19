@@ -1,6 +1,3 @@
-// ignore_for_file: prefer_foreach
-
-import 'dart:async';
 import 'dart:io';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -17,7 +14,7 @@ void _logToAppConsole<T>(final T objectToLog) {
       );
 }
 
-class LoggingLink extends Link {
+class RequestLoggingLink extends Link {
   @override
   Stream<Response> request(
     final Request request, [
@@ -28,7 +25,7 @@ class LoggingLink extends Link {
   }
 }
 
-class LoggingResponseParser extends ResponseParser {
+class ResponseLoggingParser extends ResponseParser {
   @override
   Response parseResponse(final Map<String, dynamic> body) {
     final response = super.parseResponse(body);
@@ -61,12 +58,12 @@ abstract class ApiMap {
     final httpLink = HttpLink(
       'https://api.$rootAddress/graphql',
       httpClient: ioClient,
-      parser: LoggingResponseParser(),
+      parser: ResponseLoggingParser(),
     );
 
     final String token = _getApiToken();
 
-    final Link graphQLLink = LoggingLink().concat(
+    final Link graphQLLink = RequestLoggingLink().concat(
       isWithToken
           ? AuthLink(
               getToken: () async =>
@@ -76,8 +73,8 @@ abstract class ApiMap {
     );
 
     // Every request goes through either chain:
-    // 1. AuthLink -> HttpLink -> LoggingLink
-    // 2.             HttpLink -> LoggingLink
+    // 1. RequestLoggingLink -> AuthLink -> HttpLink
+    // 2. RequestLoggingLink -> HttpLink
 
     return GraphQLClient(
       cache: GraphQLCache(),

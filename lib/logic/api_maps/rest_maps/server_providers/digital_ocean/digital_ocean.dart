@@ -23,7 +23,7 @@ import 'package:selfprivacy/utils/password_generator.dart';
 class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   DigitalOceanApi({
     required this.region,
-    this.hasLogger = false,
+    this.hasLogger = true,
     this.isWithToken = true,
   });
   @override

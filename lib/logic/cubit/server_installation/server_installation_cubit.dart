@@ -633,18 +633,27 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         state as ServerInstallationRecovery;
     final List<ServerBasicInfo> servers =
         await repository.getServersOnProviderAccount();
-    final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
-      (final ServerBasicInfo server) =>
-          ServerBasicInfoWithValidators.fromServerBasicInfo(
-        serverBasicInfo: server,
-        isIpValid: server.ip == dataState.serverDetails?.ip4,
-        isReverseDnsValid:
-            server.reverseDns == dataState.serverDomain?.domainName ||
-                server.reverseDns ==
-                    dataState.serverDomain?.domainName.split('.')[0],
-      ),
-    );
-    return validated.toList();
+    List<ServerBasicInfoWithValidators> validatedList = [];
+    try {
+      final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
+        (final ServerBasicInfo server) =>
+            ServerBasicInfoWithValidators.fromServerBasicInfo(
+          serverBasicInfo: server,
+          isIpValid: server.ip == dataState.serverDetails?.ip4,
+          isReverseDnsValid:
+              server.reverseDns == dataState.serverDomain?.domainName ||
+                  server.reverseDns ==
+                      dataState.serverDomain?.domainName.split('.')[0],
+        ),
+      );
+      validatedList = validated.toList();
+    } catch (e) {
+      print(e);
+      getIt<NavigationService>()
+          .showSnackBar('modals.server_validators_error'.tr());
+    }
+
+    return validatedList;
   }
 
   Future<void> setServerId(final ServerBasicInfo server) async {

@@ -24,7 +24,7 @@ import 'package:selfprivacy/utils/password_generator.dart';
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   HetznerApi({
     this.region,
-    this.hasLogger = false,
+    this.hasLogger = true,
     this.isWithToken = true,
   });
   @override

@@ -9,6 +9,7 @@ class DnsRecord {
     required this.type,
     required this.name,
     required this.content,
+    this.id,
     this.ttl = 3600,
     this.priority = 10,
     this.proxied = false,
@@ -30,6 +31,9 @@ class DnsRecord {
   final int ttl;
   final int priority;
   final bool proxied;
+
+  /// TODO: Refactoring refactoring refactoring refactoring >:c
+  final int? id;
 
   Map<String, dynamic> toJson() => _$DnsRecordToJson(this);
 }

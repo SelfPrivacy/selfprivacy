@@ -102,23 +102,15 @@ class DigitalOceanDnsApi extends DnsProviderApi {
     final String? ip4,
   }) async {
     final String domainName = domain.domainName;
-    final String domainZoneId = domain.zoneId;
-
-    final String url = '/zones/$domainZoneId/dns_records';
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(url);
-
-      final List records = response.data['result'] ?? [];
-      final List<Future> allDeleteFutures = <Future>[];
-
+      final List<Future> allDeleteFutures = [];
+      final List<DnsRecord> records = await getDnsRecords(domain: domain);
       for (final record in records) {
-        if (record['zone_name'] == domainName) {
-          allDeleteFutures.add(
-            client.delete('$url/${record["id"]}'),
-          );
-        }
+        allDeleteFutures.add(
+          client.delete('/domains/$domainName/records/${record.id}'),
+        );
       }
       await Future.wait(allDeleteFutures);
     } catch (e) {
@@ -141,28 +133,31 @@ class DigitalOceanDnsApi extends DnsProviderApi {
   }) async {
     Response response;
     final String domainName = domain.domainName;
-    final String domainZoneId = domain.zoneId;
     final List<DnsRecord> allRecords = <DnsRecord>[];
 
-    final String url = '/zones/$domainZoneId/dns_records';
+    /// Default amount is 20, but we will eventually overflow it,
+    /// so I hardcode it to the maximum available amount in advance just in case
+    ///
+    /// https://docs.digitalocean.com/reference/api/api-reference/#operation/domains_list_records
+    const int amountPerPage = 200;
+    final String url = '/domains/$domainName/records?per_page=$amountPerPage';
 
     final Dio client = await getClient();
     try {
       response = await client.get(url);
-      final List records = response.data['result'] ?? [];
+      final List records = response.data['domain_records'] ?? [];
 
       for (final record in records) {
-        if (record['zone_name'] == domainName) {
-          allRecords.add(
-            DnsRecord(
-              name: record['name'],
-              type: record['type'],
-              content: record['content'],
-              ttl: record['ttl'],
-              proxied: record['proxied'],
-            ),
-          );
-        }
+        allRecords.add(
+          DnsRecord(
+            id: record['id'],
+            name: record['name'],
+            type: record['type'],
+            content: record['data'],
+            ttl: record['ttl'],
+            proxied: false,
+          ),
+        );
       }
     } catch (e) {
       print(e);
@@ -179,17 +174,22 @@ class DigitalOceanDnsApi extends DnsProviderApi {
     final String? ip4,
   }) async {
     final String domainName = domain.domainName;
-    final String domainZoneId = domain.zoneId;
-    final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
+    final List<DnsRecord> dnsRecords = getProjectDnsRecords(domainName, ip4);
     final List<Future> allCreateFutures = <Future>[];
 
     final Dio client = await getClient();
     try {
-      for (final DnsRecord record in listDnsRecords) {
+      for (final DnsRecord record in dnsRecords) {
         allCreateFutures.add(
           client.post(
-            '/zones/$domainZoneId/dns_records',
-            data: record.toJson(),
+            '/domains/$domainName/records',
+            data: {
+              'type': record.type,
+              'name': record.name,
+              'data': record.content,
+              'ttl': record.ttl,
+              'priority': record.priority,
+            },
           ),
         );
       }
@@ -211,66 +211,23 @@ class DigitalOceanDnsApi extends DnsProviderApi {
     return APIGenericResult(success: true, data: null);
   }
 
-  List<DnsRecord> projectDnsRecords(
-    final String? domainName,
-    final String? ip4,
-  ) {
-    final DnsRecord domainA =
-        DnsRecord(type: 'A', name: domainName, content: ip4);
-
-    final DnsRecord mx = DnsRecord(type: 'MX', name: '@', content: domainName);
-    final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
-    final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
-    final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
-    final DnsRecord meetA = DnsRecord(type: 'A', name: 'meet', content: ip4);
-    final DnsRecord passwordA =
-        DnsRecord(type: 'A', name: 'password', content: ip4);
-    final DnsRecord socialA =
-        DnsRecord(type: 'A', name: 'social', content: ip4);
-    final DnsRecord vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
-
-    final DnsRecord txt1 = DnsRecord(
-      type: 'TXT',
-      name: '_dmarc',
-      content: 'v=DMARC1; p=none',
-      ttl: 18000,
-    );
-
-    final DnsRecord txt2 = DnsRecord(
-      type: 'TXT',
-      name: domainName,
-      content: 'v=spf1 a mx ip4:$ip4 -all',
-      ttl: 18000,
-    );
-
-    return <DnsRecord>[
-      domainA,
-      apiA,
-      cloudA,
-      gitA,
-      meetA,
-      passwordA,
-      socialA,
-      mx,
-      txt1,
-      txt2,
-      vpn
-    ];
-  }
-
   @override
   Future<void> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
   ) async {
-    final String domainZoneId = domain.zoneId;
-    final String url = '$rootAddress/zones/$domainZoneId/dns_records';
-
     final Dio client = await getClient();
     try {
+      final domainName = domain.domainName;
       await client.post(
-        url,
-        data: record.toJson(),
+        '/domains/$domainName/records',
+        data: {
+          'type': record.type,
+          'name': record.name,
+          'data': record.content,
+          'ttl': record.ttl,
+          'priority': record.priority,
+        },
       );
     } catch (e) {
       print(e);

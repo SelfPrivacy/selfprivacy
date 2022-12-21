@@ -238,16 +238,13 @@ class DigitalOceanDnsApi extends DnsProviderApi {
 
   @override
   Future<List<String>> domainList() async {
-    final String url = '$rootAddress/zones';
+    final String url = '$rootAddress/domains';
     List<String> domains = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(
-        url,
-        queryParameters: {'per_page': 50},
-      );
-      domains = response.data['result']
+      final Response response = await client.get(url);
+      domains = response.data['domains']
           .map<String>((final el) => el['name'] as String)
           .toList();
     } catch (e) {

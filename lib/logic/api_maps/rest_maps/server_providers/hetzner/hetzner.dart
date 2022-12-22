@@ -19,6 +19,7 @@ import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
@@ -459,23 +460,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           hetznerError?.response?.statusCode,
       message: apiResultMessage,
     );
-  }
-
-  static String getHostnameFromDomain(final String domain) {
-    // Replace all non-alphanumeric characters with an underscore
-    String hostname =
-        domain.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
-    if (hostname.endsWith('-')) {
-      hostname = hostname.substring(0, hostname.length - 1);
-    }
-    if (hostname.startsWith('-')) {
-      hostname = hostname.substring(1);
-    }
-    if (hostname.isEmpty) {
-      hostname = 'selfprivacy-server';
-    }
-
-    return hostname;
   }
 
   @override

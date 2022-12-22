@@ -431,17 +431,41 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<void> deleteServer({
+  Future<APIGenericResult<bool>> deleteServer({
     required final String domainName,
   }) async {
     final Dio client = await getClient();
 
-    final ServerBasicInfo serverToRemove = (await getServers()).firstWhere(
-      (final el) => el.name == domainName,
-    );
-    final ServerVolume volumeToRemove = (await getVolumes()).firstWhere(
-      (final el) => el.serverId == serverToRemove.id,
-    );
+    final servers = await getServers();
+    final ServerBasicInfo serverToRemove;
+    try {
+      serverToRemove = servers.firstWhere(
+        (final el) => el.name == domainName,
+      );
+    } catch (e) {
+      print(e);
+      return APIGenericResult(
+        data: false,
+        success: false,
+        message: e.toString(),
+      );
+    }
+
+    final volumes = await getVolumes();
+    final ServerVolume volumeToRemove;
+    try {
+      volumeToRemove = volumes.firstWhere(
+        (final el) => el.serverId == serverToRemove.id,
+      );
+    } catch (e) {
+      print(e);
+      return APIGenericResult(
+        data: false,
+        success: false,
+        message: e.toString(),
+      );
+    }
+
     final List<Future> laterFutures = <Future>[];
 
     await detachVolume(volumeToRemove);
@@ -453,9 +477,19 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       await Future.wait(laterFutures);
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        success: false,
+        data: false,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
+
+    return APIGenericResult(
+      success: true,
+      data: true,
+    );
   }
 
   @override

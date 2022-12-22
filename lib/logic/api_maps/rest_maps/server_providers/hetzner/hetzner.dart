@@ -479,31 +479,46 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<void> deleteServer({
+  Future<APIGenericResult<bool>> deleteServer({
     required final String domainName,
   }) async {
     final Dio client = await getClient();
+    try {
+      final String hostname = getHostnameFromDomain(domainName);
 
-    final String hostname = getHostnameFromDomain(domainName);
+      final Response serversReponse = await client.get('/servers');
+      final List servers = serversReponse.data['servers'];
+      final Map server =
+          servers.firstWhere((final el) => el['name'] == hostname);
+      final List volumes = server['volumes'];
+      final List<Future> laterFutures = <Future>[];
 
-    final Response serversReponse = await client.get('/servers');
-    final List servers = serversReponse.data['servers'];
-    final Map server = servers.firstWhere((final el) => el['name'] == hostname);
-    final List volumes = server['volumes'];
-    final List<Future> laterFutures = <Future>[];
+      for (final volumeId in volumes) {
+        await client.post('/volumes/$volumeId/actions/detach');
+      }
+      await Future.delayed(const Duration(seconds: 10));
 
-    for (final volumeId in volumes) {
-      await client.post('/volumes/$volumeId/actions/detach');
+      for (final volumeId in volumes) {
+        laterFutures.add(client.delete('/volumes/$volumeId'));
+      }
+      laterFutures.add(client.delete('/servers/${server['id']}'));
+
+      await Future.wait(laterFutures);
+    } catch (e) {
+      print(e);
+      return APIGenericResult(
+        success: false,
+        data: false,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
     }
-    await Future.delayed(const Duration(seconds: 10));
 
-    for (final volumeId in volumes) {
-      laterFutures.add(client.delete('/volumes/$volumeId'));
-    }
-    laterFutures.add(client.delete('/servers/${server['id']}'));
-
-    await Future.wait(laterFutures);
-    close(client);
+    return APIGenericResult(
+      success: true,
+      data: true,
+    );
   }
 
   @override

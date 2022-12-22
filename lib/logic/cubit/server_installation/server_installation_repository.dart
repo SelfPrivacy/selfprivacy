@@ -759,12 +759,25 @@ class ServerInstallationRepository {
     await box.put(BNames.hasFinalChecked, value);
   }
 
-  Future<void> deleteServer(final ServerDomain serverDomain) async {
-    await ApiController.currentServerProviderApiFactory!
+  Future<bool> deleteServer(final ServerDomain serverDomain) async {
+    final APIGenericResult<bool> deletionResult = await ApiController
+        .currentServerProviderApiFactory!
         .getServerProvider()
         .deleteServer(
           domainName: serverDomain.domainName,
         );
+
+    if (!deletionResult.success) {
+      getIt<NavigationService>()
+          .showSnackBar('modals.server_validators_error'.tr());
+      return false;
+    }
+
+    if (!deletionResult.data) {
+      getIt<NavigationService>()
+          .showSnackBar('modals.server_deletion_error'.tr());
+      return false;
+    }
 
     await box.put(BNames.hasFinalChecked, false);
     await box.put(BNames.isServerStarted, false);
@@ -773,9 +786,15 @@ class ServerInstallationRepository {
     await box.put(BNames.isLoading, false);
     await box.put(BNames.serverDetails, null);
 
-    await ApiController.currentDnsProviderApiFactory!
+    final APIGenericResult<void> removalResult = await ApiController
+        .currentDnsProviderApiFactory!
         .getDnsProvider()
         .removeSimilarRecords(domain: serverDomain);
+
+    if (!removalResult.success) {
+      getIt<NavigationService>().showSnackBar('modals.dns_removal_error'.tr());
+    }
+    return true;
   }
 
   Future<void> deleteServerRelatedRecords() async {

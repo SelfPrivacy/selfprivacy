@@ -392,6 +392,8 @@
         "generation_error": "Не удалось сгенерировать ключ. {}"
     },
     "modals": {
+        "dns_removal_error": "Невозможно удалить DNS записи.",
+        "server_deletion_error": "Невозможно удалить сервер.",
         "server_validators_error": "Не удалось получить список серверов.",
         "already_exists": "Такой сервер уже существует.",
         "unexpected_error": "Непредвиденная ошибка со стороны провайдера.",

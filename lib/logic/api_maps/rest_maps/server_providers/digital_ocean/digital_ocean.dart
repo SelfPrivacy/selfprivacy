@@ -18,6 +18,7 @@ import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
@@ -325,23 +326,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return success;
   }
 
-  static String getHostnameFromDomain(final String domain) {
-    // Replace all non-alphanumeric characters with an underscore
-    String hostname =
-        domain.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
-    if (hostname.endsWith('-')) {
-      hostname = hostname.substring(0, hostname.length - 1);
-    }
-    if (hostname.startsWith('-')) {
-      hostname = hostname.substring(1);
-    }
-    if (hostname.isEmpty) {
-      hostname = 'selfprivacy-server';
-    }
-
-    return hostname;
-  }
-
   @override
   Future<APIGenericResult<ServerHostingDetails?>> createServer({
     required final String dnsApiToken,
@@ -431,17 +415,42 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<void> deleteServer({
+  Future<APIGenericResult<bool>> deleteServer({
     required final String domainName,
   }) async {
     final Dio client = await getClient();
 
-    final ServerBasicInfo serverToRemove = (await getServers()).firstWhere(
-      (final el) => el.name == domainName,
-    );
-    final ServerVolume volumeToRemove = (await getVolumes()).firstWhere(
-      (final el) => el.serverId == serverToRemove.id,
-    );
+    final String hostname = getHostnameFromDomain(domainName);
+    final servers = await getServers();
+    final ServerBasicInfo serverToRemove;
+    try {
+      serverToRemove = servers.firstWhere(
+        (final el) => el.name == hostname,
+      );
+    } catch (e) {
+      print(e);
+      return APIGenericResult(
+        data: false,
+        success: false,
+        message: e.toString(),
+      );
+    }
+
+    final volumes = await getVolumes();
+    final ServerVolume volumeToRemove;
+    try {
+      volumeToRemove = volumes.firstWhere(
+        (final el) => el.serverId == serverToRemove.id,
+      );
+    } catch (e) {
+      print(e);
+      return APIGenericResult(
+        data: false,
+        success: false,
+        message: e.toString(),
+      );
+    }
+
     final List<Future> laterFutures = <Future>[];
 
     await detachVolume(volumeToRemove);
@@ -449,13 +458,23 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     try {
       laterFutures.add(deleteVolume(volumeToRemove));
-      laterFutures.add(client.delete('/droplets/$serverToRemove.id'));
+      laterFutures.add(client.delete('/droplets/${serverToRemove.id}'));
       await Future.wait(laterFutures);
     } catch (e) {
       print(e);
+      return APIGenericResult(
+        success: false,
+        data: false,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
+
+    return APIGenericResult(
+      success: true,
+      data: true,
+    );
   }
 
   @override

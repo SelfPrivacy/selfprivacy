@@ -756,7 +756,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     closeTimer();
 
     if (state.serverDetails != null) {
-      await repository.deleteServer(state.serverDomain!);
+      final bool deletionResult =
+          await repository.deleteServer(state.serverDomain!);
+      if (!deletionResult) {
+        return;
+      }
     }
     await repository.deleteServerRelatedRecords();
     emit(

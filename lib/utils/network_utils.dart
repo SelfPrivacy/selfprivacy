@@ -133,3 +133,20 @@ DnsRecord? extractDkimRecord(final List<DnsRecord> records) {
 
   return dkimRecord;
 }
+
+String getHostnameFromDomain(final String domain) {
+  // Replace all non-alphanumeric characters with an underscore
+  String hostname =
+      domain.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+  if (hostname.endsWith('-')) {
+    hostname = hostname.substring(0, hostname.length - 1);
+  }
+  if (hostname.startsWith('-')) {
+    hostname = hostname.substring(1);
+  }
+  if (hostname.isEmpty) {
+    hostname = 'selfprivacy-server';
+  }
+
+  return hostname;
+}

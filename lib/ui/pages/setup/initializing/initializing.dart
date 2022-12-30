@@ -2,7 +2,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
@@ -17,6 +17,7 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/dns_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_type_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
@@ -37,7 +38,7 @@ class InitializingPage extends StatelessWidget {
         actualInitializingPage = [
           () => _stepServerProviderToken(cubit),
           () => _stepServerType(cubit),
-          () => _stepCloudflare(cubit),
+          () => _stepDnsProviderToken(cubit),
           () => _stepBackblaze(cubit),
           () => _stepDomain(cubit),
           () => _stepUser(cubit),
@@ -149,10 +150,11 @@ class InitializingPage extends StatelessWidget {
     final ServerInstallationCubit serverInstallationCubit,
   ) =>
       BlocProvider(
-        create: (final context) => ProviderFormCubit(serverInstallationCubit),
+        create: (final context) =>
+            ServerProviderFormCubit(serverInstallationCubit),
         child: Builder(
           builder: (final context) {
-            final providerCubit = context.watch<ProviderFormCubit>();
+            final providerCubit = context.watch<ServerProviderFormCubit>();
             return ServerProviderPicker(
               formCubit: providerCubit,
               serverInstallationCubit: serverInstallationCubit,
@@ -165,7 +167,8 @@ class InitializingPage extends StatelessWidget {
     final ServerInstallationCubit serverInstallationCubit,
   ) =>
       BlocProvider(
-        create: (final context) => ProviderFormCubit(serverInstallationCubit),
+        create: (final context) =>
+            ServerProviderFormCubit(serverInstallationCubit),
         child: Builder(
           builder: (final context) => ServerTypePicker(
             serverInstallationCubit: serverInstallationCubit,
@@ -182,48 +185,19 @@ class InitializingPage extends StatelessWidget {
     );
   }
 
-  Widget _stepCloudflare(final ServerInstallationCubit initializingCubit) =>
+  Widget _stepDnsProviderToken(
+    final ServerInstallationCubit initializingCubit,
+  ) =>
       BlocProvider(
         create: (final context) => DnsProviderFormCubit(initializingCubit),
         child: Builder(
-          builder: (final context) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset(
-                'assets/images/logos/cloudflare.png',
-                width: 150,
-              ),
-              const SizedBox(height: 10),
-              BrandText.h2('initializing.connect_cloudflare'.tr()),
-              const SizedBox(height: 10),
-              BrandText.body2('initializing.manage_domain_dns'.tr()),
-              const Spacer(),
-              CubitFormTextField(
-                formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
-                textAlign: TextAlign.center,
-                scrollPadding: const EdgeInsets.only(bottom: 70),
-                decoration: InputDecoration(
-                  hintText: 'initializing.cloudflare_api_token'.tr(),
-                ),
-              ),
-              const Spacer(),
-              BrandButton.rised(
-                onPressed: () =>
-                    context.read<DnsProviderFormCubit>().trySubmit(),
-                text: 'basis.connect'.tr(),
-              ),
-              const SizedBox(height: 10),
-              BrandButton.text(
-                onPressed: () => _showModal(
-                  context,
-                  const _HowTo(
-                    fileName: 'how_cloudflare',
-                  ),
-                ),
-                title: 'initializing.how'.tr(),
-              ),
-            ],
-          ),
+          builder: (final context) {
+            final providerCubit = context.watch<DnsProviderFormCubit>();
+            return DnsProviderPicker(
+              formCubit: providerCubit,
+              serverInstallationCubit: initializingCubit,
+            );
+          },
         ),
       );
 

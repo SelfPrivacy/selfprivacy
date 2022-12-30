@@ -66,6 +66,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
+  void setDnsProviderType(final DnsProvider providerType) async {
+    await repository.saveDnsProviderType(providerType);
+    ApiController.initDnsProviderApiFactory(
+      DnsProviderApiFactorySettings(
+        provider: providerType,
+      ),
+    );
+  }
+
   ProviderApiTokenValidation serverProviderApiTokenValidation() =>
       ApiController.currentServerProviderApiFactory!
           .getServerProvider()
@@ -101,16 +110,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<bool?> isDnsProviderApiTokenValid(
     final String providerToken,
   ) async {
-    if (ApiController.currentDnsProviderApiFactory == null) {
-      // No other DNS provider is supported for now,
-      //    so it's safe to hardcode Cloudflare
-      ApiController.initDnsProviderApiFactory(
-        DnsProviderApiFactorySettings(
-          provider: DnsProvider.cloudflare,
-        ),
-      );
-    }
-
     final APIGenericResult<bool> apiResponse =
         await ApiController.currentDnsProviderApiFactory!
             .getDnsProvider(

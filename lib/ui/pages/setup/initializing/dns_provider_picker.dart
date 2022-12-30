@@ -3,30 +3,31 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
-class ServerProviderPicker extends StatefulWidget {
-  const ServerProviderPicker({
+class DnsProviderPicker extends StatefulWidget {
+  const DnsProviderPicker({
     required this.formCubit,
     required this.serverInstallationCubit,
     super.key,
   });
 
-  final ServerProviderFormCubit formCubit;
+  final DnsProviderFormCubit formCubit;
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
-  State<ServerProviderPicker> createState() => _ServerProviderPickerState();
+  State<DnsProviderPicker> createState() => _DnsProviderPickerState();
 }
 
-class _ServerProviderPickerState extends State<ServerProviderPicker> {
-  ServerProvider selectedProvider = ServerProvider.unknown;
+class _DnsProviderPickerState extends State<DnsProviderPicker> {
+  DnsProvider selectedProvider = DnsProvider.unknown;
 
-  void setProvider(final ServerProvider provider) {
+  void setProvider(final DnsProvider provider) {
     setState(() {
       selectedProvider = provider;
     });
@@ -35,31 +36,31 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
   @override
   Widget build(final BuildContext context) {
     switch (selectedProvider) {
-      case ServerProvider.unknown:
+      case DnsProvider.unknown:
         return ProviderSelectionPage(
           serverInstallationCubit: widget.serverInstallationCubit,
           callback: setProvider,
         );
 
-      case ServerProvider.hetzner:
+      case DnsProvider.cloudflare:
         return ProviderInputDataPage(
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
-            providerType: ServerProvider.hetzner,
-            pathToHow: 'hetzner_how',
+            providerType: DnsProvider.cloudflare,
+            pathToHow: 'how_cloudflare',
             image: Image.asset(
-              'assets/images/logos/hetzner.png',
+              'assets/images/logos/cloudflare.png',
               width: 150,
             ),
           ),
         );
 
-      case ServerProvider.digitalOcean:
+      case DnsProvider.digitalOcean:
         return ProviderInputDataPage(
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
-            providerType: ServerProvider.digitalOcean,
-            pathToHow: 'hetzner_how',
+            providerType: DnsProvider.digitalOcean,
+            pathToHow: 'how_cloudflare',
             image: Image.asset(
               'assets/images/logos/digital_ocean.png',
               width: 150,
@@ -79,7 +80,7 @@ class ProviderPageInfo {
 
   final String pathToHow;
   final Image image;
-  final ServerProvider providerType;
+  final DnsProvider providerType;
 }
 
 class ProviderInputDataPage extends StatelessWidget {
@@ -90,7 +91,7 @@ class ProviderInputDataPage extends StatelessWidget {
   });
 
   final ProviderPageInfo providerInfo;
-  final ServerProviderFormCubit providerCubit;
+  final DnsProviderFormCubit providerCubit;
 
   @override
   Widget build(final BuildContext context) => Column(
@@ -99,7 +100,7 @@ class ProviderInputDataPage extends StatelessWidget {
           providerInfo.image,
           const SizedBox(height: 10),
           Text(
-            'initializing.connect_to_server'.tr(),
+            'initializing.connect_to_dns'.tr(),
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const Spacer(),
@@ -162,7 +163,7 @@ class ProviderSelectionPage extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'initializing.server_provider_description'.tr(),
+            'initializing.dns_provider_description'.tr(),
           ),
           const SizedBox(height: 10),
           ConstrainedBox(
@@ -174,11 +175,11 @@ class ProviderSelectionPage extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     serverInstallationCubit
-                        .setServerProviderType(ServerProvider.hetzner);
-                    callback(ServerProvider.hetzner);
+                        .setDnsProviderType(DnsProvider.cloudflare);
+                    callback(DnsProvider.cloudflare);
                   },
                   child: Image.asset(
-                    'assets/images/logos/hetzner.png',
+                    'assets/images/logos/cloudflare.png',
                     width: 150,
                   ),
                 ),
@@ -188,8 +189,8 @@ class ProviderSelectionPage extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     serverInstallationCubit
-                        .setServerProviderType(ServerProvider.digitalOcean);
-                    callback(ServerProvider.digitalOcean);
+                        .setDnsProviderType(DnsProvider.digitalOcean);
+                    callback(DnsProvider.digitalOcean);
                   },
                   child: Image.asset(
                     'assets/images/logos/digital_ocean.png',

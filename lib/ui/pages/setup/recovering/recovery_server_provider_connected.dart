@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
@@ -19,11 +19,12 @@ class RecoveryServerProviderConnected extends StatelessWidget {
         context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (final BuildContext context) => ProviderFormCubit(appConfig),
+      create: (final BuildContext context) =>
+          ServerProviderFormCubit(appConfig),
       child: Builder(
         builder: (final BuildContext context) {
           final FormCubitState formCubitState =
-              context.watch<ProviderFormCubit>().state;
+              context.watch<ServerProviderFormCubit>().state;
 
           return BrandHeroScreen(
             heroTitle: 'recovering.server_provider_connected'.tr(),
@@ -37,7 +38,7 @@ class RecoveryServerProviderConnected extends StatelessWidget {
             },
             children: [
               CubitFormTextField(
-                formFieldCubit: context.read<ProviderFormCubit>().apiKey,
+                formFieldCubit: context.read<ServerProviderFormCubit>().apiKey,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText:
@@ -49,7 +50,7 @@ class RecoveryServerProviderConnected extends StatelessWidget {
                 title: 'basis.continue'.tr(),
                 onPressed: formCubitState.isSubmitting
                     ? null
-                    : () => context.read<ProviderFormCubit>().trySubmit(),
+                    : () => context.read<ServerProviderFormCubit>().trySubmit(),
               ),
               const SizedBox(height: 16),
               BrandButton.text(

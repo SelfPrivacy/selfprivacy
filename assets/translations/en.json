@@ -268,9 +268,10 @@
         "no_ssh_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon."
     },
     "initializing": {
-        "connect_to_server": "Connect a server",
+        "connect_to_server": "Connect the server provider",
         "select_provider": "Select your provider",
-        "place_where_data": "A place where your data and SelfPrivacy services will reside:",
+        "server_provider_description": "A place where your data and SelfPrivacy services will reside:",
+        "dns_provider_description": "A service which lets your IP point towards domain names:",
         "how": "How to obtain API token",
         "provider_bad_key_error": "Provider API key is invalid",
         "could_not_connect": "Counldn't connect to the provider.",
@@ -280,7 +281,7 @@
         "no_server_types_found": "No available server types found. Make sure your account is accessible and try to change your server location.",
         "cloudflare_bad_key_error": "Cloudflare API key is invalid",
         "backblaze_bad_key_error": "Backblaze storage information is invalid",
-        "connect_cloudflare": "Connect CloudFlare",
+        "connect_to_dns": "Connect the DNS provider",
         "manage_domain_dns": "To manage your domain's DNS",
         "cloudflare_api_token": "CloudFlare API Token",
         "connect_backblaze_storage": "Connect Backblaze storage",

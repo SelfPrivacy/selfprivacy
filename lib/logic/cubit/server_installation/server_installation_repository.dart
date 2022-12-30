@@ -688,6 +688,10 @@ class ServerInstallationRepository {
     await getIt<ApiConfigModel>().storeServerProviderType(type);
   }
 
+  Future<void> saveDnsProviderType(final DnsProvider type) async {
+    await getIt<ApiConfigModel>().storeDnsProviderType(type);
+  }
+
   Future<void> saveServerProviderKey(final String key) async {
     await getIt<ApiConfigModel>().storeServerProviderKey(key);
   }

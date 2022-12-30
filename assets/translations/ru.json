@@ -269,7 +269,8 @@
     },
     "initializing": {
         "connect_to_server": "Подключите сервер",
-        "place_where_data": "Здесь будут жить ваши данные и SelfPrivacy-сервисы:",
+        "server_provider_description": "Здесь будут жить ваши данные и SelfPrivacy-сервисы:",
+        "dns_provider_description": "Это позволит связать ваш домен с IP адресом:",
         "how": "Как получить API Token",
         "provider_bad_key_error": "API ключ провайдера неверен",
         "could_not_connect": "Не удалось соединиться с провайдером.",
@@ -279,7 +280,7 @@
         "no_server_types_found": "Не удалось получить список серверов. Убедитесь, что ваш аккаунт доступен и попытайтесь сменить локацию сервера.",
         "cloudflare_bad_key_error": "Cloudflare API ключ неверен",
         "backblaze_bad_key_error": "Информация о Backblaze хранилище неверна",
-        "connect_cloudflare": "Подключите CloudFlare",
+        "connect_to_dns": "Подключите DNS провайдер",
         "manage_domain_dns": "Для управления DNS вашего домена",
         "cloudflare_api_token": "CloudFlare API ключ",
         "connect_backblaze_storage": "Подключите облачное хранилище Backblaze",

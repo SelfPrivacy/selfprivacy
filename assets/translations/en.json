@@ -4,6 +4,7 @@
     "basis": {
         "providers": "Providers",
         "providers_title": "Your Data Center",
+        "select": "Select",
         "services": "Services",
         "services_title": "Your personal, private and independent services.",
         "users": "Users",
@@ -79,8 +80,14 @@
     "onboarding": {
         "page1_title": "Digital independence, available to all of us",
         "page1_text": "Mail, VPN, Messenger, social network and much more on your private server, under your control.",
-        "page2_title": "SelfPrivacy — it's not a cloud, but your personal datacenter",
-        "page2_text": "SelfPrivacy works only with your provider accounts: Hetzner, Cloudflare, Backblaze. If you do not own those, we'll help you to create them."
+        "page2_title": "SelfPrivacy is not a cloud, it's Your personal datacenter",
+        "page2_text": "SelfPrivacy only works with providers that you choose. If you do not have required accounts in those, we'll help you to create them.",
+        "page2_server_provider_title": "Server provider",
+        "page2_server_provider_text": "A server provider maintains your server in its own data center. SelfPrivacy will automatically connect to the provider and setup all necessary things.",
+        "page2_dns_provider_title": "DNS provider",
+        "page2_dns_provider_text": "You need a domain to have a place in the Internet. And you also need a reliable DNS provider to have the domain pointed to your server. We will suggest you pick a supported DNS provider to automatically setup networking.",
+        "page2_backup_provider_title": "Backup provider",
+        "page2_backup_provider_text": "What if something happens to your server? Imagine a hacker attack, an accidental data deletion or denial of service? Your data will be kept safe in your provider of backups. They will be securely encrypted and anytime accessible to restore your server with."
     },
     "resource_chart": {
         "month": "Month",
@@ -268,9 +275,21 @@
         "no_ssh_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon."
     },
     "initializing": {
-        "connect_to_server": "Connect a server",
-        "select_provider": "Select your provider",
-        "place_where_data": "A place where your data and SelfPrivacy services will reside:",
+        "connect_to_server": "Let's start with a server.",
+        "select_provider": "Pick any provider from the following list, they all support SelfPrivacy",
+        "select_provider_countries_title": "Available countries",
+        "select_provider_countries_text_hetzner": "Germany, Finland, USA",
+        "select_provider_countries_text_do": "USA, Netherlands, Singapore, UK, Germany, Canada, India, Australia",
+        "select_provider_price_title": "Average price",
+        "select_provider_price_text_hetzner": "€8 per month for a relatively small server and 50GB of disk storage",
+        "select_provider_price_text_do": "$17 per month for a relatively small server and 50GB of disk storage",
+        "select_provider_payment_title": "Payment methods",
+        "select_provider_payment_text_hetzner": "Credit cards, SWIFT, SEPA, PayPal",
+        "select_provider_payment_text_do": "Credit cards, Google Pay, PayPal",
+        "select_provider_email_notice": "E-mail hosting won't be available for new clients. Nevertheless it will be unlocked as soon as you complete your first payment.",
+        "select_provider_site_button": "Visit site",
+        "connect_to_server_provider": "Autorize in ",
+        "connect_to_server_provider_text": "With API token SelfPrivacy will be able to setup a server ",
         "how": "How to obtain API token",
         "provider_bad_key_error": "Provider API key is invalid",
         "could_not_connect": "Counldn't connect to the provider.",

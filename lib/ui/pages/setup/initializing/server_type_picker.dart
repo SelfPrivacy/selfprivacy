@@ -254,9 +254,9 @@ class SelectTypePage extends StatelessWidget {
                                   const SizedBox(width: 8),
                                   Text(
                                     'initializing.choose_server_type_storage'
-                                        .tr(args: [
-                                      type.disk.gibibyte.toString()
-                                    ]),
+                                        .tr(
+                                      args: [type.disk.gibibyte.toString()],
+                                    ),
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -275,9 +275,11 @@ class SelectTypePage extends StatelessWidget {
                                   const SizedBox(width: 8),
                                   Text(
                                     'initializing.choose_server_type_payment_per_month'
-                                        .tr(args: [
-                                      '${type.price.value.toString()} ${type.price.currency}'
-                                    ]),
+                                        .tr(
+                                      args: [
+                                        '${type.price.value.toString()} ${type.price.currency}'
+                                      ],
+                                    ),
                                     style:
                                         Theme.of(context).textTheme.bodyLarge,
                                   ),

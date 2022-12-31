@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:system_theme/system_theme.dart';
-import 'package:gtk_theme_fl/gtk_theme_fl.dart';
+import 'package:material_color_utilities/palettes/core_palette.dart';
 
 abstract class AppThemeFactory {
   AppThemeFactory._();
@@ -22,40 +19,18 @@ abstract class AppThemeFactory {
     required final Color fallbackColor,
     final bool isDark = false,
   }) async {
-    ColorScheme? gtkColorsScheme;
     final Brightness brightness = isDark ? Brightness.dark : Brightness.light;
 
     final ColorScheme? dynamicColorsScheme =
         await _getDynamicColors(brightness);
 
-    if (Platform.isLinux) {
-      final GtkThemeData themeData = await GtkThemeData.initialize();
-      final bool isGtkDark =
-          Color(themeData.theme_bg_color).computeLuminance() < 0.5;
-      final bool isInverseNeeded = isGtkDark != isDark;
-      gtkColorsScheme = ColorScheme.fromSeed(
-        seedColor: Color(themeData.theme_selected_bg_color),
-        brightness: brightness,
-        background: isInverseNeeded ? null : Color(themeData.theme_bg_color),
-        surface: isInverseNeeded ? null : Color(themeData.theme_base_color),
-      );
-    }
-
-    final SystemAccentColor accentColor = SystemAccentColor(fallbackColor);
-
-    try {
-      await accentColor.load();
-    } on MissingPluginException catch (e) {
-      print('_createAppTheme: ${e.message}');
-    }
-
     final ColorScheme fallbackColorScheme = ColorScheme.fromSeed(
-      seedColor: accentColor.accent,
+      seedColor: fallbackColor,
       brightness: brightness,
     );
 
     final ColorScheme colorScheme =
-        dynamicColorsScheme ?? gtkColorsScheme ?? fallbackColorScheme;
+        dynamicColorsScheme ?? fallbackColorScheme;
 
     final Typography appTypography = Typography.material2021();
 
@@ -76,6 +51,14 @@ abstract class AppThemeFactory {
       return DynamicColorPlugin.getCorePalette().then(
         (final corePallet) => corePallet?.toColorScheme(brightness: brightness),
       );
+    } on PlatformException {
+      return Future.value(null);
+    }
+  }
+
+  static Future<CorePalette?> getCorePalette() async {
+    try {
+      return await DynamicColorPlugin.getCorePalette();
     } on PlatformException {
       return Future.value(null);
     }

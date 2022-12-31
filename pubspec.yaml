@@ -14,7 +14,7 @@ dependencies:
   cubit_form: ^2.0.1
   device_info_plus: ^4.0.1
   dio: ^4.0.4
-  dynamic_color: ^1.4.0
+  dynamic_color: ^1.5.4
   easy_localization: ^3.0.0
   either_option: ^2.0.1-dev.1
   equatable: ^2.0.3
@@ -30,7 +30,6 @@ dependencies:
   graphql: ^5.1.1
   graphql_codegen: ^0.10.2
   graphql_flutter: ^5.1.0
-  gtk_theme_fl: ^0.0.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   http: ^0.13.5
@@ -38,6 +37,7 @@ dependencies:
   ionicons: ^0.1.2
   json_annotation: ^4.6.0
   local_auth: ^2.0.2
+  material_color_utilities: ^0.1.5
   modal_bottom_sheet: ^2.0.1
   nanoid: ^1.0.0
   package_info: ^2.0.2
@@ -45,7 +45,6 @@ dependencies:
   provider: ^6.0.2
   pub_semver: ^2.1.1
   share_plus: ^4.0.4
-  system_theme: ^2.0.0
   timezone: ^0.8.0
   url_launcher: ^6.0.20
   wakelock: ^0.6.1+1

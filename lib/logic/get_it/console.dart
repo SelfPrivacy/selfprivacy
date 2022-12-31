@@ -9,5 +9,9 @@ class ConsoleModel extends ChangeNotifier {
   void addMessage(final Message message) {
     messages.add(message);
     notifyListeners();
+    // Make sure we don't have too many messages
+    if (messages.length > 500) {
+      messages.removeAt(0);
+    }
   }
 }

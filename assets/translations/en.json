@@ -289,7 +289,7 @@
         "select_provider_payment_text_do": "Credit cards, Google Pay, PayPal",
         "select_provider_email_notice": "E-mail hosting won't be available for new clients. Nevertheless it will be unlocked as soon as you complete your first payment.",
         "select_provider_site_button": "Visit site",
-        "connect_to_server_provider": "Autorize in ",
+        "connect_to_server_provider": "Now log in ",
         "connect_to_server_provider_text": "With API token SelfPrivacy will be able to rent a machine and setup your server on it",
         "how": "How to obtain API token",
         "provider_bad_key_error": "Provider API key is invalid",

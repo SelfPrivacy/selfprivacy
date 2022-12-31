@@ -11,7 +11,6 @@ import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cu
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
@@ -56,88 +55,91 @@ class InitializingPage extends StatelessWidget {
                 .pushReplacement(materialRoute(const RootPage()));
           }
         },
-        child: SafeArea(
-          child: Scaffold(
-            body: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: paddingH15V0.copyWith(top: 10, bottom: 10),
-                    child: cubit.state is ServerInstallationFinished
-                        ? const SizedBox(
-                            height: 80,
-                          )
-                        : ProgressBar(
-                            steps: const [
-                              'Hosting',
-                              'Server Type',
-                              'CloudFlare',
-                              'Backblaze',
-                              'Domain',
-                              'User',
-                              'Server',
-                              'Installation',
-                            ],
-                            activeIndex: cubit.state.porgressBar,
-                          ),
+        child: Scaffold(
+          appBar: AppBar(
+            actions: [
+              if (cubit.state is ServerInstallationFinished)
+                IconButton(
+                  icon: const Icon(Icons.check),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushReplacement(materialRoute(const RootPage()));
+                  },
+                )
+            ],
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(28),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: ProgressBar(
+                  steps: const [
+                    'Hosting',
+                    'Server Type',
+                    'CloudFlare',
+                    'Backblaze',
+                    'Domain',
+                    'User',
+                    'Server',
+                    'Installation',
+                  ],
+                  activeIndex: cubit.state.porgressBar,
+                ),
+              ),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0.0),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: actualInitializingPage,
                   ),
-                  if (cubit.state.porgressBar ==
-                      ServerSetupProgress.serverProviderFilled.index)
-                    BrandText.h2(
-                      'initializing.choose_location_type'.tr(),
-                    ),
-                  _addCard(
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      child: actualInitializingPage,
-                    ),
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top -
+                        MediaQuery.of(context).padding.bottom -
+                        566,
                   ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height -
-                          MediaQuery.of(context).padding.top -
-                          MediaQuery.of(context).padding.bottom -
-                          566,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        child: BrandButton.text(
+                          title: cubit.state is ServerInstallationFinished
+                              ? 'basis.close'.tr()
+                              : 'basis.later'.tr(),
+                          onPressed: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              materialRoute(const RootPage()),
+                              (final predicate) => false,
+                            );
+                          },
+                        ),
+                      ),
+                      if (cubit.state is ServerInstallationEmpty)
                         Container(
                           alignment: Alignment.center,
                           child: BrandButton.text(
-                            title: cubit.state is ServerInstallationFinished
-                                ? 'basis.close'.tr()
-                                : 'basis.later'.tr(),
+                            title: 'basis.connect_to_existing'.tr(),
                             onPressed: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                materialRoute(const RootPage()),
-                                (final predicate) => false,
+                              Navigator.of(context).push(
+                                materialRoute(
+                                  const RecoveryRouting(),
+                                ),
                               );
                             },
                           ),
-                        ),
-                        if (cubit.state is ServerInstallationFinished)
-                          Container()
-                        else
-                          Container(
-                            alignment: Alignment.center,
-                            child: BrandButton.text(
-                              title: 'basis.connect_to_existing'.tr(),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  materialRoute(
-                                    const RecoveryRouting(),
-                                  ),
-                                );
-                              },
-                            ),
-                          )
-                      ],
-                    ),
+                        )
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -189,15 +191,16 @@ class InitializingPage extends StatelessWidget {
           builder: (final context) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                'assets/images/logos/cloudflare.png',
-                width: 150,
+              Text(
+                '${'initializing.connect_to_server_provider'.tr()}Cloudflare',
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
-              const SizedBox(height: 10),
-              BrandText.h2('initializing.connect_cloudflare'.tr()),
-              const SizedBox(height: 10),
-              BrandText.body2('initializing.manage_domain_dns'.tr()),
-              const Spacer(),
+              const SizedBox(height: 16),
+              Text(
+                'initializing.manage_domain_dns'.tr(),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 32),
               CubitFormTextField(
                 formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
                 textAlign: TextAlign.center,
@@ -206,7 +209,7 @@ class InitializingPage extends StatelessWidget {
                   hintText: 'initializing.cloudflare_api_token'.tr(),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(height: 32),
               BrandButton.rised(
                 onPressed: () =>
                     context.read<DnsProviderFormCubit>().trySubmit(),
@@ -236,14 +239,11 @@ class InitializingPage extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  'assets/images/logos/backblaze.png',
-                  height: 50,
+                Text(
+                  '${'initializing.connect_to_server_provider'.tr()}Backblaze',
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const SizedBox(height: 10),
-                BrandText.h2('initializing.connect_backblaze_storage'.tr()),
-                const SizedBox(height: 10),
-                const Spacer(),
+                const SizedBox(height: 32),
                 CubitFormTextField(
                   formFieldCubit: context.read<BackblazeFormCubit>().keyId,
                   textAlign: TextAlign.center,
@@ -252,7 +252,7 @@ class InitializingPage extends StatelessWidget {
                     hintText: 'KeyID',
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 16),
                 CubitFormTextField(
                   formFieldCubit:
                       context.read<BackblazeFormCubit>().applicationKey,
@@ -262,7 +262,7 @@ class InitializingPage extends StatelessWidget {
                     hintText: 'Master Application Key',
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 32),
                 BrandButton.rised(
                   onPressed: formCubitState.isSubmitting
                       ? null
@@ -292,91 +292,85 @@ class InitializingPage extends StatelessWidget {
           builder: (final context) {
             final DomainSetupState state =
                 context.watch<DomainSetupCubit>().state;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  'assets/images/logos/cloudflare.png',
-                  width: 150,
-                ),
-                const SizedBox(height: 30),
-                BrandText.h2('basis.domain'.tr()),
-                const SizedBox(height: 10),
-                if (state is Empty)
-                  BrandText.body2('initializing.no_connected_domains'.tr()),
-                if (state is Loading)
-                  BrandText.body2(
-                    state.type == LoadingTypes.loadingDomain
-                        ? 'initializing.loading_domain_list'.tr()
-                        : 'basis.saving'.tr(),
+            return SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'initializing.use_this_domain'.tr(),
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                if (state is MoreThenOne)
-                  BrandText.body2(
-                    'initializing.found_more_domains'.tr(),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.use_this_domain_text'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                if (state is Loaded) ...[
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: BrandText.h3(
+                  const SizedBox(height: 32),
+                  if (state is Empty)
+                    Text(
+                      'initializing.no_connected_domains'.tr(),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  if (state is Loading)
+                    Text(
+                      state.type == LoadingTypes.loadingDomain
+                          ? 'initializing.loading_domain_list'.tr()
+                          : 'basis.saving'.tr(),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  if (state is MoreThenOne)
+                    Text(
+                      'initializing.found_more_domains'.tr(),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  if (state is Loaded) ...[
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
                           state.domain,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
                           textAlign: TextAlign.center,
                         ),
-                      ),
-                      SizedBox(
-                        width: 56,
-                        child: BrandButton.rised(
-                          onPressed: () =>
-                              context.read<DomainSetupCubit>().load(),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Icon(
-                                Icons.refresh,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-                if (state is Empty) ...[
-                  const SizedBox(height: 30),
-                  BrandButton.rised(
-                    onPressed: () => context.read<DomainSetupCubit>().load(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.refresh,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 10),
-                        BrandText.buttonTitleText('domain.update_list'.tr()),
                       ],
                     ),
-                  ),
+                  ],
+                  if (state is Empty) ...[
+                    const SizedBox(height: 30),
+                    BrandButton.rised(
+                      onPressed: () => context.read<DomainSetupCubit>().load(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.refresh,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 10),
+                          BrandText.buttonTitleText('domain.update_list'.tr()),
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (state is Loaded) ...[
+                    const SizedBox(height: 32),
+                    BrandButton.rised(
+                      onPressed: () =>
+                          context.read<DomainSetupCubit>().saveDomain(),
+                      text: 'initializing.save_domain'.tr(),
+                    ),
+                  ],
                 ],
-                if (state is Loaded) ...[
-                  const SizedBox(height: 30),
-                  BrandButton.rised(
-                    onPressed: () =>
-                        context.read<DomainSetupCubit>().saveDomain(),
-                    text: 'initializing.save_domain'.tr(),
-                  ),
-                ],
-                const SizedBox(
-                  height: 10,
-                  width: double.infinity,
-                ),
-              ],
+              ),
             );
           },
         ),
@@ -393,12 +387,16 @@ class InitializingPage extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BrandText.h2('initializing.create_master_account'.tr()),
-                const SizedBox(height: 10),
-                BrandText.body2(
-                  'initializing.enter_username_and_password'.tr(),
+                Text(
+                  'initializing.create_master_account'.tr(),
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const Spacer(),
+                const SizedBox(height: 16),
+                Text(
+                  'initializing.enter_username_and_password'.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                if (formCubitState.isErrorShown) const SizedBox(height: 16),
                 if (formCubitState.isErrorShown)
                   Text(
                     'users.username_rule'.tr(),
@@ -406,7 +404,7 @@ class InitializingPage extends StatelessWidget {
                       color: Theme.of(context).colorScheme.error,
                     ),
                   ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 32),
                 CubitFormTextField(
                   formFieldCubit: context.read<RootUserFormCubit>().userName,
                   textAlign: TextAlign.center,
@@ -415,7 +413,7 @@ class InitializingPage extends StatelessWidget {
                     hintText: 'basis.username'.tr(),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 16),
                 BlocBuilder<FieldCubit<bool>, FieldCubitState<bool>>(
                   bloc: context.read<RootUserFormCubit>().isVisible,
                   builder: (final context, final state) {
@@ -446,7 +444,7 @@ class InitializingPage extends StatelessWidget {
                     );
                   },
                 ),
-                const Spacer(),
+                const SizedBox(height: 32),
                 BrandButton.rised(
                   onPressed: formCubitState.isSubmitting
                       ? null
@@ -466,11 +464,16 @@ class InitializingPage extends StatelessWidget {
       builder: (final context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Spacer(flex: 2),
-          BrandText.h2('initializing.final'.tr()),
-          const SizedBox(height: 10),
-          BrandText.body2('initializing.create_server'.tr()),
-          const Spacer(),
+          Text(
+            'initializing.final'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'initializing.create_server'.tr(),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 128),
           BrandButton.rised(
             onPressed:
                 isLoading ? null : appConfigCubit.createServerAndSetDnsRecords,
@@ -505,55 +508,64 @@ class InitializingPage extends StatelessWidget {
       doneCount = 0;
     }
     return Builder(
-      builder: (final context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 15),
-          BrandText.h4(
-            'initializing.checks'.tr(args: [doneCount.toString(), '4']),
-          ),
-          const Spacer(flex: 2),
-          const SizedBox(height: 10),
-          BrandText.body2(text),
-          const SizedBox(height: 10),
-          if (doneCount == 0 && state.dnsMatches != null)
-            Column(
-              children: state.dnsMatches!.entries.map((final entry) {
-                final String domain = entry.key;
-                final bool isCorrect = entry.value;
-                return Row(
-                  children: [
-                    if (isCorrect) const Icon(Icons.check, color: Colors.green),
-                    if (!isCorrect)
-                      const Icon(Icons.schedule, color: Colors.amber),
-                    const SizedBox(width: 10),
-                    Text(domain),
-                  ],
-                );
-              }).toList(),
+      builder: (final context) => SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'initializing.checks'.tr(args: [doneCount.toString(), '4']),
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
-          const SizedBox(height: 10),
-          if (!state.isLoading)
-            Row(
-              children: [
-                BrandText.body2('initializing.until_the_next_check'.tr()),
-                BrandTimer(
-                  startDateTime: state.timerStart!,
-                  duration: state.duration!,
-                )
-              ],
-            ),
-          if (state.isLoading) BrandText.body2('initializing.check'.tr()),
-        ],
+            const SizedBox(height: 16),
+            if (text != null)
+              Text(
+                text,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            const SizedBox(height: 128),
+            const SizedBox(height: 10),
+            if (doneCount == 0 && state.dnsMatches != null)
+              Column(
+                children: state.dnsMatches!.entries.map((final entry) {
+                  final String domain = entry.key;
+                  final bool isCorrect = entry.value;
+                  return Row(
+                    children: [
+                      if (isCorrect)
+                        const Icon(Icons.check, color: Colors.green),
+                      if (!isCorrect)
+                        const Icon(Icons.schedule, color: Colors.amber),
+                      const SizedBox(width: 10),
+                      Text(domain),
+                    ],
+                  );
+                }).toList(),
+              ),
+            const SizedBox(height: 10),
+            if (!state.isLoading)
+              Row(
+                children: [
+                  Text(
+                    'initializing.until_the_next_check'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  BrandTimer(
+                    startDateTime: state.timerStart!,
+                    duration: state.duration!,
+                  )
+                ],
+              ),
+            if (state.isLoading)
+              Text(
+                'initializing.check'.tr(),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+          ],
+        ),
       ),
     );
   }
-
-  Widget _addCard(final Widget child) => Container(
-        height: 450,
-        padding: paddingH15V0,
-        child: BrandCards.big(child: child),
-      );
 }
 
 class _HowTo extends StatelessWidget {

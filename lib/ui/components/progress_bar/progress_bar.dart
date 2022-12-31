@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 class ProgressBar extends StatefulWidget {
   const ProgressBar({
@@ -63,13 +62,6 @@ class _ProgressBarState extends State<ProgressBar> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        BrandText.h2('Progress'),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: even,
-        ),
-        const SizedBox(height: 7),
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
@@ -97,11 +89,6 @@ class _ProgressBarState extends State<ProgressBar> {
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 5),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: odd,
         ),
       ],
     );

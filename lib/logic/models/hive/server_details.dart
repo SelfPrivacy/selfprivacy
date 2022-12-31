@@ -95,4 +95,15 @@ enum ServerProvider {
         return unknown;
     }
   }
+
+  String get displayName {
+    switch (this) {
+      case ServerProvider.hetzner:
+        return 'Hetzner Cloud';
+      case ServerProvider.digitalOcean:
+        return 'Digital Ocean';
+      default:
+        return 'Unknown';
+    }
+  }
 }

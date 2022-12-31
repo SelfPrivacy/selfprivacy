@@ -29,8 +29,7 @@ abstract class AppThemeFactory {
       brightness: brightness,
     );
 
-    final ColorScheme colorScheme =
-        dynamicColorsScheme ?? fallbackColorScheme;
+    final ColorScheme colorScheme = dynamicColorsScheme ?? fallbackColorScheme;
 
     final Typography appTypography = Typography.material2021();
 

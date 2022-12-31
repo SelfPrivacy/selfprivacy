@@ -54,7 +54,8 @@
     "about_application_page": {
         "title": "About",
         "application_version_text": "Application version v.{}",
-        "api_version_text": "Server API version v.{}"
+        "api_version_text": "Server API version v.{}",
+        "privacy_policy": "Privacy policy"
     },
     "application_settings": {
         "title": "Application settings",

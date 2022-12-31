@@ -122,7 +122,8 @@ class InitializingPage extends StatelessWidget {
                           },
                         ),
                       ),
-                      if (cubit.state is ServerInstallationEmpty)
+                      if (cubit.state is ServerInstallationEmpty ||
+                          cubit.state is ServerInstallationNotFinished)
                         Container(
                           alignment: Alignment.center,
                           child: BrandButton.text(

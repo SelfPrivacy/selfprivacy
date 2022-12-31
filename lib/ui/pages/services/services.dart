@@ -41,6 +41,10 @@ class _ServicesPageState extends State<ServicesPage> {
     final isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
 
+    final services = [...context.watch<ServicesCubit>().state.services];
+    services
+        .sort((final a, final b) => a.status.index.compareTo(b.status.index));
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(52),
@@ -58,10 +62,7 @@ class _ServicesPageState extends State<ServicesPage> {
             BrandText.body1('basis.services_title'.tr()),
             const SizedBox(height: 24),
             if (!isReady) ...[const NotReadyCard(), const SizedBox(height: 24)],
-            ...context
-                .read<ServicesCubit>()
-                .state
-                .services
+            ...services
                 .map(
                   (final service) => Padding(
                     padding: const EdgeInsets.only(

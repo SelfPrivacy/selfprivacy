@@ -105,13 +105,13 @@ class ServiceStorageUsage {
 }
 
 enum ServiceStatus {
+  failed,
+  reloading,
   activating,
   active,
   deactivating,
-  failed,
   inactive,
-  off,
-  reloading;
+  off;
 
   factory ServiceStatus.fromGraphQL(final Enum$ServiceStatusEnum graphQL) {
     switch (graphQL) {

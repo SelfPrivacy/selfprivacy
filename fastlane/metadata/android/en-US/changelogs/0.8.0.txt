@@ -1,0 +1,33 @@
+Server setup:
+- Added support for Digital Ocean as server provider
+- You can now choose server region
+- You can now choose server tier
+- Server installation UI has been refreshed
+- Fields now have more specific error messages
+
+Common UI:
+- New app bar used in most of the screens
+
+Services:
+- Services are now sorted by their status
+
+Server settings:
+- Timezone search screen now has a search bar
+- Fixed job creation when switching the setting multiple times
+- Server destruction now works
+
+Jobs:
+- Jobs panel now should take slightly less space
+
+Auth:
+- Recovery key page can now be reloaded by dragging down
+
+Logging:
+- Log console now has a limit of 500 lines
+- GraphQL API requests are now logged in the console
+- Networks errors are better handled
+
+For developers:
+- App now only uses GraphQL API to communicate with the server. All REST API calls have been removed.
+- Server can now be deployed with staging ACME certificates
+- Language assets have been reorganized

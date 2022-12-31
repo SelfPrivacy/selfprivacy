@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:intl/intl.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/bottom_title.dart';
@@ -82,7 +86,10 @@ class CpuChart extends StatelessWidget {
             ),
           ],
           minY: 0,
-          maxY: 100,
+          // Maximal value of data by 100 step
+          maxY:
+              ((data.map((final e) => e.value).reduce(max) - 1) / 100).ceil() *
+                  100.0,
           minX: 0,
           titlesData: FlTitlesData(
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

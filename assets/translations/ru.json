@@ -54,7 +54,8 @@
     "about_application_page": {
         "title": "О приложении",
         "application_version_text": "Версия приложения v.{}",
-        "api_version_text": "Версия API сервера v.{}"
+        "api_version_text": "Версия API сервера v.{}",
+        "privacy_policy": "Политика конфиденциальности"
     },
     "application_settings": {
         "title": "Настройки приложения",

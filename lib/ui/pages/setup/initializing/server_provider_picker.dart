@@ -51,7 +51,7 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
             providerType: ServerProvider.hetzner,
-            pathToHow: 'hetzner_how',
+            pathToHow: 'how_hetzner',
             image: Image.asset(
               'assets/images/logos/hetzner.png',
               width: 150,
@@ -64,7 +64,7 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
             providerType: ServerProvider.digitalOcean,
-            pathToHow: 'hetzner_how',
+            pathToHow: 'how_digital_ocean',
             image: Image.asset(
               'assets/images/logos/digital_ocean.png',
               width: 150,

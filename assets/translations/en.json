@@ -299,6 +299,7 @@
         "locations_not_found": "Oops!",
         "locations_not_found_text": "There are no available servers to rent",
         "back_to_locations": "Select something else",
+        "no_locations_found": "No available locations found, make sure your account is accessible",
         "choose_server_type": "What type of server do you need?",
         "choose_server_type_text": "Different resource capabilities support different services. Don't worry, you can expand your server anytime",
         "choose_server_type_notice": "The important things to look at are the CPU and RAM. The data of your services will be stored on a mounted volume which is easily explandable and gets paid for separately.",

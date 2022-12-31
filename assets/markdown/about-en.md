@@ -1,12 +1,24 @@
 ### About us
 
-More and more corporations want to control our data.
-We want to have full control of our **data** on our own.
+More and more organizations want to own our data. The project allows everyone to create private services for themselves and their loved ones, and only you can fully manage your own **data** on your own server.
 
-### Our mission
+**Digital independence and privacy, available to everyone.**
 
-Digital independence and privacy, available to everyone
 
-### Target
+### Where to find us?
 
-Develop the program, which will allow everyone to deploy their private services for themselves and their neighbours.
+[Official site](https://selfprivacy.org)
+
+[Source Code](https://git.selfprivacy.org/kherel/selfprivacy.org.app)
+
+[Go to Fdroid page](http://f-droid.org/en/packages/pro.kherel.selfprivacy)
+
+Channels with news:
+
+- [matrix: #news:selfprivacy.org](https://matrix.to/#/#news:selfprivacy.org)
+- [telegram: @selfprivacy](https://t.me/selfprivacy)
+    
+Chats, where you can get help:
+
+- [matrix: #chat:selfprivacy.org](https://matrix.to/#/#chat:selfprivacy.org)
+- [telegram: @selfprivacy_chat](https://t.me/selfprivacy_chat)

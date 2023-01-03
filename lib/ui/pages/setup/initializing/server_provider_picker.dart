@@ -1,13 +1,18 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
+import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
+import 'package:selfprivacy/ui/components/info_box/info_box.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 class ServerProviderPicker extends StatefulWidget {
   const ServerProviderPicker({
@@ -46,7 +51,7 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
             providerType: ServerProvider.hetzner,
-            pathToHow: 'hetzner_how',
+            pathToHow: 'how_hetzner',
             image: Image.asset(
               'assets/images/logos/hetzner.png',
               width: 150,
@@ -59,7 +64,7 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
             providerType: ServerProvider.digitalOcean,
-            pathToHow: 'hetzner_how',
+            pathToHow: 'how_digital_ocean',
             image: Image.asset(
               'assets/images/logos/digital_ocean.png',
               width: 150,
@@ -96,13 +101,16 @@ class ProviderInputDataPage extends StatelessWidget {
   Widget build(final BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          providerInfo.image,
-          const SizedBox(height: 10),
           Text(
-            'initializing.connect_to_server'.tr(),
-            style: Theme.of(context).textTheme.titleLarge,
+            "${'initializing.connect_to_server_provider'.tr()}${providerInfo.providerType.displayName}",
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
-          const Spacer(),
+          const SizedBox(height: 16),
+          Text(
+            'initializing.connect_to_server_provider_text'.tr(),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 32),
           CubitFormTextField(
             formFieldCubit: providerCubit.apiKey,
             textAlign: TextAlign.center,
@@ -111,13 +119,13 @@ class ProviderInputDataPage extends StatelessWidget {
               hintText: 'Provider API Token',
             ),
           ),
-          const Spacer(),
+          const SizedBox(height: 32),
           FilledButton(
             title: 'basis.connect'.tr(),
             onPressed: () => providerCubit.trySubmit(),
           ),
           const SizedBox(height: 10),
-          OutlinedButton(
+          BrandOutlinedButton(
             child: Text('initializing.how'.tr()),
             onPressed: () => showModalBottomSheet<void>(
               context: context,
@@ -154,51 +162,177 @@ class ProviderSelectionPage extends StatelessWidget {
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
-  Widget build(final BuildContext context) => Column(
-        children: [
-          Text(
-            'initializing.select_provider'.tr(),
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'initializing.server_provider_description'.tr(),
-          ),
-          const SizedBox(height: 10),
-          ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 320,
+  Widget build(final BuildContext context) => SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'initializing.connect_to_server'.tr(),
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    serverInstallationCubit
-                        .setServerProviderType(ServerProvider.hetzner);
-                    callback(ServerProvider.hetzner);
-                  },
-                  child: Image.asset(
-                    'assets/images/logos/hetzner.png',
-                    width: 150,
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                InkWell(
-                  onTap: () {
-                    serverInstallationCubit
-                        .setServerProviderType(ServerProvider.digitalOcean);
-                    callback(ServerProvider.digitalOcean);
-                  },
-                  child: Image.asset(
-                    'assets/images/logos/digital_ocean.png',
-                    width: 150,
-                  ),
-                ),
-              ],
+            const SizedBox(height: 10),
+            Text(
+              'initializing.select_provider'.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            OutlinedCard(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: const Color(0xFFD50C2D),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/images/logos/hetzner.svg',
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          'Hetzner Cloud',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_countries_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_countries_text_hetzner'
+                          .tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_price_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_price_text_hetzner'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_payment_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_payment_text_hetzner'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_email_notice'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                      title: 'basis.select'.tr(),
+                      onPressed: () {
+                        serverInstallationCubit
+                            .setServerProviderType(ServerProvider.hetzner);
+                        callback(ServerProvider.hetzner);
+                      },
+                    ),
+                    // Outlined button that will open website
+                    BrandOutlinedButton(
+                      onPressed: () =>
+                          launchURL('https://www.hetzner.com/cloud'),
+                      title: 'initializing.select_provider_site_button'.tr(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            OutlinedCard(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: const Color(0xFF0080FF),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/images/logos/digital_ocean.svg',
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          'Digital Ocean',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_countries_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_countries_text_do'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_price_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_price_text_do'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_payment_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_payment_text_do'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                      title: 'basis.select'.tr(),
+                      onPressed: () {
+                        serverInstallationCubit
+                            .setServerProviderType(ServerProvider.digitalOcean);
+                        callback(ServerProvider.digitalOcean);
+                      },
+                    ),
+                    // Outlined button that will open website
+                    BrandOutlinedButton(
+                      onPressed: () =>
+                          launchURL('https://www.digitalocean.com'),
+                      title: 'initializing.select_provider_site_button'.tr(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            InfoBox(text: 'initializing.select_provider_notice'.tr()),
+          ],
+        ),
       );
 }

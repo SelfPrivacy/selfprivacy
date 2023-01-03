@@ -149,6 +149,7 @@ def package_linux_archive():
 def deploy_gitea_release():
   gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/standalone_{APP_NAME}-{APP_SEMVER}.apk")
   gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/standalone_{APP_NAME}-{APP_SEMVER}.apk.idsig")
+  gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.aab")
   gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage")
   gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/SelfPrivacy-{APP_SEMVER}-x86_64.AppImage.zsync")
   gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.flatpak")

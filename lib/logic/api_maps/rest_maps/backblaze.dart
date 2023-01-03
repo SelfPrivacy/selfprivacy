@@ -90,7 +90,8 @@ class BackblazeApi extends ApiMap {
         ),
       );
       if (response.statusCode == HttpStatus.ok) {
-        isTokenValid = response.data['allowed']['capabilities'].contains('listBuckets');
+        isTokenValid =
+            response.data['allowed']['capabilities'].contains('listBuckets');
       } else if (response.statusCode == HttpStatus.unauthorized) {
         isTokenValid = false;
       } else {

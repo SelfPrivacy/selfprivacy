@@ -31,7 +31,9 @@ abstract class ServerProviderApi extends ApiMap {
   Future<ServerHostingDetails> restart();
   Future<ServerHostingDetails> powerOn();
 
-  Future<void> deleteServer({required final String domainName});
+  Future<APIGenericResult<bool>> deleteServer({
+    required final String domainName,
+  });
   Future<APIGenericResult<ServerHostingDetails?>> createServer({
     required final String dnsApiToken,
     required final User rootUser,

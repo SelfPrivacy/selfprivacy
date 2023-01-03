@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -49,11 +48,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 30),
-            BrandText.h2(
+            Text(
               'onboarding.page1_title'.tr(),
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const SizedBox(height: 20),
-            BrandText.body2('onboarding.page1_text'.tr()),
+            const SizedBox(height: 16),
+            Text(
+              'onboarding.page1_text'.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 16),
             Flexible(
               child: Center(
                 child: Image.asset(
@@ -86,34 +90,49 @@ class _OnboardingPageState extends State<OnboardingPage> {
           maxHeight: MediaQuery.of(context).size.height,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 30),
-            BrandText.h2('onboarding.page2_title'.tr()),
-            const SizedBox(height: 20),
-            BrandText.body2('onboarding.page2_text'.tr()),
-            const SizedBox(height: 20),
-            Center(
-              child: Image.asset(
-                _fileName(
-                  context: context,
-                  path: 'assets/images/onboarding',
-                  fileExtention: 'png',
-                  fileName: 'logos_line',
-                ),
-              ),
+            Text(
+              'onboarding.page2_title'.tr(),
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
-            Flexible(
-              child: Center(
-                child: Image.asset(
-                  _fileName(
-                    context: context,
-                    path: 'assets/images/onboarding',
-                    fileExtention: 'png',
-                    fileName: 'onboarding2',
-                  ),
-                ),
-              ),
+            const SizedBox(height: 16),
+            Text(
+              'onboarding.page2_text'.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
+            const SizedBox(height: 16),
+            Text(
+              'onboarding.page2_server_provider_title'.tr(),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'onboarding.page2_server_provider_text'.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'onboarding.page2_dns_provider_title'.tr(),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'onboarding.page2_dns_provider_text'.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'onboarding.page2_backup_provider_title'.tr(),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'onboarding.page2_backup_provider_text'.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 16),
             BrandButton.rised(
               onPressed: () {
                 context.read<AppSettingsCubit>().turnOffOnboarding();

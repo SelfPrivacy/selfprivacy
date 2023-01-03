@@ -19,6 +19,7 @@ import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
@@ -461,49 +462,47 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  static String getHostnameFromDomain(final String domain) {
-    // Replace all non-alphanumeric characters with an underscore
-    String hostname =
-        domain.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
-    if (hostname.endsWith('-')) {
-      hostname = hostname.substring(0, hostname.length - 1);
-    }
-    if (hostname.startsWith('-')) {
-      hostname = hostname.substring(1);
-    }
-    if (hostname.isEmpty) {
-      hostname = 'selfprivacy-server';
-    }
-
-    return hostname;
-  }
-
   @override
-  Future<void> deleteServer({
+  Future<APIGenericResult<bool>> deleteServer({
     required final String domainName,
   }) async {
     final Dio client = await getClient();
+    try {
+      final String hostname = getHostnameFromDomain(domainName);
 
-    final String hostname = getHostnameFromDomain(domainName);
+      final Response serversReponse = await client.get('/servers');
+      final List servers = serversReponse.data['servers'];
+      final Map server =
+          servers.firstWhere((final el) => el['name'] == hostname);
+      final List volumes = server['volumes'];
+      final List<Future> laterFutures = <Future>[];
 
-    final Response serversReponse = await client.get('/servers');
-    final List servers = serversReponse.data['servers'];
-    final Map server = servers.firstWhere((final el) => el['name'] == hostname);
-    final List volumes = server['volumes'];
-    final List<Future> laterFutures = <Future>[];
+      for (final volumeId in volumes) {
+        await client.post('/volumes/$volumeId/actions/detach');
+      }
+      await Future.delayed(const Duration(seconds: 10));
 
-    for (final volumeId in volumes) {
-      await client.post('/volumes/$volumeId/actions/detach');
+      for (final volumeId in volumes) {
+        laterFutures.add(client.delete('/volumes/$volumeId'));
+      }
+      laterFutures.add(client.delete('/servers/${server['id']}'));
+
+      await Future.wait(laterFutures);
+    } catch (e) {
+      print(e);
+      return APIGenericResult(
+        success: false,
+        data: false,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
     }
-    await Future.delayed(const Duration(seconds: 10));
 
-    for (final volumeId in volumes) {
-      laterFutures.add(client.delete('/volumes/$volumeId'));
-    }
-    laterFutures.add(client.delete('/servers/${server['id']}'));
-
-    await Future.wait(laterFutures);
-    close(client);
+    return APIGenericResult(
+      success: true,
+      data: true,
+    );
   }
 
   @override

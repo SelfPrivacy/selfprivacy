@@ -5,6 +5,7 @@ import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:package_info/package_info.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutApplicationPage extends StatelessWidget {
   const AboutApplicationPage({super.key});
@@ -36,6 +37,26 @@ class AboutApplicationPage extends StatelessWidget {
                   'about_application_page.api_version_text'
                       .tr(args: [snapshot.data.toString()]),
                 ),
+              ),
+              const SizedBox(height: 10),
+              // Button to call showAboutDialog
+              TextButton(
+                onPressed: () => showAboutDialog(
+                  context: context,
+                  applicationName: 'SelfPrivacy',
+                  applicationLegalese: '© 2022 SelfPrivacy',
+                  // Link to privacy policy
+                  children: [
+                    TextButton(
+                      onPressed: () => launchUrl(
+                        Uri.parse('https://selfprivacy.ru/privacy-policy'),
+                        mode: LaunchMode.externalApplication,
+                      ),
+                      child: Text('about_application_page.privacy_policy'.tr()),
+                    ),
+                  ],
+                ),
+                child: const Text('Show about dialog'),
               ),
             ],
           ),

@@ -308,7 +308,7 @@ packages:
       name: dynamic_color
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.0"
+    version: "1.5.4"
   easy_localization:
     dependency: "direct main"
     description:
@@ -602,13 +602,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  gtk_theme_fl:
-    dependency: "direct main"
-    description:
-      name: gtk_theme_fl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1"
   hive:
     dependency: "direct main"
     description:
@@ -764,7 +757,7 @@ packages:
     source: hosted
     version: "0.12.12"
   material_color_utilities:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: material_color_utilities
       url: "https://pub.dartlang.org"
@@ -1188,20 +1181,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
-  system_theme:
-    dependency: "direct main"
-    description:
-      name: system_theme
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
-  system_theme_web:
-    dependency: transitive
-    description:
-      name: system_theme_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.2"
   term_glyph:
     dependency: transitive
     description:
@@ -1414,4 +1393,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.17.0 <3.0.0"
-  flutter: ">=3.0.0"
+  flutter: ">=3.3.0"

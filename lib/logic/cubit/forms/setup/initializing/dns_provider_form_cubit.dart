@@ -11,7 +11,6 @@ class DnsProviderFormCubit extends FormCubit {
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
-        LengthStringNotEqualValidation(40)
       ],
     );
 
@@ -43,7 +42,7 @@ class DnsProviderFormCubit extends FormCubit {
     }
 
     if (!isKeyValid) {
-      apiKey.setError('initializing.cloudflare_bad_key_error'.tr());
+      apiKey.setError('initializing.dns_provider_bad_key_error'.tr());
     }
 
     return isKeyValid;

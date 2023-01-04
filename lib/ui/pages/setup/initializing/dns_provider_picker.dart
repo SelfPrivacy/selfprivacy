@@ -164,7 +164,7 @@ class ProviderSelectionPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'initializing.connect_to_server'.tr(),
+              'initializing.select_dns'.tr(),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 10),
@@ -187,10 +187,10 @@ class ProviderSelectionPage extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
-                            color: const Color(0xFFD50C2D),
+                            color: const Color.fromARGB(255, 241, 215, 166),
                           ),
                           child: SvgPicture.asset(
-                            'assets/images/logos/hetzner.svg',
+                            'assets/images/logos/cloudflare.svg',
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -202,21 +202,11 @@ class ProviderSelectionPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'initializing.select_provider_countries_title'.tr(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      'initializing.select_provider_countries_text_hetzner'
-                          .tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
                       'initializing.select_provider_price_title'.tr(),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Text(
-                      'initializing.select_provider_price_text_hetzner'.tr(),
+                      'initializing.select_provider_price_free'.tr(),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),
@@ -225,12 +215,8 @@ class ProviderSelectionPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Text(
-                      'initializing.select_provider_payment_text_hetzner'.tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'initializing.select_provider_email_notice'.tr(),
+                      'initializing.select_provider_payment_text_cloudflare'
+                          .tr(),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),
@@ -245,7 +231,7 @@ class ProviderSelectionPage extends StatelessWidget {
                     // Outlined button that will open website
                     BrandOutlinedButton(
                       onPressed: () =>
-                          launchURL('https://cloud.digitalocean.com/'),
+                          launchURL('https://dash.cloudflare.com/'),
                       title: 'initializing.select_provider_site_button'.tr(),
                     ),
                   ],
@@ -282,20 +268,11 @@ class ProviderSelectionPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'initializing.select_provider_countries_title'.tr(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      'initializing.select_provider_countries_text_do'.tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
                       'initializing.select_provider_price_title'.tr(),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Text(
-                      'initializing.select_provider_price_text_do'.tr(),
+                      'initializing.select_provider_price_free'.tr(),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),

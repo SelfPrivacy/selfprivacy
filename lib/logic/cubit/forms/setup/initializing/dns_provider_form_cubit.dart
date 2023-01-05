@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 
 class DnsProviderFormCubit extends FormCubit {
   DnsProviderFormCubit(this.initializingCubit) {

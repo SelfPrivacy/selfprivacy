@@ -11,7 +11,6 @@ import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.da
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ServicePage extends StatefulWidget {
   const ServicePage({required this.serviceId, super.key});

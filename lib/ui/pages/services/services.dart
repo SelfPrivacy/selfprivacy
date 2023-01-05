@@ -15,7 +15,6 @@ import 'package:selfprivacy/ui/pages/services/service_page.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});

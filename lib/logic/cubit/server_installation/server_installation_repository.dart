@@ -48,6 +48,7 @@ class ServerInstallationRepository {
     final String? cloudflareToken = getIt<ApiConfigModel>().dnsProviderKey;
     final String? serverTypeIdentificator = getIt<ApiConfigModel>().serverType;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
+    final DnsProvider? dnsProvider = getIt<ApiConfigModel>().dnsProvider;
     final ServerProvider? serverProvider =
         getIt<ApiConfigModel>().serverProvider;
     final BackblazeCredential? backblazeCredential =
@@ -75,12 +76,15 @@ class ServerInstallationRepository {
       );
     }
 
-    // No other DNS provider is supported for now, so it's fine.
-    ApiController.initDnsProviderApiFactory(
-      DnsProviderApiFactorySettings(
-        provider: DnsProvider.cloudflare,
-      ),
-    );
+    if (dnsProvider != null ||
+        (serverDomain != null &&
+            serverDomain.provider != ServerProvider.unknown)) {
+      ApiController.initDnsProviderApiFactory(
+        DnsProviderApiFactorySettings(
+          provider: dnsProvider ?? serverDomain!.provider,
+        ),
+      );
+    }
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
       return ServerInstallationFinished(

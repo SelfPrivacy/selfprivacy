@@ -314,6 +314,7 @@
         "dns_provider_bad_key_error": "API ключ неверен",
         "backblaze_bad_key_error": "Информация о Backblaze хранилище неверна",
         "connect_to_dns": "Подключите DNS провайдер",
+        "connect_to_dns_provider_text": "С помощью API токена приложение SelfPrivacy настроит DNS записи",
         "manage_domain_dns": "Для управления DNS вашего домена",
         "use_this_domain": "Используем этот домен?",
         "use_this_domain_text": "Указанный вами токен даёт контроль над этим доменом",

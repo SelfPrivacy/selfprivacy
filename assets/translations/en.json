@@ -315,6 +315,7 @@
         "dns_provider_bad_key_error": "API key is invalid",
         "backblaze_bad_key_error": "Backblaze storage information is invalid",
         "connect_to_dns": "Connect the DNS provider",
+        "connect_to_dns_provider_text": "With API token SelfPrivacy will manage all DNS entries",
         "select_dns": "Now let's select a DNS provider",
         "manage_domain_dns": "To manage your domain's DNS",
         "use_this_domain": "Use this domain?",

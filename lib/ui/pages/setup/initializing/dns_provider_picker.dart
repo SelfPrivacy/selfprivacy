@@ -100,13 +100,16 @@ class ProviderInputDataPage extends StatelessWidget {
   Widget build(final BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          providerInfo.image,
-          const SizedBox(height: 10),
           Text(
             'initializing.connect_to_dns'.tr(),
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
-          const Spacer(),
+          const SizedBox(height: 16),
+          Text(
+            'initializing.connect_to_server_provider_text'.tr(),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 32),
           CubitFormTextField(
             formFieldCubit: providerCubit.apiKey,
             textAlign: TextAlign.center,
@@ -115,13 +118,13 @@ class ProviderInputDataPage extends StatelessWidget {
               hintText: 'Provider API Token',
             ),
           ),
-          const Spacer(),
+          const SizedBox(height: 32),
           FilledButton(
             title: 'basis.connect'.tr(),
             onPressed: () => providerCubit.trySubmit(),
           ),
           const SizedBox(height: 10),
-          OutlinedButton(
+          BrandOutlinedButton(
             child: Text('initializing.how'.tr()),
             onPressed: () => showModalBottomSheet<void>(
               context: context,

@@ -58,6 +58,8 @@ class DnsProviderAdapter extends TypeAdapter<DnsProvider> {
         return DnsProvider.unknown;
       case 1:
         return DnsProvider.cloudflare;
+      case 2:
+        return DnsProvider.digitalOcean;
       default:
         return DnsProvider.unknown;
     }
@@ -71,6 +73,9 @@ class DnsProviderAdapter extends TypeAdapter<DnsProvider> {
         break;
       case DnsProvider.cloudflare:
         writer.writeByte(1);
+        break;
+      case DnsProvider.digitalOcean:
+        writer.writeByte(2);
         break;
     }
   }

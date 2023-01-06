@@ -105,12 +105,15 @@ class DigitalOceanDnsApi extends DnsProviderApi {
 
     final Dio client = await getClient();
     try {
+      const String ignoreType = 'SOA';
       final List<Future> allDeleteFutures = [];
       final List<DnsRecord> records = await getDnsRecords(domain: domain);
       for (final record in records) {
-        allDeleteFutures.add(
-          client.delete('/domains/$domainName/records/${record.id}'),
-        );
+        if (record.type != ignoreType) {
+          allDeleteFutures.add(
+            client.delete('/domains/$domainName/records/${record.id}'),
+          );
+        }
       }
       await Future.wait(allDeleteFutures);
     } catch (e) {
@@ -186,7 +189,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
             data: {
               'type': record.type,
               'name': record.name,
-              'data': record.content,
+              'data': record.type == 'MX' ? '@' : record.content,
               'ttl': record.ttl,
               'priority': record.priority,
             },

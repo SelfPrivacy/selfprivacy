@@ -188,7 +188,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
             '/domains/$domainName/records',
             data: {
               'type': record.type,
-              'name': record.name,
+              'name': record.name == domainName ? '@' : record.name,
               'data': record.type == 'MX' ? '@' : record.content,
               'ttl': record.ttl,
               'priority': record.priority,

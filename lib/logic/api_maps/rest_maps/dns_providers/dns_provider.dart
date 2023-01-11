@@ -1,9 +1,11 @@
 import 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 export 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
+export 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 
 class DomainNotFoundException implements Exception {
   DomainNotFoundException(this.message);
@@ -13,6 +15,11 @@ class DomainNotFoundException implements Exception {
 abstract class DnsProviderApi extends ApiMap {
   Future<List<DnsRecord>> getDnsRecords({
     required final ServerDomain domain,
+  });
+  List<DesiredDnsRecord> getDesiredDnsRecords({
+    final String? domainName,
+    final String? ipAddress,
+    final String? dkimPublicKey,
   });
   Future<APIGenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,

@@ -25,11 +25,14 @@ class DnsRecordsCubit
     emit(
       DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
-        dnsRecords: getDesiredDnsRecords(
-          serverInstallationCubit.state.serverDomain?.domainName,
-          '',
-          '',
-        ),
+        dnsRecords: ApiController.currentDnsProviderApiFactory!
+            .getDnsProvider()
+            .getDesiredDnsRecords(
+              domainName:
+                  serverInstallationCubit.state.serverDomain?.domainName,
+              dkimPublicKey: '',
+              ipAddress: '',
+            ),
       ),
     );
 
@@ -44,16 +47,23 @@ class DnsRecordsCubit
             .getDnsRecords(domain: domain);
         final String? dkimPublicKey =
             extractDkimRecord(await api.getDnsRecords())?.content;
-        final List<DesiredDnsRecord> desiredRecords =
-            getDesiredDnsRecords(domain.domainName, ipAddress, dkimPublicKey);
+        final List<DesiredDnsRecord> desiredRecords = ApiController
+            .currentDnsProviderApiFactory!
+            .getDnsProvider()
+            .getDesiredDnsRecords(
+              domainName: domain.domainName,
+              ipAddress: ipAddress,
+              dkimPublicKey: dkimPublicKey,
+            );
         final List<DesiredDnsRecord> foundRecords = [];
-        for (final DesiredDnsRecord record in desiredRecords) {
-          if (record.description == 'record.dkim') {
+        for (final DesiredDnsRecord desiredRecord in desiredRecords) {
+          if (desiredRecord.description == 'record.dkim') {
             final DnsRecord foundRecord = records.firstWhere(
-              (final r) => r.name == record.name && r.type == record.type,
+              (final r) =>
+                  r.name == desiredRecord.name && r.type == desiredRecord.type,
               orElse: () => DnsRecord(
-                name: record.name,
-                type: record.type,
+                name: desiredRecord.name,
+                type: desiredRecord.type,
                 content: '',
                 ttl: 800,
                 proxied: false,
@@ -65,22 +75,22 @@ class DnsRecordsCubit
             final String? foundContent =
                 foundRecord.content?.replaceAll(RegExp(r'\s+'), '');
             final String content =
-                record.content.replaceAll(RegExp(r'\s+'), '');
+                desiredRecord.content.replaceAll(RegExp(r'\s+'), '');
             if (foundContent == content) {
-              foundRecords.add(record.copyWith(isSatisfied: true));
+              foundRecords.add(desiredRecord.copyWith(isSatisfied: true));
             } else {
-              foundRecords.add(record.copyWith(isSatisfied: false));
+              foundRecords.add(desiredRecord.copyWith(isSatisfied: false));
             }
           } else {
             if (records.any(
               (final r) =>
-                  r.name == record.name &&
-                  r.type == record.type &&
-                  r.content == record.content,
+                  r.name == desiredRecord.name &&
+                  r.type == desiredRecord.type &&
+                  r.content == desiredRecord.content,
             )) {
-              foundRecords.add(record.copyWith(isSatisfied: true));
+              foundRecords.add(desiredRecord.copyWith(isSatisfied: true));
             } else {
-              foundRecords.add(record.copyWith(isSatisfied: false));
+              foundRecords.add(desiredRecord.copyWith(isSatisfied: false));
             }
           }
         }

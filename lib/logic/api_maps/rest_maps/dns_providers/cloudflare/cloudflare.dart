@@ -190,6 +190,88 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
+  List<DesiredDnsRecord> getDesiredDnsRecords({
+    final String? domainName,
+    final String? ipAddress,
+    final String? dkimPublicKey,
+  }) {
+    if (domainName == null || ipAddress == null) {
+      return [];
+    }
+    return [
+      DesiredDnsRecord(
+        name: domainName,
+        content: ipAddress,
+        description: 'record.root',
+      ),
+      DesiredDnsRecord(
+        name: 'api.$domainName',
+        content: ipAddress,
+        description: 'record.api',
+      ),
+      DesiredDnsRecord(
+        name: 'cloud.$domainName',
+        content: ipAddress,
+        description: 'record.cloud',
+      ),
+      DesiredDnsRecord(
+        name: 'git.$domainName',
+        content: ipAddress,
+        description: 'record.git',
+      ),
+      DesiredDnsRecord(
+        name: 'meet.$domainName',
+        content: ipAddress,
+        description: 'record.meet',
+      ),
+      DesiredDnsRecord(
+        name: 'social.$domainName',
+        content: ipAddress,
+        description: 'record.social',
+      ),
+      DesiredDnsRecord(
+        name: 'password.$domainName',
+        content: ipAddress,
+        description: 'record.password',
+      ),
+      DesiredDnsRecord(
+        name: 'vpn.$domainName',
+        content: ipAddress,
+        description: 'record.vpn',
+      ),
+      DesiredDnsRecord(
+        name: domainName,
+        content: domainName,
+        description: 'record.mx',
+        type: 'MX',
+        category: DnsRecordsCategory.email,
+      ),
+      DesiredDnsRecord(
+        name: '_dmarc.$domainName',
+        content: 'v=DMARC1; p=none',
+        description: 'record.dmarc',
+        type: 'TXT',
+        category: DnsRecordsCategory.email,
+      ),
+      DesiredDnsRecord(
+        name: domainName,
+        content: 'v=spf1 a mx ip4:$ipAddress -all',
+        description: 'record.spf',
+        type: 'TXT',
+        category: DnsRecordsCategory.email,
+      ),
+      if (dkimPublicKey != null)
+        DesiredDnsRecord(
+          name: 'selector._domainkey.$domainName',
+          content: dkimPublicKey,
+          description: 'record.dkim',
+          type: 'TXT',
+          category: DnsRecordsCategory.email,
+        ),
+    ];
+  }
+
+  @override
   Future<APIGenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
     final String? ip4,

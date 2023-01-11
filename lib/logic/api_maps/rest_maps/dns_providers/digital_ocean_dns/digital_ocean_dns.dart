@@ -172,6 +172,96 @@ class DigitalOceanDnsApi extends DnsProviderApi {
   }
 
   @override
+  List<DesiredDnsRecord> getDesiredDnsRecords({
+    final String? domainName,
+    final String? ipAddress,
+    final String? dkimPublicKey,
+  }) {
+    if (domainName == null || ipAddress == null) {
+      return [];
+    }
+    return [
+      DesiredDnsRecord(
+        name: '@',
+        content: ipAddress,
+        description: 'record.root',
+        displayName: domainName,
+      ),
+      DesiredDnsRecord(
+        name: 'api',
+        content: ipAddress,
+        description: 'record.api',
+        displayName: 'api.$domainName',
+      ),
+      DesiredDnsRecord(
+        name: 'cloud',
+        content: ipAddress,
+        description: 'record.cloud',
+        displayName: 'cloud.$domainName',
+      ),
+      DesiredDnsRecord(
+        name: 'git',
+        content: ipAddress,
+        description: 'record.git',
+        displayName: 'git.$domainName',
+      ),
+      DesiredDnsRecord(
+        name: 'meet',
+        content: ipAddress,
+        description: 'record.meet',
+        displayName: 'meet.$domainName',
+      ),
+      DesiredDnsRecord(
+        name: 'social',
+        content: ipAddress,
+        description: 'record.social',
+        displayName: 'social.$domainName',
+      ),
+      DesiredDnsRecord(
+        name: 'password',
+        content: ipAddress,
+        description: 'record.password',
+        displayName: 'password.$domainName',
+      ),
+      DesiredDnsRecord(
+        name: 'vpn',
+        content: ipAddress,
+        description: 'record.vpn',
+        displayName: 'vpn.$domainName',
+      ),
+      DesiredDnsRecord(
+        name: domainName,
+        content: domainName,
+        description: 'record.mx',
+        type: 'MX',
+        category: DnsRecordsCategory.email,
+      ),
+      DesiredDnsRecord(
+        name: '_dmarc.$domainName',
+        content: 'v=DMARC1; p=none',
+        description: 'record.dmarc',
+        type: 'TXT',
+        category: DnsRecordsCategory.email,
+      ),
+      DesiredDnsRecord(
+        name: domainName,
+        content: 'v=spf1 a mx ip4:$ipAddress -all',
+        description: 'record.spf',
+        type: 'TXT',
+        category: DnsRecordsCategory.email,
+      ),
+      if (dkimPublicKey != null)
+        DesiredDnsRecord(
+          name: 'selector._domainkey.$domainName',
+          content: dkimPublicKey,
+          description: 'record.dkim',
+          type: 'TXT',
+          category: DnsRecordsCategory.email,
+        ),
+    ];
+  }
+
+  @override
   Future<APIGenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
     final String? ip4,

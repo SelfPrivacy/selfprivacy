@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
 
 class DnsDetailsPage extends StatefulWidget {
   const DnsDetailsPage({super.key});
@@ -109,9 +109,12 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       heroIcon: BrandIcons.globe,
       heroTitle: 'domain.screen_title'.tr(),
       children: <Widget>[
-        _getStateCard(dnsCubit.dnsState, () {
-          context.read<DnsRecordsCubit>().fix();
-        }),
+        _getStateCard(
+          dnsCubit.dnsState,
+          () {
+            context.read<DnsRecordsCubit>().fix();
+          },
+        ),
         const SizedBox(height: 16.0),
         ListTile(
           title: Text(
@@ -150,7 +153,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                       dnsRecord.description.tr(),
                     ),
                     subtitle: Text(
-                      dnsRecord.name,
+                      dnsRecord.displayName ?? dnsRecord.name,
                     ),
                   ),
                 ],

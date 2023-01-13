@@ -6,7 +6,7 @@ import requests
 import yaml
 import argparse
 
-CONTAINER_IMAGE = "localhost/flutter-build-env"
+CONTAINER_IMAGE = "registry.selfprivacy.org:5001/flutter-build-env"
 HOST_HOME = "/var/lib/drone-runner-exec"
 CONTAINER_HOME = "/tmp/builder"
 HOST_MOUNTED_VOLUME = f"{HOST_HOME}/.local/share/containers/storage/volumes/release/_data"
@@ -36,14 +36,14 @@ def podman_offline(dir, *args):
                   "--env", "STANDALONE_KEYSTORE_PASS=" + os.environ.get("STANDALONE_KEYSTORE_PASS"),
                   "--env", "GOOGLE_KEYSTORE_PASS=" + os.environ.get("GOOGLE_KEYSTORE_PASS"),
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
-                  CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
+                  "--ulimit", "nofile:102400:102400", CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ], check=True)
 
 def podman_online(dir, *args):
   subprocess.run(["podman", "run", "--rm", "--cap-add=CHOWN", f"--workdir={dir}",
                   "-v", os.getcwd() + f":{CONTAINER_HOME}/src",
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
-                  CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
+                  "--ulimit", "nofile:102400:102400",CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ], check=True)
 
 # Utilities
@@ -93,17 +93,17 @@ def gitea_upload_attachment(file):
 # Targets
 
 def build_linux():
-  podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/flutter_pub_cache",
+  podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/flutter_pub_cache",
                                           "&& flutter pub get --offline",
                                           "&& flutter build linux")
 
 def build_apk():
-  podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
-                                          "&& flutter pub get --offline",
+  podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
+                                          "&& flutter pub get",
                                           "&& flutter build apk --flavor production")
 def build_bundle():
-  podman_offline(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
-                                          "&& flutter pub get --offline",
+  podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
+                                          "&& flutter pub get",
                                           "&& flutter build appbundle --flavor production")
 
 def sign_apk_standalone():
@@ -163,10 +163,12 @@ def deploy_fdroid_repo():
 
 def ci_build_linux():
   podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/flutter_pub_cache",
+                                         "&& flutter pub get",
                                          "&& flutter build linux --debug")
 
 def ci_build_apk():
   podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
+                                         "&& flutter pub get",
                                          "&& flutter build apk --flavor nightly")
 
 def ci_run_tests():

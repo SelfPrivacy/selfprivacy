@@ -36,14 +36,14 @@ def podman_offline(dir, *args):
                   "--env", "STANDALONE_KEYSTORE_PASS=" + os.environ.get("STANDALONE_KEYSTORE_PASS"),
                   "--env", "GOOGLE_KEYSTORE_PASS=" + os.environ.get("GOOGLE_KEYSTORE_PASS"),
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
-                  "--ulimit", "nofile:102400:102400", CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
+                  "--ulimit", "nofile=102400:102400", CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ], check=True)
 
 def podman_online(dir, *args):
   subprocess.run(["podman", "run", "--rm", "--cap-add=CHOWN", f"--workdir={dir}",
                   "-v", os.getcwd() + f":{CONTAINER_HOME}/src",
                   "--user", os.getuid().__str__() + ":" + os.getgid().__str__(), "--userns=keep-id",
-                  "--ulimit", "nofile:102400:102400",CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
+                  "--ulimit", "nofile=102400:102400",CONTAINER_IMAGE, "bash", "-c", ' '.join(args)
                  ], check=True)
 
 # Utilities

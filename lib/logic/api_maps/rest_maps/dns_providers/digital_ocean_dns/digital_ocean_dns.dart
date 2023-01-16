@@ -229,22 +229,22 @@ class DigitalOceanDnsApi extends DnsProviderApi {
         description: 'record.vpn',
         displayName: 'vpn.$domainName',
       ),
-      DesiredDnsRecord(
-        name: domainName,
-        content: domainName,
+      const DesiredDnsRecord(
+        name: '@',
+        content: '@',
         description: 'record.mx',
         type: 'MX',
         category: DnsRecordsCategory.email,
       ),
-      DesiredDnsRecord(
-        name: '_dmarc.$domainName',
+      const DesiredDnsRecord(
+        name: '_dmarc',
         content: 'v=DMARC1; p=none',
         description: 'record.dmarc',
         type: 'TXT',
         category: DnsRecordsCategory.email,
       ),
       DesiredDnsRecord(
-        name: domainName,
+        name: '@',
         content: 'v=spf1 a mx ip4:$ipAddress -all',
         description: 'record.spf',
         type: 'TXT',
@@ -252,7 +252,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
       ),
       if (dkimPublicKey != null)
         DesiredDnsRecord(
-          name: 'selector._domainkey.$domainName',
+          name: 'selector._domainkey',
           content: dkimPublicKey,
           description: 'record.dkim',
           type: 'TXT',

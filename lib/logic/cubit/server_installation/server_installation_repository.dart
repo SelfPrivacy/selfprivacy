@@ -260,6 +260,7 @@ class ServerInstallationRepository {
           ServerHostingDetails? serverDetails;
           try {
             final APIGenericResult createResult = await api.createServer(
+              dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
               dnsApiToken: cloudFlareKey,
               rootUser: rootUser,
               domainName: domainName,
@@ -284,6 +285,7 @@ class ServerInstallationRepository {
     try {
       final APIGenericResult<ServerHostingDetails?> createServerResult =
           await api.createServer(
+        dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
         dnsApiToken: cloudFlareKey,
         rootUser: rootUser,
         domainName: domainName,
@@ -308,6 +310,7 @@ class ServerInstallationRepository {
             ServerHostingDetails? serverDetails;
             try {
               final APIGenericResult createResult = await api.createServer(
+                dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
                 dnsApiToken: cloudFlareKey,
                 rootUser: rootUser,
                 domainName: domainName,

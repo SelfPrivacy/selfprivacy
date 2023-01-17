@@ -12,7 +12,7 @@ import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:selfprivacy/utils/launch_url.dart';
 
 class ServerProviderPicker extends StatefulWidget {
   const ServerProviderPicker({
@@ -249,7 +249,7 @@ class ProviderSelectionPage extends StatelessWidget {
                     // Outlined button that will open website
                     BrandOutlinedButton(
                       onPressed: () =>
-                          _launchURL('https://www.hetzner.com/cloud'),
+                          launchURL('https://www.hetzner.com/cloud'),
                       title: 'initializing.select_provider_site_button'.tr(),
                     ),
                   ],
@@ -323,7 +323,7 @@ class ProviderSelectionPage extends StatelessWidget {
                     // Outlined button that will open website
                     BrandOutlinedButton(
                       onPressed: () =>
-                          _launchURL('https://www.digitalocean.com'),
+                          launchURL('https://www.digitalocean.com'),
                       title: 'initializing.select_provider_site_button'.tr(),
                     ),
                   ],
@@ -335,16 +335,4 @@ class ProviderSelectionPage extends StatelessWidget {
           ],
         ),
       );
-}
-
-void _launchURL(final url) async {
-  try {
-    final Uri uri = Uri.parse(url);
-    await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
-  } catch (e) {
-    print(e);
-  }
 }

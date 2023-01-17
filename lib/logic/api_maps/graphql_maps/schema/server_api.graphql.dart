@@ -3598,6 +3598,418 @@ class _CopyWithStubImpl$Query$SystemServerProvider$system$provider<TRes>
 }
 
 @JsonSerializable(explicitToJson: true)
+class Query$SystemDnsProvider {
+  Query$SystemDnsProvider({required this.system, required this.$__typename});
+
+  @override
+  factory Query$SystemDnsProvider.fromJson(Map<String, dynamic> json) =>
+      _$Query$SystemDnsProviderFromJson(json);
+
+  final Query$SystemDnsProvider$system system;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() => _$Query$SystemDnsProviderToJson(this);
+  int get hashCode {
+    final l$system = system;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$system, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$SystemDnsProvider) || runtimeType != other.runtimeType)
+      return false;
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$SystemDnsProvider on Query$SystemDnsProvider {
+  CopyWith$Query$SystemDnsProvider<Query$SystemDnsProvider> get copyWith =>
+      CopyWith$Query$SystemDnsProvider(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemDnsProvider<TRes> {
+  factory CopyWith$Query$SystemDnsProvider(Query$SystemDnsProvider instance,
+          TRes Function(Query$SystemDnsProvider) then) =
+      _CopyWithImpl$Query$SystemDnsProvider;
+
+  factory CopyWith$Query$SystemDnsProvider.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemDnsProvider;
+
+  TRes call({Query$SystemDnsProvider$system? system, String? $__typename});
+  CopyWith$Query$SystemDnsProvider$system<TRes> get system;
+}
+
+class _CopyWithImpl$Query$SystemDnsProvider<TRes>
+    implements CopyWith$Query$SystemDnsProvider<TRes> {
+  _CopyWithImpl$Query$SystemDnsProvider(this._instance, this._then);
+
+  final Query$SystemDnsProvider _instance;
+
+  final TRes Function(Query$SystemDnsProvider) _then;
+
+  static const _undefined = {};
+
+  TRes call({Object? system = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$SystemDnsProvider(
+          system: system == _undefined || system == null
+              ? _instance.system
+              : (system as Query$SystemDnsProvider$system),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$SystemDnsProvider$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Query$SystemDnsProvider$system(
+        local$system, (e) => call(system: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$SystemDnsProvider<TRes>
+    implements CopyWith$Query$SystemDnsProvider<TRes> {
+  _CopyWithStubImpl$Query$SystemDnsProvider(this._res);
+
+  TRes _res;
+
+  call({Query$SystemDnsProvider$system? system, String? $__typename}) => _res;
+  CopyWith$Query$SystemDnsProvider$system<TRes> get system =>
+      CopyWith$Query$SystemDnsProvider$system.stub(_res);
+}
+
+const documentNodeQuerySystemDnsProvider = DocumentNode(definitions: [
+  OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'SystemDnsProvider'),
+      variableDefinitions: [],
+      directives: [],
+      selectionSet: SelectionSetNode(selections: [
+        FieldNode(
+            name: NameNode(value: 'system'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FieldNode(
+                  name: NameNode(value: 'domainInfo'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: SelectionSetNode(selections: [
+                    FieldNode(
+                        name: NameNode(value: 'provider'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null)
+                  ])),
+              FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null)
+            ])),
+        FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null)
+      ])),
+]);
+Query$SystemDnsProvider _parserFn$Query$SystemDnsProvider(
+        Map<String, dynamic> data) =>
+    Query$SystemDnsProvider.fromJson(data);
+
+class Options$Query$SystemDnsProvider
+    extends graphql.QueryOptions<Query$SystemDnsProvider> {
+  Options$Query$SystemDnsProvider(
+      {String? operationName,
+      graphql.FetchPolicy? fetchPolicy,
+      graphql.ErrorPolicy? errorPolicy,
+      graphql.CacheRereadPolicy? cacheRereadPolicy,
+      Object? optimisticResult,
+      Duration? pollInterval,
+      graphql.Context? context})
+      : super(
+            operationName: operationName,
+            fetchPolicy: fetchPolicy,
+            errorPolicy: errorPolicy,
+            cacheRereadPolicy: cacheRereadPolicy,
+            optimisticResult: optimisticResult,
+            pollInterval: pollInterval,
+            context: context,
+            document: documentNodeQuerySystemDnsProvider,
+            parserFn: _parserFn$Query$SystemDnsProvider);
+}
+
+class WatchOptions$Query$SystemDnsProvider
+    extends graphql.WatchQueryOptions<Query$SystemDnsProvider> {
+  WatchOptions$Query$SystemDnsProvider(
+      {String? operationName,
+      graphql.FetchPolicy? fetchPolicy,
+      graphql.ErrorPolicy? errorPolicy,
+      graphql.CacheRereadPolicy? cacheRereadPolicy,
+      Object? optimisticResult,
+      graphql.Context? context,
+      Duration? pollInterval,
+      bool? eagerlyFetchResults,
+      bool carryForwardDataOnException = true,
+      bool fetchResults = false})
+      : super(
+            operationName: operationName,
+            fetchPolicy: fetchPolicy,
+            errorPolicy: errorPolicy,
+            cacheRereadPolicy: cacheRereadPolicy,
+            optimisticResult: optimisticResult,
+            context: context,
+            document: documentNodeQuerySystemDnsProvider,
+            pollInterval: pollInterval,
+            eagerlyFetchResults: eagerlyFetchResults,
+            carryForwardDataOnException: carryForwardDataOnException,
+            fetchResults: fetchResults,
+            parserFn: _parserFn$Query$SystemDnsProvider);
+}
+
+class FetchMoreOptions$Query$SystemDnsProvider
+    extends graphql.FetchMoreOptions {
+  FetchMoreOptions$Query$SystemDnsProvider(
+      {required graphql.UpdateQuery updateQuery})
+      : super(
+            updateQuery: updateQuery,
+            document: documentNodeQuerySystemDnsProvider);
+}
+
+extension ClientExtension$Query$SystemDnsProvider on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Query$SystemDnsProvider>> query$SystemDnsProvider(
+          [Options$Query$SystemDnsProvider? options]) async =>
+      await this.query(options ?? Options$Query$SystemDnsProvider());
+  graphql.ObservableQuery<Query$SystemDnsProvider> watchQuery$SystemDnsProvider(
+          [WatchOptions$Query$SystemDnsProvider? options]) =>
+      this.watchQuery(options ?? WatchOptions$Query$SystemDnsProvider());
+  void writeQuery$SystemDnsProvider(
+          {required Query$SystemDnsProvider data, bool broadcast = true}) =>
+      this.writeQuery(
+          graphql.Request(
+              operation: graphql.Operation(
+                  document: documentNodeQuerySystemDnsProvider)),
+          data: data.toJson(),
+          broadcast: broadcast);
+  Query$SystemDnsProvider? readQuery$SystemDnsProvider(
+      {bool optimistic = true}) {
+    final result = this.readQuery(
+        graphql.Request(
+            operation: graphql.Operation(
+                document: documentNodeQuerySystemDnsProvider)),
+        optimistic: optimistic);
+    return result == null ? null : Query$SystemDnsProvider.fromJson(result);
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$SystemDnsProvider$system {
+  Query$SystemDnsProvider$system(
+      {required this.domainInfo, required this.$__typename});
+
+  @override
+  factory Query$SystemDnsProvider$system.fromJson(Map<String, dynamic> json) =>
+      _$Query$SystemDnsProvider$systemFromJson(json);
+
+  final Query$SystemDnsProvider$system$domainInfo domainInfo;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() => _$Query$SystemDnsProvider$systemToJson(this);
+  int get hashCode {
+    final l$domainInfo = domainInfo;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$domainInfo, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$SystemDnsProvider$system) ||
+        runtimeType != other.runtimeType) return false;
+    final l$domainInfo = domainInfo;
+    final lOther$domainInfo = other.domainInfo;
+    if (l$domainInfo != lOther$domainInfo) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$SystemDnsProvider$system
+    on Query$SystemDnsProvider$system {
+  CopyWith$Query$SystemDnsProvider$system<Query$SystemDnsProvider$system>
+      get copyWith => CopyWith$Query$SystemDnsProvider$system(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemDnsProvider$system<TRes> {
+  factory CopyWith$Query$SystemDnsProvider$system(
+          Query$SystemDnsProvider$system instance,
+          TRes Function(Query$SystemDnsProvider$system) then) =
+      _CopyWithImpl$Query$SystemDnsProvider$system;
+
+  factory CopyWith$Query$SystemDnsProvider$system.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemDnsProvider$system;
+
+  TRes call(
+      {Query$SystemDnsProvider$system$domainInfo? domainInfo,
+      String? $__typename});
+  CopyWith$Query$SystemDnsProvider$system$domainInfo<TRes> get domainInfo;
+}
+
+class _CopyWithImpl$Query$SystemDnsProvider$system<TRes>
+    implements CopyWith$Query$SystemDnsProvider$system<TRes> {
+  _CopyWithImpl$Query$SystemDnsProvider$system(this._instance, this._then);
+
+  final Query$SystemDnsProvider$system _instance;
+
+  final TRes Function(Query$SystemDnsProvider$system) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? domainInfo = _undefined,
+          Object? $__typename = _undefined}) =>
+      _then(Query$SystemDnsProvider$system(
+          domainInfo: domainInfo == _undefined || domainInfo == null
+              ? _instance.domainInfo
+              : (domainInfo as Query$SystemDnsProvider$system$domainInfo),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+  CopyWith$Query$SystemDnsProvider$system$domainInfo<TRes> get domainInfo {
+    final local$domainInfo = _instance.domainInfo;
+    return CopyWith$Query$SystemDnsProvider$system$domainInfo(
+        local$domainInfo, (e) => call(domainInfo: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$SystemDnsProvider$system<TRes>
+    implements CopyWith$Query$SystemDnsProvider$system<TRes> {
+  _CopyWithStubImpl$Query$SystemDnsProvider$system(this._res);
+
+  TRes _res;
+
+  call(
+          {Query$SystemDnsProvider$system$domainInfo? domainInfo,
+          String? $__typename}) =>
+      _res;
+  CopyWith$Query$SystemDnsProvider$system$domainInfo<TRes> get domainInfo =>
+      CopyWith$Query$SystemDnsProvider$system$domainInfo.stub(_res);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Query$SystemDnsProvider$system$domainInfo {
+  Query$SystemDnsProvider$system$domainInfo(
+      {required this.provider, required this.$__typename});
+
+  @override
+  factory Query$SystemDnsProvider$system$domainInfo.fromJson(
+          Map<String, dynamic> json) =>
+      _$Query$SystemDnsProvider$system$domainInfoFromJson(json);
+
+  @JsonKey(unknownEnumValue: Enum$DnsProvider.$unknown)
+  final Enum$DnsProvider provider;
+
+  @JsonKey(name: '__typename')
+  final String $__typename;
+
+  Map<String, dynamic> toJson() =>
+      _$Query$SystemDnsProvider$system$domainInfoToJson(this);
+  int get hashCode {
+    final l$provider = provider;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$provider, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (!(other is Query$SystemDnsProvider$system$domainInfo) ||
+        runtimeType != other.runtimeType) return false;
+    final l$provider = provider;
+    final lOther$provider = other.provider;
+    if (l$provider != lOther$provider) return false;
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) return false;
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$SystemDnsProvider$system$domainInfo
+    on Query$SystemDnsProvider$system$domainInfo {
+  CopyWith$Query$SystemDnsProvider$system$domainInfo<
+          Query$SystemDnsProvider$system$domainInfo>
+      get copyWith =>
+          CopyWith$Query$SystemDnsProvider$system$domainInfo(this, (i) => i);
+}
+
+abstract class CopyWith$Query$SystemDnsProvider$system$domainInfo<TRes> {
+  factory CopyWith$Query$SystemDnsProvider$system$domainInfo(
+          Query$SystemDnsProvider$system$domainInfo instance,
+          TRes Function(Query$SystemDnsProvider$system$domainInfo) then) =
+      _CopyWithImpl$Query$SystemDnsProvider$system$domainInfo;
+
+  factory CopyWith$Query$SystemDnsProvider$system$domainInfo.stub(TRes res) =
+      _CopyWithStubImpl$Query$SystemDnsProvider$system$domainInfo;
+
+  TRes call({Enum$DnsProvider? provider, String? $__typename});
+}
+
+class _CopyWithImpl$Query$SystemDnsProvider$system$domainInfo<TRes>
+    implements CopyWith$Query$SystemDnsProvider$system$domainInfo<TRes> {
+  _CopyWithImpl$Query$SystemDnsProvider$system$domainInfo(
+      this._instance, this._then);
+
+  final Query$SystemDnsProvider$system$domainInfo _instance;
+
+  final TRes Function(Query$SystemDnsProvider$system$domainInfo) _then;
+
+  static const _undefined = {};
+
+  TRes call(
+          {Object? provider = _undefined, Object? $__typename = _undefined}) =>
+      _then(Query$SystemDnsProvider$system$domainInfo(
+          provider: provider == _undefined || provider == null
+              ? _instance.provider
+              : (provider as Enum$DnsProvider),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$SystemDnsProvider$system$domainInfo<TRes>
+    implements CopyWith$Query$SystemDnsProvider$system$domainInfo<TRes> {
+  _CopyWithStubImpl$Query$SystemDnsProvider$system$domainInfo(this._res);
+
+  TRes _res;
+
+  call({Enum$DnsProvider? provider, String? $__typename}) => _res;
+}
+
+@JsonSerializable(explicitToJson: true)
 class Query$GetApiTokens {
   Query$GetApiTokens({required this.api, required this.$__typename});
 

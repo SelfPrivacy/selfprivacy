@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 
 part 'server_domain.g.dart';
 
@@ -30,5 +31,16 @@ enum DnsProvider {
   @HiveField(1)
   cloudflare,
   @HiveField(2)
-  digitalOcean,
+  digitalOcean;
+
+  factory DnsProvider.fromGraphQL(final Enum$DnsProvider provider) {
+    switch (provider) {
+      case Enum$DnsProvider.CLOUDFLARE:
+        return cloudflare;
+      case Enum$DnsProvider.DIGITALOCEAN:
+        return digitalOcean;
+      default:
+        return unknown;
+    }
+  }
 }

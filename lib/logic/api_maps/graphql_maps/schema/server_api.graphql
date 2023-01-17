@@ -72,6 +72,14 @@ query SystemServerProvider {
   }
 }
 
+query SystemDnsProvider {
+  system {
+    domainInfo {
+      provider
+    }
+  }
+}
+
 query GetApiTokens {
   api {
     devices {

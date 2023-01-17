@@ -687,6 +687,8 @@ class _CopyWithStubImpl$Input$UserMutationInput<TRes>
 enum Enum$DnsProvider {
   @JsonValue('CLOUDFLARE')
   CLOUDFLARE,
+  @JsonValue('DIGITALOCEAN')
+  DIGITALOCEAN,
   $unknown
 }
 

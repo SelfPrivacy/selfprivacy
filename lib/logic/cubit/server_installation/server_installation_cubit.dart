@@ -537,17 +537,27 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         token,
         dataState.recoveryCapabilities,
       );
-      final ServerProvider provider = await ServerApi(
+      final ServerProvider serverProvider = await ServerApi(
         customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getServerProviderType();
-      if (provider == ServerProvider.unknown) {
+      final DnsProvider dnsProvider = await ServerApi(
+        customToken: serverDetails.apiToken,
+        isWithToken: true,
+      ).getDnsProviderType();
+      if (serverProvider == ServerProvider.unknown) {
+        getIt<NavigationService>()
+            .showSnackBar('recovering.generic_error'.tr());
+        return;
+      }
+      if (dnsProvider == DnsProvider.unknown) {
         getIt<NavigationService>()
             .showSnackBar('recovering.generic_error'.tr());
         return;
       }
       await repository.saveServerDetails(serverDetails);
-      setServerProviderType(provider);
+      setServerProviderType(serverProvider);
+      setDnsProviderType(dnsProvider);
       emit(
         dataState.copyWith(
           serverDetails: serverDetails,

@@ -208,6 +208,7 @@ Map<String, dynamic> _$Query$DomainInfo$system$domainInfoToJson(
 
 const _$Enum$DnsProviderEnumMap = {
   Enum$DnsProvider.CLOUDFLARE: 'CLOUDFLARE',
+  Enum$DnsProvider.DIGITALOCEAN: 'DIGITALOCEAN',
   Enum$DnsProvider.$unknown: r'$unknown',
 };
 

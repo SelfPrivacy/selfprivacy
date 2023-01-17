@@ -382,6 +382,58 @@ const _$Enum$ServerProviderEnumMap = {
   Enum$ServerProvider.$unknown: r'$unknown',
 };
 
+Query$SystemDnsProvider _$Query$SystemDnsProviderFromJson(
+        Map<String, dynamic> json) =>
+    Query$SystemDnsProvider(
+      system: Query$SystemDnsProvider$system.fromJson(
+          json['system'] as Map<String, dynamic>),
+      $__typename: json['__typename'] as String,
+    );
+
+Map<String, dynamic> _$Query$SystemDnsProviderToJson(
+        Query$SystemDnsProvider instance) =>
+    <String, dynamic>{
+      'system': instance.system.toJson(),
+      '__typename': instance.$__typename,
+    };
+
+Query$SystemDnsProvider$system _$Query$SystemDnsProvider$systemFromJson(
+        Map<String, dynamic> json) =>
+    Query$SystemDnsProvider$system(
+      domainInfo: Query$SystemDnsProvider$system$domainInfo.fromJson(
+          json['domainInfo'] as Map<String, dynamic>),
+      $__typename: json['__typename'] as String,
+    );
+
+Map<String, dynamic> _$Query$SystemDnsProvider$systemToJson(
+        Query$SystemDnsProvider$system instance) =>
+    <String, dynamic>{
+      'domainInfo': instance.domainInfo.toJson(),
+      '__typename': instance.$__typename,
+    };
+
+Query$SystemDnsProvider$system$domainInfo
+    _$Query$SystemDnsProvider$system$domainInfoFromJson(
+            Map<String, dynamic> json) =>
+        Query$SystemDnsProvider$system$domainInfo(
+          provider: $enumDecode(_$Enum$DnsProviderEnumMap, json['provider'],
+              unknownValue: Enum$DnsProvider.$unknown),
+          $__typename: json['__typename'] as String,
+        );
+
+Map<String, dynamic> _$Query$SystemDnsProvider$system$domainInfoToJson(
+        Query$SystemDnsProvider$system$domainInfo instance) =>
+    <String, dynamic>{
+      'provider': _$Enum$DnsProviderEnumMap[instance.provider]!,
+      '__typename': instance.$__typename,
+    };
+
+const _$Enum$DnsProviderEnumMap = {
+  Enum$DnsProvider.CLOUDFLARE: 'CLOUDFLARE',
+  Enum$DnsProvider.DIGITALOCEAN: 'DIGITALOCEAN',
+  Enum$DnsProvider.$unknown: r'$unknown',
+};
+
 Query$GetApiTokens _$Query$GetApiTokensFromJson(Map<String, dynamic> json) =>
     Query$GetApiTokens(
       api: Query$GetApiTokens$api.fromJson(json['api'] as Map<String, dynamic>),

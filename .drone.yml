@@ -157,8 +157,7 @@ steps:
 
   - name: Push Artifacts to the Release Volume
     commands:
-#      - git add -v *.AppImage *.AppImage.zsync *.flatpak *.apk *.apk.idsig *.aab *.tar.zstd
-      - git add -v *.AppImage *.AppImage.zsync *.flatpak *.apk *.apk.idsig *.tar.zstd
+      - git add -v *.AppImage *.AppImage.zsync *.flatpak *.apk *.apk.idsig *.aab *.tar.zstd
       - git commit -m Release
       - git archive --format=tar HEAD | podman volume import release -
 

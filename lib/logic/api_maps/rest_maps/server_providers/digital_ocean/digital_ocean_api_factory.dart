@@ -1,12 +1,12 @@
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/digital_ocean/digital_ocean_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 
-class HetznerApiFactory extends ServerProviderApiFactory
+class DigitalOceanApiFactory extends ServerProviderApiFactory
     with VolumeProviderApiFactory {
-  HetznerApiFactory({this.region});
+  DigitalOceanApiFactory({this.region});
 
   final String? region;
 
@@ -15,7 +15,7 @@ class HetznerApiFactory extends ServerProviderApiFactory
     final ServerProviderApiSettings settings =
         const ServerProviderApiSettings(),
   }) =>
-      HetznerApi(
+      DigitalOceanApi(
         region: settings.region ?? region,
         hasLogger: settings.hasLogger,
         isWithToken: settings.isWithToken,
@@ -26,7 +26,7 @@ class HetznerApiFactory extends ServerProviderApiFactory
     final ServerProviderApiSettings settings =
         const ServerProviderApiSettings(),
   }) =>
-      HetznerApi(
+      DigitalOceanApi(
         region: settings.region ?? region,
         hasLogger: settings.hasLogger,
         isWithToken: settings.isWithToken,

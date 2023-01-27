@@ -1,23 +1,23 @@
-### How to get Hetzner API Token
-1.  Visit the following [link](https://console.hetzner.cloud/) and sign
-    into newly created account.
-2.  Enter into previously created project. If you haven't created one,
-    then please proceed.
-3.  Hover side panel with mouse cursor. Panel should expand and show us
-    a menu. We're interested in the last one — **Security** (icon of a
-    key).
-4.  Next, in the upper part of an interface, we can see approximately
-    the following: **SSH Keys, API Tokens, Certificates, Members.** You
-    need **API Tokens**. Click on it.
-5.  In the right part of the interface, there should be **Generate API
-    token** button. If you're using mobile version og a webpage, in the
-    lower right corner you'll see **red cross**. Push that button.
-6.  In the **Description** field, give our token a name (this can be any
-    name that you like. It doesn't influence the essence.
-7.  Under the **Description** field we can see a possibility to choose
-    **permissions**. Pick **Read & Write**.
-8.  Click **Generate API Token.**
-9.  After that, our key will be shown. Store it in the reliable place,
-    or in the password manager, which is better.
+## як отримати Hetzner API токен
+1. Завітайте на наступний [посилання](https://console.hetzner.cloud/) і підпишіться
+на новостворений рахунок.
+2. Введіть раніше створений проект. Якщо ви не створили його,
+тоді, будь ласка, продовжуйте.
+3. Наведіть вказівник на бічну панель з курсором миші. Панель повинна розгорнути і показати нам
+меню. Нас цікавить останній — **БЕЗПЕКА** (значок а
+ключ).
+4. Далі, у верхній частині інтерфейсу, ми можемо побачити приблизно
+Нижче наведено **ключі SSH, ключі API, сертифікати, члени.** Ви
+Потрібно **API-Токени**. Клікніть на нього.
+5. У правій частині інтерфейсу має бути **Generate API
+ токен**. Якщо ви користуєтеся мобільною версією, або веб-сторінкою, в
+у нижньому правому куті ви побачите **червоний хрест**. Натисніть цю кнопку.
+6. У полі **Опис** надайте нашому жетону назву (це може бути будь-яка
+ім'я, яке тобі подобається. Це не впливає на суть.
+7. У полі **Опис** ми можемо побачити можливість вибору
+**дозволи**. Виберіть **Читати і писати**.
+8. Натисніть **Створити ключ API.**
+9. Після цього буде показано наш ключ. Зберігайте його в надійному місці,
+або в менеджері паролів, що краще.
 
-![Hetzner token setup](resource:assets/images/gifs/Hetzner.gif)
+![Hetzner токен налаштування](resource:assets/images/gifs/Hetzner.gif)

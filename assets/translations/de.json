@@ -1,0 +1,79 @@
+{
+    "test": "de-test",
+    "locale": "de",
+    "basis": {
+        "providers": "Provider",
+        "password": "Passwort",
+        "create": "Hinzufügen",
+        "confirmation": "Bestätigung",
+        "providers_title": "Ihr Rechenzentrum",
+        "select": "Auswählen",
+        "services": "Dienste",
+        "users": "Benutzer",
+        "more": "Mehr",
+        "next": "Weiter",
+        "got_it": "Verstanden",
+        "settings": "Einstellungen",
+        "cancel": "Abbrechen",
+        "delete": "Löschen",
+        "close": "Schließen",
+        "connect": "Verbinden",
+        "domain": "Domäne",
+        "saving": "Speichern…",
+        "username": "Benutzername",
+        "loading": "Laden…",
+        "later": "Überspringen und später einstellen",
+        "connect_to_existing": "Mit einem existierenden Server verbinden",
+        "reset": "Zurücksetzen",
+        "details": "Einzelheiten",
+        "no_data": "Keine Daten",
+        "wait": "Warten",
+        "remove": "Entfernen",
+        "done": "Fertig",
+        "continue": "Fortfahren",
+        "alert": "Alarm",
+        "services_title": "Ihre persönliche, private und unabhängige Dienste.",
+        "apply": "Anwenden"
+    },
+    "more_page": {
+        "configuration_wizard": "Setup-Assistent",
+        "about_project": "Über uns",
+        "about_application": "Über",
+        "onboarding": "Onboarding",
+        "create_ssh_key": "Superuser SSH Schlüssel",
+        "console": "Konsole",
+        "application_settings": "Anwendungseinstellungen"
+    },
+    "console_page": {
+        "title": "Konsole",
+        "waiting": "Warten auf Initialisierung…"
+    },
+    "about_us_page": {
+        "title": "Über uns"
+    },
+    "about_application_page": {
+        "title": "Über",
+        "application_version_text": "Anwendungsversion v.{}",
+        "api_version_text": "Server API Version v.{}",
+        "privacy_policy": "Datenschutzerklärung"
+    },
+    "application_settings": {
+        "title": "Anwendungseinstellungen",
+        "dark_theme_title": "Dunkles Thema",
+        "dark_theme_description": "Ihr Anwendungsdesign wechseln",
+        "reset_config_title": "Anwendungseinstellungen zurücksetzen",
+        "reset_config_description": "API Sclüssel und root Benutzer zurücksetzen",
+        "delete_server_title": "Server löschen",
+        "delete_server_description": "Das wird Ihren Server löschen. Es wird nicht mehr zugänglich sein."
+    },
+    "ssh": {
+        "title": "SSH Schlüssel",
+        "create": "SSH Schlüssel erstellen",
+        "delete": "SSH Schlüssel entfernen",
+        "delete_confirm_question": "Sind Sie sicher, dass Sie SSH SChlüssel entfernen wollen?",
+        "subtitle_with_keys": "{} Schlüssel",
+        "subtitle_without_keys": "Keine Slüssel",
+        "no_key_name": "Unbennanter Schlüssel",
+        "root_title": "Das sind superuser Schlüsseln"
+    }
+}

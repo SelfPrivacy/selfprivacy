@@ -1,12 +1,12 @@
-### About us
+### Про нас
 
-More and more corporations want to control our data.
-We want to have full control of our **data** on our own.
+Все більше корпорацій хочуть контролювати свої дані. 
+Ми хочемо мати повний контроль над нашими.
 
-### Our mission
+### Наша місія
 
-Digital independence and privacy, available to everyone
+Цифрова незалежність і конфіденційність доступні кожному
 
-### Target
+### Ціль
 
-Develop the program, which will allow everyone to deploy their private services for themselves and their neighbours.
+Розробити програму, яка дозволить кожному розгорнути свої приватні послуги для себе та їх сусідів.

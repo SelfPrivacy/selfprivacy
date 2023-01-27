@@ -1,8 +1,8 @@
-### How to get Backblaze API Token
-1. Visit the following link and authorize: https://secure.backblaze.com/user_signin.htm
-2. On the left side of the interface, select **App Keys** in the **B2 Cloud Storage** subcategory.
-3. Click on the blue **Generate New Master Application Key** button.
-4. In the appeared pop-up window confirm the generation.
-5. Save _keyID_ and _applicationKey_ in the safe place. For example, in the password manager.
+## Як отримати Backblaze API токен
+1. Перейдіть за посиланням і авторизуйте: https://secure.backblaze.com/user_signin.htm
+2. У лівій частині інтерфейсу виберіть **App Keys** у підкатегорії **B2 Cloud Storage**.
+3. Натисніть кнопку синій **Створити новий майстер-ключ програми**.
+4. У з'явилось спливаюче вікно підтверджують покоління.
+5. Save _KeyID_ and _applicationKey_ in the safe place. Наприклад, в менеджері паролів.
 
-![Backblaze token setup](resource:assets/images/gifs/Backblaze.gif)
+![Backblaze токен налаштування](resource:assets/images/gifs/Backblaze.gif)

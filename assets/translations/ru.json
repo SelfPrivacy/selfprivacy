@@ -81,7 +81,7 @@
     "onboarding": {
         "page1_title": "Цифровая независимость доступна каждому",
         "page1_text": "Почта, VPN, Мессенджер, социальная сеть и многое другое на Вашем личном сервере, под Вашим полным контролем.",
-        "page2_title": "SelfPrivacy — это не облако, а Ваш личный дата-центр",
+        "page2_title": "SelfPrivacy — это не облако, а ваш личный дата-центр",
         "page2_text": "SelfPrivacy работает только с сервис-провайдерами на ваш выбор. Если у Вас нет учётных записей, мы поможем их создать.",
         "page2_server_provider_title": "Сервер-провайдер",
         "page2_server_provider_text": "Сервер-провайдер будет обслуживать ваш сервер в своём дата-центре. SelfPrivacy автоматически подключится к нему и настроит вам сервер.",
@@ -300,10 +300,10 @@
         "locations_not_found": "Упс!",
         "locations_not_found_text": "В этом месте не оказалось доступных серверов для аренды",
         "back_to_locations": "Выберем другой",
-        "no_locations_found": "Не найдено локаций. Убедитесь, что ваш аккаунт доступен.",
+        "no_locations_found": "Не найдено локаций, убедитесь, что ваш аккаунт доступен",
         "choose_server_type": "Какой выбрать тип сервера?",
         "choose_server_type_text": "От ресурсов сервера зависит, какие сервисы смогут запуститься. Расширить сервер можно будет в любое время",
-        "choose_server_type_notice": "Главное, на что стоит обратить внимание — количество потоков процессора и объём оперативной памяти. Данные сервисов будут размещены на отдельном диске, который оплачивается отдельно и легко расширяем!",
+        "choose_server_type_notice": "Главное, на что стоит обратить внимание — количество потоков процессора и объём оперативной памяти. Данные сервисов будут размещены на отдельном диске, который оплачивается отдельно и легко расширяем.",
         "choose_server_type_ram": "{} GB у RAM",
         "choose_server_type_storage": "{} GB системного хранилища",
         "choose_server_type_payment_per_month": "{} в месяц",
@@ -331,7 +331,8 @@
         "create_master_account": "Создайте главную учетную запись",
         "enter_username_and_password": "Введите имя пользователя и сложный пароль",
         "finish": "Всё инициализировано",
-        "checks": "Проверок выполнено: \n{} / {}"
+        "checks": "Проверок выполнено: \n{} / {}",
+        "select_dns": "Теперь давайте выберем DNS-провайдера"
     },
     "recovering": {
         "generic_error": "Ошибка проведения операции, попробуйте ещё раз.",
@@ -354,9 +355,6 @@
         "fallback_select_provider_console": "Доступ к консоли хостинга.",
         "authorization_failed": "Не удалось войти с этим ключом",
         "fallback_select_provider_console_hint": "Например, Hetzner.",
-        "hetzner_connected": "Подключение к Hetzner",
-        "hetzner_connected_description": "Связь с сервером установлена. Введите токен Hetzner с доступом к {}:",
-        "hetzner_connected_placeholder": "Hetzner токен",
         "confirm_server": "Подтвердите сервер",
         "confirm_server_description": "Нашли сервер! Подтвердите, что это он:",
         "confirm_server_accept": "Да, это он",
@@ -373,9 +371,11 @@
         "modal_confirmation_ip_invalid": "IP не совпадает с указанным в DNS записи",
         "confirm_cloudflare": "Подключение к Cloudflare",
         "confirm_cloudflare_description": "Введите токен Cloudflare, который имеет права на {}:",
-        "confirm_backblze": "Подключение к Backblaze",
         "confirm_backblaze_description": "Введите токен Backblaze, который имеет права на хранилище резервных копий:",
-        "confirm_backblaze": "Подключение к Backblaze"
+        "confirm_backblaze": "Подключение к Backblaze",
+        "server_provider_connected": "Подключение к вашему серверному провайдеру",
+        "server_provider_connected_description": "Связь установлена. Введите свой токен с доступом к {}:",
+        "server_provider_connected_placeholder": "Токен серверного провайдера"
     },
     "devices": {
         "main_screen": {

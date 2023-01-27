@@ -1,0 +1,87 @@
+{
+    "basis": {
+        "providers_title": "Su Centro de Datos",
+        "select": "Seleccione",
+        "services": "Servicios",
+        "providers": "Proveedores",
+        "users": "Usuarios",
+        "more": "Más",
+        "next": "Próximo",
+        "got_it": "Entendido",
+        "settings": "Ajustes",
+        "password": "Contraseña",
+        "create": "Añadir nuevo",
+        "confirmation": "Confirmación",
+        "cancel": "Anular",
+        "delete": "Eliminar",
+        "services_title": "Tus servicios personales, privados e independientes.",
+        "connect": "Conecte",
+        "saving": "Ahorrar…",
+        "username": "Nombre de usuario",
+        "loading": "Cargando…",
+        "later": "Saltar a la configuración posterior",
+        "reset": "Restablecer",
+        "details": "Detalles",
+        "no_data": "Sin datos",
+        "wait": "Espere",
+        "alert": "Alerta",
+        "continue": "Continuar",
+        "close": "Cerrar",
+        "domain": "Dominio",
+        "remove": "Eliminar",
+        "apply": "Solicitar",
+        "done": "Hecho",
+        "connect_to_existing": "Conectarse a un servidor existente"
+    },
+    "test": "es-test",
+    "locale": "es",
+    "application_settings": {
+        "reset_config_title": "Restablecer la configuración de la aplicación",
+        "dark_theme_description": "Cambia el tema de tu aplicación",
+        "reset_config_description": "Restablecer claves api y usuario root",
+        "delete_server_title": "Eliminar servidor",
+        "delete_server_description": "Esto elimina su servidor. Ya no será accesible.",
+        "title": "Ajustes de la aplicación",
+        "dark_theme_title": "Tema oscuro"
+    },
+    "ssh": {
+        "delete_confirm_question": "¿Está seguro de que desea eliminar la clave SSH?",
+        "root_subtitle": "Los propietarios de estas claves tienen acceso total al servidor y pueden hacer cualquier cosa en él. Añade sólo tus propias claves al servidor.",
+        "title": "SSH Claves",
+        "create": "Crear clave SSH",
+        "delete": "Eliminar clave SSH",
+        "subtitle_with_keys": "{} claves",
+        "subtitle_without_keys": "Sin llaves",
+        "no_key_name": "Clave sin nombre",
+        "root_title": "Estas son las claves de superusuario",
+        "input_label": "Clave pública ED25519 o RSA"
+    },
+    "about_application_page": {
+        "application_version_text": "Versión de la aplicación v.{}",
+        "title": "Sobre",
+        "api_version_text": "Versión API del servidor v.{}",
+        "privacy_policy": "Política de privacidad"
+    },
+    "onboarding": {
+        "page2_text": "SelfPrivacy sólo trabaja con los proveedores que usted elija. Si no tiene cuentas obligatorias en ellos, le ayudaremos a crearlas.",
+        "page1_title": "La independencia digital, al alcance de todos",
+        "page1_text": "Correo, VPN, Messenger, red social y mucho más en tu servidor privado, bajo tu control.",
+        "page2_title": "SelfPrivacy no es una nube, es tu centro de datos personal"
+    },
+    "more_page": {
+        "configuration_wizard": "Asistente de configuración",
+        "about_project": "Sobre nosotros",
+        "about_application": "Sobre",
+        "onboarding": "Incorporación",
+        "create_ssh_key": "Claves SSH de superusuario",
+        "console": "Consola",
+        "application_settings": "Ajustes de la aplicación"
+    },
+    "console_page": {
+        "title": "Consola",
+        "waiting": "Esperando la inicialización…"
+    },
+    "about_us_page": {
+        "title": "Sobre nosotros"
+    }
+}

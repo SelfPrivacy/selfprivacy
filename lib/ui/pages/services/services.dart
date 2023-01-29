@@ -133,8 +133,13 @@ class _Card extends StatelessWidget {
                         Column(
                           children: [
                             GestureDetector(
+<<<<<<< HEAD
                               onTap: () => launchURL(
                                 'https://${service.url}',
+=======
+                              onTap: () => _launchURL(
+                                service.url,
+>>>>>>> master
                               ),
                               child: Text(
                                 '${service.url}',

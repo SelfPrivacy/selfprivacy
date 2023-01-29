@@ -1,10 +1,12 @@
-### Как получить токен Digital Ocean API
-1. Переходим по [ссылке](https://console.hetzner.cloud/) и авторизуемся в ранее созданном аккаунте.
-2. Заходим в созданный нами проект. Если такового нет — значит создаём.
-3. *Наводим мышкой на боковую панель.* Она должна раскрыться, показав нам пункты меню. Нас интересует последний — **Security** (с иконкой ключика).
-4. Далее, в верхней части интерфейса видим примерно такой список: **SSH KEYS, API TOKENS, CERTIFICATES, MEMBERS.** Нам нужен **API TOKENS**. Переходим по нему.
-5. По середине в интерфейсе, нас будет ожидать кнопка **GENERATE API TOKEN**. Нажимаем на эту кнопку.
-6. В поле **Description** даём нашему токену название (это может быть любое название, которое Вам нравится, сути оно не меняет).
-7. Под полем **Description** видим возможность выбрать разрешения **PERMISSIONS**. Выбираем **Read & Write**.
-8. Нажимаем **GENERATE API TOKEN**.
-9. После этого, появиться окно с вашим токеном.
+### How to get Digital Ocean API Token
+1.  Visit the following [link](https://cloud.digitalocean.com/) and sign
+    into newly created account.
+2.  Enter into previously created project. If you haven't created one,
+    then please proceed.
+3.  Go to the "API" link on the left bar.
+4.  Click on the "Generate New Token".
+5.  Enter any name for the token.
+6.  Put expiration time to "No expiry".
+7.  Check the "Write (optional)" checkbox.
+8.  Now click on the "Generate Token" button. 
+9.  After that, the token will be shown. Store it in any reliable place, preferably a password manager.

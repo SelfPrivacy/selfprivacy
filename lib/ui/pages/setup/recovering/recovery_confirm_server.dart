@@ -55,8 +55,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                     if (servers != null && servers.isNotEmpty)
                       Column(
                         children: [
-                          if (servers.length == 1 ||
-                              (!_isExtended && _isServerFound(servers)))
+                          if (!_isExtended && _isServerFound(servers))
                             confirmServer(
                               context,
                               _firstValidServer(servers),

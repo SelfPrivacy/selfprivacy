@@ -134,7 +134,7 @@ class _Card extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () => launchURL(
-                                'https://${service.url}',
+                                service.url,
                               ),
                               child: Text(
                                 '${service.url}',

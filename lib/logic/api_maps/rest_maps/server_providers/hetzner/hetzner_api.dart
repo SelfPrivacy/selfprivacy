@@ -356,7 +356,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final User rootUser,
     required final String domainName,
     required final String serverType,
-    required final DnsProvider dnsProvider,
+    required final DnsProviderType dnsProvider,
   }) async {
     final APIGenericResult<ServerVolume?> newVolumeResponse =
         await createVolume();
@@ -385,7 +385,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final String domainName,
     required final ServerVolume volume,
     required final String serverType,
-    required final DnsProvider dnsProvider,
+    required final DnsProviderType dnsProvider,
   }) async {
     final Dio client = await getClient();
 
@@ -434,7 +434,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         createTime: DateTime.now(),
         volume: volume,
         apiToken: apiToken,
-        provider: ServerProvider.hetzner,
+        provider: ServerProviderType.hetzner,
       );
       success = true;
     } on DioError catch (e) {

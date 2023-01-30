@@ -1,5 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_creator.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
+import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_factory.dart';
 
@@ -12,21 +12,21 @@ class ApiController {
       _serverProviderApiFactory;
 
   static void initVolumeProviderApiFactory(
-    final ServerProviderApiFactorySettings settings,
+    final ServerProviderSettings settings,
   ) {
     _volumeProviderApiFactory =
         VolumeApiFactoryCreator.createVolumeProviderApiFactory(settings);
   }
 
   static void initDnsProviderApiFactory(
-    final DnsProviderApiFactorySettings settings,
+    final DnsProviderFactorySettings settings,
   ) {
     _dnsProviderApiFactory =
         ApiFactoryCreator.createDnsProviderApiFactory(settings);
   }
 
   static void initServerProviderApiFactory(
-    final ServerProviderApiFactorySettings settings,
+    final ServerProviderSettings settings,
   ) {
     _serverProviderApiFactory =
         ApiFactoryCreator.createServerProviderApiFactory(settings);

@@ -17,15 +17,15 @@ class ServerDomain {
   @HiveField(1)
   final String zoneId;
 
-  @HiveField(2, defaultValue: DnsProvider.cloudflare)
-  final DnsProvider provider;
+  @HiveField(2, defaultValue: DnsProviderType.cloudflare)
+  final DnsProviderType provider;
 
   @override
   String toString() => '$domainName: $zoneId';
 }
 
 @HiveType(typeId: 100)
-enum DnsProvider {
+enum DnsProviderType {
   @HiveField(0)
   unknown,
   @HiveField(1)
@@ -33,7 +33,7 @@ enum DnsProvider {
   @HiveField(2)
   digitalOcean;
 
-  factory DnsProvider.fromGraphQL(final Enum$DnsProvider provider) {
+  factory DnsProviderType.fromGraphQL(final Enum$DnsProvider provider) {
     switch (provider) {
       case Enum$DnsProvider.CLOUDFLARE:
         return cloudflare;

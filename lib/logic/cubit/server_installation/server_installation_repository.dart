@@ -10,7 +10,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
+import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
@@ -48,8 +48,8 @@ class ServerInstallationRepository {
     final String? cloudflareToken = getIt<ApiConfigModel>().dnsProviderKey;
     final String? serverTypeIdentificator = getIt<ApiConfigModel>().serverType;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
-    final DnsProvider? dnsProvider = getIt<ApiConfigModel>().dnsProvider;
-    final ServerProvider? serverProvider =
+    final DnsProviderType? dnsProvider = getIt<ApiConfigModel>().dnsProvider;
+    final ServerProviderType? serverProvider =
         getIt<ApiConfigModel>().serverProvider;
     final BackblazeCredential? backblazeCredential =
         getIt<ApiConfigModel>().backblazeCredential;
@@ -58,9 +58,9 @@ class ServerInstallationRepository {
 
     if (serverProvider != null ||
         (serverDetails != null &&
-            serverDetails.provider != ServerProvider.unknown)) {
+            serverDetails.provider != ServerProviderType.unknown)) {
       ApiController.initServerProviderApiFactory(
-        ServerProviderApiFactorySettings(
+        ServerProviderSettings(
           provider: serverProvider ?? serverDetails!.provider,
           location: location,
         ),
@@ -69,7 +69,7 @@ class ServerInstallationRepository {
       // All current providers support volumes
       //   so it's safe to hardcode for now
       ApiController.initVolumeProviderApiFactory(
-        ServerProviderApiFactorySettings(
+        ServerProviderSettings(
           provider: serverProvider ?? serverDetails!.provider,
           location: location,
         ),
@@ -78,9 +78,9 @@ class ServerInstallationRepository {
 
     if (dnsProvider != null ||
         (serverDomain != null &&
-            serverDomain.provider != ServerProvider.unknown)) {
+            serverDomain.provider != ServerProviderType.unknown)) {
       ApiController.initDnsProviderApiFactory(
-        DnsProviderApiFactorySettings(
+        DnsProviderFactorySettings(
           provider: dnsProvider ?? serverDomain!.provider,
         ),
       );
@@ -147,8 +147,8 @@ class ServerInstallationRepository {
   ) {
     if (serverDetails != null) {
       if (serverProviderToken != null) {
-        if (serverDetails.provider != ServerProvider.unknown) {
-          if (serverDomain.provider != DnsProvider.unknown) {
+        if (serverDetails.provider != ServerProviderType.unknown) {
+          if (serverDomain.provider != DnsProviderType.unknown) {
             return RecoveryStep.backblazeToken;
           }
           return RecoveryStep.dnsProviderToken;
@@ -534,7 +534,7 @@ class ServerInstallationRepository {
           serverId: 0,
           linuxDevice: '',
         ),
-        provider: ServerProvider.unknown,
+        provider: ServerProviderType.unknown,
         id: 0,
         ip4: serverIp,
         startTime: null,
@@ -571,7 +571,7 @@ class ServerInstallationRepository {
           serverId: 0,
           linuxDevice: '',
         ),
-        provider: ServerProvider.unknown,
+        provider: ServerProviderType.unknown,
         id: 0,
         ip4: serverIp,
         startTime: null,
@@ -606,7 +606,7 @@ class ServerInstallationRepository {
             sizeByte: 0,
             linuxDevice: '',
           ),
-          provider: ServerProvider.unknown,
+          provider: ServerProviderType.unknown,
           id: 0,
           ip4: serverIp,
           startTime: null,
@@ -634,7 +634,7 @@ class ServerInstallationRepository {
           serverId: 0,
           linuxDevice: '',
         ),
-        provider: ServerProvider.unknown,
+        provider: ServerProviderType.unknown,
         id: 0,
         ip4: serverIp,
         startTime: null,
@@ -691,11 +691,11 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
-  Future<void> saveServerProviderType(final ServerProvider type) async {
+  Future<void> saveServerProviderType(final ServerProviderType type) async {
     await getIt<ApiConfigModel>().storeServerProviderType(type);
   }
 
-  Future<void> saveDnsProviderType(final DnsProvider type) async {
+  Future<void> saveDnsProviderType(final DnsProviderType type) async {
     await getIt<ApiConfigModel>().storeDnsProviderType(type);
   }
 

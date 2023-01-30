@@ -1,4 +1,4 @@
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
+import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/cloudflare/cloudflare_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/digital_ocean_dns/digital_ocean_dns_factory.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_factory.dart';
@@ -15,27 +15,27 @@ class UnknownApiProviderException implements Exception {
 
 class ApiFactoryCreator {
   static ServerProviderApiFactory createServerProviderApiFactory(
-    final ServerProviderApiFactorySettings settings,
+    final ServerProviderSettings settings,
   ) {
     switch (settings.provider) {
-      case ServerProvider.hetzner:
+      case ServerProviderType.hetzner:
         return HetznerApiFactory(region: settings.location);
-      case ServerProvider.digitalOcean:
+      case ServerProviderType.digitalOcean:
         return DigitalOceanApiFactory(region: settings.location);
-      case ServerProvider.unknown:
+      case ServerProviderType.unknown:
         throw UnknownApiProviderException('Unknown server provider');
     }
   }
 
   static DnsProviderApiFactory createDnsProviderApiFactory(
-    final DnsProviderApiFactorySettings settings,
+    final DnsProviderFactorySettings settings,
   ) {
     switch (settings.provider) {
-      case DnsProvider.cloudflare:
+      case DnsProviderType.cloudflare:
         return CloudflareApiFactory();
-      case DnsProvider.digitalOcean:
+      case DnsProviderType.digitalOcean:
         return DigitalOceanDnsApiFactory();
-      case DnsProvider.unknown:
+      case DnsProviderType.unknown:
         throw UnknownApiProviderException('Unknown DNS provider');
     }
   }
@@ -43,14 +43,14 @@ class ApiFactoryCreator {
 
 class VolumeApiFactoryCreator {
   static VolumeProviderApiFactory createVolumeProviderApiFactory(
-    final ServerProviderApiFactorySettings settings,
+    final ServerProviderSettings settings,
   ) {
     switch (settings.provider) {
-      case ServerProvider.hetzner:
+      case ServerProviderType.hetzner:
         return HetznerApiFactory();
-      case ServerProvider.digitalOcean:
+      case ServerProviderType.digitalOcean:
         return DigitalOceanApiFactory();
-      case ServerProvider.unknown:
+      case ServerProviderType.unknown:
         throw UnknownApiProviderException('Unknown volume provider');
     }
   }

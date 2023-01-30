@@ -39,7 +39,7 @@ abstract class ServerProviderApi extends ApiMap {
     required final User rootUser,
     required final String domainName,
     required final String serverType,
-    required final DnsProvider dnsProvider,
+    required final DnsProviderType dnsProvider,
   });
   Future<APIGenericResult<void>> createReverseDns({
     required final ServerHostingDetails serverDetails,
@@ -55,13 +55,13 @@ abstract class ServerProviderApi extends ApiMap {
     final DateTime end,
   );
 
-  String dnsProviderToInfectName(final DnsProvider dnsProvider) {
+  String dnsProviderToInfectName(final DnsProviderType dnsProvider) {
     String dnsProviderType;
     switch (dnsProvider) {
-      case DnsProvider.digitalOcean:
+      case DnsProviderType.digitalOcean:
         dnsProviderType = 'DIGITALOCEAN';
         break;
-      case DnsProvider.cloudflare:
+      case DnsProviderType.cloudflare:
       default:
         dnsProviderType = 'CLOUDFLARE';
         break;

@@ -6,8 +6,9 @@ import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
+import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
@@ -57,45 +58,29 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  void setServerProviderType(final ServerProvider providerType) async {
+  void setServerProviderType(final ServerProviderType providerType) async {
     await repository.saveServerProviderType(providerType);
-    ApiController.initServerProviderApiFactory(
-      ServerProviderApiFactorySettings(
-        provider: providerType,
-      ),
+    ProvidersController.initServerProvider(
+      ServerProviderSettings(provider: providerType),
     );
   }
 
-  void setDnsProviderType(final DnsProvider providerType) async {
+  void setDnsProviderType(final DnsProviderType providerType) async {
     await repository.saveDnsProviderType(providerType);
     ApiController.initDnsProviderApiFactory(
-      DnsProviderApiFactorySettings(
+      DnsProviderFactorySettings(
         provider: providerType,
       ),
     );
   }
-
-  ProviderApiTokenValidation serverProviderApiTokenValidation() =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider()
-          .getApiTokenValidation();
-
-  RegExp getDnsProviderApiTokenValidation() =>
-      ApiController.currentDnsProviderApiFactory!
-          .getDnsProvider()
-          .getApiTokenValidation();
 
   Future<bool?> isServerProviderApiTokenValid(
     final String providerToken,
   ) async {
     final APIGenericResult<bool> apiResponse =
-        await ApiController.currentServerProviderApiFactory!
-            .getServerProvider(
-              settings: const ServerProviderApiSettings(
-                isWithToken: false,
-              ),
-            )
-            .isApiTokenValid(providerToken);
+        await ProvidersController.currentServerProvider!.isApiTokenValid(
+      providerToken,
+    );
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -191,7 +176,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveServerType(serverType);
 
     ApiController.initServerProviderApiFactory(
-      ServerProviderApiFactorySettings(
+      ServerProviderSettings(
         provider: getIt<ApiConfigModel>().serverProvider!,
         location: serverType.location.identifier,
       ),
@@ -200,7 +185,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     // All server providers support volumes for now,
     //   so it's safe to initialize.
     ApiController.initVolumeProviderApiFactory(
-      ServerProviderApiFactorySettings(
+      ServerProviderSettings(
         provider: getIt<ApiConfigModel>().serverProvider!,
         location: serverType.location.identifier,
       ),
@@ -485,7 +470,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void submitDomainForAccessRecovery(final String domain) async {
     final ServerDomain serverDomain = ServerDomain(
       domainName: domain,
-      provider: DnsProvider.unknown,
+      provider: DnsProviderType.unknown,
       zoneId: '',
     );
     final ServerRecoveryCapabilities recoveryCapabilities =
@@ -537,20 +522,20 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         token,
         dataState.recoveryCapabilities,
       );
-      final ServerProvider serverProvider = await ServerApi(
+      final ServerProviderType serverProvider = await ServerApi(
         customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getServerProviderType();
-      final DnsProvider dnsProvider = await ServerApi(
+      final DnsProviderType dnsProvider = await ServerApi(
         customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getDnsProviderType();
-      if (serverProvider == ServerProvider.unknown) {
+      if (serverProvider == ServerProviderType.unknown) {
         getIt<NavigationService>()
             .showSnackBar('recovering.generic_error'.tr());
         return;
       }
-      if (dnsProvider == DnsProvider.unknown) {
+      if (dnsProvider == DnsProviderType.unknown) {
         getIt<NavigationService>()
             .showSnackBar('recovering.generic_error'.tr());
         return;
@@ -684,7 +669,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         linuxDevice: '',
       ),
       apiToken: dataState.serverDetails!.apiToken,
-      provider: ServerProvider.hetzner,
+      provider: ServerProviderType.hetzner,
     );
     await repository.saveDomain(serverDomain);
     await repository.saveServerDetails(serverDetails);
@@ -714,7 +699,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ServerDomain(
         domainName: serverDomain.domainName,
         zoneId: zoneId,
-        provider: DnsProvider.cloudflare,
+        provider: DnsProviderType.cloudflare,
       ),
     );
     await repository.setDnsApiToken(token);
@@ -723,7 +708,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         serverDomain: ServerDomain(
           domainName: serverDomain.domainName,
           zoneId: zoneId,
-          provider: DnsProvider.cloudflare,
+          provider: DnsProviderType.cloudflare,
         ),
         dnsApiToken: token,
         currentStep: RecoveryStep.backblazeToken,

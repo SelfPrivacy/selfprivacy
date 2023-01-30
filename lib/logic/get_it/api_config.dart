@@ -13,8 +13,8 @@ class ApiConfigModel {
   String? get serverLocation => _serverLocation;
   String? get serverType => _serverType;
   String? get dnsProviderKey => _dnsProviderKey;
-  ServerProvider? get serverProvider => _serverProvider;
-  DnsProvider? get dnsProvider => _dnsProvider;
+  ServerProviderType? get serverProvider => _serverProvider;
+  DnsProviderType? get dnsProvider => _dnsProvider;
   BackblazeCredential? get backblazeCredential => _backblazeCredential;
   ServerDomain? get serverDomain => _serverDomain;
   BackblazeBucket? get backblazeBucket => _backblazeBucket;
@@ -23,19 +23,19 @@ class ApiConfigModel {
   String? _serverLocation;
   String? _dnsProviderKey;
   String? _serverType;
-  ServerProvider? _serverProvider;
-  DnsProvider? _dnsProvider;
+  ServerProviderType? _serverProvider;
+  DnsProviderType? _dnsProvider;
   ServerHostingDetails? _serverDetails;
   BackblazeCredential? _backblazeCredential;
   ServerDomain? _serverDomain;
   BackblazeBucket? _backblazeBucket;
 
-  Future<void> storeServerProviderType(final ServerProvider value) async {
+  Future<void> storeServerProviderType(final ServerProviderType value) async {
     await _box.put(BNames.serverProvider, value);
     _serverProvider = value;
   }
 
-  Future<void> storeDnsProviderType(final DnsProvider value) async {
+  Future<void> storeDnsProviderType(final DnsProviderType value) async {
     await _box.put(BNames.dnsProvider, value);
     _dnsProvider = value;
   }

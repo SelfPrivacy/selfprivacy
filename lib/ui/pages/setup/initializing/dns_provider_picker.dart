@@ -28,9 +28,9 @@ class DnsProviderPicker extends StatefulWidget {
 }
 
 class _DnsProviderPickerState extends State<DnsProviderPicker> {
-  DnsProvider selectedProvider = DnsProvider.unknown;
+  DnsProviderType selectedProvider = DnsProviderType.unknown;
 
-  void setProvider(final DnsProvider provider) {
+  void setProvider(final DnsProviderType provider) {
     setState(() {
       selectedProvider = provider;
     });
@@ -39,17 +39,17 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
   @override
   Widget build(final BuildContext context) {
     switch (selectedProvider) {
-      case DnsProvider.unknown:
+      case DnsProviderType.unknown:
         return ProviderSelectionPage(
           serverInstallationCubit: widget.serverInstallationCubit,
           callback: setProvider,
         );
 
-      case DnsProvider.cloudflare:
+      case DnsProviderType.cloudflare:
         return ProviderInputDataPage(
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
-            providerType: DnsProvider.cloudflare,
+            providerType: DnsProviderType.cloudflare,
             pathToHow: 'how_cloudflare',
             image: Image.asset(
               'assets/images/logos/cloudflare.png',
@@ -58,11 +58,11 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
           ),
         );
 
-      case DnsProvider.digitalOcean:
+      case DnsProviderType.digitalOcean:
         return ProviderInputDataPage(
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
-            providerType: DnsProvider.digitalOcean,
+            providerType: DnsProviderType.digitalOcean,
             pathToHow: 'how_digital_ocean_dns',
             image: Image.asset(
               'assets/images/logos/digital_ocean.png',
@@ -83,7 +83,7 @@ class ProviderPageInfo {
 
   final String pathToHow;
   final Image image;
-  final DnsProvider providerType;
+  final DnsProviderType providerType;
 }
 
 class ProviderInputDataPage extends StatelessWidget {
@@ -227,8 +227,8 @@ class ProviderSelectionPage extends StatelessWidget {
                       title: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
-                            .setDnsProviderType(DnsProvider.cloudflare);
-                        callback(DnsProvider.cloudflare);
+                            .setDnsProviderType(DnsProviderType.cloudflare);
+                        callback(DnsProviderType.cloudflare);
                       },
                     ),
                     // Outlined button that will open website
@@ -292,8 +292,8 @@ class ProviderSelectionPage extends StatelessWidget {
                       title: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
-                            .setDnsProviderType(DnsProvider.digitalOcean);
-                        callback(DnsProvider.digitalOcean);
+                            .setDnsProviderType(DnsProviderType.digitalOcean);
+                        callback(DnsProviderType.digitalOcean);
                       },
                     ),
                     // Outlined button that will open website

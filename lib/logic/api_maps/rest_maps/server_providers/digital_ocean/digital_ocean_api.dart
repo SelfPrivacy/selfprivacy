@@ -332,7 +332,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     required final User rootUser,
     required final String domainName,
     required final String serverType,
-    required final DnsProvider dnsProvider,
+    required final DnsProviderType dnsProvider,
   }) async {
     ServerHostingDetails? serverDetails;
 
@@ -394,7 +394,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           createTime: DateTime.now(),
           volume: newVolume,
           apiToken: apiToken,
-          provider: ServerProvider.digitalOcean,
+          provider: ServerProviderType.digitalOcean,
         );
       }
     } catch (e) {

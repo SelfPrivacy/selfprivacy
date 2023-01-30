@@ -69,9 +69,9 @@ class ServerApi extends ApiMap
     return apiVersion;
   }
 
-  Future<ServerProvider> getServerProviderType() async {
+  Future<ServerProviderType> getServerProviderType() async {
     QueryResult<Query$SystemServerProvider> response;
-    ServerProvider providerType = ServerProvider.unknown;
+    ServerProviderType providerType = ServerProviderType.unknown;
 
     try {
       final GraphQLClient client = await getClient();
@@ -79,7 +79,7 @@ class ServerApi extends ApiMap
       if (response.hasException) {
         print(response.exception.toString());
       }
-      providerType = ServerProvider.fromGraphQL(
+      providerType = ServerProviderType.fromGraphQL(
         response.parsedData!.system.provider.provider,
       );
     } catch (e) {
@@ -88,9 +88,9 @@ class ServerApi extends ApiMap
     return providerType;
   }
 
-  Future<DnsProvider> getDnsProviderType() async {
+  Future<DnsProviderType> getDnsProviderType() async {
     QueryResult<Query$SystemDnsProvider> response;
-    DnsProvider providerType = DnsProvider.unknown;
+    DnsProviderType providerType = DnsProviderType.unknown;
 
     try {
       final GraphQLClient client = await getClient();
@@ -98,7 +98,7 @@ class ServerApi extends ApiMap
       if (response.hasException) {
         print(response.exception.toString());
       }
-      providerType = DnsProvider.fromGraphQL(
+      providerType = DnsProviderType.fromGraphQL(
         response.parsedData!.system.domainInfo.provider,
       );
     } catch (e) {

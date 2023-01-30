@@ -29,9 +29,9 @@ class ServerProviderPicker extends StatefulWidget {
 }
 
 class _ServerProviderPickerState extends State<ServerProviderPicker> {
-  ServerProvider selectedProvider = ServerProvider.unknown;
+  ServerProviderType selectedProvider = ServerProviderType.unknown;
 
-  void setProvider(final ServerProvider provider) {
+  void setProvider(final ServerProviderType provider) {
     setState(() {
       selectedProvider = provider;
     });
@@ -40,17 +40,17 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
   @override
   Widget build(final BuildContext context) {
     switch (selectedProvider) {
-      case ServerProvider.unknown:
+      case ServerProviderType.unknown:
         return ProviderSelectionPage(
           serverInstallationCubit: widget.serverInstallationCubit,
           callback: setProvider,
         );
 
-      case ServerProvider.hetzner:
+      case ServerProviderType.hetzner:
         return ProviderInputDataPage(
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
-            providerType: ServerProvider.hetzner,
+            providerType: ServerProviderType.hetzner,
             pathToHow: 'how_hetzner',
             image: Image.asset(
               'assets/images/logos/hetzner.png',
@@ -59,11 +59,11 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
           ),
         );
 
-      case ServerProvider.digitalOcean:
+      case ServerProviderType.digitalOcean:
         return ProviderInputDataPage(
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
-            providerType: ServerProvider.digitalOcean,
+            providerType: ServerProviderType.digitalOcean,
             pathToHow: 'how_digital_ocean',
             image: Image.asset(
               'assets/images/logos/digital_ocean.png',
@@ -84,7 +84,7 @@ class ProviderPageInfo {
 
   final String pathToHow;
   final Image image;
-  final ServerProvider providerType;
+  final ServerProviderType providerType;
 }
 
 class ProviderInputDataPage extends StatelessWidget {
@@ -242,8 +242,8 @@ class ProviderSelectionPage extends StatelessWidget {
                       title: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
-                            .setServerProviderType(ServerProvider.hetzner);
-                        callback(ServerProvider.hetzner);
+                            .setServerProviderType(ServerProviderType.hetzner);
+                        callback(ServerProviderType.hetzner);
                       },
                     ),
                     // Outlined button that will open website
@@ -315,9 +315,9 @@ class ProviderSelectionPage extends StatelessWidget {
                     FilledButton(
                       title: 'basis.select'.tr(),
                       onPressed: () {
-                        serverInstallationCubit
-                            .setServerProviderType(ServerProvider.digitalOcean);
-                        callback(ServerProvider.digitalOcean);
+                        serverInstallationCubit.setServerProviderType(
+                            ServerProviderType.digitalOcean);
+                        callback(ServerProviderType.digitalOcean);
                       },
                     ),
                     // Outlined button that will open website

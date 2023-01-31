@@ -67,6 +67,9 @@ class InitializingPage extends StatelessWidget {
                   },
                 )
             ],
+            title: Text(
+              'more_page.configuration_wizard'.tr(),
+            ),
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(28),
               child: Padding(

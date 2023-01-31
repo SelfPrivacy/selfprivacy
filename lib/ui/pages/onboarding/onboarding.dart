@@ -21,17 +21,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   @override
-  Widget build(final BuildContext context) => SafeArea(
-        child: Scaffold(
-          body: PageView(
-            controller: pageController,
-            children: [
-              _withPadding(firstPage()),
-              _withPadding(secondPage()),
-            ],
-          ),
-        ),
-      );
+  Widget build(final BuildContext context) => Scaffold(
+    body: PageView(
+      controller: pageController,
+      children: [
+        _withPadding(firstPage()),
+        _withPadding(secondPage()),
+      ],
+    ),
+  );
 
   Widget _withPadding(final Widget child) => Padding(
         padding: const EdgeInsets.symmetric(
@@ -60,15 +58,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 32),
-                  Flexible(
-                    child: Center(
-                      child: Image.asset(
-                        _fileName(
-                          context: context,
-                          path: 'assets/images/onboarding',
-                          fileExtention: 'png',
-                          fileName: 'onboarding1',
-                        ),
+                  Center(
+                    child: Image.asset(
+                      _fileName(
+                        context: context,
+                        path: 'assets/images/onboarding',
+                        fileExtention: 'png',
+                        fileName: 'onboarding1',
                       ),
                     ),
                   ),

@@ -165,6 +165,24 @@
         "create_new": "Utwórz nową kopię",
         "creating": "Tworzenie kopii: {}%",
         "restoring": "Przywracanie z kopii",
-        "waiting_for_rebuild": "Po kilku minutach będziesz mógł utworzyć pierwszą kopię."
+        "waiting_for_rebuild": "Po kilku minutach będziesz mógł utworzyć pierwszą kopię.",
+        "error_pending": "Serwer zwrócił błąd, sprawdź go poniżej",
+        "refresh": "Odśwież status",
+        "refetch_backups": "Ponownie pobierz listę kopii zapasowych",
+        "refetching_list": "Za kilka minut lista zostanie zaktualizowana",
+        "restore_alert": "Za chwilę przywrócisz z kopii utworzonej przez {}. Wszystkie bieżące dane zostaną utracone. Jesteś pewny?"
+    },
+    "storage": {
+        "card_title": "Pamięć serwera",
+        "status_ok": "Użycie dysku jest OK",
+        "status_error": "Mało miejsca na dysku",
+        "disk_usage": "{} użyte",
+        "disk_total": "{} całkowity · {}",
+        "gb": "{} GB",
+        "mb": "{} MB",
+        "kb": "{} KB",
+        "bytes": "Bajty",
+        "extend_volume_button": "Rozwiń pamięć",
+        "extending_volume_title": "Rozszerzenie pamięci"
     }
 }

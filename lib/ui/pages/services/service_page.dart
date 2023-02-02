@@ -9,8 +9,8 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
+import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ServicePage extends StatefulWidget {
   const ServicePage({required this.serviceId, super.key});
@@ -59,7 +59,7 @@ class _ServicePageState extends State<ServicePage> {
         if (service.url != null)
           ListTile(
             iconColor: Theme.of(context).colorScheme.onBackground,
-            onTap: () => _launchURL(service.url),
+            onTap: () => launchURL(service.url),
             leading: const Icon(Icons.open_in_browser),
             title: Text(
               'service_page.open_in_browser'.tr(),
@@ -230,17 +230,5 @@ class ServiceStatusCard extends StatelessWidget {
           ),
         );
     }
-  }
-}
-
-void _launchURL(final url) async {
-  try {
-    final Uri uri = Uri.parse(url);
-    await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
-  } catch (e) {
-    print(e);
   }
 }

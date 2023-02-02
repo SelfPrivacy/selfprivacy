@@ -52,40 +52,38 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
 
-    return SafeArea(
-      child: Provider<ChangeTab>(
-        create: (final _) => ChangeTab(tabController.animateTo),
-        child: Scaffold(
-          body: TabBarView(
-            controller: tabController,
-            children: const [
-              ProvidersPage(),
-              ServicesPage(),
-              UsersPage(),
-              MorePage(),
-            ],
-          ),
-          bottomNavigationBar: BrandTabBar(
-            controller: tabController,
-          ),
-          floatingActionButton: isReady
-              ? SizedBox(
-                  height: 104 + 16,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ScaleTransition(
-                        scale: _animation,
-                        child: const AddUserFab(),
-                      ),
-                      const SizedBox(height: 16),
-                      const BrandFab(),
-                    ],
-                  ),
-                )
-              : null,
+    return Provider<ChangeTab>(
+      create: (final _) => ChangeTab(tabController.animateTo),
+      child: Scaffold(
+        body: TabBarView(
+          controller: tabController,
+          children: const [
+            ProvidersPage(),
+            ServicesPage(),
+            UsersPage(),
+            MorePage(),
+          ],
         ),
+        bottomNavigationBar: BrandTabBar(
+          controller: tabController,
+        ),
+        floatingActionButton: isReady
+            ? SizedBox(
+                height: 104 + 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ScaleTransition(
+                      scale: _animation,
+                      child: const AddUserFab(),
+                    ),
+                    const SizedBox(height: 16),
+                    const BrandFab(),
+                  ],
+                ),
+              )
+            : null,
       ),
     );
   }

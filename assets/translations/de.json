@@ -74,6 +74,154 @@
         "subtitle_with_keys": "{} Schlüssel",
         "subtitle_without_keys": "Keine Slüssel",
         "no_key_name": "Unbennanter Schlüssel",
-        "root_title": "Das sind superuser Schlüsseln"
+        "root_title": "Das sind superuser Schlüsseln",
+        "root_subtitle": "Besitzer dieser Schlüssel erhalten vollen Zugriff auf den Server und können alles darauf tun. Fügen Sie dem Server nur Ihre eigenen Schlüssel hinzu.",
+        "input_label": "Öffentlicher ED25519 oder RSA Schlüssel"
+    },
+    "onboarding": {
+        "page2_server_provider_text": "Ein Serveranbieter unterhält Ihren Server in einem eigenen Rechenzentrum. SelfPrivacy verbindet sich automatisch mit dem Anbieter und richtet alle notwendigen Dinge ein.",
+        "page1_title": "Digitale Unabhägigkeit ist für jeden von uns verfügbar",
+        "page1_text": "E-Mail, VPN, Messenger, soziales Netzwerk und viel mehr auf Ihrem privaten Server unter Ihrer Kontrolle.",
+        "page2_title": "SelfPrivacy ist keine Cloud, sondern Ihr perönliches Rechenzentrum",
+        "page2_text": "SelfPrivacy funktioniert nur mit Providern Ihrer Wahl. Wenn Sie dort keine erforderlichen Konten haben, helfen wir Ihnen, sie zu erstellen.",
+        "page2_server_provider_title": "Serveranbieter",
+        "page2_dns_provider_title": "DNS-Provider",
+        "page2_backup_provider_title": "Backup-Provider",
+        "page2_dns_provider_text": "Sie brauchen einen Domainnamen, um im Internet zu sein. Sie benötigen außerdem einen zuverlässigen DNS-Provider, damit die Domain auf ihren Server verweist. Wir empfehlen Ihnen, einen unterstützten DNS-Anbieter auszuwählen, um das Netzwerk automatisch einzurichten. Wollen Sie es manuell einstellen? Das geht auch.",
+        "page2_backup_provider_text": "Was ist, wenn etwas mit Ihrem Server passiert? Stellen Sie sich einen Hackerangriff, eine versehentliche Datenlöschung oder DOS-Angriff vor? Ihre Daten werden bei Ihrem Anbieter von Backups sicher aufbewahrt. Sie werden sicher verschlüsselt und sind jederzeit zugänglich, um Ihren Server damit wiederherzustellen."
+    },
+    "resource_chart": {
+        "month": "Monat",
+        "day": "Tag",
+        "hour": "Stunde",
+        "cpu_title": "CPU Auslastung",
+        "network_title": "Netzwerknutzung",
+        "in": "Empfangen",
+        "out": "Gesendet"
+    },
+    "server": {
+        "card_title": "Server",
+        "description": "Dies ist ein virtueller Computer, auf dem alle Ihre Dienste ausgeführt werden",
+        "general_information": "Allgemeine Information",
+        "resource_usage": "Ressourcenverwendung",
+        "allow_autoupgrade": "Automatische Aktualisierung erlauben",
+        "allow_autoupgrade_hint": "Automatische Installation der Updates auf dem Server erlauben",
+        "reboot_after_upgrade": "Neustart nach der Aktualisierung",
+        "reboot_after_upgrade_hint": "Automatisch den Server neustarten nach der Anwendung der Aktualisierungen",
+        "server_timezone": "Server Zeitzone",
+        "select_timezone": "Zeitzone auswählen",
+        "timezone_search_bar": "Zeitzonenname oder Zeitverschiebungswert",
+        "server_id": "Server ID",
+        "status": "Status",
+        "cpu": "CPU",
+        "ram": "Arbeitsspeicher",
+        "disk": "Festplatte",
+        "monthly_cost": "Monatliche Kosten",
+        "location": "Standort",
+        "provider": "Provider",
+        "core_count": {
+            "one": "{} Kern",
+            "two": "{} Kerne",
+            "few": "{} Kerne",
+            "many": "{} Kerne",
+            "other": "{} Kerne"
+        }
+    },
+    "record": {
+        "root": "Root Domain",
+        "api": "SelfPrivacy API",
+        "git": "Git Server",
+        "meet": "Videokonferenz",
+        "social": "Soziales Netzwerk",
+        "password": "Passwortmanager",
+        "vpn": "VPN",
+        "dkim": "DKIM Shlüssel",
+        "mx": "MX Eintrag",
+        "dmarc": "DMARC Eintrag",
+        "spf": "SPF Eintrag",
+        "cloud": "Datencloud"
+    },
+    "domain": {
+        "screen_title": "Domäne und DNS",
+        "ok": "Aufnahmen sind in Ordnung",
+        "error": "Probleme gefunden",
+        "error_subtitle": "Tippen sie hier, um sie zu beheben",
+        "uninitialized": "Daten sind noch nicht vorhanden",
+        "services_title": "Dienste",
+        "email_title": "E-Mail",
+        "email_subtitle": "Für sicheren E-Mail-Austauch benötigte Einträge.",
+        "update_list": "Liste aktualisieren",
+        "card_title": "Domäne",
+        "refreshing": "Statusaktualisierung…",
+        "services_subtitle": "Einträge vom Typ \"A\", die für jeden Dienst erfordelich sind."
+    },
+    "backup": {
+        "card_title": "Backup",
+        "description": "Retten Sie im Falle eines Hackerangriffs, Serverlöschung usw.",
+        "reupload_key": "Erneute Hochladung des Schlüssels erzwingen",
+        "reuploaded_key": "Schlüssel auf dem Server wurde Aktualisiert",
+        "initialize": "Initialisieren",
+        "restore": "Von der Sicherungskopie wiederherstellen",
+        "no_backups": "Backups sind noch nicht vorhanden",
+        "create_new": "Neuen Backup erstellen",
+        "creating": "Erstellung eines neuen Backups: {}%",
+        "restoring": "Wiederherstellung aus Backups",
+        "restore_alert": "Sie sind dabei die am {} erstellten Backup wiederherzutellen. Alle aktuelle Daten gehen dabei verloren. Sind Sie sicher?",
+        "refresh": "Status Aktualisieren",
+        "refetch_backups": "Backupliste neuladen",
+        "waiting_for_rebuild": "In wenigen Minuten können Sie Ihren ersten Backup erstellen.",
+        "error_pending": "Server hat einen Fehler zurückgegeben, überprüfen Sie es unten",
+        "refetching_list": "In wenigen Minuten wird die Liste neugeladen"
+    },
+    "storage": {
+        "card_title": "Serverspeicher",
+        "status_ok": "Die Festplattennutzung ist in Ordnung",
+        "status_error": "Geringer Speicherplatz",
+        "disk_usage": "{} belegt",
+        "disk_total": "{} insgesamt · {}",
+        "gb": "{} GB",
+        "mb": "{} MB",
+        "kb": "{} KB",
+        "bytes": "Byte",
+        "extend_volume_button": "Speicher erweitern",
+        "extending_volume_title": "Speichererweiterung",
+        "extending_volume_description": "Durch die Speichererweiterung können Sie mehr Daten auf Ihrem Server speichern, ohne den Server selbst zu erweitern. Speicher kann nur erweitert werden, Verringerung ist nicht möglich.",
+        "extending_volume_error": "Speichererweiterung konnte nicht initialisiert werden.",
+        "size": "Größe",
+        "euro": "Euro",
+        "data_migration_title": "Datenmigration",
+        "data_migration_notice": "Während der Migration werden alle Dienste ausgeschaltet.",
+        "start_migration_button": "Migration starten",
+        "migration_process": "Migrieren…",
+        "migration_done": "Beenden",
+        "extending_volume_price_info": "Der Preis enthält die gesetzliche Mehrwertsteuer und wird anhand der von Hetzner bereitgestellten Preisangaben geschätzt. Der Server wird nach der Größenänderung neu gestartet."
+    },
+    "not_ready_card": {
+        "in_menu": "Server ist noch nicht eingerichtet. Bitte beenden Sie die Einrichtung mit dem Einrichtungsassistenten, um fortzufahren."
+    },
+    "service_page": {
+        "enable": "Dienst aktivieren",
+        "status": {
+            "deactivating": "Wird deaktiviert",
+            "active": "In Betrieb",
+            "inactive": "Gestoppt",
+            "failed": "Fehler beim Starten",
+            "off": "Deaktiviert",
+            "activating": "Wird aktiviert",
+            "reloading": "Wird neugestartet"
+        },
+        "open_in_browser": "Im Browser öffnen",
+        "restart": "Dienst neustarten",
+        "disable": "Dienst ausschalten",
+        "move": "Zu einer anderen Festplatte wechseln",
+        "uses": "Belegt {usage} auf {volume}"
+    },
+    "mail": {
+        "login_info": "Verwenden Sie den Benutzernamen und das Passwort von dem Benutzertab. IMAP-Port ist 143 mit STARTTLS, SMTP-Port ist 587 mit STARTTLS.",
+        "title": "E-Mail",
+        "subtitle": "E-Mail für Familie und Unternehmen."
+    },
+    "password_manager": {
+        "title": "Passwortmanager"
     }
 }

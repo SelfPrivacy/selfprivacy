@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.d
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/price.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
@@ -146,9 +146,8 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                 },
               ),
               const SizedBox(height: 16),
-              FilledButton(
-                title: 'storage.extend_volume_button.title'.tr(),
-                onPressed: _isError
+              BrandButton.filled(
+                onPressed: _isError || isAlreadyResizing
                     ? null
                     : () {
                         context.read<ApiProviderVolumeCubit>().resizeVolume(
@@ -161,7 +160,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                           (final predicate) => false,
                         );
                       },
-                disabled: _isError || isAlreadyResizing,
+                child: Text('storage.extend_volume_button.title'.tr()),
               ),
               const SizedBox(height: 16),
               const Divider(

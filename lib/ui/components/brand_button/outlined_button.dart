@@ -25,7 +25,7 @@ class BrandOutlinedButton extends StatelessWidget {
           child: child ??
               Text(
                 title ?? '',
-                style: Theme.of(context).textTheme.button?.copyWith(
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
               ),

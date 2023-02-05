@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_device_form_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:cubit_form/cubit_form.dart';
@@ -20,8 +20,8 @@ class RecoverByNewDeviceKeyInstruction extends StatelessWidget {
         onBackButtonPressed:
             context.read<ServerInstallationCubit>().revertRecoveryStep,
         children: [
-          FilledButton(
-            title: 'recovering.method_device_button'.tr(),
+          BrandButton.filled(
+            child: Text('recovering.method_device_button'.tr()),
             onPressed: () => Navigator.of(context)
                 .push(materialRoute(const RecoverByNewDeviceKeyInput())),
           )
@@ -73,11 +73,11 @@ class RecoverByNewDeviceKeyInput extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 FilledButton(
-                  title: 'basis.continue'.tr(),
                   onPressed: formCubitState.isSubmitting
                       ? null
                       : () =>
                           context.read<RecoveryDeviceFormCubit>().trySubmit(),
+                  child: Text('basis.continue'.tr()),
                 )
               ],
             );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 
 enum BrandButtonTypes { rised, text, iconText }
@@ -20,9 +19,29 @@ class BrandButton {
       ),
       child: FilledButton(
         key: key,
-        title: text,
         onPressed: onPressed,
-        child: child,
+        child: child ?? Text(text ?? ''),
+      ),
+    );
+  }
+
+  static ConstrainedBox filled({
+    required final VoidCallback? onPressed,
+    final Key? key,
+    final String? text,
+    final Widget? child,
+  }) {
+    assert(text == null || child == null, 'required title or child');
+    assert(text != null || child != null, 'required title or child');
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minHeight: 40,
+        minWidth: double.infinity,
+      ),
+      child: FilledButton(
+        key: key,
+        onPressed: onPressed,
+        child: child ?? Text(text ?? ''),
       ),
     );
   }

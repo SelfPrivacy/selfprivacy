@@ -41,7 +41,8 @@
         "create_ssh_key": "SSH klucze administratora",
         "console": "Konsola",
         "configuration_wizard": "Kreator konfiguracji",
-        "application_settings": "Ustawienia aplikacji"
+        "application_settings": "Ustawienia aplikacji",
+        "onboarding": "Witamy"
     },
     "console_page": {
         "title": "Konsola",
@@ -183,6 +184,86 @@
         "kb": "{} KB",
         "bytes": "Bajty",
         "extend_volume_button": "Rozwiń pamięć",
-        "extending_volume_title": "Rozszerzenie pamięci"
+        "extending_volume_title": "Rozszerzenie pamięci",
+        "extending_volume_price_info": "Cena zawiera podatek VAT i jest oparta na danych cenowych dostarczonych przez firmę Hetzner. Serwer zostanie zrestartowany w trakcie procesu.",
+        "extending_volume_error": "Nie można rozpocząć rozszerzenia repozytorium.",
+        "size": "Rozmiar",
+        "euro": "Euro",
+        "data_migration_title": "Migracja danych",
+        "data_migration_notice": "Na czas migracji danych wszystkie usługi zostaną wyłączone.",
+        "start_migration_button": "Rozpocznij migrację",
+        "migration_process": "Migracja…",
+        "migration_done": "Zakończyć",
+        "extending_volume_description": "Zmiana rozmiaru pamięci masowej pozwoli na przechowywanie większej ilości danych na serwerze bez rozszerzenia serwera. Objętość można tylko zwiększyć, nie można jej zmniejszyć."
+    },
+    "service_page": {
+        "open_in_browser": "Otwórz w przeglądarce",
+        "status": {
+            "activating": "Włącza się",
+            "deactivating": "Wyłącza się",
+            "reloading": "Uruchamia się ponownie",
+            "off": "Wyłączone",
+            "inactive": "Zatrzymany",
+            "active": "Włączone i działa",
+            "failed": "Nie udało sie uruchomić"
+        },
+        "move": "Przeniesienie do innego woluminu",
+        "enable": "Włącz usługę",
+        "restart": "Uruchom ponownie usługę",
+        "disable": "Wyłącz usługę",
+        "uses": "Używa {usage} na {volume}"
+    },
+    "mail": {
+        "title": "E-mail",
+        "subtitle": "E-Mail dla firmy i rodziny.",
+        "login_info": "Użyj nazwy użytkownika i hasła z listy użytkowników. Port IMAP: 143, STARTTLS. Port SMTP: 587, STARTTLS."
+    },
+    "password_manager": {
+        "title": "Menedżer haseł",
+        "subtitle": "To podstawa Twojego bezpieczeństwa. Bitwarden pomoże Ci tworzyć, przechowywać, kopiować hasła między urządzeniami i umieszczać je w formularzach.",
+        "login_info": "Konto należy założyć na stronie internetowej."
+    },
+    "video": {
+        "title": "Wideokonferencja",
+        "subtitle": "Zoom i Google Meet są świetne, ale Jitsi Meet to dobra alternatywa, która daje pewność, że nie jesteś słuchany.",
+        "login_info": "Konto nie jest potrzebne."
+    },
+    "cloud": {
+        "title": "Przechowywanie w chmurze",
+        "subtitle": "Nie zezwalaj usługom w chmurze na odczyt twoich danych, dla tego korzystaj z NextCloud.",
+        "login_info": "Login jest admin, hasło jest takie samo jak w przypadku głównego użytkownika. Utwórz nowe konta w interfejsie Nextcloud."
+    },
+    "social_network": {
+        "title": "Serwis społecznościowy",
+        "subtitle": "Trudno w to uwierzyć, ale stało możliwe stworzenie własnego serwisu społecznościowego, z własnymi zasadami i publicznością.",
+        "login_info": "Konto należy założyć na stronie."
+    },
+    "git": {
+        "login_info": "Konto należy założyć na stronie. Pierwszy zarejestrowany użytkownik zostaje administratorem.",
+        "title": "Git Serwer"
+    },
+    "vpn": {
+        "title": "VPN Serwer",
+        "subtitle": "Prywatny serwer VPN"
+    },
+    "users": {
+        "add_new_user": "Dodaj pierwszego użytkownika",
+        "new_user": "Nowy użytkownik",
+        "delete_user": "Usuń użytkownika",
+        "not_ready": "Połącz serwer, domenę I DNS w zakładce dostawcy, aby mieć możliwość dodać pierwszego użytkownika",
+        "nobody_here": "Tu będą pojawią się użytkownicy",
+        "login": "Login",
+        "new_user_info_note": "Nowy użytkownik automatycznie otrzyma dostęp do wszystkich serwisów",
+        "delete_confirm_question": "Czy naprawdę chcesz usunąć konto?",
+        "reset_password": "Zresetuj hasło",
+        "account": "Konto",
+        "send_registration_data": "Udostępnij dane logowania",
+        "could_not_fetch_users": "Nie udało się uzyskać użytkowników"
+    },
+    "validations": {
+        "length_longer": "Długość ciągu znaków [] musi być mniejsza lub równa {}"
+    },
+    "not_ready_card": {
+        "in_menu": "Serwer jeszcze nie jest skonfigurowany, użyj kreatora połączeń."
     }
 }

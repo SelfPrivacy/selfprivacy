@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_device_form_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:cubit_form/cubit_form.dart';
@@ -35,8 +35,8 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
               fileName: instructionFilename,
             ),
             const SizedBox(height: 16),
-            FilledButton(
-              title: 'recovering.method_device_button'.tr(),
+            BrandButton.filled(
+              child: Text('recovering.method_device_button'.tr()),
               onPressed: () => context
                   .read<ServerInstallationCubit>()
                   .selectRecoveryMethod(ServerRecoveryMethods.oldToken),
@@ -82,11 +82,11 @@ class RecoverByOldToken extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              FilledButton(
-                title: 'basis.continue'.tr(),
+              BrandButton.filled(
                 onPressed: formCubitState.isSubmitting
                     ? null
                     : () => context.read<RecoveryDeviceFormCubit>().trySubmit(),
+                child: Text('basis.continue'.tr()),
               )
             ],
           );

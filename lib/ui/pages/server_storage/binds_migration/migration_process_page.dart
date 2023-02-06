@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_linear_indicator/brand_linear_indicator.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
@@ -50,8 +50,8 @@ class _MigrationProcessPageState extends State<MigrationProcessPage> {
           ),
         if (job.finishedAt != null) const SizedBox(height: 16),
         if (job.finishedAt != null)
-          FilledButton(
-            title: 'storage.migration_done'.tr(),
+          BrandButton.filled(
+            child: Text('storage.migration_done'.tr()),
             onPressed: () {
               Navigator.of(context).pushAndRemoveUntil(
                 materialRoute(const RootPage()),

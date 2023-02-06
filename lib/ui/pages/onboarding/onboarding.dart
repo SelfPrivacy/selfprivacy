@@ -21,17 +21,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   @override
-  Widget build(final BuildContext context) => SafeArea(
-        child: Scaffold(
-          body: PageView(
-            controller: pageController,
-            children: [
-              _withPadding(firstPage()),
-              _withPadding(secondPage()),
-            ],
-          ),
-        ),
-      );
+  Widget build(final BuildContext context) => Scaffold(
+    body: PageView(
+      controller: pageController,
+      children: [
+        _withPadding(firstPage()),
+        _withPadding(secondPage()),
+      ],
+    ),
+  );
 
   Widget _withPadding(final Widget child) => Padding(
         padding: const EdgeInsets.symmetric(
@@ -45,29 +43,32 @@ class _OnboardingPageState extends State<OnboardingPage> {
           maxHeight: MediaQuery.of(context).size.height,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30),
-            Text(
-              'onboarding.page1_title'.tr(),
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'onboarding.page1_text'.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            Flexible(
-              child: Center(
-                child: Image.asset(
-                  _fileName(
-                    context: context,
-                    path: 'assets/images/onboarding',
-                    fileExtention: 'png',
-                    fileName: 'onboarding1',
+            Expanded(
+              child: ListView(
+                children: [
+                  const SizedBox(height: 30),
+                  Text(
+                    'onboarding.page1_title'.tr(),
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'onboarding.page1_text'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 32),
+                  Center(
+                    child: Image.asset(
+                      _fileName(
+                        context: context,
+                        path: 'assets/images/onboarding',
+                        fileExtention: 'png',
+                        fileName: 'onboarding1',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             BrandButton.rised(
@@ -90,49 +91,54 @@ class _OnboardingPageState extends State<OnboardingPage> {
           maxHeight: MediaQuery.of(context).size.height,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30),
-            Text(
-              'onboarding.page2_title'.tr(),
-              style: Theme.of(context).textTheme.headlineSmall,
+            Expanded(
+              child: ListView(
+                children: [
+                  const SizedBox(height: 30),
+                  Text(
+                    'onboarding.page2_title'.tr(),
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'onboarding.page2_text'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'onboarding.page2_server_provider_title'.tr(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'onboarding.page2_server_provider_text'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'onboarding.page2_dns_provider_title'.tr(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'onboarding.page2_dns_provider_text'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'onboarding.page2_backup_provider_title'.tr(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'onboarding.page2_backup_provider_text'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              'onboarding.page2_text'.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'onboarding.page2_server_provider_title'.tr(),
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'onboarding.page2_server_provider_text'.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'onboarding.page2_dns_provider_title'.tr(),
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'onboarding.page2_dns_provider_text'.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'onboarding.page2_backup_provider_title'.tr(),
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'onboarding.page2_backup_provider_text'.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
             BrandButton.rised(
               onPressed: () {
                 context.read<AppSettingsCubit>().turnOffOnboarding();

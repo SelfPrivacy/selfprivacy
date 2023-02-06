@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:cubit_form/cubit_form.dart';
@@ -46,11 +45,11 @@ class RecoveryServerProviderConnected extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              FilledButton(
-                title: 'basis.continue'.tr(),
+              BrandButton.filled(
                 onPressed: formCubitState.isSubmitting
                     ? null
                     : () => context.read<ServerProviderFormCubit>().trySubmit(),
+                child: Text('basis.continue'.tr()),
               ),
               const SizedBox(height: 16),
               BrandButton.text(

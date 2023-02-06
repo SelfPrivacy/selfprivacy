@@ -6,8 +6,8 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
@@ -119,8 +119,8 @@ class ProviderInputDataPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          FilledButton(
-            title: 'basis.connect'.tr(),
+          BrandButton.rised(
+            text: 'basis.connect'.tr(),
             onPressed: () => providerCubit.trySubmit(),
           ),
           const SizedBox(height: 10),
@@ -223,8 +223,8 @@ class ProviderSelectionPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),
-                    FilledButton(
-                      title: 'basis.select'.tr(),
+                    BrandButton.rised(
+                      text: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
                             .setDnsProviderType(DnsProvider.cloudflare);
@@ -288,8 +288,8 @@ class ProviderSelectionPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),
-                    FilledButton(
-                      title: 'basis.select'.tr(),
+                    BrandButton.rised(
+                      text: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
                             .setDnsProviderType(DnsProvider.digitalOcean);

@@ -197,9 +197,6 @@
         "migration_done": "Finish"
     },
     "not_ready_card": {
-        "begin": "Please finish application setup using ",
-        "insertion": "Setup Wizard",
-        "end": " for further work",
         "in_menu": "Server is not set up yet. Please finish setup using setup wizard for further work."
     },
     "service_page": {

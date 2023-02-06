@@ -72,7 +72,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
         children: [
           if (!isReady) ...[
             const NotReadyCard(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
           ],
           _Card(
             state: getServerStatus(),

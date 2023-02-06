@@ -12,7 +12,7 @@ import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/pages/services/service_page.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 

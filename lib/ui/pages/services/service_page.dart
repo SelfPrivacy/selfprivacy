@@ -9,7 +9,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class ServicePage extends StatefulWidget {

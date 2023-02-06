@@ -76,7 +76,7 @@ class _BackupDetailsState extends State<BackupDetails>
                     ),
                     title: Text(
                       'backup.create_new'.tr(),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                 if (backupStatus == BackupStatusEnum.backingUp)
@@ -85,7 +85,7 @@ class _BackupDetailsState extends State<BackupDetails>
                       'backup.creating'.tr(
                         args: [(backupProgress * 100).round().toString()],
                       ),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     subtitle: LinearProgressIndicator(
                       value: backupProgress,
@@ -98,7 +98,7 @@ class _BackupDetailsState extends State<BackupDetails>
                       'backup.restoring'.tr(
                         args: [(backupProgress * 100).round().toString()],
                       ),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     subtitle: LinearProgressIndicator(
                       backgroundColor: Colors.grey.withOpacity(0.2),
@@ -112,7 +112,7 @@ class _BackupDetailsState extends State<BackupDetails>
                     ),
                     title: Text(
                       'backup.error_pending'.tr(),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
               ],
@@ -134,7 +134,7 @@ class _BackupDetailsState extends State<BackupDetails>
                   ),
                   title: Text(
                     'backup.restore'.tr(),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
                 const Divider(

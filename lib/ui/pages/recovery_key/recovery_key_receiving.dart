@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 
@@ -33,8 +33,8 @@ class RecoveryKeyReceiving extends StatelessWidget {
             text: 'recovery_key.key_receiving_info'.tr(),
           ),
           const SizedBox(height: 16),
-          FilledButton(
-            title: 'recovery_key.key_receiving_done'.tr(),
+          BrandButton.filled(
+            child: Text('recovery_key.key_receiving_done'.tr()),
             onPressed: () {
               Navigator.of(context).popUntil((final route) => route.isFirst);
             },

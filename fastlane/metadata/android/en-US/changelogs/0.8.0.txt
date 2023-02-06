@@ -31,3 +31,7 @@ For developers:
 - App now only uses GraphQL API to communicate with the server. All REST API calls have been removed.
 - Server can now be deployed with staging ACME certificates
 - Language assets have been reorganized
+
+Translations:
+- Added translation for Ukrainian
+- Also activated unfinished translations for German, French, Spanish, Czech, Polish, Thai

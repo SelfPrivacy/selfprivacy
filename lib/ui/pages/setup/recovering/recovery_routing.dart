@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_domain_form_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart';
@@ -126,12 +126,12 @@ class SelectDomainToRecover extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                FilledButton(
-                  title: 'basis.continue'.tr(),
+                BrandButton.filled(
                   onPressed: formCubitState.isSubmitting
                       ? null
                       : () =>
                           context.read<RecoveryDomainFormCubit>().trySubmit(),
+                  child: Text('basis.continue'.tr()),
                 )
               ],
             ),

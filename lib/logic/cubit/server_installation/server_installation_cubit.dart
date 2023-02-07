@@ -113,22 +113,21 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   Future<List<ServerProviderLocation>> fetchAvailableLocations() async {
-    if (ApiController.currentServerProviderApiFactory == null) {
+    if (ProvidersController.currentServerProvider == null) {
       return [];
     }
 
-    final APIGenericResult apiResult = await ApiController
-        .currentServerProviderApiFactory!
-        .getServerProvider()
+    final APIGenericResult apiResponse = await ProvidersController
+        .currentServerProvider!
         .getAvailableLocations();
 
-    if (!apiResult.success) {
+    if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
         'initializing.could_not_connect'.tr(),
       );
     }
 
-    return apiResult.data;
+    return apiResponse.data;
   }
 
   Future<List<ServerType>> fetchAvailableTypesByLocation(
@@ -138,10 +137,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    final APIGenericResult apiResult = await ApiController
-        .currentServerProviderApiFactory!
-        .getServerProvider()
-        .getServerTypesByLocation(location: location);
+    final APIGenericResult apiResult = await ProvidersController
+        .currentServerProvider!
+        .getServerTypes(location: location);
 
     if (!apiResult.success) {
       getIt<NavigationService>().showSnackBar(

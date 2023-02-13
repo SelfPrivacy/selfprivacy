@@ -1,10 +1,10 @@
-import 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-export 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
+export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 export 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 
 class DomainNotFoundException implements Exception {
@@ -21,11 +21,11 @@ abstract class DnsProviderApi extends ApiMap {
     final String? ipAddress,
     final String? dkimPublicKey,
   });
-  Future<APIGenericResult<void>> removeSimilarRecords({
+  Future<GenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
     final String? ip4,
   });
-  Future<APIGenericResult<void>> createMultipleDnsRecords({
+  Future<GenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
     final String? ip4,
   });
@@ -36,7 +36,7 @@ abstract class DnsProviderApi extends ApiMap {
   Future<String?> getZoneId(final String domain);
   Future<List<String>> domainList();
 
-  Future<APIGenericResult<bool>> isApiTokenValid(final String token);
+  Future<GenericResult<bool>> isApiTokenValid(final String token);
   RegExp getApiTokenValidation();
 
   List<DnsRecord> getProjectDnsRecords(

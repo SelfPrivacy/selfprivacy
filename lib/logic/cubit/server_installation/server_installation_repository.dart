@@ -259,7 +259,7 @@ class ServerInstallationRepository {
         actionButtonOnPressed: () async {
           ServerHostingDetails? serverDetails;
           try {
-            final APIGenericResult createResult = await api.createServer(
+            final GenericResult createResult = await api.createServer(
               dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
               dnsApiToken: cloudFlareKey,
               rootUser: rootUser,
@@ -283,7 +283,7 @@ class ServerInstallationRepository {
     }
 
     try {
-      final APIGenericResult<ServerHostingDetails?> createServerResult =
+      final GenericResult<ServerHostingDetails?> createServerResult =
           await api.createServer(
         dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
         dnsApiToken: cloudFlareKey,
@@ -309,7 +309,7 @@ class ServerInstallationRepository {
 
             ServerHostingDetails? serverDetails;
             try {
-              final APIGenericResult createResult = await api.createServer(
+              final GenericResult createResult = await api.createServer(
                 dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
                 dnsApiToken: cloudFlareKey,
                 rootUser: rootUser,
@@ -366,7 +366,7 @@ class ServerInstallationRepository {
       );
     }
 
-    final APIGenericResult removingResult =
+    final GenericResult removingResult =
         await dnsProviderApi.removeSimilarRecords(
       ip4: serverDetails.ip4,
       domain: domain,
@@ -380,7 +380,7 @@ class ServerInstallationRepository {
     bool createdSuccessfully = false;
     String errorMessage = 'domain.error'.tr();
     try {
-      final APIGenericResult createResult =
+      final GenericResult createResult =
           await dnsProviderApi.createMultipleDnsRecords(
         ip4: serverDetails.ip4,
         domain: domain,
@@ -397,8 +397,7 @@ class ServerInstallationRepository {
       return false;
     }
 
-    final APIGenericResult createReverseResult =
-        await serverApi.createReverseDns(
+    final GenericResult createReverseResult = await serverApi.createReverseDns(
       serverDetails: serverDetails,
       domain: domain,
     );
@@ -520,7 +519,7 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final APIGenericResult<String> result = await serverApi.authorizeDevice(
+    final GenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: newDeviceKey),
     );
 
@@ -557,7 +556,7 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final APIGenericResult<String> result = await serverApi.useRecoveryToken(
+    final GenericResult<String> result = await serverApi.useRecoveryToken(
       DeviceToken(device: await getDeviceName(), token: recoveryKey),
     );
 
@@ -618,9 +617,9 @@ class ServerInstallationRepository {
         );
       }
     }
-    final APIGenericResult<String> deviceAuthKey =
+    final GenericResult<String> deviceAuthKey =
         await serverApi.createDeviceToken();
-    final APIGenericResult<String> result = await serverApi.authorizeDevice(
+    final GenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
     );
 
@@ -771,7 +770,7 @@ class ServerInstallationRepository {
   }
 
   Future<bool> deleteServer(final ServerDomain serverDomain) async {
-    final APIGenericResult<bool> deletionResult = await ApiController
+    final GenericResult<bool> deletionResult = await ApiController
         .currentServerProviderApiFactory!
         .getServerProvider()
         .deleteServer(
@@ -797,7 +796,7 @@ class ServerInstallationRepository {
     await box.put(BNames.isLoading, false);
     await box.put(BNames.serverDetails, null);
 
-    final APIGenericResult<void> removalResult = await ApiController
+    final GenericResult<void> removalResult = await ApiController
         .currentDnsProviderApiFactory!
         .getDnsProvider()
         .removeSimilarRecords(domain: serverDomain);

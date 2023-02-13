@@ -17,7 +17,6 @@ import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
-import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
@@ -60,8 +59,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   @override
   String get displayProviderName => 'Hetzner';
 
-  @override
-  Future<APIGenericResult<bool>> isApiTokenValid(final String token) async {
+  Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
     String message = '';
@@ -85,7 +83,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     if (response == null) {
-      return APIGenericResult(
+      return GenericResult(
         data: isValid,
         success: false,
         message: message,
@@ -100,21 +98,19 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       throw Exception('code: ${response.statusCode}');
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: isValid,
       success: true,
       message: response.statusMessage,
     );
   }
 
-  @override
   ProviderApiTokenValidation getApiTokenValidation() =>
       ProviderApiTokenValidation(
         regexp: RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]'),
         length: 64,
       );
 
-  @override
   Future<Price?> getPricePerGb() async {
     double? price;
 
@@ -140,8 +136,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           );
   }
 
-  @override
-  Future<APIGenericResult<ServerVolume?>> createVolume() async {
+  Future<GenericResult<ServerVolume?>> createVolume() async {
     ServerVolume? volume;
 
     Response? createVolumeResponse;
@@ -172,7 +167,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       );
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: null,
         success: false,
         message: e.toString(),
@@ -181,7 +176,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       client.close();
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: volume,
       success: true,
       code: createVolumeResponse.statusCode,
@@ -189,7 +184,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  @override
   Future<List<ServerVolume>> getVolumes({final String? status}) async {
     final List<ServerVolume> volumes = [];
 
@@ -257,7 +251,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return volume;
   }
 
-  @override
   Future<void> deleteVolume(final ServerVolume volume) async {
     final Dio client = await getClient();
     try {
@@ -269,8 +262,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     }
   }
 
-  @override
-  Future<APIGenericResult<bool>> attachVolume(
+  Future<GenericResult<bool>> attachVolume(
     final ServerVolume volume,
     final int serverId,
   ) async {
@@ -294,7 +286,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       client.close();
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: success,
       success: true,
       code: attachVolumeResponse?.statusCode,
@@ -302,7 +294,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  @override
   Future<bool> detachVolume(final ServerVolume volume) async {
     bool success = false;
 
@@ -323,7 +314,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return success;
   }
 
-  @override
   Future<bool> resizeVolume(
     final ServerVolume volume,
     final DiskSize size,
@@ -350,19 +340,17 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return success;
   }
 
-  @override
-  Future<APIGenericResult<ServerHostingDetails?>> createServer({
+  Future<GenericResult<ServerHostingDetails?>> createServer({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
     required final String serverType,
     required final DnsProviderType dnsProvider,
   }) async {
-    final APIGenericResult<ServerVolume?> newVolumeResponse =
-        await createVolume();
+    final GenericResult<ServerVolume?> newVolumeResponse = await createVolume();
 
     if (!newVolumeResponse.success || newVolumeResponse.data == null) {
-      return APIGenericResult(
+      return GenericResult(
         data: null,
         success: false,
         message: newVolumeResponse.message,
@@ -379,7 +367,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<APIGenericResult<ServerHostingDetails?>> createServerWithVolume({
+  Future<GenericResult<ServerHostingDetails?>> createServerWithVolume({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
@@ -457,7 +445,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       apiResultMessage = 'uniqueness_error';
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: serverDetails,
       success: success && hetznerError == null,
       code: serverCreateResponse?.statusCode ??
@@ -466,8 +454,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  @override
-  Future<APIGenericResult<bool>> deleteServer({
+  Future<GenericResult<bool>> deleteServer({
     required final String domainName,
   }) async {
     final Dio client = await getClient();
@@ -494,7 +481,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       await Future.wait(laterFutures);
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
         data: false,
         message: e.toString(),
@@ -503,45 +490,55 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return APIGenericResult(
+    return GenericResult(
       success: true,
       data: true,
     );
   }
 
-  @override
-  Future<ServerHostingDetails> restart() async {
-    final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
-
+  Future<GenericResult<void>> restart(final int serverId) async {
     final Dio client = await getClient();
     try {
-      await client.post('/servers/${server.id}/actions/reset');
+      await client.post('/servers/$serverId/actions/reset');
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return server.copyWith(startTime: DateTime.now());
+    return GenericResult(
+      success: true,
+      data: null,
+    );
   }
 
-  @override
-  Future<ServerHostingDetails> powerOn() async {
-    final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
-
+  Future<GenericResult<void>> powerOn(final int serverId) async {
     final Dio client = await getClient();
     try {
-      await client.post('/servers/${server.id}/actions/poweron');
+      await client.post('/servers/$serverId/actions/poweron');
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return server.copyWith(startTime: DateTime.now());
+    return GenericResult(
+      success: true,
+      data: null,
+    );
   }
 
-  Future<Map<String, dynamic>> requestRawMetrics(
+  Future<GenericResult<Map<String, dynamic>>> getMetrics(
     final int serverId,
     final DateTime start,
     final DateTime end,
@@ -562,127 +559,20 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       metrics = res.data['metrics'];
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: {},
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return metrics;
+    return GenericResult(data: metrics, success: true);
   }
 
-  List<TimeSeriesData> serializeTimeSeries(
-    final Map<String, dynamic> json,
-    final String type,
-  ) {
-    final List list = json['time_series'][type]['values'];
-    return list
-        .map((final el) => TimeSeriesData(el[0], double.parse(el[1])))
-        .toList();
-  }
-
-  @override
-  Future<ServerMetrics?> getMetrics(
-    final int serverId,
-    final DateTime start,
-    final DateTime end,
-  ) async {
-    ServerMetrics? metrics;
-
-    final Map<String, dynamic> rawCpuMetrics = await requestRawMetrics(
-      serverId,
-      start,
-      end,
-      'cpu',
-    );
-    final Map<String, dynamic> rawNetworkMetrics = await requestRawMetrics(
-      serverId,
-      start,
-      end,
-      'network',
-    );
-
-    if (rawNetworkMetrics.isEmpty || rawCpuMetrics.isEmpty) {
-      return metrics;
-    }
-
-    metrics = ServerMetrics(
-      cpu: serializeTimeSeries(
-        rawCpuMetrics,
-        'cpu',
-      ),
-      bandwidthIn: serializeTimeSeries(
-        rawNetworkMetrics,
-        'network.0.bandwidth.in',
-      ),
-      bandwidthOut: serializeTimeSeries(
-        rawNetworkMetrics,
-        'network.0.bandwidth.out',
-      ),
-      end: end,
-      start: start,
-      stepsInSecond: rawCpuMetrics['step'],
-    );
-
-    return metrics;
-  }
-
-  @override
-  Future<List<ServerMetadataEntity>> getMetadata(final int serverId) async {
-    List<ServerMetadataEntity> metadata = [];
-
-    final Dio client = await getClient();
-    try {
-      final Response response = await client.get('/servers/$serverId');
-      final hetznerInfo = HetznerServerInfo.fromJson(response.data!['server']);
-      metadata = [
-        ServerMetadataEntity(
-          type: MetadataType.id,
-          name: 'server.server_id'.tr(),
-          value: hetznerInfo.id.toString(),
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.status,
-          name: 'server.status'.tr(),
-          value: hetznerInfo.status.toString().split('.')[1].capitalize(),
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.cpu,
-          name: 'server.cpu'.tr(),
-          value: 'server.core_count'.plural(hetznerInfo.serverType.cores),
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.ram,
-          name: 'server.ram'.tr(),
-          value: '${hetznerInfo.serverType.memory.toString()} GB',
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.cost,
-          name: 'server.monthly_cost'.tr(),
-          value: hetznerInfo.serverType.prices[1].monthly.toStringAsFixed(2),
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.location,
-          name: 'server.location'.tr(),
-          value:
-              '${hetznerInfo.location.city}, ${hetznerInfo.location.country}',
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.other,
-          name: 'server.provider'.tr(),
-          value: displayProviderName,
-        ),
-      ];
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
-    }
-
-    return metadata;
-  }
-
-  @override
-  Future<List<ServerBasicInfo>> getServers() async {
-    List<ServerBasicInfo> servers = [];
+  Future<GenericResult<List<HetznerServerInfo>>> getServers() async {
+    List<HetznerServerInfo> servers = [];
 
     final Dio client = await getClient();
     try {
@@ -691,53 +581,22 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           .map<HetznerServerInfo>(
             (final e) => HetznerServerInfo.fromJson(e),
           )
-          .toList()
-          .where(
-            (final server) => server.publicNet.ipv4 != null,
-          )
-          .map<ServerBasicInfo>(
-            (final server) => ServerBasicInfo(
-              id: server.id,
-              name: server.name,
-              ip: server.publicNet.ipv4.ip,
-              reverseDns: server.publicNet.ipv4.reverseDns,
-              created: server.created,
-            ),
-          )
           .toList();
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: [],
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    print(servers);
-    return servers;
+    return GenericResult(data: servers, success: true);
   }
 
-  String? getEmojiFlag(final String query) {
-    String? emoji;
-
-    switch (query.toLowerCase()) {
-      case 'de':
-        emoji = '🇩🇪';
-        break;
-
-      case 'fi':
-        emoji = '🇫🇮';
-        break;
-
-      case 'us':
-        emoji = '🇺🇸';
-        break;
-    }
-
-    return emoji;
-  }
-
-  @override
-  Future<APIGenericResult<List<ServerProviderLocation>>>
-      getAvailableLocations() async {
+  Future<GenericResult<List>> getAvailableLocations() async {
     List<ServerProviderLocation> locations = [];
 
     final Dio client = await getClient();
@@ -746,19 +605,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         '/locations',
       );
 
-      locations = response.data!['locations']
-          .map<ServerProviderLocation>(
-            (final location) => ServerProviderLocation(
-              title: location['city'],
-              description: location['description'],
-              flag: getEmojiFlag(location['country']),
-              identifier: location['name'],
-            ),
-          )
-          .toList();
+      locations = response.data!['locations'];
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
         data: [],
         message: e.toString(),
@@ -767,44 +617,21 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return APIGenericResult(success: true, data: locations);
+    return GenericResult(success: true, data: locations);
   }
 
-  @override
-  Future<APIGenericResult<List<ServerType>>> getServerTypesByLocation({
-    required final ServerProviderLocation location,
-  }) async {
-    final List<ServerType> types = [];
+  Future<GenericResult<List>> getAvailableServerTypes() async {
+    List types = [];
 
     final Dio client = await getClient();
     try {
       final Response response = await client.get(
         '/server_types',
       );
-      final rawTypes = response.data!['server_types'];
-      for (final rawType in rawTypes) {
-        for (final rawPrice in rawType['prices']) {
-          if (rawPrice['location'].toString() == location.identifier) {
-            types.add(
-              ServerType(
-                title: rawType['description'],
-                identifier: rawType['name'],
-                ram: rawType['memory'],
-                cores: rawType['cores'],
-                disk: DiskSize(byte: rawType['disk'] * 1024 * 1024 * 1024),
-                price: Price(
-                  value: double.parse(rawPrice['price_monthly']['gross']),
-                  currency: 'EUR',
-                ),
-                location: location,
-              ),
-            );
-          }
-        }
-      }
+      types = response.data!['server_types'];
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: [],
         success: false,
         message: e.toString(),
@@ -813,26 +640,26 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return APIGenericResult(data: types, success: true);
+    return GenericResult(data: types, success: true);
   }
 
-  @override
-  Future<APIGenericResult<void>> createReverseDns({
-    required final ServerHostingDetails serverDetails,
-    required final ServerDomain domain,
+  Future<GenericResult<void>> createReverseDns({
+    required final int serverId,
+    required final String ip4,
+    required final String dnsPtr,
   }) async {
     final Dio client = await getClient();
     try {
       await client.post(
-        '/servers/${serverDetails.id}/actions/change_dns_ptr',
+        '/servers/$serverId/actions/change_dns_ptr',
         data: {
-          'ip': serverDetails.ip4,
-          'dns_ptr': domain.domainName,
+          'ip': ip4,
+          'dns_ptr': dnsPtr,
         },
       );
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
         data: null,
         message: e.toString(),
@@ -841,6 +668,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return APIGenericResult(success: true, data: null);
+    return GenericResult(success: true, data: null);
   }
 }

@@ -77,8 +77,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<bool?> isServerProviderApiTokenValid(
     final String providerToken,
   ) async {
-    final APIGenericResult<bool> apiResponse =
-        await ProvidersController.currentServerProvider!.isApiTokenValid(
+    final GenericResult<bool> apiResponse =
+        await ProvidersController.currentServerProvider!.tryInitApiByToken(
       providerToken,
     );
 
@@ -95,7 +95,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<bool?> isDnsProviderApiTokenValid(
     final String providerToken,
   ) async {
-    final APIGenericResult<bool> apiResponse =
+    final GenericResult<bool> apiResponse =
         await ApiController.currentDnsProviderApiFactory!
             .getDnsProvider(
               settings: const DnsProviderApiSettings(isWithToken: false),
@@ -117,7 +117,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    final APIGenericResult apiResponse = await ProvidersController
+    final GenericResult apiResponse = await ProvidersController
         .currentServerProvider!
         .getAvailableLocations();
 
@@ -137,7 +137,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    final APIGenericResult apiResult = await ProvidersController
+    final GenericResult apiResult = await ProvidersController
         .currentServerProvider!
         .getServerTypes(location: location);
 
@@ -173,21 +173,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void setServerType(final ServerType serverType) async {
     await repository.saveServerType(serverType);
 
-    ApiController.initServerProviderApiFactory(
-      ServerProviderSettings(
-        provider: getIt<ApiConfigModel>().serverProvider!,
-        location: serverType.location.identifier,
-      ),
-    );
-
-    // All server providers support volumes for now,
-    //   so it's safe to initialize.
-    ApiController.initVolumeProviderApiFactory(
-      ServerProviderSettings(
-        provider: getIt<ApiConfigModel>().serverProvider!,
-        location: serverType.location.identifier,
-      ),
-    );
+    await ProvidersController.currentServerProvider!
+        .trySetServerType(serverType);
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(

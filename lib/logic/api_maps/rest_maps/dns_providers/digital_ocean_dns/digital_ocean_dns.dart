@@ -46,7 +46,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
   String rootAddress = 'https://api.digitalocean.com/v2';
 
   @override
-  Future<APIGenericResult<bool>> isApiTokenValid(final String token) async {
+  Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
     String message = '';
@@ -70,7 +70,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
     }
 
     if (response == null) {
-      return APIGenericResult(
+      return GenericResult(
         data: isValid,
         success: false,
         message: message,
@@ -85,7 +85,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
       throw Exception('code: ${response.statusCode}');
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: isValid,
       success: true,
       message: response.statusMessage,
@@ -97,7 +97,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
   Future<String?> getZoneId(final String domain) async => domain;
 
   @override
-  Future<APIGenericResult<void>> removeSimilarRecords({
+  Future<GenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
     final String? ip4,
   }) async {
@@ -118,7 +118,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
       await Future.wait(allDeleteFutures);
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
         data: null,
         message: e.toString(),
@@ -127,7 +127,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
       close(client);
     }
 
-    return APIGenericResult(success: true, data: null);
+    return GenericResult(success: true, data: null);
   }
 
   @override
@@ -262,7 +262,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
   }
 
   @override
-  Future<APIGenericResult<void>> createMultipleDnsRecords({
+  Future<GenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
     final String? ip4,
   }) async {
@@ -292,7 +292,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
       rethrow;
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
         data: null,
         message: e.toString(),
@@ -301,7 +301,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
       close(client);
     }
 
-    return APIGenericResult(success: true, data: null);
+    return GenericResult(success: true, data: null);
   }
 
   @override

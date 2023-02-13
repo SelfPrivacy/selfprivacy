@@ -1,6 +1,6 @@
 import 'package:graphql/client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/api_map.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
@@ -24,7 +24,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 
-export 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
+export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
 part 'jobs_api.dart';
 part 'server_actions_api.dart';
@@ -205,7 +205,7 @@ class ServerApi extends ApiMap
     return settings;
   }
 
-  Future<APIGenericResult<RecoveryKeyStatus?>> getRecoveryTokenStatus() async {
+  Future<GenericResult<RecoveryKeyStatus?>> getRecoveryTokenStatus() async {
     RecoveryKeyStatus? key;
     QueryResult<Query$RecoveryKey> response;
     String? error;
@@ -222,18 +222,18 @@ class ServerApi extends ApiMap
       print(e);
     }
 
-    return APIGenericResult<RecoveryKeyStatus?>(
+    return GenericResult<RecoveryKeyStatus?>(
       success: error == null,
       data: key,
       message: error,
     );
   }
 
-  Future<APIGenericResult<String>> generateRecoveryToken(
+  Future<GenericResult<String>> generateRecoveryToken(
     final DateTime? expirationDate,
     final int? numberOfUses,
   ) async {
-    APIGenericResult<String> key;
+    GenericResult<String> key;
     QueryResult<Mutation$GetNewRecoveryApiKey> response;
 
     try {
@@ -254,19 +254,19 @@ class ServerApi extends ApiMap
       );
       if (response.hasException) {
         print(response.exception.toString());
-        key = APIGenericResult<String>(
+        key = GenericResult<String>(
           success: false,
           data: '',
           message: response.exception.toString(),
         );
       }
-      key = APIGenericResult<String>(
+      key = GenericResult<String>(
         success: true,
         data: response.parsedData!.getNewRecoveryApiKey.key!,
       );
     } catch (e) {
       print(e);
-      key = APIGenericResult<String>(
+      key = GenericResult<String>(
         success: false,
         data: '',
         message: e.toString(),
@@ -299,8 +299,8 @@ class ServerApi extends ApiMap
     return records;
   }
 
-  Future<APIGenericResult<List<ApiToken>>> getApiTokens() async {
-    APIGenericResult<List<ApiToken>> tokens;
+  Future<GenericResult<List<ApiToken>>> getApiTokens() async {
+    GenericResult<List<ApiToken>> tokens;
     QueryResult<Query$GetApiTokens> response;
 
     try {
@@ -309,7 +309,7 @@ class ServerApi extends ApiMap
       if (response.hasException) {
         final message = response.exception.toString();
         print(message);
-        tokens = APIGenericResult<List<ApiToken>>(
+        tokens = GenericResult<List<ApiToken>>(
           success: false,
           data: [],
           message: message,
@@ -323,13 +323,13 @@ class ServerApi extends ApiMap
                 ApiToken.fromGraphQL(device),
           )
           .toList();
-      tokens = APIGenericResult<List<ApiToken>>(
+      tokens = GenericResult<List<ApiToken>>(
         success: true,
         data: parsed,
       );
     } catch (e) {
       print(e);
-      tokens = APIGenericResult<List<ApiToken>>(
+      tokens = GenericResult<List<ApiToken>>(
         success: false,
         data: [],
         message: e.toString(),
@@ -339,8 +339,8 @@ class ServerApi extends ApiMap
     return tokens;
   }
 
-  Future<APIGenericResult<void>> deleteApiToken(final String name) async {
-    APIGenericResult<void> returnable;
+  Future<GenericResult<void>> deleteApiToken(final String name) async {
+    GenericResult<void> returnable;
     QueryResult<Mutation$DeleteDeviceApiToken> response;
 
     try {
@@ -357,19 +357,19 @@ class ServerApi extends ApiMap
       );
       if (response.hasException) {
         print(response.exception.toString());
-        returnable = APIGenericResult<void>(
+        returnable = GenericResult<void>(
           success: false,
           data: null,
           message: response.exception.toString(),
         );
       }
-      returnable = APIGenericResult<void>(
+      returnable = GenericResult<void>(
         success: true,
         data: null,
       );
     } catch (e) {
       print(e);
-      returnable = APIGenericResult<void>(
+      returnable = GenericResult<void>(
         success: false,
         data: null,
         message: e.toString(),
@@ -379,8 +379,8 @@ class ServerApi extends ApiMap
     return returnable;
   }
 
-  Future<APIGenericResult<String>> createDeviceToken() async {
-    APIGenericResult<String> token;
+  Future<GenericResult<String>> createDeviceToken() async {
+    GenericResult<String> token;
     QueryResult<Mutation$GetNewDeviceApiKey> response;
 
     try {
@@ -392,19 +392,19 @@ class ServerApi extends ApiMap
       );
       if (response.hasException) {
         print(response.exception.toString());
-        token = APIGenericResult<String>(
+        token = GenericResult<String>(
           success: false,
           data: '',
           message: response.exception.toString(),
         );
       }
-      token = APIGenericResult<String>(
+      token = GenericResult<String>(
         success: true,
         data: response.parsedData!.getNewDeviceApiKey.key!,
       );
     } catch (e) {
       print(e);
-      token = APIGenericResult<String>(
+      token = GenericResult<String>(
         success: false,
         data: '',
         message: e.toString(),
@@ -416,10 +416,10 @@ class ServerApi extends ApiMap
 
   Future<bool> isHttpServerWorking() async => (await getApiVersion()) != null;
 
-  Future<APIGenericResult<String>> authorizeDevice(
+  Future<GenericResult<String>> authorizeDevice(
     final DeviceToken deviceToken,
   ) async {
-    APIGenericResult<String> token;
+    GenericResult<String> token;
     QueryResult<Mutation$AuthorizeWithNewDeviceApiKey> response;
 
     try {
@@ -441,19 +441,19 @@ class ServerApi extends ApiMap
       );
       if (response.hasException) {
         print(response.exception.toString());
-        token = APIGenericResult<String>(
+        token = GenericResult<String>(
           success: false,
           data: '',
           message: response.exception.toString(),
         );
       }
-      token = APIGenericResult<String>(
+      token = GenericResult<String>(
         success: true,
         data: response.parsedData!.authorizeWithNewDeviceApiKey.token!,
       );
     } catch (e) {
       print(e);
-      token = APIGenericResult<String>(
+      token = GenericResult<String>(
         success: false,
         data: '',
         message: e.toString(),
@@ -463,10 +463,10 @@ class ServerApi extends ApiMap
     return token;
   }
 
-  Future<APIGenericResult<String>> useRecoveryToken(
+  Future<GenericResult<String>> useRecoveryToken(
     final DeviceToken deviceToken,
   ) async {
-    APIGenericResult<String> token;
+    GenericResult<String> token;
     QueryResult<Mutation$UseRecoveryApiKey> response;
 
     try {
@@ -488,19 +488,19 @@ class ServerApi extends ApiMap
       );
       if (response.hasException) {
         print(response.exception.toString());
-        token = APIGenericResult<String>(
+        token = GenericResult<String>(
           success: false,
           data: '',
           message: response.exception.toString(),
         );
       }
-      token = APIGenericResult<String>(
+      token = GenericResult<String>(
         success: true,
         data: response.parsedData!.useRecoveryApiKey.token!,
       );
     } catch (e) {
       print(e);
-      token = APIGenericResult<String>(
+      token = GenericResult<String>(
         success: false,
         data: '',
         message: e.toString(),

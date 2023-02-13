@@ -60,7 +60,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   String get displayProviderName => 'Digital Ocean';
 
   @override
-  Future<APIGenericResult<bool>> isApiTokenValid(final String token) async {
+  Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
     String message = '';
@@ -84,7 +84,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     if (response == null) {
-      return APIGenericResult(
+      return GenericResult(
         data: isValid,
         success: false,
         message: message,
@@ -99,7 +99,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       throw Exception('code: ${response.statusCode}');
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: isValid,
       success: true,
       message: response.statusMessage,
@@ -115,7 +115,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       );
 
   @override
-  Future<APIGenericResult<ServerVolume?>> createVolume() async {
+  Future<GenericResult<ServerVolume?>> createVolume() async {
     ServerVolume? volume;
 
     Response? createVolumeResponse;
@@ -147,7 +147,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       );
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: null,
         success: false,
         message: e.toString(),
@@ -156,7 +156,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       client.close();
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: volume,
       success: true,
       code: createVolumeResponse.statusCode,
@@ -230,7 +230,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<APIGenericResult<bool>> attachVolume(
+  Future<GenericResult<bool>> attachVolume(
     final ServerVolume volume,
     final int serverId,
   ) async {
@@ -252,7 +252,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           attachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: false,
         success: false,
         message: e.toString(),
@@ -261,7 +261,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: success,
       success: true,
       code: attachVolumeResponse.statusCode,
@@ -327,7 +327,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<APIGenericResult<ServerHostingDetails?>> createServer({
+  Future<GenericResult<ServerHostingDetails?>> createServer({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
@@ -399,7 +399,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       }
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
         data: null,
         message: e.toString(),
@@ -408,7 +408,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: serverDetails,
       success: true,
       code: serverCreateResponse.statusCode,
@@ -417,7 +417,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<APIGenericResult<bool>> deleteServer({
+  Future<GenericResult<bool>> deleteServer({
     required final String domainName,
   }) async {
     final Dio client = await getClient();
@@ -431,7 +431,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       );
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: false,
         success: false,
         message: e.toString(),
@@ -446,7 +446,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       );
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: false,
         success: false,
         message: e.toString(),
@@ -464,7 +464,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       await Future.wait(laterFutures);
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
         data: false,
         message: e.toString(),
@@ -473,7 +473,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return APIGenericResult(
+    return GenericResult(
       success: true,
       data: true,
     );
@@ -762,7 +762,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   @override
-  Future<APIGenericResult<List<ServerProviderLocation>>>
+  Future<GenericResult<List<ServerProviderLocation>>>
       getAvailableLocations() async {
     List<ServerProviderLocation> locations = [];
 
@@ -784,7 +784,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           .toList();
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: [],
         success: false,
         message: e.toString(),
@@ -793,11 +793,11 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return APIGenericResult(data: locations, success: true);
+    return GenericResult(data: locations, success: true);
   }
 
   @override
-  Future<APIGenericResult<List<ServerType>>> getServerTypesByLocation({
+  Future<GenericResult<List<ServerType>>> getAvailableServerTypes({
     required final ServerProviderLocation location,
   }) async {
     final List<ServerType> types = [];
@@ -830,7 +830,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       }
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: [],
         success: false,
         message: e.toString(),
@@ -839,17 +839,17 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return APIGenericResult(data: types, success: true);
+    return GenericResult(data: types, success: true);
   }
 
   @override
-  Future<APIGenericResult<void>> createReverseDns({
+  Future<GenericResult<void>> createReverseDns({
     required final ServerHostingDetails serverDetails,
     required final ServerDomain domain,
   }) async {
     /// TODO remove from provider interface
     const bool success = true;
-    return APIGenericResult(success: success, data: null);
+    return GenericResult(success: success, data: null);
   }
 
   @override

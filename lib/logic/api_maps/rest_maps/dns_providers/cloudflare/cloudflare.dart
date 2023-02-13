@@ -46,7 +46,7 @@ class CloudflareApi extends DnsProviderApi {
   String rootAddress = 'https://api.cloudflare.com/client/v4';
 
   @override
-  Future<APIGenericResult<bool>> isApiTokenValid(final String token) async {
+  Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
     String message = '';
@@ -70,7 +70,7 @@ class CloudflareApi extends DnsProviderApi {
     }
 
     if (response == null) {
-      return APIGenericResult(
+      return GenericResult(
         data: isValid,
         success: false,
         message: message,
@@ -85,7 +85,7 @@ class CloudflareApi extends DnsProviderApi {
       throw Exception('code: ${response.statusCode}');
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: isValid,
       success: true,
       message: response.statusMessage,
@@ -113,7 +113,7 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<APIGenericResult<void>> removeSimilarRecords({
+  Future<GenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
     final String? ip4,
   }) async {
@@ -139,7 +139,7 @@ class CloudflareApi extends DnsProviderApi {
       await Future.wait(allDeleteFutures);
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
         data: null,
         message: e.toString(),
@@ -148,7 +148,7 @@ class CloudflareApi extends DnsProviderApi {
       close(client);
     }
 
-    return APIGenericResult(success: true, data: null);
+    return GenericResult(success: true, data: null);
   }
 
   @override
@@ -272,7 +272,7 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<APIGenericResult<void>> createMultipleDnsRecords({
+  Future<GenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
     final String? ip4,
   }) async {
@@ -298,7 +298,7 @@ class CloudflareApi extends DnsProviderApi {
       rethrow;
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
         data: null,
         message: e.toString(),
@@ -307,7 +307,7 @@ class CloudflareApi extends DnsProviderApi {
       close(client);
     }
 
-    return APIGenericResult(success: true, data: null);
+    return GenericResult(success: true, data: null);
   }
 
   @override

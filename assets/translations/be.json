@@ -236,9 +236,9 @@
         "console": "Кансоль"
     },
     "about_application_page": {
-        "application_version_text": "Версія праграмы v.{}",
+        "application_version_text": "Версія праграмы {}",
         "title": "Аб праграме",
-        "api_version_text": "Версія API сервера v.{}",
+        "api_version_text": "Версія API сервера {}",
         "privacy_policy": "Палітыка прыватнасці"
     },
     "application_settings": {

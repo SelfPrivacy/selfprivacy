@@ -258,12 +258,37 @@
         "reset_password": "Zresetuj hasło",
         "account": "Konto",
         "send_registration_data": "Udostępnij dane logowania",
-        "could_not_fetch_users": "Nie udało się uzyskać użytkowników"
+        "could_not_fetch_users": "Nie udało się uzyskać użytkowników",
+        "could_not_fetch_description": "Sprawdź połączenie internetowe i spróbuj ponownie",
+        "refresh_users": "Odśwież listę użytkowników",
+        "could_not_create_user": "Nie udało się utworzyć użytkownika",
+        "could_not_delete_user": "Nie udało się usunąć użytkownika",
+        "could_not_add_ssh_key": "Nie udało się utworzyć SSH klucz",
+        "username_rule": "Nazwa użytkownika może zawierać tylko małe litery alfabetu łacińskiego, cyfry i podkreślenia, nie może zaczynać się od cyfry",
+        "email_login": "Logowanie e-mailem",
+        "no_ssh_notice": "Dla tego użytkownika tworzone są tylko konta e-mail i SSH. Jednokrotne logowanie do wszystkich usług będzie dostępne wkrótce."
     },
     "validations": {
         "length_longer": "Długość ciągu znaków [] musi być mniejsza lub równa {}"
     },
     "not_ready_card": {
         "in_menu": "Serwer jeszcze nie jest skonfigurowany, użyj kreatora połączeń."
+    },
+    "initializing": {
+        "connect_to_server": "Zacznijmy od serwera.",
+        "select_provider": "Wybierz dowolnego dostawcę z poniższej listy, wszyscy obsługują SelfPrivacy",
+        "select_provider_notice": "Przez \"stosunkowo małą\" rozumiemy maszynę z 2 rdzeniami procesora i 2 gigabajtami pamięci RAM.",
+        "select_provider_countries_title": "Dostępne kraje",
+        "select_provider_countries_text_hetzner": "Niemcy, Finlandia, USA",
+        "select_provider_countries_text_do": "USA, Holandia, Singapur, Wielka Brytania, Niemcy, Kanada, Indie, Australia",
+        "select_provider_payment_text_do": "Karty kredytowe, Google Pay, PayPal",
+        "select_provider_email_notice": "Hosting poczty e-mail nie będzie dostępny dla nowych klientów. Niemniej jednak zostanie odblokowany, gdy tylko dokonasz pierwszej płatności.",
+        "select_provider_site_button": "Odwiedź stronę",
+        "select_provider_price_title": "Średnia cena",
+        "select_provider_price_text_hetzner": "€8 miesięcznie za stosunkowo mały serwer i 50GB miejsca na dysku",
+        "select_provider_price_text_do": "$17 miesięcznie za stosunkowo mały serwer i 50GB miejsca na dysku",
+        "select_provider_payment_title": "Metody płatności",
+        "select_provider_payment_text_hetzner": "Karty kredytowe, SWIFT, SEPA, PayPal",
+        "connect_to_server_provider": "Teraz zaloguj się przez "
     }
 }

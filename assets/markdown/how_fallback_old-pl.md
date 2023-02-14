@@ -1,3 +1,3 @@
-In the next window, enter the token obtained from the console of the previous version of the application.
+W kolejnym oknie wprowadź token uzyskany z konsoli poprzedniej wersji aplikacji.
 
 Enter it without the word *Bearer*.

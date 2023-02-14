@@ -53,8 +53,8 @@
     },
     "about_application_page": {
         "title": "Über",
-        "application_version_text": "Anwendungsversion v.{}",
-        "api_version_text": "Server API Version v.{}",
+        "application_version_text": "Anwendungsversion {}",
+        "api_version_text": "Server API Version {}",
         "privacy_policy": "Datenschutzerklärung"
     },
     "application_settings": {

@@ -14,7 +14,7 @@ class ServerType {
   });
   final String title;
   final String identifier;
-  final double ram;
+  final double ram; // GB !!
   final DiskSize disk;
   final int cores;
   final Price price;

@@ -53,8 +53,8 @@
     },
     "about_application_page": {
         "title": "О приложении",
-        "application_version_text": "Версия приложения v.{}",
-        "api_version_text": "Версия API сервера v.{}",
+        "application_version_text": "Версия приложения {}",
+        "api_version_text": "Версия API сервера {}",
         "privacy_policy": "Политика конфиденциальности"
     },
     "application_settings": {
@@ -329,7 +329,7 @@
         "enter_username_and_password": "Введите имя пользователя и сложный пароль",
         "finish": "Всё инициализировано",
         "checks": "Проверок выполнено: \n{} / {}",
-        "select_dns": "Теперь давайте выберем DNS-провайдера"
+        "select_dns": "Сейчас выберите DNS провайдера"
     },
     "recovering": {
         "generic_error": "Ошибка проведения операции, попробуйте ещё раз.",

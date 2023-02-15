@@ -343,7 +343,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
 
     final String formattedHostname = getHostnameFromDomain(domainName);
-    const String infectBranch = 'providers/digital-ocean';
+    const String infectBranch = 'testing/digital-ocean';
     final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
     final String dnsProviderType = dnsProviderToInfectName(dnsProvider);
 

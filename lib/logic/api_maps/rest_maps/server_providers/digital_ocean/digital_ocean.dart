@@ -810,12 +810,13 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       final rawSizes = response.data!['sizes'];
       for (final rawSize in rawSizes) {
         for (final rawRegion in rawSize['regions']) {
-          if (rawRegion.toString() == location.identifier) {
+          final ramMb = rawSize['memory'].toDouble();
+          if (rawRegion.toString() == location.identifier && ramMb > 1024) {
             types.add(
               ServerType(
                 title: rawSize['description'],
                 identifier: rawSize['slug'],
-                ram: rawSize['memory'].toDouble(),
+                ram: ramMb / 1024,
                 cores: rawSize['vcpus'],
                 disk: DiskSize(byte: rawSize['disk'] * 1024 * 1024 * 1024),
                 price: Price(

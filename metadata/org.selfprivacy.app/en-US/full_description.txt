@@ -1,0 +1,23 @@
+<p>SelfPrivacy — is a platform on your cloud hosting, that allows to deploy your own private services and control them using mobile application.</p>
+
+<p>To use this application, you'll be required to create accounts of different service providers. Please reffer to this manual: https://selfprivacy.org/en/second</p>
+
+<p>Application will do the following things for you:</p>
+
+<ol>
+  <li>Create your personal server</li>
+  <li>Setup NixOS</li>
+  <li>Bring all services to the ready-to-use state. Services include:</li>
+</ol>
+
+<ul>
+  <li>E-mail, ready to use with DeltaChat</li>
+  <li>NextCloud — your personal cloud storage</li>
+  <li>Bitwarden — secure and private password manager</li>
+  <li>Pleroma — your private fediverse space for blogging</li>
+  <li>Jitsi — awesome Zoom alternative</li>
+  <li>Gitea — your own Git server</li>
+  <li>OpenConnect — Personal VPN server</li>
+</ul>
+
+<p><b>Project is currently in open beta state</b>. Feel free to try it. It would be much appreciated if you would provide us with some feedback.</p>

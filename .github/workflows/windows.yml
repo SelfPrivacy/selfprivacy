@@ -1,0 +1,29 @@
+name: Windows Builder
+
+on: tag
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Install Python dependencies
+      - run: pip install requests pyyaml
+
+      # Install Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.3.10'
+          channel: 'stable'
+
+      # Build Windows artifact
+      - run: flutter build windows
+
+      # Archive the build
+      - run: python ci.py --package-windows-archive
+
+      # Upload the build
+      - run: python ci.py --deploy-windows-archive
+        env:
+          GITEA_RELEASE_TOKEN: ${{ secrets.GITEA_RELEASE_TOKEN }}

@@ -155,6 +155,13 @@ def deploy_gitea_release():
   gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.flatpak")
   gitea_upload_attachment(f"{HOST_MOUNTED_VOLUME}/{APP_NAME}-{APP_SEMVER}.tar.zstd")
 
+def package_windows_archive():
+  import shutil
+  shutil.make_archive(f"selfprivacy-{APP_SEMVER}-win32", 'zip', "build/windows/runner/Release")
+
+def deploy_windows_archive():
+  gitea_upload_attachment(f"selfprivacy-{APP_SEMVER}-win32.zip")
+
 def deploy_fdroid_repo():
   subprocess.run([f"""eval $(ssh-agent -s) &&
                       echo \"$SSH_PRIVATE_KEY\" | tr -d '\r' | ssh-add - &&
@@ -190,8 +197,10 @@ if __name__ == "__main__":
   group.add_argument("--package-linux-appimage", action="store_true")
   group.add_argument("--package-linux-flatpak", action="store_true")
   group.add_argument("--package-linux-archive", action="store_true")
+  group.add_argument("--package-windows-archive", action="store_true")
   group.add_argument("--deploy-gitea-release", action="store_true", help="depends on $GITEA_RELEASE_TOKEN")
   group.add_argument("--deploy-fdroid-repo", action="store_true", help="depends on $SSH_PRIVATE_KEY")
+  group.add_argument("--deploy-windows-archive", action="store_true")
   group.add_argument("--ci-build-linux", action="store_true")
   group.add_argument("--ci-build-apk", action="store_true")
   group.add_argument("--ci-run-tests", action="store_true")
@@ -219,10 +228,14 @@ elif args.package_linux_flatpak:
   package_linux_flatpak()
 elif args.package_linux_archive:
   package_linux_archive()
+elif args.package_windows_archive:
+  package_windows_archive()
 elif args.deploy_gitea_release:
   deploy_gitea_release()
 elif args.deploy_fdroid_repo:
   deploy_fdroid_repo()
+elif args.deploy_windows_archive:
+  deploy_windows_archive()
 elif args.ci_build_linux:
   ci_build_linux()
 elif args.ci_build_apk:
@@ -233,3 +246,4 @@ elif args.gitea_create_release:
   gitea_create_release()
 elif args.gitea_upload_attachment:
   gitea_upload_attachment(args.gitea_upload_attachment)
+

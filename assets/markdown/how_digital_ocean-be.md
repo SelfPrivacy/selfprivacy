@@ -1,12 +1,10 @@
-### How to get Digital Ocean API Token
-1.  Visit the following [link](https://cloud.digitalocean.com/) and sign
-    into newly created account.
-2.  Enter into previously created project. If you haven't created one,
-    then please proceed.
-3.  Go to the "API" link on the left bar.
-4.  Click on the "Generate New Token".
-5.  Enter any name for the token.
-6.  Put expiration time to "No expiry".
-7.  Check the "Write (optional)" checkbox.
-8.  Now click on the "Generate Token" button. 
-9.  After that, the token will be shown. Store it in any reliable place, preferably a password manager.
+### Як атрымаць Digital Ocean API Токен
+1.  Перайдзіце па наступнай спасылцы [link](https://cloud.digitalocean.com/) і ўвайдзіце ў новы акаўнт.
+2.  Увайдзіце ў раней створаны праект. Калі вы яшчэ не стварылі, калі ласка працягвайце.
+3.  Перайдзіце па спасылцы «API» на панэлі злева.
+4.  Націсніце на "Generate New Token".
+5.  Увядзіце любое імя для токена.
+6.  Пастаўце тэрмін прыдатнасці "No expiry".
+7.  Усталюйце сцяжок  "Write (optional)".
+8.  Цяпер націсніце кнопку  "Generate Token". 
+9.  Пасля гэтага будзе паказаны токен. Захоўвайце яго ў любым надзейным месцы, пажадана ў менеджэры пароляў.

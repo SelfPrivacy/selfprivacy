@@ -340,34 +340,72 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return success;
   }
 
-  Future<GenericResult<ServerHostingDetails?>> createServer({
+  Future<GenericResult> createServer({
     required final String dnsApiToken,
+    required final String dnsProviderType,
+    required final String serverApiToken,
     required final User rootUser,
+    required final String base64Password,
+    required final String databasePassword,
     required final String domainName,
+    required final String hostName,
+    required final int volumeId,
     required final String serverType,
-    required final DnsProviderType dnsProvider,
   }) async {
-    final GenericResult<ServerVolume?> newVolumeResponse = await createVolume();
+    final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
 
-    if (!newVolumeResponse.success || newVolumeResponse.data == null) {
-      return GenericResult(
-        data: null,
-        success: false,
-        message: newVolumeResponse.message,
-        code: newVolumeResponse.code,
-      );
+    Response? serverCreateResponse;
+    DioError? hetznerError;
+    bool success = false;
+    final Dio client = await getClient();
+    try {
+      final Map<String, Object> data = {
+        'name': hostName,
+        'server_type': serverType,
+        'start_after_create': false,
+        'image': 'ubuntu-20.04',
+        'volumes': [volumeId],
+        'networks': [],
+        'user_data': '#cloud-config\n'
+            'runcmd:\n'
+            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/providers/hetzner/nixos-infect | '
+            "STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType "
+            "NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' "
+            'CF_TOKEN=$dnsApiToken DB_PASSWORD=$databasePassword API_TOKEN=$serverApiToken HOSTNAME=$hostName bash 2>&1 | '
+            'tee /tmp/infect.log',
+        'labels': {},
+        'automount': true,
+        'location': region!,
+      };
+      print('Decoded data: $data');
+
+      serverCreateResponse = await client.post('/servers', data: data);
+      success = true;
+    } on DioError catch (e) {
+      print(e);
+      hetznerError = e;
+    } catch (e) {
+      print(e);
+    } finally {
+      close(client);
     }
-    return createServerWithVolume(
-      dnsApiToken: dnsApiToken,
-      rootUser: rootUser,
-      domainName: domainName,
-      volume: newVolumeResponse.data!,
-      serverType: serverType,
-      dnsProvider: dnsProvider,
+
+    String? apiResultMessage = serverCreateResponse?.statusMessage;
+    if (hetznerError != null &&
+        hetznerError.response!.data['error']['code'] == 'uniqueness_error') {
+      apiResultMessage = 'uniqueness_error';
+    }
+
+    return GenericResult(
+      data: serverCreateResponse?.data,
+      success: success && hetznerError == null,
+      code: serverCreateResponse?.statusCode ??
+          hetznerError?.response?.statusCode,
+      message: apiResultMessage,
     );
   }
 
-  Future<GenericResult<ServerHostingDetails?>> createServerWithVolume({
+  Future<GenericResult<ServerHostingDetails?>> skldfjalkdsjflkasd({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,
@@ -375,8 +413,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final String serverType,
     required final DnsProviderType dnsProvider,
   }) async {
-    final Dio client = await getClient();
-
     final String dbPassword = StringGenerators.dbPassword();
     final int volumeId = volume.id;
 
@@ -388,14 +424,11 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
     final String dnsProviderType = dnsProviderToInfectName(dnsProvider);
 
-    final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
-
     Response? serverCreateResponse;
     ServerHostingDetails? serverDetails;
     DioError? hetznerError;
     bool success = false;
-
+    final Dio client = await getClient();
     try {
       final Map<String, Object> data = {
         'name': hostname,
@@ -404,7 +437,13 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         'image': 'ubuntu-20.04',
         'volumes': [volumeId],
         'networks': [],
-        'user_data': userdataString,
+        'user_data': '#cloud-config\n'
+            'runcmd:\n'
+            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | '
+            "STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType "
+            "NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' "
+            'CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | '
+            'tee /tmp/infect.log',
         'labels': {},
         'automount': true,
         'location': region!,

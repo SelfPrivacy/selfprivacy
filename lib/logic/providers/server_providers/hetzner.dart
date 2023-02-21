@@ -1,8 +1,14 @@
+import 'dart:convert';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner_api.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
+import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
@@ -11,6 +17,8 @@ import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/server_provider.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
   ApiAdapter({final String? region, final bool isWithToken = true})
@@ -42,7 +50,9 @@ class HetznerServerProvider extends ServerProvider {
   ApiAdapter _adapter;
 
   @override
-  Future<GenericResult<bool>> trySetServerType(final ServerType type) async {
+  Future<GenericResult<bool>> trySetServerLocation(
+    final String location,
+  ) async {
     final bool apiInitialized = _adapter.api().isWithToken;
     if (!apiInitialized) {
       return GenericResult(
@@ -54,7 +64,7 @@ class HetznerServerProvider extends ServerProvider {
 
     _adapter = ApiAdapter(
       isWithToken: true,
-      region: type.location.identifier,
+      region: location,
     );
     return success;
   }
@@ -302,6 +312,7 @@ class HetznerServerProvider extends ServerProvider {
           end,
           'cpu',
         );
+
     if (cpuResult.data.isEmpty || !cpuResult.success) {
       return GenericResult(
         success: false,
@@ -387,4 +398,170 @@ class HetznerServerProvider extends ServerProvider {
       data: timestamp,
     );
   }
+
+  String dnsProviderToInfectName(final DnsProviderType dnsProvider) {
+    String dnsProviderType;
+    switch (dnsProvider) {
+      case DnsProviderType.digitalOcean:
+        dnsProviderType = 'DIGITALOCEAN';
+        break;
+      case DnsProviderType.cloudflare:
+      default:
+        dnsProviderType = 'CLOUDFLARE';
+        break;
+    }
+    return dnsProviderType;
+  }
+
+  Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
+    final LaunchInstallationData installationData,
+  ) async {
+    final volumeResult = await _adapter.api().createVolume();
+
+    if (!volumeResult.success || volumeResult.data == null) {
+      return GenericResult(
+        data: CallbackDialogueBranching(
+          choices: [
+            CallbackDialogueChoice(
+              title: 'basis.cancel'.tr(),
+              callback: null,
+            ),
+            CallbackDialogueChoice(
+              title: 'basis.try_again'.tr(),
+              callback: () async => launchInstallation(installationData),
+            ),
+          ],
+          description:
+              volumeResult.message ?? 'modals.volume_creation_error'.tr(),
+          title: 'modals.unexpected_error'.tr(),
+        ),
+        success: false,
+        message: volumeResult.message,
+        code: volumeResult.code,
+      );
+    }
+
+    final volume = volumeResult.data!;
+    final serverApiToken = StringGenerators.apiToken();
+    final hostname = getHostnameFromDomain(installationData.domainName);
+
+    final serverResult = await _adapter.api().createServer(
+          dnsApiToken: installationData.dnsApiToken,
+          rootUser: installationData.rootUser,
+          domainName: installationData.domainName,
+          serverType: installationData.serverType.identifier,
+          dnsProviderType:
+              dnsProviderToInfectName(installationData.dnsProviderType),
+          hostName: hostname,
+          volumeId: volume.id,
+          base64Password: base64.encode(
+            utf8.encode(installationData.rootUser.password ?? 'PASS'),
+          ),
+          databasePassword: StringGenerators.dbPassword(),
+          serverApiToken: serverApiToken,
+        );
+
+    if (!serverResult.success || serverResult.data == null) {
+      await _adapter.api().deleteVolume(volume);
+      await Future.delayed(const Duration(seconds: 5));
+      if (serverResult.message != null &&
+          serverResult.message == 'uniqueness_error') {
+        return GenericResult(
+          data: CallbackDialogueBranching(
+            choices: [
+              CallbackDialogueChoice(
+                title: 'basis.cancel'.tr(),
+                callback: null,
+              ),
+              CallbackDialogueChoice(
+                title: 'basis.yes'.tr(),
+                callback: () async {
+                  final deleting = await deleteServer(hostname);
+                  if (deleting.success) {
+                    return launchInstallation(installationData);
+                  }
+
+                  return deleting;
+                },
+              ),
+            ],
+            description: volumeResult.message ?? 'modals.destroy_server'.tr(),
+            title: 'modals.already_exists'.tr(),
+          ),
+          success: false,
+          message: volumeResult.message,
+          code: volumeResult.code,
+        );
+      } else {
+        return GenericResult(
+          data: CallbackDialogueBranching(
+            choices: [
+              CallbackDialogueChoice(
+                title: 'basis.cancel'.tr(),
+                callback: null,
+              ),
+              CallbackDialogueChoice(
+                title: 'basis.try_again'.tr(),
+                callback: () async => launchInstallation(installationData),
+              ),
+            ],
+            description:
+                volumeResult.message ?? 'recovering.generic_error'.tr(),
+            title: 'modals.unexpected_error'.tr(),
+          ),
+          success: false,
+          message: volumeResult.message,
+          code: volumeResult.code,
+        );
+      }
+    }
+
+    final serverDetails = ServerHostingDetails(
+      id: serverResult.data['server']['id'],
+      ip4: serverResult.data['server']['public_net']['ipv4']['ip'],
+      createTime: DateTime.now(),
+      volume: volume,
+      apiToken: serverApiToken,
+      provider: ServerProviderType.hetzner,
+    );
+
+    final createDnsResult = await _adapter.api().createReverseDns(
+          serverId: serverDetails.id,
+          ip4: serverDetails.ip4,
+          dnsPtr: installationData.domainName,
+        );
+
+    if (!createDnsResult.success) {
+      return GenericResult(
+        data: CallbackDialogueBranching(
+          choices: [
+            CallbackDialogueChoice(
+              title: 'basis.cancel'.tr(),
+              callback: null,
+            ),
+            CallbackDialogueChoice(
+              title: 'basis.try_again'.tr(),
+              callback: () async {
+                final deletion = await deleteServer(hostname);
+                if (deletion.success) {
+                  return launchInstallation(installationData);
+                }
+
+                return deletion;
+              },
+            ),
+          ],
+          description: volumeResult.message ?? 'recovering.generic_error'.tr(),
+          title: 'modals.unexpected_error'.tr(),
+        ),
+        success: false,
+        message: volumeResult.message,
+        code: volumeResult.code,
+      );
+    }
+  }
+
+  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
+    final String hostname,
+  ) async {}
 }

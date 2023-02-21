@@ -9,8 +9,6 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -174,7 +172,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveServerType(serverType);
 
     await ProvidersController.currentServerProvider!
-        .trySetServerType(serverType);
+        .trySetServerLocation(serverType);
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(

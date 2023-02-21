@@ -429,6 +429,7 @@
     "modals": {
         "dns_removal_error": "Couldn't remove DNS records.",
         "server_deletion_error": "Couldn't delete active server.",
+        "volume_creation_error": "Couldn't create volume.",
         "server_validators_error": "Couldn't fetch available servers.",
         "already_exists": "Such server already exists.",
         "unexpected_error": "Unexpected error during placement from the provider side.",

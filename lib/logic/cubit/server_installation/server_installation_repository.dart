@@ -25,6 +25,7 @@ import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 
@@ -168,13 +169,15 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> startServer(
     final ServerHostingDetails server,
   ) async {
-    ServerHostingDetails serverDetails;
+    final result = await ProvidersController.currentServerProvider!.powerOn(
+      server.id,
+    );
 
-    serverDetails = await ApiController.currentServerProviderApiFactory!
-        .getServerProvider()
-        .powerOn();
+    if (result.success && result.data != null) {
+      server.copyWith(startTime: result.data);
+    }
 
-    return serverDetails;
+    return server;
   }
 
   Future<String?> getDomainId(final String token, final String domain) async {
@@ -237,108 +240,6 @@ class ServerInstallationRepository {
     }
 
     return matches;
-  }
-
-  Future<void> createServer(
-    final User rootUser,
-    final String domainName,
-    final String cloudFlareKey,
-    final BackblazeCredential backblazeCredential, {
-    required final void Function() onCancel,
-    required final Future<void> Function(ServerHostingDetails serverDetails)
-        onSuccess,
-  }) async {
-    final ServerProviderApi api =
-        ApiController.currentServerProviderApiFactory!.getServerProvider();
-
-    void showInstallationErrorPopUp() {
-      showPopUpAlert(
-        alertTitle: 'modals.unexpected_error'.tr(),
-        description: 'modals.try_again'.tr(),
-        actionButtonTitle: 'modals.yes'.tr(),
-        actionButtonOnPressed: () async {
-          ServerHostingDetails? serverDetails;
-          try {
-            final GenericResult createResult = await api.createServer(
-              dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
-              dnsApiToken: cloudFlareKey,
-              rootUser: rootUser,
-              domainName: domainName,
-              serverType: getIt<ApiConfigModel>().serverType!,
-            );
-            serverDetails = createResult.data;
-          } catch (e) {
-            print(e);
-          }
-
-          if (serverDetails == null) {
-            print('Server is not initialized!');
-            return;
-          }
-          await saveServerDetails(serverDetails);
-          onSuccess(serverDetails);
-        },
-        cancelButtonOnPressed: onCancel,
-      );
-    }
-
-    try {
-      final GenericResult<ServerHostingDetails?> createServerResult =
-          await api.createServer(
-        dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
-        dnsApiToken: cloudFlareKey,
-        rootUser: rootUser,
-        domainName: domainName,
-        serverType: getIt<ApiConfigModel>().serverType!,
-      );
-
-      if (createServerResult.data == null) {
-        const String e = 'Server is not initialized!';
-        print(e);
-      }
-
-      if (createServerResult.message == 'uniqueness_error') {
-        showPopUpAlert(
-          alertTitle: 'modals.already_exists'.tr(),
-          description: 'modals.destroy_server'.tr(),
-          actionButtonTitle: 'modals.yes'.tr(),
-          actionButtonOnPressed: () async {
-            await api.deleteServer(
-              domainName: domainName,
-            );
-
-            ServerHostingDetails? serverDetails;
-            try {
-              final GenericResult createResult = await api.createServer(
-                dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
-                dnsApiToken: cloudFlareKey,
-                rootUser: rootUser,
-                domainName: domainName,
-                serverType: getIt<ApiConfigModel>().serverType!,
-              );
-              serverDetails = createResult.data;
-            } catch (e) {
-              print(e);
-            }
-
-            if (serverDetails == null) {
-              print('Server is not initialized!');
-              return;
-            }
-            await saveServerDetails(serverDetails);
-            onSuccess(serverDetails);
-          },
-          cancelButtonOnPressed: onCancel,
-        );
-        return;
-      }
-
-      saveServerDetails(createServerResult.data!);
-      onSuccess(createServerResult.data!);
-    } catch (e) {
-      print(e);
-      showInstallationErrorPopUp();
-    }
   }
 
   Future<bool> createDnsRecords(

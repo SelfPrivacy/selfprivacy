@@ -1,7 +1,6 @@
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/server_type.dart';
 
 class LaunchInstallationData {
   LaunchInstallationData({
@@ -9,7 +8,7 @@ class LaunchInstallationData {
     required this.dnsApiToken,
     required this.dnsProviderType,
     required this.domainName,
-    required this.serverType,
+    required this.serverTypeId,
     required this.errorCallback,
     required this.successCallback,
   });
@@ -18,7 +17,7 @@ class LaunchInstallationData {
   final String dnsApiToken;
   final String domainName;
   final DnsProviderType dnsProviderType;
-  final ServerType serverType;
+  final String serverTypeId;
   final Function() errorCallback;
   final Function(ServerHostingDetails details) successCallback;
 }

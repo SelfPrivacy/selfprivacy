@@ -6,6 +6,8 @@ import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
+import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
+import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
@@ -18,6 +20,7 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 
 export 'package:provider/provider.dart';
 
@@ -239,14 +242,52 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void createServerAndSetDnsRecords() async {
     emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
-    await repository.createServer(
-      state.rootUser!,
-      state.serverDomain!.domainName,
-      state.dnsApiToken!,
-      state.backblazeCredential!,
-      onCancel: clearAppConfig,
-      onSuccess: onCreateServerSuccess,
+
+    final installationData = LaunchInstallationData(
+      rootUser: state.rootUser!,
+      dnsApiToken: state.dnsApiToken!,
+      dnsProviderType: state.serverDomain!.provider,
+      domainName: state.serverDomain!.domainName,
+      serverTypeId: state.serverTypeIdentificator!,
+      errorCallback: clearAppConfig,
+      successCallback: onCreateServerSuccess,
     );
+
+    final result =
+        await ProvidersController.currentServerProvider!.launchInstallation(
+      installationData,
+    );
+
+    if (!result.success && result.data != null) {
+      bool dialoguesResolved = false;
+      CallbackDialogueBranching branching = result.data!;
+      while (!dialoguesResolved) {
+        showPopUpAlert(
+          alertTitle: branching.title,
+          description: branching.description,
+          actionButtonTitle: branching.choices[1].title,
+          actionButtonOnPressed: () async {
+            final branchingResult = await branching.choices[1].callback!();
+            if (branchingResult.data == null) {
+              dialoguesResolved = true;
+              return;
+            }
+
+            branching = branchingResult.data!;
+          },
+          cancelButtonTitle: branching.choices[0].title,
+          cancelButtonOnPressed: () async {
+            final branchingResult = await branching.choices[0].callback!();
+            if (branchingResult.data == null) {
+              dialoguesResolved = true;
+              return;
+            }
+
+            branching = branchingResult.data!;
+          },
+        );
+      }
+    }
   }
 
   void startServerIfDnsIsOkay({

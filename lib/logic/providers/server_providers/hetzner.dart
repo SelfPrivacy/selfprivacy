@@ -359,6 +359,7 @@ class HetznerServerProvider extends ServerProvider {
     return GenericResult(data: metrics, success: true);
   }
 
+  @override
   Future<GenericResult<DateTime?>> restart(final int serverId) async {
     DateTime? timestamp;
     final result = await _adapter.api().restart(serverId);
@@ -379,6 +380,7 @@ class HetznerServerProvider extends ServerProvider {
     );
   }
 
+  @override
   Future<GenericResult<DateTime?>> powerOn(final int serverId) async {
     DateTime? timestamp;
     final result = await _adapter.api().powerOn(serverId);
@@ -413,6 +415,7 @@ class HetznerServerProvider extends ServerProvider {
     return dnsProviderType;
   }
 
+  @override
   Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
     final LaunchInstallationData installationData,
   ) async {
@@ -449,7 +452,7 @@ class HetznerServerProvider extends ServerProvider {
           dnsApiToken: installationData.dnsApiToken,
           rootUser: installationData.rootUser,
           domainName: installationData.domainName,
-          serverType: installationData.serverType.identifier,
+          serverType: installationData.serverTypeId,
           dnsProviderType:
               dnsProviderToInfectName(installationData.dnsProviderType),
           hostName: hostname,

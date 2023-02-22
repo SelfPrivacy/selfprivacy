@@ -172,7 +172,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveServerType(serverType);
 
     await ProvidersController.currentServerProvider!
-        .trySetServerLocation(serverType);
+        .trySetServerLocation(serverType.identifier);
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(
@@ -223,42 +223,30 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit((state as ServerInstallationNotFinished).copyWith(rootUser: rootUser));
   }
 
+  Future<void> onCreateServerSuccess(
+    final ServerHostingDetails serverDetails,
+  ) async {
+    await repository.saveServerDetails(serverDetails);
+    // TODO dns;
+    emit(
+      (state as ServerInstallationNotFinished).copyWith(
+        isLoading: false,
+        serverDetails: serverDetails,
+      ),
+    );
+    runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), null);
+  }
+
   void createServerAndSetDnsRecords() async {
-    final ServerInstallationNotFinished stateCopy =
-        state as ServerInstallationNotFinished;
-    void onCancel() => emit(
-          (state as ServerInstallationNotFinished).copyWith(isLoading: false),
-        );
-
-    Future<void> onSuccess(final ServerHostingDetails serverDetails) async {
-      await repository.createDnsRecords(
-        serverDetails,
-        state.serverDomain!,
-        onCancel: onCancel,
-      );
-
-      emit(
-        (state as ServerInstallationNotFinished).copyWith(
-          isLoading: false,
-          serverDetails: serverDetails,
-        ),
-      );
-      runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), null);
-    }
-
-    try {
-      emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
-      await repository.createServer(
-        state.rootUser!,
-        state.serverDomain!.domainName,
-        state.dnsApiToken!,
-        state.backblazeCredential!,
-        onCancel: onCancel,
-        onSuccess: onSuccess,
-      );
-    } catch (e) {
-      emit(stateCopy);
-    }
+    emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
+    await repository.createServer(
+      state.rootUser!,
+      state.serverDomain!.domainName,
+      state.dnsApiToken!,
+      state.backblazeCredential!,
+      onCancel: clearAppConfig,
+      onSuccess: onCreateServerSuccess,
+    );
   }
 
   void startServerIfDnsIsOkay({

@@ -424,7 +424,7 @@ class HetznerServerProvider extends ServerProvider {
           choices: [
             CallbackDialogueChoice(
               title: 'basis.cancel'.tr(),
-              callback: null,
+              callback: await installationData.errorCallback(),
             ),
             CallbackDialogueChoice(
               title: 'basis.try_again'.tr(),
@@ -471,7 +471,7 @@ class HetznerServerProvider extends ServerProvider {
             choices: [
               CallbackDialogueChoice(
                 title: 'basis.cancel'.tr(),
-                callback: null,
+                callback: installationData.errorCallback(),
               ),
               CallbackDialogueChoice(
                 title: 'basis.yes'.tr(),
@@ -498,7 +498,14 @@ class HetznerServerProvider extends ServerProvider {
             choices: [
               CallbackDialogueChoice(
                 title: 'basis.cancel'.tr(),
-                callback: null,
+                callback: () async {
+                  final deletion = await deleteServer(hostname);
+                  if (deletion.success) {
+                    installationData.errorCallback();
+                  }
+
+                  return deletion;
+                },
               ),
               CallbackDialogueChoice(
                 title: 'basis.try_again'.tr(),
@@ -537,13 +544,23 @@ class HetznerServerProvider extends ServerProvider {
           choices: [
             CallbackDialogueChoice(
               title: 'basis.cancel'.tr(),
-              callback: null,
+              callback: () async {
+                final deletion = await deleteServer(hostname);
+                if (deletion.success) {
+                  installationData.errorCallback();
+                }
+
+                return deletion;
+              },
             ),
             CallbackDialogueChoice(
               title: 'basis.try_again'.tr(),
               callback: () async {
+                await _adapter.api().deleteVolume(volume);
+                await Future.delayed(const Duration(seconds: 5));
                 final deletion = await deleteServer(hostname);
                 if (deletion.success) {
+                  await Future.delayed(const Duration(seconds: 5));
                   return launchInstallation(installationData);
                 }
 
@@ -559,6 +576,9 @@ class HetznerServerProvider extends ServerProvider {
         code: volumeResult.code,
       );
     }
+
+    await installationData.successCallback(serverDetails);
+    return GenericResult(success: true, data: null);
   }
 
   Future<GenericResult<CallbackDialogueBranching?>> deleteServer(

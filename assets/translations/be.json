@@ -323,7 +323,7 @@
     "validations": {
         "required": "Абавязковае поле",
         "already_exist": "Ужо існуе",
-        "invalid_format_password": "Павінен не змяшчаць пустыя сімвалы",
+        "invalid_format_password": "Не павінен змяшчаць пустыя сімвалы",
         "root_name": "Імя карыстальніка не можа быць 'root'",
         "length_not_equal": "Даўжыня радка [], павінна быць роўна {}",
         "length_longer": "Даўжыня радка [], павінна быць менш або роўна {}",

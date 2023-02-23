@@ -12,6 +12,7 @@ import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 
@@ -23,7 +24,9 @@ class BlocAndProviderConfig extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     const isDark = false;
+    const isAutoDark = true;
     final serverInstallationCubit = ServerInstallationCubit()..load();
+    final supportSystemCubit = SupportSystemCubit();
     final usersCubit = UsersCubit(serverInstallationCubit);
     final servicesCubit = ServicesCubit(serverInstallationCubit);
     final backupsCubit = BackupsCubit(serverInstallationCubit);
@@ -41,8 +44,12 @@ class BlocAndProviderConfig extends StatelessWidget {
         BlocProvider(
           create: (final _) => AppSettingsCubit(
             isDarkModeOn: isDark,
+            isAutoDarkModeOn: isAutoDark,
             isOnboardingShowing: true,
           )..load(),
+        ),
+        BlocProvider(
+          create: (final _) => supportSystemCubit,
         ),
         BlocProvider(
           create: (final _) => serverInstallationCubit,

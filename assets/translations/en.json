@@ -2,6 +2,7 @@
     "test": "en-test",
     "locale": "en",
     "basis": {
+        "app_name": "SelfPrivacy",
         "providers": "Providers",
         "providers_title": "Your Data Center",
         "select": "Select",
@@ -59,8 +60,11 @@
     },
     "application_settings": {
         "title": "Application settings",
+        "system_dark_theme_title": "System default theme",
+        "system_dark_theme_description": "Use light or dark theme depending on system settings",
         "dark_theme_title": "Dark theme",
         "dark_theme_description": "Switch your application theme",
+        "dangerous_settings": "Dangerous settings",
         "reset_config_title": "Reset application config",
         "reset_config_description": "Reset api keys and root user",
         "delete_server_title": "Delete server",
@@ -472,5 +476,19 @@
         "root_name": "Cannot be 'root'",
         "length_not_equal": "Length is [], should be {}",
         "length_longer": "Length is [], should be shorter than or equal to {}"
+    },
+    "support": {
+        "title": "SelfPrivacy Support"
+    },
+    "developer_settings": {
+        "title": "Developer settings",
+        "subtitle": "These settings are for debugging only. Don't change them unless you know what you're doing.",
+        "server_setup": "Server setup",
+        "use_staging_acme": "Use staging ACME server",
+        "use_staging_acme_description": "Rebuild your app to change this value.",
+        "routing": "App routing",
+        "reset_onboarding": "Reset onboarding switch",
+        "reset_onboarding_description": "Reset onboarding switch to show onboarding screen again",
+        "cubit_statuses": "Cubit loading statuses"
     }
 }

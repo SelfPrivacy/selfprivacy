@@ -41,7 +41,8 @@
         "console": "Console",
         "application_settings": "Paramètres de l'application",
         "configuration_wizard": "Assistant de configuration",
-        "about_project": "À propos de nous"
+        "about_project": "À propos de nous",
+        "onboarding": "Embarquement"
     },
     "console_page": {
         "title": "Console",
@@ -254,9 +255,35 @@
         "try_again": "Essayer à nouveau?"
     },
     "password_manager": {
-        "title": "Gestionnaire de mot de passe"
+        "title": "Gestionnaire de mot de passe",
+        "subtitle": "La base de votre sécurité. Bitwarden vous aidera à créer, stocker et déplacer les mots de passe entre appareils, ainsi qu'à les saisir, lorsque cela est demandé, en utilisant l'autocomplétion.",
+        "login_info": "Vous devrez créer un compte sur le site web."
     },
     "timer": {
         "sec": "{} secondes"
+    },
+    "cloud": {
+        "title": "Stockage cloud",
+        "subtitle": "Ne permettez pas aux services cloud de lire vos données en utilisant NextCloud.",
+        "login_info": "Le login est admin, le mot de passe est le même que votre utilisateur principal. Créer de nouveaux comptes via l'interface Nextcloud."
+    },
+    "video": {
+        "title": "Vidéoconférence",
+        "subtitle": "Zoom et Google Meet sont biens, mais Jitsi Meet est une alternative valable qui vous donne également l'assurance que vous n'êtes pas écouter.",
+        "login_info": "Pas de compte nécessaire."
+    },
+    "social_network": {
+        "title": "Réseaux sociaux",
+        "subtitle": "C'est difficile à croire mais il devient possible de créer votre propre réseau social, avec vos propres règles et votre propre public cible.",
+        "login_info": "Vous devrez créer un compte sur le site web."
+    },
+    "git": {
+        "title": "Serveur Git",
+        "subtitle": "Une alternative privée à Github, qui vous appartient et qui n'appartient pas à Microsoft.",
+        "login_info": "Vous devrez créer un compte sur le site web. Le premier utilisateur deviendra admin."
+    },
+    "vpn": {
+        "title": "Serveur VPN",
+        "subtitle": "Serveur VPN privé"
     }
 }

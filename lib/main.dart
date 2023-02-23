@@ -87,11 +87,11 @@ class MyApp extends StatelessWidget {
                 title: 'SelfPrivacy',
                 theme: lightThemeData,
                 darkTheme: darkThemeData,
-                themeMode:
-                    appSettings.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
-                home: appSettings.isOnboardingShowing
-                    ? const OnboardingPage(nextPage: InitializingPage())
-                    : const RootPage(),
+                themeMode: appSettings.isAutoDarkModeOn
+                    ? ThemeMode.system
+                    : appSettings.isDarkModeOn
+                        ? ThemeMode.dark
+                        : ThemeMode.light,
                 builder: (final BuildContext context, final Widget? widget) {
                   Widget error = const Text('...rendering error...');
                   if (widget is Scaffold || widget is Navigator) {

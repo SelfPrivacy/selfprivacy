@@ -64,6 +64,9 @@ class BNames {
   static String isDarkModeOn = 'isDarkModeOn';
 
   /// A boolean field of [appSettingsBox] box.
+  static String isAutoDarkModeOn = 'isAutoDarkModeOn';
+
+  /// A boolean field of [appSettingsBox] box.
   static String isOnboardingShowing = 'isOnboardingShowing';
 
   /// Encryption key to decrypt [serverInstallationBox] and [usersBox] box.

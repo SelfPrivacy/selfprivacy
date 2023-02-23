@@ -14,21 +14,21 @@ class RecoveryKeyCubit
 
   @override
   void load() async {
-    if (serverInstallationCubit.state is ServerInstallationFinished) {
-      final RecoveryKeyStatus? status = await _getRecoveryKeyStatus();
-      if (status == null) {
-        emit(state.copyWith(loadingStatus: LoadingStatus.error));
-      } else {
-        emit(
-          state.copyWith(
-            status: status,
-            loadingStatus: LoadingStatus.success,
-          ),
-        );
-      }
+    // if (serverInstallationCubit.state is ServerInstallationFinished) {
+    final RecoveryKeyStatus? status = await _getRecoveryKeyStatus();
+    if (status == null) {
+      emit(state.copyWith(loadingStatus: LoadingStatus.error));
     } else {
-      emit(state.copyWith(loadingStatus: LoadingStatus.uninitialized));
+      emit(
+        state.copyWith(
+          status: status,
+          loadingStatus: LoadingStatus.success,
+        ),
+      );
     }
+    // } else {
+    //   emit(state.copyWith(loadingStatus: LoadingStatus.uninitialized));
+    // }
   }
 
   Future<RecoveryKeyStatus?> _getRecoveryKeyStatus() async {

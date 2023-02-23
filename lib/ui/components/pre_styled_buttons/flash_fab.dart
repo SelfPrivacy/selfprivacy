@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
@@ -7,7 +8,12 @@ import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
 class BrandFab extends StatefulWidget {
-  const BrandFab({super.key});
+  const BrandFab({
+    this.extended = false,
+    super.key,
+  });
+
+  final bool extended;
 
   @override
   State<BrandFab> createState() => _BrandFabState();
@@ -64,20 +70,35 @@ class _BrandFabState extends State<BrandFab>
             ),
           );
         },
-        child: AnimatedBuilder(
-          animation: _colorTween,
-          builder: (final BuildContext context, final Widget? child) {
-            final double v = _animationController.value;
-            final IconData icon =
-                v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
-            return Transform.scale(
-              scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
-              child: Icon(
-                icon,
-                color: _colorTween.value,
+        isExtended: widget.extended,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedBuilder(
+              animation: _colorTween,
+              builder: (final BuildContext context, final Widget? child) {
+                final double v = _animationController.value;
+                final IconData icon =
+                    v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
+                return Transform.scale(
+                  scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
+                  child: Icon(
+                    icon,
+                    color: _colorTween.value,
+                  ),
+                );
+              },
+            ),
+            if (widget.extended)
+              const SizedBox(
+                width: 8,
               ),
-            );
-          },
+            if (widget.extended)
+              Text(
+                'jobs.title'.tr(),
+              ),
+          ],
         ),
       ),
     );

@@ -1,7 +1,7 @@
 part of 'users.dart';
 
-class UserDetails extends StatelessWidget {
-  const UserDetails({
+class UserDetailsPage extends StatelessWidget {
+  const UserDetailsPage({
     required this.login,
     super.key,
   });

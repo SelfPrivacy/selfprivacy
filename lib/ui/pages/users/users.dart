@@ -16,12 +16,13 @@ import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
+import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
@@ -106,12 +107,14 @@ class UsersPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(52),
-        child: BrandHeader(
-          title: 'basis.users'.tr(),
-        ),
-      ),
+      appBar: Breakpoints.small.isActive(context)
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(52),
+              child: BrandHeader(
+                title: 'basis.users'.tr(),
+              ),
+            )
+          : null,
       body: child,
     );
   }

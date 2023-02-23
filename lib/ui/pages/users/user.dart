@@ -12,7 +12,7 @@ class _User extends StatelessWidget {
   Widget build(final BuildContext context) => InkWell(
         onTap: () {
           Navigator.of(context).push(
-            materialRoute(UserDetails(login: user.login)),
+            materialRoute(UserDetailsPage(login: user.login)),
           );
         },
         child: Container(

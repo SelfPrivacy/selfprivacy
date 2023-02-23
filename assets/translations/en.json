@@ -333,7 +333,20 @@
         "create_master_account": "Create master account",
         "enter_username_and_password": "Enter username and strong password",
         "finish": "Everything is initialized",
-        "checks": "Checks have been completed \n{} out of {}"
+        "checks": "Checks have been completed \n{} out of {}",
+        "steps": {
+            "hosting": "Hosting",
+            "server_type": "Server type",
+            "dns_provider": "DNS provider",
+            "backups_provider": "Backups",
+            "domain": "Domain",
+            "master_account": "Master account",
+            "server": "Server",
+            "dns_setup": "DNS setup",
+            "nixos_installation": "NixOS installation",
+            "server_reboot": "Server reboot",
+            "final_checks": "Final checks"
+        }
     },
     "recovering": {
         "generic_error": "Operation failed, please try again.",

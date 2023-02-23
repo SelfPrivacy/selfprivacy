@@ -1,7 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
-import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class NotReadyCard extends StatelessWidget {
@@ -13,11 +13,7 @@ class NotReadyCard extends StatelessWidget {
         child: ListTile(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          onTap: () => Navigator.of(context).push(
-            materialRoute(
-              const InitializingPage(),
-            ),
-          ),
+          onTap: () => context.pushRoute(const InitializingRoute()),
           title: Text(
             'not_ready_card.in_menu'.tr(),
             style: Theme.of(context).textTheme.titleSmall?.copyWith(

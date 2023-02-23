@@ -1,4 +1,3 @@
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,18 +7,18 @@ import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key_receiving.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
-class RecoveryKey extends StatefulWidget {
-  const RecoveryKey({super.key});
+class RecoveryKeyPage extends StatefulWidget {
+  const RecoveryKeyPage({super.key});
 
   @override
-  State<RecoveryKey> createState() => _RecoveryKeyState();
+  State<RecoveryKeyPage> createState() => _RecoveryKeyPageState();
 }
 
-class _RecoveryKeyState extends State<RecoveryKey> {
+class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
   @override
   void initState() {
     super.initState();
@@ -29,7 +28,7 @@ class _RecoveryKeyState extends State<RecoveryKey> {
   @override
   Widget build(final BuildContext context) {
     final RecoveryKeyState keyStatus = context.watch<RecoveryKeyCubit>().state;
-
+    
     final List<Widget> widgets;
     String? subtitle =
         keyStatus.exists ? null : 'recovery_key.key_main_description'.tr();

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -8,19 +9,8 @@ import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/pages/devices/devices.dart';
-import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
-import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
-import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
-import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
-import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:selfprivacy/ui/pages/users/users.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
-
-import 'package:selfprivacy/ui/pages/more/about_us.dart';
-import 'package:selfprivacy/ui/pages/more/app_settings/app_setting.dart';
-import 'package:selfprivacy/ui/pages/more/console.dart';
-import 'package:selfprivacy/ui/pages/more/about_application.dart';
+import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -34,12 +24,14 @@ class MorePage extends StatelessWidget {
         context.watch<ApiServerVolumeCubit>().state.usesBinds;
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(52),
-        child: BrandHeader(
-          title: 'basis.more'.tr(),
-        ),
-      ),
+      appBar: Breakpoints.small.isActive(context)
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(52),
+              child: BrandHeader(
+                title: 'basis.more'.tr(),
+              ),
+            )
+          : null,
       body: ListView(
         children: [
           Padding(
@@ -50,7 +42,7 @@ class MorePage extends StatelessWidget {
                   _MoreMenuItem(
                     title: 'storage.start_migration_button'.tr(),
                     iconData: Icons.drive_file_move_outline,
-                    goTo: ServicesMigrationPage(
+                    goTo: () => ServicesMigrationRoute(
                       diskStatus: context
                           .watch<ApiServerVolumeCubit>()
                           .state
@@ -77,7 +69,7 @@ class MorePage extends StatelessWidget {
                   _MoreMenuItem(
                     title: 'more_page.configuration_wizard'.tr(),
                     iconData: Icons.change_history_outlined,
-                    goTo: const InitializingPage(),
+                    goTo: () => const InitializingRoute(),
                     subtitle: 'not_ready_card.in_menu'.tr(),
                     accent: true,
                   ),
@@ -85,47 +77,43 @@ class MorePage extends StatelessWidget {
                   _MoreMenuItem(
                     title: 'more_page.create_ssh_key'.tr(),
                     iconData: Ionicons.key_outline,
-                    goTo: const UserDetails(
+                    goTo: () => UserDetailsRoute(
                       login: 'root',
                     ),
                   ),
                 if (isReady)
                   _MoreMenuItem(
                     iconData: Icons.password_outlined,
-                    goTo: const RecoveryKey(),
+                    goTo: () => const RecoveryKeyRoute(),
                     title: 'recovery_key.key_main_header'.tr(),
                   ),
                 if (isReady)
                   _MoreMenuItem(
                     iconData: Icons.devices_outlined,
-                    goTo: const DevicesScreen(),
+                    goTo: () => const DevicesRoute(),
                     title: 'devices.main_screen.header'.tr(),
                   ),
                 _MoreMenuItem(
                   title: 'more_page.application_settings'.tr(),
                   iconData: Icons.settings_outlined,
-                  goTo: const AppSettingsPage(),
-                ),
-                _MoreMenuItem(
-                  title: 'more_page.about_project'.tr(),
-                  iconData: BrandIcons.engineer,
-                  goTo: const AboutUsPage(),
+                  goTo: () => const AppSettingsRoute(),
                 ),
                 _MoreMenuItem(
                   title: 'more_page.about_application'.tr(),
                   iconData: BrandIcons.fire,
-                  goTo: const AboutApplicationPage(),
+                  goTo: () => const AboutApplicationRoute(),
+                  longGoTo: const DeveloperSettingsRoute(),
                 ),
                 if (!isReady)
                   _MoreMenuItem(
                     title: 'more_page.onboarding'.tr(),
                     iconData: BrandIcons.start,
-                    goTo: const OnboardingPage(nextPage: RootPage()),
+                    goTo: () => const OnboardingRoute(),
                   ),
                 _MoreMenuItem(
                   title: 'more_page.console'.tr(),
                   iconData: BrandIcons.terminal,
-                  goTo: const Console(),
+                  goTo: () => const ConsoleRoute(),
                 ),
               ],
             ),
@@ -140,14 +128,16 @@ class _MoreMenuItem extends StatelessWidget {
   const _MoreMenuItem({
     required this.iconData,
     required this.title,
+    required this.goTo,
     this.subtitle,
-    this.goTo,
+    this.longGoTo,
     this.accent = false,
   });
 
   final IconData iconData;
   final String title;
-  final Widget? goTo;
+  final PageRouteInfo Function() goTo;
+  final PageRouteInfo? longGoTo;
   final String? subtitle;
   final bool accent;
 
@@ -160,9 +150,9 @@ class _MoreMenuItem extends StatelessWidget {
       tertiary: accent,
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        onTap: goTo != null
-            ? () => Navigator.of(context).push(materialRoute(goTo!))
-            : null,
+        onTap: () => context.pushRoute(goTo()),
+        onLongPress:
+            longGoTo != null ? () => context.pushRoute(longGoTo!) : null,
         leading: Icon(
           iconData,
           size: 24,

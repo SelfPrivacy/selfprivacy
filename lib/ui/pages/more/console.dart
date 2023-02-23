@@ -7,14 +7,14 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 
-class Console extends StatefulWidget {
-  const Console({super.key});
+class ConsolePage extends StatefulWidget {
+  const ConsolePage({super.key});
 
   @override
-  State<Console> createState() => _ConsoleState();
+  State<ConsolePage> createState() => _ConsolePageState();
 }
 
-class _ConsoleState extends State<Console> {
+class _ConsolePageState extends State<ConsolePage> {
   @override
   void initState() {
     getIt.get<ConsoleModel>().addListener(update);

@@ -13,6 +13,7 @@ import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
 import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
+import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -61,12 +62,14 @@ class _ProvidersPageState extends State<ProvidersPage> {
     }
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(52),
-        child: BrandHeader(
-          title: 'basis.providers_title'.tr(),
-        ),
-      ),
+      appBar: Breakpoints.small.isActive(context)
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(52),
+              child: BrandHeader(
+                title: 'basis.providers_title'.tr(),
+              ),
+            )
+          : null,
       body: ListView(
         padding: paddingH15V0,
         children: [

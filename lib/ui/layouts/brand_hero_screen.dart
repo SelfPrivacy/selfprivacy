@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
 import 'package:selfprivacy/ui/helpers/widget_size.dart';
+import 'package:selfprivacy/utils/breakpoints.dart';
 
 class BrandHeroScreen extends StatelessWidget {
   const BrandHeroScreen({
@@ -13,6 +15,7 @@ class BrandHeroScreen extends StatelessWidget {
     this.heroTitle = '',
     this.heroSubtitle,
     this.onBackButtonPressed,
+    this.bodyPadding = const EdgeInsets.all(16.0),
   });
 
   final List<Widget> children;
@@ -23,6 +26,7 @@ class BrandHeroScreen extends StatelessWidget {
   final String heroTitle;
   final String? heroSubtitle;
   final VoidCallback? onBackButtonPressed;
+  final EdgeInsetsGeometry bodyPadding;
 
   @override
   Widget build(final BuildContext context) {
@@ -64,7 +68,7 @@ class BrandHeroScreen extends StatelessWidget {
               ),
             ),
           SliverPadding(
-            padding: const EdgeInsets.all(16.0),
+            padding: bodyPadding,
             sliver: SliverList(
               delegate: SliverChildListDelegate(children),
             ),
@@ -98,50 +102,50 @@ class HeroSliverAppBar extends StatefulWidget {
 class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
   Size _size = Size.zero;
   @override
-  Widget build(final BuildContext context) => SliverAppBar(
-        expandedHeight:
-            widget.hasHeroIcon ? 148.0 + _size.height : 72.0 + _size.height,
-        primary: true,
-        pinned: true,
-        stretch: true,
-        leading: widget.hasBackButton
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: widget.onBackButtonPressed ??
-                    () => Navigator.of(context).pop(),
-              )
-            : null,
-        flexibleSpace: FlexibleSpaceBar(
-          title: LayoutBuilder(
-            builder: (final context, final constraints) => SizedBox(
-              width: constraints.maxWidth - 72.0,
-              child: WidgetSize(
-                onChange: (final Size size) => setState(() => _size = size),
-                child: Text(
-                  widget.heroTitle,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                  overflow: TextOverflow.fade,
-                  textAlign: TextAlign.center,
-                ),
+  Widget build(final BuildContext context) {
+    final isMobile = Breakpoints.small.isActive(context);
+    return SliverAppBar(
+      expandedHeight:
+          widget.hasHeroIcon ? 148.0 + _size.height : 72.0 + _size.height,
+      primary: true,
+      pinned: isMobile,
+      stretch: true,
+      surfaceTintColor: isMobile ? null : Colors.transparent,
+      leading: (widget.hasBackButton && isMobile)
+          ? const AutoLeadingButton()
+          : const SizedBox.shrink(),
+      flexibleSpace: FlexibleSpaceBar(
+        title: LayoutBuilder(
+          builder: (final context, final constraints) => SizedBox(
+            width: constraints.maxWidth - 72.0,
+            child: WidgetSize(
+              onChange: (final Size size) => setState(() => _size = size),
+              child: Text(
+                widget.heroTitle,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.center,
               ),
             ),
           ),
-          expandedTitleScale: 1.2,
-          centerTitle: true,
-          collapseMode: CollapseMode.pin,
-          titlePadding: const EdgeInsets.only(
-            bottom: 12.0,
-            top: 16.0,
-          ),
-          background: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 72.0),
-              if (widget.hasHeroIcon) widget.heroIconWidget,
-            ],
-          ),
         ),
-      );
+        expandedTitleScale: 1.2,
+        centerTitle: true,
+        collapseMode: CollapseMode.pin,
+        titlePadding: const EdgeInsets.only(
+          bottom: 12.0,
+          top: 16.0,
+        ),
+        background: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 72.0),
+            if (widget.hasHeroIcon) widget.heroIconWidget,
+          ],
+        ),
+      ),
+    );
+  }
 }

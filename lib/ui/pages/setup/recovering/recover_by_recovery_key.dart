@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_device_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 
 class RecoverByRecoveryKey extends StatelessWidget {
   const RecoverByRecoveryKey({super.key});

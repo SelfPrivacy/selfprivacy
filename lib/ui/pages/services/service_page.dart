@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
@@ -50,7 +50,11 @@ class _ServicePageState extends State<ServicePage> {
         service.svgIcon,
         width: 48.0,
         height: 48.0,
-        color: Theme.of(context).colorScheme.onBackground,
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).colorScheme.onBackground,
+          BlendMode.srcIn,
+        )
+        // color: Theme.of(context).colorScheme.onBackground,
       ),
       heroTitle: service.displayName,
       children: [

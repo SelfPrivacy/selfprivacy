@@ -270,7 +270,14 @@
         "no_ssh_notice": "Dla tego użytkownika tworzone są tylko konta e-mail i SSH. Jednokrotne logowanie do wszystkich usług będzie dostępne wkrótce."
     },
     "validations": {
-        "length_longer": "Długość ciągu znaków [] musi być mniejsza lub równa {}"
+        "length_longer": "Długość ciągu znaków [] musi być mniejsza lub równa {}",
+        "length_not_equal": "Długość jest [], ależ powinna być {}",
+        "already_exist": "Już jest",
+        "invalid_format": "Nieprwidłowy format",
+        "required": "Potrzebien",
+        "root_name": "Nie może być 'root'",
+        "invalid_format_ssh": "Potrzebien format klucza SSH",
+        "invalid_format_password": "Nie musi mieć puste symbole"
     },
     "not_ready_card": {
         "in_menu": "Serwer jeszcze nie jest skonfigurowany, użyj kreatora połączeń."
@@ -284,7 +291,7 @@
         "select_provider_countries_text_do": "USA, Holandia, Singapur, Wielka Brytania, Niemcy, Kanada, Indie, Australia",
         "select_provider_payment_text_do": "Karty kredytowe, Google Pay, PayPal",
         "select_provider_email_notice": "Hosting poczty e-mail nie będzie dostępny dla nowych klientów. Niemniej jednak zostanie odblokowany, gdy tylko dokonasz pierwszej płatności.",
-        "select_provider_site_button": "Odwiedź stronę",
+        "select_provider_site_button": "Odwiedź storonkę",
         "select_provider_price_title": "Średnia cena",
         "select_provider_price_text_hetzner": "€8 miesięcznie za stosunkowo mały serwer i 50GB miejsca na dysku",
         "select_provider_price_text_do": "$17 miesięcznie za stosunkowo mały serwer i 50GB miejsca na dysku",
@@ -305,9 +312,46 @@
         "locations_not_found_text": "W tej lokalizacji nie było dostępnych serwerów do wynajęcia",
         "back_to_locations": "Wybierzmy inny",
         "choose_location_type_text": "Wybór lokalizacji będzie determinował dostępne konfiguracje, ceny i prędkość połączenia z serwerem.",
-        "choose_server_type_storage": "{} GB pamięci masowej systemu",
+        "choose_server_type_storage": "{} GB pamięci na diskie",
         "choose_server_type_payment_per_month": "{} miesięcznie",
         "no_server_types_found": "Nie znaleziono dostępnych typów serwerów! Proszę upewnić się, że masz dostęp do dostawcy serwera...",
-        "cloudflare_bad_key_error": "Klucz API Cloudflare jest nieprawidłowy"
+        "cloudflare_bad_key_error": "Klucz API Cloudflare jest nieprawidłowy",
+        "use_this_domain": "Kto używa ten domen?",
+        "cloudflare_api_token": "Klucz CloudFlare API",
+        "connect_backblaze_storage": "Dodajcie Blackblaze",
+        "no_connected_domains": "Niema podłączonych domenów",
+        "what": "Co to znaczy?",
+        "backblaze_bad_key_error": "Informacja o Blackbaze nieprawidłowa",
+        "select_dns": "Teraz wybierz provajdera DNS",
+        "manage_domain_dns": "Dla kierowania DNS",
+        "create_master_account": "Dodać konto administratora"
+    },
+    "jobs": {
+        "delete_ssh_key": "Wydalić SSH-klucz dla {}",
+        "create_user": "Dodać korzystalnika",
+        "delete_user": "Wydalić korzystalnika",
+        "reboot_failed": "Nie otrzyma się zrestartować. Przeprowadzicie logi.",
+        "service_turn_off": "Wyłączyć",
+        "service_turn_on": "Włączyć",
+        "create_ssh_key": "Dodać SSH-klucz dla {}",
+        "generic_error": "Nie otrzyma się podłoczyć k serweru!"
+    },
+    "modals": {
+        "purge_all_keys": "Wydalić wszystkie kluczy autentyfikacji?",
+        "are_you_sure": "Wpełnieny?",
+        "dns_removal_error": "Nie otrzyma się wydalić zapis DNS.",
+        "yes": "Tak",
+        "no": "Nie",
+        "reboot": "Restart"
+    },
+    "recovery_key": {
+        "key_main_header": "Klucz odzyskania",
+        "key_synchronizing": "Synchronizacja…",
+        "key_receiving_done": "Zrobiono!",
+        "key_replace_button": "Wytworzyć nowy klucz",
+        "generation_error": "Nie otrzyma się zrobić klucz odzyskania. {}"
+    },
+    "timer": {
+        "sec": "{} s"
     }
 }

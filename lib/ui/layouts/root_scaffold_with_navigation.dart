@@ -36,18 +36,19 @@ class RootScaffoldWithNavigation extends StatelessWidget {
       body: Row(
         children: [
           if (Breakpoints.medium.isActive(context))
-            MainScreenNavigationRail(
+            _MainScreenNavigationRail(
               destinations: destinations,
               showFab: showFab,
             ),
           if (Breakpoints.large.isActive(context))
-            MainScreenNavigationDrawer(
+            _MainScreenNavigationDrawer(
               destinations: destinations,
+              showFab: showFab,
             ),
           Expanded(child: child),
         ],
       ),
-      bottomNavigationBar: BottomBar(
+      bottomNavigationBar: _BottomBar(
         destinations: destinations,
         hidden: !(Breakpoints.small.isActive(context) && showBottomBar),
         key: const Key('bottomBar'),
@@ -104,11 +105,10 @@ class _RootAppBar extends StatelessWidget {
       );
 }
 
-class MainScreenNavigationRail extends StatelessWidget {
-  const MainScreenNavigationRail({
+class _MainScreenNavigationRail extends StatelessWidget {
+  const _MainScreenNavigationRail({
     required this.destinations,
     this.showFab = true,
-    super.key,
   });
 
   final List<RouteDestination> destinations;
@@ -173,8 +173,8 @@ class MainScreenNavigationRail extends StatelessWidget {
   }
 }
 
-class BottomBar extends StatelessWidget {
-  const BottomBar({
+class _BottomBar extends StatelessWidget {
+  const _BottomBar({
     required this.destinations,
     required this.hidden,
     super.key,
@@ -219,11 +219,10 @@ class BottomBar extends StatelessWidget {
   }
 }
 
-class MainScreenNavigationDrawer extends StatelessWidget {
-  const MainScreenNavigationDrawer({
+class _MainScreenNavigationDrawer extends StatelessWidget {
+  const _MainScreenNavigationDrawer({
     required this.destinations,
     this.showFab = true,
-    super.key,
   });
 
   final List<RouteDestination> destinations;

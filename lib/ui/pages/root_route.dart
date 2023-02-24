@@ -38,11 +38,14 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
           (final destination) =>
               context.router.isRouteActive(destination.route.routeName),
         );
+        final isOtherRouterActive =
+            context.router.root.current.name != RootRoute.name;
         final routeName = getRouteTitle(context.router.current.name).tr();
         return RootScaffoldWithNavigation(
           title: routeName,
           destinations: destinations,
-          showBottomBar: !(currentDestinationIndex == -1),
+          showBottomBar:
+              !(currentDestinationIndex == -1 && !isOtherRouterActive),
           showFab: isReady,
           child: child,
         );

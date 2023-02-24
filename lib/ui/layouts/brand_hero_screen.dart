@@ -9,7 +9,7 @@ class BrandHeroScreen extends StatelessWidget {
     required this.children,
     super.key,
     this.hasBackButton = true,
-    this.hasFlashButton = true,
+    this.hasFlashButton = false,
     this.heroIcon,
     this.heroIconWidget,
     this.heroTitle = '',
@@ -20,6 +20,7 @@ class BrandHeroScreen extends StatelessWidget {
 
   final List<Widget> children;
   final bool hasBackButton;
+  @Deprecated('Flash button is now provided by root scaffold')
   final bool hasFlashButton;
   final IconData? heroIcon;
   final Widget? heroIconWidget;

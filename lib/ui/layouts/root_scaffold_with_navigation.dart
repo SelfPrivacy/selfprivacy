@@ -52,6 +52,9 @@ class RootScaffoldWithNavigation extends StatelessWidget {
         hidden: !(Breakpoints.small.isActive(context) && showBottomBar),
         key: const Key('bottomBar'),
       ),
+      floatingActionButton: showFab && Breakpoints.small.isActive(context)
+          ? const BrandFab()
+          : null,
     );
   }
 }

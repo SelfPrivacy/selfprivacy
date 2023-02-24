@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
@@ -10,11 +11,8 @@ import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
-import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
-import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
-import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -84,8 +82,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
             subtitle: diskStatus.isDiskOkay
                 ? 'storage.status_ok'.tr()
                 : 'storage.status_error'.tr(),
-            onTap: () => Navigator.of(context)
-                .push(materialRoute(const ServerDetailsScreen())),
+            onTap: () => context.pushRoute(const ServerDetailsRoute()),
           ),
           const SizedBox(height: 16),
           _Card(
@@ -95,11 +92,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
             subtitle: appConfig.isDomainSelected
                 ? appConfig.serverDomain!.domainName
                 : '',
-            onTap: () => Navigator.of(context).push(
-              materialRoute(
-                const DnsDetailsPage(),
-              ),
-            ),
+            onTap: () => context.pushRoute(const DnsDetailsRoute()),
           ),
           const SizedBox(height: 16),
           // TODO: When backups are fixed, show this card
@@ -111,8 +104,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
               icon: BrandIcons.save,
               title: 'backup.card_title'.tr(),
               subtitle: isBackupInitialized ? 'backup.card_subtitle'.tr() : '',
-              onTap: () => Navigator.of(context)
-                  .push(materialRoute(const BackupDetails())),
+              onTap: () => context.pushRoute(const BackupDetailsRoute()),
             ),
         ],
       ),

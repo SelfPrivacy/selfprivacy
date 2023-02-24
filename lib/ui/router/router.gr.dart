@@ -115,6 +115,12 @@ class _$RootRouter extends RootStackRouter {
         ),
       );
     },
+    NewUserRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const NewUserPage(),
+      );
+    },
     RecoveryKeyRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
@@ -137,6 +143,55 @@ class _$RootRouter extends RootStackRouter {
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: const DeveloperSettingsPage(),
+      );
+    },
+    ServiceRoute.name: (routeData) {
+      final args = routeData.argsAs<ServiceRouteArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: ServicePage(
+          serviceId: args.serviceId,
+          key: args.key,
+        ),
+      );
+    },
+    ServerDetailsRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const ServerDetailsScreen(),
+      );
+    },
+    DnsDetailsRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const DnsDetailsPage(),
+      );
+    },
+    BackupDetailsRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const BackupDetailsPage(),
+      );
+    },
+    ServerStorageRoute.name: (routeData) {
+      final args = routeData.argsAs<ServerStorageRouteArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: ServerStoragePage(
+          diskStatus: args.diskStatus,
+          key: args.key,
+        ),
+      );
+    },
+    ExtendingVolumeRoute.name: (routeData) {
+      final args = routeData.argsAs<ExtendingVolumeRouteArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: ExtendingVolumePage(
+          diskVolumeToResize: args.diskVolumeToResize,
+          diskStatus: args.diskStatus,
+          key: args.key,
+        ),
       );
     },
   };
@@ -194,6 +249,11 @@ class _$RootRouter extends RootStackRouter {
               parent: RootRoute.name,
             ),
             RouteConfig(
+              NewUserRoute.name,
+              path: 'new-user-page',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
               RecoveryKeyRoute.name,
               path: 'recovery-key-page',
               parent: RootRoute.name,
@@ -211,6 +271,36 @@ class _$RootRouter extends RootStackRouter {
             RouteConfig(
               DeveloperSettingsRoute.name,
               path: 'developer-settings-page',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              ServiceRoute.name,
+              path: 'service-page',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              ServerDetailsRoute.name,
+              path: 'server-details-screen',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              DnsDetailsRoute.name,
+              path: 'dns-details-page',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              BackupDetailsRoute.name,
+              path: 'backup-details-page',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              ServerStorageRoute.name,
+              path: 'server-storage-page',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              ExtendingVolumeRoute.name,
+              path: 'extending-volume-page',
               parent: RootRoute.name,
             ),
           ],
@@ -426,6 +516,18 @@ class UserDetailsRouteArgs {
 }
 
 /// generated route for
+/// [NewUserPage]
+class NewUserRoute extends PageRouteInfo<void> {
+  const NewUserRoute()
+      : super(
+          NewUserRoute.name,
+          path: 'new-user-page',
+        );
+
+  static const String name = 'NewUserRoute';
+}
+
+/// generated route for
 /// [RecoveryKeyPage]
 class RecoveryKeyRoute extends PageRouteInfo<void> {
   const RecoveryKeyRoute()
@@ -471,4 +573,147 @@ class DeveloperSettingsRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'DeveloperSettingsRoute';
+}
+
+/// generated route for
+/// [ServicePage]
+class ServiceRoute extends PageRouteInfo<ServiceRouteArgs> {
+  ServiceRoute({
+    required String serviceId,
+    Key? key,
+  }) : super(
+          ServiceRoute.name,
+          path: 'service-page',
+          args: ServiceRouteArgs(
+            serviceId: serviceId,
+            key: key,
+          ),
+        );
+
+  static const String name = 'ServiceRoute';
+}
+
+class ServiceRouteArgs {
+  const ServiceRouteArgs({
+    required this.serviceId,
+    this.key,
+  });
+
+  final String serviceId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ServiceRouteArgs{serviceId: $serviceId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ServerDetailsScreen]
+class ServerDetailsRoute extends PageRouteInfo<void> {
+  const ServerDetailsRoute()
+      : super(
+          ServerDetailsRoute.name,
+          path: 'server-details-screen',
+        );
+
+  static const String name = 'ServerDetailsRoute';
+}
+
+/// generated route for
+/// [DnsDetailsPage]
+class DnsDetailsRoute extends PageRouteInfo<void> {
+  const DnsDetailsRoute()
+      : super(
+          DnsDetailsRoute.name,
+          path: 'dns-details-page',
+        );
+
+  static const String name = 'DnsDetailsRoute';
+}
+
+/// generated route for
+/// [BackupDetailsPage]
+class BackupDetailsRoute extends PageRouteInfo<void> {
+  const BackupDetailsRoute()
+      : super(
+          BackupDetailsRoute.name,
+          path: 'backup-details-page',
+        );
+
+  static const String name = 'BackupDetailsRoute';
+}
+
+/// generated route for
+/// [ServerStoragePage]
+class ServerStorageRoute extends PageRouteInfo<ServerStorageRouteArgs> {
+  ServerStorageRoute({
+    required DiskStatus diskStatus,
+    Key? key,
+  }) : super(
+          ServerStorageRoute.name,
+          path: 'server-storage-page',
+          args: ServerStorageRouteArgs(
+            diskStatus: diskStatus,
+            key: key,
+          ),
+        );
+
+  static const String name = 'ServerStorageRoute';
+}
+
+class ServerStorageRouteArgs {
+  const ServerStorageRouteArgs({
+    required this.diskStatus,
+    this.key,
+  });
+
+  final DiskStatus diskStatus;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ServerStorageRouteArgs{diskStatus: $diskStatus, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ExtendingVolumePage]
+class ExtendingVolumeRoute extends PageRouteInfo<ExtendingVolumeRouteArgs> {
+  ExtendingVolumeRoute({
+    required DiskVolume diskVolumeToResize,
+    required DiskStatus diskStatus,
+    Key? key,
+  }) : super(
+          ExtendingVolumeRoute.name,
+          path: 'extending-volume-page',
+          args: ExtendingVolumeRouteArgs(
+            diskVolumeToResize: diskVolumeToResize,
+            diskStatus: diskStatus,
+            key: key,
+          ),
+        );
+
+  static const String name = 'ExtendingVolumeRoute';
+}
+
+class ExtendingVolumeRouteArgs {
+  const ExtendingVolumeRouteArgs({
+    required this.diskVolumeToResize,
+    required this.diskStatus,
+    this.key,
+  });
+
+  final DiskVolume diskVolumeToResize;
+
+  final DiskStatus diskStatus;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ExtendingVolumeRouteArgs{diskVolumeToResize: $diskVolumeToResize, diskStatus: $diskStatus, key: $key}';
+  }
 }

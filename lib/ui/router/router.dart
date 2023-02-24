@@ -3,7 +3,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
+import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/app_settings.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/developer_settings.dart';
@@ -13,7 +15,11 @@ import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
+import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
+import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
+import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
+import 'package:selfprivacy/ui/pages/services/service_page.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
@@ -75,10 +81,17 @@ Widget fadeThroughTransition(
         ),
         AutoRoute(page: AppSettingsPage),
         AutoRoute(page: UserDetailsPage),
+        AutoRoute(page: NewUserPage),
         AutoRoute(page: RecoveryKeyPage),
         AutoRoute(page: DevicesScreen),
         AutoRoute(page: AboutApplicationPage),
         AutoRoute(page: DeveloperSettingsPage),
+        AutoRoute(page: ServicePage),
+        AutoRoute(page: ServerDetailsScreen),
+        AutoRoute(page: DnsDetailsPage),
+        AutoRoute(page: BackupDetailsPage),
+        AutoRoute(page: ServerStoragePage),
+        AutoRoute(page: ExtendingVolumePage),
       ],
     ),
     AutoRoute(page: ServicesMigrationPage),
@@ -97,6 +110,7 @@ String getRouteTitle(final String routeName) {
     case 'ProvidersRoute':
       return 'basis.providers_title';
     case 'ServicesRoute':
+    case 'ServiceRoute':
       return 'basis.services';
     case 'UsersRoute':
       return 'basis.users';
@@ -105,7 +119,9 @@ String getRouteTitle(final String routeName) {
     case 'AppSettingsRoute':
       return 'application_settings.title';
     case 'UserDetailsRoute':
-      return '[User Details]';
+      return 'users.details_title';
+    case 'NewUserRoute':
+      return 'users.new_user';
     case 'RecoveryKeyRoute':
       return 'recovery_key.key_main_header';
     case 'DevicesRoute':
@@ -113,9 +129,19 @@ String getRouteTitle(final String routeName) {
     case 'AboutApplicationRoute':
       return 'about_us_page.title';
     case 'ConsoleRoute':
-      return '[Console]';
+      return 'console_page.title';
     case 'DeveloperSettingsRoute':
       return 'developer_settings.title';
+    case 'DnsDetailsRoute':
+      return 'domain.screen_title';
+    case 'ServerDetailsRoute':
+      return 'server.card_title';
+    case 'BackupDetailsRoute':
+      return 'backup.card_title';
+    case 'ServerStorageRoute':
+      return 'storage.card_title';
+    case 'ExtendingVolumeRoute':
+      return 'storage.extending_volume_title';
     default:
       return routeName;
   }

@@ -53,9 +53,10 @@ class RootScaffoldWithNavigation extends StatelessWidget {
         hidden: !(Breakpoints.small.isActive(context) && showBottomBar),
         key: const Key('bottomBar'),
       ),
-      floatingActionButton: showFab && Breakpoints.small.isActive(context)
-          ? const BrandFab()
-          : null,
+      floatingActionButton:
+          showFab && Breakpoints.small.isActive(context) && showBottomBar
+              ? const BrandFab()
+              : null,
     );
   }
 }
@@ -189,8 +190,6 @@ class _BottomBar extends StatelessWidget {
       (final destination) => context.router.stack
           .any((final route) => route.name == destination.route.routeName),
     );
-
-    print(prevActiveIndex);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),

@@ -255,6 +255,7 @@
         "subtitle": "Private VPN server"
     },
     "users": {
+        "details_title": "User details",
         "add_new_user": "Add a first user",
         "new_user": "New user",
         "delete_user": "Delete user",

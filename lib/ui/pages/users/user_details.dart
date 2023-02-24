@@ -87,6 +87,7 @@ class _DeleteUserTile extends StatelessWidget {
         onTap: () => {
           showDialog(
             context: context,
+            // useRootNavigator: false,
             builder: (final BuildContext context) => AlertDialog(
               title: Text('basis.confirmation'.tr()),
               content: SingleChildScrollView(
@@ -102,7 +103,7 @@ class _DeleteUserTile extends StatelessWidget {
                 TextButton(
                   child: Text('basis.cancel'.tr()),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.router.pop();
                   },
                 ),
                 TextButton(
@@ -114,9 +115,8 @@ class _DeleteUserTile extends StatelessWidget {
                   ),
                   onPressed: () {
                     context.read<JobsCubit>().addJob(DeleteUserJob(user: user));
-                    Navigator.of(context)
-                      ..pop()
-                      ..pop();
+                    context.router.childControllers.first.pop();
+                    context.router.pop();
                   },
                 ),
               ],

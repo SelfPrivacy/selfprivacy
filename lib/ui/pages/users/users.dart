@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -22,16 +23,14 @@ import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
-
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 part 'empty.dart';
 part 'new_user.dart';
 part 'user.dart';
 part 'user_details.dart';
-part 'add_user_fab.dart';
 part 'reset_password.dart';
 
 class UsersPage extends StatelessWidget {
@@ -93,13 +92,36 @@ class UsersPage extends StatelessWidget {
             onRefresh: () async {
               context.read<UsersCubit>().refresh();
             },
-            child: ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (final BuildContext context, final int index) =>
-                  _User(
-                user: users[index],
-                isRootUser: users[index].type == UserType.primary,
-              ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FilledButton.tonal(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.person_add_outlined),
+                        const SizedBox(width: 8),
+                        Text('users.new_user'.tr()),
+                      ],
+                    ),
+                    onPressed: () {
+                      context.pushRoute(const NewUserRoute());
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: users.length,
+                    itemBuilder:
+                        (final BuildContext context, final int index) => _User(
+                      user: users[index],
+                      isRootUser: users[index].type == UserType.primary,
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },

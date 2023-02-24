@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
@@ -8,8 +9,6 @@ import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
-import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 class ExtendingVolumePage extends StatefulWidget {
   const ExtendingVolumePage({
@@ -155,10 +154,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                               DiskSize.fromGibibyte(_currentSliderGbValue),
                               context.read<ApiServerVolumeCubit>().reload,
                             );
-                        Navigator.of(context).pushAndRemoveUntil(
-                          materialRoute(const RootPage()),
-                          (final predicate) => false,
-                        );
+                        context.router.popUntilRoot();
                       },
                 child: Text('storage.extend_volume_button.title'.tr()),
               ),

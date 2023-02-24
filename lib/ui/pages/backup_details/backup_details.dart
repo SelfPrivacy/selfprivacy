@@ -13,14 +13,14 @@ import 'package:selfprivacy/ui/helpers/modals.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-class BackupDetails extends StatefulWidget {
-  const BackupDetails({super.key});
+class BackupDetailsPage extends StatefulWidget {
+  const BackupDetailsPage({super.key});
 
   @override
-  State<BackupDetails> createState() => _BackupDetailsState();
+  State<BackupDetailsPage> createState() => _BackupDetailsPageState();
 }
 
-class _BackupDetailsState extends State<BackupDetails>
+class _BackupDetailsPageState extends State<BackupDetailsPage>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(final BuildContext context) {

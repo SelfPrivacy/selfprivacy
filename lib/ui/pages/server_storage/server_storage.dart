@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,9 +8,8 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
-import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 
 class ServerStoragePage extends StatefulWidget {
   const ServerStoragePage({
@@ -105,12 +105,10 @@ class ServerStorageSection extends StatelessWidget {
             const SizedBox(height: 16),
             BrandOutlinedButton(
               title: 'storage.extend_volume_button.title'.tr(),
-              onPressed: () => Navigator.of(context).push(
-                materialRoute(
-                  ExtendingVolumePage(
-                    diskVolumeToResize: volume,
-                    diskStatus: diskStatus,
-                  ),
+              onPressed: () => context.pushRoute(
+                ExtendingVolumeRoute(
+                  diskVolumeToResize: volume,
+                  diskStatus: diskStatus,
                 ),
               ),
             ),

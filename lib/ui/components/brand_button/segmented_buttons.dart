@@ -38,7 +38,7 @@ class SegmentedButtons extends StatelessWidget {
                   opacity: isSelected[index] ? 1 : 0,
                   child: AnimatedScale(
                     duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeInOut,
+                    curve: Curves.easeInOutCubicEmphasized,
                     alignment: Alignment.centerLeft,
                     scale: isSelected[index] ? 1 : 0,
                     child: Icon(
@@ -53,7 +53,7 @@ class SegmentedButtons extends StatelessWidget {
                       ? const EdgeInsets.only(left: 24)
                       : EdgeInsets.zero,
                   duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOut,
+                  curve: Curves.easeInOutCubicEmphasized,
                   child: Text(
                     title,
                     style: Theme.of(context).textTheme.labelLarge,

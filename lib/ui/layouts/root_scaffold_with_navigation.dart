@@ -190,9 +190,9 @@ class BottomBar extends StatelessWidget {
     print(prevActiveIndex);
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 500),
       height: hidden ? 0 : 80,
-      curve: Curves.easeInOut,
+      curve: Curves.easeInOutCubicEmphasized,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,

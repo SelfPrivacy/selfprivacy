@@ -76,7 +76,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 pageController.animateToPage(
                   1,
                   duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
+                  curve: Curves.easeInOutCubicEmphasized,
                 );
               },
               text: 'basis.next'.tr(),

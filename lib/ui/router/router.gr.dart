@@ -64,7 +64,7 @@ class _$RootRouter extends RootStackRouter {
         routeData: routeData,
         child: const ProvidersPage(),
         transitionsBuilder: fadeThroughTransition,
-        durationInMilliseconds: 200,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -74,7 +74,7 @@ class _$RootRouter extends RootStackRouter {
         routeData: routeData,
         child: const ServicesPage(),
         transitionsBuilder: fadeThroughTransition,
-        durationInMilliseconds: 200,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -84,7 +84,7 @@ class _$RootRouter extends RootStackRouter {
         routeData: routeData,
         child: const UsersPage(),
         transitionsBuilder: fadeThroughTransition,
-        durationInMilliseconds: 200,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -94,7 +94,7 @@ class _$RootRouter extends RootStackRouter {
         routeData: routeData,
         child: const MorePage(),
         transitionsBuilder: fadeThroughTransition,
-        durationInMilliseconds: 200,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );

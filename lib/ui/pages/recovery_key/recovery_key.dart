@@ -28,7 +28,7 @@ class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
   @override
   Widget build(final BuildContext context) {
     final RecoveryKeyState keyStatus = context.watch<RecoveryKeyCubit>().state;
-    
+
     final List<Widget> widgets;
     String? subtitle =
         keyStatus.exists ? null : 'recovery_key.key_main_description'.tr();

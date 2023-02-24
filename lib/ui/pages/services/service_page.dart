@@ -53,8 +53,7 @@ class _ServicePageState extends State<ServicePage> {
         colorFilter: ColorFilter.mode(
           Theme.of(context).colorScheme.onBackground,
           BlendMode.srcIn,
-        )
-        // color: Theme.of(context).colorScheme.onBackground,
+        ),
       ),
       heroTitle: service.displayName,
       children: [

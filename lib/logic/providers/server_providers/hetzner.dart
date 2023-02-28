@@ -289,6 +289,7 @@ class HetznerServerProvider extends ServerProvider {
     return GenericResult(success: true, data: metadata);
   }
 
+  @override
   Future<GenericResult<ServerMetrics?>> getMetrics(
     final int serverId,
     final DateTime start,

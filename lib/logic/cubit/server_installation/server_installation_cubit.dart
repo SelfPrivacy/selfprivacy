@@ -134,7 +134,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<List<ServerType>> fetchAvailableTypesByLocation(
     final ServerProviderLocation location,
   ) async {
-    if (ApiController.currentServerProviderApiFactory == null) {
+    if (ProvidersController.currentServerProvider == null) {
       return [];
     }
 
@@ -754,6 +754,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void clearAppConfig() {
     closeTimer();
     ApiController.clearProviderApiFactories();
+    ProvidersController.clearProviders();
     repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }

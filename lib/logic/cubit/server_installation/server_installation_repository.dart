@@ -332,15 +332,24 @@ class ServerInstallationRepository {
     return api.isHttpServerWorking();
   }
 
-  Future<ServerHostingDetails> restart() async =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider()
-          .restart();
+  Future<ServerHostingDetails> restart() async {
+    final server = getIt<ApiConfigModel>().serverDetails!;
 
-  Future<ServerHostingDetails> powerOn() async =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider()
-          .powerOn();
+    final result = await ProvidersController.currentServerProvider!.restart(
+      server.id,
+    );
+
+    if (result.success && result.data != null) {
+      server.copyWith(startTime: result.data);
+    }
+
+    return server;
+  }
+
+  Future<ServerHostingDetails> powerOn() async {
+    final server = getIt<ApiConfigModel>().serverDetails!;
+    return startServer(server);
+  }
 
   Future<ServerRecoveryCapabilities> getRecoveryCapabilities(
     final ServerDomain serverDomain,

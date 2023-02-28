@@ -1,9 +1,8 @@
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
-import 'package:selfprivacy/logic/models/metrics.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 
 class MetricsLoadException implements Exception {
   MetricsLoadException(this.message);
@@ -12,8 +11,7 @@ class MetricsLoadException implements Exception {
 
 class MetricsRepository {
   Future<MetricsLoaded> getMetrics(final Period period) async {
-    final providerApiFactory = ApiController.currentServerProviderApiFactory;
-    if (providerApiFactory == null) {
+    if (ProvidersController.currentServerProvider == null) {
       throw MetricsLoadException('Server Provider data is null');
     }
 
@@ -33,20 +31,19 @@ class MetricsRepository {
     }
 
     final serverId = getIt<ApiConfigModel>().serverDetails!.id;
-    final ServerMetrics? metrics =
-        await providerApiFactory.getServerProvider().getMetrics(
-              serverId,
-              start,
-              end,
-            );
+    final result = await ProvidersController.currentServerProvider!.getMetrics(
+      serverId,
+      start,
+      end,
+    );
 
-    if (metrics == null) {
+    if (result.data == null || !result.success) {
       throw MetricsLoadException('Metrics data is null');
     }
 
     return MetricsLoaded(
       period: period,
-      metrics: metrics,
+      metrics: result.data!,
     );
   }
 }

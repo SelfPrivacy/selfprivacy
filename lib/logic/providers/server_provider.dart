@@ -1,6 +1,7 @@
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
+import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 
@@ -18,6 +19,11 @@ abstract class ServerProvider {
   );
   Future<GenericResult<DateTime?>> powerOn(final int serverId);
   Future<GenericResult<DateTime?>> restart(final int serverId);
+  Future<GenericResult<ServerMetrics?>> getMetrics(
+    final int serverId,
+    final DateTime start,
+    final DateTime end,
+  );
 
   GenericResult<bool> get success => GenericResult(success: true, data: true);
 }

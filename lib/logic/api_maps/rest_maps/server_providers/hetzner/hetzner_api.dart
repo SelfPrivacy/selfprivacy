@@ -1,23 +1,16 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
-import 'package:selfprivacy/logic/models/server_basic_info.dart';
-import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
-import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
@@ -353,10 +346,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final String serverType,
   }) async {
     final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
-
     Response? serverCreateResponse;
     DioError? hetznerError;
     bool success = false;
+
     final Dio client = await getClient();
     try {
       final Map<String, Object> data = {
@@ -398,94 +391,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     return GenericResult(
       data: serverCreateResponse?.data,
-      success: success && hetznerError == null,
-      code: serverCreateResponse?.statusCode ??
-          hetznerError?.response?.statusCode,
-      message: apiResultMessage,
-    );
-  }
-
-  Future<GenericResult<ServerHostingDetails?>> skldfjalkdsjflkasd({
-    required final String dnsApiToken,
-    required final User rootUser,
-    required final String domainName,
-    required final ServerVolume volume,
-    required final String serverType,
-    required final DnsProviderType dnsProvider,
-  }) async {
-    final String dbPassword = StringGenerators.dbPassword();
-    final int volumeId = volume.id;
-
-    final String apiToken = StringGenerators.apiToken();
-    final String hostname = getHostnameFromDomain(domainName);
-    const String infectBranch = 'providers/hetzner';
-    final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
-    final String base64Password =
-        base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
-    final String dnsProviderType = dnsProviderToInfectName(dnsProvider);
-
-    Response? serverCreateResponse;
-    ServerHostingDetails? serverDetails;
-    DioError? hetznerError;
-    bool success = false;
-    final Dio client = await getClient();
-    try {
-      final Map<String, Object> data = {
-        'name': hostname,
-        'server_type': serverType,
-        'start_after_create': false,
-        'image': 'ubuntu-20.04',
-        'volumes': [volumeId],
-        'networks': [],
-        'user_data': '#cloud-config\n'
-            'runcmd:\n'
-            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | '
-            "STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType "
-            "NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' "
-            'CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | '
-            'tee /tmp/infect.log',
-        'labels': {},
-        'automount': true,
-        'location': region!,
-      };
-      print('Decoded data: $data');
-
-      serverCreateResponse = await client.post(
-        '/servers',
-        data: data,
-      );
-      print(serverCreateResponse.data);
-      serverDetails = ServerHostingDetails(
-        id: serverCreateResponse.data['server']['id'],
-        ip4: serverCreateResponse.data['server']['public_net']['ipv4']['ip'],
-        createTime: DateTime.now(),
-        volume: volume,
-        apiToken: apiToken,
-        provider: ServerProviderType.hetzner,
-      );
-      success = true;
-    } on DioError catch (e) {
-      print(e);
-      hetznerError = e;
-    } catch (e) {
-      print(e);
-    } finally {
-      client.close();
-    }
-
-    if (!success) {
-      await Future.delayed(const Duration(seconds: 10));
-      await deleteVolume(volume);
-    }
-
-    String? apiResultMessage = serverCreateResponse?.statusMessage;
-    if (hetznerError != null &&
-        hetznerError.response!.data['error']['code'] == 'uniqueness_error') {
-      apiResultMessage = 'uniqueness_error';
-    }
-
-    return GenericResult(
-      data: serverDetails,
       success: success && hetznerError == null,
       code: serverCreateResponse?.statusCode ??
           hetznerError?.response?.statusCode,

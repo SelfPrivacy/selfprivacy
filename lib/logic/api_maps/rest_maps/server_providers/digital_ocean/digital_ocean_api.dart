@@ -59,7 +59,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   @override
   String get displayProviderName => 'Digital Ocean';
 
-  @override
   Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
@@ -724,46 +723,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return servers;
   }
 
-  String? getEmojiFlag(final String query) {
-    String? emoji;
-
-    switch (query.toLowerCase().substring(0, 3)) {
-      case 'fra':
-        emoji = '🇩🇪';
-        break;
-
-      case 'ams':
-        emoji = '🇳🇱';
-        break;
-
-      case 'sgp':
-        emoji = '🇸🇬';
-        break;
-
-      case 'lon':
-        emoji = '🇬🇧';
-        break;
-
-      case 'tor':
-        emoji = '🇨🇦';
-        break;
-
-      case 'blr':
-        emoji = '🇮🇳';
-        break;
-
-      case 'nyc':
-      case 'sfo':
-        emoji = '🇺🇸';
-        break;
-    }
-
-    return emoji;
-  }
-
-  @override
-  Future<GenericResult<List<ServerProviderLocation>>>
-      getAvailableLocations() async {
+  Future<GenericResult<List>> getAvailableLocations() async {
     List<ServerProviderLocation> locations = [];
 
     final Dio client = await getClient();
@@ -772,16 +732,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/regions',
       );
 
-      locations = response.data!['regions']
-          .map<ServerProviderLocation>(
-            (final location) => ServerProviderLocation(
-              title: location['slug'],
-              description: location['name'],
-              flag: getEmojiFlag(location['slug']),
-              identifier: location['slug'],
-            ),
-          )
-          .toList();
+      locations = response.data!['regions'];
     } catch (e) {
       print(e);
       return GenericResult(
@@ -796,39 +747,15 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return GenericResult(data: locations, success: true);
   }
 
-  @override
-  Future<GenericResult<List<ServerType>>> getAvailableServerTypes({
-    required final ServerProviderLocation location,
-  }) async {
-    final List<ServerType> types = [];
+  Future<GenericResult<List>> getAvailableServerTypes() async {
+    List types = [];
 
     final Dio client = await getClient();
     try {
       final Response response = await client.get(
         '/sizes',
       );
-      final rawSizes = response.data!['sizes'];
-      for (final rawSize in rawSizes) {
-        for (final rawRegion in rawSize['regions']) {
-          final ramMb = rawSize['memory'].toDouble();
-          if (rawRegion.toString() == location.identifier && ramMb > 1024) {
-            types.add(
-              ServerType(
-                title: rawSize['description'],
-                identifier: rawSize['slug'],
-                ram: ramMb / 1024,
-                cores: rawSize['vcpus'],
-                disk: DiskSize(byte: rawSize['disk'] * 1024 * 1024 * 1024),
-                price: Price(
-                  value: rawSize['price_monthly'],
-                  currency: 'USD',
-                ),
-                location: location,
-              ),
-            );
-          }
-        }
-      }
+      types = response.data!['sizes'];
     } catch (e) {
       print(e);
       return GenericResult(

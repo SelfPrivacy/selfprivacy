@@ -1,5 +1,4 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
 class ProviderApiTokenValidation {
@@ -12,20 +11,6 @@ class ProviderApiTokenValidation {
 }
 
 abstract class ServerProviderApi extends ApiMap {
-  String dnsProviderToInfectName(final DnsProviderType dnsProvider) {
-    String dnsProviderType;
-    switch (dnsProvider) {
-      case DnsProviderType.digitalOcean:
-        dnsProviderType = 'DIGITALOCEAN';
-        break;
-      case DnsProviderType.cloudflare:
-      default:
-        dnsProviderType = 'CLOUDFLARE';
-        break;
-    }
-    return dnsProviderType;
-  }
-
   /// Provider name key which lets infect understand what kind of installation
   /// it requires, for example 'digitaloceal' for Digital Ocean
   String get infectProviderName;

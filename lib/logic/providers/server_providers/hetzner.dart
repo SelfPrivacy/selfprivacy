@@ -173,16 +173,6 @@ class HetznerServerProvider extends ServerProvider {
     return GenericResult(success: true, data: types);
   }
 
-  Future<GenericResult<void>> createReverseDns({
-    required final ServerHostingDetails serverDetails,
-    required final ServerDomain domain,
-  }) async =>
-      _adapter.api().createReverseDns(
-            serverId: serverDetails.id,
-            ip4: serverDetails.ip4,
-            dnsPtr: domain.domainName,
-          );
-
   Future<GenericResult<List<ServerBasicInfo>>> getServers() async {
     final List<ServerBasicInfo> servers = [];
     final result = await _adapter.api().getServers();

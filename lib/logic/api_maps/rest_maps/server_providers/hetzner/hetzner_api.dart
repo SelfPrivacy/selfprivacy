@@ -455,10 +455,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return GenericResult(
-      success: true,
-      data: null,
-    );
+    return GenericResult(success: true, data: null);
   }
 
   Future<GenericResult<void>> powerOn(final int serverId) async {
@@ -476,10 +473,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return GenericResult(
-      success: true,
-      data: null,
-    );
+    return GenericResult(success: true, data: null);
   }
 
   Future<GenericResult<Map<String, dynamic>>> getMetrics(

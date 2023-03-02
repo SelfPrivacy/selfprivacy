@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
@@ -11,13 +10,9 @@ import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
-import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
-import 'package:selfprivacy/logic/models/server_type.dart';
-import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
@@ -107,13 +102,11 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
   /// Hardcoded on their documentation and there is no pricing API at all
   /// Probably we should scrap the doc page manually
-  @override
   Future<Price?> getPricePerGb() async => Price(
         value: 0.10,
         currency: 'USD',
       );
 
-  @override
   Future<GenericResult<ServerVolume?>> createVolume() async {
     ServerVolume? volume;
 
@@ -163,7 +156,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  @override
   Future<List<ServerVolume>> getVolumes({final String? status}) async {
     final List<ServerVolume> volumes = [];
 
@@ -216,7 +208,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return requestedVolume;
   }
 
-  @override
   Future<void> deleteVolume(final ServerVolume volume) async {
     final Dio client = await getClient();
     try {
@@ -228,7 +219,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     }
   }
 
-  @override
   Future<GenericResult<bool>> attachVolume(
     final ServerVolume volume,
     final int serverId,
@@ -268,7 +258,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  @override
   Future<bool> detachVolume(final ServerVolume volume) async {
     bool success = false;
 
@@ -295,7 +284,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return success;
   }
 
-  @override
   Future<bool> resizeVolume(
     final ServerVolume volume,
     final DiskSize size,
@@ -325,7 +313,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return success;
   }
 
-  @override
   Future<GenericResult<ServerHostingDetails?>> createServer({
     required final String dnsApiToken,
     required final User rootUser,
@@ -472,132 +459,65 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
       close(client);
     }
 
-    return GenericResult(
-      success: true,
-      data: true,
-    );
+    return GenericResult(success: true, data: true);
   }
 
-  @override
-  Future<ServerHostingDetails> restart() async {
-    final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
-
+  Future<GenericResult<void>> restart(final int serverId) async {
     final Dio client = await getClient();
     try {
       await client.post(
-        '/droplets/${server.id}/actions',
+        '/droplets/$serverId/actions',
         data: {
           'type': 'reboot',
         },
       );
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return server.copyWith(startTime: DateTime.now());
+    return GenericResult(success: true, data: null);
   }
 
-  @override
-  Future<ServerHostingDetails> powerOn() async {
-    final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
-
+  Future<GenericResult<void>> powerOn(final int serverId) async {
     final Dio client = await getClient();
     try {
       await client.post(
-        '/droplets/${server.id}/actions',
+        '/droplets/$serverId/actions',
         data: {
           'type': 'power_on',
         },
       );
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return server.copyWith(startTime: DateTime.now());
+    return GenericResult(success: true, data: null);
   }
 
-  /// Digital Ocean returns a map of lists of /proc/stat values,
-  /// so here we are trying to implement average CPU
-  /// load calculation for each point in time on a given interval.
-  ///
-  /// For each point of time:
-  ///
-  /// `Average Load = 100 * (1 - (Idle Load / Total Load))`
-  ///
-  /// For more info please proceed to read:
-  /// https://rosettacode.org/wiki/Linux_CPU_utilization
-  List<TimeSeriesData> calculateCpuLoadMetrics(final List rawProcStatMetrics) {
-    final List<TimeSeriesData> cpuLoads = [];
-
-    final int pointsInTime = (rawProcStatMetrics[0]['values'] as List).length;
-    for (int i = 0; i < pointsInTime; ++i) {
-      double currentMetricLoad = 0.0;
-      double? currentMetricIdle;
-      for (final rawProcStat in rawProcStatMetrics) {
-        final String rawProcValue = rawProcStat['values'][i][1];
-        // Converting MBit into bit
-        final double procValue = double.parse(rawProcValue) * 1000000;
-        currentMetricLoad += procValue;
-        if (currentMetricIdle == null &&
-            rawProcStat['metric']['mode'] == 'idle') {
-          currentMetricIdle = procValue;
-        }
-      }
-      currentMetricIdle ??= 0.0;
-      currentMetricLoad = 100.0 * (1 - (currentMetricIdle / currentMetricLoad));
-      cpuLoads.add(
-        TimeSeriesData(
-          rawProcStatMetrics[0]['values'][i][0],
-          currentMetricLoad,
-        ),
-      );
-    }
-
-    return cpuLoads;
-  }
-
-  @override
-  Future<ServerMetrics?> getMetrics(
+  Future<GenericResult<List>> getMetricsCpu(
     final int serverId,
     final DateTime start,
     final DateTime end,
   ) async {
-    ServerMetrics? metrics;
+    List metrics = [];
 
-    const int step = 15;
     final Dio client = await getClient();
     try {
-      Response response = await client.get(
-        '/monitoring/metrics/droplet/bandwidth',
-        queryParameters: {
-          'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
-          'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
-          'host_id': '$serverId',
-          'interface': 'public',
-          'direction': 'inbound',
-        },
-      );
-
-      final List inbound = response.data['data']['result'][0]['values'];
-
-      response = await client.get(
-        '/monitoring/metrics/droplet/bandwidth',
-        queryParameters: {
-          'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
-          'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
-          'host_id': '$serverId',
-          'interface': 'public',
-          'direction': 'outbound',
-        },
-      );
-
-      final List outbound = response.data['data']['result'][0]['values'];
-
-      response = await client.get(
+      final Response response = await client.get(
         '/monitoring/metrics/droplet/cpu',
         queryParameters: {
           'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
@@ -605,122 +525,75 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'host_id': '$serverId',
         },
       );
-
-      metrics = ServerMetrics(
-        bandwidthIn: inbound
-            .map(
-              (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
-            )
-            .toList(),
-        bandwidthOut: outbound
-            .map(
-              (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
-            )
-            .toList(),
-        cpu: calculateCpuLoadMetrics(response.data['data']['result']),
-        start: start,
-        end: end,
-        stepsInSecond: step,
-      );
+      metrics = response.data['data']['result'];
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: [],
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return metrics;
+    return GenericResult(success: true, data: metrics);
   }
 
-  @override
-  Future<List<ServerMetadataEntity>> getMetadata(final int serverId) async {
-    List<ServerMetadataEntity> metadata = [];
+  Future<GenericResult<List>> getMetricsBandwidth(
+    final int serverId,
+    final DateTime start,
+    final DateTime end,
+    final bool isInbound,
+  ) async {
+    List metrics = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get('/droplets/$serverId');
-      final droplet = response.data!['droplet'];
-      metadata = [
-        ServerMetadataEntity(
-          type: MetadataType.id,
-          name: 'server.server_id'.tr(),
-          value: droplet['id'].toString(),
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.status,
-          name: 'server.status'.tr(),
-          value: droplet['status'].toString().capitalize(),
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.cpu,
-          name: 'server.cpu'.tr(),
-          value: 'server.core_count'.plural(droplet['vcpus']),
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.ram,
-          name: 'server.ram'.tr(),
-          value: "${droplet['memory'].toString()} MB",
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.cost,
-          name: 'server.monthly_cost'.tr(),
-          value: droplet['size']['price_monthly'].toString(),
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.location,
-          name: 'server.location'.tr(),
-          value:
-              '${droplet['region']['name']} ${getEmojiFlag(droplet['region']['slug'].toString()) ?? ''}',
-        ),
-        ServerMetadataEntity(
-          type: MetadataType.other,
-          name: 'server.provider'.tr(),
-          value: displayProviderName,
-        ),
-      ];
+      final Response response = await client.get(
+        '/monitoring/metrics/droplet/bandwidth',
+        queryParameters: {
+          'start': '${(start.microsecondsSinceEpoch / 1000000).round()}',
+          'end': '${(end.microsecondsSinceEpoch / 1000000).round()}',
+          'host_id': '$serverId',
+          'interface': 'public',
+          'direction': isInbound ? 'inbound' : 'outbound',
+        },
+      );
+      metrics = response.data['data']['result'][0]['values'];
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: [],
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return metadata;
+    return GenericResult(success: true, data: metrics);
   }
 
-  @override
-  Future<List<ServerBasicInfo>> getServers() async {
-    List<ServerBasicInfo> servers = [];
+  Future<GenericResult<List>> getServers() async {
+    List servers = [];
 
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/droplets');
-      servers = response.data!['droplets'].map<ServerBasicInfo>(
-        (final server) {
-          String ipv4 = '0.0.0.0';
-          if (server['networks']['v4'].isNotEmpty) {
-            for (final v4 in server['networks']['v4']) {
-              if (v4['type'].toString() == 'public') {
-                ipv4 = v4['ip_address'].toString();
-              }
-            }
-          }
-
-          return ServerBasicInfo(
-            id: server['id'],
-            reverseDns: server['name'],
-            created: DateTime.now(),
-            ip: ipv4,
-            name: server['name'],
-          );
-        },
-      ).toList();
+      servers = response.data;
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: servers,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    print(servers);
-    return servers;
+    return GenericResult(success: true, data: servers);
   }
 
   Future<GenericResult<List>> getAvailableLocations() async {
@@ -769,21 +642,4 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     return GenericResult(data: types, success: true);
   }
-
-  @override
-  Future<GenericResult<void>> createReverseDns({
-    required final ServerHostingDetails serverDetails,
-    required final ServerDomain domain,
-  }) async {
-    /// TODO remove from provider interface
-    const bool success = true;
-    return GenericResult(success: success, data: null);
-  }
-
-  @override
-  ProviderApiTokenValidation getApiTokenValidation() =>
-      ProviderApiTokenValidation(
-        regexp: RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]'),
-        length: 71,
-      );
 }

@@ -244,15 +244,25 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return volume;
   }
 
-  Future<void> deleteVolume(final ServerVolume volume) async {
+  Future<GenericResult<void>> deleteVolume(final int volumeId) async {
     final Dio client = await getClient();
     try {
-      await client.delete('/volumes/${volume.id}');
+      await client.delete('/volumes/$volumeId');
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
+
+    return GenericResult(
+      success: true,
+      data: null,
+    );
   }
 
   Future<GenericResult<bool>> attachVolume(
@@ -287,24 +297,32 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<bool> detachVolume(final ServerVolume volume) async {
+  Future<GenericResult<bool>> detachVolume(final int volumeId) async {
     bool success = false;
 
     final Response detachVolumeResponse;
     final Dio client = await getClient();
     try {
       detachVolumeResponse = await client.post(
-        '/volumes/${volume.id}/actions/detach',
+        '/volumes/$volumeId/actions/detach',
       );
       success =
           detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return success;
+    return GenericResult(
+      success: false,
+      data: success,
+    );
   }
 
   Future<bool> resizeVolume(
@@ -398,46 +416,24 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<GenericResult<bool>> deleteServer({
-    required final String domainName,
+  Future<GenericResult<void>> deleteServer({
+    required final int serverId,
   }) async {
     final Dio client = await getClient();
     try {
-      final String hostname = getHostnameFromDomain(domainName);
-
-      final Response serversReponse = await client.get('/servers');
-      final List servers = serversReponse.data['servers'];
-      final Map server =
-          servers.firstWhere((final el) => el['name'] == hostname);
-      final List volumes = server['volumes'];
-      final List<Future> laterFutures = <Future>[];
-
-      for (final volumeId in volumes) {
-        await client.post('/volumes/$volumeId/actions/detach');
-      }
-      await Future.delayed(const Duration(seconds: 10));
-
-      for (final volumeId in volumes) {
-        laterFutures.add(client.delete('/volumes/$volumeId'));
-      }
-      laterFutures.add(client.delete('/servers/${server['id']}'));
-
-      await Future.wait(laterFutures);
+      await client.delete('/servers/$serverId');
     } catch (e) {
       print(e);
       return GenericResult(
         success: false,
-        data: false,
+        data: null,
         message: e.toString(),
       );
     } finally {
       close(client);
     }
 
-    return GenericResult(
-      success: true,
-      data: true,
-    );
+    return GenericResult(success: true, data: null);
   }
 
   Future<GenericResult<void>> restart(final int serverId) async {

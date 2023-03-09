@@ -455,7 +455,7 @@ class HetznerServerProvider extends ServerProvider {
         );
 
     if (!serverResult.success || serverResult.data == null) {
-      await _adapter.api().deleteVolume(volume);
+      await _adapter.api().deleteVolume(volume.id);
       await Future.delayed(const Duration(seconds: 5));
       if (serverResult.message != null &&
           serverResult.message == 'uniqueness_error') {
@@ -549,7 +549,7 @@ class HetznerServerProvider extends ServerProvider {
             CallbackDialogueChoice(
               title: 'basis.try_again'.tr(),
               callback: () async {
-                await _adapter.api().deleteVolume(volume);
+                await _adapter.api().deleteVolume(volume.id);
                 await Future.delayed(const Duration(seconds: 5));
                 final deletion = await deleteServer(hostname);
                 if (deletion.success) {
@@ -576,5 +576,59 @@ class HetznerServerProvider extends ServerProvider {
 
   Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
     final String hostname,
-  ) async {}
+  ) async {
+    final serversResult = await _adapter.api().getServers();
+    try {
+      final servers = serversResult.data;
+      HetznerServerInfo? foundServer;
+      for (final server in servers) {
+        if (server.name == hostname) {
+          foundServer = server;
+          break;
+        }
+      }
+
+      for (final volumeId in foundServer!.volumes) {
+        await _adapter.api().detachVolume(volumeId);
+      }
+
+      await Future.delayed(const Duration(seconds: 10));
+      final List<Future> laterFutures = <Future>[];
+
+      for (final volumeId in foundServer.volumes) {
+        laterFutures.add(_adapter.api().deleteVolume(volumeId));
+      }
+      laterFutures.add(_adapter.api().deleteVolume(foundServer.id));
+
+      await Future.wait(laterFutures);
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: CallbackDialogueBranching(
+          choices: [
+            CallbackDialogueChoice(
+              title: 'basis.cancel'.tr(),
+              callback: null,
+            ),
+            CallbackDialogueChoice(
+              title: 'basis.try_again'.tr(),
+              callback: () async {
+                await Future.delayed(const Duration(seconds: 5));
+                return deleteServer(hostname);
+              },
+            ),
+          ],
+          description: 'modals.try_again'.tr(),
+          title: 'modals.server_deletion_error'.tr(),
+        ),
+        message: e.toString(),
+      );
+    }
+
+    return GenericResult(
+      success: true,
+      data: null,
+    );
+  }
 }

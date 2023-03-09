@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/digital_ocean/digital_ocean_api.dart';
+import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
@@ -8,6 +11,7 @@ import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/server_provider.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 class ApiAdapter {
   ApiAdapter({final String? region, final bool isWithToken = true})
@@ -417,6 +421,66 @@ class DigitalOceanServerProvider extends ServerProvider {
     return GenericResult(
       success: true,
       data: timestamp,
+    );
+  }
+
+  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
+    final String hostname,
+  ) async {
+    final String deletionName = getHostnameFromDomain(hostname);
+    final serversResult = await getServers();
+    try {
+      final servers = serversResult.data;
+      ServerBasicInfo? foundServer;
+      for (final server in servers) {
+        if (server.name == deletionName) {
+          foundServer = server;
+          break;
+        }
+      }
+
+      final volumes = await _adapter.api().getVolumes();
+      final ServerVolume volumeToRemove;
+      volumeToRemove = volumes.firstWhere(
+        (final el) => el.serverId == foundServer!.id,
+      );
+
+      await _adapter.api().detachVolume(volumeToRemove);
+
+      await Future.delayed(const Duration(seconds: 10));
+      final List<Future> laterFutures = <Future>[];
+      laterFutures.add(_adapter.api().deleteVolume(volumeToRemove));
+      laterFutures.add(_adapter.api().deleteServer(foundServer!.id));
+
+      await Future.wait(laterFutures);
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: CallbackDialogueBranching(
+          choices: [
+            CallbackDialogueChoice(
+              title: 'basis.cancel'.tr(),
+              callback: null,
+            ),
+            CallbackDialogueChoice(
+              title: 'basis.try_again'.tr(),
+              callback: () async {
+                await Future.delayed(const Duration(seconds: 5));
+                return deleteServer(hostname);
+              },
+            ),
+          ],
+          description: 'modals.try_again'.tr(),
+          title: 'modals.server_deletion_error'.tr(),
+        ),
+        message: e.toString(),
+      );
+    }
+
+    return GenericResult(
+      success: true,
+      data: null,
     );
   }
 }

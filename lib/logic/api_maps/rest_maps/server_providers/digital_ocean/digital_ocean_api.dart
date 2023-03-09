@@ -402,64 +402,22 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  @override
-  Future<GenericResult<bool>> deleteServer({
-    required final String domainName,
-  }) async {
+  Future<GenericResult<void>> deleteServer(final int serverId) async {
     final Dio client = await getClient();
-
-    final String hostname = getHostnameFromDomain(domainName);
-    final servers = await getServers();
-    final ServerBasicInfo serverToRemove;
     try {
-      serverToRemove = servers.firstWhere(
-        (final el) => el.name == hostname,
-      );
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        data: false,
-        success: false,
-        message: e.toString(),
-      );
-    }
-
-    final volumes = await getVolumes();
-    final ServerVolume volumeToRemove;
-    try {
-      volumeToRemove = volumes.firstWhere(
-        (final el) => el.serverId == serverToRemove.id,
-      );
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        data: false,
-        success: false,
-        message: e.toString(),
-      );
-    }
-
-    final List<Future> laterFutures = <Future>[];
-
-    await detachVolume(volumeToRemove);
-    await Future.delayed(const Duration(seconds: 10));
-
-    try {
-      laterFutures.add(deleteVolume(volumeToRemove));
-      laterFutures.add(client.delete('/droplets/${serverToRemove.id}'));
-      await Future.wait(laterFutures);
+      await client.delete('/droplets/$serverId');
     } catch (e) {
       print(e);
       return GenericResult(
         success: false,
-        data: false,
+        data: null,
         message: e.toString(),
       );
     } finally {
       close(client);
     }
 
-    return GenericResult(success: true, data: true);
+    return GenericResult(success: true, data: null);
   }
 
   Future<GenericResult<void>> restart(final int serverId) async {

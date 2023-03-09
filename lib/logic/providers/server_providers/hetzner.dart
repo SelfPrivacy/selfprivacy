@@ -598,7 +598,7 @@ class HetznerServerProvider extends ServerProvider {
       for (final volumeId in foundServer.volumes) {
         laterFutures.add(_adapter.api().deleteVolume(volumeId));
       }
-      laterFutures.add(_adapter.api().deleteVolume(foundServer.id));
+      laterFutures.add(_adapter.api().deleteServer(serverId: foundServer.id));
 
       await Future.wait(laterFutures);
     } catch (e) {

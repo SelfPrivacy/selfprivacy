@@ -125,7 +125,7 @@
         "allow_autoupgrade": "Zezwalaj na automatyczne aktualizacje",
         "reboot_after_upgrade_hint": "Automatycznie uruchom ponownie serwer po zastosowaniu aktualizacji",
         "select_timezone": "Wybierz swoją strefę czasową",
-        "timezone_search_bar": "Nazwa strefy czasowej lub wartość przesunięcia czasu"
+        "timezone_search_bar": "Nazwa strefy czasowej lub znaczenie przesunięcia czasowego"
     },
     "record": {
         "root": "Domena główna",
@@ -159,8 +159,8 @@
         "card_title": "Utworzyć kopię zapasową",
         "description": "Pomoże Ci w każdej sytuacji: atak hakerski, usunięcie serwera, itp.",
         "reupload_key": "Wymuś aktualizację klucza",
-        "reuploaded_key": "Zaktualizowano klucz na serwerze",
-        "initialize": "Inicjalizacja",
+        "reuploaded_key": "Klucz na serwerze został zaktualizowany",
+        "initialize": "Nastawić",
         "restore": "Przywróć z kopii",
         "no_backups": "Nie ma jeszcze żadnych kopii zapasowych",
         "create_new": "Utwórz nową kopię",
@@ -182,7 +182,7 @@
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",
-        "bytes": "Bajty",
+        "bytes": "Bajt",
         "extend_volume_button": "Rozwiń pamięć",
         "extending_volume_title": "Rozszerzenie pamięci",
         "extending_volume_price_info": "Cena zawiera podatek VAT i jest oparta na danych cenowych dostarczonych przez firmę Hetzner. Serwer zostanie zrestartowany w trakcie procesu.",

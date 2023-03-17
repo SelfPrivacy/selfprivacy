@@ -32,6 +32,137 @@
         "apply": "Použít",
         "done": "Hotovo",
         "continue": "Pokračovat",
-        "alert": "Upozornění"
+        "alert": "Upozornění",
+        "later": "Přeskočit na nastavení později"
+    },
+    "about_application_page": {
+        "title": "O příloze",
+        "privacy_policy": "Zásady ochrany osobních údajů",
+        "api_version_text": "Verze API serveru {}",
+        "application_version_text": "Verze aplikace {}"
+    },
+    "more_page": {
+        "about_project": "O nás",
+        "about_application": "O příloze",
+        "onboarding": "",
+        "console": "Konzole",
+        "application_settings": "Nastavení aplikace",
+        "configuration_wizard": "Průvodce nastavením",
+        "create_ssh_key": "Superuživatelské klíče SSH"
+    },
+    "console_page": {
+        "title": "Konzole",
+        "waiting": "Čekání na inicializaci…"
+    },
+    "application_settings": {
+        "title": "Nastavení aplikace",
+        "dark_theme_title": "Tmavé téma",
+        "reset_config_title": "Obnovení konfigurace aplikace",
+        "reset_config_description": "Obnovení klíčů api a uživatele root",
+        "delete_server_title": "Odstranit server",
+        "dark_theme_description": "Přepnutí tématu aplikace",
+        "delete_server_description": "Tím odstraníte svůj server. Nebude již přístupný."
+    },
+    "ssh": {
+        "title": "Klíče SSH",
+        "create": "Vytvoření klíče SSH",
+        "delete": "Odstranění klíče SSH",
+        "delete_confirm_question": "Jste si jisti, že chcete odstranit klíč SSH?",
+        "subtitle_with_keys": "{} klíče",
+        "subtitle_without_keys": "Žádné klíče",
+        "no_key_name": "Nejmenovaný klíč",
+        "root_title": "Jedná se o klíče superuživatele",
+        "input_label": "Veřejný klíč ED25519 nebo RSA",
+        "root_subtitle": "Majitelé těchto klíčů získají plný přístup k serveru a mohou na něm dělat cokoli. Na server můžete přidávat pouze své vlastní klíče."
+    },
+    "onboarding": {
+        "page1_title": "Digitální nezávislost dostupná nám všem",
+        "page1_text": "Mail, VPN, Messenger, sociální sítě a mnoho dalšího na vašem soukromém serveru, který máte pod kontrolou.",
+        "page2_text": "Služba SelfPrivacy spolupracuje pouze s poskytovateli, které si vyberete. Pokud u nich nemáte požadované účty, pomůžeme vám je vytvořit.",
+        "page2_server_provider_title": "Poskytovatel serveru",
+        "page2_dns_provider_title": "Poskytovatel DNS",
+        "page2_backup_provider_title": "Poskytovatel zálohování",
+        "page2_backup_provider_text": "Co když se něco stane s vaším serverem? Představte si útok hackera, náhodné smazání dat nebo odepření služby? Vaše data budou v bezpečí u poskytovatele záloh. Budou bezpečně zašifrovány a kdykoli přístupné pro obnovení vašeho serveru.",
+        "page2_title": "SelfPrivacy není cloud, je to vaše osobní datové centrum",
+        "page2_server_provider_text": "Poskytovatel serveru udržuje váš server ve vlastním datovém centru. SelfPrivacy se automaticky připojí k poskytovateli a nastaví vše potřebné.",
+        "page2_dns_provider_text": "Abyste měli místo na internetu, potřebujete doménu. A také potřebujete spolehlivého poskytovatele DNS, aby doména směřovala na váš server. Doporučíme vám vybrat podporovaného poskytovatele DNS pro automatické nastavení sítě."
+    },
+    "resource_chart": {
+        "month": "Měsíc",
+        "day": "Den",
+        "hour": "Hodina",
+        "cpu_title": "Využití CPU",
+        "network_title": "Používání sítě",
+        "in": "Převzato z",
+        "out": "Odesláno"
+    },
+    "server": {
+        "card_title": "Server",
+        "description": "Všechny vaše služby jsou k dispozici zde",
+        "general_information": "Obecné informace",
+        "resource_usage": "Využití zdrojů",
+        "allow_autoupgrade": "Povolit automatickou aktualizaci",
+        "allow_autoupgrade_hint": "Povolení automatických aktualizací balíčků na serveru"
+    },
+    "initializing": {
+        "locations_not_found": "Ups!",
+        "connect_to_server": "Začněme serverem.",
+        "select_provider": "Vyberte si libovolného poskytovatele z následujícího seznamu, všichni podporují službu SelfPrivacy",
+        "select_provider_notice": "Pod pojmem \"relativně malý\" rozumíme počítač se dvěma jádry procesoru a dvěma gigabajty paměti RAM.",
+        "select_provider_countries_text_do": "USA, Nizozemsko, Singapur, Velká Británie, Německo, Kanada, Indie, Austrálie.",
+        "select_provider_email_notice": "E-mailový hosting nebude pro nové klienty k dispozici. Nicméně bude odemčen, jakmile dokončíte první platbu.",
+        "choose_location_type_text": "Různá místa poskytují různé konfigurace serverů, ceny a rychlosti připojení.",
+        "choose_server_type_text": "Různé možnosti prostředků podporují různé služby. Nebojte se, svůj server můžete kdykoli rozšířit",
+        "manage_domain_dns": "Správa domény DNS",
+        "use_this_domain_text": "Vámi zadaný token poskytuje přístup k následující doméně",
+        "no_connected_domains": "V současné době nejsou připojeny žádné domény",
+        "found_more_domains": "Nalezeno více než jedna doména. V zájmu vlastní bezpečnosti vás prosíme o odstranění nepotřebných domén",
+        "server_created": "Vytvořený server. Probíhá kontrola DNS a spouštění serveru…",
+        "choose_server_type_notice": "Důležité je zaměřit se na procesor a paměť RAM. Data vašich služeb budou uložena na připojeném svazku, který lze snadno rozšířit a za který se platí zvlášť.",
+        "cloudflare_api_token": "Token API CloudFlare",
+        "connect_backblaze_storage": "Připojení úložiště Backblaze",
+        "save_domain": "Uložit doménu",
+        "final": "Závěrečný krok",
+        "create_server": "Vytvořit server",
+        "what": "Co to znamená?",
+        "server_rebooted": "Server byl restartován. Čeká se na poslední ověření…",
+        "select_provider_countries_title": "Dostupné země",
+        "select_provider_countries_text_hetzner": "Německo, Finsko, USA",
+        "select_provider_price_title": "Průměrná cena",
+        "select_provider_price_text_hetzner": "8 € měsíčně za relativně malý server a 50 GB diskového úložiště",
+        "select_provider_price_text_do": "17 dolarů měsíčně za relativně malý server a 50 GB diskového úložiště",
+        "select_provider_payment_title": "Platební metody",
+        "select_provider_payment_text_hetzner": "Kreditní karty, SWIFT, SEPA, PayPal",
+        "select_provider_payment_text_do": "Kreditní karty, Google Pay, PayPal",
+        "select_provider_site_button": "Navštivte stránku",
+        "connect_to_server_provider": "Nyní se přihlaste ",
+        "connect_to_server_provider_text": "S tokenem API si SelfPrivacy bude moci pronajmout počítač a nastavit na něm svůj server",
+        "how": "Jak získat token API",
+        "provider_bad_key_error": "Klíč API poskytovatele je neplatný",
+        "could_not_connect": "Nelze se připojit k poskytovateli.",
+        "choose_location_type": "Kde si chcete objednat server?",
+        "locations_not_found_text": "Nejsou k dispozici žádné servery k pronájmu",
+        "back_to_locations": "Vyberte něco jiného",
+        "no_locations_found": "Nebyla nalezena žádná dostupná místa, ujistěte se, že je váš účet přístupný",
+        "choose_server_type": "Jaký typ serveru potřebujete?",
+        "choose_server_type_ram": "{} GB paměti RAM",
+        "choose_server_type_storage": "{} GB systémového úložiště",
+        "choose_server_type_payment_per_month": "{} měsíčně",
+        "no_server_types_found": "Nebyly nalezeny žádné dostupné typy serverů. Ujistěte se, že je váš účet přístupný, a zkuste změnit umístění serveru.",
+        "cloudflare_bad_key_error": "Klíč API služby Cloudflare je neplatný",
+        "backblaze_bad_key_error": "Informace o úložišti Backblaze jsou neplatné",
+        "select_dns": "Nyní vybereme poskytovatele DNS",
+        "use_this_domain": "Použít tuto doménu?",
+        "server_started": "Server byl spuštěn. Nyní bude ověřen a restartován…",
+        "until_the_next_check": "Do příští kontroly: ",
+        "check": "Podívejte se na stránky",
+        "one_more_restart": "Ještě jeden restart pro použití bezpečnostních certifikátů.",
+        "create_master_account": "Vytvoření hlavního účtu"
+    },
+    "about_us_page": {
+        "title": "O nás"
+    },
+    "users": {
+        "no_ssh_notice": "Pro tohoto uživatele jsou vytvořeny pouze účty e-mailu a SSH. Jednotné přihlašování pro všechny služby se chystá brzy."
     }
 }

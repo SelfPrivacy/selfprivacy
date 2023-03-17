@@ -1,17 +1,17 @@
-### How to get Cloudflare API Token
-1. Visit the following link: https://dash.cloudflare.com/
-2. the right corner, click on the profile icon (a man in a circle). For the mobile version of the site, in the upper left corner, click the **Menu** button (three horizontal bars), in the dropdown menu, click on **My Profile**
-3. There are four configuration categories to choose from: *Communication*, *Authentication*, **API Tokens**, *Session*. Choose **API Tokens**.
-4. Click on **Create Token** button.
-5. Go down to the bottom and see the **Create Custom Token** field and press **Get Started** button on the right side.
-6. In the **Token Name** field, give your token a name.
-7. Next we have Permissions. In the leftmost field, select **Zone**. In the longest field, center, select **DNS**. In the rightmost field, select **Edit**. 
-8. Next, right under this line, click Add More. Similar field will appear.
-9. In the leftmost field of the new line, select, similar to the last line — **Zone**. In the center — a little different. Here choose the same as in the left — **Zone**. In the rightmost field, select **Read**.
-10. Next look at **Zone Resources**. Under this inscription there is a line with two fields. The left must have **Include** and the right must have **Specific Zone**. Once you select Specific Zone, another field appears on the right. Choose your domain in it.
-11. Flick to the bottom and press the blue **Continue to Summary** button.
-12. Check if you got everything right. A similar string must be present: *Domain — DNS:Edit, Zone:Read*.
-13. Click on **Create Token**.
-14. We copy the created token, and save it in a reliable place (preferably in the password manager).
+### Як отримати токен Cloudflare API
+1. Перейдіть за цим посиланням: https://dash.cloudflare.com/
+2. В правому куті натисніть на іконку профілю (людина в колі). Для мобільної версії сайту, у верхньому лівому кутку натисніть кнопку **Menu** (три горизонтальні смужки), у випадаючому меню натисніть **My profile**
+3. Є чотири категорії конфігурації на вибір: *Communication*, *Authentication*, **API Tokens**, *Session*. Виберіть **API Tokens**.
+4. Натисніть кнопку **Create Token**.
+5. Спустіться вниз і перегляньте поле **Create Custom Token** і натисніть кнопку **Get Started** праворуч.
+6. У полі **Назва токена** введіть назву токена.
+7. Далі у нас є Дозволи. У крайньому лівому полі виберіть **Zone**. У найдовшому полі по центру виберіть **DNS**. У крайньому правому полі виберіть **Edit**.
+8. Далі прямо під цим рядком натисніть «Add more». З'явиться аналогічне поле.
+9. У крайньому лівому полі нового рядка виберіть, як і в останньому рядку, — **Zone**. У центрі — трохи інше. Тут вибираємо те саме, що й зліва — **Zone**. У крайньому правому полі виберіть **Read**.
+10. Далі подивіться на **Zone Resources**. Під цим написом — рядок із двома полями. Ліворуч має бути **Include**, а праворуч має бути **Specific Zone**. Після вибору «Specific Zone» праворуч з’явиться ще одне поле. Виберіть у ньому свій домен.
+11. Прокрутіть униз і натисніть синю кнопку **Continue to Summary**.
+12. Перевірте, чи все ви зробили правильно. Подібний рядок має бути присутнім: *Domain — DNS:Edit, Zone:Read*.
+13. Натисніть **Create Token**.
+14. Копіюємо створений токен і зберігаємо в надійному місці (бажано в менеджері паролів).
 
-![Cloudflare настройка токена](resource:assets/images/gifs/CloudFlare.gif)
+![Cloudflare налаштування токена](resource:assets/images/gifs/CloudFlare.gif)

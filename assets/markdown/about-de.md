@@ -1,12 +1,12 @@
-### About us
+### Über uns
 
-More and more corporations want to control our data.
-We want to have full control of our **data** on our own.
+Immer mehr Unternehmen wollen unsere Daten kontrollieren.
+Wir wollen selbst die volle Kontrolle über unsere **data** haben.
 
-### Our mission
+### Unsere Mission
 
-Digital independence and privacy, available to everyone
+Digitale Unabhängigkeit und Privatsphäre für alle verfügbar
 
-### Target
+### Ziel
 
-Develop the program, which will allow everyone to deploy their private services for themselves and their neighbours.
+Das Programm entwickeln, das es jedem ermöglicht, seine privaten Dienste für sich und seine Nachbarn einzusetzen.

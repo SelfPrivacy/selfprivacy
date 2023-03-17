@@ -1,19 +1,19 @@
-Login as root user to your server and look at the contents of the file `/etc/nixos/userdata/tokens.json`
+Melden Sie sich als Root-Benutzer auf Ihrem Server an und sehen Sie sich den Inhalt der Datei `/etc/nixos/userdata/tokens.json` an
 
 ```sh
 cat /etc/nixos/userdata/tokens.json
 ```
 
-This file will have a similar construction:
+Diese Datei hat einen ähnlichen Aufbau:
 
 ```json
 {
     "tokens": [
         {
-            "token": "token_to_copy",
-            "name": "device_name",
-            "date": "date"
+            "token": "token_zum_Kopieren",
+            "name": "Gerätname",
+            "date": "Datum"
         }
 ```
 
-Copy the token from the file and paste it in the next window.
+Kopieren Sie das Token aus der Datei und fügen Sie es im nächsten Fenster ein.

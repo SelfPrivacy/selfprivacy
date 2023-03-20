@@ -1,4 +1,4 @@
-Login as root user to your server and look at the contents of the file `/etc/nixos/userdata/tokens.json`
+Zaloguj się jako użytkownik root na swoim serwerze i przejrzyj zawartość pliku `/etc/nixos/userdata/tokens.json`
 
 ```sh
 cat /etc/nixos/userdata/tokens.json

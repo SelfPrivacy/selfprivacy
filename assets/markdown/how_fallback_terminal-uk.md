@@ -1,6 +1,6 @@
-На панелі керування сервером Hetzner перейдіть на вкладку **Rescue**. Після цього натисніть кнопку **увімкнути цикл порятунку та живлення**.
+На панелі керування сервером Hetzner перейдіть на вкладку **Rescue**. Після цього натисніть кнопку **Enable rescue & power cycle**.
 
-In *Choose a Recue OS* select **linux64**, and in *SSH Key* select your key if it has been added to your Hetzner account.
+У полі *Choose a Recue OS* виберіть **linux64**, а в *SSH Key* свій ключ, якщо він був доданий у ваш обліковий запис Hetzner.
 
 Натисніть **Enable rescue & power cycle** і зачекайте, поки сервер перезавантажить. На екрані з'явиться логін і пароль. Увійдіть до користувача root за допомогою вашої реєстраційних даних і паролів.
 

@@ -66,7 +66,12 @@
         "page2_text": "SelfPrivacy sólo trabaja con los proveedores que usted elija. Si no tiene cuentas obligatorias en ellos, le ayudaremos a crearlas.",
         "page1_title": "La independencia digital, al alcance de todos",
         "page1_text": "Correo, VPN, Messenger, red social y mucho más en tu servidor privado, bajo tu control.",
-        "page2_title": "SelfPrivacy no es una nube, es tu centro de datos personal"
+        "page2_title": "SelfPrivacy no es una nube, es tu centro de datos personal",
+        "page2_server_provider_title": "Servidor proveedor",
+        "page2_server_provider_text": "Un proveedor de servidores mantiene su servidor en su propio centro de datos. SelfPrivacy se conectará automáticamente al proveedor y configurará todo lo necesario.",
+        "page2_dns_provider_title": "Proveedor de DNS",
+        "page2_backup_provider_title": "Proveedor de copias de seguridad",
+        "page2_dns_provider_text": "Necesitas un dominio para tener un lugar en Internet. Y también necesitas un proveedor de DNS fiable para que el dominio apunte a tu servidor. Le sugeriremos que elija un proveedor de DNS compatible para configurar automáticamente la red."
     },
     "more_page": {
         "configuration_wizard": "Asistente de configuración",

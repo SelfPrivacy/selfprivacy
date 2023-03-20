@@ -29,6 +29,261 @@
         "details": "Détails",
         "no_data": "Pas de données",
         "wait": "Attendez",
-        "remove": "Supprimer"
+        "remove": "Supprimer",
+        "alert": "Alerte",
+        "continue": "Continuer",
+        "apply": "Appliquer",
+        "done": "Effectué"
+    },
+    "more_page": {
+        "about_application": "À propos",
+        "create_ssh_key": "Clés SSH du super utilisateur",
+        "console": "Console",
+        "application_settings": "Paramètres de l'application",
+        "configuration_wizard": "Assistant de configuration",
+        "about_project": "À propos de nous",
+        "onboarding": "Embarquement"
+    },
+    "console_page": {
+        "title": "Console",
+        "waiting": "En attente de l'initialisation…"
+    },
+    "about_us_page": {
+        "title": "À propos de nous"
+    },
+    "about_application_page": {
+        "title": "À propos",
+        "privacy_policy": "Politique de confidentialité",
+        "application_version_text": "Version de l'application {}"
+    },
+    "application_settings": {
+        "title": "Paramètres de l'application",
+        "dark_theme_description": "Changer le thème de l'application",
+        "reset_config_title": "Réinitialiser la configuration de l'application",
+        "delete_server_title": "Supprimer le serveur",
+        "delete_server_description": "Cela va supprimer votre serveur. Celui-ci ne sera plus accessible.",
+        "dark_theme_title": "Thème sombre",
+        "reset_config_description": "Réinitialiser les clés API et l'utilisateur root"
+    },
+    "ssh": {
+        "title": "Clés SSH",
+        "create": "Créer une clé SSH",
+        "delete": "Supprimer une clé SSH",
+        "delete_confirm_question": "Êtes-vous sûr de vouloir supprimer la clé SSH ?",
+        "subtitle_with_keys": "{} clés",
+        "subtitle_without_keys": "Pas de clés SSH",
+        "no_key_name": "Clé sans nom",
+        "input_label": "Clé RSA ou ED25519 publique",
+        "root_title": "Ce sont les clés SSH du superutilisateur",
+        "root_subtitle": "Les possesseurs de ses clés SSH obtiennent le contrôle total sur le serveur et peuvent faire ce qu'ils veulent dessus. Il suffit d'ajouter vos clés SSH sur ce serveur."
+    },
+    "onboarding": {
+        "page1_title": "Indépendance numérique, accessible à nous tous",
+        "page1_text": "Mail, VPN, messagerie, réseau social et bien plus sur votre serveur privé, sous votre contrôle.",
+        "page2_title": "SelfPrivacy n'est pas un cloud, c'est votre centre de données personnel",
+        "page2_server_provider_title": "Hébergeur",
+        "page2_server_provider_text": "Un hébergeur maintient votre serveur dans son propre datacenter. SelfPrivacy va automatiquement se connecter à votre fournisseur et installer tout le nécessaire.",
+        "page2_dns_provider_title": "Fournisseur de DNS",
+        "page2_backup_provider_title": "Fournisseur de sauvegarde",
+        "page2_text": "SelfPrivacy fonctionne uniquement avec les fournisseurs que vous choisissez. Si vous n'avez pas de compte sur ceux-ci, nous allons vous aider à en créer.",
+        "page2_dns_provider_text": "Vous avez besoin d'un domaine pour avoir un espace sur l'Internet. Il est également nécessaire de disposer d'un fournisseur de DNS fiable pour que votre domaine pointe sur votre serveur. Nous allons vous suggérer de choisir des fournisseurs DNS supportés pour automatiquement configurer le réseau."
+    },
+    "resource_chart": {
+        "month": "Mois",
+        "day": "Jour",
+        "hour": "Heure",
+        "cpu_title": "Utilisation du CPU",
+        "network_title": "Utilisation du réseau"
+    },
+    "server": {
+        "card_title": "Serveur",
+        "general_information": "Informations générales",
+        "resource_usage": "Utilisation des ressources",
+        "allow_autoupgrade": "Permettre la mise à jour automatique",
+        "allow_autoupgrade_hint": "Permettre la mise à jour des paquets automatiquement sur le serveur",
+        "reboot_after_upgrade": "Redémarrer après mise à jour",
+        "reboot_after_upgrade_hint": "Redémarrer sans demander après application des changements sur le serveur",
+        "server_id": "ID du serveur",
+        "status": "Statut",
+        "cpu": "Processeur",
+        "ram": "Mémoire",
+        "disk": "Disque local",
+        "monthly_cost": "Coût mensuel",
+        "location": "Localisation",
+        "provider": "Fournisseur",
+        "core_count": {
+            "one": "{} cœur",
+            "two": "{} cœurs",
+            "many": "{} cœurs",
+            "other": "{} cœurs",
+            "few": "{} cœurs"
+        },
+        "server_timezone": "Fuseau horaire du serveur",
+        "select_timezone": "Sélectionner le fuseau horaire"
+    },
+    "record": {
+        "root": "Domaine racine",
+        "api": "API de SelfPrivacy",
+        "git": "Serveur Git",
+        "meet": "Conférence vidéo",
+        "social": "Réseau social",
+        "password": "Gestionnaire de mot de passe",
+        "vpn": "VPN",
+        "dmarc": "Enregistrement DMARC",
+        "spf": "Enregistrement SPF",
+        "dkim": "Clé DKIM",
+        "mx": "Enregistrement MX"
+    },
+    "domain": {
+        "card_title": "Domaine",
+        "screen_title": "Domaines et DNS",
+        "error": "Problèmes détectés",
+        "error_subtitle": "Clique ici pour les fixer",
+        "refreshing": "Rafraîchissement du statut…",
+        "services_title": "Services",
+        "services_subtitle": "Enregistrement de type \"A\" requis pour chaque service.",
+        "email_title": "Email",
+        "email_subtitle": "Enregistrements nécessaires pour l'échange sécurisé d'email.",
+        "update_list": "Liste mise à jour",
+        "ok": "Les enregistrements DNS sont OK",
+        "uninitialized": "Les données n'ont pas encore été récupérées"
+    },
+    "backup": {
+        "card_title": "Sauvegarde",
+        "reuploaded_key": "Clés republiées",
+        "initialize": "Initialise",
+        "waiting_for_rebuild": "Vous serez capable de créer votre première sauvegarde dans quelques instants.",
+        "restore": "Restaurer depuis la sauvegarde",
+        "create_new": "Créer une nouvelle sauvegarde",
+        "creating": "Création d'une nouvelle sauvegarde: {}%",
+        "restoring": "Restauration depuis la sauvegarde",
+        "restore_alert": "Vous allez restaurer depuis la sauvegarde créée le {}. Toutes les données existantes vont être perdues. Êtes-vous sûr ?",
+        "refresh": "Statut d'avancement",
+        "refetching_list": "Dans quelques minutes, la liste sera mise à jour",
+        "reupload_key": "Forcer la republication de la clé",
+        "no_backups": "Il n'y a pour l'instant aucune sauvegarde",
+        "error_pending": "Le serveur a retourné une erreur, vérifier plus bas",
+        "refetch_backups": "Récupérer la liste des mise à jour"
+    },
+    "storage": {
+        "card_title": "Stockage du serveur",
+        "status_ok": "L'utilisation du disque est OK",
+        "status_error": "Faible espace disque",
+        "disk_usage": "{} utilisé",
+        "disk_total": "{} total · {}",
+        "gb": "{} GB",
+        "mb": "{} MB",
+        "kb": "{} KB",
+        "extending_volume_title": "Extension du volume",
+        "extending_volume_price_info": "Les prix incluent la TVA et sont estimés par les données commerciales fournies par Hetzner.\nLe serveur va redémarrer après redimensionnement.",
+        "extending_volume_error": "Pas possible d'initialiser l'extension du volume.",
+        "size": "Taille",
+        "euro": "Euro",
+        "data_migration_title": "Migration de données",
+        "data_migration_notice": "Durant la migration, tous les services ne seront plus accessibles.",
+        "start_migration_button": "Démarrer la migration",
+        "migration_process": "Migration en cours…",
+        "migration_done": "Terminé",
+        "extend_volume_button": "Étendre le volume",
+        "extending_volume_description": "Redimensionner le volume va vous permettre de stocker davantage de données sur votre serveur sans étendre le serveur lui-même. Les volumes ne peuvent être qu'étendus, le shrinking n'est pas possible."
+    },
+    "service_page": {
+        "open_in_browser": "Ouvrir dans le navigateur",
+        "restart": "Redémarrer le service",
+        "status": {
+            "active": "Démarré et opérationnel",
+            "inactive": "Arrêté",
+            "failed": "Démarrage en échec",
+            "off": "Désactivé",
+            "activating": "Activation",
+            "deactivating": "Désactivation",
+            "reloading": "Redémarrage"
+        },
+        "disable": "Désactiver le service",
+        "enable": "Activer le service",
+        "move": "Déplacer sur un autre volume",
+        "uses": "Utilise {usage} du {volume}"
+    },
+    "mail": {
+        "title": "E-Mail",
+        "login_info": "Utiliser l'identifiant et le mot de passe de l'onglets utilisateurs. Le port IMAP est 143 avec STARTTLS, le port SMTP est 587 avec STARTTLS.",
+        "subtitle": "E-Mail pour des entreprises et la famille."
+    },
+    "not_ready_card": {
+        "in_menu": "Le serveur n'est pas encore configuré. Veuillez finir le paramétrage en utilisant l'assistant d'installation pour aller plus loin."
+    },
+    "validations": {
+        "invalid_format_password": "Ne doit pas contenir d'espace",
+        "invalid_format": "Format invalide",
+        "already_exist": "Existe déjà",
+        "required": "Requis",
+        "invalid_format_ssh": "Doit correspondre au format de clé SSH",
+        "root_name": "Ne peut être 'root'"
+    },
+    "jobs": {
+        "create_ssh_key": "Créer une clé SSH pour {}",
+        "reboot_failed": "Impossible de redémarrer le serveur. Veuillez vérifier les logs applicatifs.",
+        "delete_user": "Supprimer utilisateur",
+        "generic_error": "Impossible de se connecter au serveur!",
+        "delete_ssh_key": "Supprimer la clé SSH pour {}",
+        "reboot_server": "Redémarrer le serveur",
+        "upgrade_server": "Mise à jour du serveur",
+        "upgrade_failed": "Impossible de mettre à jour le serveur",
+        "upgrade_success": "Mise à jour du serveur démarrée",
+        "reboot_success": "Le serveur redémarre",
+        "run_jobs": "Lancer des jobs",
+        "job_added": "Job ajouté",
+        "service_turn_on": "Lancer",
+        "reset_user_password": "Réinitialiser le mot de passe de l'utilisateur",
+        "service_turn_off": "Arrêter",
+        "create_user": "Créer utilisateur",
+        "empty": "Pas de jobs",
+        "server_jobs": "Jobs sur le serveur",
+        "start": "Démarrer",
+        "title": "Liste des jobs"
+    },
+    "modals": {
+        "you_cant_use_this_api": "Vous ne pouvez pas utiliser cette API pour un domaine avec cette extension.",
+        "destroy_server": "Effacer le serveur et en créer un nouveau?",
+        "no": "Non",
+        "yes": "Oui",
+        "reboot": "Redémarrer",
+        "delete_server_volume": "Supprimer le serveur et le volume?",
+        "purge_all_keys_confirm": "Oui, purger tous mes tokens",
+        "purge_all_keys": "Purger toutes les clés d'authentification?",
+        "are_you_sure": "Êtes-vous sûr?",
+        "try_again": "Essayer à nouveau?"
+    },
+    "password_manager": {
+        "title": "Gestionnaire de mot de passe",
+        "subtitle": "La base de votre sécurité. Bitwarden vous aidera à créer, stocker et déplacer les mots de passe entre appareils, ainsi qu'à les saisir, lorsque cela est demandé, en utilisant l'autocomplétion.",
+        "login_info": "Vous devrez créer un compte sur le site web."
+    },
+    "timer": {
+        "sec": "{} secondes"
+    },
+    "cloud": {
+        "title": "Stockage cloud",
+        "subtitle": "Ne permettez pas aux services cloud de lire vos données en utilisant NextCloud.",
+        "login_info": "Le login est admin, le mot de passe est le même que votre utilisateur principal. Créer de nouveaux comptes via l'interface Nextcloud."
+    },
+    "video": {
+        "title": "Vidéoconférence",
+        "subtitle": "Zoom et Google Meet sont biens, mais Jitsi Meet est une alternative valable qui vous donne également l'assurance que vous n'êtes pas écouter.",
+        "login_info": "Pas de compte nécessaire."
+    },
+    "social_network": {
+        "title": "Réseaux sociaux",
+        "subtitle": "C'est difficile à croire mais il devient possible de créer votre propre réseau social, avec vos propres règles et votre propre public cible.",
+        "login_info": "Vous devrez créer un compte sur le site web."
+    },
+    "git": {
+        "title": "Serveur Git",
+        "subtitle": "Une alternative privée à Github, qui vous appartient et qui n'appartient pas à Microsoft.",
+        "login_info": "Vous devrez créer un compte sur le site web. Le premier utilisateur deviendra admin."
+    },
+    "vpn": {
+        "title": "Serveur VPN",
+        "subtitle": "Serveur VPN privé"
     }
 }

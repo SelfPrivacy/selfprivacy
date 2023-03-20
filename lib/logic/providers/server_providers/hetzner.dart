@@ -631,4 +631,124 @@ class HetznerServerProvider extends ServerProvider {
       data: null,
     );
   }
+
+  Future<GenericResult<ServerVolume?>> createVolume() async {
+    ServerVolume? volume;
+
+    final result = await _adapter.api().createVolume();
+
+    if (!result.success || result.data == null) {
+      return GenericResult(
+        data: null,
+        success: false,
+        message: result.message,
+        code: result.code,
+      );
+    }
+
+    try {
+      final volumeId = result.data['volume']['id'];
+      final volumeSize = result.data['volume']['size'];
+      final volumeServer = result.data['volume']['server'];
+      final volumeName = result.data['volume']['name'];
+      final volumeDevice = result.data['volume']['linux_device'];
+      volume = ServerVolume(
+        id: volumeId,
+        name: volumeName,
+        sizeByte: volumeSize,
+        serverId: volumeServer,
+        linuxDevice: volumeDevice,
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        data: null,
+        success: false,
+        message: e.toString(),
+      );
+    }
+
+    return GenericResult(
+      data: volume,
+      success: true,
+      code: result.code,
+      message: result.message,
+    );
+  }
+
+  Future<GenericResult<List<ServerVolume>>> getVolumes({
+    final String? status,
+  }) async {
+    final List<ServerVolume> volumes = [];
+
+    final result = await _adapter.api().getVolumes();
+
+    if (!result.success) {
+      return GenericResult(
+        data: [],
+        success: false,
+        message: result.message,
+        code: result.code,
+      );
+    }
+
+    try {
+      for (final rawVolume in result.data) {
+        final int volumeId = rawVolume['id'];
+        final int volumeSize = rawVolume['size'] * 1024 * 1024 * 1024;
+        final volumeServer = rawVolume['server'];
+        final String volumeName = rawVolume['name'];
+        final volumeDevice = rawVolume['linux_device'];
+        final volume = ServerVolume(
+          id: volumeId,
+          name: volumeName,
+          sizeByte: volumeSize,
+          serverId: volumeServer,
+          linuxDevice: volumeDevice,
+        );
+        volumes.add(volume);
+      }
+    } catch (e) {
+      return GenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
+    }
+
+    return GenericResult(
+      data: volumes,
+      success: true,
+      code: result.code,
+      message: result.message,
+    );
+  }
+
+  Future<GenericResult<void>> deleteVolume(final int volumeId) async =>
+      _adapter.api().deleteVolume(volumeId);
+
+  Future<GenericResult<bool>> attachVolume(
+    final ServerVolume volume,
+    final int serverId,
+  ) async =>
+      _adapter.api().attachVolume(
+            volume,
+            serverId,
+          );
+
+  Future<GenericResult<bool>> detachVolume(
+    final int volumeId,
+  ) async =>
+      _adapter.api().detachVolume(
+            volumeId,
+          );
+
+  Future<bool> resizeVolume(
+    final ServerVolume volume,
+    final DiskSize size,
+  ) async =>
+      _adapter.api().resizeVolume(
+            volume,
+            size,
+          );
 }

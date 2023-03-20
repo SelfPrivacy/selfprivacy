@@ -11,7 +11,6 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
@@ -129,9 +128,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           );
   }
 
-  Future<GenericResult<ServerVolume?>> createVolume() async {
-    ServerVolume? volume;
-
+  Future<GenericResult> createVolume() async {
     Response? createVolumeResponse;
     final Dio client = await getClient();
     try {
@@ -146,18 +143,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           'format': 'ext4'
         },
       );
-      final volumeId = createVolumeResponse.data['volume']['id'];
-      final volumeSize = createVolumeResponse.data['volume']['size'];
-      final volumeServer = createVolumeResponse.data['volume']['server'];
-      final volumeName = createVolumeResponse.data['volume']['name'];
-      final volumeDevice = createVolumeResponse.data['volume']['linux_device'];
-      volume = ServerVolume(
-        id: volumeId,
-        name: volumeName,
-        sizeByte: volumeSize,
-        serverId: volumeServer,
-        linuxDevice: volumeDevice,
-      );
     } catch (e) {
       print(e);
       return GenericResult(
@@ -170,17 +155,17 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     return GenericResult(
-      data: volume,
+      data: createVolumeResponse.data,
       success: true,
       code: createVolumeResponse.statusCode,
       message: createVolumeResponse.statusMessage,
     );
   }
 
-  Future<List<ServerVolume>> getVolumes({final String? status}) async {
-    final List<ServerVolume> volumes = [];
+  Future<GenericResult<List>> getVolumes({final String? status}) async {
+    List volumes = [];
 
-    final Response getVolumesResonse;
+    Response? getVolumesResonse;
     final Dio client = await getClient();
     try {
       getVolumesResonse = await client.get(
@@ -189,29 +174,24 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           'status': status,
         },
       );
-      final List<dynamic> rawVolumes = getVolumesResonse.data['volumes'];
-      for (final rawVolume in rawVolumes) {
-        final int volumeId = rawVolume['id'];
-        final int volumeSize = rawVolume['size'] * 1024 * 1024 * 1024;
-        final volumeServer = rawVolume['server'];
-        final String volumeName = rawVolume['name'];
-        final volumeDevice = rawVolume['linux_device'];
-        final volume = ServerVolume(
-          id: volumeId,
-          name: volumeName,
-          sizeByte: volumeSize,
-          serverId: volumeServer,
-          linuxDevice: volumeDevice,
-        );
-        volumes.add(volume);
-      }
+      volumes = getVolumesResonse.data['volumes'];
     } catch (e) {
       print(e);
+      return GenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return volumes;
+    return GenericResult(
+      data: volumes,
+      success: true,
+      code: getVolumesResonse.statusCode,
+      message: getVolumesResonse.statusMessage,
+    );
   }
 
   Future<ServerVolume?> getVolume(
@@ -244,7 +224,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return volume;
   }
 
-  Future<GenericResult<void>> deleteVolume(final int volumeId) async {
+  Future<GenericResult<bool>> deleteVolume(final int volumeId) async {
     final Dio client = await getClient();
     try {
       await client.delete('/volumes/$volumeId');
@@ -252,7 +232,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       print(e);
       return GenericResult(
         success: false,
-        data: null,
+        data: false,
         message: e.toString(),
       );
     } finally {
@@ -261,7 +241,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     return GenericResult(
       success: true,
-      data: null,
+      data: true,
     );
   }
 

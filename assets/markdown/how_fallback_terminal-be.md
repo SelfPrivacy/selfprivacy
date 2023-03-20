@@ -1,17 +1,17 @@
-In the Hetzner server control panel, go to the **Rescue** tab. Then, click on **Enable rescue & power cycle**.
+У панэлі кіравання серверам Hetzner перайдзіце на ўкладку **Rescue**. Затым націсніце на **Enable rescue & power cycle**.
 
-In *Choose a Recue OS* select **linux64**, and in *SSH Key* select your key if it has been added to your Hetzner account.
+У полі *Choose a Recue OS* выберыце **linux64**, а ў *SSH Key* выберыце свой ключ, калі ён быў дададзены ў ваш уліковы запіс Hetzner.
 
-Click **Enable rescue & power cycle** and wait for the server to reboot. The login and password will be displayed on the screen. Login to the root user using your login and password information.
+Націсніце **Enable rescue & power cycle** і дачакайцеся перазагрузкі сервера. На экране адлюструюцца лагін і пароль. Увайдзіце ў сістэму root, выкарыстоўваючы свой лагін і пароль.
 
-Mount your server file system and see the contents of the token file:
+Падключыце файлавую сістэму сервера і паглядзіце змесціва файла токена:
 
 ```sh
 mount /dev/sda1 /mnt
 cat /mnt/etc/nixos/userdata/tokens.json
 ```
 
-This file will have a similar construction:
+Гэты файл будзе мець падобную канструкцыю:
 
 ```json
 {
@@ -23,4 +23,4 @@ This file will have a similar construction:
         }
 ```
 
-Copy the token from the file and paste it in the next window.
+Скапіруйце токен з файла і ўстаўце яго ў наступнае акно.

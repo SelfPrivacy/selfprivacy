@@ -1,0 +1,9 @@
+{
+    "test": "mk-test",
+    "basis": {
+        "providers": "Провајдери",
+        "providers_title": "Вашиот центар за податоци",
+        "select": "Изберите"
+    },
+    "locale": "mk"
+}

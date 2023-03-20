@@ -1,26 +1,26 @@
-In the Hetzner server control panel, go to the **Rescue** tab. Then, click on **Enable rescue & power cycle**.
+Gehen Sie im Control Panel des Hetzner-Servers auf den Tab **Rescue**. Klicken Sie dann auf **Enable rescue & power cycle**.
 
-In *Choose a Recue OS* select **linux64**, and in *SSH Key* select your key if it has been added to your Hetzner account.
+In *Choose a Recue OS* wählen Sie **linux64** aus und in *SSH Key* wählen Sie Ihren Schlüssel aus, wen er zu ihrem Htzner-Konto hinzugefügt wurde.
 
-Click **Enable rescue & power cycle** and wait for the server to reboot. The login and password will be displayed on the screen. Login to the root user using your login and password information.
+Klicken Sie auf **Enable rescue & power cycle** und warten Sie, bis der Server neu gestartet wird. Login und Passwort werden auf dem Bildschirm angezeigt. Melden Sie sich mit Ihren Anmelde- und Kennwortinformationen beim Root-Benutzer an.
 
-Mount your server file system and see the contents of the token file:
+Mounten Sie Ihr Server-Dateisystem und sehen Sie sich den Inhalt der Token-Datei an:
 
 ```sh
 mount /dev/sda1 /mnt
 cat /mnt/etc/nixos/userdata/tokens.json
 ```
 
-This file will have a similar construction:
+Diese Datei hat einen ähnlichen Aufbau:
 
 ```json
 {
     "tokens": [
         {
-            "token": "token_to_copy",
-            "name": "device_name",
-            "date": "date"
+            "token": "token_zum_Kopieren",
+            "name": "Gerätname",
+            "date": "Datum"
         }
 ```
 
-Copy the token from the file and paste it in the next window.
+Kopieren Sie das Token aus der Datei und fügen Sie es im nächsten Fenster ein.

@@ -73,8 +73,8 @@
         "title": "Про нас"
     },
     "about_application_page": {
-        "application_version_text": "Версія додатку v.{}",
-        "api_version_text": "Версія API сервера v.{}",
+        "application_version_text": "Версія додатку {}",
+        "api_version_text": "Версія API сервера {}",
         "privacy_policy": "Політика конфіденційності",
         "title": "Про нас"
     },

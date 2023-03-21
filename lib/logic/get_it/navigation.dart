@@ -7,10 +7,14 @@ class NavigationService {
       GlobalKey<ScaffoldMessengerState>();
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  NavigatorState? get navigator => navigatorKey.currentState;
-
   void showPopUpDialog(final AlertDialog dialog) {
-    final BuildContext context = navigatorKey.currentState!.overlay!.context;
+    final BuildContext? context = navigatorKey.currentContext;
+
+    if (context == null) {
+      showSnackBar(
+          'Could not show dialog. This should not happen, please report this.');
+      return;
+    }
 
     showDialog(
       context: context,

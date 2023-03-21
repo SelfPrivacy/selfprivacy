@@ -63,45 +63,42 @@ class SelfprivacyApp extends StatelessWidget {
   final ThemeData lightThemeData;
   final ThemeData darkThemeData;
 
-  final _appRouter = RootRouter();
+  final _appRouter = RootRouter(getIt.get<NavigationService>().navigatorKey);
 
   @override
   Widget build(final BuildContext context) => Localization(
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle.light, // Manually changing appbar color
-          child: BlocAndProviderConfig(
-            child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
-              builder: (
-                final BuildContext context,
-                final AppSettingsState appSettings,
-              ) =>
-                  MaterialApp.router(
-                routeInformationParser: _appRouter.defaultRouteParser(),
-                routerDelegate: _appRouter.delegate(),
-                scaffoldMessengerKey:
-                    getIt.get<NavigationService>().scaffoldMessengerKey,
-                localizationsDelegates: context.localizationDelegates,
-                supportedLocales: context.supportedLocales,
-                locale: context.locale,
-                debugShowCheckedModeBanner: false,
-                title: 'SelfPrivacy',
-                theme: lightThemeData,
-                darkTheme: darkThemeData,
-                themeMode: appSettings.isAutoDarkModeOn
-                    ? ThemeMode.system
-                    : appSettings.isDarkModeOn
-                        ? ThemeMode.dark
-                        : ThemeMode.light,
-                builder: (final BuildContext context, final Widget? widget) {
-                  Widget error = const Text('...rendering error...');
-                  if (widget is Scaffold || widget is Navigator) {
-                    error = Scaffold(body: Center(child: error));
-                  }
-                  ErrorWidget.builder =
-                      (final FlutterErrorDetails errorDetails) => error;
-                  return widget!;
-                },
-              ),
+        child: BlocAndProviderConfig(
+          child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
+            builder: (
+              final BuildContext context,
+              final AppSettingsState appSettings,
+            ) =>
+                MaterialApp.router(
+              routeInformationParser: _appRouter.defaultRouteParser(),
+              routerDelegate: _appRouter.delegate(),
+              scaffoldMessengerKey:
+                  getIt.get<NavigationService>().scaffoldMessengerKey,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              debugShowCheckedModeBanner: false,
+              title: 'SelfPrivacy',
+              theme: lightThemeData,
+              darkTheme: darkThemeData,
+              themeMode: appSettings.isAutoDarkModeOn
+                  ? ThemeMode.system
+                  : appSettings.isDarkModeOn
+                      ? ThemeMode.dark
+                      : ThemeMode.light,
+              builder: (final BuildContext context, final Widget? widget) {
+                Widget error = const Text('...rendering error...');
+                if (widget is Scaffold || widget is Navigator) {
+                  error = Scaffold(body: Center(child: error));
+                }
+                ErrorWidget.builder =
+                    (final FlutterErrorDetails errorDetails) => error;
+                return widget!;
+              },
             ),
           ),
         ),

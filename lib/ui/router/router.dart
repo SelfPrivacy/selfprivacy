@@ -99,7 +99,7 @@ Widget fadeThroughTransition(
   ],
 )
 class RootRouter extends _$RootRouter {
-  RootRouter();
+  RootRouter(GlobalKey<NavigatorState> super.navigatorKey);
 }
 
 // Function to map route names to route titles

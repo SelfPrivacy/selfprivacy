@@ -231,9 +231,7 @@ class _SshKeysCard extends StatelessWidget {
                                       publicKey: key,
                                     ),
                                   );
-                              Navigator.of(context)
-                                ..pop()
-                                ..pop();
+                              context.popRoute();
                             },
                           ),
                         ],

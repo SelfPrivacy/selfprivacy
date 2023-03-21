@@ -107,13 +107,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         currency: 'USD',
       );
 
-  Future<GenericResult<ServerVolume?>> createVolume() async {
-    ServerVolume? volume;
-
+  Future<GenericResult> createVolume() async {
     Response? createVolumeResponse;
     final Dio client = await getClient();
     try {
-      final List<ServerVolume> volumes = await getVolumes();
       await Future.delayed(const Duration(seconds: 6));
 
       createVolumeResponse = await client.post(
@@ -125,17 +122,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'region': region,
           'filesystem_type': 'ext4',
         },
-      );
-      final volumeId = createVolumeResponse.data['volume']['id'];
-      final volumeSize = createVolumeResponse.data['volume']['size_gigabytes'];
-      final volumeName = createVolumeResponse.data['volume']['name'];
-      volume = ServerVolume(
-        id: volumes.length,
-        name: volumeName,
-        sizeByte: volumeSize,
-        serverId: null,
-        linuxDevice: '/dev/disk/by-id/scsi-0DO_Volume_$volumeName',
-        uuid: volumeId,
       );
     } catch (e) {
       print(e);
@@ -149,17 +135,17 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     return GenericResult(
-      data: volume,
+      data: createVolumeResponse.data,
       success: true,
       code: createVolumeResponse.statusCode,
       message: createVolumeResponse.statusMessage,
     );
   }
 
-  Future<List<ServerVolume>> getVolumes({final String? status}) async {
-    final List<ServerVolume> volumes = [];
+  Future<GenericResult<List>> getVolumes({final String? status}) async {
+    List volumes = [];
 
-    final Response getVolumesResponse;
+    Response? getVolumesResponse;
     final Dio client = await getClient();
     try {
       getVolumesResponse = await client.get(
@@ -168,59 +154,47 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'status': status,
         },
       );
-      final List<dynamic> rawVolumes = getVolumesResponse.data['volumes'];
-      int id = 0;
-      for (final rawVolume in rawVolumes) {
-        final volumeId = rawVolume['id'];
-        final int volumeSize = rawVolume['size_gigabytes'] * 1024 * 1024 * 1024;
-        final volumeDropletIds = rawVolume['droplet_ids'];
-        final String volumeName = rawVolume['name'];
-        final volume = ServerVolume(
-          id: id++,
-          name: volumeName,
-          sizeByte: volumeSize,
-          serverId: volumeDropletIds.isNotEmpty ? volumeDropletIds[0] : null,
-          linuxDevice: 'scsi-0DO_Volume_$volumeName',
-          uuid: volumeId,
-        );
-        volumes.add(volume);
-      }
+      volumes = getVolumesResponse.data['volumes'];
     } catch (e) {
       print(e);
+      return GenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return volumes;
+    return GenericResult(
+      data: volumes,
+      success: false,
+    );
   }
 
-  Future<ServerVolume?> getVolume(final String volumeUuid) async {
-    ServerVolume? requestedVolume;
-
-    final List<ServerVolume> volumes = await getVolumes();
-
-    for (final volume in volumes) {
-      if (volume.uuid == volumeUuid) {
-        requestedVolume = volume;
-      }
-    }
-
-    return requestedVolume;
-  }
-
-  Future<void> deleteVolume(final ServerVolume volume) async {
+  Future<GenericResult<void>> deleteVolume(final String uuid) async {
     final Dio client = await getClient();
     try {
-      await client.delete('/volumes/${volume.uuid}');
+      await client.delete('/volumes/$uuid');
     } catch (e) {
       print(e);
+      return GenericResult(
+        data: null,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
+
+    return GenericResult(
+      data: null,
+      success: true,
+    );
   }
 
   Future<GenericResult<bool>> attachVolume(
-    final ServerVolume volume,
+    final String name,
     final int serverId,
   ) async {
     bool success = false;
@@ -232,7 +206,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/volumes/actions',
         data: {
           'type': 'attach',
-          'volume_name': volume.name,
+          'volume_name': name,
           'region': region,
           'droplet_id': serverId,
         },
@@ -258,7 +232,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<bool> detachVolume(final ServerVolume volume) async {
+  Future<GenericResult<bool>> detachVolume(
+    final String name,
+    final int serverId,
+  ) async {
     bool success = false;
 
     final Response detachVolumeResponse;
@@ -268,8 +245,8 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/volumes/actions',
         data: {
           'type': 'detach',
-          'volume_name': volume.name,
-          'droplet_id': volume.serverId,
+          'volume_name': name,
+          'droplet_id': serverId,
           'region': region,
         },
       );
@@ -277,15 +254,23 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
+      return GenericResult(
+        data: false,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return success;
+    return GenericResult(
+      data: success,
+      success: true,
+    );
   }
 
-  Future<bool> resizeVolume(
-    final ServerVolume volume,
+  Future<GenericResult<bool>> resizeVolume(
+    final String name,
     final DiskSize size,
   ) async {
     bool success = false;
@@ -297,7 +282,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/volumes/actions',
         data: {
           'type': 'resize',
-          'volume_name': volume.name,
+          'volume_name': name,
           'size_gigabytes': size.gibibyte,
           'region': region,
         },
@@ -306,11 +291,19 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
+      return GenericResult(
+        data: false,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return success;
+    return GenericResult(
+      data: success,
+      success: true,
+    );
   }
 
   Future<GenericResult<ServerHostingDetails?>> createServer({

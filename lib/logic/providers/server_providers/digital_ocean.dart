@@ -439,17 +439,20 @@ class DigitalOceanServerProvider extends ServerProvider {
         }
       }
 
-      final volumes = await _adapter.api().getVolumes();
+      final volumes = await getVolumes();
       final ServerVolume volumeToRemove;
-      volumeToRemove = volumes.firstWhere(
+      volumeToRemove = volumes.data.firstWhere(
         (final el) => el.serverId == foundServer!.id,
       );
 
-      await _adapter.api().detachVolume(volumeToRemove);
+      await _adapter.api().detachVolume(
+            volumeToRemove.name,
+            volumeToRemove.serverId!,
+          );
 
       await Future.delayed(const Duration(seconds: 10));
       final List<Future> laterFutures = <Future>[];
-      laterFutures.add(_adapter.api().deleteVolume(volumeToRemove));
+      laterFutures.add(_adapter.api().deleteVolume(volumeToRemove.uuid!));
       laterFutures.add(_adapter.api().deleteServer(foundServer!.id));
 
       await Future.wait(laterFutures);
@@ -483,4 +486,156 @@ class DigitalOceanServerProvider extends ServerProvider {
       data: null,
     );
   }
+
+  Future<GenericResult<List<ServerVolume>>> getVolumes({
+    final String? status,
+  }) async {
+    final List<ServerVolume> volumes = [];
+
+    final result = await _adapter.api().getVolumes();
+
+    if (!result.success || result.data.isEmpty) {
+      return GenericResult(
+        data: [],
+        success: false,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    try {
+      int id = 0;
+      for (final rawVolume in result.data) {
+        final volumeId = rawVolume['id'];
+        final int volumeSize = rawVolume['size_gigabytes'] * 1024 * 1024 * 1024;
+        final volumeDropletIds = rawVolume['droplet_ids'];
+        final String volumeName = rawVolume['name'];
+        final volume = ServerVolume(
+          id: id++,
+          name: volumeName,
+          sizeByte: volumeSize,
+          serverId: volumeDropletIds.isNotEmpty ? volumeDropletIds[0] : null,
+          linuxDevice: 'scsi-0DO_Volume_$volumeName',
+          uuid: volumeId,
+        );
+        volumes.add(volume);
+      }
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
+    }
+
+    return GenericResult(
+      data: volumes,
+      success: true,
+    );
+  }
+
+  Future<GenericResult<ServerVolume?>> createVolume() async {
+    ServerVolume? volume;
+
+    final result = await _adapter.api().createVolume();
+
+    if (!result.success || result.data == null) {
+      return GenericResult(
+        data: null,
+        success: false,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final getVolumesResult = await _adapter.api().getVolumes();
+
+    if (!getVolumesResult.success || getVolumesResult.data.isEmpty) {
+      return GenericResult(
+        data: null,
+        success: false,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final volumeId = result.data['volume']['id'];
+    final volumeSize = result.data['volume']['size_gigabytes'];
+    final volumeName = result.data['volume']['name'];
+    volume = ServerVolume(
+      id: getVolumesResult.data.length,
+      name: volumeName,
+      sizeByte: volumeSize,
+      serverId: null,
+      linuxDevice: '/dev/disk/by-id/scsi-0DO_Volume_$volumeName',
+      uuid: volumeId,
+    );
+
+    return GenericResult(
+      data: volume,
+      success: true,
+    );
+  }
+
+  Future<GenericResult<ServerVolume?>> getVolume(
+    final String volumeUuid,
+  ) async {
+    ServerVolume? requestedVolume;
+
+    final result = await getVolumes();
+
+    if (!result.success || result.data.isEmpty) {
+      return GenericResult(
+        data: null,
+        success: false,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    for (final volume in result.data) {
+      if (volume.uuid == volumeUuid) {
+        requestedVolume = volume;
+      }
+    }
+
+    return GenericResult(
+      data: requestedVolume,
+      success: true,
+    );
+  }
+
+  Future<GenericResult<void>> deleteVolume(
+    final ServerVolume volume,
+  ) async =>
+      _adapter.api().deleteVolume(
+            volume.uuid!,
+          );
+
+  Future<GenericResult<bool>> attachVolume(
+    final ServerVolume volume,
+    final int serverId,
+  ) async =>
+      _adapter.api().attachVolume(
+            volume.name,
+            serverId,
+          );
+
+  Future<GenericResult<bool>> detachVolume(
+    final ServerVolume volume,
+  ) async =>
+      _adapter.api().detachVolume(
+            volume.name,
+            volume.serverId!,
+          );
+
+  Future<GenericResult<bool>> resizeVolume(
+    final ServerVolume volume,
+    final DiskSize size,
+  ) async =>
+      _adapter.api().resizeVolume(
+            volume.name,
+            size,
+          );
 }

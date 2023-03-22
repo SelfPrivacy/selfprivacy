@@ -12,6 +12,7 @@ import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
 
+@RoutePage()
 class ServicePage extends StatefulWidget {
   const ServicePage({required this.serviceId, super.key});
 

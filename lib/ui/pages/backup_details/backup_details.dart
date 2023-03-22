@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:selfprivacy/ui/helpers/modals.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+@RoutePage()
 class BackupDetailsPage extends StatefulWidget {
   const BackupDetailsPage({super.key});
 

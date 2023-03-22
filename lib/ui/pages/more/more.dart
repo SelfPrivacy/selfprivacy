@@ -12,6 +12,7 @@ import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
+@RoutePage()
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
 

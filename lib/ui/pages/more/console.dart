@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'dart:collection';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -7,6 +8,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 
+@RoutePage()
 class ConsolePage extends StatefulWidget {
   const ConsolePage({super.key});
 

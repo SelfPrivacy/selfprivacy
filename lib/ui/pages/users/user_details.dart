@@ -1,5 +1,6 @@
 part of 'users.dart';
 
+@RoutePage()
 class UserDetailsPage extends StatelessWidget {
   const UserDetailsPage({
     required this.login,

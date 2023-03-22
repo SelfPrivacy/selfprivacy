@@ -12,7 +12,8 @@ class NavigationService {
 
     if (context == null) {
       showSnackBar(
-          'Could not show dialog. This should not happen, please report this.');
+          'Could not show dialog. This should not happen, please report this.',
+      );
       return;
     }
 

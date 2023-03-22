@@ -11,6 +11,7 @@ import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
+@RoutePage()
 class ServerStoragePage extends StatefulWidget {
   const ServerStoragePage({
     required this.diskStatus,

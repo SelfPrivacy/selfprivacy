@@ -8,6 +8,7 @@ import 'package:selfprivacy/ui/router/root_destinations.dart';
 
 import 'package:selfprivacy/ui/router/router.dart';
 
+@RoutePage()
 class RootPage extends StatefulWidget implements AutoRouteWrapper {
   const RootPage({super.key});
 

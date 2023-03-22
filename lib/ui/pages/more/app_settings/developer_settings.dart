@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
@@ -6,6 +7,7 @@ import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+@RoutePage()
 class DeveloperSettingsPage extends StatefulWidget {
   const DeveloperSettingsPage({super.key});
 

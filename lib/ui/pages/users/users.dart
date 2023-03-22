@@ -33,6 +33,7 @@ part 'user.dart';
 part 'user_details.dart';
 part 'reset_password.dart';
 
+@RoutePage()
 class UsersPage extends StatelessWidget {
   const UsersPage({super.key});
 

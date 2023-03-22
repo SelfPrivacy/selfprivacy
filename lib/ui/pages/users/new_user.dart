@@ -1,5 +1,6 @@
 part of 'users.dart';
 
+@RoutePage()
 class NewUserPage extends StatelessWidget {
   const NewUserPage({super.key});
 

@@ -10,6 +10,7 @@ import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 
+@RoutePage()
 class ExtendingVolumePage extends StatefulWidget {
   const ExtendingVolumePage({
     required this.diskVolumeToResize,

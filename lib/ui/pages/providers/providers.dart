@@ -16,6 +16,7 @@ import 'package:selfprivacy/utils/breakpoints.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+@RoutePage()
 class ProvidersPage extends StatefulWidget {
   const ProvidersPage({super.key});
 

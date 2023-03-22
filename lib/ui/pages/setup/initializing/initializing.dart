@@ -23,6 +23,7 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 
+@RoutePage()
 class InitializingPage extends StatelessWidget {
   const InitializingPage({super.key});
 

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ part 'time_zone/time_zone.dart';
 
 var navigatorKey = GlobalKey<NavigatorState>();
 
+@RoutePage()
 class ServerDetailsScreen extends StatefulWidget {
   const ServerDetailsScreen({super.key});
 

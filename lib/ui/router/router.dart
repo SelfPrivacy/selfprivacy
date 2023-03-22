@@ -41,65 +41,67 @@ Widget fadeThroughTransition(
       child: child,
     );
 
-@MaterialAutoRouter(
+@AutoRouterConfig(
   // transitionsBuilder: fadeThroughTransition,
   replaceInRouteName: 'Page|Screen|Routing,Route',
-  routes: <AutoRoute>[
-    AutoRoute(
-      page: OnboardingPage,
-    ),
-    AutoRoute(page: InitializingPage),
-    AutoRoute(page: RecoveryRouting),
-    AutoRoute(
-      page: RootPage,
-      initial: true,
-      children: [
-        CustomRoute(
-          page: ProvidersPage,
-          usesPathAsKey: true,
-          initial: true,
-          transitionsBuilder: fadeThroughTransition,
-          durationInMilliseconds: 400,
-        ),
-        CustomRoute(
-          page: ServicesPage,
-          usesPathAsKey: true,
-          transitionsBuilder: fadeThroughTransition,
-          durationInMilliseconds: 400,
-        ),
-        CustomRoute(
-          page: UsersPage,
-          usesPathAsKey: true,
-          transitionsBuilder: fadeThroughTransition,
-          durationInMilliseconds: 400,
-        ),
-        CustomRoute(
-          page: MorePage,
-          usesPathAsKey: true,
-          transitionsBuilder: fadeThroughTransition,
-          durationInMilliseconds: 400,
-        ),
-        AutoRoute(page: AppSettingsPage),
-        AutoRoute(page: UserDetailsPage),
-        AutoRoute(page: NewUserPage),
-        AutoRoute(page: RecoveryKeyPage),
-        AutoRoute(page: DevicesScreen),
-        AutoRoute(page: AboutApplicationPage),
-        AutoRoute(page: DeveloperSettingsPage),
-        AutoRoute(page: ServicePage),
-        AutoRoute(page: ServerDetailsScreen),
-        AutoRoute(page: DnsDetailsPage),
-        AutoRoute(page: BackupDetailsPage),
-        AutoRoute(page: ServerStoragePage),
-        AutoRoute(page: ExtendingVolumePage),
-      ],
-    ),
-    AutoRoute(page: ServicesMigrationPage),
-    AutoRoute(page: ConsolePage),
-  ],
 )
 class RootRouter extends _$RootRouter {
   RootRouter(GlobalKey<NavigatorState> super.navigatorKey);
+
+  @override
+  RouteType get defaultRouteType => const RouteType.material();
+  @override
+  final List<AutoRoute> routes = [
+    AutoRoute(page: OnboardingRoute.page),
+    AutoRoute(page: InitializingRoute.page),
+    AutoRoute(page: RecoveryRoute.page),
+    AutoRoute(
+      page: RootRoute.page,
+      path: '/',
+      children: [
+        CustomRoute(
+          page: ProvidersRoute.page,
+          usesPathAsKey: true,
+          path: '',
+          transitionsBuilder: fadeThroughTransition,
+          durationInMilliseconds: 400,
+        ),
+        CustomRoute(
+          page: ServicesRoute.page,
+          usesPathAsKey: true,
+          transitionsBuilder: fadeThroughTransition,
+          durationInMilliseconds: 400,
+        ),
+        CustomRoute(
+          page: UsersRoute.page,
+          usesPathAsKey: true,
+          transitionsBuilder: fadeThroughTransition,
+          durationInMilliseconds: 400,
+        ),
+        CustomRoute(
+          page: MoreRoute.page,
+          usesPathAsKey: true,
+          transitionsBuilder: fadeThroughTransition,
+          durationInMilliseconds: 400,
+        ),
+        AutoRoute(page: AppSettingsRoute.page),
+        AutoRoute(page: UserDetailsRoute.page),
+        AutoRoute(page: NewUserRoute.page),
+        AutoRoute(page: RecoveryKeyRoute.page),
+        AutoRoute(page: DevicesRoute.page),
+        AutoRoute(page: AboutApplicationRoute.page),
+        AutoRoute(page: DeveloperSettingsRoute.page),
+        AutoRoute(page: ServiceRoute.page),
+        AutoRoute(page: ServerDetailsRoute.page),
+        AutoRoute(page: DnsDetailsRoute.page),
+        AutoRoute(page: BackupDetailsRoute.page),
+        AutoRoute(page: ServerStorageRoute.page),
+        AutoRoute(page: ExtendingVolumeRoute.page),
+      ],
+    ),
+    AutoRoute(page: ServicesMigrationRoute.page),
+    AutoRoute(page: ConsoleRoute.page),
+  ];
 }
 
 // Function to map route names to route titles

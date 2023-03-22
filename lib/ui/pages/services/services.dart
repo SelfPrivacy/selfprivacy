@@ -16,6 +16,7 @@ import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
+@RoutePage()
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
 

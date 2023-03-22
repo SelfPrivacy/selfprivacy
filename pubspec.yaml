@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   animations: ^2.0.7
-  auto_route: ^5.0.4
+  auto_route: ^6.0.1
   auto_size_text: ^3.0.0
   basic_utils: ^5.4.2
   crypt: ^4.2.1
@@ -51,7 +51,7 @@ dependencies:
   wakelock: ^0.6.2
 
 dev_dependencies:
-  auto_route_generator: ^5.0.3
+  auto_route_generator: ^6.0.0
   flutter_test:
     sdk: flutter
   build_runner: ^2.3.3

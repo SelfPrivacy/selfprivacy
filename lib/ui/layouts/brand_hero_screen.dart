@@ -1,6 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
+import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/helpers/widget_size.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 
@@ -20,7 +24,6 @@ class BrandHeroScreen extends StatelessWidget {
 
   final List<Widget> children;
   final bool hasBackButton;
-  @Deprecated('Flash button is now provided by root scaffold')
   final bool hasFlashButton;
   final IconData? heroIcon;
   final Widget? heroIconWidget;
@@ -40,7 +43,6 @@ class BrandHeroScreen extends StatelessWidget {
     final bool hasHeroIcon = heroIcon != null || this.heroIconWidget != null;
 
     return Scaffold(
-      floatingActionButton: hasFlashButton ? const BrandFab() : null,
       body: CustomScrollView(
         slivers: [
           HeroSliverAppBar(
@@ -49,6 +51,7 @@ class BrandHeroScreen extends StatelessWidget {
             hasBackButton: hasBackButton,
             onBackButtonPressed: onBackButtonPressed,
             heroIconWidget: heroIconWidget,
+            hasFlashButton: hasFlashButton,
           ),
           if (heroSubtitle != null)
             SliverPadding(
@@ -87,12 +90,14 @@ class HeroSliverAppBar extends StatefulWidget {
     required this.hasBackButton,
     required this.onBackButtonPressed,
     required this.heroIconWidget,
+    required this.hasFlashButton,
     super.key,
   });
 
   final String heroTitle;
   final bool hasHeroIcon;
   final bool hasBackButton;
+  final bool hasFlashButton;
   final VoidCallback? onBackButtonPressed;
   final Widget heroIconWidget;
 
@@ -105,6 +110,7 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
   @override
   Widget build(final BuildContext context) {
     final isMobile = Breakpoints.small.isActive(context);
+    final isJobsListEmpty = context.watch<JobsCubit>().state is JobsStateEmpty;
     return SliverAppBar(
       expandedHeight:
           widget.hasHeroIcon ? 148.0 + _size.height : 72.0 + _size.height,
@@ -115,6 +121,30 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
       leading: (widget.hasBackButton && isMobile)
           ? const AutoLeadingButton()
           : const SizedBox.shrink(),
+      actions: [
+        if (widget.hasFlashButton && isMobile)
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: IconButton(
+              onPressed: () {
+                showBrandBottomSheet(
+                  context: context,
+                  builder: (final BuildContext context) =>
+                      const BrandBottomSheet(
+                    isExpended: true,
+                    child: JobsContent(),
+                  ),
+                );
+              },
+              icon: Icon(
+                isJobsListEmpty ? Ionicons.flash_outline : Ionicons.flash,
+              ),
+              color: isJobsListEmpty
+                  ? Theme.of(context).colorScheme.onBackground
+                  : Theme.of(context).colorScheme.primary,
+            ),
+          ),
+      ],
       flexibleSpace: FlexibleSpaceBar(
         title: LayoutBuilder(
           builder: (final context, final constraints) => SizedBox(

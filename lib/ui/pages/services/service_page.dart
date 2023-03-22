@@ -47,6 +47,7 @@ class _ServicePageState extends State<ServicePage> {
 
     return BrandHeroScreen(
       hasBackButton: true,
+      hasFlashButton: true,
       heroIconWidget: SvgPicture.string(
         service.svgIcon,
         width: 48.0,

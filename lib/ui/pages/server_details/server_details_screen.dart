@@ -77,6 +77,7 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
     return BlocProvider(
       create: (final context) => context.read<ServerDetailsCubit>()..check(),
       child: BrandHeroScreen(
+        hasFlashButton: true,
         heroIcon: BrandIcons.server,
         heroTitle: 'server.card_title'.tr(),
         heroSubtitle: 'server.description'.tr(),

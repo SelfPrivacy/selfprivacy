@@ -26,6 +26,7 @@ class UserDetailsPage extends StatelessWidget {
     if (user.type == UserType.root) {
       return BrandHeroScreen(
         hasBackButton: true,
+        hasFlashButton: true,
         heroTitle: 'ssh.root_title'.tr(),
         heroSubtitle: 'ssh.root_subtitle'.tr(),
         children: [
@@ -36,6 +37,7 @@ class UserDetailsPage extends StatelessWidget {
 
     return BrandHeroScreen(
       hasBackButton: true,
+      hasFlashButton: true,
       heroTitle: user.login,
       children: [
         _UserLogins(user: user, domainName: domainName),

@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/digital_ocean/digital_ocean_api.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
@@ -12,6 +15,7 @@ import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/server_provider.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
   ApiAdapter({final String? region, final bool isWithToken = true})
@@ -109,6 +113,62 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     return emoji;
+  }
+
+  String dnsProviderToInfectName(final DnsProviderType dnsProvider) {
+    String dnsProviderType;
+    switch (dnsProvider) {
+      case DnsProviderType.digitalOcean:
+        dnsProviderType = 'DIGITALOCEAN';
+        break;
+      case DnsProviderType.cloudflare:
+      default:
+        dnsProviderType = 'CLOUDFLARE';
+        break;
+    }
+    return dnsProviderType;
+  }
+
+  @override
+  Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
+    final LaunchInstallationData installationData,
+  ) async {
+    final serverResult = await _adapter.api().createServer(
+          dnsApiToken: installationData.dnsApiToken,
+          rootUser: installationData.rootUser,
+          domainName: installationData.domainName,
+          serverType: installationData.serverTypeId,
+          dnsProviderType:
+              dnsProviderToInfectName(installationData.dnsProviderType),
+          hostName: getHostnameFromDomain(installationData.domainName),
+          base64Password: base64.encode(
+            utf8.encode(installationData.rootUser.password ?? 'PASS'),
+          ),
+          databasePassword: StringGenerators.dbPassword(),
+          serverApiToken: StringGenerators.apiToken(),
+        );
+
+    if (!serverResult.success || serverResult.data == null) {
+      GenericResult(
+        data: CallbackDialogueBranching(
+          choices: [
+            CallbackDialogueChoice(
+              title: 'basis.cancel'.tr(),
+              callback: await installationData.errorCallback(),
+            ),
+            CallbackDialogueChoice(
+              title: 'basis.try_again'.tr(),
+              callback: () async => launchInstallation(installationData),
+            ),
+          ],
+          description: serverResult.message ?? 'recovering.generic_error'.tr(),
+          title: 'modals.unexpected_error'.tr(),
+        ),
+        success: false,
+        message: serverResult.message,
+        code: serverResult.code,
+      );
+    }
   }
 
   @override

@@ -306,7 +306,61 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<GenericResult<ServerHostingDetails?>> createServer({
+  Future<GenericResult> createServer({
+    required final String dnsApiToken,
+    required final String dnsProviderType,
+    required final String serverApiToken,
+    required final User rootUser,
+    required final String base64Password,
+    required final String databasePassword,
+    required final String domainName,
+    required final String hostName,
+    required final int volumeId,
+    required final String serverType,
+  }) async {
+    final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
+
+    Response? serverCreateResponse;
+    final Dio client = await getClient();
+    try {
+      final Map<String, Object> data = {
+        'name': hostName,
+        'size': serverType,
+        'image': 'ubuntu-20-04-x64',
+        'user_data': '#cloud-config\n'
+            'runcmd:\n'
+            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/providers/digital-ocean/nixos-infect | '
+            "PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType STAGING_ACME='$stagingAcme' DOMAIN='$domainName' "
+            "LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$databasePassword "
+            'API_TOKEN=$serverApiToken HOSTNAME=$hostName bash 2>&1 | tee /tmp/infect.log',
+        'region': region!,
+      };
+      print('Decoded data: $data');
+
+      serverCreateResponse = await client.post(
+        '/droplets',
+        data: data,
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(
+      data: serverCreateResponse,
+      success: true,
+      code: serverCreateResponse.statusCode,
+      message: serverCreateResponse.statusMessage,
+    );
+  }
+
+  Future<GenericResult<ServerHostingDetails?>> creatfgdfeServer({
     required final String dnsApiToken,
     required final User rootUser,
     required final String domainName,

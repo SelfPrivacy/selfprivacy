@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/ui/components/action_button/action_button.dart';
+import 'package:selfprivacy/ui/components/buttons/dialog_action_button.dart';
 import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -84,7 +84,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   title: 'modals.are_you_sure'.tr(),
                   contentText: 'modals.delete_server_volume'.tr(),
                   actions: [
-                    ActionButton(
+                    DialogActionButton(
                       text: 'modals.yes'.tr(),
                       isRed: true,
                       onPressed: () async {
@@ -104,7 +104,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                         Navigator.of(context).pop();
                       },
                     ),
-                    ActionButton(
+                    DialogActionButton(
                       text: 'basis.cancel'.tr(),
                     ),
                   ],
@@ -129,7 +129,7 @@ class _ResetAppTile extends StatelessWidget {
               title: 'modals.are_you_sure'.tr(),
               contentText: 'modals.purge_all_keys'.tr(),
               actions: [
-                ActionButton(
+                DialogActionButton(
                   text: 'modals.purge_all_keys_confirm'.tr(),
                   isRed: true,
                   onPressed: () {
@@ -137,7 +137,7 @@ class _ResetAppTile extends StatelessWidget {
                     Navigator.of(context).pop();
                   },
                 ),
-                ActionButton(
+                DialogActionButton(
                   text: 'basis.cancel'.tr(),
                 ),
               ],

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 extension TextExtension on Text {
   Text withColor(final Color color) => Text(

@@ -28,17 +28,17 @@ class _User extends StatelessWidget {
               ),
               const SizedBox(width: 20),
               Flexible(
-                child: isRootUser
-                    ? BrandText.h4Underlined(user.login)
-                    // cross out text if user not found on server
-                    : BrandText.h4(
-                        user.login,
-                        style: user.isFoundOnServer
-                            ? null
-                            : const TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                              ),
+                child: Text(
+                  user.login,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        decoration: isRootUser
+                            ? TextDecoration.underline
+                            : user.isFoundOnServer
+                                ? TextDecoration.none
+                                : TextDecoration.lineThrough,
                       ),
+                ),
               ),
             ],
           ),

@@ -77,8 +77,11 @@ class _ConsolePageState extends State<ConsolePage> {
                                           '${message.timeString}${isError ? '(Error)' : ''}: \n',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color:
-                                            isError ? BrandColors.red1 : null,
+                                        color: isError
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .error
+                                            : null,
                                       ),
                                     ),
                                     TextSpan(text: message.text),

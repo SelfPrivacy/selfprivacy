@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -10,9 +12,8 @@ import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_fo
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/components/support_drawer/support_drawer.dart';
@@ -395,7 +396,10 @@ class InitializingPage extends StatelessWidget {
                             color: Colors.white,
                           ),
                           const SizedBox(width: 10),
-                          BrandText.buttonTitleText('domain.update_list'.tr()),
+                          Text(
+                            'domain.update_list'.tr(),
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         ],
                       ),
                     ),
@@ -403,8 +407,8 @@ class InitializingPage extends StatelessWidget {
                   if (state is Loaded) ...[
                     const SizedBox(height: 32),
                     BrandButton.filled(
-                      onPressed: () =>
-                          context.read<DomainSetupCubit>().saveDomain(),
+                      onPressed: () => unawaited(
+                          context.read<DomainSetupCubit>().saveDomain()),
                       text: 'initializing.save_domain'.tr(),
                     ),
                   ],

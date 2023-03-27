@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,7 +9,6 @@ import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -45,24 +46,25 @@ class _ServicesPageState extends State<ServicesPage> {
           : null,
       body: RefreshIndicator(
         onRefresh: () async {
-          context.read<ServicesCubit>().reload();
+          unawaited(context.read<ServicesCubit>().reload());
         },
         child: ListView(
           padding: paddingH15V0,
           children: [
-            BrandText.body1('basis.services_title'.tr()),
+            Text(
+              'basis.services_title'.tr(),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             const SizedBox(height: 24),
             if (!isReady) ...[const NotReadyCard(), const SizedBox(height: 24)],
-            ...services
-                .map(
-                  (final service) => Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 30,
-                    ),
-                    child: _Card(service: service),
-                  ),
-                )
-                .toList()
+            ...services.map(
+              (final service) => Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 30,
+                ),
+                child: _Card(service: service),
+              ),
+            )
           ],
         ),
       ),
@@ -106,8 +108,10 @@ class _Card extends StatelessWidget {
       child: InkResponse(
         highlightShape: BoxShape.rectangle,
         onTap: isReady
-            ? () => context.pushRoute(
-                  ServiceRoute(serviceId: service.id),
+            ? () => unawaited(
+                  context.pushRoute(
+                    ServiceRoute(serviceId: service.id),
+                  ),
                 )
             : null,
         child: Padding(
@@ -134,23 +138,17 @@ class _Card extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 10),
-                  BrandText.h2(service.displayName),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
+                  Text(
+                    service.displayName,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 8),
                   if (service.url != '' && service.url != null)
                     Column(
                       children: [
-                        GestureDetector(
-                          onTap: () => launchURL(
-                            service.url,
-                          ),
-                          child: Text(
-                            '${service.url}',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
+                        _ServiceLink(
+                          url: service.url ?? '',
                         ),
                         const SizedBox(height: 10),
                       ],
@@ -158,19 +156,22 @@ class _Card extends StatelessWidget {
                   if (service.id == 'mailserver')
                     Column(
                       children: [
-                        Text(
-                          domainName,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            decoration: TextDecoration.underline,
-                          ),
+                        _ServiceLink(
+                          url: domainName,
+                          isActive: false,
                         ),
                         const SizedBox(height: 10),
                       ],
                     ),
-                  BrandText.body2(service.loginInfo),
+                  Text(
+                    service.loginInfo,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: 10),
-                  BrandText.body2(service.description),
+                  Text(
+                    service.description,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: 10),
                 ],
               )
@@ -180,4 +181,30 @@ class _Card extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ServiceLink extends StatelessWidget {
+  const _ServiceLink({
+    required this.url,
+    this.isActive = true,
+  });
+
+  final String url;
+  final bool isActive;
+
+  @override
+  Widget build(final BuildContext context) => GestureDetector(
+        onTap: isActive
+            ? () => launchURL(
+                  url,
+                )
+            : null,
+        child: Text(
+          url,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                decoration: TextDecoration.underline,
+              ),
+        ),
+      );
 }

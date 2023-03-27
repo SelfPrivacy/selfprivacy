@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:package_info/package_info.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -25,17 +24,19 @@ class AboutApplicationPage extends StatelessWidget {
       children: [
         FutureBuilder(
           future: _packageVersion(),
-          builder: (final context, final snapshot) => BrandText.body1(
+          builder: (final context, final snapshot) => Text(
             'about_application_page.application_version_text'
                 .tr(args: [snapshot.data.toString()]),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
         if (isReady)
           FutureBuilder(
             future: _apiVersion(),
-            builder: (final context, final snapshot) => BrandText.body1(
+            builder: (final context, final snapshot) => Text(
               'about_application_page.api_version_text'
                   .tr(args: [snapshot.data.toString()]),
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
         const SizedBox(height: 10),

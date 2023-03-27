@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 
 class BrandBottomSheet extends StatelessWidget {
   const BrandBottomSheet({
@@ -38,7 +37,7 @@ class BrandBottomSheet extends StatelessWidget {
             width: 30,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2),
-              color: BrandColors.gray4,
+              color: const Color(0xFFDDDDDD),
             ),
           ),
         ),

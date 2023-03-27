@@ -11,21 +11,25 @@ class _NoUsers extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(BrandIcons.users, size: 50, color: BrandColors.grey7),
+            Icon(
+              BrandIcons.users,
+              size: 50,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
             const SizedBox(height: 20),
-            BrandText.h2(
+            Text(
               'users.nobody_here'.tr(),
-              style: const TextStyle(
-                color: BrandColors.grey7,
-              ),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
             ),
             const SizedBox(height: 10),
-            BrandText.medium(
+            Text(
               text,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: BrandColors.grey7,
-              ),
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
             ),
           ],
         ),
@@ -43,21 +47,25 @@ class _CouldNotLoadUsers extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(BrandIcons.users, size: 50, color: BrandColors.grey7),
+            Icon(
+              BrandIcons.users,
+              size: 50,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
             const SizedBox(height: 20),
-            BrandText.h2(
+            Text(
               'users.could_not_fetch_users'.tr(),
-              style: const TextStyle(
-                color: BrandColors.grey7,
-              ),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
             ),
             const SizedBox(height: 10),
-            BrandText.medium(
+            Text(
               text,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: BrandColors.grey7,
-              ),
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
             ),
           ],
         ),

@@ -5,11 +5,10 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -59,7 +58,10 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
             text: 'backup.initialize'.tr(),
           ),
         if (backupStatus == BackupStatusEnum.initializing)
-          BrandText.body1('backup.waiting_for_rebuild'.tr()),
+          Text(
+            'backup.waiting_for_rebuild'.tr(),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
         if (backupStatus != BackupStatusEnum.initializing &&
             backupStatus != BackupStatusEnum.noKey)
           OutlinedCard(
@@ -229,7 +231,10 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
           ),
         ),
         if (backupStatus == BackupStatusEnum.error)
-          BrandText.body1(backupError.toString()),
+          Text(
+            backupError.toString(),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
       ],
     );
   }

@@ -23,15 +23,13 @@ class _TextDetails extends StatelessWidget {
                     ),
               ),
             ),
-            ...details.metadata
-                .map(
-                  (final metadata) => ListTileOnSurfaceVariant(
-                    leadingIcon: metadata.type.icon,
-                    title: metadata.name,
-                    subtitle: metadata.value,
-                  ),
-                )
-                .toList(),
+            ...details.metadata.map(
+              (final metadata) => ListTileOnSurfaceVariant(
+                leadingIcon: metadata.type.icon,
+                title: metadata.name,
+                subtitle: metadata.value,
+              ),
+            ),
           ],
         ),
       );
@@ -39,24 +37,6 @@ class _TextDetails extends StatelessWidget {
       throw Exception('wrong state');
     }
   }
-
-  Widget getRowTitle(final String title) => Padding(
-        padding: const EdgeInsets.only(right: 10),
-        child: BrandText.h5(
-          title,
-          textAlign: TextAlign.right,
-        ),
-      );
-
-  Widget getRowValue(final String title, {final bool isBold = false}) =>
-      BrandText.body1(
-        title,
-        style: isBold
-            ? const TextStyle(
-                fontWeight: NamedFontWeight.demiBold,
-              )
-            : null,
-      );
 }
 
 class _TempMessage extends StatelessWidget {
@@ -69,7 +49,10 @@ class _TempMessage extends StatelessWidget {
   Widget build(final BuildContext context) => SizedBox(
         height: MediaQuery.of(context).size.height - 100,
         child: Center(
-          child: BrandText.body2(message),
+          child: Text(
+            message,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
         ),
       );
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
@@ -88,11 +90,13 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       text: 'modals.yes'.tr(),
                       isRed: true,
                       onPressed: () async {
-                        showDialog(
-                          context: context,
-                          builder: (final context) => Container(
-                            alignment: Alignment.center,
-                            child: const CircularProgressIndicator(),
+                        unawaited(
+                          showDialog(
+                            context: context,
+                            builder: (final context) => Container(
+                              alignment: Alignment.center,
+                              child: const CircularProgressIndicator(),
+                            ),
                           ),
                         );
                         await context

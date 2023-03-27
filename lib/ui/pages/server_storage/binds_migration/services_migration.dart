@@ -112,22 +112,20 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                 ),
                 child: Column(
                   children: [
-                    ...widget.diskStatus.diskVolumes
-                        .map(
-                          (final volume) => Column(
-                            children: [
-                              ServerStorageListItem(
-                                volume: recalculatedDiskUsages(
-                                  volume,
-                                  widget.services,
-                                ),
-                                dense: true,
-                              ),
-                              const SizedBox(height: headerVerticalPadding),
-                            ],
+                    ...widget.diskStatus.diskVolumes.map(
+                      (final volume) => Column(
+                        children: [
+                          ServerStorageListItem(
+                            volume: recalculatedDiskUsages(
+                              volume,
+                              widget.services,
+                            ),
+                            dense: true,
                           ),
-                        )
-                        .toList(),
+                          const SizedBox(height: headerVerticalPadding),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -140,23 +138,21 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
           children: <Widget>[
             if (widget.services.isEmpty)
               const Center(child: CircularProgressIndicator()),
-            ...widget.services
-                .map(
-                  (final service) => Column(
-                    children: [
-                      const SizedBox(height: 8),
-                      ServiceMigrationListItem(
-                        service: service,
-                        diskStatus: widget.diskStatus,
-                        selectedVolume: serviceToDisk[service.id]!,
-                        onChange: onChange,
-                      ),
-                      const SizedBox(height: 4),
-                      const Divider(),
-                    ],
+            ...widget.services.map(
+              (final service) => Column(
+                children: [
+                  const SizedBox(height: 8),
+                  ServiceMigrationListItem(
+                    service: service,
+                    diskStatus: widget.diskStatus,
+                    selectedVolume: serviceToDisk[service.id]!,
+                    onChange: onChange,
                   ),
-                )
-                .toList(),
+                  const SizedBox(height: 4),
+                  const Divider(),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InfoBox(

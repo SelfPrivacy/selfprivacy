@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -46,7 +44,7 @@ class _ServicesPageState extends State<ServicesPage> {
           : null,
       body: RefreshIndicator(
         onRefresh: () async {
-          unawaited(context.read<ServicesCubit>().reload());
+          await context.read<ServicesCubit>().reload();
         },
         child: ListView(
           padding: paddingH15V0,
@@ -108,10 +106,8 @@ class _Card extends StatelessWidget {
       child: InkResponse(
         highlightShape: BoxShape.rectangle,
         onTap: isReady
-            ? () => unawaited(
-                  context.pushRoute(
-                    ServiceRoute(serviceId: service.id),
-                  ),
+            ? () => context.pushRoute(
+                  ServiceRoute(serviceId: service.id),
                 )
             : null,
         child: Padding(

@@ -251,7 +251,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).push(
+      await Navigator.of(context).push(
         materialRoute(
           RecoveryKeyReceiving(recoveryKey: token), // TO DO
         ),

@@ -27,7 +27,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<ApiDevicesCubit>().refresh();
+        await context.read<ApiDevicesCubit>().refresh();
       },
       child: BrandHeroScreen(
         heroTitle: 'devices.main_screen.header'.tr(),
@@ -92,8 +92,7 @@ class _DevicesInfo extends StatelessWidget {
                 ),
           ),
           ...devicesStatus.otherDevices
-              .map((final device) => _DeviceTile(device: device))
-              .toList(),
+              .map((final device) => _DeviceTile(device: device)),
         ],
       );
 }

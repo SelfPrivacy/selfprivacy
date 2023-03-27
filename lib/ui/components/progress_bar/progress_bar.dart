@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 
 class ProgressBar extends StatefulWidget {

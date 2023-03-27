@@ -69,38 +69,34 @@ class JobsContent extends StatelessWidget {
           ];
         } else if (state is JobsStateWithJobs) {
           widgets = [
-            ...state.clientJobList
-                .map(
-                  (final j) => Row(
-                    children: [
-                      Expanded(
-                        child: BrandCards.small(
-                          child: Text(j.title),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.errorContainer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () =>
-                            context.read<JobsCubit>().removeJob(j.id),
-                        child: Text(
-                          'basis.remove'.tr(),
-                          style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.onErrorContainer,
-                          ),
-                        ),
-                      ),
-                    ],
+            ...state.clientJobList.map(
+              (final j) => Row(
+                children: [
+                  Expanded(
+                    child: BrandCards.small(
+                      child: Text(j.title),
+                    ),
                   ),
-                )
-                .toList(),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Theme.of(context).colorScheme.errorContainer,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () => context.read<JobsCubit>().removeJob(j.id),
+                    child: Text(
+                      'basis.remove'.tr(),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onErrorContainer,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 20),
             BrandButton.rised(
               onPressed: () => context.read<JobsCubit>().applyAll(),

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -407,8 +405,8 @@ class InitializingPage extends StatelessWidget {
                   if (state is Loaded) ...[
                     const SizedBox(height: 32),
                     BrandButton.filled(
-                      onPressed: () => unawaited(
-                          context.read<DomainSetupCubit>().saveDomain()),
+                      onPressed: () =>
+                          context.read<DomainSetupCubit>().saveDomain(),
                       text: 'initializing.save_domain'.tr(),
                     ),
                   ],
@@ -666,7 +664,7 @@ class _ProgressDrawer extends StatelessWidget {
                           isCurrent: index == cubit.state.progress.index,
                           isCompleted: index < cubit.state.progress.index,
                         );
-                      }).toList(),
+                      }),
                     ],
                   ),
                 ),

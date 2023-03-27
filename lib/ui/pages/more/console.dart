@@ -3,7 +3,6 @@ import 'dart:collection';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';

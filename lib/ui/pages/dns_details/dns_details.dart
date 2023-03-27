@@ -157,8 +157,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                   ),
                 ],
               ),
-            )
-            .toList(),
+            ),
         const SizedBox(height: 16.0),
         ListTile(
           title: Text(
@@ -199,8 +198,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                   ),
                 ],
               ),
-            )
-            .toList(),
+            ),
       ],
     );
   }

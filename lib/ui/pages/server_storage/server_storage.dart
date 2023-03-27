@@ -46,28 +46,26 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
       heroTitle: 'storage.card_title'.tr(),
       children: [
         // ...sections,
-        ...widget.diskStatus.diskVolumes
-            .map(
-              (final volume) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ServerStorageSection(
-                    volume: volume,
-                    diskStatus: widget.diskStatus,
-                    services: services
-                        .where(
-                          (final service) =>
-                              service.storageUsage.volume == volume.name,
-                        )
-                        .toList(),
-                  ),
-                  const SizedBox(height: 16),
-                  const Divider(),
-                  const SizedBox(height: 16),
-                ],
+        ...widget.diskStatus.diskVolumes.map(
+          (final volume) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ServerStorageSection(
+                volume: volume,
+                diskStatus: widget.diskStatus,
+                services: services
+                    .where(
+                      (final service) =>
+                          service.storageUsage.volume == volume.name,
+                    )
+                    .toList(),
               ),
-            )
-            .toList(),
+              const SizedBox(height: 16),
+              const Divider(),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
         const SizedBox(height: 8),
       ],
     );
@@ -94,14 +92,12 @@ class ServerStorageSection extends StatelessWidget {
             volume: volume,
           ),
           const SizedBox(height: 16),
-          ...services
-              .map(
-                (final service) => ServerConsumptionListTile(
-                  service: service,
-                  volume: volume,
-                ),
-              )
-              .toList(),
+          ...services.map(
+            (final service) => ServerConsumptionListTile(
+              service: service,
+              volume: volume,
+            ),
+          ),
           if (volume.isResizable) ...[
             const SizedBox(height: 16),
             BrandOutlinedButton(

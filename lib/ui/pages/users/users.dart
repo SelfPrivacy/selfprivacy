@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -64,7 +63,7 @@ class UsersPage extends StatelessWidget {
             }
             return RefreshIndicator(
               onRefresh: () async {
-                context.read<UsersCubit>().refresh();
+                await context.read<UsersCubit>().refresh();
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -90,7 +89,7 @@ class UsersPage extends StatelessWidget {
           }
           return RefreshIndicator(
             onRefresh: () async {
-              context.read<UsersCubit>().refresh();
+              await context.read<UsersCubit>().refresh();
             },
             child: Column(
               children: [

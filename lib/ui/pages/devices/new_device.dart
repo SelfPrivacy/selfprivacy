@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 
 class NewDeviceScreen extends StatelessWidget {
@@ -71,7 +71,7 @@ class _KeyDisplay extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          FilledButton(
+          BrandButton.filled(
             child: Text(
               'basis.done'.tr(),
             ),

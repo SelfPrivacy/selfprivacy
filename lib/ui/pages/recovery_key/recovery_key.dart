@@ -7,7 +7,6 @@ import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
 import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key_receiving.dart';
@@ -104,8 +103,8 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
             },
           ),
         if (!_isConfigurationVisible && !keyStatus.isValid && keyStatus.exists)
-          FilledButton(
-            title: 'recovery_key.key_replace_button'.tr(),
+          BrandButton.filled(
+            child: Text('recovery_key.key_replace_button'.tr()),
             onPressed: () {
               setState(() {
                 _isConfigurationVisible = true;
@@ -393,12 +392,11 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
           secondChild: Container(),
         ),
         const SizedBox(height: 16),
-        FilledButton(
-          title: 'recovery_key.key_receive_button'.tr(),
-          disabled: _isAmountError || _isExpirationError || _isLoading,
-          onPressed: !_isAmountError && !_isExpirationError
+        BrandButton.filled(
+          onPressed: !_isAmountError && !_isExpirationError && !_isLoading
               ? _generateRecoveryToken
               : null,
+          child: Text('recovery_key.key_receive_button'.tr()),
         ),
       ],
     );

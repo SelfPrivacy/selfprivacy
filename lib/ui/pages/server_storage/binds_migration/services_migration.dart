@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_button/filled_button.dart';
+import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
@@ -163,8 +163,8 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
               ),
             ),
             const SizedBox(height: 16),
-            FilledButton(
-              title: 'storage.start_migration_button'.tr(),
+            BrandButton.filled(
+              child: Text('storage.start_migration_button'.tr()),
               onPressed: () {
                 if (widget.isMigration) {
                   context.read<ServerJobsCubit>().migrateToBinds(

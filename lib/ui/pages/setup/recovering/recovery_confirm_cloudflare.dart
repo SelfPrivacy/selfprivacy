@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
@@ -54,18 +53,15 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
-                  builder: (final BuildContext context) => BrandBottomSheet(
-                    isExpended: true,
-                    child: Padding(
-                      padding: paddingH15V0,
-                      child: ListView(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        children: const [
-                          BrandMarkdown(
-                            fileName: 'how_cloudflare',
-                          ),
-                        ],
-                      ),
+                  builder: (final BuildContext context) => Padding(
+                    padding: paddingH15V0,
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      children: const [
+                        BrandMarkdown(
+                          fileName: 'how_cloudflare',
+                        ),
+                      ],
                     ),
                   ),
                 ),

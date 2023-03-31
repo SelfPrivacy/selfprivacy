@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
 
 class BrandFab extends StatefulWidget {
   const BrandFab({
@@ -62,12 +60,9 @@ class _BrandFabState extends State<BrandFab>
       child: FloatingActionButton(
         onPressed: () {
           // TODO: Make a hero animation to the screen
-          showBrandBottomSheet(
+          showModalBottomSheet(
             context: context,
-            builder: (final BuildContext context) => const BrandBottomSheet(
-              isExpended: true,
-              child: JobsContent(),
-            ),
+            builder: (final BuildContext context) => const JobsContent(),
           );
         },
         isExtended: widget.extended,

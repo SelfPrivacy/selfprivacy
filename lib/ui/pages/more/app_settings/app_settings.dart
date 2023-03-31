@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/buttons/dialog_action_button.dart';
-import 'package:selfprivacy/ui/components/brand_alert/brand_alert.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -82,9 +81,9 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           : () {
               showDialog(
                 context: context,
-                builder: (final _) => BrandAlert(
-                  title: 'modals.are_you_sure'.tr(),
-                  contentText: 'modals.delete_server_volume'.tr(),
+                builder: (final _) => AlertDialog(
+                  title: Text('modals.are_you_sure'.tr()),
+                  content: Text('modals.delete_server_volume'.tr()),
                   actions: [
                     DialogActionButton(
                       text: 'modals.yes'.tr(),
@@ -129,9 +128,9 @@ class _ResetAppTile extends StatelessWidget {
         onTap: () {
           showDialog(
             context: context,
-            builder: (final _) => BrandAlert(
-              title: 'modals.are_you_sure'.tr(),
-              contentText: 'modals.purge_all_keys'.tr(),
+            builder: (final _) => AlertDialog(
+              title: Text('modals.are_you_sure'.tr()),
+              content: Text('modals.purge_all_keys'.tr()),
               actions: [
                 DialogActionButton(
                   text: 'modals.purge_all_keys_confirm'.tr(),

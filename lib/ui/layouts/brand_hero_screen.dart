@@ -2,9 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
 import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/helpers/widget_size.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 
@@ -127,13 +125,10 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
             duration: const Duration(milliseconds: 300),
             child: IconButton(
               onPressed: () {
-                showBrandBottomSheet(
+                showModalBottomSheet(
                   context: context,
                   builder: (final BuildContext context) =>
-                      const BrandBottomSheet(
-                    isExpended: true,
-                    child: JobsContent(),
-                  ),
+                      const JobsContent(),
                 );
               },
               icon: Icon(

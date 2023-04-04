@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/message.dart';
-import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/list_tiles/log_list_tile.dart';
 
 @RoutePage()
 class ConsolePage extends StatefulWidget {
@@ -29,21 +29,29 @@ class _ConsolePageState extends State<ConsolePage> {
     super.dispose();
   }
 
-  void update() => setState(() => {});
+  bool paused = false;
+
+  void update() {
+    if (!paused) {
+      setState(() => {});
+    }
+  }
 
   @override
   Widget build(final BuildContext context) => SafeArea(
         child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(53),
-            child: Column(
-              children: [
-                BrandHeader(
-                  title: 'console_page.title'.tr(),
-                  hasBackButton: true,
-                ),
-              ],
+          appBar: AppBar(
+            title: Text('console_page.title'.tr()),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
             ),
+            actions: [
+              IconButton(
+                icon: Icon(paused ? Icons.play_arrow_outlined : Icons.pause_outlined),
+                onPressed: () => setState(() => paused = !paused),
+              ),
+            ],
           ),
           body: FutureBuilder(
             future: getIt.allReady(),
@@ -62,33 +70,7 @@ class _ConsolePageState extends State<ConsolePage> {
                     const SizedBox(height: 20),
                     ...UnmodifiableListView(
                       messages
-                          .map((final message) {
-                            final bool isError =
-                                message.type == MessageType.warning;
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: RichText(
-                                text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text:
-                                          '${message.timeString}${isError ? '(Error)' : ''}: \n',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: isError
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .error
-                                            : null,
-                                      ),
-                                    ),
-                                    TextSpan(text: message.text),
-                                  ],
-                                ),
-                              ),
-                            );
-                          })
+                          .map((final message) => LogListItem(message: message))
                           .toList()
                           .reversed,
                     ),

@@ -20,7 +20,13 @@ class RequestLoggingLink extends Link {
     final Request request, [
     final NextLink? forward,
   ]) async* {
-    _logToAppConsole(request);
+    getIt.get<ConsoleModel>().addMessage(
+          GraphQlRequestMessage(
+            operation: request.operation,
+            variables: request.variables,
+            context: request.context,
+          ),
+        );
     yield* forward!(request);
   }
 }
@@ -29,7 +35,13 @@ class ResponseLoggingParser extends ResponseParser {
   @override
   Response parseResponse(final Map<String, dynamic> body) {
     final response = super.parseResponse(body);
-    _logToAppConsole(response);
+    getIt.get<ConsoleModel>().addMessage(
+          GraphQlResponseMessage(
+            data: response.data,
+            errors: response.errors,
+            context: response.context,
+          ),
+        );
     return response;
   }
 

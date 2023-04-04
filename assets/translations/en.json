@@ -47,7 +47,8 @@
     },
     "console_page": {
         "title": "Console",
-        "waiting": "Waiting for initialization…"
+        "waiting": "Waiting for initialization…",
+        "copy": "Copy"
     },
     "about_us_page": {
         "title": "About us"

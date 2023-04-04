@@ -17,6 +17,7 @@ class RecoveryMethodSelect extends StatelessWidget {
         heroSubtitle: 'recovering.method_select_description'.tr(),
         hasBackButton: true,
         hasFlashButton: false,
+        ignoreBreakpoints: true,
         onBackButtonPressed:
             context.read<ServerInstallationCubit>().revertRecoveryStep,
         children: [
@@ -74,6 +75,7 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
           heroSubtitle: 'recovering.fallback_select_description'.tr(),
           hasBackButton: true,
           hasFlashButton: false,
+          ignoreBreakpoints: true,
           children: [
             OutlinedCard(
               child: ListTile(

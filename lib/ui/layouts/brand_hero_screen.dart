@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
+import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
 import 'package:selfprivacy/ui/helpers/widget_size.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 
@@ -18,6 +19,8 @@ class BrandHeroScreen extends StatelessWidget {
     this.heroSubtitle,
     this.onBackButtonPressed,
     this.bodyPadding = const EdgeInsets.all(16.0),
+    this.ignoreBreakpoints = false,
+    this.hasSupportDrawer = false,
   });
 
   final List<Widget> children;
@@ -30,6 +33,15 @@ class BrandHeroScreen extends StatelessWidget {
   final VoidCallback? onBackButtonPressed;
   final EdgeInsetsGeometry bodyPadding;
 
+  /// On non-mobile screens the buttons of the app bar are hidden.
+  /// This is because this widget implies that it is nested inside a bigger layout.
+  /// If it is not nested, set this to true.
+  final bool ignoreBreakpoints;
+
+  /// Usually support drawer is provided by the parent layout.
+  /// If it is not provided, set this to true.
+  final bool hasSupportDrawer;
+
   @override
   Widget build(final BuildContext context) {
     final Widget heroIconWidget = this.heroIconWidget ??
@@ -41,6 +53,8 @@ class BrandHeroScreen extends StatelessWidget {
     final bool hasHeroIcon = heroIcon != null || this.heroIconWidget != null;
 
     return Scaffold(
+      endDrawerEnableOpenDragGesture: false,
+      endDrawer: hasSupportDrawer ? const SupportDrawer() : null,
       body: CustomScrollView(
         slivers: [
           HeroSliverAppBar(
@@ -50,6 +64,7 @@ class BrandHeroScreen extends StatelessWidget {
             onBackButtonPressed: onBackButtonPressed,
             heroIconWidget: heroIconWidget,
             hasFlashButton: hasFlashButton,
+            ignoreBreakpoints: ignoreBreakpoints,
           ),
           if (heroSubtitle != null)
             SliverPadding(
@@ -89,6 +104,7 @@ class HeroSliverAppBar extends StatefulWidget {
     required this.onBackButtonPressed,
     required this.heroIconWidget,
     required this.hasFlashButton,
+    required this.ignoreBreakpoints,
     super.key,
   });
 
@@ -98,6 +114,7 @@ class HeroSliverAppBar extends StatefulWidget {
   final bool hasFlashButton;
   final VoidCallback? onBackButtonPressed;
   final Widget heroIconWidget;
+  final bool ignoreBreakpoints;
 
   @override
   State<HeroSliverAppBar> createState() => _HeroSliverAppBarState();
@@ -107,7 +124,8 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
   Size _size = Size.zero;
   @override
   Widget build(final BuildContext context) {
-    final isMobile = Breakpoints.small.isActive(context);
+    final isMobile =
+        widget.ignoreBreakpoints ? true : Breakpoints.small.isActive(context);
     final isJobsListEmpty = context.watch<JobsCubit>().state is JobsStateEmpty;
     return SliverAppBar(
       expandedHeight:
@@ -127,8 +145,7 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
-                  builder: (final BuildContext context) =>
-                      const JobsContent(),
+                  builder: (final BuildContext context) => const JobsContent(),
                 );
               },
               icon: Icon(
@@ -139,6 +156,7 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
                   : Theme.of(context).colorScheme.primary,
             ),
           ),
+        const SizedBox.shrink(),
       ],
       flexibleSpace: FlexibleSpaceBar(
         title: LayoutBuilder(

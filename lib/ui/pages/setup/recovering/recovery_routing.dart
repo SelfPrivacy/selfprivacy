@@ -112,6 +112,7 @@ class SelectDomainToRecover extends StatelessWidget {
               heroSubtitle: 'recovering.domain_recovery_description'.tr(),
               hasBackButton: true,
               hasFlashButton: false,
+              ignoreBreakpoints: true,
               onBackButtonPressed: () {
                 Navigator.of(context).pushAndRemoveUntil(
                   materialRoute(const RootPage()),

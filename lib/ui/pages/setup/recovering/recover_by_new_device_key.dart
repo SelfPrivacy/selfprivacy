@@ -17,6 +17,7 @@ class RecoverByNewDeviceKeyInstruction extends StatelessWidget {
         heroSubtitle: 'recovering.method_device_description'.tr(),
         hasBackButton: true,
         hasFlashButton: false,
+        ignoreBreakpoints: true,
         onBackButtonPressed:
             context.read<ServerInstallationCubit>().revertRecoveryStep,
         children: [
@@ -61,6 +62,7 @@ class RecoverByNewDeviceKeyInput extends StatelessWidget {
               heroSubtitle: 'recovering.method_device_input_description'.tr(),
               hasBackButton: true,
               hasFlashButton: false,
+              ignoreBreakpoints: true,
               children: [
                 CubitFormTextField(
                   formFieldCubit:

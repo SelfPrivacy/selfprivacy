@@ -1,12 +1,11 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 
 class RecoveryConfirmCloudflare extends StatelessWidget {
   const RecoveryConfirmCloudflare({super.key});
@@ -30,6 +29,8 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
             ),
             hasBackButton: true,
             hasFlashButton: false,
+            ignoreBreakpoints: true,
+            hasSupportDrawer: true,
             onBackButtonPressed:
                 context.read<ServerInstallationCubit>().revertRecoveryStep,
             children: [
@@ -48,24 +49,15 @@ class RecoveryConfirmCloudflare extends StatelessWidget {
                 text: 'basis.connect'.tr(),
               ),
               const SizedBox(height: 16),
-              BrandButton.text(
-                onPressed: () => showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (final BuildContext context) => Padding(
-                    padding: paddingH15V0,
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      children: const [
-                        BrandMarkdown(
-                          fileName: 'how_cloudflare',
-                        ),
-                      ],
-                    ),
-                  ),
+              Builder(
+                builder: (final context) => BrandButton.text(
+                  onPressed: () =>
+                      context.read<SupportSystemCubit>().showArticle(
+                            article: 'how_cloudflare',
+                            context: context,
+                          ),
+                  title: 'initializing.how'.tr(),
                 ),
-                title: 'initializing.how'.tr(),
               ),
             ],
           );

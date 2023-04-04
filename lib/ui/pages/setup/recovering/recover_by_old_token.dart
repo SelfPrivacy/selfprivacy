@@ -28,6 +28,7 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
           heroTitle: 'recovering.recovery_main_header'.tr(),
           hasBackButton: true,
           hasFlashButton: false,
+          ignoreBreakpoints: true,
           onBackButtonPressed:
               context.read<ServerInstallationCubit>().revertRecoveryStep,
           children: [
@@ -72,6 +73,7 @@ class RecoverByOldToken extends StatelessWidget {
             heroSubtitle: 'recovering.method_device_input_description'.tr(),
             hasBackButton: true,
             hasFlashButton: false,
+            ignoreBreakpoints: true,
             children: [
               CubitFormTextField(
                 formFieldCubit:

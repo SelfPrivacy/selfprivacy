@@ -38,6 +38,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
             ? 'recovering.choose_server_description'.tr()
             : 'recovering.confirm_server_description'.tr(),
         hasBackButton: true,
+        ignoreBreakpoints: true,
         onBackButtonPressed: () {
           Navigator.of(context).popUntil((final route) => route.isFirst);
         },

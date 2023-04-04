@@ -182,8 +182,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                 );
                 showModalBottomSheet(
                   context: context,
-                  builder: (final BuildContext context) =>
-                      const JobsContent(),
+                  builder: (final BuildContext context) => const JobsContent(),
                 );
               },
             ),

@@ -13,8 +13,9 @@ import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
+import 'package:selfprivacy/ui/components/drawers/progress_drawer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
-import 'package:selfprivacy/ui/components/support_drawer/support_drawer.dart';
+import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_type_picker.dart';
@@ -113,10 +114,42 @@ class InitializingPage extends StatelessWidget {
             builder: (final context, final constraints) => Row(
               children: [
                 if (Breakpoints.large.isActive(context))
-                  _ProgressDrawer(
+                  ProgressDrawer(
                     steps: steps,
-                    cubit: cubit,
+                    currentStep: cubit.state.progress.index,
+                    title: 'more_page.configuration_wizard'.tr(),
                     constraints: constraints,
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (cubit.state is ServerInstallationEmpty ||
+                            cubit.state is ServerInstallationNotFinished)
+                          Container(
+                            alignment: Alignment.center,
+                            child: BrandButton.filled(
+                              text: 'basis.connect_to_existing'.tr(),
+                              onPressed: () {
+                                context.router.replace(const RecoveryRoute());
+                              },
+                            ),
+                          ),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minWidth: double.infinity,
+                          ),
+                          child: OutlinedButton(
+                            child: Text(
+                              cubit.state is ServerInstallationFinished
+                                  ? 'basis.close'.tr()
+                                  : 'basis.later'.tr(),
+                            ),
+                            onPressed: () {
+                              context.router.popUntilRoot();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 SizedBox(
                   width: constraints.maxWidth -
@@ -624,137 +657,4 @@ class InitializingPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class _ProgressDrawer extends StatelessWidget {
-  const _ProgressDrawer({
-    required this.steps,
-    required this.cubit,
-    required this.constraints,
-  });
-
-  final List<String> steps;
-  final ServerInstallationCubit cubit;
-  final BoxConstraints constraints;
-
-  @override
-  Widget build(final BuildContext context) => SizedBox(
-        width: 300,
-        height: constraints.maxHeight,
-        child: Drawer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'more_page.configuration_wizard'.tr(),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Flexible(
-                fit: FlexFit.tight,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ...steps.map((final step) {
-                        final index = steps.indexOf(step);
-                        return _StepIndicator(
-                          title: step.tr(),
-                          isCurrent: index == cubit.state.progress.index,
-                          isCompleted: index < cubit.state.progress.index,
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-              ),
-              // const Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (cubit.state is ServerInstallationEmpty ||
-                        cubit.state is ServerInstallationNotFinished)
-                      Container(
-                        alignment: Alignment.center,
-                        child: BrandButton.filled(
-                          text: 'basis.connect_to_existing'.tr(),
-                          onPressed: () {
-                            context.router.replace(const RecoveryRoute());
-                          },
-                        ),
-                      ),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minWidth: double.infinity,
-                      ),
-                      child: OutlinedButton(
-                        child: Text(
-                          cubit.state is ServerInstallationFinished
-                              ? 'basis.close'.tr()
-                              : 'basis.later'.tr(),
-                        ),
-                        onPressed: () {
-                          context.router.popUntilRoot();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-}
-
-class _StepIndicator extends StatelessWidget {
-  const _StepIndicator({
-    required this.title,
-    required this.isCompleted,
-    required this.isCurrent,
-  });
-
-  final String title;
-  final bool isCompleted;
-  final bool isCurrent;
-
-  @override
-  Widget build(final BuildContext context) => ListTile(
-        selected: isCurrent,
-        leading: isCurrent
-            ? const _StepCurrentIcon()
-            : isCompleted
-                ? const _StepCompletedIcon()
-                : const _StepPendingIcon(),
-        title: Text(
-          title,
-        ),
-        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-      );
-}
-
-class _StepCompletedIcon extends StatelessWidget {
-  const _StepCompletedIcon();
-
-  @override
-  Widget build(final BuildContext context) => const Icon(Icons.check_circle);
-}
-
-class _StepPendingIcon extends StatelessWidget {
-  const _StepPendingIcon();
-
-  @override
-  Widget build(final BuildContext context) => const Icon(Icons.circle_outlined);
-}
-
-class _StepCurrentIcon extends StatelessWidget {
-  const _StepCurrentIcon();
-
-  @override
-  Widget build(final BuildContext context) =>
-      const Icon(Icons.build_circle_outlined);
 }

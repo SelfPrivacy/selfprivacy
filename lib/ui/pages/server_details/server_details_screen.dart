@@ -11,7 +11,7 @@ import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart'
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/ui/components/buttons/segmented_buttons.dart';
-import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
+import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';

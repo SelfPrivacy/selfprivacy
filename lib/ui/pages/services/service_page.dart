@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart'
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
+import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';

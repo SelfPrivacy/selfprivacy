@@ -48,7 +48,8 @@ class _ConsolePageState extends State<ConsolePage> {
             ),
             actions: [
               IconButton(
-                icon: Icon(paused ? Icons.play_arrow_outlined : Icons.pause_outlined),
+                icon: Icon(
+                    paused ? Icons.play_arrow_outlined : Icons.pause_outlined),
                 onPressed: () => setState(() => paused = !paused),
               ),
             ],

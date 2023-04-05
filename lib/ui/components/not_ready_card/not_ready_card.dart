@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
+import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:easy_localization/easy_localization.dart';
 

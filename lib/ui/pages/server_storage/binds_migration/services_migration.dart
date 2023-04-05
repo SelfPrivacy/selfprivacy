@@ -12,8 +12,6 @@ import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/service_migration_list_item.dart';
-import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 @RoutePage()
 class ServicesMigrationPage extends StatefulWidget {
@@ -176,10 +174,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                     }
                   }
                 }
-                Navigator.of(context).pushAndRemoveUntil(
-                  materialRoute(const RootPage()),
-                  (final predicate) => false,
-                );
+                context.router.popUntilRoot();
                 showModalBottomSheet(
                   context: context,
                   builder: (final BuildContext context) => const JobsContent(),

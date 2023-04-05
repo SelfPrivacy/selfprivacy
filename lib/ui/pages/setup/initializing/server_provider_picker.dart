@@ -8,7 +8,7 @@ import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
-import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
+import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 import 'package:selfprivacy/utils/launch_url.dart';

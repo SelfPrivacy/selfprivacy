@@ -143,8 +143,11 @@ class _GraphQlResponseMessageItem extends StatelessWidget {
         title: Text(
           'GraphQL Response at ${message.timeString}',
         ),
-        subtitle: Text(message.data.toString(),
-            overflow: TextOverflow.ellipsis, maxLines: 1,),
+        subtitle: Text(
+          message.data.toString(),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
         leading: const Icon(Icons.arrow_circle_down_outlined),
         iconColor: Theme.of(context).colorScheme.tertiary,
         onTap: () => showDialog(
@@ -171,8 +174,10 @@ class _GraphQlResponseMessageItem extends StatelessWidget {
                 if (message.errors != null)
                   Text(
                     message.errors!
-                        .map((final entry) =>
-                            '${entry.message} at ${entry.locations}',)
+                        .map(
+                          (final entry) =>
+                              '${entry.message} at ${entry.locations}',
+                        )
                         .join('\n'),
                   ),
                 const Divider(),
@@ -211,8 +216,11 @@ class _GraphQlRequestMessageItem extends StatelessWidget {
         title: Text(
           'GraphQL Request at ${message.timeString}',
         ),
-        subtitle: Text(message.operation.toString(),
-            overflow: TextOverflow.ellipsis, maxLines: 1,),
+        subtitle: Text(
+          message.operation.toString(),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
         leading: const Icon(Icons.arrow_circle_up_outlined),
         iconColor: Theme.of(context).colorScheme.secondary,
         onTap: () => showDialog(

@@ -27,14 +27,14 @@ class BrandLinearIndicator extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: AnimatedSlide(
             duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut,
+            curve: Curves.easeInOutCubicEmphasized,
             offset: Offset(
               -(1 - value),
               0,
             ),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 400),
-              curve: Curves.easeInOut,
+              curve: Curves.easeInOutCubicEmphasized,
               width: constraints.maxWidth,
               decoration: BoxDecoration(
                 color: color,

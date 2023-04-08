@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -17,6 +17,7 @@ class RecoveryMethodSelect extends StatelessWidget {
         heroSubtitle: 'recovering.method_select_description'.tr(),
         hasBackButton: true,
         hasFlashButton: false,
+        ignoreBreakpoints: true,
         onBackButtonPressed:
             context.read<ServerInstallationCubit>().revertRecoveryStep,
         children: [
@@ -74,6 +75,7 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
           heroSubtitle: 'recovering.fallback_select_description'.tr(),
           hasBackButton: true,
           hasFlashButton: false,
+          ignoreBreakpoints: true,
           children: [
             OutlinedCard(
               child: ListTile(

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -5,11 +6,12 @@ import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/pages/devices/new_device.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
+@RoutePage()
 class DevicesScreen extends StatefulWidget {
   const DevicesScreen({super.key});
 
@@ -25,7 +27,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<ApiDevicesCubit>().refresh();
+        await context.read<ApiDevicesCubit>().refresh();
       },
       child: BrandHeroScreen(
         heroTitle: 'devices.main_screen.header'.tr(),
@@ -90,8 +92,7 @@ class _DevicesInfo extends StatelessWidget {
                 ),
           ),
           ...devicesStatus.otherDevices
-              .map((final device) => _DeviceTile(device: device))
-              .toList(),
+              .map((final device) => _DeviceTile(device: device)),
         ],
       );
 }

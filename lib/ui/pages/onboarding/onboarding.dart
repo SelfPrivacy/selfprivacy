@@ -1,13 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+@RoutePage()
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({required this.nextPage, super.key});
+  const OnboardingPage({super.key});
 
-  final Widget nextPage;
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
 }
@@ -22,14 +23,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-    body: PageView(
-      controller: pageController,
-      children: [
-        _withPadding(firstPage()),
-        _withPadding(secondPage()),
-      ],
-    ),
-  );
+        body: PageView(
+          controller: pageController,
+          children: [
+            _withPadding(firstPage()),
+            _withPadding(secondPage()),
+          ],
+        ),
+      );
 
   Widget _withPadding(final Widget child) => Padding(
         padding: const EdgeInsets.symmetric(
@@ -76,7 +77,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 pageController.animateToPage(
                   1,
                   duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
+                  curve: Curves.easeInOutCubicEmphasized,
                 );
               },
               text: 'basis.next'.tr(),
@@ -142,10 +143,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
             BrandButton.rised(
               onPressed: () {
                 context.read<AppSettingsCubit>().turnOffOnboarding();
-                Navigator.of(context).pushAndRemoveUntil(
-                  materialRoute(widget.nextPage),
-                  (final route) => false,
-                );
+                context.router.replaceAll([
+                  const RootRoute(),
+                  const InitializingRoute(),
+                ]);
               },
               text: 'basis.got_it'.tr(),
             ),

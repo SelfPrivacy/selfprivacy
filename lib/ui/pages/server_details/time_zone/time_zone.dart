@@ -57,66 +57,72 @@ class _SelectTimezoneState extends State<SelectTimezone> {
   }
 
   @override
-  Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: isSearching
-              ? TextField(
-                  readOnly: false,
-                  textAlign: TextAlign.start,
-                  textInputAction: TextInputAction.next,
-                  enabled: true,
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    errorText: null,
-                    hintText: 'server.timezone_search_bar'.tr(),
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: Text('server.select_timezone'.tr()),
+  Widget build(final BuildContext context) {
+    final isDesktop = Breakpoints.mediumAndUp.isActive(context);
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: (isDesktop || isSearching)
+            ? TextField(
+                readOnly: false,
+                textAlign: TextAlign.start,
+                textInputAction: TextInputAction.next,
+                enabled: true,
+                controller: searchController,
+                decoration: InputDecoration(
+                  errorText: null,
+                  hintText: 'server.timezone_search_bar'.tr(),
                 ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: isSearching
-                ? () => setState(() => isSearching = false)
-                : () => Navigator.of(context).pop(),
-          ),
-          actions: [
-            if (!isSearching)
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () => setState(() => isSearching = true),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text('server.select_timezone'.tr()),
               ),
-          ],
+        leading: !isDesktop
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: isSearching
+                    ? () => setState(() => isSearching = false)
+                    : () => Navigator.of(context).pop(),
+              )
+            : null,
+        actions: [
+          if (!isSearching && !isDesktop)
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () => setState(() => isSearching = true),
+            ),
+        ],
+      ),
+      body: SafeArea(
+        child: ListView(
+          controller: scrollController,
+          children: locations
+              .where(
+                (final Location location) => timezoneFilterValue == null
+                    ? true
+                    : location.name
+                            .toLowerCase()
+                            .contains(timezoneFilterValue!) ||
+                        Duration(
+                          milliseconds: location.currentTimeZone.offset,
+                        )
+                            .toDayHourMinuteFormat()
+                            .contains(timezoneFilterValue!),
+              )
+              .toList()
+              .asMap()
+              .map(
+                (final key, final value) => locationToListTile(key, value),
+              )
+              .values
+              .toList(),
         ),
-        body: SafeArea(
-          child: ListView(
-            controller: scrollController,
-            children: locations
-                .where(
-                  (final Location location) => timezoneFilterValue == null
-                      ? true
-                      : location.name
-                              .toLowerCase()
-                              .contains(timezoneFilterValue!) ||
-                          Duration(
-                            milliseconds: location.currentTimeZone.offset,
-                          )
-                              .toDayHourMinuteFormat()
-                              .contains(timezoneFilterValue!),
-                )
-                .toList()
-                .asMap()
-                .map(
-                  (final key, final value) => locationToListTile(key, value),
-                )
-                .values
-                .toList(),
-          ),
-        ),
-      );
+      ),
+    );
+  }
 
-  MapEntry<int, Container> locationToListTile(
+  MapEntry<int, ListTile> locationToListTile(
     final int key,
     final Location location,
   ) {
@@ -126,46 +132,19 @@ class _SelectTimezoneState extends State<SelectTimezone> {
 
     return MapEntry(
       key,
-      Container(
-        height: 75,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: BrandColors.dividerColor,
-            ),
-          ),
+      ListTile(
+        title: Text(
+          location.name,
         ),
-        child: InkWell(
-          onTap: () {
-            context.read<ServerDetailsCubit>().repository.setTimezone(
-                  location.name,
-                );
-            Navigator.of(context).pop();
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                BrandText.body1(
-                  location.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                BrandText.small(
-                  'GMT ${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
+        subtitle: Text(
+          'GMT ${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}',
         ),
+        onTap: () {
+          context.read<ServerDetailsCubit>().repository.setTimezone(
+                location.name,
+              );
+          Navigator.of(context).pop();
+        },
       ),
     );
   }

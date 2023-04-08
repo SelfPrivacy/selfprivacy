@@ -1,16 +1,17 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
-import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 
+@RoutePage()
 class ServerStoragePage extends StatefulWidget {
   const ServerStoragePage({
     required this.diskStatus,
@@ -45,28 +46,26 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
       heroTitle: 'storage.card_title'.tr(),
       children: [
         // ...sections,
-        ...widget.diskStatus.diskVolumes
-            .map(
-              (final volume) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ServerStorageSection(
-                    volume: volume,
-                    diskStatus: widget.diskStatus,
-                    services: services
-                        .where(
-                          (final service) =>
-                              service.storageUsage.volume == volume.name,
-                        )
-                        .toList(),
-                  ),
-                  const SizedBox(height: 16),
-                  const Divider(),
-                  const SizedBox(height: 16),
-                ],
+        ...widget.diskStatus.diskVolumes.map(
+          (final volume) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ServerStorageSection(
+                volume: volume,
+                diskStatus: widget.diskStatus,
+                services: services
+                    .where(
+                      (final service) =>
+                          service.storageUsage.volume == volume.name,
+                    )
+                    .toList(),
               ),
-            )
-            .toList(),
+              const SizedBox(height: 16),
+              const Divider(),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
         const SizedBox(height: 8),
       ],
     );
@@ -93,24 +92,20 @@ class ServerStorageSection extends StatelessWidget {
             volume: volume,
           ),
           const SizedBox(height: 16),
-          ...services
-              .map(
-                (final service) => ServerConsumptionListTile(
-                  service: service,
-                  volume: volume,
-                ),
-              )
-              .toList(),
+          ...services.map(
+            (final service) => ServerConsumptionListTile(
+              service: service,
+              volume: volume,
+            ),
+          ),
           if (volume.isResizable) ...[
             const SizedBox(height: 16),
             BrandOutlinedButton(
               title: 'storage.extend_volume_button.title'.tr(),
-              onPressed: () => Navigator.of(context).push(
-                materialRoute(
-                  ExtendingVolumePage(
-                    diskVolumeToResize: volume,
-                    diskStatus: diskStatus,
-                  ),
+              onPressed: () => context.pushRoute(
+                ExtendingVolumeRoute(
+                  diskVolumeToResize: volume,
+                  diskStatus: diskStatus,
                 ),
               ),
             ),

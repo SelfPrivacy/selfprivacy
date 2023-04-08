@@ -2,6 +2,7 @@
     "test": "en-test",
     "locale": "en",
     "basis": {
+        "app_name": "SelfPrivacy",
         "providers": "Providers",
         "providers_title": "Your Data Center",
         "select": "Select",
@@ -46,7 +47,8 @@
     },
     "console_page": {
         "title": "Console",
-        "waiting": "Waiting for initialization…"
+        "waiting": "Waiting for initialization…",
+        "copy": "Copy"
     },
     "about_us_page": {
         "title": "About us"
@@ -59,8 +61,11 @@
     },
     "application_settings": {
         "title": "Application settings",
+        "system_dark_theme_title": "System default theme",
+        "system_dark_theme_description": "Use light or dark theme depending on system settings",
         "dark_theme_title": "Dark theme",
         "dark_theme_description": "Switch your application theme",
+        "dangerous_settings": "Dangerous settings",
         "reset_config_title": "Reset application config",
         "reset_config_description": "Reset api keys and root user",
         "delete_server_title": "Delete server",
@@ -251,6 +256,7 @@
         "subtitle": "Private VPN server"
     },
     "users": {
+        "details_title": "User details",
         "add_new_user": "Add a first user",
         "new_user": "New user",
         "delete_user": "Delete user",
@@ -329,7 +335,20 @@
         "create_master_account": "Create master account",
         "enter_username_and_password": "Enter username and strong password",
         "finish": "Everything is initialized",
-        "checks": "Checks have been completed \n{} out of {}"
+        "checks": "Checks have been completed \n{} out of {}",
+        "steps": {
+            "hosting": "Hosting",
+            "server_type": "Server type",
+            "dns_provider": "DNS provider",
+            "backups_provider": "Backups",
+            "domain": "Domain",
+            "master_account": "Master account",
+            "server": "Server",
+            "dns_setup": "DNS setup",
+            "nixos_installation": "NixOS installation",
+            "server_reboot": "Server reboot",
+            "final_checks": "Final checks"
+        }
     },
     "recovering": {
         "generic_error": "Operation failed, please try again.",
@@ -472,5 +491,19 @@
         "root_name": "Cannot be 'root'",
         "length_not_equal": "Length is [], should be {}",
         "length_longer": "Length is [], should be shorter than or equal to {}"
+    },
+    "support": {
+        "title": "SelfPrivacy Support"
+    },
+    "developer_settings": {
+        "title": "Developer settings",
+        "subtitle": "These settings are for debugging only. Don't change them unless you know what you're doing.",
+        "server_setup": "Server setup",
+        "use_staging_acme": "Use staging ACME server",
+        "use_staging_acme_description": "Rebuild your app to change this value.",
+        "routing": "App routing",
+        "reset_onboarding": "Reset onboarding switch",
+        "reset_onboarding_description": "Reset onboarding switch to show onboarding screen again",
+        "cubit_statuses": "Cubit loading statuses"
     }
 }

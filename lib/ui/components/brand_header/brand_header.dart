@@ -25,5 +25,8 @@ class BrandHeader extends StatelessWidget {
                     onBackButtonPressed ?? () => Navigator.of(context).pop(),
               )
             : null,
+        actions: const [
+          SizedBox.shrink(),
+        ],
       );
 }

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
-
-enum BrandButtonTypes { rised, text, iconText }
 
 class BrandButton {
   static ConstrainedBox rised({
@@ -57,54 +54,5 @@ class BrandButton {
           minWidth: double.infinity,
         ),
         child: TextButton(onPressed: onPressed, child: Text(title)),
-      );
-
-  static IconTextButton emptyWithIconText({
-    required final VoidCallback onPressed,
-    required final String title,
-    required final Icon icon,
-    final Key? key,
-  }) =>
-      IconTextButton(
-        key: key,
-        title: title,
-        onPressed: onPressed,
-        icon: icon,
-      );
-}
-
-class IconTextButton extends StatelessWidget {
-  const IconTextButton({
-    super.key,
-    this.onPressed,
-    this.title,
-    this.icon,
-  });
-
-  final VoidCallback? onPressed;
-  final String? title;
-  final Icon? icon;
-
-  @override
-  Widget build(final BuildContext context) => Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed,
-          child: Container(
-            height: 48,
-            width: double.infinity,
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BrandText.body1(title),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: icon,
-                )
-              ],
-            ),
-          ),
-        ),
       );
 }

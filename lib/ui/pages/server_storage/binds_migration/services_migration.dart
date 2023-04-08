@@ -1,21 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/service_migration_list_item.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
-import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
+@RoutePage()
 class ServicesMigrationPage extends StatefulWidget {
   const ServicesMigrationPage({
     required this.services,
@@ -110,22 +108,20 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                 ),
                 child: Column(
                   children: [
-                    ...widget.diskStatus.diskVolumes
-                        .map(
-                          (final volume) => Column(
-                            children: [
-                              ServerStorageListItem(
-                                volume: recalculatedDiskUsages(
-                                  volume,
-                                  widget.services,
-                                ),
-                                dense: true,
-                              ),
-                              const SizedBox(height: headerVerticalPadding),
-                            ],
+                    ...widget.diskStatus.diskVolumes.map(
+                      (final volume) => Column(
+                        children: [
+                          ServerStorageListItem(
+                            volume: recalculatedDiskUsages(
+                              volume,
+                              widget.services,
+                            ),
+                            dense: true,
                           ),
-                        )
-                        .toList(),
+                          const SizedBox(height: headerVerticalPadding),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -138,23 +134,21 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
           children: <Widget>[
             if (widget.services.isEmpty)
               const Center(child: CircularProgressIndicator()),
-            ...widget.services
-                .map(
-                  (final service) => Column(
-                    children: [
-                      const SizedBox(height: 8),
-                      ServiceMigrationListItem(
-                        service: service,
-                        diskStatus: widget.diskStatus,
-                        selectedVolume: serviceToDisk[service.id]!,
-                        onChange: onChange,
-                      ),
-                      const SizedBox(height: 4),
-                      const Divider(),
-                    ],
+            ...widget.services.map(
+              (final service) => Column(
+                children: [
+                  const SizedBox(height: 8),
+                  ServiceMigrationListItem(
+                    service: service,
+                    diskStatus: widget.diskStatus,
+                    selectedVolume: serviceToDisk[service.id]!,
+                    onChange: onChange,
                   ),
-                )
-                .toList(),
+                  const SizedBox(height: 4),
+                  const Divider(),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InfoBox(
@@ -180,17 +174,10 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                     }
                   }
                 }
-                Navigator.of(context).pushAndRemoveUntil(
-                  materialRoute(const RootPage()),
-                  (final predicate) => false,
-                );
-                showBrandBottomSheet(
+                context.router.popUntilRoot();
+                showModalBottomSheet(
                   context: context,
-                  builder: (final BuildContext context) =>
-                      const BrandBottomSheet(
-                    isExpended: true,
-                    child: JobsContent(),
-                  ),
+                  builder: (final BuildContext context) => const JobsContent(),
                 );
               },
             ),

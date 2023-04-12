@@ -53,7 +53,7 @@ class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
     }
 
     await Future.delayed(const Duration(seconds: 2));
-    reload();
+    unawaited(reload());
     await Future.delayed(const Duration(seconds: 10));
     emit(
       state.copyWith(
@@ -62,7 +62,7 @@ class ServicesCubit extends ServerInstallationDependendCubit<ServicesState> {
             .toList(),
       ),
     );
-    reload();
+    unawaited(reload());
   }
 
   Future<void> moveService(

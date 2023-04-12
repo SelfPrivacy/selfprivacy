@@ -15,10 +15,12 @@ part 'app_settings_state.dart';
 class AppSettingsCubit extends Cubit<AppSettingsState> {
   AppSettingsCubit({
     required final bool isDarkModeOn,
+    required final bool isAutoDarkModeOn,
     required final bool isOnboardingShowing,
   }) : super(
           AppSettingsState(
             isDarkModeOn: isDarkModeOn,
+            isAutoDarkModeOn: isAutoDarkModeOn,
             isOnboardingShowing: isOnboardingShowing,
           ),
         );
@@ -27,10 +29,12 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
 
   void load() async {
     final bool? isDarkModeOn = box.get(BNames.isDarkModeOn);
+    final bool? isAutoDarkModeOn = box.get(BNames.isAutoDarkModeOn);
     final bool? isOnboardingShowing = box.get(BNames.isOnboardingShowing);
     emit(
       state.copyWith(
         isDarkModeOn: isDarkModeOn,
+        isAutoDarkModeOn: isAutoDarkModeOn,
         isOnboardingShowing: isOnboardingShowing,
       ),
     );
@@ -49,9 +53,14 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
     emit(state.copyWith(isDarkModeOn: isDarkModeOn));
   }
 
-  void turnOffOnboarding() {
-    box.put(BNames.isOnboardingShowing, false);
+  void updateAutoDarkMode({required final bool isAutoDarkModeOn}) {
+    box.put(BNames.isAutoDarkModeOn, isAutoDarkModeOn);
+    emit(state.copyWith(isAutoDarkModeOn: isAutoDarkModeOn));
+  }
 
-    emit(state.copyWith(isOnboardingShowing: false));
+  void turnOffOnboarding({final bool isOnboardingShowing = false}) {
+    box.put(BNames.isOnboardingShowing, isOnboardingShowing);
+
+    emit(state.copyWith(isOnboardingShowing: isOnboardingShowing));
   }
 }

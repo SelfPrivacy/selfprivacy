@@ -36,10 +36,6 @@ class UserFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() {
-    print('onSubmit');
-    print('initialUser: $initialUser');
-    print('login: ${login.state.value}');
-    print('password: ${password.state.value}');
     if (initialUser == null) {
       final User user = User(
         login: login.state.value,

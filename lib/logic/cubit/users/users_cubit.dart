@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -39,7 +41,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       );
     }
 
-    refresh();
+    unawaited(refresh());
   }
 
   Future<void> refresh() async {

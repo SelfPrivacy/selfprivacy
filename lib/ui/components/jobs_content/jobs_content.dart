@@ -6,10 +6,8 @@ import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_cards/brand_cards.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
@@ -32,7 +30,12 @@ class JobsContent extends StatelessWidget {
         if (state is JobsStateEmpty) {
           widgets = [
             const SizedBox(height: 80),
-            Center(child: BrandText.body1('jobs.empty'.tr())),
+            Center(
+              child: Text(
+                'jobs.empty'.tr(),
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
           ];
 
           if (installationState is ServerInstallationFinished) {
@@ -65,38 +68,49 @@ class JobsContent extends StatelessWidget {
           ];
         } else if (state is JobsStateWithJobs) {
           widgets = [
-            ...state.clientJobList
-                .map(
-                  (final j) => Row(
-                    children: [
-                      Expanded(
-                        child: BrandCards.small(
-                          child: Text(j.title),
+            ...state.clientJobList.map(
+              (final j) => Row(
+                children: [
+                  Expanded(
+                    child: Card(
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 10,
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.errorContainer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () =>
-                            context.read<JobsCubit>().removeJob(j.id),
                         child: Text(
-                          'basis.remove'.tr(),
-                          style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.onErrorContainer,
-                          ),
+                          j.title,
+                          style:
+                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                )
-                .toList(),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Theme.of(context).colorScheme.errorContainer,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () => context.read<JobsCubit>().removeJob(j.id),
+                    child: Text(
+                      'basis.remove'.tr(),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onErrorContainer,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 20),
             BrandButton.rised(
               onPressed: () => context.read<JobsCubit>().applyAll(),
@@ -109,8 +123,9 @@ class JobsContent extends StatelessWidget {
           children: [
             const SizedBox(height: 15),
             Center(
-              child: BrandText.h2(
+              child: Text(
                 'jobs.title'.tr(),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
             const SizedBox(height: 20),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
@@ -20,7 +22,7 @@ class ApiProviderVolumeCubit
   @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
-      _refetch();
+      unawaited(_refetch());
     }
   }
 
@@ -31,7 +33,7 @@ class ApiProviderVolumeCubit
 
   Future<void> refresh() async {
     emit(const ApiProviderVolumeState([], LoadingStatus.refreshing, false));
-    _refetch();
+    unawaited(_refetch());
   }
 
   Future<void> _refetch() async {
@@ -56,14 +58,14 @@ class ApiProviderVolumeCubit
     await ApiController.currentVolumeProviderApiFactory!
         .getVolumeProvider()
         .attachVolume(volume.providerVolume!, server.id);
-    refresh();
+    unawaited(refresh());
   }
 
   Future<void> detachVolume(final DiskVolume volume) async {
     await ApiController.currentVolumeProviderApiFactory!
         .getVolumeProvider()
         .detachVolume(volume.providerVolume!);
-    refresh();
+    unawaited(refresh());
   }
 
   Future<bool> resizeVolume(
@@ -125,14 +127,14 @@ class ApiProviderVolumeCubit
     await Future.delayed(const Duration(seconds: 10));
 
     await ServerApi().mountVolume(volume!.name);
-    refresh();
+    unawaited(refresh());
   }
 
   Future<void> deleteVolume(final DiskVolume volume) async {
     await ApiController.currentVolumeProviderApiFactory!
         .getVolumeProvider()
         .deleteVolume(volume.providerVolume!);
-    refresh();
+    unawaited(refresh());
   }
 
   @override

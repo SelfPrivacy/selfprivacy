@@ -186,7 +186,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void setDnsApiToken(final String dnsApiToken) async {
     if (state is ServerInstallationRecovery) {
-      setAndValidateCloudflareToken(dnsApiToken);
+      await setAndValidateCloudflareToken(dnsApiToken);
       return;
     }
     await repository.setDnsApiToken(dnsApiToken);

@@ -1,7 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -11,28 +11,26 @@ import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_button/outlined_button.dart';
-import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
+import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
+import 'package:selfprivacy/ui/router/router.dart';
+import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
-
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 part 'empty.dart';
 part 'new_user.dart';
 part 'user.dart';
 part 'user_details.dart';
-part 'add_user_fab.dart';
 part 'reset_password.dart';
 
+@RoutePage()
 class UsersPage extends StatelessWidget {
   const UsersPage({super.key});
 
@@ -64,7 +62,7 @@ class UsersPage extends StatelessWidget {
             }
             return RefreshIndicator(
               onRefresh: () async {
-                context.read<UsersCubit>().refresh();
+                await context.read<UsersCubit>().refresh();
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -90,15 +88,38 @@ class UsersPage extends StatelessWidget {
           }
           return RefreshIndicator(
             onRefresh: () async {
-              context.read<UsersCubit>().refresh();
+              await context.read<UsersCubit>().refresh();
             },
-            child: ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (final BuildContext context, final int index) =>
-                  _User(
-                user: users[index],
-                isRootUser: users[index].type == UserType.primary,
-              ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FilledButton.tonal(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.person_add_outlined),
+                        const SizedBox(width: 8),
+                        Text('users.new_user'.tr()),
+                      ],
+                    ),
+                    onPressed: () {
+                      context.pushRoute(const NewUserRoute());
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: users.length,
+                    itemBuilder:
+                        (final BuildContext context, final int index) => _User(
+                      user: users[index],
+                      isRootUser: users[index].type == UserType.primary,
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },
@@ -106,12 +127,14 @@ class UsersPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(52),
-        child: BrandHeader(
-          title: 'basis.users'.tr(),
-        ),
-      ),
+      appBar: Breakpoints.small.isActive(context)
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(52),
+              child: BrandHeader(
+                title: 'basis.users'.tr(),
+              ),
+            )
+          : null,
       body: child,
     );
   }

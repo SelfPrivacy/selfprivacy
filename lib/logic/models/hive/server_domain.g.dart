@@ -19,8 +19,9 @@ class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
     return ServerDomain(
       domainName: fields[0] as String,
       zoneId: fields[1] as String,
-      provider:
-          fields[2] == null ? DnsProvider.cloudflare : fields[2] as DnsProvider,
+      provider: fields[2] == null
+          ? DnsProviderType.cloudflare
+          : fields[2] as DnsProviderType,
     );
   }
 
@@ -47,34 +48,34 @@ class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
           typeId == other.typeId;
 }
 
-class DnsProviderAdapter extends TypeAdapter<DnsProvider> {
+class DnsProviderTypeAdapter extends TypeAdapter<DnsProviderType> {
   @override
   final int typeId = 100;
 
   @override
-  DnsProvider read(BinaryReader reader) {
+  DnsProviderType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return DnsProvider.unknown;
+        return DnsProviderType.unknown;
       case 1:
-        return DnsProvider.cloudflare;
+        return DnsProviderType.cloudflare;
       case 2:
-        return DnsProvider.digitalOcean;
+        return DnsProviderType.digitalOcean;
       default:
-        return DnsProvider.unknown;
+        return DnsProviderType.unknown;
     }
   }
 
   @override
-  void write(BinaryWriter writer, DnsProvider obj) {
+  void write(BinaryWriter writer, DnsProviderType obj) {
     switch (obj) {
-      case DnsProvider.unknown:
+      case DnsProviderType.unknown:
         writer.writeByte(0);
         break;
-      case DnsProvider.cloudflare:
+      case DnsProviderType.cloudflare:
         writer.writeByte(1);
         break;
-      case DnsProvider.digitalOcean:
+      case DnsProviderType.digitalOcean:
         writer.writeByte(2);
         break;
     }
@@ -86,7 +87,7 @@ class DnsProviderAdapter extends TypeAdapter<DnsProvider> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DnsProviderAdapter &&
+      other is DnsProviderTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
+/// For some reason original [SegmentedButton] does not have animations.
+///
+/// The [SegmentedButtons] was written for SelfPrivacy before [SegmentedButton] was introduced.
+/// While it doesn't have that much options to pass, it has cute little animation.
+/// It is based on [ToggleButtons].
 class SegmentedButtons extends StatelessWidget {
+  /// Creates a segmented buttons widget. This is a SelfPrivacy implementation.
+  ///
+  /// Provide the button titles in [titles] as a [List<String>].
+  /// Current selection is provided in [isSelected] as a [List<bool>].
+  /// This widget will call [onPressed] with the index of the button that was pressed.
   const SegmentedButtons({
     required this.isSelected,
     required this.onPressed,
@@ -8,15 +18,24 @@ class SegmentedButtons extends StatelessWidget {
     super.key,
   });
 
+  /// The current selection state of the buttons.
+  ///
+  /// The length of this list must be equal to the length of [titles].
+  /// Several buttons can be selected at the same time.
   final List<bool> isSelected;
+
+  /// The callback that is called when a button is pressed.
+  /// It will be called with the index of the button that was pressed.
   final Function(int)? onPressed;
+
+  /// The titles of the buttons.
   final List<String> titles;
 
   @override
   Widget build(final BuildContext context) => LayoutBuilder(
         builder: (final context, final constraints) => ToggleButtons(
           constraints: BoxConstraints(
-            minWidth: (constraints.maxWidth - 8) / 3,
+            minWidth: (constraints.maxWidth - 8) / titles.length,
             minHeight: 40 + Theme.of(context).visualDensity.vertical * 4,
           ),
           borderRadius: BorderRadius.circular(48),
@@ -38,7 +57,7 @@ class SegmentedButtons extends StatelessWidget {
                   opacity: isSelected[index] ? 1 : 0,
                   child: AnimatedScale(
                     duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeInOut,
+                    curve: Curves.easeInOutCubicEmphasized,
                     alignment: Alignment.centerLeft,
                     scale: isSelected[index] ? 1 : 0,
                     child: Icon(
@@ -53,7 +72,7 @@ class SegmentedButtons extends StatelessWidget {
                       ? const EdgeInsets.only(left: 24)
                       : EdgeInsets.zero,
                   duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOut,
+                  curve: Curves.easeInOutCubicEmphasized,
                   child: Text(
                     title,
                     style: Theme.of(context).textTheme.labelLarge,

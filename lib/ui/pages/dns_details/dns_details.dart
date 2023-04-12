@@ -1,13 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_cards/filled_card.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/components/cards/filled_card.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 
+@RoutePage()
 class DnsDetailsPage extends StatefulWidget {
   const DnsDetailsPage({super.key});
 
@@ -158,8 +160,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                   ),
                 ],
               ),
-            )
-            .toList(),
+            ),
         const SizedBox(height: 16.0),
         ListTile(
           title: Text(
@@ -200,8 +201,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                   ),
                 ],
               ),
-            )
-            .toList(),
+            ),
       ],
     );
   }

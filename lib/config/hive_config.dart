@@ -18,9 +18,6 @@ class HiveConfig {
     Hive.registerAdapter(BackblazeCredentialAdapter());
     Hive.registerAdapter(BackblazeBucketAdapter());
     Hive.registerAdapter(ServerVolumeAdapter());
-
-    Hive.registerAdapter(DnsProviderAdapter());
-    Hive.registerAdapter(ServerProviderAdapter());
     Hive.registerAdapter(UserTypeAdapter());
 
     await Hive.openBox(BNames.appSettingsBox);
@@ -35,8 +32,8 @@ class HiveConfig {
     final Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
     if (deprecatedUsers.isNotEmpty) {
       final Box<User> users = Hive.box<User>(BNames.usersBox);
-      users.addAll(deprecatedUsers.values.toList());
-      deprecatedUsers.clear();
+      await users.addAll(deprecatedUsers.values.toList());
+      await deprecatedUsers.clear();
     }
 
     await Hive.openBox(BNames.serverInstallationBox, encryptionCipher: cipher);
@@ -62,6 +59,9 @@ class BNames {
 
   /// A boolean field of [appSettingsBox] box.
   static String isDarkModeOn = 'isDarkModeOn';
+
+  /// A boolean field of [appSettingsBox] box.
+  static String isAutoDarkModeOn = 'isAutoDarkModeOn';
 
   /// A boolean field of [appSettingsBox] box.
   static String isOnboardingShowing = 'isOnboardingShowing';

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/utils/named_font_weight.dart';
 
 class BrandTimer extends StatefulWidget {
@@ -52,11 +51,12 @@ class _BrandTimerState extends State<BrandTimer> {
   }
 
   @override
-  Widget build(final BuildContext context) => BrandText.medium(
-        _timeString,
-        style: const TextStyle(
-          fontWeight: NamedFontWeight.demiBold,
-        ),
+  Widget build(final BuildContext context) => Text(
+        _timeString ?? '',
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: NamedFontWeight.demiBold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
       );
 
   void _getTime() {

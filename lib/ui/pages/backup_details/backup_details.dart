@@ -1,26 +1,27 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_cards/outlined_card.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-class BackupDetails extends StatefulWidget {
-  const BackupDetails({super.key});
+@RoutePage()
+class BackupDetailsPage extends StatefulWidget {
+  const BackupDetailsPage({super.key});
 
   @override
-  State<BackupDetails> createState() => _BackupDetailsState();
+  State<BackupDetailsPage> createState() => _BackupDetailsPageState();
 }
 
-class _BackupDetailsState extends State<BackupDetails>
+class _BackupDetailsPageState extends State<BackupDetailsPage>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(final BuildContext context) {
@@ -57,7 +58,10 @@ class _BackupDetailsState extends State<BackupDetails>
             text: 'backup.initialize'.tr(),
           ),
         if (backupStatus == BackupStatusEnum.initializing)
-          BrandText.body1('backup.waiting_for_rebuild'.tr()),
+          Text(
+            'backup.waiting_for_rebuild'.tr(),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
         if (backupStatus != BackupStatusEnum.initializing &&
             backupStatus != BackupStatusEnum.noKey)
           OutlinedCard(
@@ -227,7 +231,10 @@ class _BackupDetailsState extends State<BackupDetails>
           ),
         ),
         if (backupStatus == BackupStatusEnum.error)
-          BrandText.body1(backupError.toString()),
+          Text(
+            backupError.toString(),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
       ],
     );
   }

@@ -1,7 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
@@ -9,19 +9,21 @@ import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_bottom_sheet/brand_bottom_sheet.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
-import 'package:selfprivacy/ui/components/brand_text/brand_text.dart';
+import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
+import 'package:selfprivacy/ui/components/drawers/progress_drawer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
-import 'package:selfprivacy/ui/pages/root_route.dart';
+import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
+import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/dns_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_type_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:selfprivacy/ui/router/router.dart';
+import 'package:selfprivacy/utils/breakpoints.dart';
 
+@RoutePage()
 class InitializingPage extends StatelessWidget {
   const InitializingPage({super.key});
 
@@ -49,99 +51,155 @@ class InitializingPage extends StatelessWidget {
         ][cubit.state.progress.index]();
       }
 
+      const steps = [
+        'initializing.steps.hosting',
+        'initializing.steps.server_type',
+        'initializing.steps.dns_provider',
+        'initializing.steps.backups_provider',
+        'initializing.steps.domain',
+        'initializing.steps.master_account',
+        'initializing.steps.server',
+        'initializing.steps.dns_setup',
+        'initializing.steps.nixos_installation',
+        'initializing.steps.server_reboot',
+        'initializing.steps.final_checks',
+      ];
+
       return BlocListener<ServerInstallationCubit, ServerInstallationState>(
         listener: (final context, final state) {
           if (cubit.state is ServerInstallationFinished) {
-            Navigator.of(context)
-                .pushReplacement(materialRoute(const RootPage()));
+            context.router.popUntilRoot();
           }
         },
         child: Scaffold(
-          appBar: AppBar(
-            actions: [
-              if (cubit.state is ServerInstallationFinished)
-                IconButton(
-                  icon: const Icon(Icons.check),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacement(materialRoute(const RootPage()));
-                  },
-                )
-            ],
-            title: Text(
-              'more_page.configuration_wizard'.tr(),
-            ),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(28),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: ProgressBar(
-                  steps: const [
-                    'Hosting',
-                    'Server Type',
-                    'CloudFlare',
-                    'Backblaze',
-                    'Domain',
-                    'User',
-                    'Server',
-                    'Installation',
-                  ],
-                  activeIndex: cubit.state.porgressBar,
-                ),
-              ),
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0.0),
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: actualInitializingPage,
-                  ),
-                ),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).padding.top -
-                        MediaQuery.of(context).padding.bottom -
-                        566,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        child: BrandButton.text(
-                          title: cubit.state is ServerInstallationFinished
-                              ? 'basis.close'.tr()
-                              : 'basis.later'.tr(),
-                          onPressed: () {
-                            Navigator.of(context).pushAndRemoveUntil(
-                              materialRoute(const RootPage()),
-                              (final predicate) => false,
-                            );
-                          },
-                        ),
+          endDrawer: const SupportDrawer(),
+          endDrawerEnableOpenDragGesture: false,
+          appBar: Breakpoints.large.isActive(context)
+              ? null
+              : AppBar(
+                  actions: [
+                    if (cubit.state is ServerInstallationFinished)
+                      IconButton(
+                        icon: const Icon(Icons.check),
+                        onPressed: () {
+                          context.router.popUntilRoot();
+                        },
                       ),
-                      if (cubit.state is ServerInstallationEmpty ||
-                          cubit.state is ServerInstallationNotFinished)
-                        Container(
-                          alignment: Alignment.center,
-                          child: BrandButton.text(
-                            title: 'basis.connect_to_existing'.tr(),
+                    const SizedBox.shrink(),
+                  ],
+                  title: Text(
+                    'more_page.configuration_wizard'.tr(),
+                  ),
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(28),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: ProgressBar(
+                        steps: const [
+                          'Hosting',
+                          'Server Type',
+                          'CloudFlare',
+                          'Backblaze',
+                          'Domain',
+                          'User',
+                          'Server',
+                          'Installation',
+                        ],
+                        activeIndex: cubit.state.porgressBar,
+                      ),
+                    ),
+                  ),
+                ),
+          body: LayoutBuilder(
+            builder: (final context, final constraints) => Row(
+              children: [
+                if (Breakpoints.large.isActive(context))
+                  ProgressDrawer(
+                    steps: steps,
+                    currentStep: cubit.state.progress.index,
+                    title: 'more_page.configuration_wizard'.tr(),
+                    constraints: constraints,
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (cubit.state is ServerInstallationEmpty ||
+                            cubit.state is ServerInstallationNotFinished)
+                          Container(
+                            alignment: Alignment.center,
+                            child: BrandButton.filled(
+                              text: 'basis.connect_to_existing'.tr(),
+                              onPressed: () {
+                                context.router.replace(const RecoveryRoute());
+                              },
+                            ),
+                          ),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minWidth: double.infinity,
+                          ),
+                          child: OutlinedButton(
+                            child: Text(
+                              cubit.state is ServerInstallationFinished
+                                  ? 'basis.close'.tr()
+                                  : 'basis.later'.tr(),
+                            ),
                             onPressed: () {
-                              Navigator.of(context).push(
-                                materialRoute(
-                                  const RecoveryRouting(),
-                                ),
-                              );
+                              context.router.popUntilRoot();
                             },
                           ),
-                        )
-                    ],
+                        ),
+                      ],
+                    ),
+                  ),
+                SizedBox(
+                  width: constraints.maxWidth -
+                      (Breakpoints.large.isActive(context) ? 300 : 0),
+                  height: constraints.maxHeight,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: Breakpoints.large.isActive(context)
+                              ? const EdgeInsets.all(16.0)
+                              : const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0.0),
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            child: actualInitializingPage,
+                          ),
+                        ),
+                        if (!Breakpoints.large.isActive(context))
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                child: BrandButton.text(
+                                  title:
+                                      cubit.state is ServerInstallationFinished
+                                          ? 'basis.close'.tr()
+                                          : 'basis.later'.tr(),
+                                  onPressed: () {
+                                    context.router.popUntilRoot();
+                                  },
+                                ),
+                              ),
+                              if (cubit.state is ServerInstallationEmpty ||
+                                  cubit.state is ServerInstallationNotFinished)
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: BrandButton.text(
+                                    title: 'basis.connect_to_existing'.tr(),
+                                    onPressed: () {
+                                      context.router
+                                          .replace(const RecoveryRoute());
+                                    },
+                                  ),
+                                )
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -182,15 +240,6 @@ class InitializingPage extends StatelessWidget {
         ),
       );
 
-  void _showModal(final BuildContext context, final Widget widget) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (final BuildContext context) => widget,
-    );
-  }
-
   Widget _stepDnsProviderToken(
     final ServerInstallationCubit initializingCubit,
   ) =>
@@ -213,50 +262,57 @@ class InitializingPage extends StatelessWidget {
         child: Builder(
           builder: (final context) {
             final formCubitState = context.watch<BackblazeFormCubit>().state;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${'initializing.connect_to_server_provider'.tr()}Backblaze',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 32),
-                CubitFormTextField(
-                  formFieldCubit: context.read<BackblazeFormCubit>().keyId,
-                  textAlign: TextAlign.center,
-                  scrollPadding: const EdgeInsets.only(bottom: 70),
-                  decoration: const InputDecoration(
-                    hintText: 'KeyID',
+            return ResponsiveLayoutWithInfobox(
+              topChild: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${'initializing.connect_to_server_provider'.tr()}Backblaze',
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                ),
-                const SizedBox(height: 16),
-                CubitFormTextField(
-                  formFieldCubit:
-                      context.read<BackblazeFormCubit>().applicationKey,
-                  textAlign: TextAlign.center,
-                  scrollPadding: const EdgeInsets.only(bottom: 70),
-                  decoration: const InputDecoration(
-                    hintText: 'Master Application Key',
-                  ),
-                ),
-                const SizedBox(height: 32),
-                BrandButton.rised(
-                  onPressed: formCubitState.isSubmitting
-                      ? null
-                      : () => context.read<BackblazeFormCubit>().trySubmit(),
-                  text: 'basis.connect'.tr(),
-                ),
-                const SizedBox(height: 10),
-                BrandButton.text(
-                  onPressed: () => _showModal(
-                    context,
-                    const _HowTo(
-                      fileName: 'how_backblaze',
+                ],
+              ),
+              primaryColumn: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CubitFormTextField(
+                    formFieldCubit: context.read<BackblazeFormCubit>().keyId,
+                    textAlign: TextAlign.center,
+                    scrollPadding: const EdgeInsets.only(bottom: 70),
+                    decoration: const InputDecoration(
+                      hintText: 'KeyID',
                     ),
                   ),
-                  title: 'initializing.how'.tr(),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  CubitFormTextField(
+                    formFieldCubit:
+                        context.read<BackblazeFormCubit>().applicationKey,
+                    textAlign: TextAlign.center,
+                    scrollPadding: const EdgeInsets.only(bottom: 70),
+                    decoration: const InputDecoration(
+                      hintText: 'Master Application Key',
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  BrandButton.rised(
+                    onPressed: formCubitState.isSubmitting
+                        ? null
+                        : () => context.read<BackblazeFormCubit>().trySubmit(),
+                    text: 'basis.connect'.tr(),
+                  ),
+                  const SizedBox(height: 10),
+                  BrandButton.text(
+                    onPressed: () {
+                      context.read<SupportSystemCubit>().showArticle(
+                            article: 'how_backblaze',
+                            context: context,
+                          );
+                      Scaffold.of(context).openEndDrawer();
+                    },
+                    title: 'initializing.how'.tr(),
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -269,9 +325,8 @@ class InitializingPage extends StatelessWidget {
           builder: (final context) {
             final DomainSetupState state =
                 context.watch<DomainSetupCubit>().state;
-            return SizedBox(
-              width: double.infinity,
-              child: Column(
+            return ResponsiveLayoutWithInfobox(
+              topChild: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -283,7 +338,11 @@ class InitializingPage extends StatelessWidget {
                     'initializing.use_this_domain_text'.tr(),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 32),
+                ],
+              ),
+              primaryColumn: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   if (state is Empty)
                     Text(
                       'initializing.no_connected_domains'.tr(),
@@ -323,7 +382,7 @@ class InitializingPage extends StatelessWidget {
                   ],
                   if (state is Empty) ...[
                     const SizedBox(height: 30),
-                    BrandButton.rised(
+                    BrandButton.filled(
                       onPressed: () => context.read<DomainSetupCubit>().load(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -333,14 +392,17 @@ class InitializingPage extends StatelessWidget {
                             color: Colors.white,
                           ),
                           const SizedBox(width: 10),
-                          BrandText.buttonTitleText('domain.update_list'.tr()),
+                          Text(
+                            'domain.update_list'.tr(),
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         ],
                       ),
                     ),
                   ],
                   if (state is Loaded) ...[
                     const SizedBox(height: 32),
-                    BrandButton.rised(
+                    BrandButton.filled(
                       onPressed: () =>
                           context.read<DomainSetupCubit>().saveDomain(),
                       text: 'initializing.save_domain'.tr(),
@@ -361,74 +423,83 @@ class InitializingPage extends StatelessWidget {
           builder: (final context) {
             final formCubitState = context.watch<RootUserFormCubit>().state;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'initializing.create_master_account'.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'initializing.enter_username_and_password'.tr(),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                if (formCubitState.isErrorShown) const SizedBox(height: 16),
-                if (formCubitState.isErrorShown)
+            return ResponsiveLayoutWithInfobox(
+              topChild: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    'users.username_rule'.tr(),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
+                    'initializing.create_master_account'.tr(),
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.enter_username_and_password'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+              primaryColumn: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (formCubitState.isErrorShown) const SizedBox(height: 16),
+                  if (formCubitState.isErrorShown)
+                    Text(
+                      'users.username_rule'.tr(),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  const SizedBox(height: 32),
+                  CubitFormTextField(
+                    formFieldCubit: context.read<RootUserFormCubit>().userName,
+                    textAlign: TextAlign.center,
+                    scrollPadding: const EdgeInsets.only(bottom: 70),
+                    decoration: InputDecoration(
+                      hintText: 'basis.username'.tr(),
                     ),
                   ),
-                const SizedBox(height: 32),
-                CubitFormTextField(
-                  formFieldCubit: context.read<RootUserFormCubit>().userName,
-                  textAlign: TextAlign.center,
-                  scrollPadding: const EdgeInsets.only(bottom: 70),
-                  decoration: InputDecoration(
-                    hintText: 'basis.username'.tr(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                BlocBuilder<FieldCubit<bool>, FieldCubitState<bool>>(
-                  bloc: context.read<RootUserFormCubit>().isVisible,
-                  builder: (final context, final state) {
-                    final bool isVisible = state.value;
-                    return CubitFormTextField(
-                      obscureText: !isVisible,
-                      formFieldCubit:
-                          context.read<RootUserFormCubit>().password,
-                      textAlign: TextAlign.center,
-                      scrollPadding: const EdgeInsets.only(bottom: 70),
-                      decoration: InputDecoration(
-                        hintText: 'basis.password'.tr(),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            isVisible ? Icons.visibility : Icons.visibility_off,
+                  const SizedBox(height: 16),
+                  BlocBuilder<FieldCubit<bool>, FieldCubitState<bool>>(
+                    bloc: context.read<RootUserFormCubit>().isVisible,
+                    builder: (final context, final state) {
+                      final bool isVisible = state.value;
+                      return CubitFormTextField(
+                        obscureText: !isVisible,
+                        formFieldCubit:
+                            context.read<RootUserFormCubit>().password,
+                        textAlign: TextAlign.center,
+                        scrollPadding: const EdgeInsets.only(bottom: 70),
+                        decoration: InputDecoration(
+                          hintText: 'basis.password'.tr(),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              isVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () => context
+                                .read<RootUserFormCubit>()
+                                .isVisible
+                                .setValue(!isVisible),
                           ),
-                          onPressed: () => context
-                              .read<RootUserFormCubit>()
-                              .isVisible
-                              .setValue(!isVisible),
+                          suffixIconConstraints:
+                              const BoxConstraints(minWidth: 60),
+                          prefixIconConstraints:
+                              const BoxConstraints(maxWidth: 60),
+                          prefixIcon: Container(),
                         ),
-                        suffixIconConstraints:
-                            const BoxConstraints(minWidth: 60),
-                        prefixIconConstraints:
-                            const BoxConstraints(maxWidth: 60),
-                        prefixIcon: Container(),
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 32),
-                BrandButton.rised(
-                  onPressed: formCubitState.isSubmitting
-                      ? null
-                      : () => context.read<RootUserFormCubit>().trySubmit(),
-                  text: 'basis.connect'.tr(),
-                ),
-              ],
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 32),
+                  BrandButton.filled(
+                    onPressed: formCubitState.isSubmitting
+                        ? null
+                        : () => context.read<RootUserFormCubit>().trySubmit(),
+                    text: 'basis.connect'.tr(),
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -438,27 +509,28 @@ class InitializingPage extends StatelessWidget {
     final bool isLoading =
         (appConfigCubit.state as ServerInstallationNotFinished).isLoading;
     return Builder(
-      builder: (final context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'initializing.final'.tr(),
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'initializing.create_server'.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 128),
-          BrandButton.rised(
-            onPressed:
-                isLoading ? null : appConfigCubit.createServerAndSetDnsRecords,
-            text: isLoading
-                ? 'basis.loading'.tr()
-                : 'initializing.create_server'.tr(),
-          ),
-        ],
+      builder: (final context) => ResponsiveLayoutWithInfobox(
+        topChild: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'initializing.final'.tr(),
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'initializing.create_server'.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
+        primaryColumn: BrandButton.filled(
+          onPressed:
+              isLoading ? null : appConfigCubit.createServerAndSetDnsRecords,
+          text: isLoading
+              ? 'basis.loading'.tr()
+              : 'initializing.create_server'.tr(),
+        ),
       ),
     );
   }
@@ -487,84 +559,67 @@ class InitializingPage extends StatelessWidget {
     return Builder(
       builder: (final context) => SizedBox(
         width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'initializing.checks'.tr(args: [doneCount.toString(), '4']),
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            if (text != null)
+        child: ResponsiveLayoutWithInfobox(
+          topChild: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text(
-                text,
-                style: Theme.of(context).textTheme.bodyMedium,
+                'initializing.checks'.tr(args: [doneCount.toString(), '4']),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
-            const SizedBox(height: 128),
-            const SizedBox(height: 10),
-            if (doneCount == 0 && state.dnsMatches != null)
-              Column(
-                children: state.dnsMatches!.entries.map((final entry) {
-                  final String domain = entry.key;
-                  final bool isCorrect = entry.value;
-                  return Row(
-                    children: [
-                      if (isCorrect)
-                        const Icon(Icons.check, color: Colors.green),
-                      if (!isCorrect)
-                        const Icon(Icons.schedule, color: Colors.amber),
-                      const SizedBox(width: 10),
-                      Text(domain),
-                    ],
-                  );
-                }).toList(),
-              ),
-            const SizedBox(height: 10),
-            if (!state.isLoading)
-              Row(
-                children: [
-                  Text(
-                    'initializing.until_the_next_check'.tr(),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  BrandTimer(
-                    startDateTime: state.timerStart!,
-                    duration: state.duration!,
-                  )
-                ],
-              ),
-            if (state.isLoading)
-              Text(
-                'initializing.check'.tr(),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-          ],
+              const SizedBox(height: 16),
+              if (text != null)
+                Text(
+                  text,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+            ],
+          ),
+          primaryColumn: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 128),
+              const SizedBox(height: 10),
+              if (doneCount == 0 && state.dnsMatches != null)
+                Column(
+                  children: state.dnsMatches!.entries.map((final entry) {
+                    final String domain = entry.key;
+                    final bool isCorrect = entry.value;
+                    return Row(
+                      children: [
+                        if (isCorrect)
+                          const Icon(Icons.check, color: Colors.green),
+                        if (!isCorrect)
+                          const Icon(Icons.schedule, color: Colors.amber),
+                        const SizedBox(width: 10),
+                        Text(domain),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              const SizedBox(height: 10),
+              if (!state.isLoading)
+                Row(
+                  children: [
+                    Text(
+                      'initializing.until_the_next_check'.tr(),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    BrandTimer(
+                      startDateTime: state.timerStart!,
+                      duration: state.duration!,
+                    )
+                  ],
+                ),
+              if (state.isLoading)
+                Text(
+                  'initializing.check'.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
-}
-
-class _HowTo extends StatelessWidget {
-  const _HowTo({
-    required this.fileName,
-  });
-
-  final String fileName;
-
-  @override
-  Widget build(final BuildContext context) => BrandBottomSheet(
-        isExpended: true,
-        child: Padding(
-          padding: paddingH15V0,
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            children: [
-              BrandMarkdown(
-                fileName: fileName,
-              ),
-            ],
-          ),
-        ),
-      );
 }

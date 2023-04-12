@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
@@ -14,21 +16,21 @@ class RecoveryKeyCubit
 
   @override
   void load() async {
-    if (serverInstallationCubit.state is ServerInstallationFinished) {
-      final RecoveryKeyStatus? status = await _getRecoveryKeyStatus();
-      if (status == null) {
-        emit(state.copyWith(loadingStatus: LoadingStatus.error));
-      } else {
-        emit(
-          state.copyWith(
-            status: status,
-            loadingStatus: LoadingStatus.success,
-          ),
-        );
-      }
+    // if (serverInstallationCubit.state is ServerInstallationFinished) {
+    final RecoveryKeyStatus? status = await _getRecoveryKeyStatus();
+    if (status == null) {
+      emit(state.copyWith(loadingStatus: LoadingStatus.error));
     } else {
-      emit(state.copyWith(loadingStatus: LoadingStatus.uninitialized));
+      emit(
+        state.copyWith(
+          status: status,
+          loadingStatus: LoadingStatus.success,
+        ),
+      );
     }
+    // } else {
+    //   emit(state.copyWith(loadingStatus: LoadingStatus.uninitialized));
+    // }
   }
 
   Future<RecoveryKeyStatus?> _getRecoveryKeyStatus() async {
@@ -60,7 +62,7 @@ class RecoveryKeyCubit
     final APIGenericResult<String> response =
         await api.generateRecoveryToken(expirationDate, numberOfUses);
     if (response.success) {
-      refresh();
+      unawaited(refresh());
       return response.data;
     } else {
       throw GenerationError(response.message ?? 'Unknown error');

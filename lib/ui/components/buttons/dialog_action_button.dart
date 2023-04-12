@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ActionButton extends StatelessWidget {
-  const ActionButton({
+/// Basically a [TextButton] to be used in dialogs
+class DialogActionButton extends StatelessWidget {
+  const DialogActionButton({
     super.key,
     this.text,
     this.onPressed,

@@ -1,7 +1,8 @@
 part of 'users.dart';
 
-class UserDetails extends StatelessWidget {
-  const UserDetails({
+@RoutePage()
+class UserDetailsPage extends StatelessWidget {
+  const UserDetailsPage({
     required this.login,
     super.key,
   });
@@ -25,6 +26,7 @@ class UserDetails extends StatelessWidget {
     if (user.type == UserType.root) {
       return BrandHeroScreen(
         hasBackButton: true,
+        hasFlashButton: true,
         heroTitle: 'ssh.root_title'.tr(),
         heroSubtitle: 'ssh.root_subtitle'.tr(),
         children: [
@@ -35,6 +37,7 @@ class UserDetails extends StatelessWidget {
 
     return BrandHeroScreen(
       hasBackButton: true,
+      hasFlashButton: true,
       heroTitle: user.login,
       children: [
         _UserLogins(user: user, domainName: domainName),
@@ -87,6 +90,7 @@ class _DeleteUserTile extends StatelessWidget {
         onTap: () => {
           showDialog(
             context: context,
+            // useRootNavigator: false,
             builder: (final BuildContext context) => AlertDialog(
               title: Text('basis.confirmation'.tr()),
               content: SingleChildScrollView(
@@ -102,7 +106,7 @@ class _DeleteUserTile extends StatelessWidget {
                 TextButton(
                   child: Text('basis.cancel'.tr()),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.router.pop();
                   },
                 ),
                 TextButton(
@@ -114,9 +118,8 @@ class _DeleteUserTile extends StatelessWidget {
                   ),
                   onPressed: () {
                     context.read<JobsCubit>().addJob(DeleteUserJob(user: user));
-                    Navigator.of(context)
-                      ..pop()
-                      ..pop();
+                    context.router.childControllers.first.pop();
+                    context.router.pop();
                   },
                 ),
               ],
@@ -231,9 +234,7 @@ class _SshKeysCard extends StatelessWidget {
                                       publicKey: key,
                                     ),
                                   );
-                              Navigator.of(context)
-                                ..pop()
-                                ..pop();
+                              context.popRoute();
                             },
                           ),
                         ],
@@ -253,72 +254,69 @@ class NewSshKey extends StatelessWidget {
   final User user;
 
   @override
-  Widget build(final BuildContext context) => BrandBottomSheet(
-        child: BlocProvider(
-          create: (final context) {
-            final jobCubit = context.read<JobsCubit>();
-            final jobState = jobCubit.state;
-            if (jobState is JobsStateWithJobs) {
-              final jobs = jobState.clientJobList;
-              for (final job in jobs) {
-                if (job is CreateSSHKeyJob && job.user.login == user.login) {
-                  user.sshKeys.add(job.publicKey);
-                }
+  Widget build(final BuildContext context) => BlocProvider(
+        create: (final context) {
+          final jobCubit = context.read<JobsCubit>();
+          final jobState = jobCubit.state;
+          if (jobState is JobsStateWithJobs) {
+            final jobs = jobState.clientJobList;
+            for (final job in jobs) {
+              if (job is CreateSSHKeyJob && job.user.login == user.login) {
+                user.sshKeys.add(job.publicKey);
               }
             }
-            return SshFormCubit(
-              jobsCubit: jobCubit,
-              user: user,
-            );
-          },
-          child: Builder(
-            builder: (final context) {
-              final formCubitState = context.watch<SshFormCubit>().state;
+          }
+          return SshFormCubit(
+            jobsCubit: jobCubit,
+            user: user,
+          );
+        },
+        child: Builder(
+          builder: (final context) {
+            final formCubitState = context.watch<SshFormCubit>().state;
 
-              return BlocListener<SshFormCubit, FormCubitState>(
-                listener: (final context, final state) {
-                  if (state.isSubmitted) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    BrandHeader(
-                      title: user.login,
-                    ),
-                    const SizedBox(width: 14),
-                    Padding(
-                      padding: paddingH15V0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IntrinsicHeight(
-                            child: CubitFormTextField(
-                              formFieldCubit: context.read<SshFormCubit>().key,
-                              decoration: InputDecoration(
-                                labelText: 'ssh.input_label'.tr(),
-                              ),
+            return BlocListener<SshFormCubit, FormCubitState>(
+              listener: (final context, final state) {
+                if (state.isSubmitted) {
+                  Navigator.pop(context);
+                }
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  BrandHeader(
+                    title: user.login,
+                  ),
+                  const SizedBox(width: 14),
+                  Padding(
+                    padding: paddingH15V0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IntrinsicHeight(
+                          child: CubitFormTextField(
+                            formFieldCubit: context.read<SshFormCubit>().key,
+                            decoration: InputDecoration(
+                              labelText: 'ssh.input_label'.tr(),
                             ),
                           ),
-                          const SizedBox(height: 30),
-                          BrandButton.rised(
-                            onPressed: formCubitState.isSubmitting
-                                ? null
-                                : () =>
-                                    context.read<SshFormCubit>().trySubmit(),
-                            text: 'ssh.create'.tr(),
-                          ),
-                          const SizedBox(height: 30),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 30),
+                        BrandButton.rised(
+                          onPressed: formCubitState.isSubmitting
+                              ? null
+                              : () => context.read<SshFormCubit>().trySubmit(),
+                          text: 'ssh.create'.tr(),
+                        ),
+                        const SizedBox(height: 30),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       );
 }

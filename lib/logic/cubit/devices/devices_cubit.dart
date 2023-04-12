@@ -15,9 +15,9 @@ class ApiDevicesCubit
 
   @override
   void load() async {
-    if (serverInstallationCubit.state is ServerInstallationFinished) {
-      _refetch();
-    }
+    // if (serverInstallationCubit.state is ServerInstallationFinished) {
+    _refetch();
+    // }
   }
 
   Future<void> refresh() async {

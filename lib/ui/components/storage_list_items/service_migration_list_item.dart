@@ -72,7 +72,10 @@ class ServiceConsumptionTitle extends StatelessWidget {
                   service.svgIcon,
                   width: 24.0,
                   height: 24.0,
-                  color: Theme.of(context).colorScheme.onBackground,
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.onBackground,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
               const SizedBox(width: 16),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:basic_utils/basic_utils.dart';
@@ -276,7 +277,7 @@ class ServerInstallationRepository {
             return;
           }
           await saveServerDetails(serverDetails);
-          onSuccess(serverDetails);
+          unawaited(onSuccess(serverDetails));
         },
         cancelButtonOnPressed: onCancel,
       );
@@ -326,15 +327,15 @@ class ServerInstallationRepository {
               return;
             }
             await saveServerDetails(serverDetails);
-            onSuccess(serverDetails);
+            unawaited(onSuccess(serverDetails));
           },
           cancelButtonOnPressed: onCancel,
         );
         return;
       }
 
-      saveServerDetails(createServerResult.data!);
-      onSuccess(createServerResult.data!);
+      await saveServerDetails(createServerResult.data!);
+      unawaited(onSuccess(createServerResult.data!));
     } catch (e) {
       print(e);
       showInstallationErrorPopUp();

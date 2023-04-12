@@ -65,9 +65,11 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     final RequestInterceptorHandler handler,
   ) async {
     addMessage(
-      Message(
-        text:
-            'request-uri: ${options.uri}\nheaders: ${options.headers}\ndata: ${options.data}',
+      RestApiRequestMessage(
+        method: options.method,
+        data: options.data.toString(),
+        headers: options.headers,
+        uri: options.uri,
       ),
     );
     return super.onRequest(options, handler);
@@ -79,9 +81,11 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     final ResponseInterceptorHandler handler,
   ) async {
     addMessage(
-      Message(
-        text:
-            'response-uri: ${response.realUri}\ncode: ${response.statusCode}\ndata: ${response.toString()}\n',
+      RestApiResponseMessage(
+        method: response.requestOptions.method,
+        statusCode: response.statusCode,
+        data: response.data.toString(),
+        uri: response.realUri,
       ),
     );
     return super.onResponse(

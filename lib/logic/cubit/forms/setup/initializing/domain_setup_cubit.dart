@@ -22,9 +22,6 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
     }
   }
 
-  @override
-  Future<void> close() => super.close();
-
   Future<void> saveDomain() async {
     assert(state is Loaded, 'wrong state');
     final String domainName = (state as Loaded).domain;

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/brand_colors.dart';
-import 'package:selfprivacy/config/text_themes.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 
 class ProgressBar extends StatefulWidget {
@@ -65,7 +63,7 @@ class _ProgressBarState extends State<ProgressBar> {
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
-            color: BrandColors.gray4,
+            color: const Color(0xFFDDDDDD),
             borderRadius: BorderRadius.circular(5),
           ),
           child: LayoutBuilder(
@@ -119,3 +117,13 @@ class _ProgressBarState extends State<ProgressBar> {
     );
   }
 }
+
+const TextStyle progressTextStyleLight = TextStyle(
+  fontSize: 11,
+  color: Colors.black,
+  height: 1.7,
+);
+
+final TextStyle progressTextStyleDark = progressTextStyleLight.copyWith(
+  color: Colors.white,
+);

@@ -1,0 +1,150 @@
+import 'package:animations/animations.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
+import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
+import 'package:selfprivacy/ui/pages/devices/devices.dart';
+import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
+import 'package:selfprivacy/ui/pages/more/about_application.dart';
+import 'package:selfprivacy/ui/pages/more/app_settings/app_settings.dart';
+import 'package:selfprivacy/ui/pages/more/app_settings/developer_settings.dart';
+import 'package:selfprivacy/ui/pages/more/console.dart';
+import 'package:selfprivacy/ui/pages/more/more.dart';
+import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
+import 'package:selfprivacy/ui/pages/providers/providers.dart';
+import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
+import 'package:selfprivacy/ui/pages/root_route.dart';
+import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
+import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
+import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
+import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
+import 'package:selfprivacy/ui/pages/services/service_page.dart';
+import 'package:selfprivacy/ui/pages/services/services.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
+import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
+import 'package:selfprivacy/ui/pages/users/users.dart';
+
+part 'router.gr.dart';
+
+Widget fadeThroughTransition(
+  final BuildContext context,
+  final Animation<double> animation,
+  final Animation<double> secondaryAnimation,
+  final Widget child,
+) =>
+    SharedAxisTransition(
+      key: UniqueKey(),
+      animation: animation,
+      secondaryAnimation: secondaryAnimation,
+      transitionType: SharedAxisTransitionType.vertical,
+      child: child,
+    );
+
+@AutoRouterConfig(
+  // transitionsBuilder: fadeThroughTransition,
+  replaceInRouteName: 'Page|Screen|Routing,Route',
+)
+class RootRouter extends _$RootRouter {
+  RootRouter(GlobalKey<NavigatorState> super.navigatorKey);
+
+  @override
+  RouteType get defaultRouteType => const RouteType.material();
+  @override
+  final List<AutoRoute> routes = [
+    AutoRoute(page: OnboardingRoute.page),
+    AutoRoute(page: InitializingRoute.page),
+    AutoRoute(page: RecoveryRoute.page),
+    AutoRoute(
+      page: RootRoute.page,
+      path: '/',
+      children: [
+        CustomRoute(
+          page: ProvidersRoute.page,
+          usesPathAsKey: true,
+          path: '',
+          transitionsBuilder: fadeThroughTransition,
+          durationInMilliseconds: 400,
+        ),
+        CustomRoute(
+          page: ServicesRoute.page,
+          usesPathAsKey: true,
+          transitionsBuilder: fadeThroughTransition,
+          durationInMilliseconds: 400,
+        ),
+        CustomRoute(
+          page: UsersRoute.page,
+          usesPathAsKey: true,
+          transitionsBuilder: fadeThroughTransition,
+          durationInMilliseconds: 400,
+        ),
+        CustomRoute(
+          page: MoreRoute.page,
+          usesPathAsKey: true,
+          transitionsBuilder: fadeThroughTransition,
+          durationInMilliseconds: 400,
+        ),
+        AutoRoute(page: AppSettingsRoute.page),
+        AutoRoute(page: UserDetailsRoute.page),
+        AutoRoute(page: NewUserRoute.page),
+        AutoRoute(page: RecoveryKeyRoute.page),
+        AutoRoute(page: DevicesRoute.page),
+        AutoRoute(page: AboutApplicationRoute.page),
+        AutoRoute(page: DeveloperSettingsRoute.page),
+        AutoRoute(page: ServiceRoute.page),
+        AutoRoute(page: ServerDetailsRoute.page),
+        AutoRoute(page: DnsDetailsRoute.page),
+        AutoRoute(page: BackupDetailsRoute.page),
+        AutoRoute(page: ServerStorageRoute.page),
+        AutoRoute(page: ExtendingVolumeRoute.page),
+      ],
+    ),
+    AutoRoute(page: ServicesMigrationRoute.page),
+    AutoRoute(page: ConsoleRoute.page),
+  ];
+}
+
+// Function to map route names to route titles
+String getRouteTitle(final String routeName) {
+  switch (routeName) {
+    case 'RootRoute':
+      return 'basis.app_name';
+    case 'ProvidersRoute':
+      return 'basis.providers_title';
+    case 'ServicesRoute':
+    case 'ServiceRoute':
+      return 'basis.services';
+    case 'UsersRoute':
+      return 'basis.users';
+    case 'MoreRoute':
+      return 'basis.more';
+    case 'AppSettingsRoute':
+      return 'application_settings.title';
+    case 'UserDetailsRoute':
+      return 'users.details_title';
+    case 'NewUserRoute':
+      return 'users.new_user';
+    case 'RecoveryKeyRoute':
+      return 'recovery_key.key_main_header';
+    case 'DevicesRoute':
+      return 'devices.main_screen.header';
+    case 'AboutApplicationRoute':
+      return 'about_us_page.title';
+    case 'ConsoleRoute':
+      return 'console_page.title';
+    case 'DeveloperSettingsRoute':
+      return 'developer_settings.title';
+    case 'DnsDetailsRoute':
+      return 'domain.screen_title';
+    case 'ServerDetailsRoute':
+      return 'server.card_title';
+    case 'BackupDetailsRoute':
+      return 'backup.card_title';
+    case 'ServerStorageRoute':
+      return 'storage.card_title';
+    case 'ExtendingVolumeRoute':
+      return 'storage.extending_volume_title';
+    default:
+      return routeName;
+  }
+}

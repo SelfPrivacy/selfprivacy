@@ -1,11 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_domain_form_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_button/brand_button.dart';
-import 'package:selfprivacy/ui/components/brand_hero_screen/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_recovery_key.dart';
@@ -17,6 +18,7 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_server_provider_c
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
+@RoutePage()
 class RecoveryRouting extends StatelessWidget {
   const RecoveryRouting({super.key});
 
@@ -110,6 +112,7 @@ class SelectDomainToRecover extends StatelessWidget {
               heroSubtitle: 'recovering.domain_recovery_description'.tr(),
               hasBackButton: true,
               hasFlashButton: false,
+              ignoreBreakpoints: true,
               onBackButtonPressed: () {
                 Navigator.of(context).pushAndRemoveUntil(
                   materialRoute(const RootPage()),

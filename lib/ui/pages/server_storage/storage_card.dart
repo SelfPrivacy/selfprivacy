@@ -1,12 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
-import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 
 class StorageCard extends StatelessWidget {
   const StorageCard({
@@ -45,13 +45,8 @@ class StorageCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkResponse(
         highlightShape: BoxShape.rectangle,
-        onTap: () => Navigator.of(context).push(
-          materialRoute(
-            ServerStoragePage(
-              diskStatus: diskStatus,
-            ),
-          ),
-        ),
+        onTap: () =>
+            context.pushRoute(ServerStorageRoute(diskStatus: diskStatus)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

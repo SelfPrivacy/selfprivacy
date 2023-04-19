@@ -133,6 +133,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
     final LaunchInstallationData installationData,
   ) async {
+    ServerHostingDetails? serverDetails;
+    final serverApiToken = StringGenerators.apiToken();
+    final hostname = getHostnameFromDomain(installationData.domainName);
     final serverResult = await _adapter.api().createServer(
           dnsApiToken: installationData.dnsApiToken,
           rootUser: installationData.rootUser,
@@ -140,12 +143,12 @@ class DigitalOceanServerProvider extends ServerProvider {
           serverType: installationData.serverTypeId,
           dnsProviderType:
               dnsProviderToInfectName(installationData.dnsProviderType),
-          hostName: getHostnameFromDomain(installationData.domainName),
+          hostName: hostname,
           base64Password: base64.encode(
             utf8.encode(installationData.rootUser.password ?? 'PASS'),
           ),
           databasePassword: StringGenerators.dbPassword(),
-          serverApiToken: StringGenerators.apiToken(),
+          serverApiToken: serverApiToken,
         );
 
     if (!serverResult.success || serverResult.data == null) {
@@ -169,6 +172,66 @@ class DigitalOceanServerProvider extends ServerProvider {
         code: serverResult.code,
       );
     }
+
+    try {
+      final int dropletId = serverResult.data['droplet']['id'];
+      final ServerVolume? newVolume = (await createVolume()).data;
+      final bool attachedVolume =
+          (await attachVolume(newVolume!, dropletId)).data;
+
+      String? ipv4;
+      int attempts = 0;
+      while (attempts < 5 && ipv4 == null) {
+        await Future.delayed(const Duration(seconds: 20));
+        final servers = await getServers();
+        for (final server in servers.data) {
+          if (server.name == hostname && server.ip != '0.0.0.0') {
+            ipv4 = server.ip;
+            break;
+          }
+        }
+        ++attempts;
+      }
+
+      if (attachedVolume && ipv4 != null) {
+        serverDetails = ServerHostingDetails(
+          id: dropletId,
+          ip4: ipv4,
+          createTime: DateTime.now(),
+          volume: newVolume,
+          apiToken: serverApiToken,
+          provider: ServerProviderType.digitalOcean,
+        );
+      }
+    } catch (e) {
+      return GenericResult(
+        success: false,
+        data: CallbackDialogueBranching(
+          choices: [
+            CallbackDialogueChoice(
+              title: 'basis.cancel'.tr(),
+              callback: null,
+            ),
+            CallbackDialogueChoice(
+              title: 'basis.try_again'.tr(),
+              callback: () async {
+                await Future.delayed(const Duration(seconds: 5));
+                final deletion = await deleteServer(hostname);
+                return deletion.success
+                    ? await launchInstallation(installationData)
+                    : deletion;
+              },
+            ),
+          ],
+          description: 'modals.try_again'.tr(),
+          title: 'modals.server_deletion_error'.tr(),
+        ),
+        message: e.toString(),
+      );
+    }
+
+    await installationData.successCallback(serverDetails!);
+    return GenericResult(success: true, data: null);
   }
 
   @override

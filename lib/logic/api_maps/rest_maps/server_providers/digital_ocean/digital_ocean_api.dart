@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -7,13 +6,9 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_pro
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/price.dart';
-import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
@@ -315,7 +310,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     required final String databasePassword,
     required final String domainName,
     required final String hostName,
-    required final int volumeId,
     required final String serverType,
   }) async {
     final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
@@ -354,95 +348,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     return GenericResult(
       data: serverCreateResponse,
-      success: true,
-      code: serverCreateResponse.statusCode,
-      message: serverCreateResponse.statusMessage,
-    );
-  }
-
-  Future<GenericResult<ServerHostingDetails?>> creatfgdfeServer({
-    required final String dnsApiToken,
-    required final User rootUser,
-    required final String domainName,
-    required final String serverType,
-    required final DnsProviderType dnsProvider,
-  }) async {
-    ServerHostingDetails? serverDetails;
-
-    final String dbPassword = StringGenerators.dbPassword();
-    final String apiToken = StringGenerators.apiToken();
-
-    final String base64Password =
-        base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
-
-    final String formattedHostname = getHostnameFromDomain(domainName);
-    const String infectBranch = 'testing/digital-ocean';
-    final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
-    final String dnsProviderType = dnsProviderToInfectName(dnsProvider);
-
-    final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType STAGING_ACME='$stagingAcme' DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
-    print(userdataString);
-
-    Response? serverCreateResponse;
-    final Dio client = await getClient();
-    try {
-      final Map<String, Object> data = {
-        'name': formattedHostname,
-        'size': serverType,
-        'image': 'ubuntu-20-04-x64',
-        'user_data': userdataString,
-        'region': region!,
-      };
-      print('Decoded data: $data');
-
-      serverCreateResponse = await client.post(
-        '/droplets',
-        data: data,
-      );
-
-      final int serverId = serverCreateResponse.data['droplet']['id'];
-      final ServerVolume? newVolume = (await createVolume()).data;
-      final bool attachedVolume =
-          (await attachVolume(newVolume!, serverId)).data;
-
-      String? ipv4;
-      int attempts = 0;
-      while (attempts < 5 && ipv4 == null) {
-        await Future.delayed(const Duration(seconds: 20));
-        final List<ServerBasicInfo> servers = await getServers();
-        for (final server in servers) {
-          if (server.name == formattedHostname && server.ip != '0.0.0.0') {
-            ipv4 = server.ip;
-            break;
-          }
-        }
-        ++attempts;
-      }
-
-      if (attachedVolume && ipv4 != null) {
-        serverDetails = ServerHostingDetails(
-          id: serverId,
-          ip4: ipv4,
-          createTime: DateTime.now(),
-          volume: newVolume,
-          apiToken: apiToken,
-          provider: ServerProviderType.digitalOcean,
-        );
-      }
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(
-      data: serverDetails,
       success: true,
       code: serverCreateResponse.statusCode,
       message: serverCreateResponse.statusMessage,

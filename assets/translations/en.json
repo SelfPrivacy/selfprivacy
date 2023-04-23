@@ -395,7 +395,7 @@
         "fallback_select_description": "What exactly do you have? Pick the first available option:",
         "fallback_select_token_copy": "Copy of auth token from other version of the application.",
         "fallback_select_root_ssh": "Root SSH access to the server.",
-        "fallback_select_provider_console": "Access to the server console of my prodiver.",
+        "fallback_select_provider_console": "Access to the server console of my provider.",
         "authorization_failed": "Couldn't log in with this key",
         "fallback_select_provider_console_hint": "For example: Hetzner.",
         "server_provider_connected": "Connect to your Server Provider",

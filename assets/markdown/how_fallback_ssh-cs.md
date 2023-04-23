@@ -1,10 +1,10 @@
-Login as root user to your server and look at the contents of the file `/etc/nixos/userdata/tokens.json`
+Přihlaste se k serveru jako uživatel root a podívejte se na obsah souboru `/etc/nixos/userdata/tokens.json`
 
 ```sh
 cat /etc/nixos/userdata/tokens.json
 ```
 
-This file will have a similar construction:
+Tento soubor bude mít podobnou konstrukci:
 
 ```json
 {
@@ -16,4 +16,4 @@ This file will have a similar construction:
         }
 ```
 
-Copy the token from the file and paste it in the next window.
+Zkopírujte token ze souboru a vložte jej do dalšího okna.

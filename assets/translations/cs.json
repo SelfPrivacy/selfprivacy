@@ -33,7 +33,8 @@
         "done": "Hotovo",
         "continue": "Pokračovat",
         "alert": "Upozornění",
-        "later": "Přeskočit na nastavení později"
+        "later": "Přeskočit na nastavení později",
+        "app_name": "SelfPrivacy"
     },
     "about_application_page": {
         "title": "O příloze",
@@ -52,7 +53,8 @@
     },
     "console_page": {
         "title": "Konzole",
-        "waiting": "Čekání na inicializaci…"
+        "waiting": "Čekání na inicializaci…",
+        "copy": "Kopírovat"
     },
     "application_settings": {
         "title": "Nastavení aplikace",
@@ -61,7 +63,10 @@
         "reset_config_description": "Obnovení klíčů api a uživatele root",
         "delete_server_title": "Odstranit server",
         "dark_theme_description": "Přepnutí tématu aplikace",
-        "delete_server_description": "Tím odstraníte svůj server. Nebude již přístupný."
+        "delete_server_description": "Tím odstraníte svůj server. Nebude již přístupný.",
+        "system_dark_theme_title": "Výchozí téma systému",
+        "system_dark_theme_description": "Použití světlého nebo tmavého motivu v závislosti na nastavení systému",
+        "dangerous_settings": "Nebezpečná nastavení"
     },
     "ssh": {
         "title": "Klíče SSH",
@@ -181,7 +186,20 @@
         "loading_domain_list": "Načítání seznamu domén",
         "enter_username_and_password": "Zadejte uživatelské jméno a silné heslo",
         "finish": "Vše je inicializováno",
-        "checks": "Kontroly byly dokončeny\n{} z {}"
+        "checks": "Kontroly byly dokončeny\n{} z {}",
+        "steps": {
+            "server": "Server",
+            "dns_setup": "Instalace služby DNS",
+            "hosting": "Hostování",
+            "server_type": "Typ serveru",
+            "dns_provider": "Poskytovatel DNS",
+            "backups_provider": "Zálohování",
+            "domain": "Doména",
+            "master_account": "Hlavní účet",
+            "nixos_installation": "Instalace systému NixOS",
+            "server_reboot": "Restartování serveru",
+            "final_checks": "Závěrečné kontroly"
+        }
     },
     "about_us_page": {
         "title": "O nás"
@@ -206,7 +224,8 @@
         "delete_user": "Odstranění uživatele",
         "not_ready": "Připojte prosím server, doménu a DNS na kartě Poskytovatelé, abyste mohli přidat prvního uživatele",
         "could_not_add_ssh_key": "Nepodařilo se přidat klíč SSH",
-        "username_rule": "Uživatelské jméno musí obsahovat pouze malá písmena latinky, číslice a podtržítka, nesmí začínat číslicí"
+        "username_rule": "Uživatelské jméno musí obsahovat pouze malá písmena latinky, číslice a podtržítka, nesmí začínat číslicí",
+        "details_title": "Údaje o uživateli"
     },
     "record": {
         "root": "Kořenová doména",
@@ -401,6 +420,90 @@
     },
     "recovery_key": {
         "key_connection_error": "Nepodařilo se připojit k serveru.",
-        "key_synchronizing": "Synchronizace…"
+        "key_synchronizing": "Synchronizace…",
+        "key_receiving_done": "Hotovo!",
+        "generation_error": "Nepodařilo se vygenerovat klíč pro obnovení. {}",
+        "key_main_header": "Klíč pro obnovu",
+        "key_main_description": "Vyžaduje se pro autorizaci SelfPrivacy, pokud nejsou k dispozici autorizovaná zařízení.",
+        "key_amount_toggle": "Omezit používání",
+        "key_amount_field_title": "Maximální počet použití",
+        "key_duedate_toggle": "Omezit dobu používání",
+        "key_duedate_field_title": "Datum vypršení platnosti",
+        "key_receive_button": "Přijmout klíč",
+        "key_valid": "Váš klíč je platný",
+        "key_invalid": "Váš klíč již není platný",
+        "key_valid_until": "Platí do {}",
+        "key_valid_for": "{} můžete použít vícekrát",
+        "key_creation_date": "Vytvořeno {}",
+        "key_replace_button": "Generování nového klíče",
+        "key_receiving_description": "Tento klíč si zapište na bezpečné místo. Umožní vám plný přístup k serveru:",
+        "key_receiving_info": "Tento klíč se již nebude zobrazovat, ale můžete jej nahradit novým."
+    },
+    "timer": {
+        "sec": "{} sek"
+    },
+    "jobs": {
+        "title": "Seznam pracovních míst",
+        "start": "Start",
+        "empty": "Žádná pracovní místa",
+        "create_user": "Vytvoření uživatele",
+        "delete_user": "Odstranění uživatele",
+        "service_turn_off": "Zastavte",
+        "service_turn_on": "Zapnout",
+        "job_added": "Přidaná práce",
+        "run_jobs": "Spouštění úloh",
+        "reboot_success": "Server se restartuje",
+        "reboot_failed": "Server se nepodařilo restartovat. Zkontrolujte protokoly aplikace.",
+        "config_pull_failed": "Nepodařilo se stáhnout aktualizaci konfigurace. Přesto byla spuštěna aktualizace softwaru.",
+        "upgrade_success": "Zahájena aktualizace serveru",
+        "upgrade_failed": "Aktualizace serveru nefungovala",
+        "upgrade_server": "Aktualizace serveru",
+        "reboot_server": "Restartování serveru",
+        "create_ssh_key": "Vytvoření klíče SSH pro {}",
+        "delete_ssh_key": "Odstranění klíče SSH pro {}",
+        "server_jobs": "Úlohy na serveru",
+        "reset_user_password": "Obnovení hesla uživatele",
+        "generic_error": "Nelze se připojit k serveru!"
+    },
+    "validations": {
+        "already_exist": "Již existuje",
+        "invalid_format": "Nesprávný formát",
+        "root_name": "Nemůže být 'root'",
+        "required": "Povinné pole",
+        "invalid_format_password": "Nesmí obsahovat prázdné znaky",
+        "invalid_format_ssh": "Musí dodržovat formát klíče SSH",
+        "length_not_equal": "Délka je [], mělo by být {}",
+        "length_longer": "Délka je [], měla by být kratší nebo rovna {}."
+    },
+    "modals": {
+        "dns_removal_error": "Nepodařilo se odstranit záznamy DNS.",
+        "server_deletion_error": "Nepodařilo se odstranit aktivní server.",
+        "server_validators_error": "Nelze načíst seznam serverů.",
+        "already_exists": "Takový server již existuje.",
+        "unexpected_error": "Neočekávaná chyba při umisťování na straně poskytovatele.",
+        "destroy_server": "Zničit server a vytvořit nový?",
+        "try_again": "Mám to zkusit znovu?",
+        "are_you_sure": "Jste si jistý?",
+        "purge_all_keys": "Vyčistit všechny ověřovací klíče?",
+        "purge_all_keys_confirm": "Ano, vyčistěte všechny mé žetony",
+        "delete_server_volume": "Smazat server a svazek?",
+        "reboot": "Restartovat",
+        "you_cant_use_this_api": "Toto rozhraní API nelze použít pro doménu s podobnou TLD.",
+        "yes": "Ano",
+        "no": "Ne"
+    },
+    "support": {
+        "title": "Podpora SelfPrivacy"
+    },
+    "developer_settings": {
+        "title": "Nastavení vývojáře",
+        "subtitle": "Tato nastavení slouží pouze k ladění. Neměňte je, pokud nevíte, co děláte.",
+        "server_setup": "Nastavení serveru",
+        "use_staging_acme": "Použití testovacího serveru ACME",
+        "use_staging_acme_description": "Chcete-li tuto hodnotu změnit, znovu sestavte aplikaci.",
+        "routing": "Směrování aplikací",
+        "reset_onboarding": "Obnovení uvítací vlajky pro návštěvu",
+        "reset_onboarding_description": "Resetování vypínače pro opětovné zobrazení obrazovky pro zapnutí napájení",
+        "cubit_statuses": "Stavy nakládky zařízení Cubit"
     }
 }

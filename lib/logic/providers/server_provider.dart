@@ -1,7 +1,10 @@
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 
@@ -26,5 +29,18 @@ abstract class ServerProvider {
     final DateTime end,
   );
 
+  Future<Price?> getPricePerGb();
+  Future<GenericResult<List<ServerVolume>>> getVolumes({final String? status});
+  Future<GenericResult<ServerVolume?>> createVolume();
+  Future<GenericResult<void>> deleteVolume(final ServerVolume volume);
+  Future<GenericResult<bool>> resizeVolume(
+    final ServerVolume volume,
+    final DiskSize size,
+  );
+  Future<GenericResult<bool>> attachVolume(
+    final ServerVolume volume,
+    final int serverId,
+  );
+  Future<GenericResult<bool>> detachVolume(final ServerVolume volume);
   GenericResult<bool> get success => GenericResult(success: true, data: true);
 }

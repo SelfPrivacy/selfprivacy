@@ -610,6 +610,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     );
   }
 
+  @override
   Future<GenericResult<List<ServerVolume>>> getVolumes({
     final String? status,
   }) async {
@@ -658,6 +659,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     );
   }
 
+  @override
   Future<GenericResult<ServerVolume?>> createVolume() async {
     ServerVolume? volume;
 
@@ -729,6 +731,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     );
   }
 
+  @override
   Future<GenericResult<void>> deleteVolume(
     final ServerVolume volume,
   ) async =>
@@ -736,6 +739,7 @@ class DigitalOceanServerProvider extends ServerProvider {
             volume.uuid!,
           );
 
+  @override
   Future<GenericResult<bool>> attachVolume(
     final ServerVolume volume,
     final int serverId,
@@ -745,6 +749,7 @@ class DigitalOceanServerProvider extends ServerProvider {
             serverId,
           );
 
+  @override
   Future<GenericResult<bool>> detachVolume(
     final ServerVolume volume,
   ) async =>
@@ -753,6 +758,7 @@ class DigitalOceanServerProvider extends ServerProvider {
             volume.serverId!,
           );
 
+  @override
   Future<GenericResult<bool>> resizeVolume(
     final ServerVolume volume,
     final DiskSize size,
@@ -761,4 +767,33 @@ class DigitalOceanServerProvider extends ServerProvider {
             volume.name,
             size,
           );
+
+  /// Hardcoded on their documentation and there is no pricing API at all
+  /// Probably we should scrap the doc page manually
+  @override
+  Future<Price?> getPricePerGb() async => Price(
+        value: 0.10,
+        currency: 'USD',
+      );
+
+  @override
+  Future<GenericResult<DateTime?>> powerOn(final int serverId) async {
+    DateTime? timestamp;
+    final result = await _adapter.api().powerOn(serverId);
+    if (!result.success) {
+      return GenericResult(
+        success: false,
+        data: timestamp,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    timestamp = DateTime.now();
+
+    return GenericResult(
+      success: true,
+      data: timestamp,
+    );
+  }
 }

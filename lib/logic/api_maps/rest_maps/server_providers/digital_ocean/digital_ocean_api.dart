@@ -95,13 +95,6 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  /// Hardcoded on their documentation and there is no pricing API at all
-  /// Probably we should scrap the doc page manually
-  Future<Price?> getPricePerGb() async => Price(
-        value: 0.10,
-        currency: 'USD',
-      );
-
   Future<GenericResult> createVolume() async {
     Response? createVolumeResponse;
     final Dio client = await getClient();

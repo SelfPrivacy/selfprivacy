@@ -7,7 +7,6 @@ import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
-import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
@@ -434,7 +433,7 @@ class HetznerServerProvider extends ServerProvider {
       );
     }
 
-    final volume = volumeResult.data!;
+    final volume = volumeResult.data;
     final serverApiToken = StringGenerators.apiToken();
     final hostname = getHostnameFromDomain(installationData.domainName);
 
@@ -632,6 +631,7 @@ class HetznerServerProvider extends ServerProvider {
     );
   }
 
+  @override
   Future<GenericResult<ServerVolume?>> createVolume() async {
     ServerVolume? volume;
 
@@ -676,6 +676,7 @@ class HetznerServerProvider extends ServerProvider {
     );
   }
 
+  @override
   Future<GenericResult<List<ServerVolume>>> getVolumes({
     final String? status,
   }) async {
@@ -724,9 +725,11 @@ class HetznerServerProvider extends ServerProvider {
     );
   }
 
-  Future<GenericResult<void>> deleteVolume(final int volumeId) async =>
-      _adapter.api().deleteVolume(volumeId);
+  @override
+  Future<GenericResult<void>> deleteVolume(final ServerVolume volume) async =>
+      _adapter.api().deleteVolume(volume.id);
 
+  @override
   Future<GenericResult<bool>> attachVolume(
     final ServerVolume volume,
     final int serverId,
@@ -736,14 +739,16 @@ class HetznerServerProvider extends ServerProvider {
             serverId,
           );
 
+  @override
   Future<GenericResult<bool>> detachVolume(
-    final int volumeId,
+    final ServerVolume volume,
   ) async =>
       _adapter.api().detachVolume(
-            volumeId,
+            volume.id,
           );
 
-  Future<bool> resizeVolume(
+  @override
+  Future<GenericResult<bool>> resizeVolume(
     final ServerVolume volume,
     final DiskSize size,
   ) async =>
@@ -751,4 +756,7 @@ class HetznerServerProvider extends ServerProvider {
             volume,
             size,
           );
+
+  @override
+  Future<Price?> getPricePerGb() async => _adapter.api().getPricePerGb();
 }

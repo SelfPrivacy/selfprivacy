@@ -305,7 +305,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<bool> resizeVolume(
+  Future<GenericResult<bool>> resizeVolume(
     final ServerVolume volume,
     final DiskSize size,
   ) async {
@@ -324,11 +324,19 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
+      return GenericResult(
+        data: false,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return success;
+    return GenericResult(
+      data: success,
+      success: true,
+    );
   }
 
   Future<GenericResult> createServer({

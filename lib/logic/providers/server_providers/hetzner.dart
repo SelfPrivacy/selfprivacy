@@ -209,6 +209,7 @@ class HetznerServerProvider extends ServerProvider {
     return GenericResult(success: true, data: servers);
   }
 
+  @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
     final int serverId,
   ) async {
@@ -573,6 +574,7 @@ class HetznerServerProvider extends ServerProvider {
     return GenericResult(success: true, data: null);
   }
 
+  @override
   Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
     final String hostname,
   ) async {

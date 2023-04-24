@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -36,7 +35,7 @@ class ApiProviderVolumeCubit
   }
 
   Future<void> _refetch() async {
-    if (ApiController.currentVolumeProviderApiFactory == null) {
+    if (ProvidersController.currentServerProvider == null) {
       return emit(const ApiProviderVolumeState([], LoadingStatus.error, false));
     }
 

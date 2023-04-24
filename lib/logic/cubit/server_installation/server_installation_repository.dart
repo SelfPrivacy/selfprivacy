@@ -61,16 +61,7 @@ class ServerInstallationRepository {
     if (serverProvider != null ||
         (serverDetails != null &&
             serverDetails.provider != ServerProviderType.unknown)) {
-      ApiController.initServerProviderApiFactory(
-        ServerProviderSettings(
-          provider: serverProvider ?? serverDetails!.provider,
-          location: location,
-        ),
-      );
-
-      // All current providers support volumes
-      //   so it's safe to hardcode for now
-      ApiController.initVolumeProviderApiFactory(
+      ProvidersController.initServerProvider(
         ServerProviderSettings(
           provider: serverProvider ?? serverDetails!.provider,
           location: location,
@@ -250,8 +241,7 @@ class ServerInstallationRepository {
   }) async {
     final DnsProviderApi dnsProviderApi =
         ApiController.currentDnsProviderApiFactory!.getDnsProvider();
-    final ServerProviderApi serverApi =
-        ApiController.currentServerProviderApiFactory!.getServerProvider();
+    final serverProvider = ProvidersController.currentServerProvider!;
 
     void showDomainErrorPopUp(final String error) {
       showPopUpAlert(
@@ -260,8 +250,8 @@ class ServerInstallationRepository {
         cancelButtonOnPressed: onCancel,
         actionButtonTitle: 'basis.delete'.tr(),
         actionButtonOnPressed: () async {
-          await serverApi.deleteServer(
-            domainName: domain.domainName,
+          await serverProvider.deleteServer(
+            domain.domainName,
           );
           onCancel();
         },
@@ -295,16 +285,6 @@ class ServerInstallationRepository {
     }
 
     if (!createdSuccessfully) {
-      showDomainErrorPopUp(errorMessage);
-      return false;
-    }
-
-    final GenericResult createReverseResult = await serverApi.createReverseDns(
-      serverDetails: serverDetails,
-      domain: domain,
-    );
-
-    if (!createReverseResult.success) {
       showDomainErrorPopUp(errorMessage);
       return false;
     }
@@ -586,9 +566,7 @@ class ServerInstallationRepository {
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider()
-          .getServers();
+      (await ProvidersController.currentServerProvider!.getServers()).data;
 
   Future<void> saveServerDetails(
     final ServerHostingDetails serverDetails,
@@ -681,22 +659,14 @@ class ServerInstallationRepository {
   }
 
   Future<bool> deleteServer(final ServerDomain serverDomain) async {
-    final GenericResult<bool> deletionResult = await ApiController
-        .currentServerProviderApiFactory!
-        .getServerProvider()
-        .deleteServer(
-          domainName: serverDomain.domainName,
-        );
+    final deletionResult =
+        await ProvidersController.currentServerProvider!.deleteServer(
+      serverDomain.domainName,
+    );
 
     if (!deletionResult.success) {
       getIt<NavigationService>()
           .showSnackBar('modals.server_validators_error'.tr());
-      return false;
-    }
-
-    if (!deletionResult.data) {
-      getIt<NavigationService>()
-          .showSnackBar('modals.server_deletion_error'.tr());
       return false;
     }
 

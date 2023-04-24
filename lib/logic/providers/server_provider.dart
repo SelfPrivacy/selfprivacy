@@ -5,6 +5,8 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
+import 'package:selfprivacy/logic/models/server_basic_info.dart';
+import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 
@@ -12,12 +14,17 @@ export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 export 'package:selfprivacy/logic/models/launch_installation_data.dart';
 
 abstract class ServerProvider {
+  Future<GenericResult<List<ServerBasicInfo>>> getServers();
   Future<GenericResult<bool>> trySetServerLocation(final String location);
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
   Future<GenericResult<List<ServerProviderLocation>>> getAvailableLocations();
   Future<GenericResult<List<ServerType>>> getServerTypes({
     required final ServerProviderLocation location,
   });
+
+  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
+    final String hostname,
+  );
   Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
     final LaunchInstallationData installationData,
   );
@@ -42,5 +49,8 @@ abstract class ServerProvider {
     final int serverId,
   );
   Future<GenericResult<bool>> detachVolume(final ServerVolume volume);
+  Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
+    final int serverId,
+  );
   GenericResult<bool> get success => GenericResult(success: true, data: true);
 }

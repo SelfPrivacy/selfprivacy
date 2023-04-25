@@ -19,6 +19,8 @@ class HiveConfig {
     Hive.registerAdapter(BackblazeBucketAdapter());
     Hive.registerAdapter(ServerVolumeAdapter());
     Hive.registerAdapter(UserTypeAdapter());
+    Hive.registerAdapter(DnsProviderTypeAdapter());
+    Hive.registerAdapter(ServerProviderTypeAdapter());
 
     await Hive.openBox(BNames.appSettingsBox);
 

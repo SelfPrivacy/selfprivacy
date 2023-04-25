@@ -172,6 +172,7 @@ class HetznerServerProvider extends ServerProvider {
     return GenericResult(success: true, data: types);
   }
 
+  @override
   Future<GenericResult<List<ServerBasicInfo>>> getServers() async {
     final List<ServerBasicInfo> servers = [];
     final result = await _adapter.api().getServers();
@@ -434,7 +435,7 @@ class HetznerServerProvider extends ServerProvider {
       );
     }
 
-    final volume = volumeResult.data;
+    final volume = volumeResult.data['volume'];
     final serverApiToken = StringGenerators.apiToken();
     final hostname = getHostnameFromDomain(installationData.domainName);
 
@@ -446,7 +447,7 @@ class HetznerServerProvider extends ServerProvider {
           dnsProviderType:
               dnsProviderToInfectName(installationData.dnsProviderType),
           hostName: hostname,
-          volumeId: volume.id,
+          volumeId: volume['id'],
           base64Password: base64.encode(
             utf8.encode(installationData.rootUser.password ?? 'PASS'),
           ),
@@ -455,7 +456,7 @@ class HetznerServerProvider extends ServerProvider {
         );
 
     if (!serverResult.success || serverResult.data == null) {
-      await _adapter.api().deleteVolume(volume.id);
+      await _adapter.api().deleteVolume(volume['id']);
       await Future.delayed(const Duration(seconds: 5));
       if (serverResult.message != null &&
           serverResult.message == 'uniqueness_error') {
@@ -549,7 +550,7 @@ class HetznerServerProvider extends ServerProvider {
             CallbackDialogueChoice(
               title: 'basis.try_again'.tr(),
               callback: () async {
-                await _adapter.api().deleteVolume(volume.id);
+                await _adapter.api().deleteVolume(volume['id']);
                 await Future.delayed(const Duration(seconds: 5));
                 final deletion = await deleteServer(hostname);
                 if (deletion.success) {

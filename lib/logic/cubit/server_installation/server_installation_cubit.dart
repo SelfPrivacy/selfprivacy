@@ -175,7 +175,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveServerType(serverType);
 
     await ProvidersController.currentServerProvider!
-        .trySetServerLocation(serverType.identifier);
+        .trySetServerLocation(serverType.location.identifier);
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(

@@ -10,7 +10,6 @@ import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/price.dart';
-import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {

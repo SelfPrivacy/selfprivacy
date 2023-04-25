@@ -519,7 +519,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   Future<GenericResult<List>> getAvailableLocations() async {
-    List<ServerProviderLocation> locations = [];
+    List locations = [];
 
     final Dio client = await getClient();
     try {

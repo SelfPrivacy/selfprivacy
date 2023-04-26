@@ -521,7 +521,13 @@ class HetznerServerProvider extends ServerProvider {
       id: serverResult.data['server']['id'],
       ip4: serverResult.data['server']['public_net']['ipv4']['ip'],
       createTime: DateTime.now(),
-      volume: volume,
+      volume: ServerVolume(
+        id: volume['id'],
+        name: volume['name'],
+        sizeByte: volume['size'],
+        serverId: volume['server'],
+        linuxDevice: volume['linux_device'],
+      ),
       apiToken: serverApiToken,
       provider: ServerProviderType.hetzner,
     );

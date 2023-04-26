@@ -194,7 +194,7 @@ class ProviderSelectionPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 16),
                         Text(
-                          'Hetzner Cloud',
+                          'Cloudflare',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],

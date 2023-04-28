@@ -437,12 +437,14 @@ class HetznerServerProvider extends ServerProvider {
 
     final volume = volumeResult.data['volume'];
     final serverApiToken = StringGenerators.apiToken();
-    final hostname = getHostnameFromDomain(installationData.domainName);
+    final hostname = getHostnameFromDomain(
+      installationData.serverDomain.domainName,
+    );
 
     final serverResult = await _adapter.api().createServer(
           dnsApiToken: installationData.dnsApiToken,
           rootUser: installationData.rootUser,
-          domainName: installationData.domainName,
+          domainName: installationData.serverDomain.domainName,
           serverType: installationData.serverTypeId,
           dnsProviderType:
               dnsProviderToInfectName(installationData.dnsProviderType),
@@ -535,7 +537,7 @@ class HetznerServerProvider extends ServerProvider {
     final createDnsResult = await _adapter.api().createReverseDns(
           serverId: serverDetails.id,
           ip4: serverDetails.ip4,
-          dnsPtr: installationData.domainName,
+          dnsPtr: installationData.serverDomain.domainName,
         );
 
     if (!createDnsResult.success) {
@@ -578,6 +580,15 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     await installationData.successCallback(serverDetails);
+    await installationData.dnsProviderApi.removeSimilarRecords(
+      ip4: serverDetails.ip4,
+      domain: installationData.serverDomain,
+    );
+    await installationData.dnsProviderApi.createMultipleDnsRecords(
+      ip4: serverDetails.ip4,
+      domain: installationData.serverDomain,
+    );
+
     return GenericResult(success: true, data: null);
   }
 

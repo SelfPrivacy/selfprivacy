@@ -230,7 +230,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final ServerHostingDetails serverDetails,
   ) async {
     await repository.saveServerDetails(serverDetails);
-    // TODO dns;
     emit(
       (state as ServerInstallationNotFinished).copyWith(
         isLoading: false,
@@ -247,10 +246,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       rootUser: state.rootUser!,
       dnsApiToken: state.dnsApiToken!,
       dnsProviderType: state.serverDomain!.provider,
-      domainName: state.serverDomain!.domainName,
+      serverDomain: state.serverDomain!,
       serverTypeId: state.serverTypeIdentificator!,
       errorCallback: clearAppConfig,
       successCallback: onCreateServerSuccess,
+      dnsProviderApi:
+          ApiController.currentDnsProviderApiFactory!.getDnsProvider(),
     );
 
     final result =

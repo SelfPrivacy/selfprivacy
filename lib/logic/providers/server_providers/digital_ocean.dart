@@ -135,11 +135,13 @@ class DigitalOceanServerProvider extends ServerProvider {
   ) async {
     ServerHostingDetails? serverDetails;
     final serverApiToken = StringGenerators.apiToken();
-    final hostname = getHostnameFromDomain(installationData.domainName);
+    final hostname = getHostnameFromDomain(
+      installationData.serverDomain.domainName,
+    );
     final serverResult = await _adapter.api().createServer(
           dnsApiToken: installationData.dnsApiToken,
           rootUser: installationData.rootUser,
-          domainName: installationData.domainName,
+          domainName: installationData.serverDomain.domainName,
           serverType: installationData.serverTypeId,
           dnsProviderType:
               dnsProviderToInfectName(installationData.dnsProviderType),
@@ -308,6 +310,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     return GenericResult(success: true, data: types);
   }
 
+  @override
   Future<GenericResult<List<ServerBasicInfo>>> getServers() async {
     final List<ServerBasicInfo> servers = [];
     final result = await _adapter.api().getServers();
@@ -345,6 +348,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     return GenericResult(success: true, data: servers);
   }
 
+  @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
     final int serverId,
   ) async {
@@ -547,6 +551,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     );
   }
 
+  @override
   Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
     final String hostname,
   ) async {

@@ -328,7 +328,7 @@
         "what": "Co to znaczy?",
         "backblaze_bad_key_error": "Informacja o Blackbaze nieprawidłowa",
         "select_dns": "Teraz wybierz provajdera DNS",
-        "manage_domain_dns": "Jak kierować DNS dla twojego domena?",
+        "manage_domain_dns": "Aby zarządzać DNS domeny",
         "create_master_account": "Dodać konto administratora",
         "use_this_domain_text": "Podany token zapewnia kontrolę nad tą domeną",
         "loading_domain_list": "Ładowanie listy domen",

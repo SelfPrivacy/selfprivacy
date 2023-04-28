@@ -31,7 +31,8 @@
         "apply": "Zastosuj to",
         "done": "Gotowe",
         "continue": "Kontynuować",
-        "alert": "Powiadomienie"
+        "alert": "Powiadomienie",
+        "app_name": "SelfPrivacy"
     },
     "test": "pl-test",
     "locale": "pl",
@@ -46,7 +47,8 @@
     },
     "console_page": {
         "title": "Konsola",
-        "waiting": "Oczekiwanie na inicjalizację…"
+        "waiting": "Oczekiwanie na inicjalizację…",
+        "copy": "Kopia"
     },
     "about_us_page": {
         "title": "O projekcie \"SelfPrivacy\""
@@ -64,7 +66,10 @@
         "reset_config_title": "Resetowanie",
         "reset_config_description": "Zresetuj klucze API i użytkownika root",
         "delete_server_title": "Usuń serwer",
-        "delete_server_description": "Ta czynność usunie serwer. Po tym będzie niedostępny."
+        "delete_server_description": "Ta czynność usunie serwer. Po tym będzie niedostępny.",
+        "system_dark_theme_description": "Użyj jasnego lub ciemnego motywu w zależności od ustawień systemu",
+        "system_dark_theme_title": "Domyślny motyw systemowy",
+        "dangerous_settings": "Niebezpieczne ustawienia"
     },
     "ssh": {
         "title": "klucze SSH",
@@ -266,7 +271,8 @@
         "could_not_add_ssh_key": "Nie udało się utworzyć SSH klucz",
         "username_rule": "Nazwa użytkownika może zawierać tylko małe litery alfabetu łacińskiego, cyfry i podkreślenia, nie może zaczynać się od cyfry",
         "email_login": "Logowanie e-mailem",
-        "no_ssh_notice": "Dla tego użytkownika tworzone są tylko konta e-mail i SSH. Jednokrotne logowanie do wszystkich usług będzie dostępne wkrótce."
+        "no_ssh_notice": "Dla tego użytkownika tworzone są tylko konta e-mail i SSH. Jednokrotne logowanie do wszystkich usług będzie dostępne wkrótce.",
+        "details_title": "Dane użytkownika"
     },
     "validations": {
         "length_longer": "Długość ciągu znaków [] musi być mniejsza lub równa {}",
@@ -322,7 +328,7 @@
         "what": "Co to znaczy?",
         "backblaze_bad_key_error": "Informacja o Blackbaze nieprawidłowa",
         "select_dns": "Teraz wybierz provajdera DNS",
-        "manage_domain_dns": "Dla kirowania DNS",
+        "manage_domain_dns": "Aby zarządzać DNS domeny",
         "create_master_account": "Dodać konto administratora",
         "use_this_domain_text": "Podany token zapewnia kontrolę nad tą domeną",
         "loading_domain_list": "Ładowanie listy domen",
@@ -338,7 +344,20 @@
         "one_more_restart": "Teraz nastąpi dodatkowe ponowne uruchomienie komputera w celu aktywacji certyfikatów bezpieczeństwa.",
         "enter_username_and_password": "Wprowadź nazwę użytkownika i złożone hasło",
         "finish": "Wszystko jest inicjalizowane",
-        "checks": "Kontrole wykonane:\n{} / {}"
+        "checks": "Kontrole wykonane:\n{} / {}",
+        "steps": {
+            "hosting": "Hosting",
+            "nixos_installation": "Instalacja NixOS",
+            "server_type": "Typ serwera",
+            "dns_provider": "Dostawca DNS",
+            "backups_provider": "Kopie zapasowe",
+            "domain": "Domena",
+            "master_account": "Rachunek główny",
+            "server": "Serwer",
+            "dns_setup": "Instalacja DNS",
+            "server_reboot": "Restart serwera",
+            "final_checks": "Kontrole końcowe"
+        }
     },
     "jobs": {
         "delete_ssh_key": "Wydalić SSH-klucz dla {}",
@@ -409,7 +428,7 @@
         "domain_not_available_on_token": "Wprowadzony token nie ma dostępu do żądanej domeny.",
         "confirm_cloudflare_description": "Podaj token Cloudflare, który ma prawa do {}:",
         "method_recovery_input_description": "Wprowadź swój token odzyskiwania",
-        "fallback_select_provider_console": "Dostęp do konsoli hostingowej.",
+        "fallback_select_provider_console": "Dostęp do konsoli serwera mojego dostawcy.",
         "confirm_server_description": "Znalazłem twój serwer! Potwierdź, że jest to właściwe:",
         "confirm_server": "Potwierdzić serwer",
         "modal_confirmation_title": "Czy to naprawdę twój serwer?",
@@ -471,5 +490,19 @@
             "expired": "Klucz stracił ważność.",
             "get_new_key": "Uzyskaj nowy klucz"
         }
+    },
+    "support": {
+        "title": "Wsparcie SelfPrivacy"
+    },
+    "developer_settings": {
+        "subtitle": "Te ustawienia służą wyłącznie do celów debugowania. Nie zmieniaj ich, jeśli nie wiesz, co robisz.",
+        "title": "Ustawienia dewelopera",
+        "server_setup": "Kreator instalacji serwera",
+        "use_staging_acme": "Korzystanie z serwera testów ACME",
+        "use_staging_acme_description": "Ponownie skompiluj aplikację, aby zmienić tę wartość.",
+        "routing": "Trasowanie aplikacji",
+        "reset_onboarding": "Wyzerowanie flagi powitalnej dla wizyty",
+        "reset_onboarding_description": "Resetowanie przełącznika zasilania w celu ponownego wyświetlenia ekranu włączania zasilania",
+        "cubit_statuses": "Aktualny stan qubitów ładujących"
     }
 }

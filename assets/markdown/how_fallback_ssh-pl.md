@@ -4,16 +4,16 @@ Zaloguj się jako użytkownik root na swoim serwerze i przejrzyj zawartość pli
 cat /etc/nixos/userdata/tokens.json
 ```
 
-This file will have a similar construction:
+W tym pliku będzie podobny wzór:
 
-```json
+`json
 {
-    "tokens": [
+    { "tokens": [
         {
-            "token": "token_to_copy",
-            "name": "device_name",
-            "date": "date"
+            { "token": "token_który_był_skopedowany",
+            { "name": "device_name",
+            { "data": "data"
         }
 ```
 
-Copy the token from the file and paste it in the next window.
+Skopiuj token z pliku i wklej w kolejnym oknie.

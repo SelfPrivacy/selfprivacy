@@ -159,10 +159,10 @@ class DigitalOceanServerProvider extends ServerProvider {
           choices: [
             CallbackDialogueChoice(
               title: 'basis.cancel'.tr(),
-              callback: await installationData.errorCallback(),
+              callback: () async => await installationData.errorCallback(),
             ),
             CallbackDialogueChoice(
-              title: 'basis.try_again'.tr(),
+              title: 'modals.try_again'.tr(),
               callback: () async => launchInstallation(installationData),
             ),
           ],
@@ -215,7 +215,7 @@ class DigitalOceanServerProvider extends ServerProvider {
               callback: null,
             ),
             CallbackDialogueChoice(
-              title: 'basis.try_again'.tr(),
+              title: 'modals.try_again'.tr(),
               callback: () async {
                 await Future.delayed(const Duration(seconds: 5));
                 final deletion = await deleteServer(hostname);
@@ -595,7 +595,7 @@ class DigitalOceanServerProvider extends ServerProvider {
               callback: null,
             ),
             CallbackDialogueChoice(
-              title: 'basis.try_again'.tr(),
+              title: 'modals.try_again'.tr(),
               callback: () async {
                 await Future.delayed(const Duration(seconds: 5));
                 return deleteServer(hostname);

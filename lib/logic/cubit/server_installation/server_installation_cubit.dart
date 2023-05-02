@@ -262,32 +262,32 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     if (!result.success && result.data != null) {
       bool dialoguesResolved = false;
       CallbackDialogueBranching branching = result.data!;
-      while (!dialoguesResolved) {
-        showPopUpAlert(
-          alertTitle: branching.title,
-          description: branching.description,
-          actionButtonTitle: branching.choices[1].title,
-          actionButtonOnPressed: () async {
-            final branchingResult = await branching.choices[1].callback!();
-            if (branchingResult.data == null) {
-              dialoguesResolved = true;
-              return;
-            }
+      //while (!dialoguesResolved) {
+      showPopUpAlert(
+        alertTitle: branching.title,
+        description: branching.description,
+        actionButtonTitle: branching.choices[1].title,
+        actionButtonOnPressed: () async {
+          final branchingResult = await branching.choices[1].callback!();
+          if (branchingResult.data == null) {
+            dialoguesResolved = true;
+            return;
+          }
 
-            branching = branchingResult.data!;
-          },
-          cancelButtonTitle: branching.choices[0].title,
-          cancelButtonOnPressed: () async {
-            final branchingResult = await branching.choices[0].callback!();
-            if (branchingResult.data == null) {
-              dialoguesResolved = true;
-              return;
-            }
+          branching = branchingResult.data!;
+        },
+        cancelButtonTitle: branching.choices[0].title,
+        cancelButtonOnPressed: () async {
+          final branchingResult = await branching.choices[0].callback!();
+          if (branchingResult.data == null) {
+            dialoguesResolved = true;
+            return;
+          }
 
-            branching = branchingResult.data!;
-          },
-        );
-      }
+          branching = branchingResult.data!;
+        },
+      );
+      //}
     }
   }
 

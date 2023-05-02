@@ -418,10 +418,10 @@ class HetznerServerProvider extends ServerProvider {
           choices: [
             CallbackDialogueChoice(
               title: 'basis.cancel'.tr(),
-              callback: await installationData.errorCallback(),
+              callback: () async => await installationData.errorCallback(),
             ),
             CallbackDialogueChoice(
-              title: 'basis.try_again'.tr(),
+              title: 'modals.try_again'.tr(),
               callback: () async => launchInstallation(installationData),
             ),
           ],
@@ -467,10 +467,10 @@ class HetznerServerProvider extends ServerProvider {
             choices: [
               CallbackDialogueChoice(
                 title: 'basis.cancel'.tr(),
-                callback: installationData.errorCallback(),
+                callback: () async => installationData.errorCallback(),
               ),
               CallbackDialogueChoice(
-                title: 'basis.yes'.tr(),
+                title: 'modals.yes'.tr(),
                 callback: () async {
                   final deleting = await deleteServer(hostname);
                   if (deleting.success) {
@@ -481,7 +481,7 @@ class HetznerServerProvider extends ServerProvider {
                 },
               ),
             ],
-            description: volumeResult.message ?? 'modals.destroy_server'.tr(),
+            description: 'modals.destroy_server'.tr(),
             title: 'modals.already_exists'.tr(),
           ),
           success: false,
@@ -504,7 +504,7 @@ class HetznerServerProvider extends ServerProvider {
                 },
               ),
               CallbackDialogueChoice(
-                title: 'basis.try_again'.tr(),
+                title: 'modals.try_again'.tr(),
                 callback: () async => launchInstallation(installationData),
               ),
             ],
@@ -556,7 +556,7 @@ class HetznerServerProvider extends ServerProvider {
               },
             ),
             CallbackDialogueChoice(
-              title: 'basis.try_again'.tr(),
+              title: 'modals.try_again'.tr(),
               callback: () async {
                 await _adapter.api().deleteVolume(volume['id']);
                 await Future.delayed(const Duration(seconds: 5));
@@ -631,7 +631,7 @@ class HetznerServerProvider extends ServerProvider {
               callback: null,
             ),
             CallbackDialogueChoice(
-              title: 'basis.try_again'.tr(),
+              title: 'modals.try_again'.tr(),
               callback: () async {
                 await Future.delayed(const Duration(seconds: 5));
                 return deleteServer(hostname);

@@ -580,11 +580,11 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     await installationData.successCallback(serverDetails);
-    await installationData.dnsProviderApi.removeSimilarRecords(
+    await installationData.dnsProvider.removeSimilarRecords(
       ip4: serverDetails.ip4,
       domain: installationData.serverDomain,
     );
-    await installationData.dnsProviderApi.createMultipleDnsRecords(
+    await installationData.dnsProvider.createMultipleDnsRecords(
       ip4: serverDetails.ip4,
       domain: installationData.serverDomain,
     );

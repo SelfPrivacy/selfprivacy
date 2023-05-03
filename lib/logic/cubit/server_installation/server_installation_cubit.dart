@@ -5,11 +5,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -68,7 +66,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void setDnsProviderType(final DnsProviderType providerType) async {
     await repository.saveDnsProviderType(providerType);
-    ApiController.initDnsProviderApiFactory(
+    ProvidersController.initDnsProvider(
       DnsProviderSettings(
         provider: providerType,
       ),
@@ -97,11 +95,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final String providerToken,
   ) async {
     final GenericResult<bool> apiResponse =
-        await ApiController.currentDnsProviderApiFactory!
-            .getDnsProvider(
-              settings: const DnsProviderApiSettings(isWithToken: false),
-            )
-            .isApiTokenValid(providerToken);
+        await ProvidersController.currentDnsProvider!.tryInitApiByToken(
+      providerToken,
+    );
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -250,8 +246,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       serverTypeId: state.serverTypeIdentificator!,
       errorCallback: clearAppConfig,
       successCallback: onCreateServerSuccess,
-      dnsProviderApi:
-          ApiController.currentDnsProviderApiFactory!.getDnsProvider(),
+      dnsProvider: ProvidersController.currentDnsProvider!,
     );
 
     final result =
@@ -754,7 +749,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void clearAppConfig() {
     closeTimer();
-    ApiController.clearProviderApiFactories();
     ProvidersController.clearProviders();
     repository.clearAppConfig();
     emit(const ServerInstallationEmpty());

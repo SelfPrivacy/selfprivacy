@@ -10,12 +10,10 @@ import 'package:hive/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -72,7 +70,7 @@ class ServerInstallationRepository {
     if (dnsProvider != null ||
         (serverDomain != null &&
             serverDomain.provider != ServerProviderType.unknown)) {
-      ApiController.initDnsProviderApiFactory(
+      ProvidersController.initDnsProvider(
         DnsProviderSettings(
           provider: dnsProvider ?? serverDomain!.provider,
         ),
@@ -239,8 +237,6 @@ class ServerInstallationRepository {
     final ServerDomain domain, {
     required final void Function() onCancel,
   }) async {
-    final DnsProviderApi dnsProviderApi =
-        ApiController.currentDnsProviderApiFactory!.getDnsProvider();
     final serverProvider = ProvidersController.currentServerProvider!;
 
     void showDomainErrorPopUp(final String error) {
@@ -259,7 +255,7 @@ class ServerInstallationRepository {
     }
 
     final GenericResult removingResult =
-        await dnsProviderApi.removeSimilarRecords(
+        await ProvidersController.currentDnsProvider!.removeSimilarRecords(
       ip4: serverDetails.ip4,
       domain: domain,
     );
@@ -272,8 +268,9 @@ class ServerInstallationRepository {
     bool createdSuccessfully = false;
     String errorMessage = 'domain.error'.tr();
     try {
-      final GenericResult createResult =
-          await dnsProviderApi.createMultipleDnsRecords(
+      final GenericResult createResult = await ProvidersController
+          .currentDnsProvider!
+          .createMultipleDnsRecords(
         ip4: serverDetails.ip4,
         domain: domain,
       );
@@ -293,8 +290,6 @@ class ServerInstallationRepository {
   }
 
   Future<void> createDkimRecord(final ServerDomain cloudFlareDomain) async {
-    final DnsProviderApi dnsProviderApi =
-        ApiController.currentDnsProviderApiFactory!.getDnsProvider();
     final ServerApi api = ServerApi();
 
     late DnsRecord record;
@@ -305,7 +300,10 @@ class ServerInstallationRepository {
       rethrow;
     }
 
-    await dnsProviderApi.setDnsRecord(record, cloudFlareDomain);
+    await ProvidersController.currentDnsProvider!.setDnsRecord(
+      record,
+      cloudFlareDomain,
+    );
   }
 
   Future<bool> isHttpServerWorking() async {
@@ -677,9 +675,8 @@ class ServerInstallationRepository {
     await box.put(BNames.isLoading, false);
     await box.put(BNames.serverDetails, null);
 
-    final GenericResult<void> removalResult = await ApiController
-        .currentDnsProviderApiFactory!
-        .getDnsProvider()
+    final GenericResult<void> removalResult = await ProvidersController
+        .currentDnsProvider!
         .removeSimilarRecords(domain: serverDomain);
 
     if (!removalResult.success) {

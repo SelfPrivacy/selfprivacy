@@ -7,7 +7,6 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_pro
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 

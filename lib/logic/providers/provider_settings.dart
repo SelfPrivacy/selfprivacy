@@ -11,8 +11,8 @@ class ServerProviderSettings {
   final String? location;
 }
 
-class DnsProviderFactorySettings {
-  DnsProviderFactorySettings({
+class DnsProviderSettings {
+  DnsProviderSettings({
     required this.provider,
   });
 

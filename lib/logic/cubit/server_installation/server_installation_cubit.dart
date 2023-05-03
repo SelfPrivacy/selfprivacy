@@ -69,7 +69,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void setDnsProviderType(final DnsProviderType providerType) async {
     await repository.saveDnsProviderType(providerType);
     ApiController.initDnsProviderApiFactory(
-      DnsProviderFactorySettings(
+      DnsProviderSettings(
         provider: providerType,
       ),
     );

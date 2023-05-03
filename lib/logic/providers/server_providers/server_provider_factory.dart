@@ -1,6 +1,6 @@
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/logic/providers/server_provider.dart';
+import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/providers/server_providers/digital_ocean.dart';
 import 'package:selfprivacy/logic/providers/server_providers/hetzner.dart';
 

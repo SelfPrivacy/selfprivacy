@@ -28,7 +28,7 @@ class ApiFactoryCreator {
   }
 
   static DnsProviderApiFactory createDnsProviderApiFactory(
-    final DnsProviderFactorySettings settings,
+    final DnsProviderSettings settings,
   ) {
     switch (settings.provider) {
       case DnsProviderType.cloudflare:

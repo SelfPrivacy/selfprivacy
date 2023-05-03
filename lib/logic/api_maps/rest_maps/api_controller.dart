@@ -7,7 +7,7 @@ class ApiController {
       _dnsProviderApiFactory;
 
   static void initDnsProviderApiFactory(
-    final DnsProviderFactorySettings settings,
+    final DnsProviderSettings settings,
   ) {
     _dnsProviderApiFactory =
         ApiFactoryCreator.createDnsProviderApiFactory(settings);

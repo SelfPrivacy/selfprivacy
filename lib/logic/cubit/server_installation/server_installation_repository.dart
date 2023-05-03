@@ -73,7 +73,7 @@ class ServerInstallationRepository {
         (serverDomain != null &&
             serverDomain.provider != ServerProviderType.unknown)) {
       ApiController.initDnsProviderApiFactory(
-        DnsProviderFactorySettings(
+        DnsProviderSettings(
           provider: dnsProvider ?? serverDomain!.provider,
         ),
       );

@@ -16,6 +16,15 @@
         "cancel": "Prekliči",
         "providers": "Ponudniki",
         "services_title": "Vaše osebne, zasebne in neodvisne storitve.",
-        "app_name": "SelfPrivacy"
+        "app_name": "SelfPrivacy",
+        "delete": "Izbriši",
+        "close": "Zapri",
+        "connect": "Povežite",
+        "domain": "Domena",
+        "saving": "Varčevanje…",
+        "username": "Uporabniško ime",
+        "loading": "Nalaganje…",
+        "later": "Preskočite in prilagodite pozneje",
+        "connect_to_existing": "Preskočite in prilagodite pozneje"
     }
 }

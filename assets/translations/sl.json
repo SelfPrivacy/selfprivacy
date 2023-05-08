@@ -1,1 +1,21 @@
-{}
+{
+    "test": "sl-test",
+    "locale": "sl",
+    "basis": {
+        "providers_title": "Vaš podatkovni center",
+        "select": "Izberite",
+        "services": "Storitve",
+        "users": "Uporabniki",
+        "more": "Več",
+        "next": "Naslednji",
+        "got_it": "Imam ga",
+        "settings": "Nastavitve",
+        "password": "Geslo",
+        "create": "Dodajte novo",
+        "confirmation": "Potrditev",
+        "cancel": "Prekliči",
+        "providers": "Ponudniki",
+        "services_title": "Vaše osebne, zasebne in neodvisne storitve.",
+        "app_name": "SelfPrivacy"
+    }
+}

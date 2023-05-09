@@ -14,6 +14,8 @@ class ApiConfigModel {
   String? get serverType => _serverType;
   String? get cloudFlareKey => _cloudFlareKey;
   ServerProvider? get serverProvider => _serverProvider;
+  DnsProvider? get dnsProvider => _dnsProvider;
+
   BackblazeCredential? get backblazeCredential => _backblazeCredential;
   ServerDomain? get serverDomain => _serverDomain;
   BackblazeBucket? get backblazeBucket => _backblazeBucket;
@@ -23,6 +25,7 @@ class ApiConfigModel {
   String? _cloudFlareKey;
   String? _serverType;
   ServerProvider? _serverProvider;
+  DnsProvider? _dnsProvider;
   ServerHostingDetails? _serverDetails;
   BackblazeCredential? _backblazeCredential;
   ServerDomain? _serverDomain;
@@ -31,6 +34,11 @@ class ApiConfigModel {
   Future<void> storeServerProviderType(final ServerProvider value) async {
     await _box.put(BNames.serverProvider, value);
     _serverProvider = value;
+  }
+
+  Future<void> storeDnsProviderType(final DnsProvider value) async {
+    await _box.put(BNames.dnsProvider, value);
+    _dnsProvider = value;
   }
 
   Future<void> storeServerProviderKey(final String value) async {
@@ -75,6 +83,7 @@ class ApiConfigModel {
 
   void clear() {
     _serverProviderKey = null;
+    _dnsProvider = null;
     _serverLocation = null;
     _cloudFlareKey = null;
     _backblazeCredential = null;
@@ -95,5 +104,6 @@ class ApiConfigModel {
     _backblazeBucket = _box.get(BNames.backblazeBucket);
     _serverType = _box.get(BNames.serverTypeIdentifier);
     _serverProvider = _box.get(BNames.serverProvider);
+    _dnsProvider = _box.get(BNames.dnsProvider);
   }
 }

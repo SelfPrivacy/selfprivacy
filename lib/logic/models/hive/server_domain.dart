@@ -29,4 +29,6 @@ enum DnsProvider {
   unknown,
   @HiveField(1)
   cloudflare,
+  @HiveField(2)
+  desec
 }

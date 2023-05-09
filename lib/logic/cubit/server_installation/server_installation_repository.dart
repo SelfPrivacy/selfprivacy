@@ -706,6 +706,10 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
+  Future<void> saveDnsProviderType(final DnsProvider type) async {
+    await getIt<ApiConfigModel>().storeDnsProviderType(type);
+  }
+
   Future<void> saveBackblazeKey(
     final BackblazeCredential backblazeCredential,
   ) async {

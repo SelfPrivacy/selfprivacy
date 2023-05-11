@@ -150,6 +150,109 @@
         "screen_title": "Domena in DNS",
         "card_title": "Domena",
         "ok": "Zapisi so v redu",
-        "error": "Ugotovljene težave"
+        "error": "Ugotovljene težave",
+        "error_subtitle": "Kliknite tukaj za popravek",
+        "refreshing": "Posodobitev podatkov…",
+        "uninitialized": "Podatki še niso na voljo",
+        "services_title": "Storitve",
+        "services_subtitle": "Za vsako storitev so potrebni zapisi tipa \"A\".",
+        "email_title": "E-pošta",
+        "email_subtitle": "Zapisi, potrebni za varno izmenjavo e-pošte.",
+        "update_list": "Seznam posodobitev"
+    },
+    "backup": {
+        "restore": "Obnovitev iz varnostne kopije",
+        "no_backups": "Varnostnih kopij še ni",
+        "card_title": "Varnostna kopija",
+        "description": "V primeru incidenta: napada hekerjev, izbrisa strežnika itd.",
+        "reupload_key": "Prisilna posodobitev ključa",
+        "reuploaded_key": "Ključ v strežniku je bil posodobljen",
+        "initialize": "Inicializacija",
+        "waiting_for_rebuild": "Prvo varnostno kopijo boste lahko ustvarili v nekaj minutah.",
+        "create_new": "Ustvarite novo varnostno kopijo",
+        "creating": "Ustvarjanje nove varnostne kopije: {}%",
+        "restoring": "Obnovitev iz varnostne kopije",
+        "error_pending": "Strežnik je vrnil napako, preverite spodaj",
+        "restore_alert": "Obnavljate iz varnostne kopije, ustvarjene dne {}. Vsi trenutni podatki bodo izgubljeni. Ste prepričani?",
+        "refresh": "Osvežitev stanja",
+        "refetch_backups": "Ponovno pridobivanje seznama varnostnih kopij",
+        "refetching_list": "V nekaj minutah bo seznam posodobljen"
+    },
+    "mail": {
+        "login_info": "Uporabite uporabniško ime in geslo iz zavihka uporabniki. Vrata IMAP: 143, STARTTLS. Vrata SMTP: 587, STARTTLS.",
+        "title": "E-naslov",
+        "subtitle": "E-pošta za družbo in družino."
+    },
+    "password_manager": {
+        "title": "Upravitelj gesel",
+        "subtitle": "Osnova vaše varnosti. Bitwarden vam bo pomagal ustvarjati, shranjevati in prenašati gesla med napravami ter jih na zahtevo vnašati z uporabo samodejnega dopolnjevanja.",
+        "login_info": "Na spletnem mestu boste morali ustvariti račun."
+    },
+    "video": {
+        "title": "Videokonferenca",
+        "subtitle": "Zoom in Google Meet sta dobra, vendar je Jitsi Meet vredna alternativa, ki vam daje tudi zagotovilo, da vam nihče ne prisluškuje.",
+        "login_info": "Račun ni potreben."
+    },
+    "storage": {
+        "extending_volume_price_info": "Cena vključuje DDV in je izračunana na podlagi podatkov o cenah, ki jih je posredoval Hetzner. Strežnik se med postopkom ponovno zažene.",
+        "data_migration_notice": "Med migracijo bodo vse storitve izklopljene.",
+        "card_title": "Shranjevanje podatkov v strežniku",
+        "status_ok": "Uporaba diska je v redu",
+        "status_error": "Malo prostora na disku",
+        "disk_usage": "{} uporablja se",
+        "disk_total": "{} skupaj - {}",
+        "gb": "{} GB",
+        "mb": "{} MB",
+        "kb": "{} KB",
+        "bytes": "Bajti",
+        "extend_volume_button": "Podaljšanje glasnosti",
+        "extending_volume_title": "Razširitev prostora za shranjevanje",
+        "extending_volume_description": "Če spremenite velikost shrambe, lahko v strežniku shranite več podatkov, ne da bi pri tem povečali sam strežnik. Obseg je mogoče samo povečati: ni ga mogoče zmanjšati.",
+        "extending_volume_error": "Ni uspelo zagnati razširitve shrambe.",
+        "size": "Velikost",
+        "euro": "Euro",
+        "data_migration_title": "Migracija podatkov",
+        "start_migration_button": "Začetek migracije",
+        "migration_process": "Selitev…",
+        "migration_done": "Zaključek"
+    },
+    "service_page": {
+        "uses": "Uporablja {usage} na {volume}",
+        "status": {
+            "reloading": "Ponovni zagon spletne strani",
+            "active": "Vzpostavitev in delovanje",
+            "inactive": "Ustavljeno",
+            "failed": "Ni se uspelo zagnati",
+            "off": "Invalidi",
+            "activating": "Aktivacija spletne strani",
+            "deactivating": "Deaktiviranje spletne strani"
+        },
+        "open_in_browser": "Odprite v brskalniku",
+        "restart": "Ponovni zagon storitve",
+        "disable": "Onemogočite storitev",
+        "enable": "Omogočite storitev",
+        "move": "Premik na drug zvezek"
+    },
+    "social_network": {
+        "subtitle": "Težko je verjeti, vendar je mogoče ustvariti lastno družbeno omrežje z lastnimi pravili in občinstvom.",
+        "title": "Družbeno omrežje",
+        "login_info": "Na spletišču morate ustvariti račun."
+    },
+    "not_ready_card": {
+        "in_menu": "Strežnik še ni bil nastavljen, uporabite čarovnika za povezavo."
+    },
+    "cloud": {
+        "title": "Shranjevanje v oblaku",
+        "subtitle": "Storitvam v oblaku ne dovolite vpogleda v svoje podatke. Uporabite NextCloud - varen dom za vse svoje podatke.",
+        "login_info": "Prijava skrbnika: admin, geslo je enako geslu glavnega uporabnika. Ustvarite nove uporabnike v skrbniškem vmesniku NextCloud."
+    },
+    "git": {
+        "title": "Git Strežnik",
+        "subtitle": "Zasebna alternativa Githubu, ki pripada vam, ne pa Microsoftu.",
+        "login_info": "Na spletnem mestu morate ustvariti račun. Prvi uporabnik bo postal administrator."
+    },
+    "vpn": {
+        "title": "VPN Strežnik",
+        "subtitle": "Zasebni strežnik VPN"
     }
 }

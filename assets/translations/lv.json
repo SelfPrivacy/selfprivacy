@@ -1,1 +1,68 @@
-{}
+{
+    "test": "lv-test",
+    "basis": {
+        "app_name": "SelfPrivacy",
+        "providers_title": "Tavs Datu Centrs",
+        "select": "Izvēlies",
+        "services": "Servisi",
+        "services_title": "Tavi personīgie, privātie un neatkarīgie servisi.",
+        "users": "Lietotāji",
+        "more": "Vairāk",
+        "next": "Nākamais",
+        "got_it": "Sapratu",
+        "password": "Parole",
+        "create": "Pievienot jaunu",
+        "confirmation": "Apstiprinājums",
+        "cancel": "Atcelt",
+        "delete": "Izdzēst",
+        "close": "Aizvērt",
+        "connect": "Savienoties",
+        "domain": "Domēna",
+        "saving": "Saglabā…",
+        "username": "Lietotājvārds",
+        "later": "Izlaist un iestatīt vēlāk",
+        "connect_to_existing": "Savienoties ar esošu serveri",
+        "reset": "Atiestatīt",
+        "details": "Detaļas",
+        "no_data": "Nav dati",
+        "wait": "Uzgaidiet",
+        "remove": "Noņemt",
+        "apply": "Pieteikties",
+        "done": "Pabeigts",
+        "alert": "Brīdinājums",
+        "providers": "Sniedzēji",
+        "settings": "Iestatījumi",
+        "loading": "Lādē…",
+        "continue": "Turpināt"
+    },
+    "more_page": {
+        "configuration_wizard": "Iestatīšanas vednis",
+        "about_project": "Par mums",
+        "about_application": "Par",
+        "onboarding": "Pievienošanās",
+        "console": "Konsole",
+        "application_settings": "Aplikācijas iestatījumi",
+        "create_ssh_key": "Superlietotāja SSH atslēgas"
+    },
+    "console_page": {
+        "title": "Konsole",
+        "copy": "Kopēt",
+        "waiting": "Gaida inicializatīnu…"
+    },
+    "about_us_page": {
+        "title": "Par mums"
+    },
+    "about_application_page": {
+        "title": "Par",
+        "application_version_text": "Aplikācijas versija {}",
+        "api_version_text": "Servera API versija {}",
+        "privacy_policy": "Privātuma politika"
+    },
+    "application_settings": {
+        "system_dark_theme_title": "Sistēmas noklusējuma dizains",
+        "dark_theme_title": "Tumšs dizains",
+        "title": "Aplikācijas iestatījumi",
+        "system_dark_theme_description": "Izmantojiet gaišu vai tumšu dizainu atkarībā no sistēmas iestatījumiem"
+    },
+    "locale": "lv"
+}

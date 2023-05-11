@@ -25,6 +25,131 @@
         "username": "Uporabniško ime",
         "loading": "Nalaganje…",
         "later": "Preskočite in prilagodite pozneje",
-        "connect_to_existing": "Preskočite in prilagodite pozneje"
+        "connect_to_existing": "Preskočite in prilagodite pozneje",
+        "reset": "Ponastavitev",
+        "details": "Podrobne informacije",
+        "no_data": "Ni podatkov",
+        "wait": "Prenesi",
+        "remove": "Izbriši",
+        "apply": "Uporabi",
+        "done": "Končano",
+        "continue": "Nadaljuj",
+        "alert": "Opozorilo"
+    },
+    "more_page": {
+        "about_application": "O prilogi",
+        "about_project": "O storitvi SelfPrivacy",
+        "onboarding": "Pozdravi",
+        "console": "Konzola",
+        "application_settings": "Nastavitve aplikacije",
+        "create_ssh_key": "Superuporabniški ključi SSH",
+        "configuration_wizard": "Pomočnik za nastavitev"
+    },
+    "console_page": {
+        "title": "Konzole",
+        "waiting": "Čakanje na inicializacijo…",
+        "copy": "Kopiraj"
+    },
+    "about_us_page": {
+        "title": "O storitvi SelfPrivacy"
+    },
+    "about_application_page": {
+        "title": "O dodatku",
+        "api_version_text": "Različica API strežnika {}",
+        "privacy_policy": "Pravilnik o zasebnosti",
+        "application_version_text": "Različica aplikacije {}"
+    },
+    "application_settings": {
+        "dark_theme_title": "Temna tema",
+        "title": "Nastavitve aplikacije",
+        "system_dark_theme_title": "Privzeta tema sistema",
+        "system_dark_theme_description": "Uporaba svetle ali temne teme glede na sistemske nastavitve",
+        "dark_theme_description": "Spreminjanje barvne teme",
+        "dangerous_settings": "Nevarne nastavitve",
+        "reset_config_title": "Ponastavitev konfiguracije aplikacije",
+        "reset_config_description": "Сбросить API ключи, а также root пользователя",
+        "delete_server_title": "Brisanje strežnika",
+        "delete_server_description": "To dejanje povzroči izbris strežnika. Nato bo nedosegljiv."
+    },
+    "onboarding": {
+        "page1_title": "Digitalna neodvisnost je na voljo vsem",
+        "page1_text": "Pošta, VPN, messenger, družabna omrežja in še veliko več na lastnem zasebnem strežniku pod vašim popolnim nadzorom.",
+        "page2_title": "SelfPrivacy ni oblak, temveč vaš osebni podatkovni center",
+        "page2_text": "Storitev SelfPrivacy sodeluje le s ponudnikom storitev po vaši izbiri. Če nimate računov, vam jih lahko pomagamo ustvariti.",
+        "page2_server_provider_title": "Ponudnik strežnika",
+        "page2_server_provider_text": "Ponudnik strežnika bo vaš strežnik vzdrževal v svojem podatkovnem centru. SelfPrivacy se bo samodejno povezal z njim in nastavil vaš strežnik.",
+        "page2_dns_provider_title": "Ponudnik storitev DNS",
+        "page2_dns_provider_text": "To be on the Internet, you need a domain. To have a domain point to your server, you need a reliable DNS server. We will offer you to choose one of the supported DNS servers and automatically configure all entries. Want to configure them manually? You can do that too.",
+        "page2_backup_provider_title": "Ponudnik varnostnih kopij",
+        "page2_backup_provider_text": "Kaj če se kaj zgodi z vašim strežnikom? Predstavljajte si hekerski napad, nenamerno brisanje podatkov ali zavrnitev storitve? Vaši podatki bodo na varnem pri ponudniku varnostnih kopij. Te bodo varno šifrirane in kadar koli dostopne za obnovitev strežnika."
+    },
+    "resource_chart": {
+        "month": "Mesec",
+        "day": "Dan",
+        "hour": "Ura",
+        "cpu_title": "Poraba CPU",
+        "out": "Poslano",
+        "network_title": "Uporaba omrežja",
+        "in": "Pridobljeno iz"
+    },
+    "server": {
+        "card_title": "Server",
+        "description": "Vse vaše storitve so na voljo tukaj",
+        "general_information": "Splošne informacije",
+        "resource_usage": "Uporaba virov",
+        "allow_autoupgrade": "Dovolite samodejno nadgradnjo",
+        "allow_autoupgrade_hint": "Omogočite samodejne nadgradnje paketov na strežniku",
+        "reboot_after_upgrade": "Ponovni zagon po nadgradnji",
+        "core_count": {
+            "two": "{} jedra",
+            "few": "{} jedra",
+            "one": "{} jedro",
+            "many": "{} jedra",
+            "other": "{} jeder"
+        },
+        "reboot_after_upgrade_hint": "Ponovni zagon brez poziva po uporabi sprememb v strežniku",
+        "server_timezone": "Časovni pas strežnika",
+        "select_timezone": "Izberite časovni pas",
+        "timezone_search_bar": "Ime časovnega pasu ali vrednost časovnega zamika",
+        "server_id": "ID strežnika",
+        "status": "Status",
+        "cpu": "CPU",
+        "ram": "Glavni pomnilnik",
+        "disk": "Lokalni disk",
+        "monthly_cost": "Mesečni stroški",
+        "location": "Lokacija",
+        "provider": "Ponudnik"
+    },
+    "ssh": {
+        "root_subtitle": "Lastniki tukaj navedenih ključev imajo popoln dostop do podatkov in nastavitev strežnika. Dodajte samo svoje ključe.",
+        "title": "Ključi SSH",
+        "create": "Dodajanje ključa SSH",
+        "delete": "Odstranitev ključa SSH",
+        "delete_confirm_question": "Ali ste prepričani, da želite izbrisati naslednjo tipko?",
+        "subtitle_with_keys": "Ključi: {}",
+        "subtitle_without_keys": "Brez ključev",
+        "no_key_name": "Ključ brez imena",
+        "root_title": "To so ključi superuporabnika",
+        "input_label": "Javni ključ ED25519 ali RSA"
+    },
+    "record": {
+        "cloud": "Oblak datotek",
+        "root": "Korenska domena",
+        "api": "SelfPrivacy API",
+        "git": "Git Strežnik",
+        "meet": "Videokonferenca",
+        "social": "Družabno omrežje",
+        "password": "Upravitelj gesel",
+        "vpn": "VPN",
+        "mx": "Zapis MX",
+        "dmarc": "DMARC zapis",
+        "spf": "SPF zapis",
+        "dkim": "DKIM ključ"
+    },
+    "domain": {
+        "screen_title": "Domena in DNS",
+        "card_title": "Domena",
+        "ok": "Zapisi so v redu",
+        "error": "Ugotovljene težave"
     }
 }

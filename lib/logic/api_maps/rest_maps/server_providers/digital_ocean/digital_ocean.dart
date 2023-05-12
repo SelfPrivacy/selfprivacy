@@ -332,6 +332,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     required final User rootUser,
     required final String domainName,
     required final String serverType,
+    required final DnsProvider dnsProvider,
   }) async {
     ServerHostingDetails? serverDetails;
 
@@ -344,9 +345,10 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final String formattedHostname = getHostnameFromDomain(domainName);
     const String infectBranch = 'providers/digital-ocean';
     final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
+    final String dnsProviderType = dnsProviderToInfectName(dnsProvider);
 
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | DNS_PROVIDER_TYPE=$dnsProviderType PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$formattedHostname bash 2>&1 | tee /tmp/infect.log";
     print(userdataString);
 
     Response? serverCreateResponse;

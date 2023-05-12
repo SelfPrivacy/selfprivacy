@@ -27,13 +27,13 @@ class DesecApi extends DnsProviderApi {
   BaseOptions get options {
     final BaseOptions options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
-      final String? token = getIt<ApiConfigModel>().cloudFlareKey;
+      final String? token = getIt<ApiConfigModel>().dnsProviderKey;
       assert(token != null);
-      options.headers = {'Authorization': 'Bearer $token'};
+      options.headers = {'Authorization': 'Token $token'};
     }
 
     if (customToken != null) {
-      options.headers = {'Authorization': 'Bearer $customToken'};
+      options.headers = {'Authorization': 'Token $customToken'};
     }
 
     if (validateStatus != null) {
@@ -107,7 +107,7 @@ class DesecApi extends DnsProviderApi {
     try {
       final Response response = await client.get(url);
 
-      final List records = response.data['result'] ?? [];
+      final List records = response.data;
       await client.put(url, data: records);
     } catch (e) {
       print(e);
@@ -136,7 +136,7 @@ class DesecApi extends DnsProviderApi {
     final Dio client = await getClient();
     try {
       response = await client.get(url);
-      final List records = response.data['result'] ?? [];
+      final List records = response.data;
 
       for (final record in records) {
         allRecords.add(
@@ -291,7 +291,7 @@ class DesecApi extends DnsProviderApi {
       final Response response = await client.get(
         '',
       );
-      domains = response.data['result']
+      domains = response.data
           .map<String>((final el) => el['name'] as String)
           .toList();
     } catch (e) {

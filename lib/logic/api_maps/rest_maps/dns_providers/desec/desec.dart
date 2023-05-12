@@ -172,7 +172,18 @@ class DesecApi extends DnsProviderApi {
         allCreateFutures.add(
           client.post(
             '/$domainName/rrsets/',
-            data: record.toJson(),
+            data: record.name == null
+                ? {
+                    'type': record.type,
+                    'ttl': record.ttl,
+                    'records': [record.content],
+                  }
+                : {
+                    'subname': record.name,
+                    'type': record.type,
+                    'ttl': record.ttl,
+                    'records': [record.content],
+                  },
           ),
         );
       }
@@ -198,10 +209,9 @@ class DesecApi extends DnsProviderApi {
     final String? domainName,
     final String? ip4,
   ) {
-    final DnsRecord domainA =
-        DnsRecord(type: 'A', name: domainName, content: ip4);
+    final DnsRecord domainA = DnsRecord(type: 'A', name: null, content: ip4);
 
-    final DnsRecord mx = DnsRecord(type: 'MX', name: '@', content: domainName);
+    final DnsRecord mx = DnsRecord(type: 'MX', name: null, content: domainName);
     final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
     final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
     final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
@@ -221,7 +231,7 @@ class DesecApi extends DnsProviderApi {
 
     final DnsRecord txt2 = DnsRecord(
       type: 'TXT',
-      name: domainName,
+      name: null,
       content: 'v=spf1 a mx ip4:$ip4 -all',
       ttl: 18000,
     );
@@ -246,14 +256,24 @@ class DesecApi extends DnsProviderApi {
     final DnsRecord record,
     final ServerDomain domain,
   ) async {
-    final String domainZoneId = domain.zoneId;
-    final String url = '$rootAddress/zones/$domainZoneId/dns_records';
+    final String url = '/${domain.domainName}/rrsets/';
 
     final Dio client = await getClient();
     try {
       await client.post(
         url,
-        data: record.toJson(),
+        data: record.name == null
+            ? {
+                'type': record.type,
+                'ttl': record.ttl,
+                'records': [record.content],
+              }
+            : {
+                'subname': record.name,
+                'type': record.type,
+                'ttl': record.ttl,
+                'records': [record.content],
+              },
       );
     } catch (e) {
       print(e);
@@ -264,14 +284,12 @@ class DesecApi extends DnsProviderApi {
 
   @override
   Future<List<String>> domainList() async {
-    final String url = '$rootAddress/zones';
     List<String> domains = [];
 
     final Dio client = await getClient();
     try {
       final Response response = await client.get(
-        url,
-        queryParameters: {'per_page': 50},
+        '',
       );
       domains = response.data['result']
           .map<String>((final el) => el['name'] as String)

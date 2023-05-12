@@ -27,7 +27,7 @@ class CloudflareApi extends DnsProviderApi {
   BaseOptions get options {
     final BaseOptions options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
-      final String? token = getIt<ApiConfigModel>().cloudFlareKey;
+      final String? token = getIt<ApiConfigModel>().dnsProviderKey;
       assert(token != null);
       options.headers = {'Authorization': 'Bearer $token'};
     }

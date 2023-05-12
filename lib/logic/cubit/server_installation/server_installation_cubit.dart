@@ -110,16 +110,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<bool?> isDnsProviderApiTokenValid(
     final String providerToken,
   ) async {
-    if (ApiController.currentDnsProviderApiFactory == null) {
-      // No other DNS provider is supported for now,
-      //    so it's safe to hardcode Cloudflare
-      ApiController.initDnsProviderApiFactory(
-        DnsProviderApiFactorySettings(
-          provider: DnsProvider.cloudflare,
-        ),
-      );
-    }
-
     final APIGenericResult<bool> apiResponse =
         await ApiController.currentDnsProviderApiFactory!
             .getDnsProvider(
@@ -223,16 +213,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  void setCloudflareKey(final String cloudFlareKey) async {
+  void setDnsApiToken(final String dnsApiToken) async {
     if (state is ServerInstallationRecovery) {
-      setAndValidateCloudflareToken(cloudFlareKey);
+      setAndValidateDnsApiToken(dnsApiToken);
       return;
     }
-    await repository.saveCloudFlareKey(cloudFlareKey);
+    await repository.saveDnsProviderKey(dnsApiToken);
 
     emit(
       (state as ServerInstallationNotFinished)
-          .copyWith(cloudFlareKey: cloudFlareKey),
+          .copyWith(dnsApiToken: dnsApiToken),
     );
   }
 
@@ -293,7 +283,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       await repository.createServer(
         state.rootUser!,
         state.serverDomain!.domainName,
-        state.cloudFlareKey!,
+        state.dnsApiToken!,
         state.backblazeCredential!,
         onCancel: onCancel,
         onSuccess: onSuccess,
@@ -595,7 +585,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           ),
         );
         break;
-      case RecoveryStep.cloudflareToken:
+      case RecoveryStep.dnsProviderToken:
         repository.deleteServerDetails();
         emit(
           dataState.copyWith(
@@ -691,12 +681,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(
       dataState.copyWith(
         serverDetails: serverDetails,
-        currentStep: RecoveryStep.cloudflareToken,
+        currentStep: RecoveryStep.dnsProviderToken,
       ),
     );
   }
 
-  Future<void> setAndValidateCloudflareToken(final String token) async {
+  Future<void> setAndValidateDnsApiToken(final String token) async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
     final ServerDomain? serverDomain = dataState.serverDomain;
@@ -714,10 +704,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ServerDomain(
         domainName: serverDomain.domainName,
         zoneId: zoneId,
-        provider: DnsProvider.cloudflare,
+        provider: await ServerApi(
+          customToken: token,
+          isWithToken: true,
+        ).getDnsProviderType(),
       ),
     );
-    await repository.saveCloudFlareKey(token);
+    await repository.saveDnsProviderKey(token);
     emit(
       dataState.copyWith(
         serverDomain: ServerDomain(
@@ -725,7 +718,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           zoneId: zoneId,
           provider: DnsProvider.cloudflare,
         ),
-        cloudFlareKey: token,
+        dnsApiToken: token,
         currentStep: RecoveryStep.backblazeToken,
       ),
     );
@@ -776,7 +769,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ServerInstallationNotFinished(
         providerApiToken: state.providerApiToken,
         serverDomain: state.serverDomain,
-        cloudFlareKey: state.cloudFlareKey,
+        dnsApiToken: state.dnsApiToken,
         backblazeCredential: state.backblazeCredential,
         rootUser: state.rootUser,
         serverDetails: null,

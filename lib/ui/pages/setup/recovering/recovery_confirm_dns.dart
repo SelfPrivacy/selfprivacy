@@ -7,8 +7,8 @@ import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 
-class RecoveryConfirmCloudflare extends StatelessWidget {
-  const RecoveryConfirmCloudflare({super.key});
+class RecoveryConfirmDns extends StatelessWidget {
+  const RecoveryConfirmDns({super.key});
 
   @override
   Widget build(final BuildContext context) {

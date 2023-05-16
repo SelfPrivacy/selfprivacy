@@ -2,6 +2,7 @@ import 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 export 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 
@@ -26,9 +27,18 @@ abstract class DnsProviderApi extends ApiMap {
     final DnsRecord record,
     final ServerDomain domain,
   );
+  Future<APIGenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
+    final ServerDomain domain,
+    final String ip4,
+    final String dkimPublicKey,
+  );
+  List<DesiredDnsRecord> getDesiredDnsRecords(
+    final String? domainName,
+    final String? ip4,
+    final String? dkimPublicKey,
+  );
   Future<String?> getZoneId(final String domain);
   Future<List<String>> domainList();
-
   Future<APIGenericResult<bool>> isApiTokenValid(final String token);
   RegExp getApiTokenValidation();
 }

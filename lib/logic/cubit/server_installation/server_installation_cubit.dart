@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -436,6 +437,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(TimerState(dataState: dataState, isLoading: true));
 
     final bool isServerWorking = await repository.isHttpServerWorking();
+    StagingOptions.verifyCertificate = true;
 
     if (isServerWorking) {
       bool dkimCreated = true;
@@ -758,6 +760,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void clearAppConfig() {
     closeTimer();
     ApiController.clearProviderApiFactories();
+    StagingOptions.verifyCertificate = false;
     repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }

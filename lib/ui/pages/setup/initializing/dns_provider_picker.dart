@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
@@ -51,7 +52,7 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
             providerType: DnsProvider.cloudflare,
             pathToHow: 'how_cloudflare',
             image: Image.asset(
-              'assets/images/logos/cloudflare.png',
+              'assets/images/logos/cloudflare.svg',
               width: 150,
             ),
           ),
@@ -62,9 +63,9 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
           providerCubit: widget.formCubit,
           providerInfo: ProviderPageInfo(
             providerType: DnsProvider.desec,
-            pathToHow: 'how_digital_ocean_dns',
+            pathToHow: 'how_desec',
             image: Image.asset(
-              'assets/images/logos/digital_ocean.png',
+              'assets/images/logos/desec.svg',
               width: 150,
             ),
           ),
@@ -100,7 +101,7 @@ class ProviderInputDataPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'initializing.connect_to_dns'.tr(),
+            'initializing.cloudflare_api_token'.tr(),
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 16),
@@ -125,22 +126,12 @@ class ProviderInputDataPage extends StatelessWidget {
           const SizedBox(height: 10),
           BrandOutlinedButton(
             child: Text('initializing.how'.tr()),
-            onPressed: () => showModalBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (final BuildContext context) => Padding(
-                padding: paddingH15V0,
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  children: [
-                    BrandMarkdown(
-                      fileName: providerInfo.pathToHow,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            onPressed: () {
+              context.read<SupportSystemCubit>().showArticle(
+                    article: providerInfo.pathToHow,
+                    context: context,
+                  );
+            },
           ),
         ],
       );
@@ -186,7 +177,7 @@ class ProviderSelectionPage extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
-                            color: const Color.fromARGB(255, 241, 215, 166),
+                            color: const Color.fromARGB(255, 244, 128, 31),
                           ),
                           child: SvgPicture.asset(
                             'assets/images/logos/cloudflare.svg',
@@ -194,7 +185,7 @@ class ProviderSelectionPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 16),
                         Text(
-                          'Hetzner Cloud',
+                          'Cloudflare',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],

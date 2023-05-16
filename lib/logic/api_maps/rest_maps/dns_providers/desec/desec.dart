@@ -352,7 +352,9 @@ class DesecApi extends DnsProviderApi {
       for (final DesiredDnsRecord record in desiredRecords) {
         if (record.description == 'record.dkim') {
           final DnsRecord foundRecord = records.firstWhere(
-            (final r) => (r.name == record.name) && r.type == record.type,
+            (final r) =>
+                ('${r.name}.${domain.domainName}' == record.name) &&
+                r.type == record.type,
             orElse: () => DnsRecord(
               name: record.name,
               type: record.type,

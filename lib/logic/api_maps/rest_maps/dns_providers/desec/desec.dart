@@ -5,6 +5,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 class DesecApi extends DnsProviderApi {
   DesecApi({
@@ -61,6 +62,7 @@ class DesecApi extends DnsProviderApi {
           headers: {'Authorization': 'Token $token'},
         ),
       );
+      await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
       isValid = false;
@@ -102,13 +104,29 @@ class DesecApi extends DnsProviderApi {
   }) async {
     final String domainName = domain.domainName;
     final String url = '/$domainName/rrsets/';
+    final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(url);
-
-      final List records = response.data;
-      await client.put(url, data: records);
+      final List<dynamic> bulkRecords = [];
+      for (final DnsRecord record in listDnsRecords) {
+        bulkRecords.add(
+          record.name == null
+              ? {
+                  'type': record.type,
+                  'ttl': record.ttl,
+                  'records': [],
+                }
+              : {
+                  'subname': record.name,
+                  'type': record.type,
+                  'ttl': record.ttl,
+                  'records': [],
+                },
+        );
+      }
+      await client.put(url, data: bulkRecords);
+      await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
       return APIGenericResult(
@@ -136,14 +154,18 @@ class DesecApi extends DnsProviderApi {
     final Dio client = await getClient();
     try {
       response = await client.get(url);
+      await Future.delayed(const Duration(seconds: 1));
       final List records = response.data;
 
       for (final record in records) {
+        final String? content = (record['records'] is List<dynamic>)
+            ? record['records'][0]
+            : record['records'];
         allRecords.add(
           DnsRecord(
             name: record['subname'],
             type: record['type'],
-            content: record['records'],
+            content: content,
             ttl: record['ttl'],
           ),
         );
@@ -164,30 +186,31 @@ class DesecApi extends DnsProviderApi {
   }) async {
     final String domainName = domain.domainName;
     final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
-    final List<Future> allCreateFutures = <Future>[];
 
     final Dio client = await getClient();
     try {
+      final List<dynamic> bulkRecords = [];
       for (final DnsRecord record in listDnsRecords) {
-        allCreateFutures.add(
-          client.post(
-            '/$domainName/rrsets/',
-            data: record.name == null
-                ? {
-                    'type': record.type,
-                    'ttl': record.ttl,
-                    'records': [record.content],
-                  }
-                : {
-                    'subname': record.name,
-                    'type': record.type,
-                    'ttl': record.ttl,
-                    'records': [record.content],
-                  },
-          ),
+        bulkRecords.add(
+          record.name == null
+              ? {
+                  'type': record.type,
+                  'ttl': record.ttl,
+                  'records': [record.content],
+                }
+              : {
+                  'subname': record.name,
+                  'type': record.type,
+                  'ttl': record.ttl,
+                  'records': [record.content],
+                },
         );
       }
-      await Future.wait(allCreateFutures);
+      await client.post(
+        '/$domainName/rrsets/',
+        data: bulkRecords,
+      );
+      await Future.delayed(const Duration(seconds: 1));
     } on DioError catch (e) {
       print(e.message);
       rethrow;
@@ -209,9 +232,10 @@ class DesecApi extends DnsProviderApi {
     final String? domainName,
     final String? ip4,
   ) {
-    final DnsRecord domainA = DnsRecord(type: 'A', name: null, content: ip4);
+    final DnsRecord domainA = DnsRecord(type: 'A', name: '', content: ip4);
 
-    final DnsRecord mx = DnsRecord(type: 'MX', name: null, content: domainName);
+    final DnsRecord mx =
+        DnsRecord(type: 'MX', name: '', content: '10 $domainName.');
     final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
     final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
     final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
@@ -225,14 +249,14 @@ class DesecApi extends DnsProviderApi {
     final DnsRecord txt1 = DnsRecord(
       type: 'TXT',
       name: '_dmarc',
-      content: 'v=DMARC1; p=none',
+      content: '"v=DMARC1; p=none"',
       ttl: 18000,
     );
 
     final DnsRecord txt2 = DnsRecord(
       type: 'TXT',
-      name: null,
-      content: 'v=spf1 a mx ip4:$ip4 -all',
+      name: '',
+      content: '"v=spf1 a mx ip4:$ip4 -all"',
       ttl: 18000,
     );
 
@@ -275,6 +299,7 @@ class DesecApi extends DnsProviderApi {
                 'records': [record.content],
               },
       );
+      await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
     } finally {
@@ -291,6 +316,7 @@ class DesecApi extends DnsProviderApi {
       final Response response = await client.get(
         '',
       );
+      await Future.delayed(const Duration(seconds: 1));
       domains = response.data
           .map<String>((final el) => el['name'] as String)
           .toList();
@@ -301,5 +327,149 @@ class DesecApi extends DnsProviderApi {
     }
 
     return domains;
+  }
+
+  @override
+  Future<APIGenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
+    final ServerDomain domain,
+    final String ip4,
+    final String dkimPublicKey,
+  ) async {
+    final List<DnsRecord> records = await getDnsRecords(domain: domain);
+    final List<DesiredDnsRecord> foundRecords = [];
+    try {
+      final List<DesiredDnsRecord> desiredRecords =
+          getDesiredDnsRecords(domain.domainName, ip4, dkimPublicKey);
+      for (final DesiredDnsRecord record in desiredRecords) {
+        if (record.description == 'record.dkim') {
+          final DnsRecord foundRecord = records.firstWhere(
+            (final r) => (r.name == record.name) && r.type == record.type,
+            orElse: () => DnsRecord(
+              name: record.name,
+              type: record.type,
+              content: '',
+              ttl: 800,
+              proxied: false,
+            ),
+          );
+          // remove all spaces and tabulators from
+          // the foundRecord.content and the record.content
+          // to compare them
+          final String? foundContent =
+              foundRecord.content?.replaceAll(RegExp(r'\s+'), '');
+          final String content = record.content.replaceAll(RegExp(r'\s+'), '');
+          if (foundContent == content) {
+            foundRecords.add(record.copyWith(isSatisfied: true));
+          } else {
+            foundRecords.add(record.copyWith(isSatisfied: false));
+          }
+        } else {
+          if (records.any(
+            (final r) =>
+                ('${r.name}.${domain.domainName}' == record.name ||
+                    record.name == '') &&
+                r.type == record.type &&
+                r.content == record.content,
+          )) {
+            foundRecords.add(record.copyWith(isSatisfied: true));
+          } else {
+            foundRecords.add(record.copyWith(isSatisfied: false));
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+      return APIGenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
+    }
+    return APIGenericResult(
+      data: foundRecords,
+      success: true,
+    );
+  }
+
+  @override
+  List<DesiredDnsRecord> getDesiredDnsRecords(
+    final String? domainName,
+    final String? ip4,
+    final String? dkimPublicKey,
+  ) {
+    if (domainName == null || ip4 == null) {
+      return [];
+    }
+    return [
+      DesiredDnsRecord(
+        name: '',
+        content: ip4,
+        description: 'record.root',
+      ),
+      DesiredDnsRecord(
+        name: 'api.$domainName',
+        content: ip4,
+        description: 'record.api',
+      ),
+      DesiredDnsRecord(
+        name: 'cloud.$domainName',
+        content: ip4,
+        description: 'record.cloud',
+      ),
+      DesiredDnsRecord(
+        name: 'git.$domainName',
+        content: ip4,
+        description: 'record.git',
+      ),
+      DesiredDnsRecord(
+        name: 'meet.$domainName',
+        content: ip4,
+        description: 'record.meet',
+      ),
+      DesiredDnsRecord(
+        name: 'social.$domainName',
+        content: ip4,
+        description: 'record.social',
+      ),
+      DesiredDnsRecord(
+        name: 'password.$domainName',
+        content: ip4,
+        description: 'record.password',
+      ),
+      DesiredDnsRecord(
+        name: 'vpn.$domainName',
+        content: ip4,
+        description: 'record.vpn',
+      ),
+      DesiredDnsRecord(
+        name: '',
+        content: '10 $domainName.',
+        description: 'record.mx',
+        type: 'MX',
+        category: DnsRecordsCategory.email,
+      ),
+      DesiredDnsRecord(
+        name: '_dmarc.$domainName',
+        content: '"v=DMARC1; p=none"',
+        description: 'record.dmarc',
+        type: 'TXT',
+        category: DnsRecordsCategory.email,
+      ),
+      DesiredDnsRecord(
+        name: '',
+        content: '"v=spf1 a mx ip4:$ip4 -all"',
+        description: 'record.spf',
+        type: 'TXT',
+        category: DnsRecordsCategory.email,
+      ),
+      if (dkimPublicKey != null)
+        DesiredDnsRecord(
+          name: 'selector._domainkey.$domainName',
+          content: dkimPublicKey,
+          description: 'record.dkim',
+          type: 'TXT',
+          category: DnsRecordsCategory.email,
+        ),
+    ];
   }
 }

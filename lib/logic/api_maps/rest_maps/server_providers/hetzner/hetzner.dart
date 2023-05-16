@@ -394,7 +394,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
 
     final String apiToken = StringGenerators.apiToken();
     final String hostname = getHostnameFromDomain(domainName);
-    const String infectBranch = 'providers/hetzner';
+    const String infectBranch = 'testing/desec';
     final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
     final String base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));

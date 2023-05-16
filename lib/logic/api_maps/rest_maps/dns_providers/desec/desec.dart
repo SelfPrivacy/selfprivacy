@@ -196,13 +196,13 @@ class DesecApi extends DnsProviderApi {
               ? {
                   'type': record.type,
                   'ttl': record.ttl,
-                  'records': [record.content],
+                  'records': [extractContent(record)],
                 }
               : {
                   'subname': record.name,
                   'type': record.type,
                   'ttl': record.ttl,
-                  'records': [record.content],
+                  'records': [extractContent(record)],
                 },
         );
       }
@@ -275,6 +275,15 @@ class DesecApi extends DnsProviderApi {
     ];
   }
 
+  String? extractContent(final DnsRecord record) {
+    String? content = record.content;
+    if (record.type == 'TXT' && content != null && !content.startsWith('"')) {
+      content = '"$content"';
+    }
+
+    return content;
+  }
+
   @override
   Future<void> setDnsRecord(
     final DnsRecord record,
@@ -290,13 +299,13 @@ class DesecApi extends DnsProviderApi {
             ? {
                 'type': record.type,
                 'ttl': record.ttl,
-                'records': [record.content],
+                'records': [extractContent(record)],
               }
             : {
                 'subname': record.name,
                 'type': record.type,
                 'ttl': record.ttl,
-                'records': [record.content],
+                'records': [extractContent(record)],
               },
       );
       await Future.delayed(const Duration(seconds: 1));
@@ -465,7 +474,7 @@ class DesecApi extends DnsProviderApi {
       if (dkimPublicKey != null)
         DesiredDnsRecord(
           name: 'selector._domainkey.$domainName',
-          content: dkimPublicKey,
+          content: '"$dkimPublicKey"',
           description: 'record.dkim',
           type: 'TXT',
           category: DnsRecordsCategory.email,

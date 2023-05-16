@@ -541,13 +541,20 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getServerProviderType();
-      if (provider == ServerProvider.unknown) {
+      final dnsProvider = await ServerApi(
+        customToken: serverDetails.apiToken,
+        isWithToken: true,
+      ).getDnsProviderType();
+      if (provider == ServerProvider.unknown ||
+          dnsProvider == DnsProvider.unknown) {
         getIt<NavigationService>()
             .showSnackBar('recovering.generic_error'.tr());
         return;
       }
       await repository.saveServerDetails(serverDetails);
+      await repository.saveDnsProviderType(dnsProvider);
       setServerProviderType(provider);
+      setDnsProviderType(dnsProvider);
       emit(
         dataState.copyWith(
           serverDetails: serverDetails,
@@ -700,14 +707,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           .showSnackBar('recovering.domain_not_available_on_token'.tr());
       return;
     }
+    final dnsProviderType = await ServerApi(
+      customToken: dataState.serverDetails!.apiToken,
+      isWithToken: true,
+    ).getDnsProviderType();
     await repository.saveDomain(
       ServerDomain(
         domainName: serverDomain.domainName,
         zoneId: zoneId,
-        provider: await ServerApi(
-          customToken: token,
-          isWithToken: true,
-        ).getDnsProviderType(),
+        provider: dnsProviderType,
       ),
     );
     await repository.saveDnsProviderKey(token);

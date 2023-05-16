@@ -15,6 +15,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -76,17 +77,20 @@ class ServerInstallationRepository {
       );
     }
 
-    if (dnsProvider != null ||
-        (serverDomain != null &&
-            serverDomain.provider != DnsProvider.unknown)) {
-      ApiController.initDnsProviderApiFactory(
-        DnsProviderApiFactorySettings(
-          provider: dnsProvider ?? serverDomain!.provider,
-        ),
-      );
+    if (ApiController.currentDnsProviderApiFactory == null) {
+      if (dnsProvider != null ||
+          (serverDomain != null &&
+              serverDomain.provider != DnsProvider.unknown)) {
+        ApiController.initDnsProviderApiFactory(
+          DnsProviderApiFactorySettings(
+            provider: dnsProvider ?? serverDomain!.provider,
+          ),
+        );
+      }
     }
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
+      StagingOptions.verifyCertificate = true;
       return ServerInstallationFinished(
         providerApiToken: providerApiToken!,
         serverTypeIdentificator: serverTypeIdentificator ?? '',

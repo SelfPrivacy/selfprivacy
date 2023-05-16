@@ -111,20 +111,22 @@ class DesecApi extends DnsProviderApi {
       final List<dynamic> bulkRecords = [];
       for (final DnsRecord record in listDnsRecords) {
         bulkRecords.add(
-          record.name == null
-              ? {
-                  'type': record.type,
-                  'ttl': record.ttl,
-                  'records': [],
-                }
-              : {
-                  'subname': record.name,
-                  'type': record.type,
-                  'ttl': record.ttl,
-                  'records': [],
-                },
+          {
+            'subname': record.name,
+            'type': record.type,
+            'ttl': record.ttl,
+            'records': [],
+          },
         );
       }
+      bulkRecords.add(
+        {
+          'subname': 'selector._domainkey',
+          'type': 'TXT',
+          'ttl': 18000,
+          'records': [],
+        },
+      );
       await client.put(url, data: bulkRecords);
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
@@ -192,18 +194,12 @@ class DesecApi extends DnsProviderApi {
       final List<dynamic> bulkRecords = [];
       for (final DnsRecord record in listDnsRecords) {
         bulkRecords.add(
-          record.name == null
-              ? {
-                  'type': record.type,
-                  'ttl': record.ttl,
-                  'records': [extractContent(record)],
-                }
-              : {
-                  'subname': record.name,
-                  'type': record.type,
-                  'ttl': record.ttl,
-                  'records': [extractContent(record)],
-                },
+          {
+            'subname': record.name,
+            'type': record.type,
+            'ttl': record.ttl,
+            'records': [extractContent(record)],
+          },
         );
       }
       await client.post(
@@ -295,18 +291,12 @@ class DesecApi extends DnsProviderApi {
     try {
       await client.post(
         url,
-        data: record.name == null
-            ? {
-                'type': record.type,
-                'ttl': record.ttl,
-                'records': [extractContent(record)],
-              }
-            : {
-                'subname': record.name,
-                'type': record.type,
-                'ttl': record.ttl,
-                'records': [extractContent(record)],
-              },
+        data: {
+          'subname': record.name,
+          'type': record.type,
+          'ttl': record.ttl,
+          'records': [extractContent(record)],
+        },
       );
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {

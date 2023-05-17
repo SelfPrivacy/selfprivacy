@@ -9,6 +9,9 @@ import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -182,7 +185,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void setDnsApiToken(final String dnsApiToken) async {
     if (state is ServerInstallationRecovery) {
-      await setAndValidateCloudflareToken(dnsApiToken);
+      await setAndValidateDnsApiToken(dnsApiToken);
       return;
     }
     await repository.setDnsApiToken(dnsApiToken);
@@ -429,6 +432,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(TimerState(dataState: dataState, isLoading: true));
 
     final bool isServerWorking = await repository.isHttpServerWorking();
+    StagingOptions.verifyCertificate = true;
 
     if (isServerWorking) {
       bool dkimCreated = true;
@@ -534,21 +538,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getServerProviderType();
-      final DnsProviderType dnsProvider = await ServerApi(
+      final dnsProvider = await ServerApi(
         customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getDnsProviderType();
-      if (serverProvider == ServerProviderType.unknown) {
-        getIt<NavigationService>()
-            .showSnackBar('recovering.generic_error'.tr());
-        return;
-      }
-      if (dnsProvider == DnsProviderType.unknown) {
+      if (serverProvider == ServerProviderType.unknown ||
+          dnsProvider == DnsProviderType.unknown) {
         getIt<NavigationService>()
             .showSnackBar('recovering.generic_error'.tr());
         return;
       }
       await repository.saveServerDetails(serverDetails);
+      await repository.saveDnsProviderType(dnsProvider);
       setServerProviderType(serverProvider);
       setDnsProviderType(dnsProvider);
       emit(
@@ -689,7 +690,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  Future<void> setAndValidateCloudflareToken(final String token) async {
+  Future<void> setAndValidateDnsApiToken(final String token) async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
     final ServerDomain? serverDomain = dataState.serverDomain;
@@ -703,11 +704,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           .showSnackBar('recovering.domain_not_available_on_token'.tr());
       return;
     }
+    final dnsProviderType = await ServerApi(
+      customToken: dataState.serverDetails!.apiToken,
+      isWithToken: true,
+    ).getDnsProviderType();
     await repository.saveDomain(
       ServerDomain(
         domainName: serverDomain.domainName,
         zoneId: zoneId,
-        provider: DnsProviderType.cloudflare,
+        provider: dnsProviderType,
       ),
     );
     await repository.setDnsApiToken(token);
@@ -716,7 +721,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         serverDomain: ServerDomain(
           domainName: serverDomain.domainName,
           zoneId: zoneId,
-          provider: DnsProviderType.cloudflare,
+          provider: dnsProviderType,
         ),
         dnsApiToken: token,
         currentStep: RecoveryStep.backblazeToken,
@@ -750,6 +755,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void clearAppConfig() {
     closeTimer();
     ProvidersController.clearProviders();
+    StagingOptions.verifyCertificate = false;
     repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }

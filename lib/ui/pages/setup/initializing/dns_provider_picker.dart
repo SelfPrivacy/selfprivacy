@@ -11,6 +11,8 @@ import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/utils/launch_url.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DnsProviderPicker extends StatefulWidget {
   const DnsProviderPicker({
@@ -65,6 +67,19 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
             pathToHow: 'how_digital_ocean_dns',
             image: Image.asset(
               'assets/images/logos/digital_ocean.png',
+              width: 150,
+            ),
+          ),
+        );
+
+      case DnsProviderType.desec:
+        return ProviderInputDataPage(
+          providerCubit: widget.formCubit,
+          providerInfo: ProviderPageInfo(
+            providerType: DnsProviderType.desec,
+            pathToHow: 'how_desec',
+            image: Image.asset(
+              'assets/images/logos/desec.svg',
               width: 150,
             ),
           ),
@@ -186,7 +201,7 @@ class ProviderSelectionPage extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
-                            color: const Color.fromARGB(255, 241, 215, 166),
+                            color: const Color.fromARGB(255, 244, 128, 31),
                           ),
                           child: SvgPicture.asset(
                             'assets/images/logos/cloudflare.svg',
@@ -230,7 +245,7 @@ class ProviderSelectionPage extends StatelessWidget {
                     // Outlined button that will open website
                     BrandOutlinedButton(
                       onPressed: () =>
-                          launchURL('https://dash.cloudflare.com/'),
+                          launchUrlString('https://dash.cloudflare.com/'),
                       title: 'initializing.select_provider_site_button'.tr(),
                     ),
                   ],
@@ -295,7 +310,71 @@ class ProviderSelectionPage extends StatelessWidget {
                     // Outlined button that will open website
                     BrandOutlinedButton(
                       onPressed: () =>
-                          launchURL('https://www.digitalocean.com'),
+                          launchUrlString('https://www.digitalocean.com'),
+                      title: 'initializing.select_provider_site_button'.tr(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            OutlinedCard(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: const Color.fromARGB(255, 245, 229, 82),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/images/logos/desec.svg',
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          'deSEC',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_price_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_price_free'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_payment_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_payment_text_do'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    BrandButton.rised(
+                      text: 'basis.select'.tr(),
+                      onPressed: () {
+                        serverInstallationCubit
+                            .setDnsProviderType(DnsProviderType.desec);
+                        callback(DnsProviderType.desec);
+                      },
+                    ),
+                    // Outlined button that will open website
+                    BrandOutlinedButton(
+                      onPressed: () => launchUrlString('https://desec.io/'),
                       title: 'initializing.select_provider_site_button'.tr(),
                     ),
                   ],

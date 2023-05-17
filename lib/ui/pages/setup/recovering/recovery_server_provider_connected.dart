@@ -46,9 +46,8 @@ class RecoveryServerProviderConnected extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               BrandButton.filled(
-                onPressed: formCubitState.isSubmitting
-                    ? null
-                    : () => context.read<ServerProviderFormCubit>().trySubmit(),
+                onPressed: () =>
+                    context.read<ServerProviderFormCubit>().trySubmit(),
                 child: Text('basis.continue'.tr()),
               ),
               const SizedBox(height: 16),

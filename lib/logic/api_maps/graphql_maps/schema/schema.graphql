@@ -76,7 +76,8 @@ type DeviceApiTokenMutationReturn implements MutationReturnInterface {
 
 enum DnsProvider {
   CLOUDFLARE,
-  DIGITALOCEAN
+  DIGITALOCEAN,
+  DESEC
 }
 
 type DnsRecord {

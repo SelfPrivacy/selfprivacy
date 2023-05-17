@@ -10,17 +10,18 @@ import 'package:hive/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
-import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
@@ -45,7 +46,7 @@ class ServerInstallationRepository {
   Future<ServerInstallationState> load() async {
     final String? providerApiToken = getIt<ApiConfigModel>().serverProviderKey;
     final String? location = getIt<ApiConfigModel>().serverLocation;
-    final String? cloudflareToken = getIt<ApiConfigModel>().dnsProviderKey;
+    final String? dnsApiToken = getIt<ApiConfigModel>().dnsProviderKey;
     final String? serverTypeIdentificator = getIt<ApiConfigModel>().serverType;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
     final DnsProviderType? dnsProvider = getIt<ApiConfigModel>().dnsProvider;
@@ -78,10 +79,11 @@ class ServerInstallationRepository {
     }
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
+      StagingOptions.verifyCertificate = true;
       return ServerInstallationFinished(
         providerApiToken: providerApiToken!,
         serverTypeIdentificator: serverTypeIdentificator ?? '',
-        dnsApiToken: cloudflareToken!,
+        dnsApiToken: dnsApiToken!,
         serverDomain: serverDomain!,
         backblazeCredential: backblazeCredential!,
         serverDetails: serverDetails!,
@@ -98,14 +100,14 @@ class ServerInstallationRepository {
         serverDomain != null) {
       return ServerInstallationRecovery(
         providerApiToken: providerApiToken,
-        dnsApiToken: cloudflareToken,
+        dnsApiToken: dnsApiToken,
         serverDomain: serverDomain,
         backblazeCredential: backblazeCredential,
         serverDetails: serverDetails,
         rootUser: box.get(BNames.rootUser),
         currentStep: _getCurrentRecoveryStep(
           providerApiToken,
-          cloudflareToken,
+          dnsApiToken,
           serverDomain,
           serverDetails,
         ),
@@ -115,7 +117,7 @@ class ServerInstallationRepository {
 
     return ServerInstallationNotFinished(
       providerApiToken: providerApiToken,
-      dnsApiToken: cloudflareToken,
+      dnsApiToken: dnsApiToken,
       serverDomain: serverDomain,
       backblazeCredential: backblazeCredential,
       serverDetails: serverDetails,
@@ -603,6 +605,10 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
+  Future<void> saveDnsProviderType(final DnsProvider type) async {
+    await getIt<ApiConfigModel>().storeDnsProviderType(type);
+  }
+
   Future<void> saveBackblazeKey(
     final BackblazeCredential backblazeCredential,
   ) async {
@@ -618,7 +624,7 @@ class ServerInstallationRepository {
     await getIt<ApiConfigModel>().storeDnsProviderKey(key);
   }
 
-  Future<void> deleteCloudFlareKey() async {
+  Future<void> deleteDnsProviderKey() async {
     await box.delete(BNames.cloudFlareKey);
     getIt<ApiConfigModel>().init();
   }

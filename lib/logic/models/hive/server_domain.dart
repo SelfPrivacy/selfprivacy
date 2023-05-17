@@ -31,12 +31,16 @@ enum DnsProviderType {
   @HiveField(1)
   cloudflare,
   @HiveField(2)
+  desec,
+  @HiveField(3)
   digitalOcean;
 
   factory DnsProviderType.fromGraphQL(final Enum$DnsProvider provider) {
     switch (provider) {
       case Enum$DnsProvider.CLOUDFLARE:
         return cloudflare;
+      case Enum$DnsProvider.DESEC:
+        return desec;
       case Enum$DnsProvider.DIGITALOCEAN:
         return digitalOcean;
       default:

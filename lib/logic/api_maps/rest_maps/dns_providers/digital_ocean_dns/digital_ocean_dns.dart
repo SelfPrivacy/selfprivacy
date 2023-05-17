@@ -171,61 +171,67 @@ class DigitalOceanDnsApi extends DnsProviderApi {
     return allRecords;
   }
 
+  Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
+    final ServerDomain domain,
+    final String ip4,
+    final String dkimPublicKey,
+  );
+
   @override
-  List<DesiredDnsRecord> getDesiredDnsRecords({
+  List<DesiredDnsRecord> getDesiredDnsRecords(
     final String? domainName,
-    final String? ipAddress,
+    final String? ip4,
     final String? dkimPublicKey,
-  }) {
-    if (domainName == null || ipAddress == null) {
+  ) {
+    if (domainName == null || ip4 == null) {
       return [];
     }
     return [
       DesiredDnsRecord(
         name: '@',
-        content: ipAddress,
+        content: ip4,
         description: 'record.root',
         displayName: domainName,
       ),
       DesiredDnsRecord(
         name: 'api',
-        content: ipAddress,
+        content: ip4,
         description: 'record.api',
         displayName: 'api.$domainName',
       ),
       DesiredDnsRecord(
         name: 'cloud',
-        content: ipAddress,
+        content: ip4,
         description: 'record.cloud',
         displayName: 'cloud.$domainName',
       ),
       DesiredDnsRecord(
         name: 'git',
-        content: ipAddress,
+        content: ip4,
         description: 'record.git',
         displayName: 'git.$domainName',
       ),
       DesiredDnsRecord(
         name: 'meet',
-        content: ipAddress,
+        content: ip4,
         description: 'record.meet',
         displayName: 'meet.$domainName',
       ),
       DesiredDnsRecord(
         name: 'social',
-        content: ipAddress,
+        content: ip4,
         description: 'record.social',
         displayName: 'social.$domainName',
       ),
       DesiredDnsRecord(
         name: 'password',
-        content: ipAddress,
+        content: ip4,
         description: 'record.password',
         displayName: 'password.$domainName',
       ),
       DesiredDnsRecord(
         name: 'vpn',
-        content: ipAddress,
+        content: ip4,
         description: 'record.vpn',
         displayName: 'vpn.$domainName',
       ),
@@ -245,7 +251,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
       ),
       DesiredDnsRecord(
         name: '@',
-        content: 'v=spf1 a mx ip4:$ipAddress -all',
+        content: 'v=spf1 a mx ip4:$ip4 -all',
         description: 'record.spf',
         type: 'TXT',
         category: DnsRecordsCategory.email,

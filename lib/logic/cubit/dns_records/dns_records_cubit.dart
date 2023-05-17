@@ -25,12 +25,14 @@ class DnsRecordsCubit
     emit(
       DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
-        dnsRecords:
-            ProvidersController.currentDnsProvider!.getDesiredDnsRecords(
-          domainName: serverInstallationCubit.state.serverDomain?.domainName,
-          dkimPublicKey: '',
-          ipAddress: '',
-        ),
+        dnsRecords: ApiController.currentDnsProviderApiFactory
+                ?.getDnsProvider()
+                .getDesiredDnsRecords(
+                  serverInstallationCubit.state.serverDomain?.domainName,
+                  '',
+                  '',
+                ) ??
+            [],
       ),
     );
 
@@ -38,68 +40,32 @@ class DnsRecordsCubit
       final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
       final String? ipAddress =
           serverInstallationCubit.state.serverDetails?.ip4;
-      if (domain != null && ipAddress != null) {
-        final List<DnsRecord> records = await ProvidersController
-            .currentDnsProvider!
-            .getDnsRecords(domain: domain);
-        final String? dkimPublicKey =
-            extractDkimRecord(await api.getDnsRecords())?.content;
-        final List<DesiredDnsRecord> desiredRecords =
-            ProvidersController.currentDnsProvider!.getDesiredDnsRecords(
-          domainName: domain.domainName,
-          ipAddress: ipAddress,
-          dkimPublicKey: dkimPublicKey,
-        );
-        final List<DesiredDnsRecord> foundRecords = [];
-        for (final DesiredDnsRecord desiredRecord in desiredRecords) {
-          if (desiredRecord.description == 'record.dkim') {
-            final DnsRecord foundRecord = records.firstWhere(
-              (final r) =>
-                  r.name == desiredRecord.name && r.type == desiredRecord.type,
-              orElse: () => DnsRecord(
-                name: desiredRecord.name,
-                type: desiredRecord.type,
-                content: '',
-                ttl: 800,
-                proxied: false,
-              ),
-            );
-            // remove all spaces and tabulators from
-            // the foundRecord.content and the record.content
-            // to compare them
-            final String? foundContent =
-                foundRecord.content?.replaceAll(RegExp(r'\s+'), '');
-            final String content =
-                desiredRecord.content.replaceAll(RegExp(r'\s+'), '');
-            if (foundContent == content) {
-              foundRecords.add(desiredRecord.copyWith(isSatisfied: true));
-            } else {
-              foundRecords.add(desiredRecord.copyWith(isSatisfied: false));
-            }
-          } else {
-            if (records.any(
-              (final r) =>
-                  r.name == desiredRecord.name &&
-                  r.type == desiredRecord.type &&
-                  r.content == desiredRecord.content,
-            )) {
-              foundRecords.add(desiredRecord.copyWith(isSatisfied: true));
-            } else {
-              foundRecords.add(desiredRecord.copyWith(isSatisfied: false));
-            }
-          }
-        }
-        emit(
-          DnsRecordsState(
-            dnsRecords: foundRecords,
-            dnsState: foundRecords.any((final r) => r.isSatisfied == false)
-                ? DnsRecordsStatus.error
-                : DnsRecordsStatus.good,
-          ),
-        );
-      } else {
+      if (domain == null && ipAddress == null) {
         emit(const DnsRecordsState());
+        return;
       }
+
+      final foundRecords = await ApiController.currentDnsProviderApiFactory!
+          .getDnsProvider()
+          .validateDnsRecords(
+            domain!,
+            ipAddress!,
+            extractDkimRecord(await api.getDnsRecords())?.content ?? '',
+          );
+
+      if (!foundRecords.success || foundRecords.data.isEmpty) {
+        emit(const DnsRecordsState());
+        return;
+      }
+
+      emit(
+        DnsRecordsState(
+          dnsRecords: foundRecords.data,
+          dnsState: foundRecords.data.any((final r) => r.isSatisfied == false)
+              ? DnsRecordsStatus.error
+              : DnsRecordsStatus.good,
+        ),
+      );
     }
   }
 

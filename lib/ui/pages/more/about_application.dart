@@ -50,7 +50,7 @@ class AboutApplicationPage extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: () => launchUrl(
-                  Uri.parse('https://selfprivacy.ru/privacy-policy'),
+                  Uri.parse('https://selfprivacy.org/privacy-policy/'),
                   mode: LaunchMode.externalApplication,
                 ),
                 child: Text('about_application_page.privacy_policy'.tr()),

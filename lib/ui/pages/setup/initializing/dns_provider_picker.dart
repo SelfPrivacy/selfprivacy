@@ -2,12 +2,10 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
@@ -177,72 +175,6 @@ class ProviderSelectionPage extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
-                            color: const Color.fromARGB(255, 244, 128, 31),
-                          ),
-                          child: SvgPicture.asset(
-                            'assets/images/logos/cloudflare.svg',
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          'Cloudflare',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'initializing.select_provider_price_title'.tr(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      'initializing.select_provider_price_free'.tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'initializing.select_provider_payment_title'.tr(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      'initializing.select_provider_payment_text_cloudflare'
-                          .tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
-                    BrandButton.rised(
-                      text: 'basis.select'.tr(),
-                      onPressed: () {
-                        serverInstallationCubit
-                            .setDnsProviderType(DnsProvider.cloudflare);
-                        callback(DnsProvider.cloudflare);
-                      },
-                    ),
-                    // Outlined button that will open website
-                    BrandOutlinedButton(
-                      onPressed: () =>
-                          launchURL('https://dash.cloudflare.com/'),
-                      title: 'initializing.select_provider_site_button'.tr(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            OutlinedCard(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
                             color: const Color.fromARGB(255, 245, 229, 82),
                           ),
                           child: SvgPicture.asset(
@@ -266,15 +198,6 @@ class ProviderSelectionPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      'initializing.select_provider_payment_title'.tr(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      'initializing.select_provider_payment_text_do'.tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
                     BrandButton.rised(
                       text: 'basis.select'.tr(),
                       onPressed: () {
@@ -286,6 +209,62 @@ class ProviderSelectionPage extends StatelessWidget {
                     // Outlined button that will open website
                     BrandOutlinedButton(
                       onPressed: () => launchURL('https://desec.io/'),
+                      title: 'initializing.select_provider_site_button'.tr(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            OutlinedCard(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: const Color.fromARGB(255, 244, 128, 31),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/images/logos/cloudflare.svg',
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          'Cloudflare',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_price_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_price_free'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    BrandButton.rised(
+                      text: 'basis.select'.tr(),
+                      onPressed: () {
+                        serverInstallationCubit
+                            .setDnsProviderType(DnsProvider.cloudflare);
+                        callback(DnsProvider.cloudflare);
+                      },
+                    ),
+                    // Outlined button that will open website
+                    BrandOutlinedButton(
+                      onPressed: () =>
+                          launchURL('https://dash.cloudflare.com/'),
                       title: 'initializing.select_provider_site_button'.tr(),
                     ),
                   ],

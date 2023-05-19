@@ -2,7 +2,7 @@
 
 SelfPrivacy — is a platform on your cloud hosting, that allows to deploy your own private services and control them using mobile application.
 
-To use this application, you'll be required to create accounts of different service providers. Please reffer to this manual: https://selfprivacy.org/en/second
+To use this application, you'll be required to create accounts of different service providers. Please reffer to this manual: https://selfprivacy.org/docs/getting-started/
 
 Application will do the following things for you:
 

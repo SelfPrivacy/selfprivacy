@@ -5,5 +5,5 @@
 4. Click on the round "plus" button in the upper right corner.
 5. **"Generate New Token"** dialogue must be displayed. Enter any **Token name** you wish. *Advanced settings* are not required, so do not touch anything there.
 6. Click on **Save**.
-7. Make sure you **save** the token's **secret value** as it will only be displayed once.
+7. Make sure you save the token's "**secret value**" as it will only be displayed once.
 8. Now you can safely **close** the dialogue.

@@ -45,7 +45,6 @@ class DesecApi extends DnsProviderApi {
   @override
   String rootAddress = 'https://desec.io/api/v1/domains/';
 
-  @override
   Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
@@ -93,40 +92,16 @@ class DesecApi extends DnsProviderApi {
     );
   }
 
-  @override
-  Future<String?> getZoneId(final String domain) async => domain;
-
-  @override
-  Future<GenericResult<void>> removeSimilarRecords({
+  Future<GenericResult<void>> updateRecords({
     required final ServerDomain domain,
-    final String? ip4,
+    required final List<dynamic> records,
   }) async {
     final String domainName = domain.domainName;
     final String url = '/$domainName/rrsets/';
-    final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
 
     final Dio client = await getClient();
     try {
-      final List<dynamic> bulkRecords = [];
-      for (final DnsRecord record in listDnsRecords) {
-        bulkRecords.add(
-          {
-            'subname': record.name,
-            'type': record.type,
-            'ttl': record.ttl,
-            'records': [],
-          },
-        );
-      }
-      bulkRecords.add(
-        {
-          'subname': 'selector._domainkey',
-          'type': 'TXT',
-          'ttl': 18000,
-          'records': [],
-        },
-      );
-      await client.put(url, data: bulkRecords);
+      await client.put(url, data: records);
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
@@ -142,13 +117,12 @@ class DesecApi extends DnsProviderApi {
     return GenericResult(success: true, data: null);
   }
 
-  @override
-  Future<List<DnsRecord>> getDnsRecords({
+  Future<GenericResult<List<dynamic>>> getDnsRecords({
     required final ServerDomain domain,
   }) async {
-    Response response;
+    Response? response;
     final String domainName = domain.domainName;
-    final List<DnsRecord> allRecords = <DnsRecord>[];
+    List allRecords = [];
 
     final String url = '/$domainName/rrsets/';
 
@@ -156,59 +130,33 @@ class DesecApi extends DnsProviderApi {
     try {
       response = await client.get(url);
       await Future.delayed(const Duration(seconds: 1));
-      final List records = response.data;
-
-      for (final record in records) {
-        final String? content = (record['records'] is List<dynamic>)
-            ? record['records'][0]
-            : record['records'];
-        allRecords.add(
-          DnsRecord(
-            name: record['subname'],
-            type: record['type'],
-            content: content,
-            ttl: record['ttl'],
-          ),
-        );
-      }
+      allRecords = response.data;
     } catch (e) {
       print(e);
+      return GenericResult(
+        data: allRecords,
+        success: false,
+        message: e.toString(),
+        code: response?.statusCode,
+      );
     } finally {
       close(client);
     }
 
-    return allRecords;
+    return GenericResult(data: allRecords, success: true);
   }
 
-  @override
-  Future<GenericResult<void>> createMultipleDnsRecords({
+  Future<GenericResult<void>> createRecords({
     required final ServerDomain domain,
-    final String? ip4,
+    required final List<dynamic> records,
   }) async {
     final String domainName = domain.domainName;
-    final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
+    final String url = '/$domainName/rrsets/';
 
     final Dio client = await getClient();
     try {
-      final List<dynamic> bulkRecords = [];
-      for (final DnsRecord record in listDnsRecords) {
-        bulkRecords.add(
-          {
-            'subname': record.name,
-            'type': record.type,
-            'ttl': record.ttl,
-            'records': [extractContent(record)],
-          },
-        );
-      }
-      await client.post(
-        '/$domainName/rrsets/',
-        data: bulkRecords,
-      );
+      await client.post(url, data: records);
       await Future.delayed(const Duration(seconds: 1));
-    } on DioError catch (e) {
-      print(e.message);
-      rethrow;
     } catch (e) {
       print(e);
       return GenericResult(
@@ -221,53 +169,6 @@ class DesecApi extends DnsProviderApi {
     }
 
     return GenericResult(success: true, data: null);
-  }
-
-  List<DnsRecord> projectDnsRecords(
-    final String? domainName,
-    final String? ip4,
-  ) {
-    final DnsRecord domainA = DnsRecord(type: 'A', name: '', content: ip4);
-
-    final DnsRecord mx =
-        DnsRecord(type: 'MX', name: '', content: '10 $domainName.');
-    final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
-    final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
-    final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
-    final DnsRecord meetA = DnsRecord(type: 'A', name: 'meet', content: ip4);
-    final DnsRecord passwordA =
-        DnsRecord(type: 'A', name: 'password', content: ip4);
-    final DnsRecord socialA =
-        DnsRecord(type: 'A', name: 'social', content: ip4);
-    final DnsRecord vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
-
-    final DnsRecord txt1 = DnsRecord(
-      type: 'TXT',
-      name: '_dmarc',
-      content: '"v=DMARC1; p=none"',
-      ttl: 18000,
-    );
-
-    final DnsRecord txt2 = DnsRecord(
-      type: 'TXT',
-      name: '',
-      content: '"v=spf1 a mx ip4:$ip4 -all"',
-      ttl: 18000,
-    );
-
-    return <DnsRecord>[
-      domainA,
-      apiA,
-      cloudA,
-      gitA,
-      meetA,
-      passwordA,
-      socialA,
-      mx,
-      txt1,
-      txt2,
-      vpn
-    ];
   }
 
   String? extractContent(final DnsRecord record) {
@@ -277,32 +178,6 @@ class DesecApi extends DnsProviderApi {
     }
 
     return content;
-  }
-
-  @override
-  Future<void> setDnsRecord(
-    final DnsRecord record,
-    final ServerDomain domain,
-  ) async {
-    final String url = '/${domain.domainName}/rrsets/';
-
-    final Dio client = await getClient();
-    try {
-      await client.post(
-        url,
-        data: {
-          'subname': record.name,
-          'type': record.type,
-          'ttl': record.ttl,
-          'records': [extractContent(record)],
-        },
-      );
-      await Future.delayed(const Duration(seconds: 1));
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
-    }
   }
 
   @override

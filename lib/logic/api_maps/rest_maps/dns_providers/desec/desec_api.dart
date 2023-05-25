@@ -20,10 +20,6 @@ class DesecApi extends DnsProviderApi {
   final String? customToken;
 
   @override
-  RegExp getApiTokenValidation() =>
-      RegExp(r'\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
-
-  @override
   BaseOptions get options {
     final BaseOptions options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {

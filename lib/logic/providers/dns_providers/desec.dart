@@ -1,4 +1,3 @@
-import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desec/desec_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -219,7 +218,7 @@ class DesecDnsProvider extends DnsProvider {
     );
 
     return GenericResult(
-      success: true,
+      success: result.success,
       data: null,
     );
   }

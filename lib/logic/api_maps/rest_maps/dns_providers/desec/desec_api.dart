@@ -181,25 +181,35 @@ class DesecApi extends DnsProviderApi {
   }
 
   @override
-  Future<List<String>> domainList() async {
-    List<String> domains = [];
+  Future<GenericResult<List>> getDomains() async {
+    List domains = [];
 
+    late final Response? response;
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(
+      response = await client.get(
         '',
       );
       await Future.delayed(const Duration(seconds: 1));
-      domains = response.data
-          .map<String>((final el) => el['name'] as String)
-          .toList();
+      domains = response.data;
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: domains,
+        code: response?.statusCode,
+        message: response?.statusMessage,
+      );
     } finally {
       close(client);
     }
 
-    return domains;
+    return GenericResult(
+      success: true,
+      data: domains,
+      code: response.statusCode,
+      message: response.statusMessage,
+    );
   }
 
   @override

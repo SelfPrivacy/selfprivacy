@@ -217,14 +217,10 @@ class DesecDnsProvider extends DnsProvider {
       ],
     );
 
-    if (!result.success) {
-      return GenericResult(
-        success: result.success,
-        data: null,
-        code: result.code,
-        message: result.message,
-      );
-    }
+    return GenericResult(
+      success: true,
+      data: null,
+    );
   }
 
   String? extractContent(final DnsRecord record) {
@@ -234,5 +230,30 @@ class DesecDnsProvider extends DnsProvider {
     }
 
     return content;
+  }
+
+  @override
+  Future<GenericResult<List<String>>> domainList() async {
+    List<String> domains = [];
+    final result = await _adapter.api().getDomains();
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: domains,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    domains = result.data
+        .map<String>(
+          (final el) => el['name'] as String,
+        )
+        .toList();
+
+    return GenericResult(
+      success: true,
+      data: domains,
+    );
   }
 }

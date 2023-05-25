@@ -20,10 +20,6 @@ class CloudflareApi extends DnsProviderApi {
   final String? customToken;
 
   @override
-  RegExp getApiTokenValidation() =>
-      RegExp(r'\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
-
-  @override
   BaseOptions get options {
     final BaseOptions options = BaseOptions(baseUrl: rootAddress);
     if (isWithToken) {
@@ -45,7 +41,6 @@ class CloudflareApi extends DnsProviderApi {
   @override
   String rootAddress = 'https://api.cloudflare.com/client/v4';
 
-  @override
   Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
@@ -92,27 +87,32 @@ class CloudflareApi extends DnsProviderApi {
     );
   }
 
-  @override
-  Future<String?> getZoneId(final String domain) async {
-    String? zoneId;
+  Future<GenericResult<List<dynamic>>> getZones(final String domain) async {
+    List zones = [];
 
+    late final Response? response;
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(
+      response = await client.get(
         '/zones',
         queryParameters: {'name': domain},
       );
-      zoneId = response.data['result'][0]['id'];
+      zones = response.data['result'];
     } catch (e) {
       print(e);
+      GenericResult(
+        success: false,
+        data: zones,
+        code: response?.statusCode,
+        message: response?.statusMessage,
+      );
     } finally {
       close(client);
     }
 
-    return zoneId;
+    return GenericResult(success: true, data: zones);
   }
 
-  @override
   Future<GenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
     final String? ip4,
@@ -151,7 +151,6 @@ class CloudflareApi extends DnsProviderApi {
     return GenericResult(success: true, data: null);
   }
 
-  @override
   Future<List<DnsRecord>> getDnsRecords({
     required final ServerDomain domain,
   }) async {
@@ -189,7 +188,6 @@ class CloudflareApi extends DnsProviderApi {
     return allRecords;
   }
 
-  @override
   Future<GenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
     final String? ip4,
@@ -228,7 +226,6 @@ class CloudflareApi extends DnsProviderApi {
     return GenericResult(success: true, data: null);
   }
 
-  @override
   Future<void> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
@@ -249,7 +246,6 @@ class CloudflareApi extends DnsProviderApi {
     }
   }
 
-  @override
   Future<List<String>> domainList() async {
     final String url = '$rootAddress/zones';
     List<String> domains = [];
@@ -272,7 +268,6 @@ class CloudflareApi extends DnsProviderApi {
     return domains;
   }
 
-  @override
   Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
     final ServerDomain domain,
     final String ip4,
@@ -333,7 +328,6 @@ class CloudflareApi extends DnsProviderApi {
     );
   }
 
-  @override
   List<DesiredDnsRecord> getDesiredDnsRecords(
     final String? domainName,
     final String? ip4,
@@ -412,6 +406,53 @@ class CloudflareApi extends DnsProviderApi {
           type: 'TXT',
           category: DnsRecordsCategory.email,
         ),
+    ];
+  }
+
+  List<DnsRecord> getProjectDnsRecords(
+    final String? domainName,
+    final String? ip4,
+  ) {
+    final DnsRecord domainA =
+        DnsRecord(type: 'A', name: domainName, content: ip4);
+
+    final DnsRecord mx = DnsRecord(type: 'MX', name: '@', content: domainName);
+    final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
+    final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
+    final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
+    final DnsRecord meetA = DnsRecord(type: 'A', name: 'meet', content: ip4);
+    final DnsRecord passwordA =
+        DnsRecord(type: 'A', name: 'password', content: ip4);
+    final DnsRecord socialA =
+        DnsRecord(type: 'A', name: 'social', content: ip4);
+    final DnsRecord vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
+
+    final DnsRecord txt1 = DnsRecord(
+      type: 'TXT',
+      name: '_dmarc',
+      content: 'v=DMARC1; p=none',
+      ttl: 18000,
+    );
+
+    final DnsRecord txt2 = DnsRecord(
+      type: 'TXT',
+      name: domainName,
+      content: 'v=spf1 a mx ip4:$ip4 -all',
+      ttl: 18000,
+    );
+
+    return <DnsRecord>[
+      domainA,
+      apiA,
+      cloudA,
+      gitA,
+      meetA,
+      passwordA,
+      socialA,
+      mx,
+      txt1,
+      txt2,
+      vpn
     ];
   }
 }

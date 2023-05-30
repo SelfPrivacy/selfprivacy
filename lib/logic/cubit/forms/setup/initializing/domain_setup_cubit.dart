@@ -1,4 +1,5 @@
 import 'package:cubit_form/cubit_form.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
@@ -10,12 +11,12 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));
-    final List<String> list =
+    final GenericResult<List<String>> result =
         await ProvidersController.currentDnsProvider!.domainList();
-    if (list.isEmpty) {
+    if (!result.success || result.data.isEmpty) {
       emit(Empty());
-    } else if (list.length == 1) {
-      emit(Loaded(list.first));
+    } else if (result.data.length == 1) {
+      emit(Loaded(result.data.first));
     } else {
       emit(MoreThenOne());
     }
@@ -27,13 +28,13 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
     emit(Loading(LoadingTypes.saving));
 
-    final String? zoneId =
+    final GenericResult<String?> zoneIdResult =
         await ProvidersController.currentDnsProvider!.getZoneId(domainName);
 
-    if (zoneId != null) {
+    if (zoneIdResult.success || zoneIdResult.data != null) {
       final ServerDomain domain = ServerDomain(
         domainName: domainName,
-        zoneId: zoneId,
+        zoneId: zoneIdResult.data!,
         provider: DnsProviderType.cloudflare,
       );
 

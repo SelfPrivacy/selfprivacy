@@ -25,14 +25,13 @@ class DnsRecordsCubit
     emit(
       DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
-        dnsRecords: ApiController.currentDnsProviderApiFactory
-                ?.getDnsProvider()
-                .getDesiredDnsRecords(
+        dnsRecords:
+            ProvidersController.currentDnsProvider?.getDesiredDnsRecords(
                   serverInstallationCubit.state.serverDomain?.domainName,
                   '',
                   '',
                 ) ??
-            [],
+                [],
       ),
     );
 
@@ -45,13 +44,12 @@ class DnsRecordsCubit
         return;
       }
 
-      final foundRecords = await ApiController.currentDnsProviderApiFactory!
-          .getDnsProvider()
-          .validateDnsRecords(
-            domain!,
-            ipAddress!,
-            extractDkimRecord(await api.getDnsRecords())?.content ?? '',
-          );
+      final foundRecords =
+          await ProvidersController.currentDnsProvider!.validateDnsRecords(
+        domain!,
+        ipAddress!,
+        extractDkimRecord(await api.getDnsRecords())?.content ?? '',
+      );
 
       if (!foundRecords.success || foundRecords.data.isEmpty) {
         emit(const DnsRecordsState());
@@ -89,10 +87,10 @@ class DnsRecordsCubit
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
     final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
     final String? ipAddress = serverInstallationCubit.state.serverDetails?.ip4;
-    await ProvidersController.currentDnsProvider!.removeSimilarRecords(
+    await ProvidersController.currentDnsProvider!.removeDomainRecords(
       domain: domain!,
     );
-    await ProvidersController.currentDnsProvider!.createMultipleDnsRecords(
+    await ProvidersController.currentDnsProvider!.createDomainRecords(
       domain: domain,
       ip4: ipAddress,
     );

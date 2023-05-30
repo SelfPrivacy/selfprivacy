@@ -10,8 +10,6 @@ import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
-import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DnsProviderPicker extends StatefulWidget {

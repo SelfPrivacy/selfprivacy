@@ -12,8 +12,6 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -173,16 +171,14 @@ class ServerInstallationRepository {
   }
 
   Future<String?> getDomainId(final String token, final String domain) async {
-    final DnsProviderApi dnsProviderApi =
-        ApiController.currentDnsProviderApiFactory!.getDnsProvider(
-      settings: DnsProviderApiSettings(
-        isWithToken: false,
-        customToken: token,
-      ),
-    );
-
-    final String? domainId = await dnsProviderApi.getZoneId(domain);
-    return domainId;
+    final result =
+        await ProvidersController.currentDnsProvider!.tryInitApiByToken(token);
+    return result.success
+        ? (await ProvidersController.currentDnsProvider!.getZoneId(
+            domain,
+          ))
+            .data
+        : null;
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(
@@ -257,7 +253,7 @@ class ServerInstallationRepository {
     }
 
     final GenericResult removingResult =
-        await ProvidersController.currentDnsProvider!.removeSimilarRecords(
+        await ProvidersController.currentDnsProvider!.removeDomainRecords(
       ip4: serverDetails.ip4,
       domain: domain,
     );
@@ -270,9 +266,8 @@ class ServerInstallationRepository {
     bool createdSuccessfully = false;
     String errorMessage = 'domain.error'.tr();
     try {
-      final GenericResult createResult = await ProvidersController
-          .currentDnsProvider!
-          .createMultipleDnsRecords(
+      final GenericResult createResult =
+          await ProvidersController.currentDnsProvider!.createDomainRecords(
         ip4: serverDetails.ip4,
         domain: domain,
       );
@@ -605,10 +600,6 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
-  Future<void> saveDnsProviderType(final DnsProvider type) async {
-    await getIt<ApiConfigModel>().storeDnsProviderType(type);
-  }
-
   Future<void> saveBackblazeKey(
     final BackblazeCredential backblazeCredential,
   ) async {
@@ -683,7 +674,7 @@ class ServerInstallationRepository {
 
     final GenericResult<void> removalResult = await ProvidersController
         .currentDnsProvider!
-        .removeSimilarRecords(domain: serverDomain);
+        .removeDomainRecords(domain: serverDomain);
 
     if (!removalResult.success) {
       getIt<NavigationService>().showSnackBar('modals.dns_removal_error'.tr());

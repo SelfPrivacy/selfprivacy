@@ -19,7 +19,6 @@ class DigitalOceanDnsApi extends DnsProviderApi {
 
   final String? customToken;
 
-  @override
   RegExp getApiTokenValidation() =>
       RegExp(r'\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
 
@@ -45,7 +44,6 @@ class DigitalOceanDnsApi extends DnsProviderApi {
   @override
   String rootAddress = 'https://api.digitalocean.com/v2';
 
-  @override
   Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;

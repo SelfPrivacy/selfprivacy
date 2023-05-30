@@ -9,8 +9,6 @@ import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -258,7 +256,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
 
     if (!result.success && result.data != null) {
-      bool dialoguesResolved = false;
       CallbackDialogueBranching branching = result.data!;
       //while (!dialoguesResolved) {
       showPopUpAlert(
@@ -268,7 +265,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         actionButtonOnPressed: () async {
           final branchingResult = await branching.choices[1].callback!();
           if (branchingResult.data == null) {
-            dialoguesResolved = true;
             return;
           }
 
@@ -278,7 +274,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         cancelButtonOnPressed: () async {
           final branchingResult = await branching.choices[0].callback!();
           if (branchingResult.data == null) {
-            dialoguesResolved = true;
             return;
           }
 

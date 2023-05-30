@@ -19,51 +19,45 @@ class RecoveryServerProviderConnected extends StatelessWidget {
       create: (final BuildContext context) =>
           ServerProviderFormCubit(appConfig),
       child: Builder(
-        builder: (final BuildContext context) {
-          final FormCubitState formCubitState =
-              context.watch<ServerProviderFormCubit>().state;
-
-          return BrandHeroScreen(
-            heroTitle: 'recovering.server_provider_connected'.tr(),
-            heroSubtitle: 'recovering.server_provider_connected_description'.tr(
-              args: [appConfig.state.serverDomain?.domainName ?? 'your domain'],
+        builder: (final BuildContext context) => BrandHeroScreen(
+          heroTitle: 'recovering.server_provider_connected'.tr(),
+          heroSubtitle: 'recovering.server_provider_connected_description'.tr(
+            args: [appConfig.state.serverDomain?.domainName ?? 'your domain'],
+          ),
+          hasBackButton: true,
+          hasFlashButton: false,
+          ignoreBreakpoints: true,
+          hasSupportDrawer: true,
+          onBackButtonPressed: () {
+            Navigator.of(context).popUntil((final route) => route.isFirst);
+          },
+          children: [
+            CubitFormTextField(
+              formFieldCubit: context.read<ServerProviderFormCubit>().apiKey,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText:
+                    'recovering.server_provider_connected_placeholder'.tr(),
+              ),
             ),
-            hasBackButton: true,
-            hasFlashButton: false,
-            ignoreBreakpoints: true,
-            hasSupportDrawer: true,
-            onBackButtonPressed: () {
-              Navigator.of(context).popUntil((final route) => route.isFirst);
-            },
-            children: [
-              CubitFormTextField(
-                formFieldCubit: context.read<ServerProviderFormCubit>().apiKey,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText:
-                      'recovering.server_provider_connected_placeholder'.tr(),
-                ),
+            const SizedBox(height: 16),
+            BrandButton.filled(
+              onPressed: () =>
+                  context.read<ServerProviderFormCubit>().trySubmit(),
+              child: Text('basis.continue'.tr()),
+            ),
+            const SizedBox(height: 16),
+            Builder(
+              builder: (final context) => BrandButton.text(
+                title: 'initializing.how'.tr(),
+                onPressed: () => context.read<SupportSystemCubit>().showArticle(
+                      article: 'how_hetzner',
+                      context: context,
+                    ),
               ),
-              const SizedBox(height: 16),
-              BrandButton.filled(
-                onPressed: () =>
-                    context.read<ServerProviderFormCubit>().trySubmit(),
-                child: Text('basis.continue'.tr()),
-              ),
-              const SizedBox(height: 16),
-              Builder(
-                builder: (final context) => BrandButton.text(
-                  title: 'initializing.how'.tr(),
-                  onPressed: () =>
-                      context.read<SupportSystemCubit>().showArticle(
-                            article: 'how_hetzner',
-                            context: context,
-                          ),
-                ),
-              ),
-            ],
-          );
-        },
+            ),
+          ],
+        ),
       ),
     );
   }

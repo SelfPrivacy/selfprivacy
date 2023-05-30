@@ -1,7 +1,7 @@
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/cloudflare.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/desec.dart';
-import 'package:selfprivacy/logic/providers/dns_providers/digital_ocean.dart';
+import 'package:selfprivacy/logic/providers/dns_providers/digital_ocean_dns.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 

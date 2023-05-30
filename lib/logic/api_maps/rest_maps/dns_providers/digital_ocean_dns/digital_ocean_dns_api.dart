@@ -92,28 +92,19 @@ class DigitalOceanDnsApi extends DnsProviderApi {
     );
   }
 
-  @override
-  // TODO: Remove from DnsProviderInterface, stub for now
-  Future<String?> getZoneId(final String domain) async => domain;
-
-  @override
   Future<GenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
-    final String? ip4,
+    required final List records,
   }) async {
     final String domainName = domain.domainName;
 
     final Dio client = await getClient();
     try {
-      const String ignoreType = 'SOA';
       final List<Future> allDeleteFutures = [];
-      final List<DnsRecord> records = await getDnsRecords(domain: domain);
       for (final record in records) {
-        if (record.type != ignoreType) {
-          allDeleteFutures.add(
-            client.delete('/domains/$domainName/records/${record.id}'),
-          );
-        }
+        allDeleteFutures.add(
+          client.delete('/domains/$domainName/records/${record.id}'),
+        );
       }
       await Future.wait(allDeleteFutures);
     } catch (e) {
@@ -130,13 +121,12 @@ class DigitalOceanDnsApi extends DnsProviderApi {
     return GenericResult(success: true, data: null);
   }
 
-  @override
-  Future<List<DnsRecord>> getDnsRecords({
+  Future<GenericResult<List>> getDnsRecords({
     required final ServerDomain domain,
   }) async {
     Response response;
     final String domainName = domain.domainName;
-    final List<DnsRecord> allRecords = <DnsRecord>[];
+    List allRecords = [];
 
     /// Default amount is 20, but we will eventually overflow it,
     /// so I hardcode it to the maximum available amount in advance just in case
@@ -148,144 +138,38 @@ class DigitalOceanDnsApi extends DnsProviderApi {
     final Dio client = await getClient();
     try {
       response = await client.get(url);
-      final List records = response.data['domain_records'] ?? [];
-
-      for (final record in records) {
-        allRecords.add(
-          DnsRecord(
-            id: record['id'],
-            name: record['name'],
-            type: record['type'],
-            content: record['data'],
-            ttl: record['ttl'],
-            proxied: false,
-          ),
-        );
-      }
+      allRecords = response.data['domain_records'] ?? [];
     } catch (e) {
       print(e);
+      GenericResult(
+        data: allRecords,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return allRecords;
+    return GenericResult(data: allRecords, success: true);
   }
 
-  Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
-    final ServerDomain domain,
-    final String ip4,
-    final String dkimPublicKey,
-  );
-
-  @override
-  List<DesiredDnsRecord> getDesiredDnsRecords(
-    final String? domainName,
-    final String? ip4,
-    final String? dkimPublicKey,
-  ) {
-    if (domainName == null || ip4 == null) {
-      return [];
-    }
-    return [
-      DesiredDnsRecord(
-        name: '@',
-        content: ip4,
-        description: 'record.root',
-        displayName: domainName,
-      ),
-      DesiredDnsRecord(
-        name: 'api',
-        content: ip4,
-        description: 'record.api',
-        displayName: 'api.$domainName',
-      ),
-      DesiredDnsRecord(
-        name: 'cloud',
-        content: ip4,
-        description: 'record.cloud',
-        displayName: 'cloud.$domainName',
-      ),
-      DesiredDnsRecord(
-        name: 'git',
-        content: ip4,
-        description: 'record.git',
-        displayName: 'git.$domainName',
-      ),
-      DesiredDnsRecord(
-        name: 'meet',
-        content: ip4,
-        description: 'record.meet',
-        displayName: 'meet.$domainName',
-      ),
-      DesiredDnsRecord(
-        name: 'social',
-        content: ip4,
-        description: 'record.social',
-        displayName: 'social.$domainName',
-      ),
-      DesiredDnsRecord(
-        name: 'password',
-        content: ip4,
-        description: 'record.password',
-        displayName: 'password.$domainName',
-      ),
-      DesiredDnsRecord(
-        name: 'vpn',
-        content: ip4,
-        description: 'record.vpn',
-        displayName: 'vpn.$domainName',
-      ),
-      const DesiredDnsRecord(
-        name: '@',
-        content: '@',
-        description: 'record.mx',
-        type: 'MX',
-        category: DnsRecordsCategory.email,
-      ),
-      const DesiredDnsRecord(
-        name: '_dmarc',
-        content: 'v=DMARC1; p=none',
-        description: 'record.dmarc',
-        type: 'TXT',
-        category: DnsRecordsCategory.email,
-      ),
-      DesiredDnsRecord(
-        name: '@',
-        content: 'v=spf1 a mx ip4:$ip4 -all',
-        description: 'record.spf',
-        type: 'TXT',
-        category: DnsRecordsCategory.email,
-      ),
-      if (dkimPublicKey != null)
-        DesiredDnsRecord(
-          name: 'selector._domainkey',
-          content: dkimPublicKey,
-          description: 'record.dkim',
-          type: 'TXT',
-          category: DnsRecordsCategory.email,
-        ),
-    ];
-  }
-
-  @override
   Future<GenericResult<void>> createMultipleDnsRecords({
     required final ServerDomain domain,
-    final String? ip4,
+    required final List<DnsRecord> records,
   }) async {
     final String domainName = domain.domainName;
-    final List<DnsRecord> dnsRecords = getProjectDnsRecords(domainName, ip4);
     final List<Future> allCreateFutures = <Future>[];
 
     final Dio client = await getClient();
     try {
-      for (final DnsRecord record in dnsRecords) {
+      for (final DnsRecord record in records) {
         allCreateFutures.add(
           client.post(
             '/domains/$domainName/records',
             data: {
               'type': record.type,
-              'name': record.name == domainName ? '@' : record.name,
-              'data': record.type == 'MX' ? '@' : record.content,
+              'name': record.name,
+              'data': record.content,
               'ttl': record.ttl,
               'priority': record.priority,
             },
@@ -310,47 +194,24 @@ class DigitalOceanDnsApi extends DnsProviderApi {
     return GenericResult(success: true, data: null);
   }
 
-  @override
-  Future<void> setDnsRecord(
-    final DnsRecord record,
-    final ServerDomain domain,
-  ) async {
-    final Dio client = await getClient();
-    try {
-      final domainName = domain.domainName;
-      await client.post(
-        '/domains/$domainName/records',
-        data: {
-          'type': record.type,
-          'name': record.name,
-          'data': record.content,
-          'ttl': record.ttl,
-          'priority': record.priority,
-        },
-      );
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
-    }
-  }
-
-  @override
-  Future<List<String>> domainList() async {
-    List<String> domains = [];
+  Future<GenericResult<List>> domainList() async {
+    List domains = [];
 
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/domains');
-      domains = response.data['domains']
-          .map<String>((final el) => el['name'] as String)
-          .toList();
+      domains = response.data['domains'];
     } catch (e) {
       print(e);
+      return GenericResult(
+        data: domains,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return domains;
+    return GenericResult(data: domains, success: true);
   }
 }

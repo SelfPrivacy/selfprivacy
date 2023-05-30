@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'disk_volumes.graphql.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'schema.graphql.dart';
-import 'services.graphql.dart';
 
 class Fragment$basicMutationReturnFields {
   Fragment$basicMutationReturnFields({
@@ -141,6 +141,177 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
             this,
             (i) => i,
           );
+  _T when<_T>({
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
+        apiKeyMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
+        autoUpgradeSettingsMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)
+        deviceApiTokenMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$GenericJobButationReturn)
+        genericJobButationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$GenericMutationReturn)
+        genericMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)
+        serviceJobMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ServiceMutationReturn)
+        serviceMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$TimezoneMutationReturn)
+        timezoneMutationReturn,
+    required _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
+        userMutationReturn,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ApiKeyMutationReturn":
+        return apiKeyMutationReturn(
+            this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
+
+      case "AutoUpgradeSettingsMutationReturn":
+        return autoUpgradeSettingsMutationReturn(this
+            as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
+
+      case "DeviceApiTokenMutationReturn":
+        return deviceApiTokenMutationReturn(this
+            as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+
+      case "GenericJobButationReturn":
+        return genericJobButationReturn(this
+            as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+
+      case "GenericMutationReturn":
+        return genericMutationReturn(
+            this as Fragment$basicMutationReturnFields$$GenericMutationReturn);
+
+      case "ServiceJobMutationReturn":
+        return serviceJobMutationReturn(this
+            as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
+
+      case "ServiceMutationReturn":
+        return serviceMutationReturn(
+            this as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
+
+      case "TimezoneMutationReturn":
+        return timezoneMutationReturn(
+            this as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
+
+      case "UserMutationReturn":
+        return userMutationReturn(
+            this as Fragment$basicMutationReturnFields$$UserMutationReturn);
+
+      default:
+        return orElse();
+    }
+  }
+
+  _T maybeWhen<_T>({
+    _T Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)?
+        apiKeyMutationReturn,
+    _T Function(
+            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)?
+        autoUpgradeSettingsMutationReturn,
+    _T Function(
+            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)?
+        deviceApiTokenMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)?
+        genericJobButationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
+        genericMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)?
+        serviceJobMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)?
+        serviceMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$TimezoneMutationReturn)?
+        timezoneMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)?
+        userMutationReturn,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ApiKeyMutationReturn":
+        if (apiKeyMutationReturn != null) {
+          return apiKeyMutationReturn(
+              this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "AutoUpgradeSettingsMutationReturn":
+        if (autoUpgradeSettingsMutationReturn != null) {
+          return autoUpgradeSettingsMutationReturn(this
+              as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "DeviceApiTokenMutationReturn":
+        if (deviceApiTokenMutationReturn != null) {
+          return deviceApiTokenMutationReturn(this
+              as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericJobButationReturn":
+        if (genericJobButationReturn != null) {
+          return genericJobButationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericMutationReturn":
+        if (genericMutationReturn != null) {
+          return genericMutationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "ServiceJobMutationReturn":
+        if (serviceJobMutationReturn != null) {
+          return serviceJobMutationReturn(this
+              as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "ServiceMutationReturn":
+        if (serviceMutationReturn != null) {
+          return serviceMutationReturn(this
+              as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "TimezoneMutationReturn":
+        if (timezoneMutationReturn != null) {
+          return timezoneMutationReturn(this
+              as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "UserMutationReturn":
+        if (userMutationReturn != null) {
+          return userMutationReturn(
+              this as Fragment$basicMutationReturnFields$$UserMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      default:
+        return orElse();
+    }
+  }
 }
 
 abstract class CopyWith$Fragment$basicMutationReturnFields<TRes> {
@@ -171,7 +342,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields<TRes>
 
   final TRes Function(Fragment$basicMutationReturnFields) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -297,7 +468,7 @@ class Fragment$basicMutationReturnFields$$ApiKeyMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ApiKeyMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ApiKeyMutationReturn.fromJson(
@@ -428,7 +599,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -476,7 +647,7 @@ class Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'AutoUpgradeSettingsMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn.fromJson(
@@ -612,7 +783,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutat
           Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -661,7 +832,7 @@ class Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'DeviceApiTokenMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn.fromJson(
@@ -795,7 +966,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationRe
   final TRes Function(
       Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -843,7 +1014,7 @@ class Fragment$basicMutationReturnFields$$GenericJobButationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericJobButationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$GenericJobButationReturn.fromJson(
@@ -975,7 +1146,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn
   final TRes Function(
       Fragment$basicMutationReturnFields$$GenericJobButationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1023,7 +1194,7 @@ class Fragment$basicMutationReturnFields$$GenericMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$GenericMutationReturn.fromJson(
@@ -1154,7 +1325,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1202,7 +1373,7 @@ class Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceJobMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ServiceJobMutationReturn.fromJson(
@@ -1334,7 +1505,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
   final TRes Function(
       Fragment$basicMutationReturnFields$$ServiceJobMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1382,7 +1553,7 @@ class Fragment$basicMutationReturnFields$$ServiceMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ServiceMutationReturn.fromJson(
@@ -1513,7 +1684,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1561,7 +1732,7 @@ class Fragment$basicMutationReturnFields$$TimezoneMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'TimezoneMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$TimezoneMutationReturn.fromJson(
@@ -1693,7 +1864,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
   final TRes Function(
       Fragment$basicMutationReturnFields$$TimezoneMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1741,7 +1912,7 @@ class Fragment$basicMutationReturnFields$$UserMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'UserMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$UserMutationReturn.fromJson(
@@ -1869,7 +2040,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<TRes>
   final TRes Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1915,7 +2086,7 @@ class Fragment$userFields {
     required this.username,
     required this.userType,
     required this.sshKeys,
-    required this.$__typename,
+    this.$__typename = 'User',
   });
 
   factory Fragment$userFields.fromJson(Map<String, dynamic> json) {
@@ -2041,7 +2212,7 @@ class _CopyWithImpl$Fragment$userFields<TRes>
 
   final TRes Function(Fragment$userFields) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? username = _undefined,
@@ -2161,7 +2332,7 @@ extension ClientExtension$Fragment$userFields on graphql.GraphQLClient {
 class Query$AllUsers {
   Query$AllUsers({
     required this.users,
-    required this.$__typename,
+    this.$__typename = 'Query',
   });
 
   factory Query$AllUsers.fromJson(Map<String, dynamic> json) {
@@ -2253,7 +2424,7 @@ class _CopyWithImpl$Query$AllUsers<TRes>
 
   final TRes Function(Query$AllUsers) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? users = _undefined,
@@ -2369,6 +2540,10 @@ const documentNodeQueryAllUsers = DocumentNode(definitions: [
 ]);
 Query$AllUsers _parserFn$Query$AllUsers(Map<String, dynamic> data) =>
     Query$AllUsers.fromJson(data);
+typedef OnQueryComplete$Query$AllUsers = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Query$AllUsers?,
+);
 
 class Options$Query$AllUsers extends graphql.QueryOptions<Query$AllUsers> {
   Options$Query$AllUsers({
@@ -2377,19 +2552,40 @@ class Options$Query$AllUsers extends graphql.QueryOptions<Query$AllUsers> {
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$AllUsers? typedOptimisticResult,
     Duration? pollInterval,
     graphql.Context? context,
-  }) : super(
+    OnQueryComplete$Query$AllUsers? onComplete,
+    graphql.OnQueryError? onError,
+  })  : onCompleteWithParsed = onComplete,
+        super(
           operationName: operationName,
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           pollInterval: pollInterval,
           context: context,
+          onComplete: onComplete == null
+              ? null
+              : (data) => onComplete(
+                    data,
+                    data == null ? null : _parserFn$Query$AllUsers(data),
+                  ),
+          onError: onError,
           document: documentNodeQueryAllUsers,
           parserFn: _parserFn$Query$AllUsers,
         );
+
+  final OnQueryComplete$Query$AllUsers? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onComplete == null
+            ? super.properties
+            : super.properties.where((property) => property != onComplete),
+        onCompleteWithParsed,
+      ];
 }
 
 class WatchOptions$Query$AllUsers
@@ -2400,6 +2596,7 @@ class WatchOptions$Query$AllUsers
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$AllUsers? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -2410,7 +2607,7 @@ class WatchOptions$Query$AllUsers
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeQueryAllUsers,
           pollInterval: pollInterval,
@@ -2460,7 +2657,7 @@ class Query$AllUsers$users {
   Query$AllUsers$users({
     required this.allUsers,
     this.rootUser,
-    required this.$__typename,
+    this.$__typename = 'Users',
   });
 
   factory Query$AllUsers$users.fromJson(Map<String, dynamic> json) {
@@ -2581,7 +2778,7 @@ class _CopyWithImpl$Query$AllUsers$users<TRes>
 
   final TRes Function(Query$AllUsers$users) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? allUsers = _undefined,
@@ -2712,7 +2909,7 @@ class _CopyWithImpl$Variables$Query$GetUser<TRes>
 
   final TRes Function(Variables$Query$GetUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? username = _undefined}) =>
       _then(Variables$Query$GetUser._({
@@ -2734,7 +2931,7 @@ class _CopyWithStubImpl$Variables$Query$GetUser<TRes>
 class Query$GetUser {
   Query$GetUser({
     required this.users,
-    required this.$__typename,
+    this.$__typename = 'Query',
   });
 
   factory Query$GetUser.fromJson(Map<String, dynamic> json) {
@@ -2825,7 +3022,7 @@ class _CopyWithImpl$Query$GetUser<TRes>
 
   final TRes Function(Query$GetUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? users = _undefined,
@@ -2929,6 +3126,10 @@ const documentNodeQueryGetUser = DocumentNode(definitions: [
 ]);
 Query$GetUser _parserFn$Query$GetUser(Map<String, dynamic> data) =>
     Query$GetUser.fromJson(data);
+typedef OnQueryComplete$Query$GetUser = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Query$GetUser?,
+);
 
 class Options$Query$GetUser extends graphql.QueryOptions<Query$GetUser> {
   Options$Query$GetUser({
@@ -2938,20 +3139,41 @@ class Options$Query$GetUser extends graphql.QueryOptions<Query$GetUser> {
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$GetUser? typedOptimisticResult,
     Duration? pollInterval,
     graphql.Context? context,
-  }) : super(
+    OnQueryComplete$Query$GetUser? onComplete,
+    graphql.OnQueryError? onError,
+  })  : onCompleteWithParsed = onComplete,
+        super(
           variables: variables.toJson(),
           operationName: operationName,
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           pollInterval: pollInterval,
           context: context,
+          onComplete: onComplete == null
+              ? null
+              : (data) => onComplete(
+                    data,
+                    data == null ? null : _parserFn$Query$GetUser(data),
+                  ),
+          onError: onError,
           document: documentNodeQueryGetUser,
           parserFn: _parserFn$Query$GetUser,
         );
+
+  final OnQueryComplete$Query$GetUser? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onComplete == null
+            ? super.properties
+            : super.properties.where((property) => property != onComplete),
+        onCompleteWithParsed,
+      ];
 }
 
 class WatchOptions$Query$GetUser
@@ -2963,6 +3185,7 @@ class WatchOptions$Query$GetUser
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$GetUser? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -2974,7 +3197,7 @@ class WatchOptions$Query$GetUser
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeQueryGetUser,
           pollInterval: pollInterval,
@@ -3034,7 +3257,7 @@ extension ClientExtension$Query$GetUser on graphql.GraphQLClient {
 class Query$GetUser$users {
   Query$GetUser$users({
     this.getUser,
-    required this.$__typename,
+    this.$__typename = 'Users',
   });
 
   factory Query$GetUser$users.fromJson(Map<String, dynamic> json) {
@@ -3128,7 +3351,7 @@ class _CopyWithImpl$Query$GetUser$users<TRes>
 
   final TRes Function(Query$GetUser$users) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? getUser = _undefined,
@@ -3245,7 +3468,7 @@ class _CopyWithImpl$Variables$Mutation$CreateUser<TRes>
 
   final TRes Function(Variables$Mutation$CreateUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? user = _undefined}) =>
       _then(Variables$Mutation$CreateUser._({
@@ -3267,7 +3490,7 @@ class _CopyWithStubImpl$Variables$Mutation$CreateUser<TRes>
 class Mutation$CreateUser {
   Mutation$CreateUser({
     required this.createUser,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$CreateUser.fromJson(Map<String, dynamic> json) {
@@ -3360,7 +3583,7 @@ class _CopyWithImpl$Mutation$CreateUser<TRes>
 
   final TRes Function(Mutation$CreateUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? createUser = _undefined,
@@ -3471,7 +3694,7 @@ const documentNodeMutationCreateUser = DocumentNode(definitions: [
 Mutation$CreateUser _parserFn$Mutation$CreateUser(Map<String, dynamic> data) =>
     Mutation$CreateUser.fromJson(data);
 typedef OnMutationCompleted$Mutation$CreateUser = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$CreateUser?,
 );
 
@@ -3484,6 +3707,7 @@ class Options$Mutation$CreateUser
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$CreateUser? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$CreateUser? onCompleted,
     graphql.OnMutationUpdate<Mutation$CreateUser>? update,
@@ -3495,7 +3719,7 @@ class Options$Mutation$CreateUser
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -3529,6 +3753,7 @@ class WatchOptions$Mutation$CreateUser
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$CreateUser? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -3540,7 +3765,7 @@ class WatchOptions$Mutation$CreateUser
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationCreateUser,
           pollInterval: pollInterval,
@@ -3566,7 +3791,7 @@ class Mutation$CreateUser$createUser
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'UserMutationReturn',
     this.user,
   });
 
@@ -3705,7 +3930,7 @@ class _CopyWithImpl$Mutation$CreateUser$createUser<TRes>
 
   final TRes Function(Mutation$CreateUser$createUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -3833,7 +4058,7 @@ class _CopyWithImpl$Variables$Mutation$DeleteUser<TRes>
 
   final TRes Function(Variables$Mutation$DeleteUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? username = _undefined}) =>
       _then(Variables$Mutation$DeleteUser._({
@@ -3855,7 +4080,7 @@ class _CopyWithStubImpl$Variables$Mutation$DeleteUser<TRes>
 class Mutation$DeleteUser {
   Mutation$DeleteUser({
     required this.deleteUser,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$DeleteUser.fromJson(Map<String, dynamic> json) {
@@ -3948,7 +4173,7 @@ class _CopyWithImpl$Mutation$DeleteUser<TRes>
 
   final TRes Function(Mutation$DeleteUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? deleteUser = _undefined,
@@ -4039,7 +4264,7 @@ const documentNodeMutationDeleteUser = DocumentNode(definitions: [
 Mutation$DeleteUser _parserFn$Mutation$DeleteUser(Map<String, dynamic> data) =>
     Mutation$DeleteUser.fromJson(data);
 typedef OnMutationCompleted$Mutation$DeleteUser = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$DeleteUser?,
 );
 
@@ -4052,6 +4277,7 @@ class Options$Mutation$DeleteUser
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$DeleteUser? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$DeleteUser? onCompleted,
     graphql.OnMutationUpdate<Mutation$DeleteUser>? update,
@@ -4063,7 +4289,7 @@ class Options$Mutation$DeleteUser
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -4097,6 +4323,7 @@ class WatchOptions$Mutation$DeleteUser
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$DeleteUser? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -4108,7 +4335,7 @@ class WatchOptions$Mutation$DeleteUser
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationDeleteUser,
           pollInterval: pollInterval,
@@ -4134,7 +4361,7 @@ class Mutation$DeleteUser$deleteUser
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericMutationReturn',
   });
 
   factory Mutation$DeleteUser$deleteUser.fromJson(Map<String, dynamic> json) {
@@ -4255,7 +4482,7 @@ class _CopyWithImpl$Mutation$DeleteUser$deleteUser<TRes>
 
   final TRes Function(Mutation$DeleteUser$deleteUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -4373,7 +4600,7 @@ class _CopyWithImpl$Variables$Mutation$UpdateUser<TRes>
 
   final TRes Function(Variables$Mutation$UpdateUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? user = _undefined}) =>
       _then(Variables$Mutation$UpdateUser._({
@@ -4395,7 +4622,7 @@ class _CopyWithStubImpl$Variables$Mutation$UpdateUser<TRes>
 class Mutation$UpdateUser {
   Mutation$UpdateUser({
     required this.updateUser,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$UpdateUser.fromJson(Map<String, dynamic> json) {
@@ -4488,7 +4715,7 @@ class _CopyWithImpl$Mutation$UpdateUser<TRes>
 
   final TRes Function(Mutation$UpdateUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? updateUser = _undefined,
@@ -4599,7 +4826,7 @@ const documentNodeMutationUpdateUser = DocumentNode(definitions: [
 Mutation$UpdateUser _parserFn$Mutation$UpdateUser(Map<String, dynamic> data) =>
     Mutation$UpdateUser.fromJson(data);
 typedef OnMutationCompleted$Mutation$UpdateUser = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$UpdateUser?,
 );
 
@@ -4612,6 +4839,7 @@ class Options$Mutation$UpdateUser
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$UpdateUser? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$UpdateUser? onCompleted,
     graphql.OnMutationUpdate<Mutation$UpdateUser>? update,
@@ -4623,7 +4851,7 @@ class Options$Mutation$UpdateUser
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -4657,6 +4885,7 @@ class WatchOptions$Mutation$UpdateUser
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$UpdateUser? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -4668,7 +4897,7 @@ class WatchOptions$Mutation$UpdateUser
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationUpdateUser,
           pollInterval: pollInterval,
@@ -4694,7 +4923,7 @@ class Mutation$UpdateUser$updateUser
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'UserMutationReturn',
     this.user,
   });
 
@@ -4833,7 +5062,7 @@ class _CopyWithImpl$Mutation$UpdateUser$updateUser<TRes>
 
   final TRes Function(Mutation$UpdateUser$updateUser) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -4964,7 +5193,7 @@ class _CopyWithImpl$Variables$Mutation$AddSshKey<TRes>
 
   final TRes Function(Variables$Mutation$AddSshKey) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? sshInput = _undefined}) =>
       _then(Variables$Mutation$AddSshKey._({
@@ -4986,7 +5215,7 @@ class _CopyWithStubImpl$Variables$Mutation$AddSshKey<TRes>
 class Mutation$AddSshKey {
   Mutation$AddSshKey({
     required this.addSshKey,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$AddSshKey.fromJson(Map<String, dynamic> json) {
@@ -5079,7 +5308,7 @@ class _CopyWithImpl$Mutation$AddSshKey<TRes>
 
   final TRes Function(Mutation$AddSshKey) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? addSshKey = _undefined,
@@ -5190,7 +5419,7 @@ const documentNodeMutationAddSshKey = DocumentNode(definitions: [
 Mutation$AddSshKey _parserFn$Mutation$AddSshKey(Map<String, dynamic> data) =>
     Mutation$AddSshKey.fromJson(data);
 typedef OnMutationCompleted$Mutation$AddSshKey = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$AddSshKey?,
 );
 
@@ -5203,6 +5432,7 @@ class Options$Mutation$AddSshKey
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$AddSshKey? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$AddSshKey? onCompleted,
     graphql.OnMutationUpdate<Mutation$AddSshKey>? update,
@@ -5214,7 +5444,7 @@ class Options$Mutation$AddSshKey
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -5248,6 +5478,7 @@ class WatchOptions$Mutation$AddSshKey
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$AddSshKey? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -5259,7 +5490,7 @@ class WatchOptions$Mutation$AddSshKey
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationAddSshKey,
           pollInterval: pollInterval,
@@ -5285,7 +5516,7 @@ class Mutation$AddSshKey$addSshKey
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'UserMutationReturn',
     this.user,
   });
 
@@ -5424,7 +5655,7 @@ class _CopyWithImpl$Mutation$AddSshKey$addSshKey<TRes>
 
   final TRes Function(Mutation$AddSshKey$addSshKey) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -5555,7 +5786,7 @@ class _CopyWithImpl$Variables$Mutation$RemoveSshKey<TRes>
 
   final TRes Function(Variables$Mutation$RemoveSshKey) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? sshInput = _undefined}) =>
       _then(Variables$Mutation$RemoveSshKey._({
@@ -5577,7 +5808,7 @@ class _CopyWithStubImpl$Variables$Mutation$RemoveSshKey<TRes>
 class Mutation$RemoveSshKey {
   Mutation$RemoveSshKey({
     required this.removeSshKey,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$RemoveSshKey.fromJson(Map<String, dynamic> json) {
@@ -5670,7 +5901,7 @@ class _CopyWithImpl$Mutation$RemoveSshKey<TRes>
 
   final TRes Function(Mutation$RemoveSshKey) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? removeSshKey = _undefined,
@@ -5782,7 +6013,7 @@ Mutation$RemoveSshKey _parserFn$Mutation$RemoveSshKey(
         Map<String, dynamic> data) =>
     Mutation$RemoveSshKey.fromJson(data);
 typedef OnMutationCompleted$Mutation$RemoveSshKey = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$RemoveSshKey?,
 );
 
@@ -5795,6 +6026,7 @@ class Options$Mutation$RemoveSshKey
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$RemoveSshKey? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$RemoveSshKey? onCompleted,
     graphql.OnMutationUpdate<Mutation$RemoveSshKey>? update,
@@ -5806,7 +6038,7 @@ class Options$Mutation$RemoveSshKey
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -5840,6 +6072,7 @@ class WatchOptions$Mutation$RemoveSshKey
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$RemoveSshKey? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -5851,7 +6084,7 @@ class WatchOptions$Mutation$RemoveSshKey
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationRemoveSshKey,
           pollInterval: pollInterval,
@@ -5877,7 +6110,7 @@ class Mutation$RemoveSshKey$removeSshKey
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'UserMutationReturn',
     this.user,
   });
 
@@ -6018,7 +6251,7 @@ class _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
 
   final TRes Function(Mutation$RemoveSshKey$removeSshKey) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,

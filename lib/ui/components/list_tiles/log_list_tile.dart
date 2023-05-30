@@ -68,12 +68,13 @@ class _RestApiRequestMessageItem extends StatelessWidget {
             ),
             actions: [
               // A button to copy the request to the clipboard
-              TextButton(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: message.text));
-                },
-                child: Text('console_page.copy'.tr()),
-              ),
+              if (message.text != null)
+                TextButton(
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: message.text ?? ''));
+                  },
+                  child: Text('console_page.copy'.tr()),
+                ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text('basis.close'.tr()),
@@ -117,12 +118,13 @@ class _RestApiResponseMessageItem extends StatelessWidget {
             ),
             actions: [
               // A button to copy the request to the clipboard
-              TextButton(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: message.text));
-                },
-                child: Text('console_page.copy'.tr()),
-              ),
+              if (message.text != null)
+                TextButton(
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: message.text ?? ''));
+                  },
+                  child: Text('console_page.copy'.tr()),
+                ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text('basis.close'.tr()),
@@ -190,12 +192,13 @@ class _GraphQlResponseMessageItem extends StatelessWidget {
             ),
             actions: [
               // A button to copy the request to the clipboard
-              TextButton(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: message.text));
-                },
-                child: Text('console_page.copy'.tr()),
-              ),
+              if (message.text != null)
+                TextButton(
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: message.text ?? ''));
+                  },
+                  child: Text('console_page.copy'.tr()),
+                ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text('basis.close'.tr()),
@@ -258,12 +261,13 @@ class _GraphQlRequestMessageItem extends StatelessWidget {
             ),
             actions: [
               // A button to copy the request to the clipboard
-              TextButton(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: message.text));
-                },
-                child: Text('console_page.copy'.tr()),
-              ),
+              if (message.text != null)
+                TextButton(
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: message.text ?? ''));
+                  },
+                  child: Text('console_page.copy'.tr()),
+                ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text('basis.close'.tr()),

@@ -1,12 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/theming/factory/app_theme_factory.dart';
 import 'package:selfprivacy/ui/router/router.dart';
-import 'package:wakelock/wakelock.dart';
+// import 'package:wakelock/wakelock.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 import 'package:selfprivacy/config/bloc_config.dart';
@@ -20,13 +19,13 @@ void main() async {
   await HiveConfig.init();
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  try {
-    /// Wakelock support for Linux
-    /// desktop is not yet implemented
-    await Wakelock.enable();
-  } on PlatformException catch (e) {
-    print(e);
-  }
+  // try {
+  //   /// Wakelock support for Linux
+  //   /// desktop is not yet implemented
+  //   await Wakelock.enable();
+  // } on PlatformException catch (e) {
+  //   print(e);
+  // }
 
   await getItSetup();
   await EasyLocalization.ensureInitialized();

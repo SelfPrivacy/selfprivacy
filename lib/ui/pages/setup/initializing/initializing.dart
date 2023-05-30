@@ -11,7 +11,6 @@ import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cu
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
-import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/drawers/progress_drawer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';

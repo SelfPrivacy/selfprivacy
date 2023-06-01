@@ -190,7 +190,16 @@ class ServerInstallationRepository {
       ),
     );
 
-    final String? domainId = await dnsProviderApi.getZoneId(domain);
+    /// TODO: nvm it's because only Cloudflare uses Zone
+    /// for other providers we need to implement a different kind of
+    /// functionality here... but it's on refactoring, let it be here for now.
+    final APIGenericResult<bool> apiResponse =
+        await dnsProviderApi.isApiTokenValid(token);
+
+    String? domainId;
+    if (apiResponse.success && apiResponse.data) {
+      domainId = await dnsProviderApi.getZoneId(domain);
+    }
     return domainId;
   }
 

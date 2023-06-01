@@ -7,8 +7,8 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 
-class CloudflareApi extends DnsProviderApi {
-  CloudflareApi({
+class DesecApi extends DnsProviderApi {
+  DesecApi({
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
@@ -30,11 +30,11 @@ class CloudflareApi extends DnsProviderApi {
     if (isWithToken) {
       final String? token = getIt<ApiConfigModel>().dnsProviderKey;
       assert(token != null);
-      options.headers = {'Authorization': 'Bearer $token'};
+      options.headers = {'Authorization': 'Token $token'};
     }
 
     if (customToken != null) {
-      options.headers = {'Authorization': 'Bearer $customToken'};
+      options.headers = {'Authorization': 'Token $customToken'};
     }
 
     if (validateStatus != null) {
@@ -44,7 +44,7 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  String rootAddress = 'https://api.cloudflare.com/client/v4';
+  String rootAddress = 'https://desec.io/api/v1/domains/';
 
   @override
   Future<APIGenericResult<bool>> isApiTokenValid(final String token) async {
@@ -54,14 +54,15 @@ class CloudflareApi extends DnsProviderApi {
     final Dio client = await getClient();
     try {
       response = await client.get(
-        '/user/tokens/verify',
+        '',
         options: Options(
           followRedirects: false,
           validateStatus: (final status) =>
               status != null && (status >= 200 || status == 401),
-          headers: {'Authorization': 'Bearer $token'},
+          headers: {'Authorization': 'Token $token'},
         ),
       );
+      await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
       isValid = false;
@@ -94,24 +95,7 @@ class CloudflareApi extends DnsProviderApi {
   }
 
   @override
-  Future<String?> getZoneId(final String domain) async {
-    String? zoneId;
-
-    final Dio client = await getClient();
-    try {
-      final Response response = await client.get(
-        '/zones',
-        queryParameters: {'name': domain},
-      );
-      zoneId = response.data['result'][0]['id'];
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
-    }
-
-    return zoneId;
-  }
+  Future<String?> getZoneId(final String domain) async => domain;
 
   @override
   Future<APIGenericResult<void>> removeSimilarRecords({
@@ -119,25 +103,32 @@ class CloudflareApi extends DnsProviderApi {
     final String? ip4,
   }) async {
     final String domainName = domain.domainName;
-    final String domainZoneId = domain.zoneId;
-
-    final String url = '/zones/$domainZoneId/dns_records';
+    final String url = '/$domainName/rrsets/';
+    final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(url);
-
-      final List records = response.data['result'] ?? [];
-      final List<Future> allDeleteFutures = <Future>[];
-
-      for (final record in records) {
-        if (record['zone_name'] == domainName) {
-          allDeleteFutures.add(
-            client.delete('$url/${record["id"]}'),
-          );
-        }
+      final List<dynamic> bulkRecords = [];
+      for (final DnsRecord record in listDnsRecords) {
+        bulkRecords.add(
+          {
+            'subname': record.name,
+            'type': record.type,
+            'ttl': record.ttl,
+            'records': [],
+          },
+        );
       }
-      await Future.wait(allDeleteFutures);
+      bulkRecords.add(
+        {
+          'subname': 'selector._domainkey',
+          'type': 'TXT',
+          'ttl': 18000,
+          'records': [],
+        },
+      );
+      await client.put(url, data: bulkRecords);
+      await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
       return APIGenericResult(
@@ -158,28 +149,28 @@ class CloudflareApi extends DnsProviderApi {
   }) async {
     Response response;
     final String domainName = domain.domainName;
-    final String domainZoneId = domain.zoneId;
     final List<DnsRecord> allRecords = <DnsRecord>[];
 
-    final String url = '/zones/$domainZoneId/dns_records';
+    final String url = '/$domainName/rrsets/';
 
     final Dio client = await getClient();
     try {
       response = await client.get(url);
-      final List records = response.data['result'] ?? [];
+      await Future.delayed(const Duration(seconds: 1));
+      final List records = response.data;
 
       for (final record in records) {
-        if (record['zone_name'] == domainName) {
-          allRecords.add(
-            DnsRecord(
-              name: record['name'],
-              type: record['type'],
-              content: record['content'],
-              ttl: record['ttl'],
-              proxied: record['proxied'],
-            ),
-          );
-        }
+        final String? content = (record['records'] is List<dynamic>)
+            ? record['records'][0]
+            : record['records'];
+        allRecords.add(
+          DnsRecord(
+            name: record['subname'],
+            type: record['type'],
+            content: content,
+            ttl: record['ttl'],
+          ),
+        );
       }
     } catch (e) {
       print(e);
@@ -196,21 +187,26 @@ class CloudflareApi extends DnsProviderApi {
     final String? ip4,
   }) async {
     final String domainName = domain.domainName;
-    final String domainZoneId = domain.zoneId;
     final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
-    final List<Future> allCreateFutures = <Future>[];
 
     final Dio client = await getClient();
     try {
+      final List<dynamic> bulkRecords = [];
       for (final DnsRecord record in listDnsRecords) {
-        allCreateFutures.add(
-          client.post(
-            '/zones/$domainZoneId/dns_records',
-            data: record.toJson(),
-          ),
+        bulkRecords.add(
+          {
+            'subname': record.name,
+            'type': record.type,
+            'ttl': record.ttl,
+            'records': [extractContent(record)],
+          },
         );
       }
-      await Future.wait(allCreateFutures);
+      await client.post(
+        '/$domainName/rrsets/',
+        data: bulkRecords,
+      );
+      await Future.delayed(const Duration(seconds: 1));
     } on DioError catch (e) {
       print(e.message);
       rethrow;
@@ -232,10 +228,10 @@ class CloudflareApi extends DnsProviderApi {
     final String? domainName,
     final String? ip4,
   ) {
-    final DnsRecord domainA =
-        DnsRecord(type: 'A', name: domainName, content: ip4);
+    final DnsRecord domainA = DnsRecord(type: 'A', name: '', content: ip4);
 
-    final DnsRecord mx = DnsRecord(type: 'MX', name: '@', content: domainName);
+    final DnsRecord mx =
+        DnsRecord(type: 'MX', name: '', content: '10 $domainName.');
     final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
     final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
     final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
@@ -249,14 +245,14 @@ class CloudflareApi extends DnsProviderApi {
     final DnsRecord txt1 = DnsRecord(
       type: 'TXT',
       name: '_dmarc',
-      content: 'v=DMARC1; p=none',
+      content: '"v=DMARC1; p=none"',
       ttl: 18000,
     );
 
     final DnsRecord txt2 = DnsRecord(
       type: 'TXT',
-      name: domainName,
-      content: 'v=spf1 a mx ip4:$ip4 -all',
+      name: '',
+      content: '"v=spf1 a mx ip4:$ip4 -all"',
       ttl: 18000,
     );
 
@@ -275,20 +271,34 @@ class CloudflareApi extends DnsProviderApi {
     ];
   }
 
+  String? extractContent(final DnsRecord record) {
+    String? content = record.content;
+    if (record.type == 'TXT' && content != null && !content.startsWith('"')) {
+      content = '"$content"';
+    }
+
+    return content;
+  }
+
   @override
   Future<void> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
   ) async {
-    final String domainZoneId = domain.zoneId;
-    final String url = '$rootAddress/zones/$domainZoneId/dns_records';
+    final String url = '/${domain.domainName}/rrsets/';
 
     final Dio client = await getClient();
     try {
       await client.post(
         url,
-        data: record.toJson(),
+        data: {
+          'subname': record.name,
+          'type': record.type,
+          'ttl': record.ttl,
+          'records': [extractContent(record)],
+        },
       );
+      await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
     } finally {
@@ -298,16 +308,15 @@ class CloudflareApi extends DnsProviderApi {
 
   @override
   Future<List<String>> domainList() async {
-    final String url = '$rootAddress/zones';
     List<String> domains = [];
 
     final Dio client = await getClient();
     try {
       final Response response = await client.get(
-        url,
-        queryParameters: {'per_page': 50},
+        '',
       );
-      domains = response.data['result']
+      await Future.delayed(const Duration(seconds: 1));
+      domains = response.data
           .map<String>((final el) => el['name'] as String)
           .toList();
     } catch (e) {
@@ -333,7 +342,9 @@ class CloudflareApi extends DnsProviderApi {
       for (final DesiredDnsRecord record in desiredRecords) {
         if (record.description == 'record.dkim') {
           final DnsRecord foundRecord = records.firstWhere(
-            (final r) => (r.name == record.name) && r.type == record.type,
+            (final r) =>
+                ('${r.name}.${domain.domainName}' == record.name) &&
+                r.type == record.type,
             orElse: () => DnsRecord(
               name: record.name,
               type: record.type,
@@ -356,7 +367,8 @@ class CloudflareApi extends DnsProviderApi {
         } else {
           if (records.any(
             (final r) =>
-                (r.name == record.name) &&
+                ('${r.name}.${domain.domainName}' == record.name ||
+                    record.name == '') &&
                 r.type == record.type &&
                 r.content == record.content,
           )) {
@@ -391,7 +403,7 @@ class CloudflareApi extends DnsProviderApi {
     }
     return [
       DesiredDnsRecord(
-        name: domainName,
+        name: '',
         content: ip4,
         description: 'record.root',
       ),
@@ -431,22 +443,22 @@ class CloudflareApi extends DnsProviderApi {
         description: 'record.vpn',
       ),
       DesiredDnsRecord(
-        name: domainName,
-        content: domainName,
+        name: '',
+        content: '10 $domainName.',
         description: 'record.mx',
         type: 'MX',
         category: DnsRecordsCategory.email,
       ),
       DesiredDnsRecord(
         name: '_dmarc.$domainName',
-        content: 'v=DMARC1; p=none',
+        content: '"v=DMARC1; p=none"',
         description: 'record.dmarc',
         type: 'TXT',
         category: DnsRecordsCategory.email,
       ),
       DesiredDnsRecord(
-        name: domainName,
-        content: 'v=spf1 a mx ip4:$ip4 -all',
+        name: '',
+        content: '"v=spf1 a mx ip4:$ip4 -all"',
         description: 'record.spf',
         type: 'TXT',
         category: DnsRecordsCategory.email,
@@ -454,7 +466,7 @@ class CloudflareApi extends DnsProviderApi {
       if (dkimPublicKey != null)
         DesiredDnsRecord(
           name: 'selector._domainkey.$domainName',
-          content: dkimPublicKey,
+          content: '"$dkimPublicKey"',
           description: 'record.dkim',
           type: 'TXT',
           category: DnsRecordsCategory.email,

@@ -11,6 +11,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dar
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
@@ -80,6 +81,25 @@ class ServerApi extends ApiMap
       }
       providerType = ServerProvider.fromGraphQL(
         response.parsedData!.system.provider.provider,
+      );
+    } catch (e) {
+      print(e);
+    }
+    return providerType;
+  }
+
+  Future<DnsProvider> getDnsProviderType() async {
+    QueryResult<Query$SystemDnsProvider> response;
+    DnsProvider providerType = DnsProvider.unknown;
+
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$SystemDnsProvider();
+      if (response.hasException) {
+        print(response.exception.toString());
+      }
+      providerType = DnsProvider.fromGraphQL(
+        response.parsedData!.system.domainInfo.provider,
       );
     } catch (e) {
       print(e);

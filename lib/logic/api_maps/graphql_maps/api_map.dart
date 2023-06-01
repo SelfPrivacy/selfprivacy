@@ -56,7 +56,7 @@ class ResponseLoggingParser extends ResponseParser {
 abstract class ApiMap {
   Future<GraphQLClient> getClient() async {
     IOClient? ioClient;
-    if (StagingOptions.stagingAcme) {
+    if (StagingOptions.stagingAcme || !StagingOptions.verifyCertificate) {
       final HttpClient httpClient = HttpClient();
       httpClient.badCertificateCallback = (
         final cert,

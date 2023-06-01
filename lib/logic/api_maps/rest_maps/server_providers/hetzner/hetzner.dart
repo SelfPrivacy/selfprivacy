@@ -356,6 +356,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final User rootUser,
     required final String domainName,
     required final String serverType,
+    required final DnsProvider dnsProvider,
   }) async {
     final APIGenericResult<ServerVolume?> newVolumeResponse =
         await createVolume();
@@ -374,6 +375,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       domainName: domainName,
       volume: newVolumeResponse.data!,
       serverType: serverType,
+      dnsProvider: dnsProvider,
     );
   }
 
@@ -383,6 +385,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     required final String domainName,
     required final ServerVolume volume,
     required final String serverType,
+    required final DnsProvider dnsProvider,
   }) async {
     final Dio client = await getClient();
 
@@ -395,9 +398,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
     final String base64Password =
         base64.encode(utf8.encode(rootUser.password ?? 'PASS'));
+    final String dnsProviderType = dnsProviderToInfectName(dnsProvider);
 
     final String userdataString =
-        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
+        "#cloud-config\nruncmd:\n- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/$infectBranch/nixos-infect | DNS_PROVIDER_TYPE=$dnsProviderType STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$dbPassword API_TOKEN=$apiToken HOSTNAME=$hostname bash 2>&1 | tee /tmp/infect.log";
 
     Response? serverCreateResponse;
     ServerHostingDetails? serverDetails;

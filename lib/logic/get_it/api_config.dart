@@ -12,17 +12,20 @@ class ApiConfigModel {
   String? get serverProviderKey => _serverProviderKey;
   String? get serverLocation => _serverLocation;
   String? get serverType => _serverType;
-  String? get cloudFlareKey => _cloudFlareKey;
+  String? get dnsProviderKey => _dnsProviderKey;
   ServerProvider? get serverProvider => _serverProvider;
+  DnsProvider? get dnsProvider => _dnsProvider;
+
   BackblazeCredential? get backblazeCredential => _backblazeCredential;
   ServerDomain? get serverDomain => _serverDomain;
   BackblazeBucket? get backblazeBucket => _backblazeBucket;
 
   String? _serverProviderKey;
   String? _serverLocation;
-  String? _cloudFlareKey;
+  String? _dnsProviderKey;
   String? _serverType;
   ServerProvider? _serverProvider;
+  DnsProvider? _dnsProvider;
   ServerHostingDetails? _serverDetails;
   BackblazeCredential? _backblazeCredential;
   ServerDomain? _serverDomain;
@@ -33,14 +36,19 @@ class ApiConfigModel {
     _serverProvider = value;
   }
 
+  Future<void> storeDnsProviderType(final DnsProvider value) async {
+    await _box.put(BNames.dnsProvider, value);
+    _dnsProvider = value;
+  }
+
   Future<void> storeServerProviderKey(final String value) async {
     await _box.put(BNames.hetznerKey, value);
     _serverProviderKey = value;
   }
 
-  Future<void> storeCloudFlareKey(final String value) async {
+  Future<void> storeDnsProviderKey(final String value) async {
     await _box.put(BNames.cloudFlareKey, value);
-    _cloudFlareKey = value;
+    _dnsProviderKey = value;
   }
 
   Future<void> storeServerTypeIdentifier(final String typeIdentifier) async {
@@ -75,8 +83,9 @@ class ApiConfigModel {
 
   void clear() {
     _serverProviderKey = null;
+    _dnsProvider = null;
     _serverLocation = null;
-    _cloudFlareKey = null;
+    _dnsProviderKey = null;
     _backblazeCredential = null;
     _serverDomain = null;
     _serverDetails = null;
@@ -88,12 +97,13 @@ class ApiConfigModel {
   void init() {
     _serverProviderKey = _box.get(BNames.hetznerKey);
     _serverLocation = _box.get(BNames.serverLocation);
-    _cloudFlareKey = _box.get(BNames.cloudFlareKey);
+    _dnsProviderKey = _box.get(BNames.cloudFlareKey);
     _backblazeCredential = _box.get(BNames.backblazeCredential);
     _serverDomain = _box.get(BNames.serverDomain);
     _serverDetails = _box.get(BNames.serverDetails);
     _backblazeBucket = _box.get(BNames.backblazeBucket);
     _serverType = _box.get(BNames.serverTypeIdentifier);
     _serverProvider = _box.get(BNames.serverProvider);
+    _dnsProvider = _box.get(BNames.dnsProvider);
   }
 }

@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/message.dart';
@@ -15,7 +15,7 @@ abstract class ApiMap {
       dio.interceptors.add(PrettyDioLogger());
     }
     dio.interceptors.add(ConsoleInterceptor());
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
         (final HttpClient client) {
       client.badCertificateCallback =
           (final X509Certificate cert, final String host, final int port) =>

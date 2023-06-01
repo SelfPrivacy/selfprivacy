@@ -141,6 +141,177 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
             this,
             (i) => i,
           );
+  _T when<_T>({
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
+        apiKeyMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
+        autoUpgradeSettingsMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)
+        deviceApiTokenMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$GenericJobButationReturn)
+        genericJobButationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$GenericMutationReturn)
+        genericMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)
+        serviceJobMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ServiceMutationReturn)
+        serviceMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$TimezoneMutationReturn)
+        timezoneMutationReturn,
+    required _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
+        userMutationReturn,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ApiKeyMutationReturn":
+        return apiKeyMutationReturn(
+            this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
+
+      case "AutoUpgradeSettingsMutationReturn":
+        return autoUpgradeSettingsMutationReturn(this
+            as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
+
+      case "DeviceApiTokenMutationReturn":
+        return deviceApiTokenMutationReturn(this
+            as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+
+      case "GenericJobButationReturn":
+        return genericJobButationReturn(this
+            as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+
+      case "GenericMutationReturn":
+        return genericMutationReturn(
+            this as Fragment$basicMutationReturnFields$$GenericMutationReturn);
+
+      case "ServiceJobMutationReturn":
+        return serviceJobMutationReturn(this
+            as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
+
+      case "ServiceMutationReturn":
+        return serviceMutationReturn(
+            this as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
+
+      case "TimezoneMutationReturn":
+        return timezoneMutationReturn(
+            this as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
+
+      case "UserMutationReturn":
+        return userMutationReturn(
+            this as Fragment$basicMutationReturnFields$$UserMutationReturn);
+
+      default:
+        return orElse();
+    }
+  }
+
+  _T maybeWhen<_T>({
+    _T Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)?
+        apiKeyMutationReturn,
+    _T Function(
+            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)?
+        autoUpgradeSettingsMutationReturn,
+    _T Function(
+            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)?
+        deviceApiTokenMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)?
+        genericJobButationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
+        genericMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)?
+        serviceJobMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)?
+        serviceMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$TimezoneMutationReturn)?
+        timezoneMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)?
+        userMutationReturn,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ApiKeyMutationReturn":
+        if (apiKeyMutationReturn != null) {
+          return apiKeyMutationReturn(
+              this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "AutoUpgradeSettingsMutationReturn":
+        if (autoUpgradeSettingsMutationReturn != null) {
+          return autoUpgradeSettingsMutationReturn(this
+              as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "DeviceApiTokenMutationReturn":
+        if (deviceApiTokenMutationReturn != null) {
+          return deviceApiTokenMutationReturn(this
+              as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericJobButationReturn":
+        if (genericJobButationReturn != null) {
+          return genericJobButationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericMutationReturn":
+        if (genericMutationReturn != null) {
+          return genericMutationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "ServiceJobMutationReturn":
+        if (serviceJobMutationReturn != null) {
+          return serviceJobMutationReturn(this
+              as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "ServiceMutationReturn":
+        if (serviceMutationReturn != null) {
+          return serviceMutationReturn(this
+              as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "TimezoneMutationReturn":
+        if (timezoneMutationReturn != null) {
+          return timezoneMutationReturn(this
+              as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "UserMutationReturn":
+        if (userMutationReturn != null) {
+          return userMutationReturn(
+              this as Fragment$basicMutationReturnFields$$UserMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      default:
+        return orElse();
+    }
+  }
 }
 
 abstract class CopyWith$Fragment$basicMutationReturnFields<TRes> {
@@ -171,7 +342,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields<TRes>
 
   final TRes Function(Fragment$basicMutationReturnFields) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -297,7 +468,7 @@ class Fragment$basicMutationReturnFields$$ApiKeyMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ApiKeyMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ApiKeyMutationReturn.fromJson(
@@ -428,7 +599,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -476,7 +647,7 @@ class Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'AutoUpgradeSettingsMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn.fromJson(
@@ -612,7 +783,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutat
           Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -661,7 +832,7 @@ class Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'DeviceApiTokenMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn.fromJson(
@@ -795,7 +966,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationRe
   final TRes Function(
       Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -843,7 +1014,7 @@ class Fragment$basicMutationReturnFields$$GenericJobButationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericJobButationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$GenericJobButationReturn.fromJson(
@@ -975,7 +1146,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn
   final TRes Function(
       Fragment$basicMutationReturnFields$$GenericJobButationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1023,7 +1194,7 @@ class Fragment$basicMutationReturnFields$$GenericMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$GenericMutationReturn.fromJson(
@@ -1154,7 +1325,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1202,7 +1373,7 @@ class Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceJobMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ServiceJobMutationReturn.fromJson(
@@ -1334,7 +1505,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
   final TRes Function(
       Fragment$basicMutationReturnFields$$ServiceJobMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1382,7 +1553,7 @@ class Fragment$basicMutationReturnFields$$ServiceMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ServiceMutationReturn.fromJson(
@@ -1513,7 +1684,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1561,7 +1732,7 @@ class Fragment$basicMutationReturnFields$$TimezoneMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'TimezoneMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$TimezoneMutationReturn.fromJson(
@@ -1693,7 +1864,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
   final TRes Function(
       Fragment$basicMutationReturnFields$$TimezoneMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1741,7 +1912,7 @@ class Fragment$basicMutationReturnFields$$UserMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'UserMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$UserMutationReturn.fromJson(
@@ -1869,7 +2040,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<TRes>
   final TRes Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1913,7 +2084,7 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<
 class Query$SystemSettings {
   Query$SystemSettings({
     required this.system,
-    required this.$__typename,
+    this.$__typename = 'Query',
   });
 
   factory Query$SystemSettings.fromJson(Map<String, dynamic> json) {
@@ -2006,7 +2177,7 @@ class _CopyWithImpl$Query$SystemSettings<TRes>
 
   final TRes Function(Query$SystemSettings) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? system = _undefined,
@@ -2157,6 +2328,10 @@ const documentNodeQuerySystemSettings = DocumentNode(definitions: [
 Query$SystemSettings _parserFn$Query$SystemSettings(
         Map<String, dynamic> data) =>
     Query$SystemSettings.fromJson(data);
+typedef OnQueryComplete$Query$SystemSettings = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Query$SystemSettings?,
+);
 
 class Options$Query$SystemSettings
     extends graphql.QueryOptions<Query$SystemSettings> {
@@ -2166,19 +2341,40 @@ class Options$Query$SystemSettings
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$SystemSettings? typedOptimisticResult,
     Duration? pollInterval,
     graphql.Context? context,
-  }) : super(
+    OnQueryComplete$Query$SystemSettings? onComplete,
+    graphql.OnQueryError? onError,
+  })  : onCompleteWithParsed = onComplete,
+        super(
           operationName: operationName,
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           pollInterval: pollInterval,
           context: context,
+          onComplete: onComplete == null
+              ? null
+              : (data) => onComplete(
+                    data,
+                    data == null ? null : _parserFn$Query$SystemSettings(data),
+                  ),
+          onError: onError,
           document: documentNodeQuerySystemSettings,
           parserFn: _parserFn$Query$SystemSettings,
         );
+
+  final OnQueryComplete$Query$SystemSettings? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onComplete == null
+            ? super.properties
+            : super.properties.where((property) => property != onComplete),
+        onCompleteWithParsed,
+      ];
 }
 
 class WatchOptions$Query$SystemSettings
@@ -2189,6 +2385,7 @@ class WatchOptions$Query$SystemSettings
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$SystemSettings? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -2199,7 +2396,7 @@ class WatchOptions$Query$SystemSettings
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeQuerySystemSettings,
           pollInterval: pollInterval,
@@ -2251,7 +2448,7 @@ extension ClientExtension$Query$SystemSettings on graphql.GraphQLClient {
 class Query$SystemSettings$system {
   Query$SystemSettings$system({
     required this.settings,
-    required this.$__typename,
+    this.$__typename = 'System',
   });
 
   factory Query$SystemSettings$system.fromJson(Map<String, dynamic> json) {
@@ -2346,7 +2543,7 @@ class _CopyWithImpl$Query$SystemSettings$system<TRes>
 
   final TRes Function(Query$SystemSettings$system) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? settings = _undefined,
@@ -2387,7 +2584,7 @@ class Query$SystemSettings$system$settings {
     required this.autoUpgrade,
     required this.ssh,
     required this.timezone,
-    required this.$__typename,
+    this.$__typename = 'SystemSettings',
   });
 
   factory Query$SystemSettings$system$settings.fromJson(
@@ -2515,7 +2712,7 @@ class _CopyWithImpl$Query$SystemSettings$system$settings<TRes>
 
   final TRes Function(Query$SystemSettings$system$settings) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? autoUpgrade = _undefined,
@@ -2575,7 +2772,7 @@ class Query$SystemSettings$system$settings$autoUpgrade {
   Query$SystemSettings$system$settings$autoUpgrade({
     required this.allowReboot,
     required this.enable,
-    required this.$__typename,
+    this.$__typename = 'AutoUpgradeOptions',
   });
 
   factory Query$SystemSettings$system$settings$autoUpgrade.fromJson(
@@ -2685,7 +2882,7 @@ class _CopyWithImpl$Query$SystemSettings$system$settings$autoUpgrade<TRes>
 
   final TRes Function(Query$SystemSettings$system$settings$autoUpgrade) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? allowReboot = _undefined,
@@ -2723,7 +2920,7 @@ class Query$SystemSettings$system$settings$ssh {
   Query$SystemSettings$system$settings$ssh({
     required this.enable,
     required this.passwordAuthentication,
-    required this.$__typename,
+    this.$__typename = 'SshSettings',
   });
 
   factory Query$SystemSettings$system$settings$ssh.fromJson(
@@ -2832,7 +3029,7 @@ class _CopyWithImpl$Query$SystemSettings$system$settings$ssh<TRes>
 
   final TRes Function(Query$SystemSettings$system$settings$ssh) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? enable = _undefined,
@@ -2870,7 +3067,7 @@ class _CopyWithStubImpl$Query$SystemSettings$system$settings$ssh<TRes>
 class Query$SystemIsUsingBinds {
   Query$SystemIsUsingBinds({
     required this.system,
-    required this.$__typename,
+    this.$__typename = 'Query',
   });
 
   factory Query$SystemIsUsingBinds.fromJson(Map<String, dynamic> json) {
@@ -2965,7 +3162,7 @@ class _CopyWithImpl$Query$SystemIsUsingBinds<TRes>
 
   final TRes Function(Query$SystemIsUsingBinds) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? system = _undefined,
@@ -3058,6 +3255,10 @@ const documentNodeQuerySystemIsUsingBinds = DocumentNode(definitions: [
 Query$SystemIsUsingBinds _parserFn$Query$SystemIsUsingBinds(
         Map<String, dynamic> data) =>
     Query$SystemIsUsingBinds.fromJson(data);
+typedef OnQueryComplete$Query$SystemIsUsingBinds = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Query$SystemIsUsingBinds?,
+);
 
 class Options$Query$SystemIsUsingBinds
     extends graphql.QueryOptions<Query$SystemIsUsingBinds> {
@@ -3067,19 +3268,42 @@ class Options$Query$SystemIsUsingBinds
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$SystemIsUsingBinds? typedOptimisticResult,
     Duration? pollInterval,
     graphql.Context? context,
-  }) : super(
+    OnQueryComplete$Query$SystemIsUsingBinds? onComplete,
+    graphql.OnQueryError? onError,
+  })  : onCompleteWithParsed = onComplete,
+        super(
           operationName: operationName,
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           pollInterval: pollInterval,
           context: context,
+          onComplete: onComplete == null
+              ? null
+              : (data) => onComplete(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Query$SystemIsUsingBinds(data),
+                  ),
+          onError: onError,
           document: documentNodeQuerySystemIsUsingBinds,
           parserFn: _parserFn$Query$SystemIsUsingBinds,
         );
+
+  final OnQueryComplete$Query$SystemIsUsingBinds? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onComplete == null
+            ? super.properties
+            : super.properties.where((property) => property != onComplete),
+        onCompleteWithParsed,
+      ];
 }
 
 class WatchOptions$Query$SystemIsUsingBinds
@@ -3090,6 +3314,7 @@ class WatchOptions$Query$SystemIsUsingBinds
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$SystemIsUsingBinds? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -3100,7 +3325,7 @@ class WatchOptions$Query$SystemIsUsingBinds
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeQuerySystemIsUsingBinds,
           pollInterval: pollInterval,
@@ -3156,7 +3381,7 @@ extension ClientExtension$Query$SystemIsUsingBinds on graphql.GraphQLClient {
 class Query$SystemIsUsingBinds$system {
   Query$SystemIsUsingBinds$system({
     required this.info,
-    required this.$__typename,
+    this.$__typename = 'System',
   });
 
   factory Query$SystemIsUsingBinds$system.fromJson(Map<String, dynamic> json) {
@@ -3251,7 +3476,7 @@ class _CopyWithImpl$Query$SystemIsUsingBinds$system<TRes>
 
   final TRes Function(Query$SystemIsUsingBinds$system) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? info = _undefined,
@@ -3290,7 +3515,7 @@ class _CopyWithStubImpl$Query$SystemIsUsingBinds$system<TRes>
 class Query$SystemIsUsingBinds$system$info {
   Query$SystemIsUsingBinds$system$info({
     required this.usingBinds,
-    required this.$__typename,
+    this.$__typename = 'SystemInfo',
   });
 
   factory Query$SystemIsUsingBinds$system$info.fromJson(
@@ -3385,7 +3610,7 @@ class _CopyWithImpl$Query$SystemIsUsingBinds$system$info<TRes>
 
   final TRes Function(Query$SystemIsUsingBinds$system$info) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? usingBinds = _undefined,
@@ -3417,7 +3642,7 @@ class _CopyWithStubImpl$Query$SystemIsUsingBinds$system$info<TRes>
 class Query$DomainInfo {
   Query$DomainInfo({
     required this.system,
-    required this.$__typename,
+    this.$__typename = 'Query',
   });
 
   factory Query$DomainInfo.fromJson(Map<String, dynamic> json) {
@@ -3510,7 +3735,7 @@ class _CopyWithImpl$Query$DomainInfo<TRes>
 
   final TRes Function(Query$DomainInfo) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? system = _undefined,
@@ -3636,6 +3861,10 @@ const documentNodeQueryDomainInfo = DocumentNode(definitions: [
 ]);
 Query$DomainInfo _parserFn$Query$DomainInfo(Map<String, dynamic> data) =>
     Query$DomainInfo.fromJson(data);
+typedef OnQueryComplete$Query$DomainInfo = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Query$DomainInfo?,
+);
 
 class Options$Query$DomainInfo extends graphql.QueryOptions<Query$DomainInfo> {
   Options$Query$DomainInfo({
@@ -3644,19 +3873,40 @@ class Options$Query$DomainInfo extends graphql.QueryOptions<Query$DomainInfo> {
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$DomainInfo? typedOptimisticResult,
     Duration? pollInterval,
     graphql.Context? context,
-  }) : super(
+    OnQueryComplete$Query$DomainInfo? onComplete,
+    graphql.OnQueryError? onError,
+  })  : onCompleteWithParsed = onComplete,
+        super(
           operationName: operationName,
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           pollInterval: pollInterval,
           context: context,
+          onComplete: onComplete == null
+              ? null
+              : (data) => onComplete(
+                    data,
+                    data == null ? null : _parserFn$Query$DomainInfo(data),
+                  ),
+          onError: onError,
           document: documentNodeQueryDomainInfo,
           parserFn: _parserFn$Query$DomainInfo,
         );
+
+  final OnQueryComplete$Query$DomainInfo? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onComplete == null
+            ? super.properties
+            : super.properties.where((property) => property != onComplete),
+        onCompleteWithParsed,
+      ];
 }
 
 class WatchOptions$Query$DomainInfo
@@ -3667,6 +3917,7 @@ class WatchOptions$Query$DomainInfo
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$DomainInfo? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -3677,7 +3928,7 @@ class WatchOptions$Query$DomainInfo
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeQueryDomainInfo,
           pollInterval: pollInterval,
@@ -3727,7 +3978,7 @@ extension ClientExtension$Query$DomainInfo on graphql.GraphQLClient {
 class Query$DomainInfo$system {
   Query$DomainInfo$system({
     required this.domainInfo,
-    required this.$__typename,
+    this.$__typename = 'System',
   });
 
   factory Query$DomainInfo$system.fromJson(Map<String, dynamic> json) {
@@ -3821,7 +4072,7 @@ class _CopyWithImpl$Query$DomainInfo$system<TRes>
 
   final TRes Function(Query$DomainInfo$system) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? domainInfo = _undefined,
@@ -3863,7 +4114,7 @@ class Query$DomainInfo$system$domainInfo {
     required this.hostname,
     required this.provider,
     required this.requiredDnsRecords,
-    required this.$__typename,
+    this.$__typename = 'SystemDomainInfo',
   });
 
   factory Query$DomainInfo$system$domainInfo.fromJson(
@@ -4016,7 +4267,7 @@ class _CopyWithImpl$Query$DomainInfo$system$domainInfo<TRes>
 
   final TRes Function(Query$DomainInfo$system$domainInfo) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? domain = _undefined,
@@ -4152,7 +4403,7 @@ class _CopyWithImpl$Variables$Mutation$ChangeTimezone<TRes>
 
   final TRes Function(Variables$Mutation$ChangeTimezone) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? timezone = _undefined}) =>
       _then(Variables$Mutation$ChangeTimezone._({
@@ -4174,7 +4425,7 @@ class _CopyWithStubImpl$Variables$Mutation$ChangeTimezone<TRes>
 class Mutation$ChangeTimezone {
   Mutation$ChangeTimezone({
     required this.changeTimezone,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$ChangeTimezone.fromJson(Map<String, dynamic> json) {
@@ -4268,7 +4519,7 @@ class _CopyWithImpl$Mutation$ChangeTimezone<TRes>
 
   final TRes Function(Mutation$ChangeTimezone) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? changeTimezone = _undefined,
@@ -4367,7 +4618,7 @@ Mutation$ChangeTimezone _parserFn$Mutation$ChangeTimezone(
         Map<String, dynamic> data) =>
     Mutation$ChangeTimezone.fromJson(data);
 typedef OnMutationCompleted$Mutation$ChangeTimezone = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$ChangeTimezone?,
 );
 
@@ -4380,6 +4631,7 @@ class Options$Mutation$ChangeTimezone
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$ChangeTimezone? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$ChangeTimezone? onCompleted,
     graphql.OnMutationUpdate<Mutation$ChangeTimezone>? update,
@@ -4391,7 +4643,7 @@ class Options$Mutation$ChangeTimezone
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -4427,6 +4679,7 @@ class WatchOptions$Mutation$ChangeTimezone
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$ChangeTimezone? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -4438,7 +4691,7 @@ class WatchOptions$Mutation$ChangeTimezone
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationChangeTimezone,
           pollInterval: pollInterval,
@@ -4464,7 +4717,7 @@ class Mutation$ChangeTimezone$changeTimezone
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'TimezoneMutationReturn',
     this.timezone,
   });
 
@@ -4602,7 +4855,7 @@ class _CopyWithImpl$Mutation$ChangeTimezone$changeTimezone<TRes>
 
   final TRes Function(Mutation$ChangeTimezone$changeTimezone) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -4726,7 +4979,7 @@ class _CopyWithImpl$Variables$Mutation$ChangeAutoUpgradeSettings<TRes>
 
   final TRes Function(Variables$Mutation$ChangeAutoUpgradeSettings) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? settings = _undefined}) =>
       _then(Variables$Mutation$ChangeAutoUpgradeSettings._({
@@ -4748,7 +5001,7 @@ class _CopyWithStubImpl$Variables$Mutation$ChangeAutoUpgradeSettings<TRes>
 class Mutation$ChangeAutoUpgradeSettings {
   Mutation$ChangeAutoUpgradeSettings({
     required this.changeAutoUpgradeSettings,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$ChangeAutoUpgradeSettings.fromJson(
@@ -4850,7 +5103,7 @@ class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings<TRes>
 
   final TRes Function(Mutation$ChangeAutoUpgradeSettings) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? changeAutoUpgradeSettings = _undefined,
@@ -4965,7 +5218,7 @@ Mutation$ChangeAutoUpgradeSettings _parserFn$Mutation$ChangeAutoUpgradeSettings(
     Mutation$ChangeAutoUpgradeSettings.fromJson(data);
 typedef OnMutationCompleted$Mutation$ChangeAutoUpgradeSettings = FutureOr<void>
     Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$ChangeAutoUpgradeSettings?,
 );
 
@@ -4978,6 +5231,7 @@ class Options$Mutation$ChangeAutoUpgradeSettings
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$ChangeAutoUpgradeSettings? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$ChangeAutoUpgradeSettings? onCompleted,
     graphql.OnMutationUpdate<Mutation$ChangeAutoUpgradeSettings>? update,
@@ -4989,7 +5243,7 @@ class Options$Mutation$ChangeAutoUpgradeSettings
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -5026,6 +5280,7 @@ class WatchOptions$Mutation$ChangeAutoUpgradeSettings
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$ChangeAutoUpgradeSettings? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -5037,7 +5292,7 @@ class WatchOptions$Mutation$ChangeAutoUpgradeSettings
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationChangeAutoUpgradeSettings,
           pollInterval: pollInterval,
@@ -5067,7 +5322,7 @@ class Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'AutoUpgradeSettingsMutationReturn',
     required this.allowReboot,
     required this.enableAutoUpgrade,
   });
@@ -5229,7 +5484,7 @@ class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
   final TRes Function(
       Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,

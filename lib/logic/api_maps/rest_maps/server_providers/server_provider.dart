@@ -39,6 +39,7 @@ abstract class ServerProviderApi extends ApiMap {
     required final User rootUser,
     required final String domainName,
     required final String serverType,
+    required final DnsProvider dnsProvider,
   });
   Future<APIGenericResult<void>> createReverseDns({
     required final ServerHostingDetails serverDetails,
@@ -53,6 +54,20 @@ abstract class ServerProviderApi extends ApiMap {
     final DateTime start,
     final DateTime end,
   );
+
+  String dnsProviderToInfectName(final DnsProvider dnsProvider) {
+    String dnsProviderType;
+    switch (dnsProvider) {
+      case DnsProvider.desec:
+        dnsProviderType = 'DESEC';
+        break;
+      case DnsProvider.cloudflare:
+      default:
+        dnsProviderType = 'CLOUDFLARE';
+        break;
+    }
+    return dnsProviderType;
+  }
 
   /// Provider name key which lets infect understand what kind of installation
   /// it requires, for example 'digitaloceal' for Digital Ocean

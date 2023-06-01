@@ -10,16 +10,11 @@
 part of 'router.dart';
 
 abstract class _$RootRouter extends RootStackRouter {
-  _$RootRouter([GlobalKey<NavigatorState>? navigatorKey]) : super(navigatorKey);
+  // ignore: unused_element
+  _$RootRouter({super.navigatorKey});
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    AboutApplicationRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const AboutApplicationPage(),
-      );
-    },
     AppSettingsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -42,6 +37,12 @@ abstract class _$RootRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const MorePage(),
+      );
+    },
+    AboutApplicationRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const AboutApplicationPage(),
       );
     },
     OnboardingRoute.name: (routeData) {
@@ -179,20 +180,6 @@ abstract class _$RootRouter extends RootStackRouter {
 }
 
 /// generated route for
-/// [AboutApplicationPage]
-class AboutApplicationRoute extends PageRouteInfo<void> {
-  const AboutApplicationRoute({List<PageRouteInfo>? children})
-      : super(
-          AboutApplicationRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'AboutApplicationRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
 /// [AppSettingsPage]
 class AppSettingsRoute extends PageRouteInfo<void> {
   const AppSettingsRoute({List<PageRouteInfo>? children})
@@ -244,6 +231,20 @@ class MoreRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'MoreRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AboutApplicationPage]
+class AboutApplicationRoute extends PageRouteInfo<void> {
+  const AboutApplicationRoute({List<PageRouteInfo>? children})
+      : super(
+          AboutApplicationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AboutApplicationRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

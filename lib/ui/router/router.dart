@@ -46,7 +46,8 @@ Widget fadeThroughTransition(
   replaceInRouteName: 'Page|Screen|Routing,Route',
 )
 class RootRouter extends _$RootRouter {
-  RootRouter(GlobalKey<NavigatorState> super.navigatorKey);
+  RootRouter(final GlobalKey<NavigatorState> navigatorKey)
+      : super(navigatorKey: navigatorKey);
 
   @override
   RouteType get defaultRouteType => const RouteType.material();

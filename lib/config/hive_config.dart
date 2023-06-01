@@ -93,6 +93,9 @@ class BNames {
   /// A String field of [serverInstallationBox] box.
   static String serverProvider = 'serverProvider';
 
+  /// A String field of [serverInstallationBox] box.
+  static String dnsProvider = 'dnsProvider';
+
   /// A String field of [serverLocation] box.
   static String serverLocation = 'serverLocation';
 

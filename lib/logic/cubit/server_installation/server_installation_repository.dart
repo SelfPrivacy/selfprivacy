@@ -15,6 +15,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -45,7 +46,7 @@ class ServerInstallationRepository {
   Future<ServerInstallationState> load() async {
     final String? providerApiToken = getIt<ApiConfigModel>().serverProviderKey;
     final String? location = getIt<ApiConfigModel>().serverLocation;
-    final String? cloudflareToken = getIt<ApiConfigModel>().cloudFlareKey;
+    final String? dnsApiToken = getIt<ApiConfigModel>().dnsProviderKey;
     final String? serverTypeIdentificator = getIt<ApiConfigModel>().serverType;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
     final ServerProvider? serverProvider =
@@ -54,6 +55,7 @@ class ServerInstallationRepository {
         getIt<ApiConfigModel>().backblazeCredential;
     final ServerHostingDetails? serverDetails =
         getIt<ApiConfigModel>().serverDetails;
+    final DnsProvider? dnsProvider = getIt<ApiConfigModel>().dnsProvider;
 
     if (serverProvider != null ||
         (serverDetails != null &&
@@ -75,18 +77,24 @@ class ServerInstallationRepository {
       );
     }
 
-    // No other DNS provider is supported for now, so it's fine.
-    ApiController.initDnsProviderApiFactory(
-      DnsProviderApiFactorySettings(
-        provider: DnsProvider.cloudflare,
-      ),
-    );
+    if (ApiController.currentDnsProviderApiFactory == null) {
+      if (dnsProvider != null ||
+          (serverDomain != null &&
+              serverDomain.provider != DnsProvider.unknown)) {
+        ApiController.initDnsProviderApiFactory(
+          DnsProviderApiFactorySettings(
+            provider: dnsProvider ?? serverDomain!.provider,
+          ),
+        );
+      }
+    }
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
+      StagingOptions.verifyCertificate = true;
       return ServerInstallationFinished(
         providerApiToken: providerApiToken!,
         serverTypeIdentificator: serverTypeIdentificator ?? '',
-        cloudFlareKey: cloudflareToken!,
+        dnsApiToken: dnsApiToken!,
         serverDomain: serverDomain!,
         backblazeCredential: backblazeCredential!,
         serverDetails: serverDetails!,
@@ -103,14 +111,14 @@ class ServerInstallationRepository {
         serverDomain != null) {
       return ServerInstallationRecovery(
         providerApiToken: providerApiToken,
-        cloudFlareKey: cloudflareToken,
+        dnsApiToken: dnsApiToken,
         serverDomain: serverDomain,
         backblazeCredential: backblazeCredential,
         serverDetails: serverDetails,
         rootUser: box.get(BNames.rootUser),
         currentStep: _getCurrentRecoveryStep(
           providerApiToken,
-          cloudflareToken,
+          dnsApiToken,
           serverDomain,
           serverDetails,
         ),
@@ -120,7 +128,7 @@ class ServerInstallationRepository {
 
     return ServerInstallationNotFinished(
       providerApiToken: providerApiToken,
-      cloudFlareKey: cloudflareToken,
+      dnsApiToken: dnsApiToken,
       serverDomain: serverDomain,
       backblazeCredential: backblazeCredential,
       serverDetails: serverDetails,
@@ -147,7 +155,7 @@ class ServerInstallationRepository {
           if (serverDomain.provider != DnsProvider.unknown) {
             return RecoveryStep.backblazeToken;
           }
-          return RecoveryStep.cloudflareToken;
+          return RecoveryStep.dnsProviderToken;
         }
         return RecoveryStep.serverSelection;
       }
@@ -182,7 +190,16 @@ class ServerInstallationRepository {
       ),
     );
 
-    final String? domainId = await dnsProviderApi.getZoneId(domain);
+    /// TODO: nvm it's because only Cloudflare uses Zone
+    /// for other providers we need to implement a different kind of
+    /// functionality here... but it's on refactoring, let it be here for now.
+    final APIGenericResult<bool> apiResponse =
+        await dnsProviderApi.isApiTokenValid(token);
+
+    String? domainId;
+    if (apiResponse.success && apiResponse.data) {
+      domainId = await dnsProviderApi.getZoneId(domain);
+    }
     return domainId;
   }
 
@@ -238,7 +255,7 @@ class ServerInstallationRepository {
   Future<void> createServer(
     final User rootUser,
     final String domainName,
-    final String cloudFlareKey,
+    final String dnsApiToken,
     final BackblazeCredential backblazeCredential, {
     required final void Function() onCancel,
     required final Future<void> Function(ServerHostingDetails serverDetails)
@@ -256,7 +273,8 @@ class ServerInstallationRepository {
           ServerHostingDetails? serverDetails;
           try {
             final APIGenericResult createResult = await api.createServer(
-              dnsApiToken: cloudFlareKey,
+              dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
+              dnsApiToken: dnsApiToken,
               rootUser: rootUser,
               domainName: domainName,
               serverType: getIt<ApiConfigModel>().serverType!,
@@ -280,7 +298,8 @@ class ServerInstallationRepository {
     try {
       final APIGenericResult<ServerHostingDetails?> createServerResult =
           await api.createServer(
-        dnsApiToken: cloudFlareKey,
+        dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
+        dnsApiToken: dnsApiToken,
         rootUser: rootUser,
         domainName: domainName,
         serverType: getIt<ApiConfigModel>().serverType!,
@@ -304,7 +323,8 @@ class ServerInstallationRepository {
             ServerHostingDetails? serverDetails;
             try {
               final APIGenericResult createResult = await api.createServer(
-                dnsApiToken: cloudFlareKey,
+                dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
+                dnsApiToken: dnsApiToken,
                 rootUser: rootUser,
                 domainName: domainName,
                 serverType: getIt<ApiConfigModel>().serverType!,
@@ -706,6 +726,10 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
+  Future<void> saveDnsProviderType(final DnsProvider type) async {
+    await getIt<ApiConfigModel>().storeDnsProviderType(type);
+  }
+
   Future<void> saveBackblazeKey(
     final BackblazeCredential backblazeCredential,
   ) async {
@@ -717,11 +741,11 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
-  Future<void> saveCloudFlareKey(final String key) async {
-    await getIt<ApiConfigModel>().storeCloudFlareKey(key);
+  Future<void> saveDnsProviderKey(final String key) async {
+    await getIt<ApiConfigModel>().storeDnsProviderKey(key);
   }
 
-  Future<void> deleteCloudFlareKey() async {
+  Future<void> deleteDnsProviderKey() async {
     await box.delete(BNames.cloudFlareKey);
     getIt<ApiConfigModel>().init();
   }

@@ -116,7 +116,7 @@ class _CopyWithImpl$Input$AutoUpgradeSettingsInput<TRes>
 
   final TRes Function(Input$AutoUpgradeSettingsInput) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? enableAutoUpgrade = _undefined,
@@ -286,7 +286,7 @@ class _CopyWithImpl$Input$MigrateToBindsInput<TRes>
 
   final TRes Function(Input$MigrateToBindsInput) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? emailBlockDevice = _undefined,
@@ -424,7 +424,7 @@ class _CopyWithImpl$Input$MoveServiceInput<TRes>
 
   final TRes Function(Input$MoveServiceInput) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? serviceId = _undefined,
@@ -567,7 +567,7 @@ class _CopyWithImpl$Input$RecoveryKeyLimitsInput<TRes>
 
   final TRes Function(Input$RecoveryKeyLimitsInput) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? expirationDate = _undefined,
@@ -692,7 +692,7 @@ class _CopyWithImpl$Input$SshMutationInput<TRes>
 
   final TRes Function(Input$SshMutationInput) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? username = _undefined,
@@ -818,7 +818,7 @@ class _CopyWithImpl$Input$UseNewDeviceKeyInput<TRes>
 
   final TRes Function(Input$UseNewDeviceKeyInput) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? key = _undefined,
@@ -943,7 +943,7 @@ class _CopyWithImpl$Input$UseRecoveryKeyInput<TRes>
 
   final TRes Function(Input$UseRecoveryKeyInput) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? key = _undefined,
@@ -1068,7 +1068,7 @@ class _CopyWithImpl$Input$UserMutationInput<TRes>
 
   final TRes Function(Input$UserMutationInput) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? username = _undefined,
@@ -1096,12 +1096,14 @@ class _CopyWithStubImpl$Input$UserMutationInput<TRes>
       _res;
 }
 
-enum Enum$DnsProvider { CLOUDFLARE, $unknown }
+enum Enum$DnsProvider { CLOUDFLARE, DESEC, $unknown }
 
 String toJson$Enum$DnsProvider(Enum$DnsProvider e) {
   switch (e) {
     case Enum$DnsProvider.CLOUDFLARE:
       return r'CLOUDFLARE';
+    case Enum$DnsProvider.DESEC:
+      return r'DESEC';
     case Enum$DnsProvider.$unknown:
       return r'$unknown';
   }
@@ -1111,6 +1113,8 @@ Enum$DnsProvider fromJson$Enum$DnsProvider(String value) {
   switch (value) {
     case r'CLOUDFLARE':
       return Enum$DnsProvider.CLOUDFLARE;
+    case r'DESEC':
+      return Enum$DnsProvider.DESEC;
     default:
       return Enum$DnsProvider.$unknown;
   }
@@ -1264,7 +1268,7 @@ class Fragment$dnsRecordFields {
     this.priority,
     required this.recordType,
     required this.ttl,
-    required this.$__typename,
+    this.$__typename = 'DnsRecord',
   });
 
   factory Fragment$dnsRecordFields.fromJson(Map<String, dynamic> json) {
@@ -1413,7 +1417,7 @@ class _CopyWithImpl$Fragment$dnsRecordFields<TRes>
 
   final TRes Function(Fragment$dnsRecordFields) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? content = _undefined,
@@ -1551,7 +1555,7 @@ extension ClientExtension$Fragment$dnsRecordFields on graphql.GraphQLClient {
   }
 }
 
-const possibleTypesMap = {
+const possibleTypesMap = <String, Set<String>>{
   'MutationReturnInterface': {
     'ApiKeyMutationReturn',
     'AutoUpgradeSettingsMutationReturn',

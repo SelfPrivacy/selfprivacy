@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
+import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -66,6 +67,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
+  void setDnsProviderType(final DnsProvider providerType) async {
+    await repository.saveDnsProviderType(providerType);
+    ApiController.initDnsProviderApiFactory(
+      DnsProviderApiFactorySettings(
+        provider: providerType,
+      ),
+    );
+  }
+
   ProviderApiTokenValidation serverProviderApiTokenValidation() =>
       ApiController.currentServerProviderApiFactory!
           .getServerProvider()
@@ -101,16 +111,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<bool?> isDnsProviderApiTokenValid(
     final String providerToken,
   ) async {
-    if (ApiController.currentDnsProviderApiFactory == null) {
-      // No other DNS provider is supported for now,
-      //    so it's safe to hardcode Cloudflare
-      ApiController.initDnsProviderApiFactory(
-        DnsProviderApiFactorySettings(
-          provider: DnsProvider.cloudflare,
-        ),
-      );
-    }
-
     final APIGenericResult<bool> apiResponse =
         await ApiController.currentDnsProviderApiFactory!
             .getDnsProvider(
@@ -214,16 +214,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  void setCloudflareKey(final String cloudFlareKey) async {
+  void setDnsApiToken(final String dnsApiToken) async {
     if (state is ServerInstallationRecovery) {
-      setAndValidateCloudflareToken(cloudFlareKey);
+      setAndValidateDnsApiToken(dnsApiToken);
       return;
     }
-    await repository.saveCloudFlareKey(cloudFlareKey);
+    await repository.saveDnsProviderKey(dnsApiToken);
 
     emit(
       (state as ServerInstallationNotFinished)
-          .copyWith(cloudFlareKey: cloudFlareKey),
+          .copyWith(dnsApiToken: dnsApiToken),
     );
   }
 
@@ -284,7 +284,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       await repository.createServer(
         state.rootUser!,
         state.serverDomain!.domainName,
-        state.cloudFlareKey!,
+        state.dnsApiToken!,
         state.backblazeCredential!,
         onCancel: onCancel,
         onSuccess: onSuccess,
@@ -437,6 +437,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(TimerState(dataState: dataState, isLoading: true));
 
     final bool isServerWorking = await repository.isHttpServerWorking();
+    StagingOptions.verifyCertificate = true;
 
     if (isServerWorking) {
       bool dkimCreated = true;
@@ -542,13 +543,20 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getServerProviderType();
-      if (provider == ServerProvider.unknown) {
+      final dnsProvider = await ServerApi(
+        customToken: serverDetails.apiToken,
+        isWithToken: true,
+      ).getDnsProviderType();
+      if (provider == ServerProvider.unknown ||
+          dnsProvider == DnsProvider.unknown) {
         getIt<NavigationService>()
             .showSnackBar('recovering.generic_error'.tr());
         return;
       }
       await repository.saveServerDetails(serverDetails);
+      await repository.saveDnsProviderType(dnsProvider);
       setServerProviderType(provider);
+      setDnsProviderType(dnsProvider);
       emit(
         dataState.copyWith(
           serverDetails: serverDetails,
@@ -586,7 +594,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           ),
         );
         break;
-      case RecoveryStep.cloudflareToken:
+      case RecoveryStep.dnsProviderToken:
         repository.deleteServerDetails();
         emit(
           dataState.copyWith(
@@ -682,12 +690,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(
       dataState.copyWith(
         serverDetails: serverDetails,
-        currentStep: RecoveryStep.cloudflareToken,
+        currentStep: RecoveryStep.dnsProviderToken,
       ),
     );
   }
 
-  Future<void> setAndValidateCloudflareToken(final String token) async {
+  Future<void> setAndValidateDnsApiToken(final String token) async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
     final ServerDomain? serverDomain = dataState.serverDomain;
@@ -701,14 +709,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           .showSnackBar('recovering.domain_not_available_on_token'.tr());
       return;
     }
+    final dnsProviderType = await ServerApi(
+      customToken: dataState.serverDetails!.apiToken,
+      isWithToken: true,
+    ).getDnsProviderType();
     await repository.saveDomain(
       ServerDomain(
         domainName: serverDomain.domainName,
         zoneId: zoneId,
-        provider: DnsProvider.cloudflare,
+        provider: dnsProviderType,
       ),
     );
-    await repository.saveCloudFlareKey(token);
+    await repository.saveDnsProviderKey(token);
     emit(
       dataState.copyWith(
         serverDomain: ServerDomain(
@@ -716,7 +728,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           zoneId: zoneId,
           provider: DnsProvider.cloudflare,
         ),
-        cloudFlareKey: token,
+        dnsApiToken: token,
         currentStep: RecoveryStep.backblazeToken,
       ),
     );
@@ -748,6 +760,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void clearAppConfig() {
     closeTimer();
     ApiController.clearProviderApiFactories();
+    StagingOptions.verifyCertificate = false;
     repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }
@@ -767,7 +780,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ServerInstallationNotFinished(
         providerApiToken: state.providerApiToken,
         serverDomain: state.serverDomain,
-        cloudFlareKey: state.cloudFlareKey,
+        dnsApiToken: state.dnsApiToken,
         backblazeCredential: state.backblazeCredential,
         rootUser: state.rootUser,
         serverDetails: null,

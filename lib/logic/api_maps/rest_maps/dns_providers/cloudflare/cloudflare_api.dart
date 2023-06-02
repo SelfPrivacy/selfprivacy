@@ -21,7 +21,11 @@ class CloudflareApi extends DnsProviderApi {
 
   @override
   BaseOptions get options {
-    final BaseOptions options = BaseOptions(baseUrl: rootAddress);
+    final BaseOptions options = BaseOptions(
+      baseUrl: rootAddress,
+      contentType: Headers.jsonContentType,
+      responseType: ResponseType.json,
+    );
     if (isWithToken) {
       final String? token = getIt<ApiConfigModel>().dnsProviderKey;
       assert(token != null);

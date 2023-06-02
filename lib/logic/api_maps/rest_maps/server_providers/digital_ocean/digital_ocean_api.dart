@@ -25,7 +25,11 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
   @override
   BaseOptions get options {
-    final BaseOptions options = BaseOptions(baseUrl: rootAddress);
+    final BaseOptions options = BaseOptions(
+      baseUrl: rootAddress,
+      contentType: Headers.jsonContentType,
+      responseType: ResponseType.json,
+    );
     if (isWithToken) {
       final String? token = getIt<ApiConfigModel>().serverProviderKey;
       assert(token != null);

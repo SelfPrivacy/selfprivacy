@@ -174,6 +174,8 @@ class ProviderSelectionPage extends StatelessWidget {
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+
+          /// TODO: Remove obvious repetition
           children: [
             Text(
               'initializing.select_dns'.tr(),
@@ -289,6 +291,62 @@ class ProviderSelectionPage extends StatelessWidget {
                     BrandOutlinedButton(
                       onPressed: () =>
                           launchUrlString('https://dash.cloudflare.com/'),
+                      title: 'initializing.select_provider_site_button'.tr(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            OutlinedCard(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: const Color.fromARGB(255, 1, 126, 251),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/images/logos/digital_ocean.svg',
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          'Digital Ocean',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'initializing.select_provider_price_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'initializing.select_provider_price_free'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    BrandButton.rised(
+                      text: 'basis.select'.tr(),
+                      onPressed: () {
+                        serverInstallationCubit
+                            .setDnsProviderType(DnsProviderType.digitalOcean);
+                        callback(DnsProviderType.digitalOcean);
+                      },
+                    ),
+                    // Outlined button that will open website
+                    BrandOutlinedButton(
+                      onPressed: () =>
+                          launchUrlString('https://cloud.digitalocean.com/'),
                       title: 'initializing.select_provider_site_button'.tr(),
                     ),
                   ],

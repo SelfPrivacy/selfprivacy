@@ -398,6 +398,9 @@ class HetznerServerProvider extends ServerProvider {
       case DnsProviderType.digitalOcean:
         dnsProviderType = 'DIGITALOCEAN';
         break;
+      case DnsProviderType.desec:
+        dnsProviderType = 'DESEC';
+        break;
       case DnsProviderType.cloudflare:
       default:
         dnsProviderType = 'CLOUDFLARE';

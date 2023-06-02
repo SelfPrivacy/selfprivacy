@@ -79,6 +79,7 @@ class ServerInstallationRepository {
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
       StagingOptions.verifyCertificate = true;
       return ServerInstallationFinished(
+        installationDialoguePopUp: null,
         providerApiToken: providerApiToken!,
         serverTypeIdentificator: serverTypeIdentificator ?? '',
         dnsApiToken: dnsApiToken!,

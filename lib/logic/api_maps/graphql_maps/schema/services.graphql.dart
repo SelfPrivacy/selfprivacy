@@ -141,6 +141,177 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
             this,
             (i) => i,
           );
+  _T when<_T>({
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
+        apiKeyMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
+        autoUpgradeSettingsMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)
+        deviceApiTokenMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$GenericJobButationReturn)
+        genericJobButationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$GenericMutationReturn)
+        genericMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)
+        serviceJobMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ServiceMutationReturn)
+        serviceMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$TimezoneMutationReturn)
+        timezoneMutationReturn,
+    required _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
+        userMutationReturn,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ApiKeyMutationReturn":
+        return apiKeyMutationReturn(
+            this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
+
+      case "AutoUpgradeSettingsMutationReturn":
+        return autoUpgradeSettingsMutationReturn(this
+            as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
+
+      case "DeviceApiTokenMutationReturn":
+        return deviceApiTokenMutationReturn(this
+            as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+
+      case "GenericJobButationReturn":
+        return genericJobButationReturn(this
+            as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+
+      case "GenericMutationReturn":
+        return genericMutationReturn(
+            this as Fragment$basicMutationReturnFields$$GenericMutationReturn);
+
+      case "ServiceJobMutationReturn":
+        return serviceJobMutationReturn(this
+            as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
+
+      case "ServiceMutationReturn":
+        return serviceMutationReturn(
+            this as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
+
+      case "TimezoneMutationReturn":
+        return timezoneMutationReturn(
+            this as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
+
+      case "UserMutationReturn":
+        return userMutationReturn(
+            this as Fragment$basicMutationReturnFields$$UserMutationReturn);
+
+      default:
+        return orElse();
+    }
+  }
+
+  _T maybeWhen<_T>({
+    _T Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)?
+        apiKeyMutationReturn,
+    _T Function(
+            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)?
+        autoUpgradeSettingsMutationReturn,
+    _T Function(
+            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)?
+        deviceApiTokenMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)?
+        genericJobButationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
+        genericMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)?
+        serviceJobMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)?
+        serviceMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$TimezoneMutationReturn)?
+        timezoneMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)?
+        userMutationReturn,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ApiKeyMutationReturn":
+        if (apiKeyMutationReturn != null) {
+          return apiKeyMutationReturn(
+              this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "AutoUpgradeSettingsMutationReturn":
+        if (autoUpgradeSettingsMutationReturn != null) {
+          return autoUpgradeSettingsMutationReturn(this
+              as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "DeviceApiTokenMutationReturn":
+        if (deviceApiTokenMutationReturn != null) {
+          return deviceApiTokenMutationReturn(this
+              as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericJobButationReturn":
+        if (genericJobButationReturn != null) {
+          return genericJobButationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericMutationReturn":
+        if (genericMutationReturn != null) {
+          return genericMutationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "ServiceJobMutationReturn":
+        if (serviceJobMutationReturn != null) {
+          return serviceJobMutationReturn(this
+              as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "ServiceMutationReturn":
+        if (serviceMutationReturn != null) {
+          return serviceMutationReturn(this
+              as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "TimezoneMutationReturn":
+        if (timezoneMutationReturn != null) {
+          return timezoneMutationReturn(this
+              as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "UserMutationReturn":
+        if (userMutationReturn != null) {
+          return userMutationReturn(
+              this as Fragment$basicMutationReturnFields$$UserMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      default:
+        return orElse();
+    }
+  }
 }
 
 abstract class CopyWith$Fragment$basicMutationReturnFields<TRes> {
@@ -171,7 +342,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields<TRes>
 
   final TRes Function(Fragment$basicMutationReturnFields) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -297,7 +468,7 @@ class Fragment$basicMutationReturnFields$$ApiKeyMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ApiKeyMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ApiKeyMutationReturn.fromJson(
@@ -428,7 +599,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -476,7 +647,7 @@ class Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'AutoUpgradeSettingsMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn.fromJson(
@@ -612,7 +783,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutat
           Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -661,7 +832,7 @@ class Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'DeviceApiTokenMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn.fromJson(
@@ -795,7 +966,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationRe
   final TRes Function(
       Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -843,7 +1014,7 @@ class Fragment$basicMutationReturnFields$$GenericJobButationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericJobButationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$GenericJobButationReturn.fromJson(
@@ -975,7 +1146,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn
   final TRes Function(
       Fragment$basicMutationReturnFields$$GenericJobButationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1023,7 +1194,7 @@ class Fragment$basicMutationReturnFields$$GenericMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$GenericMutationReturn.fromJson(
@@ -1154,7 +1325,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1202,7 +1373,7 @@ class Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceJobMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ServiceJobMutationReturn.fromJson(
@@ -1334,7 +1505,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
   final TRes Function(
       Fragment$basicMutationReturnFields$$ServiceJobMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1382,7 +1553,7 @@ class Fragment$basicMutationReturnFields$$ServiceMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ServiceMutationReturn.fromJson(
@@ -1513,7 +1684,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1561,7 +1732,7 @@ class Fragment$basicMutationReturnFields$$TimezoneMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'TimezoneMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$TimezoneMutationReturn.fromJson(
@@ -1693,7 +1864,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
   final TRes Function(
       Fragment$basicMutationReturnFields$$TimezoneMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1741,7 +1912,7 @@ class Fragment$basicMutationReturnFields$$UserMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'UserMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$UserMutationReturn.fromJson(
@@ -1869,7 +2040,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<TRes>
   final TRes Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1913,7 +2084,7 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<
 class Query$AllServices {
   Query$AllServices({
     required this.services,
-    required this.$__typename,
+    this.$__typename = 'Query',
   });
 
   factory Query$AllServices.fromJson(Map<String, dynamic> json) {
@@ -2006,7 +2177,7 @@ class _CopyWithImpl$Query$AllServices<TRes>
 
   final TRes Function(Query$AllServices) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? services = _undefined,
@@ -2225,6 +2396,10 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
 ]);
 Query$AllServices _parserFn$Query$AllServices(Map<String, dynamic> data) =>
     Query$AllServices.fromJson(data);
+typedef OnQueryComplete$Query$AllServices = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Query$AllServices?,
+);
 
 class Options$Query$AllServices
     extends graphql.QueryOptions<Query$AllServices> {
@@ -2234,19 +2409,40 @@ class Options$Query$AllServices
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$AllServices? typedOptimisticResult,
     Duration? pollInterval,
     graphql.Context? context,
-  }) : super(
+    OnQueryComplete$Query$AllServices? onComplete,
+    graphql.OnQueryError? onError,
+  })  : onCompleteWithParsed = onComplete,
+        super(
           operationName: operationName,
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           pollInterval: pollInterval,
           context: context,
+          onComplete: onComplete == null
+              ? null
+              : (data) => onComplete(
+                    data,
+                    data == null ? null : _parserFn$Query$AllServices(data),
+                  ),
+          onError: onError,
           document: documentNodeQueryAllServices,
           parserFn: _parserFn$Query$AllServices,
         );
+
+  final OnQueryComplete$Query$AllServices? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onComplete == null
+            ? super.properties
+            : super.properties.where((property) => property != onComplete),
+        onCompleteWithParsed,
+      ];
 }
 
 class WatchOptions$Query$AllServices
@@ -2257,6 +2453,7 @@ class WatchOptions$Query$AllServices
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$AllServices? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -2267,7 +2464,7 @@ class WatchOptions$Query$AllServices
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeQueryAllServices,
           pollInterval: pollInterval,
@@ -2317,7 +2514,7 @@ extension ClientExtension$Query$AllServices on graphql.GraphQLClient {
 class Query$AllServices$services {
   Query$AllServices$services({
     required this.allServices,
-    required this.$__typename,
+    this.$__typename = 'Services',
   });
 
   factory Query$AllServices$services.fromJson(Map<String, dynamic> json) {
@@ -2426,7 +2623,7 @@ class _CopyWithImpl$Query$AllServices$services<TRes>
 
   final TRes Function(Query$AllServices$services) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? allServices = _undefined,
@@ -2481,7 +2678,7 @@ class Query$AllServices$services$allServices {
     required this.storageUsage,
     required this.svgIcon,
     this.url,
-    required this.$__typename,
+    this.$__typename = 'Service',
   });
 
   factory Query$AllServices$services$allServices.fromJson(
@@ -2739,7 +2936,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
 
   final TRes Function(Query$AllServices$services$allServices) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? description = _undefined,
@@ -2843,7 +3040,7 @@ class Query$AllServices$services$allServices$storageUsage {
     required this.title,
     required this.usedSpace,
     this.volume,
-    required this.$__typename,
+    this.$__typename = 'ServiceStorageUsage',
   });
 
   factory Query$AllServices$services$allServices$storageUsage.fromJson(
@@ -2976,7 +3173,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage<TRes>
   final TRes Function(Query$AllServices$services$allServices$storageUsage)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? title = _undefined,
@@ -3035,7 +3232,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage<
 class Query$AllServices$services$allServices$storageUsage$volume {
   Query$AllServices$services$allServices$storageUsage$volume({
     required this.name,
-    required this.$__typename,
+    this.$__typename = 'StorageVolume',
   });
 
   factory Query$AllServices$services$allServices$storageUsage$volume.fromJson(
@@ -3139,7 +3336,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage$volume<
   final TRes Function(
       Query$AllServices$services$allServices$storageUsage$volume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? name = _undefined,
@@ -3249,7 +3446,7 @@ class _CopyWithImpl$Variables$Mutation$EnableService<TRes>
 
   final TRes Function(Variables$Mutation$EnableService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? serviceId = _undefined}) =>
       _then(Variables$Mutation$EnableService._({
@@ -3271,7 +3468,7 @@ class _CopyWithStubImpl$Variables$Mutation$EnableService<TRes>
 class Mutation$EnableService {
   Mutation$EnableService({
     required this.enableService,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$EnableService.fromJson(Map<String, dynamic> json) {
@@ -3365,7 +3562,7 @@ class _CopyWithImpl$Mutation$EnableService<TRes>
 
   final TRes Function(Mutation$EnableService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? enableService = _undefined,
@@ -3457,7 +3654,7 @@ Mutation$EnableService _parserFn$Mutation$EnableService(
         Map<String, dynamic> data) =>
     Mutation$EnableService.fromJson(data);
 typedef OnMutationCompleted$Mutation$EnableService = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$EnableService?,
 );
 
@@ -3470,6 +3667,7 @@ class Options$Mutation$EnableService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$EnableService? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$EnableService? onCompleted,
     graphql.OnMutationUpdate<Mutation$EnableService>? update,
@@ -3481,7 +3679,7 @@ class Options$Mutation$EnableService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -3517,6 +3715,7 @@ class WatchOptions$Mutation$EnableService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$EnableService? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -3528,7 +3727,7 @@ class WatchOptions$Mutation$EnableService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationEnableService,
           pollInterval: pollInterval,
@@ -3554,7 +3753,7 @@ class Mutation$EnableService$enableService
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceMutationReturn',
   });
 
   factory Mutation$EnableService$enableService.fromJson(
@@ -3677,7 +3876,7 @@ class _CopyWithImpl$Mutation$EnableService$enableService<TRes>
 
   final TRes Function(Mutation$EnableService$enableService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -3793,7 +3992,7 @@ class _CopyWithImpl$Variables$Mutation$DisableService<TRes>
 
   final TRes Function(Variables$Mutation$DisableService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? serviceId = _undefined}) =>
       _then(Variables$Mutation$DisableService._({
@@ -3815,7 +4014,7 @@ class _CopyWithStubImpl$Variables$Mutation$DisableService<TRes>
 class Mutation$DisableService {
   Mutation$DisableService({
     required this.disableService,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$DisableService.fromJson(Map<String, dynamic> json) {
@@ -3909,7 +4108,7 @@ class _CopyWithImpl$Mutation$DisableService<TRes>
 
   final TRes Function(Mutation$DisableService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? disableService = _undefined,
@@ -4001,7 +4200,7 @@ Mutation$DisableService _parserFn$Mutation$DisableService(
         Map<String, dynamic> data) =>
     Mutation$DisableService.fromJson(data);
 typedef OnMutationCompleted$Mutation$DisableService = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$DisableService?,
 );
 
@@ -4014,6 +4213,7 @@ class Options$Mutation$DisableService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$DisableService? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$DisableService? onCompleted,
     graphql.OnMutationUpdate<Mutation$DisableService>? update,
@@ -4025,7 +4225,7 @@ class Options$Mutation$DisableService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -4061,6 +4261,7 @@ class WatchOptions$Mutation$DisableService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$DisableService? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -4072,7 +4273,7 @@ class WatchOptions$Mutation$DisableService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationDisableService,
           pollInterval: pollInterval,
@@ -4098,7 +4299,7 @@ class Mutation$DisableService$disableService
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceMutationReturn',
   });
 
   factory Mutation$DisableService$disableService.fromJson(
@@ -4221,7 +4422,7 @@ class _CopyWithImpl$Mutation$DisableService$disableService<TRes>
 
   final TRes Function(Mutation$DisableService$disableService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -4336,7 +4537,7 @@ class _CopyWithImpl$Variables$Mutation$StopService<TRes>
 
   final TRes Function(Variables$Mutation$StopService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? serviceId = _undefined}) =>
       _then(Variables$Mutation$StopService._({
@@ -4358,7 +4559,7 @@ class _CopyWithStubImpl$Variables$Mutation$StopService<TRes>
 class Mutation$StopService {
   Mutation$StopService({
     required this.stopService,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$StopService.fromJson(Map<String, dynamic> json) {
@@ -4451,7 +4652,7 @@ class _CopyWithImpl$Mutation$StopService<TRes>
 
   final TRes Function(Mutation$StopService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? stopService = _undefined,
@@ -4543,7 +4744,7 @@ Mutation$StopService _parserFn$Mutation$StopService(
         Map<String, dynamic> data) =>
     Mutation$StopService.fromJson(data);
 typedef OnMutationCompleted$Mutation$StopService = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$StopService?,
 );
 
@@ -4556,6 +4757,7 @@ class Options$Mutation$StopService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$StopService? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$StopService? onCompleted,
     graphql.OnMutationUpdate<Mutation$StopService>? update,
@@ -4567,7 +4769,7 @@ class Options$Mutation$StopService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -4601,6 +4803,7 @@ class WatchOptions$Mutation$StopService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$StopService? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -4612,7 +4815,7 @@ class WatchOptions$Mutation$StopService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationStopService,
           pollInterval: pollInterval,
@@ -4638,7 +4841,7 @@ class Mutation$StopService$stopService
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceMutationReturn',
   });
 
   factory Mutation$StopService$stopService.fromJson(Map<String, dynamic> json) {
@@ -4759,7 +4962,7 @@ class _CopyWithImpl$Mutation$StopService$stopService<TRes>
 
   final TRes Function(Mutation$StopService$stopService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -4874,7 +5077,7 @@ class _CopyWithImpl$Variables$Mutation$StartService<TRes>
 
   final TRes Function(Variables$Mutation$StartService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? serviceId = _undefined}) =>
       _then(Variables$Mutation$StartService._({
@@ -4896,7 +5099,7 @@ class _CopyWithStubImpl$Variables$Mutation$StartService<TRes>
 class Mutation$StartService {
   Mutation$StartService({
     required this.startService,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$StartService.fromJson(Map<String, dynamic> json) {
@@ -4989,7 +5192,7 @@ class _CopyWithImpl$Mutation$StartService<TRes>
 
   final TRes Function(Mutation$StartService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? startService = _undefined,
@@ -5081,7 +5284,7 @@ Mutation$StartService _parserFn$Mutation$StartService(
         Map<String, dynamic> data) =>
     Mutation$StartService.fromJson(data);
 typedef OnMutationCompleted$Mutation$StartService = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$StartService?,
 );
 
@@ -5094,6 +5297,7 @@ class Options$Mutation$StartService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$StartService? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$StartService? onCompleted,
     graphql.OnMutationUpdate<Mutation$StartService>? update,
@@ -5105,7 +5309,7 @@ class Options$Mutation$StartService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -5139,6 +5343,7 @@ class WatchOptions$Mutation$StartService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$StartService? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -5150,7 +5355,7 @@ class WatchOptions$Mutation$StartService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationStartService,
           pollInterval: pollInterval,
@@ -5176,7 +5381,7 @@ class Mutation$StartService$startService
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceMutationReturn',
   });
 
   factory Mutation$StartService$startService.fromJson(
@@ -5299,7 +5504,7 @@ class _CopyWithImpl$Mutation$StartService$startService<TRes>
 
   final TRes Function(Mutation$StartService$startService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -5415,7 +5620,7 @@ class _CopyWithImpl$Variables$Mutation$RestartService<TRes>
 
   final TRes Function(Variables$Mutation$RestartService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? serviceId = _undefined}) =>
       _then(Variables$Mutation$RestartService._({
@@ -5437,7 +5642,7 @@ class _CopyWithStubImpl$Variables$Mutation$RestartService<TRes>
 class Mutation$RestartService {
   Mutation$RestartService({
     required this.restartService,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$RestartService.fromJson(Map<String, dynamic> json) {
@@ -5531,7 +5736,7 @@ class _CopyWithImpl$Mutation$RestartService<TRes>
 
   final TRes Function(Mutation$RestartService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? restartService = _undefined,
@@ -5623,7 +5828,7 @@ Mutation$RestartService _parserFn$Mutation$RestartService(
         Map<String, dynamic> data) =>
     Mutation$RestartService.fromJson(data);
 typedef OnMutationCompleted$Mutation$RestartService = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$RestartService?,
 );
 
@@ -5636,6 +5841,7 @@ class Options$Mutation$RestartService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$RestartService? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$RestartService? onCompleted,
     graphql.OnMutationUpdate<Mutation$RestartService>? update,
@@ -5647,7 +5853,7 @@ class Options$Mutation$RestartService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -5683,6 +5889,7 @@ class WatchOptions$Mutation$RestartService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$RestartService? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -5694,7 +5901,7 @@ class WatchOptions$Mutation$RestartService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationRestartService,
           pollInterval: pollInterval,
@@ -5720,7 +5927,7 @@ class Mutation$RestartService$restartService
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceMutationReturn',
   });
 
   factory Mutation$RestartService$restartService.fromJson(
@@ -5843,7 +6050,7 @@ class _CopyWithImpl$Mutation$RestartService$restartService<TRes>
 
   final TRes Function(Mutation$RestartService$restartService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -5961,7 +6168,7 @@ class _CopyWithImpl$Variables$Mutation$MoveService<TRes>
 
   final TRes Function(Variables$Mutation$MoveService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? input = _undefined}) =>
       _then(Variables$Mutation$MoveService._({
@@ -5983,7 +6190,7 @@ class _CopyWithStubImpl$Variables$Mutation$MoveService<TRes>
 class Mutation$MoveService {
   Mutation$MoveService({
     required this.moveService,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$MoveService.fromJson(Map<String, dynamic> json) {
@@ -6076,7 +6283,7 @@ class _CopyWithImpl$Mutation$MoveService<TRes>
 
   final TRes Function(Mutation$MoveService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? moveService = _undefined,
@@ -6260,7 +6467,7 @@ Mutation$MoveService _parserFn$Mutation$MoveService(
         Map<String, dynamic> data) =>
     Mutation$MoveService.fromJson(data);
 typedef OnMutationCompleted$Mutation$MoveService = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$MoveService?,
 );
 
@@ -6273,6 +6480,7 @@ class Options$Mutation$MoveService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$MoveService? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$MoveService? onCompleted,
     graphql.OnMutationUpdate<Mutation$MoveService>? update,
@@ -6284,7 +6492,7 @@ class Options$Mutation$MoveService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -6318,6 +6526,7 @@ class WatchOptions$Mutation$MoveService
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$MoveService? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -6329,7 +6538,7 @@ class WatchOptions$Mutation$MoveService
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationMoveService,
           pollInterval: pollInterval,
@@ -6355,7 +6564,7 @@ class Mutation$MoveService$moveService
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceJobMutationReturn',
     this.job,
   });
 
@@ -6495,7 +6704,7 @@ class _CopyWithImpl$Mutation$MoveService$moveService<TRes>
 
   final TRes Function(Mutation$MoveService$moveService) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -6560,7 +6769,7 @@ class Mutation$MoveService$moveService$job {
     this.statusText,
     required this.uid,
     required this.updatedAt,
-    required this.$__typename,
+    this.$__typename = 'ApiJob',
   });
 
   factory Mutation$MoveService$moveService$job.fromJson(
@@ -6796,7 +7005,7 @@ class _CopyWithImpl$Mutation$MoveService$moveService$job<TRes>
 
   final TRes Function(Mutation$MoveService$moveService$job) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? createdAt = _undefined,

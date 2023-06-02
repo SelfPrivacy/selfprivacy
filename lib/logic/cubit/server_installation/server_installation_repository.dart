@@ -68,7 +68,7 @@ class ServerInstallationRepository {
 
     if (dnsProvider != null ||
         (serverDomain != null &&
-            serverDomain.provider != ServerProviderType.unknown)) {
+            serverDomain.provider != DnsProviderType.unknown)) {
       ProvidersController.initDnsProvider(
         DnsProviderSettings(
           provider: dnsProvider ?? serverDomain!.provider,

@@ -32,12 +32,14 @@ class BrandButton {
     assert(text != null || child != null, 'required title or child');
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        minHeight: 40,
         minWidth: double.infinity,
       ),
       child: FilledButton(
         key: key,
         onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.padded,
+        ),
         child: child ?? Text(text ?? ''),
       ),
     );

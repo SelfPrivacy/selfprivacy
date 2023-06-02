@@ -142,6 +142,177 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
             this,
             (i) => i,
           );
+  _T when<_T>({
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
+        apiKeyMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
+        autoUpgradeSettingsMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)
+        deviceApiTokenMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$GenericJobButationReturn)
+        genericJobButationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$GenericMutationReturn)
+        genericMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)
+        serviceJobMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$ServiceMutationReturn)
+        serviceMutationReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$TimezoneMutationReturn)
+        timezoneMutationReturn,
+    required _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
+        userMutationReturn,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ApiKeyMutationReturn":
+        return apiKeyMutationReturn(
+            this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
+
+      case "AutoUpgradeSettingsMutationReturn":
+        return autoUpgradeSettingsMutationReturn(this
+            as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
+
+      case "DeviceApiTokenMutationReturn":
+        return deviceApiTokenMutationReturn(this
+            as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+
+      case "GenericJobButationReturn":
+        return genericJobButationReturn(this
+            as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+
+      case "GenericMutationReturn":
+        return genericMutationReturn(
+            this as Fragment$basicMutationReturnFields$$GenericMutationReturn);
+
+      case "ServiceJobMutationReturn":
+        return serviceJobMutationReturn(this
+            as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
+
+      case "ServiceMutationReturn":
+        return serviceMutationReturn(
+            this as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
+
+      case "TimezoneMutationReturn":
+        return timezoneMutationReturn(
+            this as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
+
+      case "UserMutationReturn":
+        return userMutationReturn(
+            this as Fragment$basicMutationReturnFields$$UserMutationReturn);
+
+      default:
+        return orElse();
+    }
+  }
+
+  _T maybeWhen<_T>({
+    _T Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)?
+        apiKeyMutationReturn,
+    _T Function(
+            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)?
+        autoUpgradeSettingsMutationReturn,
+    _T Function(
+            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)?
+        deviceApiTokenMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)?
+        genericJobButationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
+        genericMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)?
+        serviceJobMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)?
+        serviceMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$TimezoneMutationReturn)?
+        timezoneMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)?
+        userMutationReturn,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ApiKeyMutationReturn":
+        if (apiKeyMutationReturn != null) {
+          return apiKeyMutationReturn(
+              this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "AutoUpgradeSettingsMutationReturn":
+        if (autoUpgradeSettingsMutationReturn != null) {
+          return autoUpgradeSettingsMutationReturn(this
+              as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "DeviceApiTokenMutationReturn":
+        if (deviceApiTokenMutationReturn != null) {
+          return deviceApiTokenMutationReturn(this
+              as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericJobButationReturn":
+        if (genericJobButationReturn != null) {
+          return genericJobButationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericMutationReturn":
+        if (genericMutationReturn != null) {
+          return genericMutationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "ServiceJobMutationReturn":
+        if (serviceJobMutationReturn != null) {
+          return serviceJobMutationReturn(this
+              as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "ServiceMutationReturn":
+        if (serviceMutationReturn != null) {
+          return serviceMutationReturn(this
+              as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "TimezoneMutationReturn":
+        if (timezoneMutationReturn != null) {
+          return timezoneMutationReturn(this
+              as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "UserMutationReturn":
+        if (userMutationReturn != null) {
+          return userMutationReturn(
+              this as Fragment$basicMutationReturnFields$$UserMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      default:
+        return orElse();
+    }
+  }
 }
 
 abstract class CopyWith$Fragment$basicMutationReturnFields<TRes> {
@@ -172,7 +343,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields<TRes>
 
   final TRes Function(Fragment$basicMutationReturnFields) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -298,7 +469,7 @@ class Fragment$basicMutationReturnFields$$ApiKeyMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ApiKeyMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ApiKeyMutationReturn.fromJson(
@@ -429,7 +600,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -477,7 +648,7 @@ class Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'AutoUpgradeSettingsMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn.fromJson(
@@ -613,7 +784,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutat
           Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -662,7 +833,7 @@ class Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'DeviceApiTokenMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn.fromJson(
@@ -796,7 +967,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationRe
   final TRes Function(
       Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -844,7 +1015,7 @@ class Fragment$basicMutationReturnFields$$GenericJobButationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericJobButationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$GenericJobButationReturn.fromJson(
@@ -976,7 +1147,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn
   final TRes Function(
       Fragment$basicMutationReturnFields$$GenericJobButationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1024,7 +1195,7 @@ class Fragment$basicMutationReturnFields$$GenericMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$GenericMutationReturn.fromJson(
@@ -1155,7 +1326,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1203,7 +1374,7 @@ class Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceJobMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ServiceJobMutationReturn.fromJson(
@@ -1335,7 +1506,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
   final TRes Function(
       Fragment$basicMutationReturnFields$$ServiceJobMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1383,7 +1554,7 @@ class Fragment$basicMutationReturnFields$$ServiceMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'ServiceMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$ServiceMutationReturn.fromJson(
@@ -1514,7 +1685,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
   final TRes Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1562,7 +1733,7 @@ class Fragment$basicMutationReturnFields$$TimezoneMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'TimezoneMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$TimezoneMutationReturn.fromJson(
@@ -1694,7 +1865,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
   final TRes Function(
       Fragment$basicMutationReturnFields$$TimezoneMutationReturn) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1742,7 +1913,7 @@ class Fragment$basicMutationReturnFields$$UserMutationReturn
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'UserMutationReturn',
   });
 
   factory Fragment$basicMutationReturnFields$$UserMutationReturn.fromJson(
@@ -1870,7 +2041,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<TRes>
   final TRes Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -1914,7 +2085,7 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<
 class Query$GetServerDiskVolumes {
   Query$GetServerDiskVolumes({
     required this.storage,
-    required this.$__typename,
+    this.$__typename = 'Query',
   });
 
   factory Query$GetServerDiskVolumes.fromJson(Map<String, dynamic> json) {
@@ -2009,7 +2180,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes<TRes>
 
   final TRes Function(Query$GetServerDiskVolumes) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? storage = _undefined,
@@ -2233,6 +2404,10 @@ const documentNodeQueryGetServerDiskVolumes = DocumentNode(definitions: [
 Query$GetServerDiskVolumes _parserFn$Query$GetServerDiskVolumes(
         Map<String, dynamic> data) =>
     Query$GetServerDiskVolumes.fromJson(data);
+typedef OnQueryComplete$Query$GetServerDiskVolumes = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Query$GetServerDiskVolumes?,
+);
 
 class Options$Query$GetServerDiskVolumes
     extends graphql.QueryOptions<Query$GetServerDiskVolumes> {
@@ -2242,19 +2417,42 @@ class Options$Query$GetServerDiskVolumes
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$GetServerDiskVolumes? typedOptimisticResult,
     Duration? pollInterval,
     graphql.Context? context,
-  }) : super(
+    OnQueryComplete$Query$GetServerDiskVolumes? onComplete,
+    graphql.OnQueryError? onError,
+  })  : onCompleteWithParsed = onComplete,
+        super(
           operationName: operationName,
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           pollInterval: pollInterval,
           context: context,
+          onComplete: onComplete == null
+              ? null
+              : (data) => onComplete(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Query$GetServerDiskVolumes(data),
+                  ),
+          onError: onError,
           document: documentNodeQueryGetServerDiskVolumes,
           parserFn: _parserFn$Query$GetServerDiskVolumes,
         );
+
+  final OnQueryComplete$Query$GetServerDiskVolumes? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onComplete == null
+            ? super.properties
+            : super.properties.where((property) => property != onComplete),
+        onCompleteWithParsed,
+      ];
 }
 
 class WatchOptions$Query$GetServerDiskVolumes
@@ -2265,6 +2463,7 @@ class WatchOptions$Query$GetServerDiskVolumes
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Query$GetServerDiskVolumes? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -2275,7 +2474,7 @@ class WatchOptions$Query$GetServerDiskVolumes
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeQueryGetServerDiskVolumes,
           pollInterval: pollInterval,
@@ -2331,7 +2530,7 @@ extension ClientExtension$Query$GetServerDiskVolumes on graphql.GraphQLClient {
 class Query$GetServerDiskVolumes$storage {
   Query$GetServerDiskVolumes$storage({
     required this.volumes,
-    required this.$__typename,
+    this.$__typename = 'Storage',
   });
 
   factory Query$GetServerDiskVolumes$storage.fromJson(
@@ -2442,7 +2641,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage<TRes>
 
   final TRes Function(Query$GetServerDiskVolumes$storage) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? volumes = _undefined,
@@ -2495,7 +2694,7 @@ class Query$GetServerDiskVolumes$storage$volumes {
     required this.type,
     required this.usages,
     required this.usedSpace,
-    required this.$__typename,
+    this.$__typename = 'StorageVolume',
   });
 
   factory Query$GetServerDiskVolumes$storage$volumes.fromJson(
@@ -2719,7 +2918,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes<TRes>
 
   final TRes Function(Query$GetServerDiskVolumes$storage$volumes) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? freeSpace = _undefined,
@@ -2890,6 +3089,41 @@ extension UtilityExtension$Query$GetServerDiskVolumes$storage$volumes$usages
             this,
             (i) => i,
           );
+  _T when<_T>({
+    required _T Function(
+            Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage)
+        serviceStorageUsage,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ServiceStorageUsage":
+        return serviceStorageUsage(this
+            as Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage);
+
+      default:
+        return orElse();
+    }
+  }
+
+  _T maybeWhen<_T>({
+    _T Function(
+            Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage)?
+        serviceStorageUsage,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "ServiceStorageUsage":
+        if (serviceStorageUsage != null) {
+          return serviceStorageUsage(this
+              as Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage);
+        } else {
+          return orElse();
+        }
+
+      default:
+        return orElse();
+    }
+  }
 }
 
 abstract class CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages<
@@ -2922,7 +3156,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages<TRes>
 
   final TRes Function(Query$GetServerDiskVolumes$storage$volumes$usages) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? title = _undefined,
@@ -2962,7 +3196,7 @@ class Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage
     implements Query$GetServerDiskVolumes$storage$volumes$usages {
   Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage({
     this.service,
-    required this.$__typename,
+    this.$__typename = 'ServiceStorageUsage',
     required this.title,
     required this.usedSpace,
   });
@@ -3107,7 +3341,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceSt
           Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? service = _undefined,
@@ -3172,7 +3406,7 @@ class Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$ser
     required this.id,
     required this.isMovable,
     required this.displayName,
-    required this.$__typename,
+    this.$__typename = 'Service',
   });
 
   factory Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service.fromJson(
@@ -3308,7 +3542,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceSt
           Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service)
       _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? id = _undefined,
@@ -3427,7 +3661,7 @@ class _CopyWithImpl$Variables$Mutation$MountVolume<TRes>
 
   final TRes Function(Variables$Mutation$MountVolume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? name = _undefined}) =>
       _then(Variables$Mutation$MountVolume._({
@@ -3448,7 +3682,7 @@ class _CopyWithStubImpl$Variables$Mutation$MountVolume<TRes>
 class Mutation$MountVolume {
   Mutation$MountVolume({
     required this.mountVolume,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$MountVolume.fromJson(Map<String, dynamic> json) {
@@ -3541,7 +3775,7 @@ class _CopyWithImpl$Mutation$MountVolume<TRes>
 
   final TRes Function(Mutation$MountVolume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? mountVolume = _undefined,
@@ -3633,7 +3867,7 @@ Mutation$MountVolume _parserFn$Mutation$MountVolume(
         Map<String, dynamic> data) =>
     Mutation$MountVolume.fromJson(data);
 typedef OnMutationCompleted$Mutation$MountVolume = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$MountVolume?,
 );
 
@@ -3646,6 +3880,7 @@ class Options$Mutation$MountVolume
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$MountVolume? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$MountVolume? onCompleted,
     graphql.OnMutationUpdate<Mutation$MountVolume>? update,
@@ -3657,7 +3892,7 @@ class Options$Mutation$MountVolume
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -3691,6 +3926,7 @@ class WatchOptions$Mutation$MountVolume
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$MountVolume? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -3702,7 +3938,7 @@ class WatchOptions$Mutation$MountVolume
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationMountVolume,
           pollInterval: pollInterval,
@@ -3728,7 +3964,7 @@ class Mutation$MountVolume$mountVolume
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericMutationReturn',
   });
 
   factory Mutation$MountVolume$mountVolume.fromJson(Map<String, dynamic> json) {
@@ -3849,7 +4085,7 @@ class _CopyWithImpl$Mutation$MountVolume$mountVolume<TRes>
 
   final TRes Function(Mutation$MountVolume$mountVolume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -3964,7 +4200,7 @@ class _CopyWithImpl$Variables$Mutation$ResizeVolume<TRes>
 
   final TRes Function(Variables$Mutation$ResizeVolume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? name = _undefined}) =>
       _then(Variables$Mutation$ResizeVolume._({
@@ -3985,7 +4221,7 @@ class _CopyWithStubImpl$Variables$Mutation$ResizeVolume<TRes>
 class Mutation$ResizeVolume {
   Mutation$ResizeVolume({
     required this.resizeVolume,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$ResizeVolume.fromJson(Map<String, dynamic> json) {
@@ -4078,7 +4314,7 @@ class _CopyWithImpl$Mutation$ResizeVolume<TRes>
 
   final TRes Function(Mutation$ResizeVolume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? resizeVolume = _undefined,
@@ -4170,7 +4406,7 @@ Mutation$ResizeVolume _parserFn$Mutation$ResizeVolume(
         Map<String, dynamic> data) =>
     Mutation$ResizeVolume.fromJson(data);
 typedef OnMutationCompleted$Mutation$ResizeVolume = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$ResizeVolume?,
 );
 
@@ -4183,6 +4419,7 @@ class Options$Mutation$ResizeVolume
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$ResizeVolume? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$ResizeVolume? onCompleted,
     graphql.OnMutationUpdate<Mutation$ResizeVolume>? update,
@@ -4194,7 +4431,7 @@ class Options$Mutation$ResizeVolume
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -4228,6 +4465,7 @@ class WatchOptions$Mutation$ResizeVolume
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$ResizeVolume? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -4239,7 +4477,7 @@ class WatchOptions$Mutation$ResizeVolume
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationResizeVolume,
           pollInterval: pollInterval,
@@ -4265,7 +4503,7 @@ class Mutation$ResizeVolume$resizeVolume
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericMutationReturn',
   });
 
   factory Mutation$ResizeVolume$resizeVolume.fromJson(
@@ -4388,7 +4626,7 @@ class _CopyWithImpl$Mutation$ResizeVolume$resizeVolume<TRes>
 
   final TRes Function(Mutation$ResizeVolume$resizeVolume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -4503,7 +4741,7 @@ class _CopyWithImpl$Variables$Mutation$UnmountVolume<TRes>
 
   final TRes Function(Variables$Mutation$UnmountVolume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? name = _undefined}) =>
       _then(Variables$Mutation$UnmountVolume._({
@@ -4524,7 +4762,7 @@ class _CopyWithStubImpl$Variables$Mutation$UnmountVolume<TRes>
 class Mutation$UnmountVolume {
   Mutation$UnmountVolume({
     required this.unmountVolume,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$UnmountVolume.fromJson(Map<String, dynamic> json) {
@@ -4618,7 +4856,7 @@ class _CopyWithImpl$Mutation$UnmountVolume<TRes>
 
   final TRes Function(Mutation$UnmountVolume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? unmountVolume = _undefined,
@@ -4710,7 +4948,7 @@ Mutation$UnmountVolume _parserFn$Mutation$UnmountVolume(
         Map<String, dynamic> data) =>
     Mutation$UnmountVolume.fromJson(data);
 typedef OnMutationCompleted$Mutation$UnmountVolume = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$UnmountVolume?,
 );
 
@@ -4723,6 +4961,7 @@ class Options$Mutation$UnmountVolume
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$UnmountVolume? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$UnmountVolume? onCompleted,
     graphql.OnMutationUpdate<Mutation$UnmountVolume>? update,
@@ -4734,7 +4973,7 @@ class Options$Mutation$UnmountVolume
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -4770,6 +5009,7 @@ class WatchOptions$Mutation$UnmountVolume
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$UnmountVolume? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -4781,7 +5021,7 @@ class WatchOptions$Mutation$UnmountVolume
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationUnmountVolume,
           pollInterval: pollInterval,
@@ -4807,7 +5047,7 @@ class Mutation$UnmountVolume$unmountVolume
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericMutationReturn',
   });
 
   factory Mutation$UnmountVolume$unmountVolume.fromJson(
@@ -4930,7 +5170,7 @@ class _CopyWithImpl$Mutation$UnmountVolume$unmountVolume<TRes>
 
   final TRes Function(Mutation$UnmountVolume$unmountVolume) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -5049,7 +5289,7 @@ class _CopyWithImpl$Variables$Mutation$MigrateToBinds<TRes>
 
   final TRes Function(Variables$Mutation$MigrateToBinds) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? input = _undefined}) =>
       _then(Variables$Mutation$MigrateToBinds._({
@@ -5071,7 +5311,7 @@ class _CopyWithStubImpl$Variables$Mutation$MigrateToBinds<TRes>
 class Mutation$MigrateToBinds {
   Mutation$MigrateToBinds({
     required this.migrateToBinds,
-    required this.$__typename,
+    this.$__typename = 'Mutation',
   });
 
   factory Mutation$MigrateToBinds.fromJson(Map<String, dynamic> json) {
@@ -5165,7 +5405,7 @@ class _CopyWithImpl$Mutation$MigrateToBinds<TRes>
 
   final TRes Function(Mutation$MigrateToBinds) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? migrateToBinds = _undefined,
@@ -5349,7 +5589,7 @@ Mutation$MigrateToBinds _parserFn$Mutation$MigrateToBinds(
         Map<String, dynamic> data) =>
     Mutation$MigrateToBinds.fromJson(data);
 typedef OnMutationCompleted$Mutation$MigrateToBinds = FutureOr<void> Function(
-  dynamic,
+  Map<String, dynamic>?,
   Mutation$MigrateToBinds?,
 );
 
@@ -5362,6 +5602,7 @@ class Options$Mutation$MigrateToBinds
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$MigrateToBinds? typedOptimisticResult,
     graphql.Context? context,
     OnMutationCompleted$Mutation$MigrateToBinds? onCompleted,
     graphql.OnMutationUpdate<Mutation$MigrateToBinds>? update,
@@ -5373,7 +5614,7 @@ class Options$Mutation$MigrateToBinds
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           onCompleted: onCompleted == null
               ? null
@@ -5409,6 +5650,7 @@ class WatchOptions$Mutation$MigrateToBinds
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
+    Mutation$MigrateToBinds? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -5420,7 +5662,7 @@ class WatchOptions$Mutation$MigrateToBinds
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
           cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
           document: documentNodeMutationMigrateToBinds,
           pollInterval: pollInterval,
@@ -5446,7 +5688,7 @@ class Mutation$MigrateToBinds$migrateToBinds
     required this.code,
     required this.message,
     required this.success,
-    required this.$__typename,
+    this.$__typename = 'GenericJobButationReturn',
     this.job,
   });
 
@@ -5588,7 +5830,7 @@ class _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
 
   final TRes Function(Mutation$MigrateToBinds$migrateToBinds) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? code = _undefined,
@@ -5654,7 +5896,7 @@ class Mutation$MigrateToBinds$migrateToBinds$job {
     this.statusText,
     required this.uid,
     required this.updatedAt,
-    required this.$__typename,
+    this.$__typename = 'ApiJob',
   });
 
   factory Mutation$MigrateToBinds$migrateToBinds$job.fromJson(
@@ -5890,7 +6132,7 @@ class _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds$job<TRes>
 
   final TRes Function(Mutation$MigrateToBinds$migrateToBinds$job) _then;
 
-  static const _undefined = {};
+  static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? createdAt = _undefined,

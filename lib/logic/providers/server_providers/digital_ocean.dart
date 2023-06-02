@@ -47,6 +47,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   ApiAdapter _adapter;
 
   @override
+  ServerProviderType get type => ServerProviderType.digitalOcean;
+
+  @override
   Future<GenericResult<bool>> trySetServerLocation(
     final String location,
   ) async {

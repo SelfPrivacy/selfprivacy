@@ -28,14 +28,15 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
     emit(Loading(LoadingTypes.saving));
 
+    final dnsProvider = ProvidersController.currentDnsProvider!;
     final GenericResult<String?> zoneIdResult =
-        await ProvidersController.currentDnsProvider!.getZoneId(domainName);
+        await dnsProvider.getZoneId(domainName);
 
     if (zoneIdResult.success || zoneIdResult.data != null) {
       final ServerDomain domain = ServerDomain(
         domainName: domainName,
         zoneId: zoneIdResult.data!,
-        provider: DnsProviderType.cloudflare,
+        provider: dnsProvider.type,
       );
 
       serverInstallationCubit.setDomain(domain);

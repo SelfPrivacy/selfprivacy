@@ -14,6 +14,7 @@ export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 export 'package:selfprivacy/logic/models/launch_installation_data.dart';
 
 abstract class ServerProvider {
+  ServerProviderType get type;
   Future<GenericResult<List<ServerBasicInfo>>> getServers();
   Future<GenericResult<bool>> trySetServerLocation(final String location);
   Future<GenericResult<bool>> tryInitApiByToken(final String token);

@@ -5,6 +5,7 @@ import 'package:selfprivacy/logic/models/json/dns_records.dart';
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
 abstract class DnsProvider {
+  DnsProviderType get type;
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
   Future<GenericResult<String?>> getZoneId(final String domain);
   Future<GenericResult<void>> removeDomainRecords({

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:basic_utils/basic_utils.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -451,15 +450,18 @@ class ServerInstallationRepository {
   }
 
   Future<String> getServerIpFromDomain(final ServerDomain serverDomain) async {
-    final List<RRecord>? lookup = await DnsUtils.lookupRecord(
-      serverDomain.domainName,
-      RRecordType.A,
-      provider: DnsApiProvider.CLOUDFLARE,
+    String? domain;
+    await InternetAddress.lookup(serverDomain.domainName).then(
+      (final records) {
+        for (final record in records) {
+          domain = record.address;
+        }
+      },
     );
-    if (lookup == null || lookup.isEmpty) {
+    if (domain == null || domain!.isEmpty) {
       throw IpNotFoundException('No IP found for domain $serverDomain');
     }
-    return lookup[0].data;
+    return domain!;
   }
 
   Future<String> getDeviceName() async {

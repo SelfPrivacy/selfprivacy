@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_pro
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/server_provider_location.dart';
+import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
@@ -98,7 +98,8 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<GenericResult> createVolume() async {
+  Future<GenericResult<DigitalOceanVolume?>> createVolume() async {
+    DigitalOceanVolume? volume;
     Response? createVolumeResponse;
     final Dio client = await getClient();
     try {
@@ -114,6 +115,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'filesystem_type': 'ext4',
         },
       );
+      volume = DigitalOceanVolume.fromJson(createVolumeResponse.data['volume']);
     } catch (e) {
       print(e);
       return GenericResult(
@@ -126,15 +128,17 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     return GenericResult(
-      data: createVolumeResponse.data,
+      data: volume,
       success: true,
       code: createVolumeResponse.statusCode,
       message: createVolumeResponse.statusMessage,
     );
   }
 
-  Future<GenericResult<List>> getVolumes({final String? status}) async {
-    List volumes = [];
+  Future<GenericResult<List<DigitalOceanVolume>>> getVolumes({
+    final String? status,
+  }) async {
+    final List<DigitalOceanVolume> volumes = [];
 
     Response? getVolumesResponse;
     final Dio client = await getClient();
@@ -145,7 +149,9 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
           'status': status,
         },
       );
-      volumes = getVolumesResponse.data['volumes'];
+      for (final volume in getVolumesResponse.data['volumes']) {
+        volumes.add(DigitalOceanVolume.fromJson(volume));
+      }
     } catch (e) {
       print(e);
       return GenericResult(
@@ -159,7 +165,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
 
     return GenericResult(
       data: volumes,
-      success: false,
+      success: true,
     );
   }
 
@@ -297,7 +303,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<GenericResult> createServer({
+  Future<GenericResult<int?>> createServer({
     required final String dnsApiToken,
     required final String dnsProviderType,
     required final String serverApiToken,
@@ -310,6 +316,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
   }) async {
     final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
 
+    int? dropletId;
     Response? serverCreateResponse;
     final Dio client = await getClient();
     try {
@@ -331,6 +338,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/droplets',
         data: data,
       );
+      dropletId = serverCreateResponse.data['droplet']['id'];
     } catch (e) {
       print(e);
       return GenericResult(
@@ -343,7 +351,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     return GenericResult(
-      data: serverCreateResponse,
+      data: dropletId,
       success: true,
       code: serverCreateResponse.statusCode,
       message: serverCreateResponse.statusMessage,
@@ -502,8 +510,9 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return GenericResult(success: true, data: servers);
   }
 
-  Future<GenericResult<List>> getAvailableLocations() async {
-    List<ServerProviderLocation> locations = [];
+  Future<GenericResult<List<DigitalOceanLocation>>>
+      getAvailableLocations() async {
+    final List<DigitalOceanLocation> locations = [];
 
     final Dio client = await getClient();
     try {
@@ -511,7 +520,9 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         '/regions',
       );
 
-      locations = response.data!['regions'];
+      for (final region in response.data!['regions']) {
+        locations.add(DigitalOceanLocation.fromJson(region));
+      }
     } catch (e) {
       print(e);
       return GenericResult(

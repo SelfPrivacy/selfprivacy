@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
@@ -179,10 +180,13 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     try {
-      final int dropletId = serverResult.data['droplet']['id'];
-      final ServerVolume? newVolume = (await createVolume()).data;
-      final bool attachedVolume =
-          (await attachVolume(newVolume!, dropletId)).data;
+      final int dropletId = serverResult.data!;
+      final newVolume = (await createVolume()).data;
+      final bool attachedVolume = (await _adapter.api().attachVolume(
+                newVolume!.name,
+                dropletId,
+              ))
+          .data;
 
       String? ipv4;
       int attempts = 0;
@@ -253,15 +257,15 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    final List rawLocations = result.data;
+    final List<DigitalOceanLocation> rawLocations = result.data;
     for (final rawLocation in rawLocations) {
       ServerProviderLocation? location;
       try {
         location = ServerProviderLocation(
-          title: rawLocation['slug'],
-          description: rawLocation['name'],
-          flag: getEmojiFlag(rawLocation['slug']),
-          identifier: rawLocation['slug'],
+          title: rawLocation.slug,
+          description: rawLocation.name,
+          flag: getEmojiFlag(rawLocation.slug),
+          identifier: rawLocation.slug,
         );
       } catch (e) {
         continue;
@@ -638,17 +642,15 @@ class DigitalOceanServerProvider extends ServerProvider {
     try {
       int id = 0;
       for (final rawVolume in result.data) {
-        final volumeId = rawVolume['id'];
-        final int volumeSize = rawVolume['size_gigabytes'] * 1024 * 1024 * 1024;
-        final volumeDropletIds = rawVolume['droplet_ids'];
-        final String volumeName = rawVolume['name'];
+        final String volumeName = rawVolume.name;
         final volume = ServerVolume(
           id: id++,
           name: volumeName,
-          sizeByte: volumeSize,
-          serverId: volumeDropletIds.isNotEmpty ? volumeDropletIds[0] : null,
+          sizeByte: rawVolume.sizeGigabytes * 1024 * 1024 * 1024,
+          serverId:
+              rawVolume.dropletIds.isNotEmpty ? rawVolume.dropletIds[0] : null,
           linuxDevice: 'scsi-0DO_Volume_$volumeName',
-          uuid: volumeId,
+          uuid: rawVolume.id,
         );
         volumes.add(volume);
       }
@@ -693,16 +695,14 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    final volumeId = result.data['volume']['id'];
-    final volumeSize = result.data['volume']['size_gigabytes'];
-    final volumeName = result.data['volume']['name'];
+    final String volumeName = result.data!.name;
     volume = ServerVolume(
       id: getVolumesResult.data.length,
       name: volumeName,
-      sizeByte: volumeSize,
+      sizeByte: result.data!.sizeGigabytes,
       serverId: null,
       linuxDevice: '/dev/disk/by-id/scsi-0DO_Volume_$volumeName',
-      uuid: volumeId,
+      uuid: result.data!.id,
     );
 
     return GenericResult(

@@ -81,6 +81,8 @@ HetznerServerTypeInfo _$HetznerServerTypeInfoFromJson(
       (json['prices'] as List<dynamic>)
           .map((e) => HetznerPriceInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
+      json['name'] as String,
+      json['description'] as String,
     );
 
 Map<String, dynamic> _$HetznerServerTypeInfoToJson(
@@ -89,6 +91,8 @@ Map<String, dynamic> _$HetznerServerTypeInfoToJson(
       'cores': instance.cores,
       'memory': instance.memory,
       'disk': instance.disk,
+      'name': instance.name,
+      'description': instance.description,
       'prices': instance.prices,
     };
 
@@ -96,12 +100,14 @@ HetznerPriceInfo _$HetznerPriceInfoFromJson(Map<String, dynamic> json) =>
     HetznerPriceInfo(
       HetznerPriceInfo.getPrice(json['price_hourly'] as Map),
       HetznerPriceInfo.getPrice(json['price_monthly'] as Map),
+      json['location'] as String,
     );
 
 Map<String, dynamic> _$HetznerPriceInfoToJson(HetznerPriceInfo instance) =>
     <String, dynamic>{
       'price_hourly': instance.hourly,
       'price_monthly': instance.monthly,
+      'location': instance.location,
     };
 
 HetznerLocation _$HetznerLocationFromJson(Map<String, dynamic> json) =>
@@ -110,10 +116,12 @@ HetznerLocation _$HetznerLocationFromJson(Map<String, dynamic> json) =>
       json['city'] as String,
       json['description'] as String,
       json['network_zone'] as String,
+      json['name'] as String,
     );
 
 Map<String, dynamic> _$HetznerLocationToJson(HetznerLocation instance) =>
     <String, dynamic>{
+      'name': instance.name,
       'country': instance.country,
       'city': instance.city,
       'description': instance.description,

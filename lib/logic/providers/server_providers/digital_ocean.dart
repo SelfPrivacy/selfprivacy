@@ -779,9 +779,12 @@ class DigitalOceanServerProvider extends ServerProvider {
   /// Hardcoded on their documentation and there is no pricing API at all
   /// Probably we should scrap the doc page manually
   @override
-  Future<Price?> getPricePerGb() async => Price(
-        value: 0.10,
-        currency: 'USD',
+  Future<GenericResult<Price?>> getPricePerGb() async => GenericResult(
+        success: true,
+        data: Price(
+          value: 0.10,
+          currency: 'USD',
+        ),
       );
 
   @override

@@ -27,7 +27,7 @@ class ApiProviderVolumeCubit
   }
 
   Future<Price?> getPricePerGb() async =>
-      ProvidersController.currentServerProvider!.getPricePerGb();
+      (await ProvidersController.currentServerProvider!.getPricePerGb()).data;
 
   Future<void> refresh() async {
     emit(const ApiProviderVolumeState([], LoadingStatus.refreshing, false));

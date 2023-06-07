@@ -526,16 +526,15 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return GenericResult(data: servers, success: true);
   }
 
-  Future<GenericResult<List>> getAvailableLocations() async {
-    List locations = [];
+  Future<GenericResult<List<HetznerLocation>>> getAvailableLocations() async {
+    final List<HetznerLocation> locations = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(
-        '/locations',
-      );
-
-      locations = response.data!['locations'];
+      final Response response = await client.get('/locations');
+      for (final location in response.data!['locations']) {
+        locations.add(HetznerLocation.fromJson(location));
+      }
     } catch (e) {
       print(e);
       return GenericResult(

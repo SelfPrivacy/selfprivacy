@@ -116,15 +116,15 @@ class HetznerServerProvider extends ServerProvider {
       );
     }
 
-    final List rawLocations = result.data;
+    final List<HetznerLocation> rawLocations = result.data;
     for (final rawLocation in rawLocations) {
       ServerProviderLocation? location;
       try {
         location = ServerProviderLocation(
-          title: rawLocation['city'],
-          description: rawLocation['description'],
-          flag: getEmojiFlag(rawLocation['country']),
-          identifier: rawLocation['name'],
+          title: rawLocation.city,
+          description: rawLocation.description,
+          flag: getEmojiFlag(rawLocation.country),
+          identifier: rawLocation.name,
         );
       } catch (e) {
         continue;

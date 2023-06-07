@@ -118,7 +118,14 @@ class HetznerPriceInfo {
 
 @JsonSerializable()
 class HetznerLocation {
-  HetznerLocation(this.country, this.city, this.description, this.zone);
+  HetznerLocation(
+    this.country,
+    this.city,
+    this.description,
+    this.zone,
+    this.name,
+  );
+  final String name;
   final String country;
   final String city;
   final String description;

@@ -147,7 +147,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           'format': 'ext4'
         },
       );
-      volume = HetznerVolume.fromJson(createVolumeResponse.data);
+      volume = HetznerVolume.fromJson(createVolumeResponse.data['volume']);
     } catch (e) {
       print(e);
       return GenericResult(
@@ -167,8 +167,10 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<GenericResult<List>> getVolumes({final String? status}) async {
-    List volumes = [];
+  Future<GenericResult<List<HetznerVolume>>> getVolumes({
+    final String? status,
+  }) async {
+    final List<HetznerVolume> volumes = [];
 
     Response? getVolumesResonse;
     final Dio client = await getClient();
@@ -179,7 +181,9 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           'status': status,
         },
       );
-      volumes = getVolumesResonse.data['volumes'];
+      for (final volume in getVolumesResonse.data['volumes']) {
+        volumes.add(HetznerVolume.fromJson(volume));
+      }
     } catch (e) {
       print(e);
       return GenericResult(
@@ -199,34 +203,31 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<ServerVolume?> getVolume(
+  Future<GenericResult<HetznerVolume?>> getVolume(
     final String volumeId,
   ) async {
-    ServerVolume? volume;
+    HetznerVolume? volume;
 
     final Response getVolumeResponse;
     final Dio client = await getClient();
     try {
       getVolumeResponse = await client.get('/volumes/$volumeId');
-      final int responseVolumeId = getVolumeResponse.data['volume']['id'];
-      final int volumeSize = getVolumeResponse.data['volume']['size'];
-      final int volumeServer = getVolumeResponse.data['volume']['server'];
-      final String volumeName = getVolumeResponse.data['volume']['name'];
-      final volumeDevice = getVolumeResponse.data['volume']['linux_device'];
-      volume = ServerVolume(
-        id: responseVolumeId,
-        name: volumeName,
-        sizeByte: volumeSize,
-        serverId: volumeServer,
-        linuxDevice: volumeDevice,
-      );
+      volume = HetznerVolume.fromJson(getVolumeResponse.data['volume']);
     } catch (e) {
       print(e);
+      return GenericResult(
+        data: null,
+        success: false,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return volume;
+    return GenericResult(
+      data: volume,
+      success: true,
+    );
   }
 
   Future<GenericResult<bool>> deleteVolume(final int volumeId) async {
@@ -547,15 +548,18 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     return GenericResult(success: true, data: locations);
   }
 
-  Future<GenericResult<List>> getAvailableServerTypes() async {
-    List types = [];
+  Future<GenericResult<List<HetznerServerTypeInfo>>>
+      getAvailableServerTypes() async {
+    final List<HetznerServerTypeInfo> types = [];
 
     final Dio client = await getClient();
     try {
       final Response response = await client.get(
         '/server_types',
       );
-      types = response.data!['server_types'];
+      for (final type in response.data!['server_types']) {
+        types.add(HetznerServerTypeInfo.fromJson(type));
+      }
     } catch (e) {
       print(e);
       return GenericResult(

@@ -72,10 +72,20 @@ enum ServerStatus {
 
 @JsonSerializable()
 class HetznerServerTypeInfo {
-  HetznerServerTypeInfo(this.cores, this.memory, this.disk, this.prices);
+  HetznerServerTypeInfo(
+    this.cores,
+    this.memory,
+    this.disk,
+    this.prices,
+    this.name,
+    this.description,
+  );
   final int cores;
   final num memory;
   final int disk;
+
+  final String name;
+  final String description;
 
   final List<HetznerPriceInfo> prices;
 
@@ -85,13 +95,19 @@ class HetznerServerTypeInfo {
 
 @JsonSerializable()
 class HetznerPriceInfo {
-  HetznerPriceInfo(this.hourly, this.monthly);
+  HetznerPriceInfo(
+    this.hourly,
+    this.monthly,
+    this.location,
+  );
 
   @JsonKey(name: 'price_hourly', fromJson: HetznerPriceInfo.getPrice)
   final double hourly;
 
   @JsonKey(name: 'price_monthly', fromJson: HetznerPriceInfo.getPrice)
   final double monthly;
+
+  final String location;
 
   static HetznerPriceInfo fromJson(final Map<String, dynamic> json) =>
       _$HetznerPriceInfoFromJson(json);

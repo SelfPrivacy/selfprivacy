@@ -150,19 +150,19 @@ class HetznerServerProvider extends ServerProvider {
       );
     }
 
-    final List rawTypes = result.data;
+    final rawTypes = result.data;
     for (final rawType in rawTypes) {
-      for (final rawPrice in rawType['prices']) {
-        if (rawPrice['location'].toString() == location.identifier) {
+      for (final rawPrice in rawType.prices) {
+        if (rawPrice.location == location.identifier) {
           types.add(
             ServerType(
-              title: rawType['description'],
-              identifier: rawType['name'],
-              ram: rawType['memory'],
-              cores: rawType['cores'],
-              disk: DiskSize(byte: rawType['disk'] * 1024 * 1024 * 1024),
+              title: rawType.description,
+              identifier: rawType.name,
+              ram: rawType.memory.toDouble(),
+              cores: rawType.cores,
+              disk: DiskSize(byte: rawType.disk * 1024 * 1024 * 1024),
               price: Price(
-                value: double.parse(rawPrice['price_monthly']['gross']),
+                value: rawPrice.monthly,
                 currency: 'EUR',
               ),
               location: location,
@@ -532,7 +532,7 @@ class HetznerServerProvider extends ServerProvider {
       volume: ServerVolume(
         id: volume.id,
         name: volume.name,
-        sizeByte: volume.sizeByte,
+        sizeByte: volume.sizeByte * 1024 * 1024 * 1024,
         serverId: volume.serverId,
         linuxDevice: volume.linuxDevice,
       ),
@@ -676,7 +676,7 @@ class HetznerServerProvider extends ServerProvider {
       volume = ServerVolume(
         id: result.data!.id,
         name: result.data!.name,
-        sizeByte: result.data!.sizeByte,
+        sizeByte: result.data!.sizeByte * 1024 * 1024 * 1024,
         serverId: result.data!.serverId,
         linuxDevice: result.data!.linuxDevice,
       );
@@ -716,11 +716,11 @@ class HetznerServerProvider extends ServerProvider {
 
     try {
       for (final rawVolume in result.data) {
-        final int volumeId = rawVolume['id'];
-        final int volumeSize = rawVolume['size'] * 1024 * 1024 * 1024;
-        final volumeServer = rawVolume['server'];
-        final String volumeName = rawVolume['name'];
-        final volumeDevice = rawVolume['linux_device'];
+        final int volumeId = rawVolume.id;
+        final int volumeSize = rawVolume.sizeByte * 1024 * 1024 * 1024;
+        final volumeServer = rawVolume.serverId;
+        final String volumeName = rawVolume.name;
+        final volumeDevice = rawVolume.linuxDevice;
         final volume = ServerVolume(
           id: volumeId,
           name: volumeName,

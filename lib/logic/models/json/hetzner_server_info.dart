@@ -113,3 +113,24 @@ class HetznerLocation {
   static HetznerLocation fromJson(final Map<String, dynamic> json) =>
       _$HetznerLocationFromJson(json);
 }
+
+@JsonSerializable()
+class HetznerVolume {
+  HetznerVolume(
+    this.id,
+    this.sizeByte,
+    this.serverId,
+    this.name,
+    this.linuxDevice,
+  );
+  final int id;
+  final int sizeByte;
+  final int? serverId;
+  final String name;
+
+  @JsonKey(name: 'linux_device')
+  final String? linuxDevice;
+
+  static HetznerVolume fromJson(final Map<String, dynamic> json) =>
+      _$HetznerVolumeFromJson(json);
+}

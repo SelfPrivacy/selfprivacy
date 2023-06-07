@@ -131,8 +131,9 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           );
   }
 
-  Future<GenericResult> createVolume() async {
+  Future<GenericResult<HetznerVolume?>> createVolume() async {
     Response? createVolumeResponse;
+    HetznerVolume? volume;
     final Dio client = await getClient();
     try {
       createVolumeResponse = await client.post(
@@ -146,6 +147,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
           'format': 'ext4'
         },
       );
+      volume = HetznerVolume.fromJson(createVolumeResponse.data);
     } catch (e) {
       print(e);
       return GenericResult(
@@ -158,7 +160,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     return GenericResult(
-      data: createVolumeResponse.data,
+      data: volume,
       success: true,
       code: createVolumeResponse.statusCode,
       message: createVolumeResponse.statusMessage,

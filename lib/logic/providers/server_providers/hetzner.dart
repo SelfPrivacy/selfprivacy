@@ -441,7 +441,7 @@ class HetznerServerProvider extends ServerProvider {
       );
     }
 
-    final volume = volumeResult.data['volume'];
+    final volume = volumeResult.data!;
     final serverApiToken = StringGenerators.apiToken();
     final hostname = getHostnameFromDomain(
       installationData.serverDomain.domainName,
@@ -455,7 +455,7 @@ class HetznerServerProvider extends ServerProvider {
           dnsProviderType:
               dnsProviderToInfectName(installationData.dnsProviderType),
           hostName: hostname,
-          volumeId: volume['id'],
+          volumeId: volume.id,
           base64Password: base64.encode(
             utf8.encode(installationData.rootUser.password ?? 'PASS'),
           ),
@@ -464,7 +464,7 @@ class HetznerServerProvider extends ServerProvider {
         );
 
     if (!serverResult.success || serverResult.data == null) {
-      await _adapter.api().deleteVolume(volume['id']);
+      await _adapter.api().deleteVolume(volume.id);
       await Future.delayed(const Duration(seconds: 5));
       if (serverResult.message != null &&
           serverResult.message == 'uniqueness_error') {
@@ -530,11 +530,11 @@ class HetznerServerProvider extends ServerProvider {
       ip4: serverResult.data['server']['public_net']['ipv4']['ip'],
       createTime: DateTime.now(),
       volume: ServerVolume(
-        id: volume['id'],
-        name: volume['name'],
-        sizeByte: volume['size'],
-        serverId: volume['server'],
-        linuxDevice: volume['linux_device'],
+        id: volume.id,
+        name: volume.name,
+        sizeByte: volume.sizeByte,
+        serverId: volume.serverId,
+        linuxDevice: volume.linuxDevice,
       ),
       apiToken: serverApiToken,
       provider: ServerProviderType.hetzner,
@@ -564,7 +564,7 @@ class HetznerServerProvider extends ServerProvider {
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
               callback: () async {
-                await _adapter.api().deleteVolume(volume['id']);
+                await _adapter.api().deleteVolume(volume.id);
                 await Future.delayed(const Duration(seconds: 5));
                 final deletion = await deleteServer(hostname);
                 if (deletion.success) {
@@ -673,17 +673,12 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     try {
-      final volumeId = result.data['volume']['id'];
-      final volumeSize = result.data['volume']['size'];
-      final volumeServer = result.data['volume']['server'];
-      final volumeName = result.data['volume']['name'];
-      final volumeDevice = result.data['volume']['linux_device'];
       volume = ServerVolume(
-        id: volumeId,
-        name: volumeName,
-        sizeByte: volumeSize,
-        serverId: volumeServer,
-        linuxDevice: volumeDevice,
+        id: result.data!.id,
+        name: result.data!.name,
+        sizeByte: result.data!.sizeByte,
+        serverId: result.data!.serverId,
+        linuxDevice: result.data!.linuxDevice,
       );
     } catch (e) {
       print(e);

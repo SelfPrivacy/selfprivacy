@@ -756,7 +756,13 @@ class HetznerServerProvider extends ServerProvider {
     final int serverId,
   ) async =>
       _adapter.api().attachVolume(
-            volume,
+            HetznerVolume(
+              volume.id,
+              volume.sizeByte,
+              volume.serverId,
+              volume.name,
+              volume.linuxDevice,
+            ),
             serverId,
           );
 
@@ -774,10 +780,35 @@ class HetznerServerProvider extends ServerProvider {
     final DiskSize size,
   ) async =>
       _adapter.api().resizeVolume(
-            volume,
+            HetznerVolume(
+              volume.id,
+              volume.sizeByte,
+              volume.serverId,
+              volume.name,
+              volume.linuxDevice,
+            ),
             size,
           );
 
   @override
-  Future<Price?> getPricePerGb() async => _adapter.api().getPricePerGb();
+  Future<GenericResult<Price?>> getPricePerGb() async {
+    final result = await _adapter.api().getPricePerGb();
+
+    if (!result.success || result.data == null) {
+      return GenericResult(
+        data: null,
+        success: false,
+        message: result.message,
+        code: result.code,
+      );
+    }
+
+    return GenericResult(
+      success: true,
+      data: Price(
+        value: result.data!,
+        currency: 'EUR',
+      ),
+    );
+  }
 }

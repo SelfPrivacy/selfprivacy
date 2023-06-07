@@ -37,7 +37,7 @@ abstract class ServerProvider {
     final DateTime end,
   );
 
-  Future<Price?> getPricePerGb();
+  Future<GenericResult<Price?>> getPricePerGb();
   Future<GenericResult<List<ServerVolume>>> getVolumes({final String? status});
   Future<GenericResult<ServerVolume?>> createVolume();
   Future<GenericResult<void>> deleteVolume(final ServerVolume volume);

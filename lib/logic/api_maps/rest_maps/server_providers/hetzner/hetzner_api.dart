@@ -7,9 +7,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_pro
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends ServerProviderApi with VolumeProviderApi {
@@ -106,7 +104,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         length: 64,
       );
 
-  Future<Price?> getPricePerGb() async {
+  Future<GenericResult<double?>> getPricePerGb() async {
     double? price;
 
     final Response pricingResponse;
@@ -119,16 +117,16 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       price = double.parse(volumePrice);
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        data: price,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return price == null
-        ? null
-        : Price(
-            value: price,
-            currency: 'EUR',
-          );
+    return GenericResult(success: true, data: price);
   }
 
   Future<GenericResult<HetznerVolume?>> createVolume() async {
@@ -252,7 +250,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   Future<GenericResult<bool>> attachVolume(
-    final ServerVolume volume,
+    final HetznerVolume volume,
     final int serverId,
   ) async {
     bool success = false;
@@ -312,7 +310,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }
 
   Future<GenericResult<bool>> resizeVolume(
-    final ServerVolume volume,
+    final HetznerVolume volume,
     final DiskSize size,
   ) async {
     bool success = false;

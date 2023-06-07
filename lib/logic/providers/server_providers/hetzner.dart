@@ -526,8 +526,8 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     final serverDetails = ServerHostingDetails(
-      id: serverResult.data['server']['id'],
-      ip4: serverResult.data['server']['public_net']['ipv4']['ip'],
+      id: serverResult.data!.id,
+      ip4: serverResult.data!.publicNet.ipv4!.ip,
       createTime: DateTime.now(),
       volume: ServerVolume(
         id: volume.id,

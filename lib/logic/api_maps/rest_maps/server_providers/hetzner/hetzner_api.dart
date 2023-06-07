@@ -343,7 +343,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  Future<GenericResult> createServer({
+  Future<GenericResult<HetznerServerInfo?>> createServer({
     required final String dnsApiToken,
     required final String dnsProviderType,
     required final String serverApiToken,
@@ -357,6 +357,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
   }) async {
     final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
     Response? serverCreateResponse;
+    HetznerServerInfo? serverInfo;
     DioError? hetznerError;
     bool success = false;
 
@@ -383,6 +384,9 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
       print('Decoded data: $data');
 
       serverCreateResponse = await client.post('/servers', data: data);
+      serverInfo = HetznerServerInfo.fromJson(
+        serverCreateResponse.data['server'],
+      );
       success = true;
     } on DioError catch (e) {
       print(e);
@@ -400,7 +404,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     }
 
     return GenericResult(
-      data: serverCreateResponse?.data,
+      data: serverInfo,
       success: success && hetznerError == null,
       code: serverCreateResponse?.statusCode ??
           hetznerError?.response?.statusCode,

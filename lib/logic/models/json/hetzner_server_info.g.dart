@@ -131,7 +131,7 @@ Map<String, dynamic> _$HetznerLocationToJson(HetznerLocation instance) =>
 HetznerVolume _$HetznerVolumeFromJson(Map<String, dynamic> json) =>
     HetznerVolume(
       json['id'] as int,
-      json['sizeByte'] as int,
+      json['size'] as int,
       json['serverId'] as int?,
       json['name'] as String,
       json['linux_device'] as String?,
@@ -140,7 +140,7 @@ HetznerVolume _$HetznerVolumeFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$HetznerVolumeToJson(HetznerVolume instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'sizeByte': instance.sizeByte,
+      'size': instance.size,
       'serverId': instance.serverId,
       'name': instance.name,
       'linux_device': instance.linuxDevice,

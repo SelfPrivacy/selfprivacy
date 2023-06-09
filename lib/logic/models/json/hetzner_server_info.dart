@@ -141,13 +141,13 @@ class HetznerLocation {
 class HetznerVolume {
   HetznerVolume(
     this.id,
-    this.sizeByte,
+    this.size,
     this.serverId,
     this.name,
     this.linuxDevice,
   );
   final int id;
-  final int sizeByte;
+  final int size;
   final int? serverId;
   final String name;
 

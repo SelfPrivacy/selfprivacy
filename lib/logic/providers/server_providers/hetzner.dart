@@ -532,7 +532,7 @@ class HetznerServerProvider extends ServerProvider {
       volume: ServerVolume(
         id: volume.id,
         name: volume.name,
-        sizeByte: volume.sizeByte * 1024 * 1024 * 1024,
+        sizeByte: volume.size * 1024 * 1024 * 1024,
         serverId: volume.serverId,
         linuxDevice: volume.linuxDevice,
       ),
@@ -676,7 +676,7 @@ class HetznerServerProvider extends ServerProvider {
       volume = ServerVolume(
         id: result.data!.id,
         name: result.data!.name,
-        sizeByte: result.data!.sizeByte * 1024 * 1024 * 1024,
+        sizeByte: result.data!.size * 1024 * 1024 * 1024,
         serverId: result.data!.serverId,
         linuxDevice: result.data!.linuxDevice,
       );
@@ -717,7 +717,7 @@ class HetznerServerProvider extends ServerProvider {
     try {
       for (final rawVolume in result.data) {
         final int volumeId = rawVolume.id;
-        final int volumeSize = rawVolume.sizeByte * 1024 * 1024 * 1024;
+        final int volumeSize = rawVolume.size * 1024 * 1024 * 1024;
         final volumeServer = rawVolume.serverId;
         final String volumeName = rawVolume.name;
         final volumeDevice = rawVolume.linuxDevice;

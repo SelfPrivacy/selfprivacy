@@ -247,7 +247,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
 
     final DnsRecord txt2 = DnsRecord(
       type: 'TXT',
-      name: domainName,
+      name: '@',
       content: 'v=spf1 a mx ip4:$ip4 -all',
       ttl: 18000,
     );

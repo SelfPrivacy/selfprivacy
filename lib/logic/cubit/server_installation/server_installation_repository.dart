@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:basic_utils/basic_utils.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -20,7 +19,6 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
-import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
@@ -187,46 +185,20 @@ class ServerInstallationRepository {
     final String? ip4,
     final Map<String, bool> skippedMatches,
   ) async {
-    final List<String> addresses = <String>[
-      '$domainName',
-      'api.$domainName',
-      'cloud.$domainName',
-      'meet.$domainName',
-      'password.$domainName'
-    ];
-
     final Map<String, bool> matches = <String, bool>{};
-
-    for (final String address in addresses) {
-      if (skippedMatches[address] ?? false) {
-        matches[address] = true;
-        continue;
-      }
-      final List<RRecord>? lookupRecordRes = await DnsUtils.lookupRecord(
-        address,
-        RRecordType.A,
-        provider: DnsApiProvider.CLOUDFLARE,
-      );
-      getIt.get<ConsoleModel>().addMessage(
-            Message(
-              text:
-                  'DnsLookup: address: $address, $RRecordType, provider: CLOUDFLARE, ip4: $ip4',
-            ),
-          );
-      getIt.get<ConsoleModel>().addMessage(
-            Message(
-              text:
-                  'DnsLookup: ${lookupRecordRes == null ? 'empty' : (lookupRecordRes[0].data != ip4 ? 'wrong ip4' : 'right ip4')}',
-            ),
-          );
-      if (lookupRecordRes == null ||
-          lookupRecordRes.isEmpty ||
-          lookupRecordRes[0].data != ip4) {
-        matches[address] = false;
-      } else {
-        matches[address] = true;
-      }
-    }
+    await InternetAddress.lookup(domainName!).then(
+      (final records) {
+        for (final record in records) {
+          if (skippedMatches[record.host] ?? false) {
+            matches[record.host] = true;
+            continue;
+          }
+          if (record.address == ip4!) {
+            matches[record.host] = true;
+          }
+        }
+      },
+    );
 
     return matches;
   }
@@ -351,15 +323,18 @@ class ServerInstallationRepository {
   }
 
   Future<String> getServerIpFromDomain(final ServerDomain serverDomain) async {
-    final List<RRecord>? lookup = await DnsUtils.lookupRecord(
-      serverDomain.domainName,
-      RRecordType.A,
-      provider: DnsApiProvider.CLOUDFLARE,
+    String? domain;
+    await InternetAddress.lookup(serverDomain.domainName).then(
+      (final records) {
+        for (final record in records) {
+          domain = record.address;
+        }
+      },
     );
-    if (lookup == null || lookup.isEmpty) {
+    if (domain == null || domain!.isEmpty) {
       throw IpNotFoundException('No IP found for domain $serverDomain');
     }
-    return lookup[0].data;
+    return domain!;
   }
 
   Future<String> getDeviceName() async {

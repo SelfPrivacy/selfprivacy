@@ -105,7 +105,7 @@ class DigitalOceanDnsApi extends DnsProviderApi {
       final List<Future> allDeleteFutures = [];
       for (final record in records) {
         allDeleteFutures.add(
-          client.delete('/domains/$domainName/records/${record.id}'),
+          client.delete("/domains/$domainName/records/${record['id']}"),
         );
       }
       await Future.wait(allDeleteFutures);

@@ -35,3 +35,27 @@ Map<String, dynamic> _$DigitalOceanLocationToJson(
       'slug': instance.slug,
       'name': instance.name,
     };
+
+DigitalOceanServerType _$DigitalOceanServerTypeFromJson(
+        Map<String, dynamic> json) =>
+    DigitalOceanServerType(
+      (json['regions'] as List<dynamic>).map((e) => e as String).toList(),
+      (json['memory'] as num).toDouble(),
+      json['description'] as String,
+      json['disk'] as int,
+      (json['price_monthly'] as num).toDouble(),
+      json['slug'] as String,
+      json['vcpus'] as int,
+    );
+
+Map<String, dynamic> _$DigitalOceanServerTypeToJson(
+        DigitalOceanServerType instance) =>
+    <String, dynamic>{
+      'regions': instance.regions,
+      'memory': instance.memory,
+      'slug': instance.slug,
+      'description': instance.description,
+      'vcpus': instance.vcpus,
+      'disk': instance.disk,
+      'price_monthly': instance.priceMonthly,
+    };

@@ -326,7 +326,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
         'image': 'ubuntu-20-04-x64',
         'user_data': '#cloud-config\n'
             'runcmd:\n'
-            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/providers/digital-ocean/nixos-infect | '
+            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/testing/final-digital-ocean/nixos-infect | '
             "PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType STAGING_ACME='$stagingAcme' DOMAIN='$domainName' "
             "LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$databasePassword "
             'API_TOKEN=$serverApiToken HOSTNAME=$hostName bash 2>&1 | tee /tmp/infect.log',
@@ -537,15 +537,18 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     return GenericResult(data: locations, success: true);
   }
 
-  Future<GenericResult<List>> getAvailableServerTypes() async {
-    List types = [];
+  Future<GenericResult<List<DigitalOceanServerType>>>
+      getAvailableServerTypes() async {
+    final List<DigitalOceanServerType> types = [];
 
     final Dio client = await getClient();
     try {
       final Response response = await client.get(
         '/sizes',
       );
-      types = response.data!['sizes'];
+      for (final size in response.data!['sizes']) {
+        types.add(DigitalOceanServerType.fromJson(size));
+      }
     } catch (e) {
       print(e);
       return GenericResult(

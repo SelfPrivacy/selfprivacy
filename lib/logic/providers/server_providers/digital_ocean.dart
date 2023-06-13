@@ -291,20 +291,19 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    final List rawSizes = result.data;
+    final List<DigitalOceanServerType> rawSizes = result.data;
     for (final rawSize in rawSizes) {
-      for (final rawRegion in rawSize['regions']) {
-        final ramMb = rawSize['memory'].toDouble();
-        if (rawRegion.toString() == location.identifier && ramMb > 1024) {
+      for (final rawRegion in rawSize.regions) {
+        if (rawRegion == location.identifier && rawSize.memory > 1024) {
           types.add(
             ServerType(
-              title: rawSize['description'],
-              identifier: rawSize['slug'],
-              ram: ramMb / 1024,
-              cores: rawSize['vcpus'],
-              disk: DiskSize(byte: rawSize['disk'] * 1024 * 1024 * 1024),
+              title: rawSize.description,
+              identifier: rawSize.slug,
+              ram: rawSize.memory / 1024,
+              cores: rawSize.vcpus,
+              disk: DiskSize(byte: rawSize.disk * 1024 * 1024 * 1024),
               price: Price(
-                value: rawSize['price_monthly'],
+                value: rawSize.priceMonthly,
                 currency: 'USD',
               ),
               location: location,

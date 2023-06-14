@@ -372,7 +372,7 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
         'networks': [],
         'user_data': '#cloud-config\n'
             'runcmd:\n'
-            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/testing/final-hetzner/nixos-infect | '
+            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/providers/hetzner/nixos-infect | '
             "STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType "
             "NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' "
             'CF_TOKEN=$dnsApiToken DB_PASSWORD=$databasePassword API_TOKEN=$serverApiToken HOSTNAME=$hostName bash 2>&1 | '

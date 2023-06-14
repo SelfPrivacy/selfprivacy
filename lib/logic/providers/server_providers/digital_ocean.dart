@@ -318,7 +318,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<List<ServerBasicInfo>>> getServers() async {
-    final List<ServerBasicInfo> servers = [];
+    List<ServerBasicInfo> servers = [];
     final result = await _adapter.api().getServers();
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
@@ -330,7 +330,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final List rawServers = result.data;
-    rawServers.map<ServerBasicInfo>(
+    servers = rawServers.map<ServerBasicInfo>(
       (final server) {
         String ipv4 = '0.0.0.0';
         if (server['networks']['v4'].isNotEmpty) {

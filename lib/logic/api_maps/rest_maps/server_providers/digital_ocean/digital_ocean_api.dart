@@ -495,7 +495,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/droplets');
-      servers = response.data;
+      servers = response.data['droplets'];
     } catch (e) {
       print(e);
       return GenericResult(

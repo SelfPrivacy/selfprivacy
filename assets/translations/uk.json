@@ -32,7 +32,8 @@
         "cancel": "Відмінити",
         "delete": "Видалити",
         "close": "Закрити",
-        "connect": "Підключіться"
+        "connect": "Підключіться",
+        "app_name": "SelfPrivacy"
     },
     "locale": "ua",
     "application_settings": {
@@ -67,7 +68,8 @@
     },
     "console_page": {
         "title": "Консоль",
-        "waiting": "Очікування ініціалізації…"
+        "waiting": "Очікування ініціалізації…",
+        "copy": "Copie"
     },
     "about_us_page": {
         "title": "Про нас"

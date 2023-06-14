@@ -647,7 +647,9 @@ class DigitalOceanServerProvider extends ServerProvider {
           name: volumeName,
           sizeByte: rawVolume.sizeGigabytes * 1024 * 1024 * 1024,
           serverId:
-              rawVolume.dropletIds.isNotEmpty ? rawVolume.dropletIds[0] : null,
+              (rawVolume.dropletIds != null && rawVolume.dropletIds!.isNotEmpty)
+                  ? rawVolume.dropletIds![0]
+                  : null,
           linuxDevice: 'scsi-0DO_Volume_$volumeName',
           uuid: rawVolume.id,
         );

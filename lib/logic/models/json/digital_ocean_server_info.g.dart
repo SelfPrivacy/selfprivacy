@@ -11,7 +11,7 @@ DigitalOceanVolume _$DigitalOceanVolumeFromJson(Map<String, dynamic> json) =>
       json['id'] as String,
       json['name'] as String,
       json['size_gigabytes'] as int,
-      (json['droplet_ids'] as List<dynamic>).map((e) => e as int).toList(),
+      (json['droplet_ids'] as List<dynamic>?)?.map((e) => e as int).toList(),
     );
 
 Map<String, dynamic> _$DigitalOceanVolumeToJson(DigitalOceanVolume instance) =>

@@ -15,7 +15,7 @@ class DigitalOceanVolume {
   final String name;
 
   @JsonKey(name: 'droplet_ids')
-  final List<int> dropletIds;
+  final List<int>? dropletIds;
 
   @JsonKey(name: 'size_gigabytes')
   final int sizeGigabytes;

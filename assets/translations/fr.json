@@ -33,7 +33,8 @@
         "alert": "Alerte",
         "continue": "Continuer",
         "apply": "Appliquer",
-        "done": "Effectué"
+        "done": "Effectué",
+        "app_name": "SelfPrivacy"
     },
     "more_page": {
         "about_application": "À propos",

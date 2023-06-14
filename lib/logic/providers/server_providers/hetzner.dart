@@ -46,6 +46,7 @@ class HetznerServerProvider extends ServerProvider {
         );
 
   ApiAdapter _adapter;
+  final String currency = 'EUR';
 
   @override
   ServerProviderType get type => ServerProviderType.hetzner;
@@ -163,7 +164,7 @@ class HetznerServerProvider extends ServerProvider {
               disk: DiskSize(byte: rawType.disk * 1024 * 1024 * 1024),
               price: Price(
                 value: rawPrice.monthly,
-                currency: 'EUR',
+                currency: currency,
               ),
               location: location,
             ),
@@ -258,7 +259,8 @@ class HetznerServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
-          value: server.serverType.prices[1].monthly.toStringAsFixed(2),
+          value:
+              '${server.serverType.prices[1].monthly.toStringAsFixed(2)} $currency',
         ),
         ServerMetadataEntity(
           type: MetadataType.location,
@@ -807,7 +809,7 @@ class HetznerServerProvider extends ServerProvider {
       success: true,
       data: Price(
         value: result.data!,
-        currency: 'EUR',
+        currency: currency,
       ),
     );
   }

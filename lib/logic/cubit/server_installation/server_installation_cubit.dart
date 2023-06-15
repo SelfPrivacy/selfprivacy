@@ -19,6 +19,7 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 
 export 'package:provider/provider.dart';
 
@@ -723,6 +724,33 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   @override
   void onChange(final Change<ServerInstallationState> change) {
+    if (change.currentState.installationDialoguePopUp != null &&
+        change.currentState.installationDialoguePopUp !=
+            state.installationDialoguePopUp) {
+      final branching = change.currentState.installationDialoguePopUp;
+      showPopUpAlert(
+        alertTitle: branching!.title,
+        description: branching.description,
+        actionButtonTitle: branching.choices[1].title,
+        actionButtonOnPressed: () async {
+          final branchingResult = await branching.choices[1].callback!();
+          emit(
+            (state as ServerInstallationNotFinished).copyWith(
+              installationDialoguePopUp: branchingResult.data,
+            ),
+          );
+        },
+        cancelButtonTitle: branching.choices[0].title,
+        cancelButtonOnPressed: () async {
+          final branchingResult = await branching.choices[0].callback!();
+          emit(
+            (state as ServerInstallationNotFinished).copyWith(
+              installationDialoguePopUp: branchingResult.data,
+            ),
+          );
+        },
+      );
+    }
     super.onChange(change);
   }
 

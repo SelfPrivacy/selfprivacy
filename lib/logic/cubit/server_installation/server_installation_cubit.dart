@@ -231,6 +231,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       (state as ServerInstallationNotFinished).copyWith(
         isLoading: false,
         serverDetails: serverDetails,
+        installationDialoguePopUp: null,
       ),
     );
     runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), null);
@@ -734,20 +735,24 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         actionButtonTitle: branching.choices[1].title,
         actionButtonOnPressed: () async {
           final branchingResult = await branching.choices[1].callback!();
-          emit(
-            (state as ServerInstallationNotFinished).copyWith(
-              installationDialoguePopUp: branchingResult.data,
-            ),
-          );
+          if (!branchingResult.success) {
+            emit(
+              (state as ServerInstallationNotFinished).copyWith(
+                installationDialoguePopUp: branchingResult.data,
+              ),
+            );
+          }
         },
         cancelButtonTitle: branching.choices[0].title,
         cancelButtonOnPressed: () async {
           final branchingResult = await branching.choices[0].callback!();
-          emit(
-            (state as ServerInstallationNotFinished).copyWith(
-              installationDialoguePopUp: branchingResult.data,
-            ),
-          );
+          if (!branchingResult.success) {
+            emit(
+              (state as ServerInstallationNotFinished).copyWith(
+                installationDialoguePopUp: branchingResult.data,
+              ),
+            );
+          }
         },
       );
     }

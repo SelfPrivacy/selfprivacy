@@ -11,7 +11,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -228,9 +228,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void setBackblazeKey(final String keyId, final String applicationKey) async {
-    final BackblazeCredential backblazeCredential = BackblazeCredential(
+    final BackupsCredential backblazeCredential = BackupsCredential(
       keyId: keyId,
       applicationKey: applicationKey,
+      provider: BackupsProvider.backblaze,
     );
     await repository.saveBackblazeKey(backblazeCredential);
     if (state is ServerInstallationRecovery) {
@@ -735,7 +736,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void finishRecoveryProcess(
-    final BackblazeCredential backblazeCredential,
+    final BackupsCredential backblazeCredential,
   ) async {
     await repository.saveIsServerStarted(true);
     await repository.saveIsServerResetedFirstTime(true);

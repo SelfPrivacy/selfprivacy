@@ -16,7 +16,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/api_maps/staging_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -49,7 +49,7 @@ class ServerInstallationRepository {
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
     final ServerProvider? serverProvider =
         getIt<ApiConfigModel>().serverProvider;
-    final BackblazeCredential? backblazeCredential =
+    final BackupsCredential? backblazeCredential =
         getIt<ApiConfigModel>().backblazeCredential;
     final ServerHostingDetails? serverDetails =
         getIt<ApiConfigModel>().serverDetails;
@@ -228,7 +228,7 @@ class ServerInstallationRepository {
     final User rootUser,
     final String domainName,
     final String dnsApiToken,
-    final BackblazeCredential backblazeCredential, {
+    final BackupsCredential backblazeCredential, {
     required final void Function() onCancel,
     required final Future<void> Function(ServerHostingDetails serverDetails)
         onSuccess,
@@ -706,7 +706,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> saveBackblazeKey(
-    final BackblazeCredential backblazeCredential,
+    final BackupsCredential backblazeCredential,
   ) async {
     await getIt<ApiConfigModel>().storeBackblazeCredential(backblazeCredential);
   }

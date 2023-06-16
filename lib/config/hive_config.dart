@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -111,7 +111,7 @@ class BNames {
   /// A [ServerHostingDetails] field of [serverInstallationBox] box.
   static String serverDetails = 'hetznerServer';
 
-  /// A [BackblazeCredential] field of [serverInstallationBox] box.
+  /// A [BackupsCredential] field of [serverInstallationBox] box.
   static String backblazeCredential = 'backblazeKey';
 
   /// A [BackblazeBucket] field of [serverInstallationBox] box.

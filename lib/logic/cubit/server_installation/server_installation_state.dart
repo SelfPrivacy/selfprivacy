@@ -30,7 +30,7 @@ abstract class ServerInstallationState extends Equatable {
   final String? providerApiToken;
   final String? dnsApiToken;
   final String? serverTypeIdentificator;
-  final BackblazeCredential? backblazeCredential;
+  final BackupsCredential? backblazeCredential;
   final ServerDomain? serverDomain;
   final User? rootUser;
   final ServerHostingDetails? serverDetails;
@@ -161,7 +161,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final String? providerApiToken,
     final String? serverTypeIdentificator,
     final String? dnsApiToken,
-    final BackblazeCredential? backblazeCredential,
+    final BackupsCredential? backblazeCredential,
     final ServerDomain? serverDomain,
     final User? rootUser,
     final ServerHostingDetails? serverDetails,
@@ -226,7 +226,7 @@ class ServerInstallationFinished extends ServerInstallationState {
     required String super.providerApiToken,
     required String super.serverTypeIdentificator,
     required String super.dnsApiToken,
-    required BackblazeCredential super.backblazeCredential,
+    required BackupsCredential super.backblazeCredential,
     required ServerDomain super.serverDomain,
     required User super.rootUser,
     required ServerHostingDetails super.serverDetails,
@@ -309,7 +309,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     final String? providerApiToken,
     final String? serverTypeIdentificator,
     final String? dnsApiToken,
-    final BackblazeCredential? backblazeCredential,
+    final BackupsCredential? backblazeCredential,
     final ServerDomain? serverDomain,
     final User? rootUser,
     final ServerHostingDetails? serverDetails,

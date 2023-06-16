@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 
 export 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
 
@@ -36,7 +36,7 @@ class BackblazeApi extends ApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      final BackblazeCredential? backblazeCredential =
+      final BackupsCredential? backblazeCredential =
           getIt<ApiConfigModel>().backblazeCredential;
       final String token = backblazeCredential!.applicationKey;
       options.headers = {'Authorization': 'Basic $token'};
@@ -56,7 +56,7 @@ class BackblazeApi extends ApiMap {
 
   Future<BackblazeApiAuth> getAuthorizationToken() async {
     final Dio client = await getClient();
-    final BackblazeCredential? backblazeCredential =
+    final BackupsCredential? backblazeCredential =
         getIt<ApiConfigModel>().backblazeCredential;
     if (backblazeCredential == null) {
       throw Exception('Backblaze credential is null');
@@ -121,7 +121,7 @@ class BackblazeApi extends ApiMap {
   // Create bucket
   Future<String> createBucket(final String bucketName) async {
     final BackblazeApiAuth auth = await getAuthorizationToken();
-    final BackblazeCredential? backblazeCredential =
+    final BackupsCredential? backblazeCredential =
         getIt<ApiConfigModel>().backblazeCredential;
     final Dio client = await getClient();
     client.options.baseUrl = auth.apiUrl;

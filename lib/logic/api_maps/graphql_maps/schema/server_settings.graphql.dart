@@ -27,6 +27,10 @@ class Fragment$basicMutationReturnFields {
         return Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
             .fromJson(json);
 
+      case "GenericBackupConfigReturn":
+        return Fragment$basicMutationReturnFields$$GenericBackupConfigReturn
+            .fromJson(json);
+
       case "GenericJobButationReturn":
         return Fragment$basicMutationReturnFields$$GenericJobButationReturn
             .fromJson(json);
@@ -152,6 +156,9 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
             Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)
         deviceApiTokenMutationReturn,
     required _T Function(
+            Fragment$basicMutationReturnFields$$GenericBackupConfigReturn)
+        genericBackupConfigReturn,
+    required _T Function(
             Fragment$basicMutationReturnFields$$GenericJobButationReturn)
         genericJobButationReturn,
     required _T Function(
@@ -182,6 +189,10 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
       case "DeviceApiTokenMutationReturn":
         return deviceApiTokenMutationReturn(this
             as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+
+      case "GenericBackupConfigReturn":
+        return genericBackupConfigReturn(this
+            as Fragment$basicMutationReturnFields$$GenericBackupConfigReturn);
 
       case "GenericJobButationReturn":
         return genericJobButationReturn(this
@@ -221,6 +232,8 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
     _T Function(
             Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)?
         deviceApiTokenMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericBackupConfigReturn)?
+        genericBackupConfigReturn,
     _T Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)?
         genericJobButationReturn,
     _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
@@ -256,6 +269,14 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
         if (deviceApiTokenMutationReturn != null) {
           return deviceApiTokenMutationReturn(this
               as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericBackupConfigReturn":
+        if (genericBackupConfigReturn != null) {
+          return genericBackupConfigReturn(this
+              as Fragment$basicMutationReturnFields$$GenericBackupConfigReturn);
         } else {
           return orElse();
         }
@@ -995,6 +1016,186 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutati
         CopyWith$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn<
             TRes> {
   _CopyWithStubImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Fragment$basicMutationReturnFields$$GenericBackupConfigReturn
+    implements Fragment$basicMutationReturnFields {
+  Fragment$basicMutationReturnFields$$GenericBackupConfigReturn({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericBackupConfigReturn',
+  });
+
+  factory Fragment$basicMutationReturnFields$$GenericBackupConfigReturn.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Fragment$basicMutationReturnFields$$GenericBackupConfigReturn) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn
+    on Fragment$basicMutationReturnFields$$GenericBackupConfigReturn {
+  CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
+          Fragment$basicMutationReturnFields$$GenericBackupConfigReturn>
+      get copyWith =>
+          CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
+    TRes> {
+  factory CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
+    Fragment$basicMutationReturnFields$$GenericBackupConfigReturn instance,
+    TRes Function(Fragment$basicMutationReturnFields$$GenericBackupConfigReturn)
+        then,
+  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn;
+
+  factory CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn.stub(
+          TRes res) =
+      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
+        TRes>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
+            TRes> {
+  _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$basicMutationReturnFields$$GenericBackupConfigReturn _instance;
+
+  final TRes Function(
+      Fragment$basicMutationReturnFields$$GenericBackupConfigReturn) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
+        TRes>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
+            TRes> {
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
       this._res);
 
   TRes _res;

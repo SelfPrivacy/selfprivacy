@@ -143,6 +143,190 @@ class _CopyWithStubImpl$Input$AutoUpgradeSettingsInput<TRes>
       _res;
 }
 
+class Input$InitializeRepositoryInput {
+  factory Input$InitializeRepositoryInput({
+    required Enum$BackupProvider provider,
+    required String locationId,
+    required String locationName,
+    required String login,
+    required String password,
+  }) =>
+      Input$InitializeRepositoryInput._({
+        r'provider': provider,
+        r'locationId': locationId,
+        r'locationName': locationName,
+        r'login': login,
+        r'password': password,
+      });
+
+  Input$InitializeRepositoryInput._(this._$data);
+
+  factory Input$InitializeRepositoryInput.fromJson(Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$provider = data['provider'];
+    result$data['provider'] =
+        fromJson$Enum$BackupProvider((l$provider as String));
+    final l$locationId = data['locationId'];
+    result$data['locationId'] = (l$locationId as String);
+    final l$locationName = data['locationName'];
+    result$data['locationName'] = (l$locationName as String);
+    final l$login = data['login'];
+    result$data['login'] = (l$login as String);
+    final l$password = data['password'];
+    result$data['password'] = (l$password as String);
+    return Input$InitializeRepositoryInput._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  Enum$BackupProvider get provider =>
+      (_$data['provider'] as Enum$BackupProvider);
+  String get locationId => (_$data['locationId'] as String);
+  String get locationName => (_$data['locationName'] as String);
+  String get login => (_$data['login'] as String);
+  String get password => (_$data['password'] as String);
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$provider = provider;
+    result$data['provider'] = toJson$Enum$BackupProvider(l$provider);
+    final l$locationId = locationId;
+    result$data['locationId'] = l$locationId;
+    final l$locationName = locationName;
+    result$data['locationName'] = l$locationName;
+    final l$login = login;
+    result$data['login'] = l$login;
+    final l$password = password;
+    result$data['password'] = l$password;
+    return result$data;
+  }
+
+  CopyWith$Input$InitializeRepositoryInput<Input$InitializeRepositoryInput>
+      get copyWith => CopyWith$Input$InitializeRepositoryInput(
+            this,
+            (i) => i,
+          );
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Input$InitializeRepositoryInput) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$provider = provider;
+    final lOther$provider = other.provider;
+    if (l$provider != lOther$provider) {
+      return false;
+    }
+    final l$locationId = locationId;
+    final lOther$locationId = other.locationId;
+    if (l$locationId != lOther$locationId) {
+      return false;
+    }
+    final l$locationName = locationName;
+    final lOther$locationName = other.locationName;
+    if (l$locationName != lOther$locationName) {
+      return false;
+    }
+    final l$login = login;
+    final lOther$login = other.login;
+    if (l$login != lOther$login) {
+      return false;
+    }
+    final l$password = password;
+    final lOther$password = other.password;
+    if (l$password != lOther$password) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$provider = provider;
+    final l$locationId = locationId;
+    final l$locationName = locationName;
+    final l$login = login;
+    final l$password = password;
+    return Object.hashAll([
+      l$provider,
+      l$locationId,
+      l$locationName,
+      l$login,
+      l$password,
+    ]);
+  }
+}
+
+abstract class CopyWith$Input$InitializeRepositoryInput<TRes> {
+  factory CopyWith$Input$InitializeRepositoryInput(
+    Input$InitializeRepositoryInput instance,
+    TRes Function(Input$InitializeRepositoryInput) then,
+  ) = _CopyWithImpl$Input$InitializeRepositoryInput;
+
+  factory CopyWith$Input$InitializeRepositoryInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$InitializeRepositoryInput;
+
+  TRes call({
+    Enum$BackupProvider? provider,
+    String? locationId,
+    String? locationName,
+    String? login,
+    String? password,
+  });
+}
+
+class _CopyWithImpl$Input$InitializeRepositoryInput<TRes>
+    implements CopyWith$Input$InitializeRepositoryInput<TRes> {
+  _CopyWithImpl$Input$InitializeRepositoryInput(
+    this._instance,
+    this._then,
+  );
+
+  final Input$InitializeRepositoryInput _instance;
+
+  final TRes Function(Input$InitializeRepositoryInput) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? provider = _undefined,
+    Object? locationId = _undefined,
+    Object? locationName = _undefined,
+    Object? login = _undefined,
+    Object? password = _undefined,
+  }) =>
+      _then(Input$InitializeRepositoryInput._({
+        ..._instance._$data,
+        if (provider != _undefined && provider != null)
+          'provider': (provider as Enum$BackupProvider),
+        if (locationId != _undefined && locationId != null)
+          'locationId': (locationId as String),
+        if (locationName != _undefined && locationName != null)
+          'locationName': (locationName as String),
+        if (login != _undefined && login != null) 'login': (login as String),
+        if (password != _undefined && password != null)
+          'password': (password as String),
+      }));
+}
+
+class _CopyWithStubImpl$Input$InitializeRepositoryInput<TRes>
+    implements CopyWith$Input$InitializeRepositoryInput<TRes> {
+  _CopyWithStubImpl$Input$InitializeRepositoryInput(this._res);
+
+  TRes _res;
+
+  call({
+    Enum$BackupProvider? provider,
+    String? locationId,
+    String? locationName,
+    String? login,
+    String? password,
+  }) =>
+      _res;
+}
+
 class Input$MigrateToBindsInput {
   factory Input$MigrateToBindsInput({
     required String emailBlockDevice,
@@ -1096,12 +1280,46 @@ class _CopyWithStubImpl$Input$UserMutationInput<TRes>
       _res;
 }
 
-enum Enum$DnsProvider { CLOUDFLARE, DESEC, $unknown }
+enum Enum$BackupProvider { BACKBLAZE, NONE, MEMORY, FILE, $unknown }
+
+String toJson$Enum$BackupProvider(Enum$BackupProvider e) {
+  switch (e) {
+    case Enum$BackupProvider.BACKBLAZE:
+      return r'BACKBLAZE';
+    case Enum$BackupProvider.NONE:
+      return r'NONE';
+    case Enum$BackupProvider.MEMORY:
+      return r'MEMORY';
+    case Enum$BackupProvider.FILE:
+      return r'FILE';
+    case Enum$BackupProvider.$unknown:
+      return r'$unknown';
+  }
+}
+
+Enum$BackupProvider fromJson$Enum$BackupProvider(String value) {
+  switch (value) {
+    case r'BACKBLAZE':
+      return Enum$BackupProvider.BACKBLAZE;
+    case r'NONE':
+      return Enum$BackupProvider.NONE;
+    case r'MEMORY':
+      return Enum$BackupProvider.MEMORY;
+    case r'FILE':
+      return Enum$BackupProvider.FILE;
+    default:
+      return Enum$BackupProvider.$unknown;
+  }
+}
+
+enum Enum$DnsProvider { CLOUDFLARE, DIGITALOCEAN, DESEC, $unknown }
 
 String toJson$Enum$DnsProvider(Enum$DnsProvider e) {
   switch (e) {
     case Enum$DnsProvider.CLOUDFLARE:
       return r'CLOUDFLARE';
+    case Enum$DnsProvider.DIGITALOCEAN:
+      return r'DIGITALOCEAN';
     case Enum$DnsProvider.DESEC:
       return r'DESEC';
     case Enum$DnsProvider.$unknown:
@@ -1113,6 +1331,8 @@ Enum$DnsProvider fromJson$Enum$DnsProvider(String value) {
   switch (value) {
     case r'CLOUDFLARE':
       return Enum$DnsProvider.CLOUDFLARE;
+    case r'DIGITALOCEAN':
+      return Enum$DnsProvider.DIGITALOCEAN;
     case r'DESEC':
       return Enum$DnsProvider.DESEC;
     default:
@@ -1145,32 +1365,32 @@ Enum$ServerProvider fromJson$Enum$ServerProvider(String value) {
 }
 
 enum Enum$ServiceStatusEnum {
-  ACTIVATING,
   ACTIVE,
-  DEACTIVATING,
-  FAILED,
-  INACTIVE,
-  OFF,
   RELOADING,
+  INACTIVE,
+  FAILED,
+  ACTIVATING,
+  DEACTIVATING,
+  OFF,
   $unknown
 }
 
 String toJson$Enum$ServiceStatusEnum(Enum$ServiceStatusEnum e) {
   switch (e) {
-    case Enum$ServiceStatusEnum.ACTIVATING:
-      return r'ACTIVATING';
     case Enum$ServiceStatusEnum.ACTIVE:
       return r'ACTIVE';
-    case Enum$ServiceStatusEnum.DEACTIVATING:
-      return r'DEACTIVATING';
-    case Enum$ServiceStatusEnum.FAILED:
-      return r'FAILED';
-    case Enum$ServiceStatusEnum.INACTIVE:
-      return r'INACTIVE';
-    case Enum$ServiceStatusEnum.OFF:
-      return r'OFF';
     case Enum$ServiceStatusEnum.RELOADING:
       return r'RELOADING';
+    case Enum$ServiceStatusEnum.INACTIVE:
+      return r'INACTIVE';
+    case Enum$ServiceStatusEnum.FAILED:
+      return r'FAILED';
+    case Enum$ServiceStatusEnum.ACTIVATING:
+      return r'ACTIVATING';
+    case Enum$ServiceStatusEnum.DEACTIVATING:
+      return r'DEACTIVATING';
+    case Enum$ServiceStatusEnum.OFF:
+      return r'OFF';
     case Enum$ServiceStatusEnum.$unknown:
       return r'$unknown';
   }
@@ -1178,39 +1398,39 @@ String toJson$Enum$ServiceStatusEnum(Enum$ServiceStatusEnum e) {
 
 Enum$ServiceStatusEnum fromJson$Enum$ServiceStatusEnum(String value) {
   switch (value) {
-    case r'ACTIVATING':
-      return Enum$ServiceStatusEnum.ACTIVATING;
     case r'ACTIVE':
       return Enum$ServiceStatusEnum.ACTIVE;
-    case r'DEACTIVATING':
-      return Enum$ServiceStatusEnum.DEACTIVATING;
-    case r'FAILED':
-      return Enum$ServiceStatusEnum.FAILED;
-    case r'INACTIVE':
-      return Enum$ServiceStatusEnum.INACTIVE;
-    case r'OFF':
-      return Enum$ServiceStatusEnum.OFF;
     case r'RELOADING':
       return Enum$ServiceStatusEnum.RELOADING;
+    case r'INACTIVE':
+      return Enum$ServiceStatusEnum.INACTIVE;
+    case r'FAILED':
+      return Enum$ServiceStatusEnum.FAILED;
+    case r'ACTIVATING':
+      return Enum$ServiceStatusEnum.ACTIVATING;
+    case r'DEACTIVATING':
+      return Enum$ServiceStatusEnum.DEACTIVATING;
+    case r'OFF':
+      return Enum$ServiceStatusEnum.OFF;
     default:
       return Enum$ServiceStatusEnum.$unknown;
   }
 }
 
-enum Enum$Severity { CRITICAL, ERROR, INFO, SUCCESS, WARNING, $unknown }
+enum Enum$Severity { INFO, WARNING, ERROR, CRITICAL, SUCCESS, $unknown }
 
 String toJson$Enum$Severity(Enum$Severity e) {
   switch (e) {
-    case Enum$Severity.CRITICAL:
-      return r'CRITICAL';
-    case Enum$Severity.ERROR:
-      return r'ERROR';
     case Enum$Severity.INFO:
       return r'INFO';
-    case Enum$Severity.SUCCESS:
-      return r'SUCCESS';
     case Enum$Severity.WARNING:
       return r'WARNING';
+    case Enum$Severity.ERROR:
+      return r'ERROR';
+    case Enum$Severity.CRITICAL:
+      return r'CRITICAL';
+    case Enum$Severity.SUCCESS:
+      return r'SUCCESS';
     case Enum$Severity.$unknown:
       return r'$unknown';
   }
@@ -1218,16 +1438,16 @@ String toJson$Enum$Severity(Enum$Severity e) {
 
 Enum$Severity fromJson$Enum$Severity(String value) {
   switch (value) {
-    case r'CRITICAL':
-      return Enum$Severity.CRITICAL;
-    case r'ERROR':
-      return Enum$Severity.ERROR;
     case r'INFO':
       return Enum$Severity.INFO;
-    case r'SUCCESS':
-      return Enum$Severity.SUCCESS;
     case r'WARNING':
       return Enum$Severity.WARNING;
+    case r'ERROR':
+      return Enum$Severity.ERROR;
+    case r'CRITICAL':
+      return Enum$Severity.CRITICAL;
+    case r'SUCCESS':
+      return Enum$Severity.SUCCESS;
     default:
       return Enum$Severity.$unknown;
   }
@@ -1555,11 +1775,229 @@ extension ClientExtension$Fragment$dnsRecordFields on graphql.GraphQLClient {
   }
 }
 
+class Fragment$backupSnapshotFields {
+  Fragment$backupSnapshotFields({
+    required this.id,
+    required this.createdAt,
+    this.$__typename = 'SnapshotInfo',
+  });
+
+  factory Fragment$backupSnapshotFields.fromJson(Map<String, dynamic> json) {
+    final l$id = json['id'];
+    final l$createdAt = json['createdAt'];
+    final l$$__typename = json['__typename'];
+    return Fragment$backupSnapshotFields(
+      id: (l$id as String),
+      createdAt: dateTimeFromJson(l$createdAt),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String id;
+
+  final DateTime createdAt;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$createdAt = createdAt;
+    _resultData['createdAt'] = dateTimeToJson(l$createdAt);
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$createdAt = createdAt;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$createdAt,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Fragment$backupSnapshotFields) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$createdAt = createdAt;
+    final lOther$createdAt = other.createdAt;
+    if (l$createdAt != lOther$createdAt) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$backupSnapshotFields
+    on Fragment$backupSnapshotFields {
+  CopyWith$Fragment$backupSnapshotFields<Fragment$backupSnapshotFields>
+      get copyWith => CopyWith$Fragment$backupSnapshotFields(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Fragment$backupSnapshotFields<TRes> {
+  factory CopyWith$Fragment$backupSnapshotFields(
+    Fragment$backupSnapshotFields instance,
+    TRes Function(Fragment$backupSnapshotFields) then,
+  ) = _CopyWithImpl$Fragment$backupSnapshotFields;
+
+  factory CopyWith$Fragment$backupSnapshotFields.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$backupSnapshotFields;
+
+  TRes call({
+    String? id,
+    DateTime? createdAt,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$backupSnapshotFields<TRes>
+    implements CopyWith$Fragment$backupSnapshotFields<TRes> {
+  _CopyWithImpl$Fragment$backupSnapshotFields(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$backupSnapshotFields _instance;
+
+  final TRes Function(Fragment$backupSnapshotFields) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? createdAt = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$backupSnapshotFields(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
+        createdAt: createdAt == _undefined || createdAt == null
+            ? _instance.createdAt
+            : (createdAt as DateTime),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$backupSnapshotFields<TRes>
+    implements CopyWith$Fragment$backupSnapshotFields<TRes> {
+  _CopyWithStubImpl$Fragment$backupSnapshotFields(this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    DateTime? createdAt,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+const fragmentDefinitionbackupSnapshotFields = FragmentDefinitionNode(
+  name: NameNode(value: 'backupSnapshotFields'),
+  typeCondition: TypeConditionNode(
+      on: NamedTypeNode(
+    name: NameNode(value: 'SnapshotInfo'),
+    isNonNull: false,
+  )),
+  directives: [],
+  selectionSet: SelectionSetNode(selections: [
+    FieldNode(
+      name: NameNode(value: 'id'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'createdAt'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: '__typename'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+  ]),
+);
+const documentNodeFragmentbackupSnapshotFields = DocumentNode(definitions: [
+  fragmentDefinitionbackupSnapshotFields,
+]);
+
+extension ClientExtension$Fragment$backupSnapshotFields
+    on graphql.GraphQLClient {
+  void writeFragment$backupSnapshotFields({
+    required Fragment$backupSnapshotFields data,
+    required Map<String, dynamic> idFields,
+    bool broadcast = true,
+  }) =>
+      this.writeFragment(
+        graphql.FragmentRequest(
+          idFields: idFields,
+          fragment: const graphql.Fragment(
+            fragmentName: 'backupSnapshotFields',
+            document: documentNodeFragmentbackupSnapshotFields,
+          ),
+        ),
+        data: data.toJson(),
+        broadcast: broadcast,
+      );
+  Fragment$backupSnapshotFields? readFragment$backupSnapshotFields({
+    required Map<String, dynamic> idFields,
+    bool optimistic = true,
+  }) {
+    final result = this.readFragment(
+      graphql.FragmentRequest(
+        idFields: idFields,
+        fragment: const graphql.Fragment(
+          fragmentName: 'backupSnapshotFields',
+          document: documentNodeFragmentbackupSnapshotFields,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null
+        ? null
+        : Fragment$backupSnapshotFields.fromJson(result);
+  }
+}
+
 const possibleTypesMap = <String, Set<String>>{
   'MutationReturnInterface': {
     'ApiKeyMutationReturn',
     'AutoUpgradeSettingsMutationReturn',
     'DeviceApiTokenMutationReturn',
+    'GenericBackupConfigReturn',
     'GenericJobButationReturn',
     'GenericMutationReturn',
     'ServiceJobMutationReturn',

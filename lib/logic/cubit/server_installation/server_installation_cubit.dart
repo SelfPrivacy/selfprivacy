@@ -724,10 +724,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   @override
   void onChange(final Change<ServerInstallationState> change) {
-    if (change.currentState.installationDialoguePopUp != null &&
+    if (change.nextState.installationDialoguePopUp != null &&
         change.currentState.installationDialoguePopUp !=
-            state.installationDialoguePopUp) {
-      final branching = change.currentState.installationDialoguePopUp;
+            change.nextState.installationDialoguePopUp) {
+      final branching = change.nextState.installationDialoguePopUp;
       showPopUpAlert(
         alertTitle: branching!.title,
         description: branching.description,

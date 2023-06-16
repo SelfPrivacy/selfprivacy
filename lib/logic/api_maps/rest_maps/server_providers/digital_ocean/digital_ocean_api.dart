@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/volume_provider.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
-import 'package:selfprivacy/logic/api_maps/staging_options.dart';
+import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
@@ -314,7 +314,7 @@ class DigitalOceanApi extends ServerProviderApi with VolumeProviderApi {
     required final String hostName,
     required final String serverType,
   }) async {
-    final String stagingAcme = StagingOptions.stagingAcme ? 'true' : 'false';
+    final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
 
     int? dropletId;
     Response? serverCreateResponse;

@@ -12,7 +12,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/staging_options.dart';
+import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -75,7 +75,7 @@ class ServerInstallationRepository {
     }
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
-      StagingOptions.verifyCertificate = true;
+      TlsOptions.verifyCertificate = true;
       return ServerInstallationFinished(
         installationDialoguePopUp: null,
         providerApiToken: providerApiToken!,

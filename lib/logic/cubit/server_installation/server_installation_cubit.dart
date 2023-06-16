@@ -9,7 +9,7 @@ import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
-import 'package:selfprivacy/logic/api_maps/staging_options.dart';
+import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -407,7 +407,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(TimerState(dataState: dataState, isLoading: true));
 
     final bool isServerWorking = await repository.isHttpServerWorking();
-    StagingOptions.verifyCertificate = true;
+    TlsOptions.verifyCertificate = true;
 
     if (isServerWorking) {
       bool dkimCreated = true;
@@ -757,7 +757,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void clearAppConfig() {
     closeTimer();
     ProvidersController.clearProviders();
-    StagingOptions.verifyCertificate = false;
+    TlsOptions.verifyCertificate = false;
     repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/io_client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/staging_options.dart';
+import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 
 void _logToAppConsole<T>(final T objectToLog) {
@@ -56,7 +56,7 @@ class ResponseLoggingParser extends ResponseParser {
 abstract class ApiMap {
   Future<GraphQLClient> getClient() async {
     IOClient? ioClient;
-    if (StagingOptions.stagingAcme || !StagingOptions.verifyCertificate) {
+    if (TlsOptions.stagingAcme || !TlsOptions.verifyCertificate) {
       final HttpClient httpClient = HttpClient();
       httpClient.badCertificateCallback = (
         final cert,

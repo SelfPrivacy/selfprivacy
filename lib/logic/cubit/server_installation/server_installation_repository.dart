@@ -203,62 +203,6 @@ class ServerInstallationRepository {
     return matches;
   }
 
-  Future<bool> createDnsRecords(
-    final ServerHostingDetails serverDetails,
-    final ServerDomain domain, {
-    required final void Function() onCancel,
-  }) async {
-    final serverProvider = ProvidersController.currentServerProvider!;
-
-    void showDomainErrorPopUp(final String error) {
-      showPopUpAlert(
-        alertTitle: error,
-        description: 'modals.delete_server_volume'.tr(),
-        cancelButtonOnPressed: onCancel,
-        actionButtonTitle: 'basis.delete'.tr(),
-        actionButtonOnPressed: () async {
-          await serverProvider.deleteServer(
-            domain.domainName,
-          );
-          onCancel();
-        },
-      );
-    }
-
-    final GenericResult removingResult =
-        await ProvidersController.currentDnsProvider!.removeDomainRecords(
-      ip4: serverDetails.ip4,
-      domain: domain,
-    );
-
-    if (!removingResult.success) {
-      showDomainErrorPopUp('domain.error'.tr());
-      return false;
-    }
-
-    bool createdSuccessfully = false;
-    String errorMessage = 'domain.error'.tr();
-    try {
-      final GenericResult createResult =
-          await ProvidersController.currentDnsProvider!.createDomainRecords(
-        ip4: serverDetails.ip4,
-        domain: domain,
-      );
-      createdSuccessfully = createResult.success;
-    } on DioError catch (e) {
-      if (e.response!.data['errors'][0]['code'] == 1038) {
-        errorMessage = 'modals.you_cant_use_this_api'.tr();
-      }
-    }
-
-    if (!createdSuccessfully) {
-      showDomainErrorPopUp(errorMessage);
-      return false;
-    }
-
-    return true;
-  }
-
   Future<void> createDkimRecord(final ServerDomain cloudFlareDomain) async {
     final ServerApi api = ServerApi();
 

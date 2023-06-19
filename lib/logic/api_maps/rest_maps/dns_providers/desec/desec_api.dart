@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 class DesecApi extends DnsProviderApi {
   DesecApi({
@@ -169,15 +168,6 @@ class DesecApi extends DnsProviderApi {
     }
 
     return GenericResult(success: true, data: null);
-  }
-
-  String? extractContent(final DnsRecord record) {
-    String? content = record.content;
-    if (record.type == 'TXT' && content != null && !content.startsWith('"')) {
-      content = '"$content"';
-    }
-
-    return content;
   }
 
   Future<GenericResult<List>> getDomains() async {

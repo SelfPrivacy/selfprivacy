@@ -6,13 +6,10 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 
 class ServerProviderFormCubit extends FormCubit {
   ServerProviderFormCubit(this.serverInstallationCubit) {
-    //final int tokenLength =
-    //    serverInstallationCubit.serverProviderApiTokenValidation().length;
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
-        //LengthStringNotEqualValidation(tokenLength),
       ],
     );
 

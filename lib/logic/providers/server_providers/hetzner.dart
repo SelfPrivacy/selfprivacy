@@ -588,15 +588,6 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     await installationData.successCallback(serverDetails);
-    await installationData.dnsProvider.removeDomainRecords(
-      ip4: serverDetails.ip4,
-      domain: installationData.serverDomain,
-    );
-    await installationData.dnsProvider.createDomainRecords(
-      ip4: serverDetails.ip4,
-      domain: installationData.serverDomain,
-    );
-
     return GenericResult(success: true, data: null);
   }
 

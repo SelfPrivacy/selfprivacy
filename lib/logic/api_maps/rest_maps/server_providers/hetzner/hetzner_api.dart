@@ -98,12 +98,6 @@ class HetznerApi extends ServerProviderApi with VolumeProviderApi {
     );
   }
 
-  ProviderApiTokenValidation getApiTokenValidation() =>
-      ProviderApiTokenValidation(
-        regexp: RegExp(r'\s+|[-!$%^&*()@+|~=`{}\[\]:<>?,.\/]'),
-        length: 64,
-      );
-
   Future<GenericResult<double?>> getPricePerGb() async {
     double? price;
 

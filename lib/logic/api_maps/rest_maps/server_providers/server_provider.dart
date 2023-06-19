@@ -1,15 +1,6 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
-class ProviderApiTokenValidation {
-  ProviderApiTokenValidation({
-    required this.length,
-    required this.regexp,
-  });
-  final int length;
-  final RegExp regexp;
-}
-
 abstract class ServerProviderApi extends ApiMap {
   /// Provider name key which lets infect understand what kind of installation
   /// it requires, for example 'digitaloceal' for Digital Ocean

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
@@ -22,7 +21,6 @@ import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 
 class IpNotFoundException implements Exception {

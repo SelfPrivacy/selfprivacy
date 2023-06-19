@@ -227,6 +227,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final ServerHostingDetails serverDetails,
   ) async {
     await repository.saveServerDetails(serverDetails);
+    await ProvidersController.currentDnsProvider!.removeDomainRecords(
+      ip4: serverDetails.ip4,
+      domain: state.serverDomain!,
+    );
+    await ProvidersController.currentDnsProvider!.createDomainRecords(
+      ip4: serverDetails.ip4,
+      domain: state.serverDomain!,
+    );
+
     emit(
       (state as ServerInstallationNotFinished).copyWith(
         isLoading: false,
@@ -248,7 +257,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       serverTypeId: state.serverTypeIdentificator!,
       errorCallback: clearAppConfig,
       successCallback: onCreateServerSuccess,
-      dnsProvider: ProvidersController.currentDnsProvider!,
     );
 
     final result =

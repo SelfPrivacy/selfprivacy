@@ -19,9 +19,6 @@ class DigitalOceanDnsApi extends DnsProviderApi {
 
   final String? customToken;
 
-  RegExp getApiTokenValidation() =>
-      RegExp(r'\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
-
   @override
   BaseOptions get options {
     final BaseOptions options = BaseOptions(

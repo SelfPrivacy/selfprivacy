@@ -1,5 +1,5 @@
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';

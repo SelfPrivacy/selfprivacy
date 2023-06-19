@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-class CloudflareApi extends DnsProviderApi {
+class CloudflareApi extends ApiMap {
   CloudflareApi({
     this.hasLogger = false,
     this.isWithToken = true,

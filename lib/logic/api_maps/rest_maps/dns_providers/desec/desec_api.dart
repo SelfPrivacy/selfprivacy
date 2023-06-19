@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
-class DesecApi extends DnsProviderApi {
+class DesecApi extends ApiMap {
   DesecApi({
     this.hasLogger = false,
     this.isWithToken = true,

@@ -116,7 +116,7 @@ type GenericBackupConfigReturn implements MutationReturnInterface {
   configuration: BackupConfiguration
 }
 
-type GenericJobButationReturn implements MutationReturnInterface {
+type GenericJobMutationReturn implements MutationReturnInterface {
   success: Boolean!
   message: String!
   code: Int!
@@ -178,7 +178,7 @@ type Mutation {
   resizeVolume(name: String!): GenericMutationReturn!
   mountVolume(name: String!): GenericMutationReturn!
   unmountVolume(name: String!): GenericMutationReturn!
-  migrateToBinds(input: MigrateToBindsInput!): GenericJobButationReturn!
+  migrateToBinds(input: MigrateToBindsInput!): GenericJobMutationReturn!
   enableService(serviceId: String!): ServiceMutationReturn!
   disableService(serviceId: String!): ServiceMutationReturn!
   stopService(serviceId: String!): ServiceMutationReturn!
@@ -189,8 +189,8 @@ type Mutation {
   initializeRepository(repository: InitializeRepositoryInput!): GenericBackupConfigReturn!
   removeRepository: GenericBackupConfigReturn!
   setAutobackupPeriod(period: Int = null): GenericBackupConfigReturn!
-  startBackup(serviceId: String = null): GenericJobButationReturn!
-  restoreBackup(snapshotId: String!): GenericJobButationReturn!
+  startBackup(serviceId: String = null): GenericJobMutationReturn!
+  restoreBackup(snapshotId: String!): GenericJobMutationReturn!
   forceSnapshotsReload: GenericMutationReturn!
   testMutation: GenericMutationReturn!
 }

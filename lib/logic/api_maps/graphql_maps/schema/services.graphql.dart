@@ -31,8 +31,8 @@ class Fragment$basicMutationReturnFields {
         return Fragment$basicMutationReturnFields$$GenericBackupConfigReturn
             .fromJson(json);
 
-      case "GenericJobButationReturn":
-        return Fragment$basicMutationReturnFields$$GenericJobButationReturn
+      case "GenericJobMutationReturn":
+        return Fragment$basicMutationReturnFields$$GenericJobMutationReturn
             .fromJson(json);
 
       case "GenericMutationReturn":
@@ -159,8 +159,8 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
             Fragment$basicMutationReturnFields$$GenericBackupConfigReturn)
         genericBackupConfigReturn,
     required _T Function(
-            Fragment$basicMutationReturnFields$$GenericJobButationReturn)
-        genericJobButationReturn,
+            Fragment$basicMutationReturnFields$$GenericJobMutationReturn)
+        genericJobMutationReturn,
     required _T Function(
             Fragment$basicMutationReturnFields$$GenericMutationReturn)
         genericMutationReturn,
@@ -194,9 +194,9 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
         return genericBackupConfigReturn(this
             as Fragment$basicMutationReturnFields$$GenericBackupConfigReturn);
 
-      case "GenericJobButationReturn":
-        return genericJobButationReturn(this
-            as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+      case "GenericJobMutationReturn":
+        return genericJobMutationReturn(this
+            as Fragment$basicMutationReturnFields$$GenericJobMutationReturn);
 
       case "GenericMutationReturn":
         return genericMutationReturn(
@@ -234,8 +234,8 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
         deviceApiTokenMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$GenericBackupConfigReturn)?
         genericBackupConfigReturn,
-    _T Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)?
-        genericJobButationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericJobMutationReturn)?
+        genericJobMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
         genericMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)?
@@ -281,10 +281,10 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
           return orElse();
         }
 
-      case "GenericJobButationReturn":
-        if (genericJobButationReturn != null) {
-          return genericJobButationReturn(this
-              as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+      case "GenericJobMutationReturn":
+        if (genericJobMutationReturn != null) {
+          return genericJobMutationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericJobMutationReturn);
         } else {
           return orElse();
         }
@@ -1209,22 +1209,22 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigR
       _res;
 }
 
-class Fragment$basicMutationReturnFields$$GenericJobButationReturn
+class Fragment$basicMutationReturnFields$$GenericJobMutationReturn
     implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$GenericJobButationReturn({
+  Fragment$basicMutationReturnFields$$GenericJobMutationReturn({
     required this.code,
     required this.message,
     required this.success,
-    this.$__typename = 'GenericJobButationReturn',
+    this.$__typename = 'GenericJobMutationReturn',
   });
 
-  factory Fragment$basicMutationReturnFields$$GenericJobButationReturn.fromJson(
+  factory Fragment$basicMutationReturnFields$$GenericJobMutationReturn.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+    return Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -1273,7 +1273,7 @@ class Fragment$basicMutationReturnFields$$GenericJobButationReturn
       return true;
     }
     if (!(other
-            is Fragment$basicMutationReturnFields$$GenericJobButationReturn) ||
+            is Fragment$basicMutationReturnFields$$GenericJobMutationReturn) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1301,28 +1301,28 @@ class Fragment$basicMutationReturnFields$$GenericJobButationReturn
   }
 }
 
-extension UtilityExtension$Fragment$basicMutationReturnFields$$GenericJobButationReturn
-    on Fragment$basicMutationReturnFields$$GenericJobButationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
-          Fragment$basicMutationReturnFields$$GenericJobButationReturn>
+extension UtilityExtension$Fragment$basicMutationReturnFields$$GenericJobMutationReturn
+    on Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
+  CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
+          Fragment$basicMutationReturnFields$$GenericJobMutationReturn>
       get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+          CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
     TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
-    Fragment$basicMutationReturnFields$$GenericJobButationReturn instance,
-    TRes Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)
+  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
+    Fragment$basicMutationReturnFields$$GenericJobMutationReturn instance,
+    TRes Function(Fragment$basicMutationReturnFields$$GenericJobMutationReturn)
         then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn;
+  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn;
 
-  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn.stub(
+  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn.stub(
           TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn;
+      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn;
 
   TRes call({
     int? code,
@@ -1332,20 +1332,20 @@ abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationRe
   });
 }
 
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
         TRes>
     implements
-        CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+        CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
             TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+  _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
     this._instance,
     this._then,
   );
 
-  final Fragment$basicMutationReturnFields$$GenericJobButationReturn _instance;
+  final Fragment$basicMutationReturnFields$$GenericJobMutationReturn _instance;
 
   final TRes Function(
-      Fragment$basicMutationReturnFields$$GenericJobButationReturn) _then;
+      Fragment$basicMutationReturnFields$$GenericJobMutationReturn) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -1355,7 +1355,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+      _then(Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -1370,12 +1370,12 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn
       ));
 }
 
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
         TRes>
     implements
-        CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+        CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
             TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
       this._res);
 
   TRes _res;

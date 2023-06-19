@@ -1998,7 +1998,7 @@ const possibleTypesMap = <String, Set<String>>{
     'AutoUpgradeSettingsMutationReturn',
     'DeviceApiTokenMutationReturn',
     'GenericBackupConfigReturn',
-    'GenericJobButationReturn',
+    'GenericJobMutationReturn',
     'GenericMutationReturn',
     'ServiceJobMutationReturn',
     'ServiceMutationReturn',

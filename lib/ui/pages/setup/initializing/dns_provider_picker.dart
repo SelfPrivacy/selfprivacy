@@ -47,39 +47,27 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
       case DnsProviderType.cloudflare:
         return ProviderInputDataPage(
           providerCubit: widget.formCubit,
-          providerInfo: ProviderPageInfo(
+          providerInfo: const ProviderPageInfo(
             providerType: DnsProviderType.cloudflare,
             pathToHow: 'how_cloudflare',
-            image: Image.asset(
-              'assets/images/logos/cloudflare.png',
-              width: 150,
-            ),
           ),
         );
 
       case DnsProviderType.digitalOcean:
         return ProviderInputDataPage(
           providerCubit: widget.formCubit,
-          providerInfo: ProviderPageInfo(
+          providerInfo: const ProviderPageInfo(
             providerType: DnsProviderType.digitalOcean,
             pathToHow: 'how_digital_ocean_dns',
-            image: Image.asset(
-              'assets/images/logos/digital_ocean.png',
-              width: 150,
-            ),
           ),
         );
 
       case DnsProviderType.desec:
         return ProviderInputDataPage(
           providerCubit: widget.formCubit,
-          providerInfo: ProviderPageInfo(
+          providerInfo: const ProviderPageInfo(
             providerType: DnsProviderType.desec,
             pathToHow: 'how_desec',
-            image: Image.asset(
-              'assets/images/logos/desec.svg',
-              width: 150,
-            ),
           ),
         );
     }
@@ -90,11 +78,9 @@ class ProviderPageInfo {
   const ProviderPageInfo({
     required this.providerType,
     required this.pathToHow,
-    required this.image,
   });
 
   final String pathToHow;
-  final Image image;
   final DnsProviderType providerType;
 }
 

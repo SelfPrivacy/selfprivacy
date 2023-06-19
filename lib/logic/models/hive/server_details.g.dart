@@ -23,8 +23,8 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
       volume: fields[4] as ServerVolume,
       apiToken: fields[5] as String,
       provider: fields[6] == null
-          ? ServerProvider.hetzner
-          : fields[6] as ServerProvider,
+          ? ServerProviderType.hetzner
+          : fields[6] as ServerProviderType,
       startTime: fields[2] as DateTime?,
     );
   }
@@ -109,34 +109,34 @@ class ServerVolumeAdapter extends TypeAdapter<ServerVolume> {
           typeId == other.typeId;
 }
 
-class ServerProviderAdapter extends TypeAdapter<ServerProvider> {
+class ServerProviderTypeAdapter extends TypeAdapter<ServerProviderType> {
   @override
   final int typeId = 101;
 
   @override
-  ServerProvider read(BinaryReader reader) {
+  ServerProviderType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ServerProvider.unknown;
+        return ServerProviderType.unknown;
       case 1:
-        return ServerProvider.hetzner;
+        return ServerProviderType.hetzner;
       case 2:
-        return ServerProvider.digitalOcean;
+        return ServerProviderType.digitalOcean;
       default:
-        return ServerProvider.unknown;
+        return ServerProviderType.unknown;
     }
   }
 
   @override
-  void write(BinaryWriter writer, ServerProvider obj) {
+  void write(BinaryWriter writer, ServerProviderType obj) {
     switch (obj) {
-      case ServerProvider.unknown:
+      case ServerProviderType.unknown:
         writer.writeByte(0);
         break;
-      case ServerProvider.hetzner:
+      case ServerProviderType.hetzner:
         writer.writeByte(1);
         break;
-      case ServerProvider.digitalOcean:
+      case ServerProviderType.digitalOcean:
         writer.writeByte(2);
         break;
     }
@@ -148,7 +148,7 @@ class ServerProviderAdapter extends TypeAdapter<ServerProvider> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ServerProviderAdapter &&
+      other is ServerProviderTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

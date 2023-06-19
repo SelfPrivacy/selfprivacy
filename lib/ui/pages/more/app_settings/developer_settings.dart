@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/api_maps/staging_options.dart';
+import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
@@ -37,8 +37,19 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
             title: Text('developer_settings.use_staging_acme'.tr()),
             subtitle:
                 Text('developer_settings.use_staging_acme_description'.tr()),
-            value: StagingOptions.stagingAcme,
-            onChanged: null,
+            value: TlsOptions.stagingAcme,
+            onChanged: (final bool value) => setState(
+              () => TlsOptions.stagingAcme = value,
+            ),
+          ),
+          SwitchListTile(
+            title: Text('developer_settings.ignore_tls'.tr()),
+            subtitle:
+            Text('developer_settings.ignore_tls_description'.tr()),
+            value: TlsOptions.verifyCertificate,
+            onChanged: (final bool value) => setState(
+                  () => TlsOptions.verifyCertificate = value,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),

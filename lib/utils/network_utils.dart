@@ -1,45 +1,5 @@
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
-
-enum DnsRecordsCategory {
-  services,
-  email,
-  other,
-}
-
-class DesiredDnsRecord {
-  const DesiredDnsRecord({
-    required this.name,
-    required this.content,
-    this.type = 'A',
-    this.description = '',
-    this.category = DnsRecordsCategory.services,
-    this.isSatisfied = false,
-  });
-
-  final String name;
-  final String type;
-  final String content;
-  final String description;
-  final DnsRecordsCategory category;
-  final bool isSatisfied;
-
-  DesiredDnsRecord copyWith({
-    final String? name,
-    final String? type,
-    final String? content,
-    final String? description,
-    final DnsRecordsCategory? category,
-    final bool? isSatisfied,
-  }) =>
-      DesiredDnsRecord(
-        name: name ?? this.name,
-        type: type ?? this.type,
-        content: content ?? this.content,
-        description: description ?? this.description,
-        category: category ?? this.category,
-        isSatisfied: isSatisfied ?? this.isSatisfied,
-      );
-}
+import 'package:url_launcher/url_launcher.dart';
 
 DnsRecord? extractDkimRecord(final List<DnsRecord> records) {
   DnsRecord? dkimRecord;
@@ -68,4 +28,16 @@ String getHostnameFromDomain(final String domain) {
   }
 
   return hostname;
+}
+
+void launchURL(final url) async {
+  try {
+    final Uri uri = Uri.parse(url);
+    await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+  } catch (e) {
+    print(e);
+  }
 }

@@ -26,7 +26,7 @@ class _TextDetails extends StatelessWidget {
             ...details.metadata.map(
               (final metadata) => ListTileOnSurfaceVariant(
                 leadingIcon: metadata.type.icon,
-                title: metadata.name,
+                title: metadata.trId.tr(),
                 subtitle: metadata.value,
               ),
             ),

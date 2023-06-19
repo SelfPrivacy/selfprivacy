@@ -273,6 +273,7 @@
         "no_ssh_notice": "Для этого пользователя созданы только SSH и Email аккаунты. Единая авторизация для всех сервисов ещё не реализована."
     },
     "initializing": {
+        "dns_provider_description": "Это позволит связать ваш домен с IP адресом:",
         "connect_to_server": "Начнём с сервера.",
         "select_provider": "Ниже подборка провайдеров, которых поддерживает SelfPrivacy",
         "select_provider_notice": "Под 'Небольшим сервером' имеется ввиду сервер с двумя потоками процессора и двумя гигабайтами оперативной памяти.",
@@ -307,8 +308,10 @@
         "choose_server_type_storage": "{} GB системного хранилища",
         "choose_server_type_payment_per_month": "{} в месяц",
         "no_server_types_found": "Не найдено доступных типов сервера! Пожалуйста, убедитесь, что у вас есть доступ к провайдеру сервера...",
-        "cloudflare_bad_key_error": "API ключ неверен",
+        "dns_provider_bad_key_error": "API ключ неверен",
         "backblaze_bad_key_error": "Информация о Backblaze хранилище неверна",
+        "connect_to_dns": "Подключите DNS провайдера",
+        "connect_to_dns_provider_text": "С помощью API токена приложение SelfPrivacy настроит DNS записи",
         "manage_domain_dns": "Для управления DNS вашего домена",
         "use_this_domain": "Используем этот домен?",
         "use_this_domain_text": "Указанный вами токен даёт контроль над этим доменом",
@@ -469,7 +472,7 @@
         "required": "Обязательное поле",
         "already_exist": "Уже существует",
         "invalid_format": "Неверный формат",
-        "invalid_format_password": "Должен не содержать пустые символы",
+        "invalid_format_password": "Пароль не должен содержать пробелы",
         "invalid_format_ssh": "Должен следовать формату SSH ключей",
         "root_name": "Имя пользователя не может быть 'root'",
         "length_not_equal": "Длина строки [], должна быть равна {}",

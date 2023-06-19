@@ -1,5 +1,5 @@
-class APIGenericResult<T> {
-  APIGenericResult({
+class GenericResult<T> {
+  GenericResult({
     required this.success,
     required this.data,
     this.message,

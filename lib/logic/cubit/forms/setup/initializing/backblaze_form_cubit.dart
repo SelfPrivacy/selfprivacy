@@ -40,7 +40,7 @@ class BackblazeFormCubit extends FormCubit {
 
   @override
   FutureOr<bool> asyncValidation() async {
-    late APIGenericResult<bool> backblazeResponse;
+    late GenericResult<bool> backblazeResponse;
     final BackblazeApi apiClient = BackblazeApi(isWithToken: false);
 
     try {
@@ -51,7 +51,7 @@ class BackblazeFormCubit extends FormCubit {
       backblazeResponse = await apiClient.isApiTokenValid(encodedApiKey);
     } catch (e) {
       addError(e);
-      backblazeResponse = APIGenericResult(
+      backblazeResponse = GenericResult(
         success: false,
         data: false,
         message: e.toString(),

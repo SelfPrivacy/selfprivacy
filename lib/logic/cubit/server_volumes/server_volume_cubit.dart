@@ -24,7 +24,7 @@ class ApiServerVolumeCubit
   @override
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
-      reload();
+      unawaited(reload());
     }
   }
 

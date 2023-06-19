@@ -8,7 +8,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 
-abstract class ApiMap {
+abstract class RestApiMap {
   Future<Dio> getClient({final BaseOptions? customOptions}) async {
     final Dio dio = Dio(customOptions ?? (await options));
     if (hasLogger) {

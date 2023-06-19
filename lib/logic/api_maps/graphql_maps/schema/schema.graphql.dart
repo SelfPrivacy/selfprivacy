@@ -1096,7 +1096,7 @@ class _CopyWithStubImpl$Input$UserMutationInput<TRes>
       _res;
 }
 
-enum Enum$DnsProvider { CLOUDFLARE, DESEC, $unknown }
+enum Enum$DnsProvider { CLOUDFLARE, DESEC, DIGITALOCEAN, $unknown }
 
 String toJson$Enum$DnsProvider(Enum$DnsProvider e) {
   switch (e) {
@@ -1104,6 +1104,8 @@ String toJson$Enum$DnsProvider(Enum$DnsProvider e) {
       return r'CLOUDFLARE';
     case Enum$DnsProvider.DESEC:
       return r'DESEC';
+    case Enum$DnsProvider.DIGITALOCEAN:
+      return r'DIGITALOCEAN';
     case Enum$DnsProvider.$unknown:
       return r'$unknown';
   }
@@ -1115,6 +1117,8 @@ Enum$DnsProvider fromJson$Enum$DnsProvider(String value) {
       return Enum$DnsProvider.CLOUDFLARE;
     case r'DESEC':
       return Enum$DnsProvider.DESEC;
+    case r'DIGITALOCEAN':
+      return Enum$DnsProvider.DIGITALOCEAN;
     default:
       return Enum$DnsProvider.$unknown;
   }

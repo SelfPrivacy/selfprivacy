@@ -19,11 +19,11 @@ enum MetadataType {
 
 class ServerMetadataEntity {
   ServerMetadataEntity({
-    required this.name,
+    required this.trId,
     required this.value,
     this.type = MetadataType.other,
   });
   final MetadataType type;
-  final String name;
+  final String trId;
   final String value;
 }

@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 
-export 'package:selfprivacy/logic/api_maps/api_generic_result.dart';
+export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
 class BackblazeApiAuth {
   BackblazeApiAuth({required this.authorizationToken, required this.apiUrl});
@@ -25,7 +25,7 @@ class BackblazeApplicationKey {
   final String applicationKey;
 }
 
-class BackblazeApi extends ApiMap {
+class BackblazeApi extends RestApiMap {
   BackblazeApi({this.hasLogger = false, this.isWithToken = true});
 
   @override
@@ -78,7 +78,7 @@ class BackblazeApi extends ApiMap {
     );
   }
 
-  Future<APIGenericResult<bool>> isApiTokenValid(
+  Future<GenericResult<bool>> isApiTokenValid(
     final String encodedApiKey,
   ) async {
     final Dio client = await getClient();
@@ -103,7 +103,7 @@ class BackblazeApi extends ApiMap {
       }
     } on DioError catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: false,
         success: false,
         message: e.toString(),
@@ -112,7 +112,7 @@ class BackblazeApi extends ApiMap {
       close(client);
     }
 
-    return APIGenericResult(
+    return GenericResult(
       data: isTokenValid,
       success: true,
     );

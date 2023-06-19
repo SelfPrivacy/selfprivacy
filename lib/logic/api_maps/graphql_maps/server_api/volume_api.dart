@@ -1,6 +1,6 @@
 part of 'server_api.dart';
 
-mixin VolumeApi on ApiMap {
+mixin VolumeApi on GraphQLApiMap {
   Future<List<ServerDiskVolume>> getServerDiskVolumes() async {
     QueryResult response;
     List<ServerDiskVolume> volumes = [];
@@ -57,10 +57,10 @@ mixin VolumeApi on ApiMap {
     }
   }
 
-  Future<APIGenericResult<String?>> migrateToBinds(
+  Future<GenericResult<String?>> migrateToBinds(
     final Map<String, String> serviceToDisk,
   ) async {
-    APIGenericResult<String?>? mutation;
+    GenericResult<String?>? mutation;
 
     try {
       final GraphQLClient client = await getClient();
@@ -78,7 +78,7 @@ mixin VolumeApi on ApiMap {
           await client.mutate$MigrateToBinds(
         migrateMutation,
       );
-      mutation = mutation = APIGenericResult(
+      mutation = mutation = GenericResult(
         success: true,
         code: result.parsedData!.migrateToBinds.code,
         message: result.parsedData!.migrateToBinds.message,
@@ -86,7 +86,7 @@ mixin VolumeApi on ApiMap {
       );
     } catch (e) {
       print(e);
-      mutation = APIGenericResult(
+      mutation = GenericResult(
         success: false,
         code: 0,
         message: e.toString(),

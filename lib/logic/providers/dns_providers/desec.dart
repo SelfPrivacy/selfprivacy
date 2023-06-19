@@ -1,173 +1,113 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desec/desec_api.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
-class DesecApi extends DnsProviderApi {
-  DesecApi({
-    this.hasLogger = false,
-    this.isWithToken = true,
-    this.customToken,
-  });
-  @override
-  final bool hasLogger;
-  @override
-  final bool isWithToken;
+class ApiAdapter {
+  ApiAdapter({final bool isWithToken = true})
+      : _api = DesecApi(
+          isWithToken: isWithToken,
+        );
 
-  final String? customToken;
+  DesecApi api({final bool getInitialized = true}) => getInitialized
+      ? _api
+      : DesecApi(
+          isWithToken: false,
+        );
+
+  final DesecApi _api;
+}
+
+class DesecDnsProvider extends DnsProvider {
+  DesecDnsProvider() : _adapter = ApiAdapter();
+  DesecDnsProvider.load(
+    final bool isAuthotized,
+  ) : _adapter = ApiAdapter(
+          isWithToken: isAuthotized,
+        );
+
+  ApiAdapter _adapter;
 
   @override
-  RegExp getApiTokenValidation() =>
-      RegExp(r'\s+|[!$%^&*()@+|~=`{}\[\]:<>?,.\/]');
+  DnsProviderType get type => DnsProviderType.desec;
 
   @override
-  BaseOptions get options {
-    final BaseOptions options = BaseOptions(
-      baseUrl: rootAddress,
-      contentType: Headers.jsonContentType,
-      responseType: ResponseType.json,
-    );
-    if (isWithToken) {
-      final String? token = getIt<ApiConfigModel>().dnsProviderKey;
-      assert(token != null);
-      options.headers = {'Authorization': 'Token $token'};
+  Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
+    final api = _adapter.api(getInitialized: false);
+    final result = await api.isApiTokenValid(token);
+    if (!result.data || !result.success) {
+      return result;
     }
 
-    if (customToken != null) {
-      options.headers = {'Authorization': 'Token $customToken'};
-    }
-
-    if (validateStatus != null) {
-      options.validateStatus = validateStatus!;
-    }
-    return options;
+    _adapter = ApiAdapter(isWithToken: true);
+    return result;
   }
 
   @override
-  String rootAddress = 'https://desec.io/api/v1/domains/';
-
-  @override
-  Future<APIGenericResult<bool>> isApiTokenValid(final String token) async {
-    bool isValid = false;
-    Response? response;
-    String message = '';
-    final Dio client = await getClient();
-    try {
-      response = await client.get(
-        '',
-        options: Options(
-          followRedirects: false,
-          validateStatus: (final status) =>
-              status != null && (status >= 200 || status == 401),
-          headers: {'Authorization': 'Token $token'},
-        ),
+  Future<GenericResult<String?>> getZoneId(final String domain) async =>
+      GenericResult(
+        data: domain,
+        success: true,
       );
-      await Future.delayed(const Duration(seconds: 1));
-    } catch (e) {
-      print(e);
-      isValid = false;
-      message = e.toString();
-    } finally {
-      close(client);
-    }
-
-    if (response == null) {
-      return APIGenericResult(
-        data: isValid,
-        success: false,
-        message: message,
-      );
-    }
-
-    if (response.statusCode == HttpStatus.ok) {
-      isValid = true;
-    } else if (response.statusCode == HttpStatus.unauthorized) {
-      isValid = false;
-    } else {
-      throw Exception('code: ${response.statusCode}');
-    }
-
-    return APIGenericResult(
-      data: isValid,
-      success: true,
-      message: response.statusMessage,
-    );
-  }
 
   @override
-  Future<String?> getZoneId(final String domain) async => domain;
-
-  @override
-  Future<APIGenericResult<void>> removeSimilarRecords({
+  Future<GenericResult<void>> removeDomainRecords({
     required final ServerDomain domain,
     final String? ip4,
   }) async {
-    final String domainName = domain.domainName;
-    final String url = '/$domainName/rrsets/';
-    final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
+    final List<DnsRecord> listDnsRecords = projectDnsRecords(
+      domain.domainName,
+      ip4,
+    );
 
-    final Dio client = await getClient();
-    try {
-      final List<dynamic> bulkRecords = [];
-      for (final DnsRecord record in listDnsRecords) {
-        bulkRecords.add(
-          {
-            'subname': record.name,
-            'type': record.type,
-            'ttl': record.ttl,
-            'records': [],
-          },
-        );
-      }
+    final List<dynamic> bulkRecords = [];
+    for (final DnsRecord record in listDnsRecords) {
       bulkRecords.add(
         {
-          'subname': 'selector._domainkey',
-          'type': 'TXT',
-          'ttl': 18000,
+          'subname': record.name,
+          'type': record.type,
+          'ttl': record.ttl,
           'records': [],
         },
       );
-      await client.put(url, data: bulkRecords);
-      await Future.delayed(const Duration(seconds: 1));
-    } catch (e) {
-      print(e);
-      return APIGenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
     }
+    bulkRecords.add(
+      {
+        'subname': 'selector._domainkey',
+        'type': 'TXT',
+        'ttl': 18000,
+        'records': [],
+      },
+    );
 
-    return APIGenericResult(success: true, data: null);
+    return _adapter.api().updateRecords(
+          domain: domain,
+          records: bulkRecords,
+        );
   }
 
   @override
-  Future<List<DnsRecord>> getDnsRecords({
+  Future<GenericResult<List<DnsRecord>>> getDnsRecords({
     required final ServerDomain domain,
   }) async {
-    Response response;
-    final String domainName = domain.domainName;
-    final List<DnsRecord> allRecords = <DnsRecord>[];
+    final List<DnsRecord> records = [];
+    final result = await _adapter.api().getDnsRecords(domain: domain);
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: records,
+        code: result.code,
+        message: result.message,
+      );
+    }
 
-    final String url = '/$domainName/rrsets/';
-
-    final Dio client = await getClient();
     try {
-      response = await client.get(url);
-      await Future.delayed(const Duration(seconds: 1));
-      final List records = response.data;
-
-      for (final record in records) {
+      for (final record in result.data) {
         final String? content = (record['records'] is List<dynamic>)
             ? record['records'][0]
             : record['records'];
-        allRecords.add(
+        records.add(
           DnsRecord(
             name: record['subname'],
             type: record['type'],
@@ -178,54 +118,14 @@ class DesecApi extends DnsProviderApi {
       }
     } catch (e) {
       print(e);
-    } finally {
-      close(client);
-    }
-
-    return allRecords;
-  }
-
-  @override
-  Future<APIGenericResult<void>> createMultipleDnsRecords({
-    required final ServerDomain domain,
-    final String? ip4,
-  }) async {
-    final String domainName = domain.domainName;
-    final List<DnsRecord> listDnsRecords = projectDnsRecords(domainName, ip4);
-
-    final Dio client = await getClient();
-    try {
-      final List<dynamic> bulkRecords = [];
-      for (final DnsRecord record in listDnsRecords) {
-        bulkRecords.add(
-          {
-            'subname': record.name,
-            'type': record.type,
-            'ttl': record.ttl,
-            'records': [extractContent(record)],
-          },
-        );
-      }
-      await client.post(
-        '/$domainName/rrsets/',
-        data: bulkRecords,
-      );
-      await Future.delayed(const Duration(seconds: 1));
-    } on DioError catch (e) {
-      print(e.message);
-      rethrow;
-    } catch (e) {
-      print(e);
-      return APIGenericResult(
+      return GenericResult(
         success: false,
-        data: null,
+        data: records,
         message: e.toString(),
       );
-    } finally {
-      close(client);
     }
 
-    return APIGenericResult(success: true, data: null);
+    return GenericResult(success: true, data: records);
   }
 
   List<DnsRecord> projectDnsRecords(
@@ -275,6 +175,57 @@ class DesecApi extends DnsProviderApi {
     ];
   }
 
+  @override
+  Future<GenericResult<void>> createDomainRecords({
+    required final ServerDomain domain,
+    final String? ip4,
+  }) async {
+    final List<DnsRecord> listDnsRecords = projectDnsRecords(
+      domain.domainName,
+      ip4,
+    );
+
+    final List<dynamic> bulkRecords = [];
+    for (final DnsRecord record in listDnsRecords) {
+      bulkRecords.add(
+        {
+          'subname': record.name,
+          'type': record.type,
+          'ttl': record.ttl,
+          'records': [extractContent(record)],
+        },
+      );
+    }
+
+    return _adapter.api().createRecords(
+          domain: domain,
+          records: bulkRecords,
+        );
+  }
+
+  @override
+  Future<GenericResult<void>> setDnsRecord(
+    final DnsRecord record,
+    final ServerDomain domain,
+  ) async {
+    final result = await _adapter.api().createRecords(
+      domain: domain,
+      records: [
+        {
+          'subname': record.name,
+          'type': record.type,
+          'ttl': record.ttl,
+          'records': [extractContent(record)],
+        },
+      ],
+    );
+
+    return GenericResult(
+      success: result.success,
+      data: null,
+    );
+  }
+
   String? extractContent(final DnsRecord record) {
     String? content = record.content;
     if (record.type == 'TXT' && content != null && !content.startsWith('"')) {
@@ -285,60 +236,47 @@ class DesecApi extends DnsProviderApi {
   }
 
   @override
-  Future<void> setDnsRecord(
-    final DnsRecord record,
-    final ServerDomain domain,
-  ) async {
-    final String url = '/${domain.domainName}/rrsets/';
-
-    final Dio client = await getClient();
-    try {
-      await client.post(
-        url,
-        data: {
-          'subname': record.name,
-          'type': record.type,
-          'ttl': record.ttl,
-          'records': [extractContent(record)],
-        },
-      );
-      await Future.delayed(const Duration(seconds: 1));
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
-    }
-  }
-
-  @override
-  Future<List<String>> domainList() async {
+  Future<GenericResult<List<String>>> domainList() async {
     List<String> domains = [];
-
-    final Dio client = await getClient();
-    try {
-      final Response response = await client.get(
-        '',
+    final result = await _adapter.api().getDomains();
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: domains,
+        code: result.code,
+        message: result.message,
       );
-      await Future.delayed(const Duration(seconds: 1));
-      domains = response.data
-          .map<String>((final el) => el['name'] as String)
-          .toList();
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
     }
 
-    return domains;
+    domains = result.data
+        .map<String>(
+          (final el) => el['name'] as String,
+        )
+        .toList();
+
+    return GenericResult(
+      success: true,
+      data: domains,
+    );
   }
 
   @override
-  Future<APIGenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
+  Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
     final ServerDomain domain,
     final String ip4,
     final String dkimPublicKey,
   ) async {
-    final List<DnsRecord> records = await getDnsRecords(domain: domain);
+    final result = await getDnsRecords(domain: domain);
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: [],
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final records = result.data;
     final List<DesiredDnsRecord> foundRecords = [];
     try {
       final List<DesiredDnsRecord> desiredRecords =
@@ -384,13 +322,13 @@ class DesecApi extends DnsProviderApi {
       }
     } catch (e) {
       print(e);
-      return APIGenericResult(
+      return GenericResult(
         data: [],
         success: false,
         message: e.toString(),
       );
     }
-    return APIGenericResult(
+    return GenericResult(
       data: foundRecords,
       success: true,
     );

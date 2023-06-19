@@ -5,12 +5,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider_api_settings.dart';
-import 'package:selfprivacy/logic/api_maps/staging_options.dart';
+import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
+import 'package:selfprivacy/logic/models/launch_installation_data.dart';
+import 'package:selfprivacy/logic/providers/provider_settings.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -20,6 +19,7 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 
 export 'package:provider/provider.dart';
 
@@ -58,45 +58,29 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  void setServerProviderType(final ServerProvider providerType) async {
+  void setServerProviderType(final ServerProviderType providerType) async {
     await repository.saveServerProviderType(providerType);
-    ApiController.initServerProviderApiFactory(
-      ServerProviderApiFactorySettings(
-        provider: providerType,
-      ),
+    ProvidersController.initServerProvider(
+      ServerProviderSettings(provider: providerType),
     );
   }
 
-  void setDnsProviderType(final DnsProvider providerType) async {
+  void setDnsProviderType(final DnsProviderType providerType) async {
     await repository.saveDnsProviderType(providerType);
-    ApiController.initDnsProviderApiFactory(
-      DnsProviderApiFactorySettings(
+    ProvidersController.initDnsProvider(
+      DnsProviderSettings(
         provider: providerType,
       ),
     );
   }
-
-  ProviderApiTokenValidation serverProviderApiTokenValidation() =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider()
-          .getApiTokenValidation();
-
-  RegExp getDnsProviderApiTokenValidation() =>
-      ApiController.currentDnsProviderApiFactory!
-          .getDnsProvider()
-          .getApiTokenValidation();
 
   Future<bool?> isServerProviderApiTokenValid(
     final String providerToken,
   ) async {
-    final APIGenericResult<bool> apiResponse =
-        await ApiController.currentServerProviderApiFactory!
-            .getServerProvider(
-              settings: const ServerProviderApiSettings(
-                isWithToken: false,
-              ),
-            )
-            .isApiTokenValid(providerToken);
+    final GenericResult<bool> apiResponse =
+        await ProvidersController.currentServerProvider!.tryInitApiByToken(
+      providerToken,
+    );
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -111,12 +95,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<bool?> isDnsProviderApiTokenValid(
     final String providerToken,
   ) async {
-    final APIGenericResult<bool> apiResponse =
-        await ApiController.currentDnsProviderApiFactory!
-            .getDnsProvider(
-              settings: const DnsProviderApiSettings(isWithToken: false),
-            )
-            .isApiTokenValid(providerToken);
+    final GenericResult<bool> apiResponse =
+        await ProvidersController.currentDnsProvider!.tryInitApiByToken(
+      providerToken,
+    );
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -129,35 +111,33 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   Future<List<ServerProviderLocation>> fetchAvailableLocations() async {
-    if (ApiController.currentServerProviderApiFactory == null) {
+    if (ProvidersController.currentServerProvider == null) {
       return [];
     }
 
-    final APIGenericResult apiResult = await ApiController
-        .currentServerProviderApiFactory!
-        .getServerProvider()
+    final GenericResult apiResponse = await ProvidersController
+        .currentServerProvider!
         .getAvailableLocations();
 
-    if (!apiResult.success) {
+    if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
         'initializing.could_not_connect'.tr(),
       );
     }
 
-    return apiResult.data;
+    return apiResponse.data;
   }
 
   Future<List<ServerType>> fetchAvailableTypesByLocation(
     final ServerProviderLocation location,
   ) async {
-    if (ApiController.currentServerProviderApiFactory == null) {
+    if (ProvidersController.currentServerProvider == null) {
       return [];
     }
 
-    final APIGenericResult apiResult = await ApiController
-        .currentServerProviderApiFactory!
-        .getServerProvider()
-        .getServerTypesByLocation(location: location);
+    final GenericResult apiResult = await ProvidersController
+        .currentServerProvider!
+        .getServerTypes(location: location);
 
     if (!apiResult.success) {
       getIt<NavigationService>().showSnackBar(
@@ -191,21 +171,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void setServerType(final ServerType serverType) async {
     await repository.saveServerType(serverType);
 
-    ApiController.initServerProviderApiFactory(
-      ServerProviderApiFactorySettings(
-        provider: getIt<ApiConfigModel>().serverProvider!,
-        location: serverType.location.identifier,
-      ),
-    );
-
-    // All server providers support volumes for now,
-    //   so it's safe to initialize.
-    ApiController.initVolumeProviderApiFactory(
-      ServerProviderApiFactorySettings(
-        provider: getIt<ApiConfigModel>().serverProvider!,
-        location: serverType.location.identifier,
-      ),
-    );
+    await ProvidersController.currentServerProvider!
+        .trySetServerLocation(serverType.location.identifier);
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(
@@ -216,10 +183,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   void setDnsApiToken(final String dnsApiToken) async {
     if (state is ServerInstallationRecovery) {
-      setAndValidateDnsApiToken(dnsApiToken);
+      await setAndValidateDnsApiToken(dnsApiToken);
       return;
     }
-    await repository.saveDnsProviderKey(dnsApiToken);
+    await repository.setDnsApiToken(dnsApiToken);
 
     emit(
       (state as ServerInstallationNotFinished)
@@ -256,41 +223,53 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit((state as ServerInstallationNotFinished).copyWith(rootUser: rootUser));
   }
 
+  Future<void> onCreateServerSuccess(
+    final ServerHostingDetails serverDetails,
+  ) async {
+    await repository.saveServerDetails(serverDetails);
+    await ProvidersController.currentDnsProvider!.removeDomainRecords(
+      ip4: serverDetails.ip4,
+      domain: state.serverDomain!,
+    );
+    await ProvidersController.currentDnsProvider!.createDomainRecords(
+      ip4: serverDetails.ip4,
+      domain: state.serverDomain!,
+    );
+
+    emit(
+      (state as ServerInstallationNotFinished).copyWith(
+        isLoading: false,
+        serverDetails: serverDetails,
+        installationDialoguePopUp: null,
+      ),
+    );
+    runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), null);
+  }
+
   void createServerAndSetDnsRecords() async {
-    final ServerInstallationNotFinished stateCopy =
-        state as ServerInstallationNotFinished;
-    void onCancel() => emit(
-          (state as ServerInstallationNotFinished).copyWith(isLoading: false),
-        );
+    emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
 
-    Future<void> onSuccess(final ServerHostingDetails serverDetails) async {
-      await repository.createDnsRecords(
-        serverDetails,
-        state.serverDomain!,
-        onCancel: onCancel,
-      );
+    final installationData = LaunchInstallationData(
+      rootUser: state.rootUser!,
+      dnsApiToken: state.dnsApiToken!,
+      dnsProviderType: state.serverDomain!.provider,
+      serverDomain: state.serverDomain!,
+      serverTypeId: state.serverTypeIdentificator!,
+      errorCallback: clearAppConfig,
+      successCallback: onCreateServerSuccess,
+    );
 
+    final result =
+        await ProvidersController.currentServerProvider!.launchInstallation(
+      installationData,
+    );
+
+    if (!result.success && result.data != null) {
       emit(
         (state as ServerInstallationNotFinished).copyWith(
-          isLoading: false,
-          serverDetails: serverDetails,
+          installationDialoguePopUp: result.data,
         ),
       );
-      runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), null);
-    }
-
-    try {
-      emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
-      await repository.createServer(
-        state.rootUser!,
-        state.serverDomain!.domainName,
-        state.dnsApiToken!,
-        state.backblazeCredential!,
-        onCancel: onCancel,
-        onSuccess: onSuccess,
-      );
-    } catch (e) {
-      emit(stateCopy);
     }
   }
 
@@ -437,7 +416,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(TimerState(dataState: dataState, isLoading: true));
 
     final bool isServerWorking = await repository.isHttpServerWorking();
-    StagingOptions.verifyCertificate = true;
+    TlsOptions.verifyCertificate = true;
 
     if (isServerWorking) {
       bool dkimCreated = true;
@@ -487,7 +466,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void submitDomainForAccessRecovery(final String domain) async {
     final ServerDomain serverDomain = ServerDomain(
       domainName: domain,
-      provider: DnsProvider.unknown,
+      provider: DnsProviderType.unknown,
       zoneId: '',
     );
     final ServerRecoveryCapabilities recoveryCapabilities =
@@ -539,7 +518,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         token,
         dataState.recoveryCapabilities,
       );
-      final ServerProvider provider = await ServerApi(
+      final ServerProviderType serverProvider = await ServerApi(
         customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getServerProviderType();
@@ -547,15 +526,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         customToken: serverDetails.apiToken,
         isWithToken: true,
       ).getDnsProviderType();
-      if (provider == ServerProvider.unknown ||
-          dnsProvider == DnsProvider.unknown) {
+      if (serverProvider == ServerProviderType.unknown ||
+          dnsProvider == DnsProviderType.unknown) {
         getIt<NavigationService>()
             .showSnackBar('recovering.generic_error'.tr());
         return;
       }
       await repository.saveServerDetails(serverDetails);
       await repository.saveDnsProviderType(dnsProvider);
-      setServerProviderType(provider);
+      setServerProviderType(serverProvider);
       setDnsProviderType(dnsProvider);
       emit(
         dataState.copyWith(
@@ -683,7 +662,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         linuxDevice: '',
       ),
       apiToken: dataState.serverDetails!.apiToken,
-      provider: ServerProvider.hetzner,
+      provider: ServerProviderType.hetzner,
     );
     await repository.saveDomain(serverDomain);
     await repository.saveServerDetails(serverDetails);
@@ -720,13 +699,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         provider: dnsProviderType,
       ),
     );
-    await repository.saveDnsProviderKey(token);
+    await repository.setDnsApiToken(token);
     emit(
       dataState.copyWith(
         serverDomain: ServerDomain(
           domainName: serverDomain.domainName,
           zoneId: zoneId,
-          provider: DnsProvider.cloudflare,
+          provider: dnsProviderType,
         ),
         dnsApiToken: token,
         currentStep: RecoveryStep.backblazeToken,
@@ -754,13 +733,44 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   @override
   void onChange(final Change<ServerInstallationState> change) {
+    if (change.nextState.installationDialoguePopUp != null &&
+        change.currentState.installationDialoguePopUp !=
+            change.nextState.installationDialoguePopUp) {
+      final branching = change.nextState.installationDialoguePopUp;
+      showPopUpAlert(
+        alertTitle: branching!.title,
+        description: branching.description,
+        actionButtonTitle: branching.choices[1].title,
+        actionButtonOnPressed: () async {
+          final branchingResult = await branching.choices[1].callback!();
+          if (!branchingResult.success) {
+            emit(
+              (state as ServerInstallationNotFinished).copyWith(
+                installationDialoguePopUp: branchingResult.data,
+              ),
+            );
+          }
+        },
+        cancelButtonTitle: branching.choices[0].title,
+        cancelButtonOnPressed: () async {
+          final branchingResult = await branching.choices[0].callback!();
+          if (!branchingResult.success) {
+            emit(
+              (state as ServerInstallationNotFinished).copyWith(
+                installationDialoguePopUp: branchingResult.data,
+              ),
+            );
+          }
+        },
+      );
+    }
     super.onChange(change);
   }
 
   void clearAppConfig() {
     closeTimer();
-    ApiController.clearProviderApiFactories();
-    StagingOptions.verifyCertificate = false;
+    ProvidersController.clearProviders();
+    TlsOptions.verifyCertificate = false;
     repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }

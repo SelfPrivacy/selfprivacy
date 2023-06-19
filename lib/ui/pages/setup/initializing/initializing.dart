@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/provider_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
@@ -211,10 +211,11 @@ class InitializingPage extends StatelessWidget {
     final ServerInstallationCubit serverInstallationCubit,
   ) =>
       BlocProvider(
-        create: (final context) => ProviderFormCubit(serverInstallationCubit),
+        create: (final context) =>
+            ServerProviderFormCubit(serverInstallationCubit),
         child: Builder(
           builder: (final context) {
-            final providerCubit = context.watch<ProviderFormCubit>();
+            final providerCubit = context.watch<ServerProviderFormCubit>();
             return ServerProviderPicker(
               formCubit: providerCubit,
               serverInstallationCubit: serverInstallationCubit,
@@ -227,7 +228,8 @@ class InitializingPage extends StatelessWidget {
     final ServerInstallationCubit serverInstallationCubit,
   ) =>
       BlocProvider(
-        create: (final context) => ProviderFormCubit(serverInstallationCubit),
+        create: (final context) =>
+            ServerProviderFormCubit(serverInstallationCubit),
         child: Builder(
           builder: (final context) => ServerTypePicker(
             serverInstallationCubit: serverInstallationCubit,

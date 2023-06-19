@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -39,7 +41,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       );
     }
 
-    refresh();
+    unawaited(refresh());
   }
 
   Future<void> refresh() async {
@@ -78,7 +80,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       return;
     }
     // If API returned error, do nothing
-    final APIGenericResult<User?> result =
+    final GenericResult<User?> result =
         await api.createUser(user.login, password);
     if (result.data == null) {
       getIt<NavigationService>()
@@ -101,7 +103,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
       return;
     }
     final List<User> loadedUsers = List<User>.from(state.users);
-    final APIGenericResult result = await api.deleteUser(user.login);
+    final GenericResult result = await api.deleteUser(user.login);
     if (result.success && result.data) {
       loadedUsers.removeWhere((final User u) => u.login == user.login);
       await box.clear();
@@ -128,7 +130,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
           .showSnackBar('users.could_not_change_password'.tr());
       return;
     }
-    final APIGenericResult<User?> result =
+    final GenericResult<User?> result =
         await api.updateUser(user.login, newPassword);
     if (result.data == null) {
       getIt<NavigationService>().showSnackBar(
@@ -138,7 +140,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   }
 
   Future<void> addSshKey(final User user, final String publicKey) async {
-    final APIGenericResult<User?> result =
+    final GenericResult<User?> result =
         await api.addSshKey(user.login, publicKey);
     if (result.data != null) {
       final User updatedUser = result.data!;
@@ -157,7 +159,7 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   }
 
   Future<void> deleteSshKey(final User user, final String publicKey) async {
-    final APIGenericResult<User?> result =
+    final GenericResult<User?> result =
         await api.removeSshKey(user.login, publicKey);
     if (result.data != null) {
       final User updatedUser = result.data!;

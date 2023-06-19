@@ -1,20 +1,20 @@
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
-class ServerProviderApiFactorySettings {
-  ServerProviderApiFactorySettings({
+class ServerProviderSettings {
+  ServerProviderSettings({
     required this.provider,
     this.location,
   });
 
-  final ServerProvider provider;
+  final ServerProviderType provider;
   final String? location;
 }
 
-class DnsProviderApiFactorySettings {
-  DnsProviderApiFactorySettings({
+class DnsProviderSettings {
+  DnsProviderSettings({
     required this.provider,
   });
 
-  final DnsProvider provider;
+  final DnsProviderType provider;
 }

@@ -321,7 +321,6 @@
         "choose_server_type_storage": "{} GB systémového úložiska",
         "choose_server_type_payment_per_month": "{} mesačne",
         "no_server_types_found": "Nenašli sa žiadne dostupné typy serverov. Uistite sa, že je váš účet prístupný a skúste zmeniť umiestnenie servera.",
-        "cloudflare_bad_key_error": "Kľúč Cloudflare API je neplatný",
         "backblaze_bad_key_error": "Informácie o úložisku Backblaze sú neplatné",
         "select_dns": "Teraz vyberme poskytovateľa DNS",
         "manage_domain_dns": "Na správu DNS vašej domény",

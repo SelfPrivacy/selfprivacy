@@ -12,7 +12,6 @@
         "choose_server_type_ram": "{} GB RAM",
         "choose_server_type_payment_per_month": "{} у месяц",
         "no_server_types_found": "Не знойдзена даступных тыпаў сервера! Калі ласка, пераканайцеся, што ў вас ёсць доступ да правайдэра сервера...",
-        "cloudflare_bad_key_error": "Cloudflare API ключ няправільны",
         "backblaze_bad_key_error": "Інфармацыя аб Backblaze сховішча няслушная",
         "select_dns": "Цяпер давайце выберам DNS-правайдэра",
         "what": "Што гэта значыць?",

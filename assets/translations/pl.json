@@ -320,7 +320,6 @@
         "choose_server_type_storage": "{} GB pamięci na diskie",
         "choose_server_type_payment_per_month": "{} miesięcznie",
         "no_server_types_found": "Nie znaleziono dostępnych typów serwerów! Proszę upewnić się, że masz dostęp do dostawcy serwera...",
-        "cloudflare_bad_key_error": "Klucz API Cloudflare jest nieprawidłowy",
         "use_this_domain": "Kto używa ten domen?",
         "cloudflare_api_token": "Klucz CloudFlare API",
         "connect_backblaze_storage": "Dodajcie Blackblaze",

@@ -295,7 +295,6 @@
         "choose_server_type_ram": "RAM üçün {} GB",
         "choose_server_type_storage": "{} GB sistem yaddaşı",
         "choose_server_type_payment_per_month": "{} aylıq",
-        "cloudflare_bad_key_error": "Cloudflare API açarı yanlışdır",
         "backblaze_bad_key_error": "Backblaze vault haqqında məlumat yanlışdır",
         "select_dns": "İndi DNS provayderini seçək",
         "manage_domain_dns": "Domeninizin DNS-ni idarə etmək üçün",

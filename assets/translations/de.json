@@ -318,7 +318,6 @@
         "choose_server_type_ram": "{} GB Arbeitsspeicher",
         "choose_server_type_storage": "{} GB Systemspeicher",
         "choose_server_type_payment_per_month": "{} pro Monat",
-        "cloudflare_bad_key_error": "Der Cloudflare-API-Schlüssel ist ungültig",
         "what": "Was bedeutet das?",
         "server_rebooted": "Server neugestartet. Warten auf die letzte Bestätigung…",
         "server_started": "Server gestartet. Es wird jetzt validiert und neugestartet…",

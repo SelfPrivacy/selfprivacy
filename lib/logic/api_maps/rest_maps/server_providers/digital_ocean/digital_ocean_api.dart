@@ -2,14 +2,15 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
-class DigitalOceanApi extends ServerProviderApi {
+class DigitalOceanApi extends RestApiMap {
   DigitalOceanApi({
     required this.region,
     this.hasLogger = true,
@@ -44,11 +45,7 @@ class DigitalOceanApi extends ServerProviderApi {
 
   @override
   String get rootAddress => 'https://api.digitalocean.com/v2';
-
-  @override
   String get infectProviderName => 'digitalocean';
-
-  @override
   String get displayProviderName => 'Digital Ocean';
 
   Future<GenericResult<bool>> isApiTokenValid(final String token) async {

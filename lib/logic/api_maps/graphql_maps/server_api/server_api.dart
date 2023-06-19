@@ -1,7 +1,7 @@
 import 'package:graphql/client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/api_map.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';

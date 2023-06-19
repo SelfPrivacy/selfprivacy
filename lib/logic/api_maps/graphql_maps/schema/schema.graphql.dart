@@ -1312,16 +1312,16 @@ Enum$BackupProvider fromJson$Enum$BackupProvider(String value) {
   }
 }
 
-enum Enum$DnsProvider { CLOUDFLARE, DIGITALOCEAN, DESEC, $unknown }
+enum Enum$DnsProvider { CLOUDFLARE, DESEC, DIGITALOCEAN, $unknown }
 
 String toJson$Enum$DnsProvider(Enum$DnsProvider e) {
   switch (e) {
     case Enum$DnsProvider.CLOUDFLARE:
       return r'CLOUDFLARE';
-    case Enum$DnsProvider.DIGITALOCEAN:
-      return r'DIGITALOCEAN';
     case Enum$DnsProvider.DESEC:
       return r'DESEC';
+    case Enum$DnsProvider.DIGITALOCEAN:
+      return r'DIGITALOCEAN';
     case Enum$DnsProvider.$unknown:
       return r'$unknown';
   }
@@ -1331,10 +1331,10 @@ Enum$DnsProvider fromJson$Enum$DnsProvider(String value) {
   switch (value) {
     case r'CLOUDFLARE':
       return Enum$DnsProvider.CLOUDFLARE;
-    case r'DIGITALOCEAN':
-      return Enum$DnsProvider.DIGITALOCEAN;
     case r'DESEC':
       return Enum$DnsProvider.DESEC;
+    case r'DIGITALOCEAN':
+      return Enum$DnsProvider.DIGITALOCEAN;
     default:
       return Enum$DnsProvider.$unknown;
   }

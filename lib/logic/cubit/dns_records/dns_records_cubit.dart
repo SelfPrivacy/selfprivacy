@@ -1,11 +1,11 @@
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 
 part 'dns_records_state.dart';
@@ -25,14 +25,13 @@ class DnsRecordsCubit
     emit(
       DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
-        dnsRecords: ApiController.currentDnsProviderApiFactory
-                ?.getDnsProvider()
-                .getDesiredDnsRecords(
+        dnsRecords:
+            ProvidersController.currentDnsProvider?.getDesiredDnsRecords(
                   serverInstallationCubit.state.serverDomain?.domainName,
                   '',
                   '',
                 ) ??
-            [],
+                [],
       ),
     );
 
@@ -45,13 +44,12 @@ class DnsRecordsCubit
         return;
       }
 
-      final foundRecords = await ApiController.currentDnsProviderApiFactory!
-          .getDnsProvider()
-          .validateDnsRecords(
-            domain!,
-            ipAddress!,
-            extractDkimRecord(await api.getDnsRecords())?.content ?? '',
-          );
+      final foundRecords =
+          await ProvidersController.currentDnsProvider!.validateDnsRecords(
+        domain!,
+        ipAddress!,
+        extractDkimRecord(await api.getDnsRecords())?.content ?? '',
+      );
 
       if (!foundRecords.success || foundRecords.data.isEmpty) {
         emit(const DnsRecordsState());
@@ -89,10 +87,10 @@ class DnsRecordsCubit
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
     final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
     final String? ipAddress = serverInstallationCubit.state.serverDetails?.ip4;
-    final DnsProviderApi dnsProviderApi =
-        ApiController.currentDnsProviderApiFactory!.getDnsProvider();
-    await dnsProviderApi.removeSimilarRecords(domain: domain!);
-    await dnsProviderApi.createMultipleDnsRecords(
+    await ProvidersController.currentDnsProvider!.removeDomainRecords(
+      domain: domain!,
+    );
+    await ProvidersController.currentDnsProvider!.createDomainRecords(
       domain: domain,
       ip4: ipAddress,
     );
@@ -100,7 +98,10 @@ class DnsRecordsCubit
     final List<DnsRecord> records = await api.getDnsRecords();
     final DnsRecord? dkimRecord = extractDkimRecord(records);
     if (dkimRecord != null) {
-      await dnsProviderApi.setDnsRecord(dkimRecord, domain);
+      await ProvidersController.currentDnsProvider!.setDnsRecord(
+        dkimRecord,
+        domain,
+      );
     }
 
     await load();

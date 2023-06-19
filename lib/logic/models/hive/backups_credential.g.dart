@@ -6,30 +6,35 @@ part of 'backups_credential.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class BackblazeCredentialAdapter extends TypeAdapter<BackblazeCredential> {
+class BackupsCredentialAdapter extends TypeAdapter<BackupsCredential> {
   @override
   final int typeId = 4;
 
   @override
-  BackblazeCredential read(BinaryReader reader) {
+  BackupsCredential read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return BackblazeCredential(
+    return BackupsCredential(
       keyId: fields[0] as String,
       applicationKey: fields[1] as String,
+      provider: fields[2] == null
+          ? BackupsProvider.backblaze
+          : fields[2] as BackupsProvider,
     );
   }
 
   @override
-  void write(BinaryWriter writer, BackblazeCredential obj) {
+  void write(BinaryWriter writer, BackupsCredential obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.keyId)
       ..writeByte(1)
-      ..write(obj.applicationKey);
+      ..write(obj.applicationKey)
+      ..writeByte(2)
+      ..write(obj.provider);
   }
 
   @override
@@ -38,7 +43,7 @@ class BackblazeCredentialAdapter extends TypeAdapter<BackblazeCredential> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BackblazeCredentialAdapter &&
+      other is BackupsCredentialAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -15,13 +15,12 @@ class HiveConfig {
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(ServerHostingDetailsAdapter());
     Hive.registerAdapter(ServerDomainAdapter());
-    Hive.registerAdapter(BackblazeCredentialAdapter());
+    Hive.registerAdapter(BackupsCredentialAdapter());
     Hive.registerAdapter(BackblazeBucketAdapter());
     Hive.registerAdapter(ServerVolumeAdapter());
-
-    Hive.registerAdapter(DnsProviderAdapter());
-    Hive.registerAdapter(ServerProviderAdapter());
     Hive.registerAdapter(UserTypeAdapter());
+    Hive.registerAdapter(DnsProviderTypeAdapter());
+    Hive.registerAdapter(ServerProviderTypeAdapter());
 
     await Hive.openBox(BNames.appSettingsBox);
 
@@ -35,8 +34,8 @@ class HiveConfig {
     final Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
     if (deprecatedUsers.isNotEmpty) {
       final Box<User> users = Hive.box<User>(BNames.usersBox);
-      users.addAll(deprecatedUsers.values.toList());
-      deprecatedUsers.clear();
+      await users.addAll(deprecatedUsers.values.toList());
+      await deprecatedUsers.clear();
     }
 
     await Hive.openBox(BNames.serverInstallationBox, encryptionCipher: cipher);

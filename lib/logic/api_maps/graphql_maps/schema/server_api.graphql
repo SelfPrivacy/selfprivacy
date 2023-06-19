@@ -80,7 +80,6 @@ query SystemDnsProvider {
   }
 }
 
-
 query GetApiTokens {
   api {
     devices {

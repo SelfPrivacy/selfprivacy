@@ -133,7 +133,10 @@ class ServerConsumptionListTile extends StatelessWidget {
             service.svgIcon,
             width: 24.0,
             height: 24.0,
-            color: Theme.of(context).colorScheme.onBackground,
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).colorScheme.onBackground,
+              BlendMode.srcIn,
+            ),
           ),
           rightSideText: service.storageUsage.used.toString(),
           percentage: service.storageUsage.used.byte / volume.sizeTotal.byte,

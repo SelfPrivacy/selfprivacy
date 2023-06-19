@@ -4,15 +4,12 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 
-class ProviderFormCubit extends FormCubit {
-  ProviderFormCubit(this.serverInstallationCubit) {
-    //final int tokenLength =
-    //    serverInstallationCubit.serverProviderApiTokenValidation().length;
+class ServerProviderFormCubit extends FormCubit {
+  ServerProviderFormCubit(this.serverInstallationCubit) {
     apiKey = FieldCubit(
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
-        //LengthStringNotEqualValidation(tokenLength),
       ],
     );
 

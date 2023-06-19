@@ -1,30 +1,26 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_factory_settings.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/dns_provider_api_settings.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
+import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/server_provider.dart';
-import 'package:selfprivacy/logic/api_maps/staging_options.dart';
+import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
-import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 
 class IpNotFoundException implements Exception {
@@ -47,49 +43,39 @@ class ServerInstallationRepository {
     final String? dnsApiToken = getIt<ApiConfigModel>().dnsProviderKey;
     final String? serverTypeIdentificator = getIt<ApiConfigModel>().serverType;
     final ServerDomain? serverDomain = getIt<ApiConfigModel>().serverDomain;
-    final ServerProvider? serverProvider =
+    final DnsProviderType? dnsProvider = getIt<ApiConfigModel>().dnsProvider;
+    final ServerProviderType? serverProvider =
         getIt<ApiConfigModel>().serverProvider;
     final BackupsCredential? backblazeCredential =
         getIt<ApiConfigModel>().backblazeCredential;
     final ServerHostingDetails? serverDetails =
         getIt<ApiConfigModel>().serverDetails;
-    final DnsProvider? dnsProvider = getIt<ApiConfigModel>().dnsProvider;
 
     if (serverProvider != null ||
         (serverDetails != null &&
-            serverDetails.provider != ServerProvider.unknown)) {
-      ApiController.initServerProviderApiFactory(
-        ServerProviderApiFactorySettings(
-          provider: serverProvider ?? serverDetails!.provider,
-          location: location,
-        ),
-      );
-
-      // All current providers support volumes
-      //   so it's safe to hardcode for now
-      ApiController.initVolumeProviderApiFactory(
-        ServerProviderApiFactorySettings(
+            serverDetails.provider != ServerProviderType.unknown)) {
+      ProvidersController.initServerProvider(
+        ServerProviderSettings(
           provider: serverProvider ?? serverDetails!.provider,
           location: location,
         ),
       );
     }
 
-    if (ApiController.currentDnsProviderApiFactory == null) {
-      if (dnsProvider != null ||
-          (serverDomain != null &&
-              serverDomain.provider != DnsProvider.unknown)) {
-        ApiController.initDnsProviderApiFactory(
-          DnsProviderApiFactorySettings(
-            provider: dnsProvider ?? serverDomain!.provider,
-          ),
-        );
-      }
+    if (dnsProvider != null ||
+        (serverDomain != null &&
+            serverDomain.provider != DnsProviderType.unknown)) {
+      ProvidersController.initDnsProvider(
+        DnsProviderSettings(
+          provider: dnsProvider ?? serverDomain!.provider,
+        ),
+      );
     }
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
-      StagingOptions.verifyCertificate = true;
+      TlsOptions.verifyCertificate = true;
       return ServerInstallationFinished(
+        installationDialoguePopUp: null,
         providerApiToken: providerApiToken!,
         serverTypeIdentificator: serverTypeIdentificator ?? '',
         dnsApiToken: dnsApiToken!,
@@ -149,8 +135,8 @@ class ServerInstallationRepository {
   ) {
     if (serverDetails != null) {
       if (serverProviderToken != null) {
-        if (serverDetails.provider != ServerProvider.unknown) {
-          if (serverDomain.provider != DnsProvider.unknown) {
+        if (serverDetails.provider != ServerProviderType.unknown) {
+          if (serverDomain.provider != DnsProviderType.unknown) {
             return RecoveryStep.backblazeToken;
           }
           return RecoveryStep.dnsProviderToken;
@@ -170,35 +156,26 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> startServer(
     final ServerHostingDetails server,
   ) async {
-    ServerHostingDetails serverDetails;
+    final result = await ProvidersController.currentServerProvider!.powerOn(
+      server.id,
+    );
 
-    serverDetails = await ApiController.currentServerProviderApiFactory!
-        .getServerProvider()
-        .powerOn();
+    if (result.success && result.data != null) {
+      server.copyWith(startTime: result.data);
+    }
 
-    return serverDetails;
+    return server;
   }
 
   Future<String?> getDomainId(final String token, final String domain) async {
-    final DnsProviderApi dnsProviderApi =
-        ApiController.currentDnsProviderApiFactory!.getDnsProvider(
-      settings: DnsProviderApiSettings(
-        isWithToken: false,
-        customToken: token,
-      ),
-    );
-
-    /// TODO: nvm it's because only Cloudflare uses Zone
-    /// for other providers we need to implement a different kind of
-    /// functionality here... but it's on refactoring, let it be here for now.
-    final APIGenericResult<bool> apiResponse =
-        await dnsProviderApi.isApiTokenValid(token);
-
-    String? domainId;
-    if (apiResponse.success && apiResponse.data) {
-      domainId = await dnsProviderApi.getZoneId(domain);
-    }
-    return domainId;
+    final result =
+        await ProvidersController.currentDnsProvider!.tryInitApiByToken(token);
+    return result.success
+        ? (await ProvidersController.currentDnsProvider!.getZoneId(
+            domain,
+          ))
+            .data
+        : null;
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(
@@ -224,181 +201,7 @@ class ServerInstallationRepository {
     return matches;
   }
 
-  Future<void> createServer(
-    final User rootUser,
-    final String domainName,
-    final String dnsApiToken,
-    final BackupsCredential backblazeCredential, {
-    required final void Function() onCancel,
-    required final Future<void> Function(ServerHostingDetails serverDetails)
-        onSuccess,
-  }) async {
-    final ServerProviderApi api =
-        ApiController.currentServerProviderApiFactory!.getServerProvider();
-
-    void showInstallationErrorPopUp() {
-      showPopUpAlert(
-        alertTitle: 'modals.unexpected_error'.tr(),
-        description: 'modals.try_again'.tr(),
-        actionButtonTitle: 'modals.yes'.tr(),
-        actionButtonOnPressed: () async {
-          ServerHostingDetails? serverDetails;
-          try {
-            final APIGenericResult createResult = await api.createServer(
-              dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
-              dnsApiToken: dnsApiToken,
-              rootUser: rootUser,
-              domainName: domainName,
-              serverType: getIt<ApiConfigModel>().serverType!,
-            );
-            serverDetails = createResult.data;
-          } catch (e) {
-            print(e);
-          }
-
-          if (serverDetails == null) {
-            print('Server is not initialized!');
-            return;
-          }
-          await saveServerDetails(serverDetails);
-          onSuccess(serverDetails);
-        },
-        cancelButtonOnPressed: onCancel,
-      );
-    }
-
-    try {
-      final APIGenericResult<ServerHostingDetails?> createServerResult =
-          await api.createServer(
-        dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
-        dnsApiToken: dnsApiToken,
-        rootUser: rootUser,
-        domainName: domainName,
-        serverType: getIt<ApiConfigModel>().serverType!,
-      );
-
-      if (createServerResult.data == null) {
-        const String e = 'Server is not initialized!';
-        print(e);
-      }
-
-      if (createServerResult.message == 'uniqueness_error') {
-        showPopUpAlert(
-          alertTitle: 'modals.already_exists'.tr(),
-          description: 'modals.destroy_server'.tr(),
-          actionButtonTitle: 'modals.yes'.tr(),
-          actionButtonOnPressed: () async {
-            await api.deleteServer(
-              domainName: domainName,
-            );
-
-            ServerHostingDetails? serverDetails;
-            try {
-              final APIGenericResult createResult = await api.createServer(
-                dnsProvider: getIt<ApiConfigModel>().dnsProvider!,
-                dnsApiToken: dnsApiToken,
-                rootUser: rootUser,
-                domainName: domainName,
-                serverType: getIt<ApiConfigModel>().serverType!,
-              );
-              serverDetails = createResult.data;
-            } catch (e) {
-              print(e);
-            }
-
-            if (serverDetails == null) {
-              print('Server is not initialized!');
-              return;
-            }
-            await saveServerDetails(serverDetails);
-            onSuccess(serverDetails);
-          },
-          cancelButtonOnPressed: onCancel,
-        );
-        return;
-      }
-
-      saveServerDetails(createServerResult.data!);
-      onSuccess(createServerResult.data!);
-    } catch (e) {
-      print(e);
-      showInstallationErrorPopUp();
-    }
-  }
-
-  Future<bool> createDnsRecords(
-    final ServerHostingDetails serverDetails,
-    final ServerDomain domain, {
-    required final void Function() onCancel,
-  }) async {
-    final DnsProviderApi dnsProviderApi =
-        ApiController.currentDnsProviderApiFactory!.getDnsProvider();
-    final ServerProviderApi serverApi =
-        ApiController.currentServerProviderApiFactory!.getServerProvider();
-
-    void showDomainErrorPopUp(final String error) {
-      showPopUpAlert(
-        alertTitle: error,
-        description: 'modals.delete_server_volume'.tr(),
-        cancelButtonOnPressed: onCancel,
-        actionButtonTitle: 'basis.delete'.tr(),
-        actionButtonOnPressed: () async {
-          await serverApi.deleteServer(
-            domainName: domain.domainName,
-          );
-          onCancel();
-        },
-      );
-    }
-
-    final APIGenericResult removingResult =
-        await dnsProviderApi.removeSimilarRecords(
-      ip4: serverDetails.ip4,
-      domain: domain,
-    );
-
-    if (!removingResult.success) {
-      showDomainErrorPopUp('domain.error'.tr());
-      return false;
-    }
-
-    bool createdSuccessfully = false;
-    String errorMessage = 'domain.error'.tr();
-    try {
-      final APIGenericResult createResult =
-          await dnsProviderApi.createMultipleDnsRecords(
-        ip4: serverDetails.ip4,
-        domain: domain,
-      );
-      createdSuccessfully = createResult.success;
-    } on DioError catch (e) {
-      if (e.response!.data['errors'][0]['code'] == 1038) {
-        errorMessage = 'modals.you_cant_use_this_api'.tr();
-      }
-    }
-
-    if (!createdSuccessfully) {
-      showDomainErrorPopUp(errorMessage);
-      return false;
-    }
-
-    final APIGenericResult createReverseResult =
-        await serverApi.createReverseDns(
-      serverDetails: serverDetails,
-      domain: domain,
-    );
-
-    if (!createReverseResult.success) {
-      showDomainErrorPopUp(errorMessage);
-      return false;
-    }
-
-    return true;
-  }
-
   Future<void> createDkimRecord(final ServerDomain cloudFlareDomain) async {
-    final DnsProviderApi dnsProviderApi =
-        ApiController.currentDnsProviderApiFactory!.getDnsProvider();
     final ServerApi api = ServerApi();
 
     late DnsRecord record;
@@ -409,7 +212,10 @@ class ServerInstallationRepository {
       rethrow;
     }
 
-    await dnsProviderApi.setDnsRecord(record, cloudFlareDomain);
+    await ProvidersController.currentDnsProvider!.setDnsRecord(
+      record,
+      cloudFlareDomain,
+    );
   }
 
   Future<bool> isHttpServerWorking() async {
@@ -417,15 +223,24 @@ class ServerInstallationRepository {
     return api.isHttpServerWorking();
   }
 
-  Future<ServerHostingDetails> restart() async =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider()
-          .restart();
+  Future<ServerHostingDetails> restart() async {
+    final server = getIt<ApiConfigModel>().serverDetails!;
 
-  Future<ServerHostingDetails> powerOn() async =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider()
-          .powerOn();
+    final result = await ProvidersController.currentServerProvider!.restart(
+      server.id,
+    );
+
+    if (result.success && result.data != null) {
+      server.copyWith(startTime: result.data);
+    }
+
+    return server;
+  }
+
+  Future<ServerHostingDetails> powerOn() async {
+    final server = getIt<ApiConfigModel>().serverDetails!;
+    return startServer(server);
+  }
 
   Future<ServerRecoveryCapabilities> getRecoveryCapabilities(
     final ServerDomain serverDomain,
@@ -508,7 +323,7 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final APIGenericResult<String> result = await serverApi.authorizeDevice(
+    final GenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: newDeviceKey),
     );
 
@@ -522,7 +337,7 @@ class ServerInstallationRepository {
           serverId: 0,
           linuxDevice: '',
         ),
-        provider: ServerProvider.unknown,
+        provider: ServerProviderType.unknown,
         id: 0,
         ip4: serverIp,
         startTime: null,
@@ -545,7 +360,7 @@ class ServerInstallationRepository {
       overrideDomain: serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final APIGenericResult<String> result = await serverApi.useRecoveryToken(
+    final GenericResult<String> result = await serverApi.useRecoveryToken(
       DeviceToken(device: await getDeviceName(), token: recoveryKey),
     );
 
@@ -559,7 +374,7 @@ class ServerInstallationRepository {
           serverId: 0,
           linuxDevice: '',
         ),
-        provider: ServerProvider.unknown,
+        provider: ServerProviderType.unknown,
         id: 0,
         ip4: serverIp,
         startTime: null,
@@ -594,7 +409,7 @@ class ServerInstallationRepository {
             sizeByte: 0,
             linuxDevice: '',
           ),
-          provider: ServerProvider.unknown,
+          provider: ServerProviderType.unknown,
           id: 0,
           ip4: serverIp,
           startTime: null,
@@ -606,9 +421,9 @@ class ServerInstallationRepository {
         );
       }
     }
-    final APIGenericResult<String> deviceAuthKey =
+    final GenericResult<String> deviceAuthKey =
         await serverApi.createDeviceToken();
-    final APIGenericResult<String> result = await serverApi.authorizeDevice(
+    final GenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
     );
 
@@ -622,7 +437,7 @@ class ServerInstallationRepository {
           serverId: 0,
           linuxDevice: '',
         ),
-        provider: ServerProvider.unknown,
+        provider: ServerProviderType.unknown,
         id: 0,
         ip4: serverIp,
         startTime: null,
@@ -664,9 +479,7 @@ class ServerInstallationRepository {
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async =>
-      ApiController.currentServerProviderApiFactory!
-          .getServerProvider()
-          .getServers();
+      (await ProvidersController.currentServerProvider!.getServers()).data;
 
   Future<void> saveServerDetails(
     final ServerHostingDetails serverDetails,
@@ -679,8 +492,12 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
-  Future<void> saveServerProviderType(final ServerProvider type) async {
+  Future<void> saveServerProviderType(final ServerProviderType type) async {
     await getIt<ApiConfigModel>().storeServerProviderType(type);
+  }
+
+  Future<void> saveDnsProviderType(final DnsProviderType type) async {
+    await getIt<ApiConfigModel>().storeDnsProviderType(type);
   }
 
   Future<void> saveServerProviderKey(final String key) async {
@@ -701,10 +518,6 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
-  Future<void> saveDnsProviderType(final DnsProvider type) async {
-    await getIt<ApiConfigModel>().storeDnsProviderType(type);
-  }
-
   Future<void> saveBackblazeKey(
     final BackupsCredential backblazeCredential,
   ) async {
@@ -716,7 +529,7 @@ class ServerInstallationRepository {
     getIt<ApiConfigModel>().init();
   }
 
-  Future<void> saveDnsProviderKey(final String key) async {
+  Future<void> setDnsApiToken(final String key) async {
     await getIt<ApiConfigModel>().storeDnsProviderKey(key);
   }
 
@@ -759,22 +572,14 @@ class ServerInstallationRepository {
   }
 
   Future<bool> deleteServer(final ServerDomain serverDomain) async {
-    final APIGenericResult<bool> deletionResult = await ApiController
-        .currentServerProviderApiFactory!
-        .getServerProvider()
-        .deleteServer(
-          domainName: serverDomain.domainName,
-        );
+    final deletionResult =
+        await ProvidersController.currentServerProvider!.deleteServer(
+      serverDomain.domainName,
+    );
 
     if (!deletionResult.success) {
       getIt<NavigationService>()
           .showSnackBar('modals.server_validators_error'.tr());
-      return false;
-    }
-
-    if (!deletionResult.data) {
-      getIt<NavigationService>()
-          .showSnackBar('modals.server_deletion_error'.tr());
       return false;
     }
 
@@ -785,10 +590,9 @@ class ServerInstallationRepository {
     await box.put(BNames.isLoading, false);
     await box.put(BNames.serverDetails, null);
 
-    final APIGenericResult<void> removalResult = await ApiController
-        .currentDnsProviderApiFactory!
-        .getDnsProvider()
-        .removeSimilarRecords(domain: serverDomain);
+    final GenericResult<void> removalResult = await ProvidersController
+        .currentDnsProvider!
+        .removeDomainRecords(domain: serverDomain);
 
     if (!removalResult.success) {
       getIt<NavigationService>().showSnackBar('modals.dns_removal_error'.tr());

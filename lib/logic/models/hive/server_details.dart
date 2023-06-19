@@ -33,8 +33,8 @@ class ServerHostingDetails {
   @HiveField(5)
   final String apiToken;
 
-  @HiveField(6, defaultValue: ServerProvider.hetzner)
-  final ServerProvider provider;
+  @HiveField(6, defaultValue: ServerProviderType.hetzner)
+  final ServerProviderType provider;
 
   ServerHostingDetails copyWith({final DateTime? startTime}) =>
       ServerHostingDetails(
@@ -77,7 +77,7 @@ class ServerVolume {
 }
 
 @HiveType(typeId: 101)
-enum ServerProvider {
+enum ServerProviderType {
   @HiveField(0)
   unknown,
   @HiveField(1)
@@ -85,7 +85,7 @@ enum ServerProvider {
   @HiveField(2)
   digitalOcean;
 
-  factory ServerProvider.fromGraphQL(final Enum$ServerProvider provider) {
+  factory ServerProviderType.fromGraphQL(final Enum$ServerProvider provider) {
     switch (provider) {
       case Enum$ServerProvider.HETZNER:
         return hetzner;
@@ -98,9 +98,9 @@ enum ServerProvider {
 
   String get displayName {
     switch (this) {
-      case ServerProvider.hetzner:
+      case ServerProviderType.hetzner:
         return 'Hetzner Cloud';
-      case ServerProvider.digitalOcean:
+      case ServerProviderType.digitalOcean:
         return 'Digital Ocean';
       default:
         return 'Unknown';

@@ -1,7 +1,8 @@
 import 'package:cubit_form/cubit_form.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/api_controller.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 
 class DomainSetupCubit extends Cubit<DomainSetupState> {
   DomainSetupCubit(this.serverInstallationCubit) : super(Initial());
@@ -10,20 +11,16 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));
-    final List<String> list = await ApiController.currentDnsProviderApiFactory!
-        .getDnsProvider()
-        .domainList();
-    if (list.isEmpty) {
+    final GenericResult<List<String>> result =
+        await ProvidersController.currentDnsProvider!.domainList();
+    if (!result.success || result.data.isEmpty) {
       emit(Empty());
-    } else if (list.length == 1) {
-      emit(Loaded(list.first));
+    } else if (result.data.length == 1) {
+      emit(Loaded(result.data.first));
     } else {
       emit(MoreThenOne());
     }
   }
-
-  @override
-  Future<void> close() => super.close();
 
   Future<void> saveDomain() async {
     assert(state is Loaded, 'wrong state');
@@ -31,15 +28,15 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
     emit(Loading(LoadingTypes.saving));
 
-    final String? zoneId = await ApiController.currentDnsProviderApiFactory!
-        .getDnsProvider()
-        .getZoneId(domainName);
+    final dnsProvider = ProvidersController.currentDnsProvider!;
+    final GenericResult<String?> zoneIdResult =
+        await dnsProvider.getZoneId(domainName);
 
-    if (zoneId != null) {
+    if (zoneIdResult.success || zoneIdResult.data != null) {
       final ServerDomain domain = ServerDomain(
         domainName: domainName,
-        zoneId: zoneId,
-        provider: DnsProvider.cloudflare,
+        zoneId: zoneIdResult.data!,
+        provider: dnsProvider.type,
       );
 
       serverInstallationCubit.setDomain(domain);

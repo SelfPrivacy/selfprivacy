@@ -12,6 +12,7 @@ abstract class ServerInstallationState extends Equatable {
     required this.isServerStarted,
     required this.isServerResetedFirstTime,
     required this.isServerResetedSecondTime,
+    required this.installationDialoguePopUp,
   });
 
   @override
@@ -25,6 +26,7 @@ abstract class ServerInstallationState extends Equatable {
         serverDetails,
         isServerStarted,
         isServerResetedFirstTime,
+        installationDialoguePopUp
       ];
 
   final String? providerApiToken;
@@ -37,6 +39,7 @@ abstract class ServerInstallationState extends Equatable {
   final bool isServerStarted;
   final bool isServerResetedFirstTime;
   final bool isServerResetedSecondTime;
+  final CallbackDialogueBranching? installationDialoguePopUp;
 
   bool get isServerProviderApiKeyFilled => providerApiToken != null;
   bool get isServerTypeFilled => serverTypeIdentificator != null;
@@ -96,6 +99,7 @@ class TimerState extends ServerInstallationNotFinished {
           isServerResetedFirstTime: dataState.isServerResetedFirstTime,
           isServerResetedSecondTime: dataState.isServerResetedSecondTime,
           dnsMatches: dataState.dnsMatches,
+          installationDialoguePopUp: dataState.installationDialoguePopUp,
         );
 
   final ServerInstallationNotFinished dataState;
@@ -138,6 +142,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     super.serverDomain,
     super.rootUser,
     super.serverDetails,
+    super.installationDialoguePopUp,
   });
   final bool isLoading;
   final Map<String, bool>? dnsMatches;
@@ -155,6 +160,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
         isServerResetedFirstTime,
         isLoading,
         dnsMatches,
+        installationDialoguePopUp,
       ];
 
   ServerInstallationNotFinished copyWith({
@@ -170,6 +176,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final bool? isServerResetedSecondTime,
     final bool? isLoading,
     final Map<String, bool>? dnsMatches,
+    final CallbackDialogueBranching? installationDialoguePopUp,
   }) =>
       ServerInstallationNotFinished(
         providerApiToken: providerApiToken ?? this.providerApiToken,
@@ -187,6 +194,8 @@ class ServerInstallationNotFinished extends ServerInstallationState {
             isServerResetedSecondTime ?? this.isServerResetedSecondTime,
         isLoading: isLoading ?? this.isLoading,
         dnsMatches: dnsMatches ?? this.dnsMatches,
+        installationDialoguePopUp:
+            installationDialoguePopUp ?? this.installationDialoguePopUp,
       );
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
@@ -200,6 +209,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
         isServerStarted: isServerStarted,
         isServerResetedFirstTime: isServerResetedFirstTime,
         isServerResetedSecondTime: isServerResetedSecondTime,
+        installationDialoguePopUp: installationDialoguePopUp,
       );
 }
 
@@ -218,6 +228,7 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
           isServerResetedSecondTime: false,
           isLoading: false,
           dnsMatches: null,
+          installationDialoguePopUp: null,
         );
 }
 
@@ -233,6 +244,7 @@ class ServerInstallationFinished extends ServerInstallationState {
     required super.isServerStarted,
     required super.isServerResetedFirstTime,
     required super.isServerResetedSecondTime,
+    required super.installationDialoguePopUp,
   });
 
   @override
@@ -246,6 +258,7 @@ class ServerInstallationFinished extends ServerInstallationState {
         serverDetails,
         isServerStarted,
         isServerResetedFirstTime,
+        installationDialoguePopUp,
       ];
 }
 
@@ -287,6 +300,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
           isServerStarted: true,
           isServerResetedFirstTime: true,
           isServerResetedSecondTime: true,
+          installationDialoguePopUp: null,
         );
   final RecoveryStep currentStep;
   final ServerRecoveryCapabilities recoveryCapabilities;
@@ -302,7 +316,8 @@ class ServerInstallationRecovery extends ServerInstallationState {
         serverDetails,
         isServerStarted,
         isServerResetedFirstTime,
-        currentStep
+        currentStep,
+        installationDialoguePopUp
       ];
 
   ServerInstallationRecovery copyWith({
@@ -340,5 +355,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
         isServerStarted: true,
         isServerResetedFirstTime: true,
         isServerResetedSecondTime: true,
+        installationDialoguePopUp: null,
       );
 }

@@ -217,26 +217,6 @@ class CloudflareApi extends DnsProviderApi {
     return GenericResult(success: true, data: null);
   }
 
-  Future<void> setDnsRecord(
-    final DnsRecord record,
-    final ServerDomain domain,
-  ) async {
-    final String domainZoneId = domain.zoneId;
-    final String url = '$rootAddress/zones/$domainZoneId/dns_records';
-
-    final Dio client = await getClient();
-    try {
-      await client.post(
-        url,
-        data: record.toJson(),
-      );
-    } catch (e) {
-      print(e);
-    } finally {
-      close(client);
-    }
-  }
-
   Future<GenericResult<List>> getDomains() async {
     final String url = '$rootAddress/zones';
     List domains = [];

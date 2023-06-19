@@ -1,6 +1,6 @@
 part of 'server_api.dart';
 
-mixin ServerActionsApi on ApiMap {
+mixin ServerActionsApi on GraphQLApiMap {
   Future<bool> _commonBoolRequest(final Function graphQLMethod) async {
     QueryResult response;
     bool result = false;

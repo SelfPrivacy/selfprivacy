@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-class DigitalOceanDnsApi extends ApiMap {
+class DigitalOceanDnsApi extends RestApiMap {
   DigitalOceanDnsApi({
     this.hasLogger = false,
     this.isWithToken = true,

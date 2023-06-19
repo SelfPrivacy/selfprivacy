@@ -32,7 +32,7 @@ part 'services_api.dart';
 part 'users_api.dart';
 part 'volume_api.dart';
 
-class ServerApi extends ApiMap
+class ServerApi extends GraphQLApiMap
     with VolumeApi, JobsApi, ServerActionsApi, ServicesApi, UsersApi {
   ServerApi({
     this.hasLogger = false,

@@ -1,7 +1,7 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
-abstract class ServerProviderApi extends ApiMap {
+abstract class ServerProviderApi extends RestApiMap {
   /// Provider name key which lets infect understand what kind of installation
   /// it requires, for example 'digitaloceal' for Digital Ocean
   String get infectProviderName;

@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
-class DesecApi extends ApiMap {
+class DesecApi extends RestApiMap {
   DesecApi({
     this.hasLogger = false,
     this.isWithToken = true,

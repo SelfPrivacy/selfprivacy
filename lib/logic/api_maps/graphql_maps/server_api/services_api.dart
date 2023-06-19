@@ -1,6 +1,6 @@
 part of 'server_api.dart';
 
-mixin ServicesApi on ApiMap {
+mixin ServicesApi on GraphQLApiMap {
   Future<List<Service>> getAllServices() async {
     QueryResult<Query$AllServices> response;
     List<Service> services = [];

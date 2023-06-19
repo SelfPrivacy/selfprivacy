@@ -25,7 +25,7 @@ class BackblazeApplicationKey {
   final String applicationKey;
 }
 
-class BackblazeApi extends ApiMap {
+class BackblazeApi extends RestApiMap {
   BackblazeApi({this.hasLogger = false, this.isWithToken = true});
 
   @override

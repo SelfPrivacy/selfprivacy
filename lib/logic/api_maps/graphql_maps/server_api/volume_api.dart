@@ -1,6 +1,6 @@
 part of 'server_api.dart';
 
-mixin VolumeApi on ApiMap {
+mixin VolumeApi on GraphQLApiMap {
   Future<List<ServerDiskVolume>> getServerDiskVolumes() async {
     QueryResult response;
     List<ServerDiskVolume> volumes = [];

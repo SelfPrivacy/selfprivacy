@@ -53,7 +53,7 @@ class ResponseLoggingParser extends ResponseParser {
   }
 }
 
-abstract class ApiMap {
+abstract class GraphQLApiMap {
   Future<GraphQLClient> getClient() async {
     IOClient? ioClient;
     if (TlsOptions.stagingAcme || !TlsOptions.verifyCertificate) {

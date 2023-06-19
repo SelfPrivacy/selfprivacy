@@ -1,6 +1,6 @@
 part of 'server_api.dart';
 
-mixin UsersApi on ApiMap {
+mixin UsersApi on GraphQLApiMap {
   Future<List<User>> getAllUsers() async {
     QueryResult<Query$AllUsers> response;
     List<User> users = [];

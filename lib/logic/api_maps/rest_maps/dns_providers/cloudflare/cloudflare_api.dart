@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-class CloudflareApi extends ApiMap {
+class CloudflareApi extends RestApiMap {
   CloudflareApi({
     this.hasLogger = false,
     this.isWithToken = true,

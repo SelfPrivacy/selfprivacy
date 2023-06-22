@@ -43,7 +43,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   bool _isError = false;
 
   late double _currentSliderGbValue;
-  double _euroPerGb = 1.0;
+  double _pricePerGb = 1.0;
 
   final DiskSize maxSize = const DiskSize(byte: 500000000000);
   late DiskSize minSize;
@@ -75,10 +75,11 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               ],
             );
           }
-          _euroPerGb = (snapshot.data as Price).value;
+          final price = snapshot.data as Price;
+          _pricePerGb = price.value;
           _sizeController.text = _currentSliderGbValue.truncate().toString();
           _priceController.text =
-              (_euroPerGb * double.parse(_sizeController.text))
+              (_pricePerGb * double.parse(_sizeController.text))
                   .toStringAsFixed(2);
           minSize =
               widget.diskVolumeToResize.sizeTotal + DiskSize.fromGibibyte(3);
@@ -127,7 +128,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         errorText: _isError ? ' ' : null,
-                        labelText: 'storage.euro'.tr(),
+                        labelText: price.currency.shortcode,
                       ),
                     ),
                   ),

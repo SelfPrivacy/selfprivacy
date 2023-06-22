@@ -288,7 +288,6 @@
         "extending_volume_price_info": "Ціна включає ПДВ і оцінюється з даних ціноутворення, наданих Hetzner. Сервер буде перезавантажений після зміни розміру.",
         "extending_volume_error": "Не вдалося ініціалізувати розширення обсягу.",
         "size": "Розмір",
-        "euro": "Євро",
         "data_migration_title": "Перенесення даних",
         "start_migration_button": "Почати перенос",
         "migration_process": "Перенос…",

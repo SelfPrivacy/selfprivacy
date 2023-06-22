@@ -63,10 +63,10 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
             break;
           case BackupStatusEnum.initialized:
           case BackupStatusEnum.error:
-            final List<Backup> backups = await api.getBackups();
+            final result = await api.getBackups();
             emit(
               BackupsState(
-                backups: backups,
+                backups: result.data,
                 isInitialized: true,
                 preventActions: false,
                 progress: status.progress,
@@ -78,10 +78,10 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
             break;
           case BackupStatusEnum.backingUp:
           case BackupStatusEnum.restoring:
-            final List<Backup> backups = await api.getBackups();
+            final result = await api.getBackups();
             emit(
               BackupsState(
-                backups: backups,
+                backups: result.data,
                 isInitialized: true,
                 preventActions: true,
                 progress: status.progress,
@@ -121,7 +121,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     );
 
     await getIt<ApiConfigModel>().storeBackblazeBucket(bucket);
-    await api.uploadBackblazeConfig(bucket);
+    //await api.uploadBackblazeConfig(bucket);
     await updateBackups();
 
     emit(state.copyWith(isInitialized: true, preventActions: false));
@@ -133,7 +133,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     if (bucket == null) {
       emit(state.copyWith(isInitialized: false));
     } else {
-      await api.uploadBackblazeConfig(bucket);
+      //await api.uploadBackblazeConfig(bucket);
       emit(state.copyWith(isInitialized: true, preventActions: false));
       getIt<NavigationService>().showSnackBar('backup.reuploaded_key');
     }
@@ -153,7 +153,12 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   Future<void> updateBackups({final bool useTimer = false}) async {
     emit(state.copyWith(refreshing: true));
-    final List<Backup> backups = await api.getBackups();
+    final result = await api.getBackups();
+    if (!result.success || result.data.isEmpty) {
+      return;
+    }
+
+    final List<Backup> backups = result.data;
     final BackupStatus status = await api.getBackupStatus();
     emit(
       state.copyWith(
@@ -186,7 +191,9 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   Future<void> restoreBackup(final String backupId) async {
     emit(state.copyWith(preventActions: true));
-    await api.restoreBackup(backupId);
+
+    /// TOOD: ???
+    //await api.restoreBackup(backupId);
     emit(state.copyWith(preventActions: false));
   }
 

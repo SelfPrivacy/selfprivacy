@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
 
 part 'backup.g.dart';
 
@@ -6,12 +7,28 @@ part 'backup.g.dart';
 class Backup {
   factory Backup.fromJson(final Map<String, dynamic> json) =>
       _$BackupFromJson(json);
-  Backup({required this.time, required this.id});
+  Backup.fromGraphQL(
+    final Query$AllBackupSnapshots$backup$allSnapshots snapshot,
+  ) : this(
+          id: snapshot.id,
+          time: snapshot.createdAt,
+          serviceId: snapshot.service.id,
+          fallbackServiceName: snapshot.service.displayName,
+        );
+
+  Backup({
+    required this.time,
+    required this.id,
+    required this.serviceId,
+    required this.fallbackServiceName,
+  });
 
   // Time of the backup
   final DateTime time;
   @JsonKey(name: 'short_id')
   final String id;
+  final String serviceId;
+  final String fallbackServiceName;
 }
 
 enum BackupStatusEnum {

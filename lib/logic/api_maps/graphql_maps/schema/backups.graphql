@@ -22,3 +22,47 @@ query AllBackupSnapshots {
     }
   }
 }
+
+fragment genericBackupConfigReturn on GenericBackupConfigReturn {
+  code
+  message
+  success
+  configuration {
+    provider
+    encryptionKey
+    isInitialized
+    autobackupPeriod
+    locationName
+    locationId
+  }
+}
+
+mutation ForceSnapshotsReload {
+  forceSnapshotsReload {
+    ...basicMutationReturnFields
+  }
+}
+
+mutation StartBackup($serviceId: String = null) {
+  startBackup(serviceId: $serviceId) {
+      ...basicMutationReturnFields
+  }
+}
+
+mutation SetAutobackupPeriod($period: Int = null) {
+  setAutobackupPeriod(period: $period) {
+    ...genericBackupConfigReturn
+  }
+}
+
+mutation RemoveRepository {
+  removeRepository {
+    ...genericBackupConfigReturn
+  }
+}
+
+mutation InitializeRepository($repository: InitializeRepositoryInput!) {
+  initializeRepository(repository: $repository) {
+    ...genericBackupConfigReturn
+  }
+}

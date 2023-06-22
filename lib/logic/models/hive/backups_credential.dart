@@ -7,7 +7,11 @@ part 'backups_credential.g.dart';
 
 @HiveType(typeId: 4)
 class BackupsCredential {
-  BackupsCredential({required this.keyId, required this.applicationKey, required this.provider});
+  BackupsCredential({
+    required this.keyId,
+    required this.applicationKey,
+    required this.provider,
+  });
 
   @HiveField(0)
   final String keyId;
@@ -41,11 +45,19 @@ enum BackupsProvider {
   @HiveField(3)
   backblaze;
 
-  factory BackupsProvider.fromGraphQL(final Enum$BackupProvider provider) => switch (provider) {
-      Enum$BackupProvider.NONE => none,
-      Enum$BackupProvider.MEMORY => memory,
-      Enum$BackupProvider.FILE => file,
-      Enum$BackupProvider.BACKBLAZE => backblaze,
-      Enum$BackupProvider.$unknown => none
-    };
+  factory BackupsProvider.fromGraphQL(final Enum$BackupProvider provider) =>
+      switch (provider) {
+        Enum$BackupProvider.NONE => none,
+        Enum$BackupProvider.MEMORY => memory,
+        Enum$BackupProvider.FILE => file,
+        Enum$BackupProvider.BACKBLAZE => backblaze,
+        Enum$BackupProvider.$unknown => none
+      };
+
+  Enum$BackupProvider toGraphQL() => switch (this) {
+        none => Enum$BackupProvider.NONE,
+        memory => Enum$BackupProvider.MEMORY,
+        file => Enum$BackupProvider.FILE,
+        backblaze => Enum$BackupProvider.BACKBLAZE,
+      };
 }

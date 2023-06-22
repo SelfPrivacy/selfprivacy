@@ -2,6 +2,7 @@ import 'package:graphql/client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_api_map.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
@@ -9,10 +10,10 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.g
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/backup.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
@@ -510,7 +511,133 @@ class ServerApi extends GraphQLApiMap
     return token;
   }
 
-  /// TODO: backups're not implemented on server side
+  Future<GenericResult<List<Backup>>> getBackups() async {
+    GenericResult<List<Backup>> backups;
+    QueryResult<Query$AllBackupSnapshots> response;
+
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$AllBackupSnapshots();
+      if (response.hasException) {
+        final message = response.exception.toString();
+        print(message);
+        backups = GenericResult<List<Backup>>(
+          success: false,
+          data: [],
+          message: message,
+        );
+      }
+      final List<Backup> parsed = response.parsedData!.backup.allSnapshots
+          .map(
+            (
+              final Query$AllBackupSnapshots$backup$allSnapshots snapshot,
+            ) =>
+                Backup.fromGraphQL(snapshot),
+          )
+          .toList();
+      backups = GenericResult<List<Backup>>(
+        success: true,
+        data: parsed,
+      );
+    } catch (e) {
+      print(e);
+      backups = GenericResult<List<Backup>>(
+        success: false,
+        data: [],
+        message: e.toString(),
+      );
+    }
+
+    return backups;
+  }
+
+  Future<GenericResult> forceBackupListReload() async {
+    try {
+      final GraphQLClient client = await getClient();
+      await client.mutate$ForceSnapshotsReload();
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+
+    return GenericResult(
+      success: true,
+      data: null,
+    );
+  }
+
+  Future<GenericResult> startBackup({final String? serviceId}) async {
+    QueryResult<Mutation$StartBackup> response;
+    GenericResult? result;
+
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Mutation$StartBackup(serviceId: serviceId);
+      final options = Options$Mutation$StartBackup(variables: variables);
+      response = await client.mutate$StartBackup(options);
+      if (response.hasException) {
+        final message = response.exception.toString();
+        print(message);
+        result = GenericResult(
+          success: false,
+          data: null,
+          message: message,
+        );
+      }
+      result = GenericResult(
+        success: true,
+        data: null,
+      );
+    } catch (e) {
+      print(e);
+      result = GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+
+    return result;
+  }
+
+  Future<GenericResult> setAutobackupPeriod({final int? period}) async {
+    QueryResult<Mutation$SetAutobackupPeriod> response;
+    GenericResult? result;
+
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Mutation$SetAutobackupPeriod(period: period);
+      final options =
+          Options$Mutation$SetAutobackupPeriod(variables: variables);
+      response = await client.mutate$SetAutobackupPeriod(options);
+      if (response.hasException) {
+        final message = response.exception.toString();
+        print(message);
+        result = GenericResult(
+          success: false,
+          data: null,
+          message: message,
+        );
+      }
+      result = GenericResult(
+        success: true,
+        data: null,
+      );
+    } catch (e) {
+      print(e);
+      result = GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+
+    return result;
+  }
 
   Future<BackupStatus> getBackupStatus() async => BackupStatus(
         progress: 0.0,
@@ -518,13 +645,67 @@ class ServerApi extends GraphQLApiMap
         errorMessage: null,
       );
 
-  Future<List<Backup>> getBackups() async => [];
+  Future<GenericResult> removeRepository() async {
+    try {
+      final GraphQLClient client = await getClient();
+      await client.mutate$RemoveRepository();
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
 
-  Future<void> uploadBackblazeConfig(final BackblazeBucket bucket) async {}
+    return GenericResult(
+      success: true,
+      data: null,
+    );
+  }
 
-  Future<void> forceBackupListReload() async {}
+  Future<GenericResult> initializeRepository(
+    final InitializeRepositoryInput input,
+  ) async {
+    QueryResult<Mutation$InitializeRepository> response;
+    GenericResult? result;
 
-  Future<void> startBackup() async {}
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Mutation$InitializeRepository(
+        repository: Input$InitializeRepositoryInput(
+          locationId: input.locationId,
+          locationName: input.locationName,
+          login: input.login,
+          password: input.password,
+          provider: input.provider.toGraphQL(),
+        ),
+      );
+      final options =
+          Options$Mutation$InitializeRepository(variables: variables);
+      response = await client.mutate$InitializeRepository(options);
+      if (response.hasException) {
+        final message = response.exception.toString();
+        print(message);
+        result = GenericResult(
+          success: false,
+          data: null,
+          message: message,
+        );
+      }
+      result = GenericResult(
+        success: true,
+        data: null,
+      );
+    } catch (e) {
+      print(e);
+      result = GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
 
-  Future<void> restoreBackup(final String backupId) async {}
+    return result;
+  }
 }

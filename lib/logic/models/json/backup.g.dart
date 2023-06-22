@@ -9,11 +9,15 @@ part of 'backup.dart';
 Backup _$BackupFromJson(Map<String, dynamic> json) => Backup(
       time: DateTime.parse(json['time'] as String),
       id: json['short_id'] as String,
+      serviceId: json['serviceId'] as String,
+      fallbackServiceName: json['fallbackServiceName'] as String,
     );
 
 Map<String, dynamic> _$BackupToJson(Backup instance) => <String, dynamic>{
       'time': instance.time.toIso8601String(),
       'short_id': instance.id,
+      'serviceId': instance.serviceId,
+      'fallbackServiceName': instance.fallbackServiceName,
     };
 
 BackupStatus _$BackupStatusFromJson(Map<String, dynamic> json) => BackupStatus(

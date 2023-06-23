@@ -210,7 +210,6 @@
         "extending_volume_description": "Če spremenite velikost shrambe, lahko v strežniku shranite več podatkov, ne da bi pri tem povečali sam strežnik. Obseg je mogoče samo povečati: ni ga mogoče zmanjšati.",
         "extending_volume_error": "Ni uspelo zagnati razširitve shrambe.",
         "size": "Velikost",
-        "euro": "Euro",
         "data_migration_title": "Migracija podatkov",
         "start_migration_button": "Začetek migracije",
         "migration_process": "Selitev…",

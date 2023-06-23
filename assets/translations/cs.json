@@ -287,7 +287,6 @@
         "extending_volume_price_info": "Cena je uvedena včetně DPH a je odhadnuta na základě cenových údajů poskytnutých společností Hetzner. Po změně velikosti bude server restartován.",
         "extending_volume_error": "Nepodařilo se inicializovat rozšíření svazku.",
         "size": "Velikost",
-        "euro": "Euro",
         "data_migration_title": "Migrace dat",
         "data_migration_notice": "Během migrace budou všechny služby vypnuty.",
         "start_migration_button": "Zahájení migrace",

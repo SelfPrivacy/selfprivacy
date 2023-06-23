@@ -2282,6 +2282,300 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<
       _res;
 }
 
+class Fragment$fragmentDnsRecords {
+  Fragment$fragmentDnsRecords({
+    required this.recordType,
+    required this.name,
+    required this.content,
+    required this.ttl,
+    this.priority,
+    this.$__typename = 'DnsRecord',
+  });
+
+  factory Fragment$fragmentDnsRecords.fromJson(Map<String, dynamic> json) {
+    final l$recordType = json['recordType'];
+    final l$name = json['name'];
+    final l$content = json['content'];
+    final l$ttl = json['ttl'];
+    final l$priority = json['priority'];
+    final l$$__typename = json['__typename'];
+    return Fragment$fragmentDnsRecords(
+      recordType: (l$recordType as String),
+      name: (l$name as String),
+      content: (l$content as String),
+      ttl: (l$ttl as int),
+      priority: (l$priority as int?),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String recordType;
+
+  final String name;
+
+  final String content;
+
+  final int ttl;
+
+  final int? priority;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$recordType = recordType;
+    _resultData['recordType'] = l$recordType;
+    final l$name = name;
+    _resultData['name'] = l$name;
+    final l$content = content;
+    _resultData['content'] = l$content;
+    final l$ttl = ttl;
+    _resultData['ttl'] = l$ttl;
+    final l$priority = priority;
+    _resultData['priority'] = l$priority;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$recordType = recordType;
+    final l$name = name;
+    final l$content = content;
+    final l$ttl = ttl;
+    final l$priority = priority;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$recordType,
+      l$name,
+      l$content,
+      l$ttl,
+      l$priority,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Fragment$fragmentDnsRecords) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$recordType = recordType;
+    final lOther$recordType = other.recordType;
+    if (l$recordType != lOther$recordType) {
+      return false;
+    }
+    final l$name = name;
+    final lOther$name = other.name;
+    if (l$name != lOther$name) {
+      return false;
+    }
+    final l$content = content;
+    final lOther$content = other.content;
+    if (l$content != lOther$content) {
+      return false;
+    }
+    final l$ttl = ttl;
+    final lOther$ttl = other.ttl;
+    if (l$ttl != lOther$ttl) {
+      return false;
+    }
+    final l$priority = priority;
+    final lOther$priority = other.priority;
+    if (l$priority != lOther$priority) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$fragmentDnsRecords
+    on Fragment$fragmentDnsRecords {
+  CopyWith$Fragment$fragmentDnsRecords<Fragment$fragmentDnsRecords>
+      get copyWith => CopyWith$Fragment$fragmentDnsRecords(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Fragment$fragmentDnsRecords<TRes> {
+  factory CopyWith$Fragment$fragmentDnsRecords(
+    Fragment$fragmentDnsRecords instance,
+    TRes Function(Fragment$fragmentDnsRecords) then,
+  ) = _CopyWithImpl$Fragment$fragmentDnsRecords;
+
+  factory CopyWith$Fragment$fragmentDnsRecords.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$fragmentDnsRecords;
+
+  TRes call({
+    String? recordType,
+    String? name,
+    String? content,
+    int? ttl,
+    int? priority,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$fragmentDnsRecords<TRes>
+    implements CopyWith$Fragment$fragmentDnsRecords<TRes> {
+  _CopyWithImpl$Fragment$fragmentDnsRecords(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$fragmentDnsRecords _instance;
+
+  final TRes Function(Fragment$fragmentDnsRecords) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? recordType = _undefined,
+    Object? name = _undefined,
+    Object? content = _undefined,
+    Object? ttl = _undefined,
+    Object? priority = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$fragmentDnsRecords(
+        recordType: recordType == _undefined || recordType == null
+            ? _instance.recordType
+            : (recordType as String),
+        name: name == _undefined || name == null
+            ? _instance.name
+            : (name as String),
+        content: content == _undefined || content == null
+            ? _instance.content
+            : (content as String),
+        ttl: ttl == _undefined || ttl == null ? _instance.ttl : (ttl as int),
+        priority:
+            priority == _undefined ? _instance.priority : (priority as int?),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$fragmentDnsRecords<TRes>
+    implements CopyWith$Fragment$fragmentDnsRecords<TRes> {
+  _CopyWithStubImpl$Fragment$fragmentDnsRecords(this._res);
+
+  TRes _res;
+
+  call({
+    String? recordType,
+    String? name,
+    String? content,
+    int? ttl,
+    int? priority,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+const fragmentDefinitionfragmentDnsRecords = FragmentDefinitionNode(
+  name: NameNode(value: 'fragmentDnsRecords'),
+  typeCondition: TypeConditionNode(
+      on: NamedTypeNode(
+    name: NameNode(value: 'DnsRecord'),
+    isNonNull: false,
+  )),
+  directives: [],
+  selectionSet: SelectionSetNode(selections: [
+    FieldNode(
+      name: NameNode(value: 'recordType'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'name'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'content'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'ttl'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'priority'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: '__typename'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+  ]),
+);
+const documentNodeFragmentfragmentDnsRecords = DocumentNode(definitions: [
+  fragmentDefinitionfragmentDnsRecords,
+]);
+
+extension ClientExtension$Fragment$fragmentDnsRecords on graphql.GraphQLClient {
+  void writeFragment$fragmentDnsRecords({
+    required Fragment$fragmentDnsRecords data,
+    required Map<String, dynamic> idFields,
+    bool broadcast = true,
+  }) =>
+      this.writeFragment(
+        graphql.FragmentRequest(
+          idFields: idFields,
+          fragment: const graphql.Fragment(
+            fragmentName: 'fragmentDnsRecords',
+            document: documentNodeFragmentfragmentDnsRecords,
+          ),
+        ),
+        data: data.toJson(),
+        broadcast: broadcast,
+      );
+  Fragment$fragmentDnsRecords? readFragment$fragmentDnsRecords({
+    required Map<String, dynamic> idFields,
+    bool optimistic = true,
+  }) {
+    final result = this.readFragment(
+      graphql.FragmentRequest(
+        idFields: idFields,
+        fragment: const graphql.Fragment(
+          fragmentName: 'fragmentDnsRecords',
+          document: documentNodeFragmentfragmentDnsRecords,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null ? null : Fragment$fragmentDnsRecords.fromJson(result);
+  }
+}
+
 class Query$SystemSettings {
   Query$SystemSettings({
     required this.system,
@@ -4019,7 +4313,7 @@ const documentNodeQueryDomainInfo = DocumentNode(definitions: [
                 directives: [],
                 selectionSet: SelectionSetNode(selections: [
                   FragmentSpreadNode(
-                    name: NameNode(value: 'dnsRecordFields'),
+                    name: NameNode(value: 'fragmentDnsRecords'),
                     directives: [],
                   ),
                   FieldNode(
@@ -4058,7 +4352,7 @@ const documentNodeQueryDomainInfo = DocumentNode(definitions: [
       ),
     ]),
   ),
-  fragmentDefinitiondnsRecordFields,
+  fragmentDefinitionfragmentDnsRecords,
 ]);
 Query$DomainInfo _parserFn$Query$DomainInfo(Map<String, dynamic> data) =>
     Query$DomainInfo.fromJson(data);
@@ -4331,7 +4625,7 @@ class Query$DomainInfo$system$domainInfo {
       provider: fromJson$Enum$DnsProvider((l$provider as String)),
       requiredDnsRecords: (l$requiredDnsRecords as List<dynamic>)
           .map((e) =>
-              Fragment$dnsRecordFields.fromJson((e as Map<String, dynamic>)))
+              Fragment$fragmentDnsRecords.fromJson((e as Map<String, dynamic>)))
           .toList(),
       $__typename: (l$$__typename as String),
     );
@@ -4343,7 +4637,7 @@ class Query$DomainInfo$system$domainInfo {
 
   final Enum$DnsProvider provider;
 
-  final List<Fragment$dnsRecordFields> requiredDnsRecords;
+  final List<Fragment$fragmentDnsRecords> requiredDnsRecords;
 
   final String $__typename;
 
@@ -4447,13 +4741,14 @@ abstract class CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
     String? domain,
     String? hostname,
     Enum$DnsProvider? provider,
-    List<Fragment$dnsRecordFields>? requiredDnsRecords,
+    List<Fragment$fragmentDnsRecords>? requiredDnsRecords,
     String? $__typename,
   });
   TRes requiredDnsRecords(
-      Iterable<Fragment$dnsRecordFields> Function(
+      Iterable<Fragment$fragmentDnsRecords> Function(
               Iterable<
-                  CopyWith$Fragment$dnsRecordFields<Fragment$dnsRecordFields>>)
+                  CopyWith$Fragment$fragmentDnsRecords<
+                      Fragment$fragmentDnsRecords>>)
           _fn);
 }
 
@@ -4490,20 +4785,20 @@ class _CopyWithImpl$Query$DomainInfo$system$domainInfo<TRes>
         requiredDnsRecords:
             requiredDnsRecords == _undefined || requiredDnsRecords == null
                 ? _instance.requiredDnsRecords
-                : (requiredDnsRecords as List<Fragment$dnsRecordFields>),
+                : (requiredDnsRecords as List<Fragment$fragmentDnsRecords>),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
   TRes requiredDnsRecords(
-          Iterable<Fragment$dnsRecordFields> Function(
+          Iterable<Fragment$fragmentDnsRecords> Function(
                   Iterable<
-                      CopyWith$Fragment$dnsRecordFields<
-                          Fragment$dnsRecordFields>>)
+                      CopyWith$Fragment$fragmentDnsRecords<
+                          Fragment$fragmentDnsRecords>>)
               _fn) =>
       call(
           requiredDnsRecords: _fn(_instance.requiredDnsRecords
-              .map((e) => CopyWith$Fragment$dnsRecordFields(
+              .map((e) => CopyWith$Fragment$fragmentDnsRecords(
                     e,
                     (i) => i,
                   ))).toList());
@@ -4519,7 +4814,7 @@ class _CopyWithStubImpl$Query$DomainInfo$system$domainInfo<TRes>
     String? domain,
     String? hostname,
     Enum$DnsProvider? provider,
-    List<Fragment$dnsRecordFields>? requiredDnsRecords,
+    List<Fragment$fragmentDnsRecords>? requiredDnsRecords,
     String? $__typename,
   }) =>
       _res;

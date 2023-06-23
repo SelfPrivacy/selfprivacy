@@ -3,6 +3,7 @@ import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
+import 'server_settings.graphql.dart';
 
 class Fragment$basicMutationReturnFields {
   Fragment$basicMutationReturnFields({
@@ -2454,7 +2455,7 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
                 directives: [],
                 selectionSet: SelectionSetNode(selections: [
                   FragmentSpreadNode(
-                    name: NameNode(value: 'dnsRecordFields'),
+                    name: NameNode(value: 'fragmentDnsRecords'),
                     directives: [],
                   ),
                   FieldNode(
@@ -2593,7 +2594,7 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
       ),
     ]),
   ),
-  fragmentDefinitiondnsRecordFields,
+  fragmentDefinitionfragmentDnsRecords,
 ]);
 Query$AllServices _parserFn$Query$AllServices(Map<String, dynamic> data) =>
     Query$AllServices.fromJson(data);
@@ -2901,7 +2902,7 @@ class Query$AllServices$services$allServices {
       displayName: (l$displayName as String),
       dnsRecords: (l$dnsRecords as List<dynamic>?)
           ?.map((e) =>
-              Fragment$dnsRecordFields.fromJson((e as Map<String, dynamic>)))
+              Fragment$fragmentDnsRecords.fromJson((e as Map<String, dynamic>)))
           .toList(),
       id: (l$id as String),
       isEnabled: (l$isEnabled as bool),
@@ -2921,7 +2922,7 @@ class Query$AllServices$services$allServices {
 
   final String displayName;
 
-  final List<Fragment$dnsRecordFields>? dnsRecords;
+  final List<Fragment$fragmentDnsRecords>? dnsRecords;
 
   final String id;
 
@@ -3106,7 +3107,7 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
   TRes call({
     String? description,
     String? displayName,
-    List<Fragment$dnsRecordFields>? dnsRecords,
+    List<Fragment$fragmentDnsRecords>? dnsRecords,
     String? id,
     bool? isEnabled,
     bool? isMovable,
@@ -3118,9 +3119,10 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
     String? $__typename,
   });
   TRes dnsRecords(
-      Iterable<Fragment$dnsRecordFields>? Function(
+      Iterable<Fragment$fragmentDnsRecords>? Function(
               Iterable<
-                  CopyWith$Fragment$dnsRecordFields<Fragment$dnsRecordFields>>?)
+                  CopyWith$Fragment$fragmentDnsRecords<
+                      Fragment$fragmentDnsRecords>>?)
           _fn);
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
       get storageUsage;
@@ -3162,7 +3164,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
             : (displayName as String),
         dnsRecords: dnsRecords == _undefined
             ? _instance.dnsRecords
-            : (dnsRecords as List<Fragment$dnsRecordFields>?),
+            : (dnsRecords as List<Fragment$fragmentDnsRecords>?),
         id: id == _undefined || id == null ? _instance.id : (id as String),
         isEnabled: isEnabled == _undefined || isEnabled == null
             ? _instance.isEnabled
@@ -3189,14 +3191,14 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
             : ($__typename as String),
       ));
   TRes dnsRecords(
-          Iterable<Fragment$dnsRecordFields>? Function(
+          Iterable<Fragment$fragmentDnsRecords>? Function(
                   Iterable<
-                      CopyWith$Fragment$dnsRecordFields<
-                          Fragment$dnsRecordFields>>?)
+                      CopyWith$Fragment$fragmentDnsRecords<
+                          Fragment$fragmentDnsRecords>>?)
               _fn) =>
       call(
           dnsRecords: _fn(_instance.dnsRecords
-              ?.map((e) => CopyWith$Fragment$dnsRecordFields(
+              ?.map((e) => CopyWith$Fragment$fragmentDnsRecords(
                     e,
                     (i) => i,
                   )))?.toList());
@@ -3217,7 +3219,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
   call({
     String? description,
     String? displayName,
-    List<Fragment$dnsRecordFields>? dnsRecords,
+    List<Fragment$fragmentDnsRecords>? dnsRecords,
     String? id,
     bool? isEnabled,
     bool? isMovable,

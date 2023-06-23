@@ -10,7 +10,7 @@ query AllServices {
       description
       displayName
       dnsRecords {
-        ...dnsRecordFields
+        ...fragmentDnsRecords
       }
       id
       isEnabled

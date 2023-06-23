@@ -289,8 +289,10 @@ class ServerApi extends GraphQLApiMap
       }
       records = response.parsedData!.system.domainInfo.requiredDnsRecords
           .map<DnsRecord>(
-            (final Fragment$dnsRecordFields fragment) =>
-                DnsRecord.fromGraphQL(fragment),
+            (
+              final Fragment$fragmentDnsRecords record,
+            ) =>
+                DnsRecord.fromGraphQL(record),
           )
           .toList();
     } catch (e) {

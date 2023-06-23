@@ -14,7 +14,8 @@ query BackupConfiguration {
 query AllBackupSnapshots {
   backup {
     allSnapshots {
-      ...backupSnapshotFields
+      id
+      createdAt
       service {
         displayName
         id
@@ -38,31 +39,41 @@ fragment genericBackupConfigReturn on GenericBackupConfigReturn {
 }
 
 mutation ForceSnapshotsReload {
-  forceSnapshotsReload {
-    ...basicMutationReturnFields
+  backup {
+    forceSnapshotsReload {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation StartBackup($serviceId: String = null) {
-  startBackup(serviceId: $serviceId) {
+  backup {
+    startBackup(serviceId: $serviceId) {
       ...basicMutationReturnFields
+    }
   }
 }
 
 mutation SetAutobackupPeriod($period: Int = null) {
-  setAutobackupPeriod(period: $period) {
-    ...genericBackupConfigReturn
+  backup {
+    setAutobackupPeriod(period: $period) {
+      ...genericBackupConfigReturn
+    }
   }
 }
 
 mutation RemoveRepository {
-  removeRepository {
-    ...genericBackupConfigReturn
+  backup {
+    removeRepository {
+      ...genericBackupConfigReturn
+    }
   }
 }
 
 mutation InitializeRepository($repository: InitializeRepositoryInput!) {
-  initializeRepository(repository: $repository) {
-    ...genericBackupConfigReturn
+  backup {
+    initializeRepository(repository: $repository) {
+      ...genericBackupConfigReturn
+    }
   }
 }

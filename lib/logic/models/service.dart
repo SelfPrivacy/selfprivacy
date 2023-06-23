@@ -6,6 +6,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
+import '../api_maps/graphql_maps/schema/server_settings.graphql.dart';
+
 class Service {
   Service.fromGraphQL(final Query$AllServices$services$allServices service)
       : this(
@@ -24,7 +26,9 @@ class Service {
           svgIcon: utf8.decode(base64.decode(service.svgIcon)),
           dnsRecords: service.dnsRecords
                   ?.map(
-                    (final Fragment$dnsRecordFields record) =>
+                    (
+                      final Fragment$fragmentDnsRecords record,
+                    ) =>
                         DnsRecord.fromGraphQL(record),
                   )
                   .toList() ??

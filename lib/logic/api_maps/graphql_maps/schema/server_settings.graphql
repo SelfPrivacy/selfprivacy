@@ -28,6 +28,14 @@ query SystemIsUsingBinds {
   }
 }
 
+fragment fragmentDnsRecords on DnsRecord {
+  recordType
+  name
+  content
+  ttl
+  priority
+}
+
 query DomainInfo {
   system {
     domainInfo {
@@ -35,7 +43,7 @@ query DomainInfo {
       hostname
       provider
       requiredDnsRecords {
-        ...dnsRecordFields
+        ...fragmentDnsRecords
       }
     }
   }

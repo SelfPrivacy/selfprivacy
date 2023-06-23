@@ -1443,9 +1443,19 @@ const documentNodeQueryAllBackupSnapshots = DocumentNode(definitions: [
             arguments: [],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
-              FragmentSpreadNode(
-                name: NameNode(value: 'backupSnapshotFields'),
+              FieldNode(
+                name: NameNode(value: 'id'),
+                alias: null,
+                arguments: [],
                 directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'createdAt'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
               ),
               FieldNode(
                 name: NameNode(value: 'service'),
@@ -1503,7 +1513,6 @@ const documentNodeQueryAllBackupSnapshots = DocumentNode(definitions: [
       ),
     ]),
   ),
-  fragmentDefinitionbackupSnapshotFields,
 ]);
 Query$AllBackupSnapshots _parserFn$Query$AllBackupSnapshots(
         Map<String, dynamic> data) =>
@@ -1787,27 +1796,26 @@ class _CopyWithStubImpl$Query$AllBackupSnapshots$backup<TRes>
   allSnapshots(_fn) => _res;
 }
 
-class Query$AllBackupSnapshots$backup$allSnapshots
-    implements Fragment$backupSnapshotFields {
+class Query$AllBackupSnapshots$backup$allSnapshots {
   Query$AllBackupSnapshots$backup$allSnapshots({
     required this.id,
     required this.createdAt,
-    this.$__typename = 'SnapshotInfo',
     required this.service,
+    this.$__typename = 'SnapshotInfo',
   });
 
   factory Query$AllBackupSnapshots$backup$allSnapshots.fromJson(
       Map<String, dynamic> json) {
     final l$id = json['id'];
     final l$createdAt = json['createdAt'];
-    final l$$__typename = json['__typename'];
     final l$service = json['service'];
+    final l$$__typename = json['__typename'];
     return Query$AllBackupSnapshots$backup$allSnapshots(
       id: (l$id as String),
       createdAt: dateTimeFromJson(l$createdAt),
-      $__typename: (l$$__typename as String),
       service: Query$AllBackupSnapshots$backup$allSnapshots$service.fromJson(
           (l$service as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
     );
   }
 
@@ -1815,9 +1823,9 @@ class Query$AllBackupSnapshots$backup$allSnapshots
 
   final DateTime createdAt;
 
-  final String $__typename;
-
   final Query$AllBackupSnapshots$backup$allSnapshots$service service;
+
+  final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
@@ -1825,10 +1833,10 @@ class Query$AllBackupSnapshots$backup$allSnapshots
     _resultData['id'] = l$id;
     final l$createdAt = createdAt;
     _resultData['createdAt'] = dateTimeToJson(l$createdAt);
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
     final l$service = service;
     _resultData['service'] = l$service.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
     return _resultData;
   }
 
@@ -1836,13 +1844,13 @@ class Query$AllBackupSnapshots$backup$allSnapshots
   int get hashCode {
     final l$id = id;
     final l$createdAt = createdAt;
-    final l$$__typename = $__typename;
     final l$service = service;
+    final l$$__typename = $__typename;
     return Object.hashAll([
       l$id,
       l$createdAt,
-      l$$__typename,
       l$service,
+      l$$__typename,
     ]);
   }
 
@@ -1865,14 +1873,14 @@ class Query$AllBackupSnapshots$backup$allSnapshots
     if (l$createdAt != lOther$createdAt) {
       return false;
     }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
     final l$service = service;
     final lOther$service = other.service;
     if (l$service != lOther$service) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
       return false;
     }
     return true;
@@ -1901,8 +1909,8 @@ abstract class CopyWith$Query$AllBackupSnapshots$backup$allSnapshots<TRes> {
   TRes call({
     String? id,
     DateTime? createdAt,
-    String? $__typename,
     Query$AllBackupSnapshots$backup$allSnapshots$service? service,
+    String? $__typename,
   });
   CopyWith$Query$AllBackupSnapshots$backup$allSnapshots$service<TRes>
       get service;
@@ -1924,20 +1932,20 @@ class _CopyWithImpl$Query$AllBackupSnapshots$backup$allSnapshots<TRes>
   TRes call({
     Object? id = _undefined,
     Object? createdAt = _undefined,
-    Object? $__typename = _undefined,
     Object? service = _undefined,
+    Object? $__typename = _undefined,
   }) =>
       _then(Query$AllBackupSnapshots$backup$allSnapshots(
         id: id == _undefined || id == null ? _instance.id : (id as String),
         createdAt: createdAt == _undefined || createdAt == null
             ? _instance.createdAt
             : (createdAt as DateTime),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
         service: service == _undefined || service == null
             ? _instance.service
             : (service as Query$AllBackupSnapshots$backup$allSnapshots$service),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
       ));
   CopyWith$Query$AllBackupSnapshots$backup$allSnapshots$service<TRes>
       get service {
@@ -1956,8 +1964,8 @@ class _CopyWithStubImpl$Query$AllBackupSnapshots$backup$allSnapshots<TRes>
   call({
     String? id,
     DateTime? createdAt,
-    String? $__typename,
     Query$AllBackupSnapshots$backup$allSnapshots$service? service,
+    String? $__typename,
   }) =>
       _res;
   CopyWith$Query$AllBackupSnapshots$backup$allSnapshots$service<TRes>
@@ -2121,29 +2129,28 @@ class _CopyWithStubImpl$Query$AllBackupSnapshots$backup$allSnapshots$service<
 
 class Mutation$ForceSnapshotsReload {
   Mutation$ForceSnapshotsReload({
-    required this.forceSnapshotsReload,
+    required this.backup,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$ForceSnapshotsReload.fromJson(Map<String, dynamic> json) {
-    final l$forceSnapshotsReload = json['forceSnapshotsReload'];
+    final l$backup = json['backup'];
     final l$$__typename = json['__typename'];
     return Mutation$ForceSnapshotsReload(
-      forceSnapshotsReload:
-          Mutation$ForceSnapshotsReload$forceSnapshotsReload.fromJson(
-              (l$forceSnapshotsReload as Map<String, dynamic>)),
+      backup: Mutation$ForceSnapshotsReload$backup.fromJson(
+          (l$backup as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final Mutation$ForceSnapshotsReload$forceSnapshotsReload forceSnapshotsReload;
+  final Mutation$ForceSnapshotsReload$backup backup;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$forceSnapshotsReload = forceSnapshotsReload;
-    _resultData['forceSnapshotsReload'] = l$forceSnapshotsReload.toJson();
+    final l$backup = backup;
+    _resultData['backup'] = l$backup.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -2151,10 +2158,10 @@ class Mutation$ForceSnapshotsReload {
 
   @override
   int get hashCode {
-    final l$forceSnapshotsReload = forceSnapshotsReload;
+    final l$backup = backup;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$forceSnapshotsReload,
+      l$backup,
       l$$__typename,
     ]);
   }
@@ -2168,9 +2175,9 @@ class Mutation$ForceSnapshotsReload {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$forceSnapshotsReload = forceSnapshotsReload;
-    final lOther$forceSnapshotsReload = other.forceSnapshotsReload;
-    if (l$forceSnapshotsReload != lOther$forceSnapshotsReload) {
+    final l$backup = backup;
+    final lOther$backup = other.backup;
+    if (l$backup != lOther$backup) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -2201,11 +2208,10 @@ abstract class CopyWith$Mutation$ForceSnapshotsReload<TRes> {
       _CopyWithStubImpl$Mutation$ForceSnapshotsReload;
 
   TRes call({
-    Mutation$ForceSnapshotsReload$forceSnapshotsReload? forceSnapshotsReload,
+    Mutation$ForceSnapshotsReload$backup? backup,
     String? $__typename,
   });
-  CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload<TRes>
-      get forceSnapshotsReload;
+  CopyWith$Mutation$ForceSnapshotsReload$backup<TRes> get backup;
 }
 
 class _CopyWithImpl$Mutation$ForceSnapshotsReload<TRes>
@@ -2222,24 +2228,21 @@ class _CopyWithImpl$Mutation$ForceSnapshotsReload<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? forceSnapshotsReload = _undefined,
+    Object? backup = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$ForceSnapshotsReload(
-        forceSnapshotsReload:
-            forceSnapshotsReload == _undefined || forceSnapshotsReload == null
-                ? _instance.forceSnapshotsReload
-                : (forceSnapshotsReload
-                    as Mutation$ForceSnapshotsReload$forceSnapshotsReload),
+        backup: backup == _undefined || backup == null
+            ? _instance.backup
+            : (backup as Mutation$ForceSnapshotsReload$backup),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
-  CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload<TRes>
-      get forceSnapshotsReload {
-    final local$forceSnapshotsReload = _instance.forceSnapshotsReload;
-    return CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload(
-        local$forceSnapshotsReload, (e) => call(forceSnapshotsReload: e));
+  CopyWith$Mutation$ForceSnapshotsReload$backup<TRes> get backup {
+    final local$backup = _instance.backup;
+    return CopyWith$Mutation$ForceSnapshotsReload$backup(
+        local$backup, (e) => call(backup: e));
   }
 }
 
@@ -2250,14 +2253,12 @@ class _CopyWithStubImpl$Mutation$ForceSnapshotsReload<TRes>
   TRes _res;
 
   call({
-    Mutation$ForceSnapshotsReload$forceSnapshotsReload? forceSnapshotsReload,
+    Mutation$ForceSnapshotsReload$backup? backup,
     String? $__typename,
   }) =>
       _res;
-  CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload<TRes>
-      get forceSnapshotsReload =>
-          CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload.stub(
-              _res);
+  CopyWith$Mutation$ForceSnapshotsReload$backup<TRes> get backup =>
+      CopyWith$Mutation$ForceSnapshotsReload$backup.stub(_res);
 }
 
 const documentNodeMutationForceSnapshotsReload = DocumentNode(definitions: [
@@ -2268,14 +2269,29 @@ const documentNodeMutationForceSnapshotsReload = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'forceSnapshotsReload'),
+        name: NameNode(value: 'backup'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'forceSnapshotsReload'),
+            alias: null,
+            arguments: [],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -2396,22 +2412,168 @@ extension ClientExtension$Mutation$ForceSnapshotsReload
               options ?? WatchOptions$Mutation$ForceSnapshotsReload());
 }
 
-class Mutation$ForceSnapshotsReload$forceSnapshotsReload
+class Mutation$ForceSnapshotsReload$backup {
+  Mutation$ForceSnapshotsReload$backup({
+    required this.forceSnapshotsReload,
+    this.$__typename = 'BackupMutations',
+  });
+
+  factory Mutation$ForceSnapshotsReload$backup.fromJson(
+      Map<String, dynamic> json) {
+    final l$forceSnapshotsReload = json['forceSnapshotsReload'];
+    final l$$__typename = json['__typename'];
+    return Mutation$ForceSnapshotsReload$backup(
+      forceSnapshotsReload:
+          Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload.fromJson(
+              (l$forceSnapshotsReload as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload
+      forceSnapshotsReload;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$forceSnapshotsReload = forceSnapshotsReload;
+    _resultData['forceSnapshotsReload'] = l$forceSnapshotsReload.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$forceSnapshotsReload = forceSnapshotsReload;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$forceSnapshotsReload,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ForceSnapshotsReload$backup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$forceSnapshotsReload = forceSnapshotsReload;
+    final lOther$forceSnapshotsReload = other.forceSnapshotsReload;
+    if (l$forceSnapshotsReload != lOther$forceSnapshotsReload) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ForceSnapshotsReload$backup
+    on Mutation$ForceSnapshotsReload$backup {
+  CopyWith$Mutation$ForceSnapshotsReload$backup<
+          Mutation$ForceSnapshotsReload$backup>
+      get copyWith => CopyWith$Mutation$ForceSnapshotsReload$backup(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$ForceSnapshotsReload$backup<TRes> {
+  factory CopyWith$Mutation$ForceSnapshotsReload$backup(
+    Mutation$ForceSnapshotsReload$backup instance,
+    TRes Function(Mutation$ForceSnapshotsReload$backup) then,
+  ) = _CopyWithImpl$Mutation$ForceSnapshotsReload$backup;
+
+  factory CopyWith$Mutation$ForceSnapshotsReload$backup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ForceSnapshotsReload$backup;
+
+  TRes call({
+    Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload?
+        forceSnapshotsReload,
+    String? $__typename,
+  });
+  CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<TRes>
+      get forceSnapshotsReload;
+}
+
+class _CopyWithImpl$Mutation$ForceSnapshotsReload$backup<TRes>
+    implements CopyWith$Mutation$ForceSnapshotsReload$backup<TRes> {
+  _CopyWithImpl$Mutation$ForceSnapshotsReload$backup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ForceSnapshotsReload$backup _instance;
+
+  final TRes Function(Mutation$ForceSnapshotsReload$backup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? forceSnapshotsReload = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$ForceSnapshotsReload$backup(
+        forceSnapshotsReload: forceSnapshotsReload == _undefined ||
+                forceSnapshotsReload == null
+            ? _instance.forceSnapshotsReload
+            : (forceSnapshotsReload
+                as Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<TRes>
+      get forceSnapshotsReload {
+    final local$forceSnapshotsReload = _instance.forceSnapshotsReload;
+    return CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload(
+        local$forceSnapshotsReload, (e) => call(forceSnapshotsReload: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ForceSnapshotsReload$backup<TRes>
+    implements CopyWith$Mutation$ForceSnapshotsReload$backup<TRes> {
+  _CopyWithStubImpl$Mutation$ForceSnapshotsReload$backup(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload?
+        forceSnapshotsReload,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<TRes>
+      get forceSnapshotsReload =>
+          CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload
+              .stub(_res);
+}
+
+class Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$ForceSnapshotsReload$forceSnapshotsReload({
+  Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$ForceSnapshotsReload$forceSnapshotsReload.fromJson(
+  factory Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$ForceSnapshotsReload$forceSnapshotsReload(
+    return Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -2459,7 +2621,7 @@ class Mutation$ForceSnapshotsReload$forceSnapshotsReload
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$ForceSnapshotsReload$forceSnapshotsReload) ||
+    if (!(other is Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2487,27 +2649,28 @@ class Mutation$ForceSnapshotsReload$forceSnapshotsReload
   }
 }
 
-extension UtilityExtension$Mutation$ForceSnapshotsReload$forceSnapshotsReload
-    on Mutation$ForceSnapshotsReload$forceSnapshotsReload {
-  CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload<
-          Mutation$ForceSnapshotsReload$forceSnapshotsReload>
+extension UtilityExtension$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload
+    on Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload {
+  CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<
+          Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload>
       get copyWith =>
-          CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload(
+          CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload<
+abstract class CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<
     TRes> {
-  factory CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload(
-    Mutation$ForceSnapshotsReload$forceSnapshotsReload instance,
-    TRes Function(Mutation$ForceSnapshotsReload$forceSnapshotsReload) then,
-  ) = _CopyWithImpl$Mutation$ForceSnapshotsReload$forceSnapshotsReload;
+  factory CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload(
+    Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload instance,
+    TRes Function(Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload)
+        then,
+  ) = _CopyWithImpl$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload;
 
-  factory CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload.stub(
+  factory CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload.stub(
           TRes res) =
-      _CopyWithStubImpl$Mutation$ForceSnapshotsReload$forceSnapshotsReload;
+      _CopyWithStubImpl$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload;
 
   TRes call({
     int? code,
@@ -2517,17 +2680,20 @@ abstract class CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload<
   });
 }
 
-class _CopyWithImpl$Mutation$ForceSnapshotsReload$forceSnapshotsReload<TRes>
+class _CopyWithImpl$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<
+        TRes>
     implements
-        CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload<TRes> {
-  _CopyWithImpl$Mutation$ForceSnapshotsReload$forceSnapshotsReload(
+        CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<
+            TRes> {
+  _CopyWithImpl$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload(
     this._instance,
     this._then,
   );
 
-  final Mutation$ForceSnapshotsReload$forceSnapshotsReload _instance;
+  final Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload _instance;
 
-  final TRes Function(Mutation$ForceSnapshotsReload$forceSnapshotsReload) _then;
+  final TRes Function(Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload)
+      _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -2537,7 +2703,7 @@ class _CopyWithImpl$Mutation$ForceSnapshotsReload$forceSnapshotsReload<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$ForceSnapshotsReload$forceSnapshotsReload(
+      _then(Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -2552,10 +2718,12 @@ class _CopyWithImpl$Mutation$ForceSnapshotsReload$forceSnapshotsReload<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$ForceSnapshotsReload$forceSnapshotsReload<TRes>
+class _CopyWithStubImpl$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<
+        TRes>
     implements
-        CopyWith$Mutation$ForceSnapshotsReload$forceSnapshotsReload<TRes> {
-  _CopyWithStubImpl$Mutation$ForceSnapshotsReload$forceSnapshotsReload(
+        CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<
+            TRes> {
+  _CopyWithStubImpl$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload(
       this._res);
 
   TRes _res;
@@ -2675,28 +2843,28 @@ class _CopyWithStubImpl$Variables$Mutation$StartBackup<TRes>
 
 class Mutation$StartBackup {
   Mutation$StartBackup({
-    required this.startBackup,
+    required this.backup,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$StartBackup.fromJson(Map<String, dynamic> json) {
-    final l$startBackup = json['startBackup'];
+    final l$backup = json['backup'];
     final l$$__typename = json['__typename'];
     return Mutation$StartBackup(
-      startBackup: Mutation$StartBackup$startBackup.fromJson(
-          (l$startBackup as Map<String, dynamic>)),
+      backup: Mutation$StartBackup$backup.fromJson(
+          (l$backup as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final Mutation$StartBackup$startBackup startBackup;
+  final Mutation$StartBackup$backup backup;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$startBackup = startBackup;
-    _resultData['startBackup'] = l$startBackup.toJson();
+    final l$backup = backup;
+    _resultData['backup'] = l$backup.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -2704,10 +2872,10 @@ class Mutation$StartBackup {
 
   @override
   int get hashCode {
-    final l$startBackup = startBackup;
+    final l$backup = backup;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$startBackup,
+      l$backup,
       l$$__typename,
     ]);
   }
@@ -2720,9 +2888,9 @@ class Mutation$StartBackup {
     if (!(other is Mutation$StartBackup) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$startBackup = startBackup;
-    final lOther$startBackup = other.startBackup;
-    if (l$startBackup != lOther$startBackup) {
+    final l$backup = backup;
+    final lOther$backup = other.backup;
+    if (l$backup != lOther$backup) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -2752,10 +2920,10 @@ abstract class CopyWith$Mutation$StartBackup<TRes> {
       _CopyWithStubImpl$Mutation$StartBackup;
 
   TRes call({
-    Mutation$StartBackup$startBackup? startBackup,
+    Mutation$StartBackup$backup? backup,
     String? $__typename,
   });
-  CopyWith$Mutation$StartBackup$startBackup<TRes> get startBackup;
+  CopyWith$Mutation$StartBackup$backup<TRes> get backup;
 }
 
 class _CopyWithImpl$Mutation$StartBackup<TRes>
@@ -2772,21 +2940,21 @@ class _CopyWithImpl$Mutation$StartBackup<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? startBackup = _undefined,
+    Object? backup = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$StartBackup(
-        startBackup: startBackup == _undefined || startBackup == null
-            ? _instance.startBackup
-            : (startBackup as Mutation$StartBackup$startBackup),
+        backup: backup == _undefined || backup == null
+            ? _instance.backup
+            : (backup as Mutation$StartBackup$backup),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
-  CopyWith$Mutation$StartBackup$startBackup<TRes> get startBackup {
-    final local$startBackup = _instance.startBackup;
-    return CopyWith$Mutation$StartBackup$startBackup(
-        local$startBackup, (e) => call(startBackup: e));
+  CopyWith$Mutation$StartBackup$backup<TRes> get backup {
+    final local$backup = _instance.backup;
+    return CopyWith$Mutation$StartBackup$backup(
+        local$backup, (e) => call(backup: e));
   }
 }
 
@@ -2797,12 +2965,12 @@ class _CopyWithStubImpl$Mutation$StartBackup<TRes>
   TRes _res;
 
   call({
-    Mutation$StartBackup$startBackup? startBackup,
+    Mutation$StartBackup$backup? backup,
     String? $__typename,
   }) =>
       _res;
-  CopyWith$Mutation$StartBackup$startBackup<TRes> get startBackup =>
-      CopyWith$Mutation$StartBackup$startBackup.stub(_res);
+  CopyWith$Mutation$StartBackup$backup<TRes> get backup =>
+      CopyWith$Mutation$StartBackup$backup.stub(_res);
 }
 
 const documentNodeMutationStartBackup = DocumentNode(definitions: [
@@ -2823,19 +2991,34 @@ const documentNodeMutationStartBackup = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'startBackup'),
+        name: NameNode(value: 'backup'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'serviceId'),
-            value: VariableNode(name: NameNode(value: 'serviceId')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'startBackup'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'serviceId'),
+                value: VariableNode(name: NameNode(value: 'serviceId')),
+              )
+            ],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -2952,21 +3135,156 @@ extension ClientExtension$Mutation$StartBackup on graphql.GraphQLClient {
       this.watchMutation(options ?? WatchOptions$Mutation$StartBackup());
 }
 
-class Mutation$StartBackup$startBackup
+class Mutation$StartBackup$backup {
+  Mutation$StartBackup$backup({
+    required this.startBackup,
+    this.$__typename = 'BackupMutations',
+  });
+
+  factory Mutation$StartBackup$backup.fromJson(Map<String, dynamic> json) {
+    final l$startBackup = json['startBackup'];
+    final l$$__typename = json['__typename'];
+    return Mutation$StartBackup$backup(
+      startBackup: Mutation$StartBackup$backup$startBackup.fromJson(
+          (l$startBackup as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$StartBackup$backup$startBackup startBackup;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$startBackup = startBackup;
+    _resultData['startBackup'] = l$startBackup.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$startBackup = startBackup;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$startBackup,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$StartBackup$backup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$startBackup = startBackup;
+    final lOther$startBackup = other.startBackup;
+    if (l$startBackup != lOther$startBackup) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$StartBackup$backup
+    on Mutation$StartBackup$backup {
+  CopyWith$Mutation$StartBackup$backup<Mutation$StartBackup$backup>
+      get copyWith => CopyWith$Mutation$StartBackup$backup(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$StartBackup$backup<TRes> {
+  factory CopyWith$Mutation$StartBackup$backup(
+    Mutation$StartBackup$backup instance,
+    TRes Function(Mutation$StartBackup$backup) then,
+  ) = _CopyWithImpl$Mutation$StartBackup$backup;
+
+  factory CopyWith$Mutation$StartBackup$backup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$StartBackup$backup;
+
+  TRes call({
+    Mutation$StartBackup$backup$startBackup? startBackup,
+    String? $__typename,
+  });
+  CopyWith$Mutation$StartBackup$backup$startBackup<TRes> get startBackup;
+}
+
+class _CopyWithImpl$Mutation$StartBackup$backup<TRes>
+    implements CopyWith$Mutation$StartBackup$backup<TRes> {
+  _CopyWithImpl$Mutation$StartBackup$backup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$StartBackup$backup _instance;
+
+  final TRes Function(Mutation$StartBackup$backup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? startBackup = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$StartBackup$backup(
+        startBackup: startBackup == _undefined || startBackup == null
+            ? _instance.startBackup
+            : (startBackup as Mutation$StartBackup$backup$startBackup),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Mutation$StartBackup$backup$startBackup<TRes> get startBackup {
+    final local$startBackup = _instance.startBackup;
+    return CopyWith$Mutation$StartBackup$backup$startBackup(
+        local$startBackup, (e) => call(startBackup: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$StartBackup$backup<TRes>
+    implements CopyWith$Mutation$StartBackup$backup<TRes> {
+  _CopyWithStubImpl$Mutation$StartBackup$backup(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$StartBackup$backup$startBackup? startBackup,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Mutation$StartBackup$backup$startBackup<TRes> get startBackup =>
+      CopyWith$Mutation$StartBackup$backup$startBackup.stub(_res);
+}
+
+class Mutation$StartBackup$backup$startBackup
     implements Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
-  Mutation$StartBackup$startBackup({
+  Mutation$StartBackup$backup$startBackup({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericJobMutationReturn',
   });
 
-  factory Mutation$StartBackup$startBackup.fromJson(Map<String, dynamic> json) {
+  factory Mutation$StartBackup$backup$startBackup.fromJson(
+      Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$StartBackup$startBackup(
+    return Mutation$StartBackup$backup$startBackup(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -3014,7 +3332,7 @@ class Mutation$StartBackup$startBackup
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$StartBackup$startBackup) ||
+    if (!(other is Mutation$StartBackup$backup$startBackup) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3042,23 +3360,24 @@ class Mutation$StartBackup$startBackup
   }
 }
 
-extension UtilityExtension$Mutation$StartBackup$startBackup
-    on Mutation$StartBackup$startBackup {
-  CopyWith$Mutation$StartBackup$startBackup<Mutation$StartBackup$startBackup>
-      get copyWith => CopyWith$Mutation$StartBackup$startBackup(
+extension UtilityExtension$Mutation$StartBackup$backup$startBackup
+    on Mutation$StartBackup$backup$startBackup {
+  CopyWith$Mutation$StartBackup$backup$startBackup<
+          Mutation$StartBackup$backup$startBackup>
+      get copyWith => CopyWith$Mutation$StartBackup$backup$startBackup(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$StartBackup$startBackup<TRes> {
-  factory CopyWith$Mutation$StartBackup$startBackup(
-    Mutation$StartBackup$startBackup instance,
-    TRes Function(Mutation$StartBackup$startBackup) then,
-  ) = _CopyWithImpl$Mutation$StartBackup$startBackup;
+abstract class CopyWith$Mutation$StartBackup$backup$startBackup<TRes> {
+  factory CopyWith$Mutation$StartBackup$backup$startBackup(
+    Mutation$StartBackup$backup$startBackup instance,
+    TRes Function(Mutation$StartBackup$backup$startBackup) then,
+  ) = _CopyWithImpl$Mutation$StartBackup$backup$startBackup;
 
-  factory CopyWith$Mutation$StartBackup$startBackup.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$StartBackup$startBackup;
+  factory CopyWith$Mutation$StartBackup$backup$startBackup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$StartBackup$backup$startBackup;
 
   TRes call({
     int? code,
@@ -3068,16 +3387,16 @@ abstract class CopyWith$Mutation$StartBackup$startBackup<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$StartBackup$startBackup<TRes>
-    implements CopyWith$Mutation$StartBackup$startBackup<TRes> {
-  _CopyWithImpl$Mutation$StartBackup$startBackup(
+class _CopyWithImpl$Mutation$StartBackup$backup$startBackup<TRes>
+    implements CopyWith$Mutation$StartBackup$backup$startBackup<TRes> {
+  _CopyWithImpl$Mutation$StartBackup$backup$startBackup(
     this._instance,
     this._then,
   );
 
-  final Mutation$StartBackup$startBackup _instance;
+  final Mutation$StartBackup$backup$startBackup _instance;
 
-  final TRes Function(Mutation$StartBackup$startBackup) _then;
+  final TRes Function(Mutation$StartBackup$backup$startBackup) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3087,7 +3406,7 @@ class _CopyWithImpl$Mutation$StartBackup$startBackup<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$StartBackup$startBackup(
+      _then(Mutation$StartBackup$backup$startBackup(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -3102,9 +3421,9 @@ class _CopyWithImpl$Mutation$StartBackup$startBackup<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$StartBackup$startBackup<TRes>
-    implements CopyWith$Mutation$StartBackup$startBackup<TRes> {
-  _CopyWithStubImpl$Mutation$StartBackup$startBackup(this._res);
+class _CopyWithStubImpl$Mutation$StartBackup$backup$startBackup<TRes>
+    implements CopyWith$Mutation$StartBackup$backup$startBackup<TRes> {
+  _CopyWithStubImpl$Mutation$StartBackup$backup$startBackup(this._res);
 
   TRes _res;
 
@@ -3223,28 +3542,28 @@ class _CopyWithStubImpl$Variables$Mutation$SetAutobackupPeriod<TRes>
 
 class Mutation$SetAutobackupPeriod {
   Mutation$SetAutobackupPeriod({
-    required this.setAutobackupPeriod,
+    required this.backup,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$SetAutobackupPeriod.fromJson(Map<String, dynamic> json) {
-    final l$setAutobackupPeriod = json['setAutobackupPeriod'];
+    final l$backup = json['backup'];
     final l$$__typename = json['__typename'];
     return Mutation$SetAutobackupPeriod(
-      setAutobackupPeriod: Fragment$genericBackupConfigReturn.fromJson(
-          (l$setAutobackupPeriod as Map<String, dynamic>)),
+      backup: Mutation$SetAutobackupPeriod$backup.fromJson(
+          (l$backup as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final Fragment$genericBackupConfigReturn setAutobackupPeriod;
+  final Mutation$SetAutobackupPeriod$backup backup;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$setAutobackupPeriod = setAutobackupPeriod;
-    _resultData['setAutobackupPeriod'] = l$setAutobackupPeriod.toJson();
+    final l$backup = backup;
+    _resultData['backup'] = l$backup.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -3252,10 +3571,10 @@ class Mutation$SetAutobackupPeriod {
 
   @override
   int get hashCode {
-    final l$setAutobackupPeriod = setAutobackupPeriod;
+    final l$backup = backup;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$setAutobackupPeriod,
+      l$backup,
       l$$__typename,
     ]);
   }
@@ -3269,9 +3588,9 @@ class Mutation$SetAutobackupPeriod {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$setAutobackupPeriod = setAutobackupPeriod;
-    final lOther$setAutobackupPeriod = other.setAutobackupPeriod;
-    if (l$setAutobackupPeriod != lOther$setAutobackupPeriod) {
+    final l$backup = backup;
+    final lOther$backup = other.backup;
+    if (l$backup != lOther$backup) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -3302,10 +3621,10 @@ abstract class CopyWith$Mutation$SetAutobackupPeriod<TRes> {
       _CopyWithStubImpl$Mutation$SetAutobackupPeriod;
 
   TRes call({
-    Fragment$genericBackupConfigReturn? setAutobackupPeriod,
+    Mutation$SetAutobackupPeriod$backup? backup,
     String? $__typename,
   });
-  CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupPeriod;
+  CopyWith$Mutation$SetAutobackupPeriod$backup<TRes> get backup;
 }
 
 class _CopyWithImpl$Mutation$SetAutobackupPeriod<TRes>
@@ -3322,22 +3641,21 @@ class _CopyWithImpl$Mutation$SetAutobackupPeriod<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? setAutobackupPeriod = _undefined,
+    Object? backup = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$SetAutobackupPeriod(
-        setAutobackupPeriod:
-            setAutobackupPeriod == _undefined || setAutobackupPeriod == null
-                ? _instance.setAutobackupPeriod
-                : (setAutobackupPeriod as Fragment$genericBackupConfigReturn),
+        backup: backup == _undefined || backup == null
+            ? _instance.backup
+            : (backup as Mutation$SetAutobackupPeriod$backup),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
-  CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupPeriod {
-    final local$setAutobackupPeriod = _instance.setAutobackupPeriod;
-    return CopyWith$Fragment$genericBackupConfigReturn(
-        local$setAutobackupPeriod, (e) => call(setAutobackupPeriod: e));
+  CopyWith$Mutation$SetAutobackupPeriod$backup<TRes> get backup {
+    final local$backup = _instance.backup;
+    return CopyWith$Mutation$SetAutobackupPeriod$backup(
+        local$backup, (e) => call(backup: e));
   }
 }
 
@@ -3348,12 +3666,12 @@ class _CopyWithStubImpl$Mutation$SetAutobackupPeriod<TRes>
   TRes _res;
 
   call({
-    Fragment$genericBackupConfigReturn? setAutobackupPeriod,
+    Mutation$SetAutobackupPeriod$backup? backup,
     String? $__typename,
   }) =>
       _res;
-  CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupPeriod =>
-      CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
+  CopyWith$Mutation$SetAutobackupPeriod$backup<TRes> get backup =>
+      CopyWith$Mutation$SetAutobackupPeriod$backup.stub(_res);
 }
 
 const documentNodeMutationSetAutobackupPeriod = DocumentNode(definitions: [
@@ -3374,19 +3692,34 @@ const documentNodeMutationSetAutobackupPeriod = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'setAutobackupPeriod'),
+        name: NameNode(value: 'backup'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'period'),
-            value: VariableNode(name: NameNode(value: 'period')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'genericBackupConfigReturn'),
+          FieldNode(
+            name: NameNode(value: 'setAutobackupPeriod'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'period'),
+                value: VariableNode(name: NameNode(value: 'period')),
+              )
+            ],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'genericBackupConfigReturn'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -3510,30 +3843,31 @@ extension ClientExtension$Mutation$SetAutobackupPeriod
               options ?? WatchOptions$Mutation$SetAutobackupPeriod());
 }
 
-class Mutation$RemoveRepository {
-  Mutation$RemoveRepository({
-    required this.removeRepository,
-    this.$__typename = 'Mutation',
+class Mutation$SetAutobackupPeriod$backup {
+  Mutation$SetAutobackupPeriod$backup({
+    required this.setAutobackupPeriod,
+    this.$__typename = 'BackupMutations',
   });
 
-  factory Mutation$RemoveRepository.fromJson(Map<String, dynamic> json) {
-    final l$removeRepository = json['removeRepository'];
+  factory Mutation$SetAutobackupPeriod$backup.fromJson(
+      Map<String, dynamic> json) {
+    final l$setAutobackupPeriod = json['setAutobackupPeriod'];
     final l$$__typename = json['__typename'];
-    return Mutation$RemoveRepository(
-      removeRepository: Fragment$genericBackupConfigReturn.fromJson(
-          (l$removeRepository as Map<String, dynamic>)),
+    return Mutation$SetAutobackupPeriod$backup(
+      setAutobackupPeriod: Fragment$genericBackupConfigReturn.fromJson(
+          (l$setAutobackupPeriod as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final Fragment$genericBackupConfigReturn removeRepository;
+  final Fragment$genericBackupConfigReturn setAutobackupPeriod;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$removeRepository = removeRepository;
-    _resultData['removeRepository'] = l$removeRepository.toJson();
+    final l$setAutobackupPeriod = setAutobackupPeriod;
+    _resultData['setAutobackupPeriod'] = l$setAutobackupPeriod.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -3541,10 +3875,146 @@ class Mutation$RemoveRepository {
 
   @override
   int get hashCode {
-    final l$removeRepository = removeRepository;
+    final l$setAutobackupPeriod = setAutobackupPeriod;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$removeRepository,
+      l$setAutobackupPeriod,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$SetAutobackupPeriod$backup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$setAutobackupPeriod = setAutobackupPeriod;
+    final lOther$setAutobackupPeriod = other.setAutobackupPeriod;
+    if (l$setAutobackupPeriod != lOther$setAutobackupPeriod) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetAutobackupPeriod$backup
+    on Mutation$SetAutobackupPeriod$backup {
+  CopyWith$Mutation$SetAutobackupPeriod$backup<
+          Mutation$SetAutobackupPeriod$backup>
+      get copyWith => CopyWith$Mutation$SetAutobackupPeriod$backup(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$SetAutobackupPeriod$backup<TRes> {
+  factory CopyWith$Mutation$SetAutobackupPeriod$backup(
+    Mutation$SetAutobackupPeriod$backup instance,
+    TRes Function(Mutation$SetAutobackupPeriod$backup) then,
+  ) = _CopyWithImpl$Mutation$SetAutobackupPeriod$backup;
+
+  factory CopyWith$Mutation$SetAutobackupPeriod$backup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$SetAutobackupPeriod$backup;
+
+  TRes call({
+    Fragment$genericBackupConfigReturn? setAutobackupPeriod,
+    String? $__typename,
+  });
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupPeriod;
+}
+
+class _CopyWithImpl$Mutation$SetAutobackupPeriod$backup<TRes>
+    implements CopyWith$Mutation$SetAutobackupPeriod$backup<TRes> {
+  _CopyWithImpl$Mutation$SetAutobackupPeriod$backup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$SetAutobackupPeriod$backup _instance;
+
+  final TRes Function(Mutation$SetAutobackupPeriod$backup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? setAutobackupPeriod = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$SetAutobackupPeriod$backup(
+        setAutobackupPeriod:
+            setAutobackupPeriod == _undefined || setAutobackupPeriod == null
+                ? _instance.setAutobackupPeriod
+                : (setAutobackupPeriod as Fragment$genericBackupConfigReturn),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupPeriod {
+    final local$setAutobackupPeriod = _instance.setAutobackupPeriod;
+    return CopyWith$Fragment$genericBackupConfigReturn(
+        local$setAutobackupPeriod, (e) => call(setAutobackupPeriod: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$SetAutobackupPeriod$backup<TRes>
+    implements CopyWith$Mutation$SetAutobackupPeriod$backup<TRes> {
+  _CopyWithStubImpl$Mutation$SetAutobackupPeriod$backup(this._res);
+
+  TRes _res;
+
+  call({
+    Fragment$genericBackupConfigReturn? setAutobackupPeriod,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupPeriod =>
+      CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
+}
+
+class Mutation$RemoveRepository {
+  Mutation$RemoveRepository({
+    required this.backup,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$RemoveRepository.fromJson(Map<String, dynamic> json) {
+    final l$backup = json['backup'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RemoveRepository(
+      backup: Mutation$RemoveRepository$backup.fromJson(
+          (l$backup as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RemoveRepository$backup backup;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$backup = backup;
+    _resultData['backup'] = l$backup.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$backup = backup;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$backup,
       l$$__typename,
     ]);
   }
@@ -3558,9 +4028,9 @@ class Mutation$RemoveRepository {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$removeRepository = removeRepository;
-    final lOther$removeRepository = other.removeRepository;
-    if (l$removeRepository != lOther$removeRepository) {
+    final l$backup = backup;
+    final lOther$backup = other.backup;
+    if (l$backup != lOther$backup) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -3591,10 +4061,10 @@ abstract class CopyWith$Mutation$RemoveRepository<TRes> {
       _CopyWithStubImpl$Mutation$RemoveRepository;
 
   TRes call({
-    Fragment$genericBackupConfigReturn? removeRepository,
+    Mutation$RemoveRepository$backup? backup,
     String? $__typename,
   });
-  CopyWith$Fragment$genericBackupConfigReturn<TRes> get removeRepository;
+  CopyWith$Mutation$RemoveRepository$backup<TRes> get backup;
 }
 
 class _CopyWithImpl$Mutation$RemoveRepository<TRes>
@@ -3611,22 +4081,21 @@ class _CopyWithImpl$Mutation$RemoveRepository<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? removeRepository = _undefined,
+    Object? backup = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$RemoveRepository(
-        removeRepository:
-            removeRepository == _undefined || removeRepository == null
-                ? _instance.removeRepository
-                : (removeRepository as Fragment$genericBackupConfigReturn),
+        backup: backup == _undefined || backup == null
+            ? _instance.backup
+            : (backup as Mutation$RemoveRepository$backup),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
-  CopyWith$Fragment$genericBackupConfigReturn<TRes> get removeRepository {
-    final local$removeRepository = _instance.removeRepository;
-    return CopyWith$Fragment$genericBackupConfigReturn(
-        local$removeRepository, (e) => call(removeRepository: e));
+  CopyWith$Mutation$RemoveRepository$backup<TRes> get backup {
+    final local$backup = _instance.backup;
+    return CopyWith$Mutation$RemoveRepository$backup(
+        local$backup, (e) => call(backup: e));
   }
 }
 
@@ -3637,12 +4106,12 @@ class _CopyWithStubImpl$Mutation$RemoveRepository<TRes>
   TRes _res;
 
   call({
-    Fragment$genericBackupConfigReturn? removeRepository,
+    Mutation$RemoveRepository$backup? backup,
     String? $__typename,
   }) =>
       _res;
-  CopyWith$Fragment$genericBackupConfigReturn<TRes> get removeRepository =>
-      CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
+  CopyWith$Mutation$RemoveRepository$backup<TRes> get backup =>
+      CopyWith$Mutation$RemoveRepository$backup.stub(_res);
 }
 
 const documentNodeMutationRemoveRepository = DocumentNode(definitions: [
@@ -3653,14 +4122,29 @@ const documentNodeMutationRemoveRepository = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'removeRepository'),
+        name: NameNode(value: 'backup'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'genericBackupConfigReturn'),
+          FieldNode(
+            name: NameNode(value: 'removeRepository'),
+            alias: null,
+            arguments: [],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'genericBackupConfigReturn'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -3777,6 +4261,141 @@ extension ClientExtension$Mutation$RemoveRepository on graphql.GraphQLClient {
       this.watchMutation(options ?? WatchOptions$Mutation$RemoveRepository());
 }
 
+class Mutation$RemoveRepository$backup {
+  Mutation$RemoveRepository$backup({
+    required this.removeRepository,
+    this.$__typename = 'BackupMutations',
+  });
+
+  factory Mutation$RemoveRepository$backup.fromJson(Map<String, dynamic> json) {
+    final l$removeRepository = json['removeRepository'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RemoveRepository$backup(
+      removeRepository: Fragment$genericBackupConfigReturn.fromJson(
+          (l$removeRepository as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Fragment$genericBackupConfigReturn removeRepository;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$removeRepository = removeRepository;
+    _resultData['removeRepository'] = l$removeRepository.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$removeRepository = removeRepository;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$removeRepository,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RemoveRepository$backup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$removeRepository = removeRepository;
+    final lOther$removeRepository = other.removeRepository;
+    if (l$removeRepository != lOther$removeRepository) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RemoveRepository$backup
+    on Mutation$RemoveRepository$backup {
+  CopyWith$Mutation$RemoveRepository$backup<Mutation$RemoveRepository$backup>
+      get copyWith => CopyWith$Mutation$RemoveRepository$backup(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RemoveRepository$backup<TRes> {
+  factory CopyWith$Mutation$RemoveRepository$backup(
+    Mutation$RemoveRepository$backup instance,
+    TRes Function(Mutation$RemoveRepository$backup) then,
+  ) = _CopyWithImpl$Mutation$RemoveRepository$backup;
+
+  factory CopyWith$Mutation$RemoveRepository$backup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveRepository$backup;
+
+  TRes call({
+    Fragment$genericBackupConfigReturn? removeRepository,
+    String? $__typename,
+  });
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get removeRepository;
+}
+
+class _CopyWithImpl$Mutation$RemoveRepository$backup<TRes>
+    implements CopyWith$Mutation$RemoveRepository$backup<TRes> {
+  _CopyWithImpl$Mutation$RemoveRepository$backup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RemoveRepository$backup _instance;
+
+  final TRes Function(Mutation$RemoveRepository$backup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? removeRepository = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RemoveRepository$backup(
+        removeRepository:
+            removeRepository == _undefined || removeRepository == null
+                ? _instance.removeRepository
+                : (removeRepository as Fragment$genericBackupConfigReturn),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get removeRepository {
+    final local$removeRepository = _instance.removeRepository;
+    return CopyWith$Fragment$genericBackupConfigReturn(
+        local$removeRepository, (e) => call(removeRepository: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RemoveRepository$backup<TRes>
+    implements CopyWith$Mutation$RemoveRepository$backup<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveRepository$backup(this._res);
+
+  TRes _res;
+
+  call({
+    Fragment$genericBackupConfigReturn? removeRepository,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get removeRepository =>
+      CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
+}
+
 class Variables$Mutation$InitializeRepository {
   factory Variables$Mutation$InitializeRepository(
           {required Input$InitializeRepositoryInput repository}) =>
@@ -3880,28 +4499,28 @@ class _CopyWithStubImpl$Variables$Mutation$InitializeRepository<TRes>
 
 class Mutation$InitializeRepository {
   Mutation$InitializeRepository({
-    required this.initializeRepository,
+    required this.backup,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$InitializeRepository.fromJson(Map<String, dynamic> json) {
-    final l$initializeRepository = json['initializeRepository'];
+    final l$backup = json['backup'];
     final l$$__typename = json['__typename'];
     return Mutation$InitializeRepository(
-      initializeRepository: Fragment$genericBackupConfigReturn.fromJson(
-          (l$initializeRepository as Map<String, dynamic>)),
+      backup: Mutation$InitializeRepository$backup.fromJson(
+          (l$backup as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final Fragment$genericBackupConfigReturn initializeRepository;
+  final Mutation$InitializeRepository$backup backup;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$initializeRepository = initializeRepository;
-    _resultData['initializeRepository'] = l$initializeRepository.toJson();
+    final l$backup = backup;
+    _resultData['backup'] = l$backup.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -3909,10 +4528,10 @@ class Mutation$InitializeRepository {
 
   @override
   int get hashCode {
-    final l$initializeRepository = initializeRepository;
+    final l$backup = backup;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$initializeRepository,
+      l$backup,
       l$$__typename,
     ]);
   }
@@ -3926,9 +4545,9 @@ class Mutation$InitializeRepository {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$initializeRepository = initializeRepository;
-    final lOther$initializeRepository = other.initializeRepository;
-    if (l$initializeRepository != lOther$initializeRepository) {
+    final l$backup = backup;
+    final lOther$backup = other.backup;
+    if (l$backup != lOther$backup) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -3959,10 +4578,10 @@ abstract class CopyWith$Mutation$InitializeRepository<TRes> {
       _CopyWithStubImpl$Mutation$InitializeRepository;
 
   TRes call({
-    Fragment$genericBackupConfigReturn? initializeRepository,
+    Mutation$InitializeRepository$backup? backup,
     String? $__typename,
   });
-  CopyWith$Fragment$genericBackupConfigReturn<TRes> get initializeRepository;
+  CopyWith$Mutation$InitializeRepository$backup<TRes> get backup;
 }
 
 class _CopyWithImpl$Mutation$InitializeRepository<TRes>
@@ -3979,22 +4598,21 @@ class _CopyWithImpl$Mutation$InitializeRepository<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? initializeRepository = _undefined,
+    Object? backup = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$InitializeRepository(
-        initializeRepository:
-            initializeRepository == _undefined || initializeRepository == null
-                ? _instance.initializeRepository
-                : (initializeRepository as Fragment$genericBackupConfigReturn),
+        backup: backup == _undefined || backup == null
+            ? _instance.backup
+            : (backup as Mutation$InitializeRepository$backup),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
-  CopyWith$Fragment$genericBackupConfigReturn<TRes> get initializeRepository {
-    final local$initializeRepository = _instance.initializeRepository;
-    return CopyWith$Fragment$genericBackupConfigReturn(
-        local$initializeRepository, (e) => call(initializeRepository: e));
+  CopyWith$Mutation$InitializeRepository$backup<TRes> get backup {
+    final local$backup = _instance.backup;
+    return CopyWith$Mutation$InitializeRepository$backup(
+        local$backup, (e) => call(backup: e));
   }
 }
 
@@ -4005,12 +4623,12 @@ class _CopyWithStubImpl$Mutation$InitializeRepository<TRes>
   TRes _res;
 
   call({
-    Fragment$genericBackupConfigReturn? initializeRepository,
+    Mutation$InitializeRepository$backup? backup,
     String? $__typename,
   }) =>
       _res;
-  CopyWith$Fragment$genericBackupConfigReturn<TRes> get initializeRepository =>
-      CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
+  CopyWith$Mutation$InitializeRepository$backup<TRes> get backup =>
+      CopyWith$Mutation$InitializeRepository$backup.stub(_res);
 }
 
 const documentNodeMutationInitializeRepository = DocumentNode(definitions: [
@@ -4031,19 +4649,34 @@ const documentNodeMutationInitializeRepository = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'initializeRepository'),
+        name: NameNode(value: 'backup'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'repository'),
-            value: VariableNode(name: NameNode(value: 'repository')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'genericBackupConfigReturn'),
+          FieldNode(
+            name: NameNode(value: 'initializeRepository'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'repository'),
+                value: VariableNode(name: NameNode(value: 'repository')),
+              )
+            ],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'genericBackupConfigReturn'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -4165,4 +4798,141 @@ extension ClientExtension$Mutation$InitializeRepository
       watchMutation$InitializeRepository(
               WatchOptions$Mutation$InitializeRepository options) =>
           this.watchMutation(options);
+}
+
+class Mutation$InitializeRepository$backup {
+  Mutation$InitializeRepository$backup({
+    required this.initializeRepository,
+    this.$__typename = 'BackupMutations',
+  });
+
+  factory Mutation$InitializeRepository$backup.fromJson(
+      Map<String, dynamic> json) {
+    final l$initializeRepository = json['initializeRepository'];
+    final l$$__typename = json['__typename'];
+    return Mutation$InitializeRepository$backup(
+      initializeRepository: Fragment$genericBackupConfigReturn.fromJson(
+          (l$initializeRepository as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Fragment$genericBackupConfigReturn initializeRepository;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$initializeRepository = initializeRepository;
+    _resultData['initializeRepository'] = l$initializeRepository.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$initializeRepository = initializeRepository;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$initializeRepository,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$InitializeRepository$backup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$initializeRepository = initializeRepository;
+    final lOther$initializeRepository = other.initializeRepository;
+    if (l$initializeRepository != lOther$initializeRepository) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$InitializeRepository$backup
+    on Mutation$InitializeRepository$backup {
+  CopyWith$Mutation$InitializeRepository$backup<
+          Mutation$InitializeRepository$backup>
+      get copyWith => CopyWith$Mutation$InitializeRepository$backup(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$InitializeRepository$backup<TRes> {
+  factory CopyWith$Mutation$InitializeRepository$backup(
+    Mutation$InitializeRepository$backup instance,
+    TRes Function(Mutation$InitializeRepository$backup) then,
+  ) = _CopyWithImpl$Mutation$InitializeRepository$backup;
+
+  factory CopyWith$Mutation$InitializeRepository$backup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$InitializeRepository$backup;
+
+  TRes call({
+    Fragment$genericBackupConfigReturn? initializeRepository,
+    String? $__typename,
+  });
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get initializeRepository;
+}
+
+class _CopyWithImpl$Mutation$InitializeRepository$backup<TRes>
+    implements CopyWith$Mutation$InitializeRepository$backup<TRes> {
+  _CopyWithImpl$Mutation$InitializeRepository$backup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$InitializeRepository$backup _instance;
+
+  final TRes Function(Mutation$InitializeRepository$backup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? initializeRepository = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$InitializeRepository$backup(
+        initializeRepository:
+            initializeRepository == _undefined || initializeRepository == null
+                ? _instance.initializeRepository
+                : (initializeRepository as Fragment$genericBackupConfigReturn),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get initializeRepository {
+    final local$initializeRepository = _instance.initializeRepository;
+    return CopyWith$Fragment$genericBackupConfigReturn(
+        local$initializeRepository, (e) => call(initializeRepository: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$InitializeRepository$backup<TRes>
+    implements CopyWith$Mutation$InitializeRepository$backup<TRes> {
+  _CopyWithStubImpl$Mutation$InitializeRepository$backup(this._res);
+
+  TRes _res;
+
+  call({
+    Fragment$genericBackupConfigReturn? initializeRepository,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get initializeRepository =>
+      CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
 }

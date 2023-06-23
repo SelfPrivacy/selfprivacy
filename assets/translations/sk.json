@@ -254,7 +254,6 @@
         "extending_volume_price_info": "Cena je vrátane DPH a vychádza z cenových údajov poskytnutých spoločnosťou Hetzner. Server sa počas procesu reštartuje.",
         "extending_volume_error": "Nepodarilo sa spustiť rozšírenie úložiska.",
         "size": "Veľkosť",
-        "euro": "Euro",
         "data_migration_title": "Migrácia údajov",
         "data_migration_notice": "V čase migrácie údajov sa všetky služby vypnú.",
         "start_migration_button": "Spustiť migráciu",

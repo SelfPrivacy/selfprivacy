@@ -178,7 +178,6 @@
         "extending_volume_price_info": "Les prix incluent la TVA et sont estimés par les données commerciales fournies par Hetzner.\nLe serveur va redémarrer après redimensionnement.",
         "extending_volume_error": "Pas possible d'initialiser l'extension du volume.",
         "size": "Taille",
-        "euro": "Euro",
         "data_migration_title": "Migration de données",
         "data_migration_notice": "Durant la migration, tous les services ne seront plus accessibles.",
         "start_migration_button": "Démarrer la migration",

@@ -46,7 +46,7 @@ class HetznerServerProvider extends ServerProvider {
         );
 
   ApiAdapter _adapter;
-  final String currency = 'EUR';
+  final Currency currency = Currency.fromType(CurrencyType.eur);
 
   @override
   ServerProviderType get type => ServerProviderType.hetzner;
@@ -260,7 +260,7 @@ class HetznerServerProvider extends ServerProvider {
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
           value:
-              '${server.serverType.prices[1].monthly.toStringAsFixed(2)} $currency',
+              '${server.serverType.prices[1].monthly.toStringAsFixed(2)} ${currency.shortcode}',
         ),
         ServerMetadataEntity(
           type: MetadataType.location,

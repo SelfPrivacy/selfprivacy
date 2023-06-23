@@ -188,7 +188,6 @@
         "extending_volume_description": "Durch die Speichererweiterung können Sie mehr Daten auf Ihrem Server speichern, ohne den Server selbst zu erweitern. Speicher kann nur erweitert werden, Verringerung ist nicht möglich.",
         "extending_volume_error": "Speichererweiterung konnte nicht initialisiert werden.",
         "size": "Größe",
-        "euro": "Euro",
         "data_migration_title": "Datenmigration",
         "data_migration_notice": "Während der Migration werden alle Dienste ausgeschaltet.",
         "start_migration_button": "Migration starten",

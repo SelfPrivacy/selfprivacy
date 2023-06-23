@@ -46,7 +46,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         );
 
   ApiAdapter _adapter;
-  final String currency = 'USD';
+  final Currency currency = Currency.fromType(CurrencyType.usd);
 
   @override
   ServerProviderType get type => ServerProviderType.digitalOcean;
@@ -400,7 +400,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
-          value: '${droplet['size']['price_monthly']} $currency',
+          value: '${droplet['size']['price_monthly']} ${currency.shortcode}',
         ),
         ServerMetadataEntity(
           type: MetadataType.location,

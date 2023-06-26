@@ -47,4 +47,11 @@ enum DnsProviderType {
         return unknown;
     }
   }
+
+  String toInfectName() => switch (this) {
+        digitalOcean => 'DIGITALOCEAN',
+        cloudflare => 'CLOUDFLARE',
+        desec => 'DESEC',
+        unknown => 'UNKNOWN',
+      };
 }

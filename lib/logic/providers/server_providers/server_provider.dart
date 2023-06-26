@@ -14,44 +14,124 @@ export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 export 'package:selfprivacy/logic/models/launch_installation_data.dart';
 
 abstract class ServerProvider {
+  /// Returns an assigned enum value, respectively to which
+  /// provider implements [ServerProvider] interface.
   ServerProviderType get type;
+
+  /// Returns [ServerBasicInfo] of all available machines
+  /// assigned to the authorized user.
+  ///
+  /// Only with public IPv4 addresses.
   Future<GenericResult<List<ServerBasicInfo>>> getServers();
-  Future<GenericResult<bool>> trySetServerLocation(final String location);
+
+  /// Tries to launch installation of SelfPrivacy on
+  /// the requested server entry for the authorized account.
+  /// Depending on a server provider, the algorithm
+  /// and instructions vary drastically.
+  ///
+  /// If successly launched, stores new server information.
+  ///
+  /// If failure, returns error dialogue information to
+  /// write in ServerInstallationState.
+  Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
+    final LaunchInstallationData installationData,
+  );
+
+  /// Tries to delete the requested server entry
+  /// from the authorized account, including all assigned
+  /// storage extensions.
+  ///
+  /// If failure, returns error dialogue information to
+  /// write in ServerInstallationState.
+  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
+    final String hostname,
+  );
+
+  /// Tries to access an account linked to the provided token.
+  ///
+  /// To generate a token for your account follow instructions of your
+  /// server provider respectfully.
+  ///
+  /// If success, saves it for future usage.
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
+
+  /// Tries to assign the location shortcode for future usage.
+  ///
+  /// If API wasn't initialized with token by [tryInitApiByToken] beforehand,
+  /// returns 'Not authorized!' error.
+  Future<GenericResult<bool>> trySetServerLocation(final String location);
+
+  /// Returns all available server locations
+  /// of the authorized user's server provider.
   Future<GenericResult<List<ServerProviderLocation>>> getAvailableLocations();
+
+  /// Returns [ServerType] of all available
+  /// machine configurations available to the authorized account
+  /// within the requested provider location,
+  /// accessed from [getAvailableLocations].
   Future<GenericResult<List<ServerType>>> getServerTypes({
     required final ServerProviderLocation location,
   });
 
-  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
-    final String hostname,
-  );
-  Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
-    final LaunchInstallationData installationData,
-  );
+  /// Tries to power on the requested accessible machine.
+  ///
+  /// If success, returns [DateTime] of when the server
+  /// answered the request.
   Future<GenericResult<DateTime?>> powerOn(final int serverId);
+
+  /// Tries to restart the requested accessible machine.
+  ///
+  /// If success, returns [DateTime] of when the server
+  /// answered the request.
   Future<GenericResult<DateTime?>> restart(final int serverId);
+
+  /// Returns [Price] information per one gigabyte of storage extension for
+  /// the requested accessible machine.
+  Future<GenericResult<Price?>> getPricePerGb();
+
+  /// Returns [ServerVolume] of all available volumes
+  /// assigned to the authorized user and attached to active machine.
+  Future<GenericResult<List<ServerVolume>>> getVolumes({final String? status});
+
+  /// Tries to create an empty unattached [ServerVolume].
+  ///
+  /// If success, returns this volume information.
+  Future<GenericResult<ServerVolume?>> createVolume();
+
+  /// Tries to delete the requested accessible [ServerVolume].
+  Future<GenericResult<void>> deleteVolume(final ServerVolume volume);
+
+  /// Tries to resize the requested accessible [ServerVolume]
+  /// to the provided size **(not by!)**, must be greater than current size.
+  Future<GenericResult<bool>> resizeVolume(
+    final ServerVolume volume,
+    final DiskSize size,
+  );
+
+  /// Tries to attach the requested accessible [ServerVolume]
+  /// to an accessible machine by the provided identificator.
+  Future<GenericResult<bool>> attachVolume(
+    final ServerVolume volume,
+    final int serverId,
+  );
+
+  /// Tries to attach the requested accessible [ServerVolume]
+  /// from any machine.
+  Future<GenericResult<bool>> detachVolume(final ServerVolume volume);
+
+  /// Returns metedata of an accessible machine by the provided identificator
+  /// to show on ServerDetailsScreen.
+  Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
+    final int serverId,
+  );
+
+  /// Returns information about cpu and bandwidth load within the provided
+  /// time period of the requested accessible machine.
   Future<GenericResult<ServerMetrics?>> getMetrics(
     final int serverId,
     final DateTime start,
     final DateTime end,
   );
 
-  Future<GenericResult<Price?>> getPricePerGb();
-  Future<GenericResult<List<ServerVolume>>> getVolumes({final String? status});
-  Future<GenericResult<ServerVolume?>> createVolume();
-  Future<GenericResult<void>> deleteVolume(final ServerVolume volume);
-  Future<GenericResult<bool>> resizeVolume(
-    final ServerVolume volume,
-    final DiskSize size,
-  );
-  Future<GenericResult<bool>> attachVolume(
-    final ServerVolume volume,
-    final int serverId,
-  );
-  Future<GenericResult<bool>> detachVolume(final ServerVolume volume);
-  Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
-    final int serverId,
-  );
   GenericResult<bool> get success => GenericResult(success: true, data: true);
 }

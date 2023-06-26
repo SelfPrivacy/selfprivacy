@@ -5,7 +5,6 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/digital_oc
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
@@ -52,86 +51,41 @@ class DigitalOceanServerProvider extends ServerProvider {
   ServerProviderType get type => ServerProviderType.digitalOcean;
 
   @override
-  Future<GenericResult<bool>> trySetServerLocation(
-    final String location,
-  ) async {
-    final bool apiInitialized = _adapter.api().isWithToken;
-    if (!apiInitialized) {
+  Future<GenericResult<List<ServerBasicInfo>>> getServers() async {
+    List<ServerBasicInfo> servers = [];
+    final result = await _adapter.api().getServers();
+    if (result.data.isEmpty || !result.success) {
       return GenericResult(
-        success: true,
-        data: false,
-        message: 'Not authorized!',
+        success: result.success,
+        data: servers,
+        code: result.code,
+        message: result.message,
       );
     }
 
-    _adapter = ApiAdapter(
-      isWithToken: true,
-      region: location,
-    );
-    return success;
-  }
+    final List rawServers = result.data;
+    servers = rawServers.map<ServerBasicInfo>(
+      (final server) {
+        String ipv4 = '0.0.0.0';
+        if (server['networks']['v4'].isNotEmpty) {
+          for (final v4 in server['networks']['v4']) {
+            if (v4['type'].toString() == 'public') {
+              ipv4 = v4['ip_address'].toString();
+            }
+          }
+        }
 
-  @override
-  Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
-    final api = _adapter.api(getInitialized: false);
-    final result = await api.isApiTokenValid(token);
-    if (!result.data || !result.success) {
-      return result;
-    }
+        return ServerBasicInfo(
+          id: server['id'],
+          reverseDns: server['name'],
+          created: DateTime.now(),
+          ip: ipv4,
+          name: server['name'],
+        );
+      },
+    ).toList();
 
-    _adapter = ApiAdapter(region: api.region, isWithToken: true);
-    return result;
-  }
-
-  String? getEmojiFlag(final String query) {
-    String? emoji;
-
-    switch (query.toLowerCase().substring(0, 3)) {
-      case 'fra':
-        emoji = '🇩🇪';
-        break;
-
-      case 'ams':
-        emoji = '🇳🇱';
-        break;
-
-      case 'sgp':
-        emoji = '🇸🇬';
-        break;
-
-      case 'lon':
-        emoji = '🇬🇧';
-        break;
-
-      case 'tor':
-        emoji = '🇨🇦';
-        break;
-
-      case 'blr':
-        emoji = '🇮🇳';
-        break;
-
-      case 'nyc':
-      case 'sfo':
-        emoji = '🇺🇸';
-        break;
-    }
-
-    return emoji;
-  }
-
-  String dnsProviderToInfectName(final DnsProviderType dnsProvider) {
-    String dnsProviderType;
-    switch (dnsProvider) {
-      case DnsProviderType.digitalOcean:
-        dnsProviderType = 'DIGITALOCEAN';
-        break;
-      case DnsProviderType.cloudflare:
-      default:
-        dnsProviderType = 'CLOUDFLARE';
-        break;
-    }
-    return dnsProviderType;
+    return GenericResult(success: true, data: servers);
   }
 
   @override
@@ -148,8 +102,7 @@ class DigitalOceanServerProvider extends ServerProvider {
           rootUser: installationData.rootUser,
           domainName: installationData.serverDomain.domainName,
           serverType: installationData.serverTypeId,
-          dnsProviderType:
-              dnsProviderToInfectName(installationData.dnsProviderType),
+          dnsProviderType: installationData.dnsProviderType.toInfectName(),
           hostName: hostname,
           base64Password: base64.encode(
             utf8.encode(installationData.rootUser.password ?? 'PASS'),
@@ -245,6 +198,139 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
+  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
+    final String hostname,
+  ) async {
+    final String deletionName = getHostnameFromDomain(hostname);
+    final serversResult = await getServers();
+    try {
+      final servers = serversResult.data;
+      ServerBasicInfo? foundServer;
+      for (final server in servers) {
+        if (server.name == deletionName) {
+          foundServer = server;
+          break;
+        }
+      }
+
+      final volumes = await getVolumes();
+      final ServerVolume volumeToRemove;
+      volumeToRemove = volumes.data.firstWhere(
+        (final el) => el.serverId == foundServer!.id,
+      );
+
+      await _adapter.api().detachVolume(
+            volumeToRemove.name,
+            volumeToRemove.serverId!,
+          );
+
+      await Future.delayed(const Duration(seconds: 10));
+      final List<Future> laterFutures = <Future>[];
+      laterFutures.add(_adapter.api().deleteVolume(volumeToRemove.uuid!));
+      laterFutures.add(_adapter.api().deleteServer(foundServer!.id));
+
+      await Future.wait(laterFutures);
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: CallbackDialogueBranching(
+          choices: [
+            CallbackDialogueChoice(
+              title: 'basis.cancel'.tr(),
+              callback: null,
+            ),
+            CallbackDialogueChoice(
+              title: 'modals.try_again'.tr(),
+              callback: () async {
+                await Future.delayed(const Duration(seconds: 5));
+                return deleteServer(hostname);
+              },
+            ),
+          ],
+          description: 'modals.try_again'.tr(),
+          title: 'modals.server_deletion_error'.tr(),
+        ),
+        message: e.toString(),
+      );
+    }
+
+    return GenericResult(
+      success: true,
+      data: null,
+    );
+  }
+
+  @override
+  Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
+    final api = _adapter.api(getInitialized: false);
+    final result = await api.isApiTokenValid(token);
+    if (!result.data || !result.success) {
+      return result;
+    }
+
+    _adapter = ApiAdapter(region: api.region, isWithToken: true);
+    return result;
+  }
+
+  @override
+  Future<GenericResult<bool>> trySetServerLocation(
+    final String location,
+  ) async {
+    final bool apiInitialized = _adapter.api().isWithToken;
+    if (!apiInitialized) {
+      return GenericResult(
+        success: true,
+        data: false,
+        message: 'Not authorized!',
+      );
+    }
+
+    _adapter = ApiAdapter(
+      isWithToken: true,
+      region: location,
+    );
+    return success;
+  }
+
+  String? getEmojiFlag(final String query) {
+    String? emoji;
+
+    switch (query.toLowerCase().substring(0, 3)) {
+      case 'fra':
+        emoji = '🇩🇪';
+        break;
+
+      case 'ams':
+        emoji = '🇳🇱';
+        break;
+
+      case 'sgp':
+        emoji = '🇸🇬';
+        break;
+
+      case 'lon':
+        emoji = '🇬🇧';
+        break;
+
+      case 'tor':
+        emoji = '🇨🇦';
+        break;
+
+      case 'blr':
+        emoji = '🇮🇳';
+        break;
+
+      case 'nyc':
+      case 'sfo':
+        emoji = '🇺🇸';
+        break;
+    }
+
+    return emoji;
+  }
+
+  @override
   Future<GenericResult<List<ServerProviderLocation>>>
       getAvailableLocations() async {
     final List<ServerProviderLocation> locations = [];
@@ -318,42 +404,213 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<List<ServerBasicInfo>>> getServers() async {
-    List<ServerBasicInfo> servers = [];
-    final result = await _adapter.api().getServers();
-    if (result.data.isEmpty || !result.success) {
+  Future<GenericResult<DateTime?>> powerOn(final int serverId) async {
+    DateTime? timestamp;
+    final result = await _adapter.api().powerOn(serverId);
+    if (!result.success) {
       return GenericResult(
-        success: result.success,
-        data: servers,
+        success: false,
+        data: timestamp,
         code: result.code,
         message: result.message,
       );
     }
 
-    final List rawServers = result.data;
-    servers = rawServers.map<ServerBasicInfo>(
-      (final server) {
-        String ipv4 = '0.0.0.0';
-        if (server['networks']['v4'].isNotEmpty) {
-          for (final v4 in server['networks']['v4']) {
-            if (v4['type'].toString() == 'public') {
-              ipv4 = v4['ip_address'].toString();
-            }
-          }
-        }
+    timestamp = DateTime.now();
 
-        return ServerBasicInfo(
-          id: server['id'],
-          reverseDns: server['name'],
-          created: DateTime.now(),
-          ip: ipv4,
-          name: server['name'],
-        );
-      },
-    ).toList();
-
-    return GenericResult(success: true, data: servers);
+    return GenericResult(
+      success: true,
+      data: timestamp,
+    );
   }
+
+  @override
+  Future<GenericResult<DateTime?>> restart(final int serverId) async {
+    DateTime? timestamp;
+    final result = await _adapter.api().restart(serverId);
+    if (!result.success) {
+      return GenericResult(
+        success: false,
+        data: timestamp,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    timestamp = DateTime.now();
+
+    return GenericResult(
+      success: true,
+      data: timestamp,
+    );
+  }
+
+  /// Hardcoded on their documentation and there is no pricing API at all
+  /// Probably we should scrap the doc page manually
+  @override
+  Future<GenericResult<Price?>> getPricePerGb() async => GenericResult(
+        success: true,
+        data: Price(
+          value: 0.10,
+          currency: currency,
+        ),
+      );
+
+  @override
+  Future<GenericResult<List<ServerVolume>>> getVolumes({
+    final String? status,
+  }) async {
+    final List<ServerVolume> volumes = [];
+
+    final result = await _adapter.api().getVolumes();
+
+    if (!result.success || result.data.isEmpty) {
+      return GenericResult(
+        data: [],
+        success: false,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    try {
+      int id = 0;
+      for (final rawVolume in result.data) {
+        final String volumeName = rawVolume.name;
+        final volume = ServerVolume(
+          id: id++,
+          name: volumeName,
+          sizeByte: rawVolume.sizeGigabytes * 1024 * 1024 * 1024,
+          serverId:
+              (rawVolume.dropletIds != null && rawVolume.dropletIds!.isNotEmpty)
+                  ? rawVolume.dropletIds![0]
+                  : null,
+          linuxDevice: 'scsi-0DO_Volume_$volumeName',
+          uuid: rawVolume.id,
+        );
+        volumes.add(volume);
+      }
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
+    }
+
+    return GenericResult(
+      data: volumes,
+      success: true,
+    );
+  }
+
+  @override
+  Future<GenericResult<ServerVolume?>> createVolume() async {
+    ServerVolume? volume;
+
+    final result = await _adapter.api().createVolume();
+
+    if (!result.success || result.data == null) {
+      return GenericResult(
+        data: null,
+        success: false,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final getVolumesResult = await _adapter.api().getVolumes();
+
+    if (!getVolumesResult.success || getVolumesResult.data.isEmpty) {
+      return GenericResult(
+        data: null,
+        success: false,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final String volumeName = result.data!.name;
+    volume = ServerVolume(
+      id: getVolumesResult.data.length,
+      name: volumeName,
+      sizeByte: result.data!.sizeGigabytes,
+      serverId: null,
+      linuxDevice: '/dev/disk/by-id/scsi-0DO_Volume_$volumeName',
+      uuid: result.data!.id,
+    );
+
+    return GenericResult(
+      data: volume,
+      success: true,
+    );
+  }
+
+  Future<GenericResult<ServerVolume?>> getVolume(
+    final String volumeUuid,
+  ) async {
+    ServerVolume? requestedVolume;
+
+    final result = await getVolumes();
+
+    if (!result.success || result.data.isEmpty) {
+      return GenericResult(
+        data: null,
+        success: false,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    for (final volume in result.data) {
+      if (volume.uuid == volumeUuid) {
+        requestedVolume = volume;
+      }
+    }
+
+    return GenericResult(
+      data: requestedVolume,
+      success: true,
+    );
+  }
+
+  @override
+  Future<GenericResult<bool>> attachVolume(
+    final ServerVolume volume,
+    final int serverId,
+  ) async =>
+      _adapter.api().attachVolume(
+            volume.name,
+            serverId,
+          );
+
+  @override
+  Future<GenericResult<bool>> detachVolume(
+    final ServerVolume volume,
+  ) async =>
+      _adapter.api().detachVolume(
+            volume.name,
+            volume.serverId!,
+          );
+
+  @override
+  Future<GenericResult<void>> deleteVolume(
+    final ServerVolume volume,
+  ) async =>
+      _adapter.api().deleteVolume(
+            volume.uuid!,
+          );
+
+  @override
+  Future<GenericResult<bool>> resizeVolume(
+    final ServerVolume volume,
+    final DiskSize size,
+  ) async =>
+      _adapter.api().resizeVolume(
+            volume.name,
+            size,
+          );
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
@@ -535,278 +792,5 @@ class DigitalOceanServerProvider extends ServerProvider {
     );
 
     return GenericResult(success: true, data: metrics);
-  }
-
-  @override
-  Future<GenericResult<DateTime?>> restart(final int serverId) async {
-    DateTime? timestamp;
-    final result = await _adapter.api().restart(serverId);
-    if (!result.success) {
-      return GenericResult(
-        success: false,
-        data: timestamp,
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    timestamp = DateTime.now();
-
-    return GenericResult(
-      success: true,
-      data: timestamp,
-    );
-  }
-
-  @override
-  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
-    final String hostname,
-  ) async {
-    final String deletionName = getHostnameFromDomain(hostname);
-    final serversResult = await getServers();
-    try {
-      final servers = serversResult.data;
-      ServerBasicInfo? foundServer;
-      for (final server in servers) {
-        if (server.name == deletionName) {
-          foundServer = server;
-          break;
-        }
-      }
-
-      final volumes = await getVolumes();
-      final ServerVolume volumeToRemove;
-      volumeToRemove = volumes.data.firstWhere(
-        (final el) => el.serverId == foundServer!.id,
-      );
-
-      await _adapter.api().detachVolume(
-            volumeToRemove.name,
-            volumeToRemove.serverId!,
-          );
-
-      await Future.delayed(const Duration(seconds: 10));
-      final List<Future> laterFutures = <Future>[];
-      laterFutures.add(_adapter.api().deleteVolume(volumeToRemove.uuid!));
-      laterFutures.add(_adapter.api().deleteServer(foundServer!.id));
-
-      await Future.wait(laterFutures);
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: CallbackDialogueBranching(
-          choices: [
-            CallbackDialogueChoice(
-              title: 'basis.cancel'.tr(),
-              callback: null,
-            ),
-            CallbackDialogueChoice(
-              title: 'modals.try_again'.tr(),
-              callback: () async {
-                await Future.delayed(const Duration(seconds: 5));
-                return deleteServer(hostname);
-              },
-            ),
-          ],
-          description: 'modals.try_again'.tr(),
-          title: 'modals.server_deletion_error'.tr(),
-        ),
-        message: e.toString(),
-      );
-    }
-
-    return GenericResult(
-      success: true,
-      data: null,
-    );
-  }
-
-  @override
-  Future<GenericResult<List<ServerVolume>>> getVolumes({
-    final String? status,
-  }) async {
-    final List<ServerVolume> volumes = [];
-
-    final result = await _adapter.api().getVolumes();
-
-    if (!result.success || result.data.isEmpty) {
-      return GenericResult(
-        data: [],
-        success: false,
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    try {
-      int id = 0;
-      for (final rawVolume in result.data) {
-        final String volumeName = rawVolume.name;
-        final volume = ServerVolume(
-          id: id++,
-          name: volumeName,
-          sizeByte: rawVolume.sizeGigabytes * 1024 * 1024 * 1024,
-          serverId:
-              (rawVolume.dropletIds != null && rawVolume.dropletIds!.isNotEmpty)
-                  ? rawVolume.dropletIds![0]
-                  : null,
-          linuxDevice: 'scsi-0DO_Volume_$volumeName',
-          uuid: rawVolume.id,
-        );
-        volumes.add(volume);
-      }
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
-    }
-
-    return GenericResult(
-      data: volumes,
-      success: true,
-    );
-  }
-
-  @override
-  Future<GenericResult<ServerVolume?>> createVolume() async {
-    ServerVolume? volume;
-
-    final result = await _adapter.api().createVolume();
-
-    if (!result.success || result.data == null) {
-      return GenericResult(
-        data: null,
-        success: false,
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    final getVolumesResult = await _adapter.api().getVolumes();
-
-    if (!getVolumesResult.success || getVolumesResult.data.isEmpty) {
-      return GenericResult(
-        data: null,
-        success: false,
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    final String volumeName = result.data!.name;
-    volume = ServerVolume(
-      id: getVolumesResult.data.length,
-      name: volumeName,
-      sizeByte: result.data!.sizeGigabytes,
-      serverId: null,
-      linuxDevice: '/dev/disk/by-id/scsi-0DO_Volume_$volumeName',
-      uuid: result.data!.id,
-    );
-
-    return GenericResult(
-      data: volume,
-      success: true,
-    );
-  }
-
-  Future<GenericResult<ServerVolume?>> getVolume(
-    final String volumeUuid,
-  ) async {
-    ServerVolume? requestedVolume;
-
-    final result = await getVolumes();
-
-    if (!result.success || result.data.isEmpty) {
-      return GenericResult(
-        data: null,
-        success: false,
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    for (final volume in result.data) {
-      if (volume.uuid == volumeUuid) {
-        requestedVolume = volume;
-      }
-    }
-
-    return GenericResult(
-      data: requestedVolume,
-      success: true,
-    );
-  }
-
-  @override
-  Future<GenericResult<void>> deleteVolume(
-    final ServerVolume volume,
-  ) async =>
-      _adapter.api().deleteVolume(
-            volume.uuid!,
-          );
-
-  @override
-  Future<GenericResult<bool>> attachVolume(
-    final ServerVolume volume,
-    final int serverId,
-  ) async =>
-      _adapter.api().attachVolume(
-            volume.name,
-            serverId,
-          );
-
-  @override
-  Future<GenericResult<bool>> detachVolume(
-    final ServerVolume volume,
-  ) async =>
-      _adapter.api().detachVolume(
-            volume.name,
-            volume.serverId!,
-          );
-
-  @override
-  Future<GenericResult<bool>> resizeVolume(
-    final ServerVolume volume,
-    final DiskSize size,
-  ) async =>
-      _adapter.api().resizeVolume(
-            volume.name,
-            size,
-          );
-
-  /// Hardcoded on their documentation and there is no pricing API at all
-  /// Probably we should scrap the doc page manually
-  @override
-  Future<GenericResult<Price?>> getPricePerGb() async => GenericResult(
-        success: true,
-        data: Price(
-          value: 0.10,
-          currency: currency,
-        ),
-      );
-
-  @override
-  Future<GenericResult<DateTime?>> powerOn(final int serverId) async {
-    DateTime? timestamp;
-    final result = await _adapter.api().powerOn(serverId);
-    if (!result.success) {
-      return GenericResult(
-        success: false,
-        data: timestamp,
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    timestamp = DateTime.now();
-
-    return GenericResult(
-      success: true,
-      data: timestamp,
-    );
   }
 }

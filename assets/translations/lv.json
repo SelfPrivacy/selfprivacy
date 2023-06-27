@@ -173,6 +173,46 @@
         "refresh": "Atsvaidzināšanas statuss",
         "reuploaded_key": "Atslēga atkārtoti ielādēta",
         "waiting_for_rebuild": "Pirmo dublējumu varēsit izveidot dažu minūšu laikā.",
-        "restore_alert": "Jūs gatavojaties atjaunot no dublējuma, kas izveidots {}. Visi pašreizējie dati tiks zaudēti. Vai esi pārliecināts?"
+        "restore_alert": "Jūs gatavojaties atjaunot no dublējuma, kas izveidots {}. Visi pašreizējie dati tiks zaudēti. Vai esi pārliecināts?",
+        "restoring": "Atjaunošana no dublējuma",
+        "refetch_backups": "Atkārtoti ielādēt dublējumkopiju sarakstu",
+        "refetching_list": "Pēc dažām minūtēm saraksts tiks atjaunināts"
+    },
+    "service_page": {
+        "uses": "Izmanto {usage} uz {volume}",
+        "open_in_browser": "Atvērt pārlūkprogrammā",
+        "restart": "Restartējiet pakalpojumu",
+        "disable": "Atspējot pakalpojumu",
+        "enable": "Iespējot pakalpojumu",
+        "move": "Pāriet uz citu sējumu",
+        "status": {
+            "active": "Darbojas",
+            "inactive": "Apstājies"
+        }
+    },
+    "storage": {
+        "start_migration_button": "Sāciet migrāciju",
+        "card_title": "Servera krātuve",
+        "status_ok": "Diska lietojums ir kārtībā",
+        "status_error": "Maz vietas diskā",
+        "disk_usage": "{} izmantots",
+        "disk_total": "{} Kopā · {}",
+        "gb": "{} GB",
+        "mb": "{} MB",
+        "kb": "{} KB",
+        "bytes": "Baiti",
+        "extend_volume_button": "Pagarināt skaļumu",
+        "extending_volume_title": "Skaļuma paplašināšana",
+        "extending_volume_description": "Skaļuma lieluma maiņa ļaus serverī saglabāt vairāk datu, nepagarinot pašu serveri. Skaļumu var tikai palielināt: sarukt nav iespējams.",
+        "extending_volume_price_info": "Cenā ir iekļauts PVN, un tā ir aprēķināta no Hetzner sniegtajiem cenu datiem. Pēc izmēra maiņas serveris tiks restartēts.",
+        "extending_volume_error": "Nevarēja inicializēt skaļuma palielināšanu.",
+        "size": "Lielums",
+        "data_migration_title": "Datu migrācija",
+        "data_migration_notice": "Migrācijas laikā visi pakalpojumi tiks izslēgti.",
+        "migration_process": "Notiek migrēšana…",
+        "migration_done": "Pabeigt"
+    },
+    "not_ready_card": {
+        "in_menu": "Serveris vēl nav iestatīts. Lūdzu, pabeidziet iestatīšanu, izmantojot iestatīšanas vedni, lai turpinātu darbu."
     }
 }

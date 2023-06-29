@@ -42,7 +42,7 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
     final List<Backup> backups = context.watch<BackupsCubit>().state.backups;
     final bool refreshing = context.watch<BackupsCubit>().state.refreshing;
     final List<Service> services =
-        context.watch<ServicesCubit>().state.services;
+        context.watch<ServicesCubit>().state.servicesThatCanBeBackedUp;
 
     return BrandHeroScreen(
       heroIcon: BrandIcons.save,
@@ -73,7 +73,7 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
                       maxChildSize: 0.9,
                       minChildSize: 0.4,
                       initialChildSize: 0.6,
-                      builder: (context, scrollController) =>
+                      builder: (final context, final scrollController) =>
                           CreateBackupsModal(
                         services: services,
                         scrollController: scrollController,
@@ -202,9 +202,9 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
 
 class CreateBackupsModal extends StatefulWidget {
   const CreateBackupsModal({
-    super.key,
     required this.services,
     required this.scrollController,
+    super.key,
   });
 
   final List<Service> services;
@@ -226,13 +226,17 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
         .read<ServerJobsCubit>()
         .state
         .backupJobList
-        .where((final ServerJob job) =>
-            job.status == JobStatusEnum.running ||
-            job.status == JobStatusEnum.created)
+        .where(
+          (final ServerJob job) =>
+              job.status == JobStatusEnum.running ||
+              job.status == JobStatusEnum.created,
+        )
         .map((final ServerJob job) => job.typeId.split('.')[1])
         .toList();
-    selectedServices.addAll(widget.services
-        .where((final Service service) => !busyServices.contains(service.id)));
+    selectedServices.addAll(
+      widget.services
+          .where((final Service service) => !busyServices.contains(service.id)),
+    );
   }
 
   @override
@@ -241,9 +245,11 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
         .watch<ServerJobsCubit>()
         .state
         .backupJobList
-        .where((final ServerJob job) =>
-            job.status == JobStatusEnum.running ||
-            job.status == JobStatusEnum.created)
+        .where(
+          (final ServerJob job) =>
+              job.status == JobStatusEnum.running ||
+              job.status == JobStatusEnum.created,
+        )
         .map((final ServerJob job) => job.typeId.split('.')[1])
         .toList();
 
@@ -253,7 +259,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
       children: [
         const SizedBox(height: 16),
         Text(
-          'backup.create_new_select_headline'.tr(),
+          'backup.create_new_select_heading'.tr(),
           style: Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.center,
         ),
@@ -265,8 +271,11 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
               if (value ?? true) {
                 setState(() {
                   selectedServices.clear();
-                  selectedServices.addAll(widget.services.where(
-                      (final service) => !busyServices.contains(service.id)));
+                  selectedServices.addAll(
+                    widget.services.where(
+                      (final service) => !busyServices.contains(service.id),
+                    ),
+                  );
                 });
               } else {
                 selectedServices.clear();
@@ -337,7 +346,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
                   Navigator.of(context).pop();
                 },
           child: Text(
-            'backup.create'.tr(),
+            'backup.start'.tr(),
           ),
         ),
       ],

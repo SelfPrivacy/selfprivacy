@@ -101,7 +101,8 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     }
     await updateBackups();
     getIt<NavigationService>().showSnackBar(
-        'Backups repository is now initializing. It may take a while.');
+      'Backups repository is now initializing. It may take a while.',
+    );
 
     emit(state.copyWith(preventActions: false));
   }

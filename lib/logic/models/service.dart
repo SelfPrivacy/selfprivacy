@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
-import '../api_maps/graphql_maps/schema/server_settings.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 
 class Service {
   Service.fromGraphQL(final Query$AllServices$services$allServices service)
@@ -17,6 +17,7 @@ class Service {
           isEnabled: service.isEnabled,
           isRequired: service.isRequired,
           isMovable: service.isMovable,
+          canBeBackedUp: service.canBeBackedUp,
           status: ServiceStatus.fromGraphQL(service.status),
           storageUsage: ServiceStorageUsage(
             used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
@@ -42,6 +43,7 @@ class Service {
     required this.isEnabled,
     required this.isRequired,
     required this.isMovable,
+    required this.canBeBackedUp,
     required this.status,
     required this.storageUsage,
     required this.svgIcon,
@@ -75,6 +77,7 @@ class Service {
     isEnabled: false,
     isRequired: false,
     isMovable: false,
+    canBeBackedUp: false,
     status: ServiceStatus.off,
     storageUsage: ServiceStorageUsage(
       used: const DiskSize(byte: 0),
@@ -91,6 +94,7 @@ class Service {
   final bool isEnabled;
   final bool isRequired;
   final bool isMovable;
+  final bool canBeBackedUp;
   final ServiceStatus status;
   final ServiceStorageUsage storageUsage;
   final String svgIcon;

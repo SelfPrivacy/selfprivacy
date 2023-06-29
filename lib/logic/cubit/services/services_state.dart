@@ -12,6 +12,10 @@ class ServicesState extends ServerInstallationDependendState {
   final List<Service> services;
   final List<String> lockedServices;
 
+  List<Service> get servicesThatCanBeBackedUp => services.where(
+        (final service) => service.canBeBackedUp,
+      ).toList();
+
   bool isServiceLocked(final String serviceId) =>
       lockedServices.contains(serviceId);
 

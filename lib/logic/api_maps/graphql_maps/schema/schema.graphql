@@ -254,6 +254,7 @@ type Service {
   isMovable: Boolean!
   isRequired: Boolean!
   isEnabled: Boolean!
+  canBeBackedUp: Boolean!
   status: ServiceStatusEnum!
   url: String
   dnsRecords: [DnsRecord!]

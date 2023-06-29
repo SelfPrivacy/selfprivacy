@@ -16,6 +16,7 @@ query AllServices {
       isEnabled
       isMovable
       isRequired
+      canBeBackedUp
       status
       storageUsage {
         title

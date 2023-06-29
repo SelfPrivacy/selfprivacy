@@ -72,9 +72,9 @@ mixin BackupsApi on GraphQLApiMap {
     );
   }
 
-  Future<GenericResult> startBackup(final String serviceId) async {
+  Future<GenericResult<ServerJob?>> startBackup(final String serviceId) async {
     QueryResult<Mutation$StartBackup> response;
-    GenericResult? result;
+    GenericResult<ServerJob?>? result;
 
     try {
       final GraphQLClient client = await getClient();
@@ -92,7 +92,9 @@ mixin BackupsApi on GraphQLApiMap {
       }
       result = GenericResult(
         success: true,
-        data: null,
+        data: ServerJob.fromGraphQL(
+          response.parsedData!.backup.startBackup.job!,
+        ),
       );
     } catch (e) {
       print(e);
@@ -192,6 +194,45 @@ mixin BackupsApi on GraphQLApiMap {
       result = GenericResult(
         success: true,
         data: null,
+      );
+    } catch (e) {
+      print(e);
+      result = GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+
+    return result;
+  }
+
+  Future<GenericResult<ServerJob?>> restoreBackup(
+    final String snapshotId,
+  ) async {
+    QueryResult<Mutation$RestoreBackup> response;
+    GenericResult<ServerJob?>? result;
+
+    try {
+      final GraphQLClient client = await getClient();
+      final variables =
+          Variables$Mutation$RestoreBackup(snapshotId: snapshotId);
+      final options = Options$Mutation$RestoreBackup(variables: variables);
+      response = await client.mutate$RestoreBackup(options);
+      if (response.hasException) {
+        final message = response.exception.toString();
+        print(message);
+        result = GenericResult(
+          success: false,
+          data: null,
+          message: message,
+        );
+      }
+      result = GenericResult(
+        success: true,
+        data: ServerJob.fromGraphQL(
+          response.parsedData!.backup.restoreBackup.job!,
+        ),
       );
     } catch (e) {
       print(e);

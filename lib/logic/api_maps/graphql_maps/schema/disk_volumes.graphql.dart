@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
-import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
+import 'server_api.graphql.dart';
+import 'services.graphql.dart';
 
 class Fragment$basicMutationReturnFields {
   Fragment$basicMutationReturnFields({
@@ -5679,82 +5680,9 @@ const documentNodeMutationMigrateToBinds = DocumentNode(definitions: [
             arguments: [],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                name: NameNode(value: 'createdAt'),
-                alias: null,
-                arguments: [],
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicApiJobsFields'),
                 directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'description'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'error'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'finishedAt'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'name'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'progress'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'result'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'status'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'statusText'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'uid'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'updatedAt'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
               ),
               FieldNode(
                 name: NameNode(value: '__typename'),
@@ -5784,6 +5712,7 @@ const documentNodeMutationMigrateToBinds = DocumentNode(definitions: [
     ]),
   ),
   fragmentDefinitionbasicMutationReturnFields,
+  fragmentDefinitionbasicApiJobsFields,
 ]);
 Mutation$MigrateToBinds _parserFn$Mutation$MigrateToBinds(
         Map<String, dynamic> data) =>
@@ -5906,7 +5835,7 @@ class Mutation$MigrateToBinds$migrateToBinds
       $__typename: (l$$__typename as String),
       job: l$job == null
           ? null
-          : Mutation$MigrateToBinds$migrateToBinds$job.fromJson(
+          : Fragment$basicApiJobsFields.fromJson(
               (l$job as Map<String, dynamic>)),
     );
   }
@@ -5919,7 +5848,7 @@ class Mutation$MigrateToBinds$migrateToBinds
 
   final String $__typename;
 
-  final Mutation$MigrateToBinds$migrateToBinds$job? job;
+  final Fragment$basicApiJobsFields? job;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
@@ -6014,9 +5943,9 @@ abstract class CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> {
     String? message,
     bool? success,
     String? $__typename,
-    Mutation$MigrateToBinds$migrateToBinds$job? job,
+    Fragment$basicApiJobsFields? job,
   });
-  CopyWith$Mutation$MigrateToBinds$migrateToBinds$job<TRes> get job;
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job;
 }
 
 class _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
@@ -6053,15 +5982,13 @@ class _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
             : ($__typename as String),
         job: job == _undefined
             ? _instance.job
-            : (job as Mutation$MigrateToBinds$migrateToBinds$job?),
+            : (job as Fragment$basicApiJobsFields?),
       ));
-  CopyWith$Mutation$MigrateToBinds$migrateToBinds$job<TRes> get job {
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job {
     final local$job = _instance.job;
     return local$job == null
-        ? CopyWith$Mutation$MigrateToBinds$migrateToBinds$job.stub(
-            _then(_instance))
-        : CopyWith$Mutation$MigrateToBinds$migrateToBinds$job(
-            local$job, (e) => call(job: e));
+        ? CopyWith$Fragment$basicApiJobsFields.stub(_then(_instance))
+        : CopyWith$Fragment$basicApiJobsFields(local$job, (e) => call(job: e));
   }
 }
 
@@ -6076,330 +6003,9 @@ class _CopyWithStubImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
     String? message,
     bool? success,
     String? $__typename,
-    Mutation$MigrateToBinds$migrateToBinds$job? job,
+    Fragment$basicApiJobsFields? job,
   }) =>
       _res;
-  CopyWith$Mutation$MigrateToBinds$migrateToBinds$job<TRes> get job =>
-      CopyWith$Mutation$MigrateToBinds$migrateToBinds$job.stub(_res);
-}
-
-class Mutation$MigrateToBinds$migrateToBinds$job {
-  Mutation$MigrateToBinds$migrateToBinds$job({
-    required this.createdAt,
-    required this.description,
-    this.error,
-    this.finishedAt,
-    required this.name,
-    this.progress,
-    this.result,
-    required this.status,
-    this.statusText,
-    required this.uid,
-    required this.updatedAt,
-    this.$__typename = 'ApiJob',
-  });
-
-  factory Mutation$MigrateToBinds$migrateToBinds$job.fromJson(
-      Map<String, dynamic> json) {
-    final l$createdAt = json['createdAt'];
-    final l$description = json['description'];
-    final l$error = json['error'];
-    final l$finishedAt = json['finishedAt'];
-    final l$name = json['name'];
-    final l$progress = json['progress'];
-    final l$result = json['result'];
-    final l$status = json['status'];
-    final l$statusText = json['statusText'];
-    final l$uid = json['uid'];
-    final l$updatedAt = json['updatedAt'];
-    final l$$__typename = json['__typename'];
-    return Mutation$MigrateToBinds$migrateToBinds$job(
-      createdAt: dateTimeFromJson(l$createdAt),
-      description: (l$description as String),
-      error: (l$error as String?),
-      finishedAt: l$finishedAt == null ? null : dateTimeFromJson(l$finishedAt),
-      name: (l$name as String),
-      progress: (l$progress as int?),
-      result: (l$result as String?),
-      status: (l$status as String),
-      statusText: (l$statusText as String?),
-      uid: (l$uid as String),
-      updatedAt: dateTimeFromJson(l$updatedAt),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final DateTime createdAt;
-
-  final String description;
-
-  final String? error;
-
-  final DateTime? finishedAt;
-
-  final String name;
-
-  final int? progress;
-
-  final String? result;
-
-  final String status;
-
-  final String? statusText;
-
-  final String uid;
-
-  final DateTime updatedAt;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$createdAt = createdAt;
-    _resultData['createdAt'] = dateTimeToJson(l$createdAt);
-    final l$description = description;
-    _resultData['description'] = l$description;
-    final l$error = error;
-    _resultData['error'] = l$error;
-    final l$finishedAt = finishedAt;
-    _resultData['finishedAt'] =
-        l$finishedAt == null ? null : dateTimeToJson(l$finishedAt);
-    final l$name = name;
-    _resultData['name'] = l$name;
-    final l$progress = progress;
-    _resultData['progress'] = l$progress;
-    final l$result = result;
-    _resultData['result'] = l$result;
-    final l$status = status;
-    _resultData['status'] = l$status;
-    final l$statusText = statusText;
-    _resultData['statusText'] = l$statusText;
-    final l$uid = uid;
-    _resultData['uid'] = l$uid;
-    final l$updatedAt = updatedAt;
-    _resultData['updatedAt'] = dateTimeToJson(l$updatedAt);
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$createdAt = createdAt;
-    final l$description = description;
-    final l$error = error;
-    final l$finishedAt = finishedAt;
-    final l$name = name;
-    final l$progress = progress;
-    final l$result = result;
-    final l$status = status;
-    final l$statusText = statusText;
-    final l$uid = uid;
-    final l$updatedAt = updatedAt;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$createdAt,
-      l$description,
-      l$error,
-      l$finishedAt,
-      l$name,
-      l$progress,
-      l$result,
-      l$status,
-      l$statusText,
-      l$uid,
-      l$updatedAt,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other is Mutation$MigrateToBinds$migrateToBinds$job) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$createdAt = createdAt;
-    final lOther$createdAt = other.createdAt;
-    if (l$createdAt != lOther$createdAt) {
-      return false;
-    }
-    final l$description = description;
-    final lOther$description = other.description;
-    if (l$description != lOther$description) {
-      return false;
-    }
-    final l$error = error;
-    final lOther$error = other.error;
-    if (l$error != lOther$error) {
-      return false;
-    }
-    final l$finishedAt = finishedAt;
-    final lOther$finishedAt = other.finishedAt;
-    if (l$finishedAt != lOther$finishedAt) {
-      return false;
-    }
-    final l$name = name;
-    final lOther$name = other.name;
-    if (l$name != lOther$name) {
-      return false;
-    }
-    final l$progress = progress;
-    final lOther$progress = other.progress;
-    if (l$progress != lOther$progress) {
-      return false;
-    }
-    final l$result = result;
-    final lOther$result = other.result;
-    if (l$result != lOther$result) {
-      return false;
-    }
-    final l$status = status;
-    final lOther$status = other.status;
-    if (l$status != lOther$status) {
-      return false;
-    }
-    final l$statusText = statusText;
-    final lOther$statusText = other.statusText;
-    if (l$statusText != lOther$statusText) {
-      return false;
-    }
-    final l$uid = uid;
-    final lOther$uid = other.uid;
-    if (l$uid != lOther$uid) {
-      return false;
-    }
-    final l$updatedAt = updatedAt;
-    final lOther$updatedAt = other.updatedAt;
-    if (l$updatedAt != lOther$updatedAt) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Mutation$MigrateToBinds$migrateToBinds$job
-    on Mutation$MigrateToBinds$migrateToBinds$job {
-  CopyWith$Mutation$MigrateToBinds$migrateToBinds$job<
-          Mutation$MigrateToBinds$migrateToBinds$job>
-      get copyWith => CopyWith$Mutation$MigrateToBinds$migrateToBinds$job(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Mutation$MigrateToBinds$migrateToBinds$job<TRes> {
-  factory CopyWith$Mutation$MigrateToBinds$migrateToBinds$job(
-    Mutation$MigrateToBinds$migrateToBinds$job instance,
-    TRes Function(Mutation$MigrateToBinds$migrateToBinds$job) then,
-  ) = _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds$job;
-
-  factory CopyWith$Mutation$MigrateToBinds$migrateToBinds$job.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$MigrateToBinds$migrateToBinds$job;
-
-  TRes call({
-    DateTime? createdAt,
-    String? description,
-    String? error,
-    DateTime? finishedAt,
-    String? name,
-    int? progress,
-    String? result,
-    String? status,
-    String? statusText,
-    String? uid,
-    DateTime? updatedAt,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds$job<TRes>
-    implements CopyWith$Mutation$MigrateToBinds$migrateToBinds$job<TRes> {
-  _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds$job(
-    this._instance,
-    this._then,
-  );
-
-  final Mutation$MigrateToBinds$migrateToBinds$job _instance;
-
-  final TRes Function(Mutation$MigrateToBinds$migrateToBinds$job) _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? createdAt = _undefined,
-    Object? description = _undefined,
-    Object? error = _undefined,
-    Object? finishedAt = _undefined,
-    Object? name = _undefined,
-    Object? progress = _undefined,
-    Object? result = _undefined,
-    Object? status = _undefined,
-    Object? statusText = _undefined,
-    Object? uid = _undefined,
-    Object? updatedAt = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$MigrateToBinds$migrateToBinds$job(
-        createdAt: createdAt == _undefined || createdAt == null
-            ? _instance.createdAt
-            : (createdAt as DateTime),
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        error: error == _undefined ? _instance.error : (error as String?),
-        finishedAt: finishedAt == _undefined
-            ? _instance.finishedAt
-            : (finishedAt as DateTime?),
-        name: name == _undefined || name == null
-            ? _instance.name
-            : (name as String),
-        progress:
-            progress == _undefined ? _instance.progress : (progress as int?),
-        result: result == _undefined ? _instance.result : (result as String?),
-        status: status == _undefined || status == null
-            ? _instance.status
-            : (status as String),
-        statusText: statusText == _undefined
-            ? _instance.statusText
-            : (statusText as String?),
-        uid: uid == _undefined || uid == null ? _instance.uid : (uid as String),
-        updatedAt: updatedAt == _undefined || updatedAt == null
-            ? _instance.updatedAt
-            : (updatedAt as DateTime),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Mutation$MigrateToBinds$migrateToBinds$job<TRes>
-    implements CopyWith$Mutation$MigrateToBinds$migrateToBinds$job<TRes> {
-  _CopyWithStubImpl$Mutation$MigrateToBinds$migrateToBinds$job(this._res);
-
-  TRes _res;
-
-  call({
-    DateTime? createdAt,
-    String? description,
-    String? error,
-    DateTime? finishedAt,
-    String? name,
-    int? progress,
-    String? result,
-    String? status,
-    String? statusText,
-    String? uid,
-    DateTime? updatedAt,
-    String? $__typename,
-  }) =>
-      _res;
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
+      CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }

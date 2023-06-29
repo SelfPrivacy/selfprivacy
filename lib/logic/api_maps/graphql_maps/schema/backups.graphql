@@ -50,6 +50,9 @@ mutation StartBackup($serviceId: String!) {
   backup {
     startBackup(serviceId: $serviceId) {
       ...basicMutationReturnFields
+      job {
+        ...basicApiJobsFields
+      }
     }
   }
 }
@@ -74,6 +77,17 @@ mutation InitializeRepository($repository: InitializeRepositoryInput!) {
   backup {
     initializeRepository(repository: $repository) {
       ...genericBackupConfigReturn
+    }
+  }
+}
+
+mutation RestoreBackup($snapshotId: String!) {
+  backup {
+    restoreBackup(snapshotId: $snapshotId) {
+      ...basicMutationReturnFields
+      job {
+        ...basicApiJobsFields
+      }
     }
   }
 }

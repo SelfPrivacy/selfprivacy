@@ -65,17 +65,7 @@ mutation MoveService($input: MoveServiceInput!) {
   moveService(input: $input) {
     ...basicMutationReturnFields
     job {
-      createdAt
-      description
-      error
-      finishedAt
-      name
-      progress
-      result
-      status
-      statusText
-      uid
-      updatedAt
+      ...basicApiJobsFields
     }
   }
 }

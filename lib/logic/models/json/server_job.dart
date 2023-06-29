@@ -22,7 +22,7 @@ class ServerJob {
     this.finishedAt,
   });
 
-  ServerJob.fromGraphQL(final Query$GetApiJobs$jobs$getJobs serverJob)
+  ServerJob.fromGraphQL(final Fragment$basicApiJobsFields serverJob)
       : this(
           createdAt: serverJob.createdAt,
           description: serverJob.description,

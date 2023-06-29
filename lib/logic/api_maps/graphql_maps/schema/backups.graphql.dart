@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'disk_volumes.graphql.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
+import 'server_api.graphql.dart';
+import 'services.graphql.dart';
 
 class Fragment$genericBackupConfigReturn {
   Fragment$genericBackupConfigReturn({
@@ -3004,6 +3005,25 @@ const documentNodeMutationStartBackup = DocumentNode(definitions: [
                 directives: [],
               ),
               FieldNode(
+                name: NameNode(value: 'job'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'basicApiJobsFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
+              ),
+              FieldNode(
                 name: NameNode(value: '__typename'),
                 alias: null,
                 arguments: [],
@@ -3031,6 +3051,7 @@ const documentNodeMutationStartBackup = DocumentNode(definitions: [
     ]),
   ),
   fragmentDefinitionbasicMutationReturnFields,
+  fragmentDefinitionbasicApiJobsFields,
 ]);
 Mutation$StartBackup _parserFn$Mutation$StartBackup(
         Map<String, dynamic> data) =>
@@ -3268,6 +3289,7 @@ class Mutation$StartBackup$backup$startBackup
     required this.message,
     required this.success,
     this.$__typename = 'GenericJobMutationReturn',
+    this.job,
   });
 
   factory Mutation$StartBackup$backup$startBackup.fromJson(
@@ -3276,11 +3298,16 @@ class Mutation$StartBackup$backup$startBackup
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
+    final l$job = json['job'];
     return Mutation$StartBackup$backup$startBackup(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
+      job: l$job == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$job as Map<String, dynamic>)),
     );
   }
 
@@ -3292,6 +3319,8 @@ class Mutation$StartBackup$backup$startBackup
 
   final String $__typename;
 
+  final Fragment$basicApiJobsFields? job;
+
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
     final l$code = code;
@@ -3302,6 +3331,8 @@ class Mutation$StartBackup$backup$startBackup
     _resultData['success'] = l$success;
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
+    final l$job = job;
+    _resultData['job'] = l$job?.toJson();
     return _resultData;
   }
 
@@ -3311,11 +3342,13 @@ class Mutation$StartBackup$backup$startBackup
     final l$message = message;
     final l$success = success;
     final l$$__typename = $__typename;
+    final l$job = job;
     return Object.hashAll([
       l$code,
       l$message,
       l$success,
       l$$__typename,
+      l$job,
     ]);
   }
 
@@ -3348,6 +3381,11 @@ class Mutation$StartBackup$backup$startBackup
     if (l$$__typename != lOther$$__typename) {
       return false;
     }
+    final l$job = job;
+    final lOther$job = other.job;
+    if (l$job != lOther$job) {
+      return false;
+    }
     return true;
   }
 }
@@ -3376,7 +3414,9 @@ abstract class CopyWith$Mutation$StartBackup$backup$startBackup<TRes> {
     String? message,
     bool? success,
     String? $__typename,
+    Fragment$basicApiJobsFields? job,
   });
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job;
 }
 
 class _CopyWithImpl$Mutation$StartBackup$backup$startBackup<TRes>
@@ -3397,6 +3437,7 @@ class _CopyWithImpl$Mutation$StartBackup$backup$startBackup<TRes>
     Object? message = _undefined,
     Object? success = _undefined,
     Object? $__typename = _undefined,
+    Object? job = _undefined,
   }) =>
       _then(Mutation$StartBackup$backup$startBackup(
         code:
@@ -3410,7 +3451,16 @@ class _CopyWithImpl$Mutation$StartBackup$backup$startBackup<TRes>
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
+        job: job == _undefined
+            ? _instance.job
+            : (job as Fragment$basicApiJobsFields?),
       ));
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job {
+    final local$job = _instance.job;
+    return local$job == null
+        ? CopyWith$Fragment$basicApiJobsFields.stub(_then(_instance))
+        : CopyWith$Fragment$basicApiJobsFields(local$job, (e) => call(job: e));
+  }
 }
 
 class _CopyWithStubImpl$Mutation$StartBackup$backup$startBackup<TRes>
@@ -3424,8 +3474,11 @@ class _CopyWithStubImpl$Mutation$StartBackup$backup$startBackup<TRes>
     String? message,
     bool? success,
     String? $__typename,
+    Fragment$basicApiJobsFields? job,
   }) =>
       _res;
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
+      CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }
 
 class Variables$Mutation$SetAutobackupPeriod {
@@ -4927,4 +4980,751 @@ class _CopyWithStubImpl$Mutation$InitializeRepository$backup<TRes>
       _res;
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get initializeRepository =>
       CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
+}
+
+class Variables$Mutation$RestoreBackup {
+  factory Variables$Mutation$RestoreBackup({required String snapshotId}) =>
+      Variables$Mutation$RestoreBackup._({
+        r'snapshotId': snapshotId,
+      });
+
+  Variables$Mutation$RestoreBackup._(this._$data);
+
+  factory Variables$Mutation$RestoreBackup.fromJson(Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$snapshotId = data['snapshotId'];
+    result$data['snapshotId'] = (l$snapshotId as String);
+    return Variables$Mutation$RestoreBackup._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  String get snapshotId => (_$data['snapshotId'] as String);
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$snapshotId = snapshotId;
+    result$data['snapshotId'] = l$snapshotId;
+    return result$data;
+  }
+
+  CopyWith$Variables$Mutation$RestoreBackup<Variables$Mutation$RestoreBackup>
+      get copyWith => CopyWith$Variables$Mutation$RestoreBackup(
+            this,
+            (i) => i,
+          );
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Variables$Mutation$RestoreBackup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$snapshotId = snapshotId;
+    final lOther$snapshotId = other.snapshotId;
+    if (l$snapshotId != lOther$snapshotId) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$snapshotId = snapshotId;
+    return Object.hashAll([l$snapshotId]);
+  }
+}
+
+abstract class CopyWith$Variables$Mutation$RestoreBackup<TRes> {
+  factory CopyWith$Variables$Mutation$RestoreBackup(
+    Variables$Mutation$RestoreBackup instance,
+    TRes Function(Variables$Mutation$RestoreBackup) then,
+  ) = _CopyWithImpl$Variables$Mutation$RestoreBackup;
+
+  factory CopyWith$Variables$Mutation$RestoreBackup.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$RestoreBackup;
+
+  TRes call({String? snapshotId});
+}
+
+class _CopyWithImpl$Variables$Mutation$RestoreBackup<TRes>
+    implements CopyWith$Variables$Mutation$RestoreBackup<TRes> {
+  _CopyWithImpl$Variables$Mutation$RestoreBackup(
+    this._instance,
+    this._then,
+  );
+
+  final Variables$Mutation$RestoreBackup _instance;
+
+  final TRes Function(Variables$Mutation$RestoreBackup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? snapshotId = _undefined}) =>
+      _then(Variables$Mutation$RestoreBackup._({
+        ..._instance._$data,
+        if (snapshotId != _undefined && snapshotId != null)
+          'snapshotId': (snapshotId as String),
+      }));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$RestoreBackup<TRes>
+    implements CopyWith$Variables$Mutation$RestoreBackup<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$RestoreBackup(this._res);
+
+  TRes _res;
+
+  call({String? snapshotId}) => _res;
+}
+
+class Mutation$RestoreBackup {
+  Mutation$RestoreBackup({
+    required this.backup,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$RestoreBackup.fromJson(Map<String, dynamic> json) {
+    final l$backup = json['backup'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RestoreBackup(
+      backup: Mutation$RestoreBackup$backup.fromJson(
+          (l$backup as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RestoreBackup$backup backup;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$backup = backup;
+    _resultData['backup'] = l$backup.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$backup = backup;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$backup,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RestoreBackup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$backup = backup;
+    final lOther$backup = other.backup;
+    if (l$backup != lOther$backup) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RestoreBackup on Mutation$RestoreBackup {
+  CopyWith$Mutation$RestoreBackup<Mutation$RestoreBackup> get copyWith =>
+      CopyWith$Mutation$RestoreBackup(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Mutation$RestoreBackup<TRes> {
+  factory CopyWith$Mutation$RestoreBackup(
+    Mutation$RestoreBackup instance,
+    TRes Function(Mutation$RestoreBackup) then,
+  ) = _CopyWithImpl$Mutation$RestoreBackup;
+
+  factory CopyWith$Mutation$RestoreBackup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RestoreBackup;
+
+  TRes call({
+    Mutation$RestoreBackup$backup? backup,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RestoreBackup$backup<TRes> get backup;
+}
+
+class _CopyWithImpl$Mutation$RestoreBackup<TRes>
+    implements CopyWith$Mutation$RestoreBackup<TRes> {
+  _CopyWithImpl$Mutation$RestoreBackup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RestoreBackup _instance;
+
+  final TRes Function(Mutation$RestoreBackup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? backup = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RestoreBackup(
+        backup: backup == _undefined || backup == null
+            ? _instance.backup
+            : (backup as Mutation$RestoreBackup$backup),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Mutation$RestoreBackup$backup<TRes> get backup {
+    final local$backup = _instance.backup;
+    return CopyWith$Mutation$RestoreBackup$backup(
+        local$backup, (e) => call(backup: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RestoreBackup<TRes>
+    implements CopyWith$Mutation$RestoreBackup<TRes> {
+  _CopyWithStubImpl$Mutation$RestoreBackup(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RestoreBackup$backup? backup,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Mutation$RestoreBackup$backup<TRes> get backup =>
+      CopyWith$Mutation$RestoreBackup$backup.stub(_res);
+}
+
+const documentNodeMutationRestoreBackup = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'RestoreBackup'),
+    variableDefinitions: [
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'snapshotId')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'String'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(value: null),
+        directives: [],
+      )
+    ],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'backup'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'restoreBackup'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'snapshotId'),
+                value: VariableNode(name: NameNode(value: 'snapshotId')),
+              )
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'job'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'basicApiJobsFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitionbasicMutationReturnFields,
+  fragmentDefinitionbasicApiJobsFields,
+]);
+Mutation$RestoreBackup _parserFn$Mutation$RestoreBackup(
+        Map<String, dynamic> data) =>
+    Mutation$RestoreBackup.fromJson(data);
+typedef OnMutationCompleted$Mutation$RestoreBackup = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Mutation$RestoreBackup?,
+);
+
+class Options$Mutation$RestoreBackup
+    extends graphql.MutationOptions<Mutation$RestoreBackup> {
+  Options$Mutation$RestoreBackup({
+    String? operationName,
+    required Variables$Mutation$RestoreBackup variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$RestoreBackup? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$RestoreBackup? onCompleted,
+    graphql.OnMutationUpdate<Mutation$RestoreBackup>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$RestoreBackup(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationRestoreBackup,
+          parserFn: _parserFn$Mutation$RestoreBackup,
+        );
+
+  final OnMutationCompleted$Mutation$RestoreBackup? onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$RestoreBackup
+    extends graphql.WatchQueryOptions<Mutation$RestoreBackup> {
+  WatchOptions$Mutation$RestoreBackup({
+    String? operationName,
+    required Variables$Mutation$RestoreBackup variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$RestoreBackup? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationRestoreBackup,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$RestoreBackup,
+        );
+}
+
+extension ClientExtension$Mutation$RestoreBackup on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$RestoreBackup>> mutate$RestoreBackup(
+          Options$Mutation$RestoreBackup options) async =>
+      await this.mutate(options);
+  graphql.ObservableQuery<Mutation$RestoreBackup> watchMutation$RestoreBackup(
+          WatchOptions$Mutation$RestoreBackup options) =>
+      this.watchMutation(options);
+}
+
+class Mutation$RestoreBackup$backup {
+  Mutation$RestoreBackup$backup({
+    required this.restoreBackup,
+    this.$__typename = 'BackupMutations',
+  });
+
+  factory Mutation$RestoreBackup$backup.fromJson(Map<String, dynamic> json) {
+    final l$restoreBackup = json['restoreBackup'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RestoreBackup$backup(
+      restoreBackup: Mutation$RestoreBackup$backup$restoreBackup.fromJson(
+          (l$restoreBackup as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RestoreBackup$backup$restoreBackup restoreBackup;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$restoreBackup = restoreBackup;
+    _resultData['restoreBackup'] = l$restoreBackup.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$restoreBackup = restoreBackup;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$restoreBackup,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RestoreBackup$backup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$restoreBackup = restoreBackup;
+    final lOther$restoreBackup = other.restoreBackup;
+    if (l$restoreBackup != lOther$restoreBackup) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RestoreBackup$backup
+    on Mutation$RestoreBackup$backup {
+  CopyWith$Mutation$RestoreBackup$backup<Mutation$RestoreBackup$backup>
+      get copyWith => CopyWith$Mutation$RestoreBackup$backup(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RestoreBackup$backup<TRes> {
+  factory CopyWith$Mutation$RestoreBackup$backup(
+    Mutation$RestoreBackup$backup instance,
+    TRes Function(Mutation$RestoreBackup$backup) then,
+  ) = _CopyWithImpl$Mutation$RestoreBackup$backup;
+
+  factory CopyWith$Mutation$RestoreBackup$backup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RestoreBackup$backup;
+
+  TRes call({
+    Mutation$RestoreBackup$backup$restoreBackup? restoreBackup,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RestoreBackup$backup$restoreBackup<TRes> get restoreBackup;
+}
+
+class _CopyWithImpl$Mutation$RestoreBackup$backup<TRes>
+    implements CopyWith$Mutation$RestoreBackup$backup<TRes> {
+  _CopyWithImpl$Mutation$RestoreBackup$backup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RestoreBackup$backup _instance;
+
+  final TRes Function(Mutation$RestoreBackup$backup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? restoreBackup = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RestoreBackup$backup(
+        restoreBackup: restoreBackup == _undefined || restoreBackup == null
+            ? _instance.restoreBackup
+            : (restoreBackup as Mutation$RestoreBackup$backup$restoreBackup),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Mutation$RestoreBackup$backup$restoreBackup<TRes> get restoreBackup {
+    final local$restoreBackup = _instance.restoreBackup;
+    return CopyWith$Mutation$RestoreBackup$backup$restoreBackup(
+        local$restoreBackup, (e) => call(restoreBackup: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RestoreBackup$backup<TRes>
+    implements CopyWith$Mutation$RestoreBackup$backup<TRes> {
+  _CopyWithStubImpl$Mutation$RestoreBackup$backup(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RestoreBackup$backup$restoreBackup? restoreBackup,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Mutation$RestoreBackup$backup$restoreBackup<TRes>
+      get restoreBackup =>
+          CopyWith$Mutation$RestoreBackup$backup$restoreBackup.stub(_res);
+}
+
+class Mutation$RestoreBackup$backup$restoreBackup
+    implements Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
+  Mutation$RestoreBackup$backup$restoreBackup({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericJobMutationReturn',
+    this.job,
+  });
+
+  factory Mutation$RestoreBackup$backup$restoreBackup.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    final l$job = json['job'];
+    return Mutation$RestoreBackup$backup$restoreBackup(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+      job: l$job == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$job as Map<String, dynamic>)),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  final Fragment$basicApiJobsFields? job;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    final l$job = job;
+    _resultData['job'] = l$job?.toJson();
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    final l$job = job;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+      l$job,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RestoreBackup$backup$restoreBackup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    final l$job = job;
+    final lOther$job = other.job;
+    if (l$job != lOther$job) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RestoreBackup$backup$restoreBackup
+    on Mutation$RestoreBackup$backup$restoreBackup {
+  CopyWith$Mutation$RestoreBackup$backup$restoreBackup<
+          Mutation$RestoreBackup$backup$restoreBackup>
+      get copyWith => CopyWith$Mutation$RestoreBackup$backup$restoreBackup(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RestoreBackup$backup$restoreBackup<TRes> {
+  factory CopyWith$Mutation$RestoreBackup$backup$restoreBackup(
+    Mutation$RestoreBackup$backup$restoreBackup instance,
+    TRes Function(Mutation$RestoreBackup$backup$restoreBackup) then,
+  ) = _CopyWithImpl$Mutation$RestoreBackup$backup$restoreBackup;
+
+  factory CopyWith$Mutation$RestoreBackup$backup$restoreBackup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RestoreBackup$backup$restoreBackup;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    Fragment$basicApiJobsFields? job,
+  });
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job;
+}
+
+class _CopyWithImpl$Mutation$RestoreBackup$backup$restoreBackup<TRes>
+    implements CopyWith$Mutation$RestoreBackup$backup$restoreBackup<TRes> {
+  _CopyWithImpl$Mutation$RestoreBackup$backup$restoreBackup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RestoreBackup$backup$restoreBackup _instance;
+
+  final TRes Function(Mutation$RestoreBackup$backup$restoreBackup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+    Object? job = _undefined,
+  }) =>
+      _then(Mutation$RestoreBackup$backup$restoreBackup(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+        job: job == _undefined
+            ? _instance.job
+            : (job as Fragment$basicApiJobsFields?),
+      ));
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job {
+    final local$job = _instance.job;
+    return local$job == null
+        ? CopyWith$Fragment$basicApiJobsFields.stub(_then(_instance))
+        : CopyWith$Fragment$basicApiJobsFields(local$job, (e) => call(job: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RestoreBackup$backup$restoreBackup<TRes>
+    implements CopyWith$Mutation$RestoreBackup$backup$restoreBackup<TRes> {
+  _CopyWithStubImpl$Mutation$RestoreBackup$backup$restoreBackup(this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    Fragment$basicApiJobsFields? job,
+  }) =>
+      _res;
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
+      CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }

@@ -19,6 +19,7 @@ type ApiDevice {
 
 type ApiJob {
   uid: String!
+  typeId: String!
   name: String!
   description: String!
   status: String!

@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'disk_volumes.graphql.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
-import 'services.graphql.dart';
 
 class Fragment$basicMutationReturnFields {
   Fragment$basicMutationReturnFields({
@@ -2915,6 +2915,13 @@ const documentNodeQueryGetApiJobs = DocumentNode(definitions: [
                 selectionSet: null,
               ),
               FieldNode(
+                name: NameNode(value: 'typeId'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
                 name: NameNode(value: 'updatedAt'),
                 alias: null,
                 arguments: [],
@@ -3229,6 +3236,7 @@ class Query$GetApiJobs$jobs$getJobs {
     required this.status,
     this.statusText,
     required this.uid,
+    required this.typeId,
     required this.updatedAt,
     this.$__typename = 'ApiJob',
   });
@@ -3244,6 +3252,7 @@ class Query$GetApiJobs$jobs$getJobs {
     final l$status = json['status'];
     final l$statusText = json['statusText'];
     final l$uid = json['uid'];
+    final l$typeId = json['typeId'];
     final l$updatedAt = json['updatedAt'];
     final l$$__typename = json['__typename'];
     return Query$GetApiJobs$jobs$getJobs(
@@ -3257,6 +3266,7 @@ class Query$GetApiJobs$jobs$getJobs {
       status: (l$status as String),
       statusText: (l$statusText as String?),
       uid: (l$uid as String),
+      typeId: (l$typeId as String),
       updatedAt: dateTimeFromJson(l$updatedAt),
       $__typename: (l$$__typename as String),
     );
@@ -3281,6 +3291,8 @@ class Query$GetApiJobs$jobs$getJobs {
   final String? statusText;
 
   final String uid;
+
+  final String typeId;
 
   final DateTime updatedAt;
 
@@ -3309,6 +3321,8 @@ class Query$GetApiJobs$jobs$getJobs {
     _resultData['statusText'] = l$statusText;
     final l$uid = uid;
     _resultData['uid'] = l$uid;
+    final l$typeId = typeId;
+    _resultData['typeId'] = l$typeId;
     final l$updatedAt = updatedAt;
     _resultData['updatedAt'] = dateTimeToJson(l$updatedAt);
     final l$$__typename = $__typename;
@@ -3328,6 +3342,7 @@ class Query$GetApiJobs$jobs$getJobs {
     final l$status = status;
     final l$statusText = statusText;
     final l$uid = uid;
+    final l$typeId = typeId;
     final l$updatedAt = updatedAt;
     final l$$__typename = $__typename;
     return Object.hashAll([
@@ -3341,6 +3356,7 @@ class Query$GetApiJobs$jobs$getJobs {
       l$status,
       l$statusText,
       l$uid,
+      l$typeId,
       l$updatedAt,
       l$$__typename,
     ]);
@@ -3405,6 +3421,11 @@ class Query$GetApiJobs$jobs$getJobs {
     if (l$uid != lOther$uid) {
       return false;
     }
+    final l$typeId = typeId;
+    final lOther$typeId = other.typeId;
+    if (l$typeId != lOther$typeId) {
+      return false;
+    }
     final l$updatedAt = updatedAt;
     final lOther$updatedAt = other.updatedAt;
     if (l$updatedAt != lOther$updatedAt) {
@@ -3448,6 +3469,7 @@ abstract class CopyWith$Query$GetApiJobs$jobs$getJobs<TRes> {
     String? status,
     String? statusText,
     String? uid,
+    String? typeId,
     DateTime? updatedAt,
     String? $__typename,
   });
@@ -3477,6 +3499,7 @@ class _CopyWithImpl$Query$GetApiJobs$jobs$getJobs<TRes>
     Object? status = _undefined,
     Object? statusText = _undefined,
     Object? uid = _undefined,
+    Object? typeId = _undefined,
     Object? updatedAt = _undefined,
     Object? $__typename = _undefined,
   }) =>
@@ -3504,6 +3527,9 @@ class _CopyWithImpl$Query$GetApiJobs$jobs$getJobs<TRes>
             ? _instance.statusText
             : (statusText as String?),
         uid: uid == _undefined || uid == null ? _instance.uid : (uid as String),
+        typeId: typeId == _undefined || typeId == null
+            ? _instance.typeId
+            : (typeId as String),
         updatedAt: updatedAt == _undefined || updatedAt == null
             ? _instance.updatedAt
             : (updatedAt as DateTime),
@@ -3530,6 +3556,7 @@ class _CopyWithStubImpl$Query$GetApiJobs$jobs$getJobs<TRes>
     String? status,
     String? statusText,
     String? uid,
+    String? typeId,
     DateTime? updatedAt,
     String? $__typename,
   }) =>

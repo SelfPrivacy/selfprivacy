@@ -197,7 +197,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final BackupsCredential backblazeCredential = BackupsCredential(
       keyId: keyId,
       applicationKey: applicationKey,
-      provider: BackupsProvider.backblaze,
+      provider: BackupsProviderType.backblaze,
     );
     await repository.saveBackblazeKey(backblazeCredential);
     if (state is ServerInstallationRecovery) {
@@ -699,7 +699,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         provider: dnsProviderType,
       ),
     );
-    await repository.setDnsApiToken(token);
+    // await repository.setDnsApiToken(token);
     emit(
       dataState.copyWith(
         serverDomain: ServerDomain(

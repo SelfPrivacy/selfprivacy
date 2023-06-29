@@ -8,7 +8,7 @@ class InitializeRepositoryInput {
     required this.login,
     required this.password,
   });
-  final BackupsProvider provider;
+  final BackupsProviderType provider;
   final String locationId;
   final String locationName;
   final String login;

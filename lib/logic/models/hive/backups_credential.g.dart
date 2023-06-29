@@ -20,8 +20,8 @@ class BackupsCredentialAdapter extends TypeAdapter<BackupsCredential> {
       keyId: fields[0] as String,
       applicationKey: fields[1] as String,
       provider: fields[2] == null
-          ? BackupsProvider.backblaze
-          : fields[2] as BackupsProvider,
+          ? BackupsProviderType.backblaze
+          : fields[2] as BackupsProviderType,
     );
   }
 
@@ -48,39 +48,39 @@ class BackupsCredentialAdapter extends TypeAdapter<BackupsCredential> {
           typeId == other.typeId;
 }
 
-class BackupsProviderAdapter extends TypeAdapter<BackupsProvider> {
+class BackupsProviderTypeAdapter extends TypeAdapter<BackupsProviderType> {
   @override
   final int typeId = 103;
 
   @override
-  BackupsProvider read(BinaryReader reader) {
+  BackupsProviderType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return BackupsProvider.none;
+        return BackupsProviderType.none;
       case 1:
-        return BackupsProvider.memory;
+        return BackupsProviderType.memory;
       case 2:
-        return BackupsProvider.file;
+        return BackupsProviderType.file;
       case 3:
-        return BackupsProvider.backblaze;
+        return BackupsProviderType.backblaze;
       default:
-        return BackupsProvider.none;
+        return BackupsProviderType.none;
     }
   }
 
   @override
-  void write(BinaryWriter writer, BackupsProvider obj) {
+  void write(BinaryWriter writer, BackupsProviderType obj) {
     switch (obj) {
-      case BackupsProvider.none:
+      case BackupsProviderType.none:
         writer.writeByte(0);
         break;
-      case BackupsProvider.memory:
+      case BackupsProviderType.memory:
         writer.writeByte(1);
         break;
-      case BackupsProvider.file:
+      case BackupsProviderType.file:
         writer.writeByte(2);
         break;
-      case BackupsProvider.backblaze:
+      case BackupsProviderType.backblaze:
         writer.writeByte(3);
         break;
     }
@@ -92,7 +92,7 @@ class BackupsProviderAdapter extends TypeAdapter<BackupsProvider> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BackupsProviderAdapter &&
+      other is BackupsProviderTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

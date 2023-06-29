@@ -23,6 +23,7 @@ query GetApiJobs {
       status
       statusText
       uid
+      typeId
       updatedAt
     }
   }

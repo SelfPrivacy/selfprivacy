@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'disk_volumes.graphql.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
-import 'services.graphql.dart';
 
 class Fragment$genericBackupConfigReturn {
   Fragment$genericBackupConfigReturn({
@@ -2738,31 +2738,27 @@ class _CopyWithStubImpl$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReloa
 }
 
 class Variables$Mutation$StartBackup {
-  factory Variables$Mutation$StartBackup({String? serviceId}) =>
+  factory Variables$Mutation$StartBackup({required String serviceId}) =>
       Variables$Mutation$StartBackup._({
-        if (serviceId != null) r'serviceId': serviceId,
+        r'serviceId': serviceId,
       });
 
   Variables$Mutation$StartBackup._(this._$data);
 
   factory Variables$Mutation$StartBackup.fromJson(Map<String, dynamic> data) {
     final result$data = <String, dynamic>{};
-    if (data.containsKey('serviceId')) {
-      final l$serviceId = data['serviceId'];
-      result$data['serviceId'] = (l$serviceId as String?);
-    }
+    final l$serviceId = data['serviceId'];
+    result$data['serviceId'] = (l$serviceId as String);
     return Variables$Mutation$StartBackup._(result$data);
   }
 
   Map<String, dynamic> _$data;
 
-  String? get serviceId => (_$data['serviceId'] as String?);
+  String get serviceId => (_$data['serviceId'] as String);
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
-    if (_$data.containsKey('serviceId')) {
-      final l$serviceId = serviceId;
-      result$data['serviceId'] = l$serviceId;
-    }
+    final l$serviceId = serviceId;
+    result$data['serviceId'] = l$serviceId;
     return result$data;
   }
 
@@ -2782,10 +2778,6 @@ class Variables$Mutation$StartBackup {
     }
     final l$serviceId = serviceId;
     final lOther$serviceId = other.serviceId;
-    if (_$data.containsKey('serviceId') !=
-        other._$data.containsKey('serviceId')) {
-      return false;
-    }
     if (l$serviceId != lOther$serviceId) {
       return false;
     }
@@ -2795,8 +2787,7 @@ class Variables$Mutation$StartBackup {
   @override
   int get hashCode {
     final l$serviceId = serviceId;
-    return Object.hashAll(
-        [_$data.containsKey('serviceId') ? l$serviceId : const {}]);
+    return Object.hashAll([l$serviceId]);
   }
 }
 
@@ -2828,7 +2819,8 @@ class _CopyWithImpl$Variables$Mutation$StartBackup<TRes>
   TRes call({Object? serviceId = _undefined}) =>
       _then(Variables$Mutation$StartBackup._({
         ..._instance._$data,
-        if (serviceId != _undefined) 'serviceId': (serviceId as String?),
+        if (serviceId != _undefined && serviceId != null)
+          'serviceId': (serviceId as String),
       }));
 }
 
@@ -2982,9 +2974,9 @@ const documentNodeMutationStartBackup = DocumentNode(definitions: [
         variable: VariableNode(name: NameNode(value: 'serviceId')),
         type: NamedTypeNode(
           name: NameNode(value: 'String'),
-          isNonNull: false,
+          isNonNull: true,
         ),
-        defaultValue: DefaultValueNode(value: NullValueNode()),
+        defaultValue: DefaultValueNode(value: null),
         directives: [],
       )
     ],
@@ -3052,7 +3044,7 @@ class Options$Mutation$StartBackup
     extends graphql.MutationOptions<Mutation$StartBackup> {
   Options$Mutation$StartBackup({
     String? operationName,
-    Variables$Mutation$StartBackup? variables,
+    required Variables$Mutation$StartBackup variables,
     graphql.FetchPolicy? fetchPolicy,
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
@@ -3064,7 +3056,7 @@ class Options$Mutation$StartBackup
     graphql.OnError? onError,
   })  : onCompletedWithParsed = onCompleted,
         super(
-          variables: variables?.toJson() ?? {},
+          variables: variables.toJson(),
           operationName: operationName,
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
@@ -3098,7 +3090,7 @@ class WatchOptions$Mutation$StartBackup
     extends graphql.WatchQueryOptions<Mutation$StartBackup> {
   WatchOptions$Mutation$StartBackup({
     String? operationName,
-    Variables$Mutation$StartBackup? variables,
+    required Variables$Mutation$StartBackup variables,
     graphql.FetchPolicy? fetchPolicy,
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
@@ -3110,7 +3102,7 @@ class WatchOptions$Mutation$StartBackup
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables?.toJson() ?? {},
+          variables: variables.toJson(),
           operationName: operationName,
           fetchPolicy: fetchPolicy,
           errorPolicy: errorPolicy,
@@ -3128,11 +3120,11 @@ class WatchOptions$Mutation$StartBackup
 
 extension ClientExtension$Mutation$StartBackup on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$StartBackup>> mutate$StartBackup(
-          [Options$Mutation$StartBackup? options]) async =>
-      await this.mutate(options ?? Options$Mutation$StartBackup());
+          Options$Mutation$StartBackup options) async =>
+      await this.mutate(options);
   graphql.ObservableQuery<Mutation$StartBackup> watchMutation$StartBackup(
-          [WatchOptions$Mutation$StartBackup? options]) =>
-      this.watchMutation(options ?? WatchOptions$Mutation$StartBackup());
+          WatchOptions$Mutation$StartBackup options) =>
+      this.watchMutation(options);
 }
 
 class Mutation$StartBackup$backup {

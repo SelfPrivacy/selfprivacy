@@ -46,7 +46,7 @@ mutation ForceSnapshotsReload {
   }
 }
 
-mutation StartBackup($serviceId: String = null) {
+mutation StartBackup($serviceId: String!) {
   backup {
     startBackup(serviceId: $serviceId) {
       ...basicMutationReturnFields

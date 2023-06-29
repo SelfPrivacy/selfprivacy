@@ -15,7 +15,7 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
-import 'package:selfprivacy/logic/models/json/backup.dart';
+import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
@@ -32,9 +32,10 @@ part 'server_actions_api.dart';
 part 'services_api.dart';
 part 'users_api.dart';
 part 'volume_api.dart';
+part 'backups_api.dart';
 
 class ServerApi extends GraphQLApiMap
-    with VolumeApi, JobsApi, ServerActionsApi, ServicesApi, UsersApi {
+    with VolumeApi, JobsApi, ServerActionsApi, ServicesApi, UsersApi, BackupsApi {
   ServerApi({
     this.hasLogger = false,
     this.isWithToken = true,
@@ -511,203 +512,5 @@ class ServerApi extends GraphQLApiMap
     }
 
     return token;
-  }
-
-  Future<GenericResult<List<Backup>>> getBackups() async {
-    GenericResult<List<Backup>> backups;
-    QueryResult<Query$AllBackupSnapshots> response;
-
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$AllBackupSnapshots();
-      if (response.hasException) {
-        final message = response.exception.toString();
-        print(message);
-        backups = GenericResult<List<Backup>>(
-          success: false,
-          data: [],
-          message: message,
-        );
-      }
-      final List<Backup> parsed = response.parsedData!.backup.allSnapshots
-          .map(
-            (
-              final Query$AllBackupSnapshots$backup$allSnapshots snapshot,
-            ) =>
-                Backup.fromGraphQL(snapshot),
-          )
-          .toList();
-      backups = GenericResult<List<Backup>>(
-        success: true,
-        data: parsed,
-      );
-    } catch (e) {
-      print(e);
-      backups = GenericResult<List<Backup>>(
-        success: false,
-        data: [],
-        message: e.toString(),
-      );
-    }
-
-    return backups;
-  }
-
-  Future<GenericResult> forceBackupListReload() async {
-    try {
-      final GraphQLClient client = await getClient();
-      await client.mutate$ForceSnapshotsReload();
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    }
-
-    return GenericResult(
-      success: true,
-      data: null,
-    );
-  }
-
-  Future<GenericResult> startBackup({final String? serviceId}) async {
-    QueryResult<Mutation$StartBackup> response;
-    GenericResult? result;
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$StartBackup(serviceId: serviceId);
-      final options = Options$Mutation$StartBackup(variables: variables);
-      response = await client.mutate$StartBackup(options);
-      if (response.hasException) {
-        final message = response.exception.toString();
-        print(message);
-        result = GenericResult(
-          success: false,
-          data: null,
-          message: message,
-        );
-      }
-      result = GenericResult(
-        success: true,
-        data: null,
-      );
-    } catch (e) {
-      print(e);
-      result = GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    }
-
-    return result;
-  }
-
-  Future<GenericResult> setAutobackupPeriod({final int? period}) async {
-    QueryResult<Mutation$SetAutobackupPeriod> response;
-    GenericResult? result;
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$SetAutobackupPeriod(period: period);
-      final options =
-          Options$Mutation$SetAutobackupPeriod(variables: variables);
-      response = await client.mutate$SetAutobackupPeriod(options);
-      if (response.hasException) {
-        final message = response.exception.toString();
-        print(message);
-        result = GenericResult(
-          success: false,
-          data: null,
-          message: message,
-        );
-      }
-      result = GenericResult(
-        success: true,
-        data: null,
-      );
-    } catch (e) {
-      print(e);
-      result = GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    }
-
-    return result;
-  }
-
-  Future<BackupStatus> getBackupStatus() async => BackupStatus(
-        progress: 0.0,
-        status: BackupStatusEnum.error,
-        errorMessage: null,
-      );
-
-  Future<GenericResult> removeRepository() async {
-    try {
-      final GraphQLClient client = await getClient();
-      await client.mutate$RemoveRepository();
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    }
-
-    return GenericResult(
-      success: true,
-      data: null,
-    );
-  }
-
-  Future<GenericResult> initializeRepository(
-    final InitializeRepositoryInput input,
-  ) async {
-    QueryResult<Mutation$InitializeRepository> response;
-    GenericResult? result;
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$InitializeRepository(
-        repository: Input$InitializeRepositoryInput(
-          locationId: input.locationId,
-          locationName: input.locationName,
-          login: input.login,
-          password: input.password,
-          provider: input.provider.toGraphQL(),
-        ),
-      );
-      final options =
-          Options$Mutation$InitializeRepository(variables: variables);
-      response = await client.mutate$InitializeRepository(options);
-      if (response.hasException) {
-        final message = response.exception.toString();
-        print(message);
-        result = GenericResult(
-          success: false,
-          data: null,
-          message: message,
-        );
-      }
-      result = GenericResult(
-        success: true,
-        data: null,
-      );
-    } catch (e) {
-      print(e);
-      result = GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    }
-
-    return result;
   }
 }

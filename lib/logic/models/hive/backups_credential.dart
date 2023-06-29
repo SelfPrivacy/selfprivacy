@@ -19,8 +19,8 @@ class BackupsCredential {
   @HiveField(1)
   final String applicationKey;
 
-  @HiveField(2, defaultValue: BackupsProvider.backblaze)
-  final BackupsProvider provider;
+  @HiveField(2, defaultValue: BackupsProviderType.backblaze)
+  final BackupsProviderType provider;
 
   String get encodedApiKey => encodedBackblazeKey(keyId, applicationKey);
 
@@ -35,7 +35,7 @@ String encodedBackblazeKey(final String? keyId, final String? applicationKey) {
 }
 
 @HiveType(typeId: 103)
-enum BackupsProvider {
+enum BackupsProviderType {
   @HiveField(0)
   none,
   @HiveField(1)
@@ -45,7 +45,7 @@ enum BackupsProvider {
   @HiveField(3)
   backblaze;
 
-  factory BackupsProvider.fromGraphQL(final Enum$BackupProvider provider) =>
+  factory BackupsProviderType.fromGraphQL(final Enum$BackupProvider provider) =>
       switch (provider) {
         Enum$BackupProvider.NONE => none,
         Enum$BackupProvider.MEMORY => memory,

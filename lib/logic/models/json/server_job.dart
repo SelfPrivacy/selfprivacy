@@ -12,6 +12,7 @@ class ServerJob {
     required this.description,
     required this.status,
     required this.uid,
+    required this.typeId,
     required this.updatedAt,
     required this.createdAt,
     this.error,
@@ -33,12 +34,14 @@ class ServerJob {
           status: JobStatusEnum.fromString(serverJob.status),
           statusText: serverJob.statusText,
           uid: serverJob.uid,
+          typeId: serverJob.typeId,
           updatedAt: serverJob.updatedAt,
         );
   final String name;
   final String description;
   final JobStatusEnum status;
   final String uid;
+  final String typeId;
   final DateTime updatedAt;
   final DateTime createdAt;
 

@@ -12,7 +12,12 @@ import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
 class JobsContent extends StatelessWidget {
-  const JobsContent({super.key});
+  const JobsContent({
+    required this.controller,
+    super.key,
+  });
+
+  final ScrollController controller;
 
   @override
   Widget build(final BuildContext context) {
@@ -119,9 +124,10 @@ class JobsContent extends StatelessWidget {
           ];
         }
         return ListView(
+          controller: controller,
           padding: paddingH15V0,
           children: [
-            const SizedBox(height: 15),
+            const SizedBox(height: 16),
             Center(
               child: Text(
                 'jobs.title'.tr(),

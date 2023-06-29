@@ -170,12 +170,13 @@ class ServerInstallationRepository {
   Future<String?> getDomainId(final String token, final String domain) async {
     final result =
         await ProvidersController.currentDnsProvider!.tryInitApiByToken(token);
-    return result.success
-        ? (await ProvidersController.currentDnsProvider!.getZoneId(
-            domain,
-          ))
-            .data
-        : null;
+    if (!result.success) {
+      return null;
+    }
+    await setDnsApiToken(token);
+    return (await ProvidersController.currentDnsProvider!.getZoneId(
+      domain,
+    )).data;
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(

@@ -282,7 +282,7 @@
         "required": "Potrzebien",
         "root_name": "Nie może być 'root'",
         "invalid_format_ssh": "Potrzebien format klucza SSH",
-        "invalid_format_password": "Nie musi mieć puste symbole"
+        "invalid_format_password": "Hasło nie może zawierać spacji"
     },
     "not_ready_card": {
         "in_menu": "Serwer jeszcze nie jest skonfigurowany, użyj kreatora połączeń."
@@ -321,7 +321,7 @@
         "choose_server_type_payment_per_month": "{} miesięcznie",
         "no_server_types_found": "Nie znaleziono dostępnych typów serwerów! Proszę upewnić się, że masz dostęp do dostawcy serwera...",
         "use_this_domain": "Kto używa ten domen?",
-        "cloudflare_api_token": "Klucz CloudFlare API",
+        "cloudflare_api_token": "Klucz API dostawcy DNS",
         "connect_backblaze_storage": "Dodajcie Blackblaze",
         "no_connected_domains": "Niema podłączonych domenów",
         "what": "Co to znaczy?",
@@ -356,7 +356,14 @@
             "dns_setup": "Instalacja DNS",
             "server_reboot": "Restart serwera",
             "final_checks": "Kontrole końcowe"
-        }
+        },
+        "dns_provider_bad_key_error": "Klucz API jest nieprawidłowy",
+        "connect_to_dns_provider_text": "Za pomocą interfejsu API tokena aplikacja SelfPrivacy skonfiguruje rekordy DNS",
+        "server_provider_description": "Lokalizacja, w której będą znajdować się Twoje dane i usługi SelfPrivacy:",
+        "dns_provider_description": "Spowoduje to połączenie Twojej domeny z adresem IP:",
+        "select_provider_price_free": "Za darmo",
+        "select_provider_payment_text_cloudflare": "Karty bankowe",
+        "connect_to_dns": "Połącz dostawcę DNS"
     },
     "jobs": {
         "delete_ssh_key": "Wydalić SSH-klucz dla {}",
@@ -396,7 +403,8 @@
         "try_again": "Mam spróbować jeszcze raz?",
         "purge_all_keys_confirm": "Tak, wymazać wszystkie klucze",
         "delete_server_volume": "Usunąć serwer i pamięć masową?",
-        "you_cant_use_this_api": "Nie możesz użyć tego API dla domeny z podobnym TLD."
+        "you_cant_use_this_api": "Nie możesz użyć tego API dla domeny z podobnym TLD.",
+        "volume_creation_error": "Nie udało się utworzyć woluminu."
     },
     "recovery_key": {
         "key_main_header": "Klucz odzyskania",
@@ -425,7 +433,7 @@
     "recovering": {
         "confirm_server_decline": "Wybierz inny serwer",
         "domain_not_available_on_token": "Wprowadzony token nie ma dostępu do żądanej domeny.",
-        "confirm_cloudflare_description": "Podaj token Cloudflare, który ma prawa do {}:",
+        "confirm_cloudflare_description": "Wprowadź token DNS dostawcy, który ma uprawnienia do {}:",
         "method_recovery_input_description": "Wprowadź swój token odzyskiwania",
         "fallback_select_provider_console": "Dostęp do konsoli serwera mojego dostawcy.",
         "confirm_server_description": "Znalazłem twój serwer! Potwierdź, że jest to właściwe:",
@@ -453,7 +461,7 @@
         "modal_confirmation_dns_invalid": "Odwrócony DNS wskazuje na inną domenę",
         "modal_confirmation_ip_valid": "IP jest takie samo jak w rekordzie DNS",
         "modal_confirmation_ip_invalid": "IP nie jest zgodne z tym w rekordzie DNS",
-        "confirm_cloudflare": "Łączenie się z Cloudflare",
+        "confirm_cloudflare": "Łączenie z dostawcą DNS",
         "confirm_backblaze": "Podłączanie do Backblaze",
         "confirm_backblaze_description": "Wpisz token Backblaze, który ma prawa do magazynu kopii zapasowych:",
         "fallback_select_description": "Które z nich posiadasz? Wybierz pierwszą, która pasuje:",
@@ -498,10 +506,11 @@
         "title": "Ustawienia dewelopera",
         "server_setup": "Kreator instalacji serwera",
         "use_staging_acme": "Korzystanie z serwera testów ACME",
-        "use_staging_acme_description": "Ponownie skompiluj aplikację, aby zmienić tę wartość.",
+        "use_staging_acme_description": "Używane podczas konfigurowania nowego serwera.",
         "routing": "Trasowanie aplikacji",
         "reset_onboarding": "Wyzerowanie flagi powitalnej dla wizyty",
         "reset_onboarding_description": "Resetowanie przełącznika zasilania w celu ponownego wyświetlenia ekranu włączania zasilania",
-        "cubit_statuses": "Aktualny stan qubitów ładujących"
+        "cubit_statuses": "Aktualny stan qubitów ładujących",
+        "ignore_tls": "Używane podczas konfigurowania nowego serwera."
     }
 }

@@ -134,7 +134,7 @@
         "connect_to_server": "Začněme serverem.",
         "select_provider": "Vyberte si libovolného poskytovatele z následujícího seznamu, všichni podporují službu SelfPrivacy",
         "select_provider_notice": "Pod pojmem \"relativně malý\" rozumíme počítač se dvěma jádry procesoru a dvěma gigabajty paměti RAM.",
-        "select_provider_countries_text_do": "USA, Nizozemsko, Singapur, Velká Británie, Německo, Kanada, Indie, Austrálie.",
+        "select_provider_countries_text_do": "USA, Nizozemsko, Singapur, Velká Británie, Německo, Kanada, Indie, Austrálie",
         "select_provider_email_notice": "E-mailový hosting nebude pro nové klienty k dispozici. Nicméně bude odemčen, jakmile dokončíte první platbu.",
         "choose_location_type_text": "Různá místa poskytují různé konfigurace serverů, ceny a rychlosti připojení.",
         "choose_server_type_text": "Různé možnosti prostředků podporují různé služby. Nebojte se, svůj server můžete kdykoli rozšířit",
@@ -144,7 +144,7 @@
         "found_more_domains": "Nalezeno více než jedna doména. V zájmu vlastní bezpečnosti vás prosíme o odstranění nepotřebných domén",
         "server_created": "Vytvořený server. Probíhá kontrola DNS a spouštění serveru…",
         "choose_server_type_notice": "Důležité je zaměřit se na procesor a paměť RAM. Data vašich služeb budou uložena na připojeném svazku, který lze snadno rozšířit a za který se platí zvlášť.",
-        "cloudflare_api_token": "Token API CloudFlare",
+        "cloudflare_api_token": "Klíč API poskytovatele DNS",
         "connect_backblaze_storage": "Připojení úložiště Backblaze",
         "save_domain": "Uložit doménu",
         "final": "Závěrečný krok",
@@ -198,7 +198,14 @@
             "nixos_installation": "Instalace systému NixOS",
             "server_reboot": "Restartování serveru",
             "final_checks": "Závěrečné kontroly"
-        }
+        },
+        "server_provider_description": "Místo, kde budou umístěna vaše data a služby SelfPrivacy:",
+        "dns_provider_description": "Toto propojí vaši doménu s IP adresou:",
+        "dns_provider_bad_key_error": "Klíč API je neplatný",
+        "connect_to_dns": "Připojte poskytovatele DNS",
+        "select_provider_price_free": "Zdarma",
+        "select_provider_payment_text_cloudflare": "Bankovní karty",
+        "connect_to_dns_provider_text": "Pomocí rozhraní token API nakonfiguruje aplikace SelfPrivacy záznamy DNS"
     },
     "about_us_page": {
         "title": "O nás"
@@ -327,7 +334,7 @@
         "subtitle": "Základna vašeho zabezpečení. Bitwarden vám pomůže vytvářet, ukládat a přesouvat hesla mezi zařízeními a také je zadávat na vyžádání pomocí automatického doplňování."
     },
     "video": {
-        "title": "Videomeet",
+        "title": "Video konference",
         "subtitle": "Zoom a Google Meet jsou dobré, ale Jitsi Meet je hodnotná alternativa, která vám navíc dává jistotu, že vás nikdo neposlouchá.",
         "login_info": "Není potřeba žádný účet."
     },
@@ -376,8 +383,8 @@
         "modal_confirmation_dns_valid": "Reverzní DNS je platný",
         "modal_confirmation_dns_invalid": "Reverzní DNS ukazuje na jinou doménu",
         "modal_confirmation_ip_invalid": "IP není stejná jako v záznamu DNS",
-        "confirm_cloudflare": "Připojení ke službě CloudFlare",
-        "confirm_cloudflare_description": "Zadejte token Cloudflare s přístupem k {}:",
+        "confirm_cloudflare": "Připojení k poskytovateli DNS",
+        "confirm_cloudflare_description": "Zadejte token DNS poskytovatele, který má práva k {}:",
         "confirm_backblaze": "Připojení k službě Backblaze",
         "generic_error": "Operace se nezdařila, zkuste to prosím znovu.",
         "domain_recovery_description": "Zadejte doménu serveru, ke které chcete získat přístup:",
@@ -468,10 +475,10 @@
         "invalid_format": "Nesprávný formát",
         "root_name": "Nemůže být 'root'",
         "required": "Povinné pole",
-        "invalid_format_password": "Nesmí obsahovat prázdné znaky",
+        "invalid_format_password": "Heslo nesmí obsahovat mezery",
         "invalid_format_ssh": "Musí dodržovat formát klíče SSH",
         "length_not_equal": "Délka je [], mělo by být {}",
-        "length_longer": "Délka je [], měla by být kratší nebo rovna {}."
+        "length_longer": "Délka řetězce [] musí být menší nebo rovna {}"
     },
     "modals": {
         "dns_removal_error": "Nepodařilo se odstranit záznamy DNS.",
@@ -488,7 +495,8 @@
         "reboot": "Restartovat",
         "you_cant_use_this_api": "Toto rozhraní API nelze použít pro doménu s podobnou TLD.",
         "yes": "Ano",
-        "no": "Ne"
+        "no": "Ne",
+        "volume_creation_error": "Svazek se nepodařilo vytvořit."
     },
     "support": {
         "title": "Podpora SelfPrivacy"
@@ -498,10 +506,12 @@
         "subtitle": "Tato nastavení slouží pouze k ladění. Neměňte je, pokud nevíte, co děláte.",
         "server_setup": "Nastavení serveru",
         "use_staging_acme": "Použití testovacího serveru ACME",
-        "use_staging_acme_description": "Chcete-li tuto hodnotu změnit, znovu sestavte aplikaci.",
+        "use_staging_acme_description": "Používá se při nastavování nového serveru.",
         "routing": "Směrování aplikací",
         "reset_onboarding": "Obnovení uvítací vlajky pro návštěvu",
         "reset_onboarding_description": "Resetování vypínače pro opětovné zobrazení obrazovky pro zapnutí napájení",
-        "cubit_statuses": "Stavy nakládky zařízení Cubit"
+        "cubit_statuses": "Stavy nakládky zařízení Cubit",
+        "ignore_tls": "Nekontrolujte certifikáty TLS",
+        "ignore_tls_description": "Aplikace nebude při připojování k serveru ověřovat certifikáty TLS."
     }
 }

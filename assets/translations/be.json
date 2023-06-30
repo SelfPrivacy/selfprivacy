@@ -32,7 +32,7 @@
         "manage_domain_dns": "Для кіравання DNS вашага дамена",
         "use_this_domain": "Ужываем гэты дамен?",
         "use_this_domain_text": "Указаны вамі токен дае кантроль над гэтым даменам",
-        "cloudflare_api_token": "CloudFlare API ключ",
+        "cloudflare_api_token": "API ключ DNS правайдэра",
         "connect_backblaze_storage": "Падлучыце хмарнае сховішча Backblaze",
         "no_connected_domains": "У дадзены момант падлучаных даменаў няма",
         "loading_domain_list": "Загружаем спіс даменаў",
@@ -68,7 +68,14 @@
             "dns_setup": "Устаноўка DNS",
             "server_reboot": "Перазагрузка сервера",
             "final_checks": "Фінальныя праверкі"
-        }
+        },
+        "server_provider_description": "Месца, дзе будуць знаходзіцца вашыя дадзеныя і службы SelfPrivacy:",
+        "dns_provider_description": "Гэта дазволіць звязаць ваш дамен з IP адрасам:",
+        "connect_to_dns": "Падлучыце DNS правайдэра",
+        "select_provider_payment_text_cloudflare": "Банкаўскія карты",
+        "dns_provider_bad_key_error": "API ключ няслушны",
+        "select_provider_price_free": "Бясплатна",
+        "connect_to_dns_provider_text": "З дапамогай API токена прыкладанне SelfPrivacy наладзіць DNS запісы"
     },
     "recovering": {
         "generic_error": "Памылка правядзення аперацыі, паспрабуйце яшчэ раз.",
@@ -110,8 +117,8 @@
         "no_servers": "На вашым акаўнце няма даступных сэрвэраў.",
         "modal_confirmation_description": "Падлучэнне да няправільнага сервера можа прывесці да дэструктыўных наступстваў.",
         "modal_confirmation_ip_valid": "IP супадае з паказаным у DNS запісу",
-        "confirm_cloudflare": "Падключэнне да Cloudflare",
-        "confirm_cloudflare_description": "Увядзіце токен Cloudflare, які мае правы на {}:"
+        "confirm_cloudflare": "Падключэнне да DNS Правайдэра",
+        "confirm_cloudflare_description": "Увядзіце токен DNS Правайдэра, які мае правы на {}:"
     },
     "devices": {
         "main_screen": {
@@ -211,7 +218,8 @@
         "dns_removal_error": "Немагчыма выдаліць запісы DNS.",
         "server_deletion_error": "Немагчыма выдаліць сервер.",
         "unexpected_error": "Непрадбачаная памылка з боку правайдэра.",
-        "delete_server_volume": "Выдаліць сервер і сховішча?"
+        "delete_server_volume": "Выдаліць сервер і сховішча?",
+        "volume_creation_error": "Не ўдалося стварыць том."
     },
     "timer": {
         "sec": "{} сек"
@@ -339,7 +347,7 @@
     "validations": {
         "required": "Абавязковае поле",
         "already_exist": "Ужо існуе",
-        "invalid_format_password": "Не павінен змяшчаць пустыя сімвалы",
+        "invalid_format_password": "Пароль не павінен змяшчаць прабелы",
         "root_name": "Імя карыстальніка не можа быць 'root'",
         "length_not_equal": "Даўжыня радка [], павінна быць роўна {}",
         "length_longer": "Даўжыня радка [], павінна быць менш або роўна {}",
@@ -496,10 +504,12 @@
         "subtitle": "Гэтыя налады прызначаны толькі для адладкі. Не мяняйце іх, калі не ведаеце, што робіце.",
         "server_setup": "Майстар усталёўкі сервера",
         "use_staging_acme": "Выкарыстанне тэставага ACME сервера",
-        "use_staging_acme_description": "Перазбярыце дадатак, каб змяніць гэта значэнне.",
+        "use_staging_acme_description": "Ужываецца пры наладзе новага сервера.",
         "routing": "Маршрутызацыя прыкладанняў",
         "reset_onboarding": "Скінуць сцяг наведвання прывітання",
-        "cubit_statuses": "Бягучы статут кубітаў загрузкі"
+        "cubit_statuses": "Бягучы статут кубітаў загрузкі",
+        "ignore_tls": "Не правяраць сертыфікаты TLS",
+        "ignore_tls_description": "Прыкладанне не будзе правяраць сертыфікаты TLS пры падключэнні да сервера."
     },
     "support": {
         "title": "Падтрымка SelfPrivacy"

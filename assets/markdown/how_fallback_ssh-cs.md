@@ -10,9 +10,9 @@ Tento soubor bude mít podobnou konstrukci:
 {
     "tokens": [
         {
-            "token": "token_to_copy",
-            "name": "device_name",
-            "date": "date"
+            "token": "token_ke_zkopírování",
+            "name": "název_zařízení",
+            "date": "datum"
         }
 ```
 

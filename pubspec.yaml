@@ -15,6 +15,7 @@ dependencies:
   cubit_form: ^2.0.1
   device_info_plus: ^9.0.2
   dio: ^5.1.2
+  duration: 3.0.12
   dynamic_color: ^1.6.5
   easy_localization: ^3.0.2
   either_option: ^2.0.1-dev.1

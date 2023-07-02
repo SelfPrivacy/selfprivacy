@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'disk_volumes.graphql.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:selfprivacy/utils/scalars.dart';

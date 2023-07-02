@@ -35,7 +35,13 @@ part 'volume_api.dart';
 part 'backups_api.dart';
 
 class ServerApi extends GraphQLApiMap
-    with VolumeApi, JobsApi, ServerActionsApi, ServicesApi, UsersApi, BackupsApi {
+    with
+        VolumeApi,
+        JobsApi,
+        ServerActionsApi,
+        ServicesApi,
+        UsersApi,
+        BackupsApi {
   ServerApi({
     this.hasLogger = false,
     this.isWithToken = true,

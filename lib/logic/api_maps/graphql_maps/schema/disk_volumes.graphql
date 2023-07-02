@@ -1,9 +1,3 @@
-fragment basicMutationReturnFields on MutationReturnInterface{
-  code
-  message
-  success
-}
-
 query GetServerDiskVolumes {
   storage {
     volumes {

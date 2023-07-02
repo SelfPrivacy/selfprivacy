@@ -141,6 +141,19 @@ class _ServicePageState extends State<ServicePage> {
             ),
             enabled: !serviceDisabled && !serviceLocked,
           ),
+        if (service.canBeBackedUp)
+          ListTile(
+            iconColor: Theme.of(context).colorScheme.onBackground,
+            // Open page ServicesMigrationPage
+            onTap: () => context.pushRoute(
+              BackupsListRoute(service: service),
+            ),
+            leading: const Icon(Icons.settings_backup_restore_outlined),
+            title: Text(
+              'service_page.snapshots'.tr(),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
       ],
     );
   }

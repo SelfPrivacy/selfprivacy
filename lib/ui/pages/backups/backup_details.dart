@@ -11,10 +11,14 @@ import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
-import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
+import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
+import 'package:selfprivacy/ui/pages/backups/change_period_modal.dart';
+import 'package:selfprivacy/ui/pages/backups/create_backups_modal.dart';
+import 'package:selfprivacy/ui/router/router.dart';
+import 'package:selfprivacy/utils/extensions/duration.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -43,13 +47,30 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
     final bool refreshing = context.watch<BackupsCubit>().state.refreshing;
     final List<Service> services =
         context.watch<ServicesCubit>().state.servicesThatCanBeBackedUp;
+    final Duration? autobackupPeriod =
+        context.watch<BackupsCubit>().state.autobackupPeriod;
+    final List<ServerJob> backupJobs = context
+        .watch<ServerJobsCubit>()
+        .state
+        .backupJobList
+        .where((final job) => job.status != JobStatusEnum.finished)
+        .toList();
 
-    return BrandHeroScreen(
-      heroIcon: BrandIcons.save,
-      heroTitle: 'backup.card_title'.tr(),
-      heroSubtitle: 'backup.description'.tr(),
-      children: [
-        if (isReady && !isBackupInitialized)
+    if (!isReady) {
+      return BrandHeroScreen(
+        heroIcon: BrandIcons.save,
+        heroTitle: 'backup.card_title'.tr(),
+        heroSubtitle: 'not_ready_card.in_menu'.tr(),
+        children: const [],
+      );
+    }
+
+    if (!isBackupInitialized) {
+      return BrandHeroScreen(
+        heroIcon: BrandIcons.save,
+        heroTitle: 'backup.card_title'.tr(),
+        heroSubtitle: 'backup.description'.tr(),
+        children: [
           BrandButton.rised(
             onPressed: preventActions
                 ? null
@@ -58,11 +79,19 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
                   },
             text: 'backup.initialize'.tr(),
           ),
+        ],
+      );
+    }
+
+    return BrandHeroScreen(
+      heroIcon: BrandIcons.save,
+      heroTitle: 'backup.card_title'.tr(),
+      heroSubtitle: 'backup.description'.tr(),
+      children: [
         ListTile(
           onTap: preventActions
               ? null
               : () {
-                  // await context.read<BackupsCubit>().createBackup();
                   showModalBottomSheet(
                     useRootNavigator: true,
                     context: context,
@@ -88,7 +117,66 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
             'backup.create_new'.tr(),
           ),
         ),
+        ListTile(
+          onTap: preventActions
+              ? null
+              : () {
+                  // await context.read<BackupsCubit>().createBackup();
+                  showModalBottomSheet(
+                    useRootNavigator: true,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (final BuildContext context) =>
+                        DraggableScrollableSheet(
+                      expand: false,
+                      maxChildSize: 0.9,
+                      minChildSize: 0.4,
+                      initialChildSize: 0.6,
+                      builder: (final context, final scrollController) =>
+                          ChangeAutobackupsPeriodModal(
+                        scrollController: scrollController,
+                      ),
+                    ),
+                  );
+                },
+          leading: const Icon(
+            Icons.manage_history_outlined,
+          ),
+          title: Text(
+            'backup.autobackup_period_title'.tr(),
+          ),
+          subtitle: Text(
+            autobackupPeriod != null
+                ? 'backup.autobackup_period_subtitle'.tr(
+                    namedArgs: {
+                      'period': autobackupPeriod.toPrettyString(context.locale)
+                    },
+                  )
+                : 'backup.autobackup_period_never'.tr(),
+          ),
+        ),
         const SizedBox(height: 16),
+        if (backupJobs.isNotEmpty)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                title: Text(
+                  'backup.pending_jobs'.tr(),
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                ),
+              ),
+              for (final job in backupJobs)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ServerJobCard(
+                    serverJob: job,
+                  ),
+                ),
+            ],
+          ),
         // Card with a list of existing backups
         // Each list item has a date
         // When clicked, starts the restore action
@@ -98,13 +186,13 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
             children: [
               ListTile(
                 title: Text(
-                  'backups.latest_snapshots'.tr(),
+                  'backup.latest_snapshots'.tr(),
                   style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                 ),
                 subtitle: Text(
-                  'backups.latest_snapshots_subtitle'.tr(),
+                  'backup.latest_snapshots_subtitle'.tr(),
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),
@@ -117,7 +205,7 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
                 ),
               if (backups.isNotEmpty)
                 Column(
-                  children: backups.take(20).map(
+                  children: backups.take(15).map(
                     (final Backup backup) {
                       final service = context
                           .read<ServicesCubit>()
@@ -163,221 +251,71 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
                     },
                   ).toList(),
                 ),
-              if (backups.isNotEmpty && backups.length > 20)
+              if (backups.isNotEmpty && backups.length > 15)
                 ListTile(
                   title: Text(
-                    'backups.show_more'.tr(),
+                    'backup.show_more'.tr(),
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                   leading: const Icon(
                     Icons.arrow_drop_down,
                   ),
-                  onTap: null,
+                  onTap: () =>
+                      context.pushRoute(BackupsListRoute(service: null)),
                 )
             ],
           ),
-        const SizedBox(height: 16),
-        OutlinedCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        const SizedBox(height: 8),
+        const Divider(),
+        const SizedBox(height: 8),
+        ListTile(
+          title: Text(
+            'backup.refresh'.tr(),
+          ),
+          onTap: refreshing
+              ? null
+              : () => {context.read<BackupsCubit>().updateBackups()},
+          enabled: !refreshing,
+          leading: const Icon(
+            Icons.refresh_outlined,
+          ),
+        ),
+        if (providerState != StateType.uninitialized)
+          Column(
             children: [
               ListTile(
                 title: Text(
-                  'backup.refresh'.tr(),
+                  'backup.refetch_backups'.tr(),
                 ),
-                onTap: refreshing
+                subtitle: Text(
+                  'backup.refetch_backups_subtitle'.tr(),
+                ),
+                leading: const Icon(
+                  Icons.cached_outlined,
+                ),
+                onTap: preventActions
                     ? null
-                    : () => {context.read<BackupsCubit>().updateBackups()},
-                enabled: !refreshing,
+                    : () => {context.read<BackupsCubit>().forceUpdateBackups()},
               ),
-              if (providerState != StateType.uninitialized)
-                Column(
-                  children: [
-                    const Divider(
-                      height: 1.0,
-                    ),
-                    ListTile(
-                      title: Text(
-                        'backup.refetch_backups'.tr(),
-                      ),
-                      onTap: preventActions
-                          ? null
-                          : () => {
-                                context
-                                    .read<BackupsCubit>()
-                                    .forceUpdateBackups()
-                              },
-                    ),
-                    const Divider(
-                      height: 1.0,
-                    ),
-                    ListTile(
-                      title: Text(
-                        'backup.reupload_key'.tr(),
-                      ),
-                      onTap: preventActions
-                          ? null
-                          : () => {context.read<BackupsCubit>().reuploadKey()},
-                    ),
-                  ],
+              const SizedBox(height: 8),
+              const Divider(),
+              const SizedBox(height: 8),
+              ListTile(
+                title: Text(
+                  'backup.reupload_key'.tr(),
                 ),
+                subtitle: Text(
+                  'backup.reupload_key_subtitle'.tr(),
+                ),
+                leading: const Icon(
+                  Icons.warning_amber_outlined,
+                ),
+                onTap: preventActions
+                    ? null
+                    : () => {context.read<BackupsCubit>().reuploadKey()},
+              ),
             ],
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class CreateBackupsModal extends StatefulWidget {
-  const CreateBackupsModal({
-    required this.services,
-    required this.scrollController,
-    super.key,
-  });
-
-  final List<Service> services;
-  final ScrollController scrollController;
-
-  @override
-  State<CreateBackupsModal> createState() => _CreateBackupsModalState();
-}
-
-class _CreateBackupsModalState extends State<CreateBackupsModal> {
-  // Store in state the selected services to backup
-  List<Service> selectedServices = [];
-
-  // Select all services on modal open
-  @override
-  void initState() {
-    super.initState();
-    final List<String> busyServices = context
-        .read<ServerJobsCubit>()
-        .state
-        .backupJobList
-        .where(
-          (final ServerJob job) =>
-              job.status == JobStatusEnum.running ||
-              job.status == JobStatusEnum.created,
-        )
-        .map((final ServerJob job) => job.typeId.split('.')[1])
-        .toList();
-    selectedServices.addAll(
-      widget.services
-          .where((final Service service) => !busyServices.contains(service.id)),
-    );
-  }
-
-  @override
-  Widget build(final BuildContext context) {
-    final List<String> busyServices = context
-        .watch<ServerJobsCubit>()
-        .state
-        .backupJobList
-        .where(
-          (final ServerJob job) =>
-              job.status == JobStatusEnum.running ||
-              job.status == JobStatusEnum.created,
-        )
-        .map((final ServerJob job) => job.typeId.split('.')[1])
-        .toList();
-
-    return ListView(
-      controller: widget.scrollController,
-      padding: const EdgeInsets.all(16),
-      children: [
-        const SizedBox(height: 16),
-        Text(
-          'backup.create_new_select_heading'.tr(),
-          style: Theme.of(context).textTheme.headlineSmall,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 16),
-        // Select all services tile
-        CheckboxListTile(
-          onChanged: (final bool? value) {
-            setState(() {
-              if (value ?? true) {
-                setState(() {
-                  selectedServices.clear();
-                  selectedServices.addAll(
-                    widget.services.where(
-                      (final service) => !busyServices.contains(service.id),
-                    ),
-                  );
-                });
-              } else {
-                selectedServices.clear();
-              }
-            });
-          },
-          title: Text(
-            'backup.select_all'.tr(),
-          ),
-          secondary: const Icon(
-            Icons.checklist_outlined,
-          ),
-          value: selectedServices.length >=
-              widget.services.length - busyServices.length,
-        ),
-        const Divider(
-          height: 1.0,
-        ),
-        ...widget.services.map(
-          (final Service service) {
-            final bool busy = busyServices.contains(service.id);
-            return CheckboxListTile(
-              onChanged: !busy
-                  ? (final bool? value) {
-                      setState(() {
-                        if (value ?? true) {
-                          setState(() {
-                            selectedServices.add(service);
-                          });
-                        } else {
-                          setState(() {
-                            selectedServices.remove(service);
-                          });
-                        }
-                      });
-                    }
-                  : null,
-              title: Text(
-                service.displayName,
-              ),
-              subtitle: Text(
-                busy ? 'backup.service_busy'.tr() : service.backupDescription,
-              ),
-              secondary: SvgPicture.string(
-                service.svgIcon,
-                height: 24,
-                width: 24,
-                colorFilter: ColorFilter.mode(
-                  busy
-                      ? Theme.of(context).colorScheme.outlineVariant
-                      : Theme.of(context).colorScheme.onBackground,
-                  BlendMode.srcIn,
-                ),
-              ),
-              value: selectedServices.contains(service),
-            );
-          },
-        ),
-        const SizedBox(height: 16),
-        // Create backup button
-        FilledButton(
-          onPressed: selectedServices.isEmpty
-              ? null
-              : () {
-                  context
-                      .read<BackupsCubit>()
-                      .createMultipleBackups(selectedServices);
-                  Navigator.of(context).pop();
-                },
-          child: Text(
-            'backup.start'.tr(),
-          ),
-        ),
       ],
     );
   }

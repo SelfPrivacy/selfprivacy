@@ -18,6 +18,7 @@ class Service {
           isRequired: service.isRequired,
           isMovable: service.isMovable,
           canBeBackedUp: service.canBeBackedUp,
+          backupDescription: service.backupDescription,
           status: ServiceStatus.fromGraphQL(service.status),
           storageUsage: ServiceStorageUsage(
             used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
@@ -44,6 +45,7 @@ class Service {
     required this.isRequired,
     required this.isMovable,
     required this.canBeBackedUp,
+    required this.backupDescription,
     required this.status,
     required this.storageUsage,
     required this.svgIcon,
@@ -78,6 +80,7 @@ class Service {
     isRequired: false,
     isMovable: false,
     canBeBackedUp: false,
+    backupDescription: '',
     status: ServiceStatus.off,
     storageUsage: ServiceStorageUsage(
       used: const DiskSize(byte: 0),
@@ -95,6 +98,7 @@ class Service {
   final bool isRequired;
   final bool isMovable;
   final bool canBeBackedUp;
+  final String backupDescription;
   final ServiceStatus status;
   final ServiceStorageUsage storageUsage;
   final String svgIcon;

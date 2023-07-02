@@ -255,6 +255,7 @@ type Service {
   isRequired: Boolean!
   isEnabled: Boolean!
   canBeBackedUp: Boolean!
+  backupDescription: String!
   status: ServiceStatusEnum!
   url: String
   dnsRecords: [DnsRecord!]

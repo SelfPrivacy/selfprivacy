@@ -93,59 +93,88 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
         // Each list item has a date
         // When clicked, starts the restore action
         if (isBackupInitialized)
-          OutlinedCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                title: Text(
+                  'backups.latest_snapshots'.tr(),
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                ),
+                subtitle: Text(
+                  'backups.latest_snapshots_subtitle'.tr(),
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              ),
+              if (backups.isEmpty)
                 ListTile(
                   leading: const Icon(
-                    Icons.refresh,
+                    Icons.error_outline,
                   ),
-                  title: Text(
-                    'backup.restore'.tr(),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                  title: Text('backup.no_backups'.tr()),
                 ),
-                const Divider(
-                  height: 1.0,
-                ),
-                if (backups.isEmpty)
-                  ListTile(
-                    leading: const Icon(
-                      Icons.error_outline,
-                    ),
-                    title: Text('backup.no_backups'.tr()),
-                  ),
-                if (backups.isNotEmpty)
-                  Column(
-                    children: backups
-                        .map(
-                          (final Backup backup) => ListTile(
-                            onTap: preventActions
-                                ? null
-                                : () {
-                                    showPopUpAlert(
-                                      alertTitle: 'backup.restoring'.tr(),
-                                      description: 'backup.restore_alert'.tr(
-                                        args: [backup.time.toString()],
-                                      ),
-                                      actionButtonTitle: 'modals.yes'.tr(),
-                                      actionButtonOnPressed: () => {
-                                        context
-                                            .read<BackupsCubit>()
-                                            .restoreBackup(backup.id)
-                                      },
-                                    );
+              if (backups.isNotEmpty)
+                Column(
+                  children: backups.take(20).map(
+                    (final Backup backup) {
+                      final service = context
+                          .read<ServicesCubit>()
+                          .state
+                          .getServiceById(backup.serviceId);
+                      return ListTile(
+                        onTap: preventActions
+                            ? null
+                            : () {
+                                showPopUpAlert(
+                                  alertTitle: 'backup.restoring'.tr(),
+                                  description: 'backup.restore_alert'.tr(
+                                    args: [backup.time.toString()],
+                                  ),
+                                  actionButtonTitle: 'modals.yes'.tr(),
+                                  actionButtonOnPressed: () => {
+                                    context
+                                        .read<BackupsCubit>()
+                                        .restoreBackup(backup.id)
                                   },
-                            title: Text(
-                              '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
-                            ),
-                          ),
-                        )
-                        .toList(),
+                                );
+                              },
+                        title: Text(
+                          '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
+                        ),
+                        subtitle: Text(
+                          service?.displayName ?? backup.fallbackServiceName,
+                        ),
+                        leading: service != null
+                            ? SvgPicture.string(
+                                service.svgIcon,
+                                height: 24,
+                                width: 24,
+                                colorFilter: ColorFilter.mode(
+                                  Theme.of(context).colorScheme.onBackground,
+                                  BlendMode.srcIn,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.question_mark_outlined,
+                              ),
+                      );
+                    },
+                  ).toList(),
+                ),
+              if (backups.isNotEmpty && backups.length > 20)
+                ListTile(
+                  title: Text(
+                    'backups.show_more'.tr(),
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
-              ],
-            ),
+                  leading: const Icon(
+                    Icons.arrow_drop_down,
+                  ),
+                  onTap: null,
+                )
+            ],
           ),
         const SizedBox(height: 16),
         OutlinedCard(
@@ -317,7 +346,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
                 service.displayName,
               ),
               subtitle: Text(
-                busy ? 'backup.service_busy'.tr() : service.description,
+                busy ? 'backup.service_busy'.tr() : service.backupDescription,
               ),
               secondary: SvgPicture.string(
                 service.svgIcon,

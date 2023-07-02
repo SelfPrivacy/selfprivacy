@@ -25,7 +25,7 @@ class BackupsState extends ServerInstallationDependendState {
         backups,
         preventActions,
         refreshTimer,
-        refreshing
+        refreshing,
       ];
 
   BackupsState copyWith({

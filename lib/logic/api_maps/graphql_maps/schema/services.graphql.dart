@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'disk_volumes.graphql.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'schema.graphql.dart';
@@ -2503,6 +2504,13 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
                 selectionSet: null,
               ),
               FieldNode(
+                name: NameNode(value: 'backupDescription'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
                 name: NameNode(value: 'status'),
                 alias: null,
                 arguments: [],
@@ -2884,6 +2892,7 @@ class Query$AllServices$services$allServices {
     required this.isMovable,
     required this.isRequired,
     required this.canBeBackedUp,
+    required this.backupDescription,
     required this.status,
     required this.storageUsage,
     required this.svgIcon,
@@ -2901,6 +2910,7 @@ class Query$AllServices$services$allServices {
     final l$isMovable = json['isMovable'];
     final l$isRequired = json['isRequired'];
     final l$canBeBackedUp = json['canBeBackedUp'];
+    final l$backupDescription = json['backupDescription'];
     final l$status = json['status'];
     final l$storageUsage = json['storageUsage'];
     final l$svgIcon = json['svgIcon'];
@@ -2918,6 +2928,7 @@ class Query$AllServices$services$allServices {
       isMovable: (l$isMovable as bool),
       isRequired: (l$isRequired as bool),
       canBeBackedUp: (l$canBeBackedUp as bool),
+      backupDescription: (l$backupDescription as String),
       status: fromJson$Enum$ServiceStatusEnum((l$status as String)),
       storageUsage:
           Query$AllServices$services$allServices$storageUsage.fromJson(
@@ -2943,6 +2954,8 @@ class Query$AllServices$services$allServices {
   final bool isRequired;
 
   final bool canBeBackedUp;
+
+  final String backupDescription;
 
   final Enum$ServiceStatusEnum status;
 
@@ -2972,6 +2985,8 @@ class Query$AllServices$services$allServices {
     _resultData['isRequired'] = l$isRequired;
     final l$canBeBackedUp = canBeBackedUp;
     _resultData['canBeBackedUp'] = l$canBeBackedUp;
+    final l$backupDescription = backupDescription;
+    _resultData['backupDescription'] = l$backupDescription;
     final l$status = status;
     _resultData['status'] = toJson$Enum$ServiceStatusEnum(l$status);
     final l$storageUsage = storageUsage;
@@ -2995,6 +3010,7 @@ class Query$AllServices$services$allServices {
     final l$isMovable = isMovable;
     final l$isRequired = isRequired;
     final l$canBeBackedUp = canBeBackedUp;
+    final l$backupDescription = backupDescription;
     final l$status = status;
     final l$storageUsage = storageUsage;
     final l$svgIcon = svgIcon;
@@ -3009,6 +3025,7 @@ class Query$AllServices$services$allServices {
       l$isMovable,
       l$isRequired,
       l$canBeBackedUp,
+      l$backupDescription,
       l$status,
       l$storageUsage,
       l$svgIcon,
@@ -3077,6 +3094,11 @@ class Query$AllServices$services$allServices {
     if (l$canBeBackedUp != lOther$canBeBackedUp) {
       return false;
     }
+    final l$backupDescription = backupDescription;
+    final lOther$backupDescription = other.backupDescription;
+    if (l$backupDescription != lOther$backupDescription) {
+      return false;
+    }
     final l$status = status;
     final lOther$status = other.status;
     if (l$status != lOther$status) {
@@ -3134,6 +3156,7 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
     bool? isMovable,
     bool? isRequired,
     bool? canBeBackedUp,
+    String? backupDescription,
     Enum$ServiceStatusEnum? status,
     Query$AllServices$services$allServices$storageUsage? storageUsage,
     String? svgIcon,
@@ -3172,6 +3195,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
     Object? isMovable = _undefined,
     Object? isRequired = _undefined,
     Object? canBeBackedUp = _undefined,
+    Object? backupDescription = _undefined,
     Object? status = _undefined,
     Object? storageUsage = _undefined,
     Object? svgIcon = _undefined,
@@ -3201,6 +3225,10 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
         canBeBackedUp: canBeBackedUp == _undefined || canBeBackedUp == null
             ? _instance.canBeBackedUp
             : (canBeBackedUp as bool),
+        backupDescription:
+            backupDescription == _undefined || backupDescription == null
+                ? _instance.backupDescription
+                : (backupDescription as String),
         status: status == _undefined || status == null
             ? _instance.status
             : (status as Enum$ServiceStatusEnum),
@@ -3251,6 +3279,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
     bool? isMovable,
     bool? isRequired,
     bool? canBeBackedUp,
+    String? backupDescription,
     Enum$ServiceStatusEnum? status,
     Query$AllServices$services$allServices$storageUsage? storageUsage,
     String? svgIcon,

@@ -30,6 +30,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
       final BackupConfiguration? backupConfig =
           await api.getBackupsConfiguration();
       final List<Backup> backups = await api.getBackups();
+      backups.sort((final a, final b) => b.time.compareTo(a.time));
       emit(
         state.copyWith(
           backblazeBucket: bucket,
@@ -144,6 +145,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
   Future<void> updateBackups({final bool useTimer = false}) async {
     emit(state.copyWith(refreshing: true));
     final backups = await api.getBackups();
+    backups.sort((final a, final b) => b.time.compareTo(a.time));
     final backupConfig = await api.getBackupsConfiguration();
 
     emit(

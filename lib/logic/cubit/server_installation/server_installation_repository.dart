@@ -176,7 +176,8 @@ class ServerInstallationRepository {
     await setDnsApiToken(token);
     return (await ProvidersController.currentDnsProvider!.getZoneId(
       domain,
-    )).data;
+    ))
+        .data;
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(

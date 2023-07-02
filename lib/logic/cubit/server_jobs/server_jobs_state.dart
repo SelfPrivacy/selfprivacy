@@ -21,10 +21,12 @@ class ServerJobsState extends ServerInstallationDependendState {
     }
   }
 
-  List<ServerJob> get backupJobList => serverJobList.where(
+  List<ServerJob> get backupJobList => serverJobList
+      .where(
         // The backup jobs has the format of 'service.<service_id>.backup'
         (final job) => job.typeId.contains('backup'),
-      ).toList();
+      )
+      .toList();
 
   bool get hasRemovableJobs => serverJobList.any(
         (final job) =>

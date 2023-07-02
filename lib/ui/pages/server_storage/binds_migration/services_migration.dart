@@ -179,7 +179,8 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                   context: context,
                   useRootNavigator: true,
                   isScrollControlled: true,
-                  builder: (final BuildContext context) => DraggableScrollableSheet(
+                  builder: (final BuildContext context) =>
+                      DraggableScrollableSheet(
                     expand: false,
                     maxChildSize: 0.9,
                     minChildSize: 0.4,

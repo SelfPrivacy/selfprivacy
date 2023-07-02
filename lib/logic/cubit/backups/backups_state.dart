@@ -19,6 +19,10 @@ class BackupsState extends ServerInstallationDependendState {
   final Duration? autobackupPeriod;
   final BackblazeBucket? backblazeBucket;
 
+  List<Backup> serviceBackups(final String serviceId) => backups
+      .where((final backup) => backup.serviceId == serviceId)
+      .toList(growable: false);
+
   @override
   List<Object> get props => [
         isInitialized,
@@ -43,7 +47,11 @@ class BackupsState extends ServerInstallationDependendState {
         preventActions: preventActions ?? this.preventActions,
         refreshTimer: refreshTimer ?? this.refreshTimer,
         refreshing: refreshing ?? this.refreshing,
-        autobackupPeriod: autobackupPeriod ?? this.autobackupPeriod,
+        // The autobackupPeriod might be null, so if the duration is set to 0, we
+        // set it to null.
+        autobackupPeriod: autobackupPeriod?.inSeconds == 0
+            ? null
+            : autobackupPeriod ?? this.autobackupPeriod,
         backblazeBucket: backblazeBucket ?? this.backblazeBucket,
       );
 }

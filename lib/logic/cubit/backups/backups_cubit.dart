@@ -35,7 +35,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
         state.copyWith(
           backblazeBucket: bucket,
           isInitialized: backupConfig?.isInitialized,
-          autobackupPeriod: backupConfig?.autobackupPeriod,
+          autobackupPeriod: backupConfig?.autobackupPeriod ?? Duration.zero,
           backups: backups,
           preventActions: false,
           refreshing: false,
@@ -164,8 +164,8 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   Future<void> forceUpdateBackups() async {
     emit(state.copyWith(preventActions: true));
-    await api.forceBackupListReload();
     getIt<NavigationService>().showSnackBar('backup.refetching_list'.tr());
+    await api.forceBackupListReload();
     emit(state.copyWith(preventActions: false));
   }
 
@@ -187,10 +187,28 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   Future<void> restoreBackup(final String backupId) async {
     emit(state.copyWith(preventActions: true));
-
-    /// TOOD: ???
-    //await api.restoreBackup(backupId);
+    await api.restoreBackup(backupId);
     emit(state.copyWith(preventActions: false));
+  }
+
+  Future<void> setAutobackupPeriod(final Duration? period) async {
+    emit(state.copyWith(preventActions: true));
+    final result = await api.setAutobackupPeriod(period: period?.inMinutes);
+    if (result.success == false) {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'Unknown error');
+      emit(state.copyWith(preventActions: false));
+    } else {
+      getIt<NavigationService>()
+          .showSnackBar('backup.autobackup_period_set'.tr());
+      emit(
+        state.copyWith(
+          preventActions: false,
+          autobackupPeriod: period ?? Duration.zero,
+        ),
+      );
+    }
+    await updateBackups();
   }
 
   @override

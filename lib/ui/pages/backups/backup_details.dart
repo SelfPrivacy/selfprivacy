@@ -20,35 +20,25 @@ import 'package:selfprivacy/ui/pages/backups/create_backups_modal.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
 
-GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 @RoutePage()
-class BackupDetailsPage extends StatefulWidget {
+class BackupDetailsPage extends StatelessWidget {
   const BackupDetailsPage({super.key});
 
-  @override
-  State<BackupDetailsPage> createState() => _BackupDetailsPageState();
-}
-
-class _BackupDetailsPageState extends State<BackupDetailsPage>
-    with SingleTickerProviderStateMixin {
   @override
   Widget build(final BuildContext context) {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    final bool isBackupInitialized =
-        context.watch<BackupsCubit>().state.isInitialized;
+    final BackupsState backupsState = context.watch<BackupsCubit>().state;
+    final bool isBackupInitialized = backupsState.isInitialized;
     final StateType providerState = isReady && isBackupInitialized
         ? StateType.stable
         : StateType.uninitialized;
-    final bool preventActions =
-        context.watch<BackupsCubit>().state.preventActions;
-    final List<Backup> backups = context.watch<BackupsCubit>().state.backups;
-    final bool refreshing = context.watch<BackupsCubit>().state.refreshing;
+    final bool preventActions = backupsState.preventActions;
+    final List<Backup> backups = backupsState.backups;
+    final bool refreshing = backupsState.refreshing;
     final List<Service> services =
         context.watch<ServicesCubit>().state.servicesThatCanBeBackedUp;
-    final Duration? autobackupPeriod =
-        context.watch<BackupsCubit>().state.autobackupPeriod;
+    final Duration? autobackupPeriod = backupsState.autobackupPeriod;
     final List<ServerJob> backupJobs = context
         .watch<ServerJobsCubit>()
         .state
@@ -121,7 +111,6 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
           onTap: preventActions
               ? null
               : () {
-                  // await context.read<BackupsCubit>().createBackup();
                   showModalBottomSheet(
                     useRootNavigator: true,
                     context: context,
@@ -177,9 +166,6 @@ class _BackupDetailsPageState extends State<BackupDetailsPage>
                 ),
             ],
           ),
-        // Card with a list of existing backups
-        // Each list item has a date
-        // When clicked, starts the restore action
         if (isBackupInitialized)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

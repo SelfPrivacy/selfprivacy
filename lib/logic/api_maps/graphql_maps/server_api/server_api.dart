@@ -2,6 +2,7 @@ import 'package:graphql/client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_api_map.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
@@ -9,12 +10,12 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.g
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
-import 'package:selfprivacy/logic/models/json/backup.dart';
+import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
@@ -31,9 +32,16 @@ part 'server_actions_api.dart';
 part 'services_api.dart';
 part 'users_api.dart';
 part 'volume_api.dart';
+part 'backups_api.dart';
 
 class ServerApi extends GraphQLApiMap
-    with VolumeApi, JobsApi, ServerActionsApi, ServicesApi, UsersApi {
+    with
+        VolumeApi,
+        JobsApi,
+        ServerActionsApi,
+        ServicesApi,
+        UsersApi,
+        BackupsApi {
   ServerApi({
     this.hasLogger = false,
     this.isWithToken = true,
@@ -288,8 +296,10 @@ class ServerApi extends GraphQLApiMap
       }
       records = response.parsedData!.system.domainInfo.requiredDnsRecords
           .map<DnsRecord>(
-            (final Fragment$dnsRecordFields fragment) =>
-                DnsRecord.fromGraphQL(fragment),
+            (
+              final Fragment$fragmentDnsRecords record,
+            ) =>
+                DnsRecord.fromGraphQL(record),
           )
           .toList();
     } catch (e) {
@@ -509,22 +519,4 @@ class ServerApi extends GraphQLApiMap
 
     return token;
   }
-
-  /// TODO: backups're not implemented on server side
-
-  Future<BackupStatus> getBackupStatus() async => BackupStatus(
-        progress: 0.0,
-        status: BackupStatusEnum.error,
-        errorMessage: null,
-      );
-
-  Future<List<Backup>> getBackups() async => [];
-
-  Future<void> uploadBackblazeConfig(final BackblazeBucket bucket) async {}
-
-  Future<void> forceBackupListReload() async {}
-
-  Future<void> startBackup() async {}
-
-  Future<void> restoreBackup(final String backupId) async {}
 }

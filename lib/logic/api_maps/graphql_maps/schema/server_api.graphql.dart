@@ -3,7 +3,6 @@ import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
-import 'services.graphql.dart';
 
 class Fragment$basicMutationReturnFields {
   Fragment$basicMutationReturnFields({
@@ -28,8 +27,12 @@ class Fragment$basicMutationReturnFields {
         return Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
             .fromJson(json);
 
-      case "GenericJobButationReturn":
-        return Fragment$basicMutationReturnFields$$GenericJobButationReturn
+      case "GenericBackupConfigReturn":
+        return Fragment$basicMutationReturnFields$$GenericBackupConfigReturn
+            .fromJson(json);
+
+      case "GenericJobMutationReturn":
+        return Fragment$basicMutationReturnFields$$GenericJobMutationReturn
             .fromJson(json);
 
       case "GenericMutationReturn":
@@ -153,8 +156,11 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
             Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)
         deviceApiTokenMutationReturn,
     required _T Function(
-            Fragment$basicMutationReturnFields$$GenericJobButationReturn)
-        genericJobButationReturn,
+            Fragment$basicMutationReturnFields$$GenericBackupConfigReturn)
+        genericBackupConfigReturn,
+    required _T Function(
+            Fragment$basicMutationReturnFields$$GenericJobMutationReturn)
+        genericJobMutationReturn,
     required _T Function(
             Fragment$basicMutationReturnFields$$GenericMutationReturn)
         genericMutationReturn,
@@ -184,9 +190,13 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
         return deviceApiTokenMutationReturn(this
             as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
 
-      case "GenericJobButationReturn":
-        return genericJobButationReturn(this
-            as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+      case "GenericBackupConfigReturn":
+        return genericBackupConfigReturn(this
+            as Fragment$basicMutationReturnFields$$GenericBackupConfigReturn);
+
+      case "GenericJobMutationReturn":
+        return genericJobMutationReturn(this
+            as Fragment$basicMutationReturnFields$$GenericJobMutationReturn);
 
       case "GenericMutationReturn":
         return genericMutationReturn(
@@ -222,8 +232,10 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
     _T Function(
             Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)?
         deviceApiTokenMutationReturn,
-    _T Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)?
-        genericJobButationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericBackupConfigReturn)?
+        genericBackupConfigReturn,
+    _T Function(Fragment$basicMutationReturnFields$$GenericJobMutationReturn)?
+        genericJobMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
         genericMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)?
@@ -261,10 +273,18 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
           return orElse();
         }
 
-      case "GenericJobButationReturn":
-        if (genericJobButationReturn != null) {
-          return genericJobButationReturn(this
-              as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
+      case "GenericBackupConfigReturn":
+        if (genericBackupConfigReturn != null) {
+          return genericBackupConfigReturn(this
+              as Fragment$basicMutationReturnFields$$GenericBackupConfigReturn);
+        } else {
+          return orElse();
+        }
+
+      case "GenericJobMutationReturn":
+        if (genericJobMutationReturn != null) {
+          return genericJobMutationReturn(this
+              as Fragment$basicMutationReturnFields$$GenericJobMutationReturn);
         } else {
           return orElse();
         }
@@ -1009,22 +1029,22 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutati
       _res;
 }
 
-class Fragment$basicMutationReturnFields$$GenericJobButationReturn
+class Fragment$basicMutationReturnFields$$GenericBackupConfigReturn
     implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$GenericJobButationReturn({
+  Fragment$basicMutationReturnFields$$GenericBackupConfigReturn({
     required this.code,
     required this.message,
     required this.success,
-    this.$__typename = 'GenericJobButationReturn',
+    this.$__typename = 'GenericBackupConfigReturn',
   });
 
-  factory Fragment$basicMutationReturnFields$$GenericJobButationReturn.fromJson(
+  factory Fragment$basicMutationReturnFields$$GenericBackupConfigReturn.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+    return Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -1073,7 +1093,7 @@ class Fragment$basicMutationReturnFields$$GenericJobButationReturn
       return true;
     }
     if (!(other
-            is Fragment$basicMutationReturnFields$$GenericJobButationReturn) ||
+            is Fragment$basicMutationReturnFields$$GenericBackupConfigReturn) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1101,28 +1121,28 @@ class Fragment$basicMutationReturnFields$$GenericJobButationReturn
   }
 }
 
-extension UtilityExtension$Fragment$basicMutationReturnFields$$GenericJobButationReturn
-    on Fragment$basicMutationReturnFields$$GenericJobButationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
-          Fragment$basicMutationReturnFields$$GenericJobButationReturn>
+extension UtilityExtension$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn
+    on Fragment$basicMutationReturnFields$$GenericBackupConfigReturn {
+  CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
+          Fragment$basicMutationReturnFields$$GenericBackupConfigReturn>
       get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+          CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
     TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
-    Fragment$basicMutationReturnFields$$GenericJobButationReturn instance,
-    TRes Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)
+  factory CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
+    Fragment$basicMutationReturnFields$$GenericBackupConfigReturn instance,
+    TRes Function(Fragment$basicMutationReturnFields$$GenericBackupConfigReturn)
         then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn;
+  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn;
 
-  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn.stub(
+  factory CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn.stub(
           TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn;
+      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn;
 
   TRes call({
     int? code,
@@ -1132,20 +1152,20 @@ abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationRe
   });
 }
 
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
         TRes>
     implements
-        CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+        CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
             TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+  _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
     this._instance,
     this._then,
   );
 
-  final Fragment$basicMutationReturnFields$$GenericJobButationReturn _instance;
+  final Fragment$basicMutationReturnFields$$GenericBackupConfigReturn _instance;
 
   final TRes Function(
-      Fragment$basicMutationReturnFields$$GenericJobButationReturn) _then;
+      Fragment$basicMutationReturnFields$$GenericBackupConfigReturn) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -1155,7 +1175,7 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+      _then(Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -1170,12 +1190,192 @@ class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn
       ));
 }
 
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
         TRes>
     implements
-        CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
+        CopyWith$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn<
             TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericBackupConfigReturn(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Fragment$basicMutationReturnFields$$GenericJobMutationReturn
+    implements Fragment$basicMutationReturnFields {
+  Fragment$basicMutationReturnFields$$GenericJobMutationReturn({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericJobMutationReturn',
+  });
+
+  factory Fragment$basicMutationReturnFields$$GenericJobMutationReturn.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Fragment$basicMutationReturnFields$$GenericJobMutationReturn) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$basicMutationReturnFields$$GenericJobMutationReturn
+    on Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
+  CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
+          Fragment$basicMutationReturnFields$$GenericJobMutationReturn>
+      get copyWith =>
+          CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
+    TRes> {
+  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
+    Fragment$basicMutationReturnFields$$GenericJobMutationReturn instance,
+    TRes Function(Fragment$basicMutationReturnFields$$GenericJobMutationReturn)
+        then,
+  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn;
+
+  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn.stub(
+          TRes res) =
+      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
+        TRes>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
+            TRes> {
+  _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$basicMutationReturnFields$$GenericJobMutationReturn _instance;
+
+  final TRes Function(
+      Fragment$basicMutationReturnFields$$GenericJobMutationReturn) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
+        TRes>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$GenericJobMutationReturn<
+            TRes> {
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobMutationReturn(
       this._res);
 
   TRes _res;
@@ -2082,6 +2282,486 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<
       _res;
 }
 
+class Fragment$basicApiJobsFields {
+  Fragment$basicApiJobsFields({
+    required this.createdAt,
+    required this.description,
+    this.error,
+    this.finishedAt,
+    required this.name,
+    this.progress,
+    this.result,
+    required this.status,
+    this.statusText,
+    required this.uid,
+    required this.typeId,
+    required this.updatedAt,
+    this.$__typename = 'ApiJob',
+  });
+
+  factory Fragment$basicApiJobsFields.fromJson(Map<String, dynamic> json) {
+    final l$createdAt = json['createdAt'];
+    final l$description = json['description'];
+    final l$error = json['error'];
+    final l$finishedAt = json['finishedAt'];
+    final l$name = json['name'];
+    final l$progress = json['progress'];
+    final l$result = json['result'];
+    final l$status = json['status'];
+    final l$statusText = json['statusText'];
+    final l$uid = json['uid'];
+    final l$typeId = json['typeId'];
+    final l$updatedAt = json['updatedAt'];
+    final l$$__typename = json['__typename'];
+    return Fragment$basicApiJobsFields(
+      createdAt: dateTimeFromJson(l$createdAt),
+      description: (l$description as String),
+      error: (l$error as String?),
+      finishedAt: l$finishedAt == null ? null : dateTimeFromJson(l$finishedAt),
+      name: (l$name as String),
+      progress: (l$progress as int?),
+      result: (l$result as String?),
+      status: (l$status as String),
+      statusText: (l$statusText as String?),
+      uid: (l$uid as String),
+      typeId: (l$typeId as String),
+      updatedAt: dateTimeFromJson(l$updatedAt),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final DateTime createdAt;
+
+  final String description;
+
+  final String? error;
+
+  final DateTime? finishedAt;
+
+  final String name;
+
+  final int? progress;
+
+  final String? result;
+
+  final String status;
+
+  final String? statusText;
+
+  final String uid;
+
+  final String typeId;
+
+  final DateTime updatedAt;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$createdAt = createdAt;
+    _resultData['createdAt'] = dateTimeToJson(l$createdAt);
+    final l$description = description;
+    _resultData['description'] = l$description;
+    final l$error = error;
+    _resultData['error'] = l$error;
+    final l$finishedAt = finishedAt;
+    _resultData['finishedAt'] =
+        l$finishedAt == null ? null : dateTimeToJson(l$finishedAt);
+    final l$name = name;
+    _resultData['name'] = l$name;
+    final l$progress = progress;
+    _resultData['progress'] = l$progress;
+    final l$result = result;
+    _resultData['result'] = l$result;
+    final l$status = status;
+    _resultData['status'] = l$status;
+    final l$statusText = statusText;
+    _resultData['statusText'] = l$statusText;
+    final l$uid = uid;
+    _resultData['uid'] = l$uid;
+    final l$typeId = typeId;
+    _resultData['typeId'] = l$typeId;
+    final l$updatedAt = updatedAt;
+    _resultData['updatedAt'] = dateTimeToJson(l$updatedAt);
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$createdAt = createdAt;
+    final l$description = description;
+    final l$error = error;
+    final l$finishedAt = finishedAt;
+    final l$name = name;
+    final l$progress = progress;
+    final l$result = result;
+    final l$status = status;
+    final l$statusText = statusText;
+    final l$uid = uid;
+    final l$typeId = typeId;
+    final l$updatedAt = updatedAt;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$createdAt,
+      l$description,
+      l$error,
+      l$finishedAt,
+      l$name,
+      l$progress,
+      l$result,
+      l$status,
+      l$statusText,
+      l$uid,
+      l$typeId,
+      l$updatedAt,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Fragment$basicApiJobsFields) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$createdAt = createdAt;
+    final lOther$createdAt = other.createdAt;
+    if (l$createdAt != lOther$createdAt) {
+      return false;
+    }
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) {
+      return false;
+    }
+    final l$error = error;
+    final lOther$error = other.error;
+    if (l$error != lOther$error) {
+      return false;
+    }
+    final l$finishedAt = finishedAt;
+    final lOther$finishedAt = other.finishedAt;
+    if (l$finishedAt != lOther$finishedAt) {
+      return false;
+    }
+    final l$name = name;
+    final lOther$name = other.name;
+    if (l$name != lOther$name) {
+      return false;
+    }
+    final l$progress = progress;
+    final lOther$progress = other.progress;
+    if (l$progress != lOther$progress) {
+      return false;
+    }
+    final l$result = result;
+    final lOther$result = other.result;
+    if (l$result != lOther$result) {
+      return false;
+    }
+    final l$status = status;
+    final lOther$status = other.status;
+    if (l$status != lOther$status) {
+      return false;
+    }
+    final l$statusText = statusText;
+    final lOther$statusText = other.statusText;
+    if (l$statusText != lOther$statusText) {
+      return false;
+    }
+    final l$uid = uid;
+    final lOther$uid = other.uid;
+    if (l$uid != lOther$uid) {
+      return false;
+    }
+    final l$typeId = typeId;
+    final lOther$typeId = other.typeId;
+    if (l$typeId != lOther$typeId) {
+      return false;
+    }
+    final l$updatedAt = updatedAt;
+    final lOther$updatedAt = other.updatedAt;
+    if (l$updatedAt != lOther$updatedAt) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$basicApiJobsFields
+    on Fragment$basicApiJobsFields {
+  CopyWith$Fragment$basicApiJobsFields<Fragment$basicApiJobsFields>
+      get copyWith => CopyWith$Fragment$basicApiJobsFields(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Fragment$basicApiJobsFields<TRes> {
+  factory CopyWith$Fragment$basicApiJobsFields(
+    Fragment$basicApiJobsFields instance,
+    TRes Function(Fragment$basicApiJobsFields) then,
+  ) = _CopyWithImpl$Fragment$basicApiJobsFields;
+
+  factory CopyWith$Fragment$basicApiJobsFields.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$basicApiJobsFields;
+
+  TRes call({
+    DateTime? createdAt,
+    String? description,
+    String? error,
+    DateTime? finishedAt,
+    String? name,
+    int? progress,
+    String? result,
+    String? status,
+    String? statusText,
+    String? uid,
+    String? typeId,
+    DateTime? updatedAt,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$basicApiJobsFields<TRes>
+    implements CopyWith$Fragment$basicApiJobsFields<TRes> {
+  _CopyWithImpl$Fragment$basicApiJobsFields(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$basicApiJobsFields _instance;
+
+  final TRes Function(Fragment$basicApiJobsFields) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? createdAt = _undefined,
+    Object? description = _undefined,
+    Object? error = _undefined,
+    Object? finishedAt = _undefined,
+    Object? name = _undefined,
+    Object? progress = _undefined,
+    Object? result = _undefined,
+    Object? status = _undefined,
+    Object? statusText = _undefined,
+    Object? uid = _undefined,
+    Object? typeId = _undefined,
+    Object? updatedAt = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$basicApiJobsFields(
+        createdAt: createdAt == _undefined || createdAt == null
+            ? _instance.createdAt
+            : (createdAt as DateTime),
+        description: description == _undefined || description == null
+            ? _instance.description
+            : (description as String),
+        error: error == _undefined ? _instance.error : (error as String?),
+        finishedAt: finishedAt == _undefined
+            ? _instance.finishedAt
+            : (finishedAt as DateTime?),
+        name: name == _undefined || name == null
+            ? _instance.name
+            : (name as String),
+        progress:
+            progress == _undefined ? _instance.progress : (progress as int?),
+        result: result == _undefined ? _instance.result : (result as String?),
+        status: status == _undefined || status == null
+            ? _instance.status
+            : (status as String),
+        statusText: statusText == _undefined
+            ? _instance.statusText
+            : (statusText as String?),
+        uid: uid == _undefined || uid == null ? _instance.uid : (uid as String),
+        typeId: typeId == _undefined || typeId == null
+            ? _instance.typeId
+            : (typeId as String),
+        updatedAt: updatedAt == _undefined || updatedAt == null
+            ? _instance.updatedAt
+            : (updatedAt as DateTime),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$basicApiJobsFields<TRes>
+    implements CopyWith$Fragment$basicApiJobsFields<TRes> {
+  _CopyWithStubImpl$Fragment$basicApiJobsFields(this._res);
+
+  TRes _res;
+
+  call({
+    DateTime? createdAt,
+    String? description,
+    String? error,
+    DateTime? finishedAt,
+    String? name,
+    int? progress,
+    String? result,
+    String? status,
+    String? statusText,
+    String? uid,
+    String? typeId,
+    DateTime? updatedAt,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+const fragmentDefinitionbasicApiJobsFields = FragmentDefinitionNode(
+  name: NameNode(value: 'basicApiJobsFields'),
+  typeCondition: TypeConditionNode(
+      on: NamedTypeNode(
+    name: NameNode(value: 'ApiJob'),
+    isNonNull: false,
+  )),
+  directives: [],
+  selectionSet: SelectionSetNode(selections: [
+    FieldNode(
+      name: NameNode(value: 'createdAt'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'description'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'error'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'finishedAt'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'name'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'progress'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'result'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'status'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'statusText'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'uid'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'typeId'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'updatedAt'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: '__typename'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+  ]),
+);
+const documentNodeFragmentbasicApiJobsFields = DocumentNode(definitions: [
+  fragmentDefinitionbasicApiJobsFields,
+]);
+
+extension ClientExtension$Fragment$basicApiJobsFields on graphql.GraphQLClient {
+  void writeFragment$basicApiJobsFields({
+    required Fragment$basicApiJobsFields data,
+    required Map<String, dynamic> idFields,
+    bool broadcast = true,
+  }) =>
+      this.writeFragment(
+        graphql.FragmentRequest(
+          idFields: idFields,
+          fragment: const graphql.Fragment(
+            fragmentName: 'basicApiJobsFields',
+            document: documentNodeFragmentbasicApiJobsFields,
+          ),
+        ),
+        data: data.toJson(),
+        broadcast: broadcast,
+      );
+  Fragment$basicApiJobsFields? readFragment$basicApiJobsFields({
+    required Map<String, dynamic> idFields,
+    bool optimistic = true,
+  }) {
+    final result = this.readFragment(
+      graphql.FragmentRequest(
+        idFields: idFields,
+        fragment: const graphql.Fragment(
+          fragmentName: 'basicApiJobsFields',
+          document: documentNodeFragmentbasicApiJobsFields,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null ? null : Fragment$basicApiJobsFields.fromJson(result);
+  }
+}
+
 class Query$GetApiVersion {
   Query$GetApiVersion({
     required this.api,
@@ -2643,82 +3323,9 @@ const documentNodeQueryGetApiJobs = DocumentNode(definitions: [
             arguments: [],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                name: NameNode(value: 'createdAt'),
-                alias: null,
-                arguments: [],
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicApiJobsFields'),
                 directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'description'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'error'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'finishedAt'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'name'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'progress'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'result'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'status'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'statusText'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'uid'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'updatedAt'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
               ),
               FieldNode(
                 name: NameNode(value: '__typename'),
@@ -2747,6 +3354,7 @@ const documentNodeQueryGetApiJobs = DocumentNode(definitions: [
       ),
     ]),
   ),
+  fragmentDefinitionbasicApiJobsFields,
 ]);
 Query$GetApiJobs _parserFn$Query$GetApiJobs(Map<String, dynamic> data) =>
     Query$GetApiJobs.fromJson(data);
@@ -2875,14 +3483,14 @@ class Query$GetApiJobs$jobs {
     final l$$__typename = json['__typename'];
     return Query$GetApiJobs$jobs(
       getJobs: (l$getJobs as List<dynamic>)
-          .map((e) => Query$GetApiJobs$jobs$getJobs.fromJson(
-              (e as Map<String, dynamic>)))
+          .map((e) =>
+              Fragment$basicApiJobsFields.fromJson((e as Map<String, dynamic>)))
           .toList(),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final List<Query$GetApiJobs$jobs$getJobs> getJobs;
+  final List<Fragment$basicApiJobsFields> getJobs;
 
   final String $__typename;
 
@@ -2952,14 +3560,14 @@ abstract class CopyWith$Query$GetApiJobs$jobs<TRes> {
       _CopyWithStubImpl$Query$GetApiJobs$jobs;
 
   TRes call({
-    List<Query$GetApiJobs$jobs$getJobs>? getJobs,
+    List<Fragment$basicApiJobsFields>? getJobs,
     String? $__typename,
   });
   TRes getJobs(
-      Iterable<Query$GetApiJobs$jobs$getJobs> Function(
+      Iterable<Fragment$basicApiJobsFields> Function(
               Iterable<
-                  CopyWith$Query$GetApiJobs$jobs$getJobs<
-                      Query$GetApiJobs$jobs$getJobs>>)
+                  CopyWith$Fragment$basicApiJobsFields<
+                      Fragment$basicApiJobsFields>>)
           _fn);
 }
 
@@ -2983,20 +3591,20 @@ class _CopyWithImpl$Query$GetApiJobs$jobs<TRes>
       _then(Query$GetApiJobs$jobs(
         getJobs: getJobs == _undefined || getJobs == null
             ? _instance.getJobs
-            : (getJobs as List<Query$GetApiJobs$jobs$getJobs>),
+            : (getJobs as List<Fragment$basicApiJobsFields>),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
   TRes getJobs(
-          Iterable<Query$GetApiJobs$jobs$getJobs> Function(
+          Iterable<Fragment$basicApiJobsFields> Function(
                   Iterable<
-                      CopyWith$Query$GetApiJobs$jobs$getJobs<
-                          Query$GetApiJobs$jobs$getJobs>>)
+                      CopyWith$Fragment$basicApiJobsFields<
+                          Fragment$basicApiJobsFields>>)
               _fn) =>
       call(
-          getJobs: _fn(_instance.getJobs
-              .map((e) => CopyWith$Query$GetApiJobs$jobs$getJobs(
+          getJobs: _fn(
+              _instance.getJobs.map((e) => CopyWith$Fragment$basicApiJobsFields(
                     e,
                     (i) => i,
                   ))).toList());
@@ -3009,330 +3617,11 @@ class _CopyWithStubImpl$Query$GetApiJobs$jobs<TRes>
   TRes _res;
 
   call({
-    List<Query$GetApiJobs$jobs$getJobs>? getJobs,
+    List<Fragment$basicApiJobsFields>? getJobs,
     String? $__typename,
   }) =>
       _res;
   getJobs(_fn) => _res;
-}
-
-class Query$GetApiJobs$jobs$getJobs {
-  Query$GetApiJobs$jobs$getJobs({
-    required this.createdAt,
-    required this.description,
-    this.error,
-    this.finishedAt,
-    required this.name,
-    this.progress,
-    this.result,
-    required this.status,
-    this.statusText,
-    required this.uid,
-    required this.updatedAt,
-    this.$__typename = 'ApiJob',
-  });
-
-  factory Query$GetApiJobs$jobs$getJobs.fromJson(Map<String, dynamic> json) {
-    final l$createdAt = json['createdAt'];
-    final l$description = json['description'];
-    final l$error = json['error'];
-    final l$finishedAt = json['finishedAt'];
-    final l$name = json['name'];
-    final l$progress = json['progress'];
-    final l$result = json['result'];
-    final l$status = json['status'];
-    final l$statusText = json['statusText'];
-    final l$uid = json['uid'];
-    final l$updatedAt = json['updatedAt'];
-    final l$$__typename = json['__typename'];
-    return Query$GetApiJobs$jobs$getJobs(
-      createdAt: dateTimeFromJson(l$createdAt),
-      description: (l$description as String),
-      error: (l$error as String?),
-      finishedAt: l$finishedAt == null ? null : dateTimeFromJson(l$finishedAt),
-      name: (l$name as String),
-      progress: (l$progress as int?),
-      result: (l$result as String?),
-      status: (l$status as String),
-      statusText: (l$statusText as String?),
-      uid: (l$uid as String),
-      updatedAt: dateTimeFromJson(l$updatedAt),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final DateTime createdAt;
-
-  final String description;
-
-  final String? error;
-
-  final DateTime? finishedAt;
-
-  final String name;
-
-  final int? progress;
-
-  final String? result;
-
-  final String status;
-
-  final String? statusText;
-
-  final String uid;
-
-  final DateTime updatedAt;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$createdAt = createdAt;
-    _resultData['createdAt'] = dateTimeToJson(l$createdAt);
-    final l$description = description;
-    _resultData['description'] = l$description;
-    final l$error = error;
-    _resultData['error'] = l$error;
-    final l$finishedAt = finishedAt;
-    _resultData['finishedAt'] =
-        l$finishedAt == null ? null : dateTimeToJson(l$finishedAt);
-    final l$name = name;
-    _resultData['name'] = l$name;
-    final l$progress = progress;
-    _resultData['progress'] = l$progress;
-    final l$result = result;
-    _resultData['result'] = l$result;
-    final l$status = status;
-    _resultData['status'] = l$status;
-    final l$statusText = statusText;
-    _resultData['statusText'] = l$statusText;
-    final l$uid = uid;
-    _resultData['uid'] = l$uid;
-    final l$updatedAt = updatedAt;
-    _resultData['updatedAt'] = dateTimeToJson(l$updatedAt);
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$createdAt = createdAt;
-    final l$description = description;
-    final l$error = error;
-    final l$finishedAt = finishedAt;
-    final l$name = name;
-    final l$progress = progress;
-    final l$result = result;
-    final l$status = status;
-    final l$statusText = statusText;
-    final l$uid = uid;
-    final l$updatedAt = updatedAt;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$createdAt,
-      l$description,
-      l$error,
-      l$finishedAt,
-      l$name,
-      l$progress,
-      l$result,
-      l$status,
-      l$statusText,
-      l$uid,
-      l$updatedAt,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other is Query$GetApiJobs$jobs$getJobs) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$createdAt = createdAt;
-    final lOther$createdAt = other.createdAt;
-    if (l$createdAt != lOther$createdAt) {
-      return false;
-    }
-    final l$description = description;
-    final lOther$description = other.description;
-    if (l$description != lOther$description) {
-      return false;
-    }
-    final l$error = error;
-    final lOther$error = other.error;
-    if (l$error != lOther$error) {
-      return false;
-    }
-    final l$finishedAt = finishedAt;
-    final lOther$finishedAt = other.finishedAt;
-    if (l$finishedAt != lOther$finishedAt) {
-      return false;
-    }
-    final l$name = name;
-    final lOther$name = other.name;
-    if (l$name != lOther$name) {
-      return false;
-    }
-    final l$progress = progress;
-    final lOther$progress = other.progress;
-    if (l$progress != lOther$progress) {
-      return false;
-    }
-    final l$result = result;
-    final lOther$result = other.result;
-    if (l$result != lOther$result) {
-      return false;
-    }
-    final l$status = status;
-    final lOther$status = other.status;
-    if (l$status != lOther$status) {
-      return false;
-    }
-    final l$statusText = statusText;
-    final lOther$statusText = other.statusText;
-    if (l$statusText != lOther$statusText) {
-      return false;
-    }
-    final l$uid = uid;
-    final lOther$uid = other.uid;
-    if (l$uid != lOther$uid) {
-      return false;
-    }
-    final l$updatedAt = updatedAt;
-    final lOther$updatedAt = other.updatedAt;
-    if (l$updatedAt != lOther$updatedAt) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Query$GetApiJobs$jobs$getJobs
-    on Query$GetApiJobs$jobs$getJobs {
-  CopyWith$Query$GetApiJobs$jobs$getJobs<Query$GetApiJobs$jobs$getJobs>
-      get copyWith => CopyWith$Query$GetApiJobs$jobs$getJobs(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Query$GetApiJobs$jobs$getJobs<TRes> {
-  factory CopyWith$Query$GetApiJobs$jobs$getJobs(
-    Query$GetApiJobs$jobs$getJobs instance,
-    TRes Function(Query$GetApiJobs$jobs$getJobs) then,
-  ) = _CopyWithImpl$Query$GetApiJobs$jobs$getJobs;
-
-  factory CopyWith$Query$GetApiJobs$jobs$getJobs.stub(TRes res) =
-      _CopyWithStubImpl$Query$GetApiJobs$jobs$getJobs;
-
-  TRes call({
-    DateTime? createdAt,
-    String? description,
-    String? error,
-    DateTime? finishedAt,
-    String? name,
-    int? progress,
-    String? result,
-    String? status,
-    String? statusText,
-    String? uid,
-    DateTime? updatedAt,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Query$GetApiJobs$jobs$getJobs<TRes>
-    implements CopyWith$Query$GetApiJobs$jobs$getJobs<TRes> {
-  _CopyWithImpl$Query$GetApiJobs$jobs$getJobs(
-    this._instance,
-    this._then,
-  );
-
-  final Query$GetApiJobs$jobs$getJobs _instance;
-
-  final TRes Function(Query$GetApiJobs$jobs$getJobs) _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? createdAt = _undefined,
-    Object? description = _undefined,
-    Object? error = _undefined,
-    Object? finishedAt = _undefined,
-    Object? name = _undefined,
-    Object? progress = _undefined,
-    Object? result = _undefined,
-    Object? status = _undefined,
-    Object? statusText = _undefined,
-    Object? uid = _undefined,
-    Object? updatedAt = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetApiJobs$jobs$getJobs(
-        createdAt: createdAt == _undefined || createdAt == null
-            ? _instance.createdAt
-            : (createdAt as DateTime),
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        error: error == _undefined ? _instance.error : (error as String?),
-        finishedAt: finishedAt == _undefined
-            ? _instance.finishedAt
-            : (finishedAt as DateTime?),
-        name: name == _undefined || name == null
-            ? _instance.name
-            : (name as String),
-        progress:
-            progress == _undefined ? _instance.progress : (progress as int?),
-        result: result == _undefined ? _instance.result : (result as String?),
-        status: status == _undefined || status == null
-            ? _instance.status
-            : (status as String),
-        statusText: statusText == _undefined
-            ? _instance.statusText
-            : (statusText as String?),
-        uid: uid == _undefined || uid == null ? _instance.uid : (uid as String),
-        updatedAt: updatedAt == _undefined || updatedAt == null
-            ? _instance.updatedAt
-            : (updatedAt as DateTime),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Query$GetApiJobs$jobs$getJobs<TRes>
-    implements CopyWith$Query$GetApiJobs$jobs$getJobs<TRes> {
-  _CopyWithStubImpl$Query$GetApiJobs$jobs$getJobs(this._res);
-
-  TRes _res;
-
-  call({
-    DateTime? createdAt,
-    String? description,
-    String? error,
-    DateTime? finishedAt,
-    String? name,
-    int? progress,
-    String? result,
-    String? status,
-    String? statusText,
-    String? uid,
-    DateTime? updatedAt,
-    String? $__typename,
-  }) =>
-      _res;
 }
 
 class Variables$Mutation$RemoveJob {

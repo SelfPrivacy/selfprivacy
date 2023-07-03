@@ -97,16 +97,15 @@ class _ProvidersPageState extends State<ProvidersPage> {
           ),
           const SizedBox(height: 16),
           // TODO: When backups are fixed, show this card
-          if (isBackupInitialized)
-            _Card(
-              state: isBackupInitialized
-                  ? StateType.stable
-                  : StateType.uninitialized,
-              icon: BrandIcons.save,
-              title: 'backup.card_title'.tr(),
-              subtitle: isBackupInitialized ? 'backup.card_subtitle'.tr() : '',
-              onTap: () => context.pushRoute(const BackupDetailsRoute()),
-            ),
+          _Card(
+            state: isBackupInitialized
+                ? StateType.stable
+                : StateType.uninitialized,
+            icon: BrandIcons.save,
+            title: 'backup.card_title'.tr(),
+            subtitle: isBackupInitialized ? 'backup.card_subtitle'.tr() : '',
+            onTap: () => context.pushRoute(const BackupDetailsRoute()),
+          ),
         ],
       ),
     );

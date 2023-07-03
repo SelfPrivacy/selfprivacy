@@ -1,9 +1,3 @@
-fragment basicMutationReturnFields on MutationReturnInterface{
-  code
-  message
-  success
-}
-
 query GetServerDiskVolumes {
   storage {
     volumes {
@@ -53,17 +47,7 @@ mutation MigrateToBinds($input: MigrateToBindsInput!) {
   migrateToBinds(input: $input) {
     ...basicMutationReturnFields
     job {
-      createdAt
-      description
-      error
-      finishedAt
-      name
-      progress
-      result
-      status
-      statusText
-      uid
-      updatedAt
+      ...basicApiJobsFields
     }
   }
 }

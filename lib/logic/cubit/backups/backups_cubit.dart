@@ -6,7 +6,10 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/json/backup.dart';
+import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
+import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 
 part 'backups_state.dart';
 
@@ -24,107 +27,85 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
   Future<void> load() async {
     if (serverInstallationCubit.state is ServerInstallationFinished) {
       final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
-      if (bucket == null) {
-        emit(
-          const BackupsState(
-            isInitialized: false,
-            preventActions: false,
-            refreshing: false,
-          ),
-        );
-      } else {
-        final BackupStatus status = await api.getBackupStatus();
-        switch (status.status) {
-          case BackupStatusEnum.noKey:
-          case BackupStatusEnum.notInitialized:
-            emit(
-              BackupsState(
-                backups: const [],
-                isInitialized: true,
-                preventActions: false,
-                progress: 0,
-                status: status.status,
-                refreshing: false,
-              ),
-            );
-            break;
-          case BackupStatusEnum.initializing:
-            emit(
-              BackupsState(
-                backups: const [],
-                isInitialized: true,
-                preventActions: false,
-                progress: 0,
-                status: status.status,
-                refreshTimer: const Duration(seconds: 10),
-                refreshing: false,
-              ),
-            );
-            break;
-          case BackupStatusEnum.initialized:
-          case BackupStatusEnum.error:
-            final List<Backup> backups = await api.getBackups();
-            emit(
-              BackupsState(
-                backups: backups,
-                isInitialized: true,
-                preventActions: false,
-                progress: status.progress,
-                status: status.status,
-                error: status.errorMessage ?? '',
-                refreshing: false,
-              ),
-            );
-            break;
-          case BackupStatusEnum.backingUp:
-          case BackupStatusEnum.restoring:
-            final List<Backup> backups = await api.getBackups();
-            emit(
-              BackupsState(
-                backups: backups,
-                isInitialized: true,
-                preventActions: true,
-                progress: status.progress,
-                status: status.status,
-                error: status.errorMessage ?? '',
-                refreshTimer: const Duration(seconds: 5),
-                refreshing: false,
-              ),
-            );
-            break;
-          default:
-            emit(const BackupsState());
-        }
-        Timer(state.refreshTimer, () => updateBackups(useTimer: true));
-      }
+      final BackupConfiguration? backupConfig =
+          await api.getBackupsConfiguration();
+      final List<Backup> backups = await api.getBackups();
+      backups.sort((final a, final b) => b.time.compareTo(a.time));
+      emit(
+        state.copyWith(
+          backblazeBucket: bucket,
+          isInitialized: backupConfig?.isInitialized,
+          autobackupPeriod: backupConfig?.autobackupPeriod ?? Duration.zero,
+          backups: backups,
+          preventActions: false,
+          refreshing: false,
+        ),
+      );
+      print(state);
     }
   }
 
-  Future<void> createBucket() async {
+  Future<void> initializeBackups() async {
     emit(state.copyWith(preventActions: true));
-    final String domain = serverInstallationCubit.state.serverDomain!.domainName
-        .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
-    final int serverId = serverInstallationCubit.state.serverDetails!.id;
-    String bucketName = 'selfprivacy-$domain-$serverId';
-    // If bucket name is too long, shorten it
-    if (bucketName.length > 49) {
-      bucketName = bucketName.substring(0, 49);
+    final String? encryptionKey =
+        (await api.getBackupsConfiguration())?.encryptionKey;
+    if (encryptionKey == null) {
+      getIt<NavigationService>()
+          .showSnackBar("Couldn't get encryption key from your server.");
+      emit(state.copyWith(preventActions: false));
+      return;
     }
-    final String bucketId = await backblaze.createBucket(bucketName);
 
-    final BackblazeApplicationKey key = await backblaze.createKey(bucketId);
-    final BackblazeBucket bucket = BackblazeBucket(
-      bucketId: bucketId,
-      bucketName: bucketName,
-      applicationKey: key.applicationKey,
-      applicationKeyId: key.applicationKeyId,
+    final BackblazeBucket bucket;
+
+    if (state.backblazeBucket == null) {
+      final String domain = serverInstallationCubit
+          .state.serverDomain!.domainName
+          .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+      final int serverId = serverInstallationCubit.state.serverDetails!.id;
+      String bucketName = 'selfprivacy-$domain-$serverId';
+      // If bucket name is too long, shorten it
+      if (bucketName.length > 49) {
+        bucketName = bucketName.substring(0, 49);
+      }
+      final String bucketId = await backblaze.createBucket(bucketName);
+
+      final BackblazeApplicationKey key = await backblaze.createKey(bucketId);
+      bucket = BackblazeBucket(
+        bucketId: bucketId,
+        bucketName: bucketName,
+        applicationKey: key.applicationKey,
+        applicationKeyId: key.applicationKeyId,
+        encryptionKey: encryptionKey,
+      );
+
+      await getIt<ApiConfigModel>().storeBackblazeBucket(bucket);
+      emit(state.copyWith(backblazeBucket: bucket));
+    } else {
+      bucket = state.backblazeBucket!;
+    }
+
+    final GenericResult result = await api.initializeRepository(
+      InitializeRepositoryInput(
+        provider: BackupsProviderType.backblaze,
+        locationId: bucket.bucketId,
+        locationName: bucket.bucketName,
+        login: bucket.applicationKeyId,
+        password: bucket.applicationKey,
+      ),
+    );
+    if (result.success == false) {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'Unknown error');
+      emit(state.copyWith(preventActions: false));
+      return;
+    }
+    await updateBackups();
+    getIt<NavigationService>().showSnackBar(
+      'Backups repository is now initializing. It may take a while.',
     );
 
-    await getIt<ApiConfigModel>().storeBackblazeBucket(bucket);
-    await api.uploadBackblazeConfig(bucket);
-    await updateBackups();
-
-    emit(state.copyWith(isInitialized: true, preventActions: false));
+    emit(state.copyWith(preventActions: false));
   }
 
   Future<void> reuploadKey() async {
@@ -132,37 +113,48 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
     if (bucket == null) {
       emit(state.copyWith(isInitialized: false));
+      print('bucket is null');
     } else {
-      await api.uploadBackblazeConfig(bucket);
-      emit(state.copyWith(isInitialized: true, preventActions: false));
-      getIt<NavigationService>().showSnackBar('backup.reuploaded_key');
+      print('bucket is not null');
+      final GenericResult result = await api.initializeRepository(
+        InitializeRepositoryInput(
+          provider: BackupsProviderType.backblaze,
+          locationId: bucket.bucketId,
+          locationName: bucket.bucketName,
+          login: bucket.applicationKeyId,
+          password: bucket.applicationKey,
+        ),
+      );
+      print('result is $result');
+      if (result.success == false) {
+        getIt<NavigationService>()
+            .showSnackBar(result.message ?? 'Unknown error');
+        emit(state.copyWith(preventActions: false));
+        return;
+      } else {
+        emit(state.copyWith(preventActions: false));
+        getIt<NavigationService>().showSnackBar('backup.reuploaded_key');
+        await updateBackups();
+      }
     }
   }
 
-  Duration refreshTimeFromState(final BackupStatusEnum status) {
-    switch (status) {
-      case BackupStatusEnum.backingUp:
-      case BackupStatusEnum.restoring:
-        return const Duration(seconds: 5);
-      case BackupStatusEnum.initializing:
-        return const Duration(seconds: 10);
-      default:
-        return const Duration(seconds: 60);
-    }
-  }
+  @Deprecated("we don't have states")
+  Duration refreshTimeFromState() => const Duration(seconds: 60);
 
   Future<void> updateBackups({final bool useTimer = false}) async {
     emit(state.copyWith(refreshing: true));
-    final List<Backup> backups = await api.getBackups();
-    final BackupStatus status = await api.getBackupStatus();
+    final backups = await api.getBackups();
+    backups.sort((final a, final b) => b.time.compareTo(a.time));
+    final backupConfig = await api.getBackupsConfiguration();
+
     emit(
       state.copyWith(
         backups: backups,
-        progress: status.progress,
-        status: status.status,
-        error: status.errorMessage,
-        refreshTimer: refreshTimeFromState(status.status),
+        refreshTimer: refreshTimeFromState(),
         refreshing: false,
+        isInitialized: backupConfig?.isInitialized ?? false,
+        autobackupPeriod: backupConfig?.autobackupPeriod,
       ),
     );
     if (useTimer) {
@@ -172,14 +164,23 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   Future<void> forceUpdateBackups() async {
     emit(state.copyWith(preventActions: true));
-    await api.forceBackupListReload();
     getIt<NavigationService>().showSnackBar('backup.refetching_list'.tr());
+    await api.forceBackupListReload();
     emit(state.copyWith(preventActions: false));
   }
 
-  Future<void> createBackup() async {
+  Future<void> createMultipleBackups(final List<Service> services) async {
     emit(state.copyWith(preventActions: true));
-    await api.startBackup();
+    for (final service in services) {
+      await api.startBackup(service.id);
+    }
+    await updateBackups();
+    emit(state.copyWith(preventActions: false));
+  }
+
+  Future<void> createBackup(final String serviceId) async {
+    emit(state.copyWith(preventActions: true));
+    await api.startBackup(serviceId);
     await updateBackups();
     emit(state.copyWith(preventActions: false));
   }
@@ -188,6 +189,26 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     emit(state.copyWith(preventActions: true));
     await api.restoreBackup(backupId);
     emit(state.copyWith(preventActions: false));
+  }
+
+  Future<void> setAutobackupPeriod(final Duration? period) async {
+    emit(state.copyWith(preventActions: true));
+    final result = await api.setAutobackupPeriod(period: period?.inMinutes);
+    if (result.success == false) {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'Unknown error');
+      emit(state.copyWith(preventActions: false));
+    } else {
+      getIt<NavigationService>()
+          .showSnackBar('backup.autobackup_period_set'.tr());
+      emit(
+        state.copyWith(
+          preventActions: false,
+          autobackupPeriod: period ?? Duration.zero,
+        ),
+      );
+    }
+    await updateBackups();
   }
 
   @override

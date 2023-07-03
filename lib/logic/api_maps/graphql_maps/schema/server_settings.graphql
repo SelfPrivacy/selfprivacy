@@ -1,9 +1,3 @@
-fragment basicMutationReturnFields on MutationReturnInterface{
-  code
-  message
-  success
-}
-
 query SystemSettings {
   system {
     settings {
@@ -28,6 +22,14 @@ query SystemIsUsingBinds {
   }
 }
 
+fragment fragmentDnsRecords on DnsRecord {
+  recordType
+  name
+  content
+  ttl
+  priority
+}
+
 query DomainInfo {
   system {
     domainInfo {
@@ -35,7 +37,7 @@ query DomainInfo {
       hostname
       provider
       requiredDnsRecords {
-        ...dnsRecordFields
+        ...fragmentDnsRecords
       }
     }
   }

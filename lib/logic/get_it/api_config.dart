@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
@@ -15,7 +15,8 @@ class ApiConfigModel {
   String? get dnsProviderKey => _dnsProviderKey;
   ServerProviderType? get serverProvider => _serverProvider;
   DnsProviderType? get dnsProvider => _dnsProvider;
-  BackblazeCredential? get backblazeCredential => _backblazeCredential;
+
+  BackupsCredential? get backblazeCredential => _backblazeCredential;
   ServerDomain? get serverDomain => _serverDomain;
   BackblazeBucket? get backblazeBucket => _backblazeBucket;
 
@@ -26,7 +27,7 @@ class ApiConfigModel {
   ServerProviderType? _serverProvider;
   DnsProviderType? _dnsProvider;
   ServerHostingDetails? _serverDetails;
-  BackblazeCredential? _backblazeCredential;
+  BackupsCredential? _backblazeCredential;
   ServerDomain? _serverDomain;
   BackblazeBucket? _backblazeBucket;
 
@@ -60,7 +61,7 @@ class ApiConfigModel {
     _serverLocation = serverLocation;
   }
 
-  Future<void> storeBackblazeCredential(final BackblazeCredential value) async {
+  Future<void> storeBackblazeCredential(final BackupsCredential value) async {
     await _box.put(BNames.backblazeCredential, value);
     _backblazeCredential = value;
   }

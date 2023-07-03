@@ -3,7 +3,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/ui/pages/backup_details/backup_details.dart';
+import 'package:selfprivacy/ui/pages/backups/backup_details.dart';
+import 'package:selfprivacy/ui/pages/backups/backups_list.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
 import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
@@ -96,6 +97,7 @@ class RootRouter extends _$RootRouter {
         AutoRoute(page: ServerDetailsRoute.page),
         AutoRoute(page: DnsDetailsRoute.page),
         AutoRoute(page: BackupDetailsRoute.page),
+        AutoRoute(page: BackupsListRoute.page),
         AutoRoute(page: ServerStorageRoute.page),
         AutoRoute(page: ExtendingVolumeRoute.page),
       ],
@@ -141,6 +143,8 @@ String getRouteTitle(final String routeName) {
       return 'server.card_title';
     case 'BackupDetailsRoute':
       return 'backup.card_title';
+    case 'BackupsListRoute':
+      return 'backup.snapshots_title';
     case 'ServerStorageRoute':
       return 'storage.card_title';
     case 'ExtendingVolumeRoute':

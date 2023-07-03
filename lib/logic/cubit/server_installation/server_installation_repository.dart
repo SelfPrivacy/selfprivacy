@@ -13,7 +13,7 @@ import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -46,7 +46,7 @@ class ServerInstallationRepository {
     final DnsProviderType? dnsProvider = getIt<ApiConfigModel>().dnsProvider;
     final ServerProviderType? serverProvider =
         getIt<ApiConfigModel>().serverProvider;
-    final BackblazeCredential? backblazeCredential =
+    final BackupsCredential? backblazeCredential =
         getIt<ApiConfigModel>().backblazeCredential;
     final ServerHostingDetails? serverDetails =
         getIt<ApiConfigModel>().serverDetails;
@@ -170,12 +170,14 @@ class ServerInstallationRepository {
   Future<String?> getDomainId(final String token, final String domain) async {
     final result =
         await ProvidersController.currentDnsProvider!.tryInitApiByToken(token);
-    return result.success
-        ? (await ProvidersController.currentDnsProvider!.getZoneId(
-            domain,
-          ))
-            .data
-        : null;
+    if (!result.success) {
+      return null;
+    }
+    await setDnsApiToken(token);
+    return (await ProvidersController.currentDnsProvider!.getZoneId(
+      domain,
+    ))
+        .data;
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(
@@ -519,7 +521,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> saveBackblazeKey(
-    final BackblazeCredential backblazeCredential,
+    final BackupsCredential backblazeCredential,
   ) async {
     await getIt<ApiConfigModel>().storeBackblazeCredential(backblazeCredential);
   }

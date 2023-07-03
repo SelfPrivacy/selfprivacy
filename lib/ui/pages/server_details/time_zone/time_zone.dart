@@ -107,7 +107,7 @@ class _SelectTimezoneState extends State<SelectTimezone> {
                         Duration(
                           milliseconds: location.currentTimeZone.offset,
                         )
-                            .toDayHourMinuteFormat()
+                            .toTimezoneOffsetFormat()
                             .contains(timezoneFilterValue!),
               )
               .toList()
@@ -137,7 +137,7 @@ class _SelectTimezoneState extends State<SelectTimezone> {
           location.name,
         ),
         subtitle: Text(
-          'GMT ${duration.toDayHourMinuteFormat()} ${area.isNotEmpty ? '($area)' : ''}',
+          'GMT ${duration.toTimezoneOffsetFormat()} ${area.isNotEmpty ? '($area)' : ''}',
         ),
         onTap: () {
           context.read<ServerDetailsCubit>().repository.setTimezone(

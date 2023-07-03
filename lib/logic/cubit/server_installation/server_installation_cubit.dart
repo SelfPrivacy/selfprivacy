@@ -5,20 +5,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
-import 'package:selfprivacy/logic/models/launch_installation_data.dart';
-import 'package:selfprivacy/logic/providers/provider_settings.dart';
-import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_credential.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
+import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/server_basic_info.dart';
-
+import 'package:selfprivacy/logic/models/launch_installation_data.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
+import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/logic/providers/provider_settings.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
 export 'package:provider/provider.dart';
@@ -195,9 +194,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void setBackblazeKey(final String keyId, final String applicationKey) async {
-    final BackblazeCredential backblazeCredential = BackblazeCredential(
+    final BackupsCredential backblazeCredential = BackupsCredential(
       keyId: keyId,
       applicationKey: applicationKey,
+      provider: BackupsProviderType.backblaze,
     );
     await repository.saveBackblazeKey(backblazeCredential);
     if (state is ServerInstallationRecovery) {
@@ -699,7 +699,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         provider: dnsProviderType,
       ),
     );
-    await repository.setDnsApiToken(token);
+    // await repository.setDnsApiToken(token);
     emit(
       dataState.copyWith(
         serverDomain: ServerDomain(
@@ -714,7 +714,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   void finishRecoveryProcess(
-    final BackblazeCredential backblazeCredential,
+    final BackupsCredential backblazeCredential,
   ) async {
     await repository.saveIsServerStarted(true);
     await repository.saveIsServerResetedFirstTime(true);

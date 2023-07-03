@@ -21,13 +21,14 @@ class BackblazeBucketAdapter extends TypeAdapter<BackblazeBucket> {
       bucketName: fields[3] as String,
       applicationKeyId: fields[1] as String,
       applicationKey: fields[2] as String,
+      encryptionKey: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, BackblazeBucket obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.bucketId)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class BackblazeBucketAdapter extends TypeAdapter<BackblazeBucket> {
       ..writeByte(2)
       ..write(obj.applicationKey)
       ..writeByte(3)
-      ..write(obj.bucketName);
+      ..write(obj.bucketName)
+      ..writeByte(4)
+      ..write(obj.encryptionKey);
   }
 
   @override

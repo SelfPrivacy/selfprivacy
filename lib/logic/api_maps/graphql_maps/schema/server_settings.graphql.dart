@@ -2,85 +2,59 @@ import 'dart:async';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
 import 'schema.graphql.dart';
-import 'services.graphql.dart';
+import 'server_api.graphql.dart';
 
-class Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields({
-    required this.code,
-    required this.message,
-    required this.success,
-    required this.$__typename,
+class Fragment$fragmentDnsRecords {
+  Fragment$fragmentDnsRecords({
+    required this.recordType,
+    required this.name,
+    required this.content,
+    required this.ttl,
+    this.priority,
+    this.$__typename = 'DnsRecord',
   });
 
-  factory Fragment$basicMutationReturnFields.fromJson(
-      Map<String, dynamic> json) {
-    switch (json["__typename"] as String) {
-      case "ApiKeyMutationReturn":
-        return Fragment$basicMutationReturnFields$$ApiKeyMutationReturn
-            .fromJson(json);
-
-      case "AutoUpgradeSettingsMutationReturn":
-        return Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn
-            .fromJson(json);
-
-      case "DeviceApiTokenMutationReturn":
-        return Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
-            .fromJson(json);
-
-      case "GenericJobButationReturn":
-        return Fragment$basicMutationReturnFields$$GenericJobButationReturn
-            .fromJson(json);
-
-      case "GenericMutationReturn":
-        return Fragment$basicMutationReturnFields$$GenericMutationReturn
-            .fromJson(json);
-
-      case "ServiceJobMutationReturn":
-        return Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
-            .fromJson(json);
-
-      case "ServiceMutationReturn":
-        return Fragment$basicMutationReturnFields$$ServiceMutationReturn
-            .fromJson(json);
-
-      case "TimezoneMutationReturn":
-        return Fragment$basicMutationReturnFields$$TimezoneMutationReturn
-            .fromJson(json);
-
-      case "UserMutationReturn":
-        return Fragment$basicMutationReturnFields$$UserMutationReturn.fromJson(
-            json);
-
-      default:
-        final l$code = json['code'];
-        final l$message = json['message'];
-        final l$success = json['success'];
-        final l$$__typename = json['__typename'];
-        return Fragment$basicMutationReturnFields(
-          code: (l$code as int),
-          message: (l$message as String),
-          success: (l$success as bool),
-          $__typename: (l$$__typename as String),
-        );
-    }
+  factory Fragment$fragmentDnsRecords.fromJson(Map<String, dynamic> json) {
+    final l$recordType = json['recordType'];
+    final l$name = json['name'];
+    final l$content = json['content'];
+    final l$ttl = json['ttl'];
+    final l$priority = json['priority'];
+    final l$$__typename = json['__typename'];
+    return Fragment$fragmentDnsRecords(
+      recordType: (l$recordType as String),
+      name: (l$name as String),
+      content: (l$content as String),
+      ttl: (l$ttl as int),
+      priority: (l$priority as int?),
+      $__typename: (l$$__typename as String),
+    );
   }
 
-  final int code;
+  final String recordType;
 
-  final String message;
+  final String name;
 
-  final bool success;
+  final String content;
+
+  final int ttl;
+
+  final int? priority;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
+    final l$recordType = recordType;
+    _resultData['recordType'] = l$recordType;
+    final l$name = name;
+    _resultData['name'] = l$name;
+    final l$content = content;
+    _resultData['content'] = l$content;
+    final l$ttl = ttl;
+    _resultData['ttl'] = l$ttl;
+    final l$priority = priority;
+    _resultData['priority'] = l$priority;
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -88,14 +62,18 @@ class Fragment$basicMutationReturnFields {
 
   @override
   int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
+    final l$recordType = recordType;
+    final l$name = name;
+    final l$content = content;
+    final l$ttl = ttl;
+    final l$priority = priority;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
+      l$recordType,
+      l$name,
+      l$content,
+      l$ttl,
+      l$priority,
       l$$__typename,
     ]);
   }
@@ -105,23 +83,33 @@ class Fragment$basicMutationReturnFields {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$basicMutationReturnFields) ||
+    if (!(other is Fragment$fragmentDnsRecords) ||
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
+    final l$recordType = recordType;
+    final lOther$recordType = other.recordType;
+    if (l$recordType != lOther$recordType) {
       return false;
     }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
+    final l$name = name;
+    final lOther$name = other.name;
+    if (l$name != lOther$name) {
       return false;
     }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
+    final l$content = content;
+    final lOther$content = other.content;
+    if (l$content != lOther$content) {
+      return false;
+    }
+    final l$ttl = ttl;
+    final lOther$ttl = other.ttl;
+    if (l$ttl != lOther$ttl) {
+      return false;
+    }
+    final l$priority = priority;
+    final lOther$priority = other.priority;
+    if (l$priority != lOther$priority) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -133,278 +121,130 @@ class Fragment$basicMutationReturnFields {
   }
 }
 
-extension UtilityExtension$Fragment$basicMutationReturnFields
-    on Fragment$basicMutationReturnFields {
-  CopyWith$Fragment$basicMutationReturnFields<
-          Fragment$basicMutationReturnFields>
-      get copyWith => CopyWith$Fragment$basicMutationReturnFields(
+extension UtilityExtension$Fragment$fragmentDnsRecords
+    on Fragment$fragmentDnsRecords {
+  CopyWith$Fragment$fragmentDnsRecords<Fragment$fragmentDnsRecords>
+      get copyWith => CopyWith$Fragment$fragmentDnsRecords(
             this,
             (i) => i,
           );
-  _T when<_T>({
-    required _T Function(
-            Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
-        apiKeyMutationReturn,
-    required _T Function(
-            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
-        autoUpgradeSettingsMutationReturn,
-    required _T Function(
-            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)
-        deviceApiTokenMutationReturn,
-    required _T Function(
-            Fragment$basicMutationReturnFields$$GenericJobButationReturn)
-        genericJobButationReturn,
-    required _T Function(
-            Fragment$basicMutationReturnFields$$GenericMutationReturn)
-        genericMutationReturn,
-    required _T Function(
-            Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)
-        serviceJobMutationReturn,
-    required _T Function(
-            Fragment$basicMutationReturnFields$$ServiceMutationReturn)
-        serviceMutationReturn,
-    required _T Function(
-            Fragment$basicMutationReturnFields$$TimezoneMutationReturn)
-        timezoneMutationReturn,
-    required _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
-        userMutationReturn,
-    required _T Function() orElse,
-  }) {
-    switch ($__typename) {
-      case "ApiKeyMutationReturn":
-        return apiKeyMutationReturn(
-            this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
-
-      case "AutoUpgradeSettingsMutationReturn":
-        return autoUpgradeSettingsMutationReturn(this
-            as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
-
-      case "DeviceApiTokenMutationReturn":
-        return deviceApiTokenMutationReturn(this
-            as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
-
-      case "GenericJobButationReturn":
-        return genericJobButationReturn(this
-            as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
-
-      case "GenericMutationReturn":
-        return genericMutationReturn(
-            this as Fragment$basicMutationReturnFields$$GenericMutationReturn);
-
-      case "ServiceJobMutationReturn":
-        return serviceJobMutationReturn(this
-            as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
-
-      case "ServiceMutationReturn":
-        return serviceMutationReturn(
-            this as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
-
-      case "TimezoneMutationReturn":
-        return timezoneMutationReturn(
-            this as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
-
-      case "UserMutationReturn":
-        return userMutationReturn(
-            this as Fragment$basicMutationReturnFields$$UserMutationReturn);
-
-      default:
-        return orElse();
-    }
-  }
-
-  _T maybeWhen<_T>({
-    _T Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)?
-        apiKeyMutationReturn,
-    _T Function(
-            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)?
-        autoUpgradeSettingsMutationReturn,
-    _T Function(
-            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)?
-        deviceApiTokenMutationReturn,
-    _T Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)?
-        genericJobButationReturn,
-    _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
-        genericMutationReturn,
-    _T Function(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)?
-        serviceJobMutationReturn,
-    _T Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)?
-        serviceMutationReturn,
-    _T Function(Fragment$basicMutationReturnFields$$TimezoneMutationReturn)?
-        timezoneMutationReturn,
-    _T Function(Fragment$basicMutationReturnFields$$UserMutationReturn)?
-        userMutationReturn,
-    required _T Function() orElse,
-  }) {
-    switch ($__typename) {
-      case "ApiKeyMutationReturn":
-        if (apiKeyMutationReturn != null) {
-          return apiKeyMutationReturn(
-              this as Fragment$basicMutationReturnFields$$ApiKeyMutationReturn);
-        } else {
-          return orElse();
-        }
-
-      case "AutoUpgradeSettingsMutationReturn":
-        if (autoUpgradeSettingsMutationReturn != null) {
-          return autoUpgradeSettingsMutationReturn(this
-              as Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn);
-        } else {
-          return orElse();
-        }
-
-      case "DeviceApiTokenMutationReturn":
-        if (deviceApiTokenMutationReturn != null) {
-          return deviceApiTokenMutationReturn(this
-              as Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn);
-        } else {
-          return orElse();
-        }
-
-      case "GenericJobButationReturn":
-        if (genericJobButationReturn != null) {
-          return genericJobButationReturn(this
-              as Fragment$basicMutationReturnFields$$GenericJobButationReturn);
-        } else {
-          return orElse();
-        }
-
-      case "GenericMutationReturn":
-        if (genericMutationReturn != null) {
-          return genericMutationReturn(this
-              as Fragment$basicMutationReturnFields$$GenericMutationReturn);
-        } else {
-          return orElse();
-        }
-
-      case "ServiceJobMutationReturn":
-        if (serviceJobMutationReturn != null) {
-          return serviceJobMutationReturn(this
-              as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
-        } else {
-          return orElse();
-        }
-
-      case "ServiceMutationReturn":
-        if (serviceMutationReturn != null) {
-          return serviceMutationReturn(this
-              as Fragment$basicMutationReturnFields$$ServiceMutationReturn);
-        } else {
-          return orElse();
-        }
-
-      case "TimezoneMutationReturn":
-        if (timezoneMutationReturn != null) {
-          return timezoneMutationReturn(this
-              as Fragment$basicMutationReturnFields$$TimezoneMutationReturn);
-        } else {
-          return orElse();
-        }
-
-      case "UserMutationReturn":
-        if (userMutationReturn != null) {
-          return userMutationReturn(
-              this as Fragment$basicMutationReturnFields$$UserMutationReturn);
-        } else {
-          return orElse();
-        }
-
-      default:
-        return orElse();
-    }
-  }
 }
 
-abstract class CopyWith$Fragment$basicMutationReturnFields<TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields(
-    Fragment$basicMutationReturnFields instance,
-    TRes Function(Fragment$basicMutationReturnFields) then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields;
+abstract class CopyWith$Fragment$fragmentDnsRecords<TRes> {
+  factory CopyWith$Fragment$fragmentDnsRecords(
+    Fragment$fragmentDnsRecords instance,
+    TRes Function(Fragment$fragmentDnsRecords) then,
+  ) = _CopyWithImpl$Fragment$fragmentDnsRecords;
 
-  factory CopyWith$Fragment$basicMutationReturnFields.stub(TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields;
+  factory CopyWith$Fragment$fragmentDnsRecords.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$fragmentDnsRecords;
 
   TRes call({
-    int? code,
-    String? message,
-    bool? success,
+    String? recordType,
+    String? name,
+    String? content,
+    int? ttl,
+    int? priority,
     String? $__typename,
   });
 }
 
-class _CopyWithImpl$Fragment$basicMutationReturnFields<TRes>
-    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields(
+class _CopyWithImpl$Fragment$fragmentDnsRecords<TRes>
+    implements CopyWith$Fragment$fragmentDnsRecords<TRes> {
+  _CopyWithImpl$Fragment$fragmentDnsRecords(
     this._instance,
     this._then,
   );
 
-  final Fragment$basicMutationReturnFields _instance;
+  final Fragment$fragmentDnsRecords _instance;
 
-  final TRes Function(Fragment$basicMutationReturnFields) _then;
+  final TRes Function(Fragment$fragmentDnsRecords) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
+    Object? recordType = _undefined,
+    Object? name = _undefined,
+    Object? content = _undefined,
+    Object? ttl = _undefined,
+    Object? priority = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Fragment$basicMutationReturnFields(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
+      _then(Fragment$fragmentDnsRecords(
+        recordType: recordType == _undefined || recordType == null
+            ? _instance.recordType
+            : (recordType as String),
+        name: name == _undefined || name == null
+            ? _instance.name
+            : (name as String),
+        content: content == _undefined || content == null
+            ? _instance.content
+            : (content as String),
+        ttl: ttl == _undefined || ttl == null ? _instance.ttl : (ttl as int),
+        priority:
+            priority == _undefined ? _instance.priority : (priority as int?),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 }
 
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields<TRes>
-    implements CopyWith$Fragment$basicMutationReturnFields<TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields(this._res);
+class _CopyWithStubImpl$Fragment$fragmentDnsRecords<TRes>
+    implements CopyWith$Fragment$fragmentDnsRecords<TRes> {
+  _CopyWithStubImpl$Fragment$fragmentDnsRecords(this._res);
 
   TRes _res;
 
   call({
-    int? code,
-    String? message,
-    bool? success,
+    String? recordType,
+    String? name,
+    String? content,
+    int? ttl,
+    int? priority,
     String? $__typename,
   }) =>
       _res;
 }
 
-const fragmentDefinitionbasicMutationReturnFields = FragmentDefinitionNode(
-  name: NameNode(value: 'basicMutationReturnFields'),
+const fragmentDefinitionfragmentDnsRecords = FragmentDefinitionNode(
+  name: NameNode(value: 'fragmentDnsRecords'),
   typeCondition: TypeConditionNode(
       on: NamedTypeNode(
-    name: NameNode(value: 'MutationReturnInterface'),
+    name: NameNode(value: 'DnsRecord'),
     isNonNull: false,
   )),
   directives: [],
   selectionSet: SelectionSetNode(selections: [
     FieldNode(
-      name: NameNode(value: 'code'),
+      name: NameNode(value: 'recordType'),
       alias: null,
       arguments: [],
       directives: [],
       selectionSet: null,
     ),
     FieldNode(
-      name: NameNode(value: 'message'),
+      name: NameNode(value: 'name'),
       alias: null,
       arguments: [],
       directives: [],
       selectionSet: null,
     ),
     FieldNode(
-      name: NameNode(value: 'success'),
+      name: NameNode(value: 'content'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'ttl'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'priority'),
       alias: null,
       arguments: [],
       directives: [],
@@ -419,15 +259,13 @@ const fragmentDefinitionbasicMutationReturnFields = FragmentDefinitionNode(
     ),
   ]),
 );
-const documentNodeFragmentbasicMutationReturnFields =
-    DocumentNode(definitions: [
-  fragmentDefinitionbasicMutationReturnFields,
+const documentNodeFragmentfragmentDnsRecords = DocumentNode(definitions: [
+  fragmentDefinitionfragmentDnsRecords,
 ]);
 
-extension ClientExtension$Fragment$basicMutationReturnFields
-    on graphql.GraphQLClient {
-  void writeFragment$basicMutationReturnFields({
-    required Fragment$basicMutationReturnFields data,
+extension ClientExtension$Fragment$fragmentDnsRecords on graphql.GraphQLClient {
+  void writeFragment$fragmentDnsRecords({
+    required Fragment$fragmentDnsRecords data,
     required Map<String, dynamic> idFields,
     bool broadcast = true,
   }) =>
@@ -435,14 +273,14 @@ extension ClientExtension$Fragment$basicMutationReturnFields
         graphql.FragmentRequest(
           idFields: idFields,
           fragment: const graphql.Fragment(
-            fragmentName: 'basicMutationReturnFields',
-            document: documentNodeFragmentbasicMutationReturnFields,
+            fragmentName: 'fragmentDnsRecords',
+            document: documentNodeFragmentfragmentDnsRecords,
           ),
         ),
         data: data.toJson(),
         broadcast: broadcast,
       );
-  Fragment$basicMutationReturnFields? readFragment$basicMutationReturnFields({
+  Fragment$fragmentDnsRecords? readFragment$fragmentDnsRecords({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
   }) {
@@ -450,1635 +288,14 @@ extension ClientExtension$Fragment$basicMutationReturnFields
       graphql.FragmentRequest(
         idFields: idFields,
         fragment: const graphql.Fragment(
-          fragmentName: 'basicMutationReturnFields',
-          document: documentNodeFragmentbasicMutationReturnFields,
+          fragmentName: 'fragmentDnsRecords',
+          document: documentNodeFragmentfragmentDnsRecords,
         ),
       ),
       optimistic: optimistic,
     );
-    return result == null
-        ? null
-        : Fragment$basicMutationReturnFields.fromJson(result);
+    return result == null ? null : Fragment$fragmentDnsRecords.fromJson(result);
   }
-}
-
-class Fragment$basicMutationReturnFields$$ApiKeyMutationReturn
-    implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$ApiKeyMutationReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.$__typename = 'ApiKeyMutationReturn',
-  });
-
-  factory Fragment$basicMutationReturnFields$$ApiKeyMutationReturn.fromJson(
-      Map<String, dynamic> json) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$ApiKeyMutationReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int code;
-
-  final String message;
-
-  final bool success;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other is Fragment$basicMutationReturnFields$$ApiKeyMutationReturn) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
-      return false;
-    }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
-      return false;
-    }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn
-    on Fragment$basicMutationReturnFields$$ApiKeyMutationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
-          Fragment$basicMutationReturnFields$$ApiKeyMutationReturn>
-      get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
-    TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn(
-    Fragment$basicMutationReturnFields$$ApiKeyMutationReturn instance,
-    TRes Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
-        then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn;
-
-  factory CopyWith$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn.stub(
-          TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn;
-
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
-            TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$basicMutationReturnFields$$ApiKeyMutationReturn _instance;
-
-  final TRes Function(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn)
-      _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$basicMutationReturnFields$$ApiKeyMutationReturn(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn<
-            TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$ApiKeyMutationReturn(
-      this._res);
-
-  TRes _res;
-
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
-      _res;
-}
-
-class Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn
-    implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.$__typename = 'AutoUpgradeSettingsMutationReturn',
-  });
-
-  factory Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn.fromJson(
-      Map<String, dynamic> json) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int code;
-
-  final String message;
-
-  final bool success;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other
-            is Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
-      return false;
-    }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
-      return false;
-    }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn
-    on Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn<
-          Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn>
-      get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn<
-    TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn(
-    Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn
-        instance,
-    TRes Function(
-            Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
-        then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn;
-
-  factory CopyWith$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn.stub(
-          TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn;
-
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn<
-            TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn
-      _instance;
-
-  final TRes Function(
-          Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn)
-      _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn<
-            TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn(
-      this._res);
-
-  TRes _res;
-
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
-      _res;
-}
-
-class Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
-    implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.$__typename = 'DeviceApiTokenMutationReturn',
-  });
-
-  factory Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn.fromJson(
-      Map<String, dynamic> json) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int code;
-
-  final String message;
-
-  final bool success;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other
-            is Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
-      return false;
-    }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
-      return false;
-    }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
-    on Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn<
-          Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn>
-      get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn<
-    TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn(
-    Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn instance,
-    TRes Function(
-            Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn)
-        then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn;
-
-  factory CopyWith$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn.stub(
-          TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn;
-
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn<
-            TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn
-      _instance;
-
-  final TRes Function(
-      Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn) _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn<
-            TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn(
-      this._res);
-
-  TRes _res;
-
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
-      _res;
-}
-
-class Fragment$basicMutationReturnFields$$GenericJobButationReturn
-    implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$GenericJobButationReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.$__typename = 'GenericJobButationReturn',
-  });
-
-  factory Fragment$basicMutationReturnFields$$GenericJobButationReturn.fromJson(
-      Map<String, dynamic> json) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$GenericJobButationReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int code;
-
-  final String message;
-
-  final bool success;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other
-            is Fragment$basicMutationReturnFields$$GenericJobButationReturn) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
-      return false;
-    }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
-      return false;
-    }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$basicMutationReturnFields$$GenericJobButationReturn
-    on Fragment$basicMutationReturnFields$$GenericJobButationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
-          Fragment$basicMutationReturnFields$$GenericJobButationReturn>
-      get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
-    TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
-    Fragment$basicMutationReturnFields$$GenericJobButationReturn instance,
-    TRes Function(Fragment$basicMutationReturnFields$$GenericJobButationReturn)
-        then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn;
-
-  factory CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn.stub(
-          TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn;
-
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
-            TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$basicMutationReturnFields$$GenericJobButationReturn _instance;
-
-  final TRes Function(
-      Fragment$basicMutationReturnFields$$GenericJobButationReturn) _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$basicMutationReturnFields$$GenericJobButationReturn(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$GenericJobButationReturn<
-            TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericJobButationReturn(
-      this._res);
-
-  TRes _res;
-
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
-      _res;
-}
-
-class Fragment$basicMutationReturnFields$$GenericMutationReturn
-    implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$GenericMutationReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.$__typename = 'GenericMutationReturn',
-  });
-
-  factory Fragment$basicMutationReturnFields$$GenericMutationReturn.fromJson(
-      Map<String, dynamic> json) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$GenericMutationReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int code;
-
-  final String message;
-
-  final bool success;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other is Fragment$basicMutationReturnFields$$GenericMutationReturn) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
-      return false;
-    }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
-      return false;
-    }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$basicMutationReturnFields$$GenericMutationReturn
-    on Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$GenericMutationReturn<
-          Fragment$basicMutationReturnFields$$GenericMutationReturn>
-      get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$GenericMutationReturn(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Fragment$basicMutationReturnFields$$GenericMutationReturn<
-    TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$GenericMutationReturn(
-    Fragment$basicMutationReturnFields$$GenericMutationReturn instance,
-    TRes Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)
-        then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn;
-
-  factory CopyWith$Fragment$basicMutationReturnFields$$GenericMutationReturn.stub(
-          TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn;
-
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$GenericMutationReturn<
-            TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$basicMutationReturnFields$$GenericMutationReturn _instance;
-
-  final TRes Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)
-      _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$basicMutationReturnFields$$GenericMutationReturn(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$GenericMutationReturn<
-            TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn(
-      this._res);
-
-  TRes _res;
-
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
-      _res;
-}
-
-class Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
-    implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$ServiceJobMutationReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.$__typename = 'ServiceJobMutationReturn',
-  });
-
-  factory Fragment$basicMutationReturnFields$$ServiceJobMutationReturn.fromJson(
-      Map<String, dynamic> json) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$ServiceJobMutationReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int code;
-
-  final String message;
-
-  final bool success;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other
-            is Fragment$basicMutationReturnFields$$ServiceJobMutationReturn) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
-      return false;
-    }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
-      return false;
-    }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
-    on Fragment$basicMutationReturnFields$$ServiceJobMutationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn<
-          Fragment$basicMutationReturnFields$$ServiceJobMutationReturn>
-      get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn<
-    TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn(
-    Fragment$basicMutationReturnFields$$ServiceJobMutationReturn instance,
-    TRes Function(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)
-        then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn;
-
-  factory CopyWith$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn.stub(
-          TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn;
-
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn<
-            TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$basicMutationReturnFields$$ServiceJobMutationReturn _instance;
-
-  final TRes Function(
-      Fragment$basicMutationReturnFields$$ServiceJobMutationReturn) _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn<
-            TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$ServiceJobMutationReturn(
-      this._res);
-
-  TRes _res;
-
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
-      _res;
-}
-
-class Fragment$basicMutationReturnFields$$ServiceMutationReturn
-    implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$ServiceMutationReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.$__typename = 'ServiceMutationReturn',
-  });
-
-  factory Fragment$basicMutationReturnFields$$ServiceMutationReturn.fromJson(
-      Map<String, dynamic> json) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$ServiceMutationReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int code;
-
-  final String message;
-
-  final bool success;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other is Fragment$basicMutationReturnFields$$ServiceMutationReturn) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
-      return false;
-    }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
-      return false;
-    }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$basicMutationReturnFields$$ServiceMutationReturn
-    on Fragment$basicMutationReturnFields$$ServiceMutationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
-          Fragment$basicMutationReturnFields$$ServiceMutationReturn>
-      get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$ServiceMutationReturn(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
-    TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$ServiceMutationReturn(
-    Fragment$basicMutationReturnFields$$ServiceMutationReturn instance,
-    TRes Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)
-        then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn;
-
-  factory CopyWith$Fragment$basicMutationReturnFields$$ServiceMutationReturn.stub(
-          TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn;
-
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
-            TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$basicMutationReturnFields$$ServiceMutationReturn _instance;
-
-  final TRes Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)
-      _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$basicMutationReturnFields$$ServiceMutationReturn(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$ServiceMutationReturn<
-            TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$ServiceMutationReturn(
-      this._res);
-
-  TRes _res;
-
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
-      _res;
-}
-
-class Fragment$basicMutationReturnFields$$TimezoneMutationReturn
-    implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$TimezoneMutationReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.$__typename = 'TimezoneMutationReturn',
-  });
-
-  factory Fragment$basicMutationReturnFields$$TimezoneMutationReturn.fromJson(
-      Map<String, dynamic> json) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$TimezoneMutationReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int code;
-
-  final String message;
-
-  final bool success;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other
-            is Fragment$basicMutationReturnFields$$TimezoneMutationReturn) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
-      return false;
-    }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
-      return false;
-    }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$basicMutationReturnFields$$TimezoneMutationReturn
-    on Fragment$basicMutationReturnFields$$TimezoneMutationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
-          Fragment$basicMutationReturnFields$$TimezoneMutationReturn>
-      get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$TimezoneMutationReturn(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
-    TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$TimezoneMutationReturn(
-    Fragment$basicMutationReturnFields$$TimezoneMutationReturn instance,
-    TRes Function(Fragment$basicMutationReturnFields$$TimezoneMutationReturn)
-        then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn;
-
-  factory CopyWith$Fragment$basicMutationReturnFields$$TimezoneMutationReturn.stub(
-          TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn;
-
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
-            TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$basicMutationReturnFields$$TimezoneMutationReturn _instance;
-
-  final TRes Function(
-      Fragment$basicMutationReturnFields$$TimezoneMutationReturn) _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$basicMutationReturnFields$$TimezoneMutationReturn(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$TimezoneMutationReturn<
-            TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$TimezoneMutationReturn(
-      this._res);
-
-  TRes _res;
-
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
-      _res;
-}
-
-class Fragment$basicMutationReturnFields$$UserMutationReturn
-    implements Fragment$basicMutationReturnFields {
-  Fragment$basicMutationReturnFields$$UserMutationReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.$__typename = 'UserMutationReturn',
-  });
-
-  factory Fragment$basicMutationReturnFields$$UserMutationReturn.fromJson(
-      Map<String, dynamic> json) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$$__typename = json['__typename'];
-    return Fragment$basicMutationReturnFields$$UserMutationReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int code;
-
-  final String message;
-
-  final bool success;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other is Fragment$basicMutationReturnFields$$UserMutationReturn) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
-      return false;
-    }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
-      return false;
-    }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$basicMutationReturnFields$$UserMutationReturn
-    on Fragment$basicMutationReturnFields$$UserMutationReturn {
-  CopyWith$Fragment$basicMutationReturnFields$$UserMutationReturn<
-          Fragment$basicMutationReturnFields$$UserMutationReturn>
-      get copyWith =>
-          CopyWith$Fragment$basicMutationReturnFields$$UserMutationReturn(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Fragment$basicMutationReturnFields$$UserMutationReturn<
-    TRes> {
-  factory CopyWith$Fragment$basicMutationReturnFields$$UserMutationReturn(
-    Fragment$basicMutationReturnFields$$UserMutationReturn instance,
-    TRes Function(Fragment$basicMutationReturnFields$$UserMutationReturn) then,
-  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$UserMutationReturn;
-
-  factory CopyWith$Fragment$basicMutationReturnFields$$UserMutationReturn.stub(
-          TRes res) =
-      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$UserMutationReturn;
-
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$UserMutationReturn<TRes> {
-  _CopyWithImpl$Fragment$basicMutationReturnFields$$UserMutationReturn(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$basicMutationReturnFields$$UserMutationReturn _instance;
-
-  final TRes Function(Fragment$basicMutationReturnFields$$UserMutationReturn)
-      _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$basicMutationReturnFields$$UserMutationReturn(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$UserMutationReturn<
-        TRes>
-    implements
-        CopyWith$Fragment$basicMutationReturnFields$$UserMutationReturn<TRes> {
-  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$UserMutationReturn(
-      this._res);
-
-  TRes _res;
-
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
-      _res;
 }
 
 class Query$SystemSettings {
@@ -3818,7 +2035,7 @@ const documentNodeQueryDomainInfo = DocumentNode(definitions: [
                 directives: [],
                 selectionSet: SelectionSetNode(selections: [
                   FragmentSpreadNode(
-                    name: NameNode(value: 'dnsRecordFields'),
+                    name: NameNode(value: 'fragmentDnsRecords'),
                     directives: [],
                   ),
                   FieldNode(
@@ -3857,7 +2074,7 @@ const documentNodeQueryDomainInfo = DocumentNode(definitions: [
       ),
     ]),
   ),
-  fragmentDefinitiondnsRecordFields,
+  fragmentDefinitionfragmentDnsRecords,
 ]);
 Query$DomainInfo _parserFn$Query$DomainInfo(Map<String, dynamic> data) =>
     Query$DomainInfo.fromJson(data);
@@ -4130,7 +2347,7 @@ class Query$DomainInfo$system$domainInfo {
       provider: fromJson$Enum$DnsProvider((l$provider as String)),
       requiredDnsRecords: (l$requiredDnsRecords as List<dynamic>)
           .map((e) =>
-              Fragment$dnsRecordFields.fromJson((e as Map<String, dynamic>)))
+              Fragment$fragmentDnsRecords.fromJson((e as Map<String, dynamic>)))
           .toList(),
       $__typename: (l$$__typename as String),
     );
@@ -4142,7 +2359,7 @@ class Query$DomainInfo$system$domainInfo {
 
   final Enum$DnsProvider provider;
 
-  final List<Fragment$dnsRecordFields> requiredDnsRecords;
+  final List<Fragment$fragmentDnsRecords> requiredDnsRecords;
 
   final String $__typename;
 
@@ -4246,13 +2463,14 @@ abstract class CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
     String? domain,
     String? hostname,
     Enum$DnsProvider? provider,
-    List<Fragment$dnsRecordFields>? requiredDnsRecords,
+    List<Fragment$fragmentDnsRecords>? requiredDnsRecords,
     String? $__typename,
   });
   TRes requiredDnsRecords(
-      Iterable<Fragment$dnsRecordFields> Function(
+      Iterable<Fragment$fragmentDnsRecords> Function(
               Iterable<
-                  CopyWith$Fragment$dnsRecordFields<Fragment$dnsRecordFields>>)
+                  CopyWith$Fragment$fragmentDnsRecords<
+                      Fragment$fragmentDnsRecords>>)
           _fn);
 }
 
@@ -4289,20 +2507,20 @@ class _CopyWithImpl$Query$DomainInfo$system$domainInfo<TRes>
         requiredDnsRecords:
             requiredDnsRecords == _undefined || requiredDnsRecords == null
                 ? _instance.requiredDnsRecords
-                : (requiredDnsRecords as List<Fragment$dnsRecordFields>),
+                : (requiredDnsRecords as List<Fragment$fragmentDnsRecords>),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
   TRes requiredDnsRecords(
-          Iterable<Fragment$dnsRecordFields> Function(
+          Iterable<Fragment$fragmentDnsRecords> Function(
                   Iterable<
-                      CopyWith$Fragment$dnsRecordFields<
-                          Fragment$dnsRecordFields>>)
+                      CopyWith$Fragment$fragmentDnsRecords<
+                          Fragment$fragmentDnsRecords>>)
               _fn) =>
       call(
           requiredDnsRecords: _fn(_instance.requiredDnsRecords
-              .map((e) => CopyWith$Fragment$dnsRecordFields(
+              .map((e) => CopyWith$Fragment$fragmentDnsRecords(
                     e,
                     (i) => i,
                   ))).toList());
@@ -4318,7 +2536,7 @@ class _CopyWithStubImpl$Query$DomainInfo$system$domainInfo<TRes>
     String? domain,
     String? hostname,
     Enum$DnsProvider? provider,
-    List<Fragment$dnsRecordFields>? requiredDnsRecords,
+    List<Fragment$fragmentDnsRecords>? requiredDnsRecords,
     String? $__typename,
   }) =>
       _res;

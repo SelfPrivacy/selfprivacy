@@ -1,13 +1,12 @@
 // ignore_for_file: unnecessary_this
 
-extension DurationFormatter on Duration {
-  String toDayHourMinuteSecondFormat() => [
-        this.inHours.remainder(24),
-        this.inMinutes.remainder(60),
-        this.inSeconds.remainder(60)
-      ].map((final int seg) => seg.toString().padLeft(2, '0')).join(':');
+import 'dart:ui';
 
-  String toDayHourMinuteFormat() {
+import 'package:duration/duration.dart';
+import 'package:duration/locale.dart';
+
+extension DurationFormatter on Duration {
+  String toTimezoneOffsetFormat() {
     final designator = this >= Duration.zero ? '+' : '-';
 
     final Iterable<String> segments = [
@@ -18,15 +17,10 @@ extension DurationFormatter on Duration {
     return '$designator${segments.first}:${segments.last}';
   }
 
-// WAT: https://flutterigniter.com/how-to-format-duration/
-  String toHoursMinutesSecondsFormat() =>
-      this.toString().split('.').first.padLeft(8, '0');
-
-  String toDayHourMinuteFormat2() {
-    final Iterable<String> segments = [
-      this.inHours.remainder(24),
-      this.inMinutes.remainder(60),
-    ].map((final int seg) => seg.toString().padLeft(2, '0'));
-    return '${segments.first} h ${segments.last} min';
-  }
+  String toPrettyString(final Locale locale) =>
+      prettyDuration(this, locale: getDurationLocale(locale));
 }
+
+DurationLocale getDurationLocale(final Locale locale) =>
+    DurationLocale.fromLanguageCode(locale.languageCode) ??
+    const EnglishDurationLocale();

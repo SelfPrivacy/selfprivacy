@@ -5,7 +5,16 @@ import 'package:selfprivacy/logic/models/json/dns_records.dart';
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
 abstract class DnsProvider {
+  /// Returns an assigned enum value, respectively to which
+  /// provider implements [DnsProvider] interface.
   DnsProviderType get type;
+
+  /// Tries to access an account linked to the provided token.
+  ///
+  /// To generate a token for your account follow instructions of your
+  /// DNS provider respectfully.
+  ///
+  /// If success, saves it for future usage.
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
   Future<GenericResult<String?>> getZoneId(final String domain);
   Future<GenericResult<void>> removeDomainRecords({

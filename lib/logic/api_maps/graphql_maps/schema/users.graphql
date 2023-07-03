@@ -1,9 +1,3 @@
-fragment basicMutationReturnFields on MutationReturnInterface{
-  code
-  message
-  success
-}
-
 fragment userFields on User{
   username
   userType

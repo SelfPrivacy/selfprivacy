@@ -1,0 +1,93 @@
+query BackupConfiguration {
+  backup {
+    configuration {
+      autobackupPeriod
+      encryptionKey
+      isInitialized
+      locationId
+      locationName
+      provider
+    }
+  }
+}
+
+query AllBackupSnapshots {
+  backup {
+    allSnapshots {
+      id
+      createdAt
+      service {
+        displayName
+        id
+      }
+    }
+  }
+}
+
+fragment genericBackupConfigReturn on GenericBackupConfigReturn {
+  code
+  message
+  success
+  configuration {
+    provider
+    encryptionKey
+    isInitialized
+    autobackupPeriod
+    locationName
+    locationId
+  }
+}
+
+mutation ForceSnapshotsReload {
+  backup {
+    forceSnapshotsReload {
+      ...basicMutationReturnFields
+    }
+  }
+}
+
+mutation StartBackup($serviceId: String!) {
+  backup {
+    startBackup(serviceId: $serviceId) {
+      ...basicMutationReturnFields
+      job {
+        ...basicApiJobsFields
+      }
+    }
+  }
+}
+
+mutation SetAutobackupPeriod($period: Int = null) {
+  backup {
+    setAutobackupPeriod(period: $period) {
+      ...genericBackupConfigReturn
+    }
+  }
+}
+
+mutation RemoveRepository {
+  backup {
+    removeRepository {
+      ...genericBackupConfigReturn
+    }
+  }
+}
+
+mutation InitializeRepository($repository: InitializeRepositoryInput!) {
+  backup {
+    initializeRepository(repository: $repository) {
+      ...genericBackupConfigReturn
+    }
+  }
+}
+
+mutation RestoreBackup($snapshotId: String!) {
+  backup {
+    restoreBackup(snapshotId: $snapshotId) {
+      ...basicMutationReturnFields
+      job {
+        ...basicApiJobsFields
+      }
+    }
+  }
+}

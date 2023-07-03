@@ -44,11 +44,10 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
           ),
           SwitchListTile(
             title: Text('developer_settings.ignore_tls'.tr()),
-            subtitle:
-            Text('developer_settings.ignore_tls_description'.tr()),
+            subtitle: Text('developer_settings.ignore_tls_description'.tr()),
             value: TlsOptions.verifyCertificate,
             onChanged: (final bool value) => setState(
-                  () => TlsOptions.verifyCertificate = value,
+              () => TlsOptions.verifyCertificate = value,
             ),
           ),
           Padding(

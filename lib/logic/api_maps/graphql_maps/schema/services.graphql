@@ -1,21 +1,17 @@
-fragment basicMutationReturnFields on MutationReturnInterface{
-  code
-  message
-  success
-}
-
 query AllServices {
   services {
     allServices {
       description
       displayName
       dnsRecords {
-        ...dnsRecordFields
+        ...fragmentDnsRecords
       }
       id
       isEnabled
       isMovable
       isRequired
+      canBeBackedUp
+      backupDescription
       status
       storageUsage {
         title
@@ -64,17 +60,7 @@ mutation MoveService($input: MoveServiceInput!) {
   moveService(input: $input) {
     ...basicMutationReturnFields
     job {
-      createdAt
-      description
-      error
-      finishedAt
-      name
-      progress
-      result
-      status
-      statusText
-      uid
-      updatedAt
+      ...basicApiJobsFields
     }
   }
 }

@@ -4,6 +4,21 @@ fragment basicMutationReturnFields on MutationReturnInterface{
   success
 }
 
+fragment basicApiJobsFields on ApiJob{
+  createdAt
+  description
+  error
+  finishedAt
+  name
+  progress
+  result
+  status
+  statusText
+  uid
+  typeId
+  updatedAt
+}
+
 query GetApiVersion {
   api {
     version
@@ -13,17 +28,7 @@ query GetApiVersion {
 query GetApiJobs {
   jobs {
     getJobs {
-      createdAt
-      description
-      error
-      finishedAt
-      name
-      progress
-      result
-      status
-      statusText
-      uid
-      updatedAt
+      ...basicApiJobsFields
     }
   }
 }

@@ -12,3 +12,4 @@
 100. DnsProvider
 101. ServerProvider
 102. UserType
+103. BackupsProvider

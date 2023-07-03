@@ -6,6 +6,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
+
 class Service {
   Service.fromGraphQL(final Query$AllServices$services$allServices service)
       : this(
@@ -15,6 +17,8 @@ class Service {
           isEnabled: service.isEnabled,
           isRequired: service.isRequired,
           isMovable: service.isMovable,
+          canBeBackedUp: service.canBeBackedUp,
+          backupDescription: service.backupDescription,
           status: ServiceStatus.fromGraphQL(service.status),
           storageUsage: ServiceStorageUsage(
             used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
@@ -24,7 +28,9 @@ class Service {
           svgIcon: utf8.decode(base64.decode(service.svgIcon)),
           dnsRecords: service.dnsRecords
                   ?.map(
-                    (final Fragment$dnsRecordFields record) =>
+                    (
+                      final Fragment$fragmentDnsRecords record,
+                    ) =>
                         DnsRecord.fromGraphQL(record),
                   )
                   .toList() ??
@@ -38,6 +44,8 @@ class Service {
     required this.isEnabled,
     required this.isRequired,
     required this.isMovable,
+    required this.canBeBackedUp,
+    required this.backupDescription,
     required this.status,
     required this.storageUsage,
     required this.svgIcon,
@@ -71,6 +79,8 @@ class Service {
     isEnabled: false,
     isRequired: false,
     isMovable: false,
+    canBeBackedUp: false,
+    backupDescription: '',
     status: ServiceStatus.off,
     storageUsage: ServiceStorageUsage(
       used: const DiskSize(byte: 0),
@@ -87,6 +97,8 @@ class Service {
   final bool isEnabled;
   final bool isRequired;
   final bool isMovable;
+  final bool canBeBackedUp;
+  final String backupDescription;
   final ServiceStatus status;
   final ServiceStorageUsage storageUsage;
   final String svgIcon;

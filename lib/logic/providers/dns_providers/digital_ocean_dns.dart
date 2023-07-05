@@ -45,11 +45,42 @@ class DigitalOceanDnsProvider extends DnsProvider {
   }
 
   @override
-  Future<GenericResult<String?>> getZoneId(final String domain) async =>
-      GenericResult(
-        data: domain,
-        success: true,
+  Future<GenericResult<List<String>>> domainList() async {
+    List<String> domains = [];
+    final result = await _adapter.api().domainList();
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: domains,
+        code: result.code,
+        message: result.message,
       );
+    }
+
+    domains = result.data
+        .map<String>(
+          (final el) => el['name'] as String,
+        )
+        .toList();
+
+    return GenericResult(
+      success: true,
+      data: domains,
+    );
+  }
+
+  @override
+  Future<GenericResult<void>> createDomainRecords({
+    required final ServerDomain domain,
+    final String? ip4,
+  }) async =>
+      _adapter.api().createMultipleDnsRecords(
+            domain: domain,
+            records: getProjectDnsRecords(
+              domain.domainName,
+              ip4,
+            ),
+          );
 
   @override
   Future<GenericResult<void>> removeDomainRecords({
@@ -112,19 +143,6 @@ class DigitalOceanDnsProvider extends DnsProvider {
   }
 
   @override
-  Future<GenericResult<void>> createDomainRecords({
-    required final ServerDomain domain,
-    final String? ip4,
-  }) async =>
-      _adapter.api().createMultipleDnsRecords(
-            domain: domain,
-            records: getProjectDnsRecords(
-              domain.domainName,
-              ip4,
-            ),
-          );
-
-  @override
   Future<GenericResult<void>> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
@@ -133,31 +151,6 @@ class DigitalOceanDnsProvider extends DnsProvider {
         domain: domain,
         records: [record],
       );
-
-  @override
-  Future<GenericResult<List<String>>> domainList() async {
-    List<String> domains = [];
-    final result = await _adapter.api().domainList();
-    if (result.data.isEmpty || !result.success) {
-      return GenericResult(
-        success: result.success,
-        data: domains,
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    domains = result.data
-        .map<String>(
-          (final el) => el['name'] as String,
-        )
-        .toList();
-
-    return GenericResult(
-      success: true,
-      data: domains,
-    );
-  }
 
   @override
   Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
@@ -356,4 +349,11 @@ class DigitalOceanDnsProvider extends DnsProvider {
         ),
     ];
   }
+
+  @override
+  Future<GenericResult<String?>> getZoneId(final String domain) async =>
+      GenericResult(
+        data: domain,
+        success: true,
+      );
 }

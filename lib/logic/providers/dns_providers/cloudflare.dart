@@ -45,21 +45,40 @@ class CloudflareDnsProvider extends DnsProvider {
   }
 
   @override
-  Future<GenericResult<String?>> getZoneId(final String domain) async {
-    String? id;
-    final result = await _adapter.api().getZones(domain);
+  Future<GenericResult<List<String>>> domainList() async {
+    List<String> domains = [];
+    final result = await _adapter.api().getDomains();
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
-        data: id,
+        data: domains,
         code: result.code,
         message: result.message,
       );
     }
 
-    id = result.data[0]['id'];
+    domains = result.data
+        .map<String>(
+          (final el) => el['name'] as String,
+        )
+        .toList();
 
-    return GenericResult(success: true, data: id);
+    return GenericResult(
+      success: true,
+      data: domains,
+    );
+  }
+
+  @override
+  Future<GenericResult<void>> createDomainRecords({
+    required final ServerDomain domain,
+    final String? ip4,
+  }) {
+    final records = getProjectDnsRecords(domain.domainName, ip4);
+    return _adapter.api().createMultipleDnsRecords(
+          domain: domain,
+          records: records,
+        );
   }
 
   @override
@@ -117,18 +136,6 @@ class CloudflareDnsProvider extends DnsProvider {
   }
 
   @override
-  Future<GenericResult<void>> createDomainRecords({
-    required final ServerDomain domain,
-    final String? ip4,
-  }) {
-    final records = getProjectDnsRecords(domain.domainName, ip4);
-    return _adapter.api().createMultipleDnsRecords(
-          domain: domain,
-          records: records,
-        );
-  }
-
-  @override
   Future<GenericResult<void>> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
@@ -137,31 +144,6 @@ class CloudflareDnsProvider extends DnsProvider {
         domain: domain,
         records: [record],
       );
-
-  @override
-  Future<GenericResult<List<String>>> domainList() async {
-    List<String> domains = [];
-    final result = await _adapter.api().getDomains();
-    if (result.data.isEmpty || !result.success) {
-      return GenericResult(
-        success: result.success,
-        data: domains,
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    domains = result.data
-        .map<String>(
-          (final el) => el['name'] as String,
-        )
-        .toList();
-
-    return GenericResult(
-      success: true,
-      data: domains,
-    );
-  }
 
   @override
   Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
@@ -352,5 +334,23 @@ class CloudflareDnsProvider extends DnsProvider {
       txt2,
       vpn
     ];
+  }
+
+  @override
+  Future<GenericResult<String?>> getZoneId(final String domain) async {
+    String? id;
+    final result = await _adapter.api().getZones(domain);
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: id,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    id = result.data[0]['id'];
+
+    return GenericResult(success: true, data: id);
   }
 }

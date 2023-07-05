@@ -16,31 +16,69 @@ abstract class DnsProvider {
   ///
   /// If success, saves it for future usage.
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
-  Future<GenericResult<String?>> getZoneId(final String domain);
-  Future<GenericResult<void>> removeDomainRecords({
-    required final ServerDomain domain,
-    final String? ip4,
-  });
-  Future<GenericResult<List<DnsRecord>>> getDnsRecords({
-    required final ServerDomain domain,
-  });
+
+  /// Returns list of all available domain entries assigned to the account.
+  Future<GenericResult<List<String>>> domainList();
+
+  /// Tries to create all main domain records needed
+  /// for SelfPrivacy to launch on requested domain by ip4.
+  ///
+  /// Doesn't check for duplication, cleaning has
+  /// to be done beforehand by [removeDomainRecords]
   Future<GenericResult<void>> createDomainRecords({
     required final ServerDomain domain,
     final String? ip4,
   });
+
+  /// Tries to remove all domain records of requested domain by ip4.
+  ///
+  /// Will remove all entries, including the ones
+  /// that weren't created by SelfPrivacy.
+  Future<GenericResult<void>> removeDomainRecords({
+    required final ServerDomain domain,
+    final String? ip4,
+  });
+
+  /// Returns list of all [DnsRecord] entries assigned to requested domain.
+  Future<GenericResult<List<DnsRecord>>> getDnsRecords({
+    required final ServerDomain domain,
+  });
+
+  /// Tries to create or update a domain record needed
+  /// on requested domain.
+  ///
+  /// Doesn't check for duplication, cleaning has
+  /// to be done beforehand by [removeDomainRecords]
   Future<GenericResult<void>> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
   );
-  Future<GenericResult<List<String>>> domainList();
+
+  /// Tries to check whether all known DNS records on the domain by ip4
+  /// match expectations of SelfPrivacy in order to launch.
+  ///
+  /// Will return list of [DesiredDnsRecord] objects, which represent
+  /// only those records which have successfully passed validation.
   Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
     final ServerDomain domain,
     final String ip4,
     final String dkimPublicKey,
   );
+
+  /// Will return list of [DesiredDnsRecord] objects, which represent
+  /// samples of perfect DNS records we need to know about in order to launch
+  /// SelfPrivacy application correctly.
   List<DesiredDnsRecord> getDesiredDnsRecords(
     final String? domainName,
     final String? ip4,
     final String? dkimPublicKey,
   );
+
+  /// Tries to access zone of requested domain.
+  ///
+  /// If a DNS provider doesn't support zones,
+  /// will return domain without any changes.
+  ///
+  /// If success, returns an initializing string of zone id.
+  Future<GenericResult<String?>> getZoneId(final String domain);
 }

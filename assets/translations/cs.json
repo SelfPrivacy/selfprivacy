@@ -406,9 +406,9 @@
             "access_granted_on": "Přístup udělen na {}"
         },
         "revoke_device_alert": {
-            "header": "Zrušit přístup?",
+            "header": "Odvolání přístup?",
             "description": "Zařízení {} již nebude mít přístup k serveru.",
-            "yes": "Zrušit",
+            "yes": "Odvolání",
             "no": "Zrušit"
         },
         "add_new_device_screen": {

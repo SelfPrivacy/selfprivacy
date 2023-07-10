@@ -131,8 +131,6 @@ class MainScreenNavigationDrawer extends StatelessWidget {
       width: 296,
       child: LayoutBuilder(
         builder: (final context, final constraints) => NavigationDrawer(
-          // backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-          // surfaceTintColor: Colors.transparent,
           key: const Key('PrimaryNavigationDrawer'),
           selectedIndex: activeIndex,
           onDestinationSelected: (final index) {

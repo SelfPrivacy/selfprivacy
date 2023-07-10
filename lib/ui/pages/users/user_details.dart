@@ -50,7 +50,7 @@ class UserDetailsPage extends StatelessWidget {
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
-              backgroundColor: Colors.transparent,
+              useRootNavigator: true,
               builder: (final BuildContext context) => Padding(
                 padding: MediaQuery.of(context).viewInsets,
                 child: ResetPassword(user: user),
@@ -178,7 +178,7 @@ class _SshKeysCard extends StatelessWidget {
                 showModalBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
+                  useRootNavigator: true,
                   builder: (final BuildContext context) => Padding(
                     padding: MediaQuery.of(context).viewInsets,
                     child: NewSshKey(user),

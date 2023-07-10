@@ -137,6 +137,12 @@ class HetznerLocation {
       _$HetznerLocationFromJson(json);
 }
 
+/// A Volume is a highly-available, scalable, and SSD-based block storage for Servers.
+///
+/// Pricing for Volumes depends on the Volume size and Location, not the actual used storage.
+///
+/// Please see Hetzner Docs for more details about Volumes.
+/// https://docs.hetzner.cloud/#volumes
 @JsonSerializable()
 class HetznerVolume {
   HetznerVolume(
@@ -146,11 +152,20 @@ class HetznerVolume {
     this.name,
     this.linuxDevice,
   );
+
+  /// ID of the Resource
   final int id;
+
+  /// Size in GB of the Volume
   final int size;
+
+  /// ID of the Server the Volume is attached to, null if it is not attached at all
   final int? serverId;
+
+  /// Name of the Resource. Is unique per Project.
   final String name;
 
+  /// Device path on the file system for the Volume
   @JsonKey(name: 'linux_device')
   final String? linuxDevice;
 

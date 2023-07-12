@@ -314,7 +314,7 @@ class SelectTypePage extends StatelessWidget {
                                           'initializing.choose_server_type_payment_per_month'
                                               .tr(
                                             args: [
-                                              '${type.price.value.toString()} ${type.price.currency}'
+                                              '${type.price.value.toString()} ${type.price.currency.shortcode}'
                                             ],
                                           ),
                                           style: Theme.of(context)

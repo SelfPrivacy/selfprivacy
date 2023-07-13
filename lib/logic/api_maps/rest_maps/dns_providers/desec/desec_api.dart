@@ -92,7 +92,63 @@ class DesecApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<void>> updateRecords({
+  Future<GenericResult<List>> getDomains() async {
+    List domains = [];
+
+    late final Response? response;
+    final Dio client = await getClient();
+    try {
+      response = await client.get(
+        '',
+      );
+      await Future.delayed(const Duration(seconds: 1));
+      domains = response.data;
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: domains,
+        code: response?.statusCode,
+        message: response?.statusMessage,
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(
+      success: true,
+      data: domains,
+      code: response.statusCode,
+      message: response.statusMessage,
+    );
+  }
+
+  Future<GenericResult<void>> createMultipleDnsRecords({
+    required final ServerDomain domain,
+    required final List<dynamic> records,
+  }) async {
+    final String domainName = domain.domainName;
+    final String url = '/$domainName/rrsets/';
+
+    final Dio client = await getClient();
+    try {
+      await client.post(url, data: records);
+      await Future.delayed(const Duration(seconds: 1));
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(success: true, data: null);
+  }
+
+  Future<GenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
     required final List<dynamic> records,
   }) async {
@@ -144,61 +200,5 @@ class DesecApi extends RestApiMap {
     }
 
     return GenericResult(data: allRecords, success: true);
-  }
-
-  Future<GenericResult<void>> createRecords({
-    required final ServerDomain domain,
-    required final List<dynamic> records,
-  }) async {
-    final String domainName = domain.domainName;
-    final String url = '/$domainName/rrsets/';
-
-    final Dio client = await getClient();
-    try {
-      await client.post(url, data: records);
-      await Future.delayed(const Duration(seconds: 1));
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(success: true, data: null);
-  }
-
-  Future<GenericResult<List>> getDomains() async {
-    List domains = [];
-
-    late final Response? response;
-    final Dio client = await getClient();
-    try {
-      response = await client.get(
-        '',
-      );
-      await Future.delayed(const Duration(seconds: 1));
-      domains = response.data;
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: domains,
-        code: response?.statusCode,
-        message: response?.statusMessage,
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(
-      success: true,
-      data: domains,
-      code: response.statusCode,
-      message: response.statusMessage,
-    );
   }
 }

@@ -48,6 +48,100 @@ class DigitalOceanApi extends RestApiMap {
   String get infectProviderName => 'digitalocean';
   String get displayProviderName => 'Digital Ocean';
 
+  Future<GenericResult<List>> getServers() async {
+    List servers = [];
+
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get('/droplets');
+      servers = response.data['droplets'];
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: servers,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(success: true, data: servers);
+  }
+
+  Future<GenericResult<int?>> createServer({
+    required final String dnsApiToken,
+    required final String dnsProviderType,
+    required final String serverApiToken,
+    required final User rootUser,
+    required final String base64Password,
+    required final String databasePassword,
+    required final String domainName,
+    required final String hostName,
+    required final String serverType,
+  }) async {
+    final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
+
+    int? dropletId;
+    Response? serverCreateResponse;
+    final Dio client = await getClient();
+    try {
+      final Map<String, Object> data = {
+        'name': hostName,
+        'size': serverType,
+        'image': 'ubuntu-20-04-x64',
+        'user_data': '#cloud-config\n'
+            'runcmd:\n'
+            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/providers/digital-ocean/nixos-infect | '
+            "PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType STAGING_ACME='$stagingAcme' DOMAIN='$domainName' "
+            "LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$databasePassword "
+            'API_TOKEN=$serverApiToken HOSTNAME=$hostName bash 2>&1 | tee /tmp/infect.log',
+        'region': region!,
+      };
+      print('Decoded data: $data');
+
+      serverCreateResponse = await client.post(
+        '/droplets',
+        data: data,
+      );
+      dropletId = serverCreateResponse.data['droplet']['id'];
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(
+      data: dropletId,
+      success: true,
+      code: serverCreateResponse.statusCode,
+      message: serverCreateResponse.statusMessage,
+    );
+  }
+
+  Future<GenericResult<void>> deleteServer(final int serverId) async {
+    final Dio client = await getClient();
+    try {
+      await client.delete('/droplets/$serverId');
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(success: true, data: null);
+  }
+
   Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
@@ -94,41 +188,103 @@ class DigitalOceanApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<DigitalOceanVolume?>> createVolume() async {
-    DigitalOceanVolume? volume;
-    Response? createVolumeResponse;
+  Future<GenericResult<List<DigitalOceanLocation>>>
+      getAvailableLocations() async {
+    final List<DigitalOceanLocation> locations = [];
+
     final Dio client = await getClient();
     try {
-      await Future.delayed(const Duration(seconds: 6));
-
-      createVolumeResponse = await client.post(
-        '/volumes',
-        data: {
-          'size_gigabytes': 10,
-          'name': 'volume${StringGenerators.storageName()}',
-          'labels': {'labelkey': 'value'},
-          'region': region,
-          'filesystem_type': 'ext4',
-        },
+      final Response response = await client.get(
+        '/regions',
       );
-      volume = DigitalOceanVolume.fromJson(createVolumeResponse.data['volume']);
+
+      for (final region in response.data!['regions']) {
+        locations.add(DigitalOceanLocation.fromJson(region));
+      }
     } catch (e) {
       print(e);
       return GenericResult(
-        data: null,
+        data: [],
         success: false,
         message: e.toString(),
       );
     } finally {
-      client.close();
+      close(client);
     }
 
-    return GenericResult(
-      data: volume,
-      success: true,
-      code: createVolumeResponse.statusCode,
-      message: createVolumeResponse.statusMessage,
-    );
+    return GenericResult(data: locations, success: true);
+  }
+
+  Future<GenericResult<List<DigitalOceanServerType>>>
+      getAvailableServerTypes() async {
+    final List<DigitalOceanServerType> types = [];
+
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get(
+        '/sizes',
+      );
+      for (final size in response.data!['sizes']) {
+        types.add(DigitalOceanServerType.fromJson(size));
+      }
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(data: types, success: true);
+  }
+
+  Future<GenericResult<void>> powerOn(final int serverId) async {
+    final Dio client = await getClient();
+    try {
+      await client.post(
+        '/droplets/$serverId/actions',
+        data: {
+          'type': 'power_on',
+        },
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(success: true, data: null);
+  }
+
+  Future<GenericResult<void>> restart(final int serverId) async {
+    final Dio client = await getClient();
+    try {
+      await client.post(
+        '/droplets/$serverId/actions',
+        data: {
+          'type': 'reboot',
+        },
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(success: true, data: null);
   }
 
   Future<GenericResult<List<DigitalOceanVolume>>> getVolumes({
@@ -165,10 +321,24 @@ class DigitalOceanApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<void>> deleteVolume(final String uuid) async {
+  Future<GenericResult<DigitalOceanVolume?>> createVolume() async {
+    DigitalOceanVolume? volume;
+    Response? createVolumeResponse;
     final Dio client = await getClient();
     try {
-      await client.delete('/volumes/$uuid');
+      await Future.delayed(const Duration(seconds: 6));
+
+      createVolumeResponse = await client.post(
+        '/volumes',
+        data: {
+          'size_gigabytes': 10,
+          'name': 'volume${StringGenerators.storageName()}',
+          'labels': {'labelkey': 'value'},
+          'region': region,
+          'filesystem_type': 'ext4',
+        },
+      );
+      volume = DigitalOceanVolume.fromJson(createVolumeResponse.data['volume']);
     } catch (e) {
       print(e);
       return GenericResult(
@@ -181,8 +351,10 @@ class DigitalOceanApi extends RestApiMap {
     }
 
     return GenericResult(
-      data: null,
+      data: volume,
       success: true,
+      code: createVolumeResponse.statusCode,
+      message: createVolumeResponse.statusMessage,
     );
   }
 
@@ -262,6 +434,27 @@ class DigitalOceanApi extends RestApiMap {
     );
   }
 
+  Future<GenericResult<void>> deleteVolume(final String uuid) async {
+    final Dio client = await getClient();
+    try {
+      await client.delete('/volumes/$uuid');
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        data: null,
+        success: false,
+        message: e.toString(),
+      );
+    } finally {
+      client.close();
+    }
+
+    return GenericResult(
+      data: null,
+      success: true,
+    );
+  }
+
   Future<GenericResult<bool>> resizeVolume(
     final String name,
     final DiskSize size,
@@ -297,125 +490,6 @@ class DigitalOceanApi extends RestApiMap {
       data: success,
       success: true,
     );
-  }
-
-  Future<GenericResult<int?>> createServer({
-    required final String dnsApiToken,
-    required final String dnsProviderType,
-    required final String serverApiToken,
-    required final User rootUser,
-    required final String base64Password,
-    required final String databasePassword,
-    required final String domainName,
-    required final String hostName,
-    required final String serverType,
-  }) async {
-    final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
-
-    int? dropletId;
-    Response? serverCreateResponse;
-    final Dio client = await getClient();
-    try {
-      final Map<String, Object> data = {
-        'name': hostName,
-        'size': serverType,
-        'image': 'ubuntu-20-04-x64',
-        'user_data': '#cloud-config\n'
-            'runcmd:\n'
-            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/providers/digital-ocean/nixos-infect | '
-            "PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType STAGING_ACME='$stagingAcme' DOMAIN='$domainName' "
-            "LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$databasePassword "
-            'API_TOKEN=$serverApiToken HOSTNAME=$hostName bash 2>&1 | tee /tmp/infect.log',
-        'region': region!,
-      };
-      print('Decoded data: $data');
-
-      serverCreateResponse = await client.post(
-        '/droplets',
-        data: data,
-      );
-      dropletId = serverCreateResponse.data['droplet']['id'];
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(
-      data: dropletId,
-      success: true,
-      code: serverCreateResponse.statusCode,
-      message: serverCreateResponse.statusMessage,
-    );
-  }
-
-  Future<GenericResult<void>> deleteServer(final int serverId) async {
-    final Dio client = await getClient();
-    try {
-      await client.delete('/droplets/$serverId');
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(success: true, data: null);
-  }
-
-  Future<GenericResult<void>> restart(final int serverId) async {
-    final Dio client = await getClient();
-    try {
-      await client.post(
-        '/droplets/$serverId/actions',
-        data: {
-          'type': 'reboot',
-        },
-      );
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(success: true, data: null);
-  }
-
-  Future<GenericResult<void>> powerOn(final int serverId) async {
-    final Dio client = await getClient();
-    try {
-      await client.post(
-        '/droplets/$serverId/actions',
-        data: {
-          'type': 'power_on',
-        },
-      );
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(success: true, data: null);
   }
 
   Future<GenericResult<List>> getMetricsCpu(
@@ -483,79 +557,5 @@ class DigitalOceanApi extends RestApiMap {
     }
 
     return GenericResult(success: true, data: metrics);
-  }
-
-  Future<GenericResult<List>> getServers() async {
-    List servers = [];
-
-    final Dio client = await getClient();
-    try {
-      final Response response = await client.get('/droplets');
-      servers = response.data['droplets'];
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: servers,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(success: true, data: servers);
-  }
-
-  Future<GenericResult<List<DigitalOceanLocation>>>
-      getAvailableLocations() async {
-    final List<DigitalOceanLocation> locations = [];
-
-    final Dio client = await getClient();
-    try {
-      final Response response = await client.get(
-        '/regions',
-      );
-
-      for (final region in response.data!['regions']) {
-        locations.add(DigitalOceanLocation.fromJson(region));
-      }
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(data: locations, success: true);
-  }
-
-  Future<GenericResult<List<DigitalOceanServerType>>>
-      getAvailableServerTypes() async {
-    final List<DigitalOceanServerType> types = [];
-
-    final Dio client = await getClient();
-    try {
-      final Response response = await client.get(
-        '/sizes',
-      );
-      for (final size in response.data!['sizes']) {
-        types.add(DigitalOceanServerType.fromJson(size));
-      }
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(data: types, success: true);
   }
 }

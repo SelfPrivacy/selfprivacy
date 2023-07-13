@@ -47,7 +47,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
   @override
   Future<GenericResult<List<String>>> domainList() async {
     List<String> domains = [];
-    final result = await _adapter.api().domainList();
+    final result = await _adapter.api().getDomains();
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,

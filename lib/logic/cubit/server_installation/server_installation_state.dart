@@ -200,7 +200,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
         providerApiToken: providerApiToken!,
-        serverTypeIdentificator: serverTypeIdentificator ?? '',
+        serverTypeIdentificator: serverTypeIdentificator!,
         dnsApiToken: dnsApiToken!,
         backblazeCredential: backblazeCredential!,
         serverDomain: serverDomain!,
@@ -346,7 +346,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
         providerApiToken: providerApiToken!,
-        serverTypeIdentificator: serverTypeIdentificator ?? '',
+        serverTypeIdentificator: serverTypeIdentificator!,
         dnsApiToken: dnsApiToken!,
         backblazeCredential: backblazeCredential!,
         serverDomain: serverDomain!,

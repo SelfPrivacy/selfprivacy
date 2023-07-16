@@ -57,6 +57,7 @@ class ServerInstallationRepository {
       ProvidersController.initServerProvider(
         ServerProviderSettings(
           provider: serverProvider ?? serverDetails!.provider,
+          isAuthorized: providerApiToken != null,
           location: location,
         ),
       );
@@ -67,6 +68,7 @@ class ServerInstallationRepository {
             serverDomain.provider != DnsProviderType.unknown)) {
       ProvidersController.initDnsProvider(
         DnsProviderSettings(
+          isAuthorized: dnsApiToken != null,
           provider: dnsProvider ?? serverDomain!.provider,
         ),
       );

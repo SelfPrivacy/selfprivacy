@@ -37,11 +37,11 @@ class ApiAdapter {
 class HetznerServerProvider extends ServerProvider {
   HetznerServerProvider() : _adapter = ApiAdapter();
   HetznerServerProvider.load(
-    final ServerType serverType,
+    final String? location,
     final bool isAuthotized,
   ) : _adapter = ApiAdapter(
           isWithToken: isAuthotized,
-          region: serverType.location.identifier,
+          region: location,
         );
 
   ApiAdapter _adapter;

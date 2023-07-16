@@ -92,22 +92,23 @@ class CloudflareApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<List<dynamic>>> getZones(final String domain) async {
-    List zones = [];
+  Future<GenericResult<List>> getDomains() async {
+    final String url = '$rootAddress/zones';
+    List domains = [];
 
     late final Response? response;
     final Dio client = await getClient();
     try {
       response = await client.get(
-        '/zones',
-        queryParameters: {'name': domain},
+        url,
+        queryParameters: {'per_page': 50},
       );
-      zones = response.data['result'];
+      domains = response.data['result'];
     } catch (e) {
       print(e);
-      GenericResult(
+      return GenericResult(
         success: false,
-        data: zones,
+        data: domains,
         code: response?.statusCode,
         message: response?.statusMessage,
       );
@@ -115,7 +116,47 @@ class CloudflareApi extends RestApiMap {
       close(client);
     }
 
-    return GenericResult(success: true, data: zones);
+    return GenericResult(
+      success: true,
+      data: domains,
+      code: response.statusCode,
+      message: response.statusMessage,
+    );
+  }
+
+  Future<GenericResult<void>> createMultipleDnsRecords({
+    required final ServerDomain domain,
+    required final List<DnsRecord> records,
+  }) async {
+    final String domainZoneId = domain.zoneId;
+    final List<Future> allCreateFutures = <Future>[];
+
+    final Dio client = await getClient();
+    try {
+      for (final DnsRecord record in records) {
+        allCreateFutures.add(
+          client.post(
+            '/zones/$domainZoneId/dns_records',
+            data: record.toJson(),
+          ),
+        );
+      }
+      await Future.wait(allCreateFutures);
+    } on DioError catch (e) {
+      print(e.message);
+      rethrow;
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(success: true, data: null);
   }
 
   Future<GenericResult<void>> removeSimilarRecords({
@@ -183,58 +224,22 @@ class CloudflareApi extends RestApiMap {
     return GenericResult(data: allRecords, success: true);
   }
 
-  Future<GenericResult<void>> createMultipleDnsRecords({
-    required final ServerDomain domain,
-    required final List<DnsRecord> records,
-  }) async {
-    final String domainZoneId = domain.zoneId;
-    final List<Future> allCreateFutures = <Future>[];
-
-    final Dio client = await getClient();
-    try {
-      for (final DnsRecord record in records) {
-        allCreateFutures.add(
-          client.post(
-            '/zones/$domainZoneId/dns_records',
-            data: record.toJson(),
-          ),
-        );
-      }
-      await Future.wait(allCreateFutures);
-    } on DioError catch (e) {
-      print(e.message);
-      rethrow;
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(success: true, data: null);
-  }
-
-  Future<GenericResult<List>> getDomains() async {
-    final String url = '$rootAddress/zones';
-    List domains = [];
+  Future<GenericResult<List<dynamic>>> getZones(final String domain) async {
+    List zones = [];
 
     late final Response? response;
     final Dio client = await getClient();
     try {
       response = await client.get(
-        url,
-        queryParameters: {'per_page': 50},
+        '/zones',
+        queryParameters: {'name': domain},
       );
-      domains = response.data['result'];
+      zones = response.data['result'];
     } catch (e) {
       print(e);
-      return GenericResult(
+      GenericResult(
         success: false,
-        data: domains,
+        data: zones,
         code: response?.statusCode,
         message: response?.statusMessage,
       );
@@ -242,11 +247,6 @@ class CloudflareApi extends RestApiMap {
       close(client);
     }
 
-    return GenericResult(
-      success: true,
-      data: domains,
-      code: response.statusCode,
-      message: response.statusMessage,
-    );
+    return GenericResult(success: true, data: zones);
   }
 }

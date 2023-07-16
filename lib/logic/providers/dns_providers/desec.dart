@@ -91,7 +91,7 @@ class DesecDnsProvider extends DnsProvider {
       );
     }
 
-    return _adapter.api().createRecords(
+    return _adapter.api().createMultipleDnsRecords(
           domain: domain,
           records: bulkRecords,
         );
@@ -127,7 +127,7 @@ class DesecDnsProvider extends DnsProvider {
       },
     );
 
-    return _adapter.api().updateRecords(
+    return _adapter.api().removeSimilarRecords(
           domain: domain,
           records: bulkRecords,
         );
@@ -179,7 +179,7 @@ class DesecDnsProvider extends DnsProvider {
     final DnsRecord record,
     final ServerDomain domain,
   ) async {
-    final result = await _adapter.api().createRecords(
+    final result = await _adapter.api().createMultipleDnsRecords(
       domain: domain,
       records: [
         {

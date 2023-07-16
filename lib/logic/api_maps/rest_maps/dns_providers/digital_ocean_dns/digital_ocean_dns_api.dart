@@ -92,6 +92,68 @@ class DigitalOceanDnsApi extends RestApiMap {
     );
   }
 
+  Future<GenericResult<List>> getDomains() async {
+    List domains = [];
+
+    final Dio client = await getClient();
+    try {
+      final Response response = await client.get('/domains');
+      domains = response.data['domains'];
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        data: domains,
+        success: false,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(data: domains, success: true);
+  }
+
+  Future<GenericResult<void>> createMultipleDnsRecords({
+    required final ServerDomain domain,
+    required final List<DnsRecord> records,
+  }) async {
+    final String domainName = domain.domainName;
+    final List<Future> allCreateFutures = <Future>[];
+
+    final Dio client = await getClient();
+    try {
+      for (final DnsRecord record in records) {
+        allCreateFutures.add(
+          client.post(
+            '/domains/$domainName/records',
+            data: {
+              'type': record.type,
+              'name': record.name,
+              'data': record.content,
+              'ttl': record.ttl,
+              'priority': record.priority,
+            },
+          ),
+        );
+      }
+      await Future.wait(allCreateFutures);
+    } on DioError catch (e) {
+      print(e.message);
+      rethrow;
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    } finally {
+      close(client);
+    }
+
+    return GenericResult(success: true, data: null);
+  }
+
   Future<GenericResult<void>> removeSimilarRecords({
     required final ServerDomain domain,
     required final List records,
@@ -151,67 +213,5 @@ class DigitalOceanDnsApi extends RestApiMap {
     }
 
     return GenericResult(data: allRecords, success: true);
-  }
-
-  Future<GenericResult<void>> createMultipleDnsRecords({
-    required final ServerDomain domain,
-    required final List<DnsRecord> records,
-  }) async {
-    final String domainName = domain.domainName;
-    final List<Future> allCreateFutures = <Future>[];
-
-    final Dio client = await getClient();
-    try {
-      for (final DnsRecord record in records) {
-        allCreateFutures.add(
-          client.post(
-            '/domains/$domainName/records',
-            data: {
-              'type': record.type,
-              'name': record.name,
-              'data': record.content,
-              'ttl': record.ttl,
-              'priority': record.priority,
-            },
-          ),
-        );
-      }
-      await Future.wait(allCreateFutures);
-    } on DioError catch (e) {
-      print(e.message);
-      rethrow;
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(success: true, data: null);
-  }
-
-  Future<GenericResult<List>> domainList() async {
-    List domains = [];
-
-    final Dio client = await getClient();
-    try {
-      final Response response = await client.get('/domains');
-      domains = response.data['domains'];
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        data: domains,
-        success: false,
-        message: e.toString(),
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(data: domains, success: true);
   }
 }

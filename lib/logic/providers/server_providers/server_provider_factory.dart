@@ -15,9 +15,19 @@ class ServerProviderFactory {
   ) {
     switch (settings.provider) {
       case ServerProviderType.hetzner:
-        return HetznerServerProvider();
+        return settings.isAuthorized
+            ? HetznerServerProvider.load(
+                settings.location,
+                settings.isAuthorized,
+              )
+            : HetznerServerProvider();
       case ServerProviderType.digitalOcean:
-        return DigitalOceanServerProvider();
+        return settings.isAuthorized
+            ? DigitalOceanServerProvider.load(
+                settings.location,
+                settings.isAuthorized,
+              )
+            : DigitalOceanServerProvider();
       case ServerProviderType.unknown:
         throw UnknownProviderException('Unknown server provider');
     }

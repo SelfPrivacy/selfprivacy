@@ -1,3 +1,3 @@
-In the next window, enter the token obtained from the console of the previous version of the application.
+V ďalšom okne zadajte token získaný z konzoly predchádzajúcej verzie aplikácie.
 
-Enter it without the word *Bearer*.
+Musíte vstúpiť bez slova *Bearer*.

@@ -1,23 +1,23 @@
-### How to get Hetzner API Token
-1.  Visit the following [link](https://console.hetzner.cloud/) and sign
-    into newly created account.
-2.  Enter into previously created project. If you haven't created one,
-    then please proceed.
-3.  Hover side panel with mouse cursor. Panel should expand and show us
-    a menu. We're interested in the last one — **Security** (icon of a
-    key).
-4.  Next, in the upper part of an interface, we can see approximately
-    the following: **SSH Keys, API Tokens, Certificates, Members.** You
-    need **API Tokens**. Click on it.
-5.  In the right part of the interface, there should be **Generate API
-    token** button. If you're using mobile version og a webpage, in the
-    lower right corner you'll see **red cross**. Push that button.
-6.  In the **Description** field, give our token a name (this can be any
-    name that you like. It doesn't influence the essence.
-7.  Under the **Description** field we can see a possibility to choose
-    **permissions**. Pick **Read & Write**.
-8.  Click **Generate API Token.**
-9.  After that, our key will be shown. Store it in the reliable place,
-    or in the password manager, which is better.
+### Jak získat Hetzner API Token
+1.  Navštivte následující [link](https://console.hetzner.cloud/) a podepište se.
+    k nově vytvořenému účtu.
+2.  Vstupte do dříve vytvořeného projektu. Pokud jste žádný nevytvořili,
+    pak prosím pokračujte.
+3.  Kurzorem myši najeďte na boční panel. Panel by se měl rozbalit a zobrazit nám
+    nabídku. Nás zajímá poslední z nich - **Security** (ikona tzv.
+    klávesy).
+4.  Dále v horní části rozhraní vidíme přibližně následující položky
+    následující: ***SSH Keys, API Tokens, Certificates, Members**.
+    potřebujete **API Tokens**. Klepněte na něj.
+5.  V pravé části rozhraní by se mělo nacházet **Generate API
+    token** tlačítko. Pokud používáte mobilní verzi og webové stránky, v části
+    pravém dolním rohu uvidíte **červený křížek**. Stiskněte toto tlačítko.
+6.  V poli **Description** pojmenujte náš token (může to být libovolný název).
+    název, který se vám líbí. Na podstatu to nemá vliv.
+7.  Pod polem **Description** vidíme možnost zvolit si.
+    **Permissions**. Vyberte možnost **Read && Write**.
+8.  Klikněte na tlačítko **Generate API Token**.
+9.  Poté se zobrazí náš klíč. Uložte jej na spolehlivé místo,
+    nebo ve správci hesel, což je lepší.
 
-![Hetzner token setup](resource:assets/images/gifs/Hetzner.gif)
+![Nastavení tokenu Hetzner](resource:assets/images/gifs/Hetzner.gif)

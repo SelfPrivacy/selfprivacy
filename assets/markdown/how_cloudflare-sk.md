@@ -1,17 +1,17 @@
-### How to get Cloudflare API Token
-1. Visit the following link: https://dash.cloudflare.com/
-2. the right corner, click on the profile icon (a man in a circle). For the mobile version of the site, in the upper left corner, click the **Menu** button (three horizontal bars), in the dropdown menu, click on **My Profile**
-3. There are four configuration categories to choose from: *Communication*, *Authentication*, **API Tokens**, *Session*. Choose **API Tokens**.
-4. Click on **Create Token** button.
-5. Go down to the bottom and see the **Create Custom Token** field and press **Get Started** button on the right side.
-6. In the **Token Name** field, give your token a name.
-7. Next we have Permissions. In the leftmost field, select **Zone**. In the longest field, center, select **DNS**. In the rightmost field, select **Edit**. 
-8. Next, right under this line, click Add More. Similar field will appear.
-9. In the leftmost field of the new line, select, similar to the last line — **Zone**. In the center — a little different. Here choose the same as in the left — **Zone**. In the rightmost field, select **Read**.
-10. Next look at **Zone Resources**. Under this inscription there is a line with two fields. The left must have **Include** and the right must have **Specific Zone**. Once you select Specific Zone, another field appears on the right. Choose your domain in it.
-11. Flick to the bottom and press the blue **Continue to Summary** button.
-12. Check if you got everything right. A similar string must be present: *Domain — DNS:Edit, Zone:Read*.
-13. Click on **Create Token**.
-14. We copy the created token, and save it in a reliable place (preferably in the password manager).
+### Ako získať token API Cloudflare
+1. Navštívte nasledujúce prepojenie: https://dash.cloudflare.com/
+2. V pravom rohu kliknite na ikonu profilu (muž v kruhu). V prípade mobilnej verzie stránky kliknite v ľavom hornom rohu na tlačidlo **Menu** (tri vodorovné pruhy), v rozbaľovacej ponuke kliknite na **My profile**
+3. Na výber sú štyri kategórie konfigurácie: *Communication*, *Authentication*, **Toky API**, *Session*. Vyberte **API Tokens**.
+4. Kliknite na tlačidlo **Create Token**.
+5. Prejdite na spodnú časť a zobrazte pole **Create Custom Token** a stlačte tlačidlo **Get Started** na pravej strane.
+6. V poli **Token Name** zadajte svoj token.
+7. Ďalej tu máme položku Permissions. V ľavom krajnom poli vyberte položku **Zone**. V najdlhšom poli uprostred vyberte položku **DNS**. V krajnom pravom poli vyberte položku **Edit**. 
+8. Ďalej priamo pod týmto riadkom kliknite na položku **Pridať ďalšie**. Zobrazí sa podobné pole.
+9. V krajnom ľavom poli nového riadku vyberte podobne ako v predchádzajúcom riadku - **Zone**. V strede - trochu inak. Tu vyberte rovnako ako v ľavom poli - **Zone**. V krajnom pravom poli vyberte položku **Read**.
+10. Ďalej sa pozrite na položku **Zone Resources**. Pod týmto nápisom sa nachádza riadok s dvoma poľami. V ľavom musí byť uvedené **Include** a v pravom **Specific Zone**. Keď vyberiete položku **Špecifická zóna**, vpravo sa objaví ďalšie pole. V ňom vyberte svoju doménu.
+11. Prejdite na spodnú časť a stlačte modré tlačidlo **Continue to Summary**.
+12. Skontrolujte, či máte všetko správne. Musí sa vyskytovať podobný reťazec: *Domain — DNS:Edit, Zone:Read*.
+13. Kliknite na **Create Token**.
+14. Vytvorený token skopírujeme a uložíme ho na spoľahlivé miesto (najlepšie do správcu hesiel).
 
 ![Cloudflare token setup](resource:assets/images/gifs/CloudFlare.gif)

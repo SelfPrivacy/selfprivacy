@@ -1,12 +1,12 @@
-### About us
+### O nás
 
 More and more corporations want to control our data.
 We want to have full control of our **data** on our own.
 
-### Our mission
+### Naše poslání
 
-Digital independence and privacy, available to everyone
+Digitální nezávislost a soukromí dostupné všem
 
-### Target
+### Cíl
 
-Develop the program, which will allow everyone to deploy their private services for themselves and their neighbours.
+Rozvíjet program, který umožní každému nasadit své soukromé služby pro sebe a své sousedy.

@@ -1,26 +1,26 @@
-In the Hetzner server control panel, go to the **Rescue** tab. Then, click on **Enable rescue & power cycle**.
+V ovládacom paneli servera Hetzner prejdite na kartu **Rescue**. Potom kliknite na **Enable rescue & power cycle**.
 
-In *Choose a Recue OS* select **linux64**, and in *SSH Key* select your key if it has been added to your Hetzner account.
+V časti *Choose a Recue OS* vyberte **linux64** a v časti *SSH Key* vyberte svoj kľúč, ak bol pridaný do vášho účtu Hetzner.
 
-Click **Enable rescue & power cycle** and wait for the server to reboot. The login and password will be displayed on the screen. Login to the root user using your login and password information.
+Stlačte tlačidlo **Enable rescue & power cycle** a počkajte, kým sa server reštartuje. Zobrazí sa prihlasovacie heslo. Prihláste sa ako používateľ root pomocou prihlasovacích údajov a hesla.
 
-Mount your server file system and see the contents of the token file:
+Pripojte súborový systém servera a pozrite si obsah súboru token:
 
 ```sh
 mount /dev/sda1 /mnt
 cat /mnt/etc/nixos/userdata/tokens.json
 ```
 
-This file will have a similar construction:
+V tomto súbore bude podobný dizajn:
 
-```json
+``json
 {
-    "tokens": [
+    {"tokens": [
         {
-            "token": "token_to_copy",
-            "name": "device_name",
-            "date": "date"
+            {"token": "token_which_has_been_scoped",
+            {"name": "device_name",
+            {"date": "date"
         }
 ```
 
-Copy the token from the file and paste it in the next window.
+Skopírujte token zo súboru a vložte ho do ďalšieho okna.

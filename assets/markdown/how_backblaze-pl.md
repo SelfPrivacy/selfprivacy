@@ -5,4 +5,4 @@
 4. W wyświetlonym oknie podręcznym potwierdź generację.
 5. Zapisz _keyID_ i _applicationKey_ w bezpiecznym miejscu. Na przykład w menedżerze haseł.
 
-![Backblaze token setup](resource:assets/images/gifs/Backblaze.gif)
+![Otrzymanie tokena Backblaze](resource:assets/images/gifs/Backblaze.gif)

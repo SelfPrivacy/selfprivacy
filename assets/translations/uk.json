@@ -32,7 +32,8 @@
         "cancel": "Відмінити",
         "delete": "Видалити",
         "close": "Закрити",
-        "connect": "Підключіться"
+        "connect": "Підключіться",
+        "app_name": "SelfPrivacy"
     },
     "locale": "ua",
     "application_settings": {
@@ -67,7 +68,8 @@
     },
     "console_page": {
         "title": "Консоль",
-        "waiting": "Очікування ініціалізації…"
+        "waiting": "Очікування ініціалізації…",
+        "copy": "Copie"
     },
     "about_us_page": {
         "title": "Про нас"
@@ -128,7 +130,6 @@
         "choose_server_type_storage": "{} ГБ системного сховища",
         "choose_server_type_payment_per_month": "{} щомісячно",
         "no_server_types_found": "Не знайдено доступних типів серверів. Переконайтеся, що ваш обліковий запис доступний і спробуйте змінити розташування вашого сервера.",
-        "cloudflare_bad_key_error": "Некоректний ключ API CloudFlare",
         "backblaze_bad_key_error": "Інформація про зберігання Backblaze є недійсною",
         "select_dns": "Тепер давайте оберемо DNS-провайдера",
         "manage_domain_dns": "Для управління DNS домену",

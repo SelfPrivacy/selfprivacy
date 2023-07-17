@@ -3,10 +3,10 @@
 More and more corporations want to control our data.
 We want to have full control of our **data** on our own.
 
-### Our mission
+### Misja projektu
 
-Digital independence and privacy, available to everyone
+Niezależność i prywatność cyfrowa dostępna dla wszystkich
 
-### Target
+### Cel
 
-Develop the program, which will allow everyone to deploy their private services for themselves and their neighbours.
+Opracuj program, dzięki któremu każdy będzie mógł stworzyć prywatne usługi dla siebie i swoich bliskich.

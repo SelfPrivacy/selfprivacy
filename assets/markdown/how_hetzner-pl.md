@@ -1,23 +1,23 @@
-### How to get Hetzner API Token
-1.  Visit the following [link](https://console.hetzner.cloud/) and sign
-    into newly created account.
-2.  Enter into previously created project. If you haven't created one,
-    then please proceed.
-3.  Hover side panel with mouse cursor. Panel should expand and show us
-    a menu. We're interested in the last one — **Security** (icon of a
-    key).
-4.  Next, in the upper part of an interface, we can see approximately
-    the following: **SSH Keys, API Tokens, Certificates, Members.** You
-    need **API Tokens**. Click on it.
-5.  In the right part of the interface, there should be **Generate API
-    token** button. If you're using mobile version og a webpage, in the
-    lower right corner you'll see **red cross**. Push that button.
-6.  In the **Description** field, give our token a name (this can be any
-    name that you like. It doesn't influence the essence.
-7.  Under the **Description** field we can see a possibility to choose
+### Jak uzyskać Hetzner API Token
+1.  Odwiedź następujący [link](https://console.hetzner.cloud/) i zaloguj się
+    na nowo utworzone konto.
+2.  Wejdź do wcześniej utworzonego projektu. Jeśli jeszcze go nie stworzyłeś,
+    to proszę przejść dalej.
+3.  Najedź kursorem myszy na panel boczny. Panel powinien się rozwinąć i pokazać nam
+    menu. Nas interesuje ostatnie z nich - **Security** (ikona klucza).
+    .
+4.  Następnie w górnej części interfejsu możemy zobaczyć ok.
+    następujące elementy: ***SSH Keys, API Tokens, Certificates, Members.** 
+Klikamy na nie.
+5.  W prawej części interfejsu powinien znajdować się przycisk **Generate API
+    token**. Jeśli korzystasz z mobilnej wersji strony, w prawym dolnym rogu pojawi się
+    dolnym prawym rogu pojawi się **red cross**. Wciśnij ten przycisk.
+6.  W polu **Description** nadaj naszemu tokenowi nazwę (może to być dowolna nazwa).
+    nazwa, która Ci się podoba. Nie ma ona wpływu na istotę.
+7.  Pod polem **Description** widzimy możliwość wyboru.
     **permissions**. Pick **Read & Write**.
-8.  Click **Generate API Token.**
-9.  After that, our key will be shown. Store it in the reliable place,
-    or in the password manager, which is better.
+8.  Klikamy **Generate API Token**.
+9.  Po tej czynności pojawi się nasz klucz. Przechowuj go w wiarygodnym miejscu, 
+lub w menedżerze haseł, co jest lepsze.
 
-![Hetzner token setup](resource:assets/images/gifs/Hetzner.gif)
+![Ustawienie tokena Hetznera](resource:assets/images/gifs/Hetzner.gif)

@@ -33,7 +33,8 @@
         "continue": "Fortfahren",
         "alert": "Alarm",
         "services_title": "Ihre persönliche, private und unabhängige Dienste.",
-        "apply": "Anwenden"
+        "apply": "Anwenden",
+        "app_name": "SelfPrivacy"
     },
     "more_page": {
         "configuration_wizard": "Setup-Assistent",
@@ -46,7 +47,8 @@
     },
     "console_page": {
         "title": "Konsole",
-        "waiting": "Warten auf Initialisierung…"
+        "waiting": "Warten auf Initialisierung…",
+        "copy": "Kopieren"
     },
     "about_us_page": {
         "title": "Über uns"
@@ -64,7 +66,10 @@
         "reset_config_title": "Anwendungseinstellungen zurücksetzen",
         "reset_config_description": "API Sclüssel und root Benutzer zurücksetzen",
         "delete_server_title": "Server löschen",
-        "delete_server_description": "Das wird Ihren Server löschen. Es wird nicht mehr zugänglich sein."
+        "delete_server_description": "Das wird Ihren Server löschen. Es wird nicht mehr zugänglich sein.",
+        "system_dark_theme_title": "Standard-Systemthema",
+        "system_dark_theme_description": "Verwenden Sie je nach Systemeinstellungen ein helles oder dunkles Thema",
+        "dangerous_settings": "Gefährliche Einstellungen"
     },
     "ssh": {
         "title": "SSH Schlüssel",
@@ -240,7 +245,8 @@
         "reboot": "Neustarten",
         "you_cant_use_this_api": "Sie können diese API nicht für Domains mit einer solchen TLD verwenden.",
         "yes": "Ja",
-        "no": "Nein"
+        "no": "Nein",
+        "volume_creation_error": "Volume konnte nicht erstellt werden."
     },
     "jobs": {
         "create_user": "Benutzer erstellen",
@@ -272,7 +278,7 @@
         "manage_domain_dns": "Zum Verwalten des DNS Ihrer Domain",
         "use_this_domain": "Diese Domäne verwenden?",
         "use_this_domain_text": "Das von Ihnen bereitgestellte Token gewährt Zugriff auf die folgende Domäne",
-        "cloudflare_api_token": "CloudFlare-API-Token",
+        "cloudflare_api_token": "API-Schlüssel des DNS-Anbieters",
         "connect_backblaze_storage": "Backblaze-Speicher verbinden",
         "no_connected_domains": "Derzeit keine verbundenen Domains",
         "loading_domain_list": "Domänenliste wird geladen",
@@ -313,7 +319,6 @@
         "choose_server_type_ram": "{} GB Arbeitsspeicher",
         "choose_server_type_storage": "{} GB Systemspeicher",
         "choose_server_type_payment_per_month": "{} pro Monat",
-        "cloudflare_bad_key_error": "Der Cloudflare-API-Schlüssel ist ungültig",
         "what": "Was bedeutet das?",
         "server_rebooted": "Server neugestartet. Warten auf die letzte Bestätigung…",
         "server_started": "Server gestartet. Es wird jetzt validiert und neugestartet…",
@@ -322,14 +327,34 @@
         "check": "Überprüfung",
         "create_master_account": "Hauptkonto erstellen",
         "enter_username_and_password": "Geben Sie den Benutzernamen und ein gutes Passwort ein",
-        "finish": "Alles initialisiert"
+        "finish": "Alles initialisiert",
+        "steps": {
+            "hosting": "Hosting",
+            "server_type": "Server-Typ",
+            "dns_provider": "DNS-Anbieter",
+            "backups_provider": "Sicherungskopien",
+            "domain": "Bereich",
+            "master_account": "Hauptkonto",
+            "server": "Server",
+            "dns_setup": "DNS-Einrichtung",
+            "nixos_installation": "NixOS-Installation",
+            "server_reboot": "Server-Neustart",
+            "final_checks": "Endgültige Kontrollen"
+        },
+        "dns_provider_bad_key_error": "Der API-Schlüssel ist ungültig",
+        "connect_to_dns": "Verbinden Sie den DNS-Anbieter",
+        "connect_to_dns_provider_text": "Mithilfe der Token-API konfiguriert die SelfPrivacy-Anwendung DNS-Einträge",
+        "server_provider_description": "Der Ort, an dem sich Ihre Daten und SelfPrivacy-Dienste befinden:",
+        "dns_provider_description": "Dadurch wird Ihre Domain mit einer IP-Adresse verknüpft:",
+        "select_provider_price_free": "Kostenlos",
+        "select_provider_payment_text_cloudflare": "Bankkarten"
     },
     "validations": {
         "length_not_equal": "Länge ist [], sollte {} sein",
         "required": "Erforderlich",
         "already_exist": "Ist bereits vorhanden",
         "invalid_format": "Ungültiges Format",
-        "invalid_format_password": "Darf keine Leerzeichen enthalten",
+        "invalid_format_password": "Das Passwort darf keine Leerzeichen enthalten",
         "invalid_format_ssh": "Muss dem SSH-Schlüsselformat entsprechen",
         "root_name": "Benutzername darf nicht root sein",
         "length_longer": "Länge ist [], sollte kürzer oder gleich {} sein"
@@ -354,7 +379,8 @@
         "could_not_fetch_users": "Benutzerliste konnte nicht abgerufen werden",
         "could_not_fetch_description": "Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut",
         "refresh_users": "Benutzerliste aktualisieren",
-        "email_login": "E-Mail-Anmeldung"
+        "email_login": "E-Mail-Anmeldung",
+        "details_title": "Angaben zum Benutzer"
     },
     "devices": {
         "main_screen": {
@@ -388,7 +414,7 @@
         "server_provider_connected_description": "Kommunikation hergestellt. Eingabe Ihres Tokens Token mit Zugriff auf {}:",
         "choose_server_description": "Wir konnten nicht herausfinden, mit welchem Server Sie sich verbinden möchten.",
         "modal_confirmation_dns_invalid": "Reverse DNS zeigt auf eine andere Domain",
-        "confirm_cloudflare_description": "Eingabe des Cloudflare-Tokens mit Zugriff auf {}:",
+        "confirm_cloudflare_description": "Geben Sie das DNS-Token des Anbieters ein, der Rechte für {} hat:",
         "confirm_backblaze": "Mit Backblaze verbinden",
         "confirm_backblaze_description": "Geben Sie ein Backblaze-Token mit Zugriff auf den Sicherungsspeicher ein:",
         "generic_error": "Vorgang fehlgeschlagen, bitte versuchen Sie es erneut.",
@@ -405,7 +431,7 @@
         "method_recovery_input_description": "Geben Sie Ihren Wiederherstellungsschlüssel ein",
         "fallback_select_description": "Was genau haben Sie? Wählen Sie die erste verfügbare Option:",
         "fallback_select_root_ssh": "Root-SSH-Zugriff auf den Server.",
-        "fallback_select_provider_console": "Zugriff auf die Serverkonsole meines Prodivers.",
+        "fallback_select_provider_console": "Zugang zur Serverkonsole meines Providers.",
         "authorization_failed": "Anmeldung mit diesem Schlüssel nicht möglich",
         "fallback_select_provider_console_hint": "Zum Beispiel: Hetzner.",
         "server_provider_connected": "Verbinden Sie sich mit Ihrem Serveranbieter",
@@ -422,7 +448,7 @@
         "modal_confirmation_dns_valid": "Reverse DNS ist gültig",
         "modal_confirmation_ip_valid": "Die IP ist die gleiche wie im DNS-Eintrag",
         "modal_confirmation_ip_invalid": "Die IP ist nicht dieselbe wie im DNS-Eintrag",
-        "confirm_cloudflare": "Mit CloudFlare verbinden"
+        "confirm_cloudflare": "Verbindung zu einem DNS-Anbieter herstellen"
     },
     "recovery_key": {
         "key_connection_error": "Es konnte keine Verbindung zum Server hergestellt werden.",
@@ -471,5 +497,21 @@
     },
     "timer": {
         "sec": "{} Sek"
+    },
+    "support": {
+        "title": "SelfPrivacy-Unterstützung"
+    },
+    "developer_settings": {
+        "title": "Einstellungen für Entwickler",
+        "subtitle": "Diese Einstellungen sind nur für Debugging-Zwecke gedacht. Ändern Sie sie nicht, wenn Sie nicht wissen, was Sie tun.",
+        "server_setup": "Server-Einrichtung",
+        "use_staging_acme": "Verwendung des ACME-Testservers",
+        "use_staging_acme_description": "Wird beim Einrichten eines neuen Servers verwendet.",
+        "routing": "Anwendungsrouting",
+        "reset_onboarding": "Setzen Sie die Willkommensflagge für den Besuch zurück",
+        "reset_onboarding_description": "Zurücksetzen des Netzschalters, um den Einschaltbildschirm erneut aufzurufen",
+        "cubit_statuses": "Aktueller Status der Ladequbits",
+        "ignore_tls": "Überprüfen Sie keine TLS-Zertifikate",
+        "ignore_tls_description": "Die Anwendung validiert TLS-Zertifikate nicht, wenn sie eine Verbindung zum Server herstellt."
     }
 }

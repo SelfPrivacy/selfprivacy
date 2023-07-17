@@ -83,7 +83,8 @@
         "alert": "Upozornenie",
         "services_title": "Vaše osobné, súkromné a nezávislé služby.",
         "loading": "Načítanie…",
-        "apply": "Uplatniť"
+        "apply": "Uplatniť",
+        "app_name": "SelfPrivacy"
     },
     "more_page": {
         "configuration_wizard": "Sprievodca nastavením",
@@ -96,7 +97,8 @@
     },
     "console_page": {
         "title": "Konzola",
-        "waiting": "Čakáme na inicializáciu…"
+        "waiting": "Čakáme na inicializáciu…",
+        "copy": "Kopírovať"
     },
     "about_us_page": {
         "title": "O nás"
@@ -114,7 +116,10 @@
         "reset_config_title": "Resetovať nastavenia aplikácie",
         "reset_config_description": "Resetovať kľúče API a užívateľa root",
         "delete_server_title": "Zmazať server",
-        "delete_server_description": "Tým sa odstráni váš server. Už nebude prístupným."
+        "delete_server_description": "Tým sa odstráni váš server. Už nebude prístupným.",
+        "system_dark_theme_description": "Použitie svetlej alebo tmavej témy v závislosti od nastavení systému",
+        "system_dark_theme_title": "Systémová predvolená téma",
+        "dangerous_settings": "Nebezpečné nastavenia"
     },
     "ssh": {
         "title": "Kľúče SSH",
@@ -316,13 +321,25 @@
         "choose_server_type_storage": "{} GB systémového úložiska",
         "choose_server_type_payment_per_month": "{} mesačne",
         "no_server_types_found": "Nenašli sa žiadne dostupné typy serverov. Uistite sa, že je váš účet prístupný a skúste zmeniť umiestnenie servera.",
-        "cloudflare_bad_key_error": "Kľúč Cloudflare API je neplatný",
         "backblaze_bad_key_error": "Informácie o úložisku Backblaze sú neplatné",
         "select_dns": "Teraz vyberme poskytovateľa DNS",
         "manage_domain_dns": "Na správu DNS vašej domény",
         "use_this_domain": "Chcete použiť túto doménu?",
         "create_master_account": "Vytvorte hlavný účet",
-        "checks": "Kontroly boli ukončené\n{} z {}"
+        "checks": "Kontroly boli ukončené\n{} z {}",
+        "steps": {
+            "nixos_installation": "Inštalácia NixOS",
+            "hosting": "Hosting",
+            "server_type": "Typ servera",
+            "dns_provider": "Poskytovateľ DNS",
+            "backups_provider": "Záložné kópie",
+            "domain": "Doména",
+            "master_account": "Hlavný účet",
+            "server": "Server",
+            "dns_setup": "Nastavenie DNS",
+            "server_reboot": "Reštartovanie servera",
+            "final_checks": "Záverečné previerky"
+        }
     },
     "mail": {
         "subtitle": "Email pre rodinu alebo spoločnosť.",
@@ -364,7 +381,8 @@
         "refresh_users": "Aktualizovať zoznam používateľov",
         "could_not_create_user": "Nepodarilo sa vytvoriť účet",
         "email_login": "Emailová autorizácia",
-        "no_ssh_notice": "Pre tohto používateľa sú vytvorené iba e-mailové účty a účty SSH. Čoskoro bude k dispozícii jednotné prihlásenie pre všetky služby."
+        "no_ssh_notice": "Pre tohto používateľa sú vytvorené iba e-mailové účty a účty SSH. Čoskoro bude k dispozícii jednotné prihlásenie pre všetky služby.",
+        "details_title": "Detaily používateľa"
     },
     "recovering": {
         "recovery_main_header": "Pripojiť sa k existujúcemu serveru",
@@ -389,7 +407,7 @@
         "fallback_select_description": "Čo z toho máte? Vyberte prvý, ktorý vyhovuje:",
         "fallback_select_token_copy": "Kópia autorizačného tokenu z inej verzie aplikácie.",
         "fallback_select_root_ssh": "Rootový prístup k serveru cez SSH.",
-        "fallback_select_provider_console": "Prístup k serverovej konzole môjho poskytovateľa.",
+        "fallback_select_provider_console": "Prístup ku konzole servera môjho poskytovateľa.",
         "authorization_failed": "Pomocou tohto kľúča sa nepodarilo prihlásiť",
         "fallback_select_provider_console_hint": "Napríklad Hetzner.",
         "server_provider_connected_description": "Spojenie bolo nadviazané. Zadajte svoj token s prístupom k {}:",
@@ -471,5 +489,19 @@
     "vpn": {
         "title": "Server VPN",
         "subtitle": "Súkromný server VPN"
+    },
+    "support": {
+        "title": "Podpora SelfPrivacy"
+    },
+    "developer_settings": {
+        "subtitle": "Tieto nastavenia slúžia len na ladenie. Nemeňte ich, ak neviete, čo robíte.",
+        "reset_onboarding": "Obnovenie uvítacej vlajky pre návštevu",
+        "title": "Nastavenia vývojára",
+        "server_setup": "Nastavenie servera",
+        "use_staging_acme": "Používanie testovacieho servera ACME",
+        "use_staging_acme_description": "Ak chcete túto hodnotu zmeniť, prekompilujte aplikáciu.",
+        "routing": "Smerovanie aplikácie",
+        "reset_onboarding_description": "Resetovanie vypínača na opätovné zobrazenie obrazovky zapnutia",
+        "cubit_statuses": "Aktuálny stav načítavania qubitov"
     }
 }

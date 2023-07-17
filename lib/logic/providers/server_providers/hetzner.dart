@@ -335,26 +335,6 @@ class HetznerServerProvider extends ServerProvider {
     return result;
   }
 
-  String? getEmojiFlag(final String query) {
-    String? emoji;
-
-    switch (query.toLowerCase()) {
-      case 'de':
-        emoji = '🇩🇪';
-        break;
-
-      case 'fi':
-        emoji = '🇫🇮';
-        break;
-
-      case 'us':
-        emoji = '🇺🇸';
-        break;
-    }
-
-    return emoji;
-  }
-
   @override
   Future<GenericResult<bool>> trySetServerLocation(
     final String location,
@@ -396,7 +376,7 @@ class HetznerServerProvider extends ServerProvider {
         location = ServerProviderLocation(
           title: rawLocation.city,
           description: rawLocation.description,
-          flag: getEmojiFlag(rawLocation.country),
+          flag: rawLocation.flag,
           identifier: rawLocation.name,
         );
       } catch (e) {

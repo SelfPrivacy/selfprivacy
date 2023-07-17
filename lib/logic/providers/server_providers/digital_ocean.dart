@@ -293,43 +293,6 @@ class DigitalOceanServerProvider extends ServerProvider {
     return success;
   }
 
-  String? getEmojiFlag(final String query) {
-    String? emoji;
-
-    switch (query.toLowerCase().substring(0, 3)) {
-      case 'fra':
-        emoji = '🇩🇪';
-        break;
-
-      case 'ams':
-        emoji = '🇳🇱';
-        break;
-
-      case 'sgp':
-        emoji = '🇸🇬';
-        break;
-
-      case 'lon':
-        emoji = '🇬🇧';
-        break;
-
-      case 'tor':
-        emoji = '🇨🇦';
-        break;
-
-      case 'blr':
-        emoji = '🇮🇳';
-        break;
-
-      case 'nyc':
-      case 'sfo':
-        emoji = '🇺🇸';
-        break;
-    }
-
-    return emoji;
-  }
-
   @override
   Future<GenericResult<List<ServerProviderLocation>>>
       getAvailableLocations() async {
@@ -351,7 +314,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         location = ServerProviderLocation(
           title: rawLocation.slug,
           description: rawLocation.name,
-          flag: getEmojiFlag(rawLocation.slug),
+          flag: rawLocation.flag,
           identifier: rawLocation.slug,
         );
       } catch (e) {
@@ -662,8 +625,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.location,
           trId: 'server.location',
-          value:
-              '${droplet['region']['name']} ${getEmojiFlag(droplet['region']['slug'].toString()) ?? ''}',
+          value: '${droplet['region']['name']}',
         ),
         ServerMetadataEntity(
           type: MetadataType.other,

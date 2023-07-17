@@ -36,6 +36,43 @@ class DigitalOceanLocation {
 
   static DigitalOceanLocation fromJson(final Map<String, dynamic> json) =>
       _$DigitalOceanLocationFromJson(json);
+
+  String get flag {
+    String emoji = '';
+
+    switch (slug.substring(0, 3)) {
+      case 'fra':
+        emoji = '🇩🇪';
+        break;
+
+      case 'ams':
+        emoji = '🇳🇱';
+        break;
+
+      case 'sgp':
+        emoji = '🇸🇬';
+        break;
+
+      case 'lon':
+        emoji = '🇬🇧';
+        break;
+
+      case 'tor':
+        emoji = '🇨🇦';
+        break;
+
+      case 'blr':
+        emoji = '🇮🇳';
+        break;
+
+      case 'nyc':
+      case 'sfo':
+        emoji = '🇺🇸';
+        break;
+    }
+
+    return emoji;
+  }
 }
 
 @JsonSerializable()

@@ -135,6 +135,24 @@ class HetznerLocation {
 
   static HetznerLocation fromJson(final Map<String, dynamic> json) =>
       _$HetznerLocationFromJson(json);
+
+  String get flag {
+    String emoji = '';
+    switch (country.substring(0, 2)) {
+      case 'DE':
+        emoji = '🇩🇪';
+        break;
+
+      case 'FI':
+        emoji = '🇫🇮';
+        break;
+
+      case 'US':
+        emoji = '🇺🇸';
+        break;
+    }
+    return emoji;
+  }
 }
 
 /// A Volume is a highly-available, scalable, and SSD-based block storage for Servers.

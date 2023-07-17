@@ -107,7 +107,7 @@ class SelectLocationPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${location.flag ?? ''} ${location.title}',
+                                      '${location.flag} ${location.title}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium,

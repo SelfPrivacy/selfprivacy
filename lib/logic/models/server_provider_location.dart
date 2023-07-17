@@ -3,13 +3,11 @@ class ServerProviderLocation {
     required this.title,
     required this.identifier,
     this.description,
-    this.flag,
+    this.flag = '',
   });
 
   final String title;
   final String identifier;
   final String? description;
-
-  /// as emoji
-  final String? flag;
+  final String flag;
 }

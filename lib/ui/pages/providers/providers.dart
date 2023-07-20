@@ -96,7 +96,6 @@ class _ProvidersPageState extends State<ProvidersPage> {
             onTap: () => context.pushRoute(const DnsDetailsRoute()),
           ),
           const SizedBox(height: 16),
-          // TODO: When backups are fixed, show this card
           _Card(
             state: isBackupInitialized
                 ? StateType.stable

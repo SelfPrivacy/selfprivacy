@@ -34,7 +34,8 @@
         "apply": "Apply",
         "done": "Done",
         "continue": "Continue",
-        "alert": "Alert"
+        "alert": "Alert",
+        "copied_to_clipboard": "Copied to clipboard!"
     },
     "more_page": {
         "configuration_wizard": "Setup wizard",
@@ -196,6 +197,7 @@
         "autobackup_custom_hint": "Enter custom period in minutes",
         "autobackup_set_period": "Set period",
         "autobackup_period_set": "Period set",
+        "backups_encryption_key": "Encryption key",
         "pending_jobs": "Currently running backup jobs",
         "snapshots_title": "Snapshot list"
     },

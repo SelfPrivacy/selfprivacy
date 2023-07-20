@@ -34,6 +34,7 @@
         "done": "Готово",
         "continue": "Продолжить",
         "alert": "Уведомление",
+        "copied_to_clipboard": "Скопировано в буфер обмена!",
         "app_name": "SelfPrivacy"
     },
     "more_page": {
@@ -197,6 +198,7 @@
         "autobackup_custom_hint": "Введите период в минутах",
         "autobackup_set_period": "Установить период",
         "autobackup_period_set": "Период установлен",
+        "backups_encryption_key": "Ключ шифрования",
         "snapshots_title": "Список снимков"
     },
     "storage": {

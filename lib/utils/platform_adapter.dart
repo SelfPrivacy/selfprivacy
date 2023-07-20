@@ -21,7 +21,7 @@ class PlatformAdapter {
     return path;
   }
 
-  /// Running operation environment.
+  /// Running operating environment.
   static Future<String> get deviceName async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (kIsWeb) {

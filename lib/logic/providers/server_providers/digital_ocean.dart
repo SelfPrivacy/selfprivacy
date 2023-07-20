@@ -97,6 +97,38 @@ class DigitalOceanServerProvider extends ServerProvider {
     final hostname = getHostnameFromDomain(
       installationData.serverDomain.domainName,
     );
+    final pastServers = await getServers();
+    for (final pastServer in pastServers.data) {
+      if (pastServer.name == hostname) {
+        return GenericResult(
+          data: CallbackDialogueBranching(
+            choices: [
+              CallbackDialogueChoice(
+                title: 'basis.cancel'.tr(),
+                callback: () async => installationData.errorCallback(),
+              ),
+              CallbackDialogueChoice(
+                title: 'modals.yes'.tr(),
+                callback: () async {
+                  final deleting = await deleteServer(hostname);
+                  if (deleting.success) {
+                    await Future.delayed(const Duration(seconds: 20));
+                    return launchInstallation(installationData);
+                  }
+
+                  return deleting;
+                },
+              ),
+            ],
+            description: 'modals.destroy_server'.tr(),
+            title: 'modals.already_exists'.tr(),
+          ),
+          success: false,
+          message: 'Droplet "$hostname" already exists.',
+        );
+      }
+    }
+
     final serverResult = await _adapter.api().createServer(
           dnsApiToken: installationData.dnsApiToken,
           rootUser: installationData.rootUser,
@@ -144,7 +176,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
       String? ipv4;
       int attempts = 0;
-      while (attempts < 5 && ipv4 == null) {
+      while (attempts < 10 && ipv4 == null) {
         await Future.delayed(const Duration(seconds: 20));
         final servers = await getServers();
         for (final server in servers.data) {

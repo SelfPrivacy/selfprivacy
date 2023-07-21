@@ -81,11 +81,63 @@ class DigitalOceanServerProvider extends ServerProvider {
           created: DateTime.now(),
           ip: ipv4,
           name: server['name'],
+          serverTypeId: server['region']['slug'],
         );
       },
     ).toList();
 
     return GenericResult(success: true, data: servers);
+  }
+
+  @override
+  Future<GenericResult<ServerBasicInfo?>> getServerInfo(
+    final int serverId,
+  ) async {
+    ServerBasicInfo? server;
+    final result = await _adapter.api().getServers();
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: server,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final rawServers = result.data;
+    for (final rawServer in rawServers) {
+      String? ipv4;
+      if (rawServer['networks']['v4'].isNotEmpty) {
+        for (final v4 in rawServer['networks']['v4']) {
+          if (v4['type'].toString() == 'public') {
+            ipv4 = v4['ip_address'].toString();
+          }
+        }
+      }
+
+      try {
+        server = ServerBasicInfo(
+          id: rawServer['id'],
+          reverseDns: rawServer['name'],
+          created: DateTime.now(),
+          ip: ipv4!,
+          name: rawServer['name'],
+          serverTypeId: rawServer['region']['slug'],
+        );
+      } catch (e) {
+        print(e);
+        continue;
+      }
+    }
+
+    if (server == null) {
+      return GenericResult(
+        success: false,
+        data: server,
+      );
+    }
+
+    return GenericResult(success: true, data: server);
   }
 
   @override

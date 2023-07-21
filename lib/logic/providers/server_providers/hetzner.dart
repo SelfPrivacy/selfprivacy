@@ -77,6 +77,7 @@ class HetznerServerProvider extends ServerProvider {
           ip: hetznerServer.publicNet.ipv4!.ip,
           reverseDns: hetznerServer.publicNet.ipv4!.reverseDns,
           created: hetznerServer.created,
+          serverTypeId: hetznerServer.name,
         );
       } catch (e) {
         continue;
@@ -86,6 +87,53 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     return GenericResult(success: true, data: servers);
+  }
+
+  @override
+  Future<GenericResult<ServerBasicInfo?>> getServerInfo(
+    final int serverId,
+  ) async {
+    ServerBasicInfo? server;
+    final result = await _adapter.api().getServers();
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: server,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final List<HetznerServerInfo> hetznerServers = result.data;
+    for (final hetznerServer in hetznerServers) {
+      if (hetznerServer.publicNet.ipv4 == null ||
+          hetznerServer.id != serverId) {
+        continue;
+      }
+
+      try {
+        server = ServerBasicInfo(
+          id: hetznerServer.id,
+          name: hetznerServer.name,
+          ip: hetznerServer.publicNet.ipv4!.ip,
+          reverseDns: hetznerServer.publicNet.ipv4!.reverseDns,
+          created: hetznerServer.created,
+          serverTypeId: hetznerServer.serverType.name,
+        );
+      } catch (e) {
+        print(e);
+        continue;
+      }
+    }
+
+    if (server == null) {
+      return GenericResult(
+        success: false,
+        data: server,
+      );
+    }
+
+    return GenericResult(success: true, data: server);
   }
 
   @override

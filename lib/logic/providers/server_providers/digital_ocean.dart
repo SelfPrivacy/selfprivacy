@@ -81,7 +81,6 @@ class DigitalOceanServerProvider extends ServerProvider {
           created: DateTime.now(),
           ip: ipv4,
           name: server['name'],
-          serverTypeId: server['region']['slug'],
         );
       },
     ).toList();

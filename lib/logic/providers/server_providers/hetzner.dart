@@ -77,7 +77,6 @@ class HetznerServerProvider extends ServerProvider {
           ip: hetznerServer.publicNet.ipv4!.ip,
           reverseDns: hetznerServer.publicNet.ipv4!.reverseDns,
           created: hetznerServer.created,
-          serverTypeId: hetznerServer.name,
         );
       } catch (e) {
         continue;

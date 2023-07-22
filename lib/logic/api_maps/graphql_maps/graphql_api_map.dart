@@ -71,6 +71,7 @@ abstract class GraphQLApiMap {
       'https://api.$rootAddress/graphql',
       httpClient: ioClient,
       parser: ResponseLoggingParser(),
+      defaultHeaders: {'Accept-Language': _locale},
     );
 
     final String token = _getApiToken();
@@ -101,7 +102,12 @@ abstract class GraphQLApiMap {
       'ws://api.$rootAddress/graphql',
       config: SocketClientConfig(
         autoReconnect: true,
-        headers: token.isEmpty ? null : {'Authorization': 'Bearer $token'},
+        headers: token.isEmpty
+            ? null
+            : {
+                'Authorization': 'Bearer $token',
+                'Accept-Language': _locale,
+              },
       ),
     );
 
@@ -110,6 +116,8 @@ abstract class GraphQLApiMap {
       link: webSocketLink,
     );
   }
+
+  String get _locale => getIt.get<ApiConfigModel>().localeCode ?? 'en';
 
   String _getApiToken() {
     String token = '';

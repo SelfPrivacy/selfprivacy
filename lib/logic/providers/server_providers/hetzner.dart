@@ -89,6 +89,78 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
+  Future<GenericResult<ServerType?>> getServerType(final int serverId) async {
+    ServerType? serverType;
+    HetznerServerInfo? server;
+    final result = await _adapter.api().getServers();
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: serverType,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final List<HetznerServerInfo> hetznerServers = result.data;
+    for (final hetznerServer in hetznerServers) {
+      if (hetznerServer.publicNet.ipv4 != null ||
+          hetznerServer.id == serverId) {
+        server = hetznerServer;
+        break;
+      }
+    }
+
+    if (server == null) {
+      const String msg = 'getServerType: no server!';
+      print(msg);
+      return GenericResult(
+        success: false,
+        data: serverType,
+        message: msg,
+      );
+    }
+
+    double? priceValue;
+    for (final price in server.serverType.prices) {
+      if (price.location == server.location.name) {
+        priceValue = price.monthly;
+      }
+    }
+
+    if (priceValue == null) {
+      const String msg = 'getServerType: no price!';
+      print(msg);
+      return GenericResult(
+        success: false,
+        data: serverType,
+        message: msg,
+      );
+    }
+
+    return GenericResult(
+      success: true,
+      data: ServerType(
+        title: server.serverType.description,
+        identifier: server.serverType.name,
+        ram: server.serverType.memory.toDouble(),
+        cores: server.serverType.cores,
+        disk: DiskSize(byte: server.serverType.disk * 1024 * 1024 * 1024),
+        price: Price(
+          value: priceValue,
+          currency: currency,
+        ),
+        location: ServerProviderLocation(
+          title: server.location.city,
+          description: server.location.description,
+          flag: server.location.flag,
+          identifier: server.location.name,
+        ),
+      ),
+    );
+  }
+
+  @override
   Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
     final LaunchInstallationData installationData,
   ) async {

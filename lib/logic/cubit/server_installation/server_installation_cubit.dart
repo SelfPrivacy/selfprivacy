@@ -721,12 +721,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveIsServerResetedSecondTime(true);
     await repository.saveHasFinalChecked(true);
     await repository.saveIsRecoveringServer(false);
+    final serverType = await ProvidersController.currentServerProvider!
+        .getServerType(state.serverDetails!.id);
+    await repository.saveServerType(serverType.data!);
+    await ProvidersController.currentServerProvider!
+        .trySetServerLocation(serverType.data!.location.identifier);
     final User mainUser = await repository.getMainUser();
     await repository.saveRootUser(mainUser);
     final ServerInstallationRecovery updatedState =
         (state as ServerInstallationRecovery).copyWith(
       backblazeCredential: backblazeCredential,
       rootUser: mainUser,
+      serverTypeIdentificator: serverType.data!.identifier,
     );
     emit(updatedState.finish());
   }

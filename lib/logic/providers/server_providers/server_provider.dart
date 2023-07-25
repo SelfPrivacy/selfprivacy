@@ -24,6 +24,11 @@ abstract class ServerProvider {
   /// Only with public IPv4 addresses.
   Future<GenericResult<List<ServerBasicInfo>>> getServers();
 
+  /// Returns actual [ServerType] of the
+  /// requested server entry assigned
+  /// to the authorized user.
+  Future<GenericResult<ServerType?>> getServerType(final int serverId);
+
   /// Tries to launch installation of SelfPrivacy on
   /// the requested server entry for the authorized account.
   /// Depending on a server provider, the algorithm

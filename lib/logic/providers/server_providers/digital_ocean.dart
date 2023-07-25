@@ -89,6 +89,93 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
+  Future<GenericResult<ServerType?>> getServerType(final int serverId) async {
+    ServerType? serverType;
+    dynamic server;
+    final result = await _adapter.api().getServers();
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: serverType,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final List rawServers = result.data;
+    for (final rawServer in rawServers) {
+      if (rawServer['networks']['v4'].isNotEmpty) {
+        for (final v4 in rawServer['networks']['v4']) {
+          if (v4['type'].toString() == 'public') {
+            server = rawServer;
+          }
+        }
+      }
+    }
+
+    if (server == null) {
+      const String msg = 'getServerType: no server!';
+      print(msg);
+      return GenericResult(
+        success: false,
+        data: serverType,
+        message: msg,
+      );
+    }
+
+    final rawLocationsResult = await getAvailableLocations();
+    if (rawLocationsResult.data.isEmpty || !rawLocationsResult.success) {
+      return GenericResult(
+        success: rawLocationsResult.success,
+        data: serverType,
+        code: rawLocationsResult.code,
+        message: rawLocationsResult.message,
+      );
+    }
+
+    ServerProviderLocation? location;
+    for (final rawLocation in rawLocationsResult.data) {
+      if (rawLocation.identifier == server['region']['slug']) {
+        location = rawLocation;
+      }
+    }
+
+    if (location == null) {
+      const String msg = 'getServerType: no location!';
+      print(msg);
+      return GenericResult(
+        success: false,
+        data: serverType,
+        message: msg,
+      );
+    }
+
+    ServerType? type;
+    final rawSize = DigitalOceanServerType.fromJson(server['size']);
+    for (final rawRegion in rawSize.regions) {
+      if (rawRegion == server['region']['slug']) {
+        type = ServerType(
+          title: rawSize.description,
+          identifier: rawSize.slug,
+          ram: rawSize.memory / 1024,
+          cores: rawSize.vcpus,
+          disk: DiskSize(byte: rawSize.disk * 1024 * 1024 * 1024),
+          price: Price(
+            value: rawSize.priceMonthly,
+            currency: currency,
+          ),
+          location: location,
+        );
+      }
+    }
+
+    return GenericResult(
+      success: true,
+      data: type,
+    );
+  }
+
+  @override
   Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
     final LaunchInstallationData installationData,
   ) async {

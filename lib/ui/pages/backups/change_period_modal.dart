@@ -20,9 +20,6 @@ class ChangeAutobackupsPeriodModal extends StatefulWidget {
 
 class _ChangeAutobackupsPeriodModalState
     extends State<ChangeAutobackupsPeriodModal> {
-  // This is a modal with radio buttons to select the autobackup period
-  // Period might be none, selected from predefined list or custom
-  // Store in state the selected period
   Duration? selectedPeriod;
 
   static const List<Duration> autobackupPeriods = [

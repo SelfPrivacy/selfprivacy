@@ -156,9 +156,9 @@ class BackupDetailsPage extends StatelessWidget {
                     builder: (final BuildContext context) =>
                         DraggableScrollableSheet(
                       expand: false,
-                      maxChildSize: 0.6,
-                      minChildSize: 0.3,
-                      initialChildSize: 0.3,
+                      maxChildSize: 0.9,
+                      minChildSize: 0.5,
+                      initialChildSize: 0.7,
                       builder: (final context, final scrollController) =>
                           CopyEncryptionKeyModal(
                         scrollController: scrollController,
@@ -171,6 +171,9 @@ class BackupDetailsPage extends StatelessWidget {
           ),
           title: Text(
             'backup.backups_encryption_key'.tr(),
+          ),
+          subtitle: Text(
+            'backup.backups_encryption_key_subtitle'.tr(),
           ),
         ),
         const SizedBox(height: 16),

@@ -198,6 +198,10 @@
         "autobackup_set_period": "Set period",
         "autobackup_period_set": "Period set",
         "backups_encryption_key": "Encryption key",
+        "backups_encryption_key_subtitle": "Keep it in a safe place.",
+        "backups_encryption_key_copy": "Copy the encryption key",
+        "backups_encryption_key_show": "Show the encryption key",
+        "backups_encryption_key_description": "This key is used to encrypt your backups. If you lose it, you will not be able to restore your backups. Keep it in a safe place, as it will be useful if you ever need to restore from backups manually.",
         "pending_jobs": "Currently running backup jobs",
         "snapshots_title": "Snapshot list"
     },

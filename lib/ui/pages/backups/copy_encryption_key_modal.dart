@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
@@ -20,6 +21,14 @@ class CopyEncryptionKeyModal extends StatefulWidget {
 
 class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
   bool isKeyVisible = false;
+  bool copiedToClipboard = false;
+  Timer? copyToClipboardTimer;
+
+  @override
+  void dispose() {
+    copyToClipboardTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -97,8 +106,23 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
         const SizedBox(height: 8),
         FilledButton.icon(
           onPressed: () {
-            getIt<NavigationService>()
-                .showSnackBar('basis.copied_to_clipboard'.tr());
+            setState(
+              () {
+                copiedToClipboard = true;
+              },
+            );
+            // Make a timer to reset the copyToClipboardTime
+            setState(() {
+              copyToClipboardTimer?.cancel();
+              copyToClipboardTimer = Timer(
+                const Duration(seconds: 5),
+                () {
+                  setState(() {
+                    copiedToClipboard = false;
+                  });
+                },
+              );
+            });
             Clipboard.setData(
               ClipboardData(
                 text: encryptionKey,
@@ -106,7 +130,11 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
             );
           },
           icon: const Icon(Icons.copy_all_outlined),
-          label: Text('backup.backups_encryption_key_copy'.tr()),
+          label: Text(
+            copiedToClipboard
+                ? 'basis.copied_to_clipboard'.tr()
+                : 'backup.backups_encryption_key_copy'.tr(),
+          ),
         ),
       ],
     );

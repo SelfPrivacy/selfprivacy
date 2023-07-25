@@ -16,6 +16,7 @@ import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/backups/change_period_modal.dart';
+import 'package:selfprivacy/ui/pages/backups/copy_encryption_key_modal.dart';
 import 'package:selfprivacy/ui/pages/backups/create_backups_modal.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
@@ -142,6 +143,37 @@ class BackupDetailsPage extends StatelessWidget {
                     },
                   )
                 : 'backup.autobackup_period_never'.tr(),
+          ),
+        ),
+        ListTile(
+          onTap: preventActions
+              ? null
+              : () {
+                  showModalBottomSheet(
+                    useRootNavigator: true,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (final BuildContext context) =>
+                        DraggableScrollableSheet(
+                      expand: false,
+                      maxChildSize: 0.9,
+                      minChildSize: 0.5,
+                      initialChildSize: 0.7,
+                      builder: (final context, final scrollController) =>
+                          CopyEncryptionKeyModal(
+                        scrollController: scrollController,
+                      ),
+                    ),
+                  );
+                },
+          leading: const Icon(
+            Icons.key_outlined,
+          ),
+          title: Text(
+            'backup.backups_encryption_key'.tr(),
+          ),
+          subtitle: Text(
+            'backup.backups_encryption_key_subtitle'.tr(),
           ),
         ),
         const SizedBox(height: 16),

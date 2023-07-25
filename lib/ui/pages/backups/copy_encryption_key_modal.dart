@@ -111,7 +111,6 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
                 copiedToClipboard = true;
               },
             );
-            // Make a timer to reset the copyToClipboardTime
             setState(() {
               copyToClipboardTimer?.cancel();
               copyToClipboardTimer = Timer(

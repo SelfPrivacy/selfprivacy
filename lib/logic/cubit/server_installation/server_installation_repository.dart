@@ -75,21 +75,44 @@ class ServerInstallationRepository {
 
     if (box.get(BNames.hasFinalChecked, defaultValue: false)) {
       TlsOptions.verifyCertificate = true;
-      return ServerInstallationFinished(
-        installationDialoguePopUp: null,
-        providerApiToken: providerApiToken!,
-        serverTypeIdentificator: serverTypeIdentificator!,
-        dnsApiToken: dnsApiToken!,
-        serverDomain: serverDomain!,
-        backblazeCredential: backblazeCredential!,
-        serverDetails: serverDetails!,
-        rootUser: box.get(BNames.rootUser),
-        isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
-        isServerResetedFirstTime:
-            box.get(BNames.isServerResetedFirstTime, defaultValue: false),
-        isServerResetedSecondTime:
-            box.get(BNames.isServerResetedSecondTime, defaultValue: false),
-      );
+      if (serverTypeIdentificator == null && serverDetails != null) {
+        final finalServerType = await ProvidersController.currentServerProvider!
+            .getServerType(serverDetails.id);
+        await saveServerType(finalServerType.data!);
+        await ProvidersController.currentServerProvider!
+            .trySetServerLocation(finalServerType.data!.location.identifier);
+        return ServerInstallationFinished(
+          installationDialoguePopUp: null,
+          providerApiToken: providerApiToken!,
+          serverTypeIdentificator: finalServerType.data!.identifier,
+          dnsApiToken: dnsApiToken!,
+          serverDomain: serverDomain!,
+          backblazeCredential: backblazeCredential!,
+          serverDetails: serverDetails,
+          rootUser: box.get(BNames.rootUser),
+          isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
+          isServerResetedFirstTime:
+              box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+          isServerResetedSecondTime:
+              box.get(BNames.isServerResetedSecondTime, defaultValue: false),
+        );
+      } else {
+        return ServerInstallationFinished(
+          installationDialoguePopUp: null,
+          providerApiToken: providerApiToken!,
+          serverTypeIdentificator: serverTypeIdentificator!,
+          dnsApiToken: dnsApiToken!,
+          serverDomain: serverDomain!,
+          backblazeCredential: backblazeCredential!,
+          serverDetails: serverDetails!,
+          rootUser: box.get(BNames.rootUser),
+          isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
+          isServerResetedFirstTime:
+              box.get(BNames.isServerResetedFirstTime, defaultValue: false),
+          isServerResetedSecondTime:
+              box.get(BNames.isServerResetedSecondTime, defaultValue: false),
+        );
+      }
     }
 
     if (box.get(BNames.isRecoveringServer, defaultValue: false) &&

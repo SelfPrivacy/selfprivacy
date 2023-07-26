@@ -71,34 +71,38 @@ class SelfprivacyApp extends StatelessWidget {
             builder: (
               final BuildContext context,
               final AppSettingsState appSettings,
-            ) =>
-                MaterialApp.router(
-              routeInformationParser: _appRouter.defaultRouteParser(),
-              routerDelegate: _appRouter.delegate(),
-              scaffoldMessengerKey:
-                  getIt.get<NavigationService>().scaffoldMessengerKey,
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              debugShowCheckedModeBanner: false,
-              title: 'SelfPrivacy',
-              theme: lightThemeData,
-              darkTheme: darkThemeData,
-              themeMode: appSettings.isAutoDarkModeOn
-                  ? ThemeMode.system
-                  : appSettings.isDarkModeOn
-                      ? ThemeMode.dark
-                      : ThemeMode.light,
-              builder: (final BuildContext context, final Widget? widget) {
-                Widget error = const Text('...rendering error...');
-                if (widget is Scaffold || widget is Navigator) {
-                  error = Scaffold(body: Center(child: error));
-                }
-                ErrorWidget.builder =
-                    (final FlutterErrorDetails errorDetails) => error;
-                return widget!;
-              },
-            ),
+            ) {
+              getIt.get<ApiConfigModel>().setLocaleCode(
+                    context.locale.languageCode,
+                  );
+              return MaterialApp.router(
+                routeInformationParser: _appRouter.defaultRouteParser(),
+                routerDelegate: _appRouter.delegate(),
+                scaffoldMessengerKey:
+                    getIt.get<NavigationService>().scaffoldMessengerKey,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                debugShowCheckedModeBanner: false,
+                title: 'SelfPrivacy',
+                theme: lightThemeData,
+                darkTheme: darkThemeData,
+                themeMode: appSettings.isAutoDarkModeOn
+                    ? ThemeMode.system
+                    : appSettings.isDarkModeOn
+                        ? ThemeMode.dark
+                        : ThemeMode.light,
+                builder: (final BuildContext context, final Widget? widget) {
+                  Widget error = const Text('...rendering error...');
+                  if (widget is Scaffold || widget is Navigator) {
+                    error = Scaffold(body: Center(child: error));
+                  }
+                  ErrorWidget.builder =
+                      (final FlutterErrorDetails errorDetails) => error;
+                  return widget!;
+                },
+              );
+            },
           ),
         ),
       );

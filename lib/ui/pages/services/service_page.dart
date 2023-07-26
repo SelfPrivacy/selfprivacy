@@ -139,7 +139,9 @@ class _ServicePageState extends State<ServicePage> {
               ),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            enabled: !serviceDisabled && !serviceLocked,
+            enabled: !serviceDisabled &&
+                !serviceLocked &&
+                service.storageUsage.volume != null,
           ),
         if (service.canBeBackedUp)
           ListTile(

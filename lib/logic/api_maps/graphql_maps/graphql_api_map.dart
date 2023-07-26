@@ -71,15 +71,14 @@ abstract class GraphQLApiMap {
       'https://api.$rootAddress/graphql',
       httpClient: ioClient,
       parser: ResponseLoggingParser(),
+      defaultHeaders: {'Accept-Language': _locale},
     );
-
-    final String token = _getApiToken();
 
     final Link graphQLLink = RequestLoggingLink().concat(
       isWithToken
           ? AuthLink(
               getToken: () async =>
-                  customToken == '' ? 'Bearer $token' : customToken,
+                  customToken == '' ? 'Bearer $_token' : customToken,
             ).concat(httpLink)
           : httpLink,
     );
@@ -95,13 +94,16 @@ abstract class GraphQLApiMap {
   }
 
   Future<GraphQLClient> getSubscriptionClient() async {
-    final String token = _getApiToken();
-
     final WebSocketLink webSocketLink = WebSocketLink(
       'ws://api.$rootAddress/graphql',
       config: SocketClientConfig(
         autoReconnect: true,
-        headers: token.isEmpty ? null : {'Authorization': 'Bearer $token'},
+        headers: _token.isEmpty
+            ? null
+            : {
+                'Authorization': 'Bearer $_token',
+                'Accept-Language': _locale,
+              },
       ),
     );
 
@@ -111,7 +113,9 @@ abstract class GraphQLApiMap {
     );
   }
 
-  String _getApiToken() {
+  String get _locale => getIt.get<ApiConfigModel>().localeCode ?? 'en';
+
+  String get _token {
     String token = '';
     final serverDetails = getIt<ApiConfigModel>().serverDetails;
     if (serverDetails != null) {

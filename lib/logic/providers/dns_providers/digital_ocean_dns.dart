@@ -129,7 +129,6 @@ class DigitalOceanDnsProvider extends DnsProvider {
     for (final rawRecord in result.data) {
       records.add(
         DnsRecord(
-          id: rawRecord['id'],
           name: rawRecord['name'],
           type: rawRecord['type'],
           content: rawRecord['data'],

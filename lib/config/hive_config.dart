@@ -8,10 +8,13 @@ import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/utils/platform_adapter.dart';
 
 class HiveConfig {
   static Future<void> init() async {
-    await Hive.initFlutter();
+    final String? storagePath = PlatformAdapter.storagePath;
+    print('HiveConfig: Custom storage path: $storagePath');
+    await Hive.initFlutter(storagePath);
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(ServerHostingDetailsAdapter());
     Hive.registerAdapter(ServerDomainAdapter());

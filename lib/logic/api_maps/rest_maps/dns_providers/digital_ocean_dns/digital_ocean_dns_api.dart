@@ -4,8 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/json/dns_records.dart';
+import 'package:selfprivacy/logic/models/json/digital_ocean_dns_info.dart';
 
 class DigitalOceanDnsApi extends RestApiMap {
   DigitalOceanDnsApi({
@@ -92,13 +91,17 @@ class DigitalOceanDnsApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<List>> getDomains() async {
-    List domains = [];
+  Future<GenericResult<List<DigitalOceanDomain>>> getDomains() async {
+    List<DigitalOceanDomain> domains = [];
 
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/domains');
-      domains = response.data['domains'];
+      domains = response.data['domains']!
+          .map<DigitalOceanDomain>(
+            (final e) => DigitalOceanDomain.fromJson(e),
+          )
+          .toList();
     } catch (e) {
       print(e);
       return GenericResult(
@@ -114,25 +117,18 @@ class DigitalOceanDnsApi extends RestApiMap {
   }
 
   Future<GenericResult<void>> createMultipleDnsRecords({
-    required final ServerDomain domain,
-    required final List<DnsRecord> records,
+    required final String domainName,
+    required final List<DigitalOceanDnsRecord> records,
   }) async {
-    final String domainName = domain.domainName;
     final List<Future> allCreateFutures = <Future>[];
 
     final Dio client = await getClient();
     try {
-      for (final DnsRecord record in records) {
+      for (final DigitalOceanDnsRecord record in records) {
         allCreateFutures.add(
           client.post(
             '/domains/$domainName/records',
-            data: {
-              'type': record.type,
-              'name': record.name,
-              'data': record.content,
-              'ttl': record.ttl,
-              'priority': record.priority,
-            },
+            data: record.toJson(),
           ),
         );
       }
@@ -155,17 +151,15 @@ class DigitalOceanDnsApi extends RestApiMap {
   }
 
   Future<GenericResult<void>> removeSimilarRecords({
-    required final ServerDomain domain,
-    required final List records,
+    required final String domainName,
+    required final List<DigitalOceanDnsRecord> records,
   }) async {
-    final String domainName = domain.domainName;
-
     final Dio client = await getClient();
     try {
       final List<Future> allDeleteFutures = [];
       for (final record in records) {
         allDeleteFutures.add(
-          client.delete("/domains/$domainName/records/${record['id']}"),
+          client.delete('/domains/$domainName/records/${record.id}'),
         );
       }
       await Future.wait(allDeleteFutures);
@@ -183,12 +177,11 @@ class DigitalOceanDnsApi extends RestApiMap {
     return GenericResult(success: true, data: null);
   }
 
-  Future<GenericResult<List>> getDnsRecords({
-    required final ServerDomain domain,
-  }) async {
+  Future<GenericResult<List<DigitalOceanDnsRecord>>> getDnsRecords(
+    final String domainName,
+  ) async {
     Response response;
-    final String domainName = domain.domainName;
-    List allRecords = [];
+    List<DigitalOceanDnsRecord> allRecords = [];
 
     /// Default amount is 20, but we will eventually overflow it,
     /// so I hardcode it to the maximum available amount in advance just in case
@@ -200,7 +193,12 @@ class DigitalOceanDnsApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get(url);
-      allRecords = response.data['domain_records'] ?? [];
+      allRecords = response.data['domain_records']
+              .map<DigitalOceanDnsRecord>(
+                (final e) => DigitalOceanDnsRecord.fromJson(e),
+              )
+              .toList() ??
+          [];
     } catch (e) {
       print(e);
       GenericResult(

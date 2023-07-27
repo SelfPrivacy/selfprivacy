@@ -1,6 +1,7 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/digital_ocean_dns/digital_ocean_dns_api.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/digital_ocean_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
@@ -59,7 +60,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
 
     domains = result.data
         .map<String>(
-          (final el) => el['name'] as String,
+          (final el) => el.name,
         )
         .toList();
 
@@ -75,11 +76,22 @@ class DigitalOceanDnsProvider extends DnsProvider {
     final String? ip4,
   }) async =>
       _adapter.api().createMultipleDnsRecords(
-            domain: domain,
+            domainName: domain.domainName,
             records: getProjectDnsRecords(
               domain.domainName,
               ip4,
-            ),
+            )
+                .map<DigitalOceanDnsRecord>(
+                  (final e) => DigitalOceanDnsRecord(
+                    name: e.name ?? '',
+                    id: null,
+                    data: e.content ?? '',
+                    ttl: e.ttl,
+                    type: e.type,
+                    priority: e.priority,
+                  ),
+                )
+                .toList(),
           );
 
   @override
@@ -87,7 +99,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
     required final ServerDomain domain,
     final String? ip4,
   }) async {
-    final result = await _adapter.api().getDnsRecords(domain: domain);
+    final result = await _adapter.api().getDnsRecords(domain.domainName);
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -98,15 +110,15 @@ class DigitalOceanDnsProvider extends DnsProvider {
     }
 
     const ignoreType = 'SOA';
-    final filteredRecords = [];
+    final List<DigitalOceanDnsRecord> filteredRecords = [];
     for (final record in result.data) {
-      if (record['type'] != ignoreType) {
+      if (record.type != ignoreType) {
         filteredRecords.add(record);
       }
     }
 
     return _adapter.api().removeSimilarRecords(
-          domain: domain,
+          domainName: domain.domainName,
           records: filteredRecords,
         );
   }
@@ -116,7 +128,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
     required final ServerDomain domain,
   }) async {
     final List<DnsRecord> records = [];
-    final result = await _adapter.api().getDnsRecords(domain: domain);
+    final result = await _adapter.api().getDnsRecords(domain.domainName);
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -129,10 +141,10 @@ class DigitalOceanDnsProvider extends DnsProvider {
     for (final rawRecord in result.data) {
       records.add(
         DnsRecord(
-          name: rawRecord['name'],
-          type: rawRecord['type'],
-          content: rawRecord['data'],
-          ttl: rawRecord['ttl'],
+          name: rawRecord.name,
+          type: rawRecord.type,
+          content: rawRecord.data,
+          ttl: rawRecord.ttl,
           proxied: false,
         ),
       );
@@ -147,8 +159,17 @@ class DigitalOceanDnsProvider extends DnsProvider {
     final ServerDomain domain,
   ) async =>
       _adapter.api().createMultipleDnsRecords(
-        domain: domain,
-        records: [record],
+        domainName: domain.domainName,
+        records: [
+          DigitalOceanDnsRecord(
+            data: record.content ?? '',
+            id: null,
+            name: record.name ?? '',
+            ttl: record.ttl,
+            type: record.type,
+            priority: record.priority,
+          ),
+        ],
       );
 
   @override

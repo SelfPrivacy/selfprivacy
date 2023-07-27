@@ -1,6 +1,7 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desec/desec_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/desec_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
@@ -59,7 +60,7 @@ class DesecDnsProvider extends DnsProvider {
 
     domains = result.data
         .map<String>(
-          (final el) => el['name'] as String,
+          (final el) => el.name,
         )
         .toList();
 
@@ -79,20 +80,20 @@ class DesecDnsProvider extends DnsProvider {
       ip4,
     );
 
-    final List<dynamic> bulkRecords = [];
+    final List<DesecDnsRecord> bulkRecords = [];
     for (final DnsRecord record in listDnsRecords) {
       bulkRecords.add(
-        {
-          'subname': record.name,
-          'type': record.type,
-          'ttl': record.ttl,
-          'records': [extractContent(record)],
-        },
+        DesecDnsRecord(
+          subname: record.name ?? '',
+          type: record.type,
+          ttl: record.ttl,
+          records: [extractContent(record) ?? ''],
+        ),
       );
     }
 
     return _adapter.api().createMultipleDnsRecords(
-          domain: domain,
+          domainName: domain.domainName,
           records: bulkRecords,
         );
   }
@@ -107,28 +108,28 @@ class DesecDnsProvider extends DnsProvider {
       ip4,
     );
 
-    final List<dynamic> bulkRecords = [];
+    final List<DesecDnsRecord> bulkRecords = [];
     for (final DnsRecord record in listDnsRecords) {
       bulkRecords.add(
-        {
-          'subname': record.name,
-          'type': record.type,
-          'ttl': record.ttl,
-          'records': [],
-        },
+        DesecDnsRecord(
+          subname: record.name ?? '',
+          type: record.type,
+          ttl: record.ttl,
+          records: [],
+        ),
       );
     }
     bulkRecords.add(
-      {
-        'subname': 'selector._domainkey',
-        'type': 'TXT',
-        'ttl': 18000,
-        'records': [],
-      },
+      DesecDnsRecord(
+        subname: 'selector._domainkey',
+        type: 'TXT',
+        ttl: 18000,
+        records: [],
+      ),
     );
 
     return _adapter.api().removeSimilarRecords(
-          domain: domain,
+          domainName: domain.domainName,
           records: bulkRecords,
         );
   }
@@ -138,7 +139,7 @@ class DesecDnsProvider extends DnsProvider {
     required final ServerDomain domain,
   }) async {
     final List<DnsRecord> records = [];
-    final result = await _adapter.api().getDnsRecords(domain: domain);
+    final result = await _adapter.api().getDnsRecords(domain.domainName);
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -150,15 +151,14 @@ class DesecDnsProvider extends DnsProvider {
 
     try {
       for (final record in result.data) {
-        final String? content = (record['records'] is List<dynamic>)
-            ? record['records'][0]
-            : record['records'];
+        final String? content =
+            record.records.isEmpty ? null : record.records[0];
         records.add(
           DnsRecord(
-            name: record['subname'],
-            type: record['type'],
+            name: record.subname,
+            type: record.type,
             content: content,
-            ttl: record['ttl'],
+            ttl: record.ttl,
           ),
         );
       }
@@ -180,14 +180,14 @@ class DesecDnsProvider extends DnsProvider {
     final ServerDomain domain,
   ) async {
     final result = await _adapter.api().createMultipleDnsRecords(
-      domain: domain,
+      domainName: domain.domainName,
       records: [
-        {
-          'subname': record.name,
-          'type': record.type,
-          'ttl': record.ttl,
-          'records': [extractContent(record)],
-        },
+        DesecDnsRecord(
+          subname: record.name ?? '',
+          type: record.type,
+          ttl: record.ttl,
+          records: [extractContent(record) ?? ''],
+        ),
       ],
     );
 

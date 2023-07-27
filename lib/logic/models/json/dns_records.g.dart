@@ -13,5 +13,4 @@ Map<String, dynamic> _$DnsRecordToJson(DnsRecord instance) => <String, dynamic>{
       'ttl': instance.ttl,
       'priority': instance.priority,
       'proxied': instance.proxied,
-      'id': instance.id,
     };

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/desec_dns_info.dart';
 
 class DesecApi extends RestApiMap {
   DesecApi({
@@ -92,8 +92,8 @@ class DesecApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<List>> getDomains() async {
-    List domains = [];
+  Future<GenericResult<List<DesecDomain>>> getDomains() async {
+    List<DesecDomain> domains = [];
 
     late final Response? response;
     final Dio client = await getClient();
@@ -102,7 +102,11 @@ class DesecApi extends RestApiMap {
         '',
       );
       await Future.delayed(const Duration(seconds: 1));
-      domains = response.data;
+      domains = response.data!
+          .map<DesecDomain>(
+            (final e) => DesecDomain.fromJson(e),
+          )
+          .toList();
     } catch (e) {
       print(e);
       return GenericResult(
@@ -124,15 +128,17 @@ class DesecApi extends RestApiMap {
   }
 
   Future<GenericResult<void>> createMultipleDnsRecords({
-    required final ServerDomain domain,
-    required final List<dynamic> records,
+    required final String domainName,
+    required final List<DesecDnsRecord> records,
   }) async {
-    final String domainName = domain.domainName;
     final String url = '/$domainName/rrsets/';
 
     final Dio client = await getClient();
     try {
-      await client.post(url, data: records);
+      await client.post(
+        url,
+        data: records.map((final rec) => rec.toJson()).toList(),
+      );
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
@@ -149,15 +155,17 @@ class DesecApi extends RestApiMap {
   }
 
   Future<GenericResult<void>> removeSimilarRecords({
-    required final ServerDomain domain,
-    required final List<dynamic> records,
+    required final String domainName,
+    required final List<DesecDnsRecord> records,
   }) async {
-    final String domainName = domain.domainName;
     final String url = '/$domainName/rrsets/';
 
     final Dio client = await getClient();
     try {
-      await client.put(url, data: records);
+      await client.put(
+        url,
+        data: records.map((final rec) => rec.toJson()).toList(),
+      );
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
@@ -173,12 +181,11 @@ class DesecApi extends RestApiMap {
     return GenericResult(success: true, data: null);
   }
 
-  Future<GenericResult<List<dynamic>>> getDnsRecords({
-    required final ServerDomain domain,
-  }) async {
+  Future<GenericResult<List<DesecDnsRecord>>> getDnsRecords(
+    final String domainName,
+  ) async {
     Response? response;
-    final String domainName = domain.domainName;
-    List allRecords = [];
+    List<DesecDnsRecord> allRecords = [];
 
     final String url = '/$domainName/rrsets/';
 
@@ -186,7 +193,11 @@ class DesecApi extends RestApiMap {
     try {
       response = await client.get(url);
       await Future.delayed(const Duration(seconds: 1));
-      allRecords = response.data;
+      allRecords = response.data!
+          .map<DesecDnsRecord>(
+            (final e) => DesecDnsRecord.fromJson(e),
+          )
+          .toList();
     } catch (e) {
       print(e);
       return GenericResult(

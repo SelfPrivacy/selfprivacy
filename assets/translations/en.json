@@ -152,7 +152,7 @@
         "screen_title": "Domain and DNS",
         "ok": "Records are OK",
         "error": "Problems found",
-        "error_subtitle": "Tap here to fix them",
+        "error_subtitle": "Tap here to fix them. This will also remove custom records.",
         "refreshing": "Refreshing status…",
         "uninitialized": "Data is not retrieved yet",
         "services_title": "Services",

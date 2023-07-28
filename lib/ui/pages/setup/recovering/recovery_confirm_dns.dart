@@ -21,10 +21,14 @@ class RecoveryConfirmDns extends StatelessWidget {
         builder: (final BuildContext context) {
           final FormCubitState formCubitState =
               context.watch<DnsProviderFormCubit>().state;
-
+          final String providerDisplayName =
+              appConfig.state.serverDomain?.provider.displayName ??
+                  'DNS Provider';
           return BrandHeroScreen(
-            heroTitle: 'recovering.confirm_cloudflare'.tr(),
-            heroSubtitle: 'recovering.confirm_cloudflare_description'.tr(
+            heroTitle: 'recovering.provider_connected'.tr(
+              args: [providerDisplayName],
+            ),
+            heroSubtitle: 'recovering.provider_connected_description'.tr(
               args: [appConfig.state.serverDomain?.domainName ?? 'your domain'],
             ),
             hasBackButton: true,
@@ -38,7 +42,9 @@ class RecoveryConfirmDns extends StatelessWidget {
                 formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: 'initializing.cloudflare_api_token'.tr(),
+                  labelText: 'recovering.provider_connected_placeholder'.tr(
+                    args: [providerDisplayName],
+                  ),
                 ),
               ),
               const SizedBox(height: 16),

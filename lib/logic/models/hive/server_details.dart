@@ -96,14 +96,9 @@ enum ServerProviderType {
     }
   }
 
-  String get displayName {
-    switch (this) {
-      case ServerProviderType.hetzner:
-        return 'Hetzner Cloud';
-      case ServerProviderType.digitalOcean:
-        return 'Digital Ocean';
-      default:
-        return 'Unknown';
-    }
-  }
+  String get displayName => switch (this) {
+        digitalOcean => 'Digital Ocean',
+        hetzner => 'Hetzner Cloud',
+        unknown => 'Unknown',
+      };
 }

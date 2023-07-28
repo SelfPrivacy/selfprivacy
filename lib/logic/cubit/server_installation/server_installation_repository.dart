@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -22,6 +20,7 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/utils/platform_adapter.dart';
 
 class IpNotFoundException implements Exception {
   IpNotFoundException(this.message);
@@ -308,40 +307,6 @@ class ServerInstallationRepository {
     return domain!;
   }
 
-  Future<String> getDeviceName() async {
-    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (kIsWeb) {
-      return deviceInfo.webBrowserInfo.then(
-        (final WebBrowserInfo value) =>
-            '${value.browserName} ${value.platform}',
-      );
-    } else {
-      if (Platform.isAndroid) {
-        return deviceInfo.androidInfo.then(
-          (final AndroidDeviceInfo value) =>
-              '${value.model} ${value.version.release}',
-        );
-      } else if (Platform.isIOS) {
-        return deviceInfo.iosInfo.then(
-          (final IosDeviceInfo value) =>
-              '${value.utsname.machine} ${value.systemName} ${value.systemVersion}',
-        );
-      } else if (Platform.isLinux) {
-        return deviceInfo.linuxInfo
-            .then((final LinuxDeviceInfo value) => value.prettyName);
-      } else if (Platform.isMacOS) {
-        return deviceInfo.macOsInfo.then(
-          (final MacOsDeviceInfo value) =>
-              '${value.hostName} ${value.computerName}',
-        );
-      } else if (Platform.isWindows) {
-        return deviceInfo.windowsInfo
-            .then((final WindowsDeviceInfo value) => value.computerName);
-      }
-    }
-    return 'Unidentified';
-  }
-
   Future<ServerHostingDetails> authorizeByNewDeviceKey(
     final ServerDomain serverDomain,
     final String newDeviceKey,
@@ -353,7 +318,10 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     final GenericResult<String> result = await serverApi.authorizeDevice(
-      DeviceToken(device: await getDeviceName(), token: newDeviceKey),
+      DeviceToken(
+        device: await PlatformAdapter.deviceName,
+        token: newDeviceKey,
+      ),
     );
 
     if (result.success) {
@@ -390,7 +358,7 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     final GenericResult<String> result = await serverApi.useRecoveryToken(
-      DeviceToken(device: await getDeviceName(), token: recoveryKey),
+      DeviceToken(device: await PlatformAdapter.deviceName, token: recoveryKey),
     );
 
     if (result.success) {
@@ -453,7 +421,10 @@ class ServerInstallationRepository {
     final GenericResult<String> deviceAuthKey =
         await serverApi.createDeviceToken();
     final GenericResult<String> result = await serverApi.authorizeDevice(
-      DeviceToken(device: await getDeviceName(), token: deviceAuthKey.data),
+      DeviceToken(
+        device: await PlatformAdapter.deviceName,
+        token: deviceAuthKey.data,
+      ),
     );
 
     if (result.success) {

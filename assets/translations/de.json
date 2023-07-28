@@ -150,7 +150,7 @@
         "screen_title": "Domäne und DNS",
         "ok": "Aufnahmen sind in Ordnung",
         "error": "Probleme gefunden",
-        "error_subtitle": "Tippen sie hier, um sie zu beheben",
+        "error_subtitle": "Tippen sie hier, um sie zu beheben. Dadurch werden auch benutzerdefinierte DNS-Einträge entfernt.",
         "uninitialized": "Daten sind noch nicht vorhanden",
         "services_title": "Dienste",
         "email_title": "E-Mail",

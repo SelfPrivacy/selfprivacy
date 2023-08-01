@@ -193,17 +193,23 @@ class ServerInstallationRepository {
     return server;
   }
 
-  Future<String?> getDomainId(final String token, final String domain) async {
+  Future<bool> validateDnsToken(
+    final String token,
+    final String domain,
+  ) async {
     final result =
         await ProvidersController.currentDnsProvider!.tryInitApiByToken(token);
     if (!result.success) {
-      return null;
+      return false;
     }
     await setDnsApiToken(token);
-    return (await ProvidersController.currentDnsProvider!.getZoneId(
-      domain,
-    ))
-        .data;
+    final domainResult =
+        await ProvidersController.currentDnsProvider!.domainList();
+    if (!domainResult.success || domainResult.data.isEmpty) {
+      return false;
+    }
+
+    return domain == domainResult.data[0];
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(

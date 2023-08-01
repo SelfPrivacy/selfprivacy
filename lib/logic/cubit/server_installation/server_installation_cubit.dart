@@ -467,7 +467,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final ServerDomain serverDomain = ServerDomain(
       domainName: domain,
       provider: DnsProviderType.unknown,
-      zoneId: '',
     );
     final ServerRecoveryCapabilities recoveryCapabilities =
         await repository.getRecoveryCapabilities(serverDomain);
@@ -681,9 +680,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     if (serverDomain == null) {
       return;
     }
-    final String? zoneId =
-        await repository.getDomainId(token, serverDomain.domainName);
-    if (zoneId == null) {
+    final isTokenValid =
+        await repository.validateDnsToken(token, serverDomain.domainName);
+    if (!isTokenValid) {
       getIt<NavigationService>()
           .showSnackBar('recovering.domain_not_available_on_token'.tr());
       return;
@@ -695,16 +694,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveDomain(
       ServerDomain(
         domainName: serverDomain.domainName,
-        zoneId: zoneId,
         provider: dnsProviderType,
       ),
     );
-    // await repository.setDnsApiToken(token);
     emit(
       dataState.copyWith(
         serverDomain: ServerDomain(
           domainName: serverDomain.domainName,
-          zoneId: zoneId,
           provider: dnsProviderType,
         ),
         dnsApiToken: token,

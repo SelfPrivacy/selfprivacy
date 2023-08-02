@@ -75,7 +75,6 @@ class CloudflareDnsProvider extends DnsProvider {
       cachedDomain: result.data[0].name,
       cachedZoneId: result.data[0].id,
     );
-    print('cachedZoneId saved for the first time!!!');
 
     return GenericResult(
       success: true,
@@ -404,8 +403,6 @@ class CloudflareDnsProvider extends DnsProvider {
         data: null,
       );
     }
-
-    print('syncZoneId!!!');
 
     final getZoneIdResult = await getZoneId(domain);
     if (!getZoneIdResult.success || getZoneIdResult.data == null) {

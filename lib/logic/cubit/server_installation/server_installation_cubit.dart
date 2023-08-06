@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -31,6 +32,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ServerInstallationRepository();
 
   Timer? timer;
+
+  final DiskSize initialStorage = DiskSize.fromGibibyte(10);
 
   Future<void> load() async {
     final ServerInstallationState state = await repository.load();
@@ -257,6 +260,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       serverTypeId: state.serverTypeIdentificator!,
       errorCallback: clearAppConfig,
       successCallback: onCreateServerSuccess,
+      storageSize: initialStorage,
     );
 
     final result =

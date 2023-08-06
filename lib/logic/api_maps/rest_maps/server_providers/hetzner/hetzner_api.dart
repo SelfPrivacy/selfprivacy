@@ -382,7 +382,7 @@ class HetznerApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<HetznerVolume?>> createVolume() async {
+  Future<GenericResult<HetznerVolume?>> createVolume(final int gb) async {
     Response? createVolumeResponse;
     HetznerVolume? volume;
     final Dio client = await getClient();
@@ -390,7 +390,7 @@ class HetznerApi extends RestApiMap {
       createVolumeResponse = await client.post(
         '/volumes',
         data: {
-          'size': 10,
+          'size': gb,
           'name': StringGenerators.storageName(),
           'labels': {'labelkey': 'value'},
           'location': region,

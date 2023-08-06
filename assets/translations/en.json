@@ -341,6 +341,7 @@
         "choose_server_type_ram": "{} GB of RAM",
         "choose_server_type_storage": "{} GB of system storage",
         "choose_server_type_payment_per_month": "{} per month",
+        "choose_server_type_per_month_description": "{} for server and {} for storage",
         "no_server_types_found": "No available server types found. Make sure your account is accessible and try to change your server location.",
         "dns_provider_bad_key_error": "API key is invalid",
         "backblaze_bad_key_error": "Backblaze storage information is invalid",

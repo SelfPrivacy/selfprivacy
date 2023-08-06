@@ -101,7 +101,7 @@ abstract class ServerProvider {
   /// Tries to create an empty unattached [ServerVolume].
   ///
   /// If success, returns this volume information.
-  Future<GenericResult<ServerVolume?>> createVolume();
+  Future<GenericResult<ServerVolume?>> createVolume(final int gb);
 
   /// Tries to delete the requested accessible [ServerVolume].
   Future<GenericResult<void>> deleteVolume(final ServerVolume volume);

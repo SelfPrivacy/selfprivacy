@@ -254,7 +254,9 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     try {
       final int dropletId = serverResult.data!;
-      final newVolume = (await createVolume()).data;
+      final newVolume =
+          (await createVolume(installationData.storageSize.gibibyte.toInt()))
+              .data;
       final bool attachedVolume = (await _adapter.api().attachVolume(
                 newVolume!.name,
                 dropletId,
@@ -588,10 +590,10 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerVolume?>> createVolume() async {
+  Future<GenericResult<ServerVolume?>> createVolume(final int gb) async {
     ServerVolume? volume;
 
-    final result = await _adapter.api().createVolume();
+    final result = await _adapter.api().createVolume(gb);
 
     if (!result.success || result.data == null) {
       return GenericResult(
@@ -708,11 +710,35 @@ class DigitalOceanServerProvider extends ServerProvider {
         message: result.message,
       );
     }
+    final resultVolumes = await _adapter.api().getVolumes();
+    if (resultVolumes.data.isEmpty || !resultVolumes.success) {
+      return GenericResult(
+        success: false,
+        data: metadata,
+        code: resultVolumes.code,
+        message: resultVolumes.message,
+      );
+    }
+    final resultPricePerGb = await getPricePerGb();
+    if (resultPricePerGb.data == null || !resultPricePerGb.success) {
+      return GenericResult(
+        success: false,
+        data: metadata,
+        code: resultPricePerGb.code,
+        message: resultPricePerGb.message,
+      );
+    }
 
     final List servers = result.data;
+    final List<DigitalOceanVolume> volumes = resultVolumes.data;
+    final Price pricePerGb = resultPricePerGb.data!;
     try {
       final droplet = servers.firstWhere(
         (final server) => server['id'] == serverId,
+      );
+
+      final volume = volumes.firstWhere(
+        (final volume) => droplet['volume_ids'].contains(volume.id),
       );
 
       metadata = [
@@ -739,7 +765,8 @@ class DigitalOceanServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
-          value: '${droplet['size']['price_monthly']} ${currency.shortcode}',
+          value:
+              '${droplet['size']['price_monthly']} + ${(volume.sizeGigabytes * pricePerGb.value).toStringAsFixed(2)} ${currency.shortcode}',
         ),
         ServerMetadataEntity(
           type: MetadataType.location,

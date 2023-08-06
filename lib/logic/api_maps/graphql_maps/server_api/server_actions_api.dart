@@ -24,11 +24,11 @@ mixin ServerActionsApi on GraphQLApiMap {
     DateTime? time;
     try {
       final GraphQLClient client = await getClient();
-      final response = await client.mutate$RunSystemRebuild();
+      final response = await client.mutate$RebootSystem();
       if (response.hasException) {
         print(response.exception.toString());
       }
-      if (response.parsedData!.runSystemRebuild.success) {
+      if (response.parsedData!.rebootSystem.success) {
         time = DateTime.now();
       }
     } catch (e) {

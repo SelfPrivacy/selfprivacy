@@ -562,7 +562,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       final newServerDomain = ServerDomain(
         domainName: serverDomain.domainName,
-        zoneId: serverDomain.zoneId,
         provider: dnsProvider,
       );
       await repository.saveServerDetails(newServerDetails);

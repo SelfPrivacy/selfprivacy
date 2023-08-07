@@ -111,7 +111,6 @@
         "disk": "Disque local",
         "monthly_cost": "Coût mensuel",
         "location": "Localisation",
-        "provider": "Fournisseur",
         "core_count": {
             "one": "{} cœur",
             "two": "{} cœurs",

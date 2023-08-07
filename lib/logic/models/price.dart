@@ -53,3 +53,12 @@ class Currency {
   final String? fontcode;
   final String? symbol;
 }
+
+class AdditionalPricing {
+  AdditionalPricing({
+    required this.perVolumeGb,
+    required this.perPublicIpv4,
+  });
+  final Price perVolumeGb;
+  final Price perPublicIpv4;
+}

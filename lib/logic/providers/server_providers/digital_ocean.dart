@@ -529,14 +529,20 @@ class DigitalOceanServerProvider extends ServerProvider {
     );
   }
 
-  /// Hardcoded on their documentation and there is no pricing API at all
-  /// Probably we should scrap the doc page manually
   @override
-  Future<GenericResult<Price?>> getPricePerGb() async => GenericResult(
+  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing() async =>
+      GenericResult(
         success: true,
-        data: Price(
-          value: 0.10,
-          currency: currency,
+        data: AdditionalPricing(
+          perVolumeGb: Price(
+            /// Hardcoded in their documentation and there is no pricing API
+            value: 0.10,
+            currency: currency,
+          ),
+          perPublicIpv4: Price(
+            value: 0,
+            currency: currency,
+          ),
         ),
       );
 
@@ -719,7 +725,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         message: resultVolumes.message,
       );
     }
-    final resultPricePerGb = await getPricePerGb();
+    final resultPricePerGb = await getAdditionalPricing();
     if (resultPricePerGb.data == null || !resultPricePerGb.success) {
       return GenericResult(
         success: false,
@@ -731,8 +737,8 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     final List servers = result.data;
     final List<DigitalOceanVolume> volumes = resultVolumes.data;
-    final Price pricePerGb = resultPricePerGb.data!;
     try {
+      final Price pricePerGb = resultPricePerGb.data!.perVolumeGb;
       final droplet = servers.firstWhere(
         (final server) => server['id'] == serverId,
       );

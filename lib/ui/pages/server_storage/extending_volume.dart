@@ -45,6 +45,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   late double _currentSliderGbValue;
   double _pricePerGb = 1.0;
 
+  // TODO: Wtfff hardcode?!?!?
   final DiskSize maxSize = const DiskSize(byte: 500000000000);
   late DiskSize minSize;
 

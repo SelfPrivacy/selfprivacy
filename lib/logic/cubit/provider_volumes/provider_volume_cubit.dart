@@ -26,8 +26,17 @@ class ApiProviderVolumeCubit
     }
   }
 
-  Future<Price?> getPricePerGb() async =>
-      (await ProvidersController.currentServerProvider!.getPricePerGb()).data;
+  Future<Price?> getPricePerGb() async {
+    Price? price;
+    final pricingResult =
+        await ProvidersController.currentServerProvider!.getAdditionalPricing();
+    if (pricingResult.data == null || !pricingResult.success) {
+      getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
+      return price;
+    }
+    price = pricingResult.data!.perVolumeGb;
+    return price;
+  }
 
   Future<void> refresh() async {
     emit(const ApiProviderVolumeState([], LoadingStatus.refreshing, false));

@@ -3,7 +3,6 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
@@ -32,7 +31,6 @@ class InitializingPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final cubit = context.watch<ServerInstallationCubit>();
-    final volumeCubit = context.read<ApiProviderVolumeCubit>();
 
     if (cubit.state is ServerInstallationRecovery) {
       return const RecoveryRouting();
@@ -41,7 +39,7 @@ class InitializingPage extends StatelessWidget {
       if (cubit.state is! ServerInstallationFinished) {
         actualInitializingPage = [
           () => _stepServerProviderToken(cubit),
-          () => _stepServerType(cubit, volumeCubit),
+          () => _stepServerType(cubit),
           () => _stepDnsProviderToken(cubit),
           () => _stepBackblaze(cubit),
           () => _stepDomain(cubit),
@@ -228,7 +226,6 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepServerType(
     final ServerInstallationCubit serverInstallationCubit,
-    final ApiProviderVolumeCubit apiProviderVolumeCubit,
   ) =>
       BlocProvider(
         create: (final context) =>
@@ -236,7 +233,6 @@ class InitializingPage extends StatelessWidget {
         child: Builder(
           builder: (final context) => ServerTypePicker(
             serverInstallationCubit: serverInstallationCubit,
-            apiProviderVolumeCubit: apiProviderVolumeCubit,
           ),
         ),
       );

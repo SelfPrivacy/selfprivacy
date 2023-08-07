@@ -14,6 +14,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
@@ -150,6 +151,19 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     return apiResult.data;
   }
 
+  Future<AdditionalPricing?> fetchAvailableAdditionalPricing() async {
+    AdditionalPricing? prices;
+    final pricingResult =
+        await ProvidersController.currentServerProvider!.getAdditionalPricing();
+    if (pricingResult.data == null || !pricingResult.success) {
+      getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
+      return prices;
+    }
+
+    prices = pricingResult.data;
+    return prices;
+  }
+
   void setServerProviderKey(final String serverProviderKey) async {
     await repository.saveServerProviderKey(serverProviderKey);
 
@@ -170,11 +184,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
+  Future<void> setLocationIdentifier(final String locationId) async {
+    await ProvidersController.currentServerProvider!
+        .trySetServerLocation(locationId);
+  }
+
   void setServerType(final ServerType serverType) async {
     await repository.saveServerType(serverType);
-
-    await ProvidersController.currentServerProvider!
-        .trySetServerLocation(serverType.location.identifier);
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(

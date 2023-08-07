@@ -321,8 +321,8 @@ class HetznerApi extends RestApiMap {
     return GenericResult(success: true, data: null);
   }
 
-  Future<GenericResult<double?>> getPricePerGb() async {
-    double? price;
+  Future<GenericResult<HetznerPricing?>> getPricing() async {
+    HetznerPricing? pricing;
 
     final Response pricingResponse;
     final Dio client = await getClient();
@@ -331,19 +331,34 @@ class HetznerApi extends RestApiMap {
 
       final volume = pricingResponse.data['pricing']['volume'];
       final volumePrice = volume['price_per_gb_month']['gross'];
-      price = double.parse(volumePrice);
+      final primaryIps = pricingResponse.data['pricing']['primary_ips'];
+      String? ipPrice;
+      for (final primaryIp in primaryIps) {
+        if (primaryIp['type'] == 'ipv4') {
+          for (final primaryIpPrice in primaryIp['prices']) {
+            if (primaryIpPrice['location'] == region!) {
+              ipPrice = primaryIpPrice['price_monthly']['gross'];
+            }
+          }
+        }
+      }
+      pricing = HetznerPricing(
+        region!,
+        double.parse(volumePrice),
+        double.parse(ipPrice!),
+      );
     } catch (e) {
       print(e);
       return GenericResult(
         success: false,
-        data: price,
+        data: pricing,
         message: e.toString(),
       );
     } finally {
       client.close();
     }
 
-    return GenericResult(success: true, data: price);
+    return GenericResult(success: true, data: pricing);
   }
 
   Future<GenericResult<List<HetznerVolume>>> getVolumes({

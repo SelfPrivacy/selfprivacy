@@ -545,8 +545,8 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<Price?>> getPricePerGb() async {
-    final result = await _adapter.api().getPricePerGb();
+  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing() async {
+    final result = await _adapter.api().getPricing();
 
     if (!result.success || result.data == null) {
       return GenericResult(
@@ -559,9 +559,15 @@ class HetznerServerProvider extends ServerProvider {
 
     return GenericResult(
       success: true,
-      data: Price(
-        value: result.data!,
-        currency: currency,
+      data: AdditionalPricing(
+        perVolumeGb: Price(
+          value: result.data!.perVolumeGb,
+          currency: currency,
+        ),
+        perPublicIpv4: Price(
+          value: result.data!.perPublicIpv4,
+          currency: currency,
+        ),
       ),
     );
   }
@@ -722,7 +728,7 @@ class HetznerServerProvider extends ServerProvider {
         message: resultVolumes.message,
       );
     }
-    final resultPricePerGb = await getPricePerGb();
+    final resultPricePerGb = await getAdditionalPricing();
     if (resultPricePerGb.data == null || !resultPricePerGb.success) {
       return GenericResult(
         success: false,
@@ -734,14 +740,16 @@ class HetznerServerProvider extends ServerProvider {
 
     final List<HetznerServerInfo> servers = resultServers.data;
     final List<HetznerVolume> volumes = resultVolumes.data;
-    final Price pricePerGb = resultPricePerGb.data!;
+
     try {
+      final Price pricePerGb = resultPricePerGb.data!.perVolumeGb;
+      final Price pricePerIp = resultPricePerGb.data!.perPublicIpv4;
       final HetznerServerInfo server = servers.firstWhere(
         (final server) => server.id == serverId,
       );
-
-      final HetznerVolume volume = volumes
-          .firstWhere((final volume) => server.volumes.contains(volume.id));
+      final HetznerVolume volume = volumes.firstWhere(
+        (final volume) => server.volumes.contains(volume.id),
+      );
 
       metadata = [
         ServerMetadataEntity(
@@ -768,7 +776,8 @@ class HetznerServerProvider extends ServerProvider {
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
           value:
-              '${server.serverType.prices[1].monthly.toStringAsFixed(2)} + ${(volume.size * pricePerGb.value).toStringAsFixed(2)} ${currency.shortcode}',
+              // TODO: Make more descriptive
+              '${server.serverType.prices[1].monthly.toStringAsFixed(2)} + ${(volume.size * pricePerGb.value).toStringAsFixed(2)} + ${pricePerIp.value.toStringAsFixed(2)} ${currency.shortcode}',
         ),
         ServerMetadataEntity(
           type: MetadataType.location,

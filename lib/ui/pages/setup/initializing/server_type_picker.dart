@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/illustrations/stray_deer.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
-import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
@@ -14,12 +13,10 @@ import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 class ServerTypePicker extends StatefulWidget {
   const ServerTypePicker({
     required this.serverInstallationCubit,
-    required this.apiProviderVolumeCubit,
     super.key,
   });
 
   final ServerInstallationCubit serverInstallationCubit;
-  final ApiProviderVolumeCubit apiProviderVolumeCubit;
 
   @override
   State<ServerTypePicker> createState() => _ServerTypePickerState();
@@ -29,7 +26,12 @@ class _ServerTypePickerState extends State<ServerTypePicker> {
   ServerProviderLocation? serverProviderLocation;
   ServerType? serverType;
 
-  void setServerProviderLocation(final ServerProviderLocation? location) {
+  void setServerProviderLocation(final ServerProviderLocation? location) async {
+    if (location != null) {
+      await widget.serverInstallationCubit.setLocationIdentifier(
+        location.identifier,
+      );
+    }
     setState(() {
       serverProviderLocation = location;
     });
@@ -47,7 +49,6 @@ class _ServerTypePickerState extends State<ServerTypePicker> {
     return SelectTypePage(
       location: serverProviderLocation!,
       serverInstallationCubit: widget.serverInstallationCubit,
-      apiProviderVolumeCubit: widget.apiProviderVolumeCubit,
       backToLocationPickingCallback: () {
         setServerProviderLocation(null);
       },
@@ -150,24 +151,23 @@ class SelectTypePage extends StatelessWidget {
     required this.backToLocationPickingCallback,
     required this.location,
     required this.serverInstallationCubit,
-    required this.apiProviderVolumeCubit,
     super.key,
   });
 
   final ServerProviderLocation location;
   final ServerInstallationCubit serverInstallationCubit;
-  final ApiProviderVolumeCubit apiProviderVolumeCubit;
   final Function backToLocationPickingCallback;
 
   @override
   Widget build(final BuildContext context) {
     final Future<List<ServerType>> serverTypes =
         serverInstallationCubit.fetchAvailableTypesByLocation(location);
-    final Future<Price?> pricePerGb = apiProviderVolumeCubit.getPricePerGb();
+    final Future<AdditionalPricing?> prices =
+        serverInstallationCubit.fetchAvailableAdditionalPricing();
     return FutureBuilder(
       future: Future.wait([
         serverTypes,
-        pricePerGb,
+        prices,
       ]),
       builder: (
         final BuildContext context,
@@ -175,7 +175,7 @@ class SelectTypePage extends StatelessWidget {
       ) {
         if (snapshot.hasData) {
           if ((snapshot.data![0] as List<ServerType>).isEmpty ||
-              (snapshot.data![1] as Price?) == null) {
+              (snapshot.data![1] as AdditionalPricing?) == null) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -213,6 +213,10 @@ class SelectTypePage extends StatelessWidget {
               ],
             );
           }
+          final prices = snapshot.data![1] as AdditionalPricing;
+          final storagePrice = serverInstallationCubit.initialStorage.gibibyte *
+              prices.perVolumeGb.value;
+          final publicIpPrice = prices.perPublicIpv4.value;
           return ResponsiveLayoutWithInfobox(
             topChild: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,7 +329,7 @@ class SelectTypePage extends StatelessWidget {
                                         'initializing.choose_server_type_payment_per_month'
                                             .tr(
                                           args: [
-                                            '${type.price.value + (serverInstallationCubit.initialStorage.gibibyte * (snapshot.data![1] as Price).value)} ${type.price.currency.shortcode}'
+                                            '${(type.price.value + storagePrice + publicIpPrice).toStringAsFixed(4)} ${type.price.currency.shortcode}'
                                           ],
                                         ),
                                         style: Theme.of(context)
@@ -334,29 +338,32 @@ class SelectTypePage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.info_outline,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'initializing.choose_server_type_per_month_description'
-                                            .tr(
-                                          args: [
-                                            type.price.value.toString(),
-                                            '${serverInstallationCubit.initialStorage.gibibyte * (snapshot.data![1] as Price).value}',
-                                          ],
-                                        ),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
-                                      ),
-                                    ],
+                                  Text(
+                                    'initializing.choose_server_type_payment_server'
+                                        .tr(
+                                      args: [type.price.value.toString()],
+                                    ),
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
                                   ),
+                                  Text(
+                                    'initializing.choose_server_type_payment_storage'
+                                        .tr(
+                                      args: [storagePrice.toString()],
+                                    ),
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  if (publicIpPrice != 0)
+                                    Text(
+                                      'initializing.choose_server_type_payment_ip'
+                                          .tr(
+                                        args: [publicIpPrice.toString()],
+                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
                                 ],
                               ),
                             ),

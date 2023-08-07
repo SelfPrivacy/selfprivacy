@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart'
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 
@@ -165,15 +166,10 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                 height: 1.0,
               ),
               const SizedBox(height: 16),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Icon(
-                  Icons.info_outlined,
-                  size: 24,
-                ),
+              InfoBox(
+                text: 'storage.extending_volume_price_info'.tr(),
+                isWarning: false,
               ),
-              const SizedBox(height: 16),
-              Text('storage.extending_volume_price_info'.tr()),
               const SizedBox(height: 16),
             ],
           );

@@ -97,8 +97,8 @@
         "fallback_select_root_ssh": "Каранёвы доступ да сервера праз SSH.",
         "authorization_failed": "Не ўдалося ўвайсці з гэтым ключом",
         "fallback_select_provider_console_hint": "Напрыклад, Hetzner.",
-        "server_provider_connected": "Падлучэнне да вашага сервернага правайдэра",
-        "server_provider_connected_placeholder": "Токен сервернага правайдэра",
+        "provider_connected": "Падлучэнне да вашага {}",
+        "provider_connected_placeholder": "Токен {}",
         "confirm_server": "Пацвердзіце сервер",
         "confirm_server_description": "Знайшлі сервер! Пацьвердзіце, што гэта ён:",
         "confirm_server_accept": "Да, гэта ён",
@@ -109,16 +109,12 @@
         "modal_confirmation_dns_valid": "Зваротны DNS карэктны",
         "modal_confirmation_dns_invalid": "Зваротны DNS паказвае на іншы дамен",
         "modal_confirmation_ip_invalid": "IP не супадае з паказаным у DNS запісу",
-        "confirm_backblaze": "Падключэнне да Backblaze",
-        "confirm_backblaze_description": "Увядзіце токен Backblaze, які мае правы на сховішча рэзервовых копій:",
         "fallback_select_provider_console": "Доступ да кансолі хостынгу.",
-        "server_provider_connected_description": "Сувязь устаноўлена. Увядзіце свой токен з доступам да {}:",
+        "provider_connected_description": "Сувязь устаноўлена. Увядзіце свой токен з доступам да {}:",
         "choose_server": "Выберыце сервер",
         "no_servers": "На вашым акаўнце няма даступных сэрвэраў.",
         "modal_confirmation_description": "Падлучэнне да няправільнага сервера можа прывесці да дэструктыўных наступстваў.",
-        "modal_confirmation_ip_valid": "IP супадае з паказаным у DNS запісу",
-        "confirm_cloudflare": "Падключэнне да DNS Правайдэра",
-        "confirm_cloudflare_description": "Увядзіце токен DNS Правайдэра, які мае правы на {}:"
+        "modal_confirmation_ip_valid": "IP супадае з паказаным у DNS запісу"
     },
     "devices": {
         "main_screen": {

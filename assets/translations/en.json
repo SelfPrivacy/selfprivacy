@@ -124,7 +124,8 @@
         "disk": "Disk local",
         "monthly_cost": "Monthly cost",
         "location": "Location",
-        "provider": "Provider",
+        "server_provider": "Server Provider",
+        "dns_provider": "DNS Provider",
         "core_count": {
             "one": "{} core",
             "two": "{} cores",
@@ -218,7 +219,7 @@
         "extend_volume_button": "Extend volume",
         "extending_volume_title": "Extending volume",
         "extending_volume_description": "Resizing volume will allow you to store more data on your server without extending the server itself. Volume can only be extended: shrinking is not possible.",
-        "extending_volume_price_info": "Price includes VAT and is estimated from pricing data provided by Hetzner. Server will be rebooted after resizing.",
+        "extending_volume_price_info": "Price includes VAT and is estimated from pricing data provided by your server provider. Server will be rebooted after resizing.",
         "extending_volume_error": "Couldn't initialize volume extending.",
         "size": "Size",
         "data_migration_title": "Data migration",
@@ -404,9 +405,9 @@
         "fallback_select_provider_console": "Access to the server console of my provider.",
         "authorization_failed": "Couldn't log in with this key",
         "fallback_select_provider_console_hint": "For example: Hetzner.",
-        "server_provider_connected": "Connect to your Server Provider",
-        "server_provider_connected_description": "Communication established. Enter you token with access to {}:",
-        "server_provider_connected_placeholder": "Server Provider token",
+        "provider_connected": "Connect to {}",
+        "provider_connected_description": "Enter your token with access to {}:",
+        "provider_connected_placeholder": "{} token",
         "confirm_server": "Confirm server",
         "confirm_server_description": "Found your server! Confirm it is the right one:",
         "confirm_server_accept": "Yes! That's it",
@@ -420,11 +421,7 @@
         "modal_confirmation_dns_valid": "Reverse DNS is valid",
         "modal_confirmation_dns_invalid": "Reverse DNS points to another domain",
         "modal_confirmation_ip_valid": "IP is the same as in DNS record",
-        "modal_confirmation_ip_invalid": "IP is not the same as in DNS record",
-        "confirm_cloudflare": "Connect to your DNS Provider",
-        "confirm_cloudflare_description": "Enter a token of your DNS Provider with access to {}:",
-        "confirm_backblaze": "Connect to Backblaze",
-        "confirm_backblaze_description": "Enter a Backblaze token with access to backup storage:"
+        "modal_confirmation_ip_invalid": "IP is not the same as in DNS record"
     },
     "devices": {
         "main_screen": {

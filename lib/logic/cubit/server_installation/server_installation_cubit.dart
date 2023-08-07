@@ -532,13 +532,29 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
             .showSnackBar('recovering.generic_error'.tr());
         return;
       }
-      await repository.saveServerDetails(serverDetails);
+      final newServerDetails = ServerHostingDetails(
+        provider: serverProvider,
+        apiToken: serverDetails.apiToken,
+        createTime: serverDetails.createTime,
+        id: serverDetails.id,
+        ip4: serverDetails.ip4,
+        volume: serverDetails.volume,
+        startTime: serverDetails.startTime,
+      );
+      final newServerDomain = ServerDomain(
+        domainName: serverDomain.domainName,
+        zoneId: serverDomain.zoneId,
+        provider: dnsProvider,
+      );
+      await repository.saveServerDetails(newServerDetails);
       await repository.saveDnsProviderType(dnsProvider);
+      await repository.saveDomain(newServerDomain);
       setServerProviderType(serverProvider);
       setDnsProviderType(dnsProvider);
       emit(
         dataState.copyWith(
-          serverDetails: serverDetails,
+          serverDetails: newServerDetails,
+          serverDomain: newServerDomain,
           currentStep: RecoveryStep.serverProviderToken,
         ),
       );

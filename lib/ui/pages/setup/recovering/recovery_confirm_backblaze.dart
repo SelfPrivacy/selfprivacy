@@ -23,8 +23,10 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
               context.watch<BackblazeFormCubit>().state;
 
           return BrandHeroScreen(
-            heroTitle: 'recovering.confirm_backblaze'.tr(),
-            heroSubtitle: 'recovering.confirm_backblaze_description'.tr(),
+            heroTitle: 'recovering.provider_connected'.tr(args: ['Backblaze']),
+            heroSubtitle: 'recovering.provider_connected_description'.tr(
+              args: ['Backblaze'],
+            ),
             hasBackButton: true,
             ignoreBreakpoints: true,
             hasSupportDrawer: true,

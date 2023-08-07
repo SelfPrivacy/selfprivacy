@@ -388,11 +388,10 @@
         "recovery_main_header": "Pripojiť sa k existujúcemu serveru",
         "method_select_other_device": "Mám prístup na inom zariadení",
         "method_device_description": "Otvorte aplikáciu na inom zariadení a otvorte obrazovku správy zariadenia. Kliknutím na „Pridať zariadenie“ získate autorizačný token.",
-        "server_provider_connected": "Pripojiť sa k poskytovateľovi servera",
+        "provider_connected": "Pripojiť sa k poskytovateľovi {}",
         "choose_server": "Vyberte si svoj server",
         "domain_not_available_on_token": "Vybraná doména nie je na tomto tokene dostupná.",
         "modal_confirmation_ip_valid": "IP je rovnaká ako v DNS zázname",
-        "confirm_backblaze_description": "Zadajte token Backblaze, ktorý má práva na úložisko záloh:",
         "generic_error": "Operácia zlyhala, skúste to znova.",
         "domain_recovery_description": "Zadajte doménu servera, pre ktorú chcete získať prístup:",
         "domain_recover_placeholder": "Vaša doména",
@@ -410,8 +409,8 @@
         "fallback_select_provider_console": "Prístup ku konzole servera môjho poskytovateľa.",
         "authorization_failed": "Pomocou tohto kľúča sa nepodarilo prihlásiť",
         "fallback_select_provider_console_hint": "Napríklad Hetzner.",
-        "server_provider_connected_description": "Spojenie bolo nadviazané. Zadajte svoj token s prístupom k {}:",
-        "server_provider_connected_placeholder": "Token poskytovateľa servera",
+        "provider_connected_description": "Spojenie bolo nadviazané. Zadajte svoj token s prístupom k {}:",
+        "provider_connected_placeholder": "{} Token",
         "confirm_server": "Potvrďte server",
         "confirm_server_description": "Našiel sa server! Potvrďte, že je to on:",
         "confirm_server_accept": "Áno, to je on",
@@ -422,10 +421,7 @@
         "modal_confirmation_description": "Ak sa pripojíte k nesprávnemu serveru, môžete stratiť všetky svoje údaje.",
         "modal_confirmation_dns_valid": "Reverzný DNS je platný",
         "modal_confirmation_dns_invalid": "Reverzné DNS ukazuje na inú doménu",
-        "modal_confirmation_ip_invalid": "IP nie je rovnaká ako v DNS zázname",
-        "confirm_cloudflare": "Pripojenie k službe CloudFlare",
-        "confirm_cloudflare_description": "Zadajte token Cloudflare, ktorý má práva na {}:",
-        "confirm_backblaze": "Pripojenie ku Backblaze"
+        "modal_confirmation_ip_invalid": "IP nie je rovnaká ako v DNS zázname"
     },
     "devices": {
         "add_new_device_screen": {

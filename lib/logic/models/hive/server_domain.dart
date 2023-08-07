@@ -54,4 +54,11 @@ enum DnsProviderType {
         desec => 'DESEC',
         unknown => 'UNKNOWN',
       };
+
+  String get displayName => switch (this) {
+        digitalOcean => 'Digital Ocean DNS',
+        cloudflare => 'Cloudflare',
+        desec => 'deSEC',
+        unknown => 'Unknown',
+      };
 }

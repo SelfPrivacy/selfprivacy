@@ -4,8 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/json/dns_records.dart';
+import 'package:selfprivacy/logic/models/json/cloudflare_dns_info.dart';
 
 class CloudflareApi extends RestApiMap {
   CloudflareApi({
@@ -92,9 +91,9 @@ class CloudflareApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<List>> getDomains() async {
+  Future<GenericResult<List<CloudflareZone>>> getZones() async {
     final String url = '$rootAddress/zones';
-    List domains = [];
+    List<CloudflareZone> domains = [];
 
     late final Response? response;
     final Dio client = await getClient();
@@ -103,7 +102,11 @@ class CloudflareApi extends RestApiMap {
         url,
         queryParameters: {'per_page': 50},
       );
-      domains = response.data['result'];
+      domains = response.data['result']!
+          .map<CloudflareZone>(
+            (final json) => CloudflareZone.fromJson(json),
+          )
+          .toList();
     } catch (e) {
       print(e);
       return GenericResult(
@@ -125,18 +128,17 @@ class CloudflareApi extends RestApiMap {
   }
 
   Future<GenericResult<void>> createMultipleDnsRecords({
-    required final ServerDomain domain,
-    required final List<DnsRecord> records,
+    required final String zoneId,
+    required final List<CloudflareDnsRecord> records,
   }) async {
-    final String domainZoneId = domain.zoneId;
     final List<Future> allCreateFutures = <Future>[];
 
     final Dio client = await getClient();
     try {
-      for (final DnsRecord record in records) {
+      for (final CloudflareDnsRecord record in records) {
         allCreateFutures.add(
           client.post(
-            '/zones/$domainZoneId/dns_records',
+            '/zones/$zoneId/dns_records',
             data: record.toJson(),
           ),
         );
@@ -160,11 +162,10 @@ class CloudflareApi extends RestApiMap {
   }
 
   Future<GenericResult<void>> removeSimilarRecords({
-    required final ServerDomain domain,
-    required final List records,
+    required final String zoneId,
+    required final List<CloudflareDnsRecord> records,
   }) async {
-    final String domainZoneId = domain.zoneId;
-    final String url = '/zones/$domainZoneId/dns_records';
+    final String url = '/zones/$zoneId/dns_records';
 
     final Dio client = await getClient();
     try {
@@ -172,7 +173,7 @@ class CloudflareApi extends RestApiMap {
 
       for (final record in records) {
         allDeleteFutures.add(
-          client.delete('$url/${record["id"]}'),
+          client.delete('$url/${record.id}'),
         );
       }
       await Future.wait(allDeleteFutures);
@@ -190,26 +191,21 @@ class CloudflareApi extends RestApiMap {
     return GenericResult(success: true, data: null);
   }
 
-  Future<GenericResult<List>> getDnsRecords({
-    required final ServerDomain domain,
+  Future<GenericResult<List<CloudflareDnsRecord>>> getDnsRecords({
+    required final String zoneId,
   }) async {
     Response response;
-    final String domainName = domain.domainName;
-    final String domainZoneId = domain.zoneId;
-    final List allRecords = [];
+    List<CloudflareDnsRecord> allRecords = [];
 
-    final String url = '/zones/$domainZoneId/dns_records';
-
+    final String url = '/zones/$zoneId/dns_records';
     final Dio client = await getClient();
     try {
       response = await client.get(url);
-      final List records = response.data['result'] ?? [];
-
-      for (final record in records) {
-        if (record['zone_name'] == domainName) {
-          allRecords.add(record);
-        }
-      }
+      allRecords = response.data['result']!
+          .map<CloudflareDnsRecord>(
+            (final json) => CloudflareDnsRecord.fromJson(json),
+          )
+          .toList();
     } catch (e) {
       print(e);
       return GenericResult(
@@ -222,31 +218,5 @@ class CloudflareApi extends RestApiMap {
     }
 
     return GenericResult(data: allRecords, success: true);
-  }
-
-  Future<GenericResult<List<dynamic>>> getZones(final String domain) async {
-    List zones = [];
-
-    late final Response? response;
-    final Dio client = await getClient();
-    try {
-      response = await client.get(
-        '/zones',
-        queryParameters: {'name': domain},
-      );
-      zones = response.data['result'];
-    } catch (e) {
-      print(e);
-      GenericResult(
-        success: false,
-        data: zones,
-        code: response?.statusCode,
-        message: response?.statusMessage,
-      );
-    } finally {
-      close(client);
-    }
-
-    return GenericResult(success: true, data: zones);
   }
 }

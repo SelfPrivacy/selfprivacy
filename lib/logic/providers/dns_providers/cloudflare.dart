@@ -1,12 +1,16 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/cloudflare/cloudflare_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/cloudflare_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
 class ApiAdapter {
-  ApiAdapter({final bool isWithToken = true})
-      : _api = CloudflareApi(
+  ApiAdapter({
+    final bool isWithToken = true,
+    this.cachedDomain = '',
+    this.cachedZoneId = '',
+  }) : _api = CloudflareApi(
           isWithToken: isWithToken,
         );
 
@@ -17,6 +21,8 @@ class ApiAdapter {
         );
 
   final CloudflareApi _api;
+  final String cachedZoneId;
+  final String cachedDomain;
 }
 
 class CloudflareDnsProvider extends DnsProvider {
@@ -47,7 +53,7 @@ class CloudflareDnsProvider extends DnsProvider {
   @override
   Future<GenericResult<List<String>>> domainList() async {
     List<String> domains = [];
-    final result = await _adapter.api().getDomains();
+    final result = await _adapter.api().getZones();
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -59,9 +65,16 @@ class CloudflareDnsProvider extends DnsProvider {
 
     domains = result.data
         .map<String>(
-          (final el) => el['name'] as String,
+          (final el) => el.name,
         )
         .toList();
+
+    /// TODO: Remove when domain selection for more than one domain on account is implemented, move cachedZoneId writing to domain saving method
+    _adapter = ApiAdapter(
+      isWithToken: true,
+      cachedDomain: result.data[0].name,
+      cachedZoneId: result.data[0].id,
+    );
 
     return GenericResult(
       success: true,
@@ -73,11 +86,27 @@ class CloudflareDnsProvider extends DnsProvider {
   Future<GenericResult<void>> createDomainRecords({
     required final ServerDomain domain,
     final String? ip4,
-  }) {
+  }) async {
+    final syncZoneIdResult = await syncZoneId(domain.domainName);
+    if (!syncZoneIdResult.success) {
+      return syncZoneIdResult;
+    }
+
     final records = getProjectDnsRecords(domain.domainName, ip4);
     return _adapter.api().createMultipleDnsRecords(
-          domain: domain,
-          records: records,
+          zoneId: _adapter.cachedZoneId,
+          records: records
+              .map<CloudflareDnsRecord>(
+                (final rec) => CloudflareDnsRecord(
+                  content: rec.content,
+                  name: rec.name,
+                  type: rec.type,
+                  zoneName: domain.domainName,
+                  id: null,
+                  ttl: rec.ttl,
+                ),
+              )
+              .toList(),
         );
   }
 
@@ -86,7 +115,13 @@ class CloudflareDnsProvider extends DnsProvider {
     required final ServerDomain domain,
     final String? ip4,
   }) async {
-    final result = await _adapter.api().getDnsRecords(domain: domain);
+    final syncZoneIdResult = await syncZoneId(domain.domainName);
+    if (!syncZoneIdResult.success) {
+      return syncZoneIdResult;
+    }
+
+    final result =
+        await _adapter.api().getDnsRecords(zoneId: _adapter.cachedZoneId);
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -97,7 +132,7 @@ class CloudflareDnsProvider extends DnsProvider {
     }
 
     return _adapter.api().removeSimilarRecords(
-          domain: domain,
+          zoneId: _adapter.cachedZoneId,
           records: result.data,
         );
   }
@@ -106,8 +141,19 @@ class CloudflareDnsProvider extends DnsProvider {
   Future<GenericResult<List<DnsRecord>>> getDnsRecords({
     required final ServerDomain domain,
   }) async {
+    final syncZoneIdResult = await syncZoneId(domain.domainName);
+    if (!syncZoneIdResult.success) {
+      return GenericResult(
+        success: syncZoneIdResult.success,
+        data: [],
+        code: syncZoneIdResult.code,
+        message: syncZoneIdResult.message,
+      );
+    }
+
     final List<DnsRecord> records = [];
-    final result = await _adapter.api().getDnsRecords(domain: domain);
+    final result =
+        await _adapter.api().getDnsRecords(zoneId: _adapter.cachedZoneId);
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -120,11 +166,10 @@ class CloudflareDnsProvider extends DnsProvider {
     for (final rawRecord in result.data) {
       records.add(
         DnsRecord(
-          name: rawRecord['name'],
-          type: rawRecord['type'],
-          content: rawRecord['content'],
-          ttl: rawRecord['ttl'],
-          proxied: rawRecord['proxied'],
+          name: rawRecord.name,
+          type: rawRecord.type,
+          content: rawRecord.content,
+          ttl: rawRecord.ttl,
         ),
       );
     }
@@ -139,11 +184,26 @@ class CloudflareDnsProvider extends DnsProvider {
   Future<GenericResult<void>> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
-  ) async =>
-      _adapter.api().createMultipleDnsRecords(
-        domain: domain,
-        records: [record],
-      );
+  ) async {
+    final syncZoneIdResult = await syncZoneId(domain.domainName);
+    if (!syncZoneIdResult.success) {
+      return syncZoneIdResult;
+    }
+
+    return _adapter.api().createMultipleDnsRecords(
+      zoneId: _adapter.cachedZoneId,
+      records: [
+        CloudflareDnsRecord(
+          content: record.content,
+          id: null,
+          name: record.name,
+          type: record.type,
+          zoneName: domain.domainName,
+          ttl: record.ttl,
+        ),
+      ],
+    );
+  }
 
   @override
   Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
@@ -336,10 +396,39 @@ class CloudflareDnsProvider extends DnsProvider {
     ];
   }
 
-  @override
+  Future<GenericResult<void>> syncZoneId(final String domain) async {
+    if (domain == _adapter.cachedDomain && _adapter.cachedZoneId.isNotEmpty) {
+      return GenericResult(
+        success: true,
+        data: null,
+      );
+    }
+
+    final getZoneIdResult = await getZoneId(domain);
+    if (!getZoneIdResult.success || getZoneIdResult.data == null) {
+      return GenericResult(
+        success: false,
+        data: null,
+        code: getZoneIdResult.code,
+        message: getZoneIdResult.message,
+      );
+    }
+
+    _adapter = ApiAdapter(
+      isWithToken: true,
+      cachedDomain: domain,
+      cachedZoneId: getZoneIdResult.data!,
+    );
+
+    return GenericResult(
+      success: true,
+      data: null,
+    );
+  }
+
   Future<GenericResult<String?>> getZoneId(final String domain) async {
     String? id;
-    final result = await _adapter.api().getZones(domain);
+    final result = await _adapter.api().getZones();
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -349,8 +438,12 @@ class CloudflareDnsProvider extends DnsProvider {
       );
     }
 
-    id = result.data[0]['id'];
+    for (final availableDomain in result.data) {
+      if (availableDomain.name == domain) {
+        id = availableDomain.id;
+      }
+    }
 
-    return GenericResult(success: true, data: id);
+    return GenericResult(success: id != null, data: id);
   }
 }

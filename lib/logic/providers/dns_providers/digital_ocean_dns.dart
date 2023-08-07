@@ -369,11 +369,4 @@ class DigitalOceanDnsProvider extends DnsProvider {
         ),
     ];
   }
-
-  @override
-  Future<GenericResult<String?>> getZoneId(final String domain) async =>
-      GenericResult(
-        data: domain,
-        success: true,
-      );
 }

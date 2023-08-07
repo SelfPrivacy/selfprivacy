@@ -9,18 +9,36 @@ class ServerDetailsRepository {
   ServerApi server = ServerApi();
 
   Future<ServerDetailsRepositoryDto> load() async {
-    final serverProviderApi = ProvidersController.currentServerProvider;
     final settings = await server.getSystemSettings();
-    final serverId = getIt<ApiConfigModel>().serverDetails!.id;
-    final metadata = await serverProviderApi?.getMetadata(serverId);
-
     return ServerDetailsRepositoryDto(
       autoUpgradeSettings: settings.autoUpgradeSettings,
-      metadata: metadata!.data,
+      metadata: await metadata,
       serverTimezone: TimeZoneSettings.fromString(
         settings.timezone,
       ),
     );
+  }
+
+  Future<List<ServerMetadataEntity>> get metadata async {
+    List<ServerMetadataEntity> data = [];
+
+    final serverProviderApi = ProvidersController.currentServerProvider;
+    final dnsProviderApi = ProvidersController.currentDnsProvider;
+    if (serverProviderApi != null && dnsProviderApi != null) {
+      final serverId = getIt<ApiConfigModel>().serverDetails?.id ?? 0;
+      final metadataResult = await serverProviderApi.getMetadata(serverId);
+      metadataResult.data.add(
+        ServerMetadataEntity(
+          trId: 'server.dns_provider',
+          value: dnsProviderApi.type.displayName,
+          type: MetadataType.other,
+        ),
+      );
+
+      data = metadataResult.data;
+    }
+
+    return data;
   }
 
   Future<void> setAutoUpgradeSettings(

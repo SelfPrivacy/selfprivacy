@@ -7,21 +7,16 @@ part 'server_domain.g.dart';
 class ServerDomain {
   ServerDomain({
     required this.domainName,
-    required this.zoneId,
     required this.provider,
   });
 
   @HiveField(0)
   final String domainName;
 
-  @HiveField(1)
-  final String zoneId;
+  // @HiveField(1)
 
   @HiveField(2, defaultValue: DnsProviderType.cloudflare)
   final DnsProviderType provider;
-
-  @override
-  String toString() => '$domainName: $zoneId';
 }
 
 @HiveType(typeId: 100)
@@ -53,5 +48,12 @@ enum DnsProviderType {
         cloudflare => 'CLOUDFLARE',
         desec => 'DESEC',
         unknown => 'UNKNOWN',
+      };
+
+  String get displayName => switch (this) {
+        digitalOcean => 'Digital Ocean DNS',
+        cloudflare => 'Cloudflare',
+        desec => 'deSEC',
+        unknown => 'Unknown',
       };
 }

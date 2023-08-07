@@ -355,9 +355,9 @@
         "fallback_select_provider_console": "Hostinq konsoluna giriş.",
         "authorization_failed": "Bu açarla daxil olmaq alınmadı",
         "fallback_select_provider_console_hint": "Məsələn: Hetzner.",
-        "server_provider_connected": "Server provayderinizə qoşulur",
-        "server_provider_connected_description": "Əlaqə quruldu. {} girişi ilə nişanınızı daxil edin:",
-        "server_provider_connected_placeholder": "Server provayderi nişanı",
+        "provider_connected": "{} qoşulur",
+        "provider_connected_description": "Əlaqə quruldu. {} girişi ilə nişanınızı daxil edin:",
+        "provider_connected_placeholder": "{} nişanı",
         "confirm_server": "Serveri təsdiqləyin",
         "confirm_server_description": "Server tapdım! Onun olduğunu təsdiq edin:",
         "confirm_server_accept": "Bəli, odur",
@@ -368,11 +368,7 @@
         "domain_not_available_on_token": "Daxil edilmiş işarənin tələb olunan domenə girişi yoxdur.",
         "modal_confirmation_dns_valid": "Əks DNS düzgündür",
         "modal_confirmation_dns_invalid": "Əks DNS fərqli domenə işarə edir",
-        "modal_confirmation_ip_valid": "IP DNS qeydində göstərilənə uyğun gəlir",
-        "confirm_cloudflare": "Cloudflare-ə qoşulur",
-        "confirm_cloudflare_description": "{} hüququ olan Cloudflare tokenini daxil edin:",
-        "confirm_backblaze": "Backblaze-ə qoşulur",
-        "confirm_backblaze_description": "Ehtiyat saxlama hüququ olan Backblaze tokenini daxil edin:"
+        "modal_confirmation_ip_valid": "IP DNS qeydində göstərilənə uyğun gəlir"
     },
     "devices": {
         "main_screen": {

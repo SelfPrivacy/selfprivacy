@@ -46,7 +46,6 @@ class HetznerApi extends RestApiMap {
   @override
   String get rootAddress => 'https://api.hetzner.cloud/v1';
   String get infectProviderName => 'hetzner';
-  String get displayProviderName => 'Hetzner';
 
   Future<GenericResult<List<HetznerServerInfo>>> getServers() async {
     List<HetznerServerInfo> servers = [];

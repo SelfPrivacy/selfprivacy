@@ -171,9 +171,9 @@
         "fallback_select_provider_console": "Доступ до серверної консолі мого продiвера.",
         "authorization_failed": "Не можу авторизуватись за цим ключем",
         "fallback_select_provider_console_hint": "Наприклад: Hetzner.",
-        "server_provider_connected": "Підключіться до провайдера сервера",
-        "server_provider_connected_description": "Зв'язок встановлений. Введіть свій токен з доступом до {}:",
-        "server_provider_connected_placeholder": "Токен провайдера сервера",
+        "provider_connected": "Підключіться до {}",
+        "provider_connected_description": "Зв'язок встановлений. Введіть свій токен з доступом до {}:",
+        "provider_connected_placeholder": "{} Токен",
         "confirm_server": "Підтвердити сервер",
         "confirm_server_description": "Знайдено ваш сервер! Підтвердіть, що він правильний:",
         "confirm_server_accept": "Так! Це воно",
@@ -187,11 +187,7 @@
         "modal_confirmation_dns_valid": "Зворотна DNS дійсна",
         "modal_confirmation_dns_invalid": "Зворотна DNS вказує на інший домен",
         "modal_confirmation_ip_valid": "IP той же, що і в записі DNS",
-        "modal_confirmation_ip_invalid": "IP не такий, як в DNS-записі",
-        "confirm_cloudflare": "Підключення до CloudFlare",
-        "confirm_cloudflare_description": "Введіть токен CloudFlare з доступом до {}:",
-        "confirm_backblaze": "Підкючитися до Backblaze",
-        "confirm_backblaze_description": "Введіть токен Backblaze із доступом до сховища резервних копій:"
+        "modal_confirmation_ip_invalid": "IP не такий, як в DNS-записі"
     },
     "resource_chart": {
         "month": "Місяць",

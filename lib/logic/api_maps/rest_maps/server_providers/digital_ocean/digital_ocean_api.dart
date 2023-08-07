@@ -46,7 +46,6 @@ class DigitalOceanApi extends RestApiMap {
   @override
   String get rootAddress => 'https://api.digitalocean.com/v2';
   String get infectProviderName => 'digitalocean';
-  String get displayProviderName => 'Digital Ocean';
 
   Future<GenericResult<List>> getServers() async {
     List servers = [];

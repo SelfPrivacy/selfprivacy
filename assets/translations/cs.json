@@ -369,9 +369,9 @@
         "fallback_select_root_ssh": "Kořenový přístup SSH k serveru.",
         "fallback_select_provider_console": "Přístup ke konzole serveru mého prodiveru.",
         "authorization_failed": "Nelze se přihlásit pomocí tohoto klíče",
-        "server_provider_connected": "Připojení k poskytovateli serveru",
-        "server_provider_connected_description": "Komunikace navázána. Zadejte svůj token s přístupem k {}:",
-        "server_provider_connected_placeholder": "Token poskytovatele serveru",
+        "provider_connected": "Připojení k poskytovateli {}",
+        "provider_connected_description": "Komunikace navázána. Zadejte svůj token s přístupem k {}:",
+        "provider_connected_placeholder": "Token {}",
         "confirm_server": "Potvrzení serveru",
         "confirm_server_accept": "Ano! To je ono",
         "confirm_server_decline": "Výběr jiného serveru",
@@ -383,17 +383,13 @@
         "modal_confirmation_dns_valid": "Reverzní DNS je platný",
         "modal_confirmation_dns_invalid": "Reverzní DNS ukazuje na jinou doménu",
         "modal_confirmation_ip_invalid": "IP není stejná jako v záznamu DNS",
-        "confirm_cloudflare": "Připojení k poskytovateli DNS",
-        "confirm_cloudflare_description": "Zadejte token DNS poskytovatele, který má práva k {}:",
-        "confirm_backblaze": "Připojení k službě Backblaze",
         "generic_error": "Operace se nezdařila, zkuste to prosím znovu.",
         "domain_recovery_description": "Zadejte doménu serveru, ke které chcete získat přístup:",
         "method_device_description": "Otevřete aplikaci v jiném zařízení a přejděte na stránku zařízení. Stisknutím tlačítka \"Přidat zařízení\" získáte token.",
         "fallback_select_provider_console_hint": "Například: Hetzner.",
         "confirm_server_description": "Našel jsem váš server! Potvrďte, že je to ten správný:",
         "domain_not_available_on_token": "Vybraná doména není na tomto tokenu k dispozici.",
-        "modal_confirmation_ip_valid": "IP je stejná jako v záznamu DNS",
-        "confirm_backblaze_description": "Zadejte token Backblaze s přístupem k úložišti záloh:"
+        "modal_confirmation_ip_valid": "IP je stejná jako v záznamu DNS"
     },
     "devices": {
         "main_screen": {

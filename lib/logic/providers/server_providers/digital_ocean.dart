@@ -781,8 +781,8 @@ class DigitalOceanServerProvider extends ServerProvider {
         ),
         ServerMetadataEntity(
           type: MetadataType.other,
-          trId: 'server.provider',
-          value: _adapter.api().displayProviderName,
+          trId: 'server.server_provider',
+          value: type.displayName,
         ),
       ];
     } catch (e) {

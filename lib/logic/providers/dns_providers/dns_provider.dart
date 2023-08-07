@@ -73,12 +73,4 @@ abstract class DnsProvider {
     final String? ip4,
     final String? dkimPublicKey,
   );
-
-  /// Tries to access zone of requested domain.
-  ///
-  /// If a DNS provider doesn't support zones,
-  /// will return domain without any changes.
-  ///
-  /// If success, returns an initializing string of zone id.
-  Future<GenericResult<String?>> getZoneId(final String domain);
 }

@@ -25,23 +25,17 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
   Future<void> saveDomain() async {
     assert(state is Loaded, 'wrong state');
     final String domainName = (state as Loaded).domain;
-
     emit(Loading(LoadingTypes.saving));
 
     final dnsProvider = ProvidersController.currentDnsProvider!;
-    final GenericResult<String?> zoneIdResult =
-        await dnsProvider.getZoneId(domainName);
 
-    if (zoneIdResult.success || zoneIdResult.data != null) {
-      final ServerDomain domain = ServerDomain(
-        domainName: domainName,
-        zoneId: zoneIdResult.data!,
-        provider: dnsProvider.type,
-      );
+    final ServerDomain domain = ServerDomain(
+      domainName: domainName,
+      provider: dnsProvider.type,
+    );
 
-      serverInstallationCubit.setDomain(domain);
-      emit(DomainSet());
-    }
+    serverInstallationCubit.setDomain(domain);
+    emit(DomainSet());
   }
 }
 

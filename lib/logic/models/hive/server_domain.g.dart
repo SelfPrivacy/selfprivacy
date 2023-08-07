@@ -18,7 +18,6 @@ class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
     };
     return ServerDomain(
       domainName: fields[0] as String,
-      zoneId: fields[1] as String,
       provider: fields[2] == null
           ? DnsProviderType.cloudflare
           : fields[2] as DnsProviderType,
@@ -28,11 +27,9 @@ class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
   @override
   void write(BinaryWriter writer, ServerDomain obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.domainName)
-      ..writeByte(1)
-      ..write(obj.zoneId)
       ..writeByte(2)
       ..write(obj.provider);
   }

@@ -46,6 +46,7 @@ class HetznerServerProvider extends ServerProvider {
 
   ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.eur);
+  int? cachedCoreAmount;
 
   @override
   ServerProviderType get type => ServerProviderType.hetzner;
@@ -286,6 +287,8 @@ class HetznerServerProvider extends ServerProvider {
       apiToken: serverApiToken,
       provider: ServerProviderType.hetzner,
     );
+
+    cachedCoreAmount = serverResult.data!.serverType.cores;
 
     final createDnsResult = await _adapter.api().createReverseDns(
           serverId: serverDetails.id,
@@ -752,8 +755,8 @@ class HetznerServerProvider extends ServerProvider {
         ),
         ServerMetadataEntity(
           type: MetadataType.other,
-          trId: 'server.provider',
-          value: _adapter.api().displayProviderName,
+          trId: 'server.server_provider',
+          value: type.displayName,
         ),
       ];
     } catch (e) {
@@ -775,13 +778,54 @@ class HetznerServerProvider extends ServerProvider {
   ) async {
     ServerMetrics? metrics;
 
-    List<TimeSeriesData> serializeTimeSeries(
+    List<TimeSeriesData> serializeTimeNetworkSeries(
       final Map<String, dynamic> json,
       final String type,
     ) {
       final List list = json['time_series'][type]['values'];
       return list
           .map((final el) => TimeSeriesData(el[0], double.parse(el[1])))
+          .toList();
+    }
+
+    if (cachedCoreAmount == null) {
+      final serversResult = await _adapter.api().getServers();
+      if (serversResult.data.isEmpty || !serversResult.success) {
+        return GenericResult(
+          success: false,
+          data: metrics,
+          code: serversResult.code,
+          message: serversResult.message,
+        );
+      }
+
+      for (final server in serversResult.data) {
+        if (server.id == serverId) {
+          cachedCoreAmount = server.serverType.cores;
+        }
+      }
+
+      if (cachedCoreAmount == null) {
+        return GenericResult(
+          success: false,
+          data: metrics,
+          message: "Couldn't find active server to cache core amount",
+        );
+      }
+    }
+
+    List<TimeSeriesData> serializeTimeCpuSeries(
+      final Map<String, dynamic> json,
+      final String type,
+    ) {
+      final List list = json['time_series'][type]['values'];
+      return list
+          .map(
+            (final el) => TimeSeriesData(
+              el[0],
+              double.parse(el[1]) / cachedCoreAmount!,
+            ),
+          )
           .toList();
     }
 
@@ -818,15 +862,15 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     metrics = ServerMetrics(
-      cpu: serializeTimeSeries(
+      cpu: serializeTimeCpuSeries(
         cpuResult.data,
         'cpu',
       ),
-      bandwidthIn: serializeTimeSeries(
+      bandwidthIn: serializeTimeNetworkSeries(
         netResult.data,
         'network.0.bandwidth.in',
       ),
-      bandwidthOut: serializeTimeSeries(
+      bandwidthOut: serializeTimeNetworkSeries(
         netResult.data,
         'network.0.bandwidth.out',
       ),

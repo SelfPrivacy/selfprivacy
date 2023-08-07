@@ -52,57 +52,59 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
         ),
         const SizedBox(height: 8),
         Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Theme.of(context).colorScheme.surfaceVariant,
-            ),
-            padding: const EdgeInsets.all(16),
-            child: Stack(
-              children: [
-                SelectableText(
-                  encryptionKey,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Theme.of(context).colorScheme.surfaceVariant,
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Stack(
+            children: [
+              SelectableText(
+                encryptionKey,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+              ),
+              Positioned.fill(
+                child: InkWell(
+                  onTap: () {
+                    setState(
+                      () {
+                        isKeyVisible = !isKeyVisible;
+                      },
+                    );
+                  },
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 200),
+                    opacity: isKeyVisible ? 0 : 1,
+                    child: Container(
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.visibility_outlined),
+                          const SizedBox(width: 8),
+                          Text(
+                            'backup.backups_encryption_key_show'.tr(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                ),
+                          ),
+                        ],
                       ),
-                ),
-                Positioned.fill(
-                  child: InkWell(
-                    onTap: () {
-                      setState(
-                        () {
-                          isKeyVisible = !isKeyVisible;
-                        },
-                      );
-                    },
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 200),
-                      opacity: isKeyVisible ? 0 : 1,
-                      child: Container(
-                          color: Theme.of(context).colorScheme.surfaceVariant,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.visibility_outlined),
-                              const SizedBox(width: 8),
-                              Text(
-                                'backup.backups_encryption_key_show'.tr(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
-                              ),
-                            ],
-                          )),
                     ),
                   ),
                 ),
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 8),
         FilledButton.icon(
           onPressed: () {

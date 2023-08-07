@@ -433,7 +433,6 @@
     "recovering": {
         "confirm_server_decline": "Wybierz inny serwer",
         "domain_not_available_on_token": "Wprowadzony token nie ma dostępu do żądanej domeny.",
-        "confirm_cloudflare_description": "Wprowadź token DNS dostawcy, który ma uprawnienia do {}:",
         "method_recovery_input_description": "Wprowadź swój token odzyskiwania",
         "fallback_select_provider_console": "Dostęp do konsoli serwera mojego dostawcy.",
         "confirm_server_description": "Znalazłem twój serwer! Potwierdź, że jest to właściwe:",
@@ -461,17 +460,14 @@
         "modal_confirmation_dns_invalid": "Odwrócony DNS wskazuje na inną domenę",
         "modal_confirmation_ip_valid": "IP jest takie samo jak w rekordzie DNS",
         "modal_confirmation_ip_invalid": "IP nie jest zgodne z tym w rekordzie DNS",
-        "confirm_cloudflare": "Łączenie z dostawcą DNS",
-        "confirm_backblaze": "Podłączanie do Backblaze",
-        "confirm_backblaze_description": "Wpisz token Backblaze, który ma prawa do magazynu kopii zapasowych:",
         "fallback_select_description": "Które z nich posiadasz? Wybierz pierwszą, która pasuje:",
         "fallback_select_token_copy": "Kopia tokena autoryzacyjnego z innej wersji aplikacji.",
         "fallback_select_root_ssh": "Dostęp Root do serwera poprzez SSH.",
         "authorization_failed": "Nie udało się zalogować za pomocą tego klucza",
         "fallback_select_provider_console_hint": "Na przykład: Hetzner.",
-        "server_provider_connected": "Połączenie z dostawcą serwera",
-        "server_provider_connected_description": "Połączenie ustanowione. Podaj swój token z dostępem do {}:",
-        "server_provider_connected_placeholder": "Token dostawcy serwera"
+        "provider_connected": "Połączenie z dostawcą {}",
+        "provider_connected_description": "Połączenie ustanowione. Podaj swój token z dostępem do {}:",
+        "provider_connected_placeholder": "{} Token "
     },
     "devices": {
         "main_screen": {

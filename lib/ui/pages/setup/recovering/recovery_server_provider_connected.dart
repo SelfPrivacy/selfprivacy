@@ -20,8 +20,13 @@ class RecoveryServerProviderConnected extends StatelessWidget {
           ServerProviderFormCubit(appConfig),
       child: Builder(
         builder: (final BuildContext context) => BrandHeroScreen(
-          heroTitle: 'recovering.server_provider_connected'.tr(),
-          heroSubtitle: 'recovering.server_provider_connected_description'.tr(
+          heroTitle: 'recovering.provider_connected'.tr(
+            args: [
+              appConfig.state.serverDetails?.provider.displayName ??
+                  'Server Provider'
+            ],
+          ),
+          heroSubtitle: 'recovering.provider_connected_description'.tr(
             args: [appConfig.state.serverDomain?.domainName ?? 'your domain'],
           ),
           hasBackButton: true,
@@ -36,8 +41,12 @@ class RecoveryServerProviderConnected extends StatelessWidget {
               formFieldCubit: context.read<ServerProviderFormCubit>().apiKey,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText:
-                    'recovering.server_provider_connected_placeholder'.tr(),
+                labelText: 'recovering.provider_connected_placeholder'.tr(
+                  args: [
+                    appConfig.state.serverDetails?.provider.displayName ??
+                        'Server Provider'
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 16),

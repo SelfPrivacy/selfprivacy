@@ -199,7 +199,8 @@
         "autobackup_set_period": "Установить период",
         "autobackup_period_set": "Период установлен",
         "backups_encryption_key": "Ключ шифрования",
-        "snapshots_title": "Список снимков"
+        "snapshots_title": "Список снимков",
+        "forget_snapshot_error": "Не удалось забыть снимок"
     },
     "storage": {
         "card_title": "Хранилище",

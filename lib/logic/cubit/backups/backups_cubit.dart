@@ -214,6 +214,20 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     await updateBackups();
   }
 
+  // TODO: inex
+  Future<void> forgetSnapshot(final String snapshotId) async {
+    final result = await api.forgetSnapshot(snapshotId);
+    if (!result.success) {
+      getIt<NavigationService>().showSnackBar('jobs.generic_error'.tr());
+      return;
+    }
+
+    if (result.data == false) {
+      getIt<NavigationService>()
+          .showSnackBar('backup.forget_snapshot_error'.tr());
+    }
+  }
+
   @override
   void clear() async {
     emit(const BackupsState());

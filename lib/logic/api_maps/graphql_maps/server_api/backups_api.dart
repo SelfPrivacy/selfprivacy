@@ -248,4 +248,42 @@ mixin BackupsApi on GraphQLApiMap {
 
     return result;
   }
+
+  Future<GenericResult<bool?>> forgetSnapshot(
+    final String snapshotId,
+  ) async {
+    QueryResult<Mutation$ForgetSnapshot> response;
+    GenericResult<bool?>? result;
+
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Mutation$ForgetSnapshot(
+        snapshotId: snapshotId,
+      );
+      final options = Options$Mutation$ForgetSnapshot(variables: variables);
+      response = await client.mutate$ForgetSnapshot(options);
+      if (response.hasException) {
+        final message = response.exception.toString();
+        print(message);
+        result = GenericResult(
+          success: false,
+          data: null,
+          message: message,
+        );
+      }
+      result = GenericResult(
+        success: true,
+        data: response.parsedData!.backup.forgetSnapshot.success,
+      );
+    } catch (e) {
+      print(e);
+      result = GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+
+    return result;
+  }
 }

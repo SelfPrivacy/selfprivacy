@@ -91,3 +91,11 @@ mutation RestoreBackup($snapshotId: String!, $strategy: RestoreStrategy! = DOWNL
     }
   }
 }
+
+mutation ForgetSnapshot($snapshotId: String!) {
+  backup {
+    forgetSnapshot(snapshotId: $snapshotId) {
+      ...basicMutationReturnFields
+    }
+  }
+}

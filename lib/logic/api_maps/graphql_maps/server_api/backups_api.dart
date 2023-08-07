@@ -209,14 +209,17 @@ mixin BackupsApi on GraphQLApiMap {
 
   Future<GenericResult<ServerJob?>> restoreBackup(
     final String snapshotId,
+    final BackupRestoreStrategy strategy,
   ) async {
     QueryResult<Mutation$RestoreBackup> response;
     GenericResult<ServerJob?>? result;
 
     try {
       final GraphQLClient client = await getClient();
-      final variables =
-          Variables$Mutation$RestoreBackup(snapshotId: snapshotId);
+      final variables = Variables$Mutation$RestoreBackup(
+        snapshotId: snapshotId,
+        strategy: strategy.toGraphQL,
+      );
       final options = Options$Mutation$RestoreBackup(variables: variables);
       response = await client.mutate$RestoreBackup(options);
       if (response.hasException) {

@@ -240,9 +240,10 @@ class BackupDetailsPage extends StatelessWidget {
                                   ),
                                   actionButtonTitle: 'modals.yes'.tr(),
                                   actionButtonOnPressed: () => {
-                                    context
-                                        .read<BackupsCubit>()
-                                        .restoreBackup(backup.id)
+                                    context.read<BackupsCubit>().restoreBackup(
+                                          backup.id, // TODO: inex
+                                          BackupRestoreStrategy.unknown,
+                                        )
                                   },
                                 );
                               },

@@ -81,9 +81,9 @@ mutation InitializeRepository($repository: InitializeRepositoryInput!) {
   }
 }
 
-mutation RestoreBackup($snapshotId: String!) {
+mutation RestoreBackup($snapshotId: String!, $strategy: RestoreStrategy! = DOWNLOAD_VERIFY_OVERWRITE) {
   backup {
-    restoreBackup(snapshotId: $snapshotId) {
+    restoreBackup(snapshotId: $snapshotId, strategy: $strategy) {
       ...basicMutationReturnFields
       job {
         ...basicApiJobsFields

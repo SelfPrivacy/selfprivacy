@@ -185,9 +185,12 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     emit(state.copyWith(preventActions: false));
   }
 
-  Future<void> restoreBackup(final String backupId) async {
+  Future<void> restoreBackup(
+    final String backupId,
+    final BackupRestoreStrategy strategy,
+  ) async {
     emit(state.copyWith(preventActions: true));
-    await api.restoreBackup(backupId);
+    await api.restoreBackup(backupId, strategy);
     emit(state.copyWith(preventActions: false));
   }
 

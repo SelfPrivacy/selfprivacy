@@ -4982,9 +4982,13 @@ class _CopyWithStubImpl$Mutation$InitializeRepository$backup<TRes>
 }
 
 class Variables$Mutation$RestoreBackup {
-  factory Variables$Mutation$RestoreBackup({required String snapshotId}) =>
+  factory Variables$Mutation$RestoreBackup({
+    required String snapshotId,
+    required Enum$RestoreStrategy strategy,
+  }) =>
       Variables$Mutation$RestoreBackup._({
         r'snapshotId': snapshotId,
+        r'strategy': strategy,
       });
 
   Variables$Mutation$RestoreBackup._(this._$data);
@@ -4993,16 +4997,23 @@ class Variables$Mutation$RestoreBackup {
     final result$data = <String, dynamic>{};
     final l$snapshotId = data['snapshotId'];
     result$data['snapshotId'] = (l$snapshotId as String);
+    final l$strategy = data['strategy'];
+    result$data['strategy'] =
+        fromJson$Enum$RestoreStrategy((l$strategy as String));
     return Variables$Mutation$RestoreBackup._(result$data);
   }
 
   Map<String, dynamic> _$data;
 
   String get snapshotId => (_$data['snapshotId'] as String);
+  Enum$RestoreStrategy get strategy =>
+      (_$data['strategy'] as Enum$RestoreStrategy);
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$snapshotId = snapshotId;
     result$data['snapshotId'] = l$snapshotId;
+    final l$strategy = strategy;
+    result$data['strategy'] = toJson$Enum$RestoreStrategy(l$strategy);
     return result$data;
   }
 
@@ -5025,13 +5036,22 @@ class Variables$Mutation$RestoreBackup {
     if (l$snapshotId != lOther$snapshotId) {
       return false;
     }
+    final l$strategy = strategy;
+    final lOther$strategy = other.strategy;
+    if (l$strategy != lOther$strategy) {
+      return false;
+    }
     return true;
   }
 
   @override
   int get hashCode {
     final l$snapshotId = snapshotId;
-    return Object.hashAll([l$snapshotId]);
+    final l$strategy = strategy;
+    return Object.hashAll([
+      l$snapshotId,
+      l$strategy,
+    ]);
   }
 }
 
@@ -5044,7 +5064,10 @@ abstract class CopyWith$Variables$Mutation$RestoreBackup<TRes> {
   factory CopyWith$Variables$Mutation$RestoreBackup.stub(TRes res) =
       _CopyWithStubImpl$Variables$Mutation$RestoreBackup;
 
-  TRes call({String? snapshotId});
+  TRes call({
+    String? snapshotId,
+    Enum$RestoreStrategy? strategy,
+  });
 }
 
 class _CopyWithImpl$Variables$Mutation$RestoreBackup<TRes>
@@ -5060,11 +5083,16 @@ class _CopyWithImpl$Variables$Mutation$RestoreBackup<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? snapshotId = _undefined}) =>
+  TRes call({
+    Object? snapshotId = _undefined,
+    Object? strategy = _undefined,
+  }) =>
       _then(Variables$Mutation$RestoreBackup._({
         ..._instance._$data,
         if (snapshotId != _undefined && snapshotId != null)
           'snapshotId': (snapshotId as String),
+        if (strategy != _undefined && strategy != null)
+          'strategy': (strategy as Enum$RestoreStrategy),
       }));
 }
 
@@ -5074,7 +5102,11 @@ class _CopyWithStubImpl$Variables$Mutation$RestoreBackup<TRes>
 
   TRes _res;
 
-  call({String? snapshotId}) => _res;
+  call({
+    String? snapshotId,
+    Enum$RestoreStrategy? strategy,
+  }) =>
+      _res;
 }
 
 class Mutation$RestoreBackup {
@@ -5223,7 +5255,18 @@ const documentNodeMutationRestoreBackup = DocumentNode(definitions: [
         ),
         defaultValue: DefaultValueNode(value: null),
         directives: [],
-      )
+      ),
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'strategy')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'RestoreStrategy'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(
+            value: EnumValueNode(
+                name: NameNode(value: 'DOWNLOAD_VERIFY_OVERWRITE'))),
+        directives: [],
+      ),
     ],
     directives: [],
     selectionSet: SelectionSetNode(selections: [
@@ -5240,7 +5283,11 @@ const documentNodeMutationRestoreBackup = DocumentNode(definitions: [
               ArgumentNode(
                 name: NameNode(value: 'snapshotId'),
                 value: VariableNode(name: NameNode(value: 'snapshotId')),
-              )
+              ),
+              ArgumentNode(
+                name: NameNode(value: 'strategy'),
+                value: VariableNode(name: NameNode(value: 'strategy')),
+              ),
             ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [

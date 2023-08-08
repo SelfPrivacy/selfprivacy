@@ -3,6 +3,23 @@ import 'package:json_annotation/json_annotation.dart';
 part 'digital_ocean_server_info.g.dart';
 
 @JsonSerializable()
+class DigitalOceanServerInfo {
+  final int id;
+  final String name;
+  final int memory;
+  final int vcpus;
+  final int disk;
+  final bool locked;
+  final String status;
+  @JsonKey(name: 'volume_ids')
+  final List<String> volumeIds;
+  @JsonKey(name: 'size_slug')
+  final String sizeSlug;
+  @JsonKey(name: 'vpc_uuid')
+  final String vpcUuid;
+}
+
+@JsonSerializable()
 class DigitalOceanVolume {
   DigitalOceanVolume(
     this.id,

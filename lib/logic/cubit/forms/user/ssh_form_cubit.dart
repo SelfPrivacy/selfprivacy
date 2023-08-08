@@ -21,7 +21,7 @@ class SshFormCubit extends FormCubit {
         ValidationModel(
           (final String newKey) =>
               user.sshKeys.any((final String key) => key == newKey),
-          'validations.already_exists'.tr(),
+          'validations.already_exist'.tr(),
         ),
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(

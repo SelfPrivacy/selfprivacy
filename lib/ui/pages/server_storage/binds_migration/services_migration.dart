@@ -55,6 +55,20 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
     });
   }
 
+  bool get isTherePendingChange {
+    bool isChangeFound = false;
+    for (final Service service in widget.services) {
+      for (final String serviceId in serviceToDisk.keys) {
+        if (serviceId == service.id &&
+            serviceToDisk[serviceId] != service.storageUsage.volume!) {
+          isChangeFound = true;
+        }
+      }
+    }
+
+    return isChangeFound;
+  }
+
   /// Check the services and if a service is moved (in a serviceToDisk entry)
   /// subtract the used storage from the old volume and add it to the new volume.
   /// The old volume is the volume the service is currently on, shown in services list.
@@ -157,40 +171,42 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
               ),
             ),
             const SizedBox(height: 16),
-            BrandButton.filled(
-              child: Text('storage.start_migration_button'.tr()),
-              onPressed: () {
-                if (widget.isMigration) {
-                  context.read<ServerJobsCubit>().migrateToBinds(
-                        serviceToDisk,
-                      );
-                } else {
-                  for (final service in widget.services) {
-                    if (serviceToDisk[service.id] != null) {
-                      context.read<ServicesCubit>().moveService(
-                            service.id,
-                            serviceToDisk[service.id]!,
-                          );
+            if (widget.isMigration ||
+                (!widget.isMigration && isTherePendingChange))
+              BrandButton.filled(
+                child: Text('storage.start_migration_button'.tr()),
+                onPressed: () {
+                  if (widget.isMigration) {
+                    context.read<ServerJobsCubit>().migrateToBinds(
+                          serviceToDisk,
+                        );
+                  } else {
+                    for (final service in widget.services) {
+                      if (serviceToDisk[service.id] != null) {
+                        context.read<ServicesCubit>().moveService(
+                              service.id,
+                              serviceToDisk[service.id]!,
+                            );
+                      }
                     }
                   }
-                }
-                context.router.popUntilRoot();
-                showModalBottomSheet(
-                  context: context,
-                  useRootNavigator: true,
-                  isScrollControlled: true,
-                  builder: (final BuildContext context) =>
-                      DraggableScrollableSheet(
-                    expand: false,
-                    maxChildSize: 0.9,
-                    minChildSize: 0.4,
-                    initialChildSize: 0.6,
-                    builder: (final context, final scrollController) =>
-                        JobsContent(controller: scrollController),
-                  ),
-                );
-              },
-            ),
+                  context.router.popUntilRoot();
+                  showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    builder: (final BuildContext context) =>
+                        DraggableScrollableSheet(
+                      expand: false,
+                      maxChildSize: 0.9,
+                      minChildSize: 0.4,
+                      initialChildSize: 0.6,
+                      builder: (final context, final scrollController) =>
+                          JobsContent(controller: scrollController),
+                    ),
+                  );
+                },
+              ),
             const SizedBox(height: 32),
           ],
         ),

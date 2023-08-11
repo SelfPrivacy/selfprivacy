@@ -39,6 +39,7 @@ class RecoveryConfirmDns extends StatelessWidget {
                 context.read<ServerInstallationCubit>().revertRecoveryStep,
             children: [
               CubitFormTextField(
+                autofocus: true,
                 formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),

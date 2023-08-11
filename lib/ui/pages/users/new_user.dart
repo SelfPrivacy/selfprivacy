@@ -55,6 +55,7 @@ class NewUserPage extends StatelessWidget {
                 const SizedBox(width: 14),
                 IntrinsicHeight(
                   child: CubitFormTextField(
+                    autofocus: true,
                     formFieldCubit: context.read<UserFormCubit>().login,
                     decoration: InputDecoration(
                       labelText: 'users.login'.tr(),

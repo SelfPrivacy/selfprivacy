@@ -36,6 +36,7 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
             hasFlashButton: false,
             children: [
               CubitFormTextField(
+                autofocus: true,
                 formFieldCubit: context.read<BackblazeFormCubit>().keyId,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),

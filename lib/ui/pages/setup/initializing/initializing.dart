@@ -273,6 +273,7 @@ class InitializingPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CubitFormTextField(
+                    autofocus: true,
                     formFieldCubit: context.read<BackblazeFormCubit>().keyId,
                     textAlign: TextAlign.center,
                     scrollPadding: const EdgeInsets.only(bottom: 70),
@@ -448,6 +449,7 @@ class InitializingPage extends StatelessWidget {
                     ),
                   const SizedBox(height: 32),
                   CubitFormTextField(
+                    autofocus: true,
                     formFieldCubit: context.read<RootUserFormCubit>().userName,
                     textAlign: TextAlign.center,
                     scrollPadding: const EdgeInsets.only(bottom: 70),

@@ -64,7 +64,7 @@
         "dark_theme_title": "Dunkles Thema",
         "dark_theme_description": "Ihr Anwendungsdesign wechseln",
         "reset_config_title": "Anwendungseinstellungen zurücksetzen",
-        "reset_config_description": "API Sclüssel und root Benutzer zurücksetzen",
+        "reset_config_description": "API Sclüssel und root Benutzer zurücksetzen.",
         "delete_server_title": "Server löschen",
         "delete_server_description": "Das wird Ihren Server löschen. Es wird nicht mehr zugänglich sein.",
         "system_dark_theme_title": "Standard-Systemthema",

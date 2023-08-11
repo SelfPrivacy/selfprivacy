@@ -68,7 +68,7 @@
         "dark_theme_description": "Switch your application theme",
         "dangerous_settings": "Dangerous settings",
         "reset_config_title": "Reset application config",
-        "reset_config_description": "Reset api keys and root user",
+        "reset_config_description": "Resets API keys and root user.",
         "delete_server_title": "Delete server",
         "delete_server_description": "This removes your server. It will be no longer accessible."
     },

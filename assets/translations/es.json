@@ -38,7 +38,7 @@
     "application_settings": {
         "reset_config_title": "Restablecer la configuración de la aplicación",
         "dark_theme_description": "Cambia el tema de tu aplicación",
-        "reset_config_description": "Restablecer claves api y usuario root",
+        "reset_config_description": "Restablecer claves API y usuario root.",
         "delete_server_title": "Eliminar servidor",
         "delete_server_description": "Esto elimina su servidor. Ya no será accesible.",
         "title": "Ajustes de la aplicación",

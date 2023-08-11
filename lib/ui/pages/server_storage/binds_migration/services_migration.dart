@@ -55,7 +55,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
     });
   }
 
-  bool get isTherePendingChange {
+  bool get isVolumePicked {
     bool isChangeFound = false;
     for (final Service service in widget.services) {
       for (final String serviceId in serviceToDisk.keys) {
@@ -171,8 +171,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
               ),
             ),
             const SizedBox(height: 16),
-            if (widget.isMigration ||
-                (!widget.isMigration && isTherePendingChange))
+            if (widget.isMigration || (!widget.isMigration && isVolumePicked))
               BrandButton.filled(
                 child: Text('storage.start_migration_button'.tr()),
                 onPressed: () {

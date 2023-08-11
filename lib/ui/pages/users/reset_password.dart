@@ -41,6 +41,7 @@ class ResetPassword extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CubitFormTextField(
+                          autofocus: true,
                           formFieldCubit:
                               context.read<UserFormCubit>().password,
                           decoration: InputDecoration(

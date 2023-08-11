@@ -59,7 +59,7 @@
         "title": "การตั้งค่าแอปพลิเคชัน",
         "dark_theme_title": "ธีมมืด",
         "reset_config_title": "รีเซ็ตค่าดั้งเดิมการตั้งค่าของแอปพลิเคชั่น",
-        "reset_config_description": "รีเซ็ต api key และผู้ใช้งาน root",
+        "reset_config_description": "รีเซ็ต API key และผู้ใช้งาน root",
         "delete_server_title": "ลบเซิฟเวอร์"
     },
     "ssh": {

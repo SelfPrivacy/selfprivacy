@@ -64,7 +64,7 @@
         "delete_server_title": "Supprimer le serveur",
         "delete_server_description": "Cela va supprimer votre serveur. Celui-ci ne sera plus accessible.",
         "dark_theme_title": "Thème sombre",
-        "reset_config_description": "Réinitialiser les clés API et l'utilisateur root"
+        "reset_config_description": "Réinitialiser les clés API et l'utilisateur root."
     },
     "ssh": {
         "title": "Clés SSH",

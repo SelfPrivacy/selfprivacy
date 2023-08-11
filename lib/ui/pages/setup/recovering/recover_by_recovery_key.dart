@@ -36,6 +36,7 @@ class RecoverByRecoveryKey extends StatelessWidget {
                 context.read<ServerInstallationCubit>().revertRecoveryStep,
             children: [
               CubitFormTextField(
+                autofocus: true,
                 formFieldCubit:
                     context.read<RecoveryDeviceFormCubit>().tokenField,
                 decoration: InputDecoration(

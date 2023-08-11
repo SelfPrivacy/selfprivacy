@@ -116,6 +116,7 @@ class ProviderInputDataPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CubitFormTextField(
+              autofocus: true,
               formFieldCubit: providerCubit.apiKey,
               textAlign: TextAlign.center,
               scrollPadding: const EdgeInsets.only(bottom: 70),

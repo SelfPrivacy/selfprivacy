@@ -296,6 +296,7 @@ class NewSshKey extends StatelessWidget {
                       children: [
                         IntrinsicHeight(
                           child: CubitFormTextField(
+                            autofocus: true,
                             formFieldCubit: context.read<SshFormCubit>().key,
                             decoration: InputDecoration(
                               labelText: 'ssh.input_label'.tr(),

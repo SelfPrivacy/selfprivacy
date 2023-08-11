@@ -121,6 +121,7 @@ class SelectDomainToRecover extends StatelessWidget {
               },
               children: [
                 CubitFormTextField(
+                  autofocus: true,
                   formFieldCubit:
                       context.read<RecoveryDomainFormCubit>().serverDomainField,
                   decoration: InputDecoration(

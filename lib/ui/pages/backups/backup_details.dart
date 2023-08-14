@@ -202,6 +202,7 @@ class BackupDetailsPage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const Divider(),
               ListTile(
                 title: Text(
                   'backup.latest_snapshots'.tr(),

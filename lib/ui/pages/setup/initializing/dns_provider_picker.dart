@@ -109,6 +109,7 @@ class ProviderInputDataPage extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           CubitFormTextField(
+            autofocus: true,
             formFieldCubit: providerCubit.apiKey,
             textAlign: TextAlign.center,
             scrollPadding: const EdgeInsets.only(bottom: 70),

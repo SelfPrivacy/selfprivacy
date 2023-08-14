@@ -60,7 +60,7 @@
         "title": "Nastavení aplikace",
         "dark_theme_title": "Tmavé téma",
         "reset_config_title": "Obnovení konfigurace aplikace",
-        "reset_config_description": "Obnovení klíčů api a uživatele root",
+        "reset_config_description": "Obnovení klíčů API a uživatele root.",
         "delete_server_title": "Odstranit server",
         "dark_theme_description": "Přepnutí tématu aplikace",
         "delete_server_description": "Tím odstraníte svůj server. Nebude již přístupný.",

@@ -41,7 +41,7 @@
         "reset_config_title": "Скинути налаштування",
         "dark_theme_title": "Темна тема",
         "dark_theme_description": "Змінити тему додатка",
-        "reset_config_description": "Скинути API ключі та root користувача",
+        "reset_config_description": "Скинути API ключі та root користувача.",
         "delete_server_title": "Видалити сервер",
         "delete_server_description": "Це видалить ваш сервер. Він більше не буде доступний."
     },

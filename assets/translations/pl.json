@@ -64,7 +64,7 @@
         "dark_theme_title": "Ciemny motyw aplikacji",
         "dark_theme_description": "Zmień kolor motywu aplikacji",
         "reset_config_title": "Resetowanie",
-        "reset_config_description": "Zresetuj klucze API i użytkownika root",
+        "reset_config_description": "Zresetuj klucze API i użytkownika root.",
         "delete_server_title": "Usuń serwer",
         "delete_server_description": "Ta czynność usunie serwer. Po tym będzie niedostępny.",
         "system_dark_theme_description": "Użyj jasnego lub ciemnego motywu w zależności od ustawień systemu",

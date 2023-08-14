@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 
 class Backup {
@@ -57,4 +58,27 @@ class BackupConfiguration {
   final String? locationId;
   final String? locationName;
   final BackupsProviderType provider;
+}
+
+enum BackupRestoreStrategy {
+  inplace,
+  downloadVerifyOverwrite,
+  unknown;
+
+  factory BackupRestoreStrategy.fromGraphQL(
+    final Enum$RestoreStrategy strategy,
+  ) =>
+      switch (strategy) {
+        Enum$RestoreStrategy.INPLACE => inplace,
+        Enum$RestoreStrategy.DOWNLOAD_VERIFY_OVERWRITE =>
+          downloadVerifyOverwrite,
+        Enum$RestoreStrategy.$unknown => unknown,
+      };
+
+  Enum$RestoreStrategy get toGraphQL => switch (this) {
+        inplace => Enum$RestoreStrategy.INPLACE,
+        downloadVerifyOverwrite =>
+          Enum$RestoreStrategy.DOWNLOAD_VERIFY_OVERWRITE,
+        unknown => Enum$RestoreStrategy.$unknown,
+      };
 }

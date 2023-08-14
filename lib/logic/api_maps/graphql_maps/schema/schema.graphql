@@ -94,7 +94,8 @@ type BackupMutations {
   removeRepository: GenericBackupConfigReturn!
   setAutobackupPeriod(period: Int = null): GenericBackupConfigReturn!
   startBackup(serviceId: String!): GenericJobMutationReturn!
-  restoreBackup(snapshotId: String!): GenericJobMutationReturn!
+  restoreBackup(snapshotId: String!, strategy: RestoreStrategy! = DOWNLOAD_VERIFY_OVERWRITE): GenericJobMutationReturn!
+  forgetSnapshot(snapshotId: String!): GenericMutationReturn!
   forceSnapshotsReload: GenericMutationReturn!
 }
 
@@ -239,6 +240,11 @@ type Query {
 input RecoveryKeyLimitsInput {
   expirationDate: DateTime = null
   uses: Int = null
+}
+
+enum RestoreStrategy {
+  INPLACE
+  DOWNLOAD_VERIFY_OVERWRITE
 }
 
 enum ServerProvider {

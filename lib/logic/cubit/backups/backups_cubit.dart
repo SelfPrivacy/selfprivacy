@@ -41,7 +41,6 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
           refreshing: false,
         ),
       );
-      print(state);
     }
   }
 
@@ -113,9 +112,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
     if (bucket == null) {
       emit(state.copyWith(isInitialized: false));
-      print('bucket is null');
     } else {
-      print('bucket is not null');
       final GenericResult result = await api.initializeRepository(
         InitializeRepositoryInput(
           provider: BackupsProviderType.backblaze,
@@ -125,7 +122,6 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
           password: bucket.applicationKey,
         ),
       );
-      print('result is $result');
       if (result.success == false) {
         getIt<NavigationService>()
             .showSnackBar(result.message ?? 'Unknown error');
@@ -214,7 +210,6 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     await updateBackups();
   }
 
-  // TODO: inex
   Future<void> forgetSnapshot(final String snapshotId) async {
     final result = await api.forgetSnapshot(snapshotId);
     if (!result.success) {
@@ -226,6 +221,17 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
       getIt<NavigationService>()
           .showSnackBar('backup.forget_snapshot_error'.tr());
     }
+
+    // Optimistic update
+    final backups = state.backups;
+    final index =
+        backups.indexWhere((final snapshot) => snapshot.id == snapshotId);
+    if (index != -1) {
+      backups.removeAt(index);
+      emit(state.copyWith(backups: backups));
+    }
+
+    await updateBackups();
   }
 
   @override

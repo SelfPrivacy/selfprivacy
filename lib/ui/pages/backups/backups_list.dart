@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/pages/backups/snapshot_modal.dart';
 
 @RoutePage()
 class BackupsListPage extends StatelessWidget {
@@ -47,16 +48,34 @@ class BackupsListPage extends StatelessWidget {
               onTap: preventActions
                   ? null
                   : () {
-                      showPopUpAlert(
-                        alertTitle: 'backup.restoring'.tr(),
-                        description: 'backup.restore_alert'.tr(
-                          args: [backup.time.toString()],
+                      showModalBottomSheet(
+                        useRootNavigator: true,
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (final BuildContext context) =>
+                            DraggableScrollableSheet(
+                          expand: false,
+                          maxChildSize: 0.9,
+                          minChildSize: 0.5,
+                          initialChildSize: 0.7,
+                          builder: (final context, final scrollController) =>
+                              SnapshotModal(
+                            snapshot: backup,
+                            scrollController: scrollController,
+                          ),
                         ),
-                        actionButtonTitle: 'modals.yes'.tr(),
+                      );
+                    },
+              onLongPress: preventActions
+                  ? null
+                  : () {
+                      showPopUpAlert(
+                        alertTitle: 'backup.forget_snapshot'.tr(),
+                        description: 'backup.forget_snapshot_alert'.tr(),
+                        actionButtonTitle: 'backup.forget_snapshot'.tr(),
                         actionButtonOnPressed: () => {
-                          context.read<BackupsCubit>().restoreBackup(
-                                backup.id, // TODO: inex
-                                BackupRestoreStrategy.unknown,
+                          context.read<BackupsCubit>().forgetSnapshot(
+                                backup.id,
                               )
                         },
                       );

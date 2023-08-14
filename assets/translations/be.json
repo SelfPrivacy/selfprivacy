@@ -259,7 +259,7 @@
         "privacy_policy": "Палітыка прыватнасці"
     },
     "application_settings": {
-        "reset_config_description": "Скінуць API ключы i суперкарыстальніка",
+        "reset_config_description": "Скінуць API ключы i суперкарыстальніка.",
         "delete_server_description": "Дзеянне прывядзе да выдалення сервера. Пасля гэтага ён будзе недаступны.",
         "title": "Налады праграмы",
         "dark_theme_title": "Цёмная тэма",

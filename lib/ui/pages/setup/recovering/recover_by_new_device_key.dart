@@ -65,6 +65,7 @@ class RecoverByNewDeviceKeyInput extends StatelessWidget {
               ignoreBreakpoints: true,
               children: [
                 CubitFormTextField(
+                  autofocus: true,
                   formFieldCubit:
                       context.read<RecoveryDeviceFormCubit>().tokenField,
                   decoration: InputDecoration(

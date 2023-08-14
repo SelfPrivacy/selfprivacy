@@ -62,7 +62,14 @@ class BackupDetailsPage extends StatelessWidget {
         heroTitle: 'backup.card_title'.tr(),
         heroSubtitle: 'backup.description'.tr(),
         children: [
-          BrandButton.rised(
+          if (preventActions)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          if (!preventActions) BrandButton.rised(
             onPressed: preventActions
                 ? null
                 : () async {

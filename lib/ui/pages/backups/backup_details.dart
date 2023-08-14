@@ -53,6 +53,7 @@ class BackupDetailsPage extends StatelessWidget {
         heroIcon: BrandIcons.save,
         heroTitle: 'backup.card_title'.tr(),
         heroSubtitle: 'not_ready_card.in_menu'.tr(),
+        hasFlashButton: true,
         children: const [],
       );
     }
@@ -62,6 +63,7 @@ class BackupDetailsPage extends StatelessWidget {
         heroIcon: BrandIcons.save,
         heroTitle: 'backup.card_title'.tr(),
         heroSubtitle: 'backup.description'.tr(),
+        hasFlashButton: true,
         children: [
           if (preventActions)
             const Center(
@@ -87,6 +89,7 @@ class BackupDetailsPage extends StatelessWidget {
       heroIcon: BrandIcons.save,
       heroTitle: 'backup.card_title'.tr(),
       heroSubtitle: 'backup.description'.tr(),
+      hasFlashButton: true,
       children: [
         ListTile(
           onTap: preventActions

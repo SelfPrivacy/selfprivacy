@@ -1338,6 +1338,30 @@ Enum$DnsProvider fromJson$Enum$DnsProvider(String value) {
   }
 }
 
+enum Enum$RestoreStrategy { INPLACE, DOWNLOAD_VERIFY_OVERWRITE, $unknown }
+
+String toJson$Enum$RestoreStrategy(Enum$RestoreStrategy e) {
+  switch (e) {
+    case Enum$RestoreStrategy.INPLACE:
+      return r'INPLACE';
+    case Enum$RestoreStrategy.DOWNLOAD_VERIFY_OVERWRITE:
+      return r'DOWNLOAD_VERIFY_OVERWRITE';
+    case Enum$RestoreStrategy.$unknown:
+      return r'$unknown';
+  }
+}
+
+Enum$RestoreStrategy fromJson$Enum$RestoreStrategy(String value) {
+  switch (value) {
+    case r'INPLACE':
+      return Enum$RestoreStrategy.INPLACE;
+    case r'DOWNLOAD_VERIFY_OVERWRITE':
+      return Enum$RestoreStrategy.DOWNLOAD_VERIFY_OVERWRITE;
+    default:
+      return Enum$RestoreStrategy.$unknown;
+  }
+}
+
 enum Enum$ServerProvider { HETZNER, DIGITALOCEAN, $unknown }
 
 String toJson$Enum$ServerProvider(Enum$ServerProvider e) {

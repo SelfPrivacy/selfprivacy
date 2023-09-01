@@ -20,15 +20,23 @@ mixin ServerActionsApi on GraphQLApiMap {
     return result;
   }
 
-  Future<bool> reboot() async {
+  Future<GenericResult<DateTime?>> reboot() async {
+    DateTime? time;
     try {
       final GraphQLClient client = await getClient();
-      return await _commonBoolRequest(
-        () async => client.mutate$RebootSystem(),
-      );
+      final response = await client.mutate$RebootSystem();
+      if (response.hasException) {
+        print(response.exception.toString());
+      }
+      if (response.parsedData!.rebootSystem.success) {
+        time = DateTime.now();
+      }
     } catch (e) {
-      return false;
+      print(e);
+      return GenericResult(data: time, success: false);
     }
+
+    return GenericResult(data: time, success: true);
   }
 
   Future<bool> pullConfigurationUpdate() async {

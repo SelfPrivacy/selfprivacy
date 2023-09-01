@@ -38,6 +38,7 @@ class RecoveryServerProviderConnected extends StatelessWidget {
           },
           children: [
             CubitFormTextField(
+              autofocus: true,
               formFieldCubit: context.read<ServerProviderFormCubit>().apiKey,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),

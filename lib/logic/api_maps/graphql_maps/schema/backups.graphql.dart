@@ -4982,9 +4982,13 @@ class _CopyWithStubImpl$Mutation$InitializeRepository$backup<TRes>
 }
 
 class Variables$Mutation$RestoreBackup {
-  factory Variables$Mutation$RestoreBackup({required String snapshotId}) =>
+  factory Variables$Mutation$RestoreBackup({
+    required String snapshotId,
+    required Enum$RestoreStrategy strategy,
+  }) =>
       Variables$Mutation$RestoreBackup._({
         r'snapshotId': snapshotId,
+        r'strategy': strategy,
       });
 
   Variables$Mutation$RestoreBackup._(this._$data);
@@ -4993,16 +4997,23 @@ class Variables$Mutation$RestoreBackup {
     final result$data = <String, dynamic>{};
     final l$snapshotId = data['snapshotId'];
     result$data['snapshotId'] = (l$snapshotId as String);
+    final l$strategy = data['strategy'];
+    result$data['strategy'] =
+        fromJson$Enum$RestoreStrategy((l$strategy as String));
     return Variables$Mutation$RestoreBackup._(result$data);
   }
 
   Map<String, dynamic> _$data;
 
   String get snapshotId => (_$data['snapshotId'] as String);
+  Enum$RestoreStrategy get strategy =>
+      (_$data['strategy'] as Enum$RestoreStrategy);
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$snapshotId = snapshotId;
     result$data['snapshotId'] = l$snapshotId;
+    final l$strategy = strategy;
+    result$data['strategy'] = toJson$Enum$RestoreStrategy(l$strategy);
     return result$data;
   }
 
@@ -5025,13 +5036,22 @@ class Variables$Mutation$RestoreBackup {
     if (l$snapshotId != lOther$snapshotId) {
       return false;
     }
+    final l$strategy = strategy;
+    final lOther$strategy = other.strategy;
+    if (l$strategy != lOther$strategy) {
+      return false;
+    }
     return true;
   }
 
   @override
   int get hashCode {
     final l$snapshotId = snapshotId;
-    return Object.hashAll([l$snapshotId]);
+    final l$strategy = strategy;
+    return Object.hashAll([
+      l$snapshotId,
+      l$strategy,
+    ]);
   }
 }
 
@@ -5044,7 +5064,10 @@ abstract class CopyWith$Variables$Mutation$RestoreBackup<TRes> {
   factory CopyWith$Variables$Mutation$RestoreBackup.stub(TRes res) =
       _CopyWithStubImpl$Variables$Mutation$RestoreBackup;
 
-  TRes call({String? snapshotId});
+  TRes call({
+    String? snapshotId,
+    Enum$RestoreStrategy? strategy,
+  });
 }
 
 class _CopyWithImpl$Variables$Mutation$RestoreBackup<TRes>
@@ -5060,11 +5083,16 @@ class _CopyWithImpl$Variables$Mutation$RestoreBackup<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? snapshotId = _undefined}) =>
+  TRes call({
+    Object? snapshotId = _undefined,
+    Object? strategy = _undefined,
+  }) =>
       _then(Variables$Mutation$RestoreBackup._({
         ..._instance._$data,
         if (snapshotId != _undefined && snapshotId != null)
           'snapshotId': (snapshotId as String),
+        if (strategy != _undefined && strategy != null)
+          'strategy': (strategy as Enum$RestoreStrategy),
       }));
 }
 
@@ -5074,7 +5102,11 @@ class _CopyWithStubImpl$Variables$Mutation$RestoreBackup<TRes>
 
   TRes _res;
 
-  call({String? snapshotId}) => _res;
+  call({
+    String? snapshotId,
+    Enum$RestoreStrategy? strategy,
+  }) =>
+      _res;
 }
 
 class Mutation$RestoreBackup {
@@ -5223,7 +5255,18 @@ const documentNodeMutationRestoreBackup = DocumentNode(definitions: [
         ),
         defaultValue: DefaultValueNode(value: null),
         directives: [],
-      )
+      ),
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'strategy')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'RestoreStrategy'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(
+            value: EnumValueNode(
+                name: NameNode(value: 'DOWNLOAD_VERIFY_OVERWRITE'))),
+        directives: [],
+      ),
     ],
     directives: [],
     selectionSet: SelectionSetNode(selections: [
@@ -5240,7 +5283,11 @@ const documentNodeMutationRestoreBackup = DocumentNode(definitions: [
               ArgumentNode(
                 name: NameNode(value: 'snapshotId'),
                 value: VariableNode(name: NameNode(value: 'snapshotId')),
-              )
+              ),
+              ArgumentNode(
+                name: NameNode(value: 'strategy'),
+                value: VariableNode(name: NameNode(value: 'strategy')),
+              ),
             ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
@@ -5726,4 +5773,703 @@ class _CopyWithStubImpl$Mutation$RestoreBackup$backup$restoreBackup<TRes>
       _res;
   CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
+}
+
+class Variables$Mutation$ForgetSnapshot {
+  factory Variables$Mutation$ForgetSnapshot({required String snapshotId}) =>
+      Variables$Mutation$ForgetSnapshot._({
+        r'snapshotId': snapshotId,
+      });
+
+  Variables$Mutation$ForgetSnapshot._(this._$data);
+
+  factory Variables$Mutation$ForgetSnapshot.fromJson(
+      Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$snapshotId = data['snapshotId'];
+    result$data['snapshotId'] = (l$snapshotId as String);
+    return Variables$Mutation$ForgetSnapshot._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  String get snapshotId => (_$data['snapshotId'] as String);
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$snapshotId = snapshotId;
+    result$data['snapshotId'] = l$snapshotId;
+    return result$data;
+  }
+
+  CopyWith$Variables$Mutation$ForgetSnapshot<Variables$Mutation$ForgetSnapshot>
+      get copyWith => CopyWith$Variables$Mutation$ForgetSnapshot(
+            this,
+            (i) => i,
+          );
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Variables$Mutation$ForgetSnapshot) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$snapshotId = snapshotId;
+    final lOther$snapshotId = other.snapshotId;
+    if (l$snapshotId != lOther$snapshotId) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$snapshotId = snapshotId;
+    return Object.hashAll([l$snapshotId]);
+  }
+}
+
+abstract class CopyWith$Variables$Mutation$ForgetSnapshot<TRes> {
+  factory CopyWith$Variables$Mutation$ForgetSnapshot(
+    Variables$Mutation$ForgetSnapshot instance,
+    TRes Function(Variables$Mutation$ForgetSnapshot) then,
+  ) = _CopyWithImpl$Variables$Mutation$ForgetSnapshot;
+
+  factory CopyWith$Variables$Mutation$ForgetSnapshot.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$ForgetSnapshot;
+
+  TRes call({String? snapshotId});
+}
+
+class _CopyWithImpl$Variables$Mutation$ForgetSnapshot<TRes>
+    implements CopyWith$Variables$Mutation$ForgetSnapshot<TRes> {
+  _CopyWithImpl$Variables$Mutation$ForgetSnapshot(
+    this._instance,
+    this._then,
+  );
+
+  final Variables$Mutation$ForgetSnapshot _instance;
+
+  final TRes Function(Variables$Mutation$ForgetSnapshot) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? snapshotId = _undefined}) =>
+      _then(Variables$Mutation$ForgetSnapshot._({
+        ..._instance._$data,
+        if (snapshotId != _undefined && snapshotId != null)
+          'snapshotId': (snapshotId as String),
+      }));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$ForgetSnapshot<TRes>
+    implements CopyWith$Variables$Mutation$ForgetSnapshot<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$ForgetSnapshot(this._res);
+
+  TRes _res;
+
+  call({String? snapshotId}) => _res;
+}
+
+class Mutation$ForgetSnapshot {
+  Mutation$ForgetSnapshot({
+    required this.backup,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$ForgetSnapshot.fromJson(Map<String, dynamic> json) {
+    final l$backup = json['backup'];
+    final l$$__typename = json['__typename'];
+    return Mutation$ForgetSnapshot(
+      backup: Mutation$ForgetSnapshot$backup.fromJson(
+          (l$backup as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$ForgetSnapshot$backup backup;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$backup = backup;
+    _resultData['backup'] = l$backup.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$backup = backup;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$backup,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ForgetSnapshot) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$backup = backup;
+    final lOther$backup = other.backup;
+    if (l$backup != lOther$backup) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ForgetSnapshot on Mutation$ForgetSnapshot {
+  CopyWith$Mutation$ForgetSnapshot<Mutation$ForgetSnapshot> get copyWith =>
+      CopyWith$Mutation$ForgetSnapshot(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Mutation$ForgetSnapshot<TRes> {
+  factory CopyWith$Mutation$ForgetSnapshot(
+    Mutation$ForgetSnapshot instance,
+    TRes Function(Mutation$ForgetSnapshot) then,
+  ) = _CopyWithImpl$Mutation$ForgetSnapshot;
+
+  factory CopyWith$Mutation$ForgetSnapshot.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ForgetSnapshot;
+
+  TRes call({
+    Mutation$ForgetSnapshot$backup? backup,
+    String? $__typename,
+  });
+  CopyWith$Mutation$ForgetSnapshot$backup<TRes> get backup;
+}
+
+class _CopyWithImpl$Mutation$ForgetSnapshot<TRes>
+    implements CopyWith$Mutation$ForgetSnapshot<TRes> {
+  _CopyWithImpl$Mutation$ForgetSnapshot(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ForgetSnapshot _instance;
+
+  final TRes Function(Mutation$ForgetSnapshot) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? backup = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$ForgetSnapshot(
+        backup: backup == _undefined || backup == null
+            ? _instance.backup
+            : (backup as Mutation$ForgetSnapshot$backup),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Mutation$ForgetSnapshot$backup<TRes> get backup {
+    final local$backup = _instance.backup;
+    return CopyWith$Mutation$ForgetSnapshot$backup(
+        local$backup, (e) => call(backup: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ForgetSnapshot<TRes>
+    implements CopyWith$Mutation$ForgetSnapshot<TRes> {
+  _CopyWithStubImpl$Mutation$ForgetSnapshot(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$ForgetSnapshot$backup? backup,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Mutation$ForgetSnapshot$backup<TRes> get backup =>
+      CopyWith$Mutation$ForgetSnapshot$backup.stub(_res);
+}
+
+const documentNodeMutationForgetSnapshot = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'ForgetSnapshot'),
+    variableDefinitions: [
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'snapshotId')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'String'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(value: null),
+        directives: [],
+      )
+    ],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'backup'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'forgetSnapshot'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'snapshotId'),
+                value: VariableNode(name: NameNode(value: 'snapshotId')),
+              )
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitionbasicMutationReturnFields,
+]);
+Mutation$ForgetSnapshot _parserFn$Mutation$ForgetSnapshot(
+        Map<String, dynamic> data) =>
+    Mutation$ForgetSnapshot.fromJson(data);
+typedef OnMutationCompleted$Mutation$ForgetSnapshot = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Mutation$ForgetSnapshot?,
+);
+
+class Options$Mutation$ForgetSnapshot
+    extends graphql.MutationOptions<Mutation$ForgetSnapshot> {
+  Options$Mutation$ForgetSnapshot({
+    String? operationName,
+    required Variables$Mutation$ForgetSnapshot variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$ForgetSnapshot? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$ForgetSnapshot? onCompleted,
+    graphql.OnMutationUpdate<Mutation$ForgetSnapshot>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$ForgetSnapshot(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationForgetSnapshot,
+          parserFn: _parserFn$Mutation$ForgetSnapshot,
+        );
+
+  final OnMutationCompleted$Mutation$ForgetSnapshot? onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$ForgetSnapshot
+    extends graphql.WatchQueryOptions<Mutation$ForgetSnapshot> {
+  WatchOptions$Mutation$ForgetSnapshot({
+    String? operationName,
+    required Variables$Mutation$ForgetSnapshot variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$ForgetSnapshot? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationForgetSnapshot,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$ForgetSnapshot,
+        );
+}
+
+extension ClientExtension$Mutation$ForgetSnapshot on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$ForgetSnapshot>> mutate$ForgetSnapshot(
+          Options$Mutation$ForgetSnapshot options) async =>
+      await this.mutate(options);
+  graphql.ObservableQuery<Mutation$ForgetSnapshot> watchMutation$ForgetSnapshot(
+          WatchOptions$Mutation$ForgetSnapshot options) =>
+      this.watchMutation(options);
+}
+
+class Mutation$ForgetSnapshot$backup {
+  Mutation$ForgetSnapshot$backup({
+    required this.forgetSnapshot,
+    this.$__typename = 'BackupMutations',
+  });
+
+  factory Mutation$ForgetSnapshot$backup.fromJson(Map<String, dynamic> json) {
+    final l$forgetSnapshot = json['forgetSnapshot'];
+    final l$$__typename = json['__typename'];
+    return Mutation$ForgetSnapshot$backup(
+      forgetSnapshot: Mutation$ForgetSnapshot$backup$forgetSnapshot.fromJson(
+          (l$forgetSnapshot as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$ForgetSnapshot$backup$forgetSnapshot forgetSnapshot;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$forgetSnapshot = forgetSnapshot;
+    _resultData['forgetSnapshot'] = l$forgetSnapshot.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$forgetSnapshot = forgetSnapshot;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$forgetSnapshot,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ForgetSnapshot$backup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$forgetSnapshot = forgetSnapshot;
+    final lOther$forgetSnapshot = other.forgetSnapshot;
+    if (l$forgetSnapshot != lOther$forgetSnapshot) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ForgetSnapshot$backup
+    on Mutation$ForgetSnapshot$backup {
+  CopyWith$Mutation$ForgetSnapshot$backup<Mutation$ForgetSnapshot$backup>
+      get copyWith => CopyWith$Mutation$ForgetSnapshot$backup(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$ForgetSnapshot$backup<TRes> {
+  factory CopyWith$Mutation$ForgetSnapshot$backup(
+    Mutation$ForgetSnapshot$backup instance,
+    TRes Function(Mutation$ForgetSnapshot$backup) then,
+  ) = _CopyWithImpl$Mutation$ForgetSnapshot$backup;
+
+  factory CopyWith$Mutation$ForgetSnapshot$backup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ForgetSnapshot$backup;
+
+  TRes call({
+    Mutation$ForgetSnapshot$backup$forgetSnapshot? forgetSnapshot,
+    String? $__typename,
+  });
+  CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes>
+      get forgetSnapshot;
+}
+
+class _CopyWithImpl$Mutation$ForgetSnapshot$backup<TRes>
+    implements CopyWith$Mutation$ForgetSnapshot$backup<TRes> {
+  _CopyWithImpl$Mutation$ForgetSnapshot$backup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ForgetSnapshot$backup _instance;
+
+  final TRes Function(Mutation$ForgetSnapshot$backup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? forgetSnapshot = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$ForgetSnapshot$backup(
+        forgetSnapshot: forgetSnapshot == _undefined || forgetSnapshot == null
+            ? _instance.forgetSnapshot
+            : (forgetSnapshot as Mutation$ForgetSnapshot$backup$forgetSnapshot),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes>
+      get forgetSnapshot {
+    final local$forgetSnapshot = _instance.forgetSnapshot;
+    return CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot(
+        local$forgetSnapshot, (e) => call(forgetSnapshot: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ForgetSnapshot$backup<TRes>
+    implements CopyWith$Mutation$ForgetSnapshot$backup<TRes> {
+  _CopyWithStubImpl$Mutation$ForgetSnapshot$backup(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$ForgetSnapshot$backup$forgetSnapshot? forgetSnapshot,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes>
+      get forgetSnapshot =>
+          CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot.stub(_res);
+}
+
+class Mutation$ForgetSnapshot$backup$forgetSnapshot
+    implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
+  Mutation$ForgetSnapshot$backup$forgetSnapshot({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericMutationReturn',
+  });
+
+  factory Mutation$ForgetSnapshot$backup$forgetSnapshot.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Mutation$ForgetSnapshot$backup$forgetSnapshot(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ForgetSnapshot$backup$forgetSnapshot) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ForgetSnapshot$backup$forgetSnapshot
+    on Mutation$ForgetSnapshot$backup$forgetSnapshot {
+  CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot<
+          Mutation$ForgetSnapshot$backup$forgetSnapshot>
+      get copyWith => CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes> {
+  factory CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot(
+    Mutation$ForgetSnapshot$backup$forgetSnapshot instance,
+    TRes Function(Mutation$ForgetSnapshot$backup$forgetSnapshot) then,
+  ) = _CopyWithImpl$Mutation$ForgetSnapshot$backup$forgetSnapshot;
+
+  factory CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$ForgetSnapshot$backup$forgetSnapshot;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes>
+    implements CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes> {
+  _CopyWithImpl$Mutation$ForgetSnapshot$backup$forgetSnapshot(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ForgetSnapshot$backup$forgetSnapshot _instance;
+
+  final TRes Function(Mutation$ForgetSnapshot$backup$forgetSnapshot) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$ForgetSnapshot$backup$forgetSnapshot(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes>
+    implements CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes> {
+  _CopyWithStubImpl$Mutation$ForgetSnapshot$backup$forgetSnapshot(this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  }) =>
+      _res;
 }

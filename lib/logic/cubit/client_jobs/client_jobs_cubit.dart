@@ -54,8 +54,8 @@ class JobsCubit extends Cubit<JobsState> {
 
   Future<void> rebootServer() async {
     emit(JobsStateLoading());
-    final bool isSuccessful = await api.reboot();
-    if (isSuccessful) {
+    final rebootResult = await api.reboot();
+    if (rebootResult.success && rebootResult.data != null) {
       getIt<NavigationService>().showSnackBar('jobs.reboot_success'.tr());
     } else {
       getIt<NavigationService>().showSnackBar('jobs.reboot_failed'.tr());

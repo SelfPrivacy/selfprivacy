@@ -18,6 +18,7 @@ import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/backups/change_period_modal.dart';
 import 'package:selfprivacy/ui/pages/backups/copy_encryption_key_modal.dart';
 import 'package:selfprivacy/ui/pages/backups/create_backups_modal.dart';
+import 'package:selfprivacy/ui/pages/backups/snapshot_modal.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
 
@@ -62,14 +63,22 @@ class BackupDetailsPage extends StatelessWidget {
         heroTitle: 'backup.card_title'.tr(),
         heroSubtitle: 'backup.description'.tr(),
         children: [
-          BrandButton.rised(
-            onPressed: preventActions
-                ? null
-                : () async {
-                    await context.read<BackupsCubit>().initializeBackups();
-                  },
-            text: 'backup.initialize'.tr(),
-          ),
+          if (preventActions)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          if (!preventActions)
+            BrandButton.rised(
+              onPressed: preventActions
+                  ? null
+                  : () async {
+                      await context.read<BackupsCubit>().initializeBackups();
+                    },
+              text: 'backup.initialize'.tr(),
+            ),
         ],
       );
     }
@@ -176,7 +185,9 @@ class BackupDetailsPage extends StatelessWidget {
             'backup.backups_encryption_key_subtitle'.tr(),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
+        const Divider(),
+        const SizedBox(height: 8),
         if (backupJobs.isNotEmpty)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,16 +244,40 @@ class BackupDetailsPage extends StatelessWidget {
                         onTap: preventActions
                             ? null
                             : () {
-                                showPopUpAlert(
-                                  alertTitle: 'backup.restoring'.tr(),
-                                  description: 'backup.restore_alert'.tr(
-                                    args: [backup.time.toString()],
+                                showModalBottomSheet(
+                                  useRootNavigator: true,
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (final BuildContext context) =>
+                                      DraggableScrollableSheet(
+                                    expand: false,
+                                    maxChildSize: 0.9,
+                                    minChildSize: 0.5,
+                                    initialChildSize: 0.7,
+                                    builder: (
+                                      final context,
+                                      final scrollController,
+                                    ) =>
+                                        SnapshotModal(
+                                      snapshot: backup,
+                                      scrollController: scrollController,
+                                    ),
                                   ),
-                                  actionButtonTitle: 'modals.yes'.tr(),
+                                );
+                              },
+                        onLongPress: preventActions
+                            ? null
+                            : () {
+                                showPopUpAlert(
+                                  alertTitle: 'backup.forget_snapshot'.tr(),
+                                  description:
+                                      'backup.forget_snapshot_alert'.tr(),
+                                  actionButtonTitle:
+                                      'backup.forget_snapshot'.tr(),
                                   actionButtonOnPressed: () => {
-                                    context
-                                        .read<BackupsCubit>()
-                                        .restoreBackup(backup.id)
+                                    context.read<BackupsCubit>().forgetSnapshot(
+                                          backup.id,
+                                        )
                                   },
                                 );
                               },

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
+import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 
 class CopyEncryptionKeyModal extends StatefulWidget {
   const CopyEncryptionKeyModal({
@@ -32,8 +33,27 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
 
   @override
   Widget build(final BuildContext context) {
-    final String encryptionKey =
-        context.watch<BackupsCubit>().state.backblazeBucket!.encryptionKey;
+    final String? encryptionKey =
+        context.watch<BackupsCubit>().state.backblazeBucket?.encryptionKey;
+    if (encryptionKey == null) {
+      return ListView(
+        controller: widget.scrollController,
+        padding: const EdgeInsets.all(16),
+        children: [
+          const SizedBox(height: 16),
+          Text(
+            'backup.backups_encryption_key'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          InfoBox(
+            text: 'backup.backups_encryption_key_not_found'.tr(),
+            isWarning: true,
+          ),
+        ],
+      );
+    }
     return ListView(
       controller: widget.scrollController,
       padding: const EdgeInsets.all(16),

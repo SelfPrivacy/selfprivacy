@@ -260,12 +260,12 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> restart() async {
     final server = getIt<ApiConfigModel>().serverDetails!;
 
-    final result = await ProvidersController.currentServerProvider!.restart(
-      server.id,
-    );
+    final result = await ServerApi().reboot();
 
     if (result.success && result.data != null) {
       server.copyWith(startTime: result.data);
+    } else {
+      getIt<NavigationService>().showSnackBar('jobs.reboot_failed'.tr());
     }
 
     return server;

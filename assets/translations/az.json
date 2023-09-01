@@ -60,7 +60,7 @@
         "title": "Tətbiq parametrləri",
         "dark_theme_title": "Qaranlıq mövzu",
         "reset_config_title": "Tətbiq Sıfırlayın",
-        "reset_config_description": "API və Super İstifadəçi Açarlarını sıfırlayın",
+        "reset_config_description": "API və Super İstifadəçi Açarlarını sıfırlayın.",
         "delete_server_title": "Serveri silin",
         "dark_theme_description": "Rəng mövzusunu dəyişdirin",
         "delete_server_description": "Əməliyyat serveri siləcək. Bundan sonra o, əlçatmaz olacaq.",

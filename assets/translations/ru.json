@@ -65,7 +65,7 @@
         "dark_theme_title": "Тёмная тема",
         "dark_theme_description": "Сменить цветовую тему",
         "reset_config_title": "Сброс настроек",
-        "reset_config_description": "Сбросить API ключи, а также root пользователя",
+        "reset_config_description": "Сбросить API ключи и root пользователя.",
         "delete_server_title": "Удалить сервер",
         "delete_server_description": "Действие приведёт к удалению сервера. После этого он будет недоступен.",
         "system_dark_theme_title": "Системная тема по-умолчанию",
@@ -199,7 +199,8 @@
         "autobackup_set_period": "Установить период",
         "autobackup_period_set": "Период установлен",
         "backups_encryption_key": "Ключ шифрования",
-        "snapshots_title": "Список снимков"
+        "snapshots_title": "Список снимков",
+        "forget_snapshot_error": "Не удалось забыть снимок"
     },
     "storage": {
         "card_title": "Хранилище",

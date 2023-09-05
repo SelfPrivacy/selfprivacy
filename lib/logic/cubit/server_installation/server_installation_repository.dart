@@ -155,7 +155,7 @@ class ServerInstallationRepository {
 
   RecoveryStep _getCurrentRecoveryStep(
     final String? serverProviderToken,
-    final String? cloudflareToken,
+    final String? dnsProviderToken,
     final ServerDomain serverDomain,
     final ServerHostingDetails? serverDetails,
   ) {
@@ -235,7 +235,7 @@ class ServerInstallationRepository {
     return matches;
   }
 
-  Future<void> createDkimRecord(final ServerDomain cloudFlareDomain) async {
+  Future<void> createDkimRecord(final ServerDomain domain) async {
     final ServerApi api = ServerApi();
 
     late DnsRecord record;
@@ -248,7 +248,7 @@ class ServerInstallationRepository {
 
     await ProvidersController.currentDnsProvider!.setDnsRecord(
       record,
-      cloudFlareDomain,
+      domain,
     );
   }
 

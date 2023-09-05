@@ -109,17 +109,34 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   Future<void> reuploadKey() async {
     emit(state.copyWith(preventActions: true));
-    final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
+    BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
     if (bucket == null) {
       emit(state.copyWith(isInitialized: false));
     } else {
+      String login = bucket.applicationKeyId;
+      String password = bucket.applicationKey;
+      if (login.isEmpty || password.isEmpty) {
+        final BackblazeApplicationKey key =
+            await backblaze.createKey(bucket.bucketId);
+        login = key.applicationKeyId;
+        password = key.applicationKey;
+        bucket = BackblazeBucket(
+          bucketId: bucket.bucketId,
+          bucketName: bucket.bucketName,
+          encryptionKey: bucket.encryptionKey,
+          applicationKey: password,
+          applicationKeyId: login,
+        );
+        await getIt<ApiConfigModel>().storeBackblazeBucket(bucket);
+        emit(state.copyWith(backblazeBucket: bucket));
+      }
       final GenericResult result = await api.initializeRepository(
         InitializeRepositoryInput(
           provider: BackupsProviderType.backblaze,
           locationId: bucket.bucketId,
           locationName: bucket.bucketName,
-          login: bucket.applicationKeyId,
-          password: bucket.applicationKey,
+          login: login,
+          password: password,
         ),
       );
       if (result.success == false) {
@@ -129,7 +146,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
         return;
       } else {
         emit(state.copyWith(preventActions: false));
-        getIt<NavigationService>().showSnackBar('backup.reuploaded_key');
+        getIt<NavigationService>().showSnackBar('backup.reuploaded_key'.tr());
         await updateBackups();
       }
     }

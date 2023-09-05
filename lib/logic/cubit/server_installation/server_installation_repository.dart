@@ -218,19 +218,23 @@ class ServerInstallationRepository {
     final Map<String, bool> skippedMatches,
   ) async {
     final Map<String, bool> matches = <String, bool>{};
-    await InternetAddress.lookup(domainName!).then(
-      (final records) {
-        for (final record in records) {
-          if (skippedMatches[record.host] ?? false) {
-            matches[record.host] = true;
-            continue;
+    try {
+      await InternetAddress.lookup(domainName!).then(
+        (final records) {
+          for (final record in records) {
+            if (skippedMatches[record.host] ?? false) {
+              matches[record.host] = true;
+              continue;
+            }
+            if (record.address == ip4!) {
+              matches[record.host] = true;
+            }
           }
-          if (record.address == ip4!) {
-            matches[record.host] = true;
-          }
-        }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
 
     return matches;
   }

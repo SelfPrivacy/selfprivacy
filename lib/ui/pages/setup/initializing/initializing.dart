@@ -99,7 +99,7 @@ class InitializingPage extends StatelessWidget {
                         steps: const [
                           'Hosting',
                           'Server Type',
-                          'CloudFlare',
+                          'DNS Provider',
                           'Backblaze',
                           'Domain',
                           'User',

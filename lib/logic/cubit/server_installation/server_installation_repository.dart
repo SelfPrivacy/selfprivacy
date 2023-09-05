@@ -155,7 +155,7 @@ class ServerInstallationRepository {
 
   RecoveryStep _getCurrentRecoveryStep(
     final String? serverProviderToken,
-    final String? cloudflareToken,
+    final String? dnsProviderToken,
     final ServerDomain serverDomain,
     final ServerHostingDetails? serverDetails,
   ) {
@@ -218,24 +218,28 @@ class ServerInstallationRepository {
     final Map<String, bool> skippedMatches,
   ) async {
     final Map<String, bool> matches = <String, bool>{};
-    await InternetAddress.lookup(domainName!).then(
-      (final records) {
-        for (final record in records) {
-          if (skippedMatches[record.host] ?? false) {
-            matches[record.host] = true;
-            continue;
+    try {
+      await InternetAddress.lookup(domainName!).then(
+        (final records) {
+          for (final record in records) {
+            if (skippedMatches[record.host] ?? false) {
+              matches[record.host] = true;
+              continue;
+            }
+            if (record.address == ip4!) {
+              matches[record.host] = true;
+            }
           }
-          if (record.address == ip4!) {
-            matches[record.host] = true;
-          }
-        }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
 
     return matches;
   }
 
-  Future<void> createDkimRecord(final ServerDomain cloudFlareDomain) async {
+  Future<void> createDkimRecord(final ServerDomain domain) async {
     final ServerApi api = ServerApi();
 
     late DnsRecord record;
@@ -248,7 +252,7 @@ class ServerInstallationRepository {
 
     await ProvidersController.currentDnsProvider!.setDnsRecord(
       record,
-      cloudFlareDomain,
+      domain,
     );
   }
 

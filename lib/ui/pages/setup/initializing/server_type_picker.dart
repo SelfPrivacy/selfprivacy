@@ -338,32 +338,122 @@ class SelectTypePage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    'initializing.choose_server_type_payment_server'
-                                        .tr(
-                                      args: [type.price.value.toString()],
+                                  IntrinsicHeight(
+                                    child: Row(
+                                      children: [
+                                        VerticalDivider(
+                                          width: 24.0,
+                                          indent: 4.0,
+                                          endIndent: 4.0,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withAlpha(128),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.memory_outlined,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface
+                                                      .withAlpha(128),
+                                                  size: 16,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  'initializing.choose_server_type_payment_server'
+                                                      .tr(
+                                                    args: [
+                                                      type.price.value
+                                                          .toString()
+                                                    ],
+                                                  ),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface
+                                                            .withAlpha(128),
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.sd_card_outlined,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface
+                                                      .withAlpha(128),
+                                                  size: 16,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  'initializing.choose_server_type_payment_storage'
+                                                      .tr(
+                                                    args: [
+                                                      storagePrice.toString()
+                                                    ],
+                                                  ),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface
+                                                            .withAlpha(128),
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                            if (publicIpPrice != 0)
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.lan_outlined,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withAlpha(128),
+                                                    size: 16,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    'initializing.choose_server_type_payment_ip'
+                                                        .tr(
+                                                      args: [
+                                                        publicIpPrice.toString()
+                                                      ],
+                                                    ),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.copyWith(
+                                                          color: Theme.of(
+                                                            context,
+                                                          )
+                                                              .colorScheme
+                                                              .onSurface
+                                                              .withAlpha(128),
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
                                   ),
-                                  Text(
-                                    'initializing.choose_server_type_payment_storage'
-                                        .tr(
-                                      args: [storagePrice.toString()],
-                                    ),
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  if (publicIpPrice != 0)
-                                    Text(
-                                      'initializing.choose_server_type_payment_ip'
-                                          .tr(
-                                        args: [publicIpPrice.toString()],
-                                      ),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
                                 ],
                               ),
                             ),

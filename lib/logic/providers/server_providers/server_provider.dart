@@ -90,9 +90,9 @@ abstract class ServerProvider {
   /// answered the request.
   Future<GenericResult<DateTime?>> restart(final int serverId);
 
-  /// Returns [Price] information per one gigabyte of storage extension for
-  /// the requested accessible machine.
-  Future<GenericResult<Price?>> getPricePerGb();
+  /// Returns [Price] information map of all additional resources, excluding
+  /// main server type pricing
+  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing();
 
   /// Returns [ServerVolume] of all available volumes
   /// assigned to the authorized user and attached to active machine.
@@ -101,7 +101,7 @@ abstract class ServerProvider {
   /// Tries to create an empty unattached [ServerVolume].
   ///
   /// If success, returns this volume information.
-  Future<GenericResult<ServerVolume?>> createVolume();
+  Future<GenericResult<ServerVolume?>> createVolume(final int gb);
 
   /// Tries to delete the requested accessible [ServerVolume].
   Future<GenericResult<void>> deleteVolume(final ServerVolume volume);

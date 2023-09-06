@@ -190,3 +190,22 @@ class HetznerVolume {
   static HetznerVolume fromJson(final Map<String, dynamic> json) =>
       _$HetznerVolumeFromJson(json);
 }
+
+/// Prices for Hetzner resources in Euro (monthly).
+/// https://docs.hetzner.cloud/#pricing
+class HetznerPricing {
+  HetznerPricing(
+    this.region,
+    this.perVolumeGb,
+    this.perPublicIpv4,
+  );
+
+  /// Region name to which current price listing applies
+  final String region;
+
+  /// The cost of Volume per GB/month
+  final double perVolumeGb;
+
+  /// Costs of Primary IP type
+  final double perPublicIpv4;
+}

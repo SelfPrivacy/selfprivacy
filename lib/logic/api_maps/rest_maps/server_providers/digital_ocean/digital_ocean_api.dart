@@ -320,7 +320,7 @@ class DigitalOceanApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<DigitalOceanVolume?>> createVolume() async {
+  Future<GenericResult<DigitalOceanVolume?>> createVolume(final int gb) async {
     DigitalOceanVolume? volume;
     Response? createVolumeResponse;
     final Dio client = await getClient();
@@ -330,7 +330,7 @@ class DigitalOceanApi extends RestApiMap {
       createVolumeResponse = await client.post(
         '/volumes',
         data: {
-          'size_gigabytes': 10,
+          'size_gigabytes': gb,
           'name': 'volume${StringGenerators.storageName()}',
           'labels': {'labelkey': 'value'},
           'region': region,

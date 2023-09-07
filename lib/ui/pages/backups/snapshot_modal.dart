@@ -52,114 +52,117 @@ class _SnapshotModalState extends State<SnapshotModal> {
         .state
         .getServiceById(widget.snapshot.serviceId);
 
-    return ListView(
-      controller: widget.scrollController,
-      padding: const EdgeInsets.all(16),
-      children: [
-        const SizedBox(height: 16),
-        Text(
-          'backup.snapshot_modal_heading'.tr(),
-          style: Theme.of(context).textTheme.headlineSmall,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 16),
-        ListTile(
-          leading: service != null
-              ? SvgPicture.string(
-                  service.svgIcon,
-                  height: 24,
-                  width: 24,
-                  colorFilter: ColorFilter.mode(
-                    Theme.of(context).colorScheme.onSurface,
-                    BlendMode.srcIn,
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: ListView(
+        controller: widget.scrollController,
+        padding: const EdgeInsets.all(16),
+        children: [
+          const SizedBox(height: 16),
+          Text(
+            'backup.snapshot_modal_heading'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          ListTile(
+            leading: service != null
+                ? SvgPicture.string(
+                    service.svgIcon,
+                    height: 24,
+                    width: 24,
+                    colorFilter: ColorFilter.mode(
+                      Theme.of(context).colorScheme.onSurface,
+                      BlendMode.srcIn,
+                    ),
+                  )
+                : const Icon(
+                    Icons.question_mark_outlined,
                   ),
-                )
-              : const Icon(
-                  Icons.question_mark_outlined,
-                ),
-          title: Text(
-            'backup.snapshot_service_title'.tr(),
-          ),
-          subtitle: Text(
-            service?.displayName ?? widget.snapshot.fallbackServiceName,
-          ),
-        ),
-        ListTile(
-          leading: Icon(
-            Icons.access_time_outlined,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          title: Text(
-            'backup.snapshot_creation_time_title'.tr(),
-          ),
-          subtitle: Text(
-            '${MaterialLocalizations.of(context).formatShortDate(widget.snapshot.time)} ${TimeOfDay.fromDateTime(widget.snapshot.time).format(context)}',
-          ),
-        ),
-        SnapshotIdListTile(snapshotId: widget.snapshot.id),
-        if (service != null)
-          Column(
-            children: [
-              const SizedBox(height: 8),
-              Text(
-                'backup.snapshot_modal_select_strategy'.tr(),
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              _BackupStrategySelectionCard(
-                isSelected: selectedStrategy ==
-                    BackupRestoreStrategy.downloadVerifyOverwrite,
-                onTap: () {
-                  setState(() {
-                    selectedStrategy =
-                        BackupRestoreStrategy.downloadVerifyOverwrite;
-                  });
-                },
-                title:
-                    'backup.snapshot_modal_download_verify_option_title'.tr(),
-                subtitle:
-                    'backup.snapshot_modal_download_verify_option_description'
-                        .tr(),
-              ),
-              const SizedBox(height: 8),
-              _BackupStrategySelectionCard(
-                isSelected: selectedStrategy == BackupRestoreStrategy.inplace,
-                onTap: () {
-                  setState(() {
-                    selectedStrategy = BackupRestoreStrategy.inplace;
-                  });
-                },
-                title: 'backup.snapshot_modal_inplace_option_title'.tr(),
-                subtitle:
-                    'backup.snapshot_modal_inplace_option_description'.tr(),
-              ),
-              const SizedBox(height: 8),
-              // Restore backup button
-              BrandButton.filled(
-                onPressed: isServiceBusy
-                    ? null
-                    : () {
-                        context.read<BackupsCubit>().restoreBackup(
-                              widget.snapshot.id,
-                              selectedStrategy,
-                            );
-                        Navigator.of(context).pop();
-                        getIt<NavigationService>()
-                            .showSnackBar('backup.restore_started'.tr());
-                      },
-                text: 'backup.restore'.tr(),
-              ),
-            ],
-          )
-        else
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: InfoBox(
-              isWarning: true,
-              text: 'backup.snapshot_modal_service_not_found'.tr(),
+            title: Text(
+              'backup.snapshot_service_title'.tr(),
             ),
-          )
-      ],
+            subtitle: Text(
+              service?.displayName ?? widget.snapshot.fallbackServiceName,
+            ),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.access_time_outlined,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            title: Text(
+              'backup.snapshot_creation_time_title'.tr(),
+            ),
+            subtitle: Text(
+              '${MaterialLocalizations.of(context).formatShortDate(widget.snapshot.time)} ${TimeOfDay.fromDateTime(widget.snapshot.time).format(context)}',
+            ),
+          ),
+          SnapshotIdListTile(snapshotId: widget.snapshot.id),
+          if (service != null)
+            Column(
+              children: [
+                const SizedBox(height: 8),
+                Text(
+                  'backup.snapshot_modal_select_strategy'.tr(),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                _BackupStrategySelectionCard(
+                  isSelected: selectedStrategy ==
+                      BackupRestoreStrategy.downloadVerifyOverwrite,
+                  onTap: () {
+                    setState(() {
+                      selectedStrategy =
+                          BackupRestoreStrategy.downloadVerifyOverwrite;
+                    });
+                  },
+                  title:
+                      'backup.snapshot_modal_download_verify_option_title'.tr(),
+                  subtitle:
+                      'backup.snapshot_modal_download_verify_option_description'
+                          .tr(),
+                ),
+                const SizedBox(height: 8),
+                _BackupStrategySelectionCard(
+                  isSelected: selectedStrategy == BackupRestoreStrategy.inplace,
+                  onTap: () {
+                    setState(() {
+                      selectedStrategy = BackupRestoreStrategy.inplace;
+                    });
+                  },
+                  title: 'backup.snapshot_modal_inplace_option_title'.tr(),
+                  subtitle:
+                      'backup.snapshot_modal_inplace_option_description'.tr(),
+                ),
+                const SizedBox(height: 8),
+                // Restore backup button
+                BrandButton.filled(
+                  onPressed: isServiceBusy
+                      ? null
+                      : () {
+                          context.read<BackupsCubit>().restoreBackup(
+                                widget.snapshot.id,
+                                selectedStrategy,
+                              );
+                          Navigator.of(context).pop();
+                          getIt<NavigationService>()
+                              .showSnackBar('backup.restore_started'.tr());
+                        },
+                  text: 'backup.restore'.tr(),
+                ),
+              ],
+            )
+          else
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: InfoBox(
+                isWarning: true,
+                text: 'backup.snapshot_modal_service_not_found'.tr(),
+              ),
+            )
+        ],
+      ),
     );
   }
 }

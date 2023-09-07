@@ -56,7 +56,7 @@ class Service {
   /// TODO Turn loginInfo into dynamic data, not static!
   String get loginInfo {
     switch (id) {
-      case 'mailserver':
+      case 'email':
         return 'mail.login_info'.tr();
       case 'bitwarden':
         return 'password_manager.login_info'.tr();

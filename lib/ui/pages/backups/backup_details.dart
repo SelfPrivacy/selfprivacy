@@ -83,6 +83,9 @@ class BackupDetailsPage extends StatelessWidget {
       );
     }
 
+    Color? getOverrideColor() =>
+        preventActions ? Theme.of(context).colorScheme.secondary : null;
+
     return BrandHeroScreen(
       heroIcon: BrandIcons.save,
       heroTitle: 'backup.card_title'.tr(),
@@ -110,11 +113,15 @@ class BackupDetailsPage extends StatelessWidget {
                     ),
                   );
                 },
-          leading: const Icon(
+          leading: Icon(
             Icons.add_circle_outline_rounded,
+            color: getOverrideColor(),
           ),
           title: Text(
             'backup.create_new'.tr(),
+            style: TextStyle(
+              color: getOverrideColor(),
+            ),
           ),
         ),
         ListTile(
@@ -138,13 +145,20 @@ class BackupDetailsPage extends StatelessWidget {
                     ),
                   );
                 },
-          leading: const Icon(
+          leading: Icon(
             Icons.manage_history_outlined,
+            color: getOverrideColor(),
           ),
           title: Text(
             'backup.autobackup_period_title'.tr(),
+            style: TextStyle(
+              color: getOverrideColor(),
+            ),
           ),
           subtitle: Text(
+            style: TextStyle(
+              color: getOverrideColor(),
+            ),
             autobackupPeriod != null
                 ? 'backup.autobackup_period_subtitle'.tr(
                     namedArgs: {
@@ -175,14 +189,21 @@ class BackupDetailsPage extends StatelessWidget {
                     ),
                   );
                 },
-          leading: const Icon(
+          leading: Icon(
             Icons.key_outlined,
+            color: getOverrideColor(),
           ),
           title: Text(
             'backup.backups_encryption_key'.tr(),
+            style: TextStyle(
+              color: getOverrideColor(),
+            ),
           ),
           subtitle: Text(
             'backup.backups_encryption_key_subtitle'.tr(),
+            style: TextStyle(
+              color: getOverrideColor(),
+            ),
           ),
         ),
         const SizedBox(height: 8),
@@ -227,10 +248,16 @@ class BackupDetailsPage extends StatelessWidget {
               ),
               if (backups.isEmpty)
                 ListTile(
-                  leading: const Icon(
+                  leading: Icon(
                     Icons.error_outline,
+                    color: getOverrideColor(),
                   ),
-                  title: Text('backup.no_backups'.tr()),
+                  title: Text(
+                    'backup.no_backups'.tr(),
+                    style: TextStyle(
+                      color: getOverrideColor(),
+                    ),
+                  ),
                 ),
               if (backups.isNotEmpty)
                 Column(
@@ -282,9 +309,15 @@ class BackupDetailsPage extends StatelessWidget {
                                 );
                               },
                         title: Text(
+                          style: TextStyle(
+                            color: getOverrideColor(),
+                          ),
                           '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
                         ),
                         subtitle: Text(
+                          style: TextStyle(
+                            color: getOverrideColor(),
+                          ),
                           service?.displayName ?? backup.fallbackServiceName,
                         ),
                         leading: service != null
@@ -293,12 +326,16 @@ class BackupDetailsPage extends StatelessWidget {
                                 height: 24,
                                 width: 24,
                                 colorFilter: ColorFilter.mode(
-                                  Theme.of(context).colorScheme.onBackground,
+                                  getOverrideColor() ??
+                                      Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
                                   BlendMode.srcIn,
                                 ),
                               )
-                            : const Icon(
+                            : Icon(
                                 Icons.question_mark_outlined,
+                                color: getOverrideColor(),
                               ),
                       );
                     },
@@ -339,12 +376,19 @@ class BackupDetailsPage extends StatelessWidget {
               ListTile(
                 title: Text(
                   'backup.refetch_backups'.tr(),
+                  style: TextStyle(
+                    color: getOverrideColor(),
+                  ),
                 ),
                 subtitle: Text(
                   'backup.refetch_backups_subtitle'.tr(),
+                  style: TextStyle(
+                    color: getOverrideColor(),
+                  ),
                 ),
-                leading: const Icon(
+                leading: Icon(
                   Icons.cached_outlined,
+                  color: getOverrideColor(),
                 ),
                 onTap: preventActions
                     ? null
@@ -356,12 +400,19 @@ class BackupDetailsPage extends StatelessWidget {
               ListTile(
                 title: Text(
                   'backup.reupload_key'.tr(),
+                  style: TextStyle(
+                    color: getOverrideColor(),
+                  ),
                 ),
                 subtitle: Text(
                   'backup.reupload_key_subtitle'.tr(),
+                  style: TextStyle(
+                    color: getOverrideColor(),
+                  ),
                 ),
-                leading: const Icon(
+                leading: Icon(
                   Icons.warning_amber_outlined,
+                  color: getOverrideColor(),
                 ),
                 onTap: preventActions
                     ? null

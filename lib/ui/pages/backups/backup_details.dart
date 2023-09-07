@@ -83,7 +83,7 @@ class BackupDetailsPage extends StatelessWidget {
       );
     }
 
-    Color? getOverrideColor() =>
+    final Color? overrideColor =
         preventActions ? Theme.of(context).colorScheme.secondary : null;
 
     return BrandHeroScreen(
@@ -115,12 +115,12 @@ class BackupDetailsPage extends StatelessWidget {
                 },
           leading: Icon(
             Icons.add_circle_outline_rounded,
-            color: getOverrideColor(),
+            color: overrideColor,
           ),
           title: Text(
             'backup.create_new'.tr(),
             style: TextStyle(
-              color: getOverrideColor(),
+              color: overrideColor,
             ),
           ),
         ),
@@ -147,17 +147,17 @@ class BackupDetailsPage extends StatelessWidget {
                 },
           leading: Icon(
             Icons.manage_history_outlined,
-            color: getOverrideColor(),
+            color: overrideColor,
           ),
           title: Text(
             'backup.autobackup_period_title'.tr(),
             style: TextStyle(
-              color: getOverrideColor(),
+              color: overrideColor,
             ),
           ),
           subtitle: Text(
             style: TextStyle(
-              color: getOverrideColor(),
+              color: overrideColor,
             ),
             autobackupPeriod != null
                 ? 'backup.autobackup_period_subtitle'.tr(
@@ -191,18 +191,18 @@ class BackupDetailsPage extends StatelessWidget {
                 },
           leading: Icon(
             Icons.key_outlined,
-            color: getOverrideColor(),
+            color: overrideColor,
           ),
           title: Text(
             'backup.backups_encryption_key'.tr(),
             style: TextStyle(
-              color: getOverrideColor(),
+              color: overrideColor,
             ),
           ),
           subtitle: Text(
             'backup.backups_encryption_key_subtitle'.tr(),
             style: TextStyle(
-              color: getOverrideColor(),
+              color: overrideColor,
             ),
           ),
         ),
@@ -250,12 +250,12 @@ class BackupDetailsPage extends StatelessWidget {
                 ListTile(
                   leading: Icon(
                     Icons.error_outline,
-                    color: getOverrideColor(),
+                    color: overrideColor,
                   ),
                   title: Text(
                     'backup.no_backups'.tr(),
                     style: TextStyle(
-                      color: getOverrideColor(),
+                      color: overrideColor,
                     ),
                   ),
                 ),
@@ -310,13 +310,13 @@ class BackupDetailsPage extends StatelessWidget {
                               },
                         title: Text(
                           style: TextStyle(
-                            color: getOverrideColor(),
+                            color: overrideColor,
                           ),
                           '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
                         ),
                         subtitle: Text(
                           style: TextStyle(
-                            color: getOverrideColor(),
+                            color: overrideColor,
                           ),
                           service?.displayName ?? backup.fallbackServiceName,
                         ),
@@ -326,7 +326,7 @@ class BackupDetailsPage extends StatelessWidget {
                                 height: 24,
                                 width: 24,
                                 colorFilter: ColorFilter.mode(
-                                  getOverrideColor() ??
+                                  overrideColor ??
                                       Theme.of(context)
                                           .colorScheme
                                           .onBackground,
@@ -335,7 +335,7 @@ class BackupDetailsPage extends StatelessWidget {
                               )
                             : Icon(
                                 Icons.question_mark_outlined,
-                                color: getOverrideColor(),
+                                color: overrideColor,
                               ),
                       );
                     },
@@ -377,18 +377,18 @@ class BackupDetailsPage extends StatelessWidget {
                 title: Text(
                   'backup.refetch_backups'.tr(),
                   style: TextStyle(
-                    color: getOverrideColor(),
+                    color: overrideColor,
                   ),
                 ),
                 subtitle: Text(
                   'backup.refetch_backups_subtitle'.tr(),
                   style: TextStyle(
-                    color: getOverrideColor(),
+                    color: overrideColor,
                   ),
                 ),
                 leading: Icon(
                   Icons.cached_outlined,
-                  color: getOverrideColor(),
+                  color: overrideColor,
                 ),
                 onTap: preventActions
                     ? null
@@ -401,18 +401,18 @@ class BackupDetailsPage extends StatelessWidget {
                 title: Text(
                   'backup.reupload_key'.tr(),
                   style: TextStyle(
-                    color: getOverrideColor(),
+                    color: overrideColor,
                   ),
                 ),
                 subtitle: Text(
                   'backup.reupload_key_subtitle'.tr(),
                   style: TextStyle(
-                    color: getOverrideColor(),
+                    color: overrideColor,
                   ),
                 ),
                 leading: Icon(
                   Icons.warning_amber_outlined,
-                  color: getOverrideColor(),
+                  color: overrideColor,
                 ),
                 onTap: preventActions
                     ? null

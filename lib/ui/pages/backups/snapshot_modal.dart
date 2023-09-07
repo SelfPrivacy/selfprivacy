@@ -11,6 +11,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
+import 'package:selfprivacy/ui/pages/backups/snapshot_id_list_tile.dart';
 
 class SnapshotModal extends StatefulWidget {
   const SnapshotModal({
@@ -95,18 +96,7 @@ class _SnapshotModalState extends State<SnapshotModal> {
             '${MaterialLocalizations.of(context).formatShortDate(widget.snapshot.time)} ${TimeOfDay.fromDateTime(widget.snapshot.time).format(context)}',
           ),
         ),
-        ListTile(
-          leading: Icon(
-            Icons.numbers_outlined,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          title: Text(
-            'backup.snapshot_id_title'.tr(),
-          ),
-          subtitle: Text(
-            widget.snapshot.id,
-          ),
-        ),
+        SnapshotIdListTile(snapshotId: widget.snapshot.id),
         if (service != null)
           Column(
             children: [

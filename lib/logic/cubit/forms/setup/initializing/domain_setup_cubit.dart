@@ -18,13 +18,11 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
     } else if (result.data.length == 1) {
       emit(Loaded(result.data.first));
     } else {
-      emit(MoreThenOne());
+      emit(MoreThenOne(result.data));
     }
   }
 
-  Future<void> saveDomain() async {
-    assert(state is Loaded, 'wrong state');
-    final String domainName = (state as Loaded).domain;
+  Future<void> saveDomain(final String domainName) async {
     emit(Loading(LoadingTypes.saving));
 
     final dnsProvider = ProvidersController.currentDnsProvider!;
@@ -45,7 +43,10 @@ class Initial extends DomainSetupState {}
 
 class Empty extends DomainSetupState {}
 
-class MoreThenOne extends DomainSetupState {}
+class MoreThenOne extends DomainSetupState {
+  MoreThenOne(this.domains);
+  final List<String> domains;
+}
 
 class Loading extends DomainSetupState {
   Loading(this.type);

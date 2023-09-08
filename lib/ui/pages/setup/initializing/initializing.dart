@@ -354,9 +354,39 @@ class InitializingPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   if (state is MoreThenOne)
-                    Text(
-                      'initializing.found_more_domains'.tr(),
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    ...state.domains.map(
+                      (final domain) => Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: Card(
+                              clipBehavior: Clip.antiAlias,
+                              child: InkResponse(
+                                highlightShape: BoxShape.rectangle,
+                                onTap: () => context
+                                    .read<DomainSetupCubit>()
+                                    .saveDomain(domain),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        domain,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
                     ),
                   if (state is Loaded) ...[
                     Row(
@@ -401,8 +431,9 @@ class InitializingPage extends StatelessWidget {
                   if (state is Loaded) ...[
                     const SizedBox(height: 32),
                     BrandButton.filled(
-                      onPressed: () =>
-                          context.read<DomainSetupCubit>().saveDomain(),
+                      onPressed: () => context
+                          .read<DomainSetupCubit>()
+                          .saveDomain(state.domain),
                       text: 'initializing.save_domain'.tr(),
                     ),
                   ],

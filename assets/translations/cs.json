@@ -144,7 +144,6 @@
         "found_more_domains": "Nalezeno více než jedna doména. V zájmu vlastní bezpečnosti vás prosíme o odstranění nepotřebných domén",
         "server_created": "Vytvořený server. Probíhá kontrola DNS a spouštění serveru…",
         "choose_server_type_notice": "Důležité je zaměřit se na procesor a paměť RAM. Data vašich služeb budou uložena na připojeném svazku, který lze snadno rozšířit a za který se platí zvlášť.",
-        "cloudflare_api_token": "Klíč API poskytovatele DNS",
         "connect_backblaze_storage": "Připojení úložiště Backblaze",
         "save_domain": "Uložit doménu",
         "final": "Závěrečný krok",

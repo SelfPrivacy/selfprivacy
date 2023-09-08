@@ -134,7 +134,6 @@
         "select_dns": "Тепер давайте оберемо DNS-провайдера",
         "manage_domain_dns": "Для управління DNS домену",
         "use_this_domain": "Скористатися цим доменом?",
-        "cloudflare_api_token": "CloudFlare API токен",
         "connect_backblaze_storage": "Підключити Backblaze сховище",
         "no_connected_domains": "Наразі немає пов'язаних доменів",
         "save_domain": "Зберегти домен",

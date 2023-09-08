@@ -280,7 +280,6 @@
         "enter_username_and_password": "Zadajte používateľské meno a zložité heslo",
         "finish": "Všetko je inicializované",
         "use_this_domain_text": "Token, ktorý ste poskytli, poskytuje prístup k nasledujúcej doméne",
-        "cloudflare_api_token": "CloudFlare API Token",
         "connect_backblaze_storage": "Pripojte svoje cloudové úložisko Backblaze",
         "no_connected_domains": "Momentálne nie sú pripojené žiadne domény",
         "loading_domain_list": "Načítava sa zoznam domén",

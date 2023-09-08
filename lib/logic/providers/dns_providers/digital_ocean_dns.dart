@@ -59,13 +59,10 @@ class DigitalOceanDnsProvider extends DnsProvider {
     }
 
     domains = result.data
-            .map<String>(
-              (final el) => el.name,
-            )
-            .toList() +
-
-        /// TODO: OH MY GOD DON"T YOU DARE NOT REMOVING IT NAIJI NAIJIIII DON'T FORGET PLEASE I BET YOU
-        ['stub.test'];
+        .map<String>(
+          (final el) => el.name,
+        )
+        .toList();
 
     return GenericResult(
       success: true,

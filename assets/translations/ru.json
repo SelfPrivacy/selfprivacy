@@ -350,7 +350,6 @@
         "manage_domain_dns": "Для управления DNS вашего домена",
         "use_this_domain": "Используем этот домен?",
         "use_this_domain_text": "Указанный вами токен даёт контроль над этим доменом",
-        "cloudflare_api_token": "API ключ DNS провайдера",
         "connect_backblaze_storage": "Подключите облачное хранилище Backblaze",
         "no_connected_domains": "На данный момент подлюченных доменов нет",
         "loading_domain_list": "Загружаем список доменов",

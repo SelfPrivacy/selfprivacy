@@ -278,7 +278,6 @@
         "manage_domain_dns": "Zum Verwalten des DNS Ihrer Domain",
         "use_this_domain": "Diese Domäne verwenden?",
         "use_this_domain_text": "Das von Ihnen bereitgestellte Token gewährt Zugriff auf die folgende Domäne",
-        "cloudflare_api_token": "API-Schlüssel des DNS-Anbieters",
         "connect_backblaze_storage": "Backblaze-Speicher verbinden",
         "no_connected_domains": "Derzeit keine verbundenen Domains",
         "loading_domain_list": "Domänenliste wird geladen",

@@ -1487,6 +1487,13 @@ const documentNodeQueryAllBackupSnapshots = DocumentNode(definitions: [
                 ]),
               ),
               FieldNode(
+                name: NameNode(value: 'reason'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
                 name: NameNode(value: '__typename'),
                 alias: null,
                 arguments: [],
@@ -1801,6 +1808,7 @@ class Query$AllBackupSnapshots$backup$allSnapshots {
     required this.id,
     required this.createdAt,
     required this.service,
+    required this.reason,
     this.$__typename = 'SnapshotInfo',
   });
 
@@ -1809,12 +1817,14 @@ class Query$AllBackupSnapshots$backup$allSnapshots {
     final l$id = json['id'];
     final l$createdAt = json['createdAt'];
     final l$service = json['service'];
+    final l$reason = json['reason'];
     final l$$__typename = json['__typename'];
     return Query$AllBackupSnapshots$backup$allSnapshots(
       id: (l$id as String),
       createdAt: dateTimeFromJson(l$createdAt),
       service: Query$AllBackupSnapshots$backup$allSnapshots$service.fromJson(
           (l$service as Map<String, dynamic>)),
+      reason: fromJson$Enum$BackupReason((l$reason as String)),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1824,6 +1834,8 @@ class Query$AllBackupSnapshots$backup$allSnapshots {
   final DateTime createdAt;
 
   final Query$AllBackupSnapshots$backup$allSnapshots$service service;
+
+  final Enum$BackupReason reason;
 
   final String $__typename;
 
@@ -1835,6 +1847,8 @@ class Query$AllBackupSnapshots$backup$allSnapshots {
     _resultData['createdAt'] = dateTimeToJson(l$createdAt);
     final l$service = service;
     _resultData['service'] = l$service.toJson();
+    final l$reason = reason;
+    _resultData['reason'] = toJson$Enum$BackupReason(l$reason);
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -1845,11 +1859,13 @@ class Query$AllBackupSnapshots$backup$allSnapshots {
     final l$id = id;
     final l$createdAt = createdAt;
     final l$service = service;
+    final l$reason = reason;
     final l$$__typename = $__typename;
     return Object.hashAll([
       l$id,
       l$createdAt,
       l$service,
+      l$reason,
       l$$__typename,
     ]);
   }
@@ -1876,6 +1892,11 @@ class Query$AllBackupSnapshots$backup$allSnapshots {
     final l$service = service;
     final lOther$service = other.service;
     if (l$service != lOther$service) {
+      return false;
+    }
+    final l$reason = reason;
+    final lOther$reason = other.reason;
+    if (l$reason != lOther$reason) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -1910,6 +1931,7 @@ abstract class CopyWith$Query$AllBackupSnapshots$backup$allSnapshots<TRes> {
     String? id,
     DateTime? createdAt,
     Query$AllBackupSnapshots$backup$allSnapshots$service? service,
+    Enum$BackupReason? reason,
     String? $__typename,
   });
   CopyWith$Query$AllBackupSnapshots$backup$allSnapshots$service<TRes>
@@ -1933,6 +1955,7 @@ class _CopyWithImpl$Query$AllBackupSnapshots$backup$allSnapshots<TRes>
     Object? id = _undefined,
     Object? createdAt = _undefined,
     Object? service = _undefined,
+    Object? reason = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Query$AllBackupSnapshots$backup$allSnapshots(
@@ -1943,6 +1966,9 @@ class _CopyWithImpl$Query$AllBackupSnapshots$backup$allSnapshots<TRes>
         service: service == _undefined || service == null
             ? _instance.service
             : (service as Query$AllBackupSnapshots$backup$allSnapshots$service),
+        reason: reason == _undefined || reason == null
+            ? _instance.reason
+            : (reason as Enum$BackupReason),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
@@ -1965,6 +1991,7 @@ class _CopyWithStubImpl$Query$AllBackupSnapshots$backup$allSnapshots<TRes>
     String? id,
     DateTime? createdAt,
     Query$AllBackupSnapshots$backup$allSnapshots$service? service,
+    Enum$BackupReason? reason,
     String? $__typename,
   }) =>
       _res;

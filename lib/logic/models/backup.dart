@@ -11,6 +11,7 @@ class Backup {
           time: snapshot.createdAt,
           serviceId: snapshot.service.id,
           fallbackServiceName: snapshot.service.displayName,
+          reason: snapshot.reason,
         );
 
   Backup({
@@ -18,6 +19,7 @@ class Backup {
     required this.id,
     required this.serviceId,
     required this.fallbackServiceName,
+    required this.reason,
   });
 
   // Time of the backup
@@ -26,6 +28,16 @@ class Backup {
   final String id;
   final String serviceId;
   final String fallbackServiceName;
+  final Enum$BackupReason reason;
+}
+
+extension BackupReasonExtension on Enum$BackupReason {
+  String get displayName => switch (this) {
+        Enum$BackupReason.AUTO => 'backup.snapshot_reasons.auto',
+        Enum$BackupReason.EXPLICIT => 'backup.snapshot_reasons.explicit',
+        Enum$BackupReason.PRE_RESTORE => 'backup.snapshot_reasons.pre_restore',
+        Enum$BackupReason.$unknown => 'backup.snapshot_reasons.unknown',
+      };
 }
 
 class BackupConfiguration {

@@ -320,7 +320,7 @@ class InitializingPage extends StatelessWidget {
   Widget _stepDomain(final ServerInstallationCubit initializingCubit) =>
       BlocProvider(
         create: (final context) => DomainSetupCubit(initializingCubit)..load(),
-        child: DomainPicker(),
+        child: const DomainPicker(),
       );
 
   Widget _stepUser(final ServerInstallationCubit initializingCubit) =>

@@ -288,6 +288,56 @@ const fragmentDefinitiongenericBackupConfigReturn = FragmentDefinitionNode(
           selectionSet: null,
         ),
         FieldNode(
+          name: NameNode(value: 'autobackupQuotas'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: SelectionSetNode(selections: [
+            FieldNode(
+              name: NameNode(value: 'last'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+            FieldNode(
+              name: NameNode(value: 'daily'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+            FieldNode(
+              name: NameNode(value: 'weekly'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+            FieldNode(
+              name: NameNode(value: 'monthly'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+            FieldNode(
+              name: NameNode(value: 'yearly'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+            FieldNode(
+              name: NameNode(value: '__typename'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+          ]),
+        ),
+        FieldNode(
           name: NameNode(value: '__typename'),
           alias: null,
           arguments: [],
@@ -356,6 +406,7 @@ class Fragment$genericBackupConfigReturn$configuration {
     this.autobackupPeriod,
     this.locationName,
     this.locationId,
+    required this.autobackupQuotas,
     this.$__typename = 'BackupConfiguration',
   });
 
@@ -367,6 +418,7 @@ class Fragment$genericBackupConfigReturn$configuration {
     final l$autobackupPeriod = json['autobackupPeriod'];
     final l$locationName = json['locationName'];
     final l$locationId = json['locationId'];
+    final l$autobackupQuotas = json['autobackupQuotas'];
     final l$$__typename = json['__typename'];
     return Fragment$genericBackupConfigReturn$configuration(
       provider: fromJson$Enum$BackupProvider((l$provider as String)),
@@ -375,6 +427,9 @@ class Fragment$genericBackupConfigReturn$configuration {
       autobackupPeriod: (l$autobackupPeriod as int?),
       locationName: (l$locationName as String?),
       locationId: (l$locationId as String?),
+      autobackupQuotas:
+          Fragment$genericBackupConfigReturn$configuration$autobackupQuotas
+              .fromJson((l$autobackupQuotas as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
@@ -390,6 +445,9 @@ class Fragment$genericBackupConfigReturn$configuration {
   final String? locationName;
 
   final String? locationId;
+
+  final Fragment$genericBackupConfigReturn$configuration$autobackupQuotas
+      autobackupQuotas;
 
   final String $__typename;
 
@@ -407,6 +465,8 @@ class Fragment$genericBackupConfigReturn$configuration {
     _resultData['locationName'] = l$locationName;
     final l$locationId = locationId;
     _resultData['locationId'] = l$locationId;
+    final l$autobackupQuotas = autobackupQuotas;
+    _resultData['autobackupQuotas'] = l$autobackupQuotas.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -420,6 +480,7 @@ class Fragment$genericBackupConfigReturn$configuration {
     final l$autobackupPeriod = autobackupPeriod;
     final l$locationName = locationName;
     final l$locationId = locationId;
+    final l$autobackupQuotas = autobackupQuotas;
     final l$$__typename = $__typename;
     return Object.hashAll([
       l$provider,
@@ -428,6 +489,7 @@ class Fragment$genericBackupConfigReturn$configuration {
       l$autobackupPeriod,
       l$locationName,
       l$locationId,
+      l$autobackupQuotas,
       l$$__typename,
     ]);
   }
@@ -471,6 +533,11 @@ class Fragment$genericBackupConfigReturn$configuration {
     if (l$locationId != lOther$locationId) {
       return false;
     }
+    final l$autobackupQuotas = autobackupQuotas;
+    final lOther$autobackupQuotas = other.autobackupQuotas;
+    if (l$autobackupQuotas != lOther$autobackupQuotas) {
+      return false;
+    }
     final l$$__typename = $__typename;
     final lOther$$__typename = other.$__typename;
     if (l$$__typename != lOther$$__typename) {
@@ -507,8 +574,12 @@ abstract class CopyWith$Fragment$genericBackupConfigReturn$configuration<TRes> {
     int? autobackupPeriod,
     String? locationName,
     String? locationId,
+    Fragment$genericBackupConfigReturn$configuration$autobackupQuotas?
+        autobackupQuotas,
     String? $__typename,
   });
+  CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+      TRes> get autobackupQuotas;
 }
 
 class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
@@ -531,6 +602,7 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
     Object? autobackupPeriod = _undefined,
     Object? locationName = _undefined,
     Object? locationId = _undefined,
+    Object? autobackupQuotas = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Fragment$genericBackupConfigReturn$configuration(
@@ -552,10 +624,21 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
         locationId: locationId == _undefined
             ? _instance.locationId
             : (locationId as String?),
+        autobackupQuotas: autobackupQuotas == _undefined ||
+                autobackupQuotas == null
+            ? _instance.autobackupQuotas
+            : (autobackupQuotas
+                as Fragment$genericBackupConfigReturn$configuration$autobackupQuotas),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
+  CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+      TRes> get autobackupQuotas {
+    final local$autobackupQuotas = _instance.autobackupQuotas;
+    return CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+        local$autobackupQuotas, (e) => call(autobackupQuotas: e));
+  }
 }
 
 class _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
@@ -571,6 +654,234 @@ class _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
     int? autobackupPeriod,
     String? locationName,
     String? locationId,
+    Fragment$genericBackupConfigReturn$configuration$autobackupQuotas?
+        autobackupQuotas,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+          TRes>
+      get autobackupQuotas =>
+          CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas
+              .stub(_res);
+}
+
+class Fragment$genericBackupConfigReturn$configuration$autobackupQuotas {
+  Fragment$genericBackupConfigReturn$configuration$autobackupQuotas({
+    required this.last,
+    required this.daily,
+    required this.weekly,
+    required this.monthly,
+    required this.yearly,
+    this.$__typename = 'AutobackupQuotas',
+  });
+
+  factory Fragment$genericBackupConfigReturn$configuration$autobackupQuotas.fromJson(
+      Map<String, dynamic> json) {
+    final l$last = json['last'];
+    final l$daily = json['daily'];
+    final l$weekly = json['weekly'];
+    final l$monthly = json['monthly'];
+    final l$yearly = json['yearly'];
+    final l$$__typename = json['__typename'];
+    return Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+      last: (l$last as int),
+      daily: (l$daily as int),
+      weekly: (l$weekly as int),
+      monthly: (l$monthly as int),
+      yearly: (l$yearly as int),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int last;
+
+  final int daily;
+
+  final int weekly;
+
+  final int monthly;
+
+  final int yearly;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$last = last;
+    _resultData['last'] = l$last;
+    final l$daily = daily;
+    _resultData['daily'] = l$daily;
+    final l$weekly = weekly;
+    _resultData['weekly'] = l$weekly;
+    final l$monthly = monthly;
+    _resultData['monthly'] = l$monthly;
+    final l$yearly = yearly;
+    _resultData['yearly'] = l$yearly;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$last = last;
+    final l$daily = daily;
+    final l$weekly = weekly;
+    final l$monthly = monthly;
+    final l$yearly = yearly;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$last,
+      l$daily,
+      l$weekly,
+      l$monthly,
+      l$yearly,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Fragment$genericBackupConfigReturn$configuration$autobackupQuotas) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$last = last;
+    final lOther$last = other.last;
+    if (l$last != lOther$last) {
+      return false;
+    }
+    final l$daily = daily;
+    final lOther$daily = other.daily;
+    if (l$daily != lOther$daily) {
+      return false;
+    }
+    final l$weekly = weekly;
+    final lOther$weekly = other.weekly;
+    if (l$weekly != lOther$weekly) {
+      return false;
+    }
+    final l$monthly = monthly;
+    final lOther$monthly = other.monthly;
+    if (l$monthly != lOther$monthly) {
+      return false;
+    }
+    final l$yearly = yearly;
+    final lOther$yearly = other.yearly;
+    if (l$yearly != lOther$yearly) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas
+    on Fragment$genericBackupConfigReturn$configuration$autobackupQuotas {
+  CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+          Fragment$genericBackupConfigReturn$configuration$autobackupQuotas>
+      get copyWith =>
+          CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+    TRes> {
+  factory CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+    Fragment$genericBackupConfigReturn$configuration$autobackupQuotas instance,
+    TRes Function(
+            Fragment$genericBackupConfigReturn$configuration$autobackupQuotas)
+        then,
+  ) = _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas;
+
+  factory CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas.stub(
+          TRes res) =
+      _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas;
+
+  TRes call({
+    int? last,
+    int? daily,
+    int? weekly,
+    int? monthly,
+    int? yearly,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+        TRes>
+    implements
+        CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+            TRes> {
+  _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$genericBackupConfigReturn$configuration$autobackupQuotas
+      _instance;
+
+  final TRes Function(
+      Fragment$genericBackupConfigReturn$configuration$autobackupQuotas) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? last = _undefined,
+    Object? daily = _undefined,
+    Object? weekly = _undefined,
+    Object? monthly = _undefined,
+    Object? yearly = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+        last:
+            last == _undefined || last == null ? _instance.last : (last as int),
+        daily: daily == _undefined || daily == null
+            ? _instance.daily
+            : (daily as int),
+        weekly: weekly == _undefined || weekly == null
+            ? _instance.weekly
+            : (weekly as int),
+        monthly: monthly == _undefined || monthly == null
+            ? _instance.monthly
+            : (monthly as int),
+        yearly: yearly == _undefined || yearly == null
+            ? _instance.yearly
+            : (yearly as int),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+        TRes>
+    implements
+        CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+            TRes> {
+  _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? last,
+    int? daily,
+    int? weekly,
+    int? monthly,
+    int? yearly,
     String? $__typename,
   }) =>
       _res;
@@ -770,6 +1081,56 @@ const documentNodeQueryBackupConfiguration = DocumentNode(definitions: [
                 arguments: [],
                 directives: [],
                 selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'autobackupQuotas'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FieldNode(
+                    name: NameNode(value: 'last'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'daily'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'weekly'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'monthly'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'yearly'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
               ),
               FieldNode(
                 name: NameNode(value: '__typename'),
@@ -1070,6 +1431,7 @@ class Query$BackupConfiguration$backup$configuration {
     this.locationId,
     this.locationName,
     required this.provider,
+    required this.autobackupQuotas,
     this.$__typename = 'BackupConfiguration',
   });
 
@@ -1081,6 +1443,7 @@ class Query$BackupConfiguration$backup$configuration {
     final l$locationId = json['locationId'];
     final l$locationName = json['locationName'];
     final l$provider = json['provider'];
+    final l$autobackupQuotas = json['autobackupQuotas'];
     final l$$__typename = json['__typename'];
     return Query$BackupConfiguration$backup$configuration(
       autobackupPeriod: (l$autobackupPeriod as int?),
@@ -1089,6 +1452,9 @@ class Query$BackupConfiguration$backup$configuration {
       locationId: (l$locationId as String?),
       locationName: (l$locationName as String?),
       provider: fromJson$Enum$BackupProvider((l$provider as String)),
+      autobackupQuotas:
+          Query$BackupConfiguration$backup$configuration$autobackupQuotas
+              .fromJson((l$autobackupQuotas as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1104,6 +1470,9 @@ class Query$BackupConfiguration$backup$configuration {
   final String? locationName;
 
   final Enum$BackupProvider provider;
+
+  final Query$BackupConfiguration$backup$configuration$autobackupQuotas
+      autobackupQuotas;
 
   final String $__typename;
 
@@ -1121,6 +1490,8 @@ class Query$BackupConfiguration$backup$configuration {
     _resultData['locationName'] = l$locationName;
     final l$provider = provider;
     _resultData['provider'] = toJson$Enum$BackupProvider(l$provider);
+    final l$autobackupQuotas = autobackupQuotas;
+    _resultData['autobackupQuotas'] = l$autobackupQuotas.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -1134,6 +1505,7 @@ class Query$BackupConfiguration$backup$configuration {
     final l$locationId = locationId;
     final l$locationName = locationName;
     final l$provider = provider;
+    final l$autobackupQuotas = autobackupQuotas;
     final l$$__typename = $__typename;
     return Object.hashAll([
       l$autobackupPeriod,
@@ -1142,6 +1514,7 @@ class Query$BackupConfiguration$backup$configuration {
       l$locationId,
       l$locationName,
       l$provider,
+      l$autobackupQuotas,
       l$$__typename,
     ]);
   }
@@ -1185,6 +1558,11 @@ class Query$BackupConfiguration$backup$configuration {
     if (l$provider != lOther$provider) {
       return false;
     }
+    final l$autobackupQuotas = autobackupQuotas;
+    final lOther$autobackupQuotas = other.autobackupQuotas;
+    if (l$autobackupQuotas != lOther$autobackupQuotas) {
+      return false;
+    }
     final l$$__typename = $__typename;
     final lOther$$__typename = other.$__typename;
     if (l$$__typename != lOther$$__typename) {
@@ -1221,8 +1599,12 @@ abstract class CopyWith$Query$BackupConfiguration$backup$configuration<TRes> {
     String? locationId,
     String? locationName,
     Enum$BackupProvider? provider,
+    Query$BackupConfiguration$backup$configuration$autobackupQuotas?
+        autobackupQuotas,
     String? $__typename,
   });
+  CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<TRes>
+      get autobackupQuotas;
 }
 
 class _CopyWithImpl$Query$BackupConfiguration$backup$configuration<TRes>
@@ -1245,6 +1627,7 @@ class _CopyWithImpl$Query$BackupConfiguration$backup$configuration<TRes>
     Object? locationId = _undefined,
     Object? locationName = _undefined,
     Object? provider = _undefined,
+    Object? autobackupQuotas = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Query$BackupConfiguration$backup$configuration(
@@ -1266,10 +1649,21 @@ class _CopyWithImpl$Query$BackupConfiguration$backup$configuration<TRes>
         provider: provider == _undefined || provider == null
             ? _instance.provider
             : (provider as Enum$BackupProvider),
+        autobackupQuotas: autobackupQuotas == _undefined ||
+                autobackupQuotas == null
+            ? _instance.autobackupQuotas
+            : (autobackupQuotas
+                as Query$BackupConfiguration$backup$configuration$autobackupQuotas),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
+  CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<TRes>
+      get autobackupQuotas {
+    final local$autobackupQuotas = _instance.autobackupQuotas;
+    return CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
+        local$autobackupQuotas, (e) => call(autobackupQuotas: e));
+  }
 }
 
 class _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration<TRes>
@@ -1285,6 +1679,233 @@ class _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration<TRes>
     String? locationId,
     String? locationName,
     Enum$BackupProvider? provider,
+    Query$BackupConfiguration$backup$configuration$autobackupQuotas?
+        autobackupQuotas,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<TRes>
+      get autobackupQuotas =>
+          CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas
+              .stub(_res);
+}
+
+class Query$BackupConfiguration$backup$configuration$autobackupQuotas {
+  Query$BackupConfiguration$backup$configuration$autobackupQuotas({
+    required this.last,
+    required this.daily,
+    required this.weekly,
+    required this.monthly,
+    required this.yearly,
+    this.$__typename = 'AutobackupQuotas',
+  });
+
+  factory Query$BackupConfiguration$backup$configuration$autobackupQuotas.fromJson(
+      Map<String, dynamic> json) {
+    final l$last = json['last'];
+    final l$daily = json['daily'];
+    final l$weekly = json['weekly'];
+    final l$monthly = json['monthly'];
+    final l$yearly = json['yearly'];
+    final l$$__typename = json['__typename'];
+    return Query$BackupConfiguration$backup$configuration$autobackupQuotas(
+      last: (l$last as int),
+      daily: (l$daily as int),
+      weekly: (l$weekly as int),
+      monthly: (l$monthly as int),
+      yearly: (l$yearly as int),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int last;
+
+  final int daily;
+
+  final int weekly;
+
+  final int monthly;
+
+  final int yearly;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$last = last;
+    _resultData['last'] = l$last;
+    final l$daily = daily;
+    _resultData['daily'] = l$daily;
+    final l$weekly = weekly;
+    _resultData['weekly'] = l$weekly;
+    final l$monthly = monthly;
+    _resultData['monthly'] = l$monthly;
+    final l$yearly = yearly;
+    _resultData['yearly'] = l$yearly;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$last = last;
+    final l$daily = daily;
+    final l$weekly = weekly;
+    final l$monthly = monthly;
+    final l$yearly = yearly;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$last,
+      l$daily,
+      l$weekly,
+      l$monthly,
+      l$yearly,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Query$BackupConfiguration$backup$configuration$autobackupQuotas) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$last = last;
+    final lOther$last = other.last;
+    if (l$last != lOther$last) {
+      return false;
+    }
+    final l$daily = daily;
+    final lOther$daily = other.daily;
+    if (l$daily != lOther$daily) {
+      return false;
+    }
+    final l$weekly = weekly;
+    final lOther$weekly = other.weekly;
+    if (l$weekly != lOther$weekly) {
+      return false;
+    }
+    final l$monthly = monthly;
+    final lOther$monthly = other.monthly;
+    if (l$monthly != lOther$monthly) {
+      return false;
+    }
+    final l$yearly = yearly;
+    final lOther$yearly = other.yearly;
+    if (l$yearly != lOther$yearly) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$BackupConfiguration$backup$configuration$autobackupQuotas
+    on Query$BackupConfiguration$backup$configuration$autobackupQuotas {
+  CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
+          Query$BackupConfiguration$backup$configuration$autobackupQuotas>
+      get copyWith =>
+          CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
+    TRes> {
+  factory CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
+    Query$BackupConfiguration$backup$configuration$autobackupQuotas instance,
+    TRes Function(
+            Query$BackupConfiguration$backup$configuration$autobackupQuotas)
+        then,
+  ) = _CopyWithImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas;
+
+  factory CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas;
+
+  TRes call({
+    int? last,
+    int? daily,
+    int? weekly,
+    int? monthly,
+    int? yearly,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
+        TRes>
+    implements
+        CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
+            TRes> {
+  _CopyWithImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
+    this._instance,
+    this._then,
+  );
+
+  final Query$BackupConfiguration$backup$configuration$autobackupQuotas
+      _instance;
+
+  final TRes Function(
+      Query$BackupConfiguration$backup$configuration$autobackupQuotas) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? last = _undefined,
+    Object? daily = _undefined,
+    Object? weekly = _undefined,
+    Object? monthly = _undefined,
+    Object? yearly = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Query$BackupConfiguration$backup$configuration$autobackupQuotas(
+        last:
+            last == _undefined || last == null ? _instance.last : (last as int),
+        daily: daily == _undefined || daily == null
+            ? _instance.daily
+            : (daily as int),
+        weekly: weekly == _undefined || weekly == null
+            ? _instance.weekly
+            : (weekly as int),
+        monthly: monthly == _undefined || monthly == null
+            ? _instance.monthly
+            : (monthly as int),
+        yearly: yearly == _undefined || yearly == null
+            ? _instance.yearly
+            : (yearly as int),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
+        TRes>
+    implements
+        CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
+            TRes> {
+  _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? last,
+    int? daily,
+    int? weekly,
+    int? monthly,
+    int? yearly,
     String? $__typename,
   }) =>
       _res;
@@ -4048,6 +4669,546 @@ class _CopyWithStubImpl$Mutation$SetAutobackupPeriod$backup<TRes>
   }) =>
       _res;
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupPeriod =>
+      CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
+}
+
+class Variables$Mutation$setAutobackupQuotas {
+  factory Variables$Mutation$setAutobackupQuotas(
+          {required Input$AutobackupQuotasInput quotas}) =>
+      Variables$Mutation$setAutobackupQuotas._({
+        r'quotas': quotas,
+      });
+
+  Variables$Mutation$setAutobackupQuotas._(this._$data);
+
+  factory Variables$Mutation$setAutobackupQuotas.fromJson(
+      Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$quotas = data['quotas'];
+    result$data['quotas'] = Input$AutobackupQuotasInput.fromJson(
+        (l$quotas as Map<String, dynamic>));
+    return Variables$Mutation$setAutobackupQuotas._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  Input$AutobackupQuotasInput get quotas =>
+      (_$data['quotas'] as Input$AutobackupQuotasInput);
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$quotas = quotas;
+    result$data['quotas'] = l$quotas.toJson();
+    return result$data;
+  }
+
+  CopyWith$Variables$Mutation$setAutobackupQuotas<
+          Variables$Mutation$setAutobackupQuotas>
+      get copyWith => CopyWith$Variables$Mutation$setAutobackupQuotas(
+            this,
+            (i) => i,
+          );
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Variables$Mutation$setAutobackupQuotas) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$quotas = quotas;
+    final lOther$quotas = other.quotas;
+    if (l$quotas != lOther$quotas) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$quotas = quotas;
+    return Object.hashAll([l$quotas]);
+  }
+}
+
+abstract class CopyWith$Variables$Mutation$setAutobackupQuotas<TRes> {
+  factory CopyWith$Variables$Mutation$setAutobackupQuotas(
+    Variables$Mutation$setAutobackupQuotas instance,
+    TRes Function(Variables$Mutation$setAutobackupQuotas) then,
+  ) = _CopyWithImpl$Variables$Mutation$setAutobackupQuotas;
+
+  factory CopyWith$Variables$Mutation$setAutobackupQuotas.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$setAutobackupQuotas;
+
+  TRes call({Input$AutobackupQuotasInput? quotas});
+}
+
+class _CopyWithImpl$Variables$Mutation$setAutobackupQuotas<TRes>
+    implements CopyWith$Variables$Mutation$setAutobackupQuotas<TRes> {
+  _CopyWithImpl$Variables$Mutation$setAutobackupQuotas(
+    this._instance,
+    this._then,
+  );
+
+  final Variables$Mutation$setAutobackupQuotas _instance;
+
+  final TRes Function(Variables$Mutation$setAutobackupQuotas) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? quotas = _undefined}) =>
+      _then(Variables$Mutation$setAutobackupQuotas._({
+        ..._instance._$data,
+        if (quotas != _undefined && quotas != null)
+          'quotas': (quotas as Input$AutobackupQuotasInput),
+      }));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$setAutobackupQuotas<TRes>
+    implements CopyWith$Variables$Mutation$setAutobackupQuotas<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$setAutobackupQuotas(this._res);
+
+  TRes _res;
+
+  call({Input$AutobackupQuotasInput? quotas}) => _res;
+}
+
+class Mutation$setAutobackupQuotas {
+  Mutation$setAutobackupQuotas({
+    required this.backup,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$setAutobackupQuotas.fromJson(Map<String, dynamic> json) {
+    final l$backup = json['backup'];
+    final l$$__typename = json['__typename'];
+    return Mutation$setAutobackupQuotas(
+      backup: Mutation$setAutobackupQuotas$backup.fromJson(
+          (l$backup as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$setAutobackupQuotas$backup backup;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$backup = backup;
+    _resultData['backup'] = l$backup.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$backup = backup;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$backup,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$setAutobackupQuotas) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$backup = backup;
+    final lOther$backup = other.backup;
+    if (l$backup != lOther$backup) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$setAutobackupQuotas
+    on Mutation$setAutobackupQuotas {
+  CopyWith$Mutation$setAutobackupQuotas<Mutation$setAutobackupQuotas>
+      get copyWith => CopyWith$Mutation$setAutobackupQuotas(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$setAutobackupQuotas<TRes> {
+  factory CopyWith$Mutation$setAutobackupQuotas(
+    Mutation$setAutobackupQuotas instance,
+    TRes Function(Mutation$setAutobackupQuotas) then,
+  ) = _CopyWithImpl$Mutation$setAutobackupQuotas;
+
+  factory CopyWith$Mutation$setAutobackupQuotas.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$setAutobackupQuotas;
+
+  TRes call({
+    Mutation$setAutobackupQuotas$backup? backup,
+    String? $__typename,
+  });
+  CopyWith$Mutation$setAutobackupQuotas$backup<TRes> get backup;
+}
+
+class _CopyWithImpl$Mutation$setAutobackupQuotas<TRes>
+    implements CopyWith$Mutation$setAutobackupQuotas<TRes> {
+  _CopyWithImpl$Mutation$setAutobackupQuotas(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$setAutobackupQuotas _instance;
+
+  final TRes Function(Mutation$setAutobackupQuotas) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? backup = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$setAutobackupQuotas(
+        backup: backup == _undefined || backup == null
+            ? _instance.backup
+            : (backup as Mutation$setAutobackupQuotas$backup),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Mutation$setAutobackupQuotas$backup<TRes> get backup {
+    final local$backup = _instance.backup;
+    return CopyWith$Mutation$setAutobackupQuotas$backup(
+        local$backup, (e) => call(backup: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$setAutobackupQuotas<TRes>
+    implements CopyWith$Mutation$setAutobackupQuotas<TRes> {
+  _CopyWithStubImpl$Mutation$setAutobackupQuotas(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$setAutobackupQuotas$backup? backup,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Mutation$setAutobackupQuotas$backup<TRes> get backup =>
+      CopyWith$Mutation$setAutobackupQuotas$backup.stub(_res);
+}
+
+const documentNodeMutationsetAutobackupQuotas = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'setAutobackupQuotas'),
+    variableDefinitions: [
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'quotas')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'AutobackupQuotasInput'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(value: null),
+        directives: [],
+      )
+    ],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'backup'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'setAutobackupQuotas'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'quotas'),
+                value: VariableNode(name: NameNode(value: 'quotas')),
+              )
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'genericBackupConfigReturn'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitiongenericBackupConfigReturn,
+]);
+Mutation$setAutobackupQuotas _parserFn$Mutation$setAutobackupQuotas(
+        Map<String, dynamic> data) =>
+    Mutation$setAutobackupQuotas.fromJson(data);
+typedef OnMutationCompleted$Mutation$setAutobackupQuotas = FutureOr<void>
+    Function(
+  Map<String, dynamic>?,
+  Mutation$setAutobackupQuotas?,
+);
+
+class Options$Mutation$setAutobackupQuotas
+    extends graphql.MutationOptions<Mutation$setAutobackupQuotas> {
+  Options$Mutation$setAutobackupQuotas({
+    String? operationName,
+    required Variables$Mutation$setAutobackupQuotas variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$setAutobackupQuotas? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$setAutobackupQuotas? onCompleted,
+    graphql.OnMutationUpdate<Mutation$setAutobackupQuotas>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$setAutobackupQuotas(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationsetAutobackupQuotas,
+          parserFn: _parserFn$Mutation$setAutobackupQuotas,
+        );
+
+  final OnMutationCompleted$Mutation$setAutobackupQuotas? onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$setAutobackupQuotas
+    extends graphql.WatchQueryOptions<Mutation$setAutobackupQuotas> {
+  WatchOptions$Mutation$setAutobackupQuotas({
+    String? operationName,
+    required Variables$Mutation$setAutobackupQuotas variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$setAutobackupQuotas? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationsetAutobackupQuotas,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$setAutobackupQuotas,
+        );
+}
+
+extension ClientExtension$Mutation$setAutobackupQuotas
+    on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$setAutobackupQuotas>>
+      mutate$setAutobackupQuotas(
+              Options$Mutation$setAutobackupQuotas options) async =>
+          await this.mutate(options);
+  graphql.ObservableQuery<Mutation$setAutobackupQuotas>
+      watchMutation$setAutobackupQuotas(
+              WatchOptions$Mutation$setAutobackupQuotas options) =>
+          this.watchMutation(options);
+}
+
+class Mutation$setAutobackupQuotas$backup {
+  Mutation$setAutobackupQuotas$backup({
+    required this.setAutobackupQuotas,
+    this.$__typename = 'BackupMutations',
+  });
+
+  factory Mutation$setAutobackupQuotas$backup.fromJson(
+      Map<String, dynamic> json) {
+    final l$setAutobackupQuotas = json['setAutobackupQuotas'];
+    final l$$__typename = json['__typename'];
+    return Mutation$setAutobackupQuotas$backup(
+      setAutobackupQuotas: Fragment$genericBackupConfigReturn.fromJson(
+          (l$setAutobackupQuotas as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Fragment$genericBackupConfigReturn setAutobackupQuotas;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$setAutobackupQuotas = setAutobackupQuotas;
+    _resultData['setAutobackupQuotas'] = l$setAutobackupQuotas.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$setAutobackupQuotas = setAutobackupQuotas;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$setAutobackupQuotas,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$setAutobackupQuotas$backup) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$setAutobackupQuotas = setAutobackupQuotas;
+    final lOther$setAutobackupQuotas = other.setAutobackupQuotas;
+    if (l$setAutobackupQuotas != lOther$setAutobackupQuotas) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$setAutobackupQuotas$backup
+    on Mutation$setAutobackupQuotas$backup {
+  CopyWith$Mutation$setAutobackupQuotas$backup<
+          Mutation$setAutobackupQuotas$backup>
+      get copyWith => CopyWith$Mutation$setAutobackupQuotas$backup(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$setAutobackupQuotas$backup<TRes> {
+  factory CopyWith$Mutation$setAutobackupQuotas$backup(
+    Mutation$setAutobackupQuotas$backup instance,
+    TRes Function(Mutation$setAutobackupQuotas$backup) then,
+  ) = _CopyWithImpl$Mutation$setAutobackupQuotas$backup;
+
+  factory CopyWith$Mutation$setAutobackupQuotas$backup.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$setAutobackupQuotas$backup;
+
+  TRes call({
+    Fragment$genericBackupConfigReturn? setAutobackupQuotas,
+    String? $__typename,
+  });
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupQuotas;
+}
+
+class _CopyWithImpl$Mutation$setAutobackupQuotas$backup<TRes>
+    implements CopyWith$Mutation$setAutobackupQuotas$backup<TRes> {
+  _CopyWithImpl$Mutation$setAutobackupQuotas$backup(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$setAutobackupQuotas$backup _instance;
+
+  final TRes Function(Mutation$setAutobackupQuotas$backup) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? setAutobackupQuotas = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$setAutobackupQuotas$backup(
+        setAutobackupQuotas:
+            setAutobackupQuotas == _undefined || setAutobackupQuotas == null
+                ? _instance.setAutobackupQuotas
+                : (setAutobackupQuotas as Fragment$genericBackupConfigReturn),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupQuotas {
+    final local$setAutobackupQuotas = _instance.setAutobackupQuotas;
+    return CopyWith$Fragment$genericBackupConfigReturn(
+        local$setAutobackupQuotas, (e) => call(setAutobackupQuotas: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$setAutobackupQuotas$backup<TRes>
+    implements CopyWith$Mutation$setAutobackupQuotas$backup<TRes> {
+  _CopyWithStubImpl$Mutation$setAutobackupQuotas$backup(this._res);
+
+  TRes _res;
+
+  call({
+    Fragment$genericBackupConfigReturn? setAutobackupQuotas,
+    String? $__typename,
+  }) =>
+      _res;
+  CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupQuotas =>
       CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
 }
 

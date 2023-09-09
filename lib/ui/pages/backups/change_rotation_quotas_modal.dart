@@ -94,6 +94,12 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
           style: Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.center,
         ),
+        const SizedBox(height: 8),
+        Text(
+          'backup.quotas_only_applied_to_autobackups'.tr(),
+          style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.center,
+        ),
         const SizedBox(height: 16),
         // Accordions for each quota type. When tapped allows to enter a new int value
         // for the quota.

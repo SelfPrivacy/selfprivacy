@@ -220,7 +220,14 @@
         "snapshot_modal_inplace_option_title": "Replace in place",
         "snapshot_modal_inplace_option_description": "Less free space needed, but more risk. Replaces current data with the snapshot data during the download.",
         "snapshot_modal_service_not_found": "This is a snapshot of a service you don't have on your server anymore. Usually this shouldn't happen, and we cannot do the automatic restore. You can still download the snapshot and restore it manually. Contact SelfPrivacy support if you need help.",
-        "restore_started": "Restore started, check the jobs list for the current status"
+        "restore_started": "Restore started, check the jobs list for the current status",
+        "snapshot_reason_title": "Creation reason",
+        "snapshot_reasons": {
+            "auto": "Created automatically",
+            "explicit": "Created by your explicit request",
+            "pre_restore": "Created as a precaution before risky restore",
+            "unknown": "Unknown"
+        }
     },
     "storage": {
         "card_title": "Server Storage",

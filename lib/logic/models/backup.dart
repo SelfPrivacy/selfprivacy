@@ -53,6 +53,9 @@ class BackupConfiguration {
           locationId: configuration.locationId,
           locationName: configuration.locationName,
           provider: BackupsProviderType.fromGraphQL(configuration.provider),
+          autobackupQuotas: AutobackupQuotas.fromGraphQL(
+            configuration.autobackupQuotas,
+          ),
         );
 
   BackupConfiguration({
@@ -62,6 +65,7 @@ class BackupConfiguration {
     required this.locationId,
     required this.locationName,
     required this.provider,
+    required this.autobackupQuotas,
   });
 
   final Duration? autobackupPeriod;
@@ -70,6 +74,49 @@ class BackupConfiguration {
   final String? locationId;
   final String? locationName;
   final BackupsProviderType provider;
+  final AutobackupQuotas autobackupQuotas;
+}
+
+class AutobackupQuotas {
+  AutobackupQuotas.fromGraphQL(
+    final Query$BackupConfiguration$backup$configuration$autobackupQuotas
+        autobackupQuotas,
+  ) : this(
+          last: autobackupQuotas.last,
+          daily: autobackupQuotas.daily,
+          weekly: autobackupQuotas.weekly,
+          monthly: autobackupQuotas.monthly,
+          yearly: autobackupQuotas.yearly,
+        );
+
+  AutobackupQuotas({
+    required this.last,
+    required this.daily,
+    required this.weekly,
+    required this.monthly,
+    required this.yearly,
+  });
+
+  final int last;
+  final int daily;
+  final int weekly;
+  final int monthly;
+  final int yearly;
+
+  AutobackupQuotas copyWith({
+    final int? last,
+    final int? daily,
+    final int? weekly,
+    final int? monthly,
+    final int? yearly,
+  }) =>
+      AutobackupQuotas(
+        last: last ?? this.last,
+        daily: daily ?? this.daily,
+        weekly: weekly ?? this.weekly,
+        monthly: monthly ?? this.monthly,
+        yearly: yearly ?? this.yearly,
+      );
 }
 
 enum BackupRestoreStrategy {

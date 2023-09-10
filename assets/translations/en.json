@@ -227,6 +227,64 @@
             "explicit": "Created by your explicit request",
             "pre_restore": "Created as a precaution before risky restore",
             "unknown": "Unknown"
+        },
+        "rotation_quotas_title": "Snapshot rotation settings",
+        "set_rotation_quotas": "Set new rotation quotas",
+        "quotas_set": "New backup rotation quotas set",
+        "quota_titles": {
+            "last": "How many latest backups to keep",
+            "daily": "How many daily backups to keep",
+            "weekly": "How many weekly backups to keep",
+            "monthly": "How many monthly backups to keep",
+            "yearly": "How many yearly backups to keep"
+        },
+        "quota_subtitles": {
+            "no_effect": "This rule has no effect because another rule will keep more backups",
+            "last": {
+                "zero": "Rule is disabled",
+                "one": "Last {} backup will be kept regardless of its age",
+                "two": "Last {} backups will be kept regardless of their age",
+                "few": "Last {} backups will be kept regardless of their age",
+                "many": "Last {} backups will be kept regardless of their age",
+                "other": "Last {} backups will be kept regardless of their age"
+            },
+            "last_infinite": "All backups will be kept",
+            "daily": {
+                "zero": "Rule is disabled",
+                "one": "Last {} daily backup will be kept",
+                "two": "Last {} daily backups will be kept",
+                "few": "Last {} daily backups will be kept",
+                "many": "Last {} daily backups will be kept",
+                "other": "Last {} daily backups will be kept"
+            },
+            "daily_infinite": "All daily backups will be kept",
+            "weekly": {
+                "zero": "Rule is disabled",
+                "one": "Last {} weekly backup will be kept",
+                "two": "Last {} weekly backups will be kept",
+                "few": "Last {} weekly backups will be kept",
+                "many": "Last {} weekly backups will be kept",
+                "other": "Last {} weekly backups will be kept"
+            },
+            "weekly_infinite": "All weekly backups will be kept",
+            "monthly": {
+                "zero": "Rule is disabled",
+                "one": "Last {} monthly backup will be kept",
+                "two": "Last {} monthly backups will be kept",
+                "few": "Last {} monthly backups will be kept",
+                "many": "Last {} monthly backups will be kept",
+                "other": "Last {} monthly backups will be kept"
+            },
+            "monthly_infinite": "All monthly backups will be kept",
+            "yearly": {
+                "zero": "Rule is disabled",
+                "one": "Last {} yearly backup will be kept",
+                "two": "Last {} yearly backups will be kept",
+                "few": "Last {} yearly backups will be kept",
+                "many": "Last {} yearly backups will be kept",
+                "other": "Last {} yearly backups will be kept"
+            },
+            "yearly_infinite": "All yearly backups will be kept"
         }
     },
     "storage": {

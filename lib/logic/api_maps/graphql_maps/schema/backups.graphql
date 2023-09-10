@@ -7,6 +7,13 @@ query BackupConfiguration {
       locationId
       locationName
       provider
+      autobackupQuotas {
+        last
+        daily
+        weekly
+        monthly
+        yearly
+      }
     }
   }
 }
@@ -36,6 +43,13 @@ fragment genericBackupConfigReturn on GenericBackupConfigReturn {
     autobackupPeriod
     locationName
     locationId
+    autobackupQuotas {
+      last
+      daily
+      weekly
+      monthly
+      yearly
+    }
   }
 }
 
@@ -61,6 +75,14 @@ mutation StartBackup($serviceId: String!) {
 mutation SetAutobackupPeriod($period: Int = null) {
   backup {
     setAutobackupPeriod(period: $period) {
+      ...genericBackupConfigReturn
+    }
+  }
+}
+
+mutation setAutobackupQuotas($quotas: AutobackupQuotasInput!) {
+  backup {
+    setAutobackupQuotas(quotas: $quotas) {
       ...genericBackupConfigReturn
     }
   }

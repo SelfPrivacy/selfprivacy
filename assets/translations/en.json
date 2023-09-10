@@ -231,6 +231,7 @@
         "rotation_quotas_title": "Snapshot rotation settings",
         "set_rotation_quotas": "Set new rotation quotas",
         "quotas_set": "New backup rotation quotas set",
+        "quotas_only_applied_to_autobackups": "These settings are only applied to automatic backups. Manual backups won't get deleted.",
         "quota_titles": {
             "last": "How many latest backups to keep",
             "daily": "How many daily backups to keep",

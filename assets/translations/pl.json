@@ -118,7 +118,6 @@
         "disk": "Dysk lokalny",
         "monthly_cost": "Koszt miesięczny",
         "location": "Lokalizacja danych",
-        "provider": "Dostawca",
         "core_count": {
             "one": "{} jądro",
             "two": "{} jądra",

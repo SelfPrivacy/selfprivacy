@@ -118,7 +118,6 @@
         "disk": "Místní disk",
         "monthly_cost": "Měsíční náklady",
         "location": "Umístění",
-        "provider": "Poskytovatel",
         "core_count": {
             "two": "{} jádra",
             "few": "{} jádra",

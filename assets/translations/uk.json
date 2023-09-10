@@ -33,7 +33,8 @@
         "delete": "Видалити",
         "close": "Закрити",
         "connect": "Підключіться",
-        "app_name": "SelfPrivacy"
+        "app_name": "SelfPrivacy",
+        "copied_to_clipboard": "Скопійовано в буфер обміну!"
     },
     "locale": "ua",
     "application_settings": {
@@ -43,7 +44,10 @@
         "dark_theme_description": "Змінити тему додатка",
         "reset_config_description": "Скинути API ключі та root користувача.",
         "delete_server_title": "Видалити сервер",
-        "delete_server_description": "Це видалить ваш сервер. Він більше не буде доступний."
+        "delete_server_description": "Це видалить ваш сервер. Він більше не буде доступний.",
+        "system_dark_theme_title": "Системна тема за замовчуванням",
+        "system_dark_theme_description": "Використовуйте світлу або темну теми залежно від системних налаштувань",
+        "dangerous_settings": "Небезпечні налаштування"
     },
     "ssh": {
         "delete_confirm_question": "Ви впевнені, що хочете видалити SSH-ключ?",
@@ -209,7 +213,6 @@
         "server_id": "Сервер ID",
         "cpu": "Процессор",
         "ram": "Пам'ять",
-        "provider": "Провайдер",
         "core_count": {
             "one": "{} ядро",
             "few": "{} ядра",
@@ -223,7 +226,9 @@
         "server_timezone": "Часовий пояс сервера",
         "timezone_search_bar": "Ім'я часового поясу або значення зсуву часу",
         "monthly_cost": "Щомісячна вартість",
-        "location": "Місцезнаходження"
+        "location": "Місцезнаходження",
+        "server_provider": "Провайдер сервера",
+        "dns_provider": "Провайдер DNS"
     },
     "record": {
         "api": "SelfPrivacy API",
@@ -250,7 +255,7 @@
         "email_title": "Електронна пошта",
         "email_subtitle": "Записи, необхідні для безпечного обміну електронною поштою.",
         "update_list": "Лист оновлень",
-        "error_subtitle": "Нажміть сюди, щоб виправити їх",
+        "error_subtitle": "Натисніть тут, щоб виправити їх. При цьому також буде видалено користувацькі записи.",
         "services_subtitle": "Введіть \"А\" записи, необхідні для кожної служби."
     },
     "backup": {
@@ -269,7 +274,29 @@
         "description": "Врятує ваш день у разі аварії: хакерська атака, видаленя серверу, тощо.",
         "waiting_for_rebuild": "Ви зможете створити свою першу резервну копію через кілька хвилин.",
         "restoring": "Відновлення з резервної копії",
-        "restore_alert": "Ви збираєтеся відновити з резервної копії. створеної на {}. Усі поточні дані будуть втрачені. Ви згодні?"
+        "restore_alert": "Ви збираєтеся відновити з резервної копії. створеної на {}. Усі поточні дані будуть втрачені. Ви згодні?",
+        "refetch_backups_subtitle": "Скинути кеш і запросити дані у провайдера. Може спричинити додаткові витрати.",
+        "reupload_key_subtitle": "Ще раз проініціалізує сховище резервних копій. Використовуйте, якщо щось зламалося.",
+        "create_new_select_heading": "Вибрати сервіси для копіювання",
+        "start": "Почати створення копій",
+        "service_busy": "Зараз створюються інші резервні копії",
+        "latest_snapshots": "Останні знімки",
+        "latest_snapshots_subtitle": "Останні 15 знімків",
+        "show_more": "Показати ще",
+        "autobackup_period_title": "Період автоматичного копіювання",
+        "autobackup_period_subtitle": "Створення копій раз на {period}",
+        "autobackup_period_never": "Автоматичне копіювання вимкнено",
+        "autobackup_period_every": "Раз у {period}",
+        "autobackup_period_disable": "Вимкнути автоматичні копіювання",
+        "autobackup_custom": "Інше",
+        "autobackup_custom_hint": "Введіть період у хвилинах",
+        "autobackup_set_period": "Встановити період",
+        "autobackup_period_set": "Період встановлено",
+        "backups_encryption_key": "Ключ шифрування",
+        "backups_encryption_key_subtitle": "Зберігайте його в безпечному місці.",
+        "backups_encryption_key_copy": "Скопіюйте ключ шифрування",
+        "card_subtitle": "Керуйте резервними копіями",
+        "select_all": "Копіювати все"
     },
     "storage": {
         "card_title": "Серверне сховище",

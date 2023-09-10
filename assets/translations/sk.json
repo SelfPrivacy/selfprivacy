@@ -173,7 +173,6 @@
         "disk": "Lokálny disk",
         "monthly_cost": "Mesačná cena",
         "location": "Lokalita",
-        "provider": "Poskytovateľ",
         "core_count": {
             "one": "{} jadro",
             "two": "{} jadrá",

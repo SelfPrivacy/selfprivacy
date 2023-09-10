@@ -1,0 +1,145 @@
+### Features
+
+- New backups implementation ([#228](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/228), [#274](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/274), [#324](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/324), [#325](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/325), [#326](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/326), [#331](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/331), [#332](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/332))
+- DigitalOcean as a DNS provider ([#213](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/213))
+- DeSEC as a DNS provider ([#211](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/211))
+- Support drawer and basic support documentation logic unit ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Automatic day/night theme ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- New router and adaptive layouts ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- New Material 3 animation curves ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Jobs button to the app bar of more screens ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Refreshed UI of modal sheets ([#228](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/228))
+- Support for `XDG_DATA_HOME` storage path on Linux for app data ([#240](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/240))
+- Accept-Language header for the server API ([#243](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/243), resolves [#205](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/205))
+- Visible providers names during server recovery ([#264](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/264), resolves [#249](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/249))
+- Visible volume and IPv4 cost added to overall monthly cost of the server ([#270](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/270), resolves [#115](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/115))
+- Support for autofocus on text fields for keyboard displaying ([#294](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/294), resolves [#292](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/292))
+- New dialogue to choose a domain if user DNS token provides access to several ([#330](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/330), resolves [#328](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/328))
+
+### Bug Fixes
+
+- Fix opening URLs from the app ([#213](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/213))
+- Fix parsing of RAM size with DigitalOcean ([#200](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/200), resolves [#199](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/199))
+- Devices and Recovery Key cubits couldn't initialize right after server installation ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Fix BottomBar showing incorrect animation when navigating from sibling routes ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- PopUpDialogs couldn't find the context. ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Update recovery flow to use new support drawer ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- New app log console ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Improve installation failure dialogues ([#213](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/213))
+- Privacy policy link pointed at wrong domain ([#207](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/207))
+- Remove price lists for DNS ([#211](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/211))
+- Implement better domain id check on DNS restoration ([#211](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/211))
+- Add forced JSON content type to REST APIs ([#212](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/212))
+- Remove unneded DNS check depending on CLOUDFLARE ([#212](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/212))
+- Add background for dialogue pop ups and move them to root navigator ([#233](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/233), resolves [#231](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/231))
+- Make currency be properly shown again via shortcode ([#234](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/234), related to [#223](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/223))
+- Add proper server type value loading ([#236](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/236), resolves [#215](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/215))
+- Implement proper load functions for DNS and Server providers ([#237](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/237), resolves [#220](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/220))
+- Prevent moving a service if volume is null for some reason ([#245](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/245))
+- Replace hard reset from server provider with direct server reboot ([#269](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/269), resolves [#266](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/266))
+- Normalize Hetzner CPU usage percentage by cached amount of cores ([#272](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/272), resolves [#156](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/156))
+- Change broken validations string for superuser SSH ([#276](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/27))
+- Don't let service migration to start bif the same volume was picked ([#297](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/297), resolves [#289](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/289))
+- Wrap DNS check in catch to avoid runtime crash ([#322](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/322))
+- Implement Backblaze bucket restoration on server recovery ([#324](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/324))
+
+### Refactor
+
+- Migrate to Flutter 3.10 and Dart 3.0
+- Migrate to AutoRouter v6 ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Get rid of BrandText and restructure the buttons ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Remove brand alert dialogs and bottom sheet ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Remove unused UI components ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Remove BrandCards ([#203](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/203))
+- Allow changing values for TLS settings
+- Replace String shortcode with Currency class ([#226](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/226))
+- Rearrange Server Provider interface ([#227](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/227))
+- Remove unused service state getters ([#228](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/228))
+- Remove unused utils, add duration formatter ([#228](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/228))
+- Move rest api methods according to their business logic files positions ([#235](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/235), partially resolves [#217](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/217) and [#219](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/219))
+- Make flag getter a part of server provider location object ([#238](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/238), resolves [#222](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/222))
+
+
+### Translation contributions
+
+* Ukrainian
+
+    * FoxMeste (3)
+    * Mithras (31)
+
+* Latvian
+
+    * Not Telling Lol (183)
+
+
+* German
+
+    * Mithras (41)
+    * FoxMeste (213)
+
+
+* Thai
+
+    * FoxMeste (77)
+
+
+* Polish
+
+    * Mithras (41)
+    * Thary (43)
+    * FoxMeste (163)
+
+
+* Slovenian
+
+    * Mithras (212)
+
+
+* Czech
+
+    * NaiJi ✨ (2)
+    * Mithras (109)
+    * FoxMeste (308)
+
+
+* Russian
+
+    * FoxMeste (4)
+    * Revertron (8)
+    * NaiJi ✨ (23)
+    * Mithras (54)
+    * Inex Code (59)
+
+
+* Slovak
+
+    * Mithras (29)
+    * Revertron (396)
+
+
+* Macedonian
+
+    * FoxMeste (7)
+
+
+* Belarusian
+
+    * Thary (1)
+    * FoxMeste (3)
+    * Mithras (47)
+
+
+* French
+
+    * Côme (211)
+
+
+* Spanish
+
+    * FoxMeste (7)
+
+
+* Azerbaijani
+
+    * Mithras (28)
+    * Ortibexon (403)

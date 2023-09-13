@@ -237,13 +237,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           print(e);
         }
       }
-      finishRecoveryProcess(backblazeCredential);
       return;
     }
-    emit(
-      (state as ServerInstallationNotFinished)
-          .copyWith(backblazeCredential: backblazeCredential),
-    );
   }
 
   void setDomain(final ServerDomain serverDomain) async {
@@ -756,14 +751,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           provider: dnsProviderType,
         ),
         dnsApiToken: token,
-        currentStep: RecoveryStep.backblazeToken,
       ),
     );
+    finishRecoveryProcess();
   }
 
-  void finishRecoveryProcess(
-    final BackupsCredential backblazeCredential,
-  ) async {
+  void finishRecoveryProcess() async {
     await repository.saveIsServerStarted(true);
     await repository.saveIsServerResetedFirstTime(true);
     await repository.saveIsServerResetedSecondTime(true);
@@ -778,7 +771,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveRootUser(mainUser);
     final ServerInstallationRecovery updatedState =
         (state as ServerInstallationRecovery).copyWith(
-      backblazeCredential: backblazeCredential,
       rootUser: mainUser,
       serverTypeIdentificator: serverType.data!.identifier,
     );
@@ -845,7 +837,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         providerApiToken: state.providerApiToken,
         serverDomain: state.serverDomain,
         dnsApiToken: state.dnsApiToken,
-        backblazeCredential: state.backblazeCredential,
         rootUser: state.rootUser,
         serverDetails: null,
         isServerStarted: false,

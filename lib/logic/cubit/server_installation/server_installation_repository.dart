@@ -45,8 +45,6 @@ class ServerInstallationRepository {
     final DnsProviderType? dnsProvider = getIt<ApiConfigModel>().dnsProvider;
     final ServerProviderType? serverProvider =
         getIt<ApiConfigModel>().serverProvider;
-    final BackupsCredential? backblazeCredential =
-        getIt<ApiConfigModel>().backblazeCredential;
     final ServerHostingDetails? serverDetails =
         getIt<ApiConfigModel>().serverDetails;
 
@@ -87,7 +85,6 @@ class ServerInstallationRepository {
           serverTypeIdentificator: finalServerType.data!.identifier,
           dnsApiToken: dnsApiToken!,
           serverDomain: serverDomain!,
-          backblazeCredential: backblazeCredential!,
           serverDetails: serverDetails,
           rootUser: box.get(BNames.rootUser),
           isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
@@ -103,7 +100,6 @@ class ServerInstallationRepository {
           serverTypeIdentificator: serverTypeIdentificator!,
           dnsApiToken: dnsApiToken!,
           serverDomain: serverDomain!,
-          backblazeCredential: backblazeCredential!,
           serverDetails: serverDetails!,
           rootUser: box.get(BNames.rootUser),
           isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
@@ -122,7 +118,6 @@ class ServerInstallationRepository {
         dnsApiToken: dnsApiToken,
         serverDomain: serverDomain,
         serverTypeIdentificator: serverTypeIdentificator,
-        backblazeCredential: backblazeCredential,
         serverDetails: serverDetails,
         rootUser: box.get(BNames.rootUser),
         currentStep: _getCurrentRecoveryStep(
@@ -140,7 +135,6 @@ class ServerInstallationRepository {
       dnsApiToken: dnsApiToken,
       serverDomain: serverDomain,
       serverTypeIdentificator: serverTypeIdentificator,
-      backblazeCredential: backblazeCredential,
       serverDetails: serverDetails,
       rootUser: box.get(BNames.rootUser),
       isServerStarted: box.get(BNames.isServerStarted, defaultValue: false),
@@ -162,9 +156,6 @@ class ServerInstallationRepository {
     if (serverDetails != null) {
       if (serverProviderToken != null) {
         if (serverDetails.provider != ServerProviderType.unknown) {
-          if (serverDomain.provider != DnsProviderType.unknown) {
-            return RecoveryStep.backblazeToken;
-          }
           return RecoveryStep.dnsProviderToken;
         }
         return RecoveryStep.serverSelection;

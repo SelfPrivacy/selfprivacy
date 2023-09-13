@@ -42,7 +42,6 @@ class InitializingPage extends StatelessWidget {
           () => _stepServerProviderToken(cubit),
           () => _stepServerType(cubit),
           () => _stepDnsProviderToken(cubit),
-          () => _stepBackblaze(cubit),
           () => _stepDomain(cubit),
           () => _stepUser(cubit),
           () => _stepServer(cubit),
@@ -249,69 +248,6 @@ class InitializingPage extends StatelessWidget {
             return DnsProviderPicker(
               formCubit: providerCubit,
               serverInstallationCubit: initializingCubit,
-            );
-          },
-        ),
-      );
-
-  Widget _stepBackblaze(final ServerInstallationCubit initializingCubit) =>
-      BlocProvider(
-        create: (final context) => BackblazeFormCubit(initializingCubit),
-        child: Builder(
-          builder: (final context) {
-            final formCubitState = context.watch<BackblazeFormCubit>().state;
-            return ResponsiveLayoutWithInfobox(
-              topChild: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${'initializing.connect_to_server_provider'.tr()}Backblaze',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ],
-              ),
-              primaryColumn: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CubitFormTextField(
-                    autofocus: true,
-                    formFieldCubit: context.read<BackblazeFormCubit>().keyId,
-                    textAlign: TextAlign.center,
-                    scrollPadding: const EdgeInsets.only(bottom: 70),
-                    decoration: const InputDecoration(
-                      hintText: 'KeyID',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  CubitFormTextField(
-                    formFieldCubit:
-                        context.read<BackblazeFormCubit>().applicationKey,
-                    textAlign: TextAlign.center,
-                    scrollPadding: const EdgeInsets.only(bottom: 70),
-                    decoration: const InputDecoration(
-                      hintText: 'Master Application Key',
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  BrandButton.rised(
-                    onPressed: formCubitState.isSubmitting
-                        ? null
-                        : () => context.read<BackblazeFormCubit>().trySubmit(),
-                    text: 'basis.connect'.tr(),
-                  ),
-                  const SizedBox(height: 10),
-                  BrandButton.text(
-                    onPressed: () {
-                      context.read<SupportSystemCubit>().showArticle(
-                            article: 'how_backblaze',
-                            context: context,
-                          );
-                      Scaffold.of(context).openEndDrawer();
-                    },
-                    title: 'initializing.how'.tr(),
-                  ),
-                ],
-              ),
             );
           },
         ),

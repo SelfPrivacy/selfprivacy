@@ -3,11 +3,11 @@ part of 'users.dart';
 class _User extends StatelessWidget {
   const _User({
     required this.user,
-    required this.isRootUser,
+    required this.isUserPrimary,
   });
 
   final User user;
-  final bool isRootUser;
+  final bool isUserPrimary;
   @override
   Widget build(final BuildContext context) => InkWell(
         onTap: () {
@@ -32,7 +32,7 @@ class _User extends StatelessWidget {
                   user.login,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onBackground,
-                        decoration: isRootUser
+                        decoration: isUserPrimary
                             ? TextDecoration.underline
                             : user.isFoundOnServer
                                 ? TextDecoration.none

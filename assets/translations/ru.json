@@ -472,7 +472,7 @@
     },
     "recovering": {
         "generic_error": "Ошибка проведения операции, попробуйте ещё раз.",
-        "recovery_main_header": "Подключиться к существующему серверу",
+        "recovery_main_header": "Подключиться к уже существующему серверу SelfPrivacy",
         "domain_recovery_description": "Введите домен, по которому вы хотите получить доступ к серверу:",
         "domain_recover_placeholder": "Домен",
         "domain_recover_error": "Не удалось найти сервер с таким доменом",

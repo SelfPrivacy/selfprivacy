@@ -107,7 +107,7 @@ class UsersPage extends StatelessWidget {
                     itemBuilder:
                         (final BuildContext context, final int index) => _User(
                       user: users[index],
-                      isUserPrimary: users[index].type == UserType.primary,
+                      isPrimaryUser: users[index].type == UserType.primary,
                     ),
                   ),
                 ),

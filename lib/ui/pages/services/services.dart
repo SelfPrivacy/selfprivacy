@@ -160,13 +160,15 @@ class _Card extends StatelessWidget {
                       ],
                     ),
                   Text(
-                    service.loginInfo,
+                    service.description,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    service.description,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    service.loginInfo,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                   ),
                   const SizedBox(height: 10),
                 ],

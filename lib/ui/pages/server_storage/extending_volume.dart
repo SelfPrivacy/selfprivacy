@@ -79,10 +79,12 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           }
           final price = snapshot.data as Price;
           _pricePerGb = price.value;
-          _sizeController.text = _currentSliderGbValue.truncate().toString();
+          final currentSizeValue = _currentSliderGbValue.truncate().toString();
+          _sizeController.text = 'storage.gb'.tr(args: [currentSizeValue]);
           _priceController.text =
-              (_pricePerGb * double.parse(_sizeController.text))
-                  .toStringAsFixed(2);
+              '${(_pricePerGb * double.parse(currentSizeValue)).toStringAsFixed(2)}'
+              ' '
+              '${price.currency.shortcode}';
           minSize =
               widget.diskVolumeToResize.sizeTotal + DiskSize.fromGibibyte(3);
           if (_currentSliderGbValue < 0) {
@@ -130,7 +132,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         errorText: _isError ? ' ' : null,
-                        labelText: price.currency.shortcode,
+                        labelText: 'storage.price'.tr(),
                       ),
                     ),
                   ),

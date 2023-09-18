@@ -129,7 +129,7 @@ class _Card extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Text(
                     service.displayName,
                     style: Theme.of(context).textTheme.headlineMedium,
@@ -139,14 +139,14 @@ class _Card extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   if (service.url != '' && service.url != null)
                     Column(
                       children: [
                         _ServiceLink(
                           url: service.url ?? '',
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                       ],
                     ),
                   if (service.id == 'mailserver')
@@ -156,21 +156,21 @@ class _Card extends StatelessWidget {
                           url: domainName,
                           isActive: false,
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                       ],
                     ),
                   Text(
                     service.description,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   Text(
                     service.loginInfo,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                 ],
               )
             ],

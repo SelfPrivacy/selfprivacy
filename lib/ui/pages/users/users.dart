@@ -47,15 +47,7 @@ class UsersPage extends StatelessWidget {
     } else {
       child = BlocBuilder<UsersCubit, UsersState>(
         builder: (final BuildContext context, final UsersState state) {
-          final List<User> users = state.users
-              .where((final user) => user.type != UserType.root)
-              .toList();
-          // final List<User> users = [];
-          users.sort(
-            (final User a, final User b) =>
-                a.login.toLowerCase().compareTo(b.login.toLowerCase()),
-          );
-
+          final users = state.orderedUsers;
           if (users.isEmpty) {
             if (state.isLoading) {
               return const Center(
@@ -117,7 +109,7 @@ class UsersPage extends StatelessWidget {
                     itemBuilder:
                         (final BuildContext context, final int index) => _User(
                       user: users[index],
-                      isRootUser: users[index].type == UserType.primary,
+                      isPrimaryUser: users[index].type == UserType.primary,
                     ),
                   ),
                 ),

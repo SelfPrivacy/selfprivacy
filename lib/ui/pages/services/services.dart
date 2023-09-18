@@ -129,17 +129,17 @@ class _Card extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(width: 10),
+                  Text(
+                    service.displayName,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 12),
-                  Text(
-                    service.displayName,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   if (service.url != '' && service.url != null)
                     Column(
                       children: [

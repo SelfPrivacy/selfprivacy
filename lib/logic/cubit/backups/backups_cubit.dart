@@ -36,6 +36,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
           backblazeBucket: bucket,
           isInitialized: backupConfig?.isInitialized,
           autobackupPeriod: backupConfig?.autobackupPeriod ?? Duration.zero,
+          autobackupQuotas: backupConfig?.autobackupQuotas,
           backups: backups,
           preventActions: false,
           refreshing: false,
@@ -168,6 +169,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
         refreshing: false,
         isInitialized: backupConfig?.isInitialized ?? false,
         autobackupPeriod: backupConfig?.autobackupPeriod,
+        autobackupQuotas: backupConfig?.autobackupQuotas,
       ),
     );
     if (useTimer) {
@@ -221,6 +223,25 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
         state.copyWith(
           preventActions: false,
           autobackupPeriod: period ?? Duration.zero,
+        ),
+      );
+    }
+    await updateBackups();
+  }
+
+  Future<void> setAutobackupQuotas(final AutobackupQuotas quotas) async {
+    emit(state.copyWith(preventActions: true));
+    final result = await api.setAutobackupQuotas(quotas);
+    if (result.success == false) {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'Unknown error');
+      emit(state.copyWith(preventActions: false));
+    } else {
+      getIt<NavigationService>().showSnackBar('backup.quotas_set'.tr());
+      emit(
+        state.copyWith(
+          preventActions: false,
+          autobackupQuotas: quotas,
         ),
       );
     }

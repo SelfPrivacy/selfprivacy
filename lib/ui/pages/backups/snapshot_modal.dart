@@ -99,6 +99,18 @@ class _SnapshotModalState extends State<SnapshotModal> {
             ),
           ),
           SnapshotIdListTile(snapshotId: widget.snapshot.id),
+          ListTile(
+            leading: Icon(
+              Icons.info_outline,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            title: Text(
+              'backup.snapshot_reason_title'.tr(),
+            ),
+            subtitle: Text(
+              widget.snapshot.reason.displayName.tr(),
+            ),
+          ),
           if (service != null)
             Column(
               children: [

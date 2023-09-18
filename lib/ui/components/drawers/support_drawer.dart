@@ -16,8 +16,8 @@ class SupportDrawer extends StatelessWidget {
     return Drawer(
       width: 440,
       child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+        child: SafeArea(
+          minimum: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Row(

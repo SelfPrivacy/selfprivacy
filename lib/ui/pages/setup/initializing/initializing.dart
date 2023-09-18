@@ -18,6 +18,7 @@ import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/dns_provider_picker.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/domain_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_type_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
@@ -319,98 +320,7 @@ class InitializingPage extends StatelessWidget {
   Widget _stepDomain(final ServerInstallationCubit initializingCubit) =>
       BlocProvider(
         create: (final context) => DomainSetupCubit(initializingCubit)..load(),
-        child: Builder(
-          builder: (final context) {
-            final DomainSetupState state =
-                context.watch<DomainSetupCubit>().state;
-            return ResponsiveLayoutWithInfobox(
-              topChild: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'initializing.use_this_domain'.tr(),
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'initializing.use_this_domain_text'.tr(),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-              primaryColumn: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (state is Empty)
-                    Text(
-                      'initializing.no_connected_domains'.tr(),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  if (state is Loading)
-                    Text(
-                      state.type == LoadingTypes.loadingDomain
-                          ? 'initializing.loading_domain_list'.tr()
-                          : 'basis.saving'.tr(),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  if (state is MoreThenOne)
-                    Text(
-                      'initializing.found_more_domains'.tr(),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  if (state is Loaded) ...[
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          state.domain,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ],
-                  if (state is Empty) ...[
-                    const SizedBox(height: 30),
-                    BrandButton.filled(
-                      onPressed: () => context.read<DomainSetupCubit>().load(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.refresh,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            'domain.update_list'.tr(),
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  if (state is Loaded) ...[
-                    const SizedBox(height: 32),
-                    BrandButton.filled(
-                      onPressed: () =>
-                          context.read<DomainSetupCubit>().saveDomain(),
-                      text: 'initializing.save_domain'.tr(),
-                    ),
-                  ],
-                ],
-              ),
-            );
-          },
-        ),
+        child: const DomainPicker(),
       );
 
   Widget _stepUser(final ServerInstallationCubit initializingCubit) =>

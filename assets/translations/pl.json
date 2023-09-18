@@ -118,7 +118,6 @@
         "disk": "Dysk lokalny",
         "monthly_cost": "Koszt miesięczny",
         "location": "Lokalizacja danych",
-        "provider": "Dostawca",
         "core_count": {
             "one": "{} jądro",
             "two": "{} jądra",
@@ -321,7 +320,6 @@
         "choose_server_type_payment_per_month": "{} miesięcznie",
         "no_server_types_found": "Nie znaleziono dostępnych typów serwerów! Proszę upewnić się, że masz dostęp do dostawcy serwera...",
         "use_this_domain": "Kto używa ten domen?",
-        "cloudflare_api_token": "Klucz API dostawcy DNS",
         "connect_backblaze_storage": "Dodajcie Blackblaze",
         "no_connected_domains": "Niema podłączonych domenów",
         "what": "Co to znaczy?",

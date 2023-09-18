@@ -2,11 +2,10 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
@@ -125,22 +124,10 @@ class ProviderInputDataPage extends StatelessWidget {
           const SizedBox(height: 10),
           BrandOutlinedButton(
             child: Text('initializing.how'.tr()),
-            onPressed: () => showModalBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (final BuildContext context) => Padding(
-                padding: paddingH15V0,
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  children: [
-                    BrandMarkdown(
-                      fileName: providerInfo.pathToHow,
-                    ),
-                  ],
+            onPressed: () => context.read<SupportSystemCubit>().showArticle(
+                  article: providerInfo.pathToHow,
+                  context: context,
                 ),
-              ),
-            ),
           ),
         ],
       );

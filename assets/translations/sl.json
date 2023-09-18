@@ -116,8 +116,7 @@
         "ram": "Glavni pomnilnik",
         "disk": "Lokalni disk",
         "monthly_cost": "Mesečni stroški",
-        "location": "Lokacija",
-        "provider": "Ponudnik"
+        "location": "Lokacija"
     },
     "ssh": {
         "root_subtitle": "Lastniki tukaj navedenih ključev imajo popoln dostop do podatkov in nastavitev strežnika. Dodajte samo svoje ključe.",

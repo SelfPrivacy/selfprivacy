@@ -220,7 +220,73 @@
         "snapshot_modal_inplace_option_title": "Replace in place",
         "snapshot_modal_inplace_option_description": "Less free space needed, but more risk. Replaces current data with the snapshot data during the download.",
         "snapshot_modal_service_not_found": "This is a snapshot of a service you don't have on your server anymore. Usually this shouldn't happen, and we cannot do the automatic restore. You can still download the snapshot and restore it manually. Contact SelfPrivacy support if you need help.",
-        "restore_started": "Restore started, check the jobs list for the current status"
+        "restore_started": "Restore started, check the jobs list for the current status",
+        "snapshot_reason_title": "Creation reason",
+        "snapshot_reasons": {
+            "auto": "Created automatically",
+            "explicit": "Created by your explicit request",
+            "pre_restore": "Created as a precaution before risky restore",
+            "unknown": "Unknown"
+        },
+        "rotation_quotas_title": "Snapshot rotation settings",
+        "set_rotation_quotas": "Set new rotation quotas",
+        "quotas_set": "New backup rotation quotas set",
+        "quotas_only_applied_to_autobackups": "These settings are only applied to automatic backups. Manual backups won't get deleted.",
+        "quota_titles": {
+            "last": "How many latest backups to keep",
+            "daily": "How many daily backups to keep",
+            "weekly": "How many weekly backups to keep",
+            "monthly": "How many monthly backups to keep",
+            "yearly": "How many yearly backups to keep"
+        },
+        "quota_subtitles": {
+            "no_effect": "This rule has no effect because another rule will keep more backups",
+            "last": {
+                "zero": "Rule is disabled",
+                "one": "Last {} backup will be kept regardless of its age",
+                "two": "Last {} backups will be kept regardless of their age",
+                "few": "Last {} backups will be kept regardless of their age",
+                "many": "Last {} backups will be kept regardless of their age",
+                "other": "Last {} backups will be kept regardless of their age"
+            },
+            "last_infinite": "All backups will be kept",
+            "daily": {
+                "zero": "Rule is disabled",
+                "one": "Last {} daily backup will be kept",
+                "two": "Last {} daily backups will be kept",
+                "few": "Last {} daily backups will be kept",
+                "many": "Last {} daily backups will be kept",
+                "other": "Last {} daily backups will be kept"
+            },
+            "daily_infinite": "All daily backups will be kept",
+            "weekly": {
+                "zero": "Rule is disabled",
+                "one": "Last {} weekly backup will be kept",
+                "two": "Last {} weekly backups will be kept",
+                "few": "Last {} weekly backups will be kept",
+                "many": "Last {} weekly backups will be kept",
+                "other": "Last {} weekly backups will be kept"
+            },
+            "weekly_infinite": "All weekly backups will be kept",
+            "monthly": {
+                "zero": "Rule is disabled",
+                "one": "Last {} monthly backup will be kept",
+                "two": "Last {} monthly backups will be kept",
+                "few": "Last {} monthly backups will be kept",
+                "many": "Last {} monthly backups will be kept",
+                "other": "Last {} monthly backups will be kept"
+            },
+            "monthly_infinite": "All monthly backups will be kept",
+            "yearly": {
+                "zero": "Rule is disabled",
+                "one": "Last {} yearly backup will be kept",
+                "two": "Last {} yearly backups will be kept",
+                "few": "Last {} yearly backups will be kept",
+                "many": "Last {} yearly backups will be kept",
+                "other": "Last {} yearly backups will be kept"
+            },
+            "yearly_infinite": "All yearly backups will be kept"
+        }
     },
     "storage": {
         "card_title": "Server Storage",
@@ -238,6 +304,7 @@
         "extending_volume_price_info": "Price includes VAT and is estimated from pricing data provided by your server provider. Server will be rebooted after resizing.",
         "extending_volume_error": "Couldn't initialize volume extending.",
         "size": "Size",
+        "price": "Price",
         "data_migration_title": "Data migration",
         "data_migration_notice": "During migration all services will be turned off.",
         "start_migration_button": "Start migration",
@@ -370,7 +437,8 @@
         "manage_domain_dns": "To manage your domain's DNS",
         "use_this_domain": "Use this domain?",
         "use_this_domain_text": "The token you provided gives access to the following domain",
-        "cloudflare_api_token": "DNS Provider API Token",
+        "multiple_domains_found": "Multiple domains found",
+        "multiple_domains_found_text": "The token you provided gives access to the following domains. Please select the one you want to use. For the security of your other domains, you should restrict this token's access to only the domain you want to use with SelfPrivacy.",
         "connect_backblaze_storage": "Connect Backblaze storage",
         "no_connected_domains": "No connected domains at the moment",
         "loading_domain_list": "Loading domain list",

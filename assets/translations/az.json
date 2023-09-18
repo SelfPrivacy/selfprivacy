@@ -123,7 +123,6 @@
         "disk": "Disk",
         "monthly_cost": "Aylıq xərc",
         "location": "Yerləşdirmə",
-        "provider": "Provayder",
         "core_count": {
             "one": "{} nüvəs",
             "two": "{} nüvələr",
@@ -300,7 +299,6 @@
         "manage_domain_dns": "Domeninizin DNS-ni idarə etmək üçün",
         "use_this_domain": "Biz bu domendən istifadə edirik?",
         "use_this_domain_text": "Göstərdiyiniz token bu domen üzərində nəzarəti təmin edir",
-        "cloudflare_api_token": "CloudFlare API Açarı",
         "connect_backblaze_storage": "Backblaze bulud yaddaşınızı birləşdirin",
         "no_connected_domains": "Hazırda heç bir bağlı domen yoxdur",
         "loading_domain_list": "Domenlərin siyahısı yüklənir",

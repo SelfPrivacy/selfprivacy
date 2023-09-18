@@ -209,7 +209,7 @@ class ServerInstallationRepository {
       return false;
     }
 
-    return domain == domainResult.data[0];
+    return domainResult.data.contains(domain);
   }
 
   Future<Map<String, bool>> isDnsAddressesMatch(

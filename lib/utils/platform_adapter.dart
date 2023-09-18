@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 /// SelfPrivacy wrapper for Platform information provider.
 class PlatformAdapter {
@@ -55,5 +56,9 @@ class PlatformAdapter {
     }
 
     return 'Unidentified';
+  }
+
+  static void setClipboard(final String clipboardData) {
+    Clipboard.setData(ClipboardData(text: clipboardData));
   }
 }

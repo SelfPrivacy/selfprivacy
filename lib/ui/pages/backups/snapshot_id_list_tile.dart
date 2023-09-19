@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/utils/platform_adapter.dart';
 
 class SnapshotIdListTile extends StatelessWidget {
   const SnapshotIdListTile({
@@ -14,7 +14,7 @@ class SnapshotIdListTile extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => ListTile(
         onLongPress: () {
-          Clipboard.setData(ClipboardData(text: snapshotId));
+          PlatformAdapter.setClipboard(snapshotId);
           getIt<NavigationService>().showSnackBar(
             'basis.copied_to_clipboard'.tr(),
             behavior: SnackBarBehavior.floating,

@@ -23,7 +23,7 @@
         "username": "Benutzername",
         "loading": "Laden…",
         "later": "Überspringen und später einstellen",
-        "connect_to_existing": "Mit einem existierenden Server verbinden",
+        "connect_to_existing": "Verbinde mit einem existierenden SelfPrivacy Server",
         "reset": "Zurücksetzen",
         "details": "Einzelheiten",
         "no_data": "Keine Daten",
@@ -34,7 +34,8 @@
         "alert": "Alarm",
         "services_title": "Ihre persönliche, private und unabhängige Dienste.",
         "apply": "Anwenden",
-        "app_name": "SelfPrivacy"
+        "app_name": "SelfPrivacy",
+        "copied_to_clipboard": "Zur Zwischenablage kopiert!"
     },
     "more_page": {
         "configuration_wizard": "Setup-Assistent",
@@ -129,7 +130,10 @@
             "few": "{} Kerne",
             "many": "{} Kerne",
             "other": "{} Kerne"
-        }
+        },
+        "server_provider": "Serverprovider",
+        "dns_provider": "DNS-Provider",
+        "pricing_error": "Konnte Providerpreise nicht abrufen"
     },
     "record": {
         "root": "Root Domain",
@@ -175,7 +179,30 @@
         "refetch_backups": "Backupliste neuladen",
         "waiting_for_rebuild": "In wenigen Minuten können Sie Ihren ersten Backup erstellen.",
         "error_pending": "Server hat einen Fehler zurückgegeben, überprüfen Sie es unten",
-        "refetching_list": "In wenigen Minuten wird die Liste neugeladen"
+        "refetching_list": "In wenigen Minuten wird die Liste neugeladen",
+        "card_subtitle": "Verwalte deine Backups",
+        "refetch_backups_subtitle": "Cache überprüfen und Daten vom Speicherprovider neu abrufen. Könnte zusätzliche Kosten verursachen.",
+        "reupload_key_subtitle": "Weist den Server an, Backupseicher zu initialisieren. Benutze diese Option, wenn etwas kaputt ist.",
+        "select_all": "Alles backupen",
+        "create_new_select_heading": "Wähle aus, was zum Backup dazugehören soll",
+        "show_more": "Mehr anzeigen",
+        "start": "Backup starten",
+        "service_busy": "Eine andere Backupoperation wird ausgeführt",
+        "latest_snapshots": "Neuster Snapshot",
+        "latest_snapshots_subtitle": "Zeige die letzten 15 Snapshots",
+        "autobackup_period_title": "Automatische Backup-Zeitspanne",
+        "autobackup_period_subtitle": "Backups werden erstellt, jede {period}",
+        "autobackup_period_never": "Automatische Backups sind deaktiviert",
+        "autobackup_period_every": "Jede {period}",
+        "autobackup_period_disable": "Deaktiviere automatische Backups",
+        "autobackup_custom": "Eigene",
+        "autobackup_custom_hint": "Eigenen Zeitraum in Minuten eingeben",
+        "autobackup_set_period": "Setze Zeitraum",
+        "autobackup_period_set": "Zeitraum setzen",
+        "backups_encryption_key": "Verschlüsselungsschlüssel",
+        "backups_encryption_key_subtitle": "Bewahre es gut auf.",
+        "backups_encryption_key_copy": "Kopiere den Verschlüselungsschlüssel",
+        "backups_encryption_key_show": "Zeige den Verschlüsselungschlüssel"
     },
     "storage": {
         "card_title": "Serverspeicher",

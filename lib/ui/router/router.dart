@@ -100,6 +100,7 @@ class RootRouter extends _$RootRouter {
         AutoRoute(page: BackupsListRoute.page),
         AutoRoute(page: ServerStorageRoute.page),
         AutoRoute(page: ExtendingVolumeRoute.page),
+        AutoRoute(page: BackupProviderPicker.page),
       ],
     ),
     AutoRoute(page: ServicesMigrationRoute.page),

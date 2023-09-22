@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 
+@RoutePage()
 class BackupProviderPicker extends StatelessWidget {
   const BackupProviderPicker({
     super.key,

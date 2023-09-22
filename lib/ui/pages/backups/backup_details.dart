@@ -15,7 +15,6 @@ import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
-import 'package:selfprivacy/ui/pages/backups/backup_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/backups/change_period_modal.dart';
 import 'package:selfprivacy/ui/pages/backups/change_rotation_quotas_modal.dart';
 import 'package:selfprivacy/ui/pages/backups/copy_encryption_key_modal.dart';
@@ -76,7 +75,7 @@ class BackupDetailsPage extends StatelessWidget {
             BrandButton.rised(
               onPressed: preventActions
                   ? null
-                  : () => context.pushRoute(BackupProviderPicker()),
+                  : () => context.pushRoute(const BackupProviderPicker()),
               text: 'backup.initialize'.tr(),
             ),
         ],

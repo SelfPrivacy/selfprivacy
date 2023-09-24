@@ -7,9 +7,10 @@ import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
-import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
@@ -42,30 +43,36 @@ class _ServicesPageState extends State<ServicesPage> {
               ),
             )
           : null,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await context.read<ServicesCubit>().reload();
-        },
-        child: ListView(
-          padding: paddingH15V0,
-          children: [
-            Text(
-              'basis.services_title'.tr(),
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 24),
-            if (!isReady) ...[const NotReadyCard(), const SizedBox(height: 24)],
-            ...services.map(
-              (final service) => Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 30,
-                ),
-                child: _Card(service: service),
-              ),
+      body: !isReady
+          ? EmptyPagePlaceholder(
+              showReadyCard: true,
+              title: 'service_page.nothing_here'.tr(),
+              description: 'basis.please_connect'.tr(),
+              iconData: BrandIcons.social,
             )
-          ],
-        ),
-      ),
+          : RefreshIndicator(
+              onRefresh: () async {
+                await context.read<ServicesCubit>().reload();
+              },
+              child: ListView(
+                padding: paddingH15V0,
+                children: [
+                  Text(
+                    'basis.services_title'.tr(),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: 24),
+                  ...services.map(
+                    (final service) => Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 30,
+                      ),
+                      child: _Card(service: service),
+                    ),
+                  )
+                ],
+              ),
+            ),
     );
   }
 }

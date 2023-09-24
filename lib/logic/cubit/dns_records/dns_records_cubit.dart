@@ -75,7 +75,7 @@ class DnsRecordsCubit
 
   @override
   Future<void> clear() async {
-    emit(const DnsRecordsState(dnsState: DnsRecordsStatus.error));
+    emit(const DnsRecordsState(dnsState: DnsRecordsStatus.uninitialized));
   }
 
   Future<void> refresh() async {

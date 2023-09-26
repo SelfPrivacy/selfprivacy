@@ -254,7 +254,6 @@
         "add_new_user": "Dodaj pierwszego użytkownika",
         "new_user": "Nowy użytkownik",
         "delete_user": "Usuń użytkownika",
-        "not_ready": "Połącz serwer, domenę I DNS w zakładce dostawcy, aby mieć możliwość dodać pierwszego użytkownika",
         "nobody_here": "Tu będą pojawią się użytkownicy",
         "login": "Login",
         "new_user_info_note": "Nowy użytkownik automatycznie otrzyma dostęp do wszystkich serwisów",

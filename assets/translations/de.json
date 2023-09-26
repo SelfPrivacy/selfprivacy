@@ -393,7 +393,6 @@
         "add_new_user": "Fügen Sie den ersten Benutzer hinzu",
         "new_user": "Neuer Benutzer",
         "delete_user": "Benutzer löschen",
-        "not_ready": "Bitte verbinden Sie Server, Domain und DNS im Providertab, um den ersten Benutzer hinzufügen zu können",
         "nobody_here": "Hier werden Benutzer angezeigt",
         "login": "Login",
         "new_user_info_note": "Neuen Benutzern wird automatisch Zugang zu allen Diensten gewährt",

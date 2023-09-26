@@ -1,0 +1,29 @@
+name: Translation issue
+about: File a translation (localization) issue
+labels:
+  - Translations
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Translations can be modified and discussed on [Weblate](https://weblate.selfprivacy.org/projects/selfprivacy/). You can fix the mistranslation issue yourself there. Using the search, you can also find the string ID of the mistranslated string. If your issue is more complex, please file it here
+
+        If you are a member of SelfPrivacy core team, you **must** fix the issue yourself on Weblate.
+  - type: input
+    id: language
+    attributes:
+      label: Language
+      description: What language is affected?
+      placeholder: |
+        English
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the issue in detail. If you have an idea how to fix this issue, please describe it here too. Include the string ID of the mistranslated string, if possible.
+      placeholder: |
+        The string `string.id` is translated as "foo", but it should be "bar".
+    validations:
+      required: true

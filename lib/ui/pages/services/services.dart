@@ -48,7 +48,7 @@ class _ServicesPageState extends State<ServicesPage> {
               showReadyCard: true,
               title: 'service_page.nothing_here'.tr(),
               description: 'basis.please_connect'.tr(),
-              iconData: BrandIcons.social,
+              iconData: BrandIcons.box,
             )
           : RefreshIndicator(
               onRefresh: () async {

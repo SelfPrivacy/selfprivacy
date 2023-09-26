@@ -24,7 +24,7 @@
         "username": "Имя пользователя",
         "loading": "Загрузка…",
         "later": "Пропустить и настроить потом",
-        "connect_to_existing": "Подключиться к уже существующему серверу SelfPrivacy",
+        "connect_to_existing": "Подключиться к существующему серверу SelfPrivacy",
         "reset": "Сбросить",
         "details": "Детальная информация",
         "no_data": "Нет данных",
@@ -35,7 +35,8 @@
         "continue": "Продолжить",
         "alert": "Уведомление",
         "copied_to_clipboard": "Скопировано в буфер обмена!",
-        "app_name": "SelfPrivacy"
+        "app_name": "SelfPrivacy",
+        "please_connect": "Настройте ваш сервер и подключите домен для полного погружения!"
     },
     "more_page": {
         "configuration_wizard": "Мастер настройки",
@@ -308,7 +309,8 @@
         "data_migration_notice": "На время миграции данных все сервисы будут выключены.",
         "start_migration_button": "Начать миграцию",
         "migration_process": "Мигрируем…",
-        "migration_done": "Завершить"
+        "migration_done": "Завершить",
+        "price": "Цена"
     },
     "not_ready_card": {
         "in_menu": "Сервер ещё не настроен, воспользуйтесь мастером подключения."
@@ -329,7 +331,8 @@
             "deactivating": "Выключается",
             "reloading": "Перезапускается"
         },
-        "snapshots": "Снимки резервных копий"
+        "snapshots": "Снимки резервных копий",
+        "nothing_here": "Здесь ничего нет"
     },
     "mail": {
         "title": "Почта",
@@ -369,7 +372,7 @@
         "add_new_user": "Добавьте первого пользователя",
         "new_user": "Новый пользователь",
         "delete_user": "Удалить пользователя",
-        "nobody_here": "Здесь будут отображаться пользователи",
+        "nobody_here": "Здесь никого нет",
         "login": "Логин",
         "new_user_info_note": "Новый пользователь автоматически получит доступ ко всем сервисам",
         "delete_confirm_question": "Вы действительно хотите удалить учетную запись?",
@@ -471,7 +474,7 @@
     },
     "recovering": {
         "generic_error": "Ошибка проведения операции, попробуйте ещё раз.",
-        "recovery_main_header": "Подключиться к уже существующему серверу SelfPrivacy",
+        "recovery_main_header": "Подключение к существующему серверу SelfPrivacy",
         "domain_recovery_description": "Введите домен, по которому вы хотите получить доступ к серверу:",
         "domain_recover_placeholder": "Домен",
         "domain_recover_error": "Не удалось найти сервер с таким доменом",

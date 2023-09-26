@@ -35,7 +35,8 @@
         "done": "Done",
         "continue": "Continue",
         "alert": "Alert",
-        "copied_to_clipboard": "Copied to clipboard!"
+        "copied_to_clipboard": "Copied to clipboard!",
+        "please_connect": "Please connect your server, domain and DNS provider to dive in!"
     },
     "more_page": {
         "configuration_wizard": "Setup wizard",
@@ -315,6 +316,7 @@
         "in_menu": "Server is not set up yet. Please finish setup using setup wizard for further work."
     },
     "service_page": {
+        "nothing_here": "Nothing here",
         "open_in_browser": "Open in browser",
         "restart": "Restart service",
         "disable": "Disable service",
@@ -371,7 +373,6 @@
         "add_new_user": "Add a first user",
         "new_user": "New user",
         "delete_user": "Delete user",
-        "not_ready": "Please connect server, domain and DNS in the Providers tab, to be able to add a first user",
         "nobody_here": "Nobody here",
         "login": "Login",
         "new_user_info_note": "New user will automatically be granted an access to all of the services",

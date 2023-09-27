@@ -54,7 +54,6 @@ class InitializingPage extends StatelessWidget {
         'initializing.steps.hosting',
         'initializing.steps.server_type',
         'initializing.steps.dns_provider',
-        'initializing.steps.backups_provider',
         'initializing.steps.domain',
         'initializing.steps.master_account',
         'initializing.steps.server',

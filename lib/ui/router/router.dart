@@ -5,6 +5,7 @@ import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/pages/backups/backup_details.dart';
 import 'package:selfprivacy/ui/pages/backups/backups_list.dart';
+import 'package:selfprivacy/ui/pages/backups/setup/backups_initializing.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
 import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
@@ -25,7 +26,6 @@ import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
-import 'package:selfprivacy/ui/pages/backups/backup_provider_picker_page.dart';
 
 part 'router.gr.dart';
 
@@ -101,7 +101,7 @@ class RootRouter extends _$RootRouter {
         AutoRoute(page: BackupsListRoute.page),
         AutoRoute(page: ServerStorageRoute.page),
         AutoRoute(page: ExtendingVolumeRoute.page),
-        AutoRoute(page: BackupProviderPickerRoute.page),
+        AutoRoute(page: BackupsInitializingRoute.page),
       ],
     ),
     AutoRoute(page: ServicesMigrationRoute.page),

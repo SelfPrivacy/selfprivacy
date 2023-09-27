@@ -186,10 +186,10 @@ abstract class _$RootRouter extends RootStackRouter {
         child: const RecoveryRouting(),
       );
     },
-    BackupProviderPickerRoute.name: (routeData) {
+    BackupsInitializingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const BackupProviderPickerPage(),
+        child: const BackupsInitializingPage(),
       );
     },
   };
@@ -691,15 +691,15 @@ class RecoveryRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [BackupProviderPickerPage]
-class BackupProviderPickerRoute extends PageRouteInfo<void> {
-  const BackupProviderPickerRoute({List<PageRouteInfo>? children})
+/// [BackupsInitializingPage]
+class BackupsInitializingRoute extends PageRouteInfo<void> {
+  const BackupsInitializingRoute({List<PageRouteInfo>? children})
       : super(
-          BackupProviderPickerRoute.name,
+          BackupsInitializingRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'BackupProviderPickerRoute';
+  static const String name = 'BackupsInitializingRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

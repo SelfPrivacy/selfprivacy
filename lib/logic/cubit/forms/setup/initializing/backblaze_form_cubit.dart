@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class BackblazeFormCubit extends FormCubit {
-  BackblazeFormCubit(this.serverInstallationCubit) {
+  BackblazeFormCubit(this.backupsCubit) {
     keyId = FieldCubit(
       initalValue: '',
       validations: [
@@ -27,13 +27,13 @@ class BackblazeFormCubit extends FormCubit {
 
   @override
   FutureOr<void> onSubmit() async {
-    serverInstallationCubit.setBackblazeKey(
+    await backupsCubit.setBackupsKey(
       keyId.state.value,
       applicationKey.state.value,
     );
   }
 
-  final ServerInstallationCubit serverInstallationCubit;
+  final BackupsCubit backupsCubit;
 
   late final FieldCubit<String> keyId;
   late final FieldCubit<String> applicationKey;

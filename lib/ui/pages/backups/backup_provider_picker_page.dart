@@ -8,8 +8,8 @@ import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 
 @RoutePage()
-class BackupProviderPicker extends StatelessWidget {
-  const BackupProviderPicker({
+class BackupProviderPickerPage extends StatelessWidget {
+  const BackupProviderPickerPage({
     super.key,
   });
 

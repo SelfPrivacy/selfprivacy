@@ -10,6 +10,7 @@ class BackupsState extends ServerInstallationDependendState {
     this.autobackupPeriod,
     this.backblazeBucket,
     this.autobackupQuotas,
+    this.backupsCredential,
   });
 
   final bool isInitialized;
@@ -20,6 +21,7 @@ class BackupsState extends ServerInstallationDependendState {
   final Duration? autobackupPeriod;
   final BackblazeBucket? backblazeBucket;
   final AutobackupQuotas? autobackupQuotas;
+  final BackupsCredential? backupsCredential;
 
   List<Backup> serviceBackups(final String serviceId) => backups
       .where((final backup) => backup.serviceId == serviceId)
@@ -43,6 +45,7 @@ class BackupsState extends ServerInstallationDependendState {
     final Duration? autobackupPeriod,
     final BackblazeBucket? backblazeBucket,
     final AutobackupQuotas? autobackupQuotas,
+    final BackupsCredential? backupsCredential,
   }) =>
       BackupsState(
         isInitialized: isInitialized ?? this.isInitialized,
@@ -50,12 +53,13 @@ class BackupsState extends ServerInstallationDependendState {
         preventActions: preventActions ?? this.preventActions,
         refreshTimer: refreshTimer ?? this.refreshTimer,
         refreshing: refreshing ?? this.refreshing,
+        backupsCredential: backupsCredential ?? this.backupsCredential,
+        backblazeBucket: backblazeBucket ?? this.backblazeBucket,
+        autobackupQuotas: autobackupQuotas ?? this.autobackupQuotas,
         // The autobackupPeriod might be null, so if the duration is set to 0, we
         // set it to null.
         autobackupPeriod: autobackupPeriod?.inSeconds == 0
             ? null
             : autobackupPeriod ?? this.autobackupPeriod,
-        backblazeBucket: backblazeBucket ?? this.backblazeBucket,
-        autobackupQuotas: autobackupQuotas ?? this.autobackupQuotas,
       );
 }

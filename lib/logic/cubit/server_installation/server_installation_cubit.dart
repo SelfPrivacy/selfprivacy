@@ -5,11 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -212,33 +209,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       (state as ServerInstallationNotFinished)
           .copyWith(dnsApiToken: dnsApiToken),
     );
-  }
-
-  void setBackblazeKey(final String keyId, final String applicationKey) async {
-    final BackupsCredential backblazeCredential = BackupsCredential(
-      keyId: keyId,
-      applicationKey: applicationKey,
-      provider: BackupsProviderType.backblaze,
-    );
-    final BackblazeBucket? bucket;
-    await repository.saveBackblazeKey(backblazeCredential);
-    if (state is ServerInstallationRecovery) {
-      final configuration = await ServerApi(
-        customToken:
-            (state as ServerInstallationRecovery).serverDetails!.apiToken,
-        isWithToken: true,
-      ).getBackupsConfiguration();
-      if (configuration != null) {
-        try {
-          bucket = await BackblazeApi()
-              .fetchBucket(backblazeCredential, configuration);
-          await getIt<ApiConfigModel>().storeBackblazeBucket(bucket!);
-        } catch (e) {
-          print(e);
-        }
-      }
-      return;
-    }
   }
 
   void setDomain(final ServerDomain serverDomain) async {

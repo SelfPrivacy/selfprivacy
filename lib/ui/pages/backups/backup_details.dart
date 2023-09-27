@@ -75,7 +75,7 @@ class BackupDetailsPage extends StatelessWidget {
             BrandButton.rised(
               onPressed: preventActions
                   ? null
-                  : () => context.pushRoute(const BackupProviderPicker()),
+                  : () => context.pushRoute(const BackupProviderPickerRoute()),
               text: 'backup.initialize'.tr(),
             ),
         ],

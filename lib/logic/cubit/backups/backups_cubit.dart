@@ -29,6 +29,8 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
       final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
       final BackupConfiguration? backupConfig =
           await api.getBackupsConfiguration();
+      final BackupsCredential? backupsCredential =
+          getIt<ApiConfigModel>().backblazeCredential;
       final List<Backup> backups = await api.getBackups();
       backups.sort((final a, final b) => b.time.compareTo(a.time));
       emit(
@@ -37,12 +39,26 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
           isInitialized: backupConfig?.isInitialized,
           autobackupPeriod: backupConfig?.autobackupPeriod ?? Duration.zero,
           autobackupQuotas: backupConfig?.autobackupQuotas,
+          backupsCredential: backupsCredential,
           backups: backups,
           preventActions: false,
           refreshing: false,
         ),
       );
     }
+  }
+
+  Future<void> setBackupsKey(
+    final String keyId,
+    final String applicationKey,
+  ) async {
+    final BackupsCredential backupsCredential = BackupsCredential(
+      keyId: keyId,
+      applicationKey: applicationKey,
+      provider: BackupsProviderType.backblaze,
+    );
+    await getIt<ApiConfigModel>().storeBackblazeCredential(backupsCredential);
+    emit(state.copyWith(backupsCredential: backupsCredential));
   }
 
   Future<void> initializeBackups() async {

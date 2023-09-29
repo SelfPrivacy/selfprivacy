@@ -25,33 +25,24 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   @override
   Future<void> load() async {
-    if (serverInstallationCubit.state is! ServerInstallationFinished) {
-      return;
+    if (serverInstallationCubit.state is ServerInstallationFinished) {
+      final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
+      final BackupConfiguration? backupConfig =
+          await api.getBackupsConfiguration();
+      final List<Backup> backups = await api.getBackups();
+      backups.sort((final a, final b) => b.time.compareTo(a.time));
+      emit(
+        state.copyWith(
+          backblazeBucket: bucket,
+          isInitialized: backupConfig?.isInitialized,
+          autobackupPeriod: backupConfig?.autobackupPeriod ?? Duration.zero,
+          autobackupQuotas: backupConfig?.autobackupQuotas,
+          backups: backups,
+          preventActions: false,
+          refreshing: false,
+        ),
+      );
     }
-
-    final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
-    final BackupConfiguration? backupConfig =
-        await api.getBackupsConfiguration();
-    final BackupsCredential? backupsCredential =
-        getIt<ApiConfigModel>().backblazeCredential;
-    final List<Backup> backups = await api.getBackups();
-    backups.sort((final a, final b) => b.time.compareTo(a.time));
-    final bool? initialized = backupConfig?.isInitialized;
-    final nextState = state.copyWith(
-      backblazeBucket: bucket,
-      isInitialized: initialized,
-      autobackupPeriod: backupConfig?.autobackupPeriod ?? Duration.zero,
-      autobackupQuotas: backupConfig?.autobackupQuotas,
-      backupsCredential: backupsCredential,
-      backups: backups,
-      preventActions: false,
-      refreshing: false,
-    );
-    emit(
-      (initialized == null || initialized == false)
-          ? BackupsNotFinishedState.fromBackupsState(nextState)
-          : nextState,
-    );
   }
 
   Future<void> setBackupsKey(
@@ -64,15 +55,6 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
       provider: BackupsProviderType.backblaze,
     );
     await getIt<ApiConfigModel>().storeBackblazeCredential(backupsCredential);
-    if (state is BackupsNotFinishedState) {
-      emit(
-        (state as BackupsNotFinishedState).copyNotFinishedWith(
-          backupsCredential: backupsCredential,
-          step: BackupsInitializingStep.period,
-        ),
-      );
-      return;
-    }
     emit(
       state.copyWith(
         backupsCredential: backupsCredential,
@@ -309,6 +291,6 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   @override
   void clear() async {
-    emit(BackupsNotFinishedState.fromBackupsState(const BackupsState()));
+    emit(const BackupsState());
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/logic/cubit/backups_wizard/backups_wizard_cubit.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
@@ -27,6 +28,7 @@ class BlocAndProviderConfig extends StatelessWidget {
     const isAutoDark = true;
     final serverInstallationCubit = ServerInstallationCubit()..load();
     final supportSystemCubit = SupportSystemCubit();
+    final backupsWizardCubit = BackupsWizardCubit();
     final usersCubit = UsersCubit(serverInstallationCubit);
     final servicesCubit = ServicesCubit(serverInstallationCubit);
     final backupsCubit = BackupsCubit(serverInstallationCubit);
@@ -96,6 +98,9 @@ class BlocAndProviderConfig extends StatelessWidget {
             usersCubit: usersCubit,
             servicesCubit: servicesCubit,
           ),
+        ),
+        BlocProvider(
+          create: (final _) => backupsWizardCubit..load(),
         ),
       ],
       child: child,

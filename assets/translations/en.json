@@ -287,6 +287,11 @@
                 "other": "Last {} yearly backups will be kept"
             },
             "yearly_infinite": "All yearly backups will be kept"
+        },
+        "steps": {
+            "hosting": "Storage Provider",
+            "period": "Automatic backups",
+            "rotation": "Rotation settings"
         }
     },
     "storage": {
@@ -462,7 +467,6 @@
             "hosting": "Hosting",
             "server_type": "Server type",
             "dns_provider": "DNS provider",
-            "backups_provider": "Backups",
             "domain": "Domain",
             "master_account": "Master account",
             "server": "Server",

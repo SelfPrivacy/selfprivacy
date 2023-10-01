@@ -45,8 +45,11 @@ class StorageCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkResponse(
         highlightShape: BoxShape.rectangle,
-        onTap: () =>
-            context.pushRoute(ServerStorageRoute(diskStatus: diskStatus)),
+
+        /// TODO: when 'isEmpty' replace with a skeleton
+        onTap: () => diskStatus.diskVolumes.isEmpty
+            ? null
+            : context.pushRoute(ServerStorageRoute(diskStatus: diskStatus)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

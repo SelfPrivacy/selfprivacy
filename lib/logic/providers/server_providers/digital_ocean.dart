@@ -698,7 +698,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     final DiskSize size,
   ) async =>
       _adapter.api().resizeVolume(
-            volume.name,
+            volume.uuid!,
             size,
           );
 

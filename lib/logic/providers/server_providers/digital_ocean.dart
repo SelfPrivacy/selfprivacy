@@ -699,7 +699,7 @@ class DigitalOceanServerProvider extends ServerProvider {
   ) async =>
       _adapter.api().resizeVolume(
             volume.uuid!,
-            size,
+            size.gibibyte.toInt(),
           );
 
   @override

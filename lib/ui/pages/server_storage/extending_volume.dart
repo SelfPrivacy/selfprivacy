@@ -157,7 +157,9 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                     : () {
                         context.read<ApiProviderVolumeCubit>().resizeVolume(
                               widget.diskVolumeToResize,
-                              DiskSize.fromGibibyte(_currentSliderGbValue),
+                              DiskSize.fromGibibyte(
+                                _currentSliderGbValue.truncate().toDouble(),
+                              ),
                               context.read<ApiServerVolumeCubit>().reload,
                             );
                         context.router.popUntilRoot();

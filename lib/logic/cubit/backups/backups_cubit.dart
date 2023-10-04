@@ -65,8 +65,13 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     );
   }
 
-  Future<void> initializeBackups() async {
+  Future<void> initializeBackups(
+    final BackupsCredential backupsCredential,
+    final AutobackupQuotas quotas,
+    final Duration? autobackupPeriod,
+  ) async {
     emit(state.copyWith(preventActions: true));
+    await getIt<ApiConfigModel>().storeBackblazeCredential(backupsCredential);
     final String? encryptionKey =
         (await api.getBackupsConfiguration())?.encryptionKey;
     if (encryptionKey == null) {
@@ -124,6 +129,9 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     getIt<NavigationService>().showSnackBar(
       'Backups repository is now initializing. It may take a while.',
     );
+
+    await setAutobackupPeriod(autobackupPeriod);
+    await setAutobackupQuotas(quotas);
 
     emit(state.copyWith(preventActions: false));
   }
@@ -290,6 +298,37 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     }
 
     await updateBackups();
+  }
+
+  Future<void> recoverState(final BackupsCredential backupsCredential) async {
+    BackblazeBucket? bucket;
+    BackupConfiguration? backupConfig;
+    try {
+      backupConfig = await ServerApi().getBackupsConfiguration();
+      await getIt<ApiConfigModel>().storeBackblazeCredential(backupsCredential);
+      final bucket = await BackblazeApi()
+          .fetchBucket(state.backupsCredential!, backupConfig!);
+      await getIt<ApiConfigModel>().storeBackblazeBucket(bucket!);
+    } catch (e) {
+      print(e);
+      getIt<NavigationService>().showSnackBar('jobs.generic_error'.tr());
+      return;
+    }
+
+    final List<Backup> backups = await api.getBackups();
+    backups.sort((final a, final b) => b.time.compareTo(a.time));
+    emit(
+      state.copyWith(
+        backupsCredential: backupsCredential,
+        backblazeBucket: bucket,
+        isInitialized: backupConfig.isInitialized,
+        autobackupPeriod: backupConfig.autobackupPeriod ?? Duration.zero,
+        autobackupQuotas: backupConfig.autobackupQuotas,
+        backups: backups,
+        preventActions: false,
+        refreshing: false,
+      ),
+    );
   }
 
   @override

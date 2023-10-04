@@ -1,15 +1,17 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups_wizard/backups_wizard_cubit.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 
 class BackupConfirmationPage extends StatelessWidget {
   const BackupConfirmationPage({
+    required this.onConfirmCallback,
     super.key,
   });
+
+  final Function() onConfirmCallback;
 
   @override
   Widget build(final BuildContext context) => ResponsiveLayoutWithInfobox(
@@ -27,9 +29,10 @@ class BackupConfirmationPage extends StatelessWidget {
           children: [
             const SizedBox(height: 32),
             BrandButton.rised(
-              onPressed: () => context
-                  .read<BackupsWizardCubit>()
-                  .recoverBackupsInformation(),
+              onPressed: () {
+                onConfirmCallback();
+                context.read<BackupsWizardCubit>().finish();
+              },
               text: 'basis.connect'.tr(),
             ),
             const SizedBox(height: 10),

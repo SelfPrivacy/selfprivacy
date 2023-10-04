@@ -30,11 +30,22 @@ class BackupsInitializingPage extends StatelessWidget {
     final currentStep = cubit.state.currentStep;
     switch (currentStep) {
       case BackupsWizardStep.confirmInitialization:
-        actualInitializingPage = const BackupConfirmationPage();
+        actualInitializingPage = BackupConfirmationPage(
+          onConfirmCallback: () =>
+              context.read<BackupsCubit>().initializeBackups(
+                    cubit.state.backupsCredential!,
+                    cubit.state.autobackupQuotas!,
+                    cubit.state.autobackupPeriod,
+                  ),
+        );
         progressDrawerStep = 2;
         break;
       case BackupsWizardStep.confirmRecovery:
-        actualInitializingPage = const BackupConfirmationPage();
+        actualInitializingPage = BackupConfirmationPage(
+          onConfirmCallback: () => context
+              .read<BackupsCubit>()
+              .recoverState(cubit.state.backupsCredential!),
+        );
         progressDrawerStep = 2;
         break;
       case BackupsWizardStep.settingsInitialization:
@@ -73,7 +84,6 @@ class BackupsInitializingPage extends StatelessWidget {
     return BlocListener<BackupsWizardCubit, BackupsWizardState>(
       listener: (final context, final state) {
         if (cubit.state.currentStep == BackupsWizardStep.finished) {
-          context.read<BackupsCubit>().load();
           context.router.popUntilRoot();
         }
       },

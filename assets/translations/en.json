@@ -288,13 +288,13 @@
             },
             "yearly_infinite": "All yearly backups will be kept"
         },
-        "steps": {
-            "hosting": "Storage Provider",
-            "period": "Automatic backups",
-            "rotation": "Rotation settings"
-        },
-        "settings": {
-            "initialize_settings_title": "Backup Settings"
+        "wizard": {
+            "initialize_settings_title": "Backup Settings",
+            "steps": {
+                "hosting": "Storage Provider",
+                "settings": "Settings",
+                "confirmation": "Confirmation"
+            }
         }
     },
     "storage": {

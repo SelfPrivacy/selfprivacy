@@ -2,13 +2,17 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups_wizard/backups_wizard_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/drawers/progress_drawer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
+import 'package:selfprivacy/ui/pages/backups/setup/backup_confirmation.dart';
 import 'package:selfprivacy/ui/pages/backups/setup/backup_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/backups/setup/backup_settings_page.dart';
 import 'package:selfprivacy/ui/router/router.dart';
@@ -22,28 +26,55 @@ class BackupsInitializingPage extends StatelessWidget {
   Widget build(final BuildContext context) {
     final Widget actualInitializingPage;
     final cubit = context.watch<BackupsWizardCubit>();
+    int progressDrawerStep = 0;
     final currentStep = cubit.state.currentStep;
     switch (currentStep) {
+      case BackupsWizardStep.confirmInitialization:
+        actualInitializingPage = const BackupConfirmationPage();
+        progressDrawerStep = 2;
+        break;
+      case BackupsWizardStep.confirmRecovery:
+        actualInitializingPage = const BackupConfirmationPage();
+        progressDrawerStep = 2;
+        break;
       case BackupsWizardStep.settingsInitialization:
         actualInitializingPage = const BackupSettingsPage();
+        progressDrawerStep = 1;
         break;
       case BackupsWizardStep.hostingRecovery:
       case BackupsWizardStep.hostingInitialization:
       default:
-        actualInitializingPage = const BackupProviderPicker();
+        progressDrawerStep = 0;
+        actualInitializingPage = BlocProvider(
+          create: (final context) => BackblazeFormCubit(
+            onSubmitCallback:
+                (final String keyId, final String applicationKey) =>
+                    cubit.setBackupsCredential(
+              BackupsCredential(
+                applicationKey: applicationKey,
+                keyId: keyId,
+                provider: BackupsProviderType.backblaze,
+              ),
+            ),
+          ),
+          child: Builder(
+            builder: (final context) => const BackupProviderPicker(),
+          ),
+        );
         break;
     }
 
     final List<String> titles = [
-      'backup.steps.hosting',
-      'backup.steps.period',
-      'backup.steps.rotation',
+      'backup.wizard.steps.hosting',
+      'backup.wizard.steps.settings',
+      'backup.wizard.steps.confirmation',
     ];
 
     return BlocListener<BackupsWizardCubit, BackupsWizardState>(
       listener: (final context, final state) {
         if (cubit.state.currentStep == BackupsWizardStep.finished) {
-          context.router.pop();
+          context.read<BackupsCubit>().load();
+          context.router.popUntilRoot();
         }
       },
       child: Scaffold(
@@ -52,15 +83,8 @@ class BackupsInitializingPage extends StatelessWidget {
         appBar: Breakpoints.large.isActive(context)
             ? null
             : AppBar(
-                actions: [
-                  if (cubit.state.currentStep == BackupsWizardStep.finished)
-                    IconButton(
-                      icon: const Icon(Icons.check),
-                      onPressed: () {
-                        context.router.pop();
-                      },
-                    ),
-                  const SizedBox.shrink(),
+                actions: const [
+                  SizedBox.shrink(),
                 ],
                 title: Text(
                   'more_page.configuration_wizard'.tr(),
@@ -86,7 +110,7 @@ class BackupsInitializingPage extends StatelessWidget {
               if (Breakpoints.large.isActive(context))
                 ProgressDrawer(
                   steps: titles,
-                  currentStep: currentStep.index,
+                  currentStep: progressDrawerStep,
                   title: 'more_page.configuration_wizard'.tr(),
                   constraints: constraints,
                   trailing: Column(
@@ -109,7 +133,7 @@ class BackupsInitializingPage extends StatelessWidget {
                           'basis.later'.tr(),
                         ),
                         onPressed: () {
-                          context.router.pop();
+                          context.router.popUntilRoot();
                         },
                       ),
                     ],

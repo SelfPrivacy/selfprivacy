@@ -30,7 +30,8 @@ class _ProvidersPageState extends State<ProvidersPage> {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
     final bool isBackupInitialized =
-        context.watch<BackupsCubit>().state.isInitialized;
+        context.watch<BackupsCubit>().state.isInitialized &&
+            context.watch<BackupsCubit>().state.backupsCredential != null;
     final DnsRecordsStatus dnsStatus =
         context.watch<DnsRecordsCubit>().state.dnsState;
 

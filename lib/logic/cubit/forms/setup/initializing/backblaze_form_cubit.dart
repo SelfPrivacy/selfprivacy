@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class BackblazeFormCubit extends FormCubit {
-  BackblazeFormCubit(this.onSubmitCallback) {
+  BackblazeFormCubit({required this.onSubmitCallback}) {
     keyId = FieldCubit(
       initalValue: '',
       validations: [

@@ -22,7 +22,7 @@ class BackupSettingsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'backup.settings.initialize_settings_title'.tr(),
+            'backup.wizard.initialize_settings_title'.tr(),
             style: Theme.of(context).textTheme.headlineSmall,
           ),
         ],

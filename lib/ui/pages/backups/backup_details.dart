@@ -33,6 +33,8 @@ class BackupDetailsPage extends StatelessWidget {
         is ServerInstallationFinished;
     final BackupsState backupsState = context.watch<BackupsCubit>().state;
     final bool isBackupInitialized = backupsState.isInitialized;
+    final bool isBackupWizard =
+        !isBackupInitialized || backupsState.backupsCredential == null;
     final StateType providerState = isReady && isBackupInitialized
         ? StateType.stable
         : StateType.uninitialized;
@@ -58,7 +60,7 @@ class BackupDetailsPage extends StatelessWidget {
       );
     }
 
-    if (!isBackupInitialized) {
+    if (isBackupWizard) {
       return BrandHeroScreen(
         heroIcon: BrandIcons.save,
         heroTitle: 'backup.card_title'.tr(),
@@ -75,7 +77,8 @@ class BackupDetailsPage extends StatelessWidget {
             BrandButton.rised(
               onPressed: preventActions
                   ? null
-                  : () => context.pushRoute(const BackupsInitializingRoute()),
+                  : () =>
+                      context.replaceRoute(const BackupsInitializingRoute()),
               text: 'backup.initialize'.tr(),
             ),
         ],

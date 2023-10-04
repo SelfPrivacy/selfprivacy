@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
@@ -80,6 +81,7 @@ class InitializingPage extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.check),
                         onPressed: () {
+                          context.read<BackupsCubit>().load();
                           context.router.popUntilRoot();
                         },
                       ),

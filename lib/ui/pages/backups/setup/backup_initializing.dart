@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
+import 'package:selfprivacy/logic/cubit/backups_wizard/backups_wizard_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
@@ -10,6 +10,7 @@ import 'package:selfprivacy/ui/components/drawers/progress_drawer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
 import 'package:selfprivacy/ui/pages/backups/setup/backup_provider_picker.dart';
+import 'package:selfprivacy/ui/pages/backups/setup/backup_settings_page.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 
@@ -20,16 +21,14 @@ class BackupsInitializingPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final Widget actualInitializingPage;
-    final cubit = context.watch<BackupsCubit>();
-    final currentStep = ((cubit.state) as BackupsNotFinishedState).step;
+    final cubit = context.watch<BackupsWizardCubit>();
+    final currentStep = cubit.state.currentStep;
     switch (currentStep) {
-      case BackupsInitializingStep.period:
-        actualInitializingPage = const BackupProviderPicker();
+      case BackupsWizardStep.settingsInitialization:
+        actualInitializingPage = const BackupSettingsPage();
         break;
-      case BackupsInitializingStep.rotation:
-        actualInitializingPage = const BackupProviderPicker();
-        break;
-      case BackupsInitializingStep.hosting:
+      case BackupsWizardStep.hostingRecovery:
+      case BackupsWizardStep.hostingInitialization:
       default:
         actualInitializingPage = const BackupProviderPicker();
         break;
@@ -41,9 +40,9 @@ class BackupsInitializingPage extends StatelessWidget {
       'backup.steps.rotation',
     ];
 
-    return BlocListener<BackupsCubit, BackupsState>(
+    return BlocListener<BackupsWizardCubit, BackupsWizardState>(
       listener: (final context, final state) {
-        if (cubit.state is! BackupsNotFinishedState) {
+        if (cubit.state.currentStep == BackupsWizardStep.finished) {
           context.router.pop();
         }
       },
@@ -54,7 +53,7 @@ class BackupsInitializingPage extends StatelessWidget {
             ? null
             : AppBar(
                 actions: [
-                  if (cubit.state is! BackupsNotFinishedState)
+                  if (cubit.state.currentStep == BackupsWizardStep.finished)
                     IconButton(
                       icon: const Icon(Icons.check),
                       onPressed: () {

@@ -41,8 +41,8 @@ class BackupsWizardState {
 enum BackupsWizardStep {
   hostingRecovery,
   hostingInitialization,
-  period,
-  quotas,
-  confirmation,
+  settingsInitialization,
+  confirmInitialization,
+  confirmRecovery,
   finished,
 }

@@ -292,6 +292,9 @@
             "hosting": "Storage Provider",
             "period": "Automatic backups",
             "rotation": "Rotation settings"
+        },
+        "settings": {
+            "initialize_settings_title": "Backup Settings"
         }
     },
     "storage": {

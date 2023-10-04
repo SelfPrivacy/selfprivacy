@@ -140,6 +140,12 @@ class BackupDetailsPage extends StatelessWidget {
                       builder: (final context, final scrollController) =>
                           ChangeAutobackupsPeriodModal(
                         scrollController: scrollController,
+                        initialAutobackupPeriod:
+                            context.read<BackupsCubit>().state.autobackupPeriod,
+                        onSetPeriodCallback: (final Duration? selectedPeriod) =>
+                            context
+                                .read<BackupsCubit>()
+                                .setAutobackupPeriod(selectedPeriod),
                       ),
                     ),
                   );
@@ -183,6 +189,14 @@ class BackupDetailsPage extends StatelessWidget {
                       initialChildSize: 0.6,
                       builder: (final context, final scrollController) =>
                           ChangeRotationQuotasModal(
+                        onSetAutobackupQuotasCallback: (
+                          final AutobackupQuotas selectedAutobackupQuotas,
+                        ) =>
+                            context
+                                .read<BackupsCubit>()
+                                .setAutobackupQuotas(selectedAutobackupQuotas),
+                        initialAutobackupQuotas:
+                            context.read<BackupsCubit>().state.autobackupQuotas,
                         scrollController: scrollController,
                       ),
                     ),

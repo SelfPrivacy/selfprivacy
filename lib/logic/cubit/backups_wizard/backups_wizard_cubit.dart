@@ -27,7 +27,7 @@ class BackupsWizardCubit extends Cubit<BackupsWizardState> {
         backupsCredential: backupsCredential,
         currentStep: state.currentStep == BackupsWizardStep.hostingRecovery
             ? BackupsWizardStep.finished
-            : BackupsWizardStep.period,
+            : BackupsWizardStep.settingsInitialization,
       ),
     );
   }
@@ -36,7 +36,6 @@ class BackupsWizardCubit extends Cubit<BackupsWizardState> {
     emit(
       state.copyWith(
         autobackupPeriod: autobackupPeriod,
-        currentStep: BackupsWizardStep.quotas,
       ),
     );
   }
@@ -45,7 +44,14 @@ class BackupsWizardCubit extends Cubit<BackupsWizardState> {
     emit(
       state.copyWith(
         autobackupQuotas: autobackupQuotas,
-        currentStep: BackupsWizardStep.confirmation,
+      ),
+    );
+  }
+
+  void confirmSettings() {
+    emit(
+      state.copyWith(
+        currentStep: BackupsWizardStep.confirmInitialization,
       ),
     );
   }

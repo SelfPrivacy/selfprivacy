@@ -12,7 +12,7 @@ class SshFormCubit extends FormCubit {
     required this.user,
   }) {
     final RegExp keyRegExp = RegExp(
-      r'^(ssh-rsa AAAAB3NzaC1yc2|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5)[0-9A-Za-z+/]+[=]{0,3}( .*)?$',
+      r'^(ecdsa-sha2-nistp256 AAAAE2VjZH|ssh-rsa AAAAB3NzaC1yc2|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5)[0-9A-Za-z+/]+[=]{0,3}( .*)?$',
     );
 
     key = FieldCubit(

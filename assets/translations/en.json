@@ -83,7 +83,7 @@
         "no_key_name": "Unnamed key",
         "root_title": "These are superuser keys",
         "root_subtitle": "Owners of these keys get full access to the server and can do anything on it. Only add your own keys to the server.",
-        "input_label": "Public ED25519 or RSA key"
+        "input_label": "Public ED25519, ECDSA or RSA key"
     },
     "onboarding": {
         "page1_title": "Digital independence, available to all of us",

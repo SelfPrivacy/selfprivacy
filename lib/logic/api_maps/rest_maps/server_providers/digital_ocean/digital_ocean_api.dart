@@ -455,8 +455,8 @@ class DigitalOceanApi extends RestApiMap {
   }
 
   Future<GenericResult<bool>> resizeVolume(
-    final String name,
-    final DiskSize size,
+    final String uuid,
+    final int gb,
   ) async {
     bool success = false;
 
@@ -464,11 +464,10 @@ class DigitalOceanApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       resizeVolumeResponse = await client.post(
-        '/volumes/actions',
+        '/volumes/$uuid/actions',
         data: {
           'type': 'resize',
-          'volume_name': name,
-          'size_gigabytes': size.gibibyte,
+          'size_gigabytes': gb,
           'region': region,
         },
       );

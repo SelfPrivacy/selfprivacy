@@ -44,5 +44,4 @@ enum BackupsWizardStep {
   settingsInitialization,
   confirmInitialization,
   confirmRecovery,
-  finished,
 }

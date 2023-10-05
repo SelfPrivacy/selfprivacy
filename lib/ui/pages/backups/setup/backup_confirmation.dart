@@ -1,7 +1,5 @@
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/backups_wizard/backups_wizard_cubit.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 
@@ -31,7 +29,6 @@ class BackupConfirmationPage extends StatelessWidget {
             BrandButton.rised(
               onPressed: () {
                 onConfirmCallback();
-                context.read<BackupsWizardCubit>().finish();
               },
               text: 'basis.connect'.tr(),
             ),

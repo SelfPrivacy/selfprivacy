@@ -15,7 +15,7 @@ class BackupsWizardCubit extends Cubit<BackupsWizardState> {
 
     /// If config already exists, then user only lacks credentials,
     /// we don't need full re-initialization
-    if (serverBackupConfig != null) {
+    if (serverBackupConfig != null && serverBackupConfig.isInitialized) {
       emit(state.copyWith(currentStep: BackupsWizardStep.hostingRecovery));
     }
   }
@@ -51,14 +51,6 @@ class BackupsWizardCubit extends Cubit<BackupsWizardState> {
     emit(
       state.copyWith(
         currentStep: BackupsWizardStep.confirmInitialization,
-      ),
-    );
-  }
-
-  void finish() async {
-    emit(
-      state.copyWith(
-        currentStep: BackupsWizardStep.finished,
       ),
     );
   }

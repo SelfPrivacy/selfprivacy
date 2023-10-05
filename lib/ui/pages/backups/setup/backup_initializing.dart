@@ -83,7 +83,8 @@ class BackupsInitializingPage extends StatelessWidget {
 
     return BlocListener<BackupsWizardCubit, BackupsWizardState>(
       listener: (final context, final state) {
-        if (cubit.state.currentStep == BackupsWizardStep.finished) {
+        if (context.watch<BackupsState>().backupsCredential != null &&
+            context.watch<BackupsState>().backblazeBucket != null) {
           context.router.popUntilRoot();
         }
       },

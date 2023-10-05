@@ -69,13 +69,6 @@ class CloudflareDnsProvider extends DnsProvider {
         )
         .toList();
 
-    /// TODO: Remove when domain selection for more than one domain on account is implemented, move cachedZoneId writing to domain saving method
-    _adapter = ApiAdapter(
-      isWithToken: true,
-      cachedDomain: result.data[0].name,
-      cachedZoneId: result.data[0].id,
-    );
-
     return GenericResult(
       success: true,
       data: domains,

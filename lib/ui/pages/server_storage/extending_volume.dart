@@ -8,6 +8,7 @@ import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 
@@ -46,7 +47,6 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   late double _currentSliderGbValue;
   double _pricePerGb = 1.0;
 
-  // TODO: Wtfff hardcode?!?!?
   final DiskSize maxSize = const DiskSize(byte: 500000000000);
   late DiskSize minSize;
 
@@ -155,14 +155,24 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                 onPressed: _isError || isAlreadyResizing
                     ? null
                     : () {
-                        context.read<ApiProviderVolumeCubit>().resizeVolume(
-                              widget.diskVolumeToResize,
-                              DiskSize.fromGibibyte(
-                                _currentSliderGbValue.truncate().toDouble(),
-                              ),
-                              context.read<ApiServerVolumeCubit>().reload,
-                            );
-                        context.router.popUntilRoot();
+                        showPopUpAlert(
+                          alertTitle: 'storage.extending_volume_title'.tr(),
+                          description:
+                              'storage.extending_volume_modal_description'.tr(
+                            args: [_sizeController.text, _priceController.text],
+                          ),
+                          actionButtonTitle: 'basis.continue'.tr(),
+                          actionButtonOnPressed: () {
+                            context.read<ApiProviderVolumeCubit>().resizeVolume(
+                                  widget.diskVolumeToResize,
+                                  DiskSize.fromGibibyte(
+                                    _currentSliderGbValue.truncate().toDouble(),
+                                  ),
+                                  context.read<ApiServerVolumeCubit>().reload,
+                                );
+                            context.router.popUntilRoot();
+                          },
+                        );
                       },
                 child: Text('storage.extend_volume_button.title'.tr()),
               ),

@@ -304,6 +304,7 @@
         "extending_volume_description": "Resizing volume will allow you to store more data on your server without extending the server itself. Volume can only be extended: shrinking is not possible.",
         "extending_volume_price_info": "Price includes VAT and is estimated from pricing data provided by your server provider. Server will be rebooted after resizing.",
         "extending_volume_error": "Couldn't initialize volume extending.",
+        "extending_volume_modal_description": "Upgrade to {} for {} plan per month.",
         "size": "Size",
         "price": "Price",
         "data_migration_title": "Data migration",

@@ -1,0 +1,20 @@
+### Bug Fixes
+
+- Fix volume resizing on Digital Ocean ([#368](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/368), resolves [#367](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/367))
+- Disable the storage card while volume information is being fetched ([#369](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/369), resolves [#317](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/317))
+
+
+### Features
+
+- Add copy-to-clipboard for email on user page ([#329](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/329), resolves [#287](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/287))
+- Add support for ECDSA SSH keys ([#362](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/362), resolves [#319](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/319))
+- Implement confirmation modal for the volume resize ([#372](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/372), resolves [#308](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/308))
+
+### Other changes
+
+- Move service descriptions above login info for service cards ([#342](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/342), resolves [#341](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/341))
+- Add measure units to 'Extending volume' page ([#344](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/344), resolves [#301](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/301))
+- Make users to be ordered properly on users page ([#343](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/343), resolves [#340](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/340))
+- Move service card name to its icon row ([#352](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/352), resolves [#350](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/350))
+- Reorganize placeholders for empty pages ([#359](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/359), resolves [#348](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/348))
+- Remove redundant zone id cache for Cloudflare ([#371](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/371))

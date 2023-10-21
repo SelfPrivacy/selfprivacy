@@ -5,7 +5,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -13,6 +16,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
+import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
@@ -31,6 +35,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ServerInstallationRepository();
 
   Timer? timer;
+
+  final DiskSize initialStorage = DiskSize.fromGibibyte(10);
 
   Future<void> load() async {
     final ServerInstallationState state = await repository.load();
@@ -147,6 +153,19 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     return apiResult.data;
   }
 
+  Future<AdditionalPricing?> fetchAvailableAdditionalPricing() async {
+    AdditionalPricing? prices;
+    final pricingResult =
+        await ProvidersController.currentServerProvider!.getAdditionalPricing();
+    if (pricingResult.data == null || !pricingResult.success) {
+      getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
+      return prices;
+    }
+
+    prices = pricingResult.data;
+    return prices;
+  }
+
   void setServerProviderKey(final String serverProviderKey) async {
     await repository.saveServerProviderKey(serverProviderKey);
 
@@ -167,11 +186,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
+  Future<void> setLocationIdentifier(final String locationId) async {
+    await ProvidersController.currentServerProvider!
+        .trySetServerLocation(locationId);
+  }
+
   void setServerType(final ServerType serverType) async {
     await repository.saveServerType(serverType);
-
-    await ProvidersController.currentServerProvider!
-        .trySetServerLocation(serverType.location.identifier);
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(
@@ -199,8 +220,23 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       applicationKey: applicationKey,
       provider: BackupsProviderType.backblaze,
     );
+    final BackblazeBucket? bucket;
     await repository.saveBackblazeKey(backblazeCredential);
     if (state is ServerInstallationRecovery) {
+      final configuration = await ServerApi(
+        customToken:
+            (state as ServerInstallationRecovery).serverDetails!.apiToken,
+        isWithToken: true,
+      ).getBackupsConfiguration();
+      if (configuration != null) {
+        try {
+          bucket = await BackblazeApi()
+              .fetchBucket(backblazeCredential, configuration);
+          await getIt<ApiConfigModel>().storeBackblazeBucket(bucket!);
+        } catch (e) {
+          print(e);
+        }
+      }
       finishRecoveryProcess(backblazeCredential);
       return;
     }
@@ -257,6 +293,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       serverTypeId: state.serverTypeIdentificator!,
       errorCallback: clearAppConfig,
       successCallback: onCreateServerSuccess,
+      storageSize: initialStorage,
     );
 
     final result =

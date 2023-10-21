@@ -9,6 +9,7 @@ class BackupsState extends ServerInstallationDependendState {
     this.refreshing = true,
     this.autobackupPeriod,
     this.backblazeBucket,
+    this.autobackupQuotas,
   });
 
   final bool isInitialized;
@@ -18,6 +19,7 @@ class BackupsState extends ServerInstallationDependendState {
   final bool refreshing;
   final Duration? autobackupPeriod;
   final BackblazeBucket? backblazeBucket;
+  final AutobackupQuotas? autobackupQuotas;
 
   List<Backup> serviceBackups(final String serviceId) => backups
       .where((final backup) => backup.serviceId == serviceId)
@@ -40,6 +42,7 @@ class BackupsState extends ServerInstallationDependendState {
     final bool? refreshing,
     final Duration? autobackupPeriod,
     final BackblazeBucket? backblazeBucket,
+    final AutobackupQuotas? autobackupQuotas,
   }) =>
       BackupsState(
         isInitialized: isInitialized ?? this.isInitialized,
@@ -53,5 +56,6 @@ class BackupsState extends ServerInstallationDependendState {
             ? null
             : autobackupPeriod ?? this.autobackupPeriod,
         backblazeBucket: backblazeBucket ?? this.backblazeBucket,
+        autobackupQuotas: autobackupQuotas ?? this.autobackupQuotas,
       );
 }

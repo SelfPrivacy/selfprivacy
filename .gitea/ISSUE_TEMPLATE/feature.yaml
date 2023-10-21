@@ -1,0 +1,23 @@
+name: Feature request
+about: Suggest an idea for this project
+label:
+  - Feature request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request! Please provide a short but a descriptive title for your issue.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the feature you'd like to see.
+      placeholder: |
+        As a user, I want to be able to...
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and notes
+      description: Additional information about environment and what were you trying to do. If you have an idea how to implement this feature, please describe it here too.

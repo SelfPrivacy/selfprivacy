@@ -254,7 +254,9 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     try {
       final int dropletId = serverResult.data!;
-      final newVolume = (await createVolume()).data;
+      final newVolume =
+          (await createVolume(installationData.storageSize.gibibyte.toInt()))
+              .data;
       final bool attachedVolume = (await _adapter.api().attachVolume(
                 newVolume!.name,
                 dropletId,
@@ -527,14 +529,20 @@ class DigitalOceanServerProvider extends ServerProvider {
     );
   }
 
-  /// Hardcoded on their documentation and there is no pricing API at all
-  /// Probably we should scrap the doc page manually
   @override
-  Future<GenericResult<Price?>> getPricePerGb() async => GenericResult(
+  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing() async =>
+      GenericResult(
         success: true,
-        data: Price(
-          value: 0.10,
-          currency: currency,
+        data: AdditionalPricing(
+          perVolumeGb: Price(
+            /// Hardcoded in their documentation and there is no pricing API
+            value: 0.10,
+            currency: currency,
+          ),
+          perPublicIpv4: Price(
+            value: 0,
+            currency: currency,
+          ),
         ),
       );
 
@@ -588,10 +596,10 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerVolume?>> createVolume() async {
+  Future<GenericResult<ServerVolume?>> createVolume(final int gb) async {
     ServerVolume? volume;
 
-    final result = await _adapter.api().createVolume();
+    final result = await _adapter.api().createVolume(gb);
 
     if (!result.success || result.data == null) {
       return GenericResult(
@@ -690,8 +698,8 @@ class DigitalOceanServerProvider extends ServerProvider {
     final DiskSize size,
   ) async =>
       _adapter.api().resizeVolume(
-            volume.name,
-            size,
+            volume.uuid!,
+            size.gibibyte.toInt(),
           );
 
   @override
@@ -708,11 +716,35 @@ class DigitalOceanServerProvider extends ServerProvider {
         message: result.message,
       );
     }
+    final resultVolumes = await _adapter.api().getVolumes();
+    if (resultVolumes.data.isEmpty || !resultVolumes.success) {
+      return GenericResult(
+        success: false,
+        data: metadata,
+        code: resultVolumes.code,
+        message: resultVolumes.message,
+      );
+    }
+    final resultPricePerGb = await getAdditionalPricing();
+    if (resultPricePerGb.data == null || !resultPricePerGb.success) {
+      return GenericResult(
+        success: false,
+        data: metadata,
+        code: resultPricePerGb.code,
+        message: resultPricePerGb.message,
+      );
+    }
 
     final List servers = result.data;
+    final List<DigitalOceanVolume> volumes = resultVolumes.data;
     try {
+      final Price pricePerGb = resultPricePerGb.data!.perVolumeGb;
       final droplet = servers.firstWhere(
         (final server) => server['id'] == serverId,
+      );
+
+      final volume = volumes.firstWhere(
+        (final volume) => droplet['volume_ids'].contains(volume.id),
       );
 
       metadata = [
@@ -739,7 +771,8 @@ class DigitalOceanServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
-          value: '${droplet['size']['price_monthly']} ${currency.shortcode}',
+          value:
+              '${droplet['size']['price_monthly']} + ${(volume.sizeGigabytes * pricePerGb.value).toStringAsFixed(2)} ${currency.shortcode}',
         ),
         ServerMetadataEntity(
           type: MetadataType.location,

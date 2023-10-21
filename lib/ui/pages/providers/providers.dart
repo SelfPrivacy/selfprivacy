@@ -49,6 +49,8 @@ class _ProvidersPageState extends State<ProvidersPage> {
       return StateType.stable;
     }
 
+    bool isClickable() => getServerStatus() != StateType.uninitialized;
+
     StateType getDnsStatus() {
       if (dnsStatus == DnsRecordsStatus.uninitialized ||
           dnsStatus == DnsRecordsStatus.refreshing) {
@@ -83,7 +85,9 @@ class _ProvidersPageState extends State<ProvidersPage> {
             subtitle: diskStatus.isDiskOkay
                 ? 'storage.status_ok'.tr()
                 : 'storage.status_error'.tr(),
-            onTap: () => context.pushRoute(const ServerDetailsRoute()),
+            onTap: isClickable()
+                ? () => context.pushRoute(const ServerDetailsRoute())
+                : null,
           ),
           const SizedBox(height: 16),
           _Card(
@@ -93,7 +97,9 @@ class _ProvidersPageState extends State<ProvidersPage> {
             subtitle: appConfig.isDomainSelected
                 ? appConfig.serverDomain!.domainName
                 : '',
-            onTap: () => context.pushRoute(const DnsDetailsRoute()),
+            onTap: isClickable()
+                ? () => context.pushRoute(const DnsDetailsRoute())
+                : null,
           ),
           const SizedBox(height: 16),
           _Card(
@@ -103,7 +109,9 @@ class _ProvidersPageState extends State<ProvidersPage> {
             icon: BrandIcons.save,
             title: 'backup.card_title'.tr(),
             subtitle: isBackupInitialized ? 'backup.card_subtitle'.tr() : '',
-            onTap: () => context.pushRoute(const BackupDetailsRoute()),
+            onTap: isClickable()
+                ? () => context.pushRoute(const BackupDetailsRoute())
+                : null,
           ),
         ],
       ),

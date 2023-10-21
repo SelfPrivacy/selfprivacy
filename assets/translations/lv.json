@@ -121,7 +121,6 @@
         "disk": "Disks lokāls",
         "monthly_cost": "Mēneša maksa",
         "location": "Vieta",
-        "provider": "Sniedzējs",
         "core_count": {
             "one": "{} kodols",
             "two": "{} kodoli",

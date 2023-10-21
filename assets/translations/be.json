@@ -32,7 +32,6 @@
         "manage_domain_dns": "Для кіравання DNS вашага дамена",
         "use_this_domain": "Ужываем гэты дамен?",
         "use_this_domain_text": "Указаны вамі токен дае кантроль над гэтым даменам",
-        "cloudflare_api_token": "API ключ DNS правайдэра",
         "connect_backblaze_storage": "Падлучыце хмарнае сховішча Backblaze",
         "no_connected_domains": "У дадзены момант падлучаных даменаў няма",
         "loading_domain_list": "Загружаем спіс даменаў",
@@ -425,7 +424,6 @@
         "disk": "Дыск",
         "monthly_cost": "Штомесячны кошт",
         "location": "Размяшчэнне",
-        "provider": "Правайдэр",
         "core_count": {
             "one": "{} ядро",
             "two": "{} ядра",

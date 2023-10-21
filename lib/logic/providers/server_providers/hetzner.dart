@@ -165,7 +165,9 @@ class HetznerServerProvider extends ServerProvider {
   Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
     final LaunchInstallationData installationData,
   ) async {
-    final volumeResult = await _adapter.api().createVolume();
+    final volumeResult = await _adapter.api().createVolume(
+          installationData.storageSize.gibibyte.toInt(),
+        );
 
     if (!volumeResult.success || volumeResult.data == null) {
       return GenericResult(
@@ -546,8 +548,8 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<Price?>> getPricePerGb() async {
-    final result = await _adapter.api().getPricePerGb();
+  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing() async {
+    final result = await _adapter.api().getPricing();
 
     if (!result.success || result.data == null) {
       return GenericResult(
@@ -560,9 +562,15 @@ class HetznerServerProvider extends ServerProvider {
 
     return GenericResult(
       success: true,
-      data: Price(
-        value: result.data!,
-        currency: currency,
+      data: AdditionalPricing(
+        perVolumeGb: Price(
+          value: result.data!.perVolumeGb,
+          currency: currency,
+        ),
+        perPublicIpv4: Price(
+          value: result.data!.perPublicIpv4,
+          currency: currency,
+        ),
       ),
     );
   }
@@ -617,10 +625,10 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerVolume?>> createVolume() async {
+  Future<GenericResult<ServerVolume?>> createVolume(final int gb) async {
     ServerVolume? volume;
 
-    final result = await _adapter.api().createVolume();
+    final result = await _adapter.api().createVolume(gb);
 
     if (!result.success || result.data == null) {
       return GenericResult(
@@ -705,20 +713,45 @@ class HetznerServerProvider extends ServerProvider {
     final int serverId,
   ) async {
     List<ServerMetadataEntity> metadata = [];
-    final result = await _adapter.api().getServers();
-    if (result.data.isEmpty || !result.success) {
+    final resultServers = await _adapter.api().getServers();
+    if (resultServers.data.isEmpty || !resultServers.success) {
       return GenericResult(
         success: false,
         data: metadata,
-        code: result.code,
-        message: result.message,
+        code: resultServers.code,
+        message: resultServers.message,
+      );
+    }
+    final resultVolumes = await _adapter.api().getVolumes();
+    if (resultVolumes.data.isEmpty || !resultVolumes.success) {
+      return GenericResult(
+        success: false,
+        data: metadata,
+        code: resultVolumes.code,
+        message: resultVolumes.message,
+      );
+    }
+    final resultPricePerGb = await getAdditionalPricing();
+    if (resultPricePerGb.data == null || !resultPricePerGb.success) {
+      return GenericResult(
+        success: false,
+        data: metadata,
+        code: resultPricePerGb.code,
+        message: resultPricePerGb.message,
       );
     }
 
-    final List<HetznerServerInfo> servers = result.data;
+    final List<HetznerServerInfo> servers = resultServers.data;
+    final List<HetznerVolume> volumes = resultVolumes.data;
+
     try {
+      final Price pricePerGb = resultPricePerGb.data!.perVolumeGb;
+      final Price pricePerIp = resultPricePerGb.data!.perPublicIpv4;
       final HetznerServerInfo server = servers.firstWhere(
         (final server) => server.id == serverId,
+      );
+      final HetznerVolume volume = volumes.firstWhere(
+        (final volume) => server.volumes.contains(volume.id),
       );
 
       metadata = [
@@ -746,7 +779,8 @@ class HetznerServerProvider extends ServerProvider {
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
           value:
-              '${server.serverType.prices[1].monthly.toStringAsFixed(2)} ${currency.shortcode}',
+              // TODO: Make more descriptive
+              '${server.serverType.prices[1].monthly.toStringAsFixed(2)} + ${(volume.size * pricePerGb.value).toStringAsFixed(2)} + ${pricePerIp.value.toStringAsFixed(2)} ${currency.shortcode}',
         ),
         ServerMetadataEntity(
           type: MetadataType.location,

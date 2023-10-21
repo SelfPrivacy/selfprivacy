@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:selfprivacy/logic/models/message.dart';
+import 'package:selfprivacy/utils/platform_adapter.dart';
 
 class LogListItem extends StatelessWidget {
   const LogListItem({
@@ -71,7 +71,7 @@ class _RestApiRequestMessageItem extends StatelessWidget {
               if (message.text != null)
                 TextButton(
                   onPressed: () {
-                    Clipboard.setData(ClipboardData(text: message.text ?? ''));
+                    PlatformAdapter.setClipboard(message.text ?? '');
                   },
                   child: Text('console_page.copy'.tr()),
                 ),
@@ -121,7 +121,7 @@ class _RestApiResponseMessageItem extends StatelessWidget {
               if (message.text != null)
                 TextButton(
                   onPressed: () {
-                    Clipboard.setData(ClipboardData(text: message.text ?? ''));
+                    PlatformAdapter.setClipboard(message.text ?? '');
                   },
                   child: Text('console_page.copy'.tr()),
                 ),
@@ -195,7 +195,7 @@ class _GraphQlResponseMessageItem extends StatelessWidget {
               if (message.text != null)
                 TextButton(
                   onPressed: () {
-                    Clipboard.setData(ClipboardData(text: message.text ?? ''));
+                    PlatformAdapter.setClipboard(message.text ?? '');
                   },
                   child: Text('console_page.copy'.tr()),
                 ),
@@ -264,7 +264,7 @@ class _GraphQlRequestMessageItem extends StatelessWidget {
               if (message.text != null)
                 TextButton(
                   onPressed: () {
-                    Clipboard.setData(ClipboardData(text: message.text ?? ''));
+                    PlatformAdapter.setClipboard(message.text ?? '');
                   },
                   child: Text('console_page.copy'.tr()),
                 ),

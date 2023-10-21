@@ -1,3 +1,4 @@
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -11,6 +12,7 @@ class LaunchInstallationData {
     required this.serverTypeId,
     required this.errorCallback,
     required this.successCallback,
+    required this.storageSize,
   });
 
   final User rootUser;
@@ -20,4 +22,5 @@ class LaunchInstallationData {
   final String serverTypeId;
   final Function() errorCallback;
   final Function(ServerHostingDetails details) successCallback;
+  final DiskSize storageSize;
 }

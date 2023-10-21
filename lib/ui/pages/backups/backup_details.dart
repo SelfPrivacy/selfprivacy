@@ -16,6 +16,7 @@ import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/pages/backups/change_period_modal.dart';
+import 'package:selfprivacy/ui/pages/backups/change_rotation_quotas_modal.dart';
 import 'package:selfprivacy/ui/pages/backups/copy_encryption_key_modal.dart';
 import 'package:selfprivacy/ui/pages/backups/create_backups_modal.dart';
 import 'package:selfprivacy/ui/pages/backups/snapshot_modal.dart';
@@ -83,6 +84,9 @@ class BackupDetailsPage extends StatelessWidget {
       );
     }
 
+    final Color? overrideColor =
+        preventActions ? Theme.of(context).colorScheme.secondary : null;
+
     return BrandHeroScreen(
       heroIcon: BrandIcons.save,
       heroTitle: 'backup.card_title'.tr(),
@@ -110,11 +114,15 @@ class BackupDetailsPage extends StatelessWidget {
                     ),
                   );
                 },
-          leading: const Icon(
+          leading: Icon(
             Icons.add_circle_outline_rounded,
+            color: overrideColor,
           ),
           title: Text(
             'backup.create_new'.tr(),
+            style: TextStyle(
+              color: overrideColor,
+            ),
           ),
         ),
         ListTile(
@@ -138,13 +146,20 @@ class BackupDetailsPage extends StatelessWidget {
                     ),
                   );
                 },
-          leading: const Icon(
+          leading: Icon(
             Icons.manage_history_outlined,
+            color: overrideColor,
           ),
           title: Text(
             'backup.autobackup_period_title'.tr(),
+            style: TextStyle(
+              color: overrideColor,
+            ),
           ),
           subtitle: Text(
+            style: TextStyle(
+              color: overrideColor,
+            ),
             autobackupPeriod != null
                 ? 'backup.autobackup_period_subtitle'.tr(
                     namedArgs: {
@@ -152,6 +167,38 @@ class BackupDetailsPage extends StatelessWidget {
                     },
                   )
                 : 'backup.autobackup_period_never'.tr(),
+          ),
+        ),
+        ListTile(
+          onTap: preventActions
+              ? null
+              : () {
+                  showModalBottomSheet(
+                    useRootNavigator: true,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (final BuildContext context) =>
+                        DraggableScrollableSheet(
+                      expand: false,
+                      maxChildSize: 0.9,
+                      minChildSize: 0.4,
+                      initialChildSize: 0.6,
+                      builder: (final context, final scrollController) =>
+                          ChangeRotationQuotasModal(
+                        scrollController: scrollController,
+                      ),
+                    ),
+                  );
+                },
+          leading: Icon(
+            Icons.auto_delete_outlined,
+            color: overrideColor,
+          ),
+          title: Text(
+            'backup.rotation_quotas_title'.tr(),
+            style: TextStyle(
+              color: overrideColor,
+            ),
           ),
         ),
         ListTile(
@@ -175,14 +222,21 @@ class BackupDetailsPage extends StatelessWidget {
                     ),
                   );
                 },
-          leading: const Icon(
+          leading: Icon(
             Icons.key_outlined,
+            color: overrideColor,
           ),
           title: Text(
             'backup.backups_encryption_key'.tr(),
+            style: TextStyle(
+              color: overrideColor,
+            ),
           ),
           subtitle: Text(
             'backup.backups_encryption_key_subtitle'.tr(),
+            style: TextStyle(
+              color: overrideColor,
+            ),
           ),
         ),
         const SizedBox(height: 8),
@@ -227,10 +281,16 @@ class BackupDetailsPage extends StatelessWidget {
               ),
               if (backups.isEmpty)
                 ListTile(
-                  leading: const Icon(
+                  leading: Icon(
                     Icons.error_outline,
+                    color: overrideColor,
                   ),
-                  title: Text('backup.no_backups'.tr()),
+                  title: Text(
+                    'backup.no_backups'.tr(),
+                    style: TextStyle(
+                      color: overrideColor,
+                    ),
+                  ),
                 ),
               if (backups.isNotEmpty)
                 Column(
@@ -282,9 +342,15 @@ class BackupDetailsPage extends StatelessWidget {
                                 );
                               },
                         title: Text(
+                          style: TextStyle(
+                            color: overrideColor,
+                          ),
                           '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
                         ),
                         subtitle: Text(
+                          style: TextStyle(
+                            color: overrideColor,
+                          ),
                           service?.displayName ?? backup.fallbackServiceName,
                         ),
                         leading: service != null
@@ -293,12 +359,16 @@ class BackupDetailsPage extends StatelessWidget {
                                 height: 24,
                                 width: 24,
                                 colorFilter: ColorFilter.mode(
-                                  Theme.of(context).colorScheme.onBackground,
+                                  overrideColor ??
+                                      Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
                                   BlendMode.srcIn,
                                 ),
                               )
-                            : const Icon(
+                            : Icon(
                                 Icons.question_mark_outlined,
+                                color: overrideColor,
                               ),
                       );
                     },
@@ -339,12 +409,19 @@ class BackupDetailsPage extends StatelessWidget {
               ListTile(
                 title: Text(
                   'backup.refetch_backups'.tr(),
+                  style: TextStyle(
+                    color: overrideColor,
+                  ),
                 ),
                 subtitle: Text(
                   'backup.refetch_backups_subtitle'.tr(),
+                  style: TextStyle(
+                    color: overrideColor,
+                  ),
                 ),
-                leading: const Icon(
+                leading: Icon(
                   Icons.cached_outlined,
+                  color: overrideColor,
                 ),
                 onTap: preventActions
                     ? null
@@ -356,12 +433,19 @@ class BackupDetailsPage extends StatelessWidget {
               ListTile(
                 title: Text(
                   'backup.reupload_key'.tr(),
+                  style: TextStyle(
+                    color: overrideColor,
+                  ),
                 ),
                 subtitle: Text(
                   'backup.reupload_key_subtitle'.tr(),
+                  style: TextStyle(
+                    color: overrideColor,
+                  ),
                 ),
-                leading: const Icon(
+                leading: Icon(
                   Icons.warning_amber_outlined,
+                  color: overrideColor,
                 ),
                 onTap: preventActions
                     ? null

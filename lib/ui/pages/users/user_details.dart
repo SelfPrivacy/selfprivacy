@@ -143,17 +143,27 @@ class _UserLogins extends StatelessWidget {
   final String domainName;
 
   @override
-  Widget build(final BuildContext context) => FilledCard(
-        child: Column(
-          children: [
-            ListTileOnSurfaceVariant(
-              title: '${user.login}@$domainName',
-              subtitle: 'users.email_login'.tr(),
-              leadingIcon: Icons.alternate_email_outlined,
-            ),
-          ],
-        ),
-      );
+  Widget build(final BuildContext context) {
+    final email = '${user.login}@$domainName';
+    return FilledCard(
+      child: Column(
+        children: [
+          ListTileOnSurfaceVariant(
+            onTap: () {
+              PlatformAdapter.setClipboard(email);
+              getIt<NavigationService>().showSnackBar(
+                'basis.copied_to_clipboard'.tr(),
+                behavior: SnackBarBehavior.floating,
+              );
+            },
+            title: email,
+            subtitle: 'users.email_login'.tr(),
+            leadingIcon: Icons.alternate_email_outlined,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _SshKeysCard extends StatelessWidget {

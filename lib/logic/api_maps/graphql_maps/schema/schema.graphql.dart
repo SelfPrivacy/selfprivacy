@@ -141,6 +141,185 @@ class _CopyWithStubImpl$Input$AutoUpgradeSettingsInput<TRes>
       _res;
 }
 
+class Input$AutobackupQuotasInput {
+  factory Input$AutobackupQuotasInput({
+    required int last,
+    required int daily,
+    required int weekly,
+    required int monthly,
+    required int yearly,
+  }) =>
+      Input$AutobackupQuotasInput._({
+        r'last': last,
+        r'daily': daily,
+        r'weekly': weekly,
+        r'monthly': monthly,
+        r'yearly': yearly,
+      });
+
+  Input$AutobackupQuotasInput._(this._$data);
+
+  factory Input$AutobackupQuotasInput.fromJson(Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$last = data['last'];
+    result$data['last'] = (l$last as int);
+    final l$daily = data['daily'];
+    result$data['daily'] = (l$daily as int);
+    final l$weekly = data['weekly'];
+    result$data['weekly'] = (l$weekly as int);
+    final l$monthly = data['monthly'];
+    result$data['monthly'] = (l$monthly as int);
+    final l$yearly = data['yearly'];
+    result$data['yearly'] = (l$yearly as int);
+    return Input$AutobackupQuotasInput._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  int get last => (_$data['last'] as int);
+  int get daily => (_$data['daily'] as int);
+  int get weekly => (_$data['weekly'] as int);
+  int get monthly => (_$data['monthly'] as int);
+  int get yearly => (_$data['yearly'] as int);
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$last = last;
+    result$data['last'] = l$last;
+    final l$daily = daily;
+    result$data['daily'] = l$daily;
+    final l$weekly = weekly;
+    result$data['weekly'] = l$weekly;
+    final l$monthly = monthly;
+    result$data['monthly'] = l$monthly;
+    final l$yearly = yearly;
+    result$data['yearly'] = l$yearly;
+    return result$data;
+  }
+
+  CopyWith$Input$AutobackupQuotasInput<Input$AutobackupQuotasInput>
+      get copyWith => CopyWith$Input$AutobackupQuotasInput(
+            this,
+            (i) => i,
+          );
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Input$AutobackupQuotasInput) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$last = last;
+    final lOther$last = other.last;
+    if (l$last != lOther$last) {
+      return false;
+    }
+    final l$daily = daily;
+    final lOther$daily = other.daily;
+    if (l$daily != lOther$daily) {
+      return false;
+    }
+    final l$weekly = weekly;
+    final lOther$weekly = other.weekly;
+    if (l$weekly != lOther$weekly) {
+      return false;
+    }
+    final l$monthly = monthly;
+    final lOther$monthly = other.monthly;
+    if (l$monthly != lOther$monthly) {
+      return false;
+    }
+    final l$yearly = yearly;
+    final lOther$yearly = other.yearly;
+    if (l$yearly != lOther$yearly) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$last = last;
+    final l$daily = daily;
+    final l$weekly = weekly;
+    final l$monthly = monthly;
+    final l$yearly = yearly;
+    return Object.hashAll([
+      l$last,
+      l$daily,
+      l$weekly,
+      l$monthly,
+      l$yearly,
+    ]);
+  }
+}
+
+abstract class CopyWith$Input$AutobackupQuotasInput<TRes> {
+  factory CopyWith$Input$AutobackupQuotasInput(
+    Input$AutobackupQuotasInput instance,
+    TRes Function(Input$AutobackupQuotasInput) then,
+  ) = _CopyWithImpl$Input$AutobackupQuotasInput;
+
+  factory CopyWith$Input$AutobackupQuotasInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$AutobackupQuotasInput;
+
+  TRes call({
+    int? last,
+    int? daily,
+    int? weekly,
+    int? monthly,
+    int? yearly,
+  });
+}
+
+class _CopyWithImpl$Input$AutobackupQuotasInput<TRes>
+    implements CopyWith$Input$AutobackupQuotasInput<TRes> {
+  _CopyWithImpl$Input$AutobackupQuotasInput(
+    this._instance,
+    this._then,
+  );
+
+  final Input$AutobackupQuotasInput _instance;
+
+  final TRes Function(Input$AutobackupQuotasInput) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? last = _undefined,
+    Object? daily = _undefined,
+    Object? weekly = _undefined,
+    Object? monthly = _undefined,
+    Object? yearly = _undefined,
+  }) =>
+      _then(Input$AutobackupQuotasInput._({
+        ..._instance._$data,
+        if (last != _undefined && last != null) 'last': (last as int),
+        if (daily != _undefined && daily != null) 'daily': (daily as int),
+        if (weekly != _undefined && weekly != null) 'weekly': (weekly as int),
+        if (monthly != _undefined && monthly != null)
+          'monthly': (monthly as int),
+        if (yearly != _undefined && yearly != null) 'yearly': (yearly as int),
+      }));
+}
+
+class _CopyWithStubImpl$Input$AutobackupQuotasInput<TRes>
+    implements CopyWith$Input$AutobackupQuotasInput<TRes> {
+  _CopyWithStubImpl$Input$AutobackupQuotasInput(this._res);
+
+  TRes _res;
+
+  call({
+    int? last,
+    int? daily,
+    int? weekly,
+    int? monthly,
+    int? yearly,
+  }) =>
+      _res;
+}
+
 class Input$InitializeRepositoryInput {
   factory Input$InitializeRepositoryInput({
     required Enum$BackupProvider provider,
@@ -1307,6 +1486,34 @@ Enum$BackupProvider fromJson$Enum$BackupProvider(String value) {
       return Enum$BackupProvider.FILE;
     default:
       return Enum$BackupProvider.$unknown;
+  }
+}
+
+enum Enum$BackupReason { EXPLICIT, AUTO, PRE_RESTORE, $unknown }
+
+String toJson$Enum$BackupReason(Enum$BackupReason e) {
+  switch (e) {
+    case Enum$BackupReason.EXPLICIT:
+      return r'EXPLICIT';
+    case Enum$BackupReason.AUTO:
+      return r'AUTO';
+    case Enum$BackupReason.PRE_RESTORE:
+      return r'PRE_RESTORE';
+    case Enum$BackupReason.$unknown:
+      return r'$unknown';
+  }
+}
+
+Enum$BackupReason fromJson$Enum$BackupReason(String value) {
+  switch (value) {
+    case r'EXPLICIT':
+      return Enum$BackupReason.EXPLICIT;
+    case r'AUTO':
+      return Enum$BackupReason.AUTO;
+    case r'PRE_RESTORE':
+      return Enum$BackupReason.PRE_RESTORE;
+    default:
+      return Enum$BackupReason.$unknown;
   }
 }
 

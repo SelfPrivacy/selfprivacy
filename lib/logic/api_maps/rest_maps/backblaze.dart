@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
@@ -174,6 +176,42 @@ class BackblazeApi extends RestApiMap {
         applicationKeyId: response.data['applicationKeyId'],
         applicationKey: response.data['applicationKey'],
       );
+    } else {
+      throw Exception('code: ${response.statusCode}');
+    }
+  }
+
+  Future<BackblazeBucket?> fetchBucket(
+    final BackupsCredential credentials,
+    final BackupConfiguration configuration,
+  ) async {
+    BackblazeBucket? bucket;
+    final BackblazeApiAuth auth = await getAuthorizationToken();
+    final Dio client = await getClient();
+    client.options.baseUrl = auth.apiUrl;
+    final Response response = await client.get(
+      '$apiPrefix/b2_list_buckets',
+      queryParameters: {
+        'accountId': getIt<ApiConfigModel>().backblazeCredential!.keyId,
+      },
+      options: Options(
+        headers: {'Authorization': auth.authorizationToken},
+      ),
+    );
+    close(client);
+    if (response.statusCode == HttpStatus.ok) {
+      for (final rawBucket in response.data['buckets']) {
+        if (rawBucket['bucketId'] == configuration.locationId) {
+          bucket = BackblazeBucket(
+            bucketId: rawBucket['bucketId'],
+            bucketName: rawBucket['bucketName'],
+            encryptionKey: configuration.encryptionKey,
+            applicationKeyId: '',
+            applicationKey: '',
+          );
+        }
+      }
+      return bucket;
     } else {
       throw Exception('code: ${response.statusCode}');
     }

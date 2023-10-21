@@ -21,11 +21,12 @@ class NavigationService {
     );
   }
 
-  void showSnackBar(final String text) {
+  void showSnackBar(final String text, {final SnackBarBehavior? behavior}) {
     final ScaffoldMessengerState state = scaffoldMessengerKey.currentState!;
     final SnackBar snack = SnackBar(
       content: Text(text),
       duration: const Duration(seconds: 2),
+      behavior: behavior,
     );
     state.showSnackBar(snack);
   }

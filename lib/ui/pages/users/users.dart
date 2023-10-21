@@ -3,6 +3,7 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
@@ -15,16 +16,16 @@ import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
-import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:selfprivacy/utils/platform_adapter.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
-part 'empty.dart';
 part 'new_user.dart';
 part 'user.dart';
 part 'user_details.dart';
@@ -41,19 +42,16 @@ class UsersPage extends StatelessWidget {
     Widget child;
 
     if (!isReady) {
-      child = isNotReady();
+      child = EmptyPagePlaceholder(
+        showReadyCard: true,
+        title: 'users.nobody_here'.tr(),
+        description: 'basis.please_connect'.tr(),
+        iconData: BrandIcons.users,
+      );
     } else {
       child = BlocBuilder<UsersCubit, UsersState>(
         builder: (final BuildContext context, final UsersState state) {
-          final List<User> users = state.users
-              .where((final user) => user.type != UserType.root)
-              .toList();
-          // final List<User> users = [];
-          users.sort(
-            (final User a, final User b) =>
-                a.login.toLowerCase().compareTo(b.login.toLowerCase()),
-          );
-
+          final users = state.orderedUsers;
           if (users.isEmpty) {
             if (state.isLoading) {
               return const Center(
@@ -70,8 +68,10 @@ class UsersPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _CouldNotLoadUsers(
-                        text: 'users.could_not_fetch_description'.tr(),
+                      EmptyPagePlaceholder(
+                        title: 'users.could_not_fetch_users'.tr(),
+                        description: 'users.could_not_fetch_description'.tr(),
+                        iconData: BrandIcons.users,
                       ),
                       const SizedBox(height: 18),
                       BrandOutlinedButton(
@@ -115,7 +115,7 @@ class UsersPage extends StatelessWidget {
                     itemBuilder:
                         (final BuildContext context, final int index) => _User(
                       user: users[index],
-                      isRootUser: users[index].type == UserType.primary,
+                      isPrimaryUser: users[index].type == UserType.primary,
                     ),
                   ),
                 ),
@@ -138,24 +138,4 @@ class UsersPage extends StatelessWidget {
       body: child,
     );
   }
-
-  Widget isNotReady() => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: NotReadyCard(),
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Center(
-                child: _NoUsers(
-                  text: 'users.not_ready'.tr(),
-                ),
-              ),
-            ),
-          )
-        ],
-      );
 }

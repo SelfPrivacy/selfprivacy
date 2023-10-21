@@ -75,6 +75,22 @@ type AutoUpgradeSettingsMutationReturn implements MutationReturnInterface {
   allowReboot: Boolean!
 }
 
+type AutobackupQuotas {
+  last: Int!
+  daily: Int!
+  weekly: Int!
+  monthly: Int!
+  yearly: Int!
+}
+
+input AutobackupQuotasInput {
+  last: Int!
+  daily: Int!
+  weekly: Int!
+  monthly: Int!
+  yearly: Int!
+}
+
 type Backup {
   configuration: BackupConfiguration!
   allSnapshots: [SnapshotInfo!]!
@@ -85,6 +101,7 @@ type BackupConfiguration {
   encryptionKey: String!
   isInitialized: Boolean!
   autobackupPeriod: Int
+  autobackupQuotas: AutobackupQuotas!
   locationName: String
   locationId: String
 }
@@ -93,6 +110,7 @@ type BackupMutations {
   initializeRepository(repository: InitializeRepositoryInput!): GenericBackupConfigReturn!
   removeRepository: GenericBackupConfigReturn!
   setAutobackupPeriod(period: Int = null): GenericBackupConfigReturn!
+  setAutobackupQuotas(quotas: AutobackupQuotasInput!): GenericBackupConfigReturn!
   startBackup(serviceId: String!): GenericJobMutationReturn!
   restoreBackup(snapshotId: String!, strategy: RestoreStrategy! = DOWNLOAD_VERIFY_OVERWRITE): GenericJobMutationReturn!
   forgetSnapshot(snapshotId: String!): GenericMutationReturn!
@@ -104,6 +122,12 @@ enum BackupProvider {
   NONE
   MEMORY
   FILE
+}
+
+enum BackupReason {
+  EXPLICIT
+  AUTO
+  PRE_RESTORE
 }
 
 """Date with time (isoformat)"""
@@ -326,6 +350,7 @@ type SnapshotInfo {
   id: String!
   service: Service!
   createdAt: DateTime!
+  reason: BackupReason!
 }
 
 input SshMutationInput {

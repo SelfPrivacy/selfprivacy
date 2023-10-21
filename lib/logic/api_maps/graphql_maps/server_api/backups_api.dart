@@ -143,6 +143,51 @@ mixin BackupsApi on GraphQLApiMap {
     return result;
   }
 
+  Future<GenericResult> setAutobackupQuotas(
+    final AutobackupQuotas quotas,
+  ) async {
+    QueryResult<Mutation$setAutobackupQuotas> response;
+    GenericResult? result;
+
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Mutation$setAutobackupQuotas(
+        quotas: Input$AutobackupQuotasInput(
+          last: quotas.last,
+          daily: quotas.daily,
+          weekly: quotas.weekly,
+          monthly: quotas.monthly,
+          yearly: quotas.yearly,
+        ),
+      );
+      final options =
+          Options$Mutation$setAutobackupQuotas(variables: variables);
+      response = await client.mutate$setAutobackupQuotas(options);
+      if (response.hasException) {
+        final message = response.exception.toString();
+        print(message);
+        result = GenericResult(
+          success: false,
+          data: null,
+          message: message,
+        );
+      }
+      result = GenericResult(
+        success: true,
+        data: null,
+      );
+    } catch (e) {
+      print(e);
+      result = GenericResult(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+
+    return result;
+  }
+
   Future<GenericResult> removeRepository() async {
     try {
       final GraphQLClient client = await getClient();

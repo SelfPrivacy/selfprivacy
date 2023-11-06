@@ -51,7 +51,7 @@ class RecoveryMethodSelect extends StatelessWidget {
             title: 'recovering.method_select_nothing'.tr(),
             onPressed: () => Navigator.of(context)
                 .push(materialRoute(const RecoveryFallbackMethodSelect())),
-          )
+          ),
         ],
       );
 }

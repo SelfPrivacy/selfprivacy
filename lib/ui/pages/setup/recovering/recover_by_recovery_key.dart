@@ -50,7 +50,7 @@ class RecoverByRecoveryKey extends StatelessWidget {
                     ? null
                     : () => context.read<RecoveryDeviceFormCubit>().trySubmit(),
                 child: Text('basis.continue'.tr()),
-              )
+              ),
             ],
           );
         },

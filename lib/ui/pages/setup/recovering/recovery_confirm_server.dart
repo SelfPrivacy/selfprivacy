@@ -81,7 +81,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                 );
               }
             },
-          )
+          ),
         ],
       );
 

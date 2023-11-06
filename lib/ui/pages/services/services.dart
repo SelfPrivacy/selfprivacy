@@ -69,7 +69,7 @@ class _ServicesPageState extends State<ServicesPage> {
                       ),
                       child: _Card(service: service),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -179,7 +179,7 @@ class _Card extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                 ],
-              )
+              ),
             ],
           ),
         ),

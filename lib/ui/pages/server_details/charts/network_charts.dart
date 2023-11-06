@@ -113,7 +113,7 @@ class NetworkChart extends StatelessWidget {
           minY: 0,
           maxY: [
                 ...listData[0].map((final e) => e.value),
-                ...listData[1].map((final e) => e.value)
+                ...listData[1].map((final e) => e.value),
               ].reduce(max) *
               1.2,
           minX: 0,
@@ -154,7 +154,7 @@ class NetworkChart extends StatelessWidget {
                 ),
                 interval: [
                       ...listData[0].map((final e) => e.value),
-                      ...listData[1].map((final e) => e.value)
+                      ...listData[1].map((final e) => e.value),
                     ].reduce(max) *
                     2 /
                     6.5,
@@ -168,7 +168,7 @@ class NetworkChart extends StatelessWidget {
             verticalInterval: 40,
             horizontalInterval: [
                   ...listData[0].map((final e) => e.value),
-                  ...listData[1].map((final e) => e.value)
+                  ...listData[1].map((final e) => e.value),
                 ].reduce(max) *
                 2 /
                 6.5,

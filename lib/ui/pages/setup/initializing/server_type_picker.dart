@@ -329,7 +329,7 @@ class SelectTypePage extends StatelessWidget {
                                         'initializing.choose_server_type_payment_per_month'
                                             .tr(
                                           args: [
-                                            '${(type.price.value + storagePrice + publicIpPrice).toStringAsFixed(4)} ${type.price.currency.shortcode}'
+                                            '${(type.price.value + storagePrice + publicIpPrice).toStringAsFixed(4)} ${type.price.currency.shortcode}',
                                           ],
                                         ),
                                         style: Theme.of(context)
@@ -371,7 +371,7 @@ class SelectTypePage extends StatelessWidget {
                                                       .tr(
                                                     args: [
                                                       type.price.value
-                                                          .toString()
+                                                          .toString(),
                                                     ],
                                                   ),
                                                   style: Theme.of(context)
@@ -401,7 +401,7 @@ class SelectTypePage extends StatelessWidget {
                                                   'initializing.choose_server_type_payment_storage'
                                                       .tr(
                                                     args: [
-                                                      storagePrice.toString()
+                                                      storagePrice.toString(),
                                                     ],
                                                   ),
                                                   style: Theme.of(context)
@@ -432,7 +432,8 @@ class SelectTypePage extends StatelessWidget {
                                                     'initializing.choose_server_type_payment_ip'
                                                         .tr(
                                                       args: [
-                                                        publicIpPrice.toString()
+                                                        publicIpPrice
+                                                            .toString(),
                                                       ],
                                                     ),
                                                     style: Theme.of(context)

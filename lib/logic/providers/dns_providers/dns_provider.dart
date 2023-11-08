@@ -63,14 +63,6 @@ abstract class DnsProvider {
     final ServerDomain domain,
     final String ip4,
     final String dkimPublicKey,
-  );
-
-  /// Will return list of [DesiredDnsRecord] objects, which represent
-  /// samples of perfect DNS records we need to know about in order to launch
-  /// SelfPrivacy application correctly.
-  List<DesiredDnsRecord> getDesiredDnsRecords(
-    final String? domainName,
-    final String? ip4,
-    final String? dkimPublicKey,
+    final List<DnsRecord> pendingDnsRecords,
   );
 }

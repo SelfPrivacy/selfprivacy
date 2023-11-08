@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 part 'desec_dns_info.g.dart';
 
@@ -28,6 +29,25 @@ class DesecDomain {
 /// https://desec.readthedocs.io/en/latest/dns/rrsets.html#retrieving-and-creating-dns-records
 @JsonSerializable()
 class DesecDnsRecord {
+  factory DesecDnsRecord.fromDnsRecord(final DnsRecord record) {
+    final String type = record.type;
+    String content = record.content ?? '';
+    String name = record.name ?? '';
+    if (type == 'MX') {
+      name = '';
+      content = '10 $content';
+    }
+    if (type == 'TXT' && content.isNotEmpty && !content.startsWith('"')) {
+      content = '"$content"';
+    }
+
+    return DesecDnsRecord(
+      subname: name,
+      type: type,
+      ttl: record.ttl,
+      records: [content],
+    );
+  }
   DesecDnsRecord({
     required this.subname,
     required this.type,

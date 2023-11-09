@@ -18,7 +18,7 @@ abstract class DnsProvider {
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
 
   /// Returns list of all available domain entries assigned to the account.
-  Future<GenericResult<List<String>>> domainList();
+  Future<GenericResult<List<ServerDomain>>> domainList();
 
   /// Tries to create all main domain records needed
   /// for SelfPrivacy to launch on requested domain by ip4.

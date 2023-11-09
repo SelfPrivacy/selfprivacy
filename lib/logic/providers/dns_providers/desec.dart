@@ -1,7 +1,7 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desec/desec_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/json/desec_dns_info.dart';
+import 'package:selfprivacy/logic/models/json/dns_providers/desec_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
@@ -47,8 +47,8 @@ class DesecDnsProvider extends DnsProvider {
   }
 
   @override
-  Future<GenericResult<List<String>>> domainList() async {
-    List<String> domains = [];
+  Future<GenericResult<List<ServerDomain>>> domainList() async {
+    List<ServerDomain> domains = [];
     final result = await _adapter.api().getDomains();
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
@@ -60,8 +60,8 @@ class DesecDnsProvider extends DnsProvider {
     }
 
     domains = result.data
-        .map<String>(
-          (final el) => el.name,
+        .map<ServerDomain>(
+          (final el) => el.toServerDomain(),
         )
         .toList();
 
@@ -146,16 +146,7 @@ class DesecDnsProvider extends DnsProvider {
 
     try {
       for (final record in result.data) {
-        final String? content =
-            record.records.isEmpty ? null : record.records[0];
-        records.add(
-          DnsRecord(
-            name: record.subname,
-            type: record.type,
-            content: content,
-            ttl: record.ttl,
-          ),
-        );
+        records.add(record.toDnsRecord());
       }
     } catch (e) {
       print(e);
@@ -234,8 +225,7 @@ class DesecDnsProvider extends DnsProvider {
         } else {
           final foundMatch = records.any(
             (final r) =>
-                ('${r.subname}.${domain.domainName}' == record.subname ||
-                    record.subname == '') &&
+                r.subname == record.subname &&
                 r.type == record.type &&
                 r.records[0] == record.records[0],
           );

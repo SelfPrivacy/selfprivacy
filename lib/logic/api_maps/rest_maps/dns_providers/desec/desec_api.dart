@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
-import 'package:selfprivacy/logic/models/json/desec_dns_info.dart';
+import 'package:selfprivacy/logic/models/json/dns_providers/desec_dns_info.dart';
 
 class DesecApi extends RestApiMap {
   DesecApi({

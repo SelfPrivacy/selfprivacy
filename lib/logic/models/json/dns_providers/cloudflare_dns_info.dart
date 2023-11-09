@@ -1,6 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 part 'cloudflare_dns_info.g.dart';
+part 'cloudflare_dns_adapter.dart';
 
 /// https://developers.cloudflare.com/api/operations/zones-get
 @JsonSerializable()
@@ -26,6 +29,7 @@ class CloudflareZone {
 
   static CloudflareZone fromJson(final Map<String, dynamic> json) =>
       _$CloudflareZoneFromJson(json);
+  ServerDomain toServerDomain() => _toServerDomain(this);
 }
 
 /// https://developers.cloudflare.com/api/operations/dns-records-for-a-zone-list-dns-records
@@ -40,6 +44,12 @@ class CloudflareDnsRecord {
     this.priority = 10,
     this.id,
   });
+
+  factory CloudflareDnsRecord.fromDnsRecord(
+    final DnsRecord dnsRecord,
+    final String rootDomain,
+  ) =>
+      _fromDnsRecord(dnsRecord, rootDomain);
 
   /// Record identifier
   ///
@@ -83,4 +93,5 @@ class CloudflareDnsRecord {
   static CloudflareDnsRecord fromJson(final Map<String, dynamic> json) =>
       _$CloudflareDnsRecordFromJson(json);
   Map<String, dynamic> toJson() => _$CloudflareDnsRecordToJson(this);
+  DnsRecord toDnsRecord() => _toDnsRecord(this);
 }

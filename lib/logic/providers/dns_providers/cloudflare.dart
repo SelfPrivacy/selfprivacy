@@ -1,9 +1,10 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/cloudflare/cloudflare_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/json/cloudflare_dns_info.dart';
+import 'package:selfprivacy/logic/models/json/dns_providers/cloudflare_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 class ApiAdapter {
   ApiAdapter({
@@ -51,8 +52,8 @@ class CloudflareDnsProvider extends DnsProvider {
   }
 
   @override
-  Future<GenericResult<List<String>>> domainList() async {
-    List<String> domains = [];
+  Future<GenericResult<List<ServerDomain>>> domainList() async {
+    List<ServerDomain> domains = [];
     final result = await _adapter.api().getZones();
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
@@ -64,8 +65,8 @@ class CloudflareDnsProvider extends DnsProvider {
     }
 
     domains = result.data
-        .map<String>(
-          (final el) => el.name,
+        .map<ServerDomain>(
+          (final el) => el.toServerDomain(),
         )
         .toList();
 
@@ -90,14 +91,8 @@ class CloudflareDnsProvider extends DnsProvider {
           zoneId: _adapter.cachedZoneId,
           records: records
               .map<CloudflareDnsRecord>(
-                (final rec) => CloudflareDnsRecord(
-                  content: rec.content,
-                  name: rec.name,
-                  type: rec.type,
-                  zoneName: domain.domainName,
-                  id: null,
-                  ttl: rec.ttl,
-                ),
+                (final rec) =>
+                    CloudflareDnsRecord.fromDnsRecord(rec, domain.domainName),
               )
               .toList(),
         );
@@ -157,14 +152,7 @@ class CloudflareDnsProvider extends DnsProvider {
     }
 
     for (final rawRecord in result.data) {
-      records.add(
-        DnsRecord(
-          name: rawRecord.name,
-          type: rawRecord.type,
-          content: rawRecord.content,
-          ttl: rawRecord.ttl,
-        ),
-      );
+      records.add(rawRecord.toDnsRecord());
     }
 
     return GenericResult(
@@ -185,16 +173,7 @@ class CloudflareDnsProvider extends DnsProvider {
 
     return _adapter.api().createMultipleDnsRecords(
       zoneId: _adapter.cachedZoneId,
-      records: [
-        CloudflareDnsRecord(
-          content: record.content,
-          id: null,
-          name: record.name,
-          type: record.type,
-          zoneName: domain.domainName,
-          ttl: record.ttl,
-        ),
-      ],
+      records: [CloudflareDnsRecord.fromDnsRecord(record, domain.domainName)],
     );
   }
 
@@ -203,15 +182,18 @@ class CloudflareDnsProvider extends DnsProvider {
     final ServerDomain domain,
     final String ip4,
     final String dkimPublicKey,
+    final List<DnsRecord> pendingDnsRecords,
   ) async {
     final GenericResult<List<DnsRecord>> records =
         await getDnsRecords(domain: domain);
     final List<DesiredDnsRecord> foundRecords = [];
     try {
-      final List<DesiredDnsRecord> desiredRecords =
-          getDesiredDnsRecords(domain.domainName, ip4, dkimPublicKey);
-      for (final DesiredDnsRecord record in desiredRecords) {
-        if (record.description == 'record.dkim') {
+      for (final DnsRecord pendingDnsRecord in pendingDnsRecords) {
+        final record = CloudflareDnsRecord.fromDnsRecord(
+          pendingDnsRecord,
+          domain.domainName,
+        );
+        if (record.name == 'selector._domainkey') {
           final DnsRecord foundRecord = records.data.firstWhere(
             (final r) => (r.name == record.name) && r.type == record.type,
             orElse: () => DnsRecord(
@@ -227,23 +209,29 @@ class CloudflareDnsProvider extends DnsProvider {
           // to compare them
           final String? foundContent =
               foundRecord.content?.replaceAll(RegExp(r'\s+'), '');
-          final String content = record.content.replaceAll(RegExp(r'\s+'), '');
-          if (foundContent == content) {
-            foundRecords.add(record.copyWith(isSatisfied: true));
-          } else {
-            foundRecords.add(record.copyWith(isSatisfied: false));
-          }
+          final String content =
+              record.content?.replaceAll(RegExp(r'\s+'), '') ?? '';
+          foundRecords.add(
+            DesiredDnsRecord(
+              name: record.name ?? '',
+              content: record.content ?? '',
+              isSatisfied: foundContent == content,
+            ),
+          );
         } else {
-          if (records.data.any(
+          final foundMatch = records.data.any(
             (final r) =>
                 (r.name == record.name) &&
                 r.type == record.type &&
                 r.content == record.content,
-          )) {
-            foundRecords.add(record.copyWith(isSatisfied: true));
-          } else {
-            foundRecords.add(record.copyWith(isSatisfied: false));
-          }
+          );
+          foundRecords.add(
+            DesiredDnsRecord(
+              name: record.name ?? '',
+              content: record.content ?? '',
+              isSatisfied: foundMatch,
+            ),
+          );
         }
       }
     } catch (e) {
@@ -258,135 +246,6 @@ class CloudflareDnsProvider extends DnsProvider {
       data: foundRecords,
       success: true,
     );
-  }
-
-  @override
-  List<DesiredDnsRecord> getDesiredDnsRecords(
-    final String? domainName,
-    final String? ip4,
-    final String? dkimPublicKey,
-  ) {
-    if (domainName == null || ip4 == null) {
-      return [];
-    }
-    return [
-      DesiredDnsRecord(
-        name: domainName,
-        content: ip4,
-        description: 'record.root',
-      ),
-      DesiredDnsRecord(
-        name: 'api.$domainName',
-        content: ip4,
-        description: 'record.api',
-      ),
-      DesiredDnsRecord(
-        name: 'cloud.$domainName',
-        content: ip4,
-        description: 'record.cloud',
-      ),
-      DesiredDnsRecord(
-        name: 'git.$domainName',
-        content: ip4,
-        description: 'record.git',
-      ),
-      DesiredDnsRecord(
-        name: 'meet.$domainName',
-        content: ip4,
-        description: 'record.meet',
-      ),
-      DesiredDnsRecord(
-        name: 'social.$domainName',
-        content: ip4,
-        description: 'record.social',
-      ),
-      DesiredDnsRecord(
-        name: 'password.$domainName',
-        content: ip4,
-        description: 'record.password',
-      ),
-      DesiredDnsRecord(
-        name: 'vpn.$domainName',
-        content: ip4,
-        description: 'record.vpn',
-      ),
-      DesiredDnsRecord(
-        name: domainName,
-        content: domainName,
-        description: 'record.mx',
-        type: 'MX',
-        category: DnsRecordsCategory.email,
-      ),
-      DesiredDnsRecord(
-        name: '_dmarc.$domainName',
-        content: 'v=DMARC1; p=none',
-        description: 'record.dmarc',
-        type: 'TXT',
-        category: DnsRecordsCategory.email,
-      ),
-      DesiredDnsRecord(
-        name: domainName,
-        content: 'v=spf1 a mx ip4:$ip4 -all',
-        description: 'record.spf',
-        type: 'TXT',
-        category: DnsRecordsCategory.email,
-      ),
-      if (dkimPublicKey != null)
-        DesiredDnsRecord(
-          name: 'selector._domainkey.$domainName',
-          content: dkimPublicKey,
-          description: 'record.dkim',
-          type: 'TXT',
-          category: DnsRecordsCategory.email,
-        ),
-    ];
-  }
-
-  List<DnsRecord> getProjectDnsRecords(
-    final String? domainName,
-    final String? ip4,
-  ) {
-    final DnsRecord domainA =
-        DnsRecord(type: 'A', name: domainName, content: ip4);
-
-    final DnsRecord mx = DnsRecord(type: 'MX', name: '@', content: domainName);
-    final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
-    final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
-    final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
-    final DnsRecord meetA = DnsRecord(type: 'A', name: 'meet', content: ip4);
-    final DnsRecord passwordA =
-        DnsRecord(type: 'A', name: 'password', content: ip4);
-    final DnsRecord socialA =
-        DnsRecord(type: 'A', name: 'social', content: ip4);
-    final DnsRecord vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
-
-    final DnsRecord txt1 = DnsRecord(
-      type: 'TXT',
-      name: '_dmarc',
-      content: 'v=DMARC1; p=none',
-      ttl: 18000,
-    );
-
-    final DnsRecord txt2 = DnsRecord(
-      type: 'TXT',
-      name: domainName,
-      content: 'v=spf1 a mx ip4:$ip4 -all',
-      ttl: 18000,
-    );
-
-    return <DnsRecord>[
-      domainA,
-      apiA,
-      cloudA,
-      gitA,
-      meetA,
-      passwordA,
-      socialA,
-      mx,
-      txt1,
-      txt2,
-      vpn
-    ];
   }
 
   Future<GenericResult<void>> syncZoneId(final String domain) async {

@@ -23,15 +23,9 @@ class DnsRecordsCubit
   @override
   Future<void> load() async {
     emit(
-      DnsRecordsState(
+      const DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
-        dnsRecords:
-            ProvidersController.currentDnsProvider?.getDesiredDnsRecords(
-                  serverInstallationCubit.state.serverDomain?.domainName,
-                  '',
-                  '',
-                ) ??
-                [],
+        dnsRecords: [],
       ),
     );
 
@@ -44,12 +38,12 @@ class DnsRecordsCubit
         return;
       }
 
-      final foundRecords =
-          await ProvidersController.currentDnsProvider!.validateDnsRecords(
-        domain!,
-        ipAddress!,
-        extractDkimRecord(await api.getDnsRecords())?.content ?? '',
-      );
+      final foundRecords = await ProvidersController.currentDnsProvider!
+          .validateDnsRecords(domain!, ipAddress!,
+              extractDkimRecord(await api.getDnsRecords())?.content ?? '', []
+
+              /// TODO: TOOD!!11kdoikadodsksakdpoadsaspodda
+              );
 
       if (!foundRecords.success || foundRecords.data.isEmpty) {
         emit(const DnsRecordsState());

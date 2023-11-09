@@ -184,8 +184,26 @@ class CloudflareDnsProvider extends DnsProvider {
     final String dkimPublicKey,
     final List<DnsRecord> pendingDnsRecords,
   ) async {
-    final GenericResult<List<DnsRecord>> records =
-        await getDnsRecords(domain: domain);
+    final syncZoneIdResult = await syncZoneId(domain.domainName);
+    if (!syncZoneIdResult.success) {
+      return GenericResult(
+        success: syncZoneIdResult.success,
+        data: [],
+        code: syncZoneIdResult.code,
+        message: syncZoneIdResult.message,
+      );
+    }
+    final result =
+        await _adapter.api().getDnsRecords(zoneId: _adapter.cachedZoneId);
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: [],
+        code: result.code,
+        message: result.message,
+      );
+    }
+    final records = result.data;
     final List<DesiredDnsRecord> foundRecords = [];
     try {
       for (final DnsRecord pendingDnsRecord in pendingDnsRecords) {
@@ -194,14 +212,14 @@ class CloudflareDnsProvider extends DnsProvider {
           domain.domainName,
         );
         if (record.name == 'selector._domainkey') {
-          final DnsRecord foundRecord = records.data.firstWhere(
+          final CloudflareDnsRecord foundRecord = records.firstWhere(
             (final r) => (r.name == record.name) && r.type == record.type,
-            orElse: () => DnsRecord(
+            orElse: () => CloudflareDnsRecord(
+              zoneName: domain.domainName,
               name: record.name,
               type: record.type,
               content: '',
               ttl: 800,
-              proxied: false,
             ),
           );
           // remove all spaces and tabulators from
@@ -219,7 +237,7 @@ class CloudflareDnsProvider extends DnsProvider {
             ),
           );
         } else {
-          final foundMatch = records.data.any(
+          final foundMatch = records.any(
             (final r) =>
                 (r.name == record.name) &&
                 r.type == record.type &&

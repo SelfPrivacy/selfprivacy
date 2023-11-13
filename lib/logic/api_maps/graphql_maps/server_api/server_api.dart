@@ -248,7 +248,7 @@ class ServerApi extends GraphQLApiMap
       final GraphQLClient client = await getClient();
 
       final input = Input$RecoveryKeyLimitsInput(
-        expirationDate: expirationDate,
+        expirationDate: expirationDate?.toUtc(),
         uses: numberOfUses,
       );
       final variables = Variables$Mutation$GetNewRecoveryApiKey(

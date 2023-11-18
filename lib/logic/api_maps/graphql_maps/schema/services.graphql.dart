@@ -115,6 +115,7 @@ class _CopyWithImpl$Query$AllServices<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$AllServices$services<TRes> get services {
     final local$services = _instance.services;
     return CopyWith$Query$AllServices$services(
@@ -133,6 +134,7 @@ class _CopyWithStubImpl$Query$AllServices<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$AllServices$services<TRes> get services =>
       CopyWith$Query$AllServices$services.stub(_res);
 }
@@ -575,6 +577,7 @@ class _CopyWithImpl$Query$AllServices$services<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   TRes allServices(
           Iterable<Query$AllServices$services$allServices> Function(
                   Iterable<
@@ -600,6 +603,7 @@ class _CopyWithStubImpl$Query$AllServices$services<TRes>
     String? $__typename,
   }) =>
       _res;
+
   allServices(_fn) => _res;
 }
 
@@ -965,6 +969,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   TRes dnsRecords(
           Iterable<Fragment$fragmentDnsRecords>? Function(
                   Iterable<
@@ -977,6 +982,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
                     e,
                     (i) => i,
                   )))?.toList());
+
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
       get storageUsage {
     final local$storageUsage = _instance.storageUsage;
@@ -1008,7 +1014,9 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
     String? $__typename,
   }) =>
       _res;
+
   dnsRecords(_fn) => _res;
+
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
       get storageUsage =>
           CopyWith$Query$AllServices$services$allServices$storageUsage.stub(
@@ -1176,6 +1184,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$AllServices$services$allServices$storageUsage$volume<TRes>
       get volume {
     final local$volume = _instance.volume;
@@ -1203,6 +1212,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage<
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$AllServices$services$allServices$storageUsage$volume<TRes>
       get volume =>
           CopyWith$Query$AllServices$services$allServices$storageUsage$volume
@@ -1367,6 +1377,7 @@ class Variables$Mutation$EnableService {
   Map<String, dynamic> _$data;
 
   String get serviceId => (_$data['serviceId'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$serviceId = serviceId;
@@ -1379,6 +1390,7 @@ class Variables$Mutation$EnableService {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -1461,6 +1473,7 @@ class Mutation$EnableService {
     );
   }
 
+  @Deprecated('Use `services.enable_service` instead')
   final Mutation$EnableService$enableService enableService;
 
   final String $__typename;
@@ -1556,6 +1569,7 @@ class _CopyWithImpl$Mutation$EnableService<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$EnableService$enableService<TRes> get enableService {
     final local$enableService = _instance.enableService;
     return CopyWith$Mutation$EnableService$enableService(
@@ -1574,6 +1588,7 @@ class _CopyWithStubImpl$Mutation$EnableService<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$EnableService$enableService<TRes> get enableService =>
       CopyWith$Mutation$EnableService$enableService.stub(_res);
 }
@@ -1913,6 +1928,7 @@ class Variables$Mutation$DisableService {
   Map<String, dynamic> _$data;
 
   String get serviceId => (_$data['serviceId'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$serviceId = serviceId;
@@ -1925,6 +1941,7 @@ class Variables$Mutation$DisableService {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -2007,6 +2024,7 @@ class Mutation$DisableService {
     );
   }
 
+  @Deprecated('Use `services.disable_service` instead')
   final Mutation$DisableService$disableService disableService;
 
   final String $__typename;
@@ -2102,6 +2120,7 @@ class _CopyWithImpl$Mutation$DisableService<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$DisableService$disableService<TRes> get disableService {
     final local$disableService = _instance.disableService;
     return CopyWith$Mutation$DisableService$disableService(
@@ -2120,6 +2139,7 @@ class _CopyWithStubImpl$Mutation$DisableService<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$DisableService$disableService<TRes> get disableService =>
       CopyWith$Mutation$DisableService$disableService.stub(_res);
 }
@@ -2458,6 +2478,7 @@ class Variables$Mutation$StopService {
   Map<String, dynamic> _$data;
 
   String get serviceId => (_$data['serviceId'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$serviceId = serviceId;
@@ -2470,6 +2491,7 @@ class Variables$Mutation$StopService {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -2552,6 +2574,7 @@ class Mutation$StopService {
     );
   }
 
+  @Deprecated('Use `services.stop_service` instead')
   final Mutation$StopService$stopService stopService;
 
   final String $__typename;
@@ -2646,6 +2669,7 @@ class _CopyWithImpl$Mutation$StopService<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$StopService$stopService<TRes> get stopService {
     final local$stopService = _instance.stopService;
     return CopyWith$Mutation$StopService$stopService(
@@ -2664,6 +2688,7 @@ class _CopyWithStubImpl$Mutation$StopService<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$StopService$stopService<TRes> get stopService =>
       CopyWith$Mutation$StopService$stopService.stub(_res);
 }
@@ -2998,6 +3023,7 @@ class Variables$Mutation$StartService {
   Map<String, dynamic> _$data;
 
   String get serviceId => (_$data['serviceId'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$serviceId = serviceId;
@@ -3010,6 +3036,7 @@ class Variables$Mutation$StartService {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -3092,6 +3119,7 @@ class Mutation$StartService {
     );
   }
 
+  @Deprecated('Use `services.start_service` instead')
   final Mutation$StartService$startService startService;
 
   final String $__typename;
@@ -3186,6 +3214,7 @@ class _CopyWithImpl$Mutation$StartService<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$StartService$startService<TRes> get startService {
     final local$startService = _instance.startService;
     return CopyWith$Mutation$StartService$startService(
@@ -3204,6 +3233,7 @@ class _CopyWithStubImpl$Mutation$StartService<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$StartService$startService<TRes> get startService =>
       CopyWith$Mutation$StartService$startService.stub(_res);
 }
@@ -3541,6 +3571,7 @@ class Variables$Mutation$RestartService {
   Map<String, dynamic> _$data;
 
   String get serviceId => (_$data['serviceId'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$serviceId = serviceId;
@@ -3553,6 +3584,7 @@ class Variables$Mutation$RestartService {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -3635,6 +3667,7 @@ class Mutation$RestartService {
     );
   }
 
+  @Deprecated('Use `services.restart_service` instead')
   final Mutation$RestartService$restartService restartService;
 
   final String $__typename;
@@ -3730,6 +3763,7 @@ class _CopyWithImpl$Mutation$RestartService<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RestartService$restartService<TRes> get restartService {
     final local$restartService = _instance.restartService;
     return CopyWith$Mutation$RestartService$restartService(
@@ -3748,6 +3782,7 @@ class _CopyWithStubImpl$Mutation$RestartService<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RestartService$restartService<TRes> get restartService =>
       CopyWith$Mutation$RestartService$restartService.stub(_res);
 }
@@ -4089,6 +4124,7 @@ class Variables$Mutation$MoveService {
 
   Input$MoveServiceInput get input =>
       (_$data['input'] as Input$MoveServiceInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$input = input;
@@ -4101,6 +4137,7 @@ class Variables$Mutation$MoveService {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -4183,6 +4220,7 @@ class Mutation$MoveService {
     );
   }
 
+  @Deprecated('Use `services.move_service` instead')
   final Mutation$MoveService$moveService moveService;
 
   final String $__typename;
@@ -4277,6 +4315,7 @@ class _CopyWithImpl$Mutation$MoveService<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$MoveService$moveService<TRes> get moveService {
     final local$moveService = _instance.moveService;
     return CopyWith$Mutation$MoveService$moveService(
@@ -4295,6 +4334,7 @@ class _CopyWithStubImpl$Mutation$MoveService<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$MoveService$moveService<TRes> get moveService =>
       CopyWith$Mutation$MoveService$moveService.stub(_res);
 }
@@ -4637,6 +4677,7 @@ class _CopyWithImpl$Mutation$MoveService$moveService<TRes>
             ? _instance.job
             : (job as Fragment$basicApiJobsFields?),
       ));
+
   CopyWith$Fragment$basicApiJobsFields<TRes> get job {
     final local$job = _instance.job;
     return local$job == null
@@ -4659,6 +4700,7 @@ class _CopyWithStubImpl$Mutation$MoveService$moveService<TRes>
     Fragment$basicApiJobsFields? job,
   }) =>
       _res;
+
   CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }

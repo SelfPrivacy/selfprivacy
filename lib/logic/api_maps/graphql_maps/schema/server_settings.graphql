@@ -30,7 +30,16 @@ fragment fragmentDnsRecords on DnsRecord {
   priority
 }
 
-query DomainInfo {
+query GetDnsRecords {
+  services {
+    allServices {
+      id
+      displayName
+      dnsRecords {
+        ...fragmentDnsRecords
+      }
+    }
+  }
   system {
     domainInfo {
       domain

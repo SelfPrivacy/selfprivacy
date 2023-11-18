@@ -408,6 +408,7 @@ class _CopyWithImpl$Query$SystemSettings<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$SystemSettings$system<TRes> get system {
     final local$system = _instance.system;
     return CopyWith$Query$SystemSettings$system(
@@ -426,6 +427,7 @@ class _CopyWithStubImpl$Query$SystemSettings<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$SystemSettings$system<TRes> get system =>
       CopyWith$Query$SystemSettings$system.stub(_res);
 }
@@ -774,6 +776,7 @@ class _CopyWithImpl$Query$SystemSettings$system<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$SystemSettings$system$settings<TRes> get settings {
     final local$settings = _instance.settings;
     return CopyWith$Query$SystemSettings$system$settings(
@@ -792,6 +795,7 @@ class _CopyWithStubImpl$Query$SystemSettings$system<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$SystemSettings$system$settings<TRes> get settings =>
       CopyWith$Query$SystemSettings$system$settings.stub(_res);
 }
@@ -951,6 +955,7 @@ class _CopyWithImpl$Query$SystemSettings$system$settings<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$SystemSettings$system$settings$autoUpgrade<TRes>
       get autoUpgrade {
     final local$autoUpgrade = _instance.autoUpgrade;
@@ -978,9 +983,11 @@ class _CopyWithStubImpl$Query$SystemSettings$system$settings<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$SystemSettings$system$settings$autoUpgrade<TRes>
       get autoUpgrade =>
           CopyWith$Query$SystemSettings$system$settings$autoUpgrade.stub(_res);
+
   CopyWith$Query$SystemSettings$system$settings$ssh<TRes> get ssh =>
       CopyWith$Query$SystemSettings$system$settings$ssh.stub(_res);
 }
@@ -1393,6 +1400,7 @@ class _CopyWithImpl$Query$SystemIsUsingBinds<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$SystemIsUsingBinds$system<TRes> get system {
     final local$system = _instance.system;
     return CopyWith$Query$SystemIsUsingBinds$system(
@@ -1411,6 +1419,7 @@ class _CopyWithStubImpl$Query$SystemIsUsingBinds<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$SystemIsUsingBinds$system<TRes> get system =>
       CopyWith$Query$SystemIsUsingBinds$system.stub(_res);
 }
@@ -1707,6 +1716,7 @@ class _CopyWithImpl$Query$SystemIsUsingBinds$system<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$SystemIsUsingBinds$system$info<TRes> get info {
     final local$info = _instance.info;
     return CopyWith$Query$SystemIsUsingBinds$system$info(
@@ -1725,6 +1735,7 @@ class _CopyWithStubImpl$Query$SystemIsUsingBinds$system<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$SystemIsUsingBinds$system$info<TRes> get info =>
       CopyWith$Query$SystemIsUsingBinds$system$info.stub(_res);
 }
@@ -1856,28 +1867,36 @@ class _CopyWithStubImpl$Query$SystemIsUsingBinds$system$info<TRes>
       _res;
 }
 
-class Query$DomainInfo {
-  Query$DomainInfo({
+class Query$GetDnsRecords {
+  Query$GetDnsRecords({
+    required this.services,
     required this.system,
     this.$__typename = 'Query',
   });
 
-  factory Query$DomainInfo.fromJson(Map<String, dynamic> json) {
+  factory Query$GetDnsRecords.fromJson(Map<String, dynamic> json) {
+    final l$services = json['services'];
     final l$system = json['system'];
     final l$$__typename = json['__typename'];
-    return Query$DomainInfo(
-      system:
-          Query$DomainInfo$system.fromJson((l$system as Map<String, dynamic>)),
+    return Query$GetDnsRecords(
+      services: Query$GetDnsRecords$services.fromJson(
+          (l$services as Map<String, dynamic>)),
+      system: Query$GetDnsRecords$system.fromJson(
+          (l$system as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final Query$DomainInfo$system system;
+  final Query$GetDnsRecords$services services;
+
+  final Query$GetDnsRecords$system system;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
+    final l$services = services;
+    _resultData['services'] = l$services.toJson();
     final l$system = system;
     _resultData['system'] = l$system.toJson();
     final l$$__typename = $__typename;
@@ -1887,9 +1906,11 @@ class Query$DomainInfo {
 
   @override
   int get hashCode {
+    final l$services = services;
     final l$system = system;
     final l$$__typename = $__typename;
     return Object.hashAll([
+      l$services,
       l$system,
       l$$__typename,
     ]);
@@ -1900,7 +1921,12 @@ class Query$DomainInfo {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$DomainInfo) || runtimeType != other.runtimeType) {
+    if (!(other is Query$GetDnsRecords) || runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$services = services;
+    final lOther$services = other.services;
+    if (l$services != lOther$services) {
       return false;
     }
     final l$system = system;
@@ -1917,84 +1943,165 @@ class Query$DomainInfo {
   }
 }
 
-extension UtilityExtension$Query$DomainInfo on Query$DomainInfo {
-  CopyWith$Query$DomainInfo<Query$DomainInfo> get copyWith =>
-      CopyWith$Query$DomainInfo(
+extension UtilityExtension$Query$GetDnsRecords on Query$GetDnsRecords {
+  CopyWith$Query$GetDnsRecords<Query$GetDnsRecords> get copyWith =>
+      CopyWith$Query$GetDnsRecords(
         this,
         (i) => i,
       );
 }
 
-abstract class CopyWith$Query$DomainInfo<TRes> {
-  factory CopyWith$Query$DomainInfo(
-    Query$DomainInfo instance,
-    TRes Function(Query$DomainInfo) then,
-  ) = _CopyWithImpl$Query$DomainInfo;
+abstract class CopyWith$Query$GetDnsRecords<TRes> {
+  factory CopyWith$Query$GetDnsRecords(
+    Query$GetDnsRecords instance,
+    TRes Function(Query$GetDnsRecords) then,
+  ) = _CopyWithImpl$Query$GetDnsRecords;
 
-  factory CopyWith$Query$DomainInfo.stub(TRes res) =
-      _CopyWithStubImpl$Query$DomainInfo;
+  factory CopyWith$Query$GetDnsRecords.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetDnsRecords;
 
   TRes call({
-    Query$DomainInfo$system? system,
+    Query$GetDnsRecords$services? services,
+    Query$GetDnsRecords$system? system,
     String? $__typename,
   });
-  CopyWith$Query$DomainInfo$system<TRes> get system;
+  CopyWith$Query$GetDnsRecords$services<TRes> get services;
+  CopyWith$Query$GetDnsRecords$system<TRes> get system;
 }
 
-class _CopyWithImpl$Query$DomainInfo<TRes>
-    implements CopyWith$Query$DomainInfo<TRes> {
-  _CopyWithImpl$Query$DomainInfo(
+class _CopyWithImpl$Query$GetDnsRecords<TRes>
+    implements CopyWith$Query$GetDnsRecords<TRes> {
+  _CopyWithImpl$Query$GetDnsRecords(
     this._instance,
     this._then,
   );
 
-  final Query$DomainInfo _instance;
+  final Query$GetDnsRecords _instance;
 
-  final TRes Function(Query$DomainInfo) _then;
+  final TRes Function(Query$GetDnsRecords) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
+    Object? services = _undefined,
     Object? system = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Query$DomainInfo(
+      _then(Query$GetDnsRecords(
+        services: services == _undefined || services == null
+            ? _instance.services
+            : (services as Query$GetDnsRecords$services),
         system: system == _undefined || system == null
             ? _instance.system
-            : (system as Query$DomainInfo$system),
+            : (system as Query$GetDnsRecords$system),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
-  CopyWith$Query$DomainInfo$system<TRes> get system {
+
+  CopyWith$Query$GetDnsRecords$services<TRes> get services {
+    final local$services = _instance.services;
+    return CopyWith$Query$GetDnsRecords$services(
+        local$services, (e) => call(services: e));
+  }
+
+  CopyWith$Query$GetDnsRecords$system<TRes> get system {
     final local$system = _instance.system;
-    return CopyWith$Query$DomainInfo$system(
+    return CopyWith$Query$GetDnsRecords$system(
         local$system, (e) => call(system: e));
   }
 }
 
-class _CopyWithStubImpl$Query$DomainInfo<TRes>
-    implements CopyWith$Query$DomainInfo<TRes> {
-  _CopyWithStubImpl$Query$DomainInfo(this._res);
+class _CopyWithStubImpl$Query$GetDnsRecords<TRes>
+    implements CopyWith$Query$GetDnsRecords<TRes> {
+  _CopyWithStubImpl$Query$GetDnsRecords(this._res);
 
   TRes _res;
 
   call({
-    Query$DomainInfo$system? system,
+    Query$GetDnsRecords$services? services,
+    Query$GetDnsRecords$system? system,
     String? $__typename,
   }) =>
       _res;
-  CopyWith$Query$DomainInfo$system<TRes> get system =>
-      CopyWith$Query$DomainInfo$system.stub(_res);
+
+  CopyWith$Query$GetDnsRecords$services<TRes> get services =>
+      CopyWith$Query$GetDnsRecords$services.stub(_res);
+
+  CopyWith$Query$GetDnsRecords$system<TRes> get system =>
+      CopyWith$Query$GetDnsRecords$system.stub(_res);
 }
 
-const documentNodeQueryDomainInfo = DocumentNode(definitions: [
+const documentNodeQueryGetDnsRecords = DocumentNode(definitions: [
   OperationDefinitionNode(
     type: OperationType.query,
-    name: NameNode(value: 'DomainInfo'),
+    name: NameNode(value: 'GetDnsRecords'),
     variableDefinitions: [],
     directives: [],
     selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'services'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'allServices'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FieldNode(
+                name: NameNode(value: 'id'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'displayName'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'dnsRecords'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'fragmentDnsRecords'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
       FieldNode(
         name: NameNode(value: 'system'),
         alias: null,
@@ -2076,24 +2183,25 @@ const documentNodeQueryDomainInfo = DocumentNode(definitions: [
   ),
   fragmentDefinitionfragmentDnsRecords,
 ]);
-Query$DomainInfo _parserFn$Query$DomainInfo(Map<String, dynamic> data) =>
-    Query$DomainInfo.fromJson(data);
-typedef OnQueryComplete$Query$DomainInfo = FutureOr<void> Function(
+Query$GetDnsRecords _parserFn$Query$GetDnsRecords(Map<String, dynamic> data) =>
+    Query$GetDnsRecords.fromJson(data);
+typedef OnQueryComplete$Query$GetDnsRecords = FutureOr<void> Function(
   Map<String, dynamic>?,
-  Query$DomainInfo?,
+  Query$GetDnsRecords?,
 );
 
-class Options$Query$DomainInfo extends graphql.QueryOptions<Query$DomainInfo> {
-  Options$Query$DomainInfo({
+class Options$Query$GetDnsRecords
+    extends graphql.QueryOptions<Query$GetDnsRecords> {
+  Options$Query$GetDnsRecords({
     String? operationName,
     graphql.FetchPolicy? fetchPolicy,
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
-    Query$DomainInfo? typedOptimisticResult,
+    Query$GetDnsRecords? typedOptimisticResult,
     Duration? pollInterval,
     graphql.Context? context,
-    OnQueryComplete$Query$DomainInfo? onComplete,
+    OnQueryComplete$Query$GetDnsRecords? onComplete,
     graphql.OnQueryError? onError,
   })  : onCompleteWithParsed = onComplete,
         super(
@@ -2108,14 +2216,14 @@ class Options$Query$DomainInfo extends graphql.QueryOptions<Query$DomainInfo> {
               ? null
               : (data) => onComplete(
                     data,
-                    data == null ? null : _parserFn$Query$DomainInfo(data),
+                    data == null ? null : _parserFn$Query$GetDnsRecords(data),
                   ),
           onError: onError,
-          document: documentNodeQueryDomainInfo,
-          parserFn: _parserFn$Query$DomainInfo,
+          document: documentNodeQueryGetDnsRecords,
+          parserFn: _parserFn$Query$GetDnsRecords,
         );
 
-  final OnQueryComplete$Query$DomainInfo? onCompleteWithParsed;
+  final OnQueryComplete$Query$GetDnsRecords? onCompleteWithParsed;
 
   @override
   List<Object?> get properties => [
@@ -2126,15 +2234,15 @@ class Options$Query$DomainInfo extends graphql.QueryOptions<Query$DomainInfo> {
       ];
 }
 
-class WatchOptions$Query$DomainInfo
-    extends graphql.WatchQueryOptions<Query$DomainInfo> {
-  WatchOptions$Query$DomainInfo({
+class WatchOptions$Query$GetDnsRecords
+    extends graphql.WatchQueryOptions<Query$GetDnsRecords> {
+  WatchOptions$Query$GetDnsRecords({
     String? operationName,
     graphql.FetchPolicy? fetchPolicy,
     graphql.ErrorPolicy? errorPolicy,
     graphql.CacheRereadPolicy? cacheRereadPolicy,
     Object? optimisticResult,
-    Query$DomainInfo? typedOptimisticResult,
+    Query$GetDnsRecords? typedOptimisticResult,
     graphql.Context? context,
     Duration? pollInterval,
     bool? eagerlyFetchResults,
@@ -2147,68 +2255,426 @@ class WatchOptions$Query$DomainInfo
           cacheRereadPolicy: cacheRereadPolicy,
           optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
           context: context,
-          document: documentNodeQueryDomainInfo,
+          document: documentNodeQueryGetDnsRecords,
           pollInterval: pollInterval,
           eagerlyFetchResults: eagerlyFetchResults,
           carryForwardDataOnException: carryForwardDataOnException,
           fetchResults: fetchResults,
-          parserFn: _parserFn$Query$DomainInfo,
+          parserFn: _parserFn$Query$GetDnsRecords,
         );
 }
 
-class FetchMoreOptions$Query$DomainInfo extends graphql.FetchMoreOptions {
-  FetchMoreOptions$Query$DomainInfo({required graphql.UpdateQuery updateQuery})
+class FetchMoreOptions$Query$GetDnsRecords extends graphql.FetchMoreOptions {
+  FetchMoreOptions$Query$GetDnsRecords(
+      {required graphql.UpdateQuery updateQuery})
       : super(
           updateQuery: updateQuery,
-          document: documentNodeQueryDomainInfo,
+          document: documentNodeQueryGetDnsRecords,
         );
 }
 
-extension ClientExtension$Query$DomainInfo on graphql.GraphQLClient {
-  Future<graphql.QueryResult<Query$DomainInfo>> query$DomainInfo(
-          [Options$Query$DomainInfo? options]) async =>
-      await this.query(options ?? Options$Query$DomainInfo());
-  graphql.ObservableQuery<Query$DomainInfo> watchQuery$DomainInfo(
-          [WatchOptions$Query$DomainInfo? options]) =>
-      this.watchQuery(options ?? WatchOptions$Query$DomainInfo());
-  void writeQuery$DomainInfo({
-    required Query$DomainInfo data,
+extension ClientExtension$Query$GetDnsRecords on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Query$GetDnsRecords>> query$GetDnsRecords(
+          [Options$Query$GetDnsRecords? options]) async =>
+      await this.query(options ?? Options$Query$GetDnsRecords());
+  graphql.ObservableQuery<Query$GetDnsRecords> watchQuery$GetDnsRecords(
+          [WatchOptions$Query$GetDnsRecords? options]) =>
+      this.watchQuery(options ?? WatchOptions$Query$GetDnsRecords());
+  void writeQuery$GetDnsRecords({
+    required Query$GetDnsRecords data,
     bool broadcast = true,
   }) =>
       this.writeQuery(
         graphql.Request(
             operation:
-                graphql.Operation(document: documentNodeQueryDomainInfo)),
+                graphql.Operation(document: documentNodeQueryGetDnsRecords)),
         data: data.toJson(),
         broadcast: broadcast,
       );
-  Query$DomainInfo? readQuery$DomainInfo({bool optimistic = true}) {
+  Query$GetDnsRecords? readQuery$GetDnsRecords({bool optimistic = true}) {
     final result = this.readQuery(
       graphql.Request(
-          operation: graphql.Operation(document: documentNodeQueryDomainInfo)),
+          operation:
+              graphql.Operation(document: documentNodeQueryGetDnsRecords)),
       optimistic: optimistic,
     );
-    return result == null ? null : Query$DomainInfo.fromJson(result);
+    return result == null ? null : Query$GetDnsRecords.fromJson(result);
   }
 }
 
-class Query$DomainInfo$system {
-  Query$DomainInfo$system({
+class Query$GetDnsRecords$services {
+  Query$GetDnsRecords$services({
+    required this.allServices,
+    this.$__typename = 'Services',
+  });
+
+  factory Query$GetDnsRecords$services.fromJson(Map<String, dynamic> json) {
+    final l$allServices = json['allServices'];
+    final l$$__typename = json['__typename'];
+    return Query$GetDnsRecords$services(
+      allServices: (l$allServices as List<dynamic>)
+          .map((e) => Query$GetDnsRecords$services$allServices.fromJson(
+              (e as Map<String, dynamic>)))
+          .toList(),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final List<Query$GetDnsRecords$services$allServices> allServices;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$allServices = allServices;
+    _resultData['allServices'] = l$allServices.map((e) => e.toJson()).toList();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$allServices = allServices;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      Object.hashAll(l$allServices.map((v) => v)),
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Query$GetDnsRecords$services) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$allServices = allServices;
+    final lOther$allServices = other.allServices;
+    if (l$allServices.length != lOther$allServices.length) {
+      return false;
+    }
+    for (int i = 0; i < l$allServices.length; i++) {
+      final l$allServices$entry = l$allServices[i];
+      final lOther$allServices$entry = lOther$allServices[i];
+      if (l$allServices$entry != lOther$allServices$entry) {
+        return false;
+      }
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetDnsRecords$services
+    on Query$GetDnsRecords$services {
+  CopyWith$Query$GetDnsRecords$services<Query$GetDnsRecords$services>
+      get copyWith => CopyWith$Query$GetDnsRecords$services(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$GetDnsRecords$services<TRes> {
+  factory CopyWith$Query$GetDnsRecords$services(
+    Query$GetDnsRecords$services instance,
+    TRes Function(Query$GetDnsRecords$services) then,
+  ) = _CopyWithImpl$Query$GetDnsRecords$services;
+
+  factory CopyWith$Query$GetDnsRecords$services.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetDnsRecords$services;
+
+  TRes call({
+    List<Query$GetDnsRecords$services$allServices>? allServices,
+    String? $__typename,
+  });
+  TRes allServices(
+      Iterable<Query$GetDnsRecords$services$allServices> Function(
+              Iterable<
+                  CopyWith$Query$GetDnsRecords$services$allServices<
+                      Query$GetDnsRecords$services$allServices>>)
+          _fn);
+}
+
+class _CopyWithImpl$Query$GetDnsRecords$services<TRes>
+    implements CopyWith$Query$GetDnsRecords$services<TRes> {
+  _CopyWithImpl$Query$GetDnsRecords$services(
+    this._instance,
+    this._then,
+  );
+
+  final Query$GetDnsRecords$services _instance;
+
+  final TRes Function(Query$GetDnsRecords$services) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? allServices = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Query$GetDnsRecords$services(
+        allServices: allServices == _undefined || allServices == null
+            ? _instance.allServices
+            : (allServices as List<Query$GetDnsRecords$services$allServices>),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  TRes allServices(
+          Iterable<Query$GetDnsRecords$services$allServices> Function(
+                  Iterable<
+                      CopyWith$Query$GetDnsRecords$services$allServices<
+                          Query$GetDnsRecords$services$allServices>>)
+              _fn) =>
+      call(
+          allServices: _fn(_instance.allServices
+              .map((e) => CopyWith$Query$GetDnsRecords$services$allServices(
+                    e,
+                    (i) => i,
+                  ))).toList());
+}
+
+class _CopyWithStubImpl$Query$GetDnsRecords$services<TRes>
+    implements CopyWith$Query$GetDnsRecords$services<TRes> {
+  _CopyWithStubImpl$Query$GetDnsRecords$services(this._res);
+
+  TRes _res;
+
+  call({
+    List<Query$GetDnsRecords$services$allServices>? allServices,
+    String? $__typename,
+  }) =>
+      _res;
+
+  allServices(_fn) => _res;
+}
+
+class Query$GetDnsRecords$services$allServices {
+  Query$GetDnsRecords$services$allServices({
+    required this.id,
+    required this.displayName,
+    this.dnsRecords,
+    this.$__typename = 'Service',
+  });
+
+  factory Query$GetDnsRecords$services$allServices.fromJson(
+      Map<String, dynamic> json) {
+    final l$id = json['id'];
+    final l$displayName = json['displayName'];
+    final l$dnsRecords = json['dnsRecords'];
+    final l$$__typename = json['__typename'];
+    return Query$GetDnsRecords$services$allServices(
+      id: (l$id as String),
+      displayName: (l$displayName as String),
+      dnsRecords: (l$dnsRecords as List<dynamic>?)
+          ?.map((e) =>
+              Fragment$fragmentDnsRecords.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String id;
+
+  final String displayName;
+
+  final List<Fragment$fragmentDnsRecords>? dnsRecords;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$displayName = displayName;
+    _resultData['displayName'] = l$displayName;
+    final l$dnsRecords = dnsRecords;
+    _resultData['dnsRecords'] = l$dnsRecords?.map((e) => e.toJson()).toList();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$displayName = displayName;
+    final l$dnsRecords = dnsRecords;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$displayName,
+      l$dnsRecords == null ? null : Object.hashAll(l$dnsRecords.map((v) => v)),
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Query$GetDnsRecords$services$allServices) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$displayName = displayName;
+    final lOther$displayName = other.displayName;
+    if (l$displayName != lOther$displayName) {
+      return false;
+    }
+    final l$dnsRecords = dnsRecords;
+    final lOther$dnsRecords = other.dnsRecords;
+    if (l$dnsRecords != null && lOther$dnsRecords != null) {
+      if (l$dnsRecords.length != lOther$dnsRecords.length) {
+        return false;
+      }
+      for (int i = 0; i < l$dnsRecords.length; i++) {
+        final l$dnsRecords$entry = l$dnsRecords[i];
+        final lOther$dnsRecords$entry = lOther$dnsRecords[i];
+        if (l$dnsRecords$entry != lOther$dnsRecords$entry) {
+          return false;
+        }
+      }
+    } else if (l$dnsRecords != lOther$dnsRecords) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetDnsRecords$services$allServices
+    on Query$GetDnsRecords$services$allServices {
+  CopyWith$Query$GetDnsRecords$services$allServices<
+          Query$GetDnsRecords$services$allServices>
+      get copyWith => CopyWith$Query$GetDnsRecords$services$allServices(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$GetDnsRecords$services$allServices<TRes> {
+  factory CopyWith$Query$GetDnsRecords$services$allServices(
+    Query$GetDnsRecords$services$allServices instance,
+    TRes Function(Query$GetDnsRecords$services$allServices) then,
+  ) = _CopyWithImpl$Query$GetDnsRecords$services$allServices;
+
+  factory CopyWith$Query$GetDnsRecords$services$allServices.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetDnsRecords$services$allServices;
+
+  TRes call({
+    String? id,
+    String? displayName,
+    List<Fragment$fragmentDnsRecords>? dnsRecords,
+    String? $__typename,
+  });
+  TRes dnsRecords(
+      Iterable<Fragment$fragmentDnsRecords>? Function(
+              Iterable<
+                  CopyWith$Fragment$fragmentDnsRecords<
+                      Fragment$fragmentDnsRecords>>?)
+          _fn);
+}
+
+class _CopyWithImpl$Query$GetDnsRecords$services$allServices<TRes>
+    implements CopyWith$Query$GetDnsRecords$services$allServices<TRes> {
+  _CopyWithImpl$Query$GetDnsRecords$services$allServices(
+    this._instance,
+    this._then,
+  );
+
+  final Query$GetDnsRecords$services$allServices _instance;
+
+  final TRes Function(Query$GetDnsRecords$services$allServices) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? displayName = _undefined,
+    Object? dnsRecords = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Query$GetDnsRecords$services$allServices(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
+        displayName: displayName == _undefined || displayName == null
+            ? _instance.displayName
+            : (displayName as String),
+        dnsRecords: dnsRecords == _undefined
+            ? _instance.dnsRecords
+            : (dnsRecords as List<Fragment$fragmentDnsRecords>?),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  TRes dnsRecords(
+          Iterable<Fragment$fragmentDnsRecords>? Function(
+                  Iterable<
+                      CopyWith$Fragment$fragmentDnsRecords<
+                          Fragment$fragmentDnsRecords>>?)
+              _fn) =>
+      call(
+          dnsRecords: _fn(_instance.dnsRecords
+              ?.map((e) => CopyWith$Fragment$fragmentDnsRecords(
+                    e,
+                    (i) => i,
+                  )))?.toList());
+}
+
+class _CopyWithStubImpl$Query$GetDnsRecords$services$allServices<TRes>
+    implements CopyWith$Query$GetDnsRecords$services$allServices<TRes> {
+  _CopyWithStubImpl$Query$GetDnsRecords$services$allServices(this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    String? displayName,
+    List<Fragment$fragmentDnsRecords>? dnsRecords,
+    String? $__typename,
+  }) =>
+      _res;
+
+  dnsRecords(_fn) => _res;
+}
+
+class Query$GetDnsRecords$system {
+  Query$GetDnsRecords$system({
     required this.domainInfo,
     this.$__typename = 'System',
   });
 
-  factory Query$DomainInfo$system.fromJson(Map<String, dynamic> json) {
+  factory Query$GetDnsRecords$system.fromJson(Map<String, dynamic> json) {
     final l$domainInfo = json['domainInfo'];
     final l$$__typename = json['__typename'];
-    return Query$DomainInfo$system(
-      domainInfo: Query$DomainInfo$system$domainInfo.fromJson(
+    return Query$GetDnsRecords$system(
+      domainInfo: Query$GetDnsRecords$system$domainInfo.fromJson(
           (l$domainInfo as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final Query$DomainInfo$system$domainInfo domainInfo;
+  final Query$GetDnsRecords$system$domainInfo domainInfo;
 
   final String $__typename;
 
@@ -2236,7 +2702,7 @@ class Query$DomainInfo$system {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$DomainInfo$system) ||
+    if (!(other is Query$GetDnsRecords$system) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2254,40 +2720,41 @@ class Query$DomainInfo$system {
   }
 }
 
-extension UtilityExtension$Query$DomainInfo$system on Query$DomainInfo$system {
-  CopyWith$Query$DomainInfo$system<Query$DomainInfo$system> get copyWith =>
-      CopyWith$Query$DomainInfo$system(
-        this,
-        (i) => i,
-      );
+extension UtilityExtension$Query$GetDnsRecords$system
+    on Query$GetDnsRecords$system {
+  CopyWith$Query$GetDnsRecords$system<Query$GetDnsRecords$system>
+      get copyWith => CopyWith$Query$GetDnsRecords$system(
+            this,
+            (i) => i,
+          );
 }
 
-abstract class CopyWith$Query$DomainInfo$system<TRes> {
-  factory CopyWith$Query$DomainInfo$system(
-    Query$DomainInfo$system instance,
-    TRes Function(Query$DomainInfo$system) then,
-  ) = _CopyWithImpl$Query$DomainInfo$system;
+abstract class CopyWith$Query$GetDnsRecords$system<TRes> {
+  factory CopyWith$Query$GetDnsRecords$system(
+    Query$GetDnsRecords$system instance,
+    TRes Function(Query$GetDnsRecords$system) then,
+  ) = _CopyWithImpl$Query$GetDnsRecords$system;
 
-  factory CopyWith$Query$DomainInfo$system.stub(TRes res) =
-      _CopyWithStubImpl$Query$DomainInfo$system;
+  factory CopyWith$Query$GetDnsRecords$system.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetDnsRecords$system;
 
   TRes call({
-    Query$DomainInfo$system$domainInfo? domainInfo,
+    Query$GetDnsRecords$system$domainInfo? domainInfo,
     String? $__typename,
   });
-  CopyWith$Query$DomainInfo$system$domainInfo<TRes> get domainInfo;
+  CopyWith$Query$GetDnsRecords$system$domainInfo<TRes> get domainInfo;
 }
 
-class _CopyWithImpl$Query$DomainInfo$system<TRes>
-    implements CopyWith$Query$DomainInfo$system<TRes> {
-  _CopyWithImpl$Query$DomainInfo$system(
+class _CopyWithImpl$Query$GetDnsRecords$system<TRes>
+    implements CopyWith$Query$GetDnsRecords$system<TRes> {
+  _CopyWithImpl$Query$GetDnsRecords$system(
     this._instance,
     this._then,
   );
 
-  final Query$DomainInfo$system _instance;
+  final Query$GetDnsRecords$system _instance;
 
-  final TRes Function(Query$DomainInfo$system) _then;
+  final TRes Function(Query$GetDnsRecords$system) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -2295,38 +2762,40 @@ class _CopyWithImpl$Query$DomainInfo$system<TRes>
     Object? domainInfo = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Query$DomainInfo$system(
+      _then(Query$GetDnsRecords$system(
         domainInfo: domainInfo == _undefined || domainInfo == null
             ? _instance.domainInfo
-            : (domainInfo as Query$DomainInfo$system$domainInfo),
+            : (domainInfo as Query$GetDnsRecords$system$domainInfo),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
-  CopyWith$Query$DomainInfo$system$domainInfo<TRes> get domainInfo {
+
+  CopyWith$Query$GetDnsRecords$system$domainInfo<TRes> get domainInfo {
     final local$domainInfo = _instance.domainInfo;
-    return CopyWith$Query$DomainInfo$system$domainInfo(
+    return CopyWith$Query$GetDnsRecords$system$domainInfo(
         local$domainInfo, (e) => call(domainInfo: e));
   }
 }
 
-class _CopyWithStubImpl$Query$DomainInfo$system<TRes>
-    implements CopyWith$Query$DomainInfo$system<TRes> {
-  _CopyWithStubImpl$Query$DomainInfo$system(this._res);
+class _CopyWithStubImpl$Query$GetDnsRecords$system<TRes>
+    implements CopyWith$Query$GetDnsRecords$system<TRes> {
+  _CopyWithStubImpl$Query$GetDnsRecords$system(this._res);
 
   TRes _res;
 
   call({
-    Query$DomainInfo$system$domainInfo? domainInfo,
+    Query$GetDnsRecords$system$domainInfo? domainInfo,
     String? $__typename,
   }) =>
       _res;
-  CopyWith$Query$DomainInfo$system$domainInfo<TRes> get domainInfo =>
-      CopyWith$Query$DomainInfo$system$domainInfo.stub(_res);
+
+  CopyWith$Query$GetDnsRecords$system$domainInfo<TRes> get domainInfo =>
+      CopyWith$Query$GetDnsRecords$system$domainInfo.stub(_res);
 }
 
-class Query$DomainInfo$system$domainInfo {
-  Query$DomainInfo$system$domainInfo({
+class Query$GetDnsRecords$system$domainInfo {
+  Query$GetDnsRecords$system$domainInfo({
     required this.domain,
     required this.hostname,
     required this.provider,
@@ -2334,14 +2803,14 @@ class Query$DomainInfo$system$domainInfo {
     this.$__typename = 'SystemDomainInfo',
   });
 
-  factory Query$DomainInfo$system$domainInfo.fromJson(
+  factory Query$GetDnsRecords$system$domainInfo.fromJson(
       Map<String, dynamic> json) {
     final l$domain = json['domain'];
     final l$hostname = json['hostname'];
     final l$provider = json['provider'];
     final l$requiredDnsRecords = json['requiredDnsRecords'];
     final l$$__typename = json['__typename'];
-    return Query$DomainInfo$system$domainInfo(
+    return Query$GetDnsRecords$system$domainInfo(
       domain: (l$domain as String),
       hostname: (l$hostname as String),
       provider: fromJson$Enum$DnsProvider((l$provider as String)),
@@ -2400,7 +2869,7 @@ class Query$DomainInfo$system$domainInfo {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$DomainInfo$system$domainInfo) ||
+    if (!(other is Query$GetDnsRecords$system$domainInfo) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2440,24 +2909,24 @@ class Query$DomainInfo$system$domainInfo {
   }
 }
 
-extension UtilityExtension$Query$DomainInfo$system$domainInfo
-    on Query$DomainInfo$system$domainInfo {
-  CopyWith$Query$DomainInfo$system$domainInfo<
-          Query$DomainInfo$system$domainInfo>
-      get copyWith => CopyWith$Query$DomainInfo$system$domainInfo(
+extension UtilityExtension$Query$GetDnsRecords$system$domainInfo
+    on Query$GetDnsRecords$system$domainInfo {
+  CopyWith$Query$GetDnsRecords$system$domainInfo<
+          Query$GetDnsRecords$system$domainInfo>
+      get copyWith => CopyWith$Query$GetDnsRecords$system$domainInfo(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
-  factory CopyWith$Query$DomainInfo$system$domainInfo(
-    Query$DomainInfo$system$domainInfo instance,
-    TRes Function(Query$DomainInfo$system$domainInfo) then,
-  ) = _CopyWithImpl$Query$DomainInfo$system$domainInfo;
+abstract class CopyWith$Query$GetDnsRecords$system$domainInfo<TRes> {
+  factory CopyWith$Query$GetDnsRecords$system$domainInfo(
+    Query$GetDnsRecords$system$domainInfo instance,
+    TRes Function(Query$GetDnsRecords$system$domainInfo) then,
+  ) = _CopyWithImpl$Query$GetDnsRecords$system$domainInfo;
 
-  factory CopyWith$Query$DomainInfo$system$domainInfo.stub(TRes res) =
-      _CopyWithStubImpl$Query$DomainInfo$system$domainInfo;
+  factory CopyWith$Query$GetDnsRecords$system$domainInfo.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetDnsRecords$system$domainInfo;
 
   TRes call({
     String? domain,
@@ -2474,16 +2943,16 @@ abstract class CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
           _fn);
 }
 
-class _CopyWithImpl$Query$DomainInfo$system$domainInfo<TRes>
-    implements CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
-  _CopyWithImpl$Query$DomainInfo$system$domainInfo(
+class _CopyWithImpl$Query$GetDnsRecords$system$domainInfo<TRes>
+    implements CopyWith$Query$GetDnsRecords$system$domainInfo<TRes> {
+  _CopyWithImpl$Query$GetDnsRecords$system$domainInfo(
     this._instance,
     this._then,
   );
 
-  final Query$DomainInfo$system$domainInfo _instance;
+  final Query$GetDnsRecords$system$domainInfo _instance;
 
-  final TRes Function(Query$DomainInfo$system$domainInfo) _then;
+  final TRes Function(Query$GetDnsRecords$system$domainInfo) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -2494,7 +2963,7 @@ class _CopyWithImpl$Query$DomainInfo$system$domainInfo<TRes>
     Object? requiredDnsRecords = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Query$DomainInfo$system$domainInfo(
+      _then(Query$GetDnsRecords$system$domainInfo(
         domain: domain == _undefined || domain == null
             ? _instance.domain
             : (domain as String),
@@ -2512,6 +2981,7 @@ class _CopyWithImpl$Query$DomainInfo$system$domainInfo<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   TRes requiredDnsRecords(
           Iterable<Fragment$fragmentDnsRecords> Function(
                   Iterable<
@@ -2526,9 +2996,9 @@ class _CopyWithImpl$Query$DomainInfo$system$domainInfo<TRes>
                   ))).toList());
 }
 
-class _CopyWithStubImpl$Query$DomainInfo$system$domainInfo<TRes>
-    implements CopyWith$Query$DomainInfo$system$domainInfo<TRes> {
-  _CopyWithStubImpl$Query$DomainInfo$system$domainInfo(this._res);
+class _CopyWithStubImpl$Query$GetDnsRecords$system$domainInfo<TRes>
+    implements CopyWith$Query$GetDnsRecords$system$domainInfo<TRes> {
+  _CopyWithStubImpl$Query$GetDnsRecords$system$domainInfo(this._res);
 
   TRes _res;
 
@@ -2540,6 +3010,7 @@ class _CopyWithStubImpl$Query$DomainInfo$system$domainInfo<TRes>
     String? $__typename,
   }) =>
       _res;
+
   requiredDnsRecords(_fn) => _res;
 }
 
@@ -2562,6 +3033,7 @@ class Variables$Mutation$ChangeTimezone {
   Map<String, dynamic> _$data;
 
   String get timezone => (_$data['timezone'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$timezone = timezone;
@@ -2574,6 +3046,7 @@ class Variables$Mutation$ChangeTimezone {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -2656,6 +3129,7 @@ class Mutation$ChangeTimezone {
     );
   }
 
+  @Deprecated('Use `system.change_timezone` instead')
   final Mutation$ChangeTimezone$changeTimezone changeTimezone;
 
   final String $__typename;
@@ -2751,6 +3225,7 @@ class _CopyWithImpl$Mutation$ChangeTimezone<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> get changeTimezone {
     final local$changeTimezone = _instance.changeTimezone;
     return CopyWith$Mutation$ChangeTimezone$changeTimezone(
@@ -2769,6 +3244,7 @@ class _CopyWithStubImpl$Mutation$ChangeTimezone<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> get changeTimezone =>
       CopyWith$Mutation$ChangeTimezone$changeTimezone.stub(_res);
 }
@@ -3137,6 +3613,7 @@ class Variables$Mutation$ChangeAutoUpgradeSettings {
 
   Input$AutoUpgradeSettingsInput get settings =>
       (_$data['settings'] as Input$AutoUpgradeSettingsInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$settings = settings;
@@ -3150,6 +3627,7 @@ class Variables$Mutation$ChangeAutoUpgradeSettings {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -3234,6 +3712,7 @@ class Mutation$ChangeAutoUpgradeSettings {
     );
   }
 
+  @Deprecated('Use `system.change_auto_upgrade_settings` instead')
   final Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
       changeAutoUpgradeSettings;
 
@@ -3337,6 +3816,7 @@ class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<TRes>
       get changeAutoUpgradeSettings {
     final local$changeAutoUpgradeSettings = _instance.changeAutoUpgradeSettings;
@@ -3358,6 +3838,7 @@ class _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<TRes>
       get changeAutoUpgradeSettings =>
           CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings

@@ -37,13 +37,14 @@ class DnsRecordsCubit
         emit(const DnsRecordsState());
         return;
       }
-
-      final foundRecords = await ProvidersController.currentDnsProvider!
-          .validateDnsRecords(domain!, ipAddress!,
-              extractDkimRecord(await api.getDnsRecords())?.content ?? '', []
-
-              /// TODO: TOOD!!11kdoikadodsksakdpoadsaspodda
-              );
+      final allDnsRecords = await api.getDnsRecords();
+      final foundRecords =
+          await ProvidersController.currentDnsProvider!.validateDnsRecords(
+        domain!,
+        ipAddress!,
+        extractDkimRecord(allDnsRecords)?.content ?? '',
+        allDnsRecords,
+      );
 
       if (!foundRecords.success || foundRecords.data.isEmpty) {
         emit(const DnsRecordsState());

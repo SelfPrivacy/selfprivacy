@@ -2871,6 +2871,7 @@ class _CopyWithImpl$Query$GetApiVersion<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$GetApiVersion$api<TRes> get api {
     final local$api = _instance.api;
     return CopyWith$Query$GetApiVersion$api(local$api, (e) => call(api: e));
@@ -2888,6 +2889,7 @@ class _CopyWithStubImpl$Query$GetApiVersion<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$GetApiVersion$api<TRes> get api =>
       CopyWith$Query$GetApiVersion$api.stub(_res);
 }
@@ -3283,6 +3285,7 @@ class _CopyWithImpl$Query$GetApiJobs<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$GetApiJobs$jobs<TRes> get jobs {
     final local$jobs = _instance.jobs;
     return CopyWith$Query$GetApiJobs$jobs(local$jobs, (e) => call(jobs: e));
@@ -3300,6 +3303,7 @@ class _CopyWithStubImpl$Query$GetApiJobs<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$GetApiJobs$jobs<TRes> get jobs =>
       CopyWith$Query$GetApiJobs$jobs.stub(_res);
 }
@@ -3596,6 +3600,7 @@ class _CopyWithImpl$Query$GetApiJobs$jobs<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   TRes getJobs(
           Iterable<Fragment$basicApiJobsFields> Function(
                   Iterable<
@@ -3621,6 +3626,7 @@ class _CopyWithStubImpl$Query$GetApiJobs$jobs<TRes>
     String? $__typename,
   }) =>
       _res;
+
   getJobs(_fn) => _res;
 }
 
@@ -3642,6 +3648,7 @@ class Variables$Mutation$RemoveJob {
   Map<String, dynamic> _$data;
 
   String get jobId => (_$data['jobId'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$jobId = jobId;
@@ -3654,6 +3661,7 @@ class Variables$Mutation$RemoveJob {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -3735,6 +3743,7 @@ class Mutation$RemoveJob {
     );
   }
 
+  @Deprecated('Use `jobs.remove_job` instead')
   final Mutation$RemoveJob$removeJob removeJob;
 
   final String $__typename;
@@ -3829,6 +3838,7 @@ class _CopyWithImpl$Mutation$RemoveJob<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RemoveJob$removeJob<TRes> get removeJob {
     final local$removeJob = _instance.removeJob;
     return CopyWith$Mutation$RemoveJob$removeJob(
@@ -3847,6 +3857,7 @@ class _CopyWithStubImpl$Mutation$RemoveJob<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RemoveJob$removeJob<TRes> get removeJob =>
       CopyWith$Mutation$RemoveJob$removeJob.stub(_res);
 }
@@ -4178,6 +4189,7 @@ class Mutation$RunSystemRebuild {
     );
   }
 
+  @Deprecated('Use `system.run_system_rebuild` instead')
   final Mutation$RunSystemRebuild$runSystemRebuild runSystemRebuild;
 
   final String $__typename;
@@ -4276,6 +4288,7 @@ class _CopyWithImpl$Mutation$RunSystemRebuild<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
       get runSystemRebuild {
     final local$runSystemRebuild = _instance.runSystemRebuild;
@@ -4295,6 +4308,7 @@ class _CopyWithStubImpl$Mutation$RunSystemRebuild<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
       get runSystemRebuild =>
           CopyWith$Mutation$RunSystemRebuild$runSystemRebuild.stub(_res);
@@ -4426,10 +4440,11 @@ extension ClientExtension$Mutation$RunSystemRebuild on graphql.GraphQLClient {
       mutate$RunSystemRebuild(
               [Options$Mutation$RunSystemRebuild? options]) async =>
           await this.mutate(options ?? Options$Mutation$RunSystemRebuild());
-  graphql.ObservableQuery<
-      Mutation$RunSystemRebuild> watchMutation$RunSystemRebuild(
-          [WatchOptions$Mutation$RunSystemRebuild? options]) =>
-      this.watchMutation(options ?? WatchOptions$Mutation$RunSystemRebuild());
+  graphql.ObservableQuery<Mutation$RunSystemRebuild>
+      watchMutation$RunSystemRebuild(
+              [WatchOptions$Mutation$RunSystemRebuild? options]) =>
+          this.watchMutation(
+              options ?? WatchOptions$Mutation$RunSystemRebuild());
 }
 
 class Mutation$RunSystemRebuild$runSystemRebuild
@@ -4615,6 +4630,7 @@ class Mutation$RunSystemRollback {
     );
   }
 
+  @Deprecated('Use `system.run_system_rollback` instead')
   final Mutation$RunSystemRollback$runSystemRollback runSystemRollback;
 
   final String $__typename;
@@ -4714,6 +4730,7 @@ class _CopyWithImpl$Mutation$RunSystemRollback<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes>
       get runSystemRollback {
     final local$runSystemRollback = _instance.runSystemRollback;
@@ -4733,6 +4750,7 @@ class _CopyWithStubImpl$Mutation$RunSystemRollback<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes>
       get runSystemRollback =>
           CopyWith$Mutation$RunSystemRollback$runSystemRollback.stub(_res);
@@ -4865,10 +4883,11 @@ extension ClientExtension$Mutation$RunSystemRollback on graphql.GraphQLClient {
       mutate$RunSystemRollback(
               [Options$Mutation$RunSystemRollback? options]) async =>
           await this.mutate(options ?? Options$Mutation$RunSystemRollback());
-  graphql.ObservableQuery<
-      Mutation$RunSystemRollback> watchMutation$RunSystemRollback(
-          [WatchOptions$Mutation$RunSystemRollback? options]) =>
-      this.watchMutation(options ?? WatchOptions$Mutation$RunSystemRollback());
+  graphql.ObservableQuery<Mutation$RunSystemRollback>
+      watchMutation$RunSystemRollback(
+              [WatchOptions$Mutation$RunSystemRollback? options]) =>
+          this.watchMutation(
+              options ?? WatchOptions$Mutation$RunSystemRollback());
 }
 
 class Mutation$RunSystemRollback$runSystemRollback
@@ -5054,6 +5073,7 @@ class Mutation$RunSystemUpgrade {
     );
   }
 
+  @Deprecated('Use `system.run_system_upgrade` instead')
   final Mutation$RunSystemUpgrade$runSystemUpgrade runSystemUpgrade;
 
   final String $__typename;
@@ -5152,6 +5172,7 @@ class _CopyWithImpl$Mutation$RunSystemUpgrade<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
       get runSystemUpgrade {
     final local$runSystemUpgrade = _instance.runSystemUpgrade;
@@ -5171,6 +5192,7 @@ class _CopyWithStubImpl$Mutation$RunSystemUpgrade<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
       get runSystemUpgrade =>
           CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade.stub(_res);
@@ -5302,10 +5324,11 @@ extension ClientExtension$Mutation$RunSystemUpgrade on graphql.GraphQLClient {
       mutate$RunSystemUpgrade(
               [Options$Mutation$RunSystemUpgrade? options]) async =>
           await this.mutate(options ?? Options$Mutation$RunSystemUpgrade());
-  graphql.ObservableQuery<
-      Mutation$RunSystemUpgrade> watchMutation$RunSystemUpgrade(
-          [WatchOptions$Mutation$RunSystemUpgrade? options]) =>
-      this.watchMutation(options ?? WatchOptions$Mutation$RunSystemUpgrade());
+  graphql.ObservableQuery<Mutation$RunSystemUpgrade>
+      watchMutation$RunSystemUpgrade(
+              [WatchOptions$Mutation$RunSystemUpgrade? options]) =>
+          this.watchMutation(
+              options ?? WatchOptions$Mutation$RunSystemUpgrade());
 }
 
 class Mutation$RunSystemUpgrade$runSystemUpgrade
@@ -5492,6 +5515,7 @@ class Mutation$PullRepositoryChanges {
     );
   }
 
+  @Deprecated('Use `system.pull_repository_changes` instead')
   final Mutation$PullRepositoryChanges$pullRepositoryChanges
       pullRepositoryChanges;
 
@@ -5592,6 +5616,7 @@ class _CopyWithImpl$Mutation$PullRepositoryChanges<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
       get pullRepositoryChanges {
     final local$pullRepositoryChanges = _instance.pullRepositoryChanges;
@@ -5611,6 +5636,7 @@ class _CopyWithStubImpl$Mutation$PullRepositoryChanges<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
       get pullRepositoryChanges =>
           CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges.stub(
@@ -5945,6 +5971,7 @@ class Mutation$RebootSystem {
     );
   }
 
+  @Deprecated('Use `system.reboot_system` instead')
   final Mutation$RebootSystem$rebootSystem rebootSystem;
 
   final String $__typename;
@@ -6039,6 +6066,7 @@ class _CopyWithImpl$Mutation$RebootSystem<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RebootSystem$rebootSystem<TRes> get rebootSystem {
     final local$rebootSystem = _instance.rebootSystem;
     return CopyWith$Mutation$RebootSystem$rebootSystem(
@@ -6057,6 +6085,7 @@ class _CopyWithStubImpl$Mutation$RebootSystem<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RebootSystem$rebootSystem<TRes> get rebootSystem =>
       CopyWith$Mutation$RebootSystem$rebootSystem.stub(_res);
 }
@@ -6468,6 +6497,7 @@ class _CopyWithImpl$Query$SystemServerProvider<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$SystemServerProvider$system<TRes> get system {
     final local$system = _instance.system;
     return CopyWith$Query$SystemServerProvider$system(
@@ -6486,6 +6516,7 @@ class _CopyWithStubImpl$Query$SystemServerProvider<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$SystemServerProvider$system<TRes> get system =>
       CopyWith$Query$SystemServerProvider$system.stub(_res);
 }
@@ -6783,6 +6814,7 @@ class _CopyWithImpl$Query$SystemServerProvider$system<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$SystemServerProvider$system$provider<TRes> get provider {
     final local$provider = _instance.provider;
     return CopyWith$Query$SystemServerProvider$system$provider(
@@ -6801,6 +6833,7 @@ class _CopyWithStubImpl$Query$SystemServerProvider$system<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$SystemServerProvider$system$provider<TRes> get provider =>
       CopyWith$Query$SystemServerProvider$system$provider.stub(_res);
 }
@@ -7043,6 +7076,7 @@ class _CopyWithImpl$Query$SystemDnsProvider<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$SystemDnsProvider$system<TRes> get system {
     final local$system = _instance.system;
     return CopyWith$Query$SystemDnsProvider$system(
@@ -7061,6 +7095,7 @@ class _CopyWithStubImpl$Query$SystemDnsProvider<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$SystemDnsProvider$system<TRes> get system =>
       CopyWith$Query$SystemDnsProvider$system.stub(_res);
 }
@@ -7355,6 +7390,7 @@ class _CopyWithImpl$Query$SystemDnsProvider$system<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$SystemDnsProvider$system$domainInfo<TRes> get domainInfo {
     final local$domainInfo = _instance.domainInfo;
     return CopyWith$Query$SystemDnsProvider$system$domainInfo(
@@ -7373,6 +7409,7 @@ class _CopyWithStubImpl$Query$SystemDnsProvider$system<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$SystemDnsProvider$system$domainInfo<TRes> get domainInfo =>
       CopyWith$Query$SystemDnsProvider$system$domainInfo.stub(_res);
 }
@@ -7613,6 +7650,7 @@ class _CopyWithImpl$Query$GetApiTokens<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$GetApiTokens$api<TRes> get api {
     final local$api = _instance.api;
     return CopyWith$Query$GetApiTokens$api(local$api, (e) => call(api: e));
@@ -7630,6 +7668,7 @@ class _CopyWithStubImpl$Query$GetApiTokens<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$GetApiTokens$api<TRes> get api =>
       CopyWith$Query$GetApiTokens$api.stub(_res);
 }
@@ -7946,6 +7985,7 @@ class _CopyWithImpl$Query$GetApiTokens$api<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   TRes devices(
           Iterable<Query$GetApiTokens$api$devices> Function(
                   Iterable<
@@ -7971,6 +8011,7 @@ class _CopyWithStubImpl$Query$GetApiTokens$api<TRes>
     String? $__typename,
   }) =>
       _res;
+
   devices(_fn) => _res;
 }
 
@@ -8248,6 +8289,7 @@ class _CopyWithImpl$Query$RecoveryKey<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$RecoveryKey$api<TRes> get api {
     final local$api = _instance.api;
     return CopyWith$Query$RecoveryKey$api(local$api, (e) => call(api: e));
@@ -8265,6 +8307,7 @@ class _CopyWithStubImpl$Query$RecoveryKey<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$RecoveryKey$api<TRes> get api =>
       CopyWith$Query$RecoveryKey$api.stub(_res);
 }
@@ -8578,6 +8621,7 @@ class _CopyWithImpl$Query$RecoveryKey$api<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$RecoveryKey$api$recoveryKey<TRes> get recoveryKey {
     final local$recoveryKey = _instance.recoveryKey;
     return CopyWith$Query$RecoveryKey$api$recoveryKey(
@@ -8596,6 +8640,7 @@ class _CopyWithStubImpl$Query$RecoveryKey$api<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$RecoveryKey$api$recoveryKey<TRes> get recoveryKey =>
       CopyWith$Query$RecoveryKey$api$recoveryKey.stub(_res);
 }
@@ -8835,6 +8880,7 @@ class Variables$Mutation$GetNewRecoveryApiKey {
 
   Input$RecoveryKeyLimitsInput? get limits =>
       (_$data['limits'] as Input$RecoveryKeyLimitsInput?);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     if (_$data.containsKey('limits')) {
@@ -8850,6 +8896,7 @@ class Variables$Mutation$GetNewRecoveryApiKey {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -8936,6 +8983,7 @@ class Mutation$GetNewRecoveryApiKey {
     );
   }
 
+  @Deprecated('Use `api.get_new_recovery_api_key` instead')
   final Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey getNewRecoveryApiKey;
 
   final String $__typename;
@@ -9035,6 +9083,7 @@ class _CopyWithImpl$Mutation$GetNewRecoveryApiKey<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
       get getNewRecoveryApiKey {
     final local$getNewRecoveryApiKey = _instance.getNewRecoveryApiKey;
@@ -9054,6 +9103,7 @@ class _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
       get getNewRecoveryApiKey =>
           CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey.stub(
@@ -9435,6 +9485,7 @@ class Variables$Mutation$UseRecoveryApiKey {
 
   Input$UseRecoveryKeyInput get input =>
       (_$data['input'] as Input$UseRecoveryKeyInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$input = input;
@@ -9448,6 +9499,7 @@ class Variables$Mutation$UseRecoveryApiKey {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -9530,6 +9582,7 @@ class Mutation$UseRecoveryApiKey {
     );
   }
 
+  @Deprecated('Use `api.use_recovery_api_key` instead')
   final Mutation$UseRecoveryApiKey$useRecoveryApiKey useRecoveryApiKey;
 
   final String $__typename;
@@ -9629,6 +9682,7 @@ class _CopyWithImpl$Mutation$UseRecoveryApiKey<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
       get useRecoveryApiKey {
     final local$useRecoveryApiKey = _instance.useRecoveryApiKey;
@@ -9648,6 +9702,7 @@ class _CopyWithStubImpl$Mutation$UseRecoveryApiKey<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
       get useRecoveryApiKey =>
           CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey.stub(_res);
@@ -10015,6 +10070,7 @@ class Mutation$RefreshDeviceApiToken {
     );
   }
 
+  @Deprecated('Use `api.refresh_device_api_token` instead')
   final Mutation$RefreshDeviceApiToken$refreshDeviceApiToken
       refreshDeviceApiToken;
 
@@ -10115,6 +10171,7 @@ class _CopyWithImpl$Mutation$RefreshDeviceApiToken<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
       get refreshDeviceApiToken {
     final local$refreshDeviceApiToken = _instance.refreshDeviceApiToken;
@@ -10134,6 +10191,7 @@ class _CopyWithStubImpl$Mutation$RefreshDeviceApiToken<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
       get refreshDeviceApiToken =>
           CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken.stub(
@@ -10497,6 +10555,7 @@ class Variables$Mutation$DeleteDeviceApiToken {
   Map<String, dynamic> _$data;
 
   String get device => (_$data['device'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$device = device;
@@ -10510,6 +10569,7 @@ class Variables$Mutation$DeleteDeviceApiToken {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -10593,6 +10653,7 @@ class Mutation$DeleteDeviceApiToken {
     );
   }
 
+  @Deprecated('Use `api.delete_device_api_token` instead')
   final Mutation$DeleteDeviceApiToken$deleteDeviceApiToken deleteDeviceApiToken;
 
   final String $__typename;
@@ -10692,6 +10753,7 @@ class _CopyWithImpl$Mutation$DeleteDeviceApiToken<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
       get deleteDeviceApiToken {
     final local$deleteDeviceApiToken = _instance.deleteDeviceApiToken;
@@ -10711,6 +10773,7 @@ class _CopyWithStubImpl$Mutation$DeleteDeviceApiToken<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
       get deleteDeviceApiToken =>
           CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken.stub(
@@ -11061,6 +11124,7 @@ class Mutation$GetNewDeviceApiKey {
     );
   }
 
+  @Deprecated('Use `api.get_new_device_api_key` instead')
   final Mutation$GetNewDeviceApiKey$getNewDeviceApiKey getNewDeviceApiKey;
 
   final String $__typename;
@@ -11160,6 +11224,7 @@ class _CopyWithImpl$Mutation$GetNewDeviceApiKey<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
       get getNewDeviceApiKey {
     final local$getNewDeviceApiKey = _instance.getNewDeviceApiKey;
@@ -11179,6 +11244,7 @@ class _CopyWithStubImpl$Mutation$GetNewDeviceApiKey<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
       get getNewDeviceApiKey =>
           CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey.stub(_res);
@@ -11318,10 +11384,11 @@ extension ClientExtension$Mutation$GetNewDeviceApiKey on graphql.GraphQLClient {
       mutate$GetNewDeviceApiKey(
               [Options$Mutation$GetNewDeviceApiKey? options]) async =>
           await this.mutate(options ?? Options$Mutation$GetNewDeviceApiKey());
-  graphql.ObservableQuery<
-      Mutation$GetNewDeviceApiKey> watchMutation$GetNewDeviceApiKey(
-          [WatchOptions$Mutation$GetNewDeviceApiKey? options]) =>
-      this.watchMutation(options ?? WatchOptions$Mutation$GetNewDeviceApiKey());
+  graphql.ObservableQuery<Mutation$GetNewDeviceApiKey>
+      watchMutation$GetNewDeviceApiKey(
+              [WatchOptions$Mutation$GetNewDeviceApiKey? options]) =>
+          this.watchMutation(
+              options ?? WatchOptions$Mutation$GetNewDeviceApiKey());
 }
 
 class Mutation$GetNewDeviceApiKey$getNewDeviceApiKey
@@ -11528,6 +11595,7 @@ class Mutation$InvalidateNewDeviceApiKey {
     );
   }
 
+  @Deprecated('Use `api.invalidate_new_device_api_key` instead')
   final Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
       invalidateNewDeviceApiKey;
 
@@ -11631,6 +11699,7 @@ class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<TRes>
       get invalidateNewDeviceApiKey {
     final local$invalidateNewDeviceApiKey = _instance.invalidateNewDeviceApiKey;
@@ -11652,6 +11721,7 @@ class _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<TRes>
       get invalidateNewDeviceApiKey =>
           CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
@@ -11998,6 +12068,7 @@ class Variables$Mutation$AuthorizeWithNewDeviceApiKey {
 
   Input$UseNewDeviceKeyInput get input =>
       (_$data['input'] as Input$UseNewDeviceKeyInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$input = input;
@@ -12011,6 +12082,7 @@ class Variables$Mutation$AuthorizeWithNewDeviceApiKey {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -12097,6 +12169,7 @@ class Mutation$AuthorizeWithNewDeviceApiKey {
     );
   }
 
+  @Deprecated('Use `api.authorize_with_new_device_api_key` instead')
   final Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
       authorizeWithNewDeviceApiKey;
 
@@ -12202,6 +12275,7 @@ class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
       TRes> get authorizeWithNewDeviceApiKey {
     final local$authorizeWithNewDeviceApiKey =
@@ -12224,6 +12298,7 @@ class _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
           TRes>
       get authorizeWithNewDeviceApiKey =>

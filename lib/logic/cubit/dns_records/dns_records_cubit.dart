@@ -37,7 +37,8 @@ class DnsRecordsCubit
         emit(const DnsRecordsState());
         return;
       }
-      final allDnsRecords = await api.getDnsRecords();
+      final List<DnsRecord> allDnsRecords = await api.getDnsRecords();
+      allDnsRecords.removeWhere((final record) => record.type == 'AAAA');
       final foundRecords =
           await ProvidersController.currentDnsProvider!.validateDnsRecords(
         domain!,

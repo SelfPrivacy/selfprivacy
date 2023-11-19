@@ -232,8 +232,11 @@ class CloudflareDnsProvider extends DnsProvider {
           foundRecords.add(
             DesiredDnsRecord(
               name: record.name ?? '',
+              description: record.name?.split('.')[0] ?? '',
               content: record.content ?? '',
               isSatisfied: foundContent == content,
+              type: record.type,
+              category: DnsRecordsCategory.email,
             ),
           );
         } else {
@@ -246,8 +249,13 @@ class CloudflareDnsProvider extends DnsProvider {
           foundRecords.add(
             DesiredDnsRecord(
               name: record.name ?? '',
+              description: record.name?.split('.')[0] ?? '',
               content: record.content ?? '',
               isSatisfied: foundMatch,
+              type: record.type,
+              category: record.type == 'A'
+                  ? DnsRecordsCategory.services
+                  : DnsRecordsCategory.other,
             ),
           );
         }

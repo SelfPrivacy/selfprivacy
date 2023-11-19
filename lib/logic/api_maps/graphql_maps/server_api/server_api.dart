@@ -285,7 +285,7 @@ class ServerApi extends GraphQLApiMap
   }
 
   Future<List<DnsRecord>> getDnsRecords() async {
-    List<DnsRecord> dnsRecords = [];
+    List<DnsRecord> records = [];
     QueryResult<Query$GetDnsRecords> response;
 
     try {
@@ -294,32 +294,19 @@ class ServerApi extends GraphQLApiMap
       if (response.hasException) {
         print(response.exception.toString());
       }
-      final List<DnsRecord> domainInfoRecords =
-          response.parsedData!.system.domainInfo.requiredDnsRecords
-              .map<DnsRecord>(
-                (
-                  final Fragment$fragmentDnsRecords record,
-                ) =>
-                    DnsRecord.fromGraphQL(record),
-              )
-              .toList();
-      final List<DnsRecord> serviceRecords = [];
-      for (final service in response.parsedData!.services.allServices) {
-        serviceRecords.addAll(
-          service.dnsRecords!.map<DnsRecord>(
+      records = response.parsedData!.system.domainInfo.requiredDnsRecords
+          .map<DnsRecord>(
             (
               final Fragment$fragmentDnsRecords record,
             ) =>
                 DnsRecord.fromGraphQL(record),
-          ),
-        );
-      }
-      dnsRecords = [...domainInfoRecords, ...serviceRecords];
+          )
+          .toList();
     } catch (e) {
       print(e);
     }
 
-    return dnsRecords;
+    return records;
   }
 
   Future<GenericResult<List<ApiToken>>> getApiTokens() async {

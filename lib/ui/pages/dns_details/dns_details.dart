@@ -151,9 +151,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                               ? neutralColor
                               : errorColor,
                     ),
-                    title: Text(
-                      dnsRecord.description.tr(),
-                    ),
+                    title: Text(dnsRecord.description),
                     subtitle: Text(
                       dnsRecord.displayName ?? dnsRecord.name,
                     ),
@@ -196,7 +194,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                               : errorColor,
                     ),
                     title: Text(
-                      dnsRecord.description.tr(),
+                      dnsRecord.description,
                     ),
                   ),
                 ],

@@ -31,15 +31,6 @@ fragment fragmentDnsRecords on DnsRecord {
 }
 
 query GetDnsRecords {
-  services {
-    allServices {
-      id
-      displayName
-      dnsRecords {
-        ...fragmentDnsRecords
-      }
-    }
-  }
   system {
     domainInfo {
       domain

@@ -39,7 +39,7 @@ dependencies:
   ionicons: ^0.2.2
   json_annotation: ^4.8.1
   local_auth: ^2.1.6
-  material_color_utilities: ^0.2.0
+  material_color_utilities: ^0.5.0
   modal_bottom_sheet: ^3.0.0-pre
   nanoid: ^1.0.0
   package_info: ^2.0.2

@@ -23,7 +23,7 @@ class RecoveryServerProviderConnected extends StatelessWidget {
           heroTitle: 'recovering.provider_connected'.tr(
             args: [
               appConfig.state.serverDetails?.provider.displayName ??
-                  'Server Provider'
+                  'Server Provider',
             ],
           ),
           heroSubtitle: 'recovering.provider_connected_description'.tr(
@@ -45,7 +45,7 @@ class RecoveryServerProviderConnected extends StatelessWidget {
                 labelText: 'recovering.provider_connected_placeholder'.tr(
                   args: [
                     appConfig.state.serverDetails?.provider.displayName ??
-                        'Server Provider'
+                        'Server Provider',
                   ],
                 ),
               ),

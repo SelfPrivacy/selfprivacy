@@ -32,7 +32,7 @@ class EmptyPagePlaceholder extends StatelessWidget {
                   child: _expandedContent(context),
                 ),
               ),
-            )
+            ),
           ],
         );
 

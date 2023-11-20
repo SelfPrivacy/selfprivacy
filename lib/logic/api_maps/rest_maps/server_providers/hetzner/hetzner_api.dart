@@ -87,7 +87,7 @@ class HetznerApi extends RestApiMap {
     final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
     Response? serverCreateResponse;
     HetznerServerInfo? serverInfo;
-    DioError? hetznerError;
+    DioException? hetznerError;
     bool success = false;
 
     final Dio client = await getClient();
@@ -117,7 +117,7 @@ class HetznerApi extends RestApiMap {
         serverCreateResponse.data['server'],
       );
       success = true;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print(e);
       hetznerError = e;
     } catch (e) {
@@ -402,7 +402,7 @@ class HetznerApi extends RestApiMap {
           'labels': {'labelkey': 'value'},
           'location': region,
           'automount': false,
-          'format': 'ext4'
+          'format': 'ext4',
         },
       );
       volume = HetznerVolume.fromJson(createVolumeResponse.data['volume']);
@@ -579,7 +579,7 @@ class HetznerApi extends RestApiMap {
       final Map<String, dynamic> queryParameters = {
         'start': start.toUtc().toIso8601String(),
         'end': end.toUtc().toIso8601String(),
-        'type': type
+        'type': type,
       };
       final Response res = await client.get(
         '/servers/$serverId/metrics',

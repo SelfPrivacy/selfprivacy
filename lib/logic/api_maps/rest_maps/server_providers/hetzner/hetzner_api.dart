@@ -87,7 +87,7 @@ class HetznerApi extends RestApiMap {
     final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
     Response? serverCreateResponse;
     HetznerServerInfo? serverInfo;
-    DioError? hetznerError;
+    DioException? hetznerError;
     bool success = false;
 
     final Dio client = await getClient();
@@ -117,7 +117,7 @@ class HetznerApi extends RestApiMap {
         serverCreateResponse.data['server'],
       );
       success = true;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print(e);
       hetznerError = e;
     } catch (e) {

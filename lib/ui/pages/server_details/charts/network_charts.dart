@@ -73,7 +73,7 @@ class NetworkChart extends StatelessWidget {
               isCurved: false,
               barWidth: 2,
               color: Theme.of(context).colorScheme.primary,
-              dotData: FlDotData(
+              dotData: const FlDotData(
                 show: false,
               ),
               belowBarData: BarAreaData(
@@ -94,7 +94,7 @@ class NetworkChart extends StatelessWidget {
               isCurved: false,
               barWidth: 2,
               color: Theme.of(context).colorScheme.tertiary,
-              dotData: FlDotData(
+              dotData: const FlDotData(
                 show: false,
               ),
               belowBarData: BarAreaData(
@@ -118,7 +118,9 @@ class NetworkChart extends StatelessWidget {
               1.2,
           minX: 0,
           titlesData: FlTitlesData(
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 interval: 40,
@@ -139,7 +141,9 @@ class NetworkChart extends StatelessWidget {
                 showTitles: true,
               ),
             ),
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
             rightTitles: AxisTitles(
               sideTitles: SideTitles(
                 reservedSize: 50,

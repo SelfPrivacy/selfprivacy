@@ -133,7 +133,7 @@ class DigitalOceanDnsApi extends RestApiMap {
         );
       }
       await Future.wait(allCreateFutures);
-    } on DioException catch (e) {
+    } on DioError catch (e) {
       print(e.message);
       rethrow;
     } catch (e) {

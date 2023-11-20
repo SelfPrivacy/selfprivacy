@@ -360,21 +360,14 @@ class HetznerApi extends RestApiMap {
     return GenericResult(success: true, data: pricing);
   }
 
-  Future<GenericResult<List<HetznerVolume>>> getVolumes({
-    final String? status,
-  }) async {
+  Future<GenericResult<List<HetznerVolume>>> getVolumes() async {
     final List<HetznerVolume> volumes = [];
 
-    Response? getVolumesResonse;
+    Response? getVolumesResponse;
     final Dio client = await getClient();
     try {
-      getVolumesResonse = await client.get(
-        '/volumes',
-        queryParameters: {
-          'status': status,
-        },
-      );
-      for (final volume in getVolumesResonse.data['volumes']) {
+      getVolumesResponse = await client.get('/volumes');
+      for (final volume in getVolumesResponse.data['volumes']) {
         volumes.add(HetznerVolume.fromJson(volume));
       }
     } catch (e) {
@@ -391,8 +384,8 @@ class HetznerApi extends RestApiMap {
     return GenericResult(
       data: volumes,
       success: true,
-      code: getVolumesResonse.statusCode,
-      message: getVolumesResonse.statusMessage,
+      code: getVolumesResponse.statusCode,
+      message: getVolumesResponse.statusMessage,
     );
   }
 

@@ -65,7 +65,7 @@ class CpuChart extends StatelessWidget {
               isCurved: false,
               barWidth: 2,
               color: Theme.of(context).colorScheme.primary,
-              dotData: const FlDotData(
+              dotData: FlDotData(
                 show: false,
               ),
               belowBarData: BarAreaData(
@@ -86,7 +86,7 @@ class CpuChart extends StatelessWidget {
           maxY: 100,
           minX: 0,
           titlesData: FlTitlesData(
-            topTitles: const AxisTitles(
+            topTitles: AxisTitles(
               sideTitles: SideTitles(showTitles: false),
             ),
             bottomTitles: AxisTitles(
@@ -109,12 +109,12 @@ class CpuChart extends StatelessWidget {
                 showTitles: true,
               ),
             ),
-            leftTitles: const AxisTitles(
+            leftTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: false,
               ),
             ),
-            rightTitles: const AxisTitles(
+            rightTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: false,
               ),

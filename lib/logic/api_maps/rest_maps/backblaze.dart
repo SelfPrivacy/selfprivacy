@@ -103,7 +103,7 @@ class BackblazeApi extends RestApiMap {
       } else {
         throw Exception('code: ${response.statusCode}');
       }
-    } on DioException catch (e) {
+    } on DioError catch (e) {
       print(e);
       return GenericResult(
         data: false,

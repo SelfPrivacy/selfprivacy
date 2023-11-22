@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
+import 'package:selfprivacy/utils/ui_helpers.dart';
 
 class ServerTypePicker extends StatefulWidget {
   const ServerTypePicker({
@@ -329,7 +330,7 @@ class SelectTypePage extends StatelessWidget {
                                         'initializing.choose_server_type_payment_per_month'
                                             .tr(
                                           args: [
-                                            '${(type.price.value + storagePrice + publicIpPrice).toStringAsFixed(4)} ${type.price.currency.shortcode}'
+                                            '${UiHelpers.formatWithPrecision(type.price.value + storagePrice + publicIpPrice)} ${type.price.currency.shortcode}',
                                           ],
                                         ),
                                         style: Theme.of(context)
@@ -370,8 +371,10 @@ class SelectTypePage extends StatelessWidget {
                                                   'initializing.choose_server_type_payment_server'
                                                       .tr(
                                                     args: [
-                                                      type.price.value
-                                                          .toString()
+                                                      UiHelpers
+                                                          .formatWithPrecision(
+                                                        type.price.value,
+                                                      ),
                                                     ],
                                                   ),
                                                   style: Theme.of(context)
@@ -401,7 +404,10 @@ class SelectTypePage extends StatelessWidget {
                                                   'initializing.choose_server_type_payment_storage'
                                                       .tr(
                                                     args: [
-                                                      storagePrice.toString()
+                                                      UiHelpers
+                                                          .formatWithPrecision(
+                                                        storagePrice,
+                                                      ),
                                                     ],
                                                   ),
                                                   style: Theme.of(context)
@@ -432,7 +438,10 @@ class SelectTypePage extends StatelessWidget {
                                                     'initializing.choose_server_type_payment_ip'
                                                         .tr(
                                                       args: [
-                                                        publicIpPrice.toString()
+                                                        UiHelpers
+                                                            .formatWithPrecision(
+                                                          publicIpPrice,
+                                                        ),
                                                       ],
                                                     ),
                                                     style: Theme.of(context)

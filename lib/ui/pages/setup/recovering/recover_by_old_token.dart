@@ -41,7 +41,7 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
               onPressed: () => context
                   .read<ServerInstallationCubit>()
                   .selectRecoveryMethod(ServerRecoveryMethods.oldToken),
-            )
+            ),
           ],
         ),
       );
@@ -90,7 +90,7 @@ class RecoverByOldToken extends StatelessWidget {
                     ? null
                     : () => context.read<RecoveryDeviceFormCubit>().trySubmit(),
                 child: Text('basis.continue'.tr()),
-              )
+              ),
             ],
           );
         },

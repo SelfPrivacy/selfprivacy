@@ -163,7 +163,7 @@ class BackupDetailsPage extends StatelessWidget {
             autobackupPeriod != null
                 ? 'backup.autobackup_period_subtitle'.tr(
                     namedArgs: {
-                      'period': autobackupPeriod.toPrettyString(context.locale)
+                      'period': autobackupPeriod.toPrettyString(context.locale),
                     },
                   )
                 : 'backup.autobackup_period_never'.tr(),
@@ -337,7 +337,7 @@ class BackupDetailsPage extends StatelessWidget {
                                   actionButtonOnPressed: () => {
                                     context.read<BackupsCubit>().forgetSnapshot(
                                           backup.id,
-                                        )
+                                        ),
                                   },
                                 );
                               },
@@ -385,7 +385,7 @@ class BackupDetailsPage extends StatelessWidget {
                   ),
                   onTap: () =>
                       context.pushRoute(BackupsListRoute(service: null)),
-                )
+                ),
             ],
           ),
         const SizedBox(height: 8),

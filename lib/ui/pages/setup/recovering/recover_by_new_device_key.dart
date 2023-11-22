@@ -25,7 +25,7 @@ class RecoverByNewDeviceKeyInstruction extends StatelessWidget {
             child: Text('recovering.method_device_button'.tr()),
             onPressed: () => Navigator.of(context)
                 .push(materialRoute(const RecoverByNewDeviceKeyInput())),
-          )
+          ),
         ],
       );
 }
@@ -81,7 +81,7 @@ class RecoverByNewDeviceKeyInput extends StatelessWidget {
                       : () =>
                           context.read<RecoveryDeviceFormCubit>().trySubmit(),
                   child: Text('basis.continue'.tr()),
-                )
+                ),
               ],
             );
           },

@@ -62,7 +62,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
         ),
         const _ResetAppTile(),
         // const Divider(height: 0),
-        _deleteServer(context)
+        _deleteServer(context),
       ],
     );
   }

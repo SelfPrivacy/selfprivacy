@@ -41,8 +41,11 @@ class DesecDnsRecord {
     required this.records,
   });
 
-  factory DesecDnsRecord.fromDnsRecord(final DnsRecord dnsRecord) =>
-      _fromDnsRecord(dnsRecord);
+  factory DesecDnsRecord.fromDnsRecord(
+    final DnsRecord dnsRecord,
+    final String domainName,
+  ) =>
+      _fromDnsRecord(dnsRecord, domainName);
 
   /// Subdomain string which, together with domain, defines the RRset name.
   /// Typical examples are www or _443._tcp.
@@ -69,5 +72,6 @@ class DesecDnsRecord {
   static DesecDnsRecord fromJson(final Map<String, dynamic> json) =>
       _$DesecDnsRecordFromJson(json);
   Map<String, dynamic> toJson() => _$DesecDnsRecordToJson(this);
-  DnsRecord toDnsRecord() => _toDnsRecord(this);
+  DnsRecord toDnsRecord(final String domainName) =>
+      _toDnsRecord(this, domainName);
 }

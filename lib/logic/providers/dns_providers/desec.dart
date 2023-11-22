@@ -83,7 +83,7 @@ class DesecDnsProvider extends DnsProvider {
 
     final List<DesecDnsRecord> bulkRecords = [];
     for (final DnsRecord record in listDnsRecords) {
-      bulkRecords.add(DesecDnsRecord.fromDnsRecord(record));
+      bulkRecords.add(DesecDnsRecord.fromDnsRecord(record, domain.domainName));
     }
 
     return _adapter.api().createMultipleDnsRecords(
@@ -104,7 +104,10 @@ class DesecDnsProvider extends DnsProvider {
 
     final List<DesecDnsRecord> bulkRecords = [];
     for (final DnsRecord record in listDnsRecords) {
-      final desecRecord = DesecDnsRecord.fromDnsRecord(record);
+      final desecRecord = DesecDnsRecord.fromDnsRecord(
+        record,
+        domain.domainName,
+      );
       bulkRecords.add(
         DesecDnsRecord(
           subname: desecRecord.subname,
@@ -146,7 +149,7 @@ class DesecDnsProvider extends DnsProvider {
 
     try {
       for (final record in result.data) {
-        records.add(record.toDnsRecord());
+        records.add(record.toDnsRecord(domain.domainName));
       }
     } catch (e) {
       print(e);
@@ -167,7 +170,7 @@ class DesecDnsProvider extends DnsProvider {
   ) async {
     final result = await _adapter.api().createMultipleDnsRecords(
       domainName: domain.domainName,
-      records: [DesecDnsRecord.fromDnsRecord(record)],
+      records: [DesecDnsRecord.fromDnsRecord(record, domain.domainName)],
     );
 
     return GenericResult(
@@ -197,7 +200,10 @@ class DesecDnsProvider extends DnsProvider {
     final List<DesiredDnsRecord> foundRecords = [];
     try {
       for (final DnsRecord pendingDnsRecord in pendingDnsRecords) {
-        final record = DesecDnsRecord.fromDnsRecord(pendingDnsRecord);
+        final record = DesecDnsRecord.fromDnsRecord(
+          pendingDnsRecord,
+          domain.domainName,
+        );
         if (record.subname == 'selector._domainkey') {
           final DesecDnsRecord foundRecord = records.firstWhere(
             (final r) =>
@@ -217,9 +223,13 @@ class DesecDnsProvider extends DnsProvider {
               record.records[0].replaceAll(RegExp(r'\s+'), '');
           foundRecords.add(
             DesiredDnsRecord(
-              name: record.subname,
+              name: '${record.subname}.${domain.domainName}',
+              description:
+                  record.subname.isEmpty ? record.subname : domain.domainName,
               content: record.records[0],
               isSatisfied: foundContent == desiredContent,
+              type: record.type,
+              category: DnsRecordsCategory.email,
             ),
           );
         } else {
@@ -231,9 +241,13 @@ class DesecDnsProvider extends DnsProvider {
           );
           foundRecords.add(
             DesiredDnsRecord(
-              name: record.subname,
+              name: '${record.subname}.${domain.domainName}',
+              description: record.subname,
               content: record.records[0],
               isSatisfied: foundMatch,
+              category: record.type == 'A'
+                  ? DnsRecordsCategory.services
+                  : DnsRecordsCategory.email,
             ),
           );
         }

@@ -148,13 +148,9 @@ class DigitalOceanDnsProvider extends DnsProvider {
       _adapter.api().createMultipleDnsRecords(
         domainName: domain.domainName,
         records: [
-          DigitalOceanDnsRecord(
-            data: record.content ?? '',
-            id: null,
-            name: record.name ?? '',
-            ttl: record.ttl,
-            type: record.type,
-            priority: record.priority,
+          DigitalOceanDnsRecord.fromDnsRecord(
+            record,
+            domain.domainName,
           ),
         ],
       );
@@ -180,7 +176,9 @@ class DigitalOceanDnsProvider extends DnsProvider {
     try {
       for (final DnsRecord pendingDnsRecord in pendingDnsRecords) {
         final record = DigitalOceanDnsRecord.fromDnsRecord(
-            pendingDnsRecord, domain.domainName);
+          pendingDnsRecord,
+          domain.domainName,
+        );
         if (record.name == 'selector._domainkey') {
           final DigitalOceanDnsRecord foundRecord = records.firstWhere(
             (final r) => (r.name == record.name) && r.type == record.type,
@@ -201,8 +199,11 @@ class DigitalOceanDnsProvider extends DnsProvider {
           foundRecords.add(
             DesiredDnsRecord(
               name: record.name,
+              description: record.name == '@' ? domain.domainName : record.name,
               content: record.data,
               isSatisfied: foundContent == content,
+              type: record.type,
+              category: DnsRecordsCategory.email,
             ),
           );
         } else {
@@ -215,8 +216,13 @@ class DigitalOceanDnsProvider extends DnsProvider {
           foundRecords.add(
             DesiredDnsRecord(
               name: record.name,
+              description: record.name == '@' ? domain.domainName : record.name,
               content: record.data,
               isSatisfied: foundMatch,
+              type: record.type,
+              category: record.type == 'A'
+                  ? DnsRecordsCategory.services
+                  : DnsRecordsCategory.email,
             ),
           );
         }

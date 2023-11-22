@@ -5,7 +5,7 @@ CloudflareDnsRecord _fromDnsRecord(
   final String rootDomain,
 ) {
   String name = dnsRecord.name ?? '';
-  if (name != rootDomain) {
+  if (name != rootDomain && name != '@') {
     name = '$name.$rootDomain';
   }
   return CloudflareDnsRecord(

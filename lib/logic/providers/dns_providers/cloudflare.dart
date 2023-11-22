@@ -255,7 +255,7 @@ class CloudflareDnsProvider extends DnsProvider {
               type: record.type,
               category: record.type == 'A'
                   ? DnsRecordsCategory.services
-                  : DnsRecordsCategory.other,
+                  : DnsRecordsCategory.email,
             ),
           );
         }

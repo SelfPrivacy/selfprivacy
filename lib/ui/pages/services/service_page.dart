@@ -134,7 +134,7 @@ class _ServicePageState extends State<ServicePage> {
                       .read<ApiServerVolumeCubit>()
                       .state
                       .getVolume(service.storageUsage.volume ?? '')
-                      .displayName
+                      .displayName,
                 },
               ),
               style: Theme.of(context).textTheme.bodyMedium,

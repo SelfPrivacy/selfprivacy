@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 const Set<TargetPlatform> _desktop = <TargetPlatform>{
   TargetPlatform.linux,
   TargetPlatform.macOS,
-  TargetPlatform.windows
+  TargetPlatform.windows,
 };
 
 const Set<TargetPlatform> _mobile = <TargetPlatform>{

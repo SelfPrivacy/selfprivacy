@@ -90,7 +90,7 @@ class ServerJobsCubit
       ServerJobsState(
         serverJobList: [
           for (final ServerJob job in state.serverJobList)
-            if (job.uid != uid) job
+            if (job.uid != uid) job,
         ],
       ),
     );

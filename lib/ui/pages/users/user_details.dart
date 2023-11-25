@@ -124,7 +124,7 @@ class _DeleteUserTile extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         },
         leading: const Icon(Icons.person_remove_outlined),
         title: Text(

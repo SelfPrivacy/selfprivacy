@@ -172,7 +172,7 @@ class _SnapshotModalState extends State<SnapshotModal> {
                 isWarning: true,
                 text: 'backup.snapshot_modal_service_not_found'.tr(),
               ),
-            )
+            ),
         ],
       ),
     );

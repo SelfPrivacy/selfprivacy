@@ -34,6 +34,9 @@ class DesecDnsProvider extends DnsProvider {
   DnsProviderType get type => DnsProviderType.desec;
 
   @override
+  String get howToRegistar => 'how_fix_domain_desec';
+
+  @override
   Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
     final api = _adapter.api(getInitialized: false);
     final result = await api.isApiTokenValid(token);

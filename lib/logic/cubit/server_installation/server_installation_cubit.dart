@@ -23,6 +23,7 @@ import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 export 'package:provider/provider.dart';
 
@@ -321,13 +322,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final String ip4 = dataState.serverDetails!.ip4;
     final String domainName = dataState.serverDomain!.domainName;
 
-    final Map<String, bool> matches = await repository.isDnsAddressesMatch(
+    final Map<String, DnsRecordStatus> matches = await validateDnsMatch(
       domainName,
+      ['api'],
       ip4,
-      dataState.dnsMatches ?? {},
     );
 
-    if (matches.values.every((final bool value) => value)) {
+    if (matches.values.every(
+          (final DnsRecordStatus value) => value == DnsRecordStatus.ok,
+        ) &&
+        matches.values.isNotEmpty) {
       final ServerHostingDetails server = await repository.startServer(
         dataState.serverDetails!,
       );

@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_fo
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
@@ -17,6 +18,7 @@ import 'package:selfprivacy/ui/components/drawers/progress_drawer.dart';
 import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
 import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/broken_domain_outlined_card.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/dns_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/domain_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_provider_picker.dart';
@@ -24,6 +26,7 @@ import 'package:selfprivacy/ui/pages/setup/initializing/server_type_picker.dart'
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:selfprivacy/utils/network_utils.dart';
 
 @RoutePage()
 class InitializingPage extends StatelessWidget {
@@ -493,12 +496,17 @@ class InitializingPage extends StatelessWidget {
                 Column(
                   children: state.dnsMatches!.entries.map((final entry) {
                     final String domain = entry.key;
-                    final bool isCorrect = entry.value;
+                    if (entry.value == DnsRecordStatus.nonexistent) {
+                      return BrokenDomainOutlinedCard(
+                        domain: domain,
+                        dnsProvider: ProvidersController.currentDnsProvider!,
+                      );
+                    }
                     return Row(
                       children: [
-                        if (isCorrect)
+                        if (entry.value == DnsRecordStatus.ok)
                           const Icon(Icons.check, color: Colors.green),
-                        if (!isCorrect)
+                        if (entry.value == DnsRecordStatus.waiting)
                           const Icon(Icons.schedule, color: Colors.amber),
                         const SizedBox(width: 10),
                         Text(domain),

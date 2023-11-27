@@ -34,6 +34,9 @@ class DigitalOceanDnsProvider extends DnsProvider {
   DnsProviderType get type => DnsProviderType.digitalOcean;
 
   @override
+  String get howToRegistar => 'how_fix_domain_digital_ocean';
+
+  @override
   Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
     final api = _adapter.api(getInitialized: false);
     final result = await api.isApiTokenValid(token);

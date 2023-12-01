@@ -1,9 +1,23 @@
-### Как получить Hetzner API Token
-1. Переходим по ссылке https://hetzner.com
-2. Заходим в созданный нами проект. Если такового - нет, значит создаём.
-3. Наводим мышкой на боковую панель. Она должна раскрыться, показав нам пункты меню. Нас интересует последний — Security (с иконкой ключика).
-4. Далее, в верхней части интерфейса видим примерно такой список: SSH Keys, API Tokens, Certificates, Members. Нам нужен API Tokens. Переходим по нему.
-5. В правой части интерфейса, нас будет ожидать кнопка Generate API token. Если же Вы используете мобильную версию сайта, в нижнем правом углу Вы увидите красный плюсик. Нажимаем на эту кнопку.
-6. В поле Description, даём нашему токену название (это может быть любое название, которые Вам нравиться. Сути оно не меняет.
+### How to get Hetzner API Token
+1.  Visit the following [link](https://console.hetzner.cloud/) and sign
+    into newly created account.
+2.  Enter into previously created project. If you haven't created one,
+    then please proceed.
+3.  Hover side panel with mouse cursor. Panel should expand and show us
+    a menu. We're interested in the last one — **Security** (icon of a
+    key).
+4.  Next, in the upper part of an interface, we can see approximately
+    the following: **SSH Keys, API Tokens, Certificates, Members.** You
+    need **API Tokens**. Click on it.
+5.  In the right part of the interface, there should be **Generate API
+    token** button. If you're using mobile version og a webpage, in the
+    lower right corner you'll see **red cross**. Push that button.
+6.  In the **Description** field, give our token a name (this can be any
+    name that you like. It doesn't influence the essence.
+7.  Under the **Description** field we can see a possibility to choose
+    **permissions**. Pick **Read & Write**.
+8.  Click **Generate API Token.**
+9.  After that, our key will be shown. Store it in the reliable place,
+    or in the password manager, which is better.
 
 ![Hetzner token setup](resource:assets/images/gifs/Hetzner.gif)

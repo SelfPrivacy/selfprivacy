@@ -24,7 +24,7 @@
         "username": "Nom d'utilisateur",
         "loading": "Chargement…",
         "later": "Passer à la configuration plus tard",
-        "connect_to_existing": "Se connecter à un server existant",
+        "connect_to_existing": "Se connecter à un serveur SelfPrivacy existant",
         "reset": "Réinitialiser",
         "details": "Détails",
         "no_data": "Pas de données",
@@ -34,7 +34,9 @@
         "continue": "Continuer",
         "apply": "Appliquer",
         "done": "Effectué",
-        "app_name": "SelfPrivacy"
+        "app_name": "SelfPrivacy",
+        "please_connect": "Veuillez connecter votre serveur, domaine et fournisseur DNS pour vous lancer dans le bain !",
+        "copied_to_clipboard": "Copié dans le presse-papier !"
     },
     "more_page": {
         "about_application": "À propos",
@@ -47,7 +49,8 @@
     },
     "console_page": {
         "title": "Console",
-        "waiting": "En attente de l'initialisation…"
+        "waiting": "En attente de l'initialisation…",
+        "copy": "Copier"
     },
     "about_us_page": {
         "title": "À propos de nous"
@@ -87,14 +90,17 @@
         "page2_dns_provider_title": "Fournisseur de DNS",
         "page2_backup_provider_title": "Fournisseur de sauvegarde",
         "page2_text": "SelfPrivacy fonctionne uniquement avec les fournisseurs que vous choisissez. Si vous n'avez pas de compte sur ceux-ci, nous allons vous aider à en créer.",
-        "page2_dns_provider_text": "Vous avez besoin d'un domaine pour avoir un espace sur l'Internet. Il est également nécessaire de disposer d'un fournisseur de DNS fiable pour que votre domaine pointe sur votre serveur. Nous allons vous suggérer de choisir des fournisseurs DNS supportés pour automatiquement configurer le réseau."
+        "page2_dns_provider_text": "Vous avez besoin d'un domaine pour avoir un espace sur l'Internet. Il est également nécessaire de disposer d'un fournisseur de DNS fiable pour que votre domaine pointe sur votre serveur. Nous allons vous suggérer de choisir des fournisseurs DNS supportés pour automatiquement configurer le réseau.",
+        "page2_backup_provider_text": "Et s'il se passait quelque chose avec votre serveur ? Imaginez une attaque par un hackeur, une suppression accidentelle de vos données ou un dénis de service ? Vos données seront conservées en toute sécurité chez votre fournisseur de sauvegardes. Elles seront chiffrées et accessibles à tout moment pour être restaurées sur vos serveurs."
     },
     "resource_chart": {
         "month": "Mois",
         "day": "Jour",
         "hour": "Heure",
         "cpu_title": "Utilisation du CPU",
-        "network_title": "Utilisation du réseau"
+        "network_title": "Utilisation du réseau",
+        "in": "Entré",
+        "out": "Sorti"
     },
     "server": {
         "card_title": "Serveur",
@@ -119,7 +125,8 @@
             "few": "{} cœurs"
         },
         "server_timezone": "Fuseau horaire du serveur",
-        "select_timezone": "Sélectionner le fuseau horaire"
+        "select_timezone": "Sélectionner le fuseau horaire",
+        "description": "Tous vos services en direct ici"
     },
     "record": {
         "root": "Domaine racine",

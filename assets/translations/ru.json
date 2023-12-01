@@ -24,7 +24,7 @@
         "username": "Имя пользователя",
         "loading": "Загрузка…",
         "later": "Пропустить и настроить потом",
-        "connect_to_existing": "Подключиться к существующему серверу SelfPrivacy",
+        "connect_to_existing": "У меня уже есть SelfPrivacy сервер!",
         "reset": "Сбросить",
         "details": "Детальная информация",
         "no_data": "Нет данных",
@@ -475,7 +475,7 @@
     },
     "recovering": {
         "generic_error": "Ошибка проведения операции, попробуйте ещё раз.",
-        "recovery_main_header": "Подключение к существующему серверу SelfPrivacy",
+        "recovery_main_header": "Подключение к существующему серверу",
         "domain_recovery_description": "Введите домен, по которому вы хотите получить доступ к серверу:",
         "domain_recover_placeholder": "Домен",
         "domain_recover_error": "Не удалось найти сервер с таким доменом",

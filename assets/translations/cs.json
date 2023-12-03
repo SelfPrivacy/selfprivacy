@@ -226,7 +226,6 @@
         "could_not_delete_user": "Nepodařilo se odstranit uživatele",
         "email_login": "Přihlášení e-mailem",
         "delete_user": "Odstranění uživatele",
-        "not_ready": "Připojte prosím server, doménu a DNS na kartě Poskytovatelé, abyste mohli přidat prvního uživatele",
         "could_not_add_ssh_key": "Nepodařilo se přidat klíč SSH",
         "username_rule": "Uživatelské jméno musí obsahovat pouze malá písmena latinky, číslice a podtržítka, nesmí začínat číslicí",
         "details_title": "Údaje o uživateli"

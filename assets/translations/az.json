@@ -237,7 +237,6 @@
         "subtitle": "Microsoft-a deyil, sizə məxsus şəxsi Github alternativi."
     },
     "users": {
-        "not_ready": "Birinci istifadəçini əlavə etmək üçün Provayderlər bölməsində server, domen və DNS-ni birləşdirin",
         "could_not_fetch_description": "İnternet bağlantısını yoxlayın və yenidən cəhd edin",
         "username_rule": "Adda yalnız kiçik Latın hərfləri, rəqəmlər, alt xətt ola bilər, rəqəmlərlə başlaya bilməz",
         "add_new_user": "İlk istifadəçini əlavə edin",

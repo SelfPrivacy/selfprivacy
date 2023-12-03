@@ -11,7 +11,7 @@ steps:
   - name: Run Tests
     commands:
       - ./ci.py --ci-run-tests
-      - sonar-scanner -Dsonar.projectKey=SelfPrivacy-Flutter-App -Dsonar.sources=. -Dsonar.host.url=http://analyzer.lan:9000 -Dsonar.login="$SONARQUBE_TOKEN"
+#      - sonar-scanner -Dsonar.projectKey=SelfPrivacy-Flutter-App -Dsonar.sources=. -Dsonar.host.url=http://analyzer.lan:9000 -Dsonar.login="$SONARQUBE_TOKEN"
     environment:
       SONARQUBE_TOKEN:
         from_secret: SONARQUBE_TOKEN

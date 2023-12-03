@@ -385,7 +385,7 @@ class CloudflareDnsProvider extends DnsProvider {
       mx,
       txt1,
       txt2,
-      vpn
+      vpn,
     ];
   }
 

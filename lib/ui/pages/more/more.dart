@@ -118,7 +118,7 @@ class MorePage extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

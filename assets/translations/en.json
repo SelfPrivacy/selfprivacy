@@ -25,7 +25,7 @@
         "username": "Username",
         "loading": "Loading…",
         "later": "Skip to setup later",
-        "connect_to_existing": "Connect to an existing server",
+        "connect_to_existing": "I already have a SelfPrivacy server!",
         "reset": "Reset",
         "details": "Details",
         "no_data": "No data",

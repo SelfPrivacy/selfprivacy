@@ -31,6 +31,7 @@ class BackupsListPage extends StatelessWidget {
         context.watch<BackupsCubit>().state.preventActions;
     return BrandHeroScreen(
       heroTitle: 'backup.snapshots_title'.tr(),
+      hasFlashButton: true,
       children: [
         if (backups.isEmpty)
           Center(
@@ -39,68 +40,70 @@ class BackupsListPage extends StatelessWidget {
             ),
           )
         else
-          ...backups.map((final Backup backup) {
-            final service = context
-                .read<ServicesCubit>()
-                .state
-                .getServiceById(backup.serviceId);
-            return ListTile(
-              onTap: preventActions
-                  ? null
-                  : () {
-                      showModalBottomSheet(
-                        useRootNavigator: true,
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (final BuildContext context) =>
-                            DraggableScrollableSheet(
-                          expand: false,
-                          maxChildSize: 0.9,
-                          minChildSize: 0.5,
-                          initialChildSize: 0.7,
-                          builder: (final context, final scrollController) =>
-                              SnapshotModal(
-                            snapshot: backup,
-                            scrollController: scrollController,
+          ...backups.map(
+            (final Backup backup) {
+              final service = context
+                  .read<ServicesCubit>()
+                  .state
+                  .getServiceById(backup.serviceId);
+              return ListTile(
+                onTap: preventActions
+                    ? null
+                    : () {
+                        showModalBottomSheet(
+                          useRootNavigator: true,
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (final BuildContext context) =>
+                              DraggableScrollableSheet(
+                            expand: false,
+                            maxChildSize: 0.9,
+                            minChildSize: 0.5,
+                            initialChildSize: 0.7,
+                            builder: (final context, final scrollController) =>
+                                SnapshotModal(
+                              snapshot: backup,
+                              scrollController: scrollController,
+                            ),
                           ),
+                        );
+                      },
+                onLongPress: preventActions
+                    ? null
+                    : () {
+                        showPopUpAlert(
+                          alertTitle: 'backup.forget_snapshot'.tr(),
+                          description: 'backup.forget_snapshot_alert'.tr(),
+                          actionButtonTitle: 'backup.forget_snapshot'.tr(),
+                          actionButtonOnPressed: () => {
+                            context.read<BackupsCubit>().forgetSnapshot(
+                                  backup.id,
+                                ),
+                          },
+                        );
+                      },
+                title: Text(
+                  '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
+                ),
+                subtitle: Text(
+                  service?.displayName ?? backup.fallbackServiceName,
+                ),
+                leading: service != null
+                    ? SvgPicture.string(
+                        service.svgIcon,
+                        height: 24,
+                        width: 24,
+                        colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.onBackground,
+                          BlendMode.srcIn,
                         ),
-                      );
-                    },
-              onLongPress: preventActions
-                  ? null
-                  : () {
-                      showPopUpAlert(
-                        alertTitle: 'backup.forget_snapshot'.tr(),
-                        description: 'backup.forget_snapshot_alert'.tr(),
-                        actionButtonTitle: 'backup.forget_snapshot'.tr(),
-                        actionButtonOnPressed: () => {
-                          context.read<BackupsCubit>().forgetSnapshot(
-                                backup.id,
-                              )
-                        },
-                      );
-                    },
-              title: Text(
-                '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
-              ),
-              subtitle: Text(
-                service?.displayName ?? backup.fallbackServiceName,
-              ),
-              leading: service != null
-                  ? SvgPicture.string(
-                      service.svgIcon,
-                      height: 24,
-                      width: 24,
-                      colorFilter: ColorFilter.mode(
-                        Theme.of(context).colorScheme.onBackground,
-                        BlendMode.srcIn,
+                      )
+                    : const Icon(
+                        Icons.question_mark_outlined,
                       ),
-                    )
-                  : const Icon(
-                      Icons.question_mark_outlined,
-                    ),
-            );
-          })
+              );
+            },
+          ),
       ],
     );
   }

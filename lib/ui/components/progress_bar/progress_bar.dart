@@ -78,7 +78,7 @@ class _ProgressBarState extends State<ProgressBar> {
                   end: Alignment.bottomRight,
                   colors: [
                     Theme.of(context).colorScheme.primary,
-                    Theme.of(context).colorScheme.secondary
+                    Theme.of(context).colorScheme.secondary,
                   ],
                 ),
               ),
@@ -110,7 +110,7 @@ class _ProgressBarState extends State<ProgressBar> {
           style: progressTextStyleLight,
           children: [
             TextSpan(text: '${index + 1}.', style: style),
-            TextSpan(text: step, style: style)
+            TextSpan(text: step, style: style),
           ],
         ),
       ),

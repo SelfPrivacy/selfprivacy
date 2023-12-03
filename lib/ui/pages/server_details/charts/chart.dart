@@ -113,7 +113,7 @@ class _Chart extends StatelessWidget {
           titles: [
             'resource_chart.month'.tr(),
             'resource_chart.day'.tr(),
-            'resource_chart.hour'.tr()
+            'resource_chart.hour'.tr(),
           ],
         ),
         const SizedBox(height: 8),

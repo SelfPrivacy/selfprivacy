@@ -137,7 +137,7 @@ class BackblazeApi extends RestApiMap {
           {
             'daysFromHidingToDeleting': 30,
             'daysFromUploadingToHiding': null,
-            'fileNamePrefix': ''
+            'fileNamePrefix': '',
           }
         ],
       },

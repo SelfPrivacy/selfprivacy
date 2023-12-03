@@ -24,7 +24,7 @@ abstract class ServerInstallationState extends Equatable {
         serverDetails,
         isServerStarted,
         isServerResetedFirstTime,
-        installationDialoguePopUp
+        installationDialoguePopUp,
       ];
 
   final String? providerApiToken;
@@ -299,7 +299,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
         isServerStarted,
         isServerResetedFirstTime,
         currentStep,
-        installationDialoguePopUp
+        installationDialoguePopUp,
       ];
 
   ServerInstallationRecovery copyWith({

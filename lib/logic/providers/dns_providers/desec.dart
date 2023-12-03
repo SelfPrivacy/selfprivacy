@@ -323,7 +323,7 @@ class DesecDnsProvider extends DnsProvider {
       mx,
       txt1,
       txt2,
-      vpn
+      vpn,
     ];
   }
 

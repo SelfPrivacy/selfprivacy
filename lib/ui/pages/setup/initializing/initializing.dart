@@ -47,7 +47,7 @@ class InitializingPage extends StatelessWidget {
           () => _stepCheck(cubit),
           () => _stepCheck(cubit),
           () => _stepCheck(cubit),
-          () => _stepCheck(cubit)
+          () => _stepCheck(cubit),
         ][cubit.state.progress.index]();
       }
 
@@ -191,7 +191,7 @@ class InitializingPage extends StatelessWidget {
                                           .replace(const RecoveryRoute());
                                     },
                                   ),
-                                )
+                                ),
                             ],
                           ),
                       ],
@@ -452,7 +452,7 @@ class InitializingPage extends StatelessWidget {
                     BrandTimer(
                       startDateTime: state.timerStart!,
                       duration: state.duration!,
-                    )
+                    ),
                   ],
                 ),
               if (state.isLoading)

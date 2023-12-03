@@ -132,7 +132,7 @@ class SelectDomainToRecover extends StatelessWidget {
                       : () =>
                           context.read<RecoveryDomainFormCubit>().trySubmit(),
                   child: Text('basis.continue'.tr()),
-                )
+                ),
               ],
             ),
           );

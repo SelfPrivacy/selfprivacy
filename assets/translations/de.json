@@ -23,7 +23,7 @@
         "username": "Benutzername",
         "loading": "Laden…",
         "later": "Überspringen und später einstellen",
-        "connect_to_existing": "Mit einem existierenden Server verbinden",
+        "connect_to_existing": "Verbinde mit einem existierenden SelfPrivacy Server",
         "reset": "Zurücksetzen",
         "details": "Einzelheiten",
         "no_data": "Keine Daten",
@@ -34,7 +34,9 @@
         "alert": "Alarm",
         "services_title": "Ihre persönliche, private und unabhängige Dienste.",
         "apply": "Anwenden",
-        "app_name": "SelfPrivacy"
+        "app_name": "SelfPrivacy",
+        "copied_to_clipboard": "Zur Zwischenablage kopiert!",
+        "please_connect": "Bitte stellen sie eine Verbindung zu ihrem Server, Domain und DNS Betreiber her um zu beginnen!"
     },
     "more_page": {
         "configuration_wizard": "Setup-Assistent",
@@ -81,7 +83,7 @@
         "no_key_name": "Unbennanter Schlüssel",
         "root_title": "Das sind superuser Schlüsseln",
         "root_subtitle": "Besitzer dieser Schlüssel erhalten vollen Zugriff auf den Server und können alles darauf tun. Fügen Sie dem Server nur Ihre eigenen Schlüssel hinzu.",
-        "input_label": "Öffentlicher ED25519 oder RSA Schlüssel"
+        "input_label": "Öffentlicher ED25519, ECDSA oder RSA Schlüssel"
     },
     "onboarding": {
         "page2_server_provider_text": "Ein Serveranbieter unterhält Ihren Server in einem eigenen Rechenzentrum. SelfPrivacy verbindet sich automatisch mit dem Anbieter und richtet alle notwendigen Dinge ein.",
@@ -129,7 +131,10 @@
             "few": "{} Kerne",
             "many": "{} Kerne",
             "other": "{} Kerne"
-        }
+        },
+        "server_provider": "Serverprovider",
+        "dns_provider": "DNS-Provider",
+        "pricing_error": "Konnte Providerpreise nicht abrufen"
     },
     "record": {
         "root": "Root Domain",
@@ -175,7 +180,47 @@
         "refetch_backups": "Backupliste neuladen",
         "waiting_for_rebuild": "In wenigen Minuten können Sie Ihren ersten Backup erstellen.",
         "error_pending": "Server hat einen Fehler zurückgegeben, überprüfen Sie es unten",
-        "refetching_list": "In wenigen Minuten wird die Liste neugeladen"
+        "refetching_list": "In wenigen Minuten wird die Liste neugeladen",
+        "card_subtitle": "Verwalte deine Backups",
+        "refetch_backups_subtitle": "Cache überprüfen und Daten vom Speicherprovider neu abrufen. Könnte zusätzliche Kosten verursachen.",
+        "reupload_key_subtitle": "Weist den Server an, Backupseicher zu initialisieren. Benutze diese Option, wenn etwas kaputt ist.",
+        "select_all": "Alles backupen",
+        "create_new_select_heading": "Wähle aus, was zum Backup dazugehören soll",
+        "show_more": "Mehr anzeigen",
+        "start": "Backup starten",
+        "service_busy": "Eine andere Backupoperation wird ausgeführt",
+        "latest_snapshots": "Neuster Snapshot",
+        "latest_snapshots_subtitle": "Zeige die letzten 15 Snapshots",
+        "autobackup_period_title": "Automatische Backup-Zeitspanne",
+        "autobackup_period_subtitle": "Backups werden erstellt, jede {period}",
+        "autobackup_period_never": "Automatische Backups sind deaktiviert",
+        "autobackup_period_every": "Jede {period}",
+        "autobackup_period_disable": "Deaktiviere automatische Backups",
+        "autobackup_custom": "Eigene",
+        "autobackup_custom_hint": "Eigenen Zeitraum in Minuten eingeben",
+        "autobackup_set_period": "Setze Zeitraum",
+        "autobackup_period_set": "Zeitraum setzen",
+        "backups_encryption_key": "Verschlüsselungsschlüssel",
+        "backups_encryption_key_subtitle": "Bewahre es gut auf.",
+        "backups_encryption_key_copy": "Kopiere den Verschlüselungsschlüssel",
+        "backups_encryption_key_show": "Zeige den Verschlüsselungschlüssel",
+        "pending_jobs": "Backup Arbeiten werden ausgeführt",
+        "backups_encryption_key_description": "Dieser Schlüssel wird verwendet um ihre Backups zu verschlüsseln. Wenn sie ihn verlieren, wird es ihnen unmöglich ihre Backups wieder herzustellen.\nBitte bewahren sie ihn an einem sicheren Ort auf, da sie ihn benötigen sofern sie einmal ihre Backups manuell wiederherstellen müssen.",
+        "snapshot_modal_service_not_found": "Dies ist ein Snapshot von einem Service den sie nicht mehr auf ihrem Server haben. Normalerweise sollte dies nicht passieren, und wir können keine automatische Wiederherstellung durchführen. Sie können den Snapshot immer noch herunterladen und manuell wiederherstellen. Kontaktieren sie den SelfPrivacy Support, wenn sie Hilfe brauchen.",
+        "snapshot_modal_download_verify_option_description": "Niedrigeres Risiko, aber es wird mehr freier Speicherplatz benötigt. Lädt den vollständigen Snapshot in den temporären Speicher, verifiziert ihn und ersetzt dann die vorhandenen Daten.",
+        "snapshots_title": "Snapshot Liste",
+        "snapshot_service_title": "Service",
+        "snapshot_creation_time_title": "Zeit der Erstellung",
+        "snapshot_id_title": "Snapshot ID",
+        "snapshot_modal_select_strategy": "Wählen sie die Art der Wiederherstellung",
+        "snapshot_modal_download_verify_option_title": "Herunterladen, verifizieren und dann ersetzen",
+        "backups_encryption_key_not_found": "Verschlüsselungscode noch nicht gefunden, bitte versuchen sie es später noch einmal.",
+        "forget_snapshot": "Vergiss diesen Snapshot",
+        "forget_snapshot_alert": "Sie sind im Begriff dazu diesen Snapshot zu löschen. Sind sie sicher? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "forget_snapshot_error": "Dieser Snapshot konnte nicht vergessen werden",
+        "snapshot_modal_heading": "Snapshot Details",
+        "snapshot_modal_inplace_option_title": "An Ort und Stelle ersetzen",
+        "snapshot_modal_inplace_option_description": "Weniger freier Speicherplatz benötigt, aber höheres Risiko. Ersetzt die vorhanden Daten, während dem Herunterladen, mit den Daten des Snapshots."
     },
     "storage": {
         "card_title": "Serverspeicher",
@@ -197,7 +242,7 @@
         "start_migration_button": "Migration starten",
         "migration_process": "Migrieren…",
         "migration_done": "Beenden",
-        "extending_volume_price_info": "Der Preis enthält die gesetzliche Mehrwertsteuer und wird anhand der von Hetzner bereitgestellten Preisangaben geschätzt. Der Server wird nach der Größenänderung neu gestartet."
+        "extending_volume_price_info": "Der Preis enthält die gesetzliche Mehrwertsteuer und wird geschätzt nach den Preisangaben die ihr Serverbetreiber bereitstellt. Der Server wird nach der Größenänderung neu gestartet."
     },
     "not_ready_card": {
         "in_menu": "Server ist noch nicht eingerichtet. Bitte beenden Sie die Einrichtung mit dem Einrichtungsassistenten, um fortzufahren."
@@ -366,7 +411,6 @@
         "add_new_user": "Fügen Sie den ersten Benutzer hinzu",
         "new_user": "Neuer Benutzer",
         "delete_user": "Benutzer löschen",
-        "not_ready": "Bitte verbinden Sie Server, Domain und DNS im Providertab, um den ersten Benutzer hinzufügen zu können",
         "nobody_here": "Hier werden Benutzer angezeigt",
         "login": "Login",
         "new_user_info_note": "Neuen Benutzern wird automatisch Zugang zu allen Diensten gewährt",

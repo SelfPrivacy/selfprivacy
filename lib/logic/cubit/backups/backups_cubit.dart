@@ -64,7 +64,7 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
           .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
       final int serverId = serverInstallationCubit.state.serverDetails!.id;
       String bucketName =
-          '$domain-$serverId-${DateTime.now().millisecondsSinceEpoch}';
+          '${DateTime.now().millisecondsSinceEpoch}-$serverId-$domain';
       if (bucketName.length > 49) {
         bucketName = bucketName.substring(0, 49);
       }

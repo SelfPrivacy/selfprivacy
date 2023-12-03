@@ -179,7 +179,8 @@ def ci_build_apk():
                                          "&& flutter build apk --flavor nightly")
 
 def ci_run_tests():
-  podman_online(f"{CONTAINER_HOME}/src", "flutter test",
+  podman_online(f"{CONTAINER_HOME}/src", "chown -R $(id -u):$(id -g) /tmp/gradle /tmp/flutter_pub_cache",
+                                         "&& flutter test",
                                          "&& flutter test --machine --coverage > tests.output")
 
 # Arguments

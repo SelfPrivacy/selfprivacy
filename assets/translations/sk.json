@@ -360,7 +360,6 @@
         "login_info": "Musíte vytvoriť účet na webovej stránke."
     },
     "users": {
-        "not_ready": "Pripojte server, doménu a DNS v sekcii Poskytovatelia a pridajte prvého používateľa",
         "could_not_fetch_users": "Nepodarilo sa načítať používateľov",
         "could_not_delete_user": "Nepodarilo sa vymazať účet",
         "could_not_add_ssh_key": "Nepodarilo sa pridať kľúč SSH",

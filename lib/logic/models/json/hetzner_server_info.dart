@@ -79,6 +79,7 @@ class HetznerServerTypeInfo {
     this.prices,
     this.name,
     this.description,
+    this.architecture,
   );
   final int cores;
   final num memory;
@@ -86,6 +87,7 @@ class HetznerServerTypeInfo {
 
   final String name;
   final String description;
+  final String architecture;
 
   final List<HetznerPriceInfo> prices;
 

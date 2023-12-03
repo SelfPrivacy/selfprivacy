@@ -482,6 +482,9 @@ class HetznerServerProvider extends ServerProvider {
 
     final rawTypes = result.data;
     for (final rawType in rawTypes) {
+      if (rawType.architecture == 'arm') {
+        continue;
+      }
       for (final rawPrice in rawType.prices) {
         if (rawPrice.location == location.identifier) {
           types.add(

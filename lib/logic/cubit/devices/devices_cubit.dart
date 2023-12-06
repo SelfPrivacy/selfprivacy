@@ -21,7 +21,7 @@ class ApiDevicesCubit
   }
 
   Future<void> refresh() async {
-    emit(const ApiDevicesState([], LoadingStatus.refreshing));
+    emit(ApiDevicesState([state.thisDevice], LoadingStatus.refreshing));
     _refetch();
   }
 

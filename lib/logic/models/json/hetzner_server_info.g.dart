@@ -83,6 +83,7 @@ HetznerServerTypeInfo _$HetznerServerTypeInfoFromJson(
           .toList(),
       json['name'] as String,
       json['description'] as String,
+      json['architecture'] as String,
     );
 
 Map<String, dynamic> _$HetznerServerTypeInfoToJson(
@@ -93,6 +94,7 @@ Map<String, dynamic> _$HetznerServerTypeInfoToJson(
       'disk': instance.disk,
       'name': instance.name,
       'description': instance.description,
+      'architecture': instance.architecture,
       'prices': instance.prices,
     };
 

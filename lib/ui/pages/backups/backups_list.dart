@@ -31,6 +31,7 @@ class BackupsListPage extends StatelessWidget {
         context.watch<BackupsCubit>().state.preventActions;
     return BrandHeroScreen(
       heroTitle: 'backup.snapshots_title'.tr(),
+      hasFlashButton: true,
       children: [
         if (backups.isEmpty)
           Center(

@@ -452,7 +452,7 @@
         "server_rebooted": "Server rebooted. Waiting for the last verification…",
         "server_started": "Server started. It will be validated and rebooted now…",
         "server_created": "Server created. DNS checks and server boot in progress…",
-        "domain_critical_error": "We can't reach it! Read more…",
+        "domain_critical_error": "We can't reach this domain! Tap to read more…",
         "until_the_next_check": "Until the next check: ",
         "check": "Check",
         "one_more_restart": "One more restart to apply your security certificates.",

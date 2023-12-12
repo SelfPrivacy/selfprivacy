@@ -212,33 +212,6 @@ class ServerInstallationRepository {
     return domainResult.data.contains(domain);
   }
 
-  Future<Map<String, bool>> isDnsAddressesMatch(
-    final String? domainName,
-    final String? ip4,
-    final Map<String, bool> skippedMatches,
-  ) async {
-    final Map<String, bool> matches = <String, bool>{};
-    try {
-      await InternetAddress.lookup(domainName!).then(
-        (final records) {
-          for (final record in records) {
-            if (skippedMatches[record.host] ?? false) {
-              matches[record.host] = true;
-              continue;
-            }
-            if (record.address == ip4!) {
-              matches[record.host] = true;
-            }
-          }
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
-
-    return matches;
-  }
-
   Future<void> createDkimRecord(final ServerDomain domain) async {
     final ServerApi api = ServerApi();
 

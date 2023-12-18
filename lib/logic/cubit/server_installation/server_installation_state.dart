@@ -145,7 +145,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     super.installationDialoguePopUp,
   });
   final bool isLoading;
-  final Map<String, bool>? dnsMatches;
+  final Map<String, DnsRecordStatus>? dnsMatches;
 
   @override
   List<Object?> get props => [
@@ -175,7 +175,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final bool? isServerResetedFirstTime,
     final bool? isServerResetedSecondTime,
     final bool? isLoading,
-    final Map<String, bool>? dnsMatches,
+    final Map<String, DnsRecordStatus>? dnsMatches,
     final CallbackDialogueBranching? installationDialoguePopUp,
   }) =>
       ServerInstallationNotFinished(

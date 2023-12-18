@@ -9,6 +9,10 @@ abstract class DnsProvider {
   /// provider implements [DnsProvider] interface.
   DnsProviderType get type;
 
+  /// Returns a full url to a guide on how to setup
+  /// DNS provider nameservers
+  String get howToRegistar;
+
   /// Tries to access an account linked to the provided token.
   ///
   /// To generate a token for your account follow instructions of your

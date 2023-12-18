@@ -91,6 +91,12 @@ class _DevicesInfo extends StatelessWidget {
                   color: Theme.of(context).colorScheme.secondary,
                 ),
           ),
+          if (devicesStatus.status == LoadingStatus.refreshing) ...[
+            const Center(
+              heightFactor: 4,
+              child: CircularProgressIndicator(),
+            ),
+          ],
           ...devicesStatus.otherDevices
               .map((final device) => _DeviceTile(device: device)),
         ],

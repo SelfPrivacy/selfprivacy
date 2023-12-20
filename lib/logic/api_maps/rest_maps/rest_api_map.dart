@@ -15,17 +15,19 @@ abstract class RestApiMap {
       dio.interceptors.add(PrettyDioLogger());
     }
     dio.interceptors.add(ConsoleInterceptor());
-    (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
-        (final HttpClient client) {
-      client.badCertificateCallback =
-          (final X509Certificate cert, final String host, final int port) =>
-              true;
-      return client;
-    };
+    dio.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: () {
+        final client = HttpClient();
+        client.badCertificateCallback =
+            (final X509Certificate cert, final String host, final int port) =>
+                true;
+        return client;
+      },
+    );
 
     dio.interceptors.add(
       InterceptorsWrapper(
-        onError: (final DioError e, final ErrorInterceptorHandler handler) {
+        onError: (final DioException e, final ErrorInterceptorHandler handler) {
           print(e.requestOptions.path);
           print(e.requestOptions.data);
 
@@ -96,7 +98,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
 
   @override
   Future<void> onError(
-    final DioError err,
+    final DioException err,
     final ErrorInterceptorHandler handler,
   ) async {
     final Response? response = err.response;

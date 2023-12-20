@@ -25,7 +25,7 @@ abstract class RestApiMap {
 
     dio.interceptors.add(
       InterceptorsWrapper(
-        onError: (final DioError e, final ErrorInterceptorHandler handler) {
+        onError: (final DioException e, final ErrorInterceptorHandler handler) {
           print(e.requestOptions.path);
           print(e.requestOptions.data);
 
@@ -96,7 +96,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
 
   @override
   Future<void> onError(
-    final DioError err,
+    final DioException err,
     final ErrorInterceptorHandler handler,
   ) async {
     final Response? response = err.response;

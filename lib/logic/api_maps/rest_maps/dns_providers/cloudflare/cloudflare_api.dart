@@ -144,7 +144,7 @@ class CloudflareApi extends RestApiMap {
         );
       }
       await Future.wait(allCreateFutures);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print(e.message);
       rethrow;
     } catch (e) {

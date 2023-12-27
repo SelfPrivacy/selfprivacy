@@ -152,6 +152,15 @@ class _Card extends StatelessWidget {
                       status: state,
                       icon: Icon(icon, size: 30, color: Colors.white),
                     ),
+                    if (state == StateType.uninitialized)
+                      const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      ),
                     if (state != StateType.uninitialized)
                       IconStatusMask(
                         status: state,

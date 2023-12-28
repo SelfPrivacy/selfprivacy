@@ -44,7 +44,7 @@ class DigitalOceanApi extends RestApiMap {
 
   @override
   String get rootAddress => 'https://api.digitalocean.com/v2';
-  String get infectProviderName => 'digitalocean';
+  String get infectProviderName => 'DIGITALOCEAN';
 
   Future<GenericResult<List>> getServers() async {
     List servers = [];
@@ -77,6 +77,7 @@ class DigitalOceanApi extends RestApiMap {
     required final String domainName,
     required final String hostName,
     required final String serverType,
+    required final String? customSshKey,
   }) async {
     final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
 
@@ -90,10 +91,12 @@ class DigitalOceanApi extends RestApiMap {
         'image': 'ubuntu-20-04-x64',
         'user_data': '#cloud-config\n'
             'runcmd:\n'
-            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/providers/digital-ocean/nixos-infect | '
-            "PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType STAGING_ACME='$stagingAcme' DOMAIN='$domainName' "
-            "LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' CF_TOKEN=$dnsApiToken DB_PASSWORD=$databasePassword "
-            'API_TOKEN=$serverApiToken HOSTNAME=$hostName bash 2>&1 | tee /tmp/infect.log',
+            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | '
+            "API_TOKEN=$serverApiToken CONFIG_URL='https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-template/archive/master.tar.gz' "
+            "DNS_PROVIDER_TOKEN=$dnsApiToken DNS_PROVIDER_TYPE=$dnsProviderType DOMAIN='$domainName' ENCODED_PASSWORD='$base64Password' "
+            "HOSTNAME=$hostName LUSER='${rootUser.login}' NIX_VERSION=2.18.1 PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' "
+            "${customSshKey != null ? "SSH_AUTHORIZED_KEY='$customSshKey'" : ""} "
+            'bash 2>&1 | tee /root/nixos-infect.log',
         'region': region!,
       };
       print('Decoded data: $data');

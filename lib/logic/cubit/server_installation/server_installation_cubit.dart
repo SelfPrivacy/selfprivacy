@@ -283,6 +283,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), null);
   }
 
+  void setCustomSshKey(final String key) async {
+    emit((state as ServerInstallationNotFinished).copyWith(customSshKey: key));
+  }
+
   void createServerAndSetDnsRecords() async {
     emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
 
@@ -295,6 +299,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       errorCallback: clearAppConfig,
       successCallback: onCreateServerSuccess,
       storageSize: initialStorage,
+      customSshKey: (state as ServerInstallationNotFinished).customSshKey,
     );
 
     final result =
@@ -851,6 +856,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         dnsApiToken: state.dnsApiToken,
         backblazeCredential: state.backblazeCredential,
         rootUser: state.rootUser,
+        customSshKey: null,
         serverDetails: null,
         isServerStarted: false,
         isServerResetedFirstTime: false,

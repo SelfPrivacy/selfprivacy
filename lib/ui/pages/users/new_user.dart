@@ -71,12 +71,38 @@ class NewUserPage extends StatelessWidget {
                     labelText: 'basis.password'.tr(),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        icon: Icon(
-                          BrandIcons.refresh,
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                        onPressed: context.read<UserFormCubit>().genNewPassword,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.copy,
+                              size: 24.0,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                            onPressed: () {
+                              final String currentPassword = context
+                                  .read<UserFormCubit>()
+                                  .password
+                                  .state
+                                  .value;
+                              PlatformAdapter.setClipboard(currentPassword);
+                              getIt<NavigationService>().showSnackBar(
+                                'basis.copied_to_clipboard'.tr(),
+                                behavior: SnackBarBehavior.floating,
+                              );
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.refresh,
+                              size: 24.0,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                            onPressed:
+                                context.read<UserFormCubit>().genNewPassword,
+                          ),
+                        ],
                       ),
                     ),
                   ),

@@ -89,10 +89,14 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
       children: [
         if (keyStatus.exists) RecoveryKeyStatusCard(isValid: keyStatus.isValid),
         const SizedBox(height: 16),
-        if (keyStatus.exists && !_isConfigurationVisible)
-          RecoveryKeyInformation(state: keyStatus),
-        if (_isConfigurationVisible || !keyStatus.exists)
-          const RecoveryKeyConfiguration(),
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 300),
+          firstChild: RecoveryKeyInformation(state: keyStatus),
+          secondChild: const RecoveryKeyConfiguration(),
+          crossFadeState: _isConfigurationVisible || !keyStatus.exists
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+        ),
         const SizedBox(height: 16),
         if (!_isConfigurationVisible && keyStatus.isValid && keyStatus.exists)
           BrandButton.text(

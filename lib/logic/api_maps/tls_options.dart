@@ -13,4 +13,6 @@ class TlsOptions {
   ///
   /// Doesn't matter if 'statingAcme' is set to 'true'
   static bool verifyCertificate = false;
+
+  static bool allowCustomSshKeyDuringSetup = false;
 }

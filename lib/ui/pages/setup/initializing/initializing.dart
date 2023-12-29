@@ -2,7 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
@@ -420,6 +422,9 @@ class InitializingPage extends StatelessWidget {
   Widget _stepServer(final ServerInstallationCubit appConfigCubit) {
     final bool isLoading =
         (appConfigCubit.state as ServerInstallationNotFinished).isLoading;
+    final bool hasSshKey =
+        (appConfigCubit.state as ServerInstallationNotFinished).customSshKey !=
+            null;
     return Builder(
       builder: (final context) => ResponsiveLayoutWithInfobox(
         topChild: Column(
@@ -436,12 +441,40 @@ class InitializingPage extends StatelessWidget {
             ),
           ],
         ),
-        primaryColumn: BrandButton.filled(
-          onPressed:
-              isLoading ? null : appConfigCubit.createServerAndSetDnsRecords,
-          text: isLoading
-              ? 'basis.loading'.tr()
-              : 'initializing.create_server'.tr(),
+        primaryColumn: Column(
+          children: [
+            BrandButton.filled(
+              onPressed: isLoading
+                  ? null
+                  : appConfigCubit.createServerAndSetDnsRecords,
+              text: isLoading
+                  ? 'basis.loading'.tr()
+                  : 'initializing.create_server'.tr(),
+            ),
+            const SizedBox(height: 16),
+            if (TlsOptions.allowCustomSshKeyDuringSetup)
+              Column(
+                children: [
+                  Text('developer_settings.title'.tr()),
+                  BrandOutlinedButton(
+                    title: hasSshKey
+                        ? 'developer_settings.root_ssh_key_added'.tr()
+                        : 'developer_settings.add_root_ssh_key'.tr(),
+                    onPressed: () {
+                      showModalBottomSheet<String?>(
+                        context: context,
+                        isScrollControlled: true,
+                        useRootNavigator: true,
+                        builder: (final BuildContext context) => Padding(
+                          padding: MediaQuery.of(context).viewInsets,
+                          child: AddSshKey(appConfigCubit),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+          ],
         ),
       ),
     );
@@ -539,4 +572,63 @@ class InitializingPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class AddSshKey extends StatelessWidget {
+  const AddSshKey(this.serverInstallationCubit, {super.key});
+
+  final ServerInstallationCubit serverInstallationCubit;
+  @override
+  Widget build(final BuildContext context) => BlocProvider(
+        create: (final context) => JoblessSshFormCubit(serverInstallationCubit),
+        child: Builder(
+          builder: (final context) {
+            final formCubitState = context.watch<JoblessSshFormCubit>().state;
+
+            return BlocListener<JoblessSshFormCubit, FormCubitState>(
+              listener: (final context, final state) {
+                if (state.isSubmitted) {
+                  Navigator.pop(context);
+                }
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(width: 14),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IntrinsicHeight(
+                          child: CubitFormTextField(
+                            autofocus: true,
+                            formFieldCubit:
+                                context.read<JoblessSshFormCubit>().key,
+                            decoration: InputDecoration(
+                              labelText: 'ssh.input_label'.tr(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        BrandButton.rised(
+                          onPressed: formCubitState.isSubmitting
+                              ? null
+                              : () => context
+                                  .read<JoblessSshFormCubit>()
+                                  .trySubmit(),
+                          text: 'ssh.create'.tr(),
+                        ),
+                        const SizedBox(height: 30),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
 }

@@ -27,9 +27,7 @@ DnsRecord _toDnsRecord(
   String convert(final String entry) => (entry == '@') ? rootDomain : entry;
   String name = digitalOceanRecord.name;
   final String content = convert(digitalOceanRecord.data);
-  if (type != 'MX') {
-    name = convert(name);
-  }
+  name = (name == '@') ? rootDomain : name;
   return DnsRecord(
     name: name,
     content: content,

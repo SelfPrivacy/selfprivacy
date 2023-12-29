@@ -8,6 +8,7 @@ class Fragment$fragmentDnsRecords {
   Fragment$fragmentDnsRecords({
     required this.recordType,
     required this.name,
+    required this.displayName,
     required this.content,
     required this.ttl,
     this.priority,
@@ -17,6 +18,7 @@ class Fragment$fragmentDnsRecords {
   factory Fragment$fragmentDnsRecords.fromJson(Map<String, dynamic> json) {
     final l$recordType = json['recordType'];
     final l$name = json['name'];
+    final l$displayName = json['displayName'];
     final l$content = json['content'];
     final l$ttl = json['ttl'];
     final l$priority = json['priority'];
@@ -24,6 +26,7 @@ class Fragment$fragmentDnsRecords {
     return Fragment$fragmentDnsRecords(
       recordType: (l$recordType as String),
       name: (l$name as String),
+      displayName: (l$displayName as String),
       content: (l$content as String),
       ttl: (l$ttl as int),
       priority: (l$priority as int?),
@@ -34,6 +37,8 @@ class Fragment$fragmentDnsRecords {
   final String recordType;
 
   final String name;
+
+  final String displayName;
 
   final String content;
 
@@ -49,6 +54,8 @@ class Fragment$fragmentDnsRecords {
     _resultData['recordType'] = l$recordType;
     final l$name = name;
     _resultData['name'] = l$name;
+    final l$displayName = displayName;
+    _resultData['displayName'] = l$displayName;
     final l$content = content;
     _resultData['content'] = l$content;
     final l$ttl = ttl;
@@ -64,6 +71,7 @@ class Fragment$fragmentDnsRecords {
   int get hashCode {
     final l$recordType = recordType;
     final l$name = name;
+    final l$displayName = displayName;
     final l$content = content;
     final l$ttl = ttl;
     final l$priority = priority;
@@ -71,6 +79,7 @@ class Fragment$fragmentDnsRecords {
     return Object.hashAll([
       l$recordType,
       l$name,
+      l$displayName,
       l$content,
       l$ttl,
       l$priority,
@@ -95,6 +104,11 @@ class Fragment$fragmentDnsRecords {
     final l$name = name;
     final lOther$name = other.name;
     if (l$name != lOther$name) {
+      return false;
+    }
+    final l$displayName = displayName;
+    final lOther$displayName = other.displayName;
+    if (l$displayName != lOther$displayName) {
       return false;
     }
     final l$content = content;
@@ -142,6 +156,7 @@ abstract class CopyWith$Fragment$fragmentDnsRecords<TRes> {
   TRes call({
     String? recordType,
     String? name,
+    String? displayName,
     String? content,
     int? ttl,
     int? priority,
@@ -165,6 +180,7 @@ class _CopyWithImpl$Fragment$fragmentDnsRecords<TRes>
   TRes call({
     Object? recordType = _undefined,
     Object? name = _undefined,
+    Object? displayName = _undefined,
     Object? content = _undefined,
     Object? ttl = _undefined,
     Object? priority = _undefined,
@@ -177,6 +193,9 @@ class _CopyWithImpl$Fragment$fragmentDnsRecords<TRes>
         name: name == _undefined || name == null
             ? _instance.name
             : (name as String),
+        displayName: displayName == _undefined || displayName == null
+            ? _instance.displayName
+            : (displayName as String),
         content: content == _undefined || content == null
             ? _instance.content
             : (content as String),
@@ -198,6 +217,7 @@ class _CopyWithStubImpl$Fragment$fragmentDnsRecords<TRes>
   call({
     String? recordType,
     String? name,
+    String? displayName,
     String? content,
     int? ttl,
     int? priority,
@@ -224,6 +244,13 @@ const fragmentDefinitionfragmentDnsRecords = FragmentDefinitionNode(
     ),
     FieldNode(
       name: NameNode(value: 'name'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'displayName'),
       alias: null,
       arguments: [],
       directives: [],

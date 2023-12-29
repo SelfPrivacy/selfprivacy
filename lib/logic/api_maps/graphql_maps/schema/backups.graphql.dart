@@ -5529,11 +5529,10 @@ extension ClientExtension$Mutation$RemoveRepository on graphql.GraphQLClient {
       mutate$RemoveRepository(
               [Options$Mutation$RemoveRepository? options]) async =>
           await this.mutate(options ?? Options$Mutation$RemoveRepository());
-  graphql.ObservableQuery<Mutation$RemoveRepository>
-      watchMutation$RemoveRepository(
-              [WatchOptions$Mutation$RemoveRepository? options]) =>
-          this.watchMutation(
-              options ?? WatchOptions$Mutation$RemoveRepository());
+  graphql.ObservableQuery<
+      Mutation$RemoveRepository> watchMutation$RemoveRepository(
+          [WatchOptions$Mutation$RemoveRepository? options]) =>
+      this.watchMutation(options ?? WatchOptions$Mutation$RemoveRepository());
 }
 
 class Mutation$RemoveRepository$backup {

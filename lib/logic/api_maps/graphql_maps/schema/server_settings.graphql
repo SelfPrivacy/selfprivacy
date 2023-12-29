@@ -25,6 +25,7 @@ query SystemIsUsingBinds {
 fragment fragmentDnsRecords on DnsRecord {
   recordType
   name
+  displayName
   content
   ttl
   priority

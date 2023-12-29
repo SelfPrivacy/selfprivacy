@@ -1,5 +1,4 @@
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
@@ -56,18 +55,5 @@ abstract class DnsProvider {
   Future<GenericResult<void>> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
-  );
-
-  /// Tries to check whether all known DNS records on the domain by ip4
-  /// match expectations of SelfPrivacy in order to launch.
-  ///
-  /// Will return list of [DesiredDnsRecord] objects, which represent
-  /// only those records which have successfully passed validation.
-  /// TODO: Unify across DNS providers
-  Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
-    final ServerDomain domain,
-    final String ip4,
-    final String dkimPublicKey,
-    final List<DnsRecord> pendingDnsRecords,
   );
 }

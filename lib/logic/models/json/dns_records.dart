@@ -9,6 +9,7 @@ class DnsRecord {
     required this.type,
     required this.name,
     required this.content,
+    this.displayName,
     this.ttl = 3600,
     this.priority = 10,
     this.proxied = false,
@@ -19,12 +20,14 @@ class DnsRecord {
   ) : this(
           type: record.recordType,
           name: record.name,
+          displayName: record.displayName,
           content: record.content,
           ttl: record.ttl,
           priority: record.priority ?? 10,
         );
 
   final String type;
+  final String? displayName;
   final String? name;
   final String? content;
   final int ttl;

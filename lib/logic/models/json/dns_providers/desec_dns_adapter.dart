@@ -34,13 +34,17 @@ DnsRecord _toDnsRecord(
   String name = desecRecord.subname;
   int? priority;
   if (type == 'MX') {
-    name = name.isEmpty ? '@' : name;
+    name = name.isEmpty ? domainName : name;
     final contentBulk = content.split(' ');
     content = contentBulk[1];
+    if (content.contains(domainName)) {
+      content =
+          content.substring(0, content.length - 1); // cut away trailing dot
+    }
     priority = int.parse(contentBulk[0]);
   }
   if (type == 'TXT' && content.isNotEmpty && content.startsWith('"')) {
-    content = content.substring(1, content.length); // cut away quotes
+    content = content.substring(1, content.length - 1); // cut away quotes
   }
   if (name.isEmpty) {
     name = domainName;

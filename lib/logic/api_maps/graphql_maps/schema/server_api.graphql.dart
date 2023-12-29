@@ -4440,11 +4440,10 @@ extension ClientExtension$Mutation$RunSystemRebuild on graphql.GraphQLClient {
       mutate$RunSystemRebuild(
               [Options$Mutation$RunSystemRebuild? options]) async =>
           await this.mutate(options ?? Options$Mutation$RunSystemRebuild());
-  graphql.ObservableQuery<Mutation$RunSystemRebuild>
-      watchMutation$RunSystemRebuild(
-              [WatchOptions$Mutation$RunSystemRebuild? options]) =>
-          this.watchMutation(
-              options ?? WatchOptions$Mutation$RunSystemRebuild());
+  graphql.ObservableQuery<
+      Mutation$RunSystemRebuild> watchMutation$RunSystemRebuild(
+          [WatchOptions$Mutation$RunSystemRebuild? options]) =>
+      this.watchMutation(options ?? WatchOptions$Mutation$RunSystemRebuild());
 }
 
 class Mutation$RunSystemRebuild$runSystemRebuild
@@ -4883,11 +4882,10 @@ extension ClientExtension$Mutation$RunSystemRollback on graphql.GraphQLClient {
       mutate$RunSystemRollback(
               [Options$Mutation$RunSystemRollback? options]) async =>
           await this.mutate(options ?? Options$Mutation$RunSystemRollback());
-  graphql.ObservableQuery<Mutation$RunSystemRollback>
-      watchMutation$RunSystemRollback(
-              [WatchOptions$Mutation$RunSystemRollback? options]) =>
-          this.watchMutation(
-              options ?? WatchOptions$Mutation$RunSystemRollback());
+  graphql.ObservableQuery<
+      Mutation$RunSystemRollback> watchMutation$RunSystemRollback(
+          [WatchOptions$Mutation$RunSystemRollback? options]) =>
+      this.watchMutation(options ?? WatchOptions$Mutation$RunSystemRollback());
 }
 
 class Mutation$RunSystemRollback$runSystemRollback
@@ -5324,11 +5322,10 @@ extension ClientExtension$Mutation$RunSystemUpgrade on graphql.GraphQLClient {
       mutate$RunSystemUpgrade(
               [Options$Mutation$RunSystemUpgrade? options]) async =>
           await this.mutate(options ?? Options$Mutation$RunSystemUpgrade());
-  graphql.ObservableQuery<Mutation$RunSystemUpgrade>
-      watchMutation$RunSystemUpgrade(
-              [WatchOptions$Mutation$RunSystemUpgrade? options]) =>
-          this.watchMutation(
-              options ?? WatchOptions$Mutation$RunSystemUpgrade());
+  graphql.ObservableQuery<
+      Mutation$RunSystemUpgrade> watchMutation$RunSystemUpgrade(
+          [WatchOptions$Mutation$RunSystemUpgrade? options]) =>
+      this.watchMutation(options ?? WatchOptions$Mutation$RunSystemUpgrade());
 }
 
 class Mutation$RunSystemUpgrade$runSystemUpgrade
@@ -11384,11 +11381,10 @@ extension ClientExtension$Mutation$GetNewDeviceApiKey on graphql.GraphQLClient {
       mutate$GetNewDeviceApiKey(
               [Options$Mutation$GetNewDeviceApiKey? options]) async =>
           await this.mutate(options ?? Options$Mutation$GetNewDeviceApiKey());
-  graphql.ObservableQuery<Mutation$GetNewDeviceApiKey>
-      watchMutation$GetNewDeviceApiKey(
-              [WatchOptions$Mutation$GetNewDeviceApiKey? options]) =>
-          this.watchMutation(
-              options ?? WatchOptions$Mutation$GetNewDeviceApiKey());
+  graphql.ObservableQuery<
+      Mutation$GetNewDeviceApiKey> watchMutation$GetNewDeviceApiKey(
+          [WatchOptions$Mutation$GetNewDeviceApiKey? options]) =>
+      this.watchMutation(options ?? WatchOptions$Mutation$GetNewDeviceApiKey());
 }
 
 class Mutation$GetNewDeviceApiKey$getNewDeviceApiKey

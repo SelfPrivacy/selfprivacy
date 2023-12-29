@@ -1,5 +1,4 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desec/desec_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/desec_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
@@ -179,93 +178,6 @@ class DesecDnsProvider extends DnsProvider {
     return GenericResult(
       success: result.success,
       data: null,
-    );
-  }
-
-  @override
-  Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
-    final ServerDomain domain,
-    final String ip4,
-    final String dkimPublicKey,
-    final List<DnsRecord> pendingDnsRecords,
-  ) async {
-    final result = await _adapter.api().getDnsRecords(domain.domainName);
-    if (result.data.isEmpty || !result.success) {
-      return GenericResult(
-        success: result.success,
-        data: [],
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    final records = result.data;
-    final List<DesiredDnsRecord> foundRecords = [];
-    try {
-      for (final DnsRecord pendingDnsRecord in pendingDnsRecords) {
-        final record = DesecDnsRecord.fromDnsRecord(
-          pendingDnsRecord,
-          domain.domainName,
-        );
-        if (record.subname == 'selector._domainkey') {
-          final DesecDnsRecord foundRecord = records.firstWhere(
-            (final r) =>
-                ('${r.subname}.${domain.domainName}' == record.subname) &&
-                r.type == record.type,
-            orElse: () => DesecDnsRecord(
-              subname: record.subname,
-              type: record.type,
-              records: [],
-              ttl: record.ttl,
-            ),
-          );
-          final desecRecords = foundRecord.records;
-          final content = desecRecords.isEmpty ? '' : desecRecords[0];
-          final String foundContent = content.replaceAll(RegExp(r'\s+'), '');
-          final String desiredContent =
-              record.records[0].replaceAll(RegExp(r'\s+'), '');
-          foundRecords.add(
-            DesiredDnsRecord(
-              name: '${record.subname}.${domain.domainName}',
-              description:
-                  record.subname.isEmpty ? record.subname : domain.domainName,
-              content: record.records[0],
-              isSatisfied: foundContent == desiredContent,
-              type: record.type,
-              category: DnsRecordsCategory.email,
-            ),
-          );
-        } else {
-          final foundMatch = records.any(
-            (final r) =>
-                r.subname == record.subname &&
-                r.type == record.type &&
-                r.records[0] == record.records[0],
-          );
-          foundRecords.add(
-            DesiredDnsRecord(
-              name: '${record.subname}.${domain.domainName}',
-              description: record.subname,
-              content: record.records[0],
-              isSatisfied: foundMatch,
-              category: record.type == 'A'
-                  ? DnsRecordsCategory.services
-                  : DnsRecordsCategory.email,
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
-    }
-    return GenericResult(
-      data: foundRecords,
-      success: true,
     );
   }
 }

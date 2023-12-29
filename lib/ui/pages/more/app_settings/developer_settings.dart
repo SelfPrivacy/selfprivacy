@@ -50,6 +50,16 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
               () => TlsOptions.verifyCertificate = value,
             ),
           ),
+          SwitchListTile(
+            title: Text('developer_settings.allow_ssh_key_at_setup'.tr()),
+            subtitle: Text(
+              'developer_settings.allow_ssh_key_at_setup_description'.tr(),
+            ),
+            value: TlsOptions.allowCustomSshKeyDuringSetup,
+            onChanged: (final bool value) => setState(
+              () => TlsOptions.allowCustomSshKeyDuringSetup = value,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(

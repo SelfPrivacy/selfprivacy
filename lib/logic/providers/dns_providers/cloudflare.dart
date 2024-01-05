@@ -154,7 +154,7 @@ class CloudflareDnsProvider extends DnsProvider {
     }
 
     for (final rawRecord in result.data) {
-      records.add(rawRecord.toDnsRecord());
+      records.add(rawRecord.toDnsRecord(domain.domainName));
     }
 
     return GenericResult(

@@ -93,5 +93,6 @@ class CloudflareDnsRecord {
   static CloudflareDnsRecord fromJson(final Map<String, dynamic> json) =>
       _$CloudflareDnsRecordFromJson(json);
   Map<String, dynamic> toJson() => _$CloudflareDnsRecordToJson(this);
-  DnsRecord toDnsRecord() => _toDnsRecord(this);
+  DnsRecord toDnsRecord(final String domainName) =>
+      _toDnsRecord(this, domainName);
 }

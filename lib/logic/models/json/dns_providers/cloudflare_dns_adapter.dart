@@ -18,12 +18,23 @@ CloudflareDnsRecord _fromDnsRecord(
   );
 }
 
-DnsRecord _toDnsRecord(final CloudflareDnsRecord cloudflareRecord) => DnsRecord(
-      content: cloudflareRecord.content,
-      name: cloudflareRecord.name,
-      type: cloudflareRecord.type,
-      ttl: cloudflareRecord.ttl,
-    );
+DnsRecord _toDnsRecord(
+  final CloudflareDnsRecord cloudflareRecord,
+  final String domainName,
+) {
+  String? name = cloudflareRecord.name;
+  if (name != null && name.endsWith('.$domainName')) {
+    // e.g. 'api.example.com -> [api] [example] [com] -> [api]'
+    name = name.split('.')[0];
+  }
+
+  return DnsRecord(
+    content: cloudflareRecord.content,
+    type: cloudflareRecord.type,
+    ttl: cloudflareRecord.ttl,
+    name: name,
+  );
+}
 
 ServerDomain _toServerDomain(final CloudflareZone cloudflareZone) =>
     ServerDomain(

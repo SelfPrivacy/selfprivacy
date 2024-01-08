@@ -150,6 +150,7 @@ class ServerInstallationRepository {
           box.get(BNames.isServerResetedSecondTime, defaultValue: false),
       isLoading: box.get(BNames.isLoading, defaultValue: false),
       dnsMatches: null,
+      customSshKey: null,
     );
   }
 

@@ -45,7 +45,7 @@ class HetznerApi extends RestApiMap {
 
   @override
   String get rootAddress => 'https://api.hetzner.cloud/v1';
-  String get infectProviderName => 'hetzner';
+  String get infectProviderName => 'HETZNER';
 
   Future<GenericResult<List<HetznerServerInfo>>> getServers() async {
     List<HetznerServerInfo> servers = [];
@@ -83,6 +83,7 @@ class HetznerApi extends RestApiMap {
     required final String hostName,
     required final int volumeId,
     required final String serverType,
+    required final String? customSshKey,
   }) async {
     final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
     Response? serverCreateResponse;
@@ -101,11 +102,12 @@ class HetznerApi extends RestApiMap {
         'networks': [],
         'user_data': '#cloud-config\n'
             'runcmd:\n'
-            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/providers/hetzner/nixos-infect | '
-            "STAGING_ACME='$stagingAcme' PROVIDER=$infectProviderName DNS_PROVIDER_TYPE=$dnsProviderType "
-            "NIX_CHANNEL=nixos-21.05 DOMAIN='$domainName' LUSER='${rootUser.login}' ENCODED_PASSWORD='$base64Password' "
-            'CF_TOKEN=$dnsApiToken DB_PASSWORD=$databasePassword API_TOKEN=$serverApiToken HOSTNAME=$hostName bash 2>&1 | '
-            'tee /tmp/infect.log',
+            '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | '
+            "API_TOKEN=$serverApiToken CONFIG_URL='https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-template/archive/master.tar.gz' "
+            "DNS_PROVIDER_TOKEN=$dnsApiToken DNS_PROVIDER_TYPE=$dnsProviderType DOMAIN='$domainName' ENCODED_PASSWORD='$base64Password' "
+            "HOSTNAME=$hostName LUSER='${rootUser.login}' NIX_VERSION=2.18.1 PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' "
+            "${customSshKey != null ? "SSH_AUTHORIZED_KEY='$customSshKey'" : ""} "
+            'bash 2>&1 | tee /root/nixos-infect.log',
         'labels': {},
         'automount': true,
         'location': region!,

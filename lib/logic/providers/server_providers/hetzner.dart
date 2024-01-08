@@ -211,6 +211,7 @@ class HetznerServerProvider extends ServerProvider {
           ),
           databasePassword: StringGenerators.dbPassword(),
           serverApiToken: serverApiToken,
+          customSshKey: installationData.customSshKey,
         );
 
     if (!serverResult.success || serverResult.data == null) {

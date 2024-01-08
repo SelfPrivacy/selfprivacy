@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
@@ -49,4 +50,40 @@ class SshFormCubit extends FormCubit {
 
   final JobsCubit jobsCubit;
   final User user;
+}
+
+class JoblessSshFormCubit extends FormCubit {
+  JoblessSshFormCubit(
+    this.serverInstallationCubit,
+  ) {
+    final RegExp keyRegExp = RegExp(
+      r'^(ecdsa-sha2-nistp256 AAAAE2VjZH|ssh-rsa AAAAB3NzaC1yc2|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5)[0-9A-Za-z+/]+[=]{0,3}( .*)?$',
+    );
+
+    key = FieldCubit(
+      initalValue: '',
+      validations: [
+        RequiredStringValidation('validations.required'.tr()),
+        ValidationModel<String>(
+          (final String s) {
+            print(s);
+            print(keyRegExp.hasMatch(s));
+            return !keyRegExp.hasMatch(s);
+          },
+          'validations.invalid_format_ssh'.tr(),
+        ),
+      ],
+    );
+
+    super.addFields([key]);
+  }
+
+  @override
+  FutureOr<void> onSubmit() {
+    serverInstallationCubit.setCustomSshKey(key.state.value);
+  }
+
+  final ServerInstallationCubit serverInstallationCubit;
+
+  late FieldCubit<String> key;
 }

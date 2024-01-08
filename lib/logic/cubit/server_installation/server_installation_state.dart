@@ -100,6 +100,7 @@ class TimerState extends ServerInstallationNotFinished {
           isServerResetedSecondTime: dataState.isServerResetedSecondTime,
           dnsMatches: dataState.dnsMatches,
           installationDialoguePopUp: dataState.installationDialoguePopUp,
+          customSshKey: dataState.customSshKey,
         );
 
   final ServerInstallationNotFinished dataState;
@@ -135,6 +136,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     required super.isServerResetedSecondTime,
     required this.isLoading,
     required this.dnsMatches,
+    required this.customSshKey,
     super.providerApiToken,
     super.serverTypeIdentificator,
     super.dnsApiToken,
@@ -146,6 +148,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
   });
   final bool isLoading;
   final Map<String, DnsRecordStatus>? dnsMatches;
+  final String? customSshKey;
 
   @override
   List<Object?> get props => [
@@ -160,6 +163,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
         isServerResetedFirstTime,
         isLoading,
         dnsMatches,
+        customSshKey,
         installationDialoguePopUp,
       ];
 
@@ -177,6 +181,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final bool? isLoading,
     final Map<String, DnsRecordStatus>? dnsMatches,
     final CallbackDialogueBranching? installationDialoguePopUp,
+    final String? customSshKey,
   }) =>
       ServerInstallationNotFinished(
         providerApiToken: providerApiToken ?? this.providerApiToken,
@@ -196,6 +201,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
         dnsMatches: dnsMatches ?? this.dnsMatches,
         installationDialoguePopUp:
             installationDialoguePopUp ?? this.installationDialoguePopUp,
+        customSshKey: customSshKey ?? this.customSshKey,
       );
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
@@ -229,6 +235,7 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
           isLoading: false,
           dnsMatches: null,
           installationDialoguePopUp: null,
+          customSshKey: null,
         );
 }
 

@@ -39,8 +39,14 @@ class BrandButton {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           tapTargetSize: MaterialTapTargetSize.padded,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
         ),
-        child: child ?? Text(text ?? ''),
+        child: child ??
+            Text(
+              text ?? '',
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+            ),
       ),
     );
   }

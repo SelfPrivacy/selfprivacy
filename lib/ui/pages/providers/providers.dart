@@ -156,9 +156,9 @@ class _Card extends StatelessWidget {
                       const SizedBox(
                         width: 24,
                         height: 24,
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        child: Icon(
+                          Icons.access_time,
+                          color: Colors.white,
                         ),
                       ),
                     if (state != StateType.uninitialized)

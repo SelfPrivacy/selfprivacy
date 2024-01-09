@@ -611,7 +611,11 @@
         "use_staging_acme_description": "חל על הקמת שרתים חדשים.",
         "use_staging_acme": "להשתמש בשרת ACME לבדיקות",
         "ignore_tls": "לא לאמת אישורי TLS",
-        "ignore_tls_description": "היישום לא יאמת אישורי RLS בעת התחברות לשרת."
+        "ignore_tls_description": "היישום לא יאמת אישורי RLS בעת התחברות לשרת.",
+        "add_root_ssh_key": "הוספת מפתח SSH למשתמש העל (root)",
+        "allow_ssh_key_at_setup": "לאפשר הגדרת מפתח SSH למשתמש העל (root) במהלך ההתקנה",
+        "allow_ssh_key_at_setup_description": "כפתור להוספת מפתח יופיע במסך האישור.",
+        "root_ssh_key_added": "מפתח SSH למשתמש העל (root) הוגדר והוחל"
     },
     "cloud": {
         "title": "אחסון בענן",

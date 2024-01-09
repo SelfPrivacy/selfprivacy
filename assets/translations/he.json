@@ -461,7 +461,8 @@
         "enter_username_and_password": "נא למלא שם משתמש וסיסמה חזקה",
         "finish": "הכול מאותחל",
         "create_master_account": "יצירת חשבון ראשי",
-        "checks": "בדיקות הושלמו \n{} מתוך {}"
+        "checks": "בדיקות הושלמו \n{} מתוך {}",
+        "domain_critical_error": "לא הצלחנו להגיע לשם התחום הזה! נגיעה למידע נוסף…"
     },
     "recovering": {
         "method_select_other_device": "יש לי גישה דרך מכשיר אחר",

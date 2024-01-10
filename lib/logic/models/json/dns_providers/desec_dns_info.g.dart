@@ -7,8 +7,8 @@ part of 'desec_dns_info.dart';
 // **************************************************************************
 
 DesecDomain _$DesecDomainFromJson(Map<String, dynamic> json) => DesecDomain(
-      json['name'] as String,
-      json['minimum_ttl'] as int,
+      name: json['name'] as String,
+      minimumTtl: json['minimum_ttl'] as int?,
     );
 
 Map<String, dynamic> _$DesecDomainToJson(DesecDomain instance) =>

@@ -1,6 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 part 'digital_ocean_dns_info.g.dart';
+part 'digital_ocean_dns_adapter.dart';
 
 /// https://docs.digitalocean.com/reference/api/api-reference/#tag/Domains
 @JsonSerializable()
@@ -9,6 +12,11 @@ class DigitalOceanDomain {
     required this.name,
     this.ttl,
   });
+
+  factory DigitalOceanDomain.fromServerDomain(
+    final ServerDomain serverDomain,
+  ) =>
+      _fromServerDomain(serverDomain);
 
   /// The name of the domain itself.
   /// This should follow the standard domain format of domain.TLD.
@@ -23,6 +31,7 @@ class DigitalOceanDomain {
 
   static DigitalOceanDomain fromJson(final Map<String, dynamic> json) =>
       _$DigitalOceanDomainFromJson(json);
+  ServerDomain toServerDomain() => _toServerDomain(this);
 }
 
 /// https://docs.digitalocean.com/reference/api/api-reference/#tag/Domain-Records
@@ -36,6 +45,15 @@ class DigitalOceanDnsRecord {
     required this.data,
     this.priority,
   });
+
+  factory DigitalOceanDnsRecord.fromDnsRecord(
+    final DnsRecord dnsRecord,
+    final String rootDomain,
+  ) =>
+      _fromDnsRecord(
+        dnsRecord,
+        rootDomain,
+      );
 
   /// A unique identifier for each domain record.
   final int? id;
@@ -63,4 +81,6 @@ class DigitalOceanDnsRecord {
   static DigitalOceanDnsRecord fromJson(final Map<String, dynamic> json) =>
       _$DigitalOceanDnsRecordFromJson(json);
   Map<String, dynamic> toJson() => _$DigitalOceanDnsRecordToJson(this);
+  DnsRecord toDnsRecord(final String rootDomain) =>
+      _toDnsRecord(this, rootDomain);
 }

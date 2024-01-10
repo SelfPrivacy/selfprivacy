@@ -361,6 +361,7 @@ class _CopyWithImpl$Query$AllUsers<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$AllUsers$users<TRes> get users {
     final local$users = _instance.users;
     return CopyWith$Query$AllUsers$users(local$users, (e) => call(users: e));
@@ -378,6 +379,7 @@ class _CopyWithStubImpl$Query$AllUsers<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$AllUsers$users<TRes> get users =>
       CopyWith$Query$AllUsers$users.stub(_res);
 }
@@ -719,6 +721,7 @@ class _CopyWithImpl$Query$AllUsers$users<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   TRes allUsers(
           Iterable<Fragment$userFields> Function(
                   Iterable<CopyWith$Fragment$userFields<Fragment$userFields>>)
@@ -729,6 +732,7 @@ class _CopyWithImpl$Query$AllUsers$users<TRes>
                     e,
                     (i) => i,
                   ))).toList());
+
   CopyWith$Fragment$userFields<TRes> get rootUser {
     final local$rootUser = _instance.rootUser;
     return local$rootUser == null
@@ -750,7 +754,9 @@ class _CopyWithStubImpl$Query$AllUsers$users<TRes>
     String? $__typename,
   }) =>
       _res;
+
   allUsers(_fn) => _res;
+
   CopyWith$Fragment$userFields<TRes> get rootUser =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -773,6 +779,7 @@ class Variables$Query$GetUser {
   Map<String, dynamic> _$data;
 
   String get username => (_$data['username'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$username = username;
@@ -785,6 +792,7 @@ class Variables$Query$GetUser {
         this,
         (i) => i,
       );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -959,6 +967,7 @@ class _CopyWithImpl$Query$GetUser<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$GetUser$users<TRes> get users {
     final local$users = _instance.users;
     return CopyWith$Query$GetUser$users(local$users, (e) => call(users: e));
@@ -976,6 +985,7 @@ class _CopyWithStubImpl$Query$GetUser<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$GetUser$users<TRes> get users =>
       CopyWith$Query$GetUser$users.stub(_res);
 }
@@ -1288,6 +1298,7 @@ class _CopyWithImpl$Query$GetUser$users<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Fragment$userFields<TRes> get getUser {
     final local$getUser = _instance.getUser;
     return local$getUser == null
@@ -1307,6 +1318,7 @@ class _CopyWithStubImpl$Query$GetUser$users<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Fragment$userFields<TRes> get getUser =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -1332,6 +1344,7 @@ class Variables$Mutation$CreateUser {
 
   Input$UserMutationInput get user =>
       (_$data['user'] as Input$UserMutationInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$user = user;
@@ -1344,6 +1357,7 @@ class Variables$Mutation$CreateUser {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -1426,6 +1440,7 @@ class Mutation$CreateUser {
     );
   }
 
+  @Deprecated('Use `users.create_user` instead')
   final Mutation$CreateUser$createUser createUser;
 
   final String $__typename;
@@ -1520,6 +1535,7 @@ class _CopyWithImpl$Mutation$CreateUser<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$CreateUser$createUser<TRes> get createUser {
     final local$createUser = _instance.createUser;
     return CopyWith$Mutation$CreateUser$createUser(
@@ -1538,6 +1554,7 @@ class _CopyWithStubImpl$Mutation$CreateUser<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$CreateUser$createUser<TRes> get createUser =>
       CopyWith$Mutation$CreateUser$createUser.stub(_res);
 }
@@ -1878,6 +1895,7 @@ class _CopyWithImpl$Mutation$CreateUser$createUser<TRes>
             ? _instance.user
             : (user as Fragment$userFields?),
       ));
+
   CopyWith$Fragment$userFields<TRes> get user {
     final local$user = _instance.user;
     return local$user == null
@@ -1900,6 +1918,7 @@ class _CopyWithStubImpl$Mutation$CreateUser$createUser<TRes>
     Fragment$userFields? user,
   }) =>
       _res;
+
   CopyWith$Fragment$userFields<TRes> get user =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -1922,6 +1941,7 @@ class Variables$Mutation$DeleteUser {
   Map<String, dynamic> _$data;
 
   String get username => (_$data['username'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$username = username;
@@ -1934,6 +1954,7 @@ class Variables$Mutation$DeleteUser {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -2016,6 +2037,7 @@ class Mutation$DeleteUser {
     );
   }
 
+  @Deprecated('Use `users.delete_user` instead')
   final Mutation$DeleteUser$deleteUser deleteUser;
 
   final String $__typename;
@@ -2110,6 +2132,7 @@ class _CopyWithImpl$Mutation$DeleteUser<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser {
     final local$deleteUser = _instance.deleteUser;
     return CopyWith$Mutation$DeleteUser$deleteUser(
@@ -2128,6 +2151,7 @@ class _CopyWithStubImpl$Mutation$DeleteUser<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser =>
       CopyWith$Mutation$DeleteUser$deleteUser.stub(_res);
 }
@@ -2464,6 +2488,7 @@ class Variables$Mutation$UpdateUser {
 
   Input$UserMutationInput get user =>
       (_$data['user'] as Input$UserMutationInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$user = user;
@@ -2476,6 +2501,7 @@ class Variables$Mutation$UpdateUser {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -2558,6 +2584,7 @@ class Mutation$UpdateUser {
     );
   }
 
+  @Deprecated('Use `users.update_user` instead')
   final Mutation$UpdateUser$updateUser updateUser;
 
   final String $__typename;
@@ -2652,6 +2679,7 @@ class _CopyWithImpl$Mutation$UpdateUser<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser {
     final local$updateUser = _instance.updateUser;
     return CopyWith$Mutation$UpdateUser$updateUser(
@@ -2670,6 +2698,7 @@ class _CopyWithStubImpl$Mutation$UpdateUser<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser =>
       CopyWith$Mutation$UpdateUser$updateUser.stub(_res);
 }
@@ -3010,6 +3039,7 @@ class _CopyWithImpl$Mutation$UpdateUser$updateUser<TRes>
             ? _instance.user
             : (user as Fragment$userFields?),
       ));
+
   CopyWith$Fragment$userFields<TRes> get user {
     final local$user = _instance.user;
     return local$user == null
@@ -3032,6 +3062,7 @@ class _CopyWithStubImpl$Mutation$UpdateUser$updateUser<TRes>
     Fragment$userFields? user,
   }) =>
       _res;
+
   CopyWith$Fragment$userFields<TRes> get user =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -3057,6 +3088,7 @@ class Variables$Mutation$AddSshKey {
 
   Input$SshMutationInput get sshInput =>
       (_$data['sshInput'] as Input$SshMutationInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$sshInput = sshInput;
@@ -3069,6 +3101,7 @@ class Variables$Mutation$AddSshKey {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -3151,6 +3184,7 @@ class Mutation$AddSshKey {
     );
   }
 
+  @Deprecated('Use `users.add_ssh_key` instead')
   final Mutation$AddSshKey$addSshKey addSshKey;
 
   final String $__typename;
@@ -3245,6 +3279,7 @@ class _CopyWithImpl$Mutation$AddSshKey<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey {
     final local$addSshKey = _instance.addSshKey;
     return CopyWith$Mutation$AddSshKey$addSshKey(
@@ -3263,6 +3298,7 @@ class _CopyWithStubImpl$Mutation$AddSshKey<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey =>
       CopyWith$Mutation$AddSshKey$addSshKey.stub(_res);
 }
@@ -3603,6 +3639,7 @@ class _CopyWithImpl$Mutation$AddSshKey$addSshKey<TRes>
             ? _instance.user
             : (user as Fragment$userFields?),
       ));
+
   CopyWith$Fragment$userFields<TRes> get user {
     final local$user = _instance.user;
     return local$user == null
@@ -3625,6 +3662,7 @@ class _CopyWithStubImpl$Mutation$AddSshKey$addSshKey<TRes>
     Fragment$userFields? user,
   }) =>
       _res;
+
   CopyWith$Fragment$userFields<TRes> get user =>
       CopyWith$Fragment$userFields.stub(_res);
 }
@@ -3650,6 +3688,7 @@ class Variables$Mutation$RemoveSshKey {
 
   Input$SshMutationInput get sshInput =>
       (_$data['sshInput'] as Input$SshMutationInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$sshInput = sshInput;
@@ -3662,6 +3701,7 @@ class Variables$Mutation$RemoveSshKey {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -3744,6 +3784,7 @@ class Mutation$RemoveSshKey {
     );
   }
 
+  @Deprecated('Use `users.remove_ssh_key` instead')
   final Mutation$RemoveSshKey$removeSshKey removeSshKey;
 
   final String $__typename;
@@ -3838,6 +3879,7 @@ class _CopyWithImpl$Mutation$RemoveSshKey<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey {
     final local$removeSshKey = _instance.removeSshKey;
     return CopyWith$Mutation$RemoveSshKey$removeSshKey(
@@ -3856,6 +3898,7 @@ class _CopyWithStubImpl$Mutation$RemoveSshKey<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey =>
       CopyWith$Mutation$RemoveSshKey$removeSshKey.stub(_res);
 }
@@ -4199,6 +4242,7 @@ class _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
             ? _instance.user
             : (user as Fragment$userFields?),
       ));
+
   CopyWith$Fragment$userFields<TRes> get user {
     final local$user = _instance.user;
     return local$user == null
@@ -4221,6 +4265,7 @@ class _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
     Fragment$userFields? user,
   }) =>
       _res;
+
   CopyWith$Fragment$userFields<TRes> get user =>
       CopyWith$Fragment$userFields.stub(_res);
 }

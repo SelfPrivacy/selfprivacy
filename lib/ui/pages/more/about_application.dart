@@ -45,7 +45,7 @@ class AboutApplicationPage extends StatelessWidget {
           onPressed: () => showAboutDialog(
             context: context,
             applicationName: 'SelfPrivacy',
-            applicationLegalese: '© 2022 SelfPrivacy',
+            applicationLegalese: '© 2024 SelfPrivacy',
             // Link to privacy policy
             children: [
               TextButton(

@@ -33,7 +33,7 @@ class JobsContent extends StatelessWidget {
         final ServerInstallationState installationState =
             context.read<ServerInstallationCubit>().state;
         if (state is JobsStateEmpty || state is JobsCompleted) {
-          if (state is JobsStateEmpty)
+          if (state is JobsStateEmpty) {
             widgets = [
               const SizedBox(height: 80),
               Center(
@@ -43,7 +43,7 @@ class JobsContent extends StatelessWidget {
                 ),
               ),
             ];
-          else
+          } else {
             widgets = [
               const SizedBox(height: 80),
               Center(
@@ -60,10 +60,11 @@ class JobsContent extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
                           ) ??
-                      TextStyle(),
+                      const TextStyle(),
                 ),
               ),
             ];
+          }
 
           if (installationState is ServerInstallationFinished) {
             widgets = [

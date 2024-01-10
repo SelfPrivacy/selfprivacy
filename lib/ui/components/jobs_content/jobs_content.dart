@@ -32,16 +32,38 @@ class JobsContent extends StatelessWidget {
         late List<Widget> widgets;
         final ServerInstallationState installationState =
             context.read<ServerInstallationCubit>().state;
-        if (state is JobsStateEmpty) {
-          widgets = [
-            const SizedBox(height: 80),
-            Center(
-              child: Text(
-                'jobs.empty'.tr(),
-                style: Theme.of(context).textTheme.bodyLarge,
+        if (state is JobsStateEmpty || state is JobsCompleted) {
+          if (state is JobsStateEmpty)
+            widgets = [
+              const SizedBox(height: 80),
+              Center(
+                child: Text(
+                  'jobs.empty'.tr(),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
-            ),
-          ];
+            ];
+          else
+            widgets = [
+              const SizedBox(height: 80),
+              Center(
+                child: Icon(
+                  Icons.check,
+                  size: 60.0,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 32),
+              Center(
+                child: Text(
+                  'jobs.completed'.tr(),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ) ??
+                      TextStyle(),
+                ),
+              ),
+            ];
 
           if (installationState is ServerInstallationFinished) {
             widgets = [

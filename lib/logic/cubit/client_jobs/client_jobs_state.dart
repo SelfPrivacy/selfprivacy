@@ -9,6 +9,8 @@ class JobsStateLoading extends JobsState {}
 
 class JobsStateEmpty extends JobsState {}
 
+class JobsComplated extends JobsState {}
+
 class JobsStateWithJobs extends JobsState {
   JobsStateWithJobs(this.clientJobList);
   final List<ClientJob> clientJobList;

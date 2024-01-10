@@ -286,11 +286,11 @@ class ServerApi extends GraphQLApiMap
 
   Future<List<DnsRecord>> getDnsRecords() async {
     List<DnsRecord> records = [];
-    QueryResult<Query$DomainInfo> response;
+    QueryResult<Query$GetDnsRecords> response;
 
     try {
       final GraphQLClient client = await getClient();
-      response = await client.query$DomainInfo();
+      response = await client.query$GetDnsRecords();
       if (response.hasException) {
         print(response.exception.toString());
       }

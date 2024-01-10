@@ -150,6 +150,7 @@ type DnsRecord {
   recordType: String!
   name: String!
   content: String!
+  displayName: String!
   ttl: Int!
   priority: Int
 }

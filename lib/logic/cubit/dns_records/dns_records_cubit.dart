@@ -23,15 +23,9 @@ class DnsRecordsCubit
   @override
   Future<void> load() async {
     emit(
-      DnsRecordsState(
+      const DnsRecordsState(
         dnsState: DnsRecordsStatus.refreshing,
-        dnsRecords:
-            ProvidersController.currentDnsProvider?.getDesiredDnsRecords(
-                  serverInstallationCubit.state.serverDomain?.domainName,
-                  '',
-                  '',
-                ) ??
-                [],
+        dnsRecords: [],
       ),
     );
 
@@ -39,16 +33,18 @@ class DnsRecordsCubit
       final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
       final String? ipAddress =
           serverInstallationCubit.state.serverDetails?.ip4;
-      if (domain == null && ipAddress == null) {
+
+      if (domain == null || ipAddress == null) {
         emit(const DnsRecordsState());
         return;
       }
 
-      final foundRecords =
-          await ProvidersController.currentDnsProvider!.validateDnsRecords(
-        domain!,
-        ipAddress!,
-        extractDkimRecord(await api.getDnsRecords())?.content ?? '',
+      final List<DnsRecord> allDnsRecords = await api.getDnsRecords();
+      allDnsRecords.removeWhere((final record) => record.type == 'AAAA');
+      final foundRecords = await validateDnsRecords(
+        domain,
+        extractDkimRecord(allDnsRecords)?.content ?? '',
+        allDnsRecords,
       );
 
       if (!foundRecords.success || foundRecords.data.isEmpty) {
@@ -65,6 +61,93 @@ class DnsRecordsCubit
         ),
       );
     }
+  }
+
+  /// Tries to check whether all known DNS records on the domain by ip4
+  /// match expectations of SelfPrivacy in order to launch.
+  ///
+  /// Will return list of [DesiredDnsRecord] objects, which represent
+  /// only those records which have successfully passed validation.
+  Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
+    final ServerDomain domain,
+    final String dkimPublicKey,
+    final List<DnsRecord> pendingDnsRecords,
+  ) async {
+    final result = await ProvidersController.currentDnsProvider!
+        .getDnsRecords(domain: domain);
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: [],
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final List<DnsRecord> providerDnsRecords = result.data;
+    final List<DesiredDnsRecord> foundRecords = [];
+    try {
+      for (final DnsRecord pendingDnsRecord in pendingDnsRecords) {
+        if (pendingDnsRecord.name == 'selector._domainkey') {
+          final foundRecord = providerDnsRecords.firstWhere(
+            (final r) =>
+                (r.name == pendingDnsRecord.name) &&
+                r.type == pendingDnsRecord.type,
+            orElse: () => DnsRecord(
+              displayName: pendingDnsRecord.displayName,
+              name: pendingDnsRecord.name,
+              type: pendingDnsRecord.type,
+              content: pendingDnsRecord.content,
+              ttl: pendingDnsRecord.ttl,
+            ),
+          );
+          final String foundContent =
+              foundRecord.content!.replaceAll(RegExp(r'\s+'), '').trim();
+          final String desiredContent =
+              pendingDnsRecord.content!.replaceAll(RegExp(r'\s+'), '').trim();
+          final isSatisfied = (desiredContent == foundContent);
+          foundRecords.add(
+            DesiredDnsRecord(
+              name: pendingDnsRecord.name!,
+              displayName: pendingDnsRecord.displayName,
+              content: pendingDnsRecord.content!,
+              isSatisfied: isSatisfied,
+              type: pendingDnsRecord.type,
+              category: DnsRecordsCategory.email,
+            ),
+          );
+        } else {
+          final foundMatch = providerDnsRecords.any(
+            (final r) =>
+                r.name == pendingDnsRecord.name &&
+                r.type == pendingDnsRecord.type &&
+                r.content == pendingDnsRecord.content,
+          );
+          foundRecords.add(
+            DesiredDnsRecord(
+              name: pendingDnsRecord.name!,
+              displayName: pendingDnsRecord.displayName,
+              content: pendingDnsRecord.content!,
+              isSatisfied: foundMatch,
+              category: pendingDnsRecord.type == 'A'
+                  ? DnsRecordsCategory.services
+                  : DnsRecordsCategory.email,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        data: [],
+        success: false,
+        message: e.toString(),
+      );
+    }
+    return GenericResult(
+      data: foundRecords,
+      success: true,
+    );
   }
 
   @override

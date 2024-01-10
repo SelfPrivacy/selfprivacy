@@ -116,6 +116,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$GetServerDiskVolumes$storage<TRes> get storage {
     final local$storage = _instance.storage;
     return CopyWith$Query$GetServerDiskVolumes$storage(
@@ -134,6 +135,7 @@ class _CopyWithStubImpl$Query$GetServerDiskVolumes<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$GetServerDiskVolumes$storage<TRes> get storage =>
       CopyWith$Query$GetServerDiskVolumes$storage.stub(_res);
 }
@@ -577,6 +579,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   TRes volumes(
           Iterable<Query$GetServerDiskVolumes$storage$volumes> Function(
                   Iterable<
@@ -602,6 +605,7 @@ class _CopyWithStubImpl$Query$GetServerDiskVolumes$storage<TRes>
     String? $__typename,
   }) =>
       _res;
+
   volumes(_fn) => _res;
 }
 
@@ -883,6 +887,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   TRes usages(
           Iterable<Query$GetServerDiskVolumes$storage$volumes$usages> Function(
                   Iterable<
@@ -916,6 +921,7 @@ class _CopyWithStubImpl$Query$GetServerDiskVolumes$storage$volumes<TRes>
     String? $__typename,
   }) =>
       _res;
+
   usages(_fn) => _res;
 }
 
@@ -1287,6 +1293,7 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceSt
             ? _instance.usedSpace
             : (usedSpace as String),
       ));
+
   CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service<
       TRes> get service {
     final local$service = _instance.service;
@@ -1316,6 +1323,7 @@ class _CopyWithStubImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$Servi
     String? usedSpace,
   }) =>
       _res;
+
   CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service<
           TRes>
       get service =>
@@ -1524,6 +1532,7 @@ class Variables$Mutation$MountVolume {
   Map<String, dynamic> _$data;
 
   String get name => (_$data['name'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$name = name;
@@ -1536,6 +1545,7 @@ class Variables$Mutation$MountVolume {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -1617,6 +1627,7 @@ class Mutation$MountVolume {
     );
   }
 
+  @Deprecated('Use `storage.mount_volume` instead')
   final Mutation$MountVolume$mountVolume mountVolume;
 
   final String $__typename;
@@ -1711,6 +1722,7 @@ class _CopyWithImpl$Mutation$MountVolume<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$MountVolume$mountVolume<TRes> get mountVolume {
     final local$mountVolume = _instance.mountVolume;
     return CopyWith$Mutation$MountVolume$mountVolume(
@@ -1729,6 +1741,7 @@ class _CopyWithStubImpl$Mutation$MountVolume<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$MountVolume$mountVolume<TRes> get mountVolume =>
       CopyWith$Mutation$MountVolume$mountVolume.stub(_res);
 }
@@ -2063,6 +2076,7 @@ class Variables$Mutation$ResizeVolume {
   Map<String, dynamic> _$data;
 
   String get name => (_$data['name'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$name = name;
@@ -2075,6 +2089,7 @@ class Variables$Mutation$ResizeVolume {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -2156,6 +2171,7 @@ class Mutation$ResizeVolume {
     );
   }
 
+  @Deprecated('Use `storage.resize_volume` instead')
   final Mutation$ResizeVolume$resizeVolume resizeVolume;
 
   final String $__typename;
@@ -2250,6 +2266,7 @@ class _CopyWithImpl$Mutation$ResizeVolume<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$ResizeVolume$resizeVolume<TRes> get resizeVolume {
     final local$resizeVolume = _instance.resizeVolume;
     return CopyWith$Mutation$ResizeVolume$resizeVolume(
@@ -2268,6 +2285,7 @@ class _CopyWithStubImpl$Mutation$ResizeVolume<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$ResizeVolume$resizeVolume<TRes> get resizeVolume =>
       CopyWith$Mutation$ResizeVolume$resizeVolume.stub(_res);
 }
@@ -2604,6 +2622,7 @@ class Variables$Mutation$UnmountVolume {
   Map<String, dynamic> _$data;
 
   String get name => (_$data['name'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$name = name;
@@ -2616,6 +2635,7 @@ class Variables$Mutation$UnmountVolume {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -2697,6 +2717,7 @@ class Mutation$UnmountVolume {
     );
   }
 
+  @Deprecated('Use `storage.unmount_volume` instead')
   final Mutation$UnmountVolume$unmountVolume unmountVolume;
 
   final String $__typename;
@@ -2792,6 +2813,7 @@ class _CopyWithImpl$Mutation$UnmountVolume<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$UnmountVolume$unmountVolume<TRes> get unmountVolume {
     final local$unmountVolume = _instance.unmountVolume;
     return CopyWith$Mutation$UnmountVolume$unmountVolume(
@@ -2810,6 +2832,7 @@ class _CopyWithStubImpl$Mutation$UnmountVolume<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$UnmountVolume$unmountVolume<TRes> get unmountVolume =>
       CopyWith$Mutation$UnmountVolume$unmountVolume.stub(_res);
 }
@@ -3152,6 +3175,7 @@ class Variables$Mutation$MigrateToBinds {
 
   Input$MigrateToBindsInput get input =>
       (_$data['input'] as Input$MigrateToBindsInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$input = input;
@@ -3164,6 +3188,7 @@ class Variables$Mutation$MigrateToBinds {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -3246,6 +3271,7 @@ class Mutation$MigrateToBinds {
     );
   }
 
+  @Deprecated('Use `storage.migrate_to_binds` instead')
   final Mutation$MigrateToBinds$migrateToBinds migrateToBinds;
 
   final String $__typename;
@@ -3341,6 +3367,7 @@ class _CopyWithImpl$Mutation$MigrateToBinds<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> get migrateToBinds {
     final local$migrateToBinds = _instance.migrateToBinds;
     return CopyWith$Mutation$MigrateToBinds$migrateToBinds(
@@ -3359,6 +3386,7 @@ class _CopyWithStubImpl$Mutation$MigrateToBinds<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> get migrateToBinds =>
       CopyWith$Mutation$MigrateToBinds$migrateToBinds.stub(_res);
 }
@@ -3705,6 +3733,7 @@ class _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
             ? _instance.job
             : (job as Fragment$basicApiJobsFields?),
       ));
+
   CopyWith$Fragment$basicApiJobsFields<TRes> get job {
     final local$job = _instance.job;
     return local$job == null
@@ -3727,6 +3756,7 @@ class _CopyWithStubImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
     Fragment$basicApiJobsFields? job,
   }) =>
       _res;
+
   CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }

@@ -1,5 +1,4 @@
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
@@ -22,7 +21,7 @@ abstract class DnsProvider {
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
 
   /// Returns list of all available domain entries assigned to the account.
-  Future<GenericResult<List<String>>> domainList();
+  Future<GenericResult<List<ServerDomain>>> domainList();
 
   /// Tries to create all main domain records needed
   /// for SelfPrivacy to launch on requested domain by ip4.
@@ -56,25 +55,5 @@ abstract class DnsProvider {
   Future<GenericResult<void>> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
-  );
-
-  /// Tries to check whether all known DNS records on the domain by ip4
-  /// match expectations of SelfPrivacy in order to launch.
-  ///
-  /// Will return list of [DesiredDnsRecord] objects, which represent
-  /// only those records which have successfully passed validation.
-  Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
-    final ServerDomain domain,
-    final String ip4,
-    final String dkimPublicKey,
-  );
-
-  /// Will return list of [DesiredDnsRecord] objects, which represent
-  /// samples of perfect DNS records we need to know about in order to launch
-  /// SelfPrivacy application correctly.
-  List<DesiredDnsRecord> getDesiredDnsRecords(
-    final String? domainName,
-    final String? ip4,
-    final String? dkimPublicKey,
   );
 }

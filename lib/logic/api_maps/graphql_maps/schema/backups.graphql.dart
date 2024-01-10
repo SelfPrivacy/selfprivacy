@@ -179,6 +179,7 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Fragment$genericBackupConfigReturn$configuration<TRes>
       get configuration {
     final local$configuration = _instance.configuration;
@@ -204,6 +205,7 @@ class _CopyWithStubImpl$Fragment$genericBackupConfigReturn<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Fragment$genericBackupConfigReturn$configuration<TRes>
       get configuration =>
           CopyWith$Fragment$genericBackupConfigReturn$configuration.stub(_res);
@@ -633,6 +635,7 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
       TRes> get autobackupQuotas {
     final local$autobackupQuotas = _instance.autobackupQuotas;
@@ -659,6 +662,7 @@ class _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
           TRes>
       get autobackupQuotas =>
@@ -999,6 +1003,7 @@ class _CopyWithImpl$Query$BackupConfiguration<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$BackupConfiguration$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Query$BackupConfiguration$backup(
@@ -1017,6 +1022,7 @@ class _CopyWithStubImpl$Query$BackupConfiguration<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$BackupConfiguration$backup<TRes> get backup =>
       CopyWith$Query$BackupConfiguration$backup.stub(_res);
 }
@@ -1399,6 +1405,7 @@ class _CopyWithImpl$Query$BackupConfiguration$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$BackupConfiguration$backup$configuration<TRes>
       get configuration {
     final local$configuration = _instance.configuration;
@@ -1418,6 +1425,7 @@ class _CopyWithStubImpl$Query$BackupConfiguration$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$BackupConfiguration$backup$configuration<TRes>
       get configuration =>
           CopyWith$Query$BackupConfiguration$backup$configuration.stub(_res);
@@ -1658,6 +1666,7 @@ class _CopyWithImpl$Query$BackupConfiguration$backup$configuration<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<TRes>
       get autobackupQuotas {
     final local$autobackupQuotas = _instance.autobackupQuotas;
@@ -1684,6 +1693,7 @@ class _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<TRes>
       get autobackupQuotas =>
           CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas
@@ -2023,6 +2033,7 @@ class _CopyWithImpl$Query$AllBackupSnapshots<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$AllBackupSnapshots$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Query$AllBackupSnapshots$backup(
@@ -2041,6 +2052,7 @@ class _CopyWithStubImpl$Query$AllBackupSnapshots<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$AllBackupSnapshots$backup<TRes> get backup =>
       CopyWith$Query$AllBackupSnapshots$backup.stub(_res);
 }
@@ -2396,6 +2408,7 @@ class _CopyWithImpl$Query$AllBackupSnapshots$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   TRes allSnapshots(
           Iterable<Query$AllBackupSnapshots$backup$allSnapshots> Function(
                   Iterable<
@@ -2421,6 +2434,7 @@ class _CopyWithStubImpl$Query$AllBackupSnapshots$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   allSnapshots(_fn) => _res;
 }
 
@@ -2594,6 +2608,7 @@ class _CopyWithImpl$Query$AllBackupSnapshots$backup$allSnapshots<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Query$AllBackupSnapshots$backup$allSnapshots$service<TRes>
       get service {
     final local$service = _instance.service;
@@ -2616,6 +2631,7 @@ class _CopyWithStubImpl$Query$AllBackupSnapshots$backup$allSnapshots<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Query$AllBackupSnapshots$backup$allSnapshots$service<TRes>
       get service =>
           CopyWith$Query$AllBackupSnapshots$backup$allSnapshots$service.stub(
@@ -2887,6 +2903,7 @@ class _CopyWithImpl$Mutation$ForceSnapshotsReload<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$ForceSnapshotsReload$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Mutation$ForceSnapshotsReload$backup(
@@ -2905,6 +2922,7 @@ class _CopyWithStubImpl$Mutation$ForceSnapshotsReload<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$ForceSnapshotsReload$backup<TRes> get backup =>
       CopyWith$Mutation$ForceSnapshotsReload$backup.stub(_res);
 }
@@ -3180,6 +3198,7 @@ class _CopyWithImpl$Mutation$ForceSnapshotsReload$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<TRes>
       get forceSnapshotsReload {
     final local$forceSnapshotsReload = _instance.forceSnapshotsReload;
@@ -3200,6 +3219,7 @@ class _CopyWithStubImpl$Mutation$ForceSnapshotsReload$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<TRes>
       get forceSnapshotsReload =>
           CopyWith$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload
@@ -3403,6 +3423,7 @@ class Variables$Mutation$StartBackup {
   Map<String, dynamic> _$data;
 
   String get serviceId => (_$data['serviceId'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$serviceId = serviceId;
@@ -3415,6 +3436,7 @@ class Variables$Mutation$StartBackup {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -3591,6 +3613,7 @@ class _CopyWithImpl$Mutation$StartBackup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$StartBackup$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Mutation$StartBackup$backup(
@@ -3609,6 +3632,7 @@ class _CopyWithStubImpl$Mutation$StartBackup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$StartBackup$backup<TRes> get backup =>
       CopyWith$Mutation$StartBackup$backup.stub(_res);
 }
@@ -3907,6 +3931,7 @@ class _CopyWithImpl$Mutation$StartBackup$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$StartBackup$backup$startBackup<TRes> get startBackup {
     final local$startBackup = _instance.startBackup;
     return CopyWith$Mutation$StartBackup$backup$startBackup(
@@ -3925,6 +3950,7 @@ class _CopyWithStubImpl$Mutation$StartBackup$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$StartBackup$backup$startBackup<TRes> get startBackup =>
       CopyWith$Mutation$StartBackup$backup$startBackup.stub(_res);
 }
@@ -4102,6 +4128,7 @@ class _CopyWithImpl$Mutation$StartBackup$backup$startBackup<TRes>
             ? _instance.job
             : (job as Fragment$basicApiJobsFields?),
       ));
+
   CopyWith$Fragment$basicApiJobsFields<TRes> get job {
     final local$job = _instance.job;
     return local$job == null
@@ -4124,6 +4151,7 @@ class _CopyWithStubImpl$Mutation$StartBackup$backup$startBackup<TRes>
     Fragment$basicApiJobsFields? job,
   }) =>
       _res;
+
   CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }
@@ -4149,6 +4177,7 @@ class Variables$Mutation$SetAutobackupPeriod {
   Map<String, dynamic> _$data;
 
   int? get period => (_$data['period'] as int?);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     if (_$data.containsKey('period')) {
@@ -4164,6 +4193,7 @@ class Variables$Mutation$SetAutobackupPeriod {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -4344,6 +4374,7 @@ class _CopyWithImpl$Mutation$SetAutobackupPeriod<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$SetAutobackupPeriod$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Mutation$SetAutobackupPeriod$backup(
@@ -4362,6 +4393,7 @@ class _CopyWithStubImpl$Mutation$SetAutobackupPeriod<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$SetAutobackupPeriod$backup<TRes> get backup =>
       CopyWith$Mutation$SetAutobackupPeriod$backup.stub(_res);
 }
@@ -4650,6 +4682,7 @@ class _CopyWithImpl$Mutation$SetAutobackupPeriod$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupPeriod {
     final local$setAutobackupPeriod = _instance.setAutobackupPeriod;
     return CopyWith$Fragment$genericBackupConfigReturn(
@@ -4668,6 +4701,7 @@ class _CopyWithStubImpl$Mutation$SetAutobackupPeriod$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupPeriod =>
       CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
 }
@@ -4694,6 +4728,7 @@ class Variables$Mutation$setAutobackupQuotas {
 
   Input$AutobackupQuotasInput get quotas =>
       (_$data['quotas'] as Input$AutobackupQuotasInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$quotas = quotas;
@@ -4707,6 +4742,7 @@ class Variables$Mutation$setAutobackupQuotas {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -4885,6 +4921,7 @@ class _CopyWithImpl$Mutation$setAutobackupQuotas<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$setAutobackupQuotas$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Mutation$setAutobackupQuotas$backup(
@@ -4903,6 +4940,7 @@ class _CopyWithStubImpl$Mutation$setAutobackupQuotas<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$setAutobackupQuotas$backup<TRes> get backup =>
       CopyWith$Mutation$setAutobackupQuotas$backup.stub(_res);
 }
@@ -5190,6 +5228,7 @@ class _CopyWithImpl$Mutation$setAutobackupQuotas$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupQuotas {
     final local$setAutobackupQuotas = _instance.setAutobackupQuotas;
     return CopyWith$Fragment$genericBackupConfigReturn(
@@ -5208,6 +5247,7 @@ class _CopyWithStubImpl$Mutation$setAutobackupQuotas$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get setAutobackupQuotas =>
       CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
 }
@@ -5324,6 +5364,7 @@ class _CopyWithImpl$Mutation$RemoveRepository<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RemoveRepository$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Mutation$RemoveRepository$backup(
@@ -5342,6 +5383,7 @@ class _CopyWithStubImpl$Mutation$RemoveRepository<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RemoveRepository$backup<TRes> get backup =>
       CopyWith$Mutation$RemoveRepository$backup.stub(_res);
 }
@@ -5606,6 +5648,7 @@ class _CopyWithImpl$Mutation$RemoveRepository$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get removeRepository {
     final local$removeRepository = _instance.removeRepository;
     return CopyWith$Fragment$genericBackupConfigReturn(
@@ -5624,6 +5667,7 @@ class _CopyWithStubImpl$Mutation$RemoveRepository$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get removeRepository =>
       CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
 }
@@ -5650,6 +5694,7 @@ class Variables$Mutation$InitializeRepository {
 
   Input$InitializeRepositoryInput get repository =>
       (_$data['repository'] as Input$InitializeRepositoryInput);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$repository = repository;
@@ -5663,6 +5708,7 @@ class Variables$Mutation$InitializeRepository {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -5841,6 +5887,7 @@ class _CopyWithImpl$Mutation$InitializeRepository<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$InitializeRepository$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Mutation$InitializeRepository$backup(
@@ -5859,6 +5906,7 @@ class _CopyWithStubImpl$Mutation$InitializeRepository<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$InitializeRepository$backup<TRes> get backup =>
       CopyWith$Mutation$InitializeRepository$backup.stub(_res);
 }
@@ -6147,6 +6195,7 @@ class _CopyWithImpl$Mutation$InitializeRepository$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get initializeRepository {
     final local$initializeRepository = _instance.initializeRepository;
     return CopyWith$Fragment$genericBackupConfigReturn(
@@ -6165,6 +6214,7 @@ class _CopyWithStubImpl$Mutation$InitializeRepository$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Fragment$genericBackupConfigReturn<TRes> get initializeRepository =>
       CopyWith$Fragment$genericBackupConfigReturn.stub(_res);
 }
@@ -6172,11 +6222,11 @@ class _CopyWithStubImpl$Mutation$InitializeRepository$backup<TRes>
 class Variables$Mutation$RestoreBackup {
   factory Variables$Mutation$RestoreBackup({
     required String snapshotId,
-    required Enum$RestoreStrategy strategy,
+    Enum$RestoreStrategy? strategy,
   }) =>
       Variables$Mutation$RestoreBackup._({
         r'snapshotId': snapshotId,
-        r'strategy': strategy,
+        if (strategy != null) r'strategy': strategy,
       });
 
   Variables$Mutation$RestoreBackup._(this._$data);
@@ -6185,23 +6235,30 @@ class Variables$Mutation$RestoreBackup {
     final result$data = <String, dynamic>{};
     final l$snapshotId = data['snapshotId'];
     result$data['snapshotId'] = (l$snapshotId as String);
-    final l$strategy = data['strategy'];
-    result$data['strategy'] =
-        fromJson$Enum$RestoreStrategy((l$strategy as String));
+    if (data.containsKey('strategy')) {
+      final l$strategy = data['strategy'];
+      result$data['strategy'] =
+          fromJson$Enum$RestoreStrategy((l$strategy as String));
+    }
     return Variables$Mutation$RestoreBackup._(result$data);
   }
 
   Map<String, dynamic> _$data;
 
   String get snapshotId => (_$data['snapshotId'] as String);
-  Enum$RestoreStrategy get strategy =>
-      (_$data['strategy'] as Enum$RestoreStrategy);
+
+  Enum$RestoreStrategy? get strategy =>
+      (_$data['strategy'] as Enum$RestoreStrategy?);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$snapshotId = snapshotId;
     result$data['snapshotId'] = l$snapshotId;
-    final l$strategy = strategy;
-    result$data['strategy'] = toJson$Enum$RestoreStrategy(l$strategy);
+    if (_$data.containsKey('strategy')) {
+      final l$strategy = strategy;
+      result$data['strategy'] =
+          toJson$Enum$RestoreStrategy((l$strategy as Enum$RestoreStrategy));
+    }
     return result$data;
   }
 
@@ -6210,6 +6267,7 @@ class Variables$Mutation$RestoreBackup {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -6226,6 +6284,10 @@ class Variables$Mutation$RestoreBackup {
     }
     final l$strategy = strategy;
     final lOther$strategy = other.strategy;
+    if (_$data.containsKey('strategy') !=
+        other._$data.containsKey('strategy')) {
+      return false;
+    }
     if (l$strategy != lOther$strategy) {
       return false;
     }
@@ -6238,7 +6300,7 @@ class Variables$Mutation$RestoreBackup {
     final l$strategy = strategy;
     return Object.hashAll([
       l$snapshotId,
-      l$strategy,
+      _$data.containsKey('strategy') ? l$strategy : const {},
     ]);
   }
 }
@@ -6408,6 +6470,7 @@ class _CopyWithImpl$Mutation$RestoreBackup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RestoreBackup$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Mutation$RestoreBackup$backup(
@@ -6426,6 +6489,7 @@ class _CopyWithStubImpl$Mutation$RestoreBackup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RestoreBackup$backup<TRes> get backup =>
       CopyWith$Mutation$RestoreBackup$backup.stub(_res);
 }
@@ -6741,6 +6805,7 @@ class _CopyWithImpl$Mutation$RestoreBackup$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$RestoreBackup$backup$restoreBackup<TRes> get restoreBackup {
     final local$restoreBackup = _instance.restoreBackup;
     return CopyWith$Mutation$RestoreBackup$backup$restoreBackup(
@@ -6759,6 +6824,7 @@ class _CopyWithStubImpl$Mutation$RestoreBackup$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$RestoreBackup$backup$restoreBackup<TRes>
       get restoreBackup =>
           CopyWith$Mutation$RestoreBackup$backup$restoreBackup.stub(_res);
@@ -6937,6 +7003,7 @@ class _CopyWithImpl$Mutation$RestoreBackup$backup$restoreBackup<TRes>
             ? _instance.job
             : (job as Fragment$basicApiJobsFields?),
       ));
+
   CopyWith$Fragment$basicApiJobsFields<TRes> get job {
     final local$job = _instance.job;
     return local$job == null
@@ -6959,6 +7026,7 @@ class _CopyWithStubImpl$Mutation$RestoreBackup$backup$restoreBackup<TRes>
     Fragment$basicApiJobsFields? job,
   }) =>
       _res;
+
   CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }
@@ -6982,6 +7050,7 @@ class Variables$Mutation$ForgetSnapshot {
   Map<String, dynamic> _$data;
 
   String get snapshotId => (_$data['snapshotId'] as String);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$snapshotId = snapshotId;
@@ -6994,6 +7063,7 @@ class Variables$Mutation$ForgetSnapshot {
             this,
             (i) => i,
           );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -7171,6 +7241,7 @@ class _CopyWithImpl$Mutation$ForgetSnapshot<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$ForgetSnapshot$backup<TRes> get backup {
     final local$backup = _instance.backup;
     return CopyWith$Mutation$ForgetSnapshot$backup(
@@ -7189,6 +7260,7 @@ class _CopyWithStubImpl$Mutation$ForgetSnapshot<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$ForgetSnapshot$backup<TRes> get backup =>
       CopyWith$Mutation$ForgetSnapshot$backup.stub(_res);
 }
@@ -7470,6 +7542,7 @@ class _CopyWithImpl$Mutation$ForgetSnapshot$backup<TRes>
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
   CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes>
       get forgetSnapshot {
     final local$forgetSnapshot = _instance.forgetSnapshot;
@@ -7489,6 +7562,7 @@ class _CopyWithStubImpl$Mutation$ForgetSnapshot$backup<TRes>
     String? $__typename,
   }) =>
       _res;
+
   CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes>
       get forgetSnapshot =>
           CopyWith$Mutation$ForgetSnapshot$backup$forgetSnapshot.stub(_res);

@@ -210,7 +210,9 @@ class ServerInstallationRepository {
       return false;
     }
 
-    return domainResult.data.contains(domain);
+    return domainResult.data.any(
+      (final serverDomain) => serverDomain.domainName == domain,
+    );
   }
 
   Future<void> createDkimRecord(final ServerDomain domain) async {

@@ -584,7 +584,7 @@
         "title": "Jobs list",
         "start": "Start",
         "empty": "No jobs",
-        "complated": "Jobs completed",
+        "completed": "Jobs completed",
         "create_user": "Create user",
         "delete_user": "Delete user",
         "service_turn_off": "Turn off",

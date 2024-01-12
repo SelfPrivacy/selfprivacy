@@ -87,9 +87,13 @@ class _DomainPickerState extends State<DomainPicker> {
                                   });
                                 },
                               ),
-                              Text(
-                                domain,
-                                style: Theme.of(context).textTheme.bodyLarge,
+                              Expanded(
+                                child: Text(
+                                  domain,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               ),
                             ],
                           ),
@@ -118,42 +122,18 @@ class _DomainPickerState extends State<DomainPicker> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  state.domain,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                  textAlign: TextAlign.center,
+                Expanded(
+                  child: Text(
+                    state.domain,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 ),
               ],
-            ),
-          ],
-          if (state is Empty) ...[
-            const SizedBox(height: 30),
-            BrandButton.filled(
-              onPressed: () => context.read<DomainSetupCubit>().load(),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.refresh,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    'domain.update_list'.tr(),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-            ),
-          ],
-          if (state is Loaded) ...[
-            const SizedBox(height: 32),
-            BrandButton.filled(
-              onPressed: () =>
-                  context.read<DomainSetupCubit>().saveDomain(state.domain),
-              text: 'initializing.save_domain'.tr(),
             ),
           ],
         ],

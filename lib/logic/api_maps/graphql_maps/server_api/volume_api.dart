@@ -80,9 +80,9 @@ mixin VolumeApi on GraphQLApiMap {
       );
       mutation = mutation = GenericResult(
         success: true,
-        code: result.parsedData!.migrateToBinds.code,
-        message: result.parsedData!.migrateToBinds.message,
-        data: result.parsedData!.migrateToBinds.job?.uid,
+        code: result.parsedData!.storage.migrateToBinds.code,
+        message: result.parsedData!.storage.migrateToBinds.message,
+        data: result.parsedData!.storage.migrateToBinds.job?.uid,
       );
     } catch (e) {
       print(e);

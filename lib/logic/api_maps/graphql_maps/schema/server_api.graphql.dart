@@ -3729,29 +3729,27 @@ class _CopyWithStubImpl$Variables$Mutation$RemoveJob<TRes>
 
 class Mutation$RemoveJob {
   Mutation$RemoveJob({
-    required this.removeJob,
+    required this.jobs,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$RemoveJob.fromJson(Map<String, dynamic> json) {
-    final l$removeJob = json['removeJob'];
+    final l$jobs = json['jobs'];
     final l$$__typename = json['__typename'];
     return Mutation$RemoveJob(
-      removeJob: Mutation$RemoveJob$removeJob.fromJson(
-          (l$removeJob as Map<String, dynamic>)),
+      jobs: Mutation$RemoveJob$jobs.fromJson((l$jobs as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `jobs.remove_job` instead')
-  final Mutation$RemoveJob$removeJob removeJob;
+  final Mutation$RemoveJob$jobs jobs;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$removeJob = removeJob;
-    _resultData['removeJob'] = l$removeJob.toJson();
+    final l$jobs = jobs;
+    _resultData['jobs'] = l$jobs.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -3759,10 +3757,10 @@ class Mutation$RemoveJob {
 
   @override
   int get hashCode {
-    final l$removeJob = removeJob;
+    final l$jobs = jobs;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$removeJob,
+      l$jobs,
       l$$__typename,
     ]);
   }
@@ -3775,9 +3773,9 @@ class Mutation$RemoveJob {
     if (!(other is Mutation$RemoveJob) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$removeJob = removeJob;
-    final lOther$removeJob = other.removeJob;
-    if (l$removeJob != lOther$removeJob) {
+    final l$jobs = jobs;
+    final lOther$jobs = other.jobs;
+    if (l$jobs != lOther$jobs) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -3807,10 +3805,10 @@ abstract class CopyWith$Mutation$RemoveJob<TRes> {
       _CopyWithStubImpl$Mutation$RemoveJob;
 
   TRes call({
-    Mutation$RemoveJob$removeJob? removeJob,
+    Mutation$RemoveJob$jobs? jobs,
     String? $__typename,
   });
-  CopyWith$Mutation$RemoveJob$removeJob<TRes> get removeJob;
+  CopyWith$Mutation$RemoveJob$jobs<TRes> get jobs;
 }
 
 class _CopyWithImpl$Mutation$RemoveJob<TRes>
@@ -3827,22 +3825,21 @@ class _CopyWithImpl$Mutation$RemoveJob<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? removeJob = _undefined,
+    Object? jobs = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$RemoveJob(
-        removeJob: removeJob == _undefined || removeJob == null
-            ? _instance.removeJob
-            : (removeJob as Mutation$RemoveJob$removeJob),
+        jobs: jobs == _undefined || jobs == null
+            ? _instance.jobs
+            : (jobs as Mutation$RemoveJob$jobs),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$RemoveJob$removeJob<TRes> get removeJob {
-    final local$removeJob = _instance.removeJob;
-    return CopyWith$Mutation$RemoveJob$removeJob(
-        local$removeJob, (e) => call(removeJob: e));
+  CopyWith$Mutation$RemoveJob$jobs<TRes> get jobs {
+    final local$jobs = _instance.jobs;
+    return CopyWith$Mutation$RemoveJob$jobs(local$jobs, (e) => call(jobs: e));
   }
 }
 
@@ -3853,13 +3850,13 @@ class _CopyWithStubImpl$Mutation$RemoveJob<TRes>
   TRes _res;
 
   call({
-    Mutation$RemoveJob$removeJob? removeJob,
+    Mutation$RemoveJob$jobs? jobs,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$RemoveJob$removeJob<TRes> get removeJob =>
-      CopyWith$Mutation$RemoveJob$removeJob.stub(_res);
+  CopyWith$Mutation$RemoveJob$jobs<TRes> get jobs =>
+      CopyWith$Mutation$RemoveJob$jobs.stub(_res);
 }
 
 const documentNodeMutationRemoveJob = DocumentNode(definitions: [
@@ -3880,19 +3877,34 @@ const documentNodeMutationRemoveJob = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'removeJob'),
+        name: NameNode(value: 'jobs'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'jobId'),
-            value: VariableNode(name: NameNode(value: 'jobId')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'removeJob'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'jobId'),
+                value: VariableNode(name: NameNode(value: 'jobId')),
+              )
+            ],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -4008,21 +4020,157 @@ extension ClientExtension$Mutation$RemoveJob on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$RemoveJob$removeJob
+class Mutation$RemoveJob$jobs {
+  Mutation$RemoveJob$jobs({
+    required this.removeJob,
+    this.$__typename = 'JobMutations',
+  });
+
+  factory Mutation$RemoveJob$jobs.fromJson(Map<String, dynamic> json) {
+    final l$removeJob = json['removeJob'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RemoveJob$jobs(
+      removeJob: Mutation$RemoveJob$jobs$removeJob.fromJson(
+          (l$removeJob as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RemoveJob$jobs$removeJob removeJob;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$removeJob = removeJob;
+    _resultData['removeJob'] = l$removeJob.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$removeJob = removeJob;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$removeJob,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RemoveJob$jobs) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$removeJob = removeJob;
+    final lOther$removeJob = other.removeJob;
+    if (l$removeJob != lOther$removeJob) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RemoveJob$jobs on Mutation$RemoveJob$jobs {
+  CopyWith$Mutation$RemoveJob$jobs<Mutation$RemoveJob$jobs> get copyWith =>
+      CopyWith$Mutation$RemoveJob$jobs(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Mutation$RemoveJob$jobs<TRes> {
+  factory CopyWith$Mutation$RemoveJob$jobs(
+    Mutation$RemoveJob$jobs instance,
+    TRes Function(Mutation$RemoveJob$jobs) then,
+  ) = _CopyWithImpl$Mutation$RemoveJob$jobs;
+
+  factory CopyWith$Mutation$RemoveJob$jobs.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveJob$jobs;
+
+  TRes call({
+    Mutation$RemoveJob$jobs$removeJob? removeJob,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RemoveJob$jobs$removeJob<TRes> get removeJob;
+}
+
+class _CopyWithImpl$Mutation$RemoveJob$jobs<TRes>
+    implements CopyWith$Mutation$RemoveJob$jobs<TRes> {
+  _CopyWithImpl$Mutation$RemoveJob$jobs(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RemoveJob$jobs _instance;
+
+  final TRes Function(Mutation$RemoveJob$jobs) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? removeJob = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RemoveJob$jobs(
+        removeJob: removeJob == _undefined || removeJob == null
+            ? _instance.removeJob
+            : (removeJob as Mutation$RemoveJob$jobs$removeJob),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RemoveJob$jobs$removeJob<TRes> get removeJob {
+    final local$removeJob = _instance.removeJob;
+    return CopyWith$Mutation$RemoveJob$jobs$removeJob(
+        local$removeJob, (e) => call(removeJob: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RemoveJob$jobs<TRes>
+    implements CopyWith$Mutation$RemoveJob$jobs<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveJob$jobs(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RemoveJob$jobs$removeJob? removeJob,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RemoveJob$jobs$removeJob<TRes> get removeJob =>
+      CopyWith$Mutation$RemoveJob$jobs$removeJob.stub(_res);
+}
+
+class Mutation$RemoveJob$jobs$removeJob
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$RemoveJob$removeJob({
+  Mutation$RemoveJob$jobs$removeJob({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$RemoveJob$removeJob.fromJson(Map<String, dynamic> json) {
+  factory Mutation$RemoveJob$jobs$removeJob.fromJson(
+      Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$RemoveJob$removeJob(
+    return Mutation$RemoveJob$jobs$removeJob(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -4070,7 +4218,7 @@ class Mutation$RemoveJob$removeJob
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RemoveJob$removeJob) ||
+    if (!(other is Mutation$RemoveJob$jobs$removeJob) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4098,23 +4246,23 @@ class Mutation$RemoveJob$removeJob
   }
 }
 
-extension UtilityExtension$Mutation$RemoveJob$removeJob
-    on Mutation$RemoveJob$removeJob {
-  CopyWith$Mutation$RemoveJob$removeJob<Mutation$RemoveJob$removeJob>
-      get copyWith => CopyWith$Mutation$RemoveJob$removeJob(
+extension UtilityExtension$Mutation$RemoveJob$jobs$removeJob
+    on Mutation$RemoveJob$jobs$removeJob {
+  CopyWith$Mutation$RemoveJob$jobs$removeJob<Mutation$RemoveJob$jobs$removeJob>
+      get copyWith => CopyWith$Mutation$RemoveJob$jobs$removeJob(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$RemoveJob$removeJob<TRes> {
-  factory CopyWith$Mutation$RemoveJob$removeJob(
-    Mutation$RemoveJob$removeJob instance,
-    TRes Function(Mutation$RemoveJob$removeJob) then,
-  ) = _CopyWithImpl$Mutation$RemoveJob$removeJob;
+abstract class CopyWith$Mutation$RemoveJob$jobs$removeJob<TRes> {
+  factory CopyWith$Mutation$RemoveJob$jobs$removeJob(
+    Mutation$RemoveJob$jobs$removeJob instance,
+    TRes Function(Mutation$RemoveJob$jobs$removeJob) then,
+  ) = _CopyWithImpl$Mutation$RemoveJob$jobs$removeJob;
 
-  factory CopyWith$Mutation$RemoveJob$removeJob.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$RemoveJob$removeJob;
+  factory CopyWith$Mutation$RemoveJob$jobs$removeJob.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveJob$jobs$removeJob;
 
   TRes call({
     int? code,
@@ -4124,16 +4272,16 @@ abstract class CopyWith$Mutation$RemoveJob$removeJob<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$RemoveJob$removeJob<TRes>
-    implements CopyWith$Mutation$RemoveJob$removeJob<TRes> {
-  _CopyWithImpl$Mutation$RemoveJob$removeJob(
+class _CopyWithImpl$Mutation$RemoveJob$jobs$removeJob<TRes>
+    implements CopyWith$Mutation$RemoveJob$jobs$removeJob<TRes> {
+  _CopyWithImpl$Mutation$RemoveJob$jobs$removeJob(
     this._instance,
     this._then,
   );
 
-  final Mutation$RemoveJob$removeJob _instance;
+  final Mutation$RemoveJob$jobs$removeJob _instance;
 
-  final TRes Function(Mutation$RemoveJob$removeJob) _then;
+  final TRes Function(Mutation$RemoveJob$jobs$removeJob) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -4143,7 +4291,7 @@ class _CopyWithImpl$Mutation$RemoveJob$removeJob<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$RemoveJob$removeJob(
+      _then(Mutation$RemoveJob$jobs$removeJob(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -4158,9 +4306,9 @@ class _CopyWithImpl$Mutation$RemoveJob$removeJob<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$RemoveJob$removeJob<TRes>
-    implements CopyWith$Mutation$RemoveJob$removeJob<TRes> {
-  _CopyWithStubImpl$Mutation$RemoveJob$removeJob(this._res);
+class _CopyWithStubImpl$Mutation$RemoveJob$jobs$removeJob<TRes>
+    implements CopyWith$Mutation$RemoveJob$jobs$removeJob<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveJob$jobs$removeJob(this._res);
 
   TRes _res;
 
@@ -4175,29 +4323,28 @@ class _CopyWithStubImpl$Mutation$RemoveJob$removeJob<TRes>
 
 class Mutation$RunSystemRebuild {
   Mutation$RunSystemRebuild({
-    required this.runSystemRebuild,
+    required this.system,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$RunSystemRebuild.fromJson(Map<String, dynamic> json) {
-    final l$runSystemRebuild = json['runSystemRebuild'];
+    final l$system = json['system'];
     final l$$__typename = json['__typename'];
     return Mutation$RunSystemRebuild(
-      runSystemRebuild: Mutation$RunSystemRebuild$runSystemRebuild.fromJson(
-          (l$runSystemRebuild as Map<String, dynamic>)),
+      system: Mutation$RunSystemRebuild$system.fromJson(
+          (l$system as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `system.run_system_rebuild` instead')
-  final Mutation$RunSystemRebuild$runSystemRebuild runSystemRebuild;
+  final Mutation$RunSystemRebuild$system system;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$runSystemRebuild = runSystemRebuild;
-    _resultData['runSystemRebuild'] = l$runSystemRebuild.toJson();
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -4205,10 +4352,10 @@ class Mutation$RunSystemRebuild {
 
   @override
   int get hashCode {
-    final l$runSystemRebuild = runSystemRebuild;
+    final l$system = system;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$runSystemRebuild,
+      l$system,
       l$$__typename,
     ]);
   }
@@ -4222,9 +4369,9 @@ class Mutation$RunSystemRebuild {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$runSystemRebuild = runSystemRebuild;
-    final lOther$runSystemRebuild = other.runSystemRebuild;
-    if (l$runSystemRebuild != lOther$runSystemRebuild) {
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -4255,11 +4402,10 @@ abstract class CopyWith$Mutation$RunSystemRebuild<TRes> {
       _CopyWithStubImpl$Mutation$RunSystemRebuild;
 
   TRes call({
-    Mutation$RunSystemRebuild$runSystemRebuild? runSystemRebuild,
+    Mutation$RunSystemRebuild$system? system,
     String? $__typename,
   });
-  CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
-      get runSystemRebuild;
+  CopyWith$Mutation$RunSystemRebuild$system<TRes> get system;
 }
 
 class _CopyWithImpl$Mutation$RunSystemRebuild<TRes>
@@ -4276,24 +4422,22 @@ class _CopyWithImpl$Mutation$RunSystemRebuild<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? runSystemRebuild = _undefined,
+    Object? system = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$RunSystemRebuild(
-        runSystemRebuild: runSystemRebuild == _undefined ||
-                runSystemRebuild == null
-            ? _instance.runSystemRebuild
-            : (runSystemRebuild as Mutation$RunSystemRebuild$runSystemRebuild),
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$RunSystemRebuild$system),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
-      get runSystemRebuild {
-    final local$runSystemRebuild = _instance.runSystemRebuild;
-    return CopyWith$Mutation$RunSystemRebuild$runSystemRebuild(
-        local$runSystemRebuild, (e) => call(runSystemRebuild: e));
+  CopyWith$Mutation$RunSystemRebuild$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$RunSystemRebuild$system(
+        local$system, (e) => call(system: e));
   }
 }
 
@@ -4304,14 +4448,13 @@ class _CopyWithStubImpl$Mutation$RunSystemRebuild<TRes>
   TRes _res;
 
   call({
-    Mutation$RunSystemRebuild$runSystemRebuild? runSystemRebuild,
+    Mutation$RunSystemRebuild$system? system,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
-      get runSystemRebuild =>
-          CopyWith$Mutation$RunSystemRebuild$runSystemRebuild.stub(_res);
+  CopyWith$Mutation$RunSystemRebuild$system<TRes> get system =>
+      CopyWith$Mutation$RunSystemRebuild$system.stub(_res);
 }
 
 const documentNodeMutationRunSystemRebuild = DocumentNode(definitions: [
@@ -4322,14 +4465,29 @@ const documentNodeMutationRunSystemRebuild = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'runSystemRebuild'),
+        name: NameNode(value: 'system'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'runSystemRebuild'),
+            alias: null,
+            arguments: [],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -4446,22 +4604,164 @@ extension ClientExtension$Mutation$RunSystemRebuild on graphql.GraphQLClient {
       this.watchMutation(options ?? WatchOptions$Mutation$RunSystemRebuild());
 }
 
-class Mutation$RunSystemRebuild$runSystemRebuild
+class Mutation$RunSystemRebuild$system {
+  Mutation$RunSystemRebuild$system({
+    required this.runSystemRebuild,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$RunSystemRebuild$system.fromJson(Map<String, dynamic> json) {
+    final l$runSystemRebuild = json['runSystemRebuild'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RunSystemRebuild$system(
+      runSystemRebuild:
+          Mutation$RunSystemRebuild$system$runSystemRebuild.fromJson(
+              (l$runSystemRebuild as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RunSystemRebuild$system$runSystemRebuild runSystemRebuild;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$runSystemRebuild = runSystemRebuild;
+    _resultData['runSystemRebuild'] = l$runSystemRebuild.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$runSystemRebuild = runSystemRebuild;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$runSystemRebuild,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RunSystemRebuild$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$runSystemRebuild = runSystemRebuild;
+    final lOther$runSystemRebuild = other.runSystemRebuild;
+    if (l$runSystemRebuild != lOther$runSystemRebuild) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RunSystemRebuild$system
+    on Mutation$RunSystemRebuild$system {
+  CopyWith$Mutation$RunSystemRebuild$system<Mutation$RunSystemRebuild$system>
+      get copyWith => CopyWith$Mutation$RunSystemRebuild$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RunSystemRebuild$system<TRes> {
+  factory CopyWith$Mutation$RunSystemRebuild$system(
+    Mutation$RunSystemRebuild$system instance,
+    TRes Function(Mutation$RunSystemRebuild$system) then,
+  ) = _CopyWithImpl$Mutation$RunSystemRebuild$system;
+
+  factory CopyWith$Mutation$RunSystemRebuild$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRebuild$system;
+
+  TRes call({
+    Mutation$RunSystemRebuild$system$runSystemRebuild? runSystemRebuild,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
+      get runSystemRebuild;
+}
+
+class _CopyWithImpl$Mutation$RunSystemRebuild$system<TRes>
+    implements CopyWith$Mutation$RunSystemRebuild$system<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRebuild$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RunSystemRebuild$system _instance;
+
+  final TRes Function(Mutation$RunSystemRebuild$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? runSystemRebuild = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RunSystemRebuild$system(
+        runSystemRebuild:
+            runSystemRebuild == _undefined || runSystemRebuild == null
+                ? _instance.runSystemRebuild
+                : (runSystemRebuild
+                    as Mutation$RunSystemRebuild$system$runSystemRebuild),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
+      get runSystemRebuild {
+    final local$runSystemRebuild = _instance.runSystemRebuild;
+    return CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild(
+        local$runSystemRebuild, (e) => call(runSystemRebuild: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemRebuild$system<TRes>
+    implements CopyWith$Mutation$RunSystemRebuild$system<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRebuild$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RunSystemRebuild$system$runSystemRebuild? runSystemRebuild,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
+      get runSystemRebuild =>
+          CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild.stub(_res);
+}
+
+class Mutation$RunSystemRebuild$system$runSystemRebuild
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$RunSystemRebuild$runSystemRebuild({
+  Mutation$RunSystemRebuild$system$runSystemRebuild({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$RunSystemRebuild$runSystemRebuild.fromJson(
+  factory Mutation$RunSystemRebuild$system$runSystemRebuild.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$RunSystemRebuild$runSystemRebuild(
+    return Mutation$RunSystemRebuild$system$runSystemRebuild(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -4509,7 +4809,7 @@ class Mutation$RunSystemRebuild$runSystemRebuild
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RunSystemRebuild$runSystemRebuild) ||
+    if (!(other is Mutation$RunSystemRebuild$system$runSystemRebuild) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4537,24 +4837,27 @@ class Mutation$RunSystemRebuild$runSystemRebuild
   }
 }
 
-extension UtilityExtension$Mutation$RunSystemRebuild$runSystemRebuild
-    on Mutation$RunSystemRebuild$runSystemRebuild {
-  CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<
-          Mutation$RunSystemRebuild$runSystemRebuild>
-      get copyWith => CopyWith$Mutation$RunSystemRebuild$runSystemRebuild(
+extension UtilityExtension$Mutation$RunSystemRebuild$system$runSystemRebuild
+    on Mutation$RunSystemRebuild$system$runSystemRebuild {
+  CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild<
+          Mutation$RunSystemRebuild$system$runSystemRebuild>
+      get copyWith =>
+          CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes> {
-  factory CopyWith$Mutation$RunSystemRebuild$runSystemRebuild(
-    Mutation$RunSystemRebuild$runSystemRebuild instance,
-    TRes Function(Mutation$RunSystemRebuild$runSystemRebuild) then,
-  ) = _CopyWithImpl$Mutation$RunSystemRebuild$runSystemRebuild;
+abstract class CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild<
+    TRes> {
+  factory CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild(
+    Mutation$RunSystemRebuild$system$runSystemRebuild instance,
+    TRes Function(Mutation$RunSystemRebuild$system$runSystemRebuild) then,
+  ) = _CopyWithImpl$Mutation$RunSystemRebuild$system$runSystemRebuild;
 
-  factory CopyWith$Mutation$RunSystemRebuild$runSystemRebuild.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$RunSystemRebuild$runSystemRebuild;
+  factory CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRebuild$system$runSystemRebuild;
 
   TRes call({
     int? code,
@@ -4564,16 +4867,17 @@ abstract class CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
-    implements CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes> {
-  _CopyWithImpl$Mutation$RunSystemRebuild$runSystemRebuild(
+class _CopyWithImpl$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
+    implements
+        CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRebuild$system$runSystemRebuild(
     this._instance,
     this._then,
   );
 
-  final Mutation$RunSystemRebuild$runSystemRebuild _instance;
+  final Mutation$RunSystemRebuild$system$runSystemRebuild _instance;
 
-  final TRes Function(Mutation$RunSystemRebuild$runSystemRebuild) _then;
+  final TRes Function(Mutation$RunSystemRebuild$system$runSystemRebuild) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -4583,7 +4887,7 @@ class _CopyWithImpl$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$RunSystemRebuild$runSystemRebuild(
+      _then(Mutation$RunSystemRebuild$system$runSystemRebuild(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -4598,9 +4902,11 @@ class _CopyWithImpl$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
-    implements CopyWith$Mutation$RunSystemRebuild$runSystemRebuild<TRes> {
-  _CopyWithStubImpl$Mutation$RunSystemRebuild$runSystemRebuild(this._res);
+class _CopyWithStubImpl$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
+    implements
+        CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRebuild$system$runSystemRebuild(
+      this._res);
 
   TRes _res;
 
@@ -4615,29 +4921,28 @@ class _CopyWithStubImpl$Mutation$RunSystemRebuild$runSystemRebuild<TRes>
 
 class Mutation$RunSystemRollback {
   Mutation$RunSystemRollback({
-    required this.runSystemRollback,
+    required this.system,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$RunSystemRollback.fromJson(Map<String, dynamic> json) {
-    final l$runSystemRollback = json['runSystemRollback'];
+    final l$system = json['system'];
     final l$$__typename = json['__typename'];
     return Mutation$RunSystemRollback(
-      runSystemRollback: Mutation$RunSystemRollback$runSystemRollback.fromJson(
-          (l$runSystemRollback as Map<String, dynamic>)),
+      system: Mutation$RunSystemRollback$system.fromJson(
+          (l$system as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `system.run_system_rollback` instead')
-  final Mutation$RunSystemRollback$runSystemRollback runSystemRollback;
+  final Mutation$RunSystemRollback$system system;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$runSystemRollback = runSystemRollback;
-    _resultData['runSystemRollback'] = l$runSystemRollback.toJson();
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -4645,10 +4950,10 @@ class Mutation$RunSystemRollback {
 
   @override
   int get hashCode {
-    final l$runSystemRollback = runSystemRollback;
+    final l$system = system;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$runSystemRollback,
+      l$system,
       l$$__typename,
     ]);
   }
@@ -4662,9 +4967,9 @@ class Mutation$RunSystemRollback {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$runSystemRollback = runSystemRollback;
-    final lOther$runSystemRollback = other.runSystemRollback;
-    if (l$runSystemRollback != lOther$runSystemRollback) {
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -4695,11 +5000,10 @@ abstract class CopyWith$Mutation$RunSystemRollback<TRes> {
       _CopyWithStubImpl$Mutation$RunSystemRollback;
 
   TRes call({
-    Mutation$RunSystemRollback$runSystemRollback? runSystemRollback,
+    Mutation$RunSystemRollback$system? system,
     String? $__typename,
   });
-  CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes>
-      get runSystemRollback;
+  CopyWith$Mutation$RunSystemRollback$system<TRes> get system;
 }
 
 class _CopyWithImpl$Mutation$RunSystemRollback<TRes>
@@ -4716,25 +5020,22 @@ class _CopyWithImpl$Mutation$RunSystemRollback<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? runSystemRollback = _undefined,
+    Object? system = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$RunSystemRollback(
-        runSystemRollback:
-            runSystemRollback == _undefined || runSystemRollback == null
-                ? _instance.runSystemRollback
-                : (runSystemRollback
-                    as Mutation$RunSystemRollback$runSystemRollback),
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$RunSystemRollback$system),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes>
-      get runSystemRollback {
-    final local$runSystemRollback = _instance.runSystemRollback;
-    return CopyWith$Mutation$RunSystemRollback$runSystemRollback(
-        local$runSystemRollback, (e) => call(runSystemRollback: e));
+  CopyWith$Mutation$RunSystemRollback$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$RunSystemRollback$system(
+        local$system, (e) => call(system: e));
   }
 }
 
@@ -4745,14 +5046,13 @@ class _CopyWithStubImpl$Mutation$RunSystemRollback<TRes>
   TRes _res;
 
   call({
-    Mutation$RunSystemRollback$runSystemRollback? runSystemRollback,
+    Mutation$RunSystemRollback$system? system,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes>
-      get runSystemRollback =>
-          CopyWith$Mutation$RunSystemRollback$runSystemRollback.stub(_res);
+  CopyWith$Mutation$RunSystemRollback$system<TRes> get system =>
+      CopyWith$Mutation$RunSystemRollback$system.stub(_res);
 }
 
 const documentNodeMutationRunSystemRollback = DocumentNode(definitions: [
@@ -4763,14 +5063,29 @@ const documentNodeMutationRunSystemRollback = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'runSystemRollback'),
+        name: NameNode(value: 'system'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'runSystemRollback'),
+            alias: null,
+            arguments: [],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -4888,22 +5203,166 @@ extension ClientExtension$Mutation$RunSystemRollback on graphql.GraphQLClient {
       this.watchMutation(options ?? WatchOptions$Mutation$RunSystemRollback());
 }
 
-class Mutation$RunSystemRollback$runSystemRollback
+class Mutation$RunSystemRollback$system {
+  Mutation$RunSystemRollback$system({
+    required this.runSystemRollback,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$RunSystemRollback$system.fromJson(
+      Map<String, dynamic> json) {
+    final l$runSystemRollback = json['runSystemRollback'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RunSystemRollback$system(
+      runSystemRollback:
+          Mutation$RunSystemRollback$system$runSystemRollback.fromJson(
+              (l$runSystemRollback as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RunSystemRollback$system$runSystemRollback runSystemRollback;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$runSystemRollback = runSystemRollback;
+    _resultData['runSystemRollback'] = l$runSystemRollback.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$runSystemRollback = runSystemRollback;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$runSystemRollback,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RunSystemRollback$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$runSystemRollback = runSystemRollback;
+    final lOther$runSystemRollback = other.runSystemRollback;
+    if (l$runSystemRollback != lOther$runSystemRollback) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RunSystemRollback$system
+    on Mutation$RunSystemRollback$system {
+  CopyWith$Mutation$RunSystemRollback$system<Mutation$RunSystemRollback$system>
+      get copyWith => CopyWith$Mutation$RunSystemRollback$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RunSystemRollback$system<TRes> {
+  factory CopyWith$Mutation$RunSystemRollback$system(
+    Mutation$RunSystemRollback$system instance,
+    TRes Function(Mutation$RunSystemRollback$system) then,
+  ) = _CopyWithImpl$Mutation$RunSystemRollback$system;
+
+  factory CopyWith$Mutation$RunSystemRollback$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRollback$system;
+
+  TRes call({
+    Mutation$RunSystemRollback$system$runSystemRollback? runSystemRollback,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RunSystemRollback$system$runSystemRollback<TRes>
+      get runSystemRollback;
+}
+
+class _CopyWithImpl$Mutation$RunSystemRollback$system<TRes>
+    implements CopyWith$Mutation$RunSystemRollback$system<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRollback$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RunSystemRollback$system _instance;
+
+  final TRes Function(Mutation$RunSystemRollback$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? runSystemRollback = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RunSystemRollback$system(
+        runSystemRollback:
+            runSystemRollback == _undefined || runSystemRollback == null
+                ? _instance.runSystemRollback
+                : (runSystemRollback
+                    as Mutation$RunSystemRollback$system$runSystemRollback),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RunSystemRollback$system$runSystemRollback<TRes>
+      get runSystemRollback {
+    final local$runSystemRollback = _instance.runSystemRollback;
+    return CopyWith$Mutation$RunSystemRollback$system$runSystemRollback(
+        local$runSystemRollback, (e) => call(runSystemRollback: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemRollback$system<TRes>
+    implements CopyWith$Mutation$RunSystemRollback$system<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRollback$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RunSystemRollback$system$runSystemRollback? runSystemRollback,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RunSystemRollback$system$runSystemRollback<TRes>
+      get runSystemRollback =>
+          CopyWith$Mutation$RunSystemRollback$system$runSystemRollback.stub(
+              _res);
+}
+
+class Mutation$RunSystemRollback$system$runSystemRollback
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$RunSystemRollback$runSystemRollback({
+  Mutation$RunSystemRollback$system$runSystemRollback({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$RunSystemRollback$runSystemRollback.fromJson(
+  factory Mutation$RunSystemRollback$system$runSystemRollback.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$RunSystemRollback$runSystemRollback(
+    return Mutation$RunSystemRollback$system$runSystemRollback(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -4951,7 +5410,7 @@ class Mutation$RunSystemRollback$runSystemRollback
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RunSystemRollback$runSystemRollback) ||
+    if (!(other is Mutation$RunSystemRollback$system$runSystemRollback) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4979,24 +5438,27 @@ class Mutation$RunSystemRollback$runSystemRollback
   }
 }
 
-extension UtilityExtension$Mutation$RunSystemRollback$runSystemRollback
-    on Mutation$RunSystemRollback$runSystemRollback {
-  CopyWith$Mutation$RunSystemRollback$runSystemRollback<
-          Mutation$RunSystemRollback$runSystemRollback>
-      get copyWith => CopyWith$Mutation$RunSystemRollback$runSystemRollback(
+extension UtilityExtension$Mutation$RunSystemRollback$system$runSystemRollback
+    on Mutation$RunSystemRollback$system$runSystemRollback {
+  CopyWith$Mutation$RunSystemRollback$system$runSystemRollback<
+          Mutation$RunSystemRollback$system$runSystemRollback>
+      get copyWith =>
+          CopyWith$Mutation$RunSystemRollback$system$runSystemRollback(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes> {
-  factory CopyWith$Mutation$RunSystemRollback$runSystemRollback(
-    Mutation$RunSystemRollback$runSystemRollback instance,
-    TRes Function(Mutation$RunSystemRollback$runSystemRollback) then,
-  ) = _CopyWithImpl$Mutation$RunSystemRollback$runSystemRollback;
+abstract class CopyWith$Mutation$RunSystemRollback$system$runSystemRollback<
+    TRes> {
+  factory CopyWith$Mutation$RunSystemRollback$system$runSystemRollback(
+    Mutation$RunSystemRollback$system$runSystemRollback instance,
+    TRes Function(Mutation$RunSystemRollback$system$runSystemRollback) then,
+  ) = _CopyWithImpl$Mutation$RunSystemRollback$system$runSystemRollback;
 
-  factory CopyWith$Mutation$RunSystemRollback$runSystemRollback.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$RunSystemRollback$runSystemRollback;
+  factory CopyWith$Mutation$RunSystemRollback$system$runSystemRollback.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRollback$system$runSystemRollback;
 
   TRes call({
     int? code,
@@ -5006,16 +5468,18 @@ abstract class CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$RunSystemRollback$runSystemRollback<TRes>
-    implements CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes> {
-  _CopyWithImpl$Mutation$RunSystemRollback$runSystemRollback(
+class _CopyWithImpl$Mutation$RunSystemRollback$system$runSystemRollback<TRes>
+    implements
+        CopyWith$Mutation$RunSystemRollback$system$runSystemRollback<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRollback$system$runSystemRollback(
     this._instance,
     this._then,
   );
 
-  final Mutation$RunSystemRollback$runSystemRollback _instance;
+  final Mutation$RunSystemRollback$system$runSystemRollback _instance;
 
-  final TRes Function(Mutation$RunSystemRollback$runSystemRollback) _then;
+  final TRes Function(Mutation$RunSystemRollback$system$runSystemRollback)
+      _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -5025,7 +5489,7 @@ class _CopyWithImpl$Mutation$RunSystemRollback$runSystemRollback<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$RunSystemRollback$runSystemRollback(
+      _then(Mutation$RunSystemRollback$system$runSystemRollback(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -5040,9 +5504,12 @@ class _CopyWithImpl$Mutation$RunSystemRollback$runSystemRollback<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$RunSystemRollback$runSystemRollback<TRes>
-    implements CopyWith$Mutation$RunSystemRollback$runSystemRollback<TRes> {
-  _CopyWithStubImpl$Mutation$RunSystemRollback$runSystemRollback(this._res);
+class _CopyWithStubImpl$Mutation$RunSystemRollback$system$runSystemRollback<
+        TRes>
+    implements
+        CopyWith$Mutation$RunSystemRollback$system$runSystemRollback<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRollback$system$runSystemRollback(
+      this._res);
 
   TRes _res;
 
@@ -5057,29 +5524,28 @@ class _CopyWithStubImpl$Mutation$RunSystemRollback$runSystemRollback<TRes>
 
 class Mutation$RunSystemUpgrade {
   Mutation$RunSystemUpgrade({
-    required this.runSystemUpgrade,
+    required this.system,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$RunSystemUpgrade.fromJson(Map<String, dynamic> json) {
-    final l$runSystemUpgrade = json['runSystemUpgrade'];
+    final l$system = json['system'];
     final l$$__typename = json['__typename'];
     return Mutation$RunSystemUpgrade(
-      runSystemUpgrade: Mutation$RunSystemUpgrade$runSystemUpgrade.fromJson(
-          (l$runSystemUpgrade as Map<String, dynamic>)),
+      system: Mutation$RunSystemUpgrade$system.fromJson(
+          (l$system as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `system.run_system_upgrade` instead')
-  final Mutation$RunSystemUpgrade$runSystemUpgrade runSystemUpgrade;
+  final Mutation$RunSystemUpgrade$system system;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$runSystemUpgrade = runSystemUpgrade;
-    _resultData['runSystemUpgrade'] = l$runSystemUpgrade.toJson();
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -5087,10 +5553,10 @@ class Mutation$RunSystemUpgrade {
 
   @override
   int get hashCode {
-    final l$runSystemUpgrade = runSystemUpgrade;
+    final l$system = system;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$runSystemUpgrade,
+      l$system,
       l$$__typename,
     ]);
   }
@@ -5104,9 +5570,9 @@ class Mutation$RunSystemUpgrade {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$runSystemUpgrade = runSystemUpgrade;
-    final lOther$runSystemUpgrade = other.runSystemUpgrade;
-    if (l$runSystemUpgrade != lOther$runSystemUpgrade) {
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -5137,11 +5603,10 @@ abstract class CopyWith$Mutation$RunSystemUpgrade<TRes> {
       _CopyWithStubImpl$Mutation$RunSystemUpgrade;
 
   TRes call({
-    Mutation$RunSystemUpgrade$runSystemUpgrade? runSystemUpgrade,
+    Mutation$RunSystemUpgrade$system? system,
     String? $__typename,
   });
-  CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
-      get runSystemUpgrade;
+  CopyWith$Mutation$RunSystemUpgrade$system<TRes> get system;
 }
 
 class _CopyWithImpl$Mutation$RunSystemUpgrade<TRes>
@@ -5158,24 +5623,22 @@ class _CopyWithImpl$Mutation$RunSystemUpgrade<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? runSystemUpgrade = _undefined,
+    Object? system = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$RunSystemUpgrade(
-        runSystemUpgrade: runSystemUpgrade == _undefined ||
-                runSystemUpgrade == null
-            ? _instance.runSystemUpgrade
-            : (runSystemUpgrade as Mutation$RunSystemUpgrade$runSystemUpgrade),
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$RunSystemUpgrade$system),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
-      get runSystemUpgrade {
-    final local$runSystemUpgrade = _instance.runSystemUpgrade;
-    return CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade(
-        local$runSystemUpgrade, (e) => call(runSystemUpgrade: e));
+  CopyWith$Mutation$RunSystemUpgrade$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$RunSystemUpgrade$system(
+        local$system, (e) => call(system: e));
   }
 }
 
@@ -5186,14 +5649,13 @@ class _CopyWithStubImpl$Mutation$RunSystemUpgrade<TRes>
   TRes _res;
 
   call({
-    Mutation$RunSystemUpgrade$runSystemUpgrade? runSystemUpgrade,
+    Mutation$RunSystemUpgrade$system? system,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
-      get runSystemUpgrade =>
-          CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade.stub(_res);
+  CopyWith$Mutation$RunSystemUpgrade$system<TRes> get system =>
+      CopyWith$Mutation$RunSystemUpgrade$system.stub(_res);
 }
 
 const documentNodeMutationRunSystemUpgrade = DocumentNode(definitions: [
@@ -5204,14 +5666,29 @@ const documentNodeMutationRunSystemUpgrade = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'runSystemUpgrade'),
+        name: NameNode(value: 'system'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'runSystemUpgrade'),
+            alias: null,
+            arguments: [],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -5328,22 +5805,164 @@ extension ClientExtension$Mutation$RunSystemUpgrade on graphql.GraphQLClient {
       this.watchMutation(options ?? WatchOptions$Mutation$RunSystemUpgrade());
 }
 
-class Mutation$RunSystemUpgrade$runSystemUpgrade
+class Mutation$RunSystemUpgrade$system {
+  Mutation$RunSystemUpgrade$system({
+    required this.runSystemUpgrade,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$RunSystemUpgrade$system.fromJson(Map<String, dynamic> json) {
+    final l$runSystemUpgrade = json['runSystemUpgrade'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RunSystemUpgrade$system(
+      runSystemUpgrade:
+          Mutation$RunSystemUpgrade$system$runSystemUpgrade.fromJson(
+              (l$runSystemUpgrade as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RunSystemUpgrade$system$runSystemUpgrade runSystemUpgrade;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$runSystemUpgrade = runSystemUpgrade;
+    _resultData['runSystemUpgrade'] = l$runSystemUpgrade.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$runSystemUpgrade = runSystemUpgrade;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$runSystemUpgrade,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RunSystemUpgrade$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$runSystemUpgrade = runSystemUpgrade;
+    final lOther$runSystemUpgrade = other.runSystemUpgrade;
+    if (l$runSystemUpgrade != lOther$runSystemUpgrade) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RunSystemUpgrade$system
+    on Mutation$RunSystemUpgrade$system {
+  CopyWith$Mutation$RunSystemUpgrade$system<Mutation$RunSystemUpgrade$system>
+      get copyWith => CopyWith$Mutation$RunSystemUpgrade$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RunSystemUpgrade$system<TRes> {
+  factory CopyWith$Mutation$RunSystemUpgrade$system(
+    Mutation$RunSystemUpgrade$system instance,
+    TRes Function(Mutation$RunSystemUpgrade$system) then,
+  ) = _CopyWithImpl$Mutation$RunSystemUpgrade$system;
+
+  factory CopyWith$Mutation$RunSystemUpgrade$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemUpgrade$system;
+
+  TRes call({
+    Mutation$RunSystemUpgrade$system$runSystemUpgrade? runSystemUpgrade,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
+      get runSystemUpgrade;
+}
+
+class _CopyWithImpl$Mutation$RunSystemUpgrade$system<TRes>
+    implements CopyWith$Mutation$RunSystemUpgrade$system<TRes> {
+  _CopyWithImpl$Mutation$RunSystemUpgrade$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RunSystemUpgrade$system _instance;
+
+  final TRes Function(Mutation$RunSystemUpgrade$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? runSystemUpgrade = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RunSystemUpgrade$system(
+        runSystemUpgrade:
+            runSystemUpgrade == _undefined || runSystemUpgrade == null
+                ? _instance.runSystemUpgrade
+                : (runSystemUpgrade
+                    as Mutation$RunSystemUpgrade$system$runSystemUpgrade),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
+      get runSystemUpgrade {
+    final local$runSystemUpgrade = _instance.runSystemUpgrade;
+    return CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade(
+        local$runSystemUpgrade, (e) => call(runSystemUpgrade: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemUpgrade$system<TRes>
+    implements CopyWith$Mutation$RunSystemUpgrade$system<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemUpgrade$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RunSystemUpgrade$system$runSystemUpgrade? runSystemUpgrade,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
+      get runSystemUpgrade =>
+          CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade.stub(_res);
+}
+
+class Mutation$RunSystemUpgrade$system$runSystemUpgrade
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$RunSystemUpgrade$runSystemUpgrade({
+  Mutation$RunSystemUpgrade$system$runSystemUpgrade({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$RunSystemUpgrade$runSystemUpgrade.fromJson(
+  factory Mutation$RunSystemUpgrade$system$runSystemUpgrade.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$RunSystemUpgrade$runSystemUpgrade(
+    return Mutation$RunSystemUpgrade$system$runSystemUpgrade(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -5391,7 +6010,7 @@ class Mutation$RunSystemUpgrade$runSystemUpgrade
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RunSystemUpgrade$runSystemUpgrade) ||
+    if (!(other is Mutation$RunSystemUpgrade$system$runSystemUpgrade) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5419,24 +6038,27 @@ class Mutation$RunSystemUpgrade$runSystemUpgrade
   }
 }
 
-extension UtilityExtension$Mutation$RunSystemUpgrade$runSystemUpgrade
-    on Mutation$RunSystemUpgrade$runSystemUpgrade {
-  CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<
-          Mutation$RunSystemUpgrade$runSystemUpgrade>
-      get copyWith => CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade(
+extension UtilityExtension$Mutation$RunSystemUpgrade$system$runSystemUpgrade
+    on Mutation$RunSystemUpgrade$system$runSystemUpgrade {
+  CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade<
+          Mutation$RunSystemUpgrade$system$runSystemUpgrade>
+      get copyWith =>
+          CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes> {
-  factory CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade(
-    Mutation$RunSystemUpgrade$runSystemUpgrade instance,
-    TRes Function(Mutation$RunSystemUpgrade$runSystemUpgrade) then,
-  ) = _CopyWithImpl$Mutation$RunSystemUpgrade$runSystemUpgrade;
+abstract class CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade<
+    TRes> {
+  factory CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade(
+    Mutation$RunSystemUpgrade$system$runSystemUpgrade instance,
+    TRes Function(Mutation$RunSystemUpgrade$system$runSystemUpgrade) then,
+  ) = _CopyWithImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade;
 
-  factory CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$RunSystemUpgrade$runSystemUpgrade;
+  factory CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade;
 
   TRes call({
     int? code,
@@ -5446,16 +6068,17 @@ abstract class CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
-    implements CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes> {
-  _CopyWithImpl$Mutation$RunSystemUpgrade$runSystemUpgrade(
+class _CopyWithImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
+    implements
+        CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes> {
+  _CopyWithImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade(
     this._instance,
     this._then,
   );
 
-  final Mutation$RunSystemUpgrade$runSystemUpgrade _instance;
+  final Mutation$RunSystemUpgrade$system$runSystemUpgrade _instance;
 
-  final TRes Function(Mutation$RunSystemUpgrade$runSystemUpgrade) _then;
+  final TRes Function(Mutation$RunSystemUpgrade$system$runSystemUpgrade) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -5465,7 +6088,7 @@ class _CopyWithImpl$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$RunSystemUpgrade$runSystemUpgrade(
+      _then(Mutation$RunSystemUpgrade$system$runSystemUpgrade(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -5480,9 +6103,11 @@ class _CopyWithImpl$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
-    implements CopyWith$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes> {
-  _CopyWithStubImpl$Mutation$RunSystemUpgrade$runSystemUpgrade(this._res);
+class _CopyWithStubImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
+    implements
+        CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade(
+      this._res);
 
   TRes _res;
 
@@ -5497,31 +6122,28 @@ class _CopyWithStubImpl$Mutation$RunSystemUpgrade$runSystemUpgrade<TRes>
 
 class Mutation$PullRepositoryChanges {
   Mutation$PullRepositoryChanges({
-    required this.pullRepositoryChanges,
+    required this.system,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$PullRepositoryChanges.fromJson(Map<String, dynamic> json) {
-    final l$pullRepositoryChanges = json['pullRepositoryChanges'];
+    final l$system = json['system'];
     final l$$__typename = json['__typename'];
     return Mutation$PullRepositoryChanges(
-      pullRepositoryChanges:
-          Mutation$PullRepositoryChanges$pullRepositoryChanges.fromJson(
-              (l$pullRepositoryChanges as Map<String, dynamic>)),
+      system: Mutation$PullRepositoryChanges$system.fromJson(
+          (l$system as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `system.pull_repository_changes` instead')
-  final Mutation$PullRepositoryChanges$pullRepositoryChanges
-      pullRepositoryChanges;
+  final Mutation$PullRepositoryChanges$system system;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$pullRepositoryChanges = pullRepositoryChanges;
-    _resultData['pullRepositoryChanges'] = l$pullRepositoryChanges.toJson();
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -5529,10 +6151,10 @@ class Mutation$PullRepositoryChanges {
 
   @override
   int get hashCode {
-    final l$pullRepositoryChanges = pullRepositoryChanges;
+    final l$system = system;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$pullRepositoryChanges,
+      l$system,
       l$$__typename,
     ]);
   }
@@ -5546,9 +6168,9 @@ class Mutation$PullRepositoryChanges {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$pullRepositoryChanges = pullRepositoryChanges;
-    final lOther$pullRepositoryChanges = other.pullRepositoryChanges;
-    if (l$pullRepositoryChanges != lOther$pullRepositoryChanges) {
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -5579,11 +6201,10 @@ abstract class CopyWith$Mutation$PullRepositoryChanges<TRes> {
       _CopyWithStubImpl$Mutation$PullRepositoryChanges;
 
   TRes call({
-    Mutation$PullRepositoryChanges$pullRepositoryChanges? pullRepositoryChanges,
+    Mutation$PullRepositoryChanges$system? system,
     String? $__typename,
   });
-  CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
-      get pullRepositoryChanges;
+  CopyWith$Mutation$PullRepositoryChanges$system<TRes> get system;
 }
 
 class _CopyWithImpl$Mutation$PullRepositoryChanges<TRes>
@@ -5600,25 +6221,22 @@ class _CopyWithImpl$Mutation$PullRepositoryChanges<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? pullRepositoryChanges = _undefined,
+    Object? system = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$PullRepositoryChanges(
-        pullRepositoryChanges:
-            pullRepositoryChanges == _undefined || pullRepositoryChanges == null
-                ? _instance.pullRepositoryChanges
-                : (pullRepositoryChanges
-                    as Mutation$PullRepositoryChanges$pullRepositoryChanges),
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$PullRepositoryChanges$system),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
-      get pullRepositoryChanges {
-    final local$pullRepositoryChanges = _instance.pullRepositoryChanges;
-    return CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges(
-        local$pullRepositoryChanges, (e) => call(pullRepositoryChanges: e));
+  CopyWith$Mutation$PullRepositoryChanges$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$PullRepositoryChanges$system(
+        local$system, (e) => call(system: e));
   }
 }
 
@@ -5629,15 +6247,13 @@ class _CopyWithStubImpl$Mutation$PullRepositoryChanges<TRes>
   TRes _res;
 
   call({
-    Mutation$PullRepositoryChanges$pullRepositoryChanges? pullRepositoryChanges,
+    Mutation$PullRepositoryChanges$system? system,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
-      get pullRepositoryChanges =>
-          CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges.stub(
-              _res);
+  CopyWith$Mutation$PullRepositoryChanges$system<TRes> get system =>
+      CopyWith$Mutation$PullRepositoryChanges$system.stub(_res);
 }
 
 const documentNodeMutationPullRepositoryChanges = DocumentNode(definitions: [
@@ -5648,14 +6264,29 @@ const documentNodeMutationPullRepositoryChanges = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'pullRepositoryChanges'),
+        name: NameNode(value: 'system'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'pullRepositoryChanges'),
+            alias: null,
+            arguments: [],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -5777,22 +6408,170 @@ extension ClientExtension$Mutation$PullRepositoryChanges
               options ?? WatchOptions$Mutation$PullRepositoryChanges());
 }
 
-class Mutation$PullRepositoryChanges$pullRepositoryChanges
+class Mutation$PullRepositoryChanges$system {
+  Mutation$PullRepositoryChanges$system({
+    required this.pullRepositoryChanges,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$PullRepositoryChanges$system.fromJson(
+      Map<String, dynamic> json) {
+    final l$pullRepositoryChanges = json['pullRepositoryChanges'];
+    final l$$__typename = json['__typename'];
+    return Mutation$PullRepositoryChanges$system(
+      pullRepositoryChanges:
+          Mutation$PullRepositoryChanges$system$pullRepositoryChanges.fromJson(
+              (l$pullRepositoryChanges as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$PullRepositoryChanges$system$pullRepositoryChanges
+      pullRepositoryChanges;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$pullRepositoryChanges = pullRepositoryChanges;
+    _resultData['pullRepositoryChanges'] = l$pullRepositoryChanges.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$pullRepositoryChanges = pullRepositoryChanges;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$pullRepositoryChanges,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$PullRepositoryChanges$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$pullRepositoryChanges = pullRepositoryChanges;
+    final lOther$pullRepositoryChanges = other.pullRepositoryChanges;
+    if (l$pullRepositoryChanges != lOther$pullRepositoryChanges) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$PullRepositoryChanges$system
+    on Mutation$PullRepositoryChanges$system {
+  CopyWith$Mutation$PullRepositoryChanges$system<
+          Mutation$PullRepositoryChanges$system>
+      get copyWith => CopyWith$Mutation$PullRepositoryChanges$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$PullRepositoryChanges$system<TRes> {
+  factory CopyWith$Mutation$PullRepositoryChanges$system(
+    Mutation$PullRepositoryChanges$system instance,
+    TRes Function(Mutation$PullRepositoryChanges$system) then,
+  ) = _CopyWithImpl$Mutation$PullRepositoryChanges$system;
+
+  factory CopyWith$Mutation$PullRepositoryChanges$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$PullRepositoryChanges$system;
+
+  TRes call({
+    Mutation$PullRepositoryChanges$system$pullRepositoryChanges?
+        pullRepositoryChanges,
+    String? $__typename,
+  });
+  CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges<TRes>
+      get pullRepositoryChanges;
+}
+
+class _CopyWithImpl$Mutation$PullRepositoryChanges$system<TRes>
+    implements CopyWith$Mutation$PullRepositoryChanges$system<TRes> {
+  _CopyWithImpl$Mutation$PullRepositoryChanges$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$PullRepositoryChanges$system _instance;
+
+  final TRes Function(Mutation$PullRepositoryChanges$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? pullRepositoryChanges = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$PullRepositoryChanges$system(
+        pullRepositoryChanges: pullRepositoryChanges == _undefined ||
+                pullRepositoryChanges == null
+            ? _instance.pullRepositoryChanges
+            : (pullRepositoryChanges
+                as Mutation$PullRepositoryChanges$system$pullRepositoryChanges),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges<TRes>
+      get pullRepositoryChanges {
+    final local$pullRepositoryChanges = _instance.pullRepositoryChanges;
+    return CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges(
+        local$pullRepositoryChanges, (e) => call(pullRepositoryChanges: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$PullRepositoryChanges$system<TRes>
+    implements CopyWith$Mutation$PullRepositoryChanges$system<TRes> {
+  _CopyWithStubImpl$Mutation$PullRepositoryChanges$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$PullRepositoryChanges$system$pullRepositoryChanges?
+        pullRepositoryChanges,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges<TRes>
+      get pullRepositoryChanges =>
+          CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges
+              .stub(_res);
+}
+
+class Mutation$PullRepositoryChanges$system$pullRepositoryChanges
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$PullRepositoryChanges$pullRepositoryChanges({
+  Mutation$PullRepositoryChanges$system$pullRepositoryChanges({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$PullRepositoryChanges$pullRepositoryChanges.fromJson(
+  factory Mutation$PullRepositoryChanges$system$pullRepositoryChanges.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$PullRepositoryChanges$pullRepositoryChanges(
+    return Mutation$PullRepositoryChanges$system$pullRepositoryChanges(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -5840,7 +6619,8 @@ class Mutation$PullRepositoryChanges$pullRepositoryChanges
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$PullRepositoryChanges$pullRepositoryChanges) ||
+    if (!(other
+            is Mutation$PullRepositoryChanges$system$pullRepositoryChanges) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5868,27 +6648,28 @@ class Mutation$PullRepositoryChanges$pullRepositoryChanges
   }
 }
 
-extension UtilityExtension$Mutation$PullRepositoryChanges$pullRepositoryChanges
-    on Mutation$PullRepositoryChanges$pullRepositoryChanges {
-  CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<
-          Mutation$PullRepositoryChanges$pullRepositoryChanges>
+extension UtilityExtension$Mutation$PullRepositoryChanges$system$pullRepositoryChanges
+    on Mutation$PullRepositoryChanges$system$pullRepositoryChanges {
+  CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges<
+          Mutation$PullRepositoryChanges$system$pullRepositoryChanges>
       get copyWith =>
-          CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges(
+          CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<
+abstract class CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges<
     TRes> {
-  factory CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges(
-    Mutation$PullRepositoryChanges$pullRepositoryChanges instance,
-    TRes Function(Mutation$PullRepositoryChanges$pullRepositoryChanges) then,
-  ) = _CopyWithImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges;
+  factory CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges(
+    Mutation$PullRepositoryChanges$system$pullRepositoryChanges instance,
+    TRes Function(Mutation$PullRepositoryChanges$system$pullRepositoryChanges)
+        then,
+  ) = _CopyWithImpl$Mutation$PullRepositoryChanges$system$pullRepositoryChanges;
 
-  factory CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges.stub(
+  factory CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges.stub(
           TRes res) =
-      _CopyWithStubImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges;
+      _CopyWithStubImpl$Mutation$PullRepositoryChanges$system$pullRepositoryChanges;
 
   TRes call({
     int? code,
@@ -5898,18 +6679,20 @@ abstract class CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<
   });
 }
 
-class _CopyWithImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
+class _CopyWithImpl$Mutation$PullRepositoryChanges$system$pullRepositoryChanges<
+        TRes>
     implements
-        CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes> {
-  _CopyWithImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges(
+        CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges<
+            TRes> {
+  _CopyWithImpl$Mutation$PullRepositoryChanges$system$pullRepositoryChanges(
     this._instance,
     this._then,
   );
 
-  final Mutation$PullRepositoryChanges$pullRepositoryChanges _instance;
+  final Mutation$PullRepositoryChanges$system$pullRepositoryChanges _instance;
 
-  final TRes Function(Mutation$PullRepositoryChanges$pullRepositoryChanges)
-      _then;
+  final TRes Function(
+      Mutation$PullRepositoryChanges$system$pullRepositoryChanges) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -5919,7 +6702,7 @@ class _CopyWithImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$PullRepositoryChanges$pullRepositoryChanges(
+      _then(Mutation$PullRepositoryChanges$system$pullRepositoryChanges(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -5934,11 +6717,12 @@ class _CopyWithImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges<
+class _CopyWithStubImpl$Mutation$PullRepositoryChanges$system$pullRepositoryChanges<
         TRes>
     implements
-        CopyWith$Mutation$PullRepositoryChanges$pullRepositoryChanges<TRes> {
-  _CopyWithStubImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges(
+        CopyWith$Mutation$PullRepositoryChanges$system$pullRepositoryChanges<
+            TRes> {
+  _CopyWithStubImpl$Mutation$PullRepositoryChanges$system$pullRepositoryChanges(
       this._res);
 
   TRes _res;
@@ -5954,29 +6738,28 @@ class _CopyWithStubImpl$Mutation$PullRepositoryChanges$pullRepositoryChanges<
 
 class Mutation$RebootSystem {
   Mutation$RebootSystem({
-    required this.rebootSystem,
+    required this.system,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$RebootSystem.fromJson(Map<String, dynamic> json) {
-    final l$rebootSystem = json['rebootSystem'];
+    final l$system = json['system'];
     final l$$__typename = json['__typename'];
     return Mutation$RebootSystem(
-      rebootSystem: Mutation$RebootSystem$rebootSystem.fromJson(
-          (l$rebootSystem as Map<String, dynamic>)),
+      system: Mutation$RebootSystem$system.fromJson(
+          (l$system as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `system.reboot_system` instead')
-  final Mutation$RebootSystem$rebootSystem rebootSystem;
+  final Mutation$RebootSystem$system system;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$rebootSystem = rebootSystem;
-    _resultData['rebootSystem'] = l$rebootSystem.toJson();
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -5984,10 +6767,10 @@ class Mutation$RebootSystem {
 
   @override
   int get hashCode {
-    final l$rebootSystem = rebootSystem;
+    final l$system = system;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$rebootSystem,
+      l$system,
       l$$__typename,
     ]);
   }
@@ -6000,9 +6783,9 @@ class Mutation$RebootSystem {
     if (!(other is Mutation$RebootSystem) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$rebootSystem = rebootSystem;
-    final lOther$rebootSystem = other.rebootSystem;
-    if (l$rebootSystem != lOther$rebootSystem) {
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -6032,10 +6815,10 @@ abstract class CopyWith$Mutation$RebootSystem<TRes> {
       _CopyWithStubImpl$Mutation$RebootSystem;
 
   TRes call({
-    Mutation$RebootSystem$rebootSystem? rebootSystem,
+    Mutation$RebootSystem$system? system,
     String? $__typename,
   });
-  CopyWith$Mutation$RebootSystem$rebootSystem<TRes> get rebootSystem;
+  CopyWith$Mutation$RebootSystem$system<TRes> get system;
 }
 
 class _CopyWithImpl$Mutation$RebootSystem<TRes>
@@ -6052,22 +6835,22 @@ class _CopyWithImpl$Mutation$RebootSystem<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? rebootSystem = _undefined,
+    Object? system = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$RebootSystem(
-        rebootSystem: rebootSystem == _undefined || rebootSystem == null
-            ? _instance.rebootSystem
-            : (rebootSystem as Mutation$RebootSystem$rebootSystem),
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$RebootSystem$system),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$RebootSystem$rebootSystem<TRes> get rebootSystem {
-    final local$rebootSystem = _instance.rebootSystem;
-    return CopyWith$Mutation$RebootSystem$rebootSystem(
-        local$rebootSystem, (e) => call(rebootSystem: e));
+  CopyWith$Mutation$RebootSystem$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$RebootSystem$system(
+        local$system, (e) => call(system: e));
   }
 }
 
@@ -6078,13 +6861,13 @@ class _CopyWithStubImpl$Mutation$RebootSystem<TRes>
   TRes _res;
 
   call({
-    Mutation$RebootSystem$rebootSystem? rebootSystem,
+    Mutation$RebootSystem$system? system,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$RebootSystem$rebootSystem<TRes> get rebootSystem =>
-      CopyWith$Mutation$RebootSystem$rebootSystem.stub(_res);
+  CopyWith$Mutation$RebootSystem$system<TRes> get system =>
+      CopyWith$Mutation$RebootSystem$system.stub(_res);
 }
 
 const documentNodeMutationRebootSystem = DocumentNode(definitions: [
@@ -6095,14 +6878,29 @@ const documentNodeMutationRebootSystem = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'rebootSystem'),
+        name: NameNode(value: 'system'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'rebootSystem'),
+            alias: null,
+            arguments: [],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -6215,22 +7013,158 @@ extension ClientExtension$Mutation$RebootSystem on graphql.GraphQLClient {
       this.watchMutation(options ?? WatchOptions$Mutation$RebootSystem());
 }
 
-class Mutation$RebootSystem$rebootSystem
+class Mutation$RebootSystem$system {
+  Mutation$RebootSystem$system({
+    required this.rebootSystem,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$RebootSystem$system.fromJson(Map<String, dynamic> json) {
+    final l$rebootSystem = json['rebootSystem'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RebootSystem$system(
+      rebootSystem: Mutation$RebootSystem$system$rebootSystem.fromJson(
+          (l$rebootSystem as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RebootSystem$system$rebootSystem rebootSystem;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$rebootSystem = rebootSystem;
+    _resultData['rebootSystem'] = l$rebootSystem.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$rebootSystem = rebootSystem;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$rebootSystem,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RebootSystem$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$rebootSystem = rebootSystem;
+    final lOther$rebootSystem = other.rebootSystem;
+    if (l$rebootSystem != lOther$rebootSystem) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RebootSystem$system
+    on Mutation$RebootSystem$system {
+  CopyWith$Mutation$RebootSystem$system<Mutation$RebootSystem$system>
+      get copyWith => CopyWith$Mutation$RebootSystem$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RebootSystem$system<TRes> {
+  factory CopyWith$Mutation$RebootSystem$system(
+    Mutation$RebootSystem$system instance,
+    TRes Function(Mutation$RebootSystem$system) then,
+  ) = _CopyWithImpl$Mutation$RebootSystem$system;
+
+  factory CopyWith$Mutation$RebootSystem$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RebootSystem$system;
+
+  TRes call({
+    Mutation$RebootSystem$system$rebootSystem? rebootSystem,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RebootSystem$system$rebootSystem<TRes> get rebootSystem;
+}
+
+class _CopyWithImpl$Mutation$RebootSystem$system<TRes>
+    implements CopyWith$Mutation$RebootSystem$system<TRes> {
+  _CopyWithImpl$Mutation$RebootSystem$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RebootSystem$system _instance;
+
+  final TRes Function(Mutation$RebootSystem$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? rebootSystem = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RebootSystem$system(
+        rebootSystem: rebootSystem == _undefined || rebootSystem == null
+            ? _instance.rebootSystem
+            : (rebootSystem as Mutation$RebootSystem$system$rebootSystem),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RebootSystem$system$rebootSystem<TRes> get rebootSystem {
+    final local$rebootSystem = _instance.rebootSystem;
+    return CopyWith$Mutation$RebootSystem$system$rebootSystem(
+        local$rebootSystem, (e) => call(rebootSystem: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RebootSystem$system<TRes>
+    implements CopyWith$Mutation$RebootSystem$system<TRes> {
+  _CopyWithStubImpl$Mutation$RebootSystem$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RebootSystem$system$rebootSystem? rebootSystem,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RebootSystem$system$rebootSystem<TRes> get rebootSystem =>
+      CopyWith$Mutation$RebootSystem$system$rebootSystem.stub(_res);
+}
+
+class Mutation$RebootSystem$system$rebootSystem
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$RebootSystem$rebootSystem({
+  Mutation$RebootSystem$system$rebootSystem({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$RebootSystem$rebootSystem.fromJson(
+  factory Mutation$RebootSystem$system$rebootSystem.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$RebootSystem$rebootSystem(
+    return Mutation$RebootSystem$system$rebootSystem(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -6278,7 +7212,7 @@ class Mutation$RebootSystem$rebootSystem
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RebootSystem$rebootSystem) ||
+    if (!(other is Mutation$RebootSystem$system$rebootSystem) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6306,24 +7240,24 @@ class Mutation$RebootSystem$rebootSystem
   }
 }
 
-extension UtilityExtension$Mutation$RebootSystem$rebootSystem
-    on Mutation$RebootSystem$rebootSystem {
-  CopyWith$Mutation$RebootSystem$rebootSystem<
-          Mutation$RebootSystem$rebootSystem>
-      get copyWith => CopyWith$Mutation$RebootSystem$rebootSystem(
+extension UtilityExtension$Mutation$RebootSystem$system$rebootSystem
+    on Mutation$RebootSystem$system$rebootSystem {
+  CopyWith$Mutation$RebootSystem$system$rebootSystem<
+          Mutation$RebootSystem$system$rebootSystem>
+      get copyWith => CopyWith$Mutation$RebootSystem$system$rebootSystem(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$RebootSystem$rebootSystem<TRes> {
-  factory CopyWith$Mutation$RebootSystem$rebootSystem(
-    Mutation$RebootSystem$rebootSystem instance,
-    TRes Function(Mutation$RebootSystem$rebootSystem) then,
-  ) = _CopyWithImpl$Mutation$RebootSystem$rebootSystem;
+abstract class CopyWith$Mutation$RebootSystem$system$rebootSystem<TRes> {
+  factory CopyWith$Mutation$RebootSystem$system$rebootSystem(
+    Mutation$RebootSystem$system$rebootSystem instance,
+    TRes Function(Mutation$RebootSystem$system$rebootSystem) then,
+  ) = _CopyWithImpl$Mutation$RebootSystem$system$rebootSystem;
 
-  factory CopyWith$Mutation$RebootSystem$rebootSystem.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$RebootSystem$rebootSystem;
+  factory CopyWith$Mutation$RebootSystem$system$rebootSystem.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RebootSystem$system$rebootSystem;
 
   TRes call({
     int? code,
@@ -6333,16 +7267,16 @@ abstract class CopyWith$Mutation$RebootSystem$rebootSystem<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$RebootSystem$rebootSystem<TRes>
-    implements CopyWith$Mutation$RebootSystem$rebootSystem<TRes> {
-  _CopyWithImpl$Mutation$RebootSystem$rebootSystem(
+class _CopyWithImpl$Mutation$RebootSystem$system$rebootSystem<TRes>
+    implements CopyWith$Mutation$RebootSystem$system$rebootSystem<TRes> {
+  _CopyWithImpl$Mutation$RebootSystem$system$rebootSystem(
     this._instance,
     this._then,
   );
 
-  final Mutation$RebootSystem$rebootSystem _instance;
+  final Mutation$RebootSystem$system$rebootSystem _instance;
 
-  final TRes Function(Mutation$RebootSystem$rebootSystem) _then;
+  final TRes Function(Mutation$RebootSystem$system$rebootSystem) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -6352,7 +7286,7 @@ class _CopyWithImpl$Mutation$RebootSystem$rebootSystem<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$RebootSystem$rebootSystem(
+      _then(Mutation$RebootSystem$system$rebootSystem(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -6367,9 +7301,9 @@ class _CopyWithImpl$Mutation$RebootSystem$rebootSystem<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$RebootSystem$rebootSystem<TRes>
-    implements CopyWith$Mutation$RebootSystem$rebootSystem<TRes> {
-  _CopyWithStubImpl$Mutation$RebootSystem$rebootSystem(this._res);
+class _CopyWithStubImpl$Mutation$RebootSystem$system$rebootSystem<TRes>
+    implements CopyWith$Mutation$RebootSystem$system$rebootSystem<TRes> {
+  _CopyWithStubImpl$Mutation$RebootSystem$system$rebootSystem(this._res);
 
   TRes _res;
 
@@ -8965,30 +9899,28 @@ class _CopyWithStubImpl$Variables$Mutation$GetNewRecoveryApiKey<TRes>
 
 class Mutation$GetNewRecoveryApiKey {
   Mutation$GetNewRecoveryApiKey({
-    required this.getNewRecoveryApiKey,
+    required this.api,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$GetNewRecoveryApiKey.fromJson(Map<String, dynamic> json) {
-    final l$getNewRecoveryApiKey = json['getNewRecoveryApiKey'];
+    final l$api = json['api'];
     final l$$__typename = json['__typename'];
     return Mutation$GetNewRecoveryApiKey(
-      getNewRecoveryApiKey:
-          Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey.fromJson(
-              (l$getNewRecoveryApiKey as Map<String, dynamic>)),
+      api: Mutation$GetNewRecoveryApiKey$api.fromJson(
+          (l$api as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `api.get_new_recovery_api_key` instead')
-  final Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey getNewRecoveryApiKey;
+  final Mutation$GetNewRecoveryApiKey$api api;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$getNewRecoveryApiKey = getNewRecoveryApiKey;
-    _resultData['getNewRecoveryApiKey'] = l$getNewRecoveryApiKey.toJson();
+    final l$api = api;
+    _resultData['api'] = l$api.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -8996,10 +9928,10 @@ class Mutation$GetNewRecoveryApiKey {
 
   @override
   int get hashCode {
-    final l$getNewRecoveryApiKey = getNewRecoveryApiKey;
+    final l$api = api;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$getNewRecoveryApiKey,
+      l$api,
       l$$__typename,
     ]);
   }
@@ -9013,9 +9945,9 @@ class Mutation$GetNewRecoveryApiKey {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$getNewRecoveryApiKey = getNewRecoveryApiKey;
-    final lOther$getNewRecoveryApiKey = other.getNewRecoveryApiKey;
-    if (l$getNewRecoveryApiKey != lOther$getNewRecoveryApiKey) {
+    final l$api = api;
+    final lOther$api = other.api;
+    if (l$api != lOther$api) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -9046,11 +9978,10 @@ abstract class CopyWith$Mutation$GetNewRecoveryApiKey<TRes> {
       _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey;
 
   TRes call({
-    Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey? getNewRecoveryApiKey,
+    Mutation$GetNewRecoveryApiKey$api? api,
     String? $__typename,
   });
-  CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
-      get getNewRecoveryApiKey;
+  CopyWith$Mutation$GetNewRecoveryApiKey$api<TRes> get api;
 }
 
 class _CopyWithImpl$Mutation$GetNewRecoveryApiKey<TRes>
@@ -9067,25 +9998,22 @@ class _CopyWithImpl$Mutation$GetNewRecoveryApiKey<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? getNewRecoveryApiKey = _undefined,
+    Object? api = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$GetNewRecoveryApiKey(
-        getNewRecoveryApiKey:
-            getNewRecoveryApiKey == _undefined || getNewRecoveryApiKey == null
-                ? _instance.getNewRecoveryApiKey
-                : (getNewRecoveryApiKey
-                    as Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey),
+        api: api == _undefined || api == null
+            ? _instance.api
+            : (api as Mutation$GetNewRecoveryApiKey$api),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
-      get getNewRecoveryApiKey {
-    final local$getNewRecoveryApiKey = _instance.getNewRecoveryApiKey;
-    return CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
-        local$getNewRecoveryApiKey, (e) => call(getNewRecoveryApiKey: e));
+  CopyWith$Mutation$GetNewRecoveryApiKey$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Mutation$GetNewRecoveryApiKey$api(
+        local$api, (e) => call(api: e));
   }
 }
 
@@ -9096,15 +10024,13 @@ class _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey<TRes>
   TRes _res;
 
   call({
-    Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey? getNewRecoveryApiKey,
+    Mutation$GetNewRecoveryApiKey$api? api,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
-      get getNewRecoveryApiKey =>
-          CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey.stub(
-              _res);
+  CopyWith$Mutation$GetNewRecoveryApiKey$api<TRes> get api =>
+      CopyWith$Mutation$GetNewRecoveryApiKey$api.stub(_res);
 }
 
 const documentNodeMutationGetNewRecoveryApiKey = DocumentNode(definitions: [
@@ -9125,26 +10051,41 @@ const documentNodeMutationGetNewRecoveryApiKey = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'getNewRecoveryApiKey'),
+        name: NameNode(value: 'api'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'limits'),
-            value: VariableNode(name: NameNode(value: 'limits')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'key'),
+            name: NameNode(value: 'getNewRecoveryApiKey'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'limits'),
+                value: VariableNode(name: NameNode(value: 'limits')),
+              )
+            ],
             directives: [],
-            selectionSet: null,
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'key'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -9269,9 +10210,156 @@ extension ClientExtension$Mutation$GetNewRecoveryApiKey
               options ?? WatchOptions$Mutation$GetNewRecoveryApiKey());
 }
 
-class Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey
+class Mutation$GetNewRecoveryApiKey$api {
+  Mutation$GetNewRecoveryApiKey$api({
+    required this.getNewRecoveryApiKey,
+    this.$__typename = 'ApiMutations',
+  });
+
+  factory Mutation$GetNewRecoveryApiKey$api.fromJson(
+      Map<String, dynamic> json) {
+    final l$getNewRecoveryApiKey = json['getNewRecoveryApiKey'];
+    final l$$__typename = json['__typename'];
+    return Mutation$GetNewRecoveryApiKey$api(
+      getNewRecoveryApiKey:
+          Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey.fromJson(
+              (l$getNewRecoveryApiKey as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey
+      getNewRecoveryApiKey;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$getNewRecoveryApiKey = getNewRecoveryApiKey;
+    _resultData['getNewRecoveryApiKey'] = l$getNewRecoveryApiKey.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$getNewRecoveryApiKey = getNewRecoveryApiKey;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$getNewRecoveryApiKey,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$GetNewRecoveryApiKey$api) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$getNewRecoveryApiKey = getNewRecoveryApiKey;
+    final lOther$getNewRecoveryApiKey = other.getNewRecoveryApiKey;
+    if (l$getNewRecoveryApiKey != lOther$getNewRecoveryApiKey) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$GetNewRecoveryApiKey$api
+    on Mutation$GetNewRecoveryApiKey$api {
+  CopyWith$Mutation$GetNewRecoveryApiKey$api<Mutation$GetNewRecoveryApiKey$api>
+      get copyWith => CopyWith$Mutation$GetNewRecoveryApiKey$api(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$GetNewRecoveryApiKey$api<TRes> {
+  factory CopyWith$Mutation$GetNewRecoveryApiKey$api(
+    Mutation$GetNewRecoveryApiKey$api instance,
+    TRes Function(Mutation$GetNewRecoveryApiKey$api) then,
+  ) = _CopyWithImpl$Mutation$GetNewRecoveryApiKey$api;
+
+  factory CopyWith$Mutation$GetNewRecoveryApiKey$api.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$api;
+
+  TRes call({
+    Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey?
+        getNewRecoveryApiKey,
+    String? $__typename,
+  });
+  CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey<TRes>
+      get getNewRecoveryApiKey;
+}
+
+class _CopyWithImpl$Mutation$GetNewRecoveryApiKey$api<TRes>
+    implements CopyWith$Mutation$GetNewRecoveryApiKey$api<TRes> {
+  _CopyWithImpl$Mutation$GetNewRecoveryApiKey$api(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$GetNewRecoveryApiKey$api _instance;
+
+  final TRes Function(Mutation$GetNewRecoveryApiKey$api) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? getNewRecoveryApiKey = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$GetNewRecoveryApiKey$api(
+        getNewRecoveryApiKey:
+            getNewRecoveryApiKey == _undefined || getNewRecoveryApiKey == null
+                ? _instance.getNewRecoveryApiKey
+                : (getNewRecoveryApiKey
+                    as Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey<TRes>
+      get getNewRecoveryApiKey {
+    final local$getNewRecoveryApiKey = _instance.getNewRecoveryApiKey;
+    return CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey(
+        local$getNewRecoveryApiKey, (e) => call(getNewRecoveryApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$api<TRes>
+    implements CopyWith$Mutation$GetNewRecoveryApiKey$api<TRes> {
+  _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$api(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey?
+        getNewRecoveryApiKey,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey<TRes>
+      get getNewRecoveryApiKey =>
+          CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey.stub(
+              _res);
+}
+
+class Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey
     implements Fragment$basicMutationReturnFields$$ApiKeyMutationReturn {
-  Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey({
+  Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey({
     required this.code,
     required this.message,
     required this.success,
@@ -9279,14 +10367,14 @@ class Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey
     this.key,
   });
 
-  factory Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey.fromJson(
+  factory Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$key = json['key'];
-    return Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+    return Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -9341,7 +10429,7 @@ class Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey) ||
+    if (!(other is Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -9374,27 +10462,27 @@ class Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey
   }
 }
 
-extension UtilityExtension$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey
-    on Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey {
-  CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<
-          Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey>
+extension UtilityExtension$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey
+    on Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey {
+  CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey<
+          Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey>
       get copyWith =>
-          CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+          CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<
+abstract class CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey<
     TRes> {
-  factory CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
-    Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey instance,
-    TRes Function(Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey) then,
-  ) = _CopyWithImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey;
+  factory CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey(
+    Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey instance,
+    TRes Function(Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey) then,
+  ) = _CopyWithImpl$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey;
 
-  factory CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey.stub(
+  factory CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey.stub(
           TRes res) =
-      _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey;
+      _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey;
 
   TRes call({
     int? code,
@@ -9405,17 +10493,18 @@ abstract class CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<
   });
 }
 
-class _CopyWithImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
+class _CopyWithImpl$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey<TRes>
     implements
-        CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes> {
-  _CopyWithImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+        CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey<TRes> {
+  _CopyWithImpl$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey(
     this._instance,
     this._then,
   );
 
-  final Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey _instance;
+  final Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey _instance;
 
-  final TRes Function(Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey) _then;
+  final TRes Function(Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey)
+      _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -9426,7 +10515,7 @@ class _CopyWithImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
     Object? $__typename = _undefined,
     Object? key = _undefined,
   }) =>
-      _then(Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+      _then(Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -9442,10 +10531,11 @@ class _CopyWithImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes>
+class _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey<
+        TRes>
     implements
-        CopyWith$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey<TRes> {
-  _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$getNewRecoveryApiKey(
+        CopyWith$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$GetNewRecoveryApiKey$api$getNewRecoveryApiKey(
       this._res);
 
   TRes _res;
@@ -9565,29 +10655,28 @@ class _CopyWithStubImpl$Variables$Mutation$UseRecoveryApiKey<TRes>
 
 class Mutation$UseRecoveryApiKey {
   Mutation$UseRecoveryApiKey({
-    required this.useRecoveryApiKey,
+    required this.api,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$UseRecoveryApiKey.fromJson(Map<String, dynamic> json) {
-    final l$useRecoveryApiKey = json['useRecoveryApiKey'];
+    final l$api = json['api'];
     final l$$__typename = json['__typename'];
     return Mutation$UseRecoveryApiKey(
-      useRecoveryApiKey: Mutation$UseRecoveryApiKey$useRecoveryApiKey.fromJson(
-          (l$useRecoveryApiKey as Map<String, dynamic>)),
+      api: Mutation$UseRecoveryApiKey$api.fromJson(
+          (l$api as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `api.use_recovery_api_key` instead')
-  final Mutation$UseRecoveryApiKey$useRecoveryApiKey useRecoveryApiKey;
+  final Mutation$UseRecoveryApiKey$api api;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$useRecoveryApiKey = useRecoveryApiKey;
-    _resultData['useRecoveryApiKey'] = l$useRecoveryApiKey.toJson();
+    final l$api = api;
+    _resultData['api'] = l$api.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -9595,10 +10684,10 @@ class Mutation$UseRecoveryApiKey {
 
   @override
   int get hashCode {
-    final l$useRecoveryApiKey = useRecoveryApiKey;
+    final l$api = api;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$useRecoveryApiKey,
+      l$api,
       l$$__typename,
     ]);
   }
@@ -9612,9 +10701,9 @@ class Mutation$UseRecoveryApiKey {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$useRecoveryApiKey = useRecoveryApiKey;
-    final lOther$useRecoveryApiKey = other.useRecoveryApiKey;
-    if (l$useRecoveryApiKey != lOther$useRecoveryApiKey) {
+    final l$api = api;
+    final lOther$api = other.api;
+    if (l$api != lOther$api) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -9645,11 +10734,10 @@ abstract class CopyWith$Mutation$UseRecoveryApiKey<TRes> {
       _CopyWithStubImpl$Mutation$UseRecoveryApiKey;
 
   TRes call({
-    Mutation$UseRecoveryApiKey$useRecoveryApiKey? useRecoveryApiKey,
+    Mutation$UseRecoveryApiKey$api? api,
     String? $__typename,
   });
-  CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
-      get useRecoveryApiKey;
+  CopyWith$Mutation$UseRecoveryApiKey$api<TRes> get api;
 }
 
 class _CopyWithImpl$Mutation$UseRecoveryApiKey<TRes>
@@ -9666,25 +10754,22 @@ class _CopyWithImpl$Mutation$UseRecoveryApiKey<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? useRecoveryApiKey = _undefined,
+    Object? api = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$UseRecoveryApiKey(
-        useRecoveryApiKey:
-            useRecoveryApiKey == _undefined || useRecoveryApiKey == null
-                ? _instance.useRecoveryApiKey
-                : (useRecoveryApiKey
-                    as Mutation$UseRecoveryApiKey$useRecoveryApiKey),
+        api: api == _undefined || api == null
+            ? _instance.api
+            : (api as Mutation$UseRecoveryApiKey$api),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
-      get useRecoveryApiKey {
-    final local$useRecoveryApiKey = _instance.useRecoveryApiKey;
-    return CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey(
-        local$useRecoveryApiKey, (e) => call(useRecoveryApiKey: e));
+  CopyWith$Mutation$UseRecoveryApiKey$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Mutation$UseRecoveryApiKey$api(
+        local$api, (e) => call(api: e));
   }
 }
 
@@ -9695,14 +10780,13 @@ class _CopyWithStubImpl$Mutation$UseRecoveryApiKey<TRes>
   TRes _res;
 
   call({
-    Mutation$UseRecoveryApiKey$useRecoveryApiKey? useRecoveryApiKey,
+    Mutation$UseRecoveryApiKey$api? api,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
-      get useRecoveryApiKey =>
-          CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey.stub(_res);
+  CopyWith$Mutation$UseRecoveryApiKey$api<TRes> get api =>
+      CopyWith$Mutation$UseRecoveryApiKey$api.stub(_res);
 }
 
 const documentNodeMutationUseRecoveryApiKey = DocumentNode(definitions: [
@@ -9723,26 +10807,41 @@ const documentNodeMutationUseRecoveryApiKey = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'useRecoveryApiKey'),
+        name: NameNode(value: 'api'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'input'),
-            value: VariableNode(name: NameNode(value: 'input')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'token'),
+            name: NameNode(value: 'useRecoveryApiKey'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'input'),
+                value: VariableNode(name: NameNode(value: 'input')),
+              )
+            ],
             directives: [],
-            selectionSet: null,
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'token'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -9864,10 +10963,152 @@ extension ClientExtension$Mutation$UseRecoveryApiKey on graphql.GraphQLClient {
           this.watchMutation(options);
 }
 
-class Mutation$UseRecoveryApiKey$useRecoveryApiKey
+class Mutation$UseRecoveryApiKey$api {
+  Mutation$UseRecoveryApiKey$api({
+    required this.useRecoveryApiKey,
+    this.$__typename = 'ApiMutations',
+  });
+
+  factory Mutation$UseRecoveryApiKey$api.fromJson(Map<String, dynamic> json) {
+    final l$useRecoveryApiKey = json['useRecoveryApiKey'];
+    final l$$__typename = json['__typename'];
+    return Mutation$UseRecoveryApiKey$api(
+      useRecoveryApiKey:
+          Mutation$UseRecoveryApiKey$api$useRecoveryApiKey.fromJson(
+              (l$useRecoveryApiKey as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$UseRecoveryApiKey$api$useRecoveryApiKey useRecoveryApiKey;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$useRecoveryApiKey = useRecoveryApiKey;
+    _resultData['useRecoveryApiKey'] = l$useRecoveryApiKey.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$useRecoveryApiKey = useRecoveryApiKey;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$useRecoveryApiKey,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$UseRecoveryApiKey$api) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$useRecoveryApiKey = useRecoveryApiKey;
+    final lOther$useRecoveryApiKey = other.useRecoveryApiKey;
+    if (l$useRecoveryApiKey != lOther$useRecoveryApiKey) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$UseRecoveryApiKey$api
+    on Mutation$UseRecoveryApiKey$api {
+  CopyWith$Mutation$UseRecoveryApiKey$api<Mutation$UseRecoveryApiKey$api>
+      get copyWith => CopyWith$Mutation$UseRecoveryApiKey$api(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$UseRecoveryApiKey$api<TRes> {
+  factory CopyWith$Mutation$UseRecoveryApiKey$api(
+    Mutation$UseRecoveryApiKey$api instance,
+    TRes Function(Mutation$UseRecoveryApiKey$api) then,
+  ) = _CopyWithImpl$Mutation$UseRecoveryApiKey$api;
+
+  factory CopyWith$Mutation$UseRecoveryApiKey$api.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UseRecoveryApiKey$api;
+
+  TRes call({
+    Mutation$UseRecoveryApiKey$api$useRecoveryApiKey? useRecoveryApiKey,
+    String? $__typename,
+  });
+  CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey<TRes>
+      get useRecoveryApiKey;
+}
+
+class _CopyWithImpl$Mutation$UseRecoveryApiKey$api<TRes>
+    implements CopyWith$Mutation$UseRecoveryApiKey$api<TRes> {
+  _CopyWithImpl$Mutation$UseRecoveryApiKey$api(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$UseRecoveryApiKey$api _instance;
+
+  final TRes Function(Mutation$UseRecoveryApiKey$api) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? useRecoveryApiKey = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$UseRecoveryApiKey$api(
+        useRecoveryApiKey:
+            useRecoveryApiKey == _undefined || useRecoveryApiKey == null
+                ? _instance.useRecoveryApiKey
+                : (useRecoveryApiKey
+                    as Mutation$UseRecoveryApiKey$api$useRecoveryApiKey),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey<TRes>
+      get useRecoveryApiKey {
+    final local$useRecoveryApiKey = _instance.useRecoveryApiKey;
+    return CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey(
+        local$useRecoveryApiKey, (e) => call(useRecoveryApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$UseRecoveryApiKey$api<TRes>
+    implements CopyWith$Mutation$UseRecoveryApiKey$api<TRes> {
+  _CopyWithStubImpl$Mutation$UseRecoveryApiKey$api(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$UseRecoveryApiKey$api$useRecoveryApiKey? useRecoveryApiKey,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey<TRes>
+      get useRecoveryApiKey =>
+          CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey.stub(_res);
+}
+
+class Mutation$UseRecoveryApiKey$api$useRecoveryApiKey
     implements
         Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn {
-  Mutation$UseRecoveryApiKey$useRecoveryApiKey({
+  Mutation$UseRecoveryApiKey$api$useRecoveryApiKey({
     required this.code,
     required this.message,
     required this.success,
@@ -9875,14 +11116,14 @@ class Mutation$UseRecoveryApiKey$useRecoveryApiKey
     this.token,
   });
 
-  factory Mutation$UseRecoveryApiKey$useRecoveryApiKey.fromJson(
+  factory Mutation$UseRecoveryApiKey$api$useRecoveryApiKey.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$token = json['token'];
-    return Mutation$UseRecoveryApiKey$useRecoveryApiKey(
+    return Mutation$UseRecoveryApiKey$api$useRecoveryApiKey(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -9937,7 +11178,7 @@ class Mutation$UseRecoveryApiKey$useRecoveryApiKey
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$UseRecoveryApiKey$useRecoveryApiKey) ||
+    if (!(other is Mutation$UseRecoveryApiKey$api$useRecoveryApiKey) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -9970,24 +11211,25 @@ class Mutation$UseRecoveryApiKey$useRecoveryApiKey
   }
 }
 
-extension UtilityExtension$Mutation$UseRecoveryApiKey$useRecoveryApiKey
-    on Mutation$UseRecoveryApiKey$useRecoveryApiKey {
-  CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<
-          Mutation$UseRecoveryApiKey$useRecoveryApiKey>
-      get copyWith => CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey(
+extension UtilityExtension$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey
+    on Mutation$UseRecoveryApiKey$api$useRecoveryApiKey {
+  CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey<
+          Mutation$UseRecoveryApiKey$api$useRecoveryApiKey>
+      get copyWith => CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes> {
-  factory CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey(
-    Mutation$UseRecoveryApiKey$useRecoveryApiKey instance,
-    TRes Function(Mutation$UseRecoveryApiKey$useRecoveryApiKey) then,
-  ) = _CopyWithImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey;
+abstract class CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey<TRes> {
+  factory CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey(
+    Mutation$UseRecoveryApiKey$api$useRecoveryApiKey instance,
+    TRes Function(Mutation$UseRecoveryApiKey$api$useRecoveryApiKey) then,
+  ) = _CopyWithImpl$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey;
 
-  factory CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey;
+  factory CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey;
 
   TRes call({
     int? code,
@@ -9998,16 +11240,16 @@ abstract class CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
-    implements CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes> {
-  _CopyWithImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey(
+class _CopyWithImpl$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey<TRes>
+    implements CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey<TRes> {
+  _CopyWithImpl$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey(
     this._instance,
     this._then,
   );
 
-  final Mutation$UseRecoveryApiKey$useRecoveryApiKey _instance;
+  final Mutation$UseRecoveryApiKey$api$useRecoveryApiKey _instance;
 
-  final TRes Function(Mutation$UseRecoveryApiKey$useRecoveryApiKey) _then;
+  final TRes Function(Mutation$UseRecoveryApiKey$api$useRecoveryApiKey) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -10018,7 +11260,7 @@ class _CopyWithImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
     Object? $__typename = _undefined,
     Object? token = _undefined,
   }) =>
-      _then(Mutation$UseRecoveryApiKey$useRecoveryApiKey(
+      _then(Mutation$UseRecoveryApiKey$api$useRecoveryApiKey(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -10034,9 +11276,9 @@ class _CopyWithImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
-    implements CopyWith$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes> {
-  _CopyWithStubImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey(this._res);
+class _CopyWithStubImpl$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey<TRes>
+    implements CopyWith$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$UseRecoveryApiKey$api$useRecoveryApiKey(this._res);
 
   TRes _res;
 
@@ -10052,31 +11294,28 @@ class _CopyWithStubImpl$Mutation$UseRecoveryApiKey$useRecoveryApiKey<TRes>
 
 class Mutation$RefreshDeviceApiToken {
   Mutation$RefreshDeviceApiToken({
-    required this.refreshDeviceApiToken,
+    required this.api,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$RefreshDeviceApiToken.fromJson(Map<String, dynamic> json) {
-    final l$refreshDeviceApiToken = json['refreshDeviceApiToken'];
+    final l$api = json['api'];
     final l$$__typename = json['__typename'];
     return Mutation$RefreshDeviceApiToken(
-      refreshDeviceApiToken:
-          Mutation$RefreshDeviceApiToken$refreshDeviceApiToken.fromJson(
-              (l$refreshDeviceApiToken as Map<String, dynamic>)),
+      api: Mutation$RefreshDeviceApiToken$api.fromJson(
+          (l$api as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `api.refresh_device_api_token` instead')
-  final Mutation$RefreshDeviceApiToken$refreshDeviceApiToken
-      refreshDeviceApiToken;
+  final Mutation$RefreshDeviceApiToken$api api;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$refreshDeviceApiToken = refreshDeviceApiToken;
-    _resultData['refreshDeviceApiToken'] = l$refreshDeviceApiToken.toJson();
+    final l$api = api;
+    _resultData['api'] = l$api.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -10084,10 +11323,10 @@ class Mutation$RefreshDeviceApiToken {
 
   @override
   int get hashCode {
-    final l$refreshDeviceApiToken = refreshDeviceApiToken;
+    final l$api = api;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$refreshDeviceApiToken,
+      l$api,
       l$$__typename,
     ]);
   }
@@ -10101,9 +11340,9 @@ class Mutation$RefreshDeviceApiToken {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$refreshDeviceApiToken = refreshDeviceApiToken;
-    final lOther$refreshDeviceApiToken = other.refreshDeviceApiToken;
-    if (l$refreshDeviceApiToken != lOther$refreshDeviceApiToken) {
+    final l$api = api;
+    final lOther$api = other.api;
+    if (l$api != lOther$api) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -10134,11 +11373,10 @@ abstract class CopyWith$Mutation$RefreshDeviceApiToken<TRes> {
       _CopyWithStubImpl$Mutation$RefreshDeviceApiToken;
 
   TRes call({
-    Mutation$RefreshDeviceApiToken$refreshDeviceApiToken? refreshDeviceApiToken,
+    Mutation$RefreshDeviceApiToken$api? api,
     String? $__typename,
   });
-  CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
-      get refreshDeviceApiToken;
+  CopyWith$Mutation$RefreshDeviceApiToken$api<TRes> get api;
 }
 
 class _CopyWithImpl$Mutation$RefreshDeviceApiToken<TRes>
@@ -10155,25 +11393,22 @@ class _CopyWithImpl$Mutation$RefreshDeviceApiToken<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? refreshDeviceApiToken = _undefined,
+    Object? api = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$RefreshDeviceApiToken(
-        refreshDeviceApiToken:
-            refreshDeviceApiToken == _undefined || refreshDeviceApiToken == null
-                ? _instance.refreshDeviceApiToken
-                : (refreshDeviceApiToken
-                    as Mutation$RefreshDeviceApiToken$refreshDeviceApiToken),
+        api: api == _undefined || api == null
+            ? _instance.api
+            : (api as Mutation$RefreshDeviceApiToken$api),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
-      get refreshDeviceApiToken {
-    final local$refreshDeviceApiToken = _instance.refreshDeviceApiToken;
-    return CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
-        local$refreshDeviceApiToken, (e) => call(refreshDeviceApiToken: e));
+  CopyWith$Mutation$RefreshDeviceApiToken$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Mutation$RefreshDeviceApiToken$api(
+        local$api, (e) => call(api: e));
   }
 }
 
@@ -10184,15 +11419,13 @@ class _CopyWithStubImpl$Mutation$RefreshDeviceApiToken<TRes>
   TRes _res;
 
   call({
-    Mutation$RefreshDeviceApiToken$refreshDeviceApiToken? refreshDeviceApiToken,
+    Mutation$RefreshDeviceApiToken$api? api,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
-      get refreshDeviceApiToken =>
-          CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken.stub(
-              _res);
+  CopyWith$Mutation$RefreshDeviceApiToken$api<TRes> get api =>
+      CopyWith$Mutation$RefreshDeviceApiToken$api.stub(_res);
 }
 
 const documentNodeMutationRefreshDeviceApiToken = DocumentNode(definitions: [
@@ -10203,21 +11436,36 @@ const documentNodeMutationRefreshDeviceApiToken = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'refreshDeviceApiToken'),
+        name: NameNode(value: 'api'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'token'),
+            name: NameNode(value: 'refreshDeviceApiToken'),
             alias: null,
             arguments: [],
             directives: [],
-            selectionSet: null,
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'token'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -10339,10 +11587,158 @@ extension ClientExtension$Mutation$RefreshDeviceApiToken
               options ?? WatchOptions$Mutation$RefreshDeviceApiToken());
 }
 
-class Mutation$RefreshDeviceApiToken$refreshDeviceApiToken
+class Mutation$RefreshDeviceApiToken$api {
+  Mutation$RefreshDeviceApiToken$api({
+    required this.refreshDeviceApiToken,
+    this.$__typename = 'ApiMutations',
+  });
+
+  factory Mutation$RefreshDeviceApiToken$api.fromJson(
+      Map<String, dynamic> json) {
+    final l$refreshDeviceApiToken = json['refreshDeviceApiToken'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RefreshDeviceApiToken$api(
+      refreshDeviceApiToken:
+          Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken.fromJson(
+              (l$refreshDeviceApiToken as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken
+      refreshDeviceApiToken;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$refreshDeviceApiToken = refreshDeviceApiToken;
+    _resultData['refreshDeviceApiToken'] = l$refreshDeviceApiToken.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$refreshDeviceApiToken = refreshDeviceApiToken;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$refreshDeviceApiToken,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RefreshDeviceApiToken$api) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$refreshDeviceApiToken = refreshDeviceApiToken;
+    final lOther$refreshDeviceApiToken = other.refreshDeviceApiToken;
+    if (l$refreshDeviceApiToken != lOther$refreshDeviceApiToken) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RefreshDeviceApiToken$api
+    on Mutation$RefreshDeviceApiToken$api {
+  CopyWith$Mutation$RefreshDeviceApiToken$api<
+          Mutation$RefreshDeviceApiToken$api>
+      get copyWith => CopyWith$Mutation$RefreshDeviceApiToken$api(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RefreshDeviceApiToken$api<TRes> {
+  factory CopyWith$Mutation$RefreshDeviceApiToken$api(
+    Mutation$RefreshDeviceApiToken$api instance,
+    TRes Function(Mutation$RefreshDeviceApiToken$api) then,
+  ) = _CopyWithImpl$Mutation$RefreshDeviceApiToken$api;
+
+  factory CopyWith$Mutation$RefreshDeviceApiToken$api.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$api;
+
+  TRes call({
+    Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken?
+        refreshDeviceApiToken,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken<TRes>
+      get refreshDeviceApiToken;
+}
+
+class _CopyWithImpl$Mutation$RefreshDeviceApiToken$api<TRes>
+    implements CopyWith$Mutation$RefreshDeviceApiToken$api<TRes> {
+  _CopyWithImpl$Mutation$RefreshDeviceApiToken$api(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RefreshDeviceApiToken$api _instance;
+
+  final TRes Function(Mutation$RefreshDeviceApiToken$api) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? refreshDeviceApiToken = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RefreshDeviceApiToken$api(
+        refreshDeviceApiToken: refreshDeviceApiToken == _undefined ||
+                refreshDeviceApiToken == null
+            ? _instance.refreshDeviceApiToken
+            : (refreshDeviceApiToken
+                as Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken<TRes>
+      get refreshDeviceApiToken {
+    final local$refreshDeviceApiToken = _instance.refreshDeviceApiToken;
+    return CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken(
+        local$refreshDeviceApiToken, (e) => call(refreshDeviceApiToken: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$api<TRes>
+    implements CopyWith$Mutation$RefreshDeviceApiToken$api<TRes> {
+  _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$api(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken?
+        refreshDeviceApiToken,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken<TRes>
+      get refreshDeviceApiToken =>
+          CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken
+              .stub(_res);
+}
+
+class Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken
     implements
         Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn {
-  Mutation$RefreshDeviceApiToken$refreshDeviceApiToken({
+  Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken({
     required this.code,
     required this.message,
     required this.success,
@@ -10350,14 +11746,14 @@ class Mutation$RefreshDeviceApiToken$refreshDeviceApiToken
     this.token,
   });
 
-  factory Mutation$RefreshDeviceApiToken$refreshDeviceApiToken.fromJson(
+  factory Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$token = json['token'];
-    return Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+    return Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -10412,7 +11808,7 @@ class Mutation$RefreshDeviceApiToken$refreshDeviceApiToken
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RefreshDeviceApiToken$refreshDeviceApiToken) ||
+    if (!(other is Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -10445,27 +11841,28 @@ class Mutation$RefreshDeviceApiToken$refreshDeviceApiToken
   }
 }
 
-extension UtilityExtension$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken
-    on Mutation$RefreshDeviceApiToken$refreshDeviceApiToken {
-  CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<
-          Mutation$RefreshDeviceApiToken$refreshDeviceApiToken>
+extension UtilityExtension$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken
+    on Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken {
+  CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken<
+          Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken>
       get copyWith =>
-          CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+          CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<
+abstract class CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken<
     TRes> {
-  factory CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
-    Mutation$RefreshDeviceApiToken$refreshDeviceApiToken instance,
-    TRes Function(Mutation$RefreshDeviceApiToken$refreshDeviceApiToken) then,
-  ) = _CopyWithImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken;
+  factory CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken(
+    Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken instance,
+    TRes Function(Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken)
+        then,
+  ) = _CopyWithImpl$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken;
 
-  factory CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken.stub(
+  factory CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken.stub(
           TRes res) =
-      _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken;
+      _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken;
 
   TRes call({
     int? code,
@@ -10476,17 +11873,19 @@ abstract class CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<
   });
 }
 
-class _CopyWithImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
+class _CopyWithImpl$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken<
+        TRes>
     implements
-        CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes> {
-  _CopyWithImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+        CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken<
+            TRes> {
+  _CopyWithImpl$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken(
     this._instance,
     this._then,
   );
 
-  final Mutation$RefreshDeviceApiToken$refreshDeviceApiToken _instance;
+  final Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken _instance;
 
-  final TRes Function(Mutation$RefreshDeviceApiToken$refreshDeviceApiToken)
+  final TRes Function(Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken)
       _then;
 
   static const _undefined = <dynamic, dynamic>{};
@@ -10498,7 +11897,7 @@ class _CopyWithImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
     Object? $__typename = _undefined,
     Object? token = _undefined,
   }) =>
-      _then(Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+      _then(Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -10514,11 +11913,12 @@ class _CopyWithImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<
+class _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken<
         TRes>
     implements
-        CopyWith$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken<TRes> {
-  _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$refreshDeviceApiToken(
+        CopyWith$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken<
+            TRes> {
+  _CopyWithStubImpl$Mutation$RefreshDeviceApiToken$api$refreshDeviceApiToken(
       this._res);
 
   TRes _res;
@@ -10635,30 +12035,28 @@ class _CopyWithStubImpl$Variables$Mutation$DeleteDeviceApiToken<TRes>
 
 class Mutation$DeleteDeviceApiToken {
   Mutation$DeleteDeviceApiToken({
-    required this.deleteDeviceApiToken,
+    required this.api,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$DeleteDeviceApiToken.fromJson(Map<String, dynamic> json) {
-    final l$deleteDeviceApiToken = json['deleteDeviceApiToken'];
+    final l$api = json['api'];
     final l$$__typename = json['__typename'];
     return Mutation$DeleteDeviceApiToken(
-      deleteDeviceApiToken:
-          Mutation$DeleteDeviceApiToken$deleteDeviceApiToken.fromJson(
-              (l$deleteDeviceApiToken as Map<String, dynamic>)),
+      api: Mutation$DeleteDeviceApiToken$api.fromJson(
+          (l$api as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `api.delete_device_api_token` instead')
-  final Mutation$DeleteDeviceApiToken$deleteDeviceApiToken deleteDeviceApiToken;
+  final Mutation$DeleteDeviceApiToken$api api;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$deleteDeviceApiToken = deleteDeviceApiToken;
-    _resultData['deleteDeviceApiToken'] = l$deleteDeviceApiToken.toJson();
+    final l$api = api;
+    _resultData['api'] = l$api.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -10666,10 +12064,10 @@ class Mutation$DeleteDeviceApiToken {
 
   @override
   int get hashCode {
-    final l$deleteDeviceApiToken = deleteDeviceApiToken;
+    final l$api = api;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$deleteDeviceApiToken,
+      l$api,
       l$$__typename,
     ]);
   }
@@ -10683,9 +12081,9 @@ class Mutation$DeleteDeviceApiToken {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$deleteDeviceApiToken = deleteDeviceApiToken;
-    final lOther$deleteDeviceApiToken = other.deleteDeviceApiToken;
-    if (l$deleteDeviceApiToken != lOther$deleteDeviceApiToken) {
+    final l$api = api;
+    final lOther$api = other.api;
+    if (l$api != lOther$api) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -10716,11 +12114,10 @@ abstract class CopyWith$Mutation$DeleteDeviceApiToken<TRes> {
       _CopyWithStubImpl$Mutation$DeleteDeviceApiToken;
 
   TRes call({
-    Mutation$DeleteDeviceApiToken$deleteDeviceApiToken? deleteDeviceApiToken,
+    Mutation$DeleteDeviceApiToken$api? api,
     String? $__typename,
   });
-  CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
-      get deleteDeviceApiToken;
+  CopyWith$Mutation$DeleteDeviceApiToken$api<TRes> get api;
 }
 
 class _CopyWithImpl$Mutation$DeleteDeviceApiToken<TRes>
@@ -10737,25 +12134,22 @@ class _CopyWithImpl$Mutation$DeleteDeviceApiToken<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? deleteDeviceApiToken = _undefined,
+    Object? api = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$DeleteDeviceApiToken(
-        deleteDeviceApiToken:
-            deleteDeviceApiToken == _undefined || deleteDeviceApiToken == null
-                ? _instance.deleteDeviceApiToken
-                : (deleteDeviceApiToken
-                    as Mutation$DeleteDeviceApiToken$deleteDeviceApiToken),
+        api: api == _undefined || api == null
+            ? _instance.api
+            : (api as Mutation$DeleteDeviceApiToken$api),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
-      get deleteDeviceApiToken {
-    final local$deleteDeviceApiToken = _instance.deleteDeviceApiToken;
-    return CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
-        local$deleteDeviceApiToken, (e) => call(deleteDeviceApiToken: e));
+  CopyWith$Mutation$DeleteDeviceApiToken$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Mutation$DeleteDeviceApiToken$api(
+        local$api, (e) => call(api: e));
   }
 }
 
@@ -10766,15 +12160,13 @@ class _CopyWithStubImpl$Mutation$DeleteDeviceApiToken<TRes>
   TRes _res;
 
   call({
-    Mutation$DeleteDeviceApiToken$deleteDeviceApiToken? deleteDeviceApiToken,
+    Mutation$DeleteDeviceApiToken$api? api,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
-      get deleteDeviceApiToken =>
-          CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken.stub(
-              _res);
+  CopyWith$Mutation$DeleteDeviceApiToken$api<TRes> get api =>
+      CopyWith$Mutation$DeleteDeviceApiToken$api.stub(_res);
 }
 
 const documentNodeMutationDeleteDeviceApiToken = DocumentNode(definitions: [
@@ -10795,19 +12187,34 @@ const documentNodeMutationDeleteDeviceApiToken = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'deleteDeviceApiToken'),
+        name: NameNode(value: 'api'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'device'),
-            value: VariableNode(name: NameNode(value: 'device')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'deleteDeviceApiToken'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'device'),
+                value: VariableNode(name: NameNode(value: 'device')),
+              )
+            ],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -10931,22 +12338,169 @@ extension ClientExtension$Mutation$DeleteDeviceApiToken
           this.watchMutation(options);
 }
 
-class Mutation$DeleteDeviceApiToken$deleteDeviceApiToken
+class Mutation$DeleteDeviceApiToken$api {
+  Mutation$DeleteDeviceApiToken$api({
+    required this.deleteDeviceApiToken,
+    this.$__typename = 'ApiMutations',
+  });
+
+  factory Mutation$DeleteDeviceApiToken$api.fromJson(
+      Map<String, dynamic> json) {
+    final l$deleteDeviceApiToken = json['deleteDeviceApiToken'];
+    final l$$__typename = json['__typename'];
+    return Mutation$DeleteDeviceApiToken$api(
+      deleteDeviceApiToken:
+          Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken.fromJson(
+              (l$deleteDeviceApiToken as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken
+      deleteDeviceApiToken;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$deleteDeviceApiToken = deleteDeviceApiToken;
+    _resultData['deleteDeviceApiToken'] = l$deleteDeviceApiToken.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$deleteDeviceApiToken = deleteDeviceApiToken;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$deleteDeviceApiToken,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$DeleteDeviceApiToken$api) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$deleteDeviceApiToken = deleteDeviceApiToken;
+    final lOther$deleteDeviceApiToken = other.deleteDeviceApiToken;
+    if (l$deleteDeviceApiToken != lOther$deleteDeviceApiToken) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$DeleteDeviceApiToken$api
+    on Mutation$DeleteDeviceApiToken$api {
+  CopyWith$Mutation$DeleteDeviceApiToken$api<Mutation$DeleteDeviceApiToken$api>
+      get copyWith => CopyWith$Mutation$DeleteDeviceApiToken$api(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$DeleteDeviceApiToken$api<TRes> {
+  factory CopyWith$Mutation$DeleteDeviceApiToken$api(
+    Mutation$DeleteDeviceApiToken$api instance,
+    TRes Function(Mutation$DeleteDeviceApiToken$api) then,
+  ) = _CopyWithImpl$Mutation$DeleteDeviceApiToken$api;
+
+  factory CopyWith$Mutation$DeleteDeviceApiToken$api.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$api;
+
+  TRes call({
+    Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken?
+        deleteDeviceApiToken,
+    String? $__typename,
+  });
+  CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken<TRes>
+      get deleteDeviceApiToken;
+}
+
+class _CopyWithImpl$Mutation$DeleteDeviceApiToken$api<TRes>
+    implements CopyWith$Mutation$DeleteDeviceApiToken$api<TRes> {
+  _CopyWithImpl$Mutation$DeleteDeviceApiToken$api(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$DeleteDeviceApiToken$api _instance;
+
+  final TRes Function(Mutation$DeleteDeviceApiToken$api) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? deleteDeviceApiToken = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$DeleteDeviceApiToken$api(
+        deleteDeviceApiToken:
+            deleteDeviceApiToken == _undefined || deleteDeviceApiToken == null
+                ? _instance.deleteDeviceApiToken
+                : (deleteDeviceApiToken
+                    as Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken<TRes>
+      get deleteDeviceApiToken {
+    final local$deleteDeviceApiToken = _instance.deleteDeviceApiToken;
+    return CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken(
+        local$deleteDeviceApiToken, (e) => call(deleteDeviceApiToken: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$api<TRes>
+    implements CopyWith$Mutation$DeleteDeviceApiToken$api<TRes> {
+  _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$api(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken?
+        deleteDeviceApiToken,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken<TRes>
+      get deleteDeviceApiToken =>
+          CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken.stub(
+              _res);
+}
+
+class Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$DeleteDeviceApiToken$deleteDeviceApiToken({
+  Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$DeleteDeviceApiToken$deleteDeviceApiToken.fromJson(
+  factory Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+    return Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -10994,7 +12548,7 @@ class Mutation$DeleteDeviceApiToken$deleteDeviceApiToken
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$DeleteDeviceApiToken$deleteDeviceApiToken) ||
+    if (!(other is Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -11022,27 +12576,27 @@ class Mutation$DeleteDeviceApiToken$deleteDeviceApiToken
   }
 }
 
-extension UtilityExtension$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken
-    on Mutation$DeleteDeviceApiToken$deleteDeviceApiToken {
-  CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<
-          Mutation$DeleteDeviceApiToken$deleteDeviceApiToken>
+extension UtilityExtension$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken
+    on Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken {
+  CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken<
+          Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken>
       get copyWith =>
-          CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+          CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<
+abstract class CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken<
     TRes> {
-  factory CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
-    Mutation$DeleteDeviceApiToken$deleteDeviceApiToken instance,
-    TRes Function(Mutation$DeleteDeviceApiToken$deleteDeviceApiToken) then,
-  ) = _CopyWithImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken;
+  factory CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken(
+    Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken instance,
+    TRes Function(Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken) then,
+  ) = _CopyWithImpl$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken;
 
-  factory CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken.stub(
+  factory CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken.stub(
           TRes res) =
-      _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken;
+      _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken;
 
   TRes call({
     int? code,
@@ -11052,17 +12606,18 @@ abstract class CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<
   });
 }
 
-class _CopyWithImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
+class _CopyWithImpl$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken<TRes>
     implements
-        CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes> {
-  _CopyWithImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+        CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken<TRes> {
+  _CopyWithImpl$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken(
     this._instance,
     this._then,
   );
 
-  final Mutation$DeleteDeviceApiToken$deleteDeviceApiToken _instance;
+  final Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken _instance;
 
-  final TRes Function(Mutation$DeleteDeviceApiToken$deleteDeviceApiToken) _then;
+  final TRes Function(Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken)
+      _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -11072,7 +12627,7 @@ class _CopyWithImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+      _then(Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -11087,10 +12642,11 @@ class _CopyWithImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
+class _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken<
+        TRes>
     implements
-        CopyWith$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes> {
-  _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken(
+        CopyWith$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken<TRes> {
+  _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$api$deleteDeviceApiToken(
       this._res);
 
   TRes _res;
@@ -11106,30 +12662,28 @@ class _CopyWithStubImpl$Mutation$DeleteDeviceApiToken$deleteDeviceApiToken<TRes>
 
 class Mutation$GetNewDeviceApiKey {
   Mutation$GetNewDeviceApiKey({
-    required this.getNewDeviceApiKey,
+    required this.api,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$GetNewDeviceApiKey.fromJson(Map<String, dynamic> json) {
-    final l$getNewDeviceApiKey = json['getNewDeviceApiKey'];
+    final l$api = json['api'];
     final l$$__typename = json['__typename'];
     return Mutation$GetNewDeviceApiKey(
-      getNewDeviceApiKey:
-          Mutation$GetNewDeviceApiKey$getNewDeviceApiKey.fromJson(
-              (l$getNewDeviceApiKey as Map<String, dynamic>)),
+      api: Mutation$GetNewDeviceApiKey$api.fromJson(
+          (l$api as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `api.get_new_device_api_key` instead')
-  final Mutation$GetNewDeviceApiKey$getNewDeviceApiKey getNewDeviceApiKey;
+  final Mutation$GetNewDeviceApiKey$api api;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$getNewDeviceApiKey = getNewDeviceApiKey;
-    _resultData['getNewDeviceApiKey'] = l$getNewDeviceApiKey.toJson();
+    final l$api = api;
+    _resultData['api'] = l$api.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -11137,10 +12691,10 @@ class Mutation$GetNewDeviceApiKey {
 
   @override
   int get hashCode {
-    final l$getNewDeviceApiKey = getNewDeviceApiKey;
+    final l$api = api;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$getNewDeviceApiKey,
+      l$api,
       l$$__typename,
     ]);
   }
@@ -11154,9 +12708,9 @@ class Mutation$GetNewDeviceApiKey {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$getNewDeviceApiKey = getNewDeviceApiKey;
-    final lOther$getNewDeviceApiKey = other.getNewDeviceApiKey;
-    if (l$getNewDeviceApiKey != lOther$getNewDeviceApiKey) {
+    final l$api = api;
+    final lOther$api = other.api;
+    if (l$api != lOther$api) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -11187,11 +12741,10 @@ abstract class CopyWith$Mutation$GetNewDeviceApiKey<TRes> {
       _CopyWithStubImpl$Mutation$GetNewDeviceApiKey;
 
   TRes call({
-    Mutation$GetNewDeviceApiKey$getNewDeviceApiKey? getNewDeviceApiKey,
+    Mutation$GetNewDeviceApiKey$api? api,
     String? $__typename,
   });
-  CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
-      get getNewDeviceApiKey;
+  CopyWith$Mutation$GetNewDeviceApiKey$api<TRes> get api;
 }
 
 class _CopyWithImpl$Mutation$GetNewDeviceApiKey<TRes>
@@ -11208,25 +12761,22 @@ class _CopyWithImpl$Mutation$GetNewDeviceApiKey<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? getNewDeviceApiKey = _undefined,
+    Object? api = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$GetNewDeviceApiKey(
-        getNewDeviceApiKey:
-            getNewDeviceApiKey == _undefined || getNewDeviceApiKey == null
-                ? _instance.getNewDeviceApiKey
-                : (getNewDeviceApiKey
-                    as Mutation$GetNewDeviceApiKey$getNewDeviceApiKey),
+        api: api == _undefined || api == null
+            ? _instance.api
+            : (api as Mutation$GetNewDeviceApiKey$api),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
-      get getNewDeviceApiKey {
-    final local$getNewDeviceApiKey = _instance.getNewDeviceApiKey;
-    return CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
-        local$getNewDeviceApiKey, (e) => call(getNewDeviceApiKey: e));
+  CopyWith$Mutation$GetNewDeviceApiKey$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Mutation$GetNewDeviceApiKey$api(
+        local$api, (e) => call(api: e));
   }
 }
 
@@ -11237,14 +12787,13 @@ class _CopyWithStubImpl$Mutation$GetNewDeviceApiKey<TRes>
   TRes _res;
 
   call({
-    Mutation$GetNewDeviceApiKey$getNewDeviceApiKey? getNewDeviceApiKey,
+    Mutation$GetNewDeviceApiKey$api? api,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
-      get getNewDeviceApiKey =>
-          CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey.stub(_res);
+  CopyWith$Mutation$GetNewDeviceApiKey$api<TRes> get api =>
+      CopyWith$Mutation$GetNewDeviceApiKey$api.stub(_res);
 }
 
 const documentNodeMutationGetNewDeviceApiKey = DocumentNode(definitions: [
@@ -11255,21 +12804,36 @@ const documentNodeMutationGetNewDeviceApiKey = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'getNewDeviceApiKey'),
+        name: NameNode(value: 'api'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'key'),
+            name: NameNode(value: 'getNewDeviceApiKey'),
             alias: null,
             arguments: [],
             directives: [],
-            selectionSet: null,
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'key'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -11387,9 +12951,152 @@ extension ClientExtension$Mutation$GetNewDeviceApiKey on graphql.GraphQLClient {
       this.watchMutation(options ?? WatchOptions$Mutation$GetNewDeviceApiKey());
 }
 
-class Mutation$GetNewDeviceApiKey$getNewDeviceApiKey
+class Mutation$GetNewDeviceApiKey$api {
+  Mutation$GetNewDeviceApiKey$api({
+    required this.getNewDeviceApiKey,
+    this.$__typename = 'ApiMutations',
+  });
+
+  factory Mutation$GetNewDeviceApiKey$api.fromJson(Map<String, dynamic> json) {
+    final l$getNewDeviceApiKey = json['getNewDeviceApiKey'];
+    final l$$__typename = json['__typename'];
+    return Mutation$GetNewDeviceApiKey$api(
+      getNewDeviceApiKey:
+          Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey.fromJson(
+              (l$getNewDeviceApiKey as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey getNewDeviceApiKey;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$getNewDeviceApiKey = getNewDeviceApiKey;
+    _resultData['getNewDeviceApiKey'] = l$getNewDeviceApiKey.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$getNewDeviceApiKey = getNewDeviceApiKey;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$getNewDeviceApiKey,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$GetNewDeviceApiKey$api) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$getNewDeviceApiKey = getNewDeviceApiKey;
+    final lOther$getNewDeviceApiKey = other.getNewDeviceApiKey;
+    if (l$getNewDeviceApiKey != lOther$getNewDeviceApiKey) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$GetNewDeviceApiKey$api
+    on Mutation$GetNewDeviceApiKey$api {
+  CopyWith$Mutation$GetNewDeviceApiKey$api<Mutation$GetNewDeviceApiKey$api>
+      get copyWith => CopyWith$Mutation$GetNewDeviceApiKey$api(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$GetNewDeviceApiKey$api<TRes> {
+  factory CopyWith$Mutation$GetNewDeviceApiKey$api(
+    Mutation$GetNewDeviceApiKey$api instance,
+    TRes Function(Mutation$GetNewDeviceApiKey$api) then,
+  ) = _CopyWithImpl$Mutation$GetNewDeviceApiKey$api;
+
+  factory CopyWith$Mutation$GetNewDeviceApiKey$api.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$api;
+
+  TRes call({
+    Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey? getNewDeviceApiKey,
+    String? $__typename,
+  });
+  CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey<TRes>
+      get getNewDeviceApiKey;
+}
+
+class _CopyWithImpl$Mutation$GetNewDeviceApiKey$api<TRes>
+    implements CopyWith$Mutation$GetNewDeviceApiKey$api<TRes> {
+  _CopyWithImpl$Mutation$GetNewDeviceApiKey$api(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$GetNewDeviceApiKey$api _instance;
+
+  final TRes Function(Mutation$GetNewDeviceApiKey$api) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? getNewDeviceApiKey = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$GetNewDeviceApiKey$api(
+        getNewDeviceApiKey:
+            getNewDeviceApiKey == _undefined || getNewDeviceApiKey == null
+                ? _instance.getNewDeviceApiKey
+                : (getNewDeviceApiKey
+                    as Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey<TRes>
+      get getNewDeviceApiKey {
+    final local$getNewDeviceApiKey = _instance.getNewDeviceApiKey;
+    return CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey(
+        local$getNewDeviceApiKey, (e) => call(getNewDeviceApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$api<TRes>
+    implements CopyWith$Mutation$GetNewDeviceApiKey$api<TRes> {
+  _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$api(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey? getNewDeviceApiKey,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey<TRes>
+      get getNewDeviceApiKey =>
+          CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey.stub(
+              _res);
+}
+
+class Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey
     implements Fragment$basicMutationReturnFields$$ApiKeyMutationReturn {
-  Mutation$GetNewDeviceApiKey$getNewDeviceApiKey({
+  Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey({
     required this.code,
     required this.message,
     required this.success,
@@ -11397,14 +13104,14 @@ class Mutation$GetNewDeviceApiKey$getNewDeviceApiKey
     this.key,
   });
 
-  factory Mutation$GetNewDeviceApiKey$getNewDeviceApiKey.fromJson(
+  factory Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$key = json['key'];
-    return Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
+    return Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -11459,7 +13166,7 @@ class Mutation$GetNewDeviceApiKey$getNewDeviceApiKey
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$GetNewDeviceApiKey$getNewDeviceApiKey) ||
+    if (!(other is Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -11492,25 +13199,27 @@ class Mutation$GetNewDeviceApiKey$getNewDeviceApiKey
   }
 }
 
-extension UtilityExtension$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey
-    on Mutation$GetNewDeviceApiKey$getNewDeviceApiKey {
-  CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<
-          Mutation$GetNewDeviceApiKey$getNewDeviceApiKey>
-      get copyWith => CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
+extension UtilityExtension$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey
+    on Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey {
+  CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey<
+          Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey>
+      get copyWith =>
+          CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes> {
-  factory CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
-    Mutation$GetNewDeviceApiKey$getNewDeviceApiKey instance,
-    TRes Function(Mutation$GetNewDeviceApiKey$getNewDeviceApiKey) then,
-  ) = _CopyWithImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey;
+abstract class CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey<
+    TRes> {
+  factory CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey(
+    Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey instance,
+    TRes Function(Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey) then,
+  ) = _CopyWithImpl$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey;
 
-  factory CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey.stub(
+  factory CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey.stub(
           TRes res) =
-      _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey;
+      _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey;
 
   TRes call({
     int? code,
@@ -11521,16 +13230,17 @@ abstract class CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
-    implements CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes> {
-  _CopyWithImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
+class _CopyWithImpl$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey<TRes>
+    implements
+        CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey<TRes> {
+  _CopyWithImpl$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey(
     this._instance,
     this._then,
   );
 
-  final Mutation$GetNewDeviceApiKey$getNewDeviceApiKey _instance;
+  final Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey _instance;
 
-  final TRes Function(Mutation$GetNewDeviceApiKey$getNewDeviceApiKey) _then;
+  final TRes Function(Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -11541,7 +13251,7 @@ class _CopyWithImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
     Object? $__typename = _undefined,
     Object? key = _undefined,
   }) =>
-      _then(Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(
+      _then(Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -11557,9 +13267,11 @@ class _CopyWithImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
-    implements CopyWith$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes> {
-  _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey(this._res);
+class _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey<TRes>
+    implements
+        CopyWith$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey<TRes> {
+  _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$api$getNewDeviceApiKey(
+      this._res);
 
   TRes _res;
 
@@ -11575,33 +13287,29 @@ class _CopyWithStubImpl$Mutation$GetNewDeviceApiKey$getNewDeviceApiKey<TRes>
 
 class Mutation$InvalidateNewDeviceApiKey {
   Mutation$InvalidateNewDeviceApiKey({
-    required this.invalidateNewDeviceApiKey,
+    required this.api,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$InvalidateNewDeviceApiKey.fromJson(
       Map<String, dynamic> json) {
-    final l$invalidateNewDeviceApiKey = json['invalidateNewDeviceApiKey'];
+    final l$api = json['api'];
     final l$$__typename = json['__typename'];
     return Mutation$InvalidateNewDeviceApiKey(
-      invalidateNewDeviceApiKey:
-          Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey.fromJson(
-              (l$invalidateNewDeviceApiKey as Map<String, dynamic>)),
+      api: Mutation$InvalidateNewDeviceApiKey$api.fromJson(
+          (l$api as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `api.invalidate_new_device_api_key` instead')
-  final Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
-      invalidateNewDeviceApiKey;
+  final Mutation$InvalidateNewDeviceApiKey$api api;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$invalidateNewDeviceApiKey = invalidateNewDeviceApiKey;
-    _resultData['invalidateNewDeviceApiKey'] =
-        l$invalidateNewDeviceApiKey.toJson();
+    final l$api = api;
+    _resultData['api'] = l$api.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -11609,10 +13317,10 @@ class Mutation$InvalidateNewDeviceApiKey {
 
   @override
   int get hashCode {
-    final l$invalidateNewDeviceApiKey = invalidateNewDeviceApiKey;
+    final l$api = api;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$invalidateNewDeviceApiKey,
+      l$api,
       l$$__typename,
     ]);
   }
@@ -11626,9 +13334,9 @@ class Mutation$InvalidateNewDeviceApiKey {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$invalidateNewDeviceApiKey = invalidateNewDeviceApiKey;
-    final lOther$invalidateNewDeviceApiKey = other.invalidateNewDeviceApiKey;
-    if (l$invalidateNewDeviceApiKey != lOther$invalidateNewDeviceApiKey) {
+    final l$api = api;
+    final lOther$api = other.api;
+    if (l$api != lOther$api) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -11660,12 +13368,10 @@ abstract class CopyWith$Mutation$InvalidateNewDeviceApiKey<TRes> {
       _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey;
 
   TRes call({
-    Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey?
-        invalidateNewDeviceApiKey,
+    Mutation$InvalidateNewDeviceApiKey$api? api,
     String? $__typename,
   });
-  CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<TRes>
-      get invalidateNewDeviceApiKey;
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$api<TRes> get api;
 }
 
 class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey<TRes>
@@ -11682,26 +13388,22 @@ class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? invalidateNewDeviceApiKey = _undefined,
+    Object? api = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$InvalidateNewDeviceApiKey(
-        invalidateNewDeviceApiKey: invalidateNewDeviceApiKey == _undefined ||
-                invalidateNewDeviceApiKey == null
-            ? _instance.invalidateNewDeviceApiKey
-            : (invalidateNewDeviceApiKey
-                as Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey),
+        api: api == _undefined || api == null
+            ? _instance.api
+            : (api as Mutation$InvalidateNewDeviceApiKey$api),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<TRes>
-      get invalidateNewDeviceApiKey {
-    final local$invalidateNewDeviceApiKey = _instance.invalidateNewDeviceApiKey;
-    return CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
-        local$invalidateNewDeviceApiKey,
-        (e) => call(invalidateNewDeviceApiKey: e));
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Mutation$InvalidateNewDeviceApiKey$api(
+        local$api, (e) => call(api: e));
   }
 }
 
@@ -11712,16 +13414,13 @@ class _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey<TRes>
   TRes _res;
 
   call({
-    Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey?
-        invalidateNewDeviceApiKey,
+    Mutation$InvalidateNewDeviceApiKey$api? api,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<TRes>
-      get invalidateNewDeviceApiKey =>
-          CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
-              .stub(_res);
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$api<TRes> get api =>
+      CopyWith$Mutation$InvalidateNewDeviceApiKey$api.stub(_res);
 }
 
 const documentNodeMutationInvalidateNewDeviceApiKey =
@@ -11733,14 +13432,29 @@ const documentNodeMutationInvalidateNewDeviceApiKey =
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'invalidateNewDeviceApiKey'),
+        name: NameNode(value: 'api'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'invalidateNewDeviceApiKey'),
+            alias: null,
+            arguments: [],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -11862,22 +13576,173 @@ extension ClientExtension$Mutation$InvalidateNewDeviceApiKey
               options ?? WatchOptions$Mutation$InvalidateNewDeviceApiKey());
 }
 
-class Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
+class Mutation$InvalidateNewDeviceApiKey$api {
+  Mutation$InvalidateNewDeviceApiKey$api({
+    required this.invalidateNewDeviceApiKey,
+    this.$__typename = 'ApiMutations',
+  });
+
+  factory Mutation$InvalidateNewDeviceApiKey$api.fromJson(
+      Map<String, dynamic> json) {
+    final l$invalidateNewDeviceApiKey = json['invalidateNewDeviceApiKey'];
+    final l$$__typename = json['__typename'];
+    return Mutation$InvalidateNewDeviceApiKey$api(
+      invalidateNewDeviceApiKey:
+          Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey
+              .fromJson((l$invalidateNewDeviceApiKey as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey
+      invalidateNewDeviceApiKey;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$invalidateNewDeviceApiKey = invalidateNewDeviceApiKey;
+    _resultData['invalidateNewDeviceApiKey'] =
+        l$invalidateNewDeviceApiKey.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$invalidateNewDeviceApiKey = invalidateNewDeviceApiKey;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$invalidateNewDeviceApiKey,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$InvalidateNewDeviceApiKey$api) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$invalidateNewDeviceApiKey = invalidateNewDeviceApiKey;
+    final lOther$invalidateNewDeviceApiKey = other.invalidateNewDeviceApiKey;
+    if (l$invalidateNewDeviceApiKey != lOther$invalidateNewDeviceApiKey) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$InvalidateNewDeviceApiKey$api
+    on Mutation$InvalidateNewDeviceApiKey$api {
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$api<
+          Mutation$InvalidateNewDeviceApiKey$api>
+      get copyWith => CopyWith$Mutation$InvalidateNewDeviceApiKey$api(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$InvalidateNewDeviceApiKey$api<TRes> {
+  factory CopyWith$Mutation$InvalidateNewDeviceApiKey$api(
+    Mutation$InvalidateNewDeviceApiKey$api instance,
+    TRes Function(Mutation$InvalidateNewDeviceApiKey$api) then,
+  ) = _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$api;
+
+  factory CopyWith$Mutation$InvalidateNewDeviceApiKey$api.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$api;
+
+  TRes call({
+    Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey?
+        invalidateNewDeviceApiKey,
+    String? $__typename,
+  });
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey<
+      TRes> get invalidateNewDeviceApiKey;
+}
+
+class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$api<TRes>
+    implements CopyWith$Mutation$InvalidateNewDeviceApiKey$api<TRes> {
+  _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$api(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$InvalidateNewDeviceApiKey$api _instance;
+
+  final TRes Function(Mutation$InvalidateNewDeviceApiKey$api) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? invalidateNewDeviceApiKey = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$InvalidateNewDeviceApiKey$api(
+        invalidateNewDeviceApiKey: invalidateNewDeviceApiKey == _undefined ||
+                invalidateNewDeviceApiKey == null
+            ? _instance.invalidateNewDeviceApiKey
+            : (invalidateNewDeviceApiKey
+                as Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey<
+      TRes> get invalidateNewDeviceApiKey {
+    final local$invalidateNewDeviceApiKey = _instance.invalidateNewDeviceApiKey;
+    return CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey(
+        local$invalidateNewDeviceApiKey,
+        (e) => call(invalidateNewDeviceApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$api<TRes>
+    implements CopyWith$Mutation$InvalidateNewDeviceApiKey$api<TRes> {
+  _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$api(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey?
+        invalidateNewDeviceApiKey,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey<
+          TRes>
+      get invalidateNewDeviceApiKey =>
+          CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey
+              .stub(_res);
+}
+
+class Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey({
+  Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey.fromJson(
+  factory Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+    return Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -11926,7 +13791,7 @@ class Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
       return true;
     }
     if (!(other
-            is Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey) ||
+            is Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -11954,28 +13819,29 @@ class Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
   }
 }
 
-extension UtilityExtension$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
-    on Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey {
-  CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
-          Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey>
+extension UtilityExtension$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey
+    on Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey {
+  CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey<
+          Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey>
       get copyWith =>
-          CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+          CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+abstract class CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey<
     TRes> {
-  factory CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
-    Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey instance,
-    TRes Function(Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey)
+  factory CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey(
+    Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey instance,
+    TRes Function(
+            Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey)
         then,
-  ) = _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey;
+  ) = _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey;
 
-  factory CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey.stub(
+  factory CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey.stub(
           TRes res) =
-      _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey;
+      _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey;
 
   TRes call({
     int? code,
@@ -11985,20 +13851,21 @@ abstract class CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceAp
   });
 }
 
-class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey<
         TRes>
     implements
-        CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+        CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey<
             TRes> {
-  _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+  _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey(
     this._instance,
     this._then,
   );
 
-  final Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey _instance;
+  final Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey
+      _instance;
 
   final TRes Function(
-      Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey) _then;
+      Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -12008,7 +13875,7 @@ class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+      _then(Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -12023,12 +13890,12 @@ class _CopyWithImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey
       ));
 }
 
-class _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+class _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey<
         TRes>
     implements
-        CopyWith$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey<
+        CopyWith$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey<
             TRes> {
-  _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$invalidateNewDeviceApiKey(
+  _CopyWithStubImpl$Mutation$InvalidateNewDeviceApiKey$api$invalidateNewDeviceApiKey(
       this._res);
 
   TRes _res;
@@ -12148,34 +14015,29 @@ class _CopyWithStubImpl$Variables$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
 
 class Mutation$AuthorizeWithNewDeviceApiKey {
   Mutation$AuthorizeWithNewDeviceApiKey({
-    required this.authorizeWithNewDeviceApiKey,
+    required this.api,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$AuthorizeWithNewDeviceApiKey.fromJson(
       Map<String, dynamic> json) {
-    final l$authorizeWithNewDeviceApiKey = json['authorizeWithNewDeviceApiKey'];
+    final l$api = json['api'];
     final l$$__typename = json['__typename'];
     return Mutation$AuthorizeWithNewDeviceApiKey(
-      authorizeWithNewDeviceApiKey:
-          Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
-              .fromJson(
-                  (l$authorizeWithNewDeviceApiKey as Map<String, dynamic>)),
+      api: Mutation$AuthorizeWithNewDeviceApiKey$api.fromJson(
+          (l$api as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `api.authorize_with_new_device_api_key` instead')
-  final Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
-      authorizeWithNewDeviceApiKey;
+  final Mutation$AuthorizeWithNewDeviceApiKey$api api;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$authorizeWithNewDeviceApiKey = authorizeWithNewDeviceApiKey;
-    _resultData['authorizeWithNewDeviceApiKey'] =
-        l$authorizeWithNewDeviceApiKey.toJson();
+    final l$api = api;
+    _resultData['api'] = l$api.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -12183,10 +14045,10 @@ class Mutation$AuthorizeWithNewDeviceApiKey {
 
   @override
   int get hashCode {
-    final l$authorizeWithNewDeviceApiKey = authorizeWithNewDeviceApiKey;
+    final l$api = api;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$authorizeWithNewDeviceApiKey,
+      l$api,
       l$$__typename,
     ]);
   }
@@ -12200,10 +14062,9 @@ class Mutation$AuthorizeWithNewDeviceApiKey {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$authorizeWithNewDeviceApiKey = authorizeWithNewDeviceApiKey;
-    final lOther$authorizeWithNewDeviceApiKey =
-        other.authorizeWithNewDeviceApiKey;
-    if (l$authorizeWithNewDeviceApiKey != lOther$authorizeWithNewDeviceApiKey) {
+    final l$api = api;
+    final lOther$api = other.api;
+    if (l$api != lOther$api) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -12235,12 +14096,10 @@ abstract class CopyWith$Mutation$AuthorizeWithNewDeviceApiKey<TRes> {
       _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey;
 
   TRes call({
-    Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey?
-        authorizeWithNewDeviceApiKey,
+    Mutation$AuthorizeWithNewDeviceApiKey$api? api,
     String? $__typename,
   });
-  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
-      TRes> get authorizeWithNewDeviceApiKey;
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api<TRes> get api;
 }
 
 class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
@@ -12257,28 +14116,22 @@ class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? authorizeWithNewDeviceApiKey = _undefined,
+    Object? api = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$AuthorizeWithNewDeviceApiKey(
-        authorizeWithNewDeviceApiKey: authorizeWithNewDeviceApiKey ==
-                    _undefined ||
-                authorizeWithNewDeviceApiKey == null
-            ? _instance.authorizeWithNewDeviceApiKey
-            : (authorizeWithNewDeviceApiKey
-                as Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey),
+        api: api == _undefined || api == null
+            ? _instance.api
+            : (api as Mutation$AuthorizeWithNewDeviceApiKey$api),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
-      TRes> get authorizeWithNewDeviceApiKey {
-    final local$authorizeWithNewDeviceApiKey =
-        _instance.authorizeWithNewDeviceApiKey;
-    return CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
-        local$authorizeWithNewDeviceApiKey,
-        (e) => call(authorizeWithNewDeviceApiKey: e));
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api<TRes> get api {
+    final local$api = _instance.api;
+    return CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api(
+        local$api, (e) => call(api: e));
   }
 }
 
@@ -12289,17 +14142,13 @@ class _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey<TRes>
   TRes _res;
 
   call({
-    Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey?
-        authorizeWithNewDeviceApiKey,
+    Mutation$AuthorizeWithNewDeviceApiKey$api? api,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
-          TRes>
-      get authorizeWithNewDeviceApiKey =>
-          CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
-              .stub(_res);
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api<TRes> get api =>
+      CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api.stub(_res);
 }
 
 const documentNodeMutationAuthorizeWithNewDeviceApiKey =
@@ -12321,26 +14170,41 @@ const documentNodeMutationAuthorizeWithNewDeviceApiKey =
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'authorizeWithNewDeviceApiKey'),
+        name: NameNode(value: 'api'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'input'),
-            value: VariableNode(name: NameNode(value: 'input')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'token'),
+            name: NameNode(value: 'authorizeWithNewDeviceApiKey'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'input'),
+                value: VariableNode(name: NameNode(value: 'input')),
+              )
+            ],
             directives: [],
-            selectionSet: null,
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'token'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -12465,10 +14329,165 @@ extension ClientExtension$Mutation$AuthorizeWithNewDeviceApiKey
           this.watchMutation(options);
 }
 
-class Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
+class Mutation$AuthorizeWithNewDeviceApiKey$api {
+  Mutation$AuthorizeWithNewDeviceApiKey$api({
+    required this.authorizeWithNewDeviceApiKey,
+    this.$__typename = 'ApiMutations',
+  });
+
+  factory Mutation$AuthorizeWithNewDeviceApiKey$api.fromJson(
+      Map<String, dynamic> json) {
+    final l$authorizeWithNewDeviceApiKey = json['authorizeWithNewDeviceApiKey'];
+    final l$$__typename = json['__typename'];
+    return Mutation$AuthorizeWithNewDeviceApiKey$api(
+      authorizeWithNewDeviceApiKey:
+          Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey
+              .fromJson(
+                  (l$authorizeWithNewDeviceApiKey as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey
+      authorizeWithNewDeviceApiKey;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$authorizeWithNewDeviceApiKey = authorizeWithNewDeviceApiKey;
+    _resultData['authorizeWithNewDeviceApiKey'] =
+        l$authorizeWithNewDeviceApiKey.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$authorizeWithNewDeviceApiKey = authorizeWithNewDeviceApiKey;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$authorizeWithNewDeviceApiKey,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$AuthorizeWithNewDeviceApiKey$api) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$authorizeWithNewDeviceApiKey = authorizeWithNewDeviceApiKey;
+    final lOther$authorizeWithNewDeviceApiKey =
+        other.authorizeWithNewDeviceApiKey;
+    if (l$authorizeWithNewDeviceApiKey != lOther$authorizeWithNewDeviceApiKey) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$AuthorizeWithNewDeviceApiKey$api
+    on Mutation$AuthorizeWithNewDeviceApiKey$api {
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api<
+          Mutation$AuthorizeWithNewDeviceApiKey$api>
+      get copyWith => CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api<TRes> {
+  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api(
+    Mutation$AuthorizeWithNewDeviceApiKey$api instance,
+    TRes Function(Mutation$AuthorizeWithNewDeviceApiKey$api) then,
+  ) = _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$api;
+
+  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$api;
+
+  TRes call({
+    Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey?
+        authorizeWithNewDeviceApiKey,
+    String? $__typename,
+  });
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey<
+      TRes> get authorizeWithNewDeviceApiKey;
+}
+
+class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$api<TRes>
+    implements CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api<TRes> {
+  _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$api(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$AuthorizeWithNewDeviceApiKey$api _instance;
+
+  final TRes Function(Mutation$AuthorizeWithNewDeviceApiKey$api) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? authorizeWithNewDeviceApiKey = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$AuthorizeWithNewDeviceApiKey$api(
+        authorizeWithNewDeviceApiKey: authorizeWithNewDeviceApiKey ==
+                    _undefined ||
+                authorizeWithNewDeviceApiKey == null
+            ? _instance.authorizeWithNewDeviceApiKey
+            : (authorizeWithNewDeviceApiKey
+                as Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey<
+      TRes> get authorizeWithNewDeviceApiKey {
+    final local$authorizeWithNewDeviceApiKey =
+        _instance.authorizeWithNewDeviceApiKey;
+    return CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey(
+        local$authorizeWithNewDeviceApiKey,
+        (e) => call(authorizeWithNewDeviceApiKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$api<TRes>
+    implements CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api<TRes> {
+  _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$api(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey?
+        authorizeWithNewDeviceApiKey,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey<
+          TRes>
+      get authorizeWithNewDeviceApiKey =>
+          CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey
+              .stub(_res);
+}
+
+class Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey
     implements
         Fragment$basicMutationReturnFields$$DeviceApiTokenMutationReturn {
-  Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey({
+  Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey({
     required this.code,
     required this.message,
     required this.success,
@@ -12476,14 +14495,14 @@ class Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
     this.token,
   });
 
-  factory Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey.fromJson(
+  factory Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$token = json['token'];
-    return Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+    return Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -12539,7 +14558,7 @@ class Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
       return true;
     }
     if (!(other
-            is Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey) ||
+            is Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -12572,29 +14591,30 @@ class Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
   }
 }
 
-extension UtilityExtension$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
-    on Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey {
-  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
-          Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey>
+extension UtilityExtension$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey
+    on Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey {
+  CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey<
+          Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey>
       get copyWith =>
-          CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+          CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+abstract class CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey<
     TRes> {
-  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
-    Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey instance,
+  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey(
+    Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey
+        instance,
     TRes Function(
-            Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey)
+            Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey)
         then,
-  ) = _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey;
+  ) = _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey;
 
-  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey.stub(
+  factory CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey.stub(
           TRes res) =
-      _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey;
+      _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey;
 
   TRes call({
     int? code,
@@ -12605,21 +14625,22 @@ abstract class CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDe
   });
 }
 
-class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey<
         TRes>
     implements
-        CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+        CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey<
             TRes> {
-  _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+  _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey(
     this._instance,
     this._then,
   );
 
-  final Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey
+  final Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey
       _instance;
 
   final TRes Function(
-      Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey) _then;
+          Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey)
+      _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -12630,7 +14651,8 @@ class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDevice
     Object? $__typename = _undefined,
     Object? token = _undefined,
   }) =>
-      _then(Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+      _then(
+          Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -12646,12 +14668,12 @@ class _CopyWithImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDevice
       ));
 }
 
-class _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+class _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey<
         TRes>
     implements
-        CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey<
+        CopyWith$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey<
             TRes> {
-  _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$authorizeWithNewDeviceApiKey(
+  _CopyWithStubImpl$Mutation$AuthorizeWithNewDeviceApiKey$api$authorizeWithNewDeviceApiKey(
       this._res);
 
   TRes _res;

@@ -1426,29 +1426,28 @@ class _CopyWithStubImpl$Variables$Mutation$CreateUser<TRes>
 
 class Mutation$CreateUser {
   Mutation$CreateUser({
-    required this.createUser,
+    required this.users,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$CreateUser.fromJson(Map<String, dynamic> json) {
-    final l$createUser = json['createUser'];
+    final l$users = json['users'];
     final l$$__typename = json['__typename'];
     return Mutation$CreateUser(
-      createUser: Mutation$CreateUser$createUser.fromJson(
-          (l$createUser as Map<String, dynamic>)),
+      users:
+          Mutation$CreateUser$users.fromJson((l$users as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `users.create_user` instead')
-  final Mutation$CreateUser$createUser createUser;
+  final Mutation$CreateUser$users users;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$createUser = createUser;
-    _resultData['createUser'] = l$createUser.toJson();
+    final l$users = users;
+    _resultData['users'] = l$users.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -1456,10 +1455,10 @@ class Mutation$CreateUser {
 
   @override
   int get hashCode {
-    final l$createUser = createUser;
+    final l$users = users;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$createUser,
+      l$users,
       l$$__typename,
     ]);
   }
@@ -1472,9 +1471,9 @@ class Mutation$CreateUser {
     if (!(other is Mutation$CreateUser) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$createUser = createUser;
-    final lOther$createUser = other.createUser;
-    if (l$createUser != lOther$createUser) {
+    final l$users = users;
+    final lOther$users = other.users;
+    if (l$users != lOther$users) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -1504,10 +1503,10 @@ abstract class CopyWith$Mutation$CreateUser<TRes> {
       _CopyWithStubImpl$Mutation$CreateUser;
 
   TRes call({
-    Mutation$CreateUser$createUser? createUser,
+    Mutation$CreateUser$users? users,
     String? $__typename,
   });
-  CopyWith$Mutation$CreateUser$createUser<TRes> get createUser;
+  CopyWith$Mutation$CreateUser$users<TRes> get users;
 }
 
 class _CopyWithImpl$Mutation$CreateUser<TRes>
@@ -1524,22 +1523,22 @@ class _CopyWithImpl$Mutation$CreateUser<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? createUser = _undefined,
+    Object? users = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$CreateUser(
-        createUser: createUser == _undefined || createUser == null
-            ? _instance.createUser
-            : (createUser as Mutation$CreateUser$createUser),
+        users: users == _undefined || users == null
+            ? _instance.users
+            : (users as Mutation$CreateUser$users),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$CreateUser$createUser<TRes> get createUser {
-    final local$createUser = _instance.createUser;
-    return CopyWith$Mutation$CreateUser$createUser(
-        local$createUser, (e) => call(createUser: e));
+  CopyWith$Mutation$CreateUser$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Mutation$CreateUser$users(
+        local$users, (e) => call(users: e));
   }
 }
 
@@ -1550,13 +1549,13 @@ class _CopyWithStubImpl$Mutation$CreateUser<TRes>
   TRes _res;
 
   call({
-    Mutation$CreateUser$createUser? createUser,
+    Mutation$CreateUser$users? users,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$CreateUser$createUser<TRes> get createUser =>
-      CopyWith$Mutation$CreateUser$createUser.stub(_res);
+  CopyWith$Mutation$CreateUser$users<TRes> get users =>
+      CopyWith$Mutation$CreateUser$users.stub(_res);
 }
 
 const documentNodeMutationCreateUser = DocumentNode(definitions: [
@@ -1577,29 +1576,44 @@ const documentNodeMutationCreateUser = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'createUser'),
+        name: NameNode(value: 'users'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'user'),
-            value: VariableNode(name: NameNode(value: 'user')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'user'),
+            name: NameNode(value: 'createUser'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'user'),
+                value: VariableNode(name: NameNode(value: 'user')),
+              )
+            ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
               FragmentSpreadNode(
-                name: NameNode(value: 'userFields'),
+                name: NameNode(value: 'basicMutationReturnFields'),
                 directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'user'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'userFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
               ),
               FieldNode(
                 name: NameNode(value: '__typename'),
@@ -1725,9 +1739,145 @@ extension ClientExtension$Mutation$CreateUser on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$CreateUser$createUser
+class Mutation$CreateUser$users {
+  Mutation$CreateUser$users({
+    required this.createUser,
+    this.$__typename = 'UsersMutations',
+  });
+
+  factory Mutation$CreateUser$users.fromJson(Map<String, dynamic> json) {
+    final l$createUser = json['createUser'];
+    final l$$__typename = json['__typename'];
+    return Mutation$CreateUser$users(
+      createUser: Mutation$CreateUser$users$createUser.fromJson(
+          (l$createUser as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$CreateUser$users$createUser createUser;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$createUser = createUser;
+    _resultData['createUser'] = l$createUser.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$createUser = createUser;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$createUser,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$CreateUser$users) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$createUser = createUser;
+    final lOther$createUser = other.createUser;
+    if (l$createUser != lOther$createUser) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$CreateUser$users
+    on Mutation$CreateUser$users {
+  CopyWith$Mutation$CreateUser$users<Mutation$CreateUser$users> get copyWith =>
+      CopyWith$Mutation$CreateUser$users(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Mutation$CreateUser$users<TRes> {
+  factory CopyWith$Mutation$CreateUser$users(
+    Mutation$CreateUser$users instance,
+    TRes Function(Mutation$CreateUser$users) then,
+  ) = _CopyWithImpl$Mutation$CreateUser$users;
+
+  factory CopyWith$Mutation$CreateUser$users.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$CreateUser$users;
+
+  TRes call({
+    Mutation$CreateUser$users$createUser? createUser,
+    String? $__typename,
+  });
+  CopyWith$Mutation$CreateUser$users$createUser<TRes> get createUser;
+}
+
+class _CopyWithImpl$Mutation$CreateUser$users<TRes>
+    implements CopyWith$Mutation$CreateUser$users<TRes> {
+  _CopyWithImpl$Mutation$CreateUser$users(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$CreateUser$users _instance;
+
+  final TRes Function(Mutation$CreateUser$users) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? createUser = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$CreateUser$users(
+        createUser: createUser == _undefined || createUser == null
+            ? _instance.createUser
+            : (createUser as Mutation$CreateUser$users$createUser),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$CreateUser$users$createUser<TRes> get createUser {
+    final local$createUser = _instance.createUser;
+    return CopyWith$Mutation$CreateUser$users$createUser(
+        local$createUser, (e) => call(createUser: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$CreateUser$users<TRes>
+    implements CopyWith$Mutation$CreateUser$users<TRes> {
+  _CopyWithStubImpl$Mutation$CreateUser$users(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$CreateUser$users$createUser? createUser,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$CreateUser$users$createUser<TRes> get createUser =>
+      CopyWith$Mutation$CreateUser$users$createUser.stub(_res);
+}
+
+class Mutation$CreateUser$users$createUser
     implements Fragment$basicMutationReturnFields$$UserMutationReturn {
-  Mutation$CreateUser$createUser({
+  Mutation$CreateUser$users$createUser({
     required this.code,
     required this.message,
     required this.success,
@@ -1735,13 +1885,14 @@ class Mutation$CreateUser$createUser
     this.user,
   });
 
-  factory Mutation$CreateUser$createUser.fromJson(Map<String, dynamic> json) {
+  factory Mutation$CreateUser$users$createUser.fromJson(
+      Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$user = json['user'];
-    return Mutation$CreateUser$createUser(
+    return Mutation$CreateUser$users$createUser(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -1798,7 +1949,7 @@ class Mutation$CreateUser$createUser
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$CreateUser$createUser) ||
+    if (!(other is Mutation$CreateUser$users$createUser) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1831,23 +1982,24 @@ class Mutation$CreateUser$createUser
   }
 }
 
-extension UtilityExtension$Mutation$CreateUser$createUser
-    on Mutation$CreateUser$createUser {
-  CopyWith$Mutation$CreateUser$createUser<Mutation$CreateUser$createUser>
-      get copyWith => CopyWith$Mutation$CreateUser$createUser(
+extension UtilityExtension$Mutation$CreateUser$users$createUser
+    on Mutation$CreateUser$users$createUser {
+  CopyWith$Mutation$CreateUser$users$createUser<
+          Mutation$CreateUser$users$createUser>
+      get copyWith => CopyWith$Mutation$CreateUser$users$createUser(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$CreateUser$createUser<TRes> {
-  factory CopyWith$Mutation$CreateUser$createUser(
-    Mutation$CreateUser$createUser instance,
-    TRes Function(Mutation$CreateUser$createUser) then,
-  ) = _CopyWithImpl$Mutation$CreateUser$createUser;
+abstract class CopyWith$Mutation$CreateUser$users$createUser<TRes> {
+  factory CopyWith$Mutation$CreateUser$users$createUser(
+    Mutation$CreateUser$users$createUser instance,
+    TRes Function(Mutation$CreateUser$users$createUser) then,
+  ) = _CopyWithImpl$Mutation$CreateUser$users$createUser;
 
-  factory CopyWith$Mutation$CreateUser$createUser.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$CreateUser$createUser;
+  factory CopyWith$Mutation$CreateUser$users$createUser.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$CreateUser$users$createUser;
 
   TRes call({
     int? code,
@@ -1859,16 +2011,16 @@ abstract class CopyWith$Mutation$CreateUser$createUser<TRes> {
   CopyWith$Fragment$userFields<TRes> get user;
 }
 
-class _CopyWithImpl$Mutation$CreateUser$createUser<TRes>
-    implements CopyWith$Mutation$CreateUser$createUser<TRes> {
-  _CopyWithImpl$Mutation$CreateUser$createUser(
+class _CopyWithImpl$Mutation$CreateUser$users$createUser<TRes>
+    implements CopyWith$Mutation$CreateUser$users$createUser<TRes> {
+  _CopyWithImpl$Mutation$CreateUser$users$createUser(
     this._instance,
     this._then,
   );
 
-  final Mutation$CreateUser$createUser _instance;
+  final Mutation$CreateUser$users$createUser _instance;
 
-  final TRes Function(Mutation$CreateUser$createUser) _then;
+  final TRes Function(Mutation$CreateUser$users$createUser) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -1879,7 +2031,7 @@ class _CopyWithImpl$Mutation$CreateUser$createUser<TRes>
     Object? $__typename = _undefined,
     Object? user = _undefined,
   }) =>
-      _then(Mutation$CreateUser$createUser(
+      _then(Mutation$CreateUser$users$createUser(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -1904,9 +2056,9 @@ class _CopyWithImpl$Mutation$CreateUser$createUser<TRes>
   }
 }
 
-class _CopyWithStubImpl$Mutation$CreateUser$createUser<TRes>
-    implements CopyWith$Mutation$CreateUser$createUser<TRes> {
-  _CopyWithStubImpl$Mutation$CreateUser$createUser(this._res);
+class _CopyWithStubImpl$Mutation$CreateUser$users$createUser<TRes>
+    implements CopyWith$Mutation$CreateUser$users$createUser<TRes> {
+  _CopyWithStubImpl$Mutation$CreateUser$users$createUser(this._res);
 
   TRes _res;
 
@@ -2023,29 +2175,28 @@ class _CopyWithStubImpl$Variables$Mutation$DeleteUser<TRes>
 
 class Mutation$DeleteUser {
   Mutation$DeleteUser({
-    required this.deleteUser,
+    required this.users,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$DeleteUser.fromJson(Map<String, dynamic> json) {
-    final l$deleteUser = json['deleteUser'];
+    final l$users = json['users'];
     final l$$__typename = json['__typename'];
     return Mutation$DeleteUser(
-      deleteUser: Mutation$DeleteUser$deleteUser.fromJson(
-          (l$deleteUser as Map<String, dynamic>)),
+      users:
+          Mutation$DeleteUser$users.fromJson((l$users as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `users.delete_user` instead')
-  final Mutation$DeleteUser$deleteUser deleteUser;
+  final Mutation$DeleteUser$users users;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$deleteUser = deleteUser;
-    _resultData['deleteUser'] = l$deleteUser.toJson();
+    final l$users = users;
+    _resultData['users'] = l$users.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -2053,10 +2204,10 @@ class Mutation$DeleteUser {
 
   @override
   int get hashCode {
-    final l$deleteUser = deleteUser;
+    final l$users = users;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$deleteUser,
+      l$users,
       l$$__typename,
     ]);
   }
@@ -2069,9 +2220,9 @@ class Mutation$DeleteUser {
     if (!(other is Mutation$DeleteUser) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$deleteUser = deleteUser;
-    final lOther$deleteUser = other.deleteUser;
-    if (l$deleteUser != lOther$deleteUser) {
+    final l$users = users;
+    final lOther$users = other.users;
+    if (l$users != lOther$users) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -2101,10 +2252,10 @@ abstract class CopyWith$Mutation$DeleteUser<TRes> {
       _CopyWithStubImpl$Mutation$DeleteUser;
 
   TRes call({
-    Mutation$DeleteUser$deleteUser? deleteUser,
+    Mutation$DeleteUser$users? users,
     String? $__typename,
   });
-  CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser;
+  CopyWith$Mutation$DeleteUser$users<TRes> get users;
 }
 
 class _CopyWithImpl$Mutation$DeleteUser<TRes>
@@ -2121,22 +2272,22 @@ class _CopyWithImpl$Mutation$DeleteUser<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? deleteUser = _undefined,
+    Object? users = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$DeleteUser(
-        deleteUser: deleteUser == _undefined || deleteUser == null
-            ? _instance.deleteUser
-            : (deleteUser as Mutation$DeleteUser$deleteUser),
+        users: users == _undefined || users == null
+            ? _instance.users
+            : (users as Mutation$DeleteUser$users),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser {
-    final local$deleteUser = _instance.deleteUser;
-    return CopyWith$Mutation$DeleteUser$deleteUser(
-        local$deleteUser, (e) => call(deleteUser: e));
+  CopyWith$Mutation$DeleteUser$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Mutation$DeleteUser$users(
+        local$users, (e) => call(users: e));
   }
 }
 
@@ -2147,13 +2298,13 @@ class _CopyWithStubImpl$Mutation$DeleteUser<TRes>
   TRes _res;
 
   call({
-    Mutation$DeleteUser$deleteUser? deleteUser,
+    Mutation$DeleteUser$users? users,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$DeleteUser$deleteUser<TRes> get deleteUser =>
-      CopyWith$Mutation$DeleteUser$deleteUser.stub(_res);
+  CopyWith$Mutation$DeleteUser$users<TRes> get users =>
+      CopyWith$Mutation$DeleteUser$users.stub(_res);
 }
 
 const documentNodeMutationDeleteUser = DocumentNode(definitions: [
@@ -2174,19 +2325,34 @@ const documentNodeMutationDeleteUser = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'deleteUser'),
+        name: NameNode(value: 'users'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'username'),
-            value: VariableNode(name: NameNode(value: 'username')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'deleteUser'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'username'),
+                value: VariableNode(name: NameNode(value: 'username')),
+              )
+            ],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -2302,21 +2468,158 @@ extension ClientExtension$Mutation$DeleteUser on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$DeleteUser$deleteUser
+class Mutation$DeleteUser$users {
+  Mutation$DeleteUser$users({
+    required this.deleteUser,
+    this.$__typename = 'UsersMutations',
+  });
+
+  factory Mutation$DeleteUser$users.fromJson(Map<String, dynamic> json) {
+    final l$deleteUser = json['deleteUser'];
+    final l$$__typename = json['__typename'];
+    return Mutation$DeleteUser$users(
+      deleteUser: Mutation$DeleteUser$users$deleteUser.fromJson(
+          (l$deleteUser as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$DeleteUser$users$deleteUser deleteUser;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$deleteUser = deleteUser;
+    _resultData['deleteUser'] = l$deleteUser.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$deleteUser = deleteUser;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$deleteUser,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$DeleteUser$users) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$deleteUser = deleteUser;
+    final lOther$deleteUser = other.deleteUser;
+    if (l$deleteUser != lOther$deleteUser) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$DeleteUser$users
+    on Mutation$DeleteUser$users {
+  CopyWith$Mutation$DeleteUser$users<Mutation$DeleteUser$users> get copyWith =>
+      CopyWith$Mutation$DeleteUser$users(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Mutation$DeleteUser$users<TRes> {
+  factory CopyWith$Mutation$DeleteUser$users(
+    Mutation$DeleteUser$users instance,
+    TRes Function(Mutation$DeleteUser$users) then,
+  ) = _CopyWithImpl$Mutation$DeleteUser$users;
+
+  factory CopyWith$Mutation$DeleteUser$users.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteUser$users;
+
+  TRes call({
+    Mutation$DeleteUser$users$deleteUser? deleteUser,
+    String? $__typename,
+  });
+  CopyWith$Mutation$DeleteUser$users$deleteUser<TRes> get deleteUser;
+}
+
+class _CopyWithImpl$Mutation$DeleteUser$users<TRes>
+    implements CopyWith$Mutation$DeleteUser$users<TRes> {
+  _CopyWithImpl$Mutation$DeleteUser$users(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$DeleteUser$users _instance;
+
+  final TRes Function(Mutation$DeleteUser$users) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? deleteUser = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$DeleteUser$users(
+        deleteUser: deleteUser == _undefined || deleteUser == null
+            ? _instance.deleteUser
+            : (deleteUser as Mutation$DeleteUser$users$deleteUser),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$DeleteUser$users$deleteUser<TRes> get deleteUser {
+    final local$deleteUser = _instance.deleteUser;
+    return CopyWith$Mutation$DeleteUser$users$deleteUser(
+        local$deleteUser, (e) => call(deleteUser: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$DeleteUser$users<TRes>
+    implements CopyWith$Mutation$DeleteUser$users<TRes> {
+  _CopyWithStubImpl$Mutation$DeleteUser$users(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$DeleteUser$users$deleteUser? deleteUser,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$DeleteUser$users$deleteUser<TRes> get deleteUser =>
+      CopyWith$Mutation$DeleteUser$users$deleteUser.stub(_res);
+}
+
+class Mutation$DeleteUser$users$deleteUser
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$DeleteUser$deleteUser({
+  Mutation$DeleteUser$users$deleteUser({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$DeleteUser$deleteUser.fromJson(Map<String, dynamic> json) {
+  factory Mutation$DeleteUser$users$deleteUser.fromJson(
+      Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$DeleteUser$deleteUser(
+    return Mutation$DeleteUser$users$deleteUser(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -2364,7 +2667,7 @@ class Mutation$DeleteUser$deleteUser
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$DeleteUser$deleteUser) ||
+    if (!(other is Mutation$DeleteUser$users$deleteUser) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2392,23 +2695,24 @@ class Mutation$DeleteUser$deleteUser
   }
 }
 
-extension UtilityExtension$Mutation$DeleteUser$deleteUser
-    on Mutation$DeleteUser$deleteUser {
-  CopyWith$Mutation$DeleteUser$deleteUser<Mutation$DeleteUser$deleteUser>
-      get copyWith => CopyWith$Mutation$DeleteUser$deleteUser(
+extension UtilityExtension$Mutation$DeleteUser$users$deleteUser
+    on Mutation$DeleteUser$users$deleteUser {
+  CopyWith$Mutation$DeleteUser$users$deleteUser<
+          Mutation$DeleteUser$users$deleteUser>
+      get copyWith => CopyWith$Mutation$DeleteUser$users$deleteUser(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$DeleteUser$deleteUser<TRes> {
-  factory CopyWith$Mutation$DeleteUser$deleteUser(
-    Mutation$DeleteUser$deleteUser instance,
-    TRes Function(Mutation$DeleteUser$deleteUser) then,
-  ) = _CopyWithImpl$Mutation$DeleteUser$deleteUser;
+abstract class CopyWith$Mutation$DeleteUser$users$deleteUser<TRes> {
+  factory CopyWith$Mutation$DeleteUser$users$deleteUser(
+    Mutation$DeleteUser$users$deleteUser instance,
+    TRes Function(Mutation$DeleteUser$users$deleteUser) then,
+  ) = _CopyWithImpl$Mutation$DeleteUser$users$deleteUser;
 
-  factory CopyWith$Mutation$DeleteUser$deleteUser.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$DeleteUser$deleteUser;
+  factory CopyWith$Mutation$DeleteUser$users$deleteUser.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteUser$users$deleteUser;
 
   TRes call({
     int? code,
@@ -2418,16 +2722,16 @@ abstract class CopyWith$Mutation$DeleteUser$deleteUser<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$DeleteUser$deleteUser<TRes>
-    implements CopyWith$Mutation$DeleteUser$deleteUser<TRes> {
-  _CopyWithImpl$Mutation$DeleteUser$deleteUser(
+class _CopyWithImpl$Mutation$DeleteUser$users$deleteUser<TRes>
+    implements CopyWith$Mutation$DeleteUser$users$deleteUser<TRes> {
+  _CopyWithImpl$Mutation$DeleteUser$users$deleteUser(
     this._instance,
     this._then,
   );
 
-  final Mutation$DeleteUser$deleteUser _instance;
+  final Mutation$DeleteUser$users$deleteUser _instance;
 
-  final TRes Function(Mutation$DeleteUser$deleteUser) _then;
+  final TRes Function(Mutation$DeleteUser$users$deleteUser) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -2437,7 +2741,7 @@ class _CopyWithImpl$Mutation$DeleteUser$deleteUser<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$DeleteUser$deleteUser(
+      _then(Mutation$DeleteUser$users$deleteUser(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -2452,9 +2756,9 @@ class _CopyWithImpl$Mutation$DeleteUser$deleteUser<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$DeleteUser$deleteUser<TRes>
-    implements CopyWith$Mutation$DeleteUser$deleteUser<TRes> {
-  _CopyWithStubImpl$Mutation$DeleteUser$deleteUser(this._res);
+class _CopyWithStubImpl$Mutation$DeleteUser$users$deleteUser<TRes>
+    implements CopyWith$Mutation$DeleteUser$users$deleteUser<TRes> {
+  _CopyWithStubImpl$Mutation$DeleteUser$users$deleteUser(this._res);
 
   TRes _res;
 
@@ -2570,29 +2874,28 @@ class _CopyWithStubImpl$Variables$Mutation$UpdateUser<TRes>
 
 class Mutation$UpdateUser {
   Mutation$UpdateUser({
-    required this.updateUser,
+    required this.users,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$UpdateUser.fromJson(Map<String, dynamic> json) {
-    final l$updateUser = json['updateUser'];
+    final l$users = json['users'];
     final l$$__typename = json['__typename'];
     return Mutation$UpdateUser(
-      updateUser: Mutation$UpdateUser$updateUser.fromJson(
-          (l$updateUser as Map<String, dynamic>)),
+      users:
+          Mutation$UpdateUser$users.fromJson((l$users as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `users.update_user` instead')
-  final Mutation$UpdateUser$updateUser updateUser;
+  final Mutation$UpdateUser$users users;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$updateUser = updateUser;
-    _resultData['updateUser'] = l$updateUser.toJson();
+    final l$users = users;
+    _resultData['users'] = l$users.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -2600,10 +2903,10 @@ class Mutation$UpdateUser {
 
   @override
   int get hashCode {
-    final l$updateUser = updateUser;
+    final l$users = users;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$updateUser,
+      l$users,
       l$$__typename,
     ]);
   }
@@ -2616,9 +2919,9 @@ class Mutation$UpdateUser {
     if (!(other is Mutation$UpdateUser) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$updateUser = updateUser;
-    final lOther$updateUser = other.updateUser;
-    if (l$updateUser != lOther$updateUser) {
+    final l$users = users;
+    final lOther$users = other.users;
+    if (l$users != lOther$users) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -2648,10 +2951,10 @@ abstract class CopyWith$Mutation$UpdateUser<TRes> {
       _CopyWithStubImpl$Mutation$UpdateUser;
 
   TRes call({
-    Mutation$UpdateUser$updateUser? updateUser,
+    Mutation$UpdateUser$users? users,
     String? $__typename,
   });
-  CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser;
+  CopyWith$Mutation$UpdateUser$users<TRes> get users;
 }
 
 class _CopyWithImpl$Mutation$UpdateUser<TRes>
@@ -2668,22 +2971,22 @@ class _CopyWithImpl$Mutation$UpdateUser<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? updateUser = _undefined,
+    Object? users = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$UpdateUser(
-        updateUser: updateUser == _undefined || updateUser == null
-            ? _instance.updateUser
-            : (updateUser as Mutation$UpdateUser$updateUser),
+        users: users == _undefined || users == null
+            ? _instance.users
+            : (users as Mutation$UpdateUser$users),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser {
-    final local$updateUser = _instance.updateUser;
-    return CopyWith$Mutation$UpdateUser$updateUser(
-        local$updateUser, (e) => call(updateUser: e));
+  CopyWith$Mutation$UpdateUser$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Mutation$UpdateUser$users(
+        local$users, (e) => call(users: e));
   }
 }
 
@@ -2694,13 +2997,13 @@ class _CopyWithStubImpl$Mutation$UpdateUser<TRes>
   TRes _res;
 
   call({
-    Mutation$UpdateUser$updateUser? updateUser,
+    Mutation$UpdateUser$users? users,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$UpdateUser$updateUser<TRes> get updateUser =>
-      CopyWith$Mutation$UpdateUser$updateUser.stub(_res);
+  CopyWith$Mutation$UpdateUser$users<TRes> get users =>
+      CopyWith$Mutation$UpdateUser$users.stub(_res);
 }
 
 const documentNodeMutationUpdateUser = DocumentNode(definitions: [
@@ -2721,29 +3024,44 @@ const documentNodeMutationUpdateUser = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'updateUser'),
+        name: NameNode(value: 'users'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'user'),
-            value: VariableNode(name: NameNode(value: 'user')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'user'),
+            name: NameNode(value: 'updateUser'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'user'),
+                value: VariableNode(name: NameNode(value: 'user')),
+              )
+            ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
               FragmentSpreadNode(
-                name: NameNode(value: 'userFields'),
+                name: NameNode(value: 'basicMutationReturnFields'),
                 directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'user'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'userFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
               ),
               FieldNode(
                 name: NameNode(value: '__typename'),
@@ -2869,9 +3187,145 @@ extension ClientExtension$Mutation$UpdateUser on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$UpdateUser$updateUser
+class Mutation$UpdateUser$users {
+  Mutation$UpdateUser$users({
+    required this.updateUser,
+    this.$__typename = 'UsersMutations',
+  });
+
+  factory Mutation$UpdateUser$users.fromJson(Map<String, dynamic> json) {
+    final l$updateUser = json['updateUser'];
+    final l$$__typename = json['__typename'];
+    return Mutation$UpdateUser$users(
+      updateUser: Mutation$UpdateUser$users$updateUser.fromJson(
+          (l$updateUser as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$UpdateUser$users$updateUser updateUser;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$updateUser = updateUser;
+    _resultData['updateUser'] = l$updateUser.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$updateUser = updateUser;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$updateUser,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$UpdateUser$users) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$updateUser = updateUser;
+    final lOther$updateUser = other.updateUser;
+    if (l$updateUser != lOther$updateUser) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$UpdateUser$users
+    on Mutation$UpdateUser$users {
+  CopyWith$Mutation$UpdateUser$users<Mutation$UpdateUser$users> get copyWith =>
+      CopyWith$Mutation$UpdateUser$users(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Mutation$UpdateUser$users<TRes> {
+  factory CopyWith$Mutation$UpdateUser$users(
+    Mutation$UpdateUser$users instance,
+    TRes Function(Mutation$UpdateUser$users) then,
+  ) = _CopyWithImpl$Mutation$UpdateUser$users;
+
+  factory CopyWith$Mutation$UpdateUser$users.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UpdateUser$users;
+
+  TRes call({
+    Mutation$UpdateUser$users$updateUser? updateUser,
+    String? $__typename,
+  });
+  CopyWith$Mutation$UpdateUser$users$updateUser<TRes> get updateUser;
+}
+
+class _CopyWithImpl$Mutation$UpdateUser$users<TRes>
+    implements CopyWith$Mutation$UpdateUser$users<TRes> {
+  _CopyWithImpl$Mutation$UpdateUser$users(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$UpdateUser$users _instance;
+
+  final TRes Function(Mutation$UpdateUser$users) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? updateUser = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$UpdateUser$users(
+        updateUser: updateUser == _undefined || updateUser == null
+            ? _instance.updateUser
+            : (updateUser as Mutation$UpdateUser$users$updateUser),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$UpdateUser$users$updateUser<TRes> get updateUser {
+    final local$updateUser = _instance.updateUser;
+    return CopyWith$Mutation$UpdateUser$users$updateUser(
+        local$updateUser, (e) => call(updateUser: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$UpdateUser$users<TRes>
+    implements CopyWith$Mutation$UpdateUser$users<TRes> {
+  _CopyWithStubImpl$Mutation$UpdateUser$users(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$UpdateUser$users$updateUser? updateUser,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$UpdateUser$users$updateUser<TRes> get updateUser =>
+      CopyWith$Mutation$UpdateUser$users$updateUser.stub(_res);
+}
+
+class Mutation$UpdateUser$users$updateUser
     implements Fragment$basicMutationReturnFields$$UserMutationReturn {
-  Mutation$UpdateUser$updateUser({
+  Mutation$UpdateUser$users$updateUser({
     required this.code,
     required this.message,
     required this.success,
@@ -2879,13 +3333,14 @@ class Mutation$UpdateUser$updateUser
     this.user,
   });
 
-  factory Mutation$UpdateUser$updateUser.fromJson(Map<String, dynamic> json) {
+  factory Mutation$UpdateUser$users$updateUser.fromJson(
+      Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$user = json['user'];
-    return Mutation$UpdateUser$updateUser(
+    return Mutation$UpdateUser$users$updateUser(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -2942,7 +3397,7 @@ class Mutation$UpdateUser$updateUser
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$UpdateUser$updateUser) ||
+    if (!(other is Mutation$UpdateUser$users$updateUser) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2975,23 +3430,24 @@ class Mutation$UpdateUser$updateUser
   }
 }
 
-extension UtilityExtension$Mutation$UpdateUser$updateUser
-    on Mutation$UpdateUser$updateUser {
-  CopyWith$Mutation$UpdateUser$updateUser<Mutation$UpdateUser$updateUser>
-      get copyWith => CopyWith$Mutation$UpdateUser$updateUser(
+extension UtilityExtension$Mutation$UpdateUser$users$updateUser
+    on Mutation$UpdateUser$users$updateUser {
+  CopyWith$Mutation$UpdateUser$users$updateUser<
+          Mutation$UpdateUser$users$updateUser>
+      get copyWith => CopyWith$Mutation$UpdateUser$users$updateUser(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$UpdateUser$updateUser<TRes> {
-  factory CopyWith$Mutation$UpdateUser$updateUser(
-    Mutation$UpdateUser$updateUser instance,
-    TRes Function(Mutation$UpdateUser$updateUser) then,
-  ) = _CopyWithImpl$Mutation$UpdateUser$updateUser;
+abstract class CopyWith$Mutation$UpdateUser$users$updateUser<TRes> {
+  factory CopyWith$Mutation$UpdateUser$users$updateUser(
+    Mutation$UpdateUser$users$updateUser instance,
+    TRes Function(Mutation$UpdateUser$users$updateUser) then,
+  ) = _CopyWithImpl$Mutation$UpdateUser$users$updateUser;
 
-  factory CopyWith$Mutation$UpdateUser$updateUser.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$UpdateUser$updateUser;
+  factory CopyWith$Mutation$UpdateUser$users$updateUser.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UpdateUser$users$updateUser;
 
   TRes call({
     int? code,
@@ -3003,16 +3459,16 @@ abstract class CopyWith$Mutation$UpdateUser$updateUser<TRes> {
   CopyWith$Fragment$userFields<TRes> get user;
 }
 
-class _CopyWithImpl$Mutation$UpdateUser$updateUser<TRes>
-    implements CopyWith$Mutation$UpdateUser$updateUser<TRes> {
-  _CopyWithImpl$Mutation$UpdateUser$updateUser(
+class _CopyWithImpl$Mutation$UpdateUser$users$updateUser<TRes>
+    implements CopyWith$Mutation$UpdateUser$users$updateUser<TRes> {
+  _CopyWithImpl$Mutation$UpdateUser$users$updateUser(
     this._instance,
     this._then,
   );
 
-  final Mutation$UpdateUser$updateUser _instance;
+  final Mutation$UpdateUser$users$updateUser _instance;
 
-  final TRes Function(Mutation$UpdateUser$updateUser) _then;
+  final TRes Function(Mutation$UpdateUser$users$updateUser) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3023,7 +3479,7 @@ class _CopyWithImpl$Mutation$UpdateUser$updateUser<TRes>
     Object? $__typename = _undefined,
     Object? user = _undefined,
   }) =>
-      _then(Mutation$UpdateUser$updateUser(
+      _then(Mutation$UpdateUser$users$updateUser(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -3048,9 +3504,9 @@ class _CopyWithImpl$Mutation$UpdateUser$updateUser<TRes>
   }
 }
 
-class _CopyWithStubImpl$Mutation$UpdateUser$updateUser<TRes>
-    implements CopyWith$Mutation$UpdateUser$updateUser<TRes> {
-  _CopyWithStubImpl$Mutation$UpdateUser$updateUser(this._res);
+class _CopyWithStubImpl$Mutation$UpdateUser$users$updateUser<TRes>
+    implements CopyWith$Mutation$UpdateUser$users$updateUser<TRes> {
+  _CopyWithStubImpl$Mutation$UpdateUser$users$updateUser(this._res);
 
   TRes _res;
 
@@ -3170,29 +3626,28 @@ class _CopyWithStubImpl$Variables$Mutation$AddSshKey<TRes>
 
 class Mutation$AddSshKey {
   Mutation$AddSshKey({
-    required this.addSshKey,
+    required this.users,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$AddSshKey.fromJson(Map<String, dynamic> json) {
-    final l$addSshKey = json['addSshKey'];
+    final l$users = json['users'];
     final l$$__typename = json['__typename'];
     return Mutation$AddSshKey(
-      addSshKey: Mutation$AddSshKey$addSshKey.fromJson(
-          (l$addSshKey as Map<String, dynamic>)),
+      users:
+          Mutation$AddSshKey$users.fromJson((l$users as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `users.add_ssh_key` instead')
-  final Mutation$AddSshKey$addSshKey addSshKey;
+  final Mutation$AddSshKey$users users;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$addSshKey = addSshKey;
-    _resultData['addSshKey'] = l$addSshKey.toJson();
+    final l$users = users;
+    _resultData['users'] = l$users.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -3200,10 +3655,10 @@ class Mutation$AddSshKey {
 
   @override
   int get hashCode {
-    final l$addSshKey = addSshKey;
+    final l$users = users;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$addSshKey,
+      l$users,
       l$$__typename,
     ]);
   }
@@ -3216,9 +3671,9 @@ class Mutation$AddSshKey {
     if (!(other is Mutation$AddSshKey) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$addSshKey = addSshKey;
-    final lOther$addSshKey = other.addSshKey;
-    if (l$addSshKey != lOther$addSshKey) {
+    final l$users = users;
+    final lOther$users = other.users;
+    if (l$users != lOther$users) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -3248,10 +3703,10 @@ abstract class CopyWith$Mutation$AddSshKey<TRes> {
       _CopyWithStubImpl$Mutation$AddSshKey;
 
   TRes call({
-    Mutation$AddSshKey$addSshKey? addSshKey,
+    Mutation$AddSshKey$users? users,
     String? $__typename,
   });
-  CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey;
+  CopyWith$Mutation$AddSshKey$users<TRes> get users;
 }
 
 class _CopyWithImpl$Mutation$AddSshKey<TRes>
@@ -3268,22 +3723,22 @@ class _CopyWithImpl$Mutation$AddSshKey<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? addSshKey = _undefined,
+    Object? users = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$AddSshKey(
-        addSshKey: addSshKey == _undefined || addSshKey == null
-            ? _instance.addSshKey
-            : (addSshKey as Mutation$AddSshKey$addSshKey),
+        users: users == _undefined || users == null
+            ? _instance.users
+            : (users as Mutation$AddSshKey$users),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey {
-    final local$addSshKey = _instance.addSshKey;
-    return CopyWith$Mutation$AddSshKey$addSshKey(
-        local$addSshKey, (e) => call(addSshKey: e));
+  CopyWith$Mutation$AddSshKey$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Mutation$AddSshKey$users(
+        local$users, (e) => call(users: e));
   }
 }
 
@@ -3294,13 +3749,13 @@ class _CopyWithStubImpl$Mutation$AddSshKey<TRes>
   TRes _res;
 
   call({
-    Mutation$AddSshKey$addSshKey? addSshKey,
+    Mutation$AddSshKey$users? users,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$AddSshKey$addSshKey<TRes> get addSshKey =>
-      CopyWith$Mutation$AddSshKey$addSshKey.stub(_res);
+  CopyWith$Mutation$AddSshKey$users<TRes> get users =>
+      CopyWith$Mutation$AddSshKey$users.stub(_res);
 }
 
 const documentNodeMutationAddSshKey = DocumentNode(definitions: [
@@ -3321,29 +3776,44 @@ const documentNodeMutationAddSshKey = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'addSshKey'),
+        name: NameNode(value: 'users'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'sshInput'),
-            value: VariableNode(name: NameNode(value: 'sshInput')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'user'),
+            name: NameNode(value: 'addSshKey'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'sshInput'),
+                value: VariableNode(name: NameNode(value: 'sshInput')),
+              )
+            ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
               FragmentSpreadNode(
-                name: NameNode(value: 'userFields'),
+                name: NameNode(value: 'basicMutationReturnFields'),
                 directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'user'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'userFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
               ),
               FieldNode(
                 name: NameNode(value: '__typename'),
@@ -3469,9 +3939,145 @@ extension ClientExtension$Mutation$AddSshKey on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$AddSshKey$addSshKey
+class Mutation$AddSshKey$users {
+  Mutation$AddSshKey$users({
+    required this.addSshKey,
+    this.$__typename = 'UsersMutations',
+  });
+
+  factory Mutation$AddSshKey$users.fromJson(Map<String, dynamic> json) {
+    final l$addSshKey = json['addSshKey'];
+    final l$$__typename = json['__typename'];
+    return Mutation$AddSshKey$users(
+      addSshKey: Mutation$AddSshKey$users$addSshKey.fromJson(
+          (l$addSshKey as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$AddSshKey$users$addSshKey addSshKey;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$addSshKey = addSshKey;
+    _resultData['addSshKey'] = l$addSshKey.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$addSshKey = addSshKey;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$addSshKey,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$AddSshKey$users) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$addSshKey = addSshKey;
+    final lOther$addSshKey = other.addSshKey;
+    if (l$addSshKey != lOther$addSshKey) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$AddSshKey$users
+    on Mutation$AddSshKey$users {
+  CopyWith$Mutation$AddSshKey$users<Mutation$AddSshKey$users> get copyWith =>
+      CopyWith$Mutation$AddSshKey$users(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Mutation$AddSshKey$users<TRes> {
+  factory CopyWith$Mutation$AddSshKey$users(
+    Mutation$AddSshKey$users instance,
+    TRes Function(Mutation$AddSshKey$users) then,
+  ) = _CopyWithImpl$Mutation$AddSshKey$users;
+
+  factory CopyWith$Mutation$AddSshKey$users.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$AddSshKey$users;
+
+  TRes call({
+    Mutation$AddSshKey$users$addSshKey? addSshKey,
+    String? $__typename,
+  });
+  CopyWith$Mutation$AddSshKey$users$addSshKey<TRes> get addSshKey;
+}
+
+class _CopyWithImpl$Mutation$AddSshKey$users<TRes>
+    implements CopyWith$Mutation$AddSshKey$users<TRes> {
+  _CopyWithImpl$Mutation$AddSshKey$users(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$AddSshKey$users _instance;
+
+  final TRes Function(Mutation$AddSshKey$users) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? addSshKey = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$AddSshKey$users(
+        addSshKey: addSshKey == _undefined || addSshKey == null
+            ? _instance.addSshKey
+            : (addSshKey as Mutation$AddSshKey$users$addSshKey),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$AddSshKey$users$addSshKey<TRes> get addSshKey {
+    final local$addSshKey = _instance.addSshKey;
+    return CopyWith$Mutation$AddSshKey$users$addSshKey(
+        local$addSshKey, (e) => call(addSshKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$AddSshKey$users<TRes>
+    implements CopyWith$Mutation$AddSshKey$users<TRes> {
+  _CopyWithStubImpl$Mutation$AddSshKey$users(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$AddSshKey$users$addSshKey? addSshKey,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$AddSshKey$users$addSshKey<TRes> get addSshKey =>
+      CopyWith$Mutation$AddSshKey$users$addSshKey.stub(_res);
+}
+
+class Mutation$AddSshKey$users$addSshKey
     implements Fragment$basicMutationReturnFields$$UserMutationReturn {
-  Mutation$AddSshKey$addSshKey({
+  Mutation$AddSshKey$users$addSshKey({
     required this.code,
     required this.message,
     required this.success,
@@ -3479,13 +4085,14 @@ class Mutation$AddSshKey$addSshKey
     this.user,
   });
 
-  factory Mutation$AddSshKey$addSshKey.fromJson(Map<String, dynamic> json) {
+  factory Mutation$AddSshKey$users$addSshKey.fromJson(
+      Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$user = json['user'];
-    return Mutation$AddSshKey$addSshKey(
+    return Mutation$AddSshKey$users$addSshKey(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -3542,7 +4149,7 @@ class Mutation$AddSshKey$addSshKey
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$AddSshKey$addSshKey) ||
+    if (!(other is Mutation$AddSshKey$users$addSshKey) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3575,23 +4182,24 @@ class Mutation$AddSshKey$addSshKey
   }
 }
 
-extension UtilityExtension$Mutation$AddSshKey$addSshKey
-    on Mutation$AddSshKey$addSshKey {
-  CopyWith$Mutation$AddSshKey$addSshKey<Mutation$AddSshKey$addSshKey>
-      get copyWith => CopyWith$Mutation$AddSshKey$addSshKey(
+extension UtilityExtension$Mutation$AddSshKey$users$addSshKey
+    on Mutation$AddSshKey$users$addSshKey {
+  CopyWith$Mutation$AddSshKey$users$addSshKey<
+          Mutation$AddSshKey$users$addSshKey>
+      get copyWith => CopyWith$Mutation$AddSshKey$users$addSshKey(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$AddSshKey$addSshKey<TRes> {
-  factory CopyWith$Mutation$AddSshKey$addSshKey(
-    Mutation$AddSshKey$addSshKey instance,
-    TRes Function(Mutation$AddSshKey$addSshKey) then,
-  ) = _CopyWithImpl$Mutation$AddSshKey$addSshKey;
+abstract class CopyWith$Mutation$AddSshKey$users$addSshKey<TRes> {
+  factory CopyWith$Mutation$AddSshKey$users$addSshKey(
+    Mutation$AddSshKey$users$addSshKey instance,
+    TRes Function(Mutation$AddSshKey$users$addSshKey) then,
+  ) = _CopyWithImpl$Mutation$AddSshKey$users$addSshKey;
 
-  factory CopyWith$Mutation$AddSshKey$addSshKey.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$AddSshKey$addSshKey;
+  factory CopyWith$Mutation$AddSshKey$users$addSshKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$AddSshKey$users$addSshKey;
 
   TRes call({
     int? code,
@@ -3603,16 +4211,16 @@ abstract class CopyWith$Mutation$AddSshKey$addSshKey<TRes> {
   CopyWith$Fragment$userFields<TRes> get user;
 }
 
-class _CopyWithImpl$Mutation$AddSshKey$addSshKey<TRes>
-    implements CopyWith$Mutation$AddSshKey$addSshKey<TRes> {
-  _CopyWithImpl$Mutation$AddSshKey$addSshKey(
+class _CopyWithImpl$Mutation$AddSshKey$users$addSshKey<TRes>
+    implements CopyWith$Mutation$AddSshKey$users$addSshKey<TRes> {
+  _CopyWithImpl$Mutation$AddSshKey$users$addSshKey(
     this._instance,
     this._then,
   );
 
-  final Mutation$AddSshKey$addSshKey _instance;
+  final Mutation$AddSshKey$users$addSshKey _instance;
 
-  final TRes Function(Mutation$AddSshKey$addSshKey) _then;
+  final TRes Function(Mutation$AddSshKey$users$addSshKey) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3623,7 +4231,7 @@ class _CopyWithImpl$Mutation$AddSshKey$addSshKey<TRes>
     Object? $__typename = _undefined,
     Object? user = _undefined,
   }) =>
-      _then(Mutation$AddSshKey$addSshKey(
+      _then(Mutation$AddSshKey$users$addSshKey(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -3648,9 +4256,9 @@ class _CopyWithImpl$Mutation$AddSshKey$addSshKey<TRes>
   }
 }
 
-class _CopyWithStubImpl$Mutation$AddSshKey$addSshKey<TRes>
-    implements CopyWith$Mutation$AddSshKey$addSshKey<TRes> {
-  _CopyWithStubImpl$Mutation$AddSshKey$addSshKey(this._res);
+class _CopyWithStubImpl$Mutation$AddSshKey$users$addSshKey<TRes>
+    implements CopyWith$Mutation$AddSshKey$users$addSshKey<TRes> {
+  _CopyWithStubImpl$Mutation$AddSshKey$users$addSshKey(this._res);
 
   TRes _res;
 
@@ -3770,29 +4378,28 @@ class _CopyWithStubImpl$Variables$Mutation$RemoveSshKey<TRes>
 
 class Mutation$RemoveSshKey {
   Mutation$RemoveSshKey({
-    required this.removeSshKey,
+    required this.users,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$RemoveSshKey.fromJson(Map<String, dynamic> json) {
-    final l$removeSshKey = json['removeSshKey'];
+    final l$users = json['users'];
     final l$$__typename = json['__typename'];
     return Mutation$RemoveSshKey(
-      removeSshKey: Mutation$RemoveSshKey$removeSshKey.fromJson(
-          (l$removeSshKey as Map<String, dynamic>)),
+      users: Mutation$RemoveSshKey$users.fromJson(
+          (l$users as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `users.remove_ssh_key` instead')
-  final Mutation$RemoveSshKey$removeSshKey removeSshKey;
+  final Mutation$RemoveSshKey$users users;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$removeSshKey = removeSshKey;
-    _resultData['removeSshKey'] = l$removeSshKey.toJson();
+    final l$users = users;
+    _resultData['users'] = l$users.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -3800,10 +4407,10 @@ class Mutation$RemoveSshKey {
 
   @override
   int get hashCode {
-    final l$removeSshKey = removeSshKey;
+    final l$users = users;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$removeSshKey,
+      l$users,
       l$$__typename,
     ]);
   }
@@ -3816,9 +4423,9 @@ class Mutation$RemoveSshKey {
     if (!(other is Mutation$RemoveSshKey) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$removeSshKey = removeSshKey;
-    final lOther$removeSshKey = other.removeSshKey;
-    if (l$removeSshKey != lOther$removeSshKey) {
+    final l$users = users;
+    final lOther$users = other.users;
+    if (l$users != lOther$users) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -3848,10 +4455,10 @@ abstract class CopyWith$Mutation$RemoveSshKey<TRes> {
       _CopyWithStubImpl$Mutation$RemoveSshKey;
 
   TRes call({
-    Mutation$RemoveSshKey$removeSshKey? removeSshKey,
+    Mutation$RemoveSshKey$users? users,
     String? $__typename,
   });
-  CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey;
+  CopyWith$Mutation$RemoveSshKey$users<TRes> get users;
 }
 
 class _CopyWithImpl$Mutation$RemoveSshKey<TRes>
@@ -3868,22 +4475,22 @@ class _CopyWithImpl$Mutation$RemoveSshKey<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? removeSshKey = _undefined,
+    Object? users = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$RemoveSshKey(
-        removeSshKey: removeSshKey == _undefined || removeSshKey == null
-            ? _instance.removeSshKey
-            : (removeSshKey as Mutation$RemoveSshKey$removeSshKey),
+        users: users == _undefined || users == null
+            ? _instance.users
+            : (users as Mutation$RemoveSshKey$users),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey {
-    final local$removeSshKey = _instance.removeSshKey;
-    return CopyWith$Mutation$RemoveSshKey$removeSshKey(
-        local$removeSshKey, (e) => call(removeSshKey: e));
+  CopyWith$Mutation$RemoveSshKey$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Mutation$RemoveSshKey$users(
+        local$users, (e) => call(users: e));
   }
 }
 
@@ -3894,13 +4501,13 @@ class _CopyWithStubImpl$Mutation$RemoveSshKey<TRes>
   TRes _res;
 
   call({
-    Mutation$RemoveSshKey$removeSshKey? removeSshKey,
+    Mutation$RemoveSshKey$users? users,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> get removeSshKey =>
-      CopyWith$Mutation$RemoveSshKey$removeSshKey.stub(_res);
+  CopyWith$Mutation$RemoveSshKey$users<TRes> get users =>
+      CopyWith$Mutation$RemoveSshKey$users.stub(_res);
 }
 
 const documentNodeMutationRemoveSshKey = DocumentNode(definitions: [
@@ -3921,29 +4528,44 @@ const documentNodeMutationRemoveSshKey = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'removeSshKey'),
+        name: NameNode(value: 'users'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'sshInput'),
-            value: VariableNode(name: NameNode(value: 'sshInput')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'user'),
+            name: NameNode(value: 'removeSshKey'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'sshInput'),
+                value: VariableNode(name: NameNode(value: 'sshInput')),
+              )
+            ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
               FragmentSpreadNode(
-                name: NameNode(value: 'userFields'),
+                name: NameNode(value: 'basicMutationReturnFields'),
                 directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'user'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'userFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
               ),
               FieldNode(
                 name: NameNode(value: '__typename'),
@@ -4070,9 +4692,145 @@ extension ClientExtension$Mutation$RemoveSshKey on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$RemoveSshKey$removeSshKey
+class Mutation$RemoveSshKey$users {
+  Mutation$RemoveSshKey$users({
+    required this.removeSshKey,
+    this.$__typename = 'UsersMutations',
+  });
+
+  factory Mutation$RemoveSshKey$users.fromJson(Map<String, dynamic> json) {
+    final l$removeSshKey = json['removeSshKey'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RemoveSshKey$users(
+      removeSshKey: Mutation$RemoveSshKey$users$removeSshKey.fromJson(
+          (l$removeSshKey as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RemoveSshKey$users$removeSshKey removeSshKey;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$removeSshKey = removeSshKey;
+    _resultData['removeSshKey'] = l$removeSshKey.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$removeSshKey = removeSshKey;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$removeSshKey,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RemoveSshKey$users) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$removeSshKey = removeSshKey;
+    final lOther$removeSshKey = other.removeSshKey;
+    if (l$removeSshKey != lOther$removeSshKey) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RemoveSshKey$users
+    on Mutation$RemoveSshKey$users {
+  CopyWith$Mutation$RemoveSshKey$users<Mutation$RemoveSshKey$users>
+      get copyWith => CopyWith$Mutation$RemoveSshKey$users(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RemoveSshKey$users<TRes> {
+  factory CopyWith$Mutation$RemoveSshKey$users(
+    Mutation$RemoveSshKey$users instance,
+    TRes Function(Mutation$RemoveSshKey$users) then,
+  ) = _CopyWithImpl$Mutation$RemoveSshKey$users;
+
+  factory CopyWith$Mutation$RemoveSshKey$users.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveSshKey$users;
+
+  TRes call({
+    Mutation$RemoveSshKey$users$removeSshKey? removeSshKey,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RemoveSshKey$users$removeSshKey<TRes> get removeSshKey;
+}
+
+class _CopyWithImpl$Mutation$RemoveSshKey$users<TRes>
+    implements CopyWith$Mutation$RemoveSshKey$users<TRes> {
+  _CopyWithImpl$Mutation$RemoveSshKey$users(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RemoveSshKey$users _instance;
+
+  final TRes Function(Mutation$RemoveSshKey$users) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? removeSshKey = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RemoveSshKey$users(
+        removeSshKey: removeSshKey == _undefined || removeSshKey == null
+            ? _instance.removeSshKey
+            : (removeSshKey as Mutation$RemoveSshKey$users$removeSshKey),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RemoveSshKey$users$removeSshKey<TRes> get removeSshKey {
+    final local$removeSshKey = _instance.removeSshKey;
+    return CopyWith$Mutation$RemoveSshKey$users$removeSshKey(
+        local$removeSshKey, (e) => call(removeSshKey: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RemoveSshKey$users<TRes>
+    implements CopyWith$Mutation$RemoveSshKey$users<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveSshKey$users(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RemoveSshKey$users$removeSshKey? removeSshKey,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RemoveSshKey$users$removeSshKey<TRes> get removeSshKey =>
+      CopyWith$Mutation$RemoveSshKey$users$removeSshKey.stub(_res);
+}
+
+class Mutation$RemoveSshKey$users$removeSshKey
     implements Fragment$basicMutationReturnFields$$UserMutationReturn {
-  Mutation$RemoveSshKey$removeSshKey({
+  Mutation$RemoveSshKey$users$removeSshKey({
     required this.code,
     required this.message,
     required this.success,
@@ -4080,14 +4838,14 @@ class Mutation$RemoveSshKey$removeSshKey
     this.user,
   });
 
-  factory Mutation$RemoveSshKey$removeSshKey.fromJson(
+  factory Mutation$RemoveSshKey$users$removeSshKey.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$user = json['user'];
-    return Mutation$RemoveSshKey$removeSshKey(
+    return Mutation$RemoveSshKey$users$removeSshKey(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -4144,7 +4902,7 @@ class Mutation$RemoveSshKey$removeSshKey
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RemoveSshKey$removeSshKey) ||
+    if (!(other is Mutation$RemoveSshKey$users$removeSshKey) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4177,24 +4935,24 @@ class Mutation$RemoveSshKey$removeSshKey
   }
 }
 
-extension UtilityExtension$Mutation$RemoveSshKey$removeSshKey
-    on Mutation$RemoveSshKey$removeSshKey {
-  CopyWith$Mutation$RemoveSshKey$removeSshKey<
-          Mutation$RemoveSshKey$removeSshKey>
-      get copyWith => CopyWith$Mutation$RemoveSshKey$removeSshKey(
+extension UtilityExtension$Mutation$RemoveSshKey$users$removeSshKey
+    on Mutation$RemoveSshKey$users$removeSshKey {
+  CopyWith$Mutation$RemoveSshKey$users$removeSshKey<
+          Mutation$RemoveSshKey$users$removeSshKey>
+      get copyWith => CopyWith$Mutation$RemoveSshKey$users$removeSshKey(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> {
-  factory CopyWith$Mutation$RemoveSshKey$removeSshKey(
-    Mutation$RemoveSshKey$removeSshKey instance,
-    TRes Function(Mutation$RemoveSshKey$removeSshKey) then,
-  ) = _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey;
+abstract class CopyWith$Mutation$RemoveSshKey$users$removeSshKey<TRes> {
+  factory CopyWith$Mutation$RemoveSshKey$users$removeSshKey(
+    Mutation$RemoveSshKey$users$removeSshKey instance,
+    TRes Function(Mutation$RemoveSshKey$users$removeSshKey) then,
+  ) = _CopyWithImpl$Mutation$RemoveSshKey$users$removeSshKey;
 
-  factory CopyWith$Mutation$RemoveSshKey$removeSshKey.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey;
+  factory CopyWith$Mutation$RemoveSshKey$users$removeSshKey.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RemoveSshKey$users$removeSshKey;
 
   TRes call({
     int? code,
@@ -4206,16 +4964,16 @@ abstract class CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> {
   CopyWith$Fragment$userFields<TRes> get user;
 }
 
-class _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
-    implements CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> {
-  _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey(
+class _CopyWithImpl$Mutation$RemoveSshKey$users$removeSshKey<TRes>
+    implements CopyWith$Mutation$RemoveSshKey$users$removeSshKey<TRes> {
+  _CopyWithImpl$Mutation$RemoveSshKey$users$removeSshKey(
     this._instance,
     this._then,
   );
 
-  final Mutation$RemoveSshKey$removeSshKey _instance;
+  final Mutation$RemoveSshKey$users$removeSshKey _instance;
 
-  final TRes Function(Mutation$RemoveSshKey$removeSshKey) _then;
+  final TRes Function(Mutation$RemoveSshKey$users$removeSshKey) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -4226,7 +4984,7 @@ class _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
     Object? $__typename = _undefined,
     Object? user = _undefined,
   }) =>
-      _then(Mutation$RemoveSshKey$removeSshKey(
+      _then(Mutation$RemoveSshKey$users$removeSshKey(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -4251,9 +5009,9 @@ class _CopyWithImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
   }
 }
 
-class _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey<TRes>
-    implements CopyWith$Mutation$RemoveSshKey$removeSshKey<TRes> {
-  _CopyWithStubImpl$Mutation$RemoveSshKey$removeSshKey(this._res);
+class _CopyWithStubImpl$Mutation$RemoveSshKey$users$removeSshKey<TRes>
+    implements CopyWith$Mutation$RemoveSshKey$users$removeSshKey<TRes> {
+  _CopyWithStubImpl$Mutation$RemoveSshKey$users$removeSshKey(this._res);
 
   TRes _res;
 

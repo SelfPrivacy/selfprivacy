@@ -45,16 +45,20 @@ query GetDnsRecords {
 }
 
 mutation ChangeTimezone($timezone: String!) {
-  changeTimezone(timezone: $timezone) {
-    ...basicMutationReturnFields
-    timezone
+  system {
+    changeTimezone(timezone: $timezone) {
+      ...basicMutationReturnFields
+      timezone
+    }
   }
 }
 
 mutation ChangeAutoUpgradeSettings($settings: AutoUpgradeSettingsInput!) {
-  changeAutoUpgradeSettings(settings: $settings) {
-    ...basicMutationReturnFields
-    allowReboot
-    enableAutoUpgrade
+  system {
+    changeAutoUpgradeSettings(settings: $settings) {
+      ...basicMutationReturnFields
+      allowReboot
+      enableAutoUpgrade
+    }
   }
 }

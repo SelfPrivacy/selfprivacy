@@ -2692,29 +2692,28 @@ class _CopyWithStubImpl$Variables$Mutation$ChangeTimezone<TRes>
 
 class Mutation$ChangeTimezone {
   Mutation$ChangeTimezone({
-    required this.changeTimezone,
+    required this.system,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$ChangeTimezone.fromJson(Map<String, dynamic> json) {
-    final l$changeTimezone = json['changeTimezone'];
+    final l$system = json['system'];
     final l$$__typename = json['__typename'];
     return Mutation$ChangeTimezone(
-      changeTimezone: Mutation$ChangeTimezone$changeTimezone.fromJson(
-          (l$changeTimezone as Map<String, dynamic>)),
+      system: Mutation$ChangeTimezone$system.fromJson(
+          (l$system as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `system.change_timezone` instead')
-  final Mutation$ChangeTimezone$changeTimezone changeTimezone;
+  final Mutation$ChangeTimezone$system system;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$changeTimezone = changeTimezone;
-    _resultData['changeTimezone'] = l$changeTimezone.toJson();
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -2722,10 +2721,10 @@ class Mutation$ChangeTimezone {
 
   @override
   int get hashCode {
-    final l$changeTimezone = changeTimezone;
+    final l$system = system;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$changeTimezone,
+      l$system,
       l$$__typename,
     ]);
   }
@@ -2739,9 +2738,9 @@ class Mutation$ChangeTimezone {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$changeTimezone = changeTimezone;
-    final lOther$changeTimezone = other.changeTimezone;
-    if (l$changeTimezone != lOther$changeTimezone) {
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -2771,10 +2770,10 @@ abstract class CopyWith$Mutation$ChangeTimezone<TRes> {
       _CopyWithStubImpl$Mutation$ChangeTimezone;
 
   TRes call({
-    Mutation$ChangeTimezone$changeTimezone? changeTimezone,
+    Mutation$ChangeTimezone$system? system,
     String? $__typename,
   });
-  CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> get changeTimezone;
+  CopyWith$Mutation$ChangeTimezone$system<TRes> get system;
 }
 
 class _CopyWithImpl$Mutation$ChangeTimezone<TRes>
@@ -2791,22 +2790,22 @@ class _CopyWithImpl$Mutation$ChangeTimezone<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? changeTimezone = _undefined,
+    Object? system = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$ChangeTimezone(
-        changeTimezone: changeTimezone == _undefined || changeTimezone == null
-            ? _instance.changeTimezone
-            : (changeTimezone as Mutation$ChangeTimezone$changeTimezone),
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$ChangeTimezone$system),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> get changeTimezone {
-    final local$changeTimezone = _instance.changeTimezone;
-    return CopyWith$Mutation$ChangeTimezone$changeTimezone(
-        local$changeTimezone, (e) => call(changeTimezone: e));
+  CopyWith$Mutation$ChangeTimezone$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$ChangeTimezone$system(
+        local$system, (e) => call(system: e));
   }
 }
 
@@ -2817,13 +2816,13 @@ class _CopyWithStubImpl$Mutation$ChangeTimezone<TRes>
   TRes _res;
 
   call({
-    Mutation$ChangeTimezone$changeTimezone? changeTimezone,
+    Mutation$ChangeTimezone$system? system,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> get changeTimezone =>
-      CopyWith$Mutation$ChangeTimezone$changeTimezone.stub(_res);
+  CopyWith$Mutation$ChangeTimezone$system<TRes> get system =>
+      CopyWith$Mutation$ChangeTimezone$system.stub(_res);
 }
 
 const documentNodeMutationChangeTimezone = DocumentNode(definitions: [
@@ -2844,26 +2843,41 @@ const documentNodeMutationChangeTimezone = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'changeTimezone'),
+        name: NameNode(value: 'system'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'timezone'),
-            value: VariableNode(name: NameNode(value: 'timezone')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'timezone'),
+            name: NameNode(value: 'changeTimezone'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'timezone'),
+                value: VariableNode(name: NameNode(value: 'timezone')),
+              )
+            ],
             directives: [],
-            selectionSet: null,
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'timezone'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -2982,9 +2996,148 @@ extension ClientExtension$Mutation$ChangeTimezone on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$ChangeTimezone$changeTimezone
+class Mutation$ChangeTimezone$system {
+  Mutation$ChangeTimezone$system({
+    required this.changeTimezone,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$ChangeTimezone$system.fromJson(Map<String, dynamic> json) {
+    final l$changeTimezone = json['changeTimezone'];
+    final l$$__typename = json['__typename'];
+    return Mutation$ChangeTimezone$system(
+      changeTimezone: Mutation$ChangeTimezone$system$changeTimezone.fromJson(
+          (l$changeTimezone as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$ChangeTimezone$system$changeTimezone changeTimezone;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$changeTimezone = changeTimezone;
+    _resultData['changeTimezone'] = l$changeTimezone.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$changeTimezone = changeTimezone;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$changeTimezone,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ChangeTimezone$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$changeTimezone = changeTimezone;
+    final lOther$changeTimezone = other.changeTimezone;
+    if (l$changeTimezone != lOther$changeTimezone) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ChangeTimezone$system
+    on Mutation$ChangeTimezone$system {
+  CopyWith$Mutation$ChangeTimezone$system<Mutation$ChangeTimezone$system>
+      get copyWith => CopyWith$Mutation$ChangeTimezone$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$ChangeTimezone$system<TRes> {
+  factory CopyWith$Mutation$ChangeTimezone$system(
+    Mutation$ChangeTimezone$system instance,
+    TRes Function(Mutation$ChangeTimezone$system) then,
+  ) = _CopyWithImpl$Mutation$ChangeTimezone$system;
+
+  factory CopyWith$Mutation$ChangeTimezone$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeTimezone$system;
+
+  TRes call({
+    Mutation$ChangeTimezone$system$changeTimezone? changeTimezone,
+    String? $__typename,
+  });
+  CopyWith$Mutation$ChangeTimezone$system$changeTimezone<TRes>
+      get changeTimezone;
+}
+
+class _CopyWithImpl$Mutation$ChangeTimezone$system<TRes>
+    implements CopyWith$Mutation$ChangeTimezone$system<TRes> {
+  _CopyWithImpl$Mutation$ChangeTimezone$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ChangeTimezone$system _instance;
+
+  final TRes Function(Mutation$ChangeTimezone$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? changeTimezone = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$ChangeTimezone$system(
+        changeTimezone: changeTimezone == _undefined || changeTimezone == null
+            ? _instance.changeTimezone
+            : (changeTimezone as Mutation$ChangeTimezone$system$changeTimezone),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$ChangeTimezone$system$changeTimezone<TRes>
+      get changeTimezone {
+    final local$changeTimezone = _instance.changeTimezone;
+    return CopyWith$Mutation$ChangeTimezone$system$changeTimezone(
+        local$changeTimezone, (e) => call(changeTimezone: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ChangeTimezone$system<TRes>
+    implements CopyWith$Mutation$ChangeTimezone$system<TRes> {
+  _CopyWithStubImpl$Mutation$ChangeTimezone$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$ChangeTimezone$system$changeTimezone? changeTimezone,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$ChangeTimezone$system$changeTimezone<TRes>
+      get changeTimezone =>
+          CopyWith$Mutation$ChangeTimezone$system$changeTimezone.stub(_res);
+}
+
+class Mutation$ChangeTimezone$system$changeTimezone
     implements Fragment$basicMutationReturnFields$$TimezoneMutationReturn {
-  Mutation$ChangeTimezone$changeTimezone({
+  Mutation$ChangeTimezone$system$changeTimezone({
     required this.code,
     required this.message,
     required this.success,
@@ -2992,14 +3145,14 @@ class Mutation$ChangeTimezone$changeTimezone
     this.timezone,
   });
 
-  factory Mutation$ChangeTimezone$changeTimezone.fromJson(
+  factory Mutation$ChangeTimezone$system$changeTimezone.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$timezone = json['timezone'];
-    return Mutation$ChangeTimezone$changeTimezone(
+    return Mutation$ChangeTimezone$system$changeTimezone(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -3054,7 +3207,7 @@ class Mutation$ChangeTimezone$changeTimezone
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$ChangeTimezone$changeTimezone) ||
+    if (!(other is Mutation$ChangeTimezone$system$changeTimezone) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3087,24 +3240,25 @@ class Mutation$ChangeTimezone$changeTimezone
   }
 }
 
-extension UtilityExtension$Mutation$ChangeTimezone$changeTimezone
-    on Mutation$ChangeTimezone$changeTimezone {
-  CopyWith$Mutation$ChangeTimezone$changeTimezone<
-          Mutation$ChangeTimezone$changeTimezone>
-      get copyWith => CopyWith$Mutation$ChangeTimezone$changeTimezone(
+extension UtilityExtension$Mutation$ChangeTimezone$system$changeTimezone
+    on Mutation$ChangeTimezone$system$changeTimezone {
+  CopyWith$Mutation$ChangeTimezone$system$changeTimezone<
+          Mutation$ChangeTimezone$system$changeTimezone>
+      get copyWith => CopyWith$Mutation$ChangeTimezone$system$changeTimezone(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> {
-  factory CopyWith$Mutation$ChangeTimezone$changeTimezone(
-    Mutation$ChangeTimezone$changeTimezone instance,
-    TRes Function(Mutation$ChangeTimezone$changeTimezone) then,
-  ) = _CopyWithImpl$Mutation$ChangeTimezone$changeTimezone;
+abstract class CopyWith$Mutation$ChangeTimezone$system$changeTimezone<TRes> {
+  factory CopyWith$Mutation$ChangeTimezone$system$changeTimezone(
+    Mutation$ChangeTimezone$system$changeTimezone instance,
+    TRes Function(Mutation$ChangeTimezone$system$changeTimezone) then,
+  ) = _CopyWithImpl$Mutation$ChangeTimezone$system$changeTimezone;
 
-  factory CopyWith$Mutation$ChangeTimezone$changeTimezone.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$ChangeTimezone$changeTimezone;
+  factory CopyWith$Mutation$ChangeTimezone$system$changeTimezone.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeTimezone$system$changeTimezone;
 
   TRes call({
     int? code,
@@ -3115,16 +3269,16 @@ abstract class CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$ChangeTimezone$changeTimezone<TRes>
-    implements CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> {
-  _CopyWithImpl$Mutation$ChangeTimezone$changeTimezone(
+class _CopyWithImpl$Mutation$ChangeTimezone$system$changeTimezone<TRes>
+    implements CopyWith$Mutation$ChangeTimezone$system$changeTimezone<TRes> {
+  _CopyWithImpl$Mutation$ChangeTimezone$system$changeTimezone(
     this._instance,
     this._then,
   );
 
-  final Mutation$ChangeTimezone$changeTimezone _instance;
+  final Mutation$ChangeTimezone$system$changeTimezone _instance;
 
-  final TRes Function(Mutation$ChangeTimezone$changeTimezone) _then;
+  final TRes Function(Mutation$ChangeTimezone$system$changeTimezone) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3135,7 +3289,7 @@ class _CopyWithImpl$Mutation$ChangeTimezone$changeTimezone<TRes>
     Object? $__typename = _undefined,
     Object? timezone = _undefined,
   }) =>
-      _then(Mutation$ChangeTimezone$changeTimezone(
+      _then(Mutation$ChangeTimezone$system$changeTimezone(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -3152,9 +3306,9 @@ class _CopyWithImpl$Mutation$ChangeTimezone$changeTimezone<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$ChangeTimezone$changeTimezone<TRes>
-    implements CopyWith$Mutation$ChangeTimezone$changeTimezone<TRes> {
-  _CopyWithStubImpl$Mutation$ChangeTimezone$changeTimezone(this._res);
+class _CopyWithStubImpl$Mutation$ChangeTimezone$system$changeTimezone<TRes>
+    implements CopyWith$Mutation$ChangeTimezone$system$changeTimezone<TRes> {
+  _CopyWithStubImpl$Mutation$ChangeTimezone$system$changeTimezone(this._res);
 
   TRes _res;
 
@@ -3273,33 +3427,29 @@ class _CopyWithStubImpl$Variables$Mutation$ChangeAutoUpgradeSettings<TRes>
 
 class Mutation$ChangeAutoUpgradeSettings {
   Mutation$ChangeAutoUpgradeSettings({
-    required this.changeAutoUpgradeSettings,
+    required this.system,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$ChangeAutoUpgradeSettings.fromJson(
       Map<String, dynamic> json) {
-    final l$changeAutoUpgradeSettings = json['changeAutoUpgradeSettings'];
+    final l$system = json['system'];
     final l$$__typename = json['__typename'];
     return Mutation$ChangeAutoUpgradeSettings(
-      changeAutoUpgradeSettings:
-          Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings.fromJson(
-              (l$changeAutoUpgradeSettings as Map<String, dynamic>)),
+      system: Mutation$ChangeAutoUpgradeSettings$system.fromJson(
+          (l$system as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `system.change_auto_upgrade_settings` instead')
-  final Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
-      changeAutoUpgradeSettings;
+  final Mutation$ChangeAutoUpgradeSettings$system system;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$changeAutoUpgradeSettings = changeAutoUpgradeSettings;
-    _resultData['changeAutoUpgradeSettings'] =
-        l$changeAutoUpgradeSettings.toJson();
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -3307,10 +3457,10 @@ class Mutation$ChangeAutoUpgradeSettings {
 
   @override
   int get hashCode {
-    final l$changeAutoUpgradeSettings = changeAutoUpgradeSettings;
+    final l$system = system;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$changeAutoUpgradeSettings,
+      l$system,
       l$$__typename,
     ]);
   }
@@ -3324,9 +3474,9 @@ class Mutation$ChangeAutoUpgradeSettings {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$changeAutoUpgradeSettings = changeAutoUpgradeSettings;
-    final lOther$changeAutoUpgradeSettings = other.changeAutoUpgradeSettings;
-    if (l$changeAutoUpgradeSettings != lOther$changeAutoUpgradeSettings) {
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -3358,12 +3508,10 @@ abstract class CopyWith$Mutation$ChangeAutoUpgradeSettings<TRes> {
       _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings;
 
   TRes call({
-    Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings?
-        changeAutoUpgradeSettings,
+    Mutation$ChangeAutoUpgradeSettings$system? system,
     String? $__typename,
   });
-  CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<TRes>
-      get changeAutoUpgradeSettings;
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$system<TRes> get system;
 }
 
 class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings<TRes>
@@ -3380,26 +3528,22 @@ class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? changeAutoUpgradeSettings = _undefined,
+    Object? system = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$ChangeAutoUpgradeSettings(
-        changeAutoUpgradeSettings: changeAutoUpgradeSettings == _undefined ||
-                changeAutoUpgradeSettings == null
-            ? _instance.changeAutoUpgradeSettings
-            : (changeAutoUpgradeSettings
-                as Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings),
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$ChangeAutoUpgradeSettings$system),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<TRes>
-      get changeAutoUpgradeSettings {
-    final local$changeAutoUpgradeSettings = _instance.changeAutoUpgradeSettings;
-    return CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
-        local$changeAutoUpgradeSettings,
-        (e) => call(changeAutoUpgradeSettings: e));
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$ChangeAutoUpgradeSettings$system(
+        local$system, (e) => call(system: e));
   }
 }
 
@@ -3410,16 +3554,13 @@ class _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings<TRes>
   TRes _res;
 
   call({
-    Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings?
-        changeAutoUpgradeSettings,
+    Mutation$ChangeAutoUpgradeSettings$system? system,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<TRes>
-      get changeAutoUpgradeSettings =>
-          CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
-              .stub(_res);
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$system<TRes> get system =>
+      CopyWith$Mutation$ChangeAutoUpgradeSettings$system.stub(_res);
 }
 
 const documentNodeMutationChangeAutoUpgradeSettings =
@@ -3441,33 +3582,48 @@ const documentNodeMutationChangeAutoUpgradeSettings =
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'changeAutoUpgradeSettings'),
+        name: NameNode(value: 'system'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'settings'),
-            value: VariableNode(name: NameNode(value: 'settings')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'allowReboot'),
+            name: NameNode(value: 'changeAutoUpgradeSettings'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'settings'),
+                value: VariableNode(name: NameNode(value: 'settings')),
+              )
+            ],
             directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'enableAutoUpgrade'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'allowReboot'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'enableAutoUpgrade'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -3591,10 +3747,161 @@ extension ClientExtension$Mutation$ChangeAutoUpgradeSettings
           this.watchMutation(options);
 }
 
-class Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
+class Mutation$ChangeAutoUpgradeSettings$system {
+  Mutation$ChangeAutoUpgradeSettings$system({
+    required this.changeAutoUpgradeSettings,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$ChangeAutoUpgradeSettings$system.fromJson(
+      Map<String, dynamic> json) {
+    final l$changeAutoUpgradeSettings = json['changeAutoUpgradeSettings'];
+    final l$$__typename = json['__typename'];
+    return Mutation$ChangeAutoUpgradeSettings$system(
+      changeAutoUpgradeSettings:
+          Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings
+              .fromJson((l$changeAutoUpgradeSettings as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings
+      changeAutoUpgradeSettings;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$changeAutoUpgradeSettings = changeAutoUpgradeSettings;
+    _resultData['changeAutoUpgradeSettings'] =
+        l$changeAutoUpgradeSettings.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$changeAutoUpgradeSettings = changeAutoUpgradeSettings;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$changeAutoUpgradeSettings,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ChangeAutoUpgradeSettings$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$changeAutoUpgradeSettings = changeAutoUpgradeSettings;
+    final lOther$changeAutoUpgradeSettings = other.changeAutoUpgradeSettings;
+    if (l$changeAutoUpgradeSettings != lOther$changeAutoUpgradeSettings) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ChangeAutoUpgradeSettings$system
+    on Mutation$ChangeAutoUpgradeSettings$system {
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$system<
+          Mutation$ChangeAutoUpgradeSettings$system>
+      get copyWith => CopyWith$Mutation$ChangeAutoUpgradeSettings$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$ChangeAutoUpgradeSettings$system<TRes> {
+  factory CopyWith$Mutation$ChangeAutoUpgradeSettings$system(
+    Mutation$ChangeAutoUpgradeSettings$system instance,
+    TRes Function(Mutation$ChangeAutoUpgradeSettings$system) then,
+  ) = _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$system;
+
+  factory CopyWith$Mutation$ChangeAutoUpgradeSettings$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$system;
+
+  TRes call({
+    Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings?
+        changeAutoUpgradeSettings,
+    String? $__typename,
+  });
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings<
+      TRes> get changeAutoUpgradeSettings;
+}
+
+class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$system<TRes>
+    implements CopyWith$Mutation$ChangeAutoUpgradeSettings$system<TRes> {
+  _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ChangeAutoUpgradeSettings$system _instance;
+
+  final TRes Function(Mutation$ChangeAutoUpgradeSettings$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? changeAutoUpgradeSettings = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$ChangeAutoUpgradeSettings$system(
+        changeAutoUpgradeSettings: changeAutoUpgradeSettings == _undefined ||
+                changeAutoUpgradeSettings == null
+            ? _instance.changeAutoUpgradeSettings
+            : (changeAutoUpgradeSettings
+                as Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings<
+      TRes> get changeAutoUpgradeSettings {
+    final local$changeAutoUpgradeSettings = _instance.changeAutoUpgradeSettings;
+    return CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings(
+        local$changeAutoUpgradeSettings,
+        (e) => call(changeAutoUpgradeSettings: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$system<TRes>
+    implements CopyWith$Mutation$ChangeAutoUpgradeSettings$system<TRes> {
+  _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings?
+        changeAutoUpgradeSettings,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings<
+          TRes>
+      get changeAutoUpgradeSettings =>
+          CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings
+              .stub(_res);
+}
+
+class Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings
     implements
         Fragment$basicMutationReturnFields$$AutoUpgradeSettingsMutationReturn {
-  Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings({
+  Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings({
     required this.code,
     required this.message,
     required this.success,
@@ -3603,7 +3910,7 @@ class Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
     required this.enableAutoUpgrade,
   });
 
-  factory Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings.fromJson(
+  factory Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
@@ -3611,7 +3918,7 @@ class Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
     final l$$__typename = json['__typename'];
     final l$allowReboot = json['allowReboot'];
     final l$enableAutoUpgrade = json['enableAutoUpgrade'];
-    return Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+    return Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -3674,7 +3981,7 @@ class Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
       return true;
     }
     if (!(other
-            is Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings) ||
+            is Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3712,28 +4019,30 @@ class Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
   }
 }
 
-extension UtilityExtension$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
-    on Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings {
-  CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
-          Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings>
+extension UtilityExtension$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings
+    on Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings {
+  CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings<
+          Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings>
       get copyWith =>
-          CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+          CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+abstract class CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings<
     TRes> {
-  factory CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
-    Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings instance,
-    TRes Function(Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings)
+  factory CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings(
+    Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings
+        instance,
+    TRes Function(
+            Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings)
         then,
-  ) = _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings;
+  ) = _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings;
 
-  factory CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings.stub(
+  factory CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings.stub(
           TRes res) =
-      _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings;
+      _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings;
 
   TRes call({
     int? code,
@@ -3745,20 +4054,22 @@ abstract class CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSett
   });
 }
 
-class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings<
         TRes>
     implements
-        CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+        CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings<
             TRes> {
-  _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+  _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings(
     this._instance,
     this._then,
   );
 
-  final Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings _instance;
+  final Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings
+      _instance;
 
   final TRes Function(
-      Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings) _then;
+          Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings)
+      _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3770,7 +4081,7 @@ class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
     Object? allowReboot = _undefined,
     Object? enableAutoUpgrade = _undefined,
   }) =>
-      _then(Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+      _then(Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -3792,12 +4103,12 @@ class _CopyWithImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings
       ));
 }
 
-class _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+class _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings<
         TRes>
     implements
-        CopyWith$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings<
+        CopyWith$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings<
             TRes> {
-  _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$changeAutoUpgradeSettings(
+  _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgradeSettings(
       this._res);
 
   TRes _res;

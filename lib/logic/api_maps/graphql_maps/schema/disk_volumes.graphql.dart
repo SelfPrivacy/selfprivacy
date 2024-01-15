@@ -1613,29 +1613,28 @@ class _CopyWithStubImpl$Variables$Mutation$MountVolume<TRes>
 
 class Mutation$MountVolume {
   Mutation$MountVolume({
-    required this.mountVolume,
+    required this.storage,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$MountVolume.fromJson(Map<String, dynamic> json) {
-    final l$mountVolume = json['mountVolume'];
+    final l$storage = json['storage'];
     final l$$__typename = json['__typename'];
     return Mutation$MountVolume(
-      mountVolume: Mutation$MountVolume$mountVolume.fromJson(
-          (l$mountVolume as Map<String, dynamic>)),
+      storage: Mutation$MountVolume$storage.fromJson(
+          (l$storage as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `storage.mount_volume` instead')
-  final Mutation$MountVolume$mountVolume mountVolume;
+  final Mutation$MountVolume$storage storage;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$mountVolume = mountVolume;
-    _resultData['mountVolume'] = l$mountVolume.toJson();
+    final l$storage = storage;
+    _resultData['storage'] = l$storage.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -1643,10 +1642,10 @@ class Mutation$MountVolume {
 
   @override
   int get hashCode {
-    final l$mountVolume = mountVolume;
+    final l$storage = storage;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$mountVolume,
+      l$storage,
       l$$__typename,
     ]);
   }
@@ -1659,9 +1658,9 @@ class Mutation$MountVolume {
     if (!(other is Mutation$MountVolume) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$mountVolume = mountVolume;
-    final lOther$mountVolume = other.mountVolume;
-    if (l$mountVolume != lOther$mountVolume) {
+    final l$storage = storage;
+    final lOther$storage = other.storage;
+    if (l$storage != lOther$storage) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -1691,10 +1690,10 @@ abstract class CopyWith$Mutation$MountVolume<TRes> {
       _CopyWithStubImpl$Mutation$MountVolume;
 
   TRes call({
-    Mutation$MountVolume$mountVolume? mountVolume,
+    Mutation$MountVolume$storage? storage,
     String? $__typename,
   });
-  CopyWith$Mutation$MountVolume$mountVolume<TRes> get mountVolume;
+  CopyWith$Mutation$MountVolume$storage<TRes> get storage;
 }
 
 class _CopyWithImpl$Mutation$MountVolume<TRes>
@@ -1711,22 +1710,22 @@ class _CopyWithImpl$Mutation$MountVolume<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? mountVolume = _undefined,
+    Object? storage = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$MountVolume(
-        mountVolume: mountVolume == _undefined || mountVolume == null
-            ? _instance.mountVolume
-            : (mountVolume as Mutation$MountVolume$mountVolume),
+        storage: storage == _undefined || storage == null
+            ? _instance.storage
+            : (storage as Mutation$MountVolume$storage),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$MountVolume$mountVolume<TRes> get mountVolume {
-    final local$mountVolume = _instance.mountVolume;
-    return CopyWith$Mutation$MountVolume$mountVolume(
-        local$mountVolume, (e) => call(mountVolume: e));
+  CopyWith$Mutation$MountVolume$storage<TRes> get storage {
+    final local$storage = _instance.storage;
+    return CopyWith$Mutation$MountVolume$storage(
+        local$storage, (e) => call(storage: e));
   }
 }
 
@@ -1737,13 +1736,13 @@ class _CopyWithStubImpl$Mutation$MountVolume<TRes>
   TRes _res;
 
   call({
-    Mutation$MountVolume$mountVolume? mountVolume,
+    Mutation$MountVolume$storage? storage,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$MountVolume$mountVolume<TRes> get mountVolume =>
-      CopyWith$Mutation$MountVolume$mountVolume.stub(_res);
+  CopyWith$Mutation$MountVolume$storage<TRes> get storage =>
+      CopyWith$Mutation$MountVolume$storage.stub(_res);
 }
 
 const documentNodeMutationMountVolume = DocumentNode(definitions: [
@@ -1764,19 +1763,34 @@ const documentNodeMutationMountVolume = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'mountVolume'),
+        name: NameNode(value: 'storage'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'name'),
-            value: VariableNode(name: NameNode(value: 'name')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'mountVolume'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'name'),
+                value: VariableNode(name: NameNode(value: 'name')),
+              )
+            ],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -1893,21 +1907,158 @@ extension ClientExtension$Mutation$MountVolume on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$MountVolume$mountVolume
+class Mutation$MountVolume$storage {
+  Mutation$MountVolume$storage({
+    required this.mountVolume,
+    this.$__typename = 'StorageMutations',
+  });
+
+  factory Mutation$MountVolume$storage.fromJson(Map<String, dynamic> json) {
+    final l$mountVolume = json['mountVolume'];
+    final l$$__typename = json['__typename'];
+    return Mutation$MountVolume$storage(
+      mountVolume: Mutation$MountVolume$storage$mountVolume.fromJson(
+          (l$mountVolume as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$MountVolume$storage$mountVolume mountVolume;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$mountVolume = mountVolume;
+    _resultData['mountVolume'] = l$mountVolume.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$mountVolume = mountVolume;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$mountVolume,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$MountVolume$storage) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$mountVolume = mountVolume;
+    final lOther$mountVolume = other.mountVolume;
+    if (l$mountVolume != lOther$mountVolume) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$MountVolume$storage
+    on Mutation$MountVolume$storage {
+  CopyWith$Mutation$MountVolume$storage<Mutation$MountVolume$storage>
+      get copyWith => CopyWith$Mutation$MountVolume$storage(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$MountVolume$storage<TRes> {
+  factory CopyWith$Mutation$MountVolume$storage(
+    Mutation$MountVolume$storage instance,
+    TRes Function(Mutation$MountVolume$storage) then,
+  ) = _CopyWithImpl$Mutation$MountVolume$storage;
+
+  factory CopyWith$Mutation$MountVolume$storage.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$MountVolume$storage;
+
+  TRes call({
+    Mutation$MountVolume$storage$mountVolume? mountVolume,
+    String? $__typename,
+  });
+  CopyWith$Mutation$MountVolume$storage$mountVolume<TRes> get mountVolume;
+}
+
+class _CopyWithImpl$Mutation$MountVolume$storage<TRes>
+    implements CopyWith$Mutation$MountVolume$storage<TRes> {
+  _CopyWithImpl$Mutation$MountVolume$storage(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$MountVolume$storage _instance;
+
+  final TRes Function(Mutation$MountVolume$storage) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? mountVolume = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$MountVolume$storage(
+        mountVolume: mountVolume == _undefined || mountVolume == null
+            ? _instance.mountVolume
+            : (mountVolume as Mutation$MountVolume$storage$mountVolume),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$MountVolume$storage$mountVolume<TRes> get mountVolume {
+    final local$mountVolume = _instance.mountVolume;
+    return CopyWith$Mutation$MountVolume$storage$mountVolume(
+        local$mountVolume, (e) => call(mountVolume: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$MountVolume$storage<TRes>
+    implements CopyWith$Mutation$MountVolume$storage<TRes> {
+  _CopyWithStubImpl$Mutation$MountVolume$storage(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$MountVolume$storage$mountVolume? mountVolume,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$MountVolume$storage$mountVolume<TRes> get mountVolume =>
+      CopyWith$Mutation$MountVolume$storage$mountVolume.stub(_res);
+}
+
+class Mutation$MountVolume$storage$mountVolume
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$MountVolume$mountVolume({
+  Mutation$MountVolume$storage$mountVolume({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$MountVolume$mountVolume.fromJson(Map<String, dynamic> json) {
+  factory Mutation$MountVolume$storage$mountVolume.fromJson(
+      Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$MountVolume$mountVolume(
+    return Mutation$MountVolume$storage$mountVolume(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -1955,7 +2106,7 @@ class Mutation$MountVolume$mountVolume
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$MountVolume$mountVolume) ||
+    if (!(other is Mutation$MountVolume$storage$mountVolume) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1983,23 +2134,24 @@ class Mutation$MountVolume$mountVolume
   }
 }
 
-extension UtilityExtension$Mutation$MountVolume$mountVolume
-    on Mutation$MountVolume$mountVolume {
-  CopyWith$Mutation$MountVolume$mountVolume<Mutation$MountVolume$mountVolume>
-      get copyWith => CopyWith$Mutation$MountVolume$mountVolume(
+extension UtilityExtension$Mutation$MountVolume$storage$mountVolume
+    on Mutation$MountVolume$storage$mountVolume {
+  CopyWith$Mutation$MountVolume$storage$mountVolume<
+          Mutation$MountVolume$storage$mountVolume>
+      get copyWith => CopyWith$Mutation$MountVolume$storage$mountVolume(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$MountVolume$mountVolume<TRes> {
-  factory CopyWith$Mutation$MountVolume$mountVolume(
-    Mutation$MountVolume$mountVolume instance,
-    TRes Function(Mutation$MountVolume$mountVolume) then,
-  ) = _CopyWithImpl$Mutation$MountVolume$mountVolume;
+abstract class CopyWith$Mutation$MountVolume$storage$mountVolume<TRes> {
+  factory CopyWith$Mutation$MountVolume$storage$mountVolume(
+    Mutation$MountVolume$storage$mountVolume instance,
+    TRes Function(Mutation$MountVolume$storage$mountVolume) then,
+  ) = _CopyWithImpl$Mutation$MountVolume$storage$mountVolume;
 
-  factory CopyWith$Mutation$MountVolume$mountVolume.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$MountVolume$mountVolume;
+  factory CopyWith$Mutation$MountVolume$storage$mountVolume.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$MountVolume$storage$mountVolume;
 
   TRes call({
     int? code,
@@ -2009,16 +2161,16 @@ abstract class CopyWith$Mutation$MountVolume$mountVolume<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$MountVolume$mountVolume<TRes>
-    implements CopyWith$Mutation$MountVolume$mountVolume<TRes> {
-  _CopyWithImpl$Mutation$MountVolume$mountVolume(
+class _CopyWithImpl$Mutation$MountVolume$storage$mountVolume<TRes>
+    implements CopyWith$Mutation$MountVolume$storage$mountVolume<TRes> {
+  _CopyWithImpl$Mutation$MountVolume$storage$mountVolume(
     this._instance,
     this._then,
   );
 
-  final Mutation$MountVolume$mountVolume _instance;
+  final Mutation$MountVolume$storage$mountVolume _instance;
 
-  final TRes Function(Mutation$MountVolume$mountVolume) _then;
+  final TRes Function(Mutation$MountVolume$storage$mountVolume) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -2028,7 +2180,7 @@ class _CopyWithImpl$Mutation$MountVolume$mountVolume<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$MountVolume$mountVolume(
+      _then(Mutation$MountVolume$storage$mountVolume(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -2043,9 +2195,9 @@ class _CopyWithImpl$Mutation$MountVolume$mountVolume<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$MountVolume$mountVolume<TRes>
-    implements CopyWith$Mutation$MountVolume$mountVolume<TRes> {
-  _CopyWithStubImpl$Mutation$MountVolume$mountVolume(this._res);
+class _CopyWithStubImpl$Mutation$MountVolume$storage$mountVolume<TRes>
+    implements CopyWith$Mutation$MountVolume$storage$mountVolume<TRes> {
+  _CopyWithStubImpl$Mutation$MountVolume$storage$mountVolume(this._res);
 
   TRes _res;
 
@@ -2157,29 +2309,28 @@ class _CopyWithStubImpl$Variables$Mutation$ResizeVolume<TRes>
 
 class Mutation$ResizeVolume {
   Mutation$ResizeVolume({
-    required this.resizeVolume,
+    required this.storage,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$ResizeVolume.fromJson(Map<String, dynamic> json) {
-    final l$resizeVolume = json['resizeVolume'];
+    final l$storage = json['storage'];
     final l$$__typename = json['__typename'];
     return Mutation$ResizeVolume(
-      resizeVolume: Mutation$ResizeVolume$resizeVolume.fromJson(
-          (l$resizeVolume as Map<String, dynamic>)),
+      storage: Mutation$ResizeVolume$storage.fromJson(
+          (l$storage as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `storage.resize_volume` instead')
-  final Mutation$ResizeVolume$resizeVolume resizeVolume;
+  final Mutation$ResizeVolume$storage storage;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$resizeVolume = resizeVolume;
-    _resultData['resizeVolume'] = l$resizeVolume.toJson();
+    final l$storage = storage;
+    _resultData['storage'] = l$storage.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -2187,10 +2338,10 @@ class Mutation$ResizeVolume {
 
   @override
   int get hashCode {
-    final l$resizeVolume = resizeVolume;
+    final l$storage = storage;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$resizeVolume,
+      l$storage,
       l$$__typename,
     ]);
   }
@@ -2203,9 +2354,9 @@ class Mutation$ResizeVolume {
     if (!(other is Mutation$ResizeVolume) || runtimeType != other.runtimeType) {
       return false;
     }
-    final l$resizeVolume = resizeVolume;
-    final lOther$resizeVolume = other.resizeVolume;
-    if (l$resizeVolume != lOther$resizeVolume) {
+    final l$storage = storage;
+    final lOther$storage = other.storage;
+    if (l$storage != lOther$storage) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -2235,10 +2386,10 @@ abstract class CopyWith$Mutation$ResizeVolume<TRes> {
       _CopyWithStubImpl$Mutation$ResizeVolume;
 
   TRes call({
-    Mutation$ResizeVolume$resizeVolume? resizeVolume,
+    Mutation$ResizeVolume$storage? storage,
     String? $__typename,
   });
-  CopyWith$Mutation$ResizeVolume$resizeVolume<TRes> get resizeVolume;
+  CopyWith$Mutation$ResizeVolume$storage<TRes> get storage;
 }
 
 class _CopyWithImpl$Mutation$ResizeVolume<TRes>
@@ -2255,22 +2406,22 @@ class _CopyWithImpl$Mutation$ResizeVolume<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? resizeVolume = _undefined,
+    Object? storage = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$ResizeVolume(
-        resizeVolume: resizeVolume == _undefined || resizeVolume == null
-            ? _instance.resizeVolume
-            : (resizeVolume as Mutation$ResizeVolume$resizeVolume),
+        storage: storage == _undefined || storage == null
+            ? _instance.storage
+            : (storage as Mutation$ResizeVolume$storage),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$ResizeVolume$resizeVolume<TRes> get resizeVolume {
-    final local$resizeVolume = _instance.resizeVolume;
-    return CopyWith$Mutation$ResizeVolume$resizeVolume(
-        local$resizeVolume, (e) => call(resizeVolume: e));
+  CopyWith$Mutation$ResizeVolume$storage<TRes> get storage {
+    final local$storage = _instance.storage;
+    return CopyWith$Mutation$ResizeVolume$storage(
+        local$storage, (e) => call(storage: e));
   }
 }
 
@@ -2281,13 +2432,13 @@ class _CopyWithStubImpl$Mutation$ResizeVolume<TRes>
   TRes _res;
 
   call({
-    Mutation$ResizeVolume$resizeVolume? resizeVolume,
+    Mutation$ResizeVolume$storage? storage,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$ResizeVolume$resizeVolume<TRes> get resizeVolume =>
-      CopyWith$Mutation$ResizeVolume$resizeVolume.stub(_res);
+  CopyWith$Mutation$ResizeVolume$storage<TRes> get storage =>
+      CopyWith$Mutation$ResizeVolume$storage.stub(_res);
 }
 
 const documentNodeMutationResizeVolume = DocumentNode(definitions: [
@@ -2308,19 +2459,34 @@ const documentNodeMutationResizeVolume = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'resizeVolume'),
+        name: NameNode(value: 'storage'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'name'),
-            value: VariableNode(name: NameNode(value: 'name')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'resizeVolume'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'name'),
+                value: VariableNode(name: NameNode(value: 'name')),
+              )
+            ],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -2437,22 +2603,158 @@ extension ClientExtension$Mutation$ResizeVolume on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$ResizeVolume$resizeVolume
+class Mutation$ResizeVolume$storage {
+  Mutation$ResizeVolume$storage({
+    required this.resizeVolume,
+    this.$__typename = 'StorageMutations',
+  });
+
+  factory Mutation$ResizeVolume$storage.fromJson(Map<String, dynamic> json) {
+    final l$resizeVolume = json['resizeVolume'];
+    final l$$__typename = json['__typename'];
+    return Mutation$ResizeVolume$storage(
+      resizeVolume: Mutation$ResizeVolume$storage$resizeVolume.fromJson(
+          (l$resizeVolume as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$ResizeVolume$storage$resizeVolume resizeVolume;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$resizeVolume = resizeVolume;
+    _resultData['resizeVolume'] = l$resizeVolume.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$resizeVolume = resizeVolume;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$resizeVolume,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ResizeVolume$storage) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$resizeVolume = resizeVolume;
+    final lOther$resizeVolume = other.resizeVolume;
+    if (l$resizeVolume != lOther$resizeVolume) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ResizeVolume$storage
+    on Mutation$ResizeVolume$storage {
+  CopyWith$Mutation$ResizeVolume$storage<Mutation$ResizeVolume$storage>
+      get copyWith => CopyWith$Mutation$ResizeVolume$storage(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$ResizeVolume$storage<TRes> {
+  factory CopyWith$Mutation$ResizeVolume$storage(
+    Mutation$ResizeVolume$storage instance,
+    TRes Function(Mutation$ResizeVolume$storage) then,
+  ) = _CopyWithImpl$Mutation$ResizeVolume$storage;
+
+  factory CopyWith$Mutation$ResizeVolume$storage.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ResizeVolume$storage;
+
+  TRes call({
+    Mutation$ResizeVolume$storage$resizeVolume? resizeVolume,
+    String? $__typename,
+  });
+  CopyWith$Mutation$ResizeVolume$storage$resizeVolume<TRes> get resizeVolume;
+}
+
+class _CopyWithImpl$Mutation$ResizeVolume$storage<TRes>
+    implements CopyWith$Mutation$ResizeVolume$storage<TRes> {
+  _CopyWithImpl$Mutation$ResizeVolume$storage(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ResizeVolume$storage _instance;
+
+  final TRes Function(Mutation$ResizeVolume$storage) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? resizeVolume = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$ResizeVolume$storage(
+        resizeVolume: resizeVolume == _undefined || resizeVolume == null
+            ? _instance.resizeVolume
+            : (resizeVolume as Mutation$ResizeVolume$storage$resizeVolume),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$ResizeVolume$storage$resizeVolume<TRes> get resizeVolume {
+    final local$resizeVolume = _instance.resizeVolume;
+    return CopyWith$Mutation$ResizeVolume$storage$resizeVolume(
+        local$resizeVolume, (e) => call(resizeVolume: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ResizeVolume$storage<TRes>
+    implements CopyWith$Mutation$ResizeVolume$storage<TRes> {
+  _CopyWithStubImpl$Mutation$ResizeVolume$storage(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$ResizeVolume$storage$resizeVolume? resizeVolume,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$ResizeVolume$storage$resizeVolume<TRes> get resizeVolume =>
+      CopyWith$Mutation$ResizeVolume$storage$resizeVolume.stub(_res);
+}
+
+class Mutation$ResizeVolume$storage$resizeVolume
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$ResizeVolume$resizeVolume({
+  Mutation$ResizeVolume$storage$resizeVolume({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$ResizeVolume$resizeVolume.fromJson(
+  factory Mutation$ResizeVolume$storage$resizeVolume.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$ResizeVolume$resizeVolume(
+    return Mutation$ResizeVolume$storage$resizeVolume(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -2500,7 +2802,7 @@ class Mutation$ResizeVolume$resizeVolume
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$ResizeVolume$resizeVolume) ||
+    if (!(other is Mutation$ResizeVolume$storage$resizeVolume) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2528,24 +2830,24 @@ class Mutation$ResizeVolume$resizeVolume
   }
 }
 
-extension UtilityExtension$Mutation$ResizeVolume$resizeVolume
-    on Mutation$ResizeVolume$resizeVolume {
-  CopyWith$Mutation$ResizeVolume$resizeVolume<
-          Mutation$ResizeVolume$resizeVolume>
-      get copyWith => CopyWith$Mutation$ResizeVolume$resizeVolume(
+extension UtilityExtension$Mutation$ResizeVolume$storage$resizeVolume
+    on Mutation$ResizeVolume$storage$resizeVolume {
+  CopyWith$Mutation$ResizeVolume$storage$resizeVolume<
+          Mutation$ResizeVolume$storage$resizeVolume>
+      get copyWith => CopyWith$Mutation$ResizeVolume$storage$resizeVolume(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$ResizeVolume$resizeVolume<TRes> {
-  factory CopyWith$Mutation$ResizeVolume$resizeVolume(
-    Mutation$ResizeVolume$resizeVolume instance,
-    TRes Function(Mutation$ResizeVolume$resizeVolume) then,
-  ) = _CopyWithImpl$Mutation$ResizeVolume$resizeVolume;
+abstract class CopyWith$Mutation$ResizeVolume$storage$resizeVolume<TRes> {
+  factory CopyWith$Mutation$ResizeVolume$storage$resizeVolume(
+    Mutation$ResizeVolume$storage$resizeVolume instance,
+    TRes Function(Mutation$ResizeVolume$storage$resizeVolume) then,
+  ) = _CopyWithImpl$Mutation$ResizeVolume$storage$resizeVolume;
 
-  factory CopyWith$Mutation$ResizeVolume$resizeVolume.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$ResizeVolume$resizeVolume;
+  factory CopyWith$Mutation$ResizeVolume$storage$resizeVolume.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ResizeVolume$storage$resizeVolume;
 
   TRes call({
     int? code,
@@ -2555,16 +2857,16 @@ abstract class CopyWith$Mutation$ResizeVolume$resizeVolume<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$ResizeVolume$resizeVolume<TRes>
-    implements CopyWith$Mutation$ResizeVolume$resizeVolume<TRes> {
-  _CopyWithImpl$Mutation$ResizeVolume$resizeVolume(
+class _CopyWithImpl$Mutation$ResizeVolume$storage$resizeVolume<TRes>
+    implements CopyWith$Mutation$ResizeVolume$storage$resizeVolume<TRes> {
+  _CopyWithImpl$Mutation$ResizeVolume$storage$resizeVolume(
     this._instance,
     this._then,
   );
 
-  final Mutation$ResizeVolume$resizeVolume _instance;
+  final Mutation$ResizeVolume$storage$resizeVolume _instance;
 
-  final TRes Function(Mutation$ResizeVolume$resizeVolume) _then;
+  final TRes Function(Mutation$ResizeVolume$storage$resizeVolume) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -2574,7 +2876,7 @@ class _CopyWithImpl$Mutation$ResizeVolume$resizeVolume<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$ResizeVolume$resizeVolume(
+      _then(Mutation$ResizeVolume$storage$resizeVolume(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -2589,9 +2891,9 @@ class _CopyWithImpl$Mutation$ResizeVolume$resizeVolume<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$ResizeVolume$resizeVolume<TRes>
-    implements CopyWith$Mutation$ResizeVolume$resizeVolume<TRes> {
-  _CopyWithStubImpl$Mutation$ResizeVolume$resizeVolume(this._res);
+class _CopyWithStubImpl$Mutation$ResizeVolume$storage$resizeVolume<TRes>
+    implements CopyWith$Mutation$ResizeVolume$storage$resizeVolume<TRes> {
+  _CopyWithStubImpl$Mutation$ResizeVolume$storage$resizeVolume(this._res);
 
   TRes _res;
 
@@ -2703,29 +3005,28 @@ class _CopyWithStubImpl$Variables$Mutation$UnmountVolume<TRes>
 
 class Mutation$UnmountVolume {
   Mutation$UnmountVolume({
-    required this.unmountVolume,
+    required this.storage,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$UnmountVolume.fromJson(Map<String, dynamic> json) {
-    final l$unmountVolume = json['unmountVolume'];
+    final l$storage = json['storage'];
     final l$$__typename = json['__typename'];
     return Mutation$UnmountVolume(
-      unmountVolume: Mutation$UnmountVolume$unmountVolume.fromJson(
-          (l$unmountVolume as Map<String, dynamic>)),
+      storage: Mutation$UnmountVolume$storage.fromJson(
+          (l$storage as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `storage.unmount_volume` instead')
-  final Mutation$UnmountVolume$unmountVolume unmountVolume;
+  final Mutation$UnmountVolume$storage storage;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$unmountVolume = unmountVolume;
-    _resultData['unmountVolume'] = l$unmountVolume.toJson();
+    final l$storage = storage;
+    _resultData['storage'] = l$storage.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -2733,10 +3034,10 @@ class Mutation$UnmountVolume {
 
   @override
   int get hashCode {
-    final l$unmountVolume = unmountVolume;
+    final l$storage = storage;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$unmountVolume,
+      l$storage,
       l$$__typename,
     ]);
   }
@@ -2750,9 +3051,9 @@ class Mutation$UnmountVolume {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$unmountVolume = unmountVolume;
-    final lOther$unmountVolume = other.unmountVolume;
-    if (l$unmountVolume != lOther$unmountVolume) {
+    final l$storage = storage;
+    final lOther$storage = other.storage;
+    if (l$storage != lOther$storage) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -2782,10 +3083,10 @@ abstract class CopyWith$Mutation$UnmountVolume<TRes> {
       _CopyWithStubImpl$Mutation$UnmountVolume;
 
   TRes call({
-    Mutation$UnmountVolume$unmountVolume? unmountVolume,
+    Mutation$UnmountVolume$storage? storage,
     String? $__typename,
   });
-  CopyWith$Mutation$UnmountVolume$unmountVolume<TRes> get unmountVolume;
+  CopyWith$Mutation$UnmountVolume$storage<TRes> get storage;
 }
 
 class _CopyWithImpl$Mutation$UnmountVolume<TRes>
@@ -2802,22 +3103,22 @@ class _CopyWithImpl$Mutation$UnmountVolume<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? unmountVolume = _undefined,
+    Object? storage = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$UnmountVolume(
-        unmountVolume: unmountVolume == _undefined || unmountVolume == null
-            ? _instance.unmountVolume
-            : (unmountVolume as Mutation$UnmountVolume$unmountVolume),
+        storage: storage == _undefined || storage == null
+            ? _instance.storage
+            : (storage as Mutation$UnmountVolume$storage),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$UnmountVolume$unmountVolume<TRes> get unmountVolume {
-    final local$unmountVolume = _instance.unmountVolume;
-    return CopyWith$Mutation$UnmountVolume$unmountVolume(
-        local$unmountVolume, (e) => call(unmountVolume: e));
+  CopyWith$Mutation$UnmountVolume$storage<TRes> get storage {
+    final local$storage = _instance.storage;
+    return CopyWith$Mutation$UnmountVolume$storage(
+        local$storage, (e) => call(storage: e));
   }
 }
 
@@ -2828,13 +3129,13 @@ class _CopyWithStubImpl$Mutation$UnmountVolume<TRes>
   TRes _res;
 
   call({
-    Mutation$UnmountVolume$unmountVolume? unmountVolume,
+    Mutation$UnmountVolume$storage? storage,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$UnmountVolume$unmountVolume<TRes> get unmountVolume =>
-      CopyWith$Mutation$UnmountVolume$unmountVolume.stub(_res);
+  CopyWith$Mutation$UnmountVolume$storage<TRes> get storage =>
+      CopyWith$Mutation$UnmountVolume$storage.stub(_res);
 }
 
 const documentNodeMutationUnmountVolume = DocumentNode(definitions: [
@@ -2855,19 +3156,34 @@ const documentNodeMutationUnmountVolume = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'unmountVolume'),
+        name: NameNode(value: 'storage'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'name'),
-            value: VariableNode(name: NameNode(value: 'name')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
+          FieldNode(
+            name: NameNode(value: 'unmountVolume'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'name'),
+                value: VariableNode(name: NameNode(value: 'name')),
+              )
+            ],
             directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -2986,22 +3302,160 @@ extension ClientExtension$Mutation$UnmountVolume on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$UnmountVolume$unmountVolume
+class Mutation$UnmountVolume$storage {
+  Mutation$UnmountVolume$storage({
+    required this.unmountVolume,
+    this.$__typename = 'StorageMutations',
+  });
+
+  factory Mutation$UnmountVolume$storage.fromJson(Map<String, dynamic> json) {
+    final l$unmountVolume = json['unmountVolume'];
+    final l$$__typename = json['__typename'];
+    return Mutation$UnmountVolume$storage(
+      unmountVolume: Mutation$UnmountVolume$storage$unmountVolume.fromJson(
+          (l$unmountVolume as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$UnmountVolume$storage$unmountVolume unmountVolume;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$unmountVolume = unmountVolume;
+    _resultData['unmountVolume'] = l$unmountVolume.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$unmountVolume = unmountVolume;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$unmountVolume,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$UnmountVolume$storage) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$unmountVolume = unmountVolume;
+    final lOther$unmountVolume = other.unmountVolume;
+    if (l$unmountVolume != lOther$unmountVolume) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$UnmountVolume$storage
+    on Mutation$UnmountVolume$storage {
+  CopyWith$Mutation$UnmountVolume$storage<Mutation$UnmountVolume$storage>
+      get copyWith => CopyWith$Mutation$UnmountVolume$storage(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$UnmountVolume$storage<TRes> {
+  factory CopyWith$Mutation$UnmountVolume$storage(
+    Mutation$UnmountVolume$storage instance,
+    TRes Function(Mutation$UnmountVolume$storage) then,
+  ) = _CopyWithImpl$Mutation$UnmountVolume$storage;
+
+  factory CopyWith$Mutation$UnmountVolume$storage.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UnmountVolume$storage;
+
+  TRes call({
+    Mutation$UnmountVolume$storage$unmountVolume? unmountVolume,
+    String? $__typename,
+  });
+  CopyWith$Mutation$UnmountVolume$storage$unmountVolume<TRes> get unmountVolume;
+}
+
+class _CopyWithImpl$Mutation$UnmountVolume$storage<TRes>
+    implements CopyWith$Mutation$UnmountVolume$storage<TRes> {
+  _CopyWithImpl$Mutation$UnmountVolume$storage(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$UnmountVolume$storage _instance;
+
+  final TRes Function(Mutation$UnmountVolume$storage) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? unmountVolume = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$UnmountVolume$storage(
+        unmountVolume: unmountVolume == _undefined || unmountVolume == null
+            ? _instance.unmountVolume
+            : (unmountVolume as Mutation$UnmountVolume$storage$unmountVolume),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$UnmountVolume$storage$unmountVolume<TRes>
+      get unmountVolume {
+    final local$unmountVolume = _instance.unmountVolume;
+    return CopyWith$Mutation$UnmountVolume$storage$unmountVolume(
+        local$unmountVolume, (e) => call(unmountVolume: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$UnmountVolume$storage<TRes>
+    implements CopyWith$Mutation$UnmountVolume$storage<TRes> {
+  _CopyWithStubImpl$Mutation$UnmountVolume$storage(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$UnmountVolume$storage$unmountVolume? unmountVolume,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$UnmountVolume$storage$unmountVolume<TRes>
+      get unmountVolume =>
+          CopyWith$Mutation$UnmountVolume$storage$unmountVolume.stub(_res);
+}
+
+class Mutation$UnmountVolume$storage$unmountVolume
     implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
-  Mutation$UnmountVolume$unmountVolume({
+  Mutation$UnmountVolume$storage$unmountVolume({
     required this.code,
     required this.message,
     required this.success,
     this.$__typename = 'GenericMutationReturn',
   });
 
-  factory Mutation$UnmountVolume$unmountVolume.fromJson(
+  factory Mutation$UnmountVolume$storage$unmountVolume.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
-    return Mutation$UnmountVolume$unmountVolume(
+    return Mutation$UnmountVolume$storage$unmountVolume(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -3049,7 +3503,7 @@ class Mutation$UnmountVolume$unmountVolume
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$UnmountVolume$unmountVolume) ||
+    if (!(other is Mutation$UnmountVolume$storage$unmountVolume) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3077,24 +3531,24 @@ class Mutation$UnmountVolume$unmountVolume
   }
 }
 
-extension UtilityExtension$Mutation$UnmountVolume$unmountVolume
-    on Mutation$UnmountVolume$unmountVolume {
-  CopyWith$Mutation$UnmountVolume$unmountVolume<
-          Mutation$UnmountVolume$unmountVolume>
-      get copyWith => CopyWith$Mutation$UnmountVolume$unmountVolume(
+extension UtilityExtension$Mutation$UnmountVolume$storage$unmountVolume
+    on Mutation$UnmountVolume$storage$unmountVolume {
+  CopyWith$Mutation$UnmountVolume$storage$unmountVolume<
+          Mutation$UnmountVolume$storage$unmountVolume>
+      get copyWith => CopyWith$Mutation$UnmountVolume$storage$unmountVolume(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$UnmountVolume$unmountVolume<TRes> {
-  factory CopyWith$Mutation$UnmountVolume$unmountVolume(
-    Mutation$UnmountVolume$unmountVolume instance,
-    TRes Function(Mutation$UnmountVolume$unmountVolume) then,
-  ) = _CopyWithImpl$Mutation$UnmountVolume$unmountVolume;
+abstract class CopyWith$Mutation$UnmountVolume$storage$unmountVolume<TRes> {
+  factory CopyWith$Mutation$UnmountVolume$storage$unmountVolume(
+    Mutation$UnmountVolume$storage$unmountVolume instance,
+    TRes Function(Mutation$UnmountVolume$storage$unmountVolume) then,
+  ) = _CopyWithImpl$Mutation$UnmountVolume$storage$unmountVolume;
 
-  factory CopyWith$Mutation$UnmountVolume$unmountVolume.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$UnmountVolume$unmountVolume;
+  factory CopyWith$Mutation$UnmountVolume$storage$unmountVolume.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$UnmountVolume$storage$unmountVolume;
 
   TRes call({
     int? code,
@@ -3104,16 +3558,16 @@ abstract class CopyWith$Mutation$UnmountVolume$unmountVolume<TRes> {
   });
 }
 
-class _CopyWithImpl$Mutation$UnmountVolume$unmountVolume<TRes>
-    implements CopyWith$Mutation$UnmountVolume$unmountVolume<TRes> {
-  _CopyWithImpl$Mutation$UnmountVolume$unmountVolume(
+class _CopyWithImpl$Mutation$UnmountVolume$storage$unmountVolume<TRes>
+    implements CopyWith$Mutation$UnmountVolume$storage$unmountVolume<TRes> {
+  _CopyWithImpl$Mutation$UnmountVolume$storage$unmountVolume(
     this._instance,
     this._then,
   );
 
-  final Mutation$UnmountVolume$unmountVolume _instance;
+  final Mutation$UnmountVolume$storage$unmountVolume _instance;
 
-  final TRes Function(Mutation$UnmountVolume$unmountVolume) _then;
+  final TRes Function(Mutation$UnmountVolume$storage$unmountVolume) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3123,7 +3577,7 @@ class _CopyWithImpl$Mutation$UnmountVolume$unmountVolume<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
   }) =>
-      _then(Mutation$UnmountVolume$unmountVolume(
+      _then(Mutation$UnmountVolume$storage$unmountVolume(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -3138,9 +3592,9 @@ class _CopyWithImpl$Mutation$UnmountVolume$unmountVolume<TRes>
       ));
 }
 
-class _CopyWithStubImpl$Mutation$UnmountVolume$unmountVolume<TRes>
-    implements CopyWith$Mutation$UnmountVolume$unmountVolume<TRes> {
-  _CopyWithStubImpl$Mutation$UnmountVolume$unmountVolume(this._res);
+class _CopyWithStubImpl$Mutation$UnmountVolume$storage$unmountVolume<TRes>
+    implements CopyWith$Mutation$UnmountVolume$storage$unmountVolume<TRes> {
+  _CopyWithStubImpl$Mutation$UnmountVolume$storage$unmountVolume(this._res);
 
   TRes _res;
 
@@ -3257,29 +3711,28 @@ class _CopyWithStubImpl$Variables$Mutation$MigrateToBinds<TRes>
 
 class Mutation$MigrateToBinds {
   Mutation$MigrateToBinds({
-    required this.migrateToBinds,
+    required this.storage,
     this.$__typename = 'Mutation',
   });
 
   factory Mutation$MigrateToBinds.fromJson(Map<String, dynamic> json) {
-    final l$migrateToBinds = json['migrateToBinds'];
+    final l$storage = json['storage'];
     final l$$__typename = json['__typename'];
     return Mutation$MigrateToBinds(
-      migrateToBinds: Mutation$MigrateToBinds$migrateToBinds.fromJson(
-          (l$migrateToBinds as Map<String, dynamic>)),
+      storage: Mutation$MigrateToBinds$storage.fromJson(
+          (l$storage as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
-  @Deprecated('Use `storage.migrate_to_binds` instead')
-  final Mutation$MigrateToBinds$migrateToBinds migrateToBinds;
+  final Mutation$MigrateToBinds$storage storage;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$migrateToBinds = migrateToBinds;
-    _resultData['migrateToBinds'] = l$migrateToBinds.toJson();
+    final l$storage = storage;
+    _resultData['storage'] = l$storage.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -3287,10 +3740,10 @@ class Mutation$MigrateToBinds {
 
   @override
   int get hashCode {
-    final l$migrateToBinds = migrateToBinds;
+    final l$storage = storage;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$migrateToBinds,
+      l$storage,
       l$$__typename,
     ]);
   }
@@ -3304,9 +3757,9 @@ class Mutation$MigrateToBinds {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$migrateToBinds = migrateToBinds;
-    final lOther$migrateToBinds = other.migrateToBinds;
-    if (l$migrateToBinds != lOther$migrateToBinds) {
+    final l$storage = storage;
+    final lOther$storage = other.storage;
+    if (l$storage != lOther$storage) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -3336,10 +3789,10 @@ abstract class CopyWith$Mutation$MigrateToBinds<TRes> {
       _CopyWithStubImpl$Mutation$MigrateToBinds;
 
   TRes call({
-    Mutation$MigrateToBinds$migrateToBinds? migrateToBinds,
+    Mutation$MigrateToBinds$storage? storage,
     String? $__typename,
   });
-  CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> get migrateToBinds;
+  CopyWith$Mutation$MigrateToBinds$storage<TRes> get storage;
 }
 
 class _CopyWithImpl$Mutation$MigrateToBinds<TRes>
@@ -3356,22 +3809,22 @@ class _CopyWithImpl$Mutation$MigrateToBinds<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? migrateToBinds = _undefined,
+    Object? storage = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$MigrateToBinds(
-        migrateToBinds: migrateToBinds == _undefined || migrateToBinds == null
-            ? _instance.migrateToBinds
-            : (migrateToBinds as Mutation$MigrateToBinds$migrateToBinds),
+        storage: storage == _undefined || storage == null
+            ? _instance.storage
+            : (storage as Mutation$MigrateToBinds$storage),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
 
-  CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> get migrateToBinds {
-    final local$migrateToBinds = _instance.migrateToBinds;
-    return CopyWith$Mutation$MigrateToBinds$migrateToBinds(
-        local$migrateToBinds, (e) => call(migrateToBinds: e));
+  CopyWith$Mutation$MigrateToBinds$storage<TRes> get storage {
+    final local$storage = _instance.storage;
+    return CopyWith$Mutation$MigrateToBinds$storage(
+        local$storage, (e) => call(storage: e));
   }
 }
 
@@ -3382,13 +3835,13 @@ class _CopyWithStubImpl$Mutation$MigrateToBinds<TRes>
   TRes _res;
 
   call({
-    Mutation$MigrateToBinds$migrateToBinds? migrateToBinds,
+    Mutation$MigrateToBinds$storage? storage,
     String? $__typename,
   }) =>
       _res;
 
-  CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> get migrateToBinds =>
-      CopyWith$Mutation$MigrateToBinds$migrateToBinds.stub(_res);
+  CopyWith$Mutation$MigrateToBinds$storage<TRes> get storage =>
+      CopyWith$Mutation$MigrateToBinds$storage.stub(_res);
 }
 
 const documentNodeMutationMigrateToBinds = DocumentNode(definitions: [
@@ -3409,29 +3862,44 @@ const documentNodeMutationMigrateToBinds = DocumentNode(definitions: [
     directives: [],
     selectionSet: SelectionSetNode(selections: [
       FieldNode(
-        name: NameNode(value: 'migrateToBinds'),
+        name: NameNode(value: 'storage'),
         alias: null,
-        arguments: [
-          ArgumentNode(
-            name: NameNode(value: 'input'),
-            value: VariableNode(name: NameNode(value: 'input')),
-          )
-        ],
+        arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(selections: [
-          FragmentSpreadNode(
-            name: NameNode(value: 'basicMutationReturnFields'),
-            directives: [],
-          ),
           FieldNode(
-            name: NameNode(value: 'job'),
+            name: NameNode(value: 'migrateToBinds'),
             alias: null,
-            arguments: [],
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'input'),
+                value: VariableNode(name: NameNode(value: 'input')),
+              )
+            ],
             directives: [],
             selectionSet: SelectionSetNode(selections: [
               FragmentSpreadNode(
-                name: NameNode(value: 'basicApiJobsFields'),
+                name: NameNode(value: 'basicMutationReturnFields'),
                 directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'job'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'basicApiJobsFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
               ),
               FieldNode(
                 name: NameNode(value: '__typename'),
@@ -3560,9 +4028,149 @@ extension ClientExtension$Mutation$MigrateToBinds on graphql.GraphQLClient {
       this.watchMutation(options);
 }
 
-class Mutation$MigrateToBinds$migrateToBinds
+class Mutation$MigrateToBinds$storage {
+  Mutation$MigrateToBinds$storage({
+    required this.migrateToBinds,
+    this.$__typename = 'StorageMutations',
+  });
+
+  factory Mutation$MigrateToBinds$storage.fromJson(Map<String, dynamic> json) {
+    final l$migrateToBinds = json['migrateToBinds'];
+    final l$$__typename = json['__typename'];
+    return Mutation$MigrateToBinds$storage(
+      migrateToBinds: Mutation$MigrateToBinds$storage$migrateToBinds.fromJson(
+          (l$migrateToBinds as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$MigrateToBinds$storage$migrateToBinds migrateToBinds;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$migrateToBinds = migrateToBinds;
+    _resultData['migrateToBinds'] = l$migrateToBinds.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$migrateToBinds = migrateToBinds;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$migrateToBinds,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$MigrateToBinds$storage) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$migrateToBinds = migrateToBinds;
+    final lOther$migrateToBinds = other.migrateToBinds;
+    if (l$migrateToBinds != lOther$migrateToBinds) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$MigrateToBinds$storage
+    on Mutation$MigrateToBinds$storage {
+  CopyWith$Mutation$MigrateToBinds$storage<Mutation$MigrateToBinds$storage>
+      get copyWith => CopyWith$Mutation$MigrateToBinds$storage(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$MigrateToBinds$storage<TRes> {
+  factory CopyWith$Mutation$MigrateToBinds$storage(
+    Mutation$MigrateToBinds$storage instance,
+    TRes Function(Mutation$MigrateToBinds$storage) then,
+  ) = _CopyWithImpl$Mutation$MigrateToBinds$storage;
+
+  factory CopyWith$Mutation$MigrateToBinds$storage.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$MigrateToBinds$storage;
+
+  TRes call({
+    Mutation$MigrateToBinds$storage$migrateToBinds? migrateToBinds,
+    String? $__typename,
+  });
+  CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds<TRes>
+      get migrateToBinds;
+}
+
+class _CopyWithImpl$Mutation$MigrateToBinds$storage<TRes>
+    implements CopyWith$Mutation$MigrateToBinds$storage<TRes> {
+  _CopyWithImpl$Mutation$MigrateToBinds$storage(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$MigrateToBinds$storage _instance;
+
+  final TRes Function(Mutation$MigrateToBinds$storage) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? migrateToBinds = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$MigrateToBinds$storage(
+        migrateToBinds: migrateToBinds == _undefined || migrateToBinds == null
+            ? _instance.migrateToBinds
+            : (migrateToBinds
+                as Mutation$MigrateToBinds$storage$migrateToBinds),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds<TRes>
+      get migrateToBinds {
+    final local$migrateToBinds = _instance.migrateToBinds;
+    return CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds(
+        local$migrateToBinds, (e) => call(migrateToBinds: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$MigrateToBinds$storage<TRes>
+    implements CopyWith$Mutation$MigrateToBinds$storage<TRes> {
+  _CopyWithStubImpl$Mutation$MigrateToBinds$storage(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$MigrateToBinds$storage$migrateToBinds? migrateToBinds,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds<TRes>
+      get migrateToBinds =>
+          CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds.stub(_res);
+}
+
+class Mutation$MigrateToBinds$storage$migrateToBinds
     implements Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
-  Mutation$MigrateToBinds$migrateToBinds({
+  Mutation$MigrateToBinds$storage$migrateToBinds({
     required this.code,
     required this.message,
     required this.success,
@@ -3570,14 +4178,14 @@ class Mutation$MigrateToBinds$migrateToBinds
     this.job,
   });
 
-  factory Mutation$MigrateToBinds$migrateToBinds.fromJson(
+  factory Mutation$MigrateToBinds$storage$migrateToBinds.fromJson(
       Map<String, dynamic> json) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$job = json['job'];
-    return Mutation$MigrateToBinds$migrateToBinds(
+    return Mutation$MigrateToBinds$storage$migrateToBinds(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
@@ -3635,7 +4243,7 @@ class Mutation$MigrateToBinds$migrateToBinds
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$MigrateToBinds$migrateToBinds) ||
+    if (!(other is Mutation$MigrateToBinds$storage$migrateToBinds) ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3668,24 +4276,25 @@ class Mutation$MigrateToBinds$migrateToBinds
   }
 }
 
-extension UtilityExtension$Mutation$MigrateToBinds$migrateToBinds
-    on Mutation$MigrateToBinds$migrateToBinds {
-  CopyWith$Mutation$MigrateToBinds$migrateToBinds<
-          Mutation$MigrateToBinds$migrateToBinds>
-      get copyWith => CopyWith$Mutation$MigrateToBinds$migrateToBinds(
+extension UtilityExtension$Mutation$MigrateToBinds$storage$migrateToBinds
+    on Mutation$MigrateToBinds$storage$migrateToBinds {
+  CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds<
+          Mutation$MigrateToBinds$storage$migrateToBinds>
+      get copyWith => CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds(
             this,
             (i) => i,
           );
 }
 
-abstract class CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> {
-  factory CopyWith$Mutation$MigrateToBinds$migrateToBinds(
-    Mutation$MigrateToBinds$migrateToBinds instance,
-    TRes Function(Mutation$MigrateToBinds$migrateToBinds) then,
-  ) = _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds;
+abstract class CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds<TRes> {
+  factory CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds(
+    Mutation$MigrateToBinds$storage$migrateToBinds instance,
+    TRes Function(Mutation$MigrateToBinds$storage$migrateToBinds) then,
+  ) = _CopyWithImpl$Mutation$MigrateToBinds$storage$migrateToBinds;
 
-  factory CopyWith$Mutation$MigrateToBinds$migrateToBinds.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$MigrateToBinds$migrateToBinds;
+  factory CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$MigrateToBinds$storage$migrateToBinds;
 
   TRes call({
     int? code,
@@ -3697,16 +4306,16 @@ abstract class CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> {
   CopyWith$Fragment$basicApiJobsFields<TRes> get job;
 }
 
-class _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
-    implements CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> {
-  _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds(
+class _CopyWithImpl$Mutation$MigrateToBinds$storage$migrateToBinds<TRes>
+    implements CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds<TRes> {
+  _CopyWithImpl$Mutation$MigrateToBinds$storage$migrateToBinds(
     this._instance,
     this._then,
   );
 
-  final Mutation$MigrateToBinds$migrateToBinds _instance;
+  final Mutation$MigrateToBinds$storage$migrateToBinds _instance;
 
-  final TRes Function(Mutation$MigrateToBinds$migrateToBinds) _then;
+  final TRes Function(Mutation$MigrateToBinds$storage$migrateToBinds) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3717,7 +4326,7 @@ class _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
     Object? $__typename = _undefined,
     Object? job = _undefined,
   }) =>
-      _then(Mutation$MigrateToBinds$migrateToBinds(
+      _then(Mutation$MigrateToBinds$storage$migrateToBinds(
         code:
             code == _undefined || code == null ? _instance.code : (code as int),
         message: message == _undefined || message == null
@@ -3742,9 +4351,9 @@ class _CopyWithImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
   }
 }
 
-class _CopyWithStubImpl$Mutation$MigrateToBinds$migrateToBinds<TRes>
-    implements CopyWith$Mutation$MigrateToBinds$migrateToBinds<TRes> {
-  _CopyWithStubImpl$Mutation$MigrateToBinds$migrateToBinds(this._res);
+class _CopyWithStubImpl$Mutation$MigrateToBinds$storage$migrateToBinds<TRes>
+    implements CopyWith$Mutation$MigrateToBinds$storage$migrateToBinds<TRes> {
+  _CopyWithStubImpl$Mutation$MigrateToBinds$storage$migrateToBinds(this._res);
 
   TRes _res;
 

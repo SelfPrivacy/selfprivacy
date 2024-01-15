@@ -29,10 +29,10 @@ mixin JobsApi on GraphQLApiMap {
       final mutation = Options$Mutation$RemoveJob(variables: variables);
       final response = await client.mutate$RemoveJob(mutation);
       return GenericResult(
-        data: response.parsedData?.removeJob.success ?? false,
+        data: response.parsedData?.jobs.removeJob.success ?? false,
         success: true,
-        code: response.parsedData?.removeJob.code ?? 0,
-        message: response.parsedData?.removeJob.message,
+        code: response.parsedData?.jobs.removeJob.code ?? 0,
+        message: response.parsedData?.jobs.removeJob.message,
       );
     } catch (e) {
       print(e);

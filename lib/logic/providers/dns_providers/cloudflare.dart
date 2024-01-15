@@ -3,7 +3,6 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/cloudflare_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
 
 class ApiAdapter {
   ApiAdapter({
@@ -80,15 +79,14 @@ class CloudflareDnsProvider extends DnsProvider {
 
   @override
   Future<GenericResult<void>> createDomainRecords({
+    required final List<DnsRecord> records,
     required final ServerDomain domain,
-    final String? ip4,
   }) async {
     final syncZoneIdResult = await syncZoneId(domain.domainName);
     if (!syncZoneIdResult.success) {
       return syncZoneIdResult;
     }
 
-    final records = getProjectDnsRecords(domain.domainName, ip4);
     return _adapter.api().createMultipleDnsRecords(
           zoneId: _adapter.cachedZoneId,
           records: records
@@ -102,16 +100,17 @@ class CloudflareDnsProvider extends DnsProvider {
 
   @override
   Future<GenericResult<void>> removeDomainRecords({
+    required final List<DnsRecord> records,
     required final ServerDomain domain,
-    final String? ip4,
   }) async {
     final syncZoneIdResult = await syncZoneId(domain.domainName);
     if (!syncZoneIdResult.success) {
       return syncZoneIdResult;
     }
 
-    final result =
-        await _adapter.api().getDnsRecords(zoneId: _adapter.cachedZoneId);
+    final result = await _adapter.api().getDnsRecords(
+          zoneId: _adapter.cachedZoneId,
+        );
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -121,9 +120,29 @@ class CloudflareDnsProvider extends DnsProvider {
       );
     }
 
+    final List<CloudflareDnsRecord> selfprivacyRecords = records
+        .map(
+          (final record) => CloudflareDnsRecord.fromDnsRecord(
+            record,
+            domain.domainName,
+          ),
+        )
+        .toList();
+
+    final List<CloudflareDnsRecord> cloudflareRecords = result.data;
+
+    /// Remove all records that do not match with SelfPrivacy
+    cloudflareRecords.removeWhere(
+      (final oceanRecord) => !selfprivacyRecords.any(
+        (final selfprivacyRecord) =>
+            selfprivacyRecord.type == oceanRecord.type &&
+            selfprivacyRecord.name == oceanRecord.name,
+      ),
+    );
+
     return _adapter.api().removeSimilarRecords(
           zoneId: _adapter.cachedZoneId,
-          records: result.data,
+          records: cloudflareRecords,
         );
   }
 

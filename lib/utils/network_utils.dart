@@ -121,6 +121,13 @@ List<DnsRecord> getProjectDnsRecords(
     ttl: 18000,
   );
 
+  final DnsRecord txt3 = DnsRecord(
+    type: 'TXT',
+    name: 'selector._domainkey',
+    content: 'v=DKIM1; k=rsa; p=none',
+    ttl: 18000,
+  );
+
   return <DnsRecord>[
     domainA,
     apiA,
@@ -132,6 +139,7 @@ List<DnsRecord> getProjectDnsRecords(
     mx,
     txt1,
     txt2,
+    txt3,
     vpn,
   ];
 }

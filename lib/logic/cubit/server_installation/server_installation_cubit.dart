@@ -270,6 +270,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       records: getProjectDnsRecords(
         state.serverDomain!.domainName,
         serverDetails.ip4,
+        false,
       ),
       domain: state.serverDomain!,
     );
@@ -277,6 +278,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       records: getProjectDnsRecords(
         state.serverDomain!.domainName,
         serverDetails.ip4,
+        true,
       ),
       domain: state.serverDomain!,
     );

@@ -93,6 +93,7 @@ void launchURL(final url) async {
 List<DnsRecord> getProjectDnsRecords(
   final String? domainName,
   final String? ip4,
+  final bool isCreating,
 ) {
   final DnsRecord domainA =
       DnsRecord(type: 'A', name: domainName, content: ip4);
@@ -139,7 +140,7 @@ List<DnsRecord> getProjectDnsRecords(
     mx,
     txt1,
     txt2,
-    txt3,
+    if (!isCreating) txt3,
     vpn,
   ];
 }

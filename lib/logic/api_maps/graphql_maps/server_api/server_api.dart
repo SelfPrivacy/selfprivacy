@@ -270,7 +270,7 @@ class ServerApi extends GraphQLApiMap
       }
       key = GenericResult<String>(
         success: true,
-        data: response.parsedData!.getNewRecoveryApiKey.key!,
+        data: response.parsedData!.api.getNewRecoveryApiKey.key!,
       );
     } catch (e) {
       print(e);
@@ -410,7 +410,7 @@ class ServerApi extends GraphQLApiMap
       }
       token = GenericResult<String>(
         success: true,
-        data: response.parsedData!.getNewDeviceApiKey.key!,
+        data: response.parsedData!.api.getNewDeviceApiKey.key!,
       );
     } catch (e) {
       print(e);
@@ -459,7 +459,7 @@ class ServerApi extends GraphQLApiMap
       }
       token = GenericResult<String>(
         success: true,
-        data: response.parsedData!.authorizeWithNewDeviceApiKey.token!,
+        data: response.parsedData!.api.authorizeWithNewDeviceApiKey.token!,
       );
     } catch (e) {
       print(e);
@@ -506,7 +506,7 @@ class ServerApi extends GraphQLApiMap
       }
       token = GenericResult<String>(
         success: true,
-        data: response.parsedData!.useRecoveryApiKey.token!,
+        data: response.parsedData!.api.useRecoveryApiKey.token!,
       );
     } catch (e) {
       print(e);

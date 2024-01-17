@@ -26,28 +26,36 @@ query GetServerDiskVolumes {
 }
 
 mutation MountVolume($name: String!) {
-  mountVolume(name: $name) {
-    ...basicMutationReturnFields
+  storage {
+    mountVolume(name: $name) {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation ResizeVolume($name: String!) {
-  resizeVolume(name: $name) {
-    ...basicMutationReturnFields
+  storage {
+    resizeVolume(name: $name) {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation UnmountVolume($name: String!) {
-  unmountVolume(name: $name) {
-    ...basicMutationReturnFields
+  storage {
+    unmountVolume(name: $name) {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation MigrateToBinds($input: MigrateToBindsInput!) {
-  migrateToBinds(input: $input) {
-    ...basicMutationReturnFields
-    job {
-      ...basicApiJobsFields
+  storage {
+    migrateToBinds(input: $input) {
+      ...basicMutationReturnFields
+      job {
+        ...basicApiJobsFields
+      }
     }
   }
 }

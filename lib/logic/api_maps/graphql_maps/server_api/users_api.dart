@@ -58,10 +58,10 @@ mixin UsersApi on GraphQLApiMap {
       final response = await client.mutate$CreateUser(mutation);
       return GenericResult(
         success: true,
-        code: response.parsedData?.createUser.code ?? 500,
-        message: response.parsedData?.createUser.message,
-        data: response.parsedData?.createUser.user != null
-            ? User.fromGraphQL(response.parsedData!.createUser.user!)
+        code: response.parsedData?.users.createUser.code ?? 500,
+        message: response.parsedData?.users.createUser.message,
+        data: response.parsedData?.users.createUser.user != null
+            ? User.fromGraphQL(response.parsedData!.users.createUser.user!)
             : null,
       );
     } catch (e) {
@@ -84,10 +84,10 @@ mixin UsersApi on GraphQLApiMap {
       final mutation = Options$Mutation$DeleteUser(variables: variables);
       final response = await client.mutate$DeleteUser(mutation);
       return GenericResult(
-        data: response.parsedData?.deleteUser.success ?? false,
+        data: response.parsedData?.users.deleteUser.success ?? false,
         success: true,
-        code: response.parsedData?.deleteUser.code ?? 500,
-        message: response.parsedData?.deleteUser.message,
+        code: response.parsedData?.users.deleteUser.code ?? 500,
+        message: response.parsedData?.users.deleteUser.message,
       );
     } catch (e) {
       print(e);
@@ -113,10 +113,10 @@ mixin UsersApi on GraphQLApiMap {
       final response = await client.mutate$UpdateUser(mutation);
       return GenericResult(
         success: true,
-        code: response.parsedData?.updateUser.code ?? 500,
-        message: response.parsedData?.updateUser.message,
-        data: response.parsedData?.updateUser.user != null
-            ? User.fromGraphQL(response.parsedData!.updateUser.user!)
+        code: response.parsedData?.users.updateUser.code ?? 500,
+        message: response.parsedData?.users.updateUser.message,
+        data: response.parsedData?.users.updateUser.user != null
+            ? User.fromGraphQL(response.parsedData!.users.updateUser.user!)
             : null,
       );
     } catch (e) {
@@ -146,10 +146,10 @@ mixin UsersApi on GraphQLApiMap {
       final response = await client.mutate$AddSshKey(mutation);
       return GenericResult(
         success: true,
-        code: response.parsedData?.addSshKey.code ?? 500,
-        message: response.parsedData?.addSshKey.message,
-        data: response.parsedData?.addSshKey.user != null
-            ? User.fromGraphQL(response.parsedData!.addSshKey.user!)
+        code: response.parsedData?.users.addSshKey.code ?? 500,
+        message: response.parsedData?.users.addSshKey.message,
+        data: response.parsedData?.users.addSshKey.user != null
+            ? User.fromGraphQL(response.parsedData!.users.addSshKey.user!)
             : null,
       );
     } catch (e) {
@@ -178,11 +178,11 @@ mixin UsersApi on GraphQLApiMap {
       final mutation = Options$Mutation$RemoveSshKey(variables: variables);
       final response = await client.mutate$RemoveSshKey(mutation);
       return GenericResult(
-        success: response.parsedData?.removeSshKey.success ?? false,
-        code: response.parsedData?.removeSshKey.code ?? 500,
-        message: response.parsedData?.removeSshKey.message,
-        data: response.parsedData?.removeSshKey.user != null
-            ? User.fromGraphQL(response.parsedData!.removeSshKey.user!)
+        success: response.parsedData?.users.removeSshKey.success ?? false,
+        code: response.parsedData?.users.removeSshKey.code ?? 500,
+        message: response.parsedData?.users.removeSshKey.message,
+        data: response.parsedData?.users.removeSshKey.user != null
+            ? User.fromGraphQL(response.parsedData!.users.removeSshKey.user!)
             : null,
       );
     } catch (e) {

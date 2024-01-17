@@ -76,7 +76,7 @@ class JobsCubit extends Cubit<JobsState> {
     } else {
       getIt<NavigationService>().showSnackBar('jobs.upgrade_failed'.tr());
     }
-    emit(JobsCompleted());
+    emit(JobsStateEmpty());
   }
 
   Future<void> applyAll() async {

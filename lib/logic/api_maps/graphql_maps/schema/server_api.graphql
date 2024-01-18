@@ -34,38 +34,50 @@ query GetApiJobs {
 }
 
 mutation RemoveJob($jobId: String!) {
-  removeJob(jobId: $jobId) {
-    ...basicMutationReturnFields
+  jobs {
+    removeJob(jobId: $jobId) {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation RunSystemRebuild {
-  runSystemRebuild {
-    ...basicMutationReturnFields
+  system {
+    runSystemRebuild {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation RunSystemRollback {
-  runSystemRollback {
-    ...basicMutationReturnFields
+  system {
+    runSystemRollback {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation RunSystemUpgrade {
-  runSystemUpgrade {
-    ...basicMutationReturnFields
+  system {
+    runSystemUpgrade {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation PullRepositoryChanges {
-  pullRepositoryChanges {
-    ...basicMutationReturnFields
+  system {
+    pullRepositoryChanges {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation RebootSystem {
-  rebootSystem {
-    ...basicMutationReturnFields
+  system {
+    rebootSystem {
+      ...basicMutationReturnFields
+    }
   }
 }
 
@@ -108,48 +120,62 @@ query RecoveryKey {
 }
 
 mutation GetNewRecoveryApiKey($limits: RecoveryKeyLimitsInput) {
-  getNewRecoveryApiKey(limits: $limits) {
-    ...basicMutationReturnFields
-    key
+  api {
+    getNewRecoveryApiKey(limits: $limits) {
+      ...basicMutationReturnFields
+      key
+    }
   }
 }
 
 mutation UseRecoveryApiKey($input: UseRecoveryKeyInput!) {
-  useRecoveryApiKey(input: $input) {
-    ...basicMutationReturnFields
-    token
+  api {
+    useRecoveryApiKey(input: $input) {
+      ...basicMutationReturnFields
+      token
+    }
   }
 }
 
 mutation RefreshDeviceApiToken {
-  refreshDeviceApiToken {
-    ...basicMutationReturnFields
-    token
+  api {
+    refreshDeviceApiToken {
+      ...basicMutationReturnFields
+      token
+    }
   }
 }
 
 mutation DeleteDeviceApiToken($device: String!) {
-  deleteDeviceApiToken(device: $device) {
-    ...basicMutationReturnFields
+  api {
+    deleteDeviceApiToken(device: $device) {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation GetNewDeviceApiKey {
-  getNewDeviceApiKey {
-    ...basicMutationReturnFields
-    key
+  api {
+    getNewDeviceApiKey {
+      ...basicMutationReturnFields
+      key
+    }
   }
 }
 
 mutation InvalidateNewDeviceApiKey {
-  invalidateNewDeviceApiKey {
-    ...basicMutationReturnFields
+  api {
+    invalidateNewDeviceApiKey {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation AuthorizeWithNewDeviceApiKey($input: UseNewDeviceKeyInput!) {
-  authorizeWithNewDeviceApiKey(input: $input) {
-    ...basicMutationReturnFields
-    token
+  api {
+    authorizeWithNewDeviceApiKey(input: $input) {
+      ...basicMutationReturnFields
+      token
+    }
   }
 }

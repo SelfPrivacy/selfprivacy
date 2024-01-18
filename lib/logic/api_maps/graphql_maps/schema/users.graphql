@@ -24,43 +24,53 @@ query GetUser($username: String!) {
 }
 
 mutation CreateUser($user: UserMutationInput!) {
-  createUser(user: $user) {
-    ...basicMutationReturnFields
-    user {
-      ...userFields
+  users {
+    createUser(user: $user) {
+      ...basicMutationReturnFields
+      user {
+        ...userFields
+      }
     }
   }
 }
 
 mutation DeleteUser($username: String!) {
-  deleteUser(username: $username) {
-    ...basicMutationReturnFields
+  users {
+    deleteUser(username: $username) {
+      ...basicMutationReturnFields
+    }
   }
 }
 
 mutation UpdateUser($user: UserMutationInput!) {
-  updateUser(user: $user) {
-    ...basicMutationReturnFields
-    user {
-      ...userFields
+  users {
+    updateUser(user: $user) {
+      ...basicMutationReturnFields
+      user {
+        ...userFields
+      }
     }
   }
 }
 
 mutation AddSshKey($sshInput: SshMutationInput!) {
-  addSshKey(sshInput: $sshInput) {
-    ...basicMutationReturnFields
-    user {
-      ...userFields
+  users {
+    addSshKey(sshInput: $sshInput) {
+      ...basicMutationReturnFields
+      user {
+        ...userFields
+      }
     }
   }
 }
 
 mutation RemoveSshKey($sshInput: SshMutationInput!) {
-  removeSshKey(sshInput: $sshInput) {
-    ...basicMutationReturnFields
-    user {
-      ...userFields
+  users {
+    removeSshKey(sshInput: $sshInput) {
+      ...basicMutationReturnFields
+      user {
+        ...userFields
+      }
     }
   }
 }

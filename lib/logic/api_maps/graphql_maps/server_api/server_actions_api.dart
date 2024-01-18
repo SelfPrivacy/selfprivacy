@@ -28,7 +28,7 @@ mixin ServerActionsApi on GraphQLApiMap {
       if (response.hasException) {
         print(response.exception.toString());
       }
-      if (response.parsedData!.rebootSystem.success) {
+      if (response.parsedData!.system.rebootSystem.success) {
         time = DateTime.now().toUtc();
       }
     } catch (e) {

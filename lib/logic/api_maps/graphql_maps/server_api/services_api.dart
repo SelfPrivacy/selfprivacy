@@ -29,10 +29,10 @@ mixin ServicesApi on GraphQLApiMap {
       final mutation = Options$Mutation$EnableService(variables: variables);
       final response = await client.mutate$EnableService(mutation);
       return GenericResult(
-        data: response.parsedData?.enableService.success ?? false,
+        data: response.parsedData?.services.enableService.success ?? false,
         success: true,
-        code: response.parsedData?.enableService.code ?? 0,
-        message: response.parsedData?.enableService.message,
+        code: response.parsedData?.services.enableService.code ?? 0,
+        message: response.parsedData?.services.enableService.message,
       );
     } catch (e) {
       print(e);
@@ -55,9 +55,9 @@ mixin ServicesApi on GraphQLApiMap {
       final response = await client.mutate$DisableService(mutation);
       return GenericResult(
         data: null,
-        success: response.parsedData?.disableService.success ?? false,
-        code: response.parsedData?.disableService.code ?? 0,
-        message: response.parsedData?.disableService.message,
+        success: response.parsedData?.services.disableService.success ?? false,
+        code: response.parsedData?.services.disableService.code ?? 0,
+        message: response.parsedData?.services.disableService.message,
       );
     } catch (e) {
       print(e);
@@ -79,10 +79,10 @@ mixin ServicesApi on GraphQLApiMap {
       final mutation = Options$Mutation$StopService(variables: variables);
       final response = await client.mutate$StopService(mutation);
       return GenericResult(
-        data: response.parsedData?.stopService.success ?? false,
+        data: response.parsedData?.services.stopService.success ?? false,
         success: true,
-        code: response.parsedData?.stopService.code ?? 0,
-        message: response.parsedData?.stopService.message,
+        code: response.parsedData?.services.stopService.code ?? 0,
+        message: response.parsedData?.services.stopService.message,
       );
     } catch (e) {
       print(e);
@@ -103,9 +103,9 @@ mixin ServicesApi on GraphQLApiMap {
       final response = await client.mutate$StartService(mutation);
       return GenericResult(
         data: null,
-        success: response.parsedData?.startService.success ?? false,
-        code: response.parsedData?.startService.code ?? 0,
-        message: response.parsedData?.startService.message,
+        success: response.parsedData?.services.startService.success ?? false,
+        code: response.parsedData?.services.startService.code ?? 0,
+        message: response.parsedData?.services.startService.message,
       );
     } catch (e) {
       print(e);
@@ -127,10 +127,10 @@ mixin ServicesApi on GraphQLApiMap {
       final mutation = Options$Mutation$RestartService(variables: variables);
       final response = await client.mutate$RestartService(mutation);
       return GenericResult(
-        data: response.parsedData?.restartService.success ?? false,
+        data: response.parsedData?.services.restartService.success ?? false,
         success: true,
-        code: response.parsedData?.restartService.code ?? 0,
-        message: response.parsedData?.restartService.message,
+        code: response.parsedData?.services.restartService.code ?? 0,
+        message: response.parsedData?.services.restartService.message,
       );
     } catch (e) {
       print(e);
@@ -157,11 +157,11 @@ mixin ServicesApi on GraphQLApiMap {
       );
       final mutation = Options$Mutation$MoveService(variables: variables);
       final response = await client.mutate$MoveService(mutation);
-      final jobJson = response.parsedData?.moveService.job?.toJson();
+      final jobJson = response.parsedData?.services.moveService.job?.toJson();
       return GenericResult(
         success: true,
-        code: response.parsedData?.moveService.code ?? 0,
-        message: response.parsedData?.moveService.message,
+        code: response.parsedData?.services.moveService.code ?? 0,
+        message: response.parsedData?.services.moveService.message,
         data: jobJson != null ? ServerJob.fromJson(jobJson) : null,
       );
     } catch (e) {

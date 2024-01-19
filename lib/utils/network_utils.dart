@@ -122,6 +122,9 @@ List<DnsRecord> getProjectDnsRecords(
     ttl: 18000,
   );
 
+  /// We never create this record!
+  /// This declaration is only for removal
+  /// as we need to compare by 'type' and 'name'
   final DnsRecord txt3 = DnsRecord(
     type: 'TXT',
     name: 'selector._domainkey',

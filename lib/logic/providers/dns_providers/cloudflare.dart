@@ -133,10 +133,10 @@ class CloudflareDnsProvider extends DnsProvider {
 
     /// Remove all records that do not match with SelfPrivacy
     cloudflareRecords.removeWhere(
-      (final oceanRecord) => !selfprivacyRecords.any(
+      (final cloudflareRecord) => !selfprivacyRecords.any(
         (final selfprivacyRecord) =>
-            selfprivacyRecord.type == oceanRecord.type &&
-            selfprivacyRecord.name == oceanRecord.name,
+            selfprivacyRecord.type == cloudflareRecord.type &&
+            selfprivacyRecord.name == cloudflareRecord.name,
       ),
     );
 

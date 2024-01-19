@@ -132,7 +132,7 @@ class _DomainPickerState extends State<DomainPicker> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                )
+                ),
               ],
             ),
           ],

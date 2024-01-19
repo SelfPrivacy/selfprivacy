@@ -93,6 +93,7 @@ void launchURL(final url) async {
 List<DnsRecord> getProjectDnsRecords(
   final String? domainName,
   final String? ip4,
+  final bool isCreating,
 ) {
   final DnsRecord domainA =
       DnsRecord(type: 'A', name: domainName, content: ip4);
@@ -121,6 +122,16 @@ List<DnsRecord> getProjectDnsRecords(
     ttl: 18000,
   );
 
+  /// We never create this record!
+  /// This declaration is only for removal
+  /// as we need to compare by 'type' and 'name'
+  final DnsRecord txt3 = DnsRecord(
+    type: 'TXT',
+    name: 'selector._domainkey',
+    content: 'v=DKIM1; k=rsa; p=none',
+    ttl: 18000,
+  );
+
   return <DnsRecord>[
     domainA,
     apiA,
@@ -132,6 +143,7 @@ List<DnsRecord> getProjectDnsRecords(
     mx,
     txt1,
     txt2,
+    if (!isCreating) txt3,
     vpn,
   ];
 }

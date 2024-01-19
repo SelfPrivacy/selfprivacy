@@ -31,7 +31,7 @@
         "remove": "Eliminar",
         "apply": "Solicitar",
         "done": "Hecho",
-        "connect_to_existing": "Conectarse a un servidor de SelfPrivacy existente",
+        "connect_to_existing": "¡Ya tengo un servidor de SelfPrivacy!",
         "app_name": "SelfPrivacy",
         "please_connect": "¡Conecta tu servidor y dominio para sumergirte!",
         "copied_to_clipboard": "¡Copiado al portapapeles!"
@@ -45,7 +45,10 @@
         "delete_server_title": "Eliminar servidor",
         "delete_server_description": "Esto elimina su servidor. Ya no será accesible.",
         "title": "Ajustes de la aplicación",
-        "dark_theme_title": "Tema oscuro"
+        "dark_theme_title": "Tema oscuro",
+        "system_dark_theme_title": "Tema del sistema",
+        "system_dark_theme_description": "Utiliza un tema claro u oscuro de la configuración del sistema",
+        "dangerous_settings": "Configuraciones peligrosas"
     },
     "ssh": {
         "delete_confirm_question": "¿Está seguro de que desea eliminar la clave SSH?",
@@ -57,7 +60,7 @@
         "subtitle_without_keys": "Sin llaves",
         "no_key_name": "Clave sin nombre",
         "root_title": "Estas son las claves de superusuario",
-        "input_label": "Clave pública ED25519 o RSA"
+        "input_label": "Clave pública ED25519, ECDSA o RSA"
     },
     "about_application_page": {
         "application_version_text": "Versión de la aplicación {}",
@@ -92,5 +95,26 @@
     },
     "about_us_page": {
         "title": "Sobre nosotros"
+    },
+    "server": {
+        "reboot_after_upgrade_hint": "Reinicio sin aviso después de aplicar cambios en el servidor",
+        "card_title": "Servidor",
+        "description": "Todos sus servicios funcionan aquí",
+        "general_information": "Información general",
+        "resource_usage": "Uso de recursos",
+        "server_timezone": "Zona horaria del servidor",
+        "select_timezone": "Selecciona zona horaria",
+        "reboot_after_upgrade": "Reinicia después de actualizar",
+        "allow_autoupgrade": "Permite la autoactualización",
+        "allow_autoupgrade_hint": "Ppermite actualizaciones automáticas de paquetes en el servidor"
+    },
+    "resource_chart": {
+        "month": "Mes",
+        "out": "Fuera",
+        "day": "Día",
+        "hour": "Hora",
+        "cpu_title": "Uso de CPU",
+        "network_title": "Uso de la red",
+        "in": "En"
     }
 }

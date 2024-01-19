@@ -1,0 +1,47 @@
+### Features
+
+- **Server installation**: New NixOS version is used during server setup ([#415](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/415))
+    - It is also possible to set a root SSH key during server setup. This feature can be activated in developer settings.
+- **DNS management**: DNS records creation dynamically gets desired records from the server now ([#424](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/424), resolves [#265](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/265))
+- **UI**: Add the button to copy password on the new user creation screen ([#409](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/409), resolves [#299](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/299))
+- **UI**: Add animation to the recovery key screen ([#410](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/410), resolves [#164](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/164))
+- **Backups**: Bucket name now includes the date of creation ([#403](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/403), resolves [#263](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/263))
+- **UI**: Snapshots List page now shows the button to open the Jobs sheet ([#396](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/396), resolves [#290](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/290))
+- **Server installation**: Implement better domain ownership check during installation ([#394](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/394), resolves [#389](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/389))
+- **UI**: Implement flexible precision formatting for prices ([#387](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/387))
+
+### Bug Fixes
+
+- **UI**: Domain name no longer overflows the screen ([#422](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/422), resolves [#408](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/408))
+- **UI**: Fix overflow of the filled buttons
+- **Hetzner**: Filter away ARM architecture from available servers ([#404](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/404), resolves [#402](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/402))
+- **UI**: Add refresh indicator on the 'Devices' screen ([#398](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/398), resolves [#258](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/258) and [#163](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/163))
+- **GraphQL API**: Force DateTime to UTC when timezone naive ([#386](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/386), resolves [#385](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/385))
+
+### Other
+
+- Updated the copyright year ([#417](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/417))
+    - Happy new year!
+- Upgrade to Flutter 3.16.1
+- Rename the Recovery flow button to prevent user confusion ([#399](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/399), resolves [#346](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/346))
+- **GraphQL API**: Remove and replace deprecated mutations ([#423](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/423), resolves [#418](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/418))
+
+### Translation contributions
+
+* French
+    * smtg (12)
+
+* Spanish
+    * NaiJi ✨ (35)
+
+* German
+    * Marvin F (23)
+    * User 1234 (30)
+
+* Hebrew
+    * Yaron (578)
+
+* Russian
+    * def (4)
+    * NaiJi ✨ (9)
+    * Inex Code (10)

@@ -3,7 +3,6 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/digital_ocean_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
 
 class ApiAdapter {
   ApiAdapter({final bool isWithToken = true})
@@ -75,15 +74,12 @@ class DigitalOceanDnsProvider extends DnsProvider {
 
   @override
   Future<GenericResult<void>> createDomainRecords({
+    required final List<DnsRecord> records,
     required final ServerDomain domain,
-    final String? ip4,
   }) async =>
       _adapter.api().createMultipleDnsRecords(
             domainName: domain.domainName,
-            records: getProjectDnsRecords(
-              domain.domainName,
-              ip4,
-            )
+            records: records
                 .map<DigitalOceanDnsRecord>(
                   (final e) =>
                       DigitalOceanDnsRecord.fromDnsRecord(e, domain.domainName),
@@ -93,8 +89,8 @@ class DigitalOceanDnsProvider extends DnsProvider {
 
   @override
   Future<GenericResult<void>> removeDomainRecords({
+    required final List<DnsRecord> records,
     required final ServerDomain domain,
-    final String? ip4,
   }) async {
     final result = await _adapter.api().getDnsRecords(domain.domainName);
     if (result.data.isEmpty || !result.success) {
@@ -106,17 +102,29 @@ class DigitalOceanDnsProvider extends DnsProvider {
       );
     }
 
-    const ignoreType = 'SOA';
-    final List<DigitalOceanDnsRecord> filteredRecords = [];
-    for (final record in result.data) {
-      if (record.type != ignoreType) {
-        filteredRecords.add(record);
-      }
-    }
+    final List<DigitalOceanDnsRecord> selfprivacyRecords = records
+        .map(
+          (final record) => DigitalOceanDnsRecord.fromDnsRecord(
+            record,
+            domain.domainName,
+          ),
+        )
+        .toList();
+
+    final List<DigitalOceanDnsRecord> oceanRecords = result.data;
+
+    /// Remove all records that do not match with SelfPrivacy
+    oceanRecords.removeWhere(
+      (final oceanRecord) => !selfprivacyRecords.any(
+        (final selfprivacyRecord) =>
+            selfprivacyRecord.type == oceanRecord.type &&
+            selfprivacyRecord.name == oceanRecord.name,
+      ),
+    );
 
     return _adapter.api().removeSimilarRecords(
           domainName: domain.domainName,
-          records: filteredRecords,
+          records: oceanRecords,
         );
   }
 

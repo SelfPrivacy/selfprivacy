@@ -3,7 +3,6 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/desec_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
 
 class ApiAdapter {
   ApiAdapter({final bool isWithToken = true})
@@ -75,16 +74,11 @@ class DesecDnsProvider extends DnsProvider {
 
   @override
   Future<GenericResult<void>> createDomainRecords({
+    required final List<DnsRecord> records,
     required final ServerDomain domain,
-    final String? ip4,
   }) async {
-    final List<DnsRecord> listDnsRecords = getProjectDnsRecords(
-      domain.domainName,
-      ip4,
-    );
-
     final List<DesecDnsRecord> bulkRecords = [];
-    for (final DnsRecord record in listDnsRecords) {
+    for (final DnsRecord record in records) {
       bulkRecords.add(DesecDnsRecord.fromDnsRecord(record, domain.domainName));
     }
 
@@ -96,21 +90,19 @@ class DesecDnsProvider extends DnsProvider {
 
   @override
   Future<GenericResult<void>> removeDomainRecords({
+    required final List<DnsRecord> records,
     required final ServerDomain domain,
-    final String? ip4,
   }) async {
-    final List<DnsRecord> listDnsRecords = getProjectDnsRecords(
-      domain.domainName,
-      ip4,
-    );
-
     final List<DesecDnsRecord> bulkRecords = [];
-    for (final DnsRecord record in listDnsRecords) {
+    for (final DnsRecord record in records) {
       final desecRecord = DesecDnsRecord.fromDnsRecord(
         record,
         domain.domainName,
       );
       bulkRecords.add(
+        /// Yes, it looks weird, but exactly forcing 'records' field
+        /// to empty array signals deSEC to remove the DNS record completely
+        /// https://desec.readthedocs.io/en/latest/dns/rrsets.html#deleting-an-rrset
         DesecDnsRecord(
           subname: desecRecord.subname,
           type: desecRecord.type,
@@ -119,14 +111,6 @@ class DesecDnsProvider extends DnsProvider {
         ),
       );
     }
-    bulkRecords.add(
-      DesecDnsRecord(
-        subname: 'selector._domainkey',
-        type: 'TXT',
-        ttl: 18000,
-        records: [],
-      ),
-    );
 
     return _adapter.api().removeSimilarRecords(
           domainName: domain.domainName,

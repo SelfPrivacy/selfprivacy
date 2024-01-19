@@ -168,24 +168,18 @@ class DnsRecordsCubit
 
   Future<void> fix() async {
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
+    final List<DnsRecord> records = await api.getDnsRecords();
+
+    /// TODO: Error handling?
     final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
-    final String? ipAddress = serverInstallationCubit.state.serverDetails?.ip4;
     await ProvidersController.currentDnsProvider!.removeDomainRecords(
+      records: records,
       domain: domain!,
     );
     await ProvidersController.currentDnsProvider!.createDomainRecords(
+      records: records,
       domain: domain,
-      ip4: ipAddress,
     );
-
-    final List<DnsRecord> records = await api.getDnsRecords();
-    final DnsRecord? dkimRecord = extractDkimRecord(records);
-    if (dkimRecord != null) {
-      await ProvidersController.currentDnsProvider!.setDnsRecord(
-        dkimRecord,
-        domain,
-      );
-    }
 
     await load();
   }

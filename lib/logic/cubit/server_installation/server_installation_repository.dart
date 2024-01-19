@@ -558,14 +558,30 @@ class ServerInstallationRepository {
   }
 
   Future<bool> deleteServer(final ServerDomain serverDomain) async {
+    final ServerApi api = ServerApi();
+    final dnsRecords = await api.getDnsRecords();
+    final GenericResult<void> removalResult =
+        await ProvidersController.currentDnsProvider!.removeDomainRecords(
+      domain: serverDomain,
+      records: dnsRecords,
+    );
+
+    if (!removalResult.success) {
+      getIt<NavigationService>().showSnackBar(
+        'modals.dns_removal_error'.tr(),
+      );
+      return false;
+    }
+
     final deletionResult =
         await ProvidersController.currentServerProvider!.deleteServer(
       serverDomain.domainName,
     );
 
     if (!deletionResult.success) {
-      getIt<NavigationService>()
-          .showSnackBar('modals.server_validators_error'.tr());
+      getIt<NavigationService>().showSnackBar(
+        'modals.server_validators_error'.tr(),
+      );
       return false;
     }
 
@@ -576,13 +592,6 @@ class ServerInstallationRepository {
     await box.put(BNames.isLoading, false);
     await box.put(BNames.serverDetails, null);
 
-    final GenericResult<void> removalResult = await ProvidersController
-        .currentDnsProvider!
-        .removeDomainRecords(domain: serverDomain);
-
-    if (!removalResult.success) {
-      getIt<NavigationService>().showSnackBar('modals.dns_removal_error'.tr());
-    }
     return true;
   }
 

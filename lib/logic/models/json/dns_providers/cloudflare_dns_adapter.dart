@@ -4,14 +4,18 @@ CloudflareDnsRecord _fromDnsRecord(
   final DnsRecord dnsRecord,
   final String rootDomain,
 ) {
+  final String type = dnsRecord.type;
   String name = dnsRecord.name ?? '';
   if (name != rootDomain && name != '@') {
     name = '$name.$rootDomain';
   }
+  if (type == 'MX' && name == '@') {
+    name = rootDomain;
+  }
   return CloudflareDnsRecord(
     content: dnsRecord.content,
     name: name,
-    type: dnsRecord.type,
+    type: type,
     zoneName: rootDomain,
     id: null,
     ttl: dnsRecord.ttl,

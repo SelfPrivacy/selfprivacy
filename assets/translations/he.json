@@ -34,7 +34,7 @@
         "username": "שם משתמש",
         "loading": "בטעינה…",
         "later": "דילוג כדי להגדיר אחר כך",
-        "connect_to_existing": "התחברות לשרת SelfPrivacy קיים",
+        "connect_to_existing": "כבר יש לי שרת SelfPrivacy!",
         "reset": "איפוס",
         "details": "פרטים",
         "no_data": "אין נתונים",
@@ -461,7 +461,8 @@
         "enter_username_and_password": "נא למלא שם משתמש וסיסמה חזקה",
         "finish": "הכול מאותחל",
         "create_master_account": "יצירת חשבון ראשי",
-        "checks": "בדיקות הושלמו \n{} מתוך {}"
+        "checks": "בדיקות הושלמו \n{} מתוך {}",
+        "domain_critical_error": "לא הצלחנו להגיע לשם התחום הזה! נגיעה למידע נוסף…"
     },
     "recovering": {
         "method_select_other_device": "יש לי גישה דרך מכשיר אחר",
@@ -480,7 +481,7 @@
         "modal_confirmation_ip_valid": "ה־IP זהה לזה שברשומת ה־DNS",
         "modal_confirmation_ip_invalid": "ה־IP שונה מזה שברשומת ה־DNS",
         "generic_error": "הפעולה בוטלה, נא לנסות שוב.",
-        "recovery_main_header": "התחברות לשרת SelfPrivacy קיים",
+        "recovery_main_header": "התחברות לשרת קיים",
         "domain_recover_placeholder": "שם התחום שלך",
         "domain_recover_error": "לא נמצא שרת עם שם תחום כזה",
         "method_select_description": "נא לבחור שיטת שחזור:",
@@ -610,7 +611,11 @@
         "use_staging_acme_description": "חל על הקמת שרתים חדשים.",
         "use_staging_acme": "להשתמש בשרת ACME לבדיקות",
         "ignore_tls": "לא לאמת אישורי TLS",
-        "ignore_tls_description": "היישום לא יאמת אישורי RLS בעת התחברות לשרת."
+        "ignore_tls_description": "היישום לא יאמת אישורי RLS בעת התחברות לשרת.",
+        "add_root_ssh_key": "הוספת מפתח SSH למשתמש העל (root)",
+        "allow_ssh_key_at_setup": "לאפשר הגדרת מפתח SSH למשתמש העל (root) במהלך ההתקנה",
+        "allow_ssh_key_at_setup_description": "כפתור להוספת מפתח יופיע במסך האישור.",
+        "root_ssh_key_added": "מפתח SSH למשתמש העל (root) הוגדר והוחל"
     },
     "cloud": {
         "title": "אחסון בענן",

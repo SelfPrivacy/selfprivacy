@@ -58,9 +58,8 @@ class JobsContent extends StatelessWidget {
                 child: Text(
                   'jobs.completed'.tr(),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ) ??
-                      const TextStyle(),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
               ),
             ];

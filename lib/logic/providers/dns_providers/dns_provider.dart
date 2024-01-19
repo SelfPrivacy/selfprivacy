@@ -23,23 +23,21 @@ abstract class DnsProvider {
   /// Returns list of all available domain entries assigned to the account.
   Future<GenericResult<List<ServerDomain>>> domainList();
 
-  /// Tries to create all main domain records needed
-  /// for SelfPrivacy to launch on requested domain by ip4.
+  /// Tries to create domain records
+  /// by our records list.
   ///
   /// Doesn't check for duplication, cleaning has
   /// to be done beforehand by [removeDomainRecords]
   Future<GenericResult<void>> createDomainRecords({
+    required final List<DnsRecord> records,
     required final ServerDomain domain,
-    final String? ip4,
   });
 
-  /// Tries to remove all domain records of requested domain by ip4.
-  ///
-  /// Will remove all entries, including the ones
-  /// that weren't created by SelfPrivacy.
+  /// Tries to remove all records of requested
+  /// domain that match our records list.
   Future<GenericResult<void>> removeDomainRecords({
+    required final List<DnsRecord> records,
     required final ServerDomain domain,
-    final String? ip4,
   });
 
   /// Returns list of all [DnsRecord] entries assigned to requested domain.

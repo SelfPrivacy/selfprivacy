@@ -264,12 +264,22 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final ServerHostingDetails serverDetails,
   ) async {
     await repository.saveServerDetails(serverDetails);
+
+    /// TODO: Error handling?
     await ProvidersController.currentDnsProvider!.removeDomainRecords(
-      ip4: serverDetails.ip4,
+      records: getProjectDnsRecords(
+        state.serverDomain!.domainName,
+        serverDetails.ip4,
+        false,
+      ),
       domain: state.serverDomain!,
     );
     await ProvidersController.currentDnsProvider!.createDomainRecords(
-      ip4: serverDetails.ip4,
+      records: getProjectDnsRecords(
+        state.serverDomain!.domainName,
+        serverDetails.ip4,
+        true,
+      ),
       domain: state.serverDomain!,
     );
 

@@ -87,9 +87,13 @@ class _DomainPickerState extends State<DomainPicker> {
                                   });
                                 },
                               ),
-                              Text(
-                                domain,
-                                style: Theme.of(context).textTheme.bodyLarge,
+                              Expanded(
+                                child: Text(
+                                  domain,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               ),
                             ],
                           ),
@@ -118,12 +122,16 @@ class _DomainPickerState extends State<DomainPicker> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  state.domain,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                  textAlign: TextAlign.center,
+                Expanded(
+                  child: Text(
+                    state.domain,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 ),
               ],
             ),

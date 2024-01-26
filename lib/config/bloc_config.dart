@@ -9,7 +9,7 @@ import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
@@ -36,7 +36,8 @@ class BlocAndProviderConfig extends StatelessWidget {
     final apiVolumesCubit = ApiProviderVolumeCubit(serverInstallationCubit);
     final apiServerVolumesCubit =
         ApiServerVolumeCubit(serverInstallationCubit, apiVolumesCubit);
-    final serverJobsCubit = ServerJobsCubit(serverInstallationCubit);
+    final serverJobsBloc = ServerJobsBloc();
+    final connectionStatusBloc = ConnectionStatusBloc();
     final serverDetailsCubit = ServerDetailsCubit(serverInstallationCubit);
 
     return MultiProvider(
@@ -64,11 +65,11 @@ class BlocAndProviderConfig extends StatelessWidget {
           lazy: false,
         ),
         BlocProvider(
-          create: (final _) => backupsCubit..load(),
+          create: (final _) => backupsCubit,
           lazy: false,
         ),
         BlocProvider(
-          create: (final _) => dnsRecordsCubit..load(),
+          create: (final _) => dnsRecordsCubit,
         ),
         BlocProvider(
           create: (final _) => recoveryKeyCubit..load(),
@@ -83,8 +84,9 @@ class BlocAndProviderConfig extends StatelessWidget {
           create: (final _) => apiServerVolumesCubit..load(),
         ),
         BlocProvider(
-          create: (final _) => serverJobsCubit..load(),
+          create: (final _) => serverJobsBloc,
         ),
+        BlocProvider(create: (final _) => connectionStatusBloc),
         BlocProvider(
           create: (final _) => serverDetailsCubit..load(),
         ),

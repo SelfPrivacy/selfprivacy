@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -43,7 +43,7 @@ class BackupDetailsPage extends StatelessWidget {
         context.watch<ServicesCubit>().state.servicesThatCanBeBackedUp;
     final Duration? autobackupPeriod = backupsState.autobackupPeriod;
     final List<ServerJob> backupJobs = context
-        .watch<ServerJobsCubit>()
+        .watch<ServerJobsBloc>()
         .state
         .backupJobList
         .where((final job) => job.status != JobStatusEnum.finished)

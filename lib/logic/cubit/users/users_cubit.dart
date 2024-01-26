@@ -5,17 +5,17 @@ import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
+import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 export 'package:provider/provider.dart';
 
 part 'users_state.dart';
 
-class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
+class UsersCubit extends ServerConnectionDependentCubit<UsersState> {
   UsersCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(
-          serverInstallationCubit,
           const UsersState(
             <User>[],
             false,
@@ -28,9 +28,6 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
 
   @override
   Future<void> load() async {
-    if (serverInstallationCubit.state is! ServerInstallationFinished) {
-      return;
-    }
     final List<User> loadedUsers = box.values.toList();
     if (loadedUsers.isNotEmpty) {
       emit(
@@ -45,7 +42,8 @@ class UsersCubit extends ServerInstallationDependendCubit<UsersState> {
   }
 
   Future<void> refresh() async {
-    if (serverInstallationCubit.state is! ServerInstallationFinished) {
+    if (getIt<ApiConnectionRepository>().connectionStatus !=
+        ConnectionStatus.nonexistent) {
       return;
     }
     emit(state.copyWith(isLoading: true));

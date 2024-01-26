@@ -1,13 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 
 part 'server_job.g.dart';
 
 @JsonSerializable()
-class ServerJob {
+class ServerJob extends Equatable {
   factory ServerJob.fromJson(final Map<String, dynamic> json) =>
       _$ServerJobFromJson(json);
-  ServerJob({
+  const ServerJob({
     required this.name,
     required this.description,
     required this.status,
@@ -50,6 +51,22 @@ class ServerJob {
   final String? result;
   final String? statusText;
   final DateTime? finishedAt;
+
+  @override
+  List<Object?> get props => [
+        name,
+        description,
+        status,
+        uid,
+        typeId,
+        updatedAt,
+        createdAt,
+        error,
+        progress,
+        result,
+        statusText,
+        finishedAt,
+      ];
 }
 
 enum JobStatusEnum {

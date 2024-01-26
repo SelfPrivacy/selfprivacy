@@ -1,5 +1,5 @@
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_repository.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
@@ -8,9 +8,9 @@ import 'package:selfprivacy/logic/models/timezone_settings.dart';
 part 'server_detailed_info_state.dart';
 
 class ServerDetailsCubit
-    extends ServerInstallationDependendCubit<ServerDetailsState> {
+    extends ServerConnectionDependentCubit<ServerDetailsState> {
   ServerDetailsCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(serverInstallationCubit, ServerDetailsInitial());
+      : super(ServerDetailsInitial());
 
   ServerDetailsRepository repository = ServerDetailsRepository();
 

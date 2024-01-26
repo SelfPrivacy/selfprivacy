@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
@@ -22,10 +22,10 @@ class JobsContent extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final List<ServerJob> serverJobs =
-        context.watch<ServerJobsCubit>().state.serverJobList;
+        context.watch<ServerJobsBloc>().state.serverJobList;
 
     final bool hasRemovableJobs =
-        context.watch<ServerJobsCubit>().state.hasRemovableJobs;
+        context.watch<ServerJobsBloc>().state.hasRemovableJobs;
 
     return BlocBuilder<JobsCubit, JobsState>(
       builder: (final context, final state) {
@@ -152,8 +152,8 @@ class JobsContent extends StatelessWidget {
                     IconButton(
                       onPressed: hasRemovableJobs
                           ? () => context
-                              .read<ServerJobsCubit>()
-                              .removeAllFinishedJobs()
+                              .read<ServerJobsBloc>()
+                              .add(RemoveAllFinishedJobs())
                           : null,
                       icon: const Icon(Icons.clear_all),
                       color: Theme.of(context).colorScheme.onBackground,
@@ -172,7 +172,9 @@ class JobsContent extends StatelessWidget {
                   serverJob: job,
                 ),
                 onDismissed: (final direction) {
-                  context.read<ServerJobsCubit>().removeServerJob(job.uid);
+                  context.read<ServerJobsBloc>().add(
+                        RemoveServerJob(job.uid),
+                      );
                 },
               ),
             ),

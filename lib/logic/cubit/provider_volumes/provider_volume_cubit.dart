@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
@@ -14,16 +14,14 @@ import 'package:selfprivacy/logic/providers/providers_controller.dart';
 part 'provider_volume_state.dart';
 
 class ApiProviderVolumeCubit
-    extends ServerInstallationDependendCubit<ApiProviderVolumeState> {
+    extends ServerConnectionDependentCubit<ApiProviderVolumeState> {
   ApiProviderVolumeCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(serverInstallationCubit, const ApiProviderVolumeState.initial());
+      : super(const ApiProviderVolumeState.initial());
   final ServerApi serverApi = ServerApi();
 
   @override
   Future<void> load() async {
-    if (serverInstallationCubit.state is ServerInstallationFinished) {
-      unawaited(_refetch());
-    }
+    unawaited(_refetch());
   }
 
   Future<Price?> getPricePerGb() async {

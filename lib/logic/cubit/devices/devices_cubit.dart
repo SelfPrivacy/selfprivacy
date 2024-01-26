@@ -1,15 +1,14 @@
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
 part 'devices_state.dart';
 
-class ApiDevicesCubit
-    extends ServerInstallationDependendCubit<ApiDevicesState> {
+class ApiDevicesCubit extends ServerConnectionDependentCubit<ApiDevicesState> {
   ApiDevicesCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(serverInstallationCubit, const ApiDevicesState.initial());
+      : super(const ApiDevicesState.initial());
 
   final ServerApi api = ServerApi();
 

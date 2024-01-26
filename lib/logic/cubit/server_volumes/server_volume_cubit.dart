@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
@@ -10,11 +10,12 @@ import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 part 'server_volume_state.dart';
 
 class ApiServerVolumeCubit
-    extends ServerInstallationDependendCubit<ApiServerVolumeState> {
+    extends ServerConnectionDependentCubit<ApiServerVolumeState> {
   ApiServerVolumeCubit(
     final ServerInstallationCubit serverInstallationCubit,
     this.providerVolumeCubit,
-  ) : super(serverInstallationCubit, ApiServerVolumeState.initial()) {
+  ) : super(ApiServerVolumeState.initial()) {
+    // TODO: Remove this connection between cubits
     _providerVolumeSubscription =
         providerVolumeCubit.stream.listen(checkProviderVolumes);
   }
@@ -23,9 +24,7 @@ class ApiServerVolumeCubit
 
   @override
   Future<void> load() async {
-    if (serverInstallationCubit.state is ServerInstallationFinished) {
-      unawaited(reload());
-    }
+    unawaited(reload());
   }
 
   late StreamSubscription<ApiProviderVolumeState> _providerVolumeSubscription;

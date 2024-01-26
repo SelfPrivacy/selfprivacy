@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
@@ -29,7 +29,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
   void initState() {
     super.initState();
     final List<String> busyServices = context
-        .read<ServerJobsCubit>()
+        .read<ServerJobsBloc>()
         .state
         .backupJobList
         .where(
@@ -48,7 +48,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
   @override
   Widget build(final BuildContext context) {
     final List<String> busyServices = context
-        .watch<ServerJobsCubit>()
+        .watch<ServerJobsBloc>()
         .state
         .backupJobList
         .where(

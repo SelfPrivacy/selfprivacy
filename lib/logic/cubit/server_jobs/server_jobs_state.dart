@@ -1,15 +1,16 @@
-part of 'server_jobs_cubit.dart';
+part of 'server_jobs_bloc.dart';
 
-class ServerJobsState extends ServerInstallationDependendState {
+sealed class ServerJobsState extends Equatable {
   ServerJobsState({
-    final serverJobList = const <ServerJob>[],
-    this.migrationJobUid,
-  }) {
-    _serverJobList = serverJobList;
-  }
+    final int? hashCode,
+  }) : _hashCode = hashCode ?? Object.hashAll([]);
 
-  late final List<ServerJob> _serverJobList;
-  final String? migrationJobUid;
+  final int? _hashCode;
+
+  final apiConnectionRepository = getIt<ApiConnectionRepository>();
+
+  List<ServerJob> get _serverJobList =>
+      apiConnectionRepository.apiData.serverJobs.data ?? [];
 
   List<ServerJob> get serverJobList {
     try {
@@ -36,14 +37,19 @@ class ServerJobsState extends ServerInstallationDependendState {
       );
 
   @override
-  List<Object?> get props => [migrationJobUid, _serverJobList];
+  List<Object?> get props => [_hashCode];
+}
 
-  ServerJobsState copyWith({
-    final List<ServerJob>? serverJobList,
-    final String? migrationJobUid,
-  }) =>
-      ServerJobsState(
-        serverJobList: serverJobList ?? _serverJobList,
-        migrationJobUid: migrationJobUid ?? this.migrationJobUid,
-      );
+class ServerJobsInitialState extends ServerJobsState {
+  ServerJobsInitialState() : super(hashCode: Object.hashAll([]));
+}
+
+class ServerJobsListEmptyState extends ServerJobsState {
+  ServerJobsListEmptyState() : super(hashCode: Object.hashAll([]));
+}
+
+class ServerJobsListWithJobsState extends ServerJobsState {
+  ServerJobsListWithJobsState({
+    required final List<ServerJob> serverJobList,
+  }) : super(hashCode: Object.hashAll([...serverJobList]));
 }

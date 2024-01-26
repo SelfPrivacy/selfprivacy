@@ -4,7 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
+import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
@@ -13,10 +14,9 @@ import 'package:selfprivacy/logic/models/service.dart';
 
 part 'backups_state.dart';
 
-class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
+class BackupsCubit extends ServerConnectionDependentCubit<BackupsState> {
   BackupsCubit(final ServerInstallationCubit serverInstallationCubit)
       : super(
-          serverInstallationCubit,
           const BackupsState(preventActions: true),
         );
 
@@ -25,24 +25,22 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
 
   @override
   Future<void> load() async {
-    if (serverInstallationCubit.state is ServerInstallationFinished) {
-      final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
-      final BackupConfiguration? backupConfig =
-          await api.getBackupsConfiguration();
-      final List<Backup> backups = await api.getBackups();
-      backups.sort((final a, final b) => b.time.compareTo(a.time));
-      emit(
-        state.copyWith(
-          backblazeBucket: bucket,
-          isInitialized: backupConfig?.isInitialized,
-          autobackupPeriod: backupConfig?.autobackupPeriod ?? Duration.zero,
-          autobackupQuotas: backupConfig?.autobackupQuotas,
-          backups: backups,
-          preventActions: false,
-          refreshing: false,
-        ),
-      );
-    }
+    final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
+    final BackupConfiguration? backupConfig =
+        await api.getBackupsConfiguration();
+    final List<Backup> backups = await api.getBackups();
+    backups.sort((final a, final b) => b.time.compareTo(a.time));
+    emit(
+      state.copyWith(
+        backblazeBucket: bucket,
+        isInitialized: backupConfig?.isInitialized,
+        autobackupPeriod: backupConfig?.autobackupPeriod ?? Duration.zero,
+        autobackupQuotas: backupConfig?.autobackupQuotas,
+        backups: backups,
+        preventActions: false,
+        refreshing: false,
+      ),
+    );
   }
 
   Future<void> initializeBackups() async {
@@ -59,10 +57,11 @@ class BackupsCubit extends ServerInstallationDependendCubit<BackupsState> {
     final BackblazeBucket bucket;
 
     if (state.backblazeBucket == null) {
-      final String domain = serverInstallationCubit
-          .state.serverDomain!.domainName
+      final String domain = getIt<ApiConnectionRepository>()
+          .serverDomain!
+          .domainName
           .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
-      final int serverId = serverInstallationCubit.state.serverDetails!.id;
+      final int serverId = getIt<ApiConnectionRepository>().serverDetails!.id;
       String bucketName =
           '${DateTime.now().millisecondsSinceEpoch}-$serverId-$domain';
       if (bucketName.length > 49) {

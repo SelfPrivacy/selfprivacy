@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 
 part 'recovery_key_state.dart';
 
 class RecoveryKeyCubit
-    extends ServerInstallationDependendCubit<RecoveryKeyState> {
+    extends ServerConnectionDependentCubit<RecoveryKeyState> {
   RecoveryKeyCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(serverInstallationCubit, const RecoveryKeyState.initial());
+      : super(const RecoveryKeyState.initial());
 
   final ServerApi api = ServerApi();
 

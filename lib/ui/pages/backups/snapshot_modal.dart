@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -34,7 +34,7 @@ class _SnapshotModalState extends State<SnapshotModal> {
   @override
   Widget build(final BuildContext context) {
     final List<String> busyServices = context
-        .watch<ServerJobsCubit>()
+        .watch<ServerJobsBloc>()
         .state
         .backupJobList
         .where(

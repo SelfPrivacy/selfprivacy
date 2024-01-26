@@ -118,7 +118,6 @@ class _ServicePageState extends State<ServicePage> {
                 services: [service],
                 diskStatus:
                     context.read<ApiServerVolumeCubit>().state.diskStatus,
-                isMigration: false,
               ),
             ),
             leading: const Icon(Icons.drive_file_move_outlined),

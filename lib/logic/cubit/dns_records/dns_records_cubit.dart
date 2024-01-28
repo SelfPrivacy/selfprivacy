@@ -1,4 +1,6 @@
 import 'package:cubit_form/cubit_form.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -45,10 +47,11 @@ class DnsRecordsCubit
         domain,
         extractDkimRecord(allDnsRecords)?.content ?? '',
         allDnsRecords,
+        ipAddress,
       );
 
       if (!foundRecords.success || foundRecords.data.isEmpty) {
-        emit(const DnsRecordsState());
+        emit(const DnsRecordsState(dnsState: DnsRecordsStatus.error));
         return;
       }
 
@@ -72,7 +75,19 @@ class DnsRecordsCubit
     final ServerDomain domain,
     final String dkimPublicKey,
     final List<DnsRecord> pendingDnsRecords,
+    final String ip4,
   ) async {
+    final matchMap = await validateDnsMatch(domain.domainName, ['api'], ip4);
+    if (matchMap.values.any((final status) => status != DnsRecordStatus.ok)) {
+      getIt<NavigationService>().showSnackBar(
+        'domain.domain_validation_failure'.tr(),
+      );
+      return GenericResult(
+        success: false,
+        data: [],
+      );
+    }
+
     final result = await ProvidersController.currentDnsProvider!
         .getDnsRecords(domain: domain);
     if (result.data.isEmpty || !result.success) {

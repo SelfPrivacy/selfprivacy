@@ -35,7 +35,6 @@ class ApiServerVolumeCubit
       ApiServerVolumeState(
         this.state._volumes,
         this.state.status,
-        this.state.usesBinds,
         DiskStatus.fromVolumes(this.state._volumes, state.volumes),
       ),
     );
@@ -44,7 +43,6 @@ class ApiServerVolumeCubit
 
   Future<void> reload() async {
     final volumes = await serverApi.getServerDiskVolumes();
-    final usesBinds = await serverApi.isUsingBinds();
     var status = LoadingStatus.error;
 
     if (volumes.isNotEmpty) {
@@ -55,7 +53,6 @@ class ApiServerVolumeCubit
       ApiServerVolumeState(
         volumes,
         status,
-        usesBinds,
         DiskStatus.fromVolumes(
           volumes,
           providerVolumeCubit.state.volumes,

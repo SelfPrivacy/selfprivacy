@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -48,7 +48,7 @@ class _SnapshotModalState extends State<SnapshotModal> {
     final bool isServiceBusy = busyServices.contains(widget.snapshot.serviceId);
 
     final Service? service = context
-        .read<ServicesCubit>()
+        .read<ServicesBloc>()
         .state
         .getServiceById(widget.snapshot.serviceId);
 
@@ -153,8 +153,12 @@ class _SnapshotModalState extends State<SnapshotModal> {
                   onPressed: isServiceBusy
                       ? null
                       : () {
-                          context.read<BackupsBloc>().add(RestoreBackup(
-                              widget.snapshot.id, selectedStrategy));
+                          context.read<BackupsBloc>().add(
+                                RestoreBackup(
+                                  widget.snapshot.id,
+                                  selectedStrategy,
+                                ),
+                              );
                           Navigator.of(context).pop();
                           getIt<NavigationService>()
                               .showSnackBar('backup.restore_started'.tr());

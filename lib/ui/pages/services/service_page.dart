@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
@@ -26,7 +26,7 @@ class _ServicePageState extends State<ServicePage> {
   @override
   Widget build(final BuildContext context) {
     final Service? service =
-        context.watch<ServicesCubit>().state.getServiceById(widget.serviceId);
+        context.watch<ServicesBloc>().state.getServiceById(widget.serviceId);
 
     if (service == null) {
       return const BrandHeroScreen(
@@ -43,7 +43,7 @@ class _ServicePageState extends State<ServicePage> {
         service.status == ServiceStatus.off;
 
     final bool serviceLocked =
-        context.watch<ServicesCubit>().state.isServiceLocked(service.id);
+        context.watch<ServicesBloc>().state.isServiceLocked(service.id);
 
     return BrandHeroScreen(
       hasBackButton: true,
@@ -81,7 +81,7 @@ class _ServicePageState extends State<ServicePage> {
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
           onTap: () => {
-            context.read<ServicesCubit>().restart(service.id),
+            context.read<ServicesBloc>().add(ServiceRestart(service)),
           },
           leading: const Icon(Icons.restart_alt_outlined),
           title: Text(

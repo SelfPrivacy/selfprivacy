@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 
 /// Repository for all API calls
 /// Stores the current state of all data from API and exposes it to Blocs.
@@ -74,6 +75,7 @@ class ApiConnectionRepository {
     _apiData.serverJobs.data = await api.getServerJobs();
     _apiData.backupConfig.data = await api.getBackupsConfiguration();
     _apiData.backups.data = await api.getBackups();
+    _apiData.services.data = await api.getAllServices();
     _dataStream.add(_apiData);
 
     connectionStatus = ConnectionStatus.connected;
@@ -109,6 +111,8 @@ class ApiConnectionRepository {
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.backupConfig
         .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.services
+        .refetchData(version, () => _dataStream.add(_apiData));
   }
 
   void emitData() {
@@ -132,12 +136,17 @@ class ApiData {
         backups = ApiDataElement<List<Backup>>(
           fetchData: () async => api.getBackups(),
           requiredApiVersion: '>=2.4.2',
+        ),
+        services = ApiDataElement<List<Service>>(
+          fetchData: () async => api.getAllServices(),
+          requiredApiVersion: '>=2.4.3',
         );
 
   ApiDataElement<List<ServerJob>> serverJobs;
   ApiDataElement<String> apiVersion;
   ApiDataElement<BackupConfiguration> backupConfig;
   ApiDataElement<List<Backup>> backups;
+  ApiDataElement<List<Service>> services;
 }
 
 enum ConnectionStatus {
@@ -163,7 +172,9 @@ class ApiDataElement<T> {
   final Future<T?> Function() fetchData;
 
   Future<void> refetchData(
-      final Version version, final Function callback) async {
+    final Version version,
+    final Function callback,
+  ) async {
     if (VersionConstraint.parse(requiredApiVersion).allows(version)) {
       print('Fetching data for $runtimeType');
       if (isExpired) {

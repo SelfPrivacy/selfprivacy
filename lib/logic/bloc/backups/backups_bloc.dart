@@ -193,7 +193,8 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
             );
     if (result.success == false) {
       getIt<NavigationService>().showSnackBar(
-          result.message ?? "Couldn't initialize repository on your server.");
+        result.message ?? "Couldn't initialize repository on your server.",
+      );
       emit(BackupsUnititialized());
       return;
     }

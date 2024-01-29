@@ -71,7 +71,8 @@ class BackupsUnititialized extends BackupsState {
     final BackblazeBucket? backblazeBucket,
   }) =>
       BackupsUnititialized(
-          backblazeBucket: backblazeBucket ?? this.backblazeBucket);
+        backblazeBucket: backblazeBucket ?? this.backblazeBucket,
+      );
 }
 
 class BackupsInitializing extends BackupsState {
@@ -86,7 +87,8 @@ class BackupsInitializing extends BackupsState {
     final BackblazeBucket? backblazeBucket,
   }) =>
       BackupsInitializing(
-          backblazeBucket: backblazeBucket ?? this.backblazeBucket);
+        backblazeBucket: backblazeBucket ?? this.backblazeBucket,
+      );
 }
 
 class BackupsInitialized extends BackupsState {

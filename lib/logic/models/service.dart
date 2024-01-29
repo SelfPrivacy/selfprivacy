@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -8,7 +9,7 @@ import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 
-class Service {
+class Service extends Equatable {
   Service.fromGraphQL(final Query$AllServices$services$allServices service)
       : this(
           id: service.id,
@@ -37,7 +38,7 @@ class Service {
               [],
           url: service.url,
         );
-  Service({
+  const Service({
     required this.id,
     required this.displayName,
     required this.description,
@@ -72,7 +73,7 @@ class Service {
     return '';
   }
 
-  static Service empty = Service(
+  static Service empty = const Service(
     id: 'empty',
     displayName: '',
     description: '',
@@ -83,7 +84,7 @@ class Service {
     backupDescription: '',
     status: ServiceStatus.off,
     storageUsage: ServiceStorageUsage(
-      used: const DiskSize(byte: 0),
+      used: DiskSize(byte: 0),
       volume: '',
     ),
     svgIcon: '',
@@ -104,16 +105,36 @@ class Service {
   final String svgIcon;
   final String? url;
   final List<DnsRecord> dnsRecords;
+
+  @override
+  List<Object?> get props => [
+        id,
+        displayName,
+        description,
+        isEnabled,
+        isRequired,
+        isMovable,
+        canBeBackedUp,
+        backupDescription,
+        status,
+        storageUsage,
+        svgIcon,
+        dnsRecords,
+        url,
+      ];
 }
 
-class ServiceStorageUsage {
-  ServiceStorageUsage({
+class ServiceStorageUsage extends Equatable {
+  const ServiceStorageUsage({
     required this.used,
     required this.volume,
   });
 
   final DiskSize used;
   final String? volume;
+
+  @override
+  List<Object?> get props => [used, volume];
 }
 
 enum ServiceStatus {

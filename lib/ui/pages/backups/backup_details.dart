@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -39,7 +39,7 @@ class BackupDetailsPage extends StatelessWidget {
     final bool preventActions = backupsState.preventActions;
     final List<Backup> backups = backupsState.backups;
     final List<Service> services =
-        context.watch<ServicesCubit>().state.servicesThatCanBeBackedUp;
+        context.watch<ServicesBloc>().state.servicesThatCanBeBackedUp;
     final Duration? autobackupPeriod = backupsState.autobackupPeriod;
     final List<ServerJob> backupJobs = context
         .watch<ServerJobsBloc>()
@@ -298,7 +298,7 @@ class BackupDetailsPage extends StatelessWidget {
                   children: backups.take(15).map(
                     (final Backup backup) {
                       final service = context
-                          .read<ServicesCubit>()
+                          .read<ServicesBloc>()
                           .state
                           .getServiceById(backup.serviceId);
                       return ListTile(
@@ -419,7 +419,7 @@ class BackupDetailsPage extends StatelessWidget {
                     : () => {
                           context
                               .read<BackupsBloc>()
-                              .add(const ForceSnapshotListUpdate())
+                              .add(const ForceSnapshotListUpdate()),
                         },
               ),
               const SizedBox(height: 8),

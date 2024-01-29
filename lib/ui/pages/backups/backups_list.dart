@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
@@ -43,7 +43,7 @@ class BackupsListPage extends StatelessWidget {
           ...backups.map(
             (final Backup backup) {
               final service = context
-                  .read<ServicesCubit>()
+                  .read<ServicesBloc>()
                   .state
                   .getServiceById(backup.serviceId);
               return ListTile(

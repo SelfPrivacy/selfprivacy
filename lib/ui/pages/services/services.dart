@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
@@ -30,7 +30,7 @@ class _ServicesPageState extends State<ServicesPage> {
     final isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
 
-    final services = [...context.watch<ServicesCubit>().state.services];
+    final services = [...context.watch<ServicesBloc>().state.services];
     services
         .sort((final a, final b) => a.status.index.compareTo(b.status.index));
 
@@ -52,7 +52,8 @@ class _ServicesPageState extends State<ServicesPage> {
             )
           : RefreshIndicator(
               onRefresh: () async {
-                await context.read<ServicesCubit>().reload();
+                // Create a ServicesRelaod event and wait for the state to change.
+                await context.read<ServicesBloc>().awaitReload();
               },
               child: ListView(
                 padding: paddingH15V0,

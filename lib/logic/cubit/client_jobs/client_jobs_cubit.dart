@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 
@@ -16,12 +16,12 @@ part 'client_jobs_state.dart';
 class JobsCubit extends Cubit<JobsState> {
   JobsCubit({
     required this.usersCubit,
-    required this.servicesCubit,
+    required this.servicesBloc,
   }) : super(JobsStateEmpty());
 
   final ServerApi api = ServerApi();
   final UsersCubit usersCubit;
-  final ServicesCubit servicesCubit;
+  final ServicesBloc servicesBloc;
 
   void addJob(final ClientJob job) {
     final jobs = currentJobList;
@@ -90,7 +90,7 @@ class JobsCubit extends Cubit<JobsState> {
 
       await api.pullConfigurationUpdate();
       await api.apply();
-      await servicesCubit.load();
+      servicesBloc.add(const ServicesReload());
 
       emit(JobsStateEmpty());
     }

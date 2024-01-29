@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/connection_status/connection_status_bloc.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
@@ -11,7 +12,6 @@ import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
@@ -28,7 +28,7 @@ class BlocAndProviderConfig extends StatelessWidget {
     final serverInstallationCubit = ServerInstallationCubit()..load();
     final supportSystemCubit = SupportSystemCubit();
     final usersCubit = UsersCubit(serverInstallationCubit);
-    final servicesCubit = ServicesCubit(serverInstallationCubit);
+    final servicesBloc = ServicesBloc();
     final backupsBloc = BackupsBloc();
     final dnsRecordsCubit = DnsRecordsCubit(serverInstallationCubit);
     final recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
@@ -61,8 +61,7 @@ class BlocAndProviderConfig extends StatelessWidget {
           lazy: false,
         ),
         BlocProvider(
-          create: (final _) => servicesCubit..load(),
-          lazy: false,
+          create: (final _) => servicesBloc,
         ),
         BlocProvider(
           create: (final _) => backupsBloc,
@@ -92,7 +91,7 @@ class BlocAndProviderConfig extends StatelessWidget {
         BlocProvider(
           create: (final _) => JobsCubit(
             usersCubit: usersCubit,
-            servicesCubit: servicesCubit,
+            servicesBloc: servicesBloc,
           ),
         ),
       ],

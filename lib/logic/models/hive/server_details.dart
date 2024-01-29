@@ -28,7 +28,7 @@ class ServerHostingDetails {
   final DateTime? startTime;
 
   @HiveField(4)
-  final ServerVolume volume;
+  final ServerProviderVolume volume;
 
   @HiveField(5)
   final String apiToken;
@@ -52,8 +52,8 @@ class ServerHostingDetails {
 }
 
 @HiveType(typeId: 5)
-class ServerVolume {
-  ServerVolume({
+class ServerProviderVolume {
+  ServerProviderVolume({
     required this.id,
     required this.name,
     required this.sizeByte,

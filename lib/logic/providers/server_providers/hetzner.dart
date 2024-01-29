@@ -280,7 +280,7 @@ class HetznerServerProvider extends ServerProvider {
       id: serverResult.data!.id,
       ip4: serverResult.data!.publicNet.ipv4!.ip,
       createTime: DateTime.now(),
-      volume: ServerVolume(
+      volume: ServerProviderVolume(
         id: volume.id,
         name: volume.name,
         sizeByte: volume.size * 1024 * 1024 * 1024,
@@ -580,10 +580,10 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<List<ServerVolume>>> getVolumes({
+  Future<GenericResult<List<ServerProviderVolume>>> getVolumes({
     final String? status,
   }) async {
-    final List<ServerVolume> volumes = [];
+    final List<ServerProviderVolume> volumes = [];
 
     final result = await _adapter.api().getVolumes();
 
@@ -603,7 +603,7 @@ class HetznerServerProvider extends ServerProvider {
         final volumeServer = rawVolume.serverId;
         final String volumeName = rawVolume.name;
         final volumeDevice = rawVolume.linuxDevice;
-        final volume = ServerVolume(
+        final volume = ServerProviderVolume(
           id: volumeId,
           name: volumeName,
           sizeByte: volumeSize,
@@ -629,8 +629,8 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerVolume?>> createVolume(final int gb) async {
-    ServerVolume? volume;
+  Future<GenericResult<ServerProviderVolume?>> createVolume(final int gb) async {
+    ServerProviderVolume? volume;
 
     final result = await _adapter.api().createVolume(gb);
 
@@ -644,7 +644,7 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     try {
-      volume = ServerVolume(
+      volume = ServerProviderVolume(
         id: result.data!.id,
         name: result.data!.name,
         sizeByte: result.data!.size * 1024 * 1024 * 1024,
@@ -669,12 +669,12 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<void>> deleteVolume(final ServerVolume volume) async =>
+  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) async =>
       _adapter.api().deleteVolume(volume.id);
 
   @override
   Future<GenericResult<bool>> resizeVolume(
-    final ServerVolume volume,
+    final ServerProviderVolume volume,
     final DiskSize size,
   ) async =>
       _adapter.api().resizeVolume(
@@ -690,7 +690,7 @@ class HetznerServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<bool>> attachVolume(
-    final ServerVolume volume,
+    final ServerProviderVolume volume,
     final int serverId,
   ) async =>
       _adapter.api().attachVolume(
@@ -706,7 +706,7 @@ class HetznerServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<bool>> detachVolume(
-    final ServerVolume volume,
+    final ServerProviderVolume volume,
   ) async =>
       _adapter.api().detachVolume(
             volume.id,

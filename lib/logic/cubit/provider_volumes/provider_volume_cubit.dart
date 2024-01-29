@@ -121,7 +121,7 @@ class ApiProviderVolumeCubit
   }
 
   Future<void> createVolume(final DiskSize size) async {
-    final ServerVolume? volume = (await ProvidersController
+    final ServerProviderVolume? volume = (await ProvidersController
             .currentServerProvider!
             .createVolume(size.gibibyte.toInt()))
         .data;

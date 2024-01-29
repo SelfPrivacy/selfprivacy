@@ -313,7 +313,7 @@ class ServerInstallationRepository {
     if (result.success) {
       return ServerHostingDetails(
         apiToken: result.data,
-        volume: ServerVolume(
+        volume: ServerProviderVolume(
           id: 0,
           name: '',
           sizeByte: 0,
@@ -350,7 +350,7 @@ class ServerInstallationRepository {
     if (result.success) {
       return ServerHostingDetails(
         apiToken: result.data,
-        volume: ServerVolume(
+        volume: ServerProviderVolume(
           id: 0,
           name: '',
           sizeByte: 0,
@@ -385,7 +385,7 @@ class ServerInstallationRepository {
       if (await serverApi.isHttpServerWorking()) {
         return ServerHostingDetails(
           apiToken: apiToken,
-          volume: ServerVolume(
+          volume: ServerProviderVolume(
             id: 0,
             name: '',
             serverId: 0,
@@ -416,7 +416,7 @@ class ServerInstallationRepository {
     if (result.success) {
       return ServerHostingDetails(
         apiToken: result.data,
-        volume: ServerVolume(
+        volume: ServerProviderVolume(
           id: 0,
           name: '',
           sizeByte: 0,

@@ -5,14 +5,14 @@ class ApiProviderVolumeState extends ServerInstallationDependendState {
 
   const ApiProviderVolumeState.initial()
       : this(const [], LoadingStatus.uninitialized, false);
-  final List<ServerVolume> _volumes;
+  final List<ServerProviderVolume> _volumes;
   final LoadingStatus status;
   final bool isResizing;
 
-  List<ServerVolume> get volumes => _volumes;
+  List<ServerProviderVolume> get volumes => _volumes;
 
   ApiProviderVolumeState copyWith({
-    final List<ServerVolume>? volumes,
+    final List<ServerProviderVolume>? volumes,
     final LoadingStatus? status,
     final bool? isResizing,
   }) =>

@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/get_it/navigation.dart';
 export 'package:selfprivacy/logic/get_it/api_config.dart';
 export 'package:selfprivacy/logic/get_it/console.dart';
 export 'package:selfprivacy/logic/get_it/navigation.dart';
+export 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 
 final GetIt getIt = GetIt.instance;
 

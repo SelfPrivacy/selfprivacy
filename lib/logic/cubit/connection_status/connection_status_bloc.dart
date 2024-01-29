@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 
 part 'connection_status_event.dart';
 part 'connection_status_state.dart';

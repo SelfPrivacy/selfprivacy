@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
+import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -25,10 +25,10 @@ class BackupsListPage extends StatelessWidget {
     // If the service is null, get all backups from state. If not null, call the
     // serviceBackups(serviceId) on the backups state.
     final List<Backup> backups = service == null
-        ? context.watch<BackupsCubit>().state.backups
-        : context.watch<BackupsCubit>().state.serviceBackups(service!.id);
+        ? context.watch<BackupsBloc>().state.backups
+        : context.watch<BackupsBloc>().state.serviceBackups(service!.id);
     final bool preventActions =
-        context.watch<BackupsCubit>().state.preventActions;
+        context.watch<BackupsBloc>().state.preventActions;
     return BrandHeroScreen(
       heroTitle: 'backup.snapshots_title'.tr(),
       hasFlashButton: true,
@@ -76,9 +76,9 @@ class BackupsListPage extends StatelessWidget {
                           description: 'backup.forget_snapshot_alert'.tr(),
                           actionButtonTitle: 'backup.forget_snapshot'.tr(),
                           actionButtonOnPressed: () => {
-                            context.read<BackupsCubit>().forgetSnapshot(
-                                  backup.id,
-                                ),
+                            context
+                                .read<BackupsBloc>()
+                                .add(ForgetSnapshot(backup.id)),
                           },
                         );
                       },

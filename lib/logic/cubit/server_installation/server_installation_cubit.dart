@@ -7,7 +7,6 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
-import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
@@ -234,7 +233,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         try {
           bucket = await BackblazeApi()
               .fetchBucket(backblazeCredential, configuration);
-          await getIt<ApiConfigModel>().storeBackblazeBucket(bucket!);
+          await getIt<ApiConfigModel>().setBackblazeBucket(bucket!);
         } catch (e) {
           print(e);
         }

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
+import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
@@ -30,7 +30,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
     final bool isBackupInitialized =
-        context.watch<BackupsCubit>().state.isInitialized;
+        context.watch<BackupsBloc>().state.isInitialized;
     final DnsRecordsStatus dnsStatus =
         context.watch<DnsRecordsCubit>().state.dnsState;
 

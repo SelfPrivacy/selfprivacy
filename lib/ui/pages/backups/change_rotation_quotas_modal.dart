@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 
 class ChangeRotationQuotasModal extends StatefulWidget {
@@ -27,7 +27,7 @@ enum QuotaUnits {
 }
 
 class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
-  AutobackupQuotas selectedQuotas = AutobackupQuotas(
+  AutobackupQuotas selectedQuotas = const AutobackupQuotas(
     last: 3,
     daily: 7,
     weekly: 4,
@@ -40,7 +40,7 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
   void initState() {
     super.initState();
     selectedQuotas =
-        context.read<BackupsCubit>().state.autobackupQuotas ?? selectedQuotas;
+        context.read<BackupsBloc>().state.autobackupQuotas ?? selectedQuotas;
   }
 
   String generateSubtitle(final int value, final QuotaUnits unit) {
@@ -83,7 +83,7 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
   @override
   Widget build(final BuildContext context) {
     final AutobackupQuotas? initialAutobackupQuotas =
-        context.watch<BackupsCubit>().state.autobackupQuotas;
+        context.watch<BackupsBloc>().state.autobackupQuotas;
     return ListView(
       controller: widget.scrollController,
       padding: const EdgeInsets.all(16),
@@ -190,8 +190,8 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
               ? null
               : () {
                   context
-                      .read<BackupsCubit>()
-                      .setAutobackupQuotas(selectedQuotas);
+                      .read<BackupsBloc>()
+                      .add(SetAutobackupQuotas(selectedQuotas));
                   Navigator.of(context).pop();
                 },
           child: Text(

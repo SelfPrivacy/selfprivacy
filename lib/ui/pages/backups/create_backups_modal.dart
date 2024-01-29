@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_bloc.dart';
+import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
@@ -147,8 +147,8 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
               ? null
               : () {
                   context
-                      .read<BackupsCubit>()
-                      .createMultipleBackups(selectedServices);
+                      .read<BackupsBloc>()
+                      .add(CreateBackups(selectedServices));
                   Navigator.of(context).pop();
                 },
           child: Text(

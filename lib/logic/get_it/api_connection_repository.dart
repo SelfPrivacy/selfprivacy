@@ -5,6 +5,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -15,7 +16,7 @@ class ApiConnectionRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
   final ServerApi api = ServerApi();
 
-  final ApiData _apiData = ApiData();
+  final ApiData _apiData = ApiData(ServerApi());
 
   ApiData get apiData => _apiData;
 
@@ -66,14 +67,17 @@ class ApiConnectionRepository {
       _connectionStatusStream.add(connectionStatus);
       return;
     } else {
-      connectionStatus = ConnectionStatus.connected;
-      _connectionStatusStream.add(connectionStatus);
       _apiData.apiVersion.data = apiVersion;
       _dataStream.add(_apiData);
     }
 
     _apiData.serverJobs.data = await api.getServerJobs();
+    _apiData.backupConfig.data = await api.getBackupsConfiguration();
+    _apiData.backups.data = await api.getBackups();
     _dataStream.add(_apiData);
+
+    connectionStatus = ConnectionStatus.connected;
+    _connectionStatusStream.add(connectionStatus);
 
     // Use timer to periodically check for new jobs
     _timer = Timer.periodic(
@@ -82,7 +86,7 @@ class ApiConnectionRepository {
     );
   }
 
-  void reload(final Timer timer) async {
+  Future<void> reload(final Timer? timer) async {
     final serverDetails = getIt<ApiConfigModel>().serverDetails;
     if (serverDetails == null) {
       return;
@@ -98,26 +102,42 @@ class ApiConnectionRepository {
       _connectionStatusStream.add(connectionStatus);
       _apiData.apiVersion.data = apiVersion;
     }
+    final Version version = Version.parse(apiVersion);
+    await _apiData.serverJobs
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.backups
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.backupConfig
+        .refetchData(version, () => _dataStream.add(_apiData));
+  }
 
-    if (VersionConstraint.parse(_apiData.apiVersion.requiredApiVersion)
-        .allows(Version.parse(apiVersion))) {
-      final jobs = await api.getServerJobs();
-      if (Object.hashAll(_apiData.serverJobs.data ?? []) !=
-          Object.hashAll(jobs)) {
-        _apiData.serverJobs.data = [...jobs];
-        _dataStream.add(_apiData);
-      }
-    }
+  void emitData() {
+    _dataStream.add(_apiData);
   }
 }
 
 class ApiData {
-  ApiData()
-      : serverJobs = ApiDataElement<List<ServerJob>>(null),
-        apiVersion = ApiDataElement<String>(null);
+  ApiData(final ServerApi api)
+      : apiVersion = ApiDataElement<String>(
+          fetchData: () async => api.getApiVersion(),
+        ),
+        serverJobs = ApiDataElement<List<ServerJob>>(
+          fetchData: () async => api.getServerJobs(),
+          ttl: 10,
+        ),
+        backupConfig = ApiDataElement<BackupConfiguration>(
+          fetchData: () async => api.getBackupsConfiguration(),
+          requiredApiVersion: '>=2.4.2',
+        ),
+        backups = ApiDataElement<List<Backup>>(
+          fetchData: () async => api.getBackups(),
+          requiredApiVersion: '>=2.4.2',
+        );
 
   ApiDataElement<List<ServerJob>> serverJobs;
   ApiDataElement<String> apiVersion;
+  ApiDataElement<BackupConfiguration> backupConfig;
+  ApiDataElement<List<Backup>> backups;
 }
 
 enum ConnectionStatus {
@@ -129,8 +149,9 @@ enum ConnectionStatus {
 }
 
 class ApiDataElement<T> {
-  ApiDataElement(
-    final T? data, {
+  ApiDataElement({
+    required this.fetchData,
+    final T? data,
     this.requiredApiVersion = '>=2.3.0',
     this.ttl = 60,
   })  : _data = data,
@@ -139,8 +160,39 @@ class ApiDataElement<T> {
   T? _data;
   final String requiredApiVersion;
 
+  final Future<T?> Function() fetchData;
+
+  Future<void> refetchData(
+      final Version version, final Function callback) async {
+    if (VersionConstraint.parse(requiredApiVersion).allows(version)) {
+      print('Fetching data for $runtimeType');
+      if (isExpired) {
+        print('Data is expired');
+        final newData = await fetchData();
+        print(newData);
+        if (T is List) {
+          if (Object.hashAll(newData as Iterable<Object?>) !=
+              Object.hashAll(_data as Iterable<Object?>)) {
+            _data = [...newData] as T?;
+          }
+        } else {
+          if (newData.hashCode != _data.hashCode) {
+            _data = newData;
+          }
+        }
+        callback();
+      }
+    }
+  }
+
   /// TTL of the data in seconds
   final int ttl;
+
+  Type get type => T;
+
+  void invalidate() {
+    _lastUpdated = DateTime.fromMillisecondsSinceEpoch(0);
+  }
 
   /// Timestamp of when the data was last updated
   DateTime _lastUpdated;

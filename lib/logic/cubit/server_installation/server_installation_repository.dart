@@ -470,7 +470,7 @@ class ServerInstallationRepository {
   Future<void> saveServerDetails(
     final ServerHostingDetails serverDetails,
   ) async {
-    await getIt<ApiConfigModel>().storeServerDetails(serverDetails);
+    await getIt<ApiConfigModel>().setServerDetails(serverDetails);
   }
 
   Future<void> deleteServerDetails() async {
@@ -483,18 +483,18 @@ class ServerInstallationRepository {
   }
 
   Future<void> saveDnsProviderType(final DnsProviderType type) async {
-    await getIt<ApiConfigModel>().storeDnsProviderType(type);
+    await getIt<ApiConfigModel>().setDnsProviderType(type);
   }
 
   Future<void> saveServerProviderKey(final String key) async {
-    await getIt<ApiConfigModel>().storeServerProviderKey(key);
+    await getIt<ApiConfigModel>().setServerProviderKey(key);
   }
 
   Future<void> saveServerType(final ServerType serverType) async {
-    await getIt<ApiConfigModel>().storeServerTypeIdentifier(
+    await getIt<ApiConfigModel>().setServerTypeIdentifier(
       serverType.identifier,
     );
-    await getIt<ApiConfigModel>().storeServerLocation(
+    await getIt<ApiConfigModel>().setServerLocation(
       serverType.location.identifier,
     );
   }
@@ -507,7 +507,7 @@ class ServerInstallationRepository {
   Future<void> saveBackblazeKey(
     final BackupsCredential backblazeCredential,
   ) async {
-    await getIt<ApiConfigModel>().storeBackblazeCredential(backblazeCredential);
+    await getIt<ApiConfigModel>().setBackblazeCredential(backblazeCredential);
   }
 
   Future<void> deleteBackblazeKey() async {
@@ -516,7 +516,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> setDnsApiToken(final String key) async {
-    await getIt<ApiConfigModel>().storeDnsProviderKey(key);
+    await getIt<ApiConfigModel>().setDnsProviderKey(key);
   }
 
   Future<void> deleteDnsProviderKey() async {
@@ -525,7 +525,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> saveDomain(final ServerDomain serverDomain) async {
-    await getIt<ApiConfigModel>().storeServerDomain(serverDomain);
+    await getIt<ApiConfigModel>().setServerDomain(serverDomain);
   }
 
   Future<void> deleteDomain() async {

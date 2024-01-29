@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 
 export 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 

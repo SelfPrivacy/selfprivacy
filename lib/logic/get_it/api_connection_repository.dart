@@ -42,6 +42,29 @@ class ApiConnectionRepository {
     _dataStream.add(_apiData);
   }
 
+  Future<void> removeAllFinishedServerJobs() async {
+    final List<ServerJob> finishedJobs = _apiData.serverJobs.data
+            ?.where(
+              (final ServerJob element) =>
+                  element.status == JobStatusEnum.finished ||
+                  element.status == JobStatusEnum.error,
+            )
+            .toList() ??
+        [];
+    // Optimistically remove the jobs from the list
+    _apiData.serverJobs.data?.removeWhere(
+      (final ServerJob element) =>
+          element.status == JobStatusEnum.finished ||
+          element.status == JobStatusEnum.error,
+    );
+    _dataStream.add(_apiData);
+
+    await Future.forEach<ServerJob>(
+      finishedJobs,
+      (final ServerJob job) async => removeServerJob(job.uid),
+    );
+  }
+
   void dispose() {
     _dataStream.close();
     _connectionStatusStream.close();

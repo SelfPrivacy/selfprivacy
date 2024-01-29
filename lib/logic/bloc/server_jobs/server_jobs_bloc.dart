@@ -61,16 +61,7 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
     final RemoveAllFinishedJobs event,
     final Emitter<ServerJobsState> emit,
   ) async {
-    final List<ServerJob> finishedJobs = state.serverJobList
-        .where(
-          (final ServerJob job) =>
-              job.status == JobStatusEnum.finished ||
-              job.status == JobStatusEnum.error,
-        )
-        .toList();
-    for (final ServerJob job in finishedJobs) {
-      await getIt<ApiConnectionRepository>().removeServerJob(job.uid);
-    }
+    await getIt<ApiConnectionRepository>().removeAllFinishedServerJobs();
   }
 
   @override

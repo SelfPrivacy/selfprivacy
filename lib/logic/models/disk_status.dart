@@ -90,7 +90,8 @@ class DiskStatus {
     ) {
       ServerProviderVolume? providerVolume;
 
-      for (final ServerProviderVolume iterableProviderVolume in providerVolumes) {
+      for (final ServerProviderVolume iterableProviderVolume
+          in providerVolumes) {
         if (iterableProviderVolume.linuxDevice == null ||
             volume.model == null ||
             volume.serial == null) {

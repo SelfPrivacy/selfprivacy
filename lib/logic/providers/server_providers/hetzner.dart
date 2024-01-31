@@ -629,7 +629,9 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerProviderVolume?>> createVolume(final int gb) async {
+  Future<GenericResult<ServerProviderVolume?>> createVolume(
+    final int gb,
+  ) async {
     ServerProviderVolume? volume;
 
     final result = await _adapter.api().createVolume(gb);
@@ -669,7 +671,9 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) async =>
+  Future<GenericResult<void>> deleteVolume(
+    final ServerProviderVolume volume,
+  ) async =>
       _adapter.api().deleteVolume(volume.id);
 
   @override

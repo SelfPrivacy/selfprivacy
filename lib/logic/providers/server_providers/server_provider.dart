@@ -96,7 +96,9 @@ abstract class ServerProvider {
 
   /// Returns [ServerProviderVolume] of all available volumes
   /// assigned to the authorized user and attached to active machine.
-  Future<GenericResult<List<ServerProviderVolume>>> getVolumes({final String? status});
+  Future<GenericResult<List<ServerProviderVolume>>> getVolumes({
+    final String? status,
+  });
 
   /// Tries to create an empty unattached [ServerProviderVolume].
   ///

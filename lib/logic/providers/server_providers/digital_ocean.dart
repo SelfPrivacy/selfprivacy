@@ -597,7 +597,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerProviderVolume?>> createVolume(final int gb) async {
+  Future<GenericResult<ServerProviderVolume?>> createVolume(
+    final int gb,
+  ) async {
     ServerProviderVolume? volume;
 
     final result = await _adapter.api().createVolume(gb);

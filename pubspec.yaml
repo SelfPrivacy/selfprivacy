@@ -27,6 +27,7 @@ dependencies:
   flutter_markdown: ^0.6.18+2
   flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.9
+  gap: 3.0.1
   get_it: ^7.6.4
   gql: ^1.0.0
   graphql: ^5.1.3

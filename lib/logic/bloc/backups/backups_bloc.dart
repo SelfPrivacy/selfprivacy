@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,33 +20,43 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   BackupsBloc() : super(BackupsInitial()) {
     on<BackupsServerLoaded>(
       _loadState,
+      transformer: droppable(),
     );
     on<BackupsServerReset>(
       _resetState,
+      transformer: droppable(),
     );
     on<BackupsStateChanged>(
       _updateState,
+      transformer: droppable(),
     );
     on<InitializeBackupsRepository>(
       _initializeRepository,
+      transformer: droppable(),
     );
     on<ForceSnapshotListUpdate>(
       _forceSnapshotListUpdate,
+      transformer: droppable(),
     );
     on<CreateBackups>(
       _createBackups,
+      transformer: sequential(),
     );
     on<RestoreBackup>(
       _restoreBackup,
+      transformer: sequential(),
     );
     on<SetAutobackupPeriod>(
       _setAutobackupPeriod,
+      transformer: restartable(),
     );
     on<SetAutobackupQuotas>(
       _setAutobackupQuotas,
+      transformer: restartable(),
     );
     on<ForgetSnapshot>(
       _forgetSnapshot,
+      transformer: sequential(),
     );
 
     final connectionRepository = getIt<ApiConnectionRepository>();

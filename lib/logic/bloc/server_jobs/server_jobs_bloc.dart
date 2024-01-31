@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -17,12 +18,15 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
         ) {
     on<ServerJobsListChanged>(
       _mapServerJobsListChangedToState,
+      transformer: sequential(),
     );
     on<RemoveServerJob>(
       _mapRemoveServerJobToState,
+      transformer: sequential(),
     );
     on<RemoveAllFinishedJobs>(
       _mapRemoveAllFinishedJobsToState,
+      transformer: droppable(),
     );
 
     final apiConnectionRepository = getIt<ApiConnectionRepository>();

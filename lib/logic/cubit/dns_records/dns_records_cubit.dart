@@ -11,7 +11,7 @@ import 'package:selfprivacy/utils/network_utils.dart';
 part 'dns_records_state.dart';
 
 class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
-  DnsRecordsCubit(final ServerInstallationCubit serverInstallationCubit)
+  DnsRecordsCubit()
       : super(
           const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing),
         );

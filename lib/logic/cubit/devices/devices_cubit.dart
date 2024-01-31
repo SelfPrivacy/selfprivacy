@@ -7,8 +7,7 @@ import 'package:selfprivacy/logic/models/json/api_token.dart';
 part 'devices_state.dart';
 
 class ApiDevicesCubit extends ServerConnectionDependentCubit<ApiDevicesState> {
-  ApiDevicesCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(const ApiDevicesState.initial());
+  ApiDevicesCubit() : super(const ApiDevicesState.initial());
 
   final ServerApi api = ServerApi();
 

@@ -9,8 +9,7 @@ part 'server_detailed_info_state.dart';
 
 class ServerDetailsCubit
     extends ServerConnectionDependentCubit<ServerDetailsState> {
-  ServerDetailsCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(ServerDetailsInitial());
+  ServerDetailsCubit() : super(ServerDetailsInitial());
 
   ServerDetailsRepository repository = ServerDetailsRepository();
 

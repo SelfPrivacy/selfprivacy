@@ -15,8 +15,7 @@ part 'provider_volume_state.dart';
 
 class ApiProviderVolumeCubit
     extends ServerConnectionDependentCubit<ApiProviderVolumeState> {
-  ApiProviderVolumeCubit(final ServerInstallationCubit serverInstallationCubit)
-      : super(const ApiProviderVolumeState.initial());
+  ApiProviderVolumeCubit() : super(const ApiProviderVolumeState.initial());
   final ServerApi serverApi = ServerApi();
 
   @override

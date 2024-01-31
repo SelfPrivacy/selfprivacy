@@ -16,29 +16,52 @@ import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart'
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 
-class BlocAndProviderConfig extends StatelessWidget {
+class BlocAndProviderConfig extends StatefulWidget {
   const BlocAndProviderConfig({super.key, this.child});
 
   final Widget? child;
 
   @override
+  BlocAndProviderConfigState createState() => BlocAndProviderConfigState();
+}
+
+class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
+  late final ServerInstallationCubit serverInstallationCubit;
+  late final SupportSystemCubit supportSystemCubit;
+  late final UsersCubit usersCubit;
+  late final ServicesBloc servicesBloc;
+  late final BackupsBloc backupsBloc;
+  late final DnsRecordsCubit dnsRecordsCubit;
+  late final RecoveryKeyCubit recoveryKeyCubit;
+  late final ApiDevicesCubit apiDevicesCubit;
+  late final ApiProviderVolumeCubit apiVolumesCubit;
+  late final ApiServerVolumeCubit apiServerVolumesCubit;
+  late final ServerJobsBloc serverJobsBloc;
+  late final ConnectionStatusBloc connectionStatusBloc;
+  late final ServerDetailsCubit serverDetailsCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    serverInstallationCubit = ServerInstallationCubit()..load();
+    supportSystemCubit = SupportSystemCubit();
+    usersCubit = UsersCubit();
+    servicesBloc = ServicesBloc();
+    backupsBloc = BackupsBloc();
+    dnsRecordsCubit = DnsRecordsCubit();
+    recoveryKeyCubit = RecoveryKeyCubit();
+    apiDevicesCubit = ApiDevicesCubit();
+    apiVolumesCubit = ApiProviderVolumeCubit();
+    apiServerVolumesCubit = ApiServerVolumeCubit(apiVolumesCubit);
+    serverJobsBloc = ServerJobsBloc();
+    connectionStatusBloc = ConnectionStatusBloc();
+    serverDetailsCubit = ServerDetailsCubit();
+  }
+
+  @override
   Widget build(final BuildContext context) {
     const isDark = false;
     const isAutoDark = true;
-    final serverInstallationCubit = ServerInstallationCubit()..load();
-    final supportSystemCubit = SupportSystemCubit();
-    final usersCubit = UsersCubit(serverInstallationCubit);
-    final servicesBloc = ServicesBloc();
-    final backupsBloc = BackupsBloc();
-    final dnsRecordsCubit = DnsRecordsCubit(serverInstallationCubit);
-    final recoveryKeyCubit = RecoveryKeyCubit(serverInstallationCubit);
-    final apiDevicesCubit = ApiDevicesCubit(serverInstallationCubit);
-    final apiVolumesCubit = ApiProviderVolumeCubit(serverInstallationCubit);
-    final apiServerVolumesCubit =
-        ApiServerVolumeCubit(serverInstallationCubit, apiVolumesCubit);
-    final serverJobsBloc = ServerJobsBloc();
-    final connectionStatusBloc = ConnectionStatusBloc();
-    final serverDetailsCubit = ServerDetailsCubit(serverInstallationCubit);
 
     return MultiProvider(
       providers: [
@@ -57,7 +80,7 @@ class BlocAndProviderConfig extends StatelessWidget {
           lazy: false,
         ),
         BlocProvider(
-          create: (final _) => usersCubit..load(),
+          create: (final _) => usersCubit,
           lazy: false,
         ),
         BlocProvider(
@@ -70,23 +93,23 @@ class BlocAndProviderConfig extends StatelessWidget {
           create: (final _) => dnsRecordsCubit,
         ),
         BlocProvider(
-          create: (final _) => recoveryKeyCubit..load(),
+          create: (final _) => recoveryKeyCubit,
         ),
         BlocProvider(
-          create: (final _) => apiDevicesCubit..load(),
+          create: (final _) => apiDevicesCubit,
         ),
         BlocProvider(
-          create: (final _) => apiVolumesCubit..load(),
+          create: (final _) => apiVolumesCubit,
         ),
         BlocProvider(
-          create: (final _) => apiServerVolumesCubit..load(),
+          create: (final _) => apiServerVolumesCubit,
         ),
         BlocProvider(
           create: (final _) => serverJobsBloc,
         ),
         BlocProvider(create: (final _) => connectionStatusBloc),
         BlocProvider(
-          create: (final _) => serverDetailsCubit..load(),
+          create: (final _) => serverDetailsCubit,
         ),
         BlocProvider(
           create: (final _) => JobsCubit(
@@ -95,7 +118,7 @@ class BlocAndProviderConfig extends StatelessWidget {
           ),
         ),
       ],
-      child: child,
+      child: widget.child,
     );
   }
 }

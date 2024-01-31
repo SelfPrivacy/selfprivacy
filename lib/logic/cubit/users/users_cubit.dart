@@ -13,7 +13,7 @@ export 'package:provider/provider.dart';
 part 'users_state.dart';
 
 class UsersCubit extends ServerConnectionDependentCubit<UsersState> {
-  UsersCubit(final ServerInstallationCubit serverInstallationCubit)
+  UsersCubit()
       : super(
           const UsersState(
             <User>[],

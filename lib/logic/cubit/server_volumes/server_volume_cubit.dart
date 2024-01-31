@@ -12,7 +12,6 @@ part 'server_volume_state.dart';
 class ApiServerVolumeCubit
     extends ServerConnectionDependentCubit<ApiServerVolumeState> {
   ApiServerVolumeCubit(
-    final ServerInstallationCubit serverInstallationCubit,
     this.providerVolumeCubit,
   ) : super(ApiServerVolumeState.initial()) {
     // TODO: Remove this connection between cubits

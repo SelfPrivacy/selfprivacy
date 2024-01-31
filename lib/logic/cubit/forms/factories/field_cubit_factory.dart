@@ -1,7 +1,7 @@
+import 'package:cubit_form/cubit_form.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 
 class FieldCubitFactory {

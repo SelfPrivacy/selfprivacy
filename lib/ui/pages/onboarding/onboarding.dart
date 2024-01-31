@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/router/router.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 @RoutePage()
 class OnboardingPage extends StatefulWidget {

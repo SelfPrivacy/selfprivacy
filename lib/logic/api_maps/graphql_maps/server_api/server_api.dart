@@ -10,12 +10,12 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.g
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
+import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
-import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
@@ -27,12 +27,12 @@ import 'package:selfprivacy/logic/models/system_settings.dart';
 
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
+part 'backups_api.dart';
 part 'jobs_api.dart';
 part 'server_actions_api.dart';
 part 'services_api.dart';
 part 'users_api.dart';
 part 'volume_api.dart';
-part 'backups_api.dart';
 
 class ServerApi extends GraphQLApiMap
     with

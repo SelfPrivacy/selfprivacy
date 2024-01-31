@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
-import 'package:package_info/package_info.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 

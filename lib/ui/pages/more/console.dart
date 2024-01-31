@@ -1,6 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'dart:collection';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';

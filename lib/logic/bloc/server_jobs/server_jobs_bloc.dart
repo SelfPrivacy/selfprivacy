@@ -15,15 +15,6 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
       : super(
           ServerJobsInitialState(),
         ) {
-    final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        add(
-          ServerJobsListChanged([...apiData.serverJobs.data ?? []]),
-        );
-      },
-    );
-
     on<ServerJobsListChanged>(
       _mapServerJobsListChangedToState,
     );
@@ -32,6 +23,15 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
     );
     on<RemoveAllFinishedJobs>(
       _mapRemoveAllFinishedJobsToState,
+    );
+
+    final apiConnectionRepository = getIt<ApiConnectionRepository>();
+    _apiDataSubscription = apiConnectionRepository.dataStream.listen(
+      (final ApiData apiData) {
+        add(
+          ServerJobsListChanged([...apiData.serverJobs.data ?? []]),
+        );
+      },
     );
   }
 

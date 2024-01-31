@@ -12,6 +12,19 @@ part 'services_state.dart';
 
 class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   ServicesBloc() : super(ServicesInitial()) {
+    on<ServicesListUpdate>(
+      _updateList,
+    );
+    on<ServicesReload>(
+      _reload,
+    );
+    on<ServiceRestart>(
+      _restart,
+    );
+    on<ServiceMove>(
+      _move,
+    );
+
     final connectionRepository = getIt<ApiConnectionRepository>();
 
     _apiDataSubscription = connectionRepository.dataStream.listen(
@@ -29,19 +42,6 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
         ),
       );
     }
-
-    on<ServicesListUpdate>(
-      _updateList,
-    );
-    on<ServicesReload>(
-      _reload,
-    );
-    on<ServiceRestart>(
-      _restart,
-    );
-    on<ServiceMove>(
-      _move,
-    );
   }
 
   Future<void> _updateList(

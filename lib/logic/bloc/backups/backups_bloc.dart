@@ -17,6 +17,37 @@ part 'backups_state.dart';
 
 class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   BackupsBloc() : super(BackupsInitial()) {
+    on<BackupsServerLoaded>(
+      _loadState,
+    );
+    on<BackupsServerReset>(
+      _resetState,
+    );
+    on<BackupsStateChanged>(
+      _updateState,
+    );
+    on<InitializeBackupsRepository>(
+      _initializeRepository,
+    );
+    on<ForceSnapshotListUpdate>(
+      _forceSnapshotListUpdate,
+    );
+    on<CreateBackups>(
+      _createBackups,
+    );
+    on<RestoreBackup>(
+      _restoreBackup,
+    );
+    on<SetAutobackupPeriod>(
+      _setAutobackupPeriod,
+    );
+    on<SetAutobackupQuotas>(
+      _setAutobackupQuotas,
+    );
+    on<ForgetSnapshot>(
+      _forgetSnapshot,
+    );
+
     final connectionRepository = getIt<ApiConnectionRepository>();
 
     _apiStatusSubscription = connectionRepository.connectionStatusStream
@@ -58,37 +89,6 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       add(const BackupsServerLoaded());
       isLoaded = true;
     }
-
-    on<BackupsServerLoaded>(
-      _loadState,
-    );
-    on<BackupsServerReset>(
-      _resetState,
-    );
-    on<BackupsStateChanged>(
-      _updateState,
-    );
-    on<InitializeBackupsRepository>(
-      _initializeRepository,
-    );
-    on<ForceSnapshotListUpdate>(
-      _forceSnapshotListUpdate,
-    );
-    on<CreateBackups>(
-      _createBackups,
-    );
-    on<RestoreBackup>(
-      _restoreBackup,
-    );
-    on<SetAutobackupPeriod>(
-      _setAutobackupPeriod,
-    );
-    on<SetAutobackupQuotas>(
-      _setAutobackupQuotas,
-    );
-    on<ForgetSnapshot>(
-      _forgetSnapshot,
-    );
   }
 
   final BackblazeApi backblaze = BackblazeApi();

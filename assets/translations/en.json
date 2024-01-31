@@ -162,7 +162,8 @@
         "services_subtitle": "Type “A” records required for each service.",
         "email_title": "Email",
         "email_subtitle": "Records necessary for secure email exchange.",
-        "update_list": "Update list"
+        "update_list": "Update list",
+        "domain_validation_failure": "We can't reach your domain!"
     },
     "backup": {
         "card_title": "Backup",

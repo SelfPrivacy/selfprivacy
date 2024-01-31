@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:selfprivacy/logic/models/disk_status.dart';
 
 @RoutePage()
 class ExtendingVolumePage extends StatefulWidget {

@@ -6,8 +6,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 

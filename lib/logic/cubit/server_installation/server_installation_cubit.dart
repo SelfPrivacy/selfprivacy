@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
+import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
-import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';

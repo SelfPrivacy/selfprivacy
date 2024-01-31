@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 

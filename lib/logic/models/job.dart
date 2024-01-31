@@ -2,10 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
-
-import 'package:selfprivacy/logic/models/hive/user.dart';
 
 @immutable
 abstract class ClientJob extends Equatable {

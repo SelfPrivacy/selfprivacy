@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
@@ -9,7 +10,6 @@ import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';

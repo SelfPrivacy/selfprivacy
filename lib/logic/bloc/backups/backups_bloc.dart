@@ -366,6 +366,14 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   ) async {
     final currentState = state;
     if (currentState is BackupsInitialized) {
+      // Optimistically remove the snapshot from the list
+      getIt<ApiConnectionRepository>().apiData.backups.data =
+          getIt<ApiConnectionRepository>()
+              .apiData
+              .backups
+              .data
+              ?.where((final Backup backup) => backup.id != event.backupId)
+              .toList();
       emit(BackupsBusy.fromState(currentState));
       final GenericResult result =
           await getIt<ApiConnectionRepository>().api.forgetSnapshot(
@@ -377,16 +385,8 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       } else if (result.data == false) {
         getIt<NavigationService>()
             .showSnackBar('backup.forget_snapshot_error'.tr());
-      } else {
-        final backups = getIt<ApiConnectionRepository>().apiData.backups.data;
-        if (backups != null) {
-          getIt<ApiConnectionRepository>().apiData.backups.data = backups
-              .where((final Backup backup) => backup.id != event.backupId)
-              .toList();
-        }
       }
       emit(currentState);
-      getIt<ApiConnectionRepository>().emitData();
     }
   }
 

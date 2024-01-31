@@ -335,13 +335,12 @@ class BackupDetailsPage extends StatelessWidget {
                                       'backup.forget_snapshot_alert'.tr(),
                                   actionButtonTitle:
                                       'backup.forget_snapshot'.tr(),
-                                  actionButtonOnPressed: () => {
-                                    context.read<BackupsBloc>().add(
-                                          ForgetSnapshot(
-                                            backup.id,
+                                  actionButtonOnPressed: () =>
+                                      context.read<BackupsBloc>().add(
+                                            ForgetSnapshot(
+                                              backup.id,
+                                            ),
                                           ),
-                                        ),
-                                  },
                                 );
                               },
                         title: Text(
@@ -416,11 +415,9 @@ class BackupDetailsPage extends StatelessWidget {
                 ),
                 onTap: preventActions
                     ? null
-                    : () => {
-                          context
-                              .read<BackupsBloc>()
-                              .add(const ForceSnapshotListUpdate()),
-                        },
+                    : () => context
+                        .read<BackupsBloc>()
+                        .add(const ForceSnapshotListUpdate()),
               ),
               const SizedBox(height: 8),
               const Divider(),
@@ -444,7 +441,7 @@ class BackupDetailsPage extends StatelessWidget {
                 ),
                 // onTap: preventActions
                 //     ? null
-                //     : () => {context.read<BackupsCubit>().reuploadKey()},
+                //     : () => context.read<BackupsCubit>().reuploadKey(),
               ),
             ],
           ),

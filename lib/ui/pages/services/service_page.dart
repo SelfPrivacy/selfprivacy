@@ -80,9 +80,8 @@ class _ServicePageState extends State<ServicePage> {
         const SizedBox(height: 8),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => {
-            context.read<ServicesBloc>().add(ServiceRestart(service)),
-          },
+          onTap: () =>
+              context.read<ServicesBloc>().add(ServiceRestart(service)),
           leading: const Icon(Icons.restart_alt_outlined),
           title: Text(
             'service_page.restart'.tr(),
@@ -92,14 +91,12 @@ class _ServicePageState extends State<ServicePage> {
         ),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => {
-            context.read<JobsCubit>().addJob(
-                  ServiceToggleJob(
-                    service: service,
-                    needToTurnOn: serviceDisabled,
-                  ),
+          onTap: () => context.read<JobsCubit>().addJob(
+                ServiceToggleJob(
+                  service: service,
+                  needToTurnOn: serviceDisabled,
                 ),
-          },
+              ),
           leading: const Icon(Icons.power_settings_new),
           title: Text(
             serviceDisabled

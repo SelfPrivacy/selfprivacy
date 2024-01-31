@@ -51,10 +51,7 @@ class _ServicesPageState extends State<ServicesPage> {
               iconData: BrandIcons.box,
             )
           : RefreshIndicator(
-              onRefresh: () async {
-                // Create a ServicesRelaod event and wait for the state to change.
-                await context.read<ServicesBloc>().awaitReload();
-              },
+              onRefresh: context.read<ServicesBloc>().awaitReload,
               child: ListView(
                 padding: paddingH15V0,
                 children: [

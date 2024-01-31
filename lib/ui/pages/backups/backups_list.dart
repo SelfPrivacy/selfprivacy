@@ -75,11 +75,9 @@ class BackupsListPage extends StatelessWidget {
                           alertTitle: 'backup.forget_snapshot'.tr(),
                           description: 'backup.forget_snapshot_alert'.tr(),
                           actionButtonTitle: 'backup.forget_snapshot'.tr(),
-                          actionButtonOnPressed: () => {
-                            context
-                                .read<BackupsBloc>()
-                                .add(ForgetSnapshot(backup.id)),
-                          },
+                          actionButtonOnPressed: () => context
+                              .read<BackupsBloc>()
+                              .add(ForgetSnapshot(backup.id)),
                         );
                       },
                 title: Text(

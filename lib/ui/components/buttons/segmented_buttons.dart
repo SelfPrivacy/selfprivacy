@@ -49,6 +49,7 @@ class SegmentedButtons extends StatelessWidget {
           children: [
             for (int i = 0; i < titles.length; i++)
               _ButtonSegment(
+                key: ValueKey(i),
                 isSelected: isSelected[i],
                 title: titles[i],
               ),
@@ -61,6 +62,7 @@ class _ButtonSegment extends StatelessWidget {
   const _ButtonSegment({
     required this.isSelected,
     required this.title,
+    super.key,
   });
 
   final bool isSelected;

@@ -27,6 +27,7 @@ class ServerHostingDetails {
   @HiveField(2)
   final DateTime? startTime;
 
+  // TODO: Check if it is still needed
   @HiveField(4)
   final ServerProviderVolume volume;
 

@@ -9,7 +9,6 @@ class DiskVolume {
     this.sizeUsed = const DiskSize(byte: 0),
     this.root = false,
     this.isResizable = false,
-    this.serverDiskVolume,
     this.providerVolume,
   });
 
@@ -27,7 +26,6 @@ class DiskVolume {
           ),
           root: volume.root,
           isResizable: providerVolume != null,
-          serverDiskVolume: volume,
           providerVolume: providerVolume,
         );
 
@@ -51,7 +49,6 @@ class DiskVolume {
   String name;
   bool root;
   bool isResizable;
-  ServerDiskVolume? serverDiskVolume;
   ServerProviderVolume? providerVolume;
 
   /// from 0.0 to 1.0
@@ -75,7 +72,6 @@ class DiskVolume {
         name: name ?? this.name,
         root: root ?? this.root,
         isResizable: isResizable ?? this.isResizable,
-        serverDiskVolume: serverDiskVolume ?? this.serverDiskVolume,
         providerVolume: providerVolume ?? this.providerVolume,
       );
 }

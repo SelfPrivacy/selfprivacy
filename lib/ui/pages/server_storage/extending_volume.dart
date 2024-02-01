@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/price.dart';
@@ -59,7 +59,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
 
   @override
   Widget build(final BuildContext context) => FutureBuilder(
-        future: context.read<ApiProviderVolumeCubit>().getPricePerGb(),
+        future: context.read<ProviderVolumeCubit>().getPricePerGb(),
         builder: (
           final BuildContext context,
           final AsyncSnapshot<void> snapshot,
@@ -92,7 +92,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           }
 
           final isAlreadyResizing =
-              context.watch<ApiProviderVolumeCubit>().state.isResizing;
+              context.watch<ProviderVolumeCubit>().state.isResizing;
 
           return BrandHeroScreen(
             hasBackButton: true,
@@ -163,12 +163,12 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                           ),
                           actionButtonTitle: 'basis.continue'.tr(),
                           actionButtonOnPressed: () {
-                            context.read<ApiProviderVolumeCubit>().resizeVolume(
+                            context.read<ProviderVolumeCubit>().resizeVolume(
                                   widget.diskVolumeToResize,
                                   DiskSize.fromGibibyte(
                                     _currentSliderGbValue.truncate().toDouble(),
                                   ),
-                                  context.read<ApiServerVolumeCubit>().reload,
+                                  context.read<VolumesBloc>().invalidateCache,
                                 );
                             context.router.popUntilRoot();
                           },

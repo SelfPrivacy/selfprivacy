@@ -8,6 +8,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
@@ -95,10 +96,11 @@ class ApiConnectionRepository {
       _dataStream.add(_apiData);
     }
 
-    _apiData.serverJobs.data = await api.getServerJobs();
-    _apiData.backupConfig.data = await api.getBackupsConfiguration();
-    _apiData.backups.data = await api.getBackups();
-    _apiData.services.data = await api.getAllServices();
+    _apiData.serverJobs.data = await _apiData.serverJobs.fetchData();
+    _apiData.backupConfig.data = await _apiData.backupConfig.fetchData();
+    _apiData.backups.data = await _apiData.backups.fetchData();
+    _apiData.services.data = await _apiData.services.fetchData();
+    _apiData.volumes.data = await _apiData.volumes.fetchData();
     _dataStream.add(_apiData);
 
     connectionStatus = ConnectionStatus.connected;
@@ -136,6 +138,8 @@ class ApiConnectionRepository {
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.services
         .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.volumes
+        .refetchData(version, () => _dataStream.add(_apiData));
   }
 
   void emitData() {
@@ -163,6 +167,9 @@ class ApiData {
         services = ApiDataElement<List<Service>>(
           fetchData: () async => api.getAllServices(),
           requiredApiVersion: '>=2.4.3',
+        ),
+        volumes = ApiDataElement<List<ServerDiskVolume>>(
+          fetchData: () async => api.getServerDiskVolumes(),
         );
 
   ApiDataElement<List<ServerJob>> serverJobs;
@@ -170,6 +177,7 @@ class ApiData {
   ApiDataElement<BackupConfiguration> backupConfig;
   ApiDataElement<List<Backup>> backups;
   ApiDataElement<List<Service>> services;
+  ApiDataElement<List<ServerDiskVolume>> volumes;
 }
 
 enum ConnectionStatus {

@@ -1,12 +1,13 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'server_disk_volume.g.dart';
 
 @JsonSerializable()
-class ServerDiskVolume {
+class ServerDiskVolume extends Equatable {
   factory ServerDiskVolume.fromJson(final Map<String, dynamic> json) =>
       _$ServerDiskVolumeFromJson(json);
-  ServerDiskVolume({
+  const ServerDiskVolume({
     required this.freeSpace,
     required this.model,
     required this.name,
@@ -25,4 +26,16 @@ class ServerDiskVolume {
   final String totalSpace;
   final String type;
   final String usedSpace;
+
+  @override
+  List<Object?> get props => [
+        freeSpace,
+        model,
+        name,
+        root,
+        serial,
+        totalSpace,
+        type,
+        usedSpace,
+      ];
 }

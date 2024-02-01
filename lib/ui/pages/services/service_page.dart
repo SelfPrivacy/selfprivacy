@@ -3,8 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
@@ -113,8 +113,7 @@ class _ServicePageState extends State<ServicePage> {
             onTap: () => context.pushRoute(
               ServicesMigrationRoute(
                 services: [service],
-                diskStatus:
-                    context.read<ApiServerVolumeCubit>().state.diskStatus,
+                diskStatus: context.read<VolumesBloc>().state.diskStatus,
               ),
             ),
             leading: const Icon(Icons.drive_file_move_outlined),
@@ -127,7 +126,7 @@ class _ServicePageState extends State<ServicePage> {
                 namedArgs: {
                   'usage': service.storageUsage.used.toString(),
                   'volume': context
-                      .read<ApiServerVolumeCubit>()
+                      .read<VolumesBloc>()
                       .state
                       .getVolume(service.storageUsage.volume ?? '')
                       .displayName,

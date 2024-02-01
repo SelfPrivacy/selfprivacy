@@ -13,9 +13,9 @@ import 'package:selfprivacy/logic/providers/providers_controller.dart';
 
 part 'provider_volume_state.dart';
 
-class ApiProviderVolumeCubit
-    extends ServerConnectionDependentCubit<ApiProviderVolumeState> {
-  ApiProviderVolumeCubit() : super(const ApiProviderVolumeState.initial());
+class ProviderVolumeCubit
+    extends ServerConnectionDependentCubit<ProviderVolumeState> {
+  ProviderVolumeCubit() : super(const ProviderVolumeState.initial());
   final ServerApi serverApi = ServerApi();
 
   @override
@@ -36,24 +36,24 @@ class ApiProviderVolumeCubit
   }
 
   Future<void> refresh() async {
-    emit(const ApiProviderVolumeState([], LoadingStatus.refreshing, false));
+    emit(const ProviderVolumeState([], LoadingStatus.refreshing, false));
     unawaited(_refetch());
   }
 
   Future<void> _refetch() async {
     if (ProvidersController.currentServerProvider == null) {
-      return emit(const ApiProviderVolumeState([], LoadingStatus.error, false));
+      return emit(const ProviderVolumeState([], LoadingStatus.error, false));
     }
 
     final volumesResult =
         await ProvidersController.currentServerProvider!.getVolumes();
 
     if (!volumesResult.success || volumesResult.data.isEmpty) {
-      return emit(const ApiProviderVolumeState([], LoadingStatus.error, false));
+      return emit(const ProviderVolumeState([], LoadingStatus.error, false));
     }
 
     emit(
-      ApiProviderVolumeState(
+      ProviderVolumeState(
         volumesResult.data,
         LoadingStatus.success,
         false,
@@ -61,18 +61,18 @@ class ApiProviderVolumeCubit
     );
   }
 
-  Future<void> attachVolume(final DiskVolume volume) async {
-    final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
-    await ProvidersController.currentServerProvider!
-        .attachVolume(volume.providerVolume!, server.id);
-    unawaited(refresh());
-  }
-
-  Future<void> detachVolume(final DiskVolume volume) async {
-    await ProvidersController.currentServerProvider!
-        .detachVolume(volume.providerVolume!);
-    unawaited(refresh());
-  }
+  // Future<void> attachVolume(final DiskVolume volume) async {
+  //   final ServerHostingDetails server = getIt<ApiConfigModel>().serverDetails!;
+  //   await ProvidersController.currentServerProvider!
+  //       .attachVolume(volume.providerVolume!, server.id);
+  //   unawaited(refresh());
+  // }
+  //
+  // Future<void> detachVolume(final DiskVolume volume) async {
+  //   await ProvidersController.currentServerProvider!
+  //       .detachVolume(volume.providerVolume!);
+  //   unawaited(refresh());
+  // }
 
   Future<bool> resizeVolume(
     final DiskVolume volume,
@@ -119,29 +119,29 @@ class ApiProviderVolumeCubit
     return true;
   }
 
-  Future<void> createVolume(final DiskSize size) async {
-    final ServerProviderVolume? volume = (await ProvidersController
-            .currentServerProvider!
-            .createVolume(size.gibibyte.toInt()))
-        .data;
-
-    final diskVolume = DiskVolume(providerVolume: volume);
-    await attachVolume(diskVolume);
-
-    await Future.delayed(const Duration(seconds: 10));
-
-    await ServerApi().mountVolume(volume!.name);
-    unawaited(refresh());
-  }
-
-  Future<void> deleteVolume(final DiskVolume volume) async {
-    await ProvidersController.currentServerProvider!
-        .deleteVolume(volume.providerVolume!);
-    unawaited(refresh());
-  }
+  // Future<void> createVolume(final DiskSize size) async {
+  //   final ServerProviderVolume? volume = (await ProvidersController
+  //           .currentServerProvider!
+  //           .createVolume(size.gibibyte.toInt()))
+  //       .data;
+  //
+  //   final diskVolume = DiskVolume(providerVolume: volume);
+  //   await attachVolume(diskVolume);
+  //
+  //   await Future.delayed(const Duration(seconds: 10));
+  //
+  //   await ServerApi().mountVolume(volume!.name);
+  //   unawaited(refresh());
+  // }
+  //
+  // Future<void> deleteVolume(final DiskVolume volume) async {
+  //   await ProvidersController.currentServerProvider!
+  //       .deleteVolume(volume.providerVolume!);
+  //   unawaited(refresh());
+  // }
 
   @override
   void clear() {
-    emit(const ApiProviderVolumeState.initial());
+    emit(const ProviderVolumeState.initial());
   }
 }

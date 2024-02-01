@@ -2,12 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
@@ -81,7 +81,7 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
         heroSubtitle: 'server.description'.tr(),
         children: [
           StorageCard(
-            diskStatus: context.watch<ApiServerVolumeCubit>().state.diskStatus,
+            diskStatus: context.watch<VolumesBloc>().state.diskStatus,
           ),
           const SizedBox(height: 16),
           const _ServerSettings(),

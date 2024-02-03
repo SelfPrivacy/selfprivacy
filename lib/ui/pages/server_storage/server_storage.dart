@@ -96,6 +96,11 @@ class ServerStorageSection extends StatelessWidget {
             (final service) => ServerConsumptionListTile(
               service: service,
               volume: volume,
+              onTap: () {
+                context.pushRoute(
+                  ServiceRoute(serviceId: service.id),
+                );
+              },
             ),
           ),
           if (volume.isResizable) ...[
@@ -118,33 +123,38 @@ class ServerConsumptionListTile extends StatelessWidget {
   const ServerConsumptionListTile({
     required this.service,
     required this.volume,
+    required this.onTap,
     super.key,
   });
 
   final Service service;
   final DiskVolume volume;
+  final VoidCallback onTap;
 
   @override
-  Widget build(final BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: ConsumptionListItem(
-          title: service.displayName,
-          icon: SvgPicture.string(
-            service.svgIcon,
-            width: 24.0,
-            height: 24.0,
-            colorFilter: ColorFilter.mode(
-              Theme.of(context).colorScheme.onBackground,
-              BlendMode.srcIn,
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: ConsumptionListItem(
+            title: service.displayName,
+            icon: SvgPicture.string(
+              service.svgIcon,
+              width: 24.0,
+              height: 24.0,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onBackground,
+                BlendMode.srcIn,
+              ),
             ),
+            rightSideText: service.storageUsage.used.toString(),
+            percentage: service.storageUsage.used.byte / volume.sizeTotal.byte,
+            color: volume.root
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.secondary,
+            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+            dense: true,
           ),
-          rightSideText: service.storageUsage.used.toString(),
-          percentage: service.storageUsage.used.byte / volume.sizeTotal.byte,
-          color: volume.root
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.secondary,
-          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-          dense: true,
         ),
       );
 }

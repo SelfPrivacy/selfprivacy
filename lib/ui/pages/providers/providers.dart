@@ -148,9 +148,18 @@ class _Card extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconStatusMask(
-                      status: state,
-                      icon: Icon(icon, size: 30, color: Colors.white),
+                    Row(
+                      children: [
+                        IconStatusMask(
+                          status: state,
+                          icon: Icon(icon, size: 30, color: Colors.white),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          title,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
                     ),
                     if (state != StateType.uninitialized)
                       IconStatusMask(
@@ -167,10 +176,6 @@ class _Card extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
                 if (state != StateType.uninitialized)
                   Text(
                     subtitle,

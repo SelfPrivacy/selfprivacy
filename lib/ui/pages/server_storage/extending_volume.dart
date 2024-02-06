@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
-import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/price.dart';
@@ -59,7 +58,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
 
   @override
   Widget build(final BuildContext context) => FutureBuilder(
-        future: context.read<ProviderVolumeCubit>().getPricePerGb(),
+        future: context.read<VolumesBloc>().getPricePerGb(),
         builder: (
           final BuildContext context,
           final AsyncSnapshot<void> snapshot,
@@ -92,7 +91,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           }
 
           final isAlreadyResizing =
-              context.watch<ProviderVolumeCubit>().state.isResizing;
+              context.watch<VolumesBloc>().state is VolumesResizing;
 
           return BrandHeroScreen(
             hasBackButton: true,
@@ -163,12 +162,15 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                           ),
                           actionButtonTitle: 'basis.continue'.tr(),
                           actionButtonOnPressed: () {
-                            context.read<ProviderVolumeCubit>().resizeVolume(
-                                  widget.diskVolumeToResize,
-                                  DiskSize.fromGibibyte(
-                                    _currentSliderGbValue.truncate().toDouble(),
+                            context.read<VolumesBloc>().add(
+                                  VolumeResize(
+                                    widget.diskVolumeToResize,
+                                    DiskSize.fromGibibyte(
+                                      _currentSliderGbValue
+                                          .truncate()
+                                          .toDouble(),
+                                    ),
                                   ),
-                                  context.read<VolumesBloc>().invalidateCache,
                                 );
                             context.router.popUntilRoot();
                           },

@@ -28,3 +28,16 @@ class VolumesServerStateChanged extends VolumesEvent {
   @override
   List<Object> get props => [volumes];
 }
+
+class VolumeResize extends VolumesEvent {
+  const VolumeResize(
+    this.volume,
+    this.newSize,
+  );
+
+  final DiskVolume volume;
+  final DiskSize newSize;
+
+  @override
+  List<Object> get props => [volume, newSize];
+}

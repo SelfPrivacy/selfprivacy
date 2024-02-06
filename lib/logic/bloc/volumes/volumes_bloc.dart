@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
@@ -26,6 +27,10 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     );
     on<VolumesServerStateChanged>(
       _updateState,
+      transformer: droppable(),
+    );
+    on<VolumeResize>(
+      _resizeVolume,
       transformer: droppable(),
     );
 
@@ -149,8 +154,21 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   ) async {
     final serverVolumes = event.volumes;
     final providerVolumes = state.providerVolumes;
+    if (state is VolumesLoading) {
+      emit(
+        VolumesLoaded(
+          diskStatus: DiskStatus.fromVolumes(
+            serverVolumes,
+            providerVolumes,
+          ),
+          providerVolumes: providerVolumes,
+          serverVolumesHashCode: Object.hashAll(serverVolumes),
+        ),
+      );
+      return;
+    }
     emit(
-      VolumesLoaded(
+      state.copyWith(
         diskStatus: DiskStatus.fromVolumes(
           serverVolumes,
           providerVolumes,
@@ -159,5 +177,70 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
         serverVolumesHashCode: Object.hashAll(serverVolumes),
       ),
     );
+  }
+
+  Future<void> _resizeVolume(
+    final VolumeResize event,
+    final Emitter<VolumesState> emit,
+  ) async {
+    if (state is! VolumesLoaded) {
+      return;
+    }
+    getIt<NavigationService>().showSnackBar(
+      'storage.extending_volume_started'.tr(),
+    );
+    emit(
+      VolumesResizing(
+        serverVolumesHashCode: state._serverVolumesHashCode,
+        diskStatus: state.diskStatus,
+        providerVolumes: state.providerVolumes,
+      ),
+    );
+
+    final resizedResult =
+        await ProvidersController.currentServerProvider!.resizeVolume(
+      event.volume.providerVolume!,
+      event.newSize,
+    );
+
+    if (!resizedResult.success || !resizedResult.data) {
+      getIt<NavigationService>().showSnackBar(
+        'storage.extending_volume_error'.tr(),
+      );
+      emit(
+        VolumesLoaded(
+          serverVolumesHashCode: state._serverVolumesHashCode,
+          diskStatus: state.diskStatus,
+          providerVolumes: state.providerVolumes,
+        ),
+      );
+      return;
+    }
+
+    getIt<NavigationService>().showSnackBar(
+      'storage.extending_volume_waiting'.tr(),
+    );
+
+    await Future.delayed(const Duration(seconds: 10));
+
+    await getIt<ApiConnectionRepository>().api.resizeVolume(event.volume.name);
+    getIt<NavigationService>().showSnackBar(
+      'storage.extending_volume_server_waiting'.tr(),
+    );
+
+    await Future.delayed(const Duration(seconds: 20));
+    getIt<NavigationService>().showSnackBar(
+      'storage.extending_volume_rebooting'.tr(),
+    );
+
+    emit(
+      VolumesLoaded(
+        serverVolumesHashCode: state._serverVolumesHashCode,
+        diskStatus: state.diskStatus,
+        providerVolumes: state.providerVolumes,
+      ),
+    );
+
+    await getIt<ApiConnectionRepository>().api.reboot();
   }
 }

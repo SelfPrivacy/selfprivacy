@@ -9,7 +9,6 @@ import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/connection_status/connection_status_bloc.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
-import 'package:selfprivacy/logic/cubit/provider_volumes/provider_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -34,7 +33,6 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final DnsRecordsCubit dnsRecordsCubit;
   late final RecoveryKeyCubit recoveryKeyCubit;
   late final ApiDevicesCubit apiDevicesCubit;
-  late final ProviderVolumeCubit apiVolumesCubit;
   late final ServerJobsBloc serverJobsBloc;
   late final ConnectionStatusBloc connectionStatusBloc;
   late final ServerDetailsCubit serverDetailsCubit;
@@ -51,7 +49,6 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
     dnsRecordsCubit = DnsRecordsCubit();
     recoveryKeyCubit = RecoveryKeyCubit();
     apiDevicesCubit = ApiDevicesCubit();
-    apiVolumesCubit = ProviderVolumeCubit();
     serverJobsBloc = ServerJobsBloc();
     connectionStatusBloc = ConnectionStatusBloc();
     serverDetailsCubit = ServerDetailsCubit();
@@ -97,9 +94,6 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
         ),
         BlocProvider(
           create: (final _) => apiDevicesCubit,
-        ),
-        BlocProvider(
-          create: (final _) => apiVolumesCubit,
         ),
         BlocProvider(
           create: (final _) => serverJobsBloc,

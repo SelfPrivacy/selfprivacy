@@ -95,3 +95,28 @@ class VolumesLoaded extends VolumesState {
         serverVolumesHashCode: serverVolumesHashCode ?? _serverVolumesHashCode!,
       );
 }
+
+class VolumesResizing extends VolumesState {
+  const VolumesResizing({
+    required super.serverVolumesHashCode,
+    required super.diskStatus,
+    final List<ServerProviderVolume>? providerVolumes,
+  }) : super(
+          providerVolumes: providerVolumes ?? const [],
+        );
+
+  @override
+  List<Object?> get props => [providerVolumes, _serverVolumesHashCode];
+
+  @override
+  VolumesResizing copyWith({
+    final DiskStatus? diskStatus,
+    final List<ServerProviderVolume>? providerVolumes,
+    final int? serverVolumesHashCode,
+  }) =>
+      VolumesResizing(
+        diskStatus: diskStatus ?? this.diskStatus,
+        providerVolumes: providerVolumes ?? this.providerVolumes,
+        serverVolumesHashCode: serverVolumesHashCode ?? _serverVolumesHashCode!,
+      );
+}

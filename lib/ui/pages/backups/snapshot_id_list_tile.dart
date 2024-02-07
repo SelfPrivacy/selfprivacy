@@ -17,7 +17,6 @@ class SnapshotIdListTile extends StatelessWidget {
           PlatformAdapter.setClipboard(snapshotId);
           getIt<NavigationService>().showSnackBar(
             'basis.copied_to_clipboard'.tr(),
-            behavior: SnackBarBehavior.floating,
           );
         },
         leading: Icon(

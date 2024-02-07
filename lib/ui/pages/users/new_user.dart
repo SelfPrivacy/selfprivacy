@@ -89,7 +89,6 @@ class NewUserPage extends StatelessWidget {
                               PlatformAdapter.setClipboard(currentPassword);
                               getIt<NavigationService>().showSnackBar(
                                 'basis.copied_to_clipboard'.tr(),
-                                behavior: SnackBarBehavior.floating,
                               );
                             },
                           ),

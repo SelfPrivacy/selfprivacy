@@ -201,7 +201,7 @@ class _BottomBar extends StatelessWidget {
       ),
       child: NavigationBar(
         selectedIndex: prevActiveIndex == -1 ? 0 : prevActiveIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         onDestinationSelected: (final index) {
           context.router.replaceAll([destinations[index].route]);
         },

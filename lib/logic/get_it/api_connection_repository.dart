@@ -8,6 +8,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -101,6 +102,8 @@ class ApiConnectionRepository {
     _apiData.backups.data = await _apiData.backups.fetchData();
     _apiData.services.data = await _apiData.services.fetchData();
     _apiData.volumes.data = await _apiData.volumes.fetchData();
+    _apiData.recoveryKeyStatus.data =
+        await _apiData.recoveryKeyStatus.fetchData();
     _dataStream.add(_apiData);
 
     connectionStatus = ConnectionStatus.connected;
@@ -140,6 +143,8 @@ class ApiConnectionRepository {
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.volumes
         .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.recoveryKeyStatus
+        .refetchData(version, () => _dataStream.add(_apiData));
   }
 
   void emitData() {
@@ -159,10 +164,12 @@ class ApiData {
         backupConfig = ApiDataElement<BackupConfiguration>(
           fetchData: () async => api.getBackupsConfiguration(),
           requiredApiVersion: '>=2.4.2',
+          ttl: 120,
         ),
         backups = ApiDataElement<List<Backup>>(
           fetchData: () async => api.getBackups(),
           requiredApiVersion: '>=2.4.2',
+          ttl: 120,
         ),
         services = ApiDataElement<List<Service>>(
           fetchData: () async => api.getAllServices(),
@@ -170,6 +177,10 @@ class ApiData {
         ),
         volumes = ApiDataElement<List<ServerDiskVolume>>(
           fetchData: () async => api.getServerDiskVolumes(),
+        ),
+        recoveryKeyStatus = ApiDataElement<RecoveryKeyStatus>(
+          fetchData: () async => (await api.getRecoveryTokenStatus()).data,
+          ttl: 300,
         );
 
   ApiDataElement<List<ServerJob>> serverJobs;
@@ -178,6 +189,7 @@ class ApiData {
   ApiDataElement<List<Backup>> backups;
   ApiDataElement<List<Service>> services;
   ApiDataElement<List<ServerDiskVolume>> volumes;
+  ApiDataElement<RecoveryKeyStatus> recoveryKeyStatus;
 }
 
 enum ConnectionStatus {

@@ -2,9 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
+import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
@@ -22,33 +20,28 @@ class RecoveryKeyPage extends StatefulWidget {
 
 class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
   @override
-  void initState() {
-    super.initState();
-    context.read<RecoveryKeyCubit>().load();
-  }
-
-  @override
   Widget build(final BuildContext context) {
-    final RecoveryKeyState keyStatus = context.watch<RecoveryKeyCubit>().state;
+    final RecoveryKeyState keyStatus = context.watch<RecoveryKeyBloc>().state;
 
     final List<Widget> widgets;
     String? subtitle =
         keyStatus.exists ? null : 'recovery_key.key_main_description'.tr();
 
-    switch (keyStatus.loadingStatus) {
-      case LoadingStatus.refreshing:
+    switch (keyStatus) {
+      case RecoveryKeyRefreshing():
         subtitle = 'recovery_key.key_synchronizing'.tr();
         widgets = [
           const Center(child: CircularProgressIndicator()),
         ];
         break;
-      case LoadingStatus.success:
+      case RecoveryKeyLoaded():
         widgets = [
           const RecoveryKeyContent(),
         ];
         break;
-      case LoadingStatus.uninitialized:
-      case LoadingStatus.error:
+      case RecoveryKeyInitial():
+      case RecoveryKeyError():
+      case RecoveryKeyCreating():
         subtitle = 'recovery_key.key_connection_error'.tr();
         widgets = [
           const Icon(Icons.sentiment_dissatisfied_outlined),
@@ -58,7 +51,7 @@ class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<RecoveryKeyCubit>().load();
+        context.read<RecoveryKeyBloc>().add(const RecoveryKeyStatusRefresh());
       },
       child: BrandHeroScreen(
         heroTitle: 'recovery_key.key_main_header'.tr(),
@@ -83,7 +76,7 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
 
   @override
   Widget build(final BuildContext context) {
-    final RecoveryKeyState keyStatus = context.watch<RecoveryKeyCubit>().state;
+    final RecoveryKeyState keyStatus = context.watch<RecoveryKeyBloc>().state;
 
     return Column(
       children: [
@@ -241,34 +234,24 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
     setState(() {
       _isLoading = true;
     });
-    try {
-      final String token =
-          await context.read<RecoveryKeyCubit>().generateRecoveryKey(
-                numberOfUses: _isAmountToggled
-                    ? int.tryParse(_amountController.text)
-                    : null,
-                expirationDate: _isExpirationToggled ? _selectedDate : null,
-              );
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _isLoading = false;
-      });
-      await Navigator.of(context).push(
-        materialRoute(
-          RecoveryKeyReceiving(recoveryKey: token), // TO DO
-        ),
-      );
-    } on GenerationError catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      getIt<NavigationService>().showSnackBar(
-        'recovery_key.generation_error'.tr(args: [e.message]),
-      );
+    context.read<RecoveryKeyBloc>().add(
+          CreateNewRecoveryKey(
+            expirationDate: _isExpirationToggled ? _selectedDate : null,
+            numberOfUses:
+                _isAmountToggled ? int.tryParse(_amountController.text) : null,
+          ),
+        );
+    if (!mounted) {
       return;
     }
+    setState(() {
+      _isLoading = false;
+    });
+    await Navigator.of(context).push(
+      materialRoute(
+        const RecoveryKeyReceiving(),
+      ),
+    );
   }
 
   void _updateErrorStatuses() {

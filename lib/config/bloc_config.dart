@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/connection_status/connection_status_bloc.dart';
+import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
@@ -9,7 +10,6 @@ import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
-import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
@@ -31,7 +31,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final ServicesBloc servicesBloc;
   late final BackupsBloc backupsBloc;
   late final DnsRecordsCubit dnsRecordsCubit;
-  late final RecoveryKeyCubit recoveryKeyCubit;
+  late final RecoveryKeyBloc recoveryKeyBloc;
   late final ApiDevicesCubit apiDevicesCubit;
   late final ServerJobsBloc serverJobsBloc;
   late final ConnectionStatusBloc connectionStatusBloc;
@@ -47,7 +47,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
     servicesBloc = ServicesBloc();
     backupsBloc = BackupsBloc();
     dnsRecordsCubit = DnsRecordsCubit();
-    recoveryKeyCubit = RecoveryKeyCubit();
+    recoveryKeyBloc = RecoveryKeyBloc();
     apiDevicesCubit = ApiDevicesCubit();
     serverJobsBloc = ServerJobsBloc();
     connectionStatusBloc = ConnectionStatusBloc();
@@ -90,7 +90,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
           create: (final _) => dnsRecordsCubit,
         ),
         BlocProvider(
-          create: (final _) => recoveryKeyCubit,
+          create: (final _) => recoveryKeyBloc,
         ),
         BlocProvider(
           create: (final _) => apiDevicesCubit,

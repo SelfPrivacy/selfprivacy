@@ -153,7 +153,6 @@ class _UserLogins extends StatelessWidget {
               PlatformAdapter.setClipboard(email);
               getIt<NavigationService>().showSnackBar(
                 'basis.copied_to_clipboard'.tr(),
-                behavior: SnackBarBehavior.floating,
               );
             },
             title: email,

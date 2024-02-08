@@ -92,13 +92,15 @@ class SelfprivacyApp extends StatelessWidget {
                         ? ThemeMode.dark
                         : ThemeMode.light,
                 builder: (final BuildContext context, final Widget? widget) {
-                  Widget error = const Text('...rendering error...');
+                  Widget error =
+                      const Center(child: Text('...rendering error...'));
                   if (widget is Scaffold || widget is Navigator) {
-                    error = Scaffold(body: Center(child: error));
+                    error = Scaffold(body: error);
                   }
                   ErrorWidget.builder =
                       (final FlutterErrorDetails errorDetails) => error;
-                  return widget!;
+
+                  return widget ?? error;
                 },
               );
             },

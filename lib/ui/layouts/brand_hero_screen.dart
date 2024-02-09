@@ -143,7 +143,7 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: Tooltip(
-              message: 'jobs.title'.tr(), // Текст подсказки
+              message: 'jobs.title'.tr(),
               child: IconButton(
                 onPressed: () {
                   showModalBottomSheet(

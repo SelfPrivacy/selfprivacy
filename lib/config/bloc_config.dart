@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/connection_status/connection_status_bloc.dart';
+import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -32,7 +32,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final BackupsBloc backupsBloc;
   late final DnsRecordsCubit dnsRecordsCubit;
   late final RecoveryKeyBloc recoveryKeyBloc;
-  late final ApiDevicesCubit apiDevicesCubit;
+  late final DevicesBloc devicesBloc;
   late final ServerJobsBloc serverJobsBloc;
   late final ConnectionStatusBloc connectionStatusBloc;
   late final ServerDetailsCubit serverDetailsCubit;
@@ -48,7 +48,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
     backupsBloc = BackupsBloc();
     dnsRecordsCubit = DnsRecordsCubit();
     recoveryKeyBloc = RecoveryKeyBloc();
-    apiDevicesCubit = ApiDevicesCubit();
+    devicesBloc = DevicesBloc();
     serverJobsBloc = ServerJobsBloc();
     connectionStatusBloc = ConnectionStatusBloc();
     serverDetailsCubit = ServerDetailsCubit();
@@ -93,7 +93,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
           create: (final _) => recoveryKeyBloc,
         ),
         BlocProvider(
-          create: (final _) => apiDevicesCubit,
+          create: (final _) => devicesBloc,
         ),
         BlocProvider(
           create: (final _) => serverJobsBloc,

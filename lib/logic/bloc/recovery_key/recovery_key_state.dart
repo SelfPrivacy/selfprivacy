@@ -54,14 +54,3 @@ class RecoveryKeyError extends RecoveryKeyState {
   @override
   List<Object> get props => [_hashCode];
 }
-
-class RecoveryKeyCreating extends RecoveryKeyState {
-  RecoveryKeyCreating({this.recoveryKey, this.error})
-      : super(keyStatus: const RecoveryKeyStatus(exists: false, valid: false));
-
-  final String? recoveryKey;
-  final String? error;
-
-  @override
-  List<Object?> get props => [_hashCode, recoveryKey, error];
-}

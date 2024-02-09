@@ -13,26 +13,6 @@ class RecoveryKeyStatusChanged extends RecoveryKeyEvent {
   List<Object?> get props => [recoveryKeyStatus];
 }
 
-class CreateNewRecoveryKey extends RecoveryKeyEvent {
-  const CreateNewRecoveryKey({
-    this.expirationDate,
-    this.numberOfUses,
-  });
-
-  final DateTime? expirationDate;
-  final int? numberOfUses;
-
-  @override
-  List<Object?> get props => [expirationDate, numberOfUses];
-}
-
-class ConsumedNewRecoveryKey extends RecoveryKeyEvent {
-  const ConsumedNewRecoveryKey();
-
-  @override
-  List<Object?> get props => [];
-}
-
 class RecoveryKeyStatusRefresh extends RecoveryKeyEvent {
   const RecoveryKeyStatusRefresh();
 

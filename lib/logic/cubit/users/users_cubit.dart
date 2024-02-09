@@ -41,7 +41,7 @@ class UsersCubit extends ServerConnectionDependentCubit<UsersState> {
   }
 
   Future<void> refresh() async {
-    if (getIt<ApiConnectionRepository>().connectionStatus !=
+    if (getIt<ApiConnectionRepository>().connectionStatus ==
         ConnectionStatus.nonexistent) {
       return;
     }

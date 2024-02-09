@@ -16,14 +16,6 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
       _mapRecoveryKeyStatusChangedToState,
       transformer: sequential(),
     );
-    on<CreateNewRecoveryKey>(
-      _mapCreateNewRecoveryKeyToState,
-      transformer: sequential(),
-    );
-    on<ConsumedNewRecoveryKey>(
-      _mapRecoveryKeyStatusRefreshToState,
-      transformer: sequential(),
-    );
     on<RecoveryKeyStatusRefresh>(
       _mapRecoveryKeyStatusRefreshToState,
       transformer: droppable(),
@@ -45,9 +37,6 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     final RecoveryKeyStatusChanged event,
     final Emitter<RecoveryKeyState> emit,
   ) async {
-    if (state is RecoveryKeyCreating) {
-      return;
-    }
     if (event.recoveryKeyStatus == null) {
       emit(RecoveryKeyError());
       return;
@@ -55,20 +44,20 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     emit(RecoveryKeyLoaded(keyStatus: event.recoveryKeyStatus));
   }
 
-  Future<void> _mapCreateNewRecoveryKeyToState(
-    final CreateNewRecoveryKey event,
-    final Emitter<RecoveryKeyState> emit,
-  ) async {
-    emit(RecoveryKeyCreating());
+  Future<String> generateRecoveryKey({
+    final DateTime? expirationDate,
+    final int? numberOfUses,
+  }) async {
     final GenericResult<String> response =
-        await getIt<ApiConnectionRepository>().api.generateRecoveryToken(
-              event.expirationDate,
-              event.numberOfUses,
-            );
+        await getIt<ApiConnectionRepository>()
+            .api
+            .generateRecoveryToken(expirationDate, numberOfUses);
     if (response.success) {
-      emit(RecoveryKeyCreating(recoveryKey: response.data));
+      getIt<ApiConnectionRepository>().apiData.recoveryKeyStatus.invalidate();
+      unawaited(getIt<ApiConnectionRepository>().reload(null));
+      return response.data;
     } else {
-      emit(RecoveryKeyCreating(error: response.message ?? 'Unknown error'));
+      throw GenerationError(response.message ?? 'Unknown error');
     }
   }
 
@@ -91,4 +80,9 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     _apiDataSubscription?.cancel();
     return super.close();
   }
+}
+
+class GenerationError extends Error {
+  GenerationError(this.message);
+  final String message;
 }

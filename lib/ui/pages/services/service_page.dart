@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
 import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
+import 'package:selfprivacy/utils/platform_adapter.dart';
 
 @RoutePage()
 class ServicePage extends StatefulWidget {
@@ -73,6 +75,24 @@ class _ServicePageState extends State<ServicePage> {
             subtitle: Text(
               service.url!.replaceAll('https://', ''),
               style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.copy,
+                    size: 24.0,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  onPressed: () {
+                    PlatformAdapter.setClipboard(service.url!);
+                    getIt<NavigationService>().showSnackBar(
+                      'basis.copied_to_clipboard'.tr(),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         const SizedBox(height: 8),

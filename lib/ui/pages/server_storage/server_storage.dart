@@ -132,28 +132,34 @@ class ServerConsumptionListTile extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(final BuildContext context) => InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: ConsumptionListItem(
-            title: service.displayName,
-            icon: SvgPicture.string(
-              service.svgIcon,
-              width: 24.0,
-              height: 24.0,
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.onBackground,
-                BlendMode.srcIn,
+  Widget build(final BuildContext context) => Material(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(8.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: ConsumptionListItem(
+              title: service.displayName,
+              icon: SvgPicture.string(
+                service.svgIcon,
+                width: 24.0,
+                height: 24.0,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.onBackground,
+                  BlendMode.srcIn,
+                ),
               ),
+              rightSideText: service.storageUsage.used.toString(),
+              percentage:
+                  service.storageUsage.used.byte / volume.sizeTotal.byte,
+              color: volume.root
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.secondary,
+              backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+              dense: true,
             ),
-            rightSideText: service.storageUsage.used.toString(),
-            percentage: service.storageUsage.used.byte / volume.sizeTotal.byte,
-            color: volume.root
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.secondary,
-            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-            dense: true,
           ),
         ),
       );

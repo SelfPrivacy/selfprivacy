@@ -1,6 +1,6 @@
 part of 'services_bloc.dart';
 
-abstract class ServicesState extends Equatable {
+sealed class ServicesState extends Equatable {
   ServicesState({final List<ServiceLock> lockedServices = const []})
       : _lockedServices =
             lockedServices.where((final lock) => lock.isLocked).toList();

@@ -1,6 +1,6 @@
 part of 'volumes_bloc.dart';
 
-abstract class VolumesState extends Equatable {
+sealed class VolumesState extends Equatable {
   const VolumesState({
     required this.diskStatus,
     required final serverVolumesHashCode,

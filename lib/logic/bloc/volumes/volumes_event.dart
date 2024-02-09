@@ -1,6 +1,6 @@
 part of 'volumes_bloc.dart';
 
-abstract class VolumesEvent extends Equatable {
+sealed class VolumesEvent extends Equatable {
   const VolumesEvent();
 }
 

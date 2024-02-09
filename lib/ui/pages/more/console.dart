@@ -1,8 +1,7 @@
-import 'dart:collection';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 import 'package:selfprivacy/ui/components/list_tiles/log_list_tile.dart';
@@ -16,25 +15,36 @@ class ConsolePage extends StatefulWidget {
 }
 
 class _ConsolePageState extends State<ConsolePage> {
+  bool paused = false;
+
   @override
   void initState() {
-    getIt.get<ConsoleModel>().addListener(update);
-
     super.initState();
+
+    getIt<ConsoleModel>().addListener(update);
   }
 
   @override
   void dispose() {
     getIt<ConsoleModel>().removeListener(update);
+
     super.dispose();
   }
 
-  bool paused = false;
-
   void update() {
-    if (!paused) {
-      setState(() => {});
-    }
+    /// listener update could come at any time, like when widget is already
+    /// unmounted or during frame build, adding as postframe callback ensures
+    /// that element is marked for rebuild
+    WidgetsBinding.instance.addPostFrameCallback((final _) {
+      if (!paused && mounted) {
+        setState(() => {});
+      }
+    });
+  }
+
+  void togglePause() {
+    paused ^= true;
+    setState(() {});
   }
 
   @override
@@ -51,7 +61,7 @@ class _ConsolePageState extends State<ConsolePage> {
                 icon: Icon(
                   paused ? Icons.play_arrow_outlined : Icons.pause_outlined,
                 ),
-                onPressed: () => setState(() => paused = !paused),
+                onPressed: togglePause,
               ),
             ],
           ),
@@ -69,12 +79,12 @@ class _ConsolePageState extends State<ConsolePage> {
                   reverse: true,
                   shrinkWrap: true,
                   children: [
-                    const SizedBox(height: 20),
-                    ...UnmodifiableListView(
-                      messages
-                          .map((final message) => LogListItem(message: message))
-                          .toList()
-                          .reversed,
+                    const Gap(20),
+                    ...messages.reversed.map(
+                      (final message) => LogListItem(
+                        key: ValueKey(message),
+                        message: message,
+                      ),
                     ),
                   ],
                 );
@@ -82,11 +92,10 @@ class _ConsolePageState extends State<ConsolePage> {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text('console_page.waiting'.tr()),
-                    const SizedBox(
-                      height: 16,
-                    ),
+                    const Gap(16),
                     const CircularProgressIndicator(),
                   ],
                 );

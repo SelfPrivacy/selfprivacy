@@ -1,0 +1,15 @@
+### Features
+
+- Enabled the following languages:
+  - Azerbaijani
+  - Belarusian
+  - Hebrew
+  - Latvian
+  - Macedonian
+  - Slovak
+  - Slovenian
+
+### Bug Fixes
+
+- **Hetzner**: Fixed an issue where could not resize a volume on Hetzner ([#456](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/456), resolves [#455](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/455))
+- **DNS**: Make sure that we notice domain ownership lost ([#441](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/441), resolves [#390](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/390))

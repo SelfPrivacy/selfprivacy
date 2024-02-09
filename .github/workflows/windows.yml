@@ -1,6 +1,9 @@
 name: Windows Builder
 
-on: tag
+on:
+  push:
+    tags:
+      - '*.*.*'
 
 jobs:
   build-windows:
@@ -14,7 +17,7 @@ jobs:
       # Install Flutter
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.3.10'
+          flutter-version: '3.16.1'
           channel: 'stable'
 
       # Build Windows artifact

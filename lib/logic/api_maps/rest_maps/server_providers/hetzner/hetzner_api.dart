@@ -547,7 +547,7 @@ class HetznerApi extends RestApiMap {
       resizeVolumeResponse = await client.post(
         '/volumes/${volume.id}/actions/resize',
         data: {
-          'size': size.gibibyte,
+          'size': size.gibibyte.floor(),
         },
       );
       success =

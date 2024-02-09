@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
@@ -141,29 +142,32 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
         if (widget.hasFlashButton && isMobile)
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            child: IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  useRootNavigator: true,
-                  isScrollControlled: true,
-                  builder: (final BuildContext context) =>
-                      DraggableScrollableSheet(
-                    expand: false,
-                    maxChildSize: 0.9,
-                    minChildSize: 0.4,
-                    initialChildSize: 0.6,
-                    builder: (final context, final scrollController) =>
-                        JobsContent(controller: scrollController),
-                  ),
-                );
-              },
-              icon: Icon(
-                isJobsListEmpty ? Ionicons.flash_outline : Ionicons.flash,
+            child: Tooltip(
+              message: 'jobs.title'.tr(), // Текст подсказки
+              child: IconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    builder: (final BuildContext context) =>
+                        DraggableScrollableSheet(
+                      expand: false,
+                      maxChildSize: 0.9,
+                      minChildSize: 0.4,
+                      initialChildSize: 0.6,
+                      builder: (final context, final scrollController) =>
+                          JobsContent(controller: scrollController),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  isJobsListEmpty ? Ionicons.flash_outline : Ionicons.flash,
+                ),
+                color: isJobsListEmpty
+                    ? Theme.of(context).colorScheme.onBackground
+                    : Theme.of(context).colorScheme.primary,
               ),
-              color: isJobsListEmpty
-                  ? Theme.of(context).colorScheme.onBackground
-                  : Theme.of(context).colorScheme.primary,
             ),
           ),
         const SizedBox.shrink(),

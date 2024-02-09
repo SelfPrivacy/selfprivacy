@@ -5,7 +5,6 @@ import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/layouts/root_scaffold_with_navigation.dart';
 import 'package:selfprivacy/ui/router/root_destinations.dart';
-
 import 'package:selfprivacy/ui/router/router.dart';
 
 @RoutePage()
@@ -149,9 +148,4 @@ class MainScreenNavigationDrawer extends StatelessWidget {
       ),
     );
   }
-}
-
-class ChangeTab {
-  ChangeTab(this.onPress);
-  final ValueChanged<int> onPress;
 }

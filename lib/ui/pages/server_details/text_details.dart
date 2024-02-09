@@ -56,5 +56,3 @@ class _TempMessage extends StatelessWidget {
         ),
       );
 }
-
-final DateFormat formatter = DateFormat('HH:mm:ss');

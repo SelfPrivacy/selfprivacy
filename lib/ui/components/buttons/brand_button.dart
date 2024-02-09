@@ -7,8 +7,9 @@ class BrandButton {
     final String? text,
     final Widget? child,
   }) {
-    assert(text == null || child == null, 'required title or child');
-    assert(text != null || child != null, 'required title or child');
+    assert((text ?? child) != null, 'either title or child must not be empty');
+    assert(text != null || child != null, 'title or child must be provided');
+
     return ConstrainedBox(
       constraints: const BoxConstraints(
         minHeight: 48,
@@ -28,8 +29,9 @@ class BrandButton {
     final String? text,
     final Widget? child,
   }) {
-    assert(text == null || child == null, 'required title or child');
-    assert(text != null || child != null, 'required title or child');
+    assert((text ?? child) != null, 'either title or child must not be empty');
+    assert(text != null || child != null, 'title or child must be provided');
+
     return ConstrainedBox(
       constraints: const BoxConstraints(
         minWidth: double.infinity,

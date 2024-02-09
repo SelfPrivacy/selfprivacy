@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
@@ -13,7 +14,6 @@ import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
-import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 
 class BlocAndProviderConfig extends StatefulWidget {
   const BlocAndProviderConfig({super.key, this.child});
@@ -27,7 +27,7 @@ class BlocAndProviderConfig extends StatefulWidget {
 class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final ServerInstallationCubit serverInstallationCubit;
   late final SupportSystemCubit supportSystemCubit;
-  late final UsersCubit usersCubit;
+  late final UsersBloc usersBloc;
   late final ServicesBloc servicesBloc;
   late final BackupsBloc backupsBloc;
   late final DnsRecordsCubit dnsRecordsCubit;
@@ -43,7 +43,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
     super.initState();
     serverInstallationCubit = ServerInstallationCubit()..load();
     supportSystemCubit = SupportSystemCubit();
-    usersCubit = UsersCubit();
+    usersBloc = UsersBloc();
     servicesBloc = ServicesBloc();
     backupsBloc = BackupsBloc();
     dnsRecordsCubit = DnsRecordsCubit();
@@ -77,7 +77,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
           lazy: false,
         ),
         BlocProvider(
-          create: (final _) => usersCubit,
+          create: (final _) => usersBloc,
           lazy: false,
         ),
         BlocProvider(
@@ -105,7 +105,6 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
         BlocProvider(create: (final _) => volumesBloc),
         BlocProvider(
           create: (final _) => JobsCubit(
-            usersCubit: usersCubit,
             servicesBloc: servicesBloc,
           ),
         ),

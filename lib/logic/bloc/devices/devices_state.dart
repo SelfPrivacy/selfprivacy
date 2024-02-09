@@ -3,7 +3,7 @@ part of 'devices_bloc.dart';
 sealed class DevicesState extends Equatable {
   DevicesState({
     required final List<ApiToken> devices,
-  }) : _hashCode = devices.hashCode;
+  }) : _hashCode = Object.hashAll(devices);
 
   final int _hashCode;
 

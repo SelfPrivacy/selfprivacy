@@ -15,7 +15,7 @@ class UserDetailsPage extends StatelessWidget {
 
     final String domainName = UiHelpers.getDomainName(config);
 
-    final User user = context.watch<UsersCubit>().state.users.firstWhere(
+    final User user = context.watch<UsersBloc>().state.users.firstWhere(
           (final User user) => user.login == login,
           orElse: () => const User(
             type: UserType.normal,

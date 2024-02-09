@@ -1,10 +1,14 @@
-part of 'users_cubit.dart';
+part of 'users_bloc.dart';
 
-class UsersState extends ServerInstallationDependendState {
-  const UsersState(this.users, this.isLoading);
+sealed class UsersState extends Equatable {
+  UsersState({
+    required final List<User> users,
+  }) : _hashCode = Object.hashAll(users);
 
-  final List<User> users;
-  final bool isLoading;
+  final int _hashCode;
+
+  List<User> get users =>
+      getIt<ApiConnectionRepository>().apiData.users.data ?? const [];
 
   User get rootUser =>
       users.firstWhere((final user) => user.type == UserType.root);
@@ -14,9 +18,6 @@ class UsersState extends ServerInstallationDependendState {
 
   List<User> get normalUsers =>
       users.where((final user) => user.type == UserType.normal).toList();
-
-  @override
-  List<Object> get props => [users, isLoading];
 
   /// Makes a copy of existing users list, but places 'primary'
   /// to the beginning and sorts the rest alphabetically
@@ -44,17 +45,29 @@ class UsersState extends ServerInstallationDependendState {
     return primaryUser == null ? normalUsers : [primaryUser] + normalUsers;
   }
 
-  UsersState copyWith({
-    final List<User>? users,
-    final bool? isLoading,
-  }) =>
-      UsersState(
-        users ?? this.users,
-        isLoading ?? this.isLoading,
-      );
-
   bool isLoginRegistered(final String login) =>
       users.any((final User user) => user.login == login);
 
   bool get isEmpty => users.isEmpty;
+}
+
+class UsersInitial extends UsersState {
+  UsersInitial() : super(users: const []);
+
+  @override
+  List<Object> get props => [_hashCode];
+}
+
+class UsersRefreshing extends UsersState {
+  UsersRefreshing({required super.users});
+
+  @override
+  List<Object> get props => [_hashCode];
+}
+
+class UsersLoaded extends UsersState {
+  UsersLoaded({required super.users});
+
+  @override
+  List<Object> get props => [_hashCode];
 }

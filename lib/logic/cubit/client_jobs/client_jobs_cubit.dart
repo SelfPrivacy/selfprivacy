@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
-import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 
 export 'package:provider/provider.dart';
@@ -15,12 +14,10 @@ part 'client_jobs_state.dart';
 
 class JobsCubit extends Cubit<JobsState> {
   JobsCubit({
-    required this.usersCubit,
     required this.servicesBloc,
   }) : super(JobsStateEmpty());
 
   final ServerApi api = ServerApi();
-  final UsersCubit usersCubit;
   final ServicesBloc servicesBloc;
 
   void addJob(final ClientJob job) {

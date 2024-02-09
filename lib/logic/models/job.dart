@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -48,7 +49,7 @@ class CreateUserJob extends ClientJob {
 
   @override
   void execute(final JobsCubit cubit) async {
-    await cubit.usersCubit.createUser(user);
+    await getIt<ApiConnectionRepository>().createUser(user);
   }
 
   @override
@@ -64,7 +65,8 @@ class ResetUserPasswordJob extends ClientJob {
 
   @override
   void execute(final JobsCubit cubit) async {
-    await cubit.usersCubit.changeUserPassword(user, user.password!);
+    await getIt<ApiConnectionRepository>()
+        .changeUserPassword(user, user.password!);
   }
 
   @override
@@ -85,7 +87,7 @@ class DeleteUserJob extends ClientJob {
 
   @override
   void execute(final JobsCubit cubit) async {
-    await cubit.usersCubit.deleteUser(user);
+    await getIt<ApiConnectionRepository>().deleteUser(user);
   }
 
   @override
@@ -129,7 +131,7 @@ class CreateSSHKeyJob extends ClientJob {
 
   @override
   void execute(final JobsCubit cubit) async {
-    await cubit.usersCubit.addSshKey(user, publicKey);
+    await getIt<ApiConnectionRepository>().addSshKey(user, publicKey);
   }
 
   @override
@@ -155,7 +157,7 @@ class DeleteSSHKeyJob extends ClientJob {
 
   @override
   void execute(final JobsCubit cubit) async {
-    await cubit.usersCubit.deleteSshKey(user, publicKey);
+    await getIt<ApiConnectionRepository>().deleteSshKey(user, publicKey);
   }
 
   @override

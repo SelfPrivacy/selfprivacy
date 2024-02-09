@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:hive/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -8,6 +9,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
@@ -68,6 +70,116 @@ class ApiConnectionRepository {
     );
   }
 
+  Future<void> createUser(final User user) async {
+    final List<User>? loadedUsers = _apiData.users.data;
+    if (loadedUsers == null) {
+      return;
+    }
+    // If user exists on server, do nothing
+    if (loadedUsers
+        .any((final User u) => u.login == user.login && u.isFoundOnServer)) {
+      return;
+    }
+    final String? password = user.password;
+    if (password == null) {
+      getIt<NavigationService>()
+          .showSnackBar('users.could_not_create_user'.tr());
+      return;
+    }
+    // If API returned error, do nothing
+    final GenericResult<User?> result =
+        await api.createUser(user.login, password);
+    if (result.data == null) {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'users.could_not_create_user'.tr());
+      return;
+    }
+
+    _apiData.users.data?.add(result.data!);
+    _apiData.users.invalidate();
+  }
+
+  Future<void> deleteUser(final User user) async {
+    final List<User>? loadedUsers = _apiData.users.data;
+    if (loadedUsers == null) {
+      return;
+    }
+    // If user is primary or root, don't delete
+    if (user.type != UserType.normal) {
+      getIt<NavigationService>()
+          .showSnackBar('users.could_not_delete_user'.tr());
+      return;
+    }
+    final GenericResult result = await api.deleteUser(user.login);
+    if (result.success && result.data) {
+      _apiData.users.data?.removeWhere((final User u) => u.login == user.login);
+      _apiData.users.invalidate();
+    }
+
+    if (!result.success || !result.data) {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'jobs.generic_error'.tr());
+    }
+  }
+
+  Future<void> changeUserPassword(
+    final User user,
+    final String newPassword,
+  ) async {
+    if (user.type == UserType.root) {
+      getIt<NavigationService>()
+          .showSnackBar('users.could_not_change_password'.tr());
+      return;
+    }
+    final GenericResult<User?> result = await api.updateUser(
+      user.login,
+      newPassword,
+    );
+    if (result.data == null) {
+      getIt<NavigationService>().showSnackBar(
+        result.message ?? 'users.could_not_change_password'.tr(),
+      );
+    }
+  }
+
+  Future<void> addSshKey(final User user, final String publicKey) async {
+    final List<User>? loadedUsers = _apiData.users.data;
+    if (loadedUsers == null) {
+      return;
+    }
+    final GenericResult<User?> result =
+        await api.addSshKey(user.login, publicKey);
+    if (result.data != null) {
+      final User updatedUser = result.data!;
+      final int index =
+          loadedUsers.indexWhere((final User u) => u.login == user.login);
+      loadedUsers[index] = updatedUser;
+      _apiData.users.invalidate();
+    } else {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'users.could_not_add_ssh_key'.tr());
+    }
+  }
+
+  Future<void> deleteSshKey(final User user, final String publicKey) async {
+    final List<User>? loadedUsers = _apiData.users.data;
+    if (loadedUsers == null) {
+      return;
+    }
+    final GenericResult<User?> result =
+        await api.removeSshKey(user.login, publicKey);
+    if (result.data != null) {
+      final User updatedUser = result.data!;
+      final int index =
+          loadedUsers.indexWhere((final User u) => u.login == user.login);
+      loadedUsers[index] = updatedUser;
+      _apiData.users.invalidate();
+    } else {
+      getIt<NavigationService>()
+          .showSnackBar(result.message ?? 'jobs.generic_error'.tr());
+    }
+  }
+
   void dispose() {
     _dataStream.close();
     _connectionStatusStream.close();
@@ -106,6 +218,7 @@ class ApiConnectionRepository {
     _apiData.recoveryKeyStatus.data =
         await _apiData.recoveryKeyStatus.fetchData();
     _apiData.devices.data = await _apiData.devices.fetchData();
+    _apiData.users.data = await _apiData.users.fetchData();
     _dataStream.add(_apiData);
 
     connectionStatus = ConnectionStatus.connected;
@@ -149,6 +262,7 @@ class ApiConnectionRepository {
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.devices
         .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.users.refetchData(version, () => _dataStream.add(_apiData));
   }
 
   void emitData() {
@@ -188,6 +302,9 @@ class ApiData {
         ),
         devices = ApiDataElement<List<ApiToken>>(
           fetchData: () async => (await api.getApiTokens()).data,
+        ),
+        users = ApiDataElement<List<User>>(
+          fetchData: () async => api.getAllUsers(),
         );
 
   ApiDataElement<List<ServerJob>> serverJobs;
@@ -198,6 +315,7 @@ class ApiData {
   ApiDataElement<List<ServerDiskVolume>> volumes;
   ApiDataElement<RecoveryKeyStatus> recoveryKeyStatus;
   ApiDataElement<List<ApiToken>> devices;
+  ApiDataElement<List<User>> users;
 }
 
 enum ConnectionStatus {

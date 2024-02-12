@@ -77,7 +77,8 @@
         "services_title": "שירותים",
         "services_subtitle": "רשומות מסוג „A” נחוצות לכל אחד מהשירותים.",
         "email_title": "דוא״ל",
-        "update_list": "עדכון הרשימה"
+        "update_list": "עדכון הרשימה",
+        "domain_validation_failure": "לא הצלחנו להגיע לשם התחום שלך!"
     },
     "console_page": {
         "title": "מסוף",

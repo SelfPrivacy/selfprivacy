@@ -39,6 +39,10 @@ class Fragment$basicMutationReturnFields {
         return Fragment$basicMutationReturnFields$$GenericMutationReturn
             .fromJson(json);
 
+      case "SSHSettingsMutationReturn":
+        return Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn
+            .fromJson(json);
+
       case "ServiceJobMutationReturn":
         return Fragment$basicMutationReturnFields$$ServiceJobMutationReturn
             .fromJson(json);
@@ -165,6 +169,9 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
             Fragment$basicMutationReturnFields$$GenericMutationReturn)
         genericMutationReturn,
     required _T Function(
+            Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn)
+        sSHSettingsMutationReturn,
+    required _T Function(
             Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)
         serviceJobMutationReturn,
     required _T Function(
@@ -202,6 +209,10 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
         return genericMutationReturn(
             this as Fragment$basicMutationReturnFields$$GenericMutationReturn);
 
+      case "SSHSettingsMutationReturn":
+        return sSHSettingsMutationReturn(this
+            as Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn);
+
       case "ServiceJobMutationReturn":
         return serviceJobMutationReturn(this
             as Fragment$basicMutationReturnFields$$ServiceJobMutationReturn);
@@ -238,6 +249,8 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
         genericJobMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
         genericMutationReturn,
+    _T Function(Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn)?
+        sSHSettingsMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$ServiceJobMutationReturn)?
         serviceJobMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$ServiceMutationReturn)?
@@ -293,6 +306,14 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
         if (genericMutationReturn != null) {
           return genericMutationReturn(this
               as Fragment$basicMutationReturnFields$$GenericMutationReturn);
+        } else {
+          return orElse();
+        }
+
+      case "SSHSettingsMutationReturn":
+        if (sSHSettingsMutationReturn != null) {
+          return sSHSettingsMutationReturn(this
+              as Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn);
         } else {
           return orElse();
         }
@@ -1555,6 +1576,186 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericMutationRetur
         CopyWith$Fragment$basicMutationReturnFields$$GenericMutationReturn<
             TRes> {
   _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn
+    implements Fragment$basicMutationReturnFields {
+  Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'SSHSettingsMutationReturn',
+  });
+
+  factory Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn
+    on Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn {
+  CopyWith$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn<
+          Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn>
+      get copyWith =>
+          CopyWith$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn<
+    TRes> {
+  factory CopyWith$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn(
+    Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn instance,
+    TRes Function(Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn)
+        then,
+  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn;
+
+  factory CopyWith$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn.stub(
+          TRes res) =
+      _CopyWithStubImpl$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn<
+        TRes>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn<
+            TRes> {
+  _CopyWithImpl$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn _instance;
+
+  final TRes Function(
+      Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn<
+        TRes>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn<
+            TRes> {
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn(
       this._res);
 
   TRes _res;
@@ -4481,6 +4682,25 @@ const documentNodeMutationRunSystemRebuild = DocumentNode(definitions: [
                 directives: [],
               ),
               FieldNode(
+                name: NameNode(value: 'job'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'basicApiJobsFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
+              ),
+              FieldNode(
                 name: NameNode(value: '__typename'),
                 alias: null,
                 arguments: [],
@@ -4508,6 +4728,7 @@ const documentNodeMutationRunSystemRebuild = DocumentNode(definitions: [
     ]),
   ),
   fragmentDefinitionbasicMutationReturnFields,
+  fragmentDefinitionbasicApiJobsFields,
 ]);
 Mutation$RunSystemRebuild _parserFn$Mutation$RunSystemRebuild(
         Map<String, dynamic> data) =>
@@ -4747,12 +4968,13 @@ class _CopyWithStubImpl$Mutation$RunSystemRebuild$system<TRes>
 }
 
 class Mutation$RunSystemRebuild$system$runSystemRebuild
-    implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
+    implements Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
   Mutation$RunSystemRebuild$system$runSystemRebuild({
     required this.code,
     required this.message,
     required this.success,
-    this.$__typename = 'GenericMutationReturn',
+    this.$__typename = 'GenericJobMutationReturn',
+    this.job,
   });
 
   factory Mutation$RunSystemRebuild$system$runSystemRebuild.fromJson(
@@ -4761,11 +4983,16 @@ class Mutation$RunSystemRebuild$system$runSystemRebuild
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
+    final l$job = json['job'];
     return Mutation$RunSystemRebuild$system$runSystemRebuild(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
+      job: l$job == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$job as Map<String, dynamic>)),
     );
   }
 
@@ -4777,6 +5004,8 @@ class Mutation$RunSystemRebuild$system$runSystemRebuild
 
   final String $__typename;
 
+  final Fragment$basicApiJobsFields? job;
+
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
     final l$code = code;
@@ -4787,6 +5016,8 @@ class Mutation$RunSystemRebuild$system$runSystemRebuild
     _resultData['success'] = l$success;
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
+    final l$job = job;
+    _resultData['job'] = l$job?.toJson();
     return _resultData;
   }
 
@@ -4796,11 +5027,13 @@ class Mutation$RunSystemRebuild$system$runSystemRebuild
     final l$message = message;
     final l$success = success;
     final l$$__typename = $__typename;
+    final l$job = job;
     return Object.hashAll([
       l$code,
       l$message,
       l$success,
       l$$__typename,
+      l$job,
     ]);
   }
 
@@ -4831,6 +5064,11 @@ class Mutation$RunSystemRebuild$system$runSystemRebuild
     final l$$__typename = $__typename;
     final lOther$$__typename = other.$__typename;
     if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    final l$job = job;
+    final lOther$job = other.job;
+    if (l$job != lOther$job) {
       return false;
     }
     return true;
@@ -4864,7 +5102,9 @@ abstract class CopyWith$Mutation$RunSystemRebuild$system$runSystemRebuild<
     String? message,
     bool? success,
     String? $__typename,
+    Fragment$basicApiJobsFields? job,
   });
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job;
 }
 
 class _CopyWithImpl$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
@@ -4886,6 +5126,7 @@ class _CopyWithImpl$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
     Object? message = _undefined,
     Object? success = _undefined,
     Object? $__typename = _undefined,
+    Object? job = _undefined,
   }) =>
       _then(Mutation$RunSystemRebuild$system$runSystemRebuild(
         code:
@@ -4899,7 +5140,17 @@ class _CopyWithImpl$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
+        job: job == _undefined
+            ? _instance.job
+            : (job as Fragment$basicApiJobsFields?),
       ));
+
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job {
+    final local$job = _instance.job;
+    return local$job == null
+        ? CopyWith$Fragment$basicApiJobsFields.stub(_then(_instance))
+        : CopyWith$Fragment$basicApiJobsFields(local$job, (e) => call(job: e));
+  }
 }
 
 class _CopyWithStubImpl$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
@@ -4915,8 +5166,12 @@ class _CopyWithStubImpl$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
     String? message,
     bool? success,
     String? $__typename,
+    Fragment$basicApiJobsFields? job,
   }) =>
       _res;
+
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
+      CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }
 
 class Mutation$RunSystemRollback {
@@ -5682,6 +5937,25 @@ const documentNodeMutationRunSystemUpgrade = DocumentNode(definitions: [
                 directives: [],
               ),
               FieldNode(
+                name: NameNode(value: 'job'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'basicApiJobsFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
+              ),
+              FieldNode(
                 name: NameNode(value: '__typename'),
                 alias: null,
                 arguments: [],
@@ -5709,6 +5983,7 @@ const documentNodeMutationRunSystemUpgrade = DocumentNode(definitions: [
     ]),
   ),
   fragmentDefinitionbasicMutationReturnFields,
+  fragmentDefinitionbasicApiJobsFields,
 ]);
 Mutation$RunSystemUpgrade _parserFn$Mutation$RunSystemUpgrade(
         Map<String, dynamic> data) =>
@@ -5948,12 +6223,13 @@ class _CopyWithStubImpl$Mutation$RunSystemUpgrade$system<TRes>
 }
 
 class Mutation$RunSystemUpgrade$system$runSystemUpgrade
-    implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
+    implements Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
   Mutation$RunSystemUpgrade$system$runSystemUpgrade({
     required this.code,
     required this.message,
     required this.success,
-    this.$__typename = 'GenericMutationReturn',
+    this.$__typename = 'GenericJobMutationReturn',
+    this.job,
   });
 
   factory Mutation$RunSystemUpgrade$system$runSystemUpgrade.fromJson(
@@ -5962,11 +6238,16 @@ class Mutation$RunSystemUpgrade$system$runSystemUpgrade
     final l$message = json['message'];
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
+    final l$job = json['job'];
     return Mutation$RunSystemUpgrade$system$runSystemUpgrade(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
+      job: l$job == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$job as Map<String, dynamic>)),
     );
   }
 
@@ -5978,6 +6259,8 @@ class Mutation$RunSystemUpgrade$system$runSystemUpgrade
 
   final String $__typename;
 
+  final Fragment$basicApiJobsFields? job;
+
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
     final l$code = code;
@@ -5988,6 +6271,8 @@ class Mutation$RunSystemUpgrade$system$runSystemUpgrade
     _resultData['success'] = l$success;
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
+    final l$job = job;
+    _resultData['job'] = l$job?.toJson();
     return _resultData;
   }
 
@@ -5997,11 +6282,13 @@ class Mutation$RunSystemUpgrade$system$runSystemUpgrade
     final l$message = message;
     final l$success = success;
     final l$$__typename = $__typename;
+    final l$job = job;
     return Object.hashAll([
       l$code,
       l$message,
       l$success,
       l$$__typename,
+      l$job,
     ]);
   }
 
@@ -6032,6 +6319,11 @@ class Mutation$RunSystemUpgrade$system$runSystemUpgrade
     final l$$__typename = $__typename;
     final lOther$$__typename = other.$__typename;
     if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    final l$job = job;
+    final lOther$job = other.job;
+    if (l$job != lOther$job) {
       return false;
     }
     return true;
@@ -6065,7 +6357,9 @@ abstract class CopyWith$Mutation$RunSystemUpgrade$system$runSystemUpgrade<
     String? message,
     bool? success,
     String? $__typename,
+    Fragment$basicApiJobsFields? job,
   });
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job;
 }
 
 class _CopyWithImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
@@ -6087,6 +6381,7 @@ class _CopyWithImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
     Object? message = _undefined,
     Object? success = _undefined,
     Object? $__typename = _undefined,
+    Object? job = _undefined,
   }) =>
       _then(Mutation$RunSystemUpgrade$system$runSystemUpgrade(
         code:
@@ -6100,7 +6395,17 @@ class _CopyWithImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
+        job: job == _undefined
+            ? _instance.job
+            : (job as Fragment$basicApiJobsFields?),
       ));
+
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job {
+    final local$job = _instance.job;
+    return local$job == null
+        ? CopyWith$Fragment$basicApiJobsFields.stub(_then(_instance))
+        : CopyWith$Fragment$basicApiJobsFields(local$job, (e) => call(job: e));
+  }
 }
 
 class _CopyWithStubImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
@@ -6116,8 +6421,12 @@ class _CopyWithStubImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
     String? message,
     bool? success,
     String? $__typename,
+    Fragment$basicApiJobsFields? job,
   }) =>
       _res;
+
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
+      CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }
 
 class Mutation$PullRepositoryChanges {

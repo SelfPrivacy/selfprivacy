@@ -45,6 +45,9 @@ mutation RunSystemRebuild {
   system {
     runSystemRebuild {
       ...basicMutationReturnFields
+      job {
+        ...basicApiJobsFields
+      }
     }
   }
 }
@@ -61,6 +64,9 @@ mutation RunSystemUpgrade {
   system {
     runSystemUpgrade {
       ...basicMutationReturnFields
+      job {
+        ...basicApiJobsFields
+      }
     }
   }
 }

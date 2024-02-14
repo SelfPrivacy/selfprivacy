@@ -803,6 +803,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       serverTypeIdentificator: serverType.data!.identifier,
     );
     emit(updatedState.finish());
+    getIt<ApiConnectionRepository>().init();
   }
 
   @override

@@ -37,8 +37,8 @@
             "one": "{} tuum",
             "two": "{} tuumi",
             "few": "{} tuumi",
-            "many": "{} südamikud",
-            "other": "{} südamikud"
+            "many": "{} tuumi",
+            "other": "{} tuumi"
         }
     },
     "ssh": {
@@ -54,7 +54,7 @@
         "input_label": "Avalik ED25519, ECDSA või RSA võti"
     },
     "onboarding": {
-        "page2_dns_provider_text": "Teil on vaja domeeni, et olla Internetis olemas. Ja teil on vaja ka usaldusväärset DNS-teenuse pakkujat, et domeen suunataks teie serverisse. Me soovitame teil valida toetatud DNS-teenuse pakkuja, et võrguühenduse automaatselt seadistada.",
+        "page2_dns_provider_text": "Teil on vaja domeeni, et olla Internetis olemas. Ja teil on vaja ka usaldusväärset DNS teenuse pakkujat, et domeen suunataks teie serverisse. Me soovitame teil valida toetatud DNS teenuse pakkuja, et võrguühenduse automaatselt seadistada.",
         "page1_title": "Digitaalne sõltumatus, saadaval kõigile meist",
         "page1_text": "Meil, VPN, Messenger, sotsiaalvõrgustik ja palju muud teie privaatsel serveril, teie kontrolli all.",
         "page2_title": "SelfPrivacy ei ole pilv, see on Teie isiklik andmekeskus",
@@ -102,7 +102,7 @@
         "continue": "Jätka",
         "alert": "Häire",
         "copied_to_clipboard": "Kopeeritud lõikelauale!",
-        "please_connect": "Palun ühendage oma server, domeen ja DNS-teenuse pakkuja, et alustada!"
+        "please_connect": "Palun ühendage oma server, domeen ja DNS teenuse pakkuja, et alustada!"
     },
     "more_page": {
         "configuration_wizard": "Seadistusviisard",
@@ -143,7 +143,7 @@
         "git": "Git server",
         "meet": "Videokonverents",
         "social": "Sotsiaalne võrgustik",
-        "password": "Paroolihaldur",
+        "password": "Paroolide haldur",
         "vpn": "VPN",
         "mx": "MX kirje",
         "dmarc": "DMARC kirje",
@@ -198,8 +198,21 @@
             "monthly": {
                 "zero": "Reegel on keelatud",
                 "one": "Viimane {} kuine varukoopia säilitatakse",
-                "two": "Viimased {} kuise varukoopiad säilitatakse"
-            }
+                "two": "Viimased {} kuise varukoopiad säilitatakse",
+                "few": "Säilitatakse viimased {} igakuist varukoopiat",
+                "many": "Säilitatakse viimased {} igakuist varukoopiat",
+                "other": "Säilitatakse viimased {} igakuist varukoopiat"
+            },
+            "monthly_infinite": "Kõik igakuised varukoopiad säilitatakse",
+            "yearly": {
+                "many": "Säilitatakse viimased {} aasta varukoopiad",
+                "zero": "Reegel on keelatud",
+                "one": "Säilitatakse viimane {} aasta varukoopia",
+                "two": "Säilitatakse viimased {} aasta varukoopiad",
+                "few": "Säilitatakse viimased {} aasta varukoopiad",
+                "other": "Säilitatakse viimased {} aasta varukoopiad"
+            },
+            "yearly_infinite": "Kõik iga-aastased varukoopiad säilitatakse"
         },
         "card_title": "Varundus",
         "card_subtitle": "Halda oma varukoopiad",
@@ -251,8 +264,31 @@
             "daily": "Kui palju päevaseid varukoopiaid säilitada",
             "weekly": "Kui palju nädalaseid varukoopiaid säilitada",
             "monthly": "Kui palju kuiseid varukoopiaid säilitada",
-            "yearly": "Kui palju aastaseid varukoopiaid säilitada"
-        }
+            "yearly": "Kui palju aastaseid varukoopiaid säilitada",
+            "last": "Kui palju uusimaid varukoopiaid säilitada"
+        },
+        "snapshot_modal_heading": "Hetktõmmise Üksikasjad",
+        "snapshot_service_title": "Teenindus",
+        "snapshot_creation_time_title": "Loomise aeg",
+        "snapshot_id_title": "Hetktõmmise ID",
+        "snapshot_modal_select_strategy": "Valige taastamise strateegia",
+        "snapshot_modal_download_verify_option_title": "Laadige alla, kontrollige ja seejärel asendage",
+        "snapshot_modal_download_verify_option_description": "Vähem riski, kuid vaja on rohkem vaba ruumi. Laadib kogu hetktõmmise ajutisse salvestusruumi alla, kontrollib seda ja seejärel asendab praegused andmed.",
+        "snapshot_modal_inplace_option_title": "Vahetage oma kohale",
+        "snapshot_modal_inplace_option_description": "Vaja on vähem vaba ruumi, kuid suurem risk. Asendab allalaadimise ajal praegused andmed hetktõmmise andmetega.",
+        "snapshot_modal_service_not_found": "See on hetktõmmis teenusest, mida teie serveris enam pole. Tavaliselt ei tohiks see juhtuda ja me ei saa automaatset taastamist teha. Saate siiski hetktõmmise alla laadida ja käsitsi taastada. Kui vajate abi, võtke ühendust SelfPrivacy toega.",
+        "restore_started": "Taastamine on alanud, kontrollige tööde loendist praegust olekut",
+        "snapshot_reason_title": "Loomise põhjus",
+        "snapshot_reasons": {
+            "auto": "Loodud automaatselt",
+            "explicit": "Loodud teie selgesõnalise taotluse alusel",
+            "pre_restore": "Loodud ettevaatusabinõuna enne riskantset taastamist",
+            "unknown": "Tundmatu"
+        },
+        "rotation_quotas_title": "Hetktõmmise pööramise Seaded",
+        "set_rotation_quotas": "Määrake uued rotatsioonikvoodid",
+        "quotas_set": "Määrati uued varukoopiate pöörlemiskvoodid",
+        "quotas_only_applied_to_autobackups": "Neid sätteid rakendatakse ainult automaatse varundamise korral. Käsitsi tehtud varukoopiaid ei kustutata."
     },
     "initializing": {
         "connect_to_server_provider_text": "API võtme abil saab SelfPrivacy rentida masina ja seadistada sellele oma serveri",
@@ -310,6 +346,292 @@
         "server_started": "Server on käivitatud. Nüüd toimub selle kontroll ja taaskäivitamine…",
         "server_created": "Server on loodud. DNS kontroll ja serveri käivitamine on pooleli…",
         "domain_critical_error": "Me ei saa sellele domeenile ühendust! Puudutage lisateabe lugemiseks…",
-        "server_rebooted": "Server taaskäivitati. Ootame viimast kontrolli…"
+        "server_rebooted": "Server taaskäivitati. Ootame viimast kontrolli…",
+        "steps": {
+            "master_account": "Põhikonto",
+            "hosting": "Hosting",
+            "server_type": "Serveri tüüp",
+            "dns_provider": "DNS pakkuja",
+            "backups_provider": "Varukoopiad",
+            "domain": "Domeen",
+            "server": "Server",
+            "dns_setup": "DNS seadistamine",
+            "nixos_installation": "NixOS installimine",
+            "server_reboot": "Serveri taaskäivitamine",
+            "final_checks": "Viimased kontrollid"
+        },
+        "create_master_account": "Loo põhikonto",
+        "enter_username_and_password": "Sisesta kasutajanimi ja tugev parool",
+        "finish": "Kõik on initsialiseeritud",
+        "checks": "Kontrollid on lõpetatud\n{} otsas {}",
+        "server_provider_description": "Koht, kus asuvad teie andmed ja SelfPrivacy teenused:",
+        "dns_provider_description": "Teenus, mis võimaldab teie IP suunata domeeninimedele:",
+        "connect_to_server": "Alustame serveriga.",
+        "select_provider": "Valige järgmisest loendist mis tahes pakkuja, need kõik toetavad SelfPrivacy",
+        "select_provider_notice": "\"Suhteliselt väikese\" all peame silmas masinat, millel on 2 tuuma CPU ja 2 gigabaiti muutmälu.",
+        "until_the_next_check": "Kuni järgmise kontrollini: ",
+        "check": "Kontrollima",
+        "one_more_restart": "Veel üks taaskäivitus turvasertifikaatide rakendamiseks."
+    },
+    "developer_settings": {
+        "ignore_tls_description": "Rakendus ei kontrolli TLS sertifikaate ühenduse loomisel serveriga.",
+        "subtitle": "Need seaded on ainult silumise jaoks. Ärge muutke neid, kui te ei tea, mida teete.",
+        "title": "Arendaja seaded",
+        "server_setup": "Serveri seadistamine",
+        "use_staging_acme_description": "Kehtib uue serveri seadistamisel.",
+        "use_staging_acme": "Kasuta etapilist ACME serverit",
+        "ignore_tls": "Ära kontrolli TLS sertifikaate",
+        "allow_ssh_key_at_setup": "Lubage juur SSH võtme seadistamine paigaldamise ajal",
+        "add_root_ssh_key": "Lisage juur SSH võti",
+        "allow_ssh_key_at_setup_description": "Kinnitusekraanile ilmub nupp võtme lisamiseks.",
+        "root_ssh_key_added": "SSH juurvõti on määratud ja seda rakendatakse",
+        "routing": "Rakenduse marsruutimine",
+        "reset_onboarding": "Lähtestage liitumislüliti",
+        "reset_onboarding_description": "Alguskuva uuesti kuvamiseks lähtestage liitumislüliti",
+        "cubit_statuses": "laadimise olekud"
+    },
+    "not_ready_card": {
+        "in_menu": "Server pole veel seadistatud. Palun lõpetage seadistamine kasutades seadistusviisardit edasiseks tööks."
+    },
+    "storage": {
+        "migration_process": "Migreerimine…",
+        "migration_done": "lõpetama",
+        "start_migration_button": "Alusta migreerimist",
+        "extending_volume_description": "Helitugevuse suuruse muutmine võimaldab teil salvestada serverisse rohkem andmeid ilma serverit ennast laiendamata. Helitugevust saab ainult pikendada: kokkutõmbumine pole võimalik.",
+        "data_migration_notice": "Migratsiooni ajal lülitatakse kõik teenused välja.",
+        "extending_volume_title": "Helitugevuse pikendamine",
+        "card_title": "Serveri salvestusruum",
+        "status_ok": "Kettakasutus on OK",
+        "status_error": "Vähene kettaruumi",
+        "disk_usage": "{} kasutatud",
+        "disk_total": "{} Kokku · {}",
+        "gb": "{} GB",
+        "mb": "{} MB",
+        "kb": "{} KB",
+        "bytes": "Baitid",
+        "extend_volume_button": "Laiendage helitugevust",
+        "extending_volume_price_info": "Hind sisaldab käibemaksu ja on prognoositud teie serveripakkuja esitatud hinnaandmete põhjal. Server taaskäivitatakse pärast suuruse muutmist.",
+        "extending_volume_error": "Helitugevuse suurendamist ei saanud lähtestada.",
+        "extending_volume_modal_description": "Uuendage {} plaanile {} kuus.",
+        "size": "Suurus",
+        "price": "Hind",
+        "data_migration_title": "Andmete migratsioon"
+    },
+    "service_page": {
+        "nothing_here": "Midagi siin",
+        "open_in_browser": "Ava brauseris",
+        "restart": "Teenuse taaskäivitamine",
+        "disable": "Keela teenus",
+        "enable": "luba teenus",
+        "move": "Liigu teisele mahule",
+        "uses": "Kasutab {usage} mahul {volume}",
+        "snapshots": "Varukoopia hetkepilte",
+        "status": {
+            "active": "Üleval ja töötab",
+            "inactive": "Peatatud",
+            "failed": "Käivitamine ebaõnnestus",
+            "off": "Keelatud",
+            "activating": "Aktiveerimine",
+            "deactivating": "Deaktiveerimine",
+            "reloading": "Taaskäivitamine"
+        }
+    },
+    "mail": {
+        "title": "E-post",
+        "login_info": "Kasutage kasutajanime ja parooli kasutajate vahekaardilt. IMAP port on 143 koos STARTTLS, SMTP port on 587 koos STARTTLS.",
+        "subtitle": "E-post ettevõttele ja perele."
+    },
+    "password_manager": {
+        "subtitle": "Teie turvalisuse alus. Bitwarden aitab teil luua, salvestada ja liigutada paroole seadmete vahel ning sisestada neid, kui neid küsitakse, kasutades automaatset täitmist.",
+        "login_info": "Teil tuleb luua konto veebisaidil.",
+        "title": "Paroolide haldur"
+    },
+    "recovering": {
+        "method_device_description": "Avage rakendus teises seadmes ja minge seadmete lehele. Oma märgi saamiseks vajutage nuppu \"Lisa seade\".",
+        "method_select_description": "Valige taastamisviis:",
+        "domain_recovery_description": "Sisestage serveri domeen, millele soovite juurdepääsu saada:",
+        "domain_recover_placeholder": "Teie domeen",
+        "domain_recover_error": "Sellise domeeniga serverit ei leitud",
+        "fallback_select_provider_console_hint": "Näiteks: Hetzner.",
+        "provider_connected": "Ühenda {}",
+        "generic_error": "Toiming ebaõnnestus, proovige uuesti.",
+        "recovery_main_header": "Ühendage olemasoleva serveriga",
+        "method_select_other_device": "Mul on juurdepääs teises seadmes",
+        "method_select_recovery_key": "Mul on taastevõti",
+        "method_select_nothing": "Mul pole midagi sellist",
+        "method_device_button": "Sain oma märgi kätte",
+        "method_device_input_description": "Sisestage oma autoriseerimisluba",
+        "method_device_input_placeholder": "Token",
+        "method_recovery_input_description": "Sisestage oma taastevõti",
+        "fallback_select_description": "Mis sul täpsemalt on? Valige esimene saadaolev valik:",
+        "fallback_select_token_copy": "Auth tokeni koopia rakenduse teisest versioonist.",
+        "fallback_select_root_ssh": "SSH juurjuurdepääs serverile.",
+        "fallback_select_provider_console": "Juurdepääs minu teenusepakkuja serverikonsoolile.",
+        "authorization_failed": "Selle võtmega ei saanud sisse logida",
+        "provider_connected_description": "Sisestage oma tunnus, millel on juurdepääs domeenile {}:",
+        "provider_connected_placeholder": "{} tunnus",
+        "confirm_server": "Kinnitage server",
+        "confirm_server_description": "Teie server leitud! Kinnitage, et see on õige:",
+        "confirm_server_accept": "Jah! See on kõik",
+        "confirm_server_decline": "Valige mõni muu server",
+        "choose_server": "Valige oma server",
+        "choose_server_description": "Me ei saanud aru, millise serveriga proovite ühendust luua.",
+        "no_servers": "Teie kontol pole saadaolevaid servereid.",
+        "domain_not_available_on_token": "Valitud domeen pole sellel märgil saadaval.",
+        "modal_confirmation_title": "Kas see on tõesti teie server?",
+        "modal_confirmation_description": "Kui loote ühenduse vale serveriga, võite kaotada kõik oma andmed.",
+        "modal_confirmation_dns_valid": "Vastupidine DNS on kehtiv",
+        "modal_confirmation_dns_invalid": "Vastupidine DNS osutab teisele domeenile",
+        "modal_confirmation_ip_valid": "IP on sama, mis DNS kirjes",
+        "modal_confirmation_ip_invalid": "IP ei ole sama, mis DNS kirjes"
+    },
+    "video": {
+        "subtitle": "Zoom ja Google Meet on head, kuid Jitsi Meet on väärt alternatiiv, mis annab teile kindlustunde, et teid ei kuulata.",
+        "title": "Videokoosolek",
+        "login_info": "Konto pole vaja."
+    },
+    "users": {
+        "could_not_fetch_users": "Kasutajate loendit ei õnnestunud hankida",
+        "refresh_users": "Värskenda kasutajate loendit",
+        "details_title": "Kasutaja üksikasjad",
+        "add_new_user": "Lisa esimene kasutaja",
+        "new_user": "Uus kasutaja",
+        "delete_user": "Kustuta kasutaja",
+        "nobody_here": "Siin pole kedagi",
+        "login": "Logi sisse",
+        "new_user_info_note": "Uuele kasutajale antakse automaatselt juurdepääs kõikidele teenustele",
+        "delete_confirm_question": "Kas oled kindel?",
+        "reset_password": "Parooli lähtestamine",
+        "account": "Konto",
+        "send_registration_data": "Jagage sisselogimisandmeid",
+        "could_not_fetch_description": "Palun kontrollige oma internetiühendust ja proovige uuesti",
+        "could_not_create_user": "Kasutaja loomine ebaõnnestus",
+        "could_not_delete_user": "Kasutaja kustutamine ebaõnnestus",
+        "could_not_add_ssh_key": "SSH võtme lisamine ebaõnnestus",
+        "username_rule": "Kasutajanimi võib sisaldada ainult väiketähti, numbreid ja allkriipse, ei tohi alata numbriga",
+        "email_login": "E-posti sisselogimine",
+        "no_ssh_notice": "Sellele kasutajale luuakse ainult e-posti ja SSH kontod. Ühe sisselogimise lahendus kõikidele teenustele on varsti saadaval."
+    },
+    "devices": {
+        "main_screen": {
+            "other_devices": "Muud seadmed",
+            "authorize_new_device": "Autoriseeri uus seade",
+            "access_granted_on": "Juurdepääs anti {}",
+            "tip": "Juurdepääsu tühistamiseks vajutage seadmel nuppu.",
+            "header": "Seadmed",
+            "description": "Nendel seadmetel on SelfPrivacy rakenduse kaudu täielik juurdepääs serverile.",
+            "this_device": "See seade"
+        },
+        "add_new_device_screen": {
+            "header": "Uue seadme autoriseerimine",
+            "description": "Sisestage selle seadme võti, mida soovite autoriseerida:",
+            "please_wait": "Palun oota",
+            "tip": "Võti kehtib 10 minutit.",
+            "expired": "Võti on aegunud.",
+            "get_new_key": "Hangi uus võti"
+        },
+        "revoke_device_alert": {
+            "header": "Tühistada juurdepääsu?",
+            "description": "Seadmel {} ei ole enam serverile juurdepääsu.",
+            "no": "Tühista",
+            "yes": "Tühistama"
+        }
+    },
+    "recovery_key": {
+        "key_connection_error": "Ühendust serveriga ei õnnestunud luua.",
+        "key_synchronizing": "Sünkroniseerimine…",
+        "key_main_header": "Taastevõti",
+        "key_main_description": "On vajalik SelfPrivacy autoriseerimiseks, kui kõik teised autoriseeritud seadmed pole kättesaadavad.",
+        "key_amount_toggle": "Piirang kasutuste arvu järgi",
+        "key_amount_field_title": "Maksimaalne kasutuskordade arv",
+        "key_duedate_toggle": "Piirang aja järgi",
+        "key_duedate_field_title": "Aegumiskuupäev",
+        "key_receive_button": "Võtme saamine",
+        "key_valid": "Teie võti on kehtiv",
+        "key_invalid": "Teie võti ei kehti enam",
+        "key_valid_until": "Kehtib kuni {}",
+        "key_valid_for": "Kehtib {} kasutuskorraks",
+        "key_creation_date": "Loodud {}",
+        "key_replace_button": "Genereeri uus võti",
+        "key_receiving_description": "Kirjutage see võti üles ja asetage turvalisse kohta. Seda kasutatakse täieliku juurdepääsu taastamiseks teie serverile:",
+        "key_receiving_info": "Võtit ei näidata kunagi enam, kuid teil on võimalus asendada see teisega.",
+        "key_receiving_done": "Valmis!",
+        "generation_error": "Taastevõtit ei õnnestunud luua. {}"
+    },
+    "jobs": {
+        "service_turn_off": "Välja lülitamine",
+        "service_turn_on": "Sisselülitamine",
+        "upgrade_success": "Serveri värskendamine on alanud",
+        "upgrade_failed": "Serveri värskendamine ebaõnnestus",
+        "upgrade_server": "Värskenda serverit",
+        "reboot_server": "Taaskäivita server",
+        "create_ssh_key": "Looge SSH võti {} jaoks",
+        "generic_error": "Ei õnnestunud ühendust serveriga luua!",
+        "delete_ssh_key": "Kustutage SSH võti {} jaoks",
+        "server_jobs": "Tööd serveris",
+        "reset_user_password": "Kasutaja parooli lähtestamine",
+        "title": "Töökohtade nimekiri",
+        "start": "Alusta",
+        "empty": "Töökohti pole",
+        "create_user": "Kasutaja loomine",
+        "delete_user": "Kasutaja kustutamine",
+        "job_added": "Töö lisatud",
+        "run_jobs": "Käivita tööd",
+        "reboot_success": "Server taaskäivitub",
+        "reboot_failed": "Serverit ei õnnestunud taaskäivitada. Kontrollige rakenduse logisid.",
+        "config_pull_failed": "Konfiguratsiooni värskendust ei õnnestunud alla laadida. Tarkvara värskendamine algas siiski."
+    },
+    "validations": {
+        "required": "Nõutud",
+        "already_exist": "Juba eksisteerib",
+        "invalid_format": "Kehtetu vorming",
+        "invalid_format_password": "Parool ei tohi sisaldada tühikuid",
+        "invalid_format_ssh": "Peab järgima SSH võtme formaati",
+        "root_name": "Ei saa olla 'root'",
+        "length_not_equal": "Pikkus on [], peaks olema {}",
+        "length_longer": "Pikkus on [], peaks olema lühem või võrdne kui {}"
+    },
+    "support": {
+        "title": "SelfPrivacy tugi"
+    },
+    "cloud": {
+        "title": "Pilvesalvestus",
+        "subtitle": "Ärge lubage pilveteenustel teie andmeid lugeda, kasutades NextCloud.",
+        "login_info": "Sisselogimine on admin, parool on sama mis teie põhikasutajal. Looge uusi kontosid Nextcloudi liideses."
+    },
+    "social_network": {
+        "title": "Sotsiaalvõrgustik",
+        "subtitle": "On raske uskuda, kuid nüüd on võimalik luua oma sotsiaalvõrgustik oma reeglite ja sihtrühmaga.",
+        "login_info": "Teil tuleb luua konto veebisaidil."
+    },
+    "git": {
+        "title": "Git Server",
+        "subtitle": "Erakasutusel olev alternatiiv Github, mis kuulub teile, kuid mitte Microsoft.",
+        "login_info": "Teil tuleb luua konto veebisaidil. Esimesest kasutajast saab administraator."
+    },
+    "vpn": {
+        "title": "VPN server",
+        "subtitle": "Eravõrgu VPN server"
+    },
+    "modals": {
+        "dns_removal_error": "DNS kirjeid ei õnnestunud eemaldada.",
+        "server_deletion_error": "Aktiivset serverit ei õnnestunud kustutada.",
+        "volume_creation_error": "Mahu loomine ebaõnnestus.",
+        "server_validators_error": "Saadaolevate serverite hankimine ebaõnnestus.",
+        "already_exists": "Selline server on juba olemas.",
+        "unexpected_error": "Pakkuja poolelt tekkis paigutuse ajal ootamatu viga.",
+        "destroy_server": "Hävitage server ja looge uus?",
+        "try_again": "Proovige uuesti?",
+        "are_you_sure": "Kas olete kindel?",
+        "purge_all_keys": "Kustutada kõik autentimisvõtmed?",
+        "purge_all_keys_confirm": "Jah, kustuta kõik minu võtmed",
+        "delete_server_volume": "Kustutada server ja maht?",
+        "reboot": "Taaskäivitage",
+        "you_cant_use_this_api": "Te ei saa seda API kasutada domeenide puhul sellise TLD.",
+        "yes": "Jah",
+        "no": "Ei"
+    },
+    "timer": {
+        "sec": "{} sek"
     }
 }

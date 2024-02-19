@@ -312,7 +312,17 @@
         "snapshot_reason_title": "Причина створення",
         "snapshot_reasons": {
             "auto": "Створено автоматично",
-            "explicit": "Створено за вашим явним запитом"
+            "explicit": "Створено за вашим явним запитом",
+            "unknown": "Невідомий"
+        },
+        "set_rotation_quotas": "Встановити нові квоти ротації",
+        "quota_subtitles": {
+            "last": {
+                "zero": "Правило вимкнено"
+            },
+            "daily": {
+                "zero": "Правило вимкнено"
+            }
         }
     },
     "storage": {

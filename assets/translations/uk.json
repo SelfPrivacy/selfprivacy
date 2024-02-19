@@ -34,7 +34,8 @@
         "close": "Закрити",
         "connect": "Підключіться",
         "app_name": "SelfPrivacy",
-        "copied_to_clipboard": "Скопійовано в буфер обміну!"
+        "copied_to_clipboard": "Скопійовано в буфер обміну!",
+        "please_connect": "Будь ласка, підключіть свій сервер, домен та провайдера DNS, щоб зануритися!"
     },
     "locale": "ua",
     "application_settings": {
@@ -228,7 +229,8 @@
         "monthly_cost": "Щомісячна вартість",
         "location": "Місцезнаходження",
         "server_provider": "Провайдер сервера",
-        "dns_provider": "Провайдер DNS"
+        "dns_provider": "Провайдер DNS",
+        "pricing_error": "Не вдалося отримати ціни постачальника"
     },
     "record": {
         "api": "SelfPrivacy API",
@@ -256,7 +258,8 @@
         "email_subtitle": "Записи, необхідні для безпечного обміну електронною поштою.",
         "update_list": "Лист оновлень",
         "error_subtitle": "Натисніть тут, щоб виправити їх. При цьому також буде видалено користувацькі записи.",
-        "services_subtitle": "Введіть \"А\" записи, необхідні для кожної служби."
+        "services_subtitle": "Введіть \"А\" записи, необхідні для кожної служби.",
+        "domain_validation_failure": "Ми не можемо отримати доступ до вашого домену!"
     },
     "backup": {
         "card_title": "Резервне копіювання",
@@ -296,7 +299,21 @@
         "backups_encryption_key_subtitle": "Зберігайте його в безпечному місці.",
         "backups_encryption_key_copy": "Скопіюйте ключ шифрування",
         "card_subtitle": "Керуйте резервними копіями",
-        "select_all": "Копіювати все"
+        "select_all": "Копіювати все",
+        "backups_encryption_key_show": "Показати ключ шифрування",
+        "backups_encryption_key_description": "Цей ключ використовується для шифрування ваших резервних копій. Якщо ви його втратите, ви не зможете відновити резервні копії. Зберігайте його в безпечному місці, оскільки він стане в нагоді, якщо вам коли-небудь знадобиться відновити з резервних копій вручну.",
+        "backups_encryption_key_not_found": "Ключ шифрування ще не знайдено, спробуйте пізніше.",
+        "snapshot_service_title": "Сервіс",
+        "snapshot_creation_time_title": "Час створення",
+        "snapshot_modal_download_verify_option_title": "Завантажте, перевірте та замініть",
+        "pending_jobs": "Зараз виконуються завдання резервного копіювання",
+        "snapshots_title": "Список знімків",
+        "snapshot_modal_inplace_option_title": "Замініть на місце",
+        "snapshot_reason_title": "Причина створення",
+        "snapshot_reasons": {
+            "auto": "Створено автоматично",
+            "explicit": "Створено за вашим явним запитом"
+        }
     },
     "storage": {
         "card_title": "Серверне сховище",

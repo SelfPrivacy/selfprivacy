@@ -1,7 +1,19 @@
 {
-    "test": "kz-test",
+    "test": "сынақ",
     "locale": "kz",
     "basis": {
-        "app_name": "SelfPrivacy"
+        "app_name": "SelfPrivacy",
+        "providers": "Провайдерлер",
+        "providers_title": "Сіздің Деректер Орталығыңыз",
+        "got_it": "Түсіндім",
+        "select": "Таңдау",
+        "services_title": "Сіздің жеке, жеке және тәуелсіз қызметтеріңіз.",
+        "more": "Толығырақ",
+        "next": "Келесі",
+        "settings": "Параметрлер",
+        "password": "Құпия сөз",
+        "create": "Жаңаны қосу",
+        "confirmation": "Растау",
+        "users": "Пайдаланушылар"
     }
 }

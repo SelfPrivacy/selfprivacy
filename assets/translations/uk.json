@@ -12,7 +12,7 @@
         "username": "І'мя користовача",
         "loading": "Завантаження…",
         "later": "Перейти до налаштувати пізніше",
-        "connect_to_existing": "Підключитись до існуючого серверу",
+        "connect_to_existing": "У мене вже є SelfPrivacy сервер!",
         "reset": "Скинути",
         "details": "Подробиці",
         "no_data": "Немає данних",
@@ -59,7 +59,7 @@
         "subtitle_without_keys": "Ключів немає",
         "no_key_name": "Безіменний ключ",
         "root_title": "Це ключі суперкористувача",
-        "input_label": "Публічний ED25519 або RSA ключ"
+        "input_label": "Публічний ED25519, ECDSA або RSA ключ"
     },
     "more_page": {
         "about_project": "Про нас",

@@ -1,1 +1,7 @@
-{}
+{
+    "test": "kz-test",
+    "locale": "kz",
+    "basis": {
+        "app_name": "SelfPrivacy"
+    }
+}

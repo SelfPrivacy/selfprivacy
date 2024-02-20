@@ -6,6 +6,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -186,6 +187,37 @@ class ApiConnectionRepository {
       return (false, result.message ?? 'jobs.generic_error'.tr());
     }
     return (true, result.message ?? 'basis.done'.tr());
+  }
+
+  Future<(bool, String)> setAutoUpgradeSettings(
+    final bool enable,
+    final bool allowReboot,
+  ) async {
+    final GenericResult<AutoUpgradeSettings?> result =
+        await api.setAutoUpgradeSettings(
+      AutoUpgradeSettings(
+        enable: enable,
+        allowReboot: allowReboot,
+      ),
+    );
+    _apiData.settings.invalidate();
+    if (result.data != null) {
+      return (true, result.message ?? 'basis.done'.tr());
+    } else {
+      return (false, result.message ?? 'jobs.generic_error'.tr());
+    }
+  }
+
+  Future<(bool, String)> setServerTimezone(
+    final String timezone,
+  ) async {
+    final GenericResult result = await api.setTimezone(timezone);
+    _apiData.settings.invalidate();
+    if (result.success) {
+      return (true, result.message ?? 'basis.done'.tr());
+    } else {
+      return (false, result.message ?? 'jobs.generic_error'.tr());
+    }
   }
 
   void dispose() {

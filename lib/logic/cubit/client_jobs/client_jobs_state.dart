@@ -45,8 +45,15 @@ class JobsStateWithJobs extends JobsState {
       final List<ClientJob> newJobsList = clientJobList
           .where((final element) => element.runtimeType != job.runtimeType)
           .toList();
-      newJobsList.add(job);
-      getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
+      if (job.shouldRemoveInsteadOfAdd(clientJobList)) {
+        getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());
+      } else {
+        newJobsList.add(job);
+        getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
+      }
+      if (newJobsList.isEmpty) {
+        return JobsStateEmpty();
+      }
       return JobsStateWithJobs(newJobsList);
     }
     if (job.canAddTo(clientJobList)) {
@@ -102,13 +109,16 @@ class JobsStateLoading extends JobsState {
 
   @override
   JobsState addJob(final ClientJob job) {
-    // Do the same, but add jobs to the postponed list
     if (job is ReplaceableJob) {
       final List<ClientJob> newPostponedJobs = postponedJobs
           .where((final element) => element.runtimeType != job.runtimeType)
           .toList();
-      newPostponedJobs.add(job);
-      getIt<NavigationService>().showSnackBar('jobs.job_postponed'.tr());
+      if (job.shouldRemoveInsteadOfAdd(postponedJobs)) {
+        getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());
+      } else {
+        newPostponedJobs.add(job);
+        getIt<NavigationService>().showSnackBar('jobs.job_postponed'.tr());
+      }
       return JobsStateLoading(clientJobList, rebuildJobUid, newPostponedJobs);
     }
     if (job.canAddTo(postponedJobs)) {
@@ -140,8 +150,15 @@ class JobsStateFinished extends JobsState {
       final List<ClientJob> newPostponedJobs = postponedJobs
           .where((final element) => element.runtimeType != job.runtimeType)
           .toList();
-      newPostponedJobs.add(job);
-      getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
+      if (job.shouldRemoveInsteadOfAdd(postponedJobs)) {
+        getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());
+      } else {
+        newPostponedJobs.add(job);
+        getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
+      }
+      if (newPostponedJobs.isEmpty) {
+        return JobsStateEmpty();
+      }
       return JobsStateWithJobs(newPostponedJobs);
     }
     if (job.canAddTo(postponedJobs)) {

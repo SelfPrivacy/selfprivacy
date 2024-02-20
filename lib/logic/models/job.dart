@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -350,18 +349,21 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
   final bool allowReboot;
 
   @override
-  Future<(bool, String)> execute() async {
-    await getIt<ApiConnectionRepository>().api.setAutoUpgradeSettings(
-          AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
-        );
-    getIt<ApiConnectionRepository>().apiData.settings.invalidate();
-    return (true, 'Check not implemented');
-  }
+  Future<(bool, String)> execute() async => getIt<ApiConnectionRepository>()
+      .setAutoUpgradeSettings(enable, allowReboot);
 
   @override
   bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
-    // TODO: Finish this
-    throw UnimplementedError();
+    final currentSettings = getIt<ApiConnectionRepository>()
+        .apiData
+        .settings
+        .data
+        ?.autoUpgradeSettings;
+    if (currentSettings == null) {
+      return false;
+    }
+    return currentSettings.enable == enable &&
+        currentSettings.allowReboot == allowReboot;
   }
 
   @override
@@ -392,16 +394,17 @@ class ChangeServerTimezoneJob extends ReplaceableJob {
   final String timezone;
 
   @override
-  Future<(bool, String)> execute() async {
-    await getIt<ApiConnectionRepository>().api.setTimezone(timezone);
-    getIt<ApiConnectionRepository>().apiData.settings.invalidate();
-    return (true, 'Check not implemented');
-  }
+  Future<(bool, String)> execute() async =>
+      getIt<ApiConnectionRepository>().setServerTimezone(timezone);
 
   @override
   bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
-    // TODO: Finish this
-    throw UnimplementedError();
+    final currentSettings =
+        getIt<ApiConnectionRepository>().apiData.settings.data?.timezone;
+    if (currentSettings == null) {
+      return false;
+    }
+    return currentSettings == timezone;
   }
 
   @override

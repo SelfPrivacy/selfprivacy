@@ -597,6 +597,7 @@
         "service_turn_on": "Turn on",
         "job_added": "Job added",
         "job_postponed": "Job added, but you will be able to launch it after current jobs are finished",
+        "job_removed": "Job removed",
         "run_jobs": "Run jobs",
         "reboot_success": "Server is rebooting",
         "reboot_failed": "Couldn't reboot the server. Check the app logs.",

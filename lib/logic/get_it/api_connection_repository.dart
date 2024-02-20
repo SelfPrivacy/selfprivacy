@@ -280,7 +280,6 @@ class ApiConnectionRepository {
     await _apiData.users.refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.settings
         .refetchData(version, () => _dataStream.add(_apiData));
-    print(_apiData.services.data?.length);
   }
 
   Future<void> reload(final Timer? timer) async {
@@ -387,11 +386,8 @@ class ApiDataElement<T> {
     final Version version,
     final Function callback,
   ) async {
-    print('Refetching data');
     if (VersionConstraint.parse(requiredApiVersion).allows(version)) {
-      print('Version is allowed');
       if (isExpired || _data == null) {
-        print('Data is expired');
         final newData = await fetchData();
         if (T is List) {
           if (Object.hashAll(newData as Iterable<Object?>) !=

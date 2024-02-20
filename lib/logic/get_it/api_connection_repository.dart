@@ -250,17 +250,7 @@ class ApiConnectionRepository {
       _dataStream.add(_apiData);
     }
 
-    _apiData.serverJobs.data = await _apiData.serverJobs.fetchData();
-    _apiData.backupConfig.data = await _apiData.backupConfig.fetchData();
-    _apiData.backups.data = await _apiData.backups.fetchData();
-    _apiData.services.data = await _apiData.services.fetchData();
-    _apiData.volumes.data = await _apiData.volumes.fetchData();
-    _apiData.recoveryKeyStatus.data =
-        await _apiData.recoveryKeyStatus.fetchData();
-    _apiData.devices.data = await _apiData.devices.fetchData();
-    _apiData.users.data = await _apiData.users.fetchData();
-    _apiData.settings.data = await _apiData.settings.fetchData();
-    _dataStream.add(_apiData);
+    await _refetchEverything(Version.parse(apiVersion));
 
     connectionStatus = ConnectionStatus.connected;
     _connectionStatusStream.add(connectionStatus);
@@ -270,6 +260,27 @@ class ApiConnectionRepository {
       const Duration(seconds: 10),
       reload,
     );
+  }
+
+  Future<void> _refetchEverything(final Version version) async {
+    await _apiData.serverJobs
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.backups
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.backupConfig
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.services
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.volumes
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.recoveryKeyStatus
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.devices
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.users.refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.settings
+        .refetchData(version, () => _dataStream.add(_apiData));
+    print(_apiData.services.data?.length);
   }
 
   Future<void> reload(final Timer? timer) async {
@@ -289,23 +300,7 @@ class ApiConnectionRepository {
       _apiData.apiVersion.data = apiVersion;
     }
     final Version version = Version.parse(apiVersion);
-    await _apiData.serverJobs
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.backups
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.backupConfig
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.services
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.volumes
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.recoveryKeyStatus
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.devices
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.users.refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.settings
-        .refetchData(version, () => _dataStream.add(_apiData));
+    await _refetchEverything(version);
   }
 
   void emitData() {
@@ -392,8 +387,11 @@ class ApiDataElement<T> {
     final Version version,
     final Function callback,
   ) async {
+    print('Refetching data');
     if (VersionConstraint.parse(requiredApiVersion).allows(version)) {
-      if (isExpired) {
+      print('Version is allowed');
+      if (isExpired || _data == null) {
+        print('Data is expired');
         final newData = await fetchData();
         if (T is List) {
           if (Object.hashAll(newData as Iterable<Object?>) !=

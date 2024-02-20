@@ -41,25 +41,34 @@
     },
     "more_page": {
         "configuration_wizard": "Setup wizard",
-        "about_project": "About us",
-        "about_application": "About",
         "onboarding": "Onboarding",
-        "create_ssh_key": "Superuser SSH keys",
-        "console": "Console",
-        "application_settings": "Application settings"
+        "create_ssh_key": "Superuser SSH keys"
     },
     "console_page": {
         "title": "Console",
         "waiting": "Waiting for initialization…",
         "copy": "Copy"
     },
-    "about_us_page": {
-        "title": "About us"
-    },
     "about_application_page": {
-        "title": "About",
-        "application_version_text": "Application version {}",
-        "api_version_text": "Server API version {}",
+        "title": "About & support",
+        "versions": "Versions",
+        "application_version_text": "Application version",
+        "api_version_text": "Server API version",
+        "open_source_licenses": "Open source licenses",
+        "links": "Links",
+        "website": "Our website",
+        "documentation": "Documentation",
+        "matrix_channel": "Matrix channel",
+        "telegram_channel": "Telegram channel",
+        "get_support": "Get support",
+        "matrix_support_chat": "Matrix support chat",
+        "telegram_support_chat": "Telegram support chat",
+        "email_support": "Email support",
+        "contribute": "Contribute",
+        "source_code": "Source code",
+        "help_translate": "Help us translate",
+        "matrix_contributors_chat": "Matrix contributors chat",
+        "telegram_contributors_chat": "Telegram contributors chat",
         "privacy_policy": "Privacy policy"
     },
     "application_settings": {

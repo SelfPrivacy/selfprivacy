@@ -63,12 +63,12 @@ class MorePage extends StatelessWidget {
                     title: 'devices.main_screen.header'.tr(),
                   ),
                 _MoreMenuItem(
-                  title: 'more_page.application_settings'.tr(),
+                  title: 'application_settings.title'.tr(),
                   iconData: Icons.settings_outlined,
                   goTo: () => const AppSettingsRoute(),
                 ),
                 _MoreMenuItem(
-                  title: 'more_page.about_application'.tr(),
+                  title: 'about_application_page.title'.tr(),
                   iconData: BrandIcons.fire,
                   goTo: () => const AboutApplicationRoute(),
                   longGoTo: const DeveloperSettingsRoute(),
@@ -80,7 +80,7 @@ class MorePage extends StatelessWidget {
                     goTo: () => const OnboardingRoute(),
                   ),
                 _MoreMenuItem(
-                  title: 'more_page.console'.tr(),
+                  title: 'console_page.title'.tr(),
                   iconData: BrandIcons.terminal,
                   goTo: () => const ConsoleRoute(),
                 ),

@@ -5,7 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 
@@ -27,8 +26,6 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   StreamSubscription? _apiDataSubscription;
-
-  final ServerApi api = ServerApi();
 
   void _handleServerJobs(final List<ServerJob> jobs) {
     if (state is! JobsStateLoading) {
@@ -66,7 +63,7 @@ class JobsCubit extends Cubit<JobsState> {
           const [],
         ),
       );
-      final rebootResult = await api.reboot();
+      final rebootResult = await getIt<ApiConnectionRepository>().api.reboot();
       if (rebootResult.success && rebootResult.data != null) {
         emit(
           JobsStateFinished(
@@ -136,7 +133,7 @@ class JobsCubit extends Cubit<JobsState> {
           (state as JobsStateLoading)
               .updateJobStatus(job.id, JobStatusEnum.running),
         );
-        final (result, message) = await job.execute(this);
+        final (result, message) = await job.execute();
         if (result) {
           emit(
             (state as JobsStateLoading).updateJobStatus(

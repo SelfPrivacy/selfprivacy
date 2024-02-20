@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -27,7 +26,7 @@ abstract class ClientJob extends Equatable {
   final String? message;
 
   bool canAddTo(final List<ClientJob> jobs) => true;
-  Future<(bool, String)> execute(final JobsCubit cubit);
+  Future<(bool, String)> execute();
 
   @override
   List<Object> get props => [id, title, status];
@@ -50,7 +49,7 @@ class RebuildServerJob extends ClientJob {
       !jobs.any((final job) => job is RebuildServerJob);
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async =>
+  Future<(bool, String)> execute() async =>
       (false, 'unimplemented');
 
   @override
@@ -74,7 +73,7 @@ class UpgradeServerJob extends ClientJob {
       !jobs.any((final job) => job is UpgradeServerJob);
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async =>
+  Future<(bool, String)> execute() async =>
       (false, 'unimplemented');
 
   @override
@@ -101,7 +100,7 @@ class RebootServerJob extends ClientJob {
       !jobs.any((final job) => job is RebootServerJob);
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async =>
+  Future<(bool, String)> execute() async =>
       (false, 'unimplemented');
 
   @override
@@ -127,7 +126,7 @@ class CreateUserJob extends ClientJob {
   final User user;
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async =>
+  Future<(bool, String)> execute() async =>
       getIt<ApiConnectionRepository>().createUser(user);
 
   @override
@@ -157,7 +156,7 @@ class ResetUserPasswordJob extends ClientJob {
   final User user;
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async =>
+  Future<(bool, String)> execute() async =>
       getIt<ApiConnectionRepository>().changeUserPassword(user, user.password!);
 
   @override
@@ -192,7 +191,7 @@ class DeleteUserJob extends ClientJob {
       );
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async =>
+  Future<(bool, String)> execute() async =>
       getIt<ApiConnectionRepository>().deleteUser(user);
 
   @override
@@ -232,8 +231,8 @@ class ServiceToggleJob extends ClientJob {
       );
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async {
-    await cubit.api.switchService(service.id, needToTurnOn);
+  Future<(bool, String)> execute() async {
+    await getIt<ApiConnectionRepository>().api.switchService(service.id, needToTurnOn);
     return (true, 'Check not implemented');
   }
 
@@ -267,7 +266,7 @@ class CreateSSHKeyJob extends ClientJob {
   final String publicKey;
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async =>
+  Future<(bool, String)> execute() async =>
       getIt<ApiConnectionRepository>().addSshKey(user, publicKey);
 
   @override
@@ -308,7 +307,7 @@ class DeleteSSHKeyJob extends ClientJob {
       );
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async =>
+  Future<(bool, String)> execute() async =>
       getIt<ApiConnectionRepository>().deleteSshKey(user, publicKey);
 
   @override
@@ -352,8 +351,8 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
   final bool allowReboot;
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async {
-    await cubit.api.setAutoUpgradeSettings(
+  Future<(bool, String)> execute() async {
+    await getIt<ApiConnectionRepository>().api.setAutoUpgradeSettings(
       AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
     );
     return (true, 'Check not implemented');
@@ -393,7 +392,7 @@ class ChangeServerTimezoneJob extends ReplaceableJob {
   final String timezone;
 
   @override
-  Future<(bool, String)> execute(final JobsCubit cubit) async {
+  Future<(bool, String)> execute() async {
     await getIt<ApiConnectionRepository>().api.setTimezone(timezone);
     return (true, 'Check not implemented');
   }

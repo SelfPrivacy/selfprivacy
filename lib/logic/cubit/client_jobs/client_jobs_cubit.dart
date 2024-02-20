@@ -1,33 +1,55 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/json/server_job.dart';
 
 export 'package:provider/provider.dart';
 
 part 'client_jobs_state.dart';
 
 class JobsCubit extends Cubit<JobsState> {
-  JobsCubit({
-    required this.servicesBloc,
-  }) : super(JobsStateEmpty());
+  JobsCubit() : super(JobsStateEmpty()) {
+    final apiConnectionRepository = getIt<ApiConnectionRepository>();
+    _apiDataSubscription = apiConnectionRepository.dataStream.listen(
+      (final ApiData apiData) {
+        if (apiData.serverJobs.data != null &&
+            apiData.serverJobs.data!.isNotEmpty) {
+          _handleServerJobs(apiData.serverJobs.data!);
+        }
+      },
+    );
+  }
+
+  StreamSubscription? _apiDataSubscription;
 
   final ServerApi api = ServerApi();
-  final ServicesBloc servicesBloc;
 
-  void addJob(final ClientJob job) {
-    final jobs = currentJobList;
-    if (job.canAddTo(jobs)) {
-      _updateJobsState([
-        ...jobs,
-        ...[job],
-      ]);
+  void _handleServerJobs(final List<ServerJob> jobs) {
+    if (state is! JobsStateLoading) {
+      return;
     }
+    if (state.rebuildJobUid == null) {
+      return;
+    }
+    // Find a job with the uid of the rebuild job
+    final ServerJob? rebuildJob = jobs.firstWhereOrNull(
+      (final job) => job.uid == state.rebuildJobUid,
+    );
+    if (rebuildJob == null ||
+        rebuildJob.status == JobStatusEnum.error ||
+        rebuildJob.status == JobStatusEnum.finished) {
+      emit((state as JobsStateLoading).finished());
+    }
+  }
+
+  void addJob(final ClientJob job) async {
+    emit(state.addJob(job));
   }
 
   void removeJob(final String id) {
@@ -35,61 +57,145 @@ class JobsCubit extends Cubit<JobsState> {
     emit(newState);
   }
 
-  List<ClientJob> get currentJobList {
-    final List<ClientJob> jobs = <ClientJob>[];
-    if (state is JobsStateWithJobs) {
-      jobs.addAll((state as JobsStateWithJobs).clientJobList);
-    }
-
-    return jobs;
-  }
-
-  void _updateJobsState(final List<ClientJob> newJobs) {
-    getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
-    emit(JobsStateWithJobs(newJobs));
-  }
-
   Future<void> rebootServer() async {
-    emit(JobsStateLoading());
-    final rebootResult = await api.reboot();
-    if (rebootResult.success && rebootResult.data != null) {
-      getIt<NavigationService>().showSnackBar('jobs.reboot_success'.tr());
-    } else {
-      getIt<NavigationService>().showSnackBar('jobs.reboot_failed'.tr());
+    if (state is JobsStateEmpty) {
+      emit(
+        JobsStateLoading(
+          [RebootServerJob(status: JobStatusEnum.running)],
+          null,
+          const [],
+        ),
+      );
+      final rebootResult = await api.reboot();
+      if (rebootResult.success && rebootResult.data != null) {
+        emit(
+          JobsStateFinished(
+            [
+              RebootServerJob(
+                status: JobStatusEnum.finished,
+                message: rebootResult.message,
+              ),
+            ],
+            null,
+            const [],
+          ),
+        );
+      } else {
+        emit(
+          JobsStateFinished(
+            [RebootServerJob(status: JobStatusEnum.error)],
+            null,
+            const [],
+          ),
+        );
+      }
     }
-    emit(JobsStateEmpty());
   }
 
   Future<void> upgradeServer() async {
-    emit(JobsStateLoading());
-    final bool isPullSuccessful = await api.pullConfigurationUpdate();
-    final bool isSuccessful = await api.upgrade();
-    if (isSuccessful) {
-      if (!isPullSuccessful) {
-        getIt<NavigationService>().showSnackBar('jobs.config_pull_failed'.tr());
+    if (state is JobsStateEmpty) {
+      emit(
+        JobsStateLoading(
+          [UpgradeServerJob(status: JobStatusEnum.running)],
+          null,
+          const [],
+        ),
+      );
+      final result = await getIt<ApiConnectionRepository>().api.upgrade();
+      if (result.success && result.data != null) {
+        emit(
+          JobsStateLoading(
+            [UpgradeServerJob(status: JobStatusEnum.finished)],
+            result.data!.uid,
+            const [],
+          ),
+        );
       } else {
-        getIt<NavigationService>().showSnackBar('jobs.upgrade_success'.tr());
+        emit(
+          JobsStateFinished(
+            [UpgradeServerJob(status: JobStatusEnum.error)],
+            null,
+            const [],
+          ),
+        );
       }
-    } else {
-      getIt<NavigationService>().showSnackBar('jobs.upgrade_failed'.tr());
     }
-    emit(JobsStateEmpty());
   }
 
   Future<void> applyAll() async {
     if (state is JobsStateWithJobs) {
       final List<ClientJob> jobs = (state as JobsStateWithJobs).clientJobList;
-      emit(JobsStateLoading());
+      emit(JobsStateLoading(jobs, null, const []));
+
+      await Future<void>.delayed(Duration.zero);
+
+      final rebuildRequired = jobs.any((final job) => job.requiresRebuild);
 
       for (final ClientJob job in jobs) {
-        job.execute(this);
+        emit(
+          (state as JobsStateLoading)
+              .updateJobStatus(job.id, JobStatusEnum.running),
+        );
+        final (result, message) = await job.execute(this);
+        if (result) {
+          emit(
+            (state as JobsStateLoading).updateJobStatus(
+              job.id,
+              JobStatusEnum.finished,
+              message: message,
+            ),
+          );
+        } else {
+          emit(
+            (state as JobsStateLoading)
+                .updateJobStatus(job.id, JobStatusEnum.error, message: message),
+          );
+        }
       }
 
-      await api.pullConfigurationUpdate();
-      await api.apply();
-      servicesBloc.add(const ServicesReload());
+      if (!rebuildRequired) {
+        emit((state as JobsStateLoading).finished());
+        return;
+      }
+      final rebuildResult = await getIt<ApiConnectionRepository>().api.apply();
+      if (rebuildResult.success) {
+        if (rebuildResult.data != null) {
+          emit(
+            (state as JobsStateLoading)
+                .copyWith(rebuildJobUid: rebuildResult.data!.uid),
+          );
+        } else {
+          emit((state as JobsStateLoading).finished());
+        }
+      } else {
+        emit((state as JobsStateLoading).finished());
+      }
+    }
+  }
 
+  Future<void> acknowledgeFinished() async {
+    if (state is! JobsStateFinished) {
+      return;
+    }
+    final rebuildJobUid = state.rebuildJobUid;
+    if ((state as JobsStateFinished).postponedJobs.isNotEmpty) {
+      emit(JobsStateWithJobs((state as JobsStateFinished).postponedJobs));
+    } else {
       emit(JobsStateEmpty());
     }
+    if (rebuildJobUid != null) {
+      await getIt<ApiConnectionRepository>().removeServerJob(rebuildJobUid);
+    }
+  }
+
+  @override
+  void onChange(final Change<JobsState> change) {
+    super.onChange(change);
+  }
+
+  @override
+  Future<void> close() {
+    _apiDataSubscription?.cancel();
+    return super.close();
   }
 }

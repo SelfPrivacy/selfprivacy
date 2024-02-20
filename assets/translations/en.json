@@ -36,7 +36,8 @@
         "continue": "Continue",
         "alert": "Alert",
         "copied_to_clipboard": "Copied to clipboard!",
-        "please_connect": "Please connect your server, domain and DNS provider to dive in!"
+        "please_connect": "Please connect your server, domain and DNS provider to dive in!",
+        "network_error": "Network error"
     },
     "more_page": {
         "configuration_wizard": "Setup wizard",
@@ -394,7 +395,8 @@
         "could_not_add_ssh_key": "Couldn't add SSH key",
         "username_rule": "Username must contain only lowercase latin letters, digits and underscores, should not start with a digit",
         "email_login": "Email login",
-        "no_ssh_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon."
+        "no_ssh_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon.",
+        "user_already_exists": "User with such username already exists"
     },
     "initializing": {
         "server_provider_description": "A place where your data and SelfPrivacy services will reside:",
@@ -594,6 +596,7 @@
         "service_turn_off": "Turn off",
         "service_turn_on": "Turn on",
         "job_added": "Job added",
+        "job_postponed": "Job added, but you will be able to launch it after current jobs are finished",
         "run_jobs": "Run jobs",
         "reboot_success": "Server is rebooting",
         "reboot_failed": "Couldn't reboot the server. Check the app logs.",
@@ -606,7 +609,11 @@
         "delete_ssh_key": "Delete SSH key for {}",
         "server_jobs": "Jobs on the server",
         "reset_user_password": "Reset password of user",
-        "generic_error": "Couldn't connect to the server!"
+        "generic_error": "Couldn't connect to the server!",
+        "rebuild_system": "Rebuild system",
+        "start_server_upgrade": "Start the server upgrade",
+        "change_auto_upgrade_settings": "Change auto-upgrade settings",
+        "change_server_timezone": "Change server timezone"
     },
     "validations": {
         "required": "Required",

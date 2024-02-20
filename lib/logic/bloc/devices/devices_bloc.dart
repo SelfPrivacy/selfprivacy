@@ -24,8 +24,6 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
     _apiDataSubscription = apiConnectionRepository.dataStream.listen(
       (final ApiData apiData) {
-        print('============');
-        print(apiData.devices.data);
         add(
           DevicesListChanged(apiData.devices.data),
         );
@@ -42,7 +40,6 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     if (state is DevicesDeleting) {
       return;
     }
-    print(event.devices);
     if (event.devices == null) {
       emit(DevicesError());
       return;
@@ -103,7 +100,6 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   @override
   void onChange(final Change<DevicesState> change) {
     super.onChange(change);
-    print(change);
   }
 
   @override

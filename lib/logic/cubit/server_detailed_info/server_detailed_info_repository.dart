@@ -40,20 +40,6 @@ class ServerDetailsRepository {
 
     return data;
   }
-
-  Future<void> setAutoUpgradeSettings(
-    final AutoUpgradeSettings settings,
-  ) async {
-    await server.setAutoUpgradeSettings(settings);
-  }
-
-  Future<void> setTimezone(
-    final String timezone,
-  ) async {
-    if (timezone.isNotEmpty) {
-      await server.setTimezone(timezone);
-    }
-  }
 }
 
 class ServerDetailsRepositoryDto {

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +7,6 @@ import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
@@ -18,6 +18,32 @@ class JobsContent extends StatelessWidget {
   });
 
   final ScrollController controller;
+
+  IconData _getIcon(final JobStatusEnum status) {
+    switch (status) {
+      case JobStatusEnum.created:
+        return Icons.query_builder_outlined;
+      case JobStatusEnum.running:
+        return Icons.pending_outlined;
+      case JobStatusEnum.finished:
+        return Icons.check_circle_outline;
+      case JobStatusEnum.error:
+        return Icons.error_outline;
+    }
+  }
+
+  Color _getColor(final JobStatusEnum status, final BuildContext context) {
+    switch (status) {
+      case JobStatusEnum.created:
+        return Theme.of(context).colorScheme.secondary;
+      case JobStatusEnum.running:
+        return Theme.of(context).colorScheme.tertiary;
+      case JobStatusEnum.finished:
+        return Theme.of(context).colorScheme.primary;
+      case JobStatusEnum.error:
+        return Theme.of(context).colorScheme.error;
+    }
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -68,8 +94,274 @@ class JobsContent extends StatelessWidget {
           }
         } else if (state is JobsStateLoading) {
           widgets = [
-            const SizedBox(height: 80),
-            BrandLoader.horizontal(),
+            ...state.clientJobList.map(
+              (final j) => Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      _getIcon(j.status),
+                      color: _getColor(j.status, context),
+                    ),
+                  ),
+                  Expanded(
+                    child: Card(
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 10,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              j.title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                            ),
+                            if (j.message != null)
+                              Text(
+                                j.message!,
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (state.rebuildRequired)
+              Builder(
+                builder: (final context) {
+                  final rebuildJob = serverJobs.firstWhereOrNull(
+                    (final job) => job.uid == state.rebuildJobUid,
+                  );
+                  return Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          _getIcon(rebuildJob?.status ?? JobStatusEnum.created),
+                          color: _getColor(
+                            rebuildJob?.status ?? JobStatusEnum.created,
+                            context,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Card(
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 10,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  rebuildJob?.name ??
+                                      'jobs.rebuild_system'.tr(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
+                                ),
+                                if (rebuildJob?.description != null)
+                                  Text(
+                                    rebuildJob!.description,
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall,
+                                  ),
+                                const SizedBox(height: 8),
+                                LinearProgressIndicator(
+                                  value: rebuildJob?.progress == null
+                                      ? 0.0
+                                      : ((rebuildJob!.progress ?? 0) < 1)
+                                          ? null
+                                          : rebuildJob.progress! / 100.0,
+                                  color: _getColor(
+                                    rebuildJob?.status ?? JobStatusEnum.created,
+                                    context,
+                                  ),
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .surfaceVariant,
+                                  minHeight: 7.0,
+                                  borderRadius: BorderRadius.circular(7.0),
+                                ),
+                                const SizedBox(height: 8),
+                                if (rebuildJob?.error != null ||
+                                    rebuildJob?.result != null ||
+                                    rebuildJob?.statusText != null)
+                                  Text(
+                                    rebuildJob?.error ??
+                                        rebuildJob?.result ??
+                                        rebuildJob?.statusText ??
+                                        '',
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+          ];
+        } else if (state is JobsStateFinished) {
+          widgets = [
+            ...state.clientJobList.map(
+              (final j) => Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      _getIcon(j.status),
+                      color: _getColor(j.status, context),
+                    ),
+                  ),
+                  Expanded(
+                    child: Card(
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 10,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              j.title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                            ),
+                            if (j.message != null)
+                              Text(
+                                j.message!,
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (state.rebuildRequired)
+              Builder(
+                builder: (final context) {
+                  final rebuildJob = serverJobs.firstWhereOrNull(
+                    (final job) => job.uid == state.rebuildJobUid,
+                  );
+                  if (rebuildJob == null) {
+                    return const SizedBox();
+                  }
+                  return Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          _getIcon(rebuildJob.status),
+                          color: _getColor(
+                            rebuildJob.status,
+                            context,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Card(
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 10,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  rebuildJob.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
+                                ),
+                                Text(
+                                  rebuildJob.description,
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                ),
+                                const SizedBox(height: 8),
+                                LinearProgressIndicator(
+                                  value: rebuildJob.progress == null
+                                      ? 0.0
+                                      : ((rebuildJob.progress ?? 0) < 1)
+                                          ? null
+                                          : rebuildJob.progress! / 100.0,
+                                  color: _getColor(
+                                    rebuildJob.status,
+                                    context,
+                                  ),
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .surfaceVariant,
+                                  minHeight: 7.0,
+                                  borderRadius: BorderRadius.circular(7.0),
+                                ),
+                                const SizedBox(height: 8),
+                                if (rebuildJob.error != null ||
+                                    rebuildJob.result != null ||
+                                    rebuildJob.statusText != null)
+                                  Text(
+                                    rebuildJob.error ??
+                                        rebuildJob.result ??
+                                        rebuildJob.statusText ??
+                                        '',
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            const SizedBox(height: 16),
+            BrandButton.rised(
+              onPressed: () => context.read<JobsCubit>().acknowledgeFinished(),
+              text: 'basis.done'.tr(),
+            ),
           ];
         } else if (state is JobsStateWithJobs) {
           widgets = [
@@ -84,19 +376,31 @@ class JobsContent extends StatelessWidget {
                           horizontal: 15,
                           vertical: 10,
                         ),
-                        child: Text(
-                          j.title,
-                          style:
-                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              j.title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurfaceVariant,
                                   ),
+                            ),
+                            if (j.message != null)
+                              Text(
+                                j.message!,
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
@@ -116,7 +420,7 @@ class JobsContent extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             BrandButton.rised(
               onPressed: () => context.read<JobsCubit>().applyAll(),
               text: 'jobs.start'.tr(),
@@ -161,23 +465,25 @@ class JobsContent extends StatelessWidget {
                   ],
                 ),
               ),
-            ...serverJobs.map(
-              (final job) => Dismissible(
-                key: ValueKey(job.uid),
-                direction: job.status == JobStatusEnum.finished ||
-                        job.status == JobStatusEnum.error
-                    ? DismissDirection.horizontal
-                    : DismissDirection.none,
-                child: ServerJobCard(
-                  serverJob: job,
+            ...serverJobs
+                .whereNot((final job) => job.uid == state.rebuildJobUid)
+                .map(
+                  (final job) => Dismissible(
+                    key: ValueKey(job.uid),
+                    direction: job.status == JobStatusEnum.finished ||
+                            job.status == JobStatusEnum.error
+                        ? DismissDirection.horizontal
+                        : DismissDirection.none,
+                    child: ServerJobCard(
+                      serverJob: job,
+                    ),
+                    onDismissed: (final direction) {
+                      context.read<ServerJobsBloc>().add(
+                            RemoveServerJob(job.uid),
+                          );
+                    },
+                  ),
                 ),
-                onDismissed: (final direction) {
-                  context.read<ServerJobsBloc>().add(
-                        RemoveServerJob(job.uid),
-                      );
-                },
-              ),
-            ),
             const SizedBox(height: 24),
           ],
         );

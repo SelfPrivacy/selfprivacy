@@ -52,6 +52,14 @@ mutation RunSystemRebuild {
   }
 }
 
+mutation RunSystemRebuildFallback {
+  system {
+    runSystemRebuild {
+      ...basicMutationReturnFields
+    }
+  }
+}
+
 mutation RunSystemRollback {
   system {
     runSystemRollback {
@@ -67,6 +75,14 @@ mutation RunSystemUpgrade {
       job {
         ...basicApiJobsFields
       }
+    }
+  }
+}
+
+mutation RunSystemUpgradeFallback {
+  system {
+    runSystemUpgrade {
+      ...basicMutationReturnFields
     }
   }
 }

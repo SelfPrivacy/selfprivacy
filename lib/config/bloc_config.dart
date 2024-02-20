@@ -104,9 +104,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
         ),
         BlocProvider(create: (final _) => volumesBloc),
         BlocProvider(
-          create: (final _) => JobsCubit(
-            servicesBloc: servicesBloc,
-          ),
+          create: (final _) => JobsCubit(),
         ),
       ],
       child: widget.child,

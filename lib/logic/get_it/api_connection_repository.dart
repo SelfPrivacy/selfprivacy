@@ -70,45 +70,41 @@ class ApiConnectionRepository {
     );
   }
 
-  Future<void> createUser(final User user) async {
+  Future<(bool, String)> createUser(final User user) async {
     final List<User>? loadedUsers = _apiData.users.data;
     if (loadedUsers == null) {
-      return;
+      return (false, 'basis.network_error'.tr());
     }
     // If user exists on server, do nothing
     if (loadedUsers
         .any((final User u) => u.login == user.login && u.isFoundOnServer)) {
-      return;
+      return (false, 'users.user_already_exists'.tr());
     }
     final String? password = user.password;
     if (password == null) {
-      getIt<NavigationService>()
-          .showSnackBar('users.could_not_create_user'.tr());
-      return;
+      return (false, 'users.could_not_create_user'.tr());
     }
     // If API returned error, do nothing
     final GenericResult<User?> result =
         await api.createUser(user.login, password);
     if (result.data == null) {
-      getIt<NavigationService>()
-          .showSnackBar(result.message ?? 'users.could_not_create_user'.tr());
-      return;
+      return (false, result.message ?? 'users.could_not_create_user'.tr());
     }
 
     _apiData.users.data?.add(result.data!);
     _apiData.users.invalidate();
+
+    return (true, result.message ?? 'basis.done'.tr());
   }
 
-  Future<void> deleteUser(final User user) async {
+  Future<(bool, String)> deleteUser(final User user) async {
     final List<User>? loadedUsers = _apiData.users.data;
     if (loadedUsers == null) {
-      return;
+      return (false, 'basis.network_error'.tr());
     }
     // If user is primary or root, don't delete
     if (user.type != UserType.normal) {
-      getIt<NavigationService>()
-          .showSnackBar('users.could_not_delete_user'.tr());
-      return;
+      return (false, 'users.could_not_delete_user'.tr());
     }
     final GenericResult result = await api.deleteUser(user.login);
     if (result.success && result.data) {
@@ -117,19 +113,18 @@ class ApiConnectionRepository {
     }
 
     if (!result.success || !result.data) {
-      getIt<NavigationService>()
-          .showSnackBar(result.message ?? 'jobs.generic_error'.tr());
+      return (false, result.message ?? 'jobs.generic_error'.tr());
     }
+
+    return (true, result.message ?? 'basis.done'.tr());
   }
 
-  Future<void> changeUserPassword(
+  Future<(bool, String)> changeUserPassword(
     final User user,
     final String newPassword,
   ) async {
     if (user.type == UserType.root) {
-      getIt<NavigationService>()
-          .showSnackBar('users.could_not_change_password'.tr());
-      return;
+      return (false, 'users.could_not_change_password'.tr());
     }
     final GenericResult<User?> result = await api.updateUser(
       user.login,
@@ -139,13 +134,21 @@ class ApiConnectionRepository {
       getIt<NavigationService>().showSnackBar(
         result.message ?? 'users.could_not_change_password'.tr(),
       );
+      return (
+        false,
+        result.message ?? 'users.could_not_change_password'.tr(),
+      );
     }
+    return (true, result.message ?? 'basis.done'.tr());
   }
 
-  Future<void> addSshKey(final User user, final String publicKey) async {
+  Future<(bool, String)> addSshKey(
+    final User user,
+    final String publicKey,
+  ) async {
     final List<User>? loadedUsers = _apiData.users.data;
     if (loadedUsers == null) {
-      return;
+      return (false, 'basis.network_error'.tr());
     }
     final GenericResult<User?> result =
         await api.addSshKey(user.login, publicKey);
@@ -156,15 +159,19 @@ class ApiConnectionRepository {
       loadedUsers[index] = updatedUser;
       _apiData.users.invalidate();
     } else {
-      getIt<NavigationService>()
-          .showSnackBar(result.message ?? 'users.could_not_add_ssh_key'.tr());
+      return (false, result.message ?? 'users.could_not_add_ssh_key'.tr());
     }
+
+    return (true, result.message ?? 'basis.done'.tr());
   }
 
-  Future<void> deleteSshKey(final User user, final String publicKey) async {
+  Future<(bool, String)> deleteSshKey(
+    final User user,
+    final String publicKey,
+  ) async {
     final List<User>? loadedUsers = _apiData.users.data;
     if (loadedUsers == null) {
-      return;
+      return (false, 'basis.network_error'.tr());
     }
     final GenericResult<User?> result =
         await api.removeSshKey(user.login, publicKey);
@@ -175,9 +182,9 @@ class ApiConnectionRepository {
       loadedUsers[index] = updatedUser;
       _apiData.users.invalidate();
     } else {
-      getIt<NavigationService>()
-          .showSnackBar(result.message ?? 'jobs.generic_error'.tr());
+      return (false, result.message ?? 'jobs.generic_error'.tr());
     }
+    return (true, result.message ?? 'basis.done'.tr());
   }
 
   void dispose() {
@@ -345,11 +352,8 @@ class ApiDataElement<T> {
     final Function callback,
   ) async {
     if (VersionConstraint.parse(requiredApiVersion).allows(version)) {
-      print('Fetching data for $runtimeType');
       if (isExpired) {
-        print('Data is expired');
         final newData = await fetchData();
-        print(newData);
         if (T is List) {
           if (Object.hashAll(newData as Iterable<Object?>) !=
               Object.hashAll(_data as Iterable<Object?>)) {

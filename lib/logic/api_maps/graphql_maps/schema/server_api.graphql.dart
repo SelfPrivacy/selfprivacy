@@ -5174,6 +5174,620 @@ class _CopyWithStubImpl$Mutation$RunSystemRebuild$system$runSystemRebuild<TRes>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }
 
+class Mutation$RunSystemRebuildFallback {
+  Mutation$RunSystemRebuildFallback({
+    required this.system,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$RunSystemRebuildFallback.fromJson(
+      Map<String, dynamic> json) {
+    final l$system = json['system'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RunSystemRebuildFallback(
+      system: Mutation$RunSystemRebuildFallback$system.fromJson(
+          (l$system as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RunSystemRebuildFallback$system system;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$system = system;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$system,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RunSystemRebuildFallback) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RunSystemRebuildFallback
+    on Mutation$RunSystemRebuildFallback {
+  CopyWith$Mutation$RunSystemRebuildFallback<Mutation$RunSystemRebuildFallback>
+      get copyWith => CopyWith$Mutation$RunSystemRebuildFallback(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RunSystemRebuildFallback<TRes> {
+  factory CopyWith$Mutation$RunSystemRebuildFallback(
+    Mutation$RunSystemRebuildFallback instance,
+    TRes Function(Mutation$RunSystemRebuildFallback) then,
+  ) = _CopyWithImpl$Mutation$RunSystemRebuildFallback;
+
+  factory CopyWith$Mutation$RunSystemRebuildFallback.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRebuildFallback;
+
+  TRes call({
+    Mutation$RunSystemRebuildFallback$system? system,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RunSystemRebuildFallback$system<TRes> get system;
+}
+
+class _CopyWithImpl$Mutation$RunSystemRebuildFallback<TRes>
+    implements CopyWith$Mutation$RunSystemRebuildFallback<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRebuildFallback(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RunSystemRebuildFallback _instance;
+
+  final TRes Function(Mutation$RunSystemRebuildFallback) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? system = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RunSystemRebuildFallback(
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$RunSystemRebuildFallback$system),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RunSystemRebuildFallback$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$RunSystemRebuildFallback$system(
+        local$system, (e) => call(system: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemRebuildFallback<TRes>
+    implements CopyWith$Mutation$RunSystemRebuildFallback<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRebuildFallback(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RunSystemRebuildFallback$system? system,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RunSystemRebuildFallback$system<TRes> get system =>
+      CopyWith$Mutation$RunSystemRebuildFallback$system.stub(_res);
+}
+
+const documentNodeMutationRunSystemRebuildFallback = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'RunSystemRebuildFallback'),
+    variableDefinitions: [],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'system'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'runSystemRebuild'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitionbasicMutationReturnFields,
+]);
+Mutation$RunSystemRebuildFallback _parserFn$Mutation$RunSystemRebuildFallback(
+        Map<String, dynamic> data) =>
+    Mutation$RunSystemRebuildFallback.fromJson(data);
+typedef OnMutationCompleted$Mutation$RunSystemRebuildFallback = FutureOr<void>
+    Function(
+  Map<String, dynamic>?,
+  Mutation$RunSystemRebuildFallback?,
+);
+
+class Options$Mutation$RunSystemRebuildFallback
+    extends graphql.MutationOptions<Mutation$RunSystemRebuildFallback> {
+  Options$Mutation$RunSystemRebuildFallback({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$RunSystemRebuildFallback? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$RunSystemRebuildFallback? onCompleted,
+    graphql.OnMutationUpdate<Mutation$RunSystemRebuildFallback>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$RunSystemRebuildFallback(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationRunSystemRebuildFallback,
+          parserFn: _parserFn$Mutation$RunSystemRebuildFallback,
+        );
+
+  final OnMutationCompleted$Mutation$RunSystemRebuildFallback?
+      onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$RunSystemRebuildFallback
+    extends graphql.WatchQueryOptions<Mutation$RunSystemRebuildFallback> {
+  WatchOptions$Mutation$RunSystemRebuildFallback({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$RunSystemRebuildFallback? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationRunSystemRebuildFallback,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$RunSystemRebuildFallback,
+        );
+}
+
+extension ClientExtension$Mutation$RunSystemRebuildFallback
+    on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$RunSystemRebuildFallback>>
+      mutate$RunSystemRebuildFallback(
+              [Options$Mutation$RunSystemRebuildFallback? options]) async =>
+          await this
+              .mutate(options ?? Options$Mutation$RunSystemRebuildFallback());
+  graphql.ObservableQuery<Mutation$RunSystemRebuildFallback>
+      watchMutation$RunSystemRebuildFallback(
+              [WatchOptions$Mutation$RunSystemRebuildFallback? options]) =>
+          this.watchMutation(
+              options ?? WatchOptions$Mutation$RunSystemRebuildFallback());
+}
+
+class Mutation$RunSystemRebuildFallback$system {
+  Mutation$RunSystemRebuildFallback$system({
+    required this.runSystemRebuild,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$RunSystemRebuildFallback$system.fromJson(
+      Map<String, dynamic> json) {
+    final l$runSystemRebuild = json['runSystemRebuild'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RunSystemRebuildFallback$system(
+      runSystemRebuild:
+          Mutation$RunSystemRebuildFallback$system$runSystemRebuild.fromJson(
+              (l$runSystemRebuild as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RunSystemRebuildFallback$system$runSystemRebuild
+      runSystemRebuild;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$runSystemRebuild = runSystemRebuild;
+    _resultData['runSystemRebuild'] = l$runSystemRebuild.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$runSystemRebuild = runSystemRebuild;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$runSystemRebuild,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RunSystemRebuildFallback$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$runSystemRebuild = runSystemRebuild;
+    final lOther$runSystemRebuild = other.runSystemRebuild;
+    if (l$runSystemRebuild != lOther$runSystemRebuild) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RunSystemRebuildFallback$system
+    on Mutation$RunSystemRebuildFallback$system {
+  CopyWith$Mutation$RunSystemRebuildFallback$system<
+          Mutation$RunSystemRebuildFallback$system>
+      get copyWith => CopyWith$Mutation$RunSystemRebuildFallback$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RunSystemRebuildFallback$system<TRes> {
+  factory CopyWith$Mutation$RunSystemRebuildFallback$system(
+    Mutation$RunSystemRebuildFallback$system instance,
+    TRes Function(Mutation$RunSystemRebuildFallback$system) then,
+  ) = _CopyWithImpl$Mutation$RunSystemRebuildFallback$system;
+
+  factory CopyWith$Mutation$RunSystemRebuildFallback$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRebuildFallback$system;
+
+  TRes call({
+    Mutation$RunSystemRebuildFallback$system$runSystemRebuild? runSystemRebuild,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild<TRes>
+      get runSystemRebuild;
+}
+
+class _CopyWithImpl$Mutation$RunSystemRebuildFallback$system<TRes>
+    implements CopyWith$Mutation$RunSystemRebuildFallback$system<TRes> {
+  _CopyWithImpl$Mutation$RunSystemRebuildFallback$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RunSystemRebuildFallback$system _instance;
+
+  final TRes Function(Mutation$RunSystemRebuildFallback$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? runSystemRebuild = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RunSystemRebuildFallback$system(
+        runSystemRebuild: runSystemRebuild == _undefined ||
+                runSystemRebuild == null
+            ? _instance.runSystemRebuild
+            : (runSystemRebuild
+                as Mutation$RunSystemRebuildFallback$system$runSystemRebuild),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild<TRes>
+      get runSystemRebuild {
+    final local$runSystemRebuild = _instance.runSystemRebuild;
+    return CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild(
+        local$runSystemRebuild, (e) => call(runSystemRebuild: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemRebuildFallback$system<TRes>
+    implements CopyWith$Mutation$RunSystemRebuildFallback$system<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRebuildFallback$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RunSystemRebuildFallback$system$runSystemRebuild? runSystemRebuild,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild<TRes>
+      get runSystemRebuild =>
+          CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild
+              .stub(_res);
+}
+
+class Mutation$RunSystemRebuildFallback$system$runSystemRebuild
+    implements Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
+  Mutation$RunSystemRebuildFallback$system$runSystemRebuild({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericJobMutationReturn',
+  });
+
+  factory Mutation$RunSystemRebuildFallback$system$runSystemRebuild.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RunSystemRebuildFallback$system$runSystemRebuild(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RunSystemRebuildFallback$system$runSystemRebuild) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RunSystemRebuildFallback$system$runSystemRebuild
+    on Mutation$RunSystemRebuildFallback$system$runSystemRebuild {
+  CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild<
+          Mutation$RunSystemRebuildFallback$system$runSystemRebuild>
+      get copyWith =>
+          CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild<
+    TRes> {
+  factory CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild(
+    Mutation$RunSystemRebuildFallback$system$runSystemRebuild instance,
+    TRes Function(Mutation$RunSystemRebuildFallback$system$runSystemRebuild)
+        then,
+  ) = _CopyWithImpl$Mutation$RunSystemRebuildFallback$system$runSystemRebuild;
+
+  factory CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemRebuildFallback$system$runSystemRebuild;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Mutation$RunSystemRebuildFallback$system$runSystemRebuild<
+        TRes>
+    implements
+        CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild<
+            TRes> {
+  _CopyWithImpl$Mutation$RunSystemRebuildFallback$system$runSystemRebuild(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RunSystemRebuildFallback$system$runSystemRebuild _instance;
+
+  final TRes Function(Mutation$RunSystemRebuildFallback$system$runSystemRebuild)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RunSystemRebuildFallback$system$runSystemRebuild(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemRebuildFallback$system$runSystemRebuild<
+        TRes>
+    implements
+        CopyWith$Mutation$RunSystemRebuildFallback$system$runSystemRebuild<
+            TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemRebuildFallback$system$runSystemRebuild(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
 class Mutation$RunSystemRollback {
   Mutation$RunSystemRollback({
     required this.system,
@@ -6427,6 +7041,620 @@ class _CopyWithStubImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
 
   CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
+}
+
+class Mutation$RunSystemUpgradeFallback {
+  Mutation$RunSystemUpgradeFallback({
+    required this.system,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$RunSystemUpgradeFallback.fromJson(
+      Map<String, dynamic> json) {
+    final l$system = json['system'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RunSystemUpgradeFallback(
+      system: Mutation$RunSystemUpgradeFallback$system.fromJson(
+          (l$system as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RunSystemUpgradeFallback$system system;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$system = system;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$system,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RunSystemUpgradeFallback) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RunSystemUpgradeFallback
+    on Mutation$RunSystemUpgradeFallback {
+  CopyWith$Mutation$RunSystemUpgradeFallback<Mutation$RunSystemUpgradeFallback>
+      get copyWith => CopyWith$Mutation$RunSystemUpgradeFallback(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RunSystemUpgradeFallback<TRes> {
+  factory CopyWith$Mutation$RunSystemUpgradeFallback(
+    Mutation$RunSystemUpgradeFallback instance,
+    TRes Function(Mutation$RunSystemUpgradeFallback) then,
+  ) = _CopyWithImpl$Mutation$RunSystemUpgradeFallback;
+
+  factory CopyWith$Mutation$RunSystemUpgradeFallback.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemUpgradeFallback;
+
+  TRes call({
+    Mutation$RunSystemUpgradeFallback$system? system,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RunSystemUpgradeFallback$system<TRes> get system;
+}
+
+class _CopyWithImpl$Mutation$RunSystemUpgradeFallback<TRes>
+    implements CopyWith$Mutation$RunSystemUpgradeFallback<TRes> {
+  _CopyWithImpl$Mutation$RunSystemUpgradeFallback(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RunSystemUpgradeFallback _instance;
+
+  final TRes Function(Mutation$RunSystemUpgradeFallback) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? system = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RunSystemUpgradeFallback(
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$RunSystemUpgradeFallback$system),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RunSystemUpgradeFallback$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$RunSystemUpgradeFallback$system(
+        local$system, (e) => call(system: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemUpgradeFallback<TRes>
+    implements CopyWith$Mutation$RunSystemUpgradeFallback<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemUpgradeFallback(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RunSystemUpgradeFallback$system? system,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RunSystemUpgradeFallback$system<TRes> get system =>
+      CopyWith$Mutation$RunSystemUpgradeFallback$system.stub(_res);
+}
+
+const documentNodeMutationRunSystemUpgradeFallback = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'RunSystemUpgradeFallback'),
+    variableDefinitions: [],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'system'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'runSystemUpgrade'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitionbasicMutationReturnFields,
+]);
+Mutation$RunSystemUpgradeFallback _parserFn$Mutation$RunSystemUpgradeFallback(
+        Map<String, dynamic> data) =>
+    Mutation$RunSystemUpgradeFallback.fromJson(data);
+typedef OnMutationCompleted$Mutation$RunSystemUpgradeFallback = FutureOr<void>
+    Function(
+  Map<String, dynamic>?,
+  Mutation$RunSystemUpgradeFallback?,
+);
+
+class Options$Mutation$RunSystemUpgradeFallback
+    extends graphql.MutationOptions<Mutation$RunSystemUpgradeFallback> {
+  Options$Mutation$RunSystemUpgradeFallback({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$RunSystemUpgradeFallback? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$RunSystemUpgradeFallback? onCompleted,
+    graphql.OnMutationUpdate<Mutation$RunSystemUpgradeFallback>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$RunSystemUpgradeFallback(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationRunSystemUpgradeFallback,
+          parserFn: _parserFn$Mutation$RunSystemUpgradeFallback,
+        );
+
+  final OnMutationCompleted$Mutation$RunSystemUpgradeFallback?
+      onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$RunSystemUpgradeFallback
+    extends graphql.WatchQueryOptions<Mutation$RunSystemUpgradeFallback> {
+  WatchOptions$Mutation$RunSystemUpgradeFallback({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$RunSystemUpgradeFallback? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationRunSystemUpgradeFallback,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$RunSystemUpgradeFallback,
+        );
+}
+
+extension ClientExtension$Mutation$RunSystemUpgradeFallback
+    on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$RunSystemUpgradeFallback>>
+      mutate$RunSystemUpgradeFallback(
+              [Options$Mutation$RunSystemUpgradeFallback? options]) async =>
+          await this
+              .mutate(options ?? Options$Mutation$RunSystemUpgradeFallback());
+  graphql.ObservableQuery<Mutation$RunSystemUpgradeFallback>
+      watchMutation$RunSystemUpgradeFallback(
+              [WatchOptions$Mutation$RunSystemUpgradeFallback? options]) =>
+          this.watchMutation(
+              options ?? WatchOptions$Mutation$RunSystemUpgradeFallback());
+}
+
+class Mutation$RunSystemUpgradeFallback$system {
+  Mutation$RunSystemUpgradeFallback$system({
+    required this.runSystemUpgrade,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$RunSystemUpgradeFallback$system.fromJson(
+      Map<String, dynamic> json) {
+    final l$runSystemUpgrade = json['runSystemUpgrade'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RunSystemUpgradeFallback$system(
+      runSystemUpgrade:
+          Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade.fromJson(
+              (l$runSystemUpgrade as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade
+      runSystemUpgrade;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$runSystemUpgrade = runSystemUpgrade;
+    _resultData['runSystemUpgrade'] = l$runSystemUpgrade.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$runSystemUpgrade = runSystemUpgrade;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$runSystemUpgrade,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RunSystemUpgradeFallback$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$runSystemUpgrade = runSystemUpgrade;
+    final lOther$runSystemUpgrade = other.runSystemUpgrade;
+    if (l$runSystemUpgrade != lOther$runSystemUpgrade) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RunSystemUpgradeFallback$system
+    on Mutation$RunSystemUpgradeFallback$system {
+  CopyWith$Mutation$RunSystemUpgradeFallback$system<
+          Mutation$RunSystemUpgradeFallback$system>
+      get copyWith => CopyWith$Mutation$RunSystemUpgradeFallback$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RunSystemUpgradeFallback$system<TRes> {
+  factory CopyWith$Mutation$RunSystemUpgradeFallback$system(
+    Mutation$RunSystemUpgradeFallback$system instance,
+    TRes Function(Mutation$RunSystemUpgradeFallback$system) then,
+  ) = _CopyWithImpl$Mutation$RunSystemUpgradeFallback$system;
+
+  factory CopyWith$Mutation$RunSystemUpgradeFallback$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemUpgradeFallback$system;
+
+  TRes call({
+    Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade? runSystemUpgrade,
+    String? $__typename,
+  });
+  CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade<TRes>
+      get runSystemUpgrade;
+}
+
+class _CopyWithImpl$Mutation$RunSystemUpgradeFallback$system<TRes>
+    implements CopyWith$Mutation$RunSystemUpgradeFallback$system<TRes> {
+  _CopyWithImpl$Mutation$RunSystemUpgradeFallback$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RunSystemUpgradeFallback$system _instance;
+
+  final TRes Function(Mutation$RunSystemUpgradeFallback$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? runSystemUpgrade = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RunSystemUpgradeFallback$system(
+        runSystemUpgrade: runSystemUpgrade == _undefined ||
+                runSystemUpgrade == null
+            ? _instance.runSystemUpgrade
+            : (runSystemUpgrade
+                as Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade<TRes>
+      get runSystemUpgrade {
+    final local$runSystemUpgrade = _instance.runSystemUpgrade;
+    return CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade(
+        local$runSystemUpgrade, (e) => call(runSystemUpgrade: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemUpgradeFallback$system<TRes>
+    implements CopyWith$Mutation$RunSystemUpgradeFallback$system<TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemUpgradeFallback$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade? runSystemUpgrade,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade<TRes>
+      get runSystemUpgrade =>
+          CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade
+              .stub(_res);
+}
+
+class Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade
+    implements Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
+  Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericJobMutationReturn',
+  });
+
+  factory Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade
+    on Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade {
+  CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade<
+          Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade>
+      get copyWith =>
+          CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade<
+    TRes> {
+  factory CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade(
+    Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade instance,
+    TRes Function(Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade)
+        then,
+  ) = _CopyWithImpl$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade;
+
+  factory CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade<
+        TRes>
+    implements
+        CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade<
+            TRes> {
+  _CopyWithImpl$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade _instance;
+
+  final TRes Function(Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade<
+        TRes>
+    implements
+        CopyWith$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade<
+            TRes> {
+  _CopyWithStubImpl$Mutation$RunSystemUpgradeFallback$system$runSystemUpgrade(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  }) =>
+      _res;
 }
 
 class Mutation$PullRepositoryChanges {

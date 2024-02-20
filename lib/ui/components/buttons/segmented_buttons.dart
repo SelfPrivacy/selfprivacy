@@ -46,41 +46,57 @@ class SegmentedButtons extends StatelessWidget {
           color: Theme.of(context).colorScheme.onSurface,
           isSelected: isSelected,
           onPressed: onPressed,
-          children: titles.asMap().entries.map((final entry) {
-            final index = entry.key;
-            final title = entry.value;
-            return Stack(
-              alignment: Alignment.centerLeft,
-              children: [
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: isSelected[index] ? 1 : 0,
-                  child: AnimatedScale(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeInOutCubicEmphasized,
-                    alignment: Alignment.centerLeft,
-                    scale: isSelected[index] ? 1 : 0,
-                    child: Icon(
-                      Icons.check,
-                      size: 18,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    ),
-                  ),
-                ),
-                AnimatedPadding(
-                  padding: isSelected[index]
-                      ? const EdgeInsets.only(left: 24)
-                      : EdgeInsets.zero,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOutCubicEmphasized,
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ),
-              ],
-            );
-          }).toList(),
+          children: [
+            for (int i = 0; i < titles.length; i++)
+              _ButtonSegment(
+                key: ValueKey(i),
+                isSelected: isSelected[i],
+                title: titles[i],
+              ),
+          ],
         ),
+      );
+}
+
+class _ButtonSegment extends StatelessWidget {
+  const _ButtonSegment({
+    required this.isSelected,
+    required this.title,
+    super.key,
+  });
+
+  final bool isSelected;
+  final String title;
+
+  @override
+  Widget build(final BuildContext context) => Stack(
+        alignment: Alignment.centerLeft,
+        children: [
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 200),
+            opacity: isSelected ? 1 : 0,
+            child: AnimatedScale(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOutCubicEmphasized,
+              alignment: Alignment.centerLeft,
+              scale: isSelected ? 1 : 0,
+              child: Icon(
+                Icons.check,
+                size: 18,
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+            ),
+          ),
+          AnimatedPadding(
+            padding:
+                isSelected ? const EdgeInsets.only(left: 24) : EdgeInsets.zero,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOutCubicEmphasized,
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+          ),
+        ],
       );
 }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,9 +18,15 @@ class AboutApplicationPage extends StatelessWidget {
   Widget build(final BuildContext context) {
     IconData getPlatformIcon() {
       if (Platform.isAndroid) {
-        return Icons.phone_android_outlined;
+        if (Breakpoints.small.isActive(context)) {
+          return Icons.phone_android_outlined;
+        }
+        return Icons.tablet_android_outlined;
       } else if (Platform.isIOS) {
-        return Icons.phone_iphone_outlined;
+        if (Breakpoints.small.isActive(context)) {
+          return Icons.phone_iphone_outlined;
+        }
+        return Icons.tablet_mac_outlined;
       } else if (Platform.isWindows || Platform.isLinux) {
         return Icons.desktop_windows_outlined;
       } else if (Platform.isMacOS) {

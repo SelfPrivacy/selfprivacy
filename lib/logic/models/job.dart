@@ -49,8 +49,7 @@ class RebuildServerJob extends ClientJob {
       !jobs.any((final job) => job is RebuildServerJob);
 
   @override
-  Future<(bool, String)> execute() async =>
-      (false, 'unimplemented');
+  Future<(bool, String)> execute() async => (false, 'unimplemented');
 
   @override
   RebuildServerJob copyWithNewStatus({
@@ -73,8 +72,7 @@ class UpgradeServerJob extends ClientJob {
       !jobs.any((final job) => job is UpgradeServerJob);
 
   @override
-  Future<(bool, String)> execute() async =>
-      (false, 'unimplemented');
+  Future<(bool, String)> execute() async => (false, 'unimplemented');
 
   @override
   UpgradeServerJob copyWithNewStatus({
@@ -100,8 +98,7 @@ class RebootServerJob extends ClientJob {
       !jobs.any((final job) => job is RebootServerJob);
 
   @override
-  Future<(bool, String)> execute() async =>
-      (false, 'unimplemented');
+  Future<(bool, String)> execute() async => (false, 'unimplemented');
 
   @override
   RebootServerJob copyWithNewStatus({
@@ -232,7 +229,9 @@ class ServiceToggleJob extends ClientJob {
 
   @override
   Future<(bool, String)> execute() async {
-    await getIt<ApiConnectionRepository>().api.switchService(service.id, needToTurnOn);
+    await getIt<ApiConnectionRepository>()
+        .api
+        .switchService(service.id, needToTurnOn);
     return (true, 'Check not implemented');
   }
 
@@ -353,8 +352,9 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
   @override
   Future<(bool, String)> execute() async {
     await getIt<ApiConnectionRepository>().api.setAutoUpgradeSettings(
-      AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
-    );
+          AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
+        );
+    getIt<ApiConnectionRepository>().apiData.settings.invalidate();
     return (true, 'Check not implemented');
   }
 
@@ -394,6 +394,7 @@ class ChangeServerTimezoneJob extends ReplaceableJob {
   @override
   Future<(bool, String)> execute() async {
     await getIt<ApiConnectionRepository>().api.setTimezone(timezone);
+    getIt<ApiConnectionRepository>().apiData.settings.invalidate();
     return (true, 'Check not implemented');
   }
 

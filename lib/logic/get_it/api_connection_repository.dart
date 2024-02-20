@@ -15,6 +15,7 @@ import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/models/system_settings.dart';
 
 /// Repository for all API calls
 /// Stores the current state of all data from API and exposes it to Blocs.
@@ -226,6 +227,7 @@ class ApiConnectionRepository {
         await _apiData.recoveryKeyStatus.fetchData();
     _apiData.devices.data = await _apiData.devices.fetchData();
     _apiData.users.data = await _apiData.users.fetchData();
+    _apiData.settings.data = await _apiData.settings.fetchData();
     _dataStream.add(_apiData);
 
     connectionStatus = ConnectionStatus.connected;
@@ -270,6 +272,8 @@ class ApiConnectionRepository {
     await _apiData.devices
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.users.refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.settings
+        .refetchData(version, () => _dataStream.add(_apiData));
   }
 
   void emitData() {
@@ -312,6 +316,10 @@ class ApiData {
         ),
         users = ApiDataElement<List<User>>(
           fetchData: () async => api.getAllUsers(),
+        ),
+        settings = ApiDataElement<SystemSettings>(
+          fetchData: () async => api.getSystemSettings(),
+          ttl: 600,
         );
 
   ApiDataElement<List<ServerJob>> serverJobs;
@@ -323,6 +331,7 @@ class ApiData {
   ApiDataElement<RecoveryKeyStatus> recoveryKeyStatus;
   ApiDataElement<List<ApiToken>> devices;
   ApiDataElement<List<User>> users;
+  ApiDataElement<SystemSettings> settings;
 }
 
 enum ConnectionStatus {

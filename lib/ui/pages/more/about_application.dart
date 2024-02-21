@@ -44,15 +44,7 @@ class AboutApplicationPage extends StatelessWidget {
       heroTitle: 'about_application_page.title'.tr(),
       bodyPadding: const EdgeInsets.symmetric(vertical: 16),
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'about_application_page.versions'.tr(),
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
-        ),
+        SectionTitle(title: 'about_application_page.versions'.tr()),
         FutureBuilder(
           future: _packageVersion(),
           builder: (final context, final snapshot) => ListTile(
@@ -111,273 +103,98 @@ class AboutApplicationPage extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'about_application_page.links'.tr(),
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
+        SectionTitle(
+          title: 'about_application_page.links'.tr(),
         ),
-        ListTile(
-          title: Text('about_application_page.website'.tr()),
-          subtitle: const Text('selfprivacy.org'),
-          onTap: () => launchUrl(
-            Uri.parse('https://selfprivacy.org/'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.language_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              'https://selfprivacy.org/',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.website'.tr(),
+          subtitle: 'selfprivacy.org',
+          uri: 'https://selfprivacy.org/',
+          icon: Icons.language_outlined,
         ),
-        ListTile(
-          title: Text('about_application_page.documentation'.tr()),
-          subtitle: const Text('selfprivacy.org/docs'),
-          onTap: () => launchUrl(
-            Uri.parse('https://selfprivacy.org/docs/'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.library_books_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              'https://selfprivacy.org/docs/',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.documentation'.tr(),
+          subtitle: 'selfprivacy.org/docs',
+          uri: 'https://selfprivacy.org/docs/',
+          icon: Icons.library_books_outlined,
         ),
-        ListTile(
-          title: Text('about_application_page.privacy_policy'.tr()),
-          subtitle: const Text('selfprivacy.org/privacy-policy'),
-          onTap: () => launchUrl(
-            Uri.parse('https://selfprivacy.org/privacy-policy/'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.policy_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              'https://selfprivacy.org/privacy-policy/',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.privacy_policy'.tr(),
+          subtitle: 'selfprivacy.org/privacy-policy',
+          uri: 'https://selfprivacy.org/privacy-policy/',
+          icon: Icons.policy_outlined,
         ),
-        // Matrix channel
-        ListTile(
-          title: Text('about_application_page.matrix_channel'.tr()),
-          subtitle: const Text('#news:selfprivacy.org'),
-          onTap: () => launchUrl(
-            Uri.parse('https://matrix.to/#/#news:selfprivacy.org'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.feed_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              '#news:selfprivacy.org',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.matrix_channel'.tr(),
+          subtitle: '#news:selfprivacy.org',
+          uri: 'https://matrix.to/#/#news:selfprivacy.org',
+          icon: Icons.feed_outlined,
+          longPressText: '#news:selfprivacy.org',
         ),
-        // Telegram channel
-        ListTile(
-          title: Text('about_application_page.telegram_channel'.tr()),
-          subtitle: const Text('@selfprivacy'),
-          onTap: () => launchUrl(
-            Uri.parse('https://t.me/selfprivacy'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.feed_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              '@selfprivacy',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.telegram_channel'.tr(),
+          subtitle: '@selfprivacy',
+          uri: 'https://t.me/selfprivacy',
+          icon: Icons.feed_outlined,
+          longPressText: '@selfprivacy',
         ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'about_application_page.get_support'.tr(),
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
+        SectionTitle(title: 'about_application_page.get_support'.tr()),
+        LinkListTile(
+          title: 'about_application_page.matrix_support_chat'.tr(),
+          subtitle: '#chat:selfprivacy.org',
+          uri: 'https://matrix.to/#/#chat:selfprivacy.org',
+          icon: Icons.question_answer_outlined,
+          longPressText: '#chat:selfprivacy.org',
         ),
-        // Matrix
-        ListTile(
-          title: Text('about_application_page.matrix_support_chat'.tr()),
-          subtitle: const Text('#chat:selfprivacy.org'),
-          onTap: () => launchUrl(
-            Uri.parse('https://matrix.to/#/#chat:selfprivacy.org'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.question_answer_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              '#chat:selfprivacy.org',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.telegram_support_chat'.tr(),
+          subtitle: '@selfprivacy_chat',
+          uri: 'https://t.me/selfprivacy_chat',
+          icon: Icons.question_answer_outlined,
+          longPressText: '@selfprivacy_chat',
         ),
-        // Telegram
-        ListTile(
-          title: Text('about_application_page.telegram_support_chat'.tr()),
-          subtitle: const Text('@selfprivacy_chat'),
-          onTap: () => launchUrl(
-            Uri.parse('https://t.me/selfprivacy_chat'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.question_answer_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              '@selfprivacy_chat',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.email_support'.tr(),
+          subtitle: 'support@selfprivacy.org',
+          uri: 'mailto:support@selfprivacy.org',
+          icon: Icons.email_outlined,
+          longPressText: 'support@selfprivacy.org',
         ),
-        // Email
-        ListTile(
-          title: Text('about_application_page.email_support'.tr()),
-          subtitle: const Text('support@selfprivacy.org'),
-          onTap: () => launchUrl(
-            Uri.parse('mailto:support@selfprivacy.org'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.email_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              'support@selfprivacy.org',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        SectionTitle(
+          title: 'about_application_page.contribute'.tr(),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'about_application_page.contribute'.tr(),
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
+        LinkListTile(
+          title: 'about_application_page.source_code'.tr(),
+          subtitle: 'git.selfprivacy.org',
+          uri: 'https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app',
+          icon: Icons.code_outlined,
         ),
-        // Source code
-        ListTile(
-          title: Text('about_application_page.source_code'.tr()),
-          subtitle: const Text('git.selfprivacy.org'),
-          onTap: () => launchUrl(
-            Uri.parse(
-              'https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app',
-            ),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.code_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              'https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.bug_report'.tr(),
+          subtitle: 'about_application_page.bug_report_subtitle'.tr(),
+          uri:
+              'https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues',
+          icon: Icons.bug_report_outlined,
         ),
-        // translate
-        ListTile(
-          title: Text('about_application_page.help_translate'.tr()),
-          subtitle: const Text('weblate.selfprivacy.org'),
-          onTap: () => launchUrl(
-            Uri.parse(
-              'https://weblate.selfprivacy.org/projects/selfprivacy/',
-            ),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.translate_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              'https://weblate.selfprivacy.org/projects/selfprivacy/',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.help_translate'.tr(),
+          subtitle: 'weblate.selfprivacy.org',
+          uri: 'https://weblate.selfprivacy.org/projects/selfprivacy/',
+          icon: Icons.translate_outlined,
         ),
-        // matrix chat
-        ListTile(
-          title: Text('about_application_page.matrix_contributors_chat'.tr()),
-          subtitle: const Text('#dev:selfprivacy.org'),
-          onTap: () => launchUrl(
-            Uri.parse('https://matrix.to/#/#dev:selfprivacy.org'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.question_answer_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              '#dev:selfprivacy.org',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.matrix_contributors_chat'.tr(),
+          subtitle: '#dev:selfprivacy.org',
+          uri: 'https://matrix.to/#/#dev:selfprivacy.org',
+          icon: Icons.question_answer_outlined,
+          longPressText: '#dev:selfprivacy.org',
         ),
-        // telegram
-        ListTile(
-          title: Text('about_application_page.telegram_contributors_chat'.tr()),
-          subtitle: const Text('@selfprivacy_dev'),
-          onTap: () => launchUrl(
-            Uri.parse('https://t.me/selfprivacy_dev'),
-            mode: LaunchMode.externalApplication,
-          ),
-          leading: const Icon(
-            Icons.question_answer_outlined,
-          ),
-          onLongPress: () {
-            PlatformAdapter.setClipboard(
-              '@selfprivacy_dev',
-            );
-            getIt<NavigationService>().showSnackBar(
-              'basis.copied_to_clipboard'.tr(),
-            );
-          },
+        LinkListTile(
+          title: 'about_application_page.telegram_contributors_chat'.tr(),
+          subtitle: '@selfprivacy_dev',
+          uri: 'https://t.me/selfprivacy_dev',
+          icon: Icons.question_answer_outlined,
+          longPressText: '@selfprivacy_dev',
         ),
       ],
     );
@@ -401,4 +218,60 @@ class AboutApplicationPage extends StatelessWidget {
 
     return apiVersion;
   }
+}
+
+class SectionTitle extends StatelessWidget {
+  const SectionTitle({
+    required this.title,
+    super.key,
+  });
+
+  final String title;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+        ),
+      );
+}
+
+class LinkListTile extends StatelessWidget {
+  const LinkListTile({
+    required this.title,
+    required this.subtitle,
+    required this.uri,
+    required this.icon,
+    this.longPressText,
+    super.key,
+  });
+
+  final String title;
+  final String subtitle;
+  final String uri;
+  final IconData icon;
+  final String? longPressText;
+
+  @override
+  Widget build(final BuildContext context) => ListTile(
+        title: Text(title),
+        subtitle: Text(subtitle),
+        onTap: () => launchUrl(
+          Uri.parse(uri),
+          mode: LaunchMode.externalApplication,
+        ),
+        leading: Icon(icon),
+        onLongPress: () {
+          PlatformAdapter.setClipboard(
+            longPressText ?? uri,
+          );
+          getIt<NavigationService>().showSnackBar(
+            'basis.copied_to_clipboard'.tr(),
+          );
+        },
+      );
 }

@@ -66,6 +66,8 @@
         "email_support": "Email support",
         "contribute": "Contribute",
         "source_code": "Source code",
+        "bug_report": "Report a bug",
+        "bug_report_subtitle": "Due to spam, manual account confirmation is required. Contact us in the support chat to activate your account.",
         "help_translate": "Help us translate",
         "matrix_contributors_chat": "Matrix contributors chat",
         "telegram_contributors_chat": "Telegram contributors chat",

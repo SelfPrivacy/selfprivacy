@@ -132,20 +132,51 @@ class ServerApi extends GraphQLApiMap
     return usesBinds;
   }
 
-  Future<void> switchService(final String uid, final bool needTurnOn) async {
+  Future<GenericResult> switchService(
+    final String uid,
+    final bool needTurnOn,
+  ) async {
     try {
       final GraphQLClient client = await getClient();
       if (needTurnOn) {
         final variables = Variables$Mutation$EnableService(serviceId: uid);
         final mutation = Options$Mutation$EnableService(variables: variables);
-        await client.mutate$EnableService(mutation);
+        final result = await client.mutate$EnableService(mutation);
+        if (result.hasException) {
+          return GenericResult(
+            success: false,
+            message: result.exception.toString(),
+            data: null,
+          );
+        }
+        return GenericResult(
+          success: result.parsedData?.services.enableService.success ?? false,
+          message: result.parsedData?.services.enableService.message,
+          data: null,
+        );
       } else {
         final variables = Variables$Mutation$DisableService(serviceId: uid);
         final mutation = Options$Mutation$DisableService(variables: variables);
-        await client.mutate$DisableService(mutation);
+        final result = await client.mutate$DisableService(mutation);
+        if (result.hasException) {
+          return GenericResult(
+            success: false,
+            message: result.exception.toString(),
+            data: null,
+          );
+        }
+        return GenericResult(
+          success: result.parsedData?.services.disableService.success ?? false,
+          message: result.parsedData?.services.disableService.message,
+          data: null,
+        );
       }
     } catch (e) {
-      print(e);
+      return GenericResult(
+        success: false,
+        message: e.toString(),
+        data: null,
+      );
     }
   }
 

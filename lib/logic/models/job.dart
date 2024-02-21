@@ -36,29 +36,6 @@ abstract class ClientJob extends Equatable {
   });
 }
 
-@Deprecated('Jobs bloc should handle it itself')
-class RebuildServerJob extends ClientJob {
-  RebuildServerJob({
-    required super.title,
-    super.id,
-  });
-
-  @override
-  bool canAddTo(final List<ClientJob> jobs) =>
-      !jobs.any((final job) => job is RebuildServerJob);
-
-  @override
-  Future<(bool, String)> execute() async => (false, 'unimplemented');
-
-  @override
-  RebuildServerJob copyWithNewStatus({
-    required final JobStatusEnum status,
-    final String? message,
-  }) {
-    throw UnimplementedError();
-  }
-}
-
 class UpgradeServerJob extends ClientJob {
   UpgradeServerJob({
     super.status,
@@ -228,10 +205,10 @@ class ServiceToggleJob extends ClientJob {
 
   @override
   Future<(bool, String)> execute() async {
-    await getIt<ApiConnectionRepository>()
+    final result = await getIt<ApiConnectionRepository>()
         .api
         .switchService(service.id, needToTurnOn);
-    return (true, 'Check not implemented');
+    return (result.success, result.message ?? 'jobs.generic_error'.tr());
   }
 
   @override

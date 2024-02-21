@@ -1,4 +1,7 @@
 {
     "test": "jp-test",
-    "locale": "jp"
+    "locale": "jp",
+    "basis": {
+        "app_name": "SelfPrivacy"
+    }
 }

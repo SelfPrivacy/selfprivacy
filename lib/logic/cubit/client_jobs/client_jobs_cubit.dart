@@ -107,6 +107,14 @@ class JobsCubit extends Cubit<JobsState> {
             const [],
           ),
         );
+      } else if (result.success) {
+        emit(
+          JobsStateFinished(
+            [UpgradeServerJob(status: JobStatusEnum.finished)],
+            null,
+            const [],
+          ),
+        );
       } else {
         emit(
           JobsStateFinished(

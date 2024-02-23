@@ -9,13 +9,12 @@ class DiskVolume {
     this.sizeUsed = const DiskSize(byte: 0),
     this.root = false,
     this.isResizable = false,
-    this.serverDiskVolume,
     this.providerVolume,
   });
 
   DiskVolume.fromServerDiscVolume(
     final ServerDiskVolume volume,
-    final ServerVolume? providerVolume,
+    final ServerProviderVolume? providerVolume,
   ) : this(
           name: volume.name,
           sizeTotal: DiskSize(
@@ -27,7 +26,6 @@ class DiskVolume {
           ),
           root: volume.root,
           isResizable: providerVolume != null,
-          serverDiskVolume: volume,
           providerVolume: providerVolume,
         );
 
@@ -51,8 +49,7 @@ class DiskVolume {
   String name;
   bool root;
   bool isResizable;
-  ServerDiskVolume? serverDiskVolume;
-  ServerVolume? providerVolume;
+  ServerProviderVolume? providerVolume;
 
   /// from 0.0 to 1.0
   double get percentage =>
@@ -67,7 +64,7 @@ class DiskVolume {
     final bool? root,
     final bool? isResizable,
     final ServerDiskVolume? serverDiskVolume,
-    final ServerVolume? providerVolume,
+    final ServerProviderVolume? providerVolume,
   }) =>
       DiskVolume(
         sizeUsed: sizeUsed ?? this.sizeUsed,
@@ -75,7 +72,6 @@ class DiskVolume {
         name: name ?? this.name,
         root: root ?? this.root,
         isResizable: isResizable ?? this.isResizable,
-        serverDiskVolume: serverDiskVolume ?? this.serverDiskVolume,
         providerVolume: providerVolume ?? this.providerVolume,
       );
 }
@@ -83,14 +79,15 @@ class DiskVolume {
 class DiskStatus {
   DiskStatus.fromVolumes(
     final List<ServerDiskVolume> serverVolumes,
-    final List<ServerVolume> providerVolumes,
+    final List<ServerProviderVolume> providerVolumes,
   ) {
     diskVolumes = serverVolumes.map((
       final ServerDiskVolume volume,
     ) {
-      ServerVolume? providerVolume;
+      ServerProviderVolume? providerVolume;
 
-      for (final ServerVolume iterableProviderVolume in providerVolumes) {
+      for (final ServerProviderVolume iterableProviderVolume
+          in providerVolumes) {
         if (iterableProviderVolume.linuxDevice == null ||
             volume.model == null ||
             volume.serial == null) {

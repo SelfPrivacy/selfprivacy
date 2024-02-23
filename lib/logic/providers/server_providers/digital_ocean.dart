@@ -336,7 +336,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       }
 
       final volumes = await getVolumes();
-      final ServerVolume volumeToRemove;
+      final ServerProviderVolume volumeToRemove;
       volumeToRemove = volumes.data.firstWhere(
         (final el) => el.serverId == foundServer!.id,
       );
@@ -548,10 +548,10 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
 
   @override
-  Future<GenericResult<List<ServerVolume>>> getVolumes({
+  Future<GenericResult<List<ServerProviderVolume>>> getVolumes({
     final String? status,
   }) async {
-    final List<ServerVolume> volumes = [];
+    final List<ServerProviderVolume> volumes = [];
 
     final result = await _adapter.api().getVolumes();
 
@@ -568,7 +568,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       int id = 0;
       for (final rawVolume in result.data) {
         final String volumeName = rawVolume.name;
-        final volume = ServerVolume(
+        final volume = ServerProviderVolume(
           id: id++,
           name: volumeName,
           sizeByte: rawVolume.sizeGigabytes * 1024 * 1024 * 1024,
@@ -597,8 +597,10 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerVolume?>> createVolume(final int gb) async {
-    ServerVolume? volume;
+  Future<GenericResult<ServerProviderVolume?>> createVolume(
+    final int gb,
+  ) async {
+    ServerProviderVolume? volume;
 
     final result = await _adapter.api().createVolume(gb);
 
@@ -623,7 +625,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final String volumeName = result.data!.name;
-    volume = ServerVolume(
+    volume = ServerProviderVolume(
       id: getVolumesResult.data.length,
       name: volumeName,
       sizeByte: result.data!.sizeGigabytes,
@@ -638,10 +640,10 @@ class DigitalOceanServerProvider extends ServerProvider {
     );
   }
 
-  Future<GenericResult<ServerVolume?>> getVolume(
+  Future<GenericResult<ServerProviderVolume?>> getVolume(
     final String volumeUuid,
   ) async {
-    ServerVolume? requestedVolume;
+    ServerProviderVolume? requestedVolume;
 
     final result = await getVolumes();
 
@@ -668,7 +670,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<bool>> attachVolume(
-    final ServerVolume volume,
+    final ServerProviderVolume volume,
     final int serverId,
   ) async =>
       _adapter.api().attachVolume(
@@ -678,7 +680,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<bool>> detachVolume(
-    final ServerVolume volume,
+    final ServerProviderVolume volume,
   ) async =>
       _adapter.api().detachVolume(
             volume.name,
@@ -687,7 +689,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<void>> deleteVolume(
-    final ServerVolume volume,
+    final ServerProviderVolume volume,
   ) async =>
       _adapter.api().deleteVolume(
             volume.uuid!,
@@ -695,7 +697,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<bool>> resizeVolume(
-    final ServerVolume volume,
+    final ServerProviderVolume volume,
     final DiskSize size,
   ) async =>
       _adapter.api().resizeVolume(

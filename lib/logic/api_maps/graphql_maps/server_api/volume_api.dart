@@ -11,6 +11,7 @@ mixin VolumeApi on GraphQLApiMap {
       if (response.hasException) {
         print(response.exception.toString());
       }
+      // TODO: Rewrite to use fromGraphQL
       volumes = response.data!['storage']['volumes']
           .map<ServerDiskVolume>((final e) => ServerDiskVolume.fromJson(e))
           .toList();

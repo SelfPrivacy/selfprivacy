@@ -1,10 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
-import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
-import 'package:selfprivacy/logic/cubit/recovery_key/recovery_key_cubit.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 
 @RoutePage()
@@ -89,15 +88,11 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
             ),
           ),
           ListTile(
-            title: const Text('ApiDevicesCubit'),
+            title: const Text('ApiConnectionRepository status'),
             subtitle: Text(
-              context.watch<ApiDevicesCubit>().state.status.toString(),
-            ),
-          ),
-          ListTile(
-            title: const Text('RecoveryKeyCubit'),
-            subtitle: Text(
-              context.watch<RecoveryKeyCubit>().state.loadingStatus.toString(),
+              getIt<ApiConnectionRepository>()
+                  .currentConnectionStatus
+                  .toString(),
             ),
           ),
         ],

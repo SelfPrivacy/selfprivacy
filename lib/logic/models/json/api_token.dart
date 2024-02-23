@@ -1,13 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 
 part 'api_token.g.dart';
 
 @JsonSerializable()
-class ApiToken {
+class ApiToken extends Equatable {
   factory ApiToken.fromJson(final Map<String, dynamic> json) =>
       _$ApiTokenFromJson(json);
-  ApiToken({
+  const ApiToken({
     required this.name,
     required this.date,
     required this.isCaller,
@@ -25,4 +26,7 @@ class ApiToken {
   final DateTime date;
   @JsonKey(name: 'is_caller')
   final bool isCaller;
+
+  @override
+  List<Object?> get props => [name, date, isCaller];
 }

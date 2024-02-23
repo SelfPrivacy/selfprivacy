@@ -1,9 +1,8 @@
 import 'package:cubit_form/cubit_form.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
-import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
@@ -11,11 +10,9 @@ import 'package:selfprivacy/utils/network_utils.dart';
 
 part 'dns_records_state.dart';
 
-class DnsRecordsCubit
-    extends ServerInstallationDependendCubit<DnsRecordsState> {
-  DnsRecordsCubit(final ServerInstallationCubit serverInstallationCubit)
+class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
+  DnsRecordsCubit()
       : super(
-          serverInstallationCubit,
           const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing),
         );
 
@@ -30,39 +27,36 @@ class DnsRecordsCubit
       ),
     );
 
-    if (serverInstallationCubit.state is ServerInstallationFinished) {
-      final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
-      final String? ipAddress =
-          serverInstallationCubit.state.serverDetails?.ip4;
+    final ServerDomain? domain = getIt<ApiConnectionRepository>().serverDomain;
+    final String? ipAddress =
+        getIt<ApiConnectionRepository>().serverDetails?.ip4;
 
-      if (domain == null || ipAddress == null) {
-        emit(const DnsRecordsState());
-        return;
-      }
-
-      final List<DnsRecord> allDnsRecords = await api.getDnsRecords();
-      allDnsRecords.removeWhere((final record) => record.type == 'AAAA');
-      final foundRecords = await validateDnsRecords(
-        domain,
-        extractDkimRecord(allDnsRecords)?.content ?? '',
-        allDnsRecords,
-        ipAddress,
-      );
-
-      if (!foundRecords.success || foundRecords.data.isEmpty) {
-        emit(const DnsRecordsState(dnsState: DnsRecordsStatus.error));
-        return;
-      }
-
-      emit(
-        DnsRecordsState(
-          dnsRecords: foundRecords.data,
-          dnsState: foundRecords.data.any((final r) => r.isSatisfied == false)
-              ? DnsRecordsStatus.error
-              : DnsRecordsStatus.good,
-        ),
-      );
+    if (domain == null || ipAddress == null) {
+      emit(const DnsRecordsState());
+      return;
     }
+
+    final List<DnsRecord> allDnsRecords = await api.getDnsRecords();
+    allDnsRecords.removeWhere((final record) => record.type == 'AAAA');
+    final foundRecords = await validateDnsRecords(
+      domain,
+      extractDkimRecord(allDnsRecords)?.content ?? '',
+      allDnsRecords,
+    );
+
+    if (!foundRecords.success || foundRecords.data.isEmpty) {
+      emit(const DnsRecordsState());
+      return;
+    }
+
+    emit(
+      DnsRecordsState(
+        dnsRecords: foundRecords.data,
+        dnsState: foundRecords.data.any((final r) => r.isSatisfied == false)
+            ? DnsRecordsStatus.error
+            : DnsRecordsStatus.good,
+      ),
+    );
   }
 
   /// Tries to check whether all known DNS records on the domain by ip4
@@ -74,19 +68,7 @@ class DnsRecordsCubit
     final ServerDomain domain,
     final String dkimPublicKey,
     final List<DnsRecord> pendingDnsRecords,
-    final String ip4,
   ) async {
-    final matchMap = await validateDnsMatch(domain.domainName, ['api'], ip4);
-    if (matchMap.values.any((final status) => status != DnsRecordStatus.ok)) {
-      getIt<NavigationService>().showSnackBar(
-        'domain.domain_validation_failure'.tr(),
-      );
-      return GenericResult(
-        success: false,
-        data: [],
-      );
-    }
-
     final result = await ProvidersController.currentDnsProvider!
         .getDnsRecords(domain: domain);
     if (result.data.isEmpty || !result.success) {
@@ -185,7 +167,7 @@ class DnsRecordsCubit
     final List<DnsRecord> records = await api.getDnsRecords();
 
     /// TODO: Error handling?
-    final ServerDomain? domain = serverInstallationCubit.state.serverDomain;
+    final ServerDomain? domain = getIt<ApiConnectionRepository>().serverDomain;
     await ProvidersController.currentDnsProvider!.removeDomainRecords(
       records: records,
       domain: domain!,

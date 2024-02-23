@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
+import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -31,19 +31,18 @@ class BackupDetailsPage extends StatelessWidget {
   Widget build(final BuildContext context) {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    final BackupsState backupsState = context.watch<BackupsCubit>().state;
+    final BackupsState backupsState = context.watch<BackupsBloc>().state;
     final bool isBackupInitialized = backupsState.isInitialized;
     final StateType providerState = isReady && isBackupInitialized
         ? StateType.stable
         : StateType.uninitialized;
     final bool preventActions = backupsState.preventActions;
     final List<Backup> backups = backupsState.backups;
-    final bool refreshing = backupsState.refreshing;
     final List<Service> services =
-        context.watch<ServicesCubit>().state.servicesThatCanBeBackedUp;
+        context.watch<ServicesBloc>().state.servicesThatCanBeBackedUp;
     final Duration? autobackupPeriod = backupsState.autobackupPeriod;
     final List<ServerJob> backupJobs = context
-        .watch<ServerJobsCubit>()
+        .watch<ServerJobsBloc>()
         .state
         .backupJobList
         .where((final job) => job.status != JobStatusEnum.finished)
@@ -75,8 +74,10 @@ class BackupDetailsPage extends StatelessWidget {
             BrandButton.rised(
               onPressed: preventActions
                   ? null
-                  : () async {
-                      await context.read<BackupsCubit>().initializeBackups();
+                  : () {
+                      context
+                          .read<BackupsBloc>()
+                          .add(const InitializeBackupsRepository());
                     },
               text: 'backup.initialize'.tr(),
             ),
@@ -297,7 +298,7 @@ class BackupDetailsPage extends StatelessWidget {
                   children: backups.take(15).map(
                     (final Backup backup) {
                       final service = context
-                          .read<ServicesCubit>()
+                          .read<ServicesBloc>()
                           .state
                           .getServiceById(backup.serviceId);
                       return ListTile(
@@ -334,11 +335,12 @@ class BackupDetailsPage extends StatelessWidget {
                                       'backup.forget_snapshot_alert'.tr(),
                                   actionButtonTitle:
                                       'backup.forget_snapshot'.tr(),
-                                  actionButtonOnPressed: () => {
-                                    context.read<BackupsCubit>().forgetSnapshot(
-                                          backup.id,
-                                        ),
-                                  },
+                                  actionButtonOnPressed: () =>
+                                      context.read<BackupsBloc>().add(
+                                            ForgetSnapshot(
+                                              backup.id,
+                                            ),
+                                          ),
                                 );
                               },
                         title: Text(
@@ -391,18 +393,6 @@ class BackupDetailsPage extends StatelessWidget {
         const SizedBox(height: 8),
         const Divider(),
         const SizedBox(height: 8),
-        ListTile(
-          title: Text(
-            'backup.refresh'.tr(),
-          ),
-          onTap: refreshing
-              ? null
-              : () => {context.read<BackupsCubit>().updateBackups()},
-          enabled: !refreshing,
-          leading: const Icon(
-            Icons.refresh_outlined,
-          ),
-        ),
         if (providerState != StateType.uninitialized)
           Column(
             children: [
@@ -425,32 +415,11 @@ class BackupDetailsPage extends StatelessWidget {
                 ),
                 onTap: preventActions
                     ? null
-                    : () => {context.read<BackupsCubit>().forceUpdateBackups()},
+                    : () => context
+                        .read<BackupsBloc>()
+                        .add(const ForceSnapshotListUpdate()),
               ),
-              const SizedBox(height: 8),
-              const Divider(),
-              const SizedBox(height: 8),
-              ListTile(
-                title: Text(
-                  'backup.reupload_key'.tr(),
-                  style: TextStyle(
-                    color: overrideColor,
-                  ),
-                ),
-                subtitle: Text(
-                  'backup.reupload_key_subtitle'.tr(),
-                  style: TextStyle(
-                    color: overrideColor,
-                  ),
-                ),
-                leading: Icon(
-                  Icons.warning_amber_outlined,
-                  color: overrideColor,
-                ),
-                onTap: preventActions
-                    ? null
-                    : () => {context.read<BackupsCubit>().reuploadKey()},
-              ),
+              // TODO: Return reupload key button in some form
             ],
           ),
       ],

@@ -131,7 +131,7 @@ class BackupsInitialized extends BackupsState {
       final List<Backup> list = _backupList;
       list.sort((final a, final b) => b.time.compareTo(a.time));
       return list;
-    } on UnsupportedError {
+    } catch (_) {
       return _backupList;
     }
   }

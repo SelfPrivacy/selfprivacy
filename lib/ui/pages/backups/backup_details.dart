@@ -419,30 +419,7 @@ class BackupDetailsPage extends StatelessWidget {
                         .read<BackupsBloc>()
                         .add(const ForceSnapshotListUpdate()),
               ),
-              const SizedBox(height: 8),
-              const Divider(),
-              const SizedBox(height: 8),
-              ListTile(
-                title: Text(
-                  'backup.reupload_key'.tr(),
-                  style: TextStyle(
-                    color: overrideColor,
-                  ),
-                ),
-                subtitle: Text(
-                  'backup.reupload_key_subtitle'.tr(),
-                  style: TextStyle(
-                    color: overrideColor,
-                  ),
-                ),
-                leading: Icon(
-                  Icons.warning_amber_outlined,
-                  color: overrideColor,
-                ),
-                // onTap: preventActions
-                //     ? null
-                //     : () => context.read<BackupsCubit>().reuploadKey(),
-              ),
+              // TODO: Return reupload key button in some form
             ],
           ),
       ],

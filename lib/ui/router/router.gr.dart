@@ -159,6 +159,7 @@ abstract class _$RootRouter extends RootStackRouter {
         child: ServicesMigrationPage(
           services: args.services,
           diskStatus: args.diskStatus,
+          isMigration: args.isMigration,
           key: args.key,
         ),
       );
@@ -575,6 +576,7 @@ class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
   ServicesMigrationRoute({
     required List<Service> services,
     required DiskStatus diskStatus,
+    required bool isMigration,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
@@ -582,6 +584,7 @@ class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
           args: ServicesMigrationRouteArgs(
             services: services,
             diskStatus: diskStatus,
+            isMigration: isMigration,
             key: key,
           ),
           initialChildren: children,
@@ -597,6 +600,7 @@ class ServicesMigrationRouteArgs {
   const ServicesMigrationRouteArgs({
     required this.services,
     required this.diskStatus,
+    required this.isMigration,
     this.key,
   });
 
@@ -604,11 +608,13 @@ class ServicesMigrationRouteArgs {
 
   final DiskStatus diskStatus;
 
+  final bool isMigration;
+
   final Key? key;
 
   @override
   String toString() {
-    return 'ServicesMigrationRouteArgs{services: $services, diskStatus: $diskStatus, key: $key}';
+    return 'ServicesMigrationRouteArgs{services: $services, diskStatus: $diskStatus, isMigration: $isMigration, key: $key}';
   }
 }
 

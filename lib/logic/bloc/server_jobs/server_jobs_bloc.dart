@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -66,6 +67,25 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
     final Emitter<ServerJobsState> emit,
   ) async {
     await getIt<ApiConnectionRepository>().removeAllFinishedServerJobs();
+  }
+
+  Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
+    final fallbackDrive = getIt<ApiConnectionRepository>()
+            .apiData
+            .volumes
+            .data
+            ?.where((final drive) => drive.root)
+            .first
+            .name ??
+        'sda1';
+    final result = await getIt<ApiConnectionRepository>()
+        .api
+        .migrateToBinds(serviceToDisk, fallbackDrive);
+    if (result.data == null) {
+      getIt<NavigationService>()
+          .showSnackBar(result.message!, behavior: SnackBarBehavior.floating);
+      return;
+    }
   }
 
   @override

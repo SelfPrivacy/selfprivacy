@@ -18,11 +18,13 @@ class ServicesMigrationPage extends StatefulWidget {
   const ServicesMigrationPage({
     required this.services,
     required this.diskStatus,
+    required this.isMigration,
     super.key,
   });
 
   final DiskStatus diskStatus;
   final List<Service> services;
+  final bool isMigration;
 
   @override
   State<ServicesMigrationPage> createState() => _ServicesMigrationPageState();
@@ -169,18 +171,24 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
               ),
             ),
             const SizedBox(height: 16),
-            if (isVolumePicked)
+            if (widget.isMigration || (!widget.isMigration && isVolumePicked))
               BrandButton.filled(
                 child: Text('storage.start_migration_button'.tr()),
                 onPressed: () {
-                  for (final service in widget.services) {
-                    if (serviceToDisk[service.id] != null) {
-                      context.read<ServicesBloc>().add(
-                            ServiceMove(
-                              service,
-                              serviceToDisk[service.id]!,
-                            ),
-                          );
+                  if (widget.isMigration) {
+                    context.read<ServerJobsBloc>().migrateToBinds(
+                          serviceToDisk,
+                        );
+                  } else {
+                    for (final service in widget.services) {
+                      if (serviceToDisk[service.id] != null) {
+                        context.read<ServicesBloc>().add(
+                              ServiceMove(
+                                service,
+                                serviceToDisk[service.id]!,
+                              ),
+                            );
+                      }
                     }
                   }
                   context.router.popUntilRoot();

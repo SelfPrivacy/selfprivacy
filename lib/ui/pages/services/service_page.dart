@@ -114,6 +114,7 @@ class _ServicePageState extends State<ServicePage> {
               ServicesMigrationRoute(
                 services: [service],
                 diskStatus: context.read<VolumesBloc>().state.diskStatus,
+                isMigration: false,
               ),
             ),
             leading: const Icon(Icons.drive_file_move_outlined),

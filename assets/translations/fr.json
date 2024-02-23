@@ -39,21 +39,14 @@
         "copied_to_clipboard": "Copié dans le presse-papier !"
     },
     "more_page": {
-        "about_application": "À propos",
         "create_ssh_key": "Clés SSH du super utilisateur",
-        "console": "Console",
-        "application_settings": "Paramètres de l'application",
         "configuration_wizard": "Assistant de configuration",
-        "about_project": "À propos de nous",
         "onboarding": "Embarquement"
     },
     "console_page": {
         "title": "Console",
         "waiting": "En attente de l'initialisation…",
         "copy": "Copier"
-    },
-    "about_us_page": {
-        "title": "À propos de nous"
     },
     "about_application_page": {
         "title": "À propos",

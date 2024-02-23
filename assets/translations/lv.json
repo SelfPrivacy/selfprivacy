@@ -37,20 +37,13 @@
     },
     "more_page": {
         "configuration_wizard": "Iestatīšanas vednis",
-        "about_project": "Par mums",
-        "about_application": "Par",
         "onboarding": "Pievienošanās",
-        "console": "Konsole",
-        "application_settings": "Aplikācijas iestatījumi",
         "create_ssh_key": "Superlietotāja SSH atslēgas"
     },
     "console_page": {
         "title": "Konsole",
         "copy": "Kopēt",
         "waiting": "Gaida inicializatīnu…"
-    },
-    "about_us_page": {
-        "title": "Par mums"
     },
     "about_application_page": {
         "title": "Par",

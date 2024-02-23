@@ -39,11 +39,7 @@
     "more_page": {
         "configuration_wizard": "Quraşdırma Sihirbazı",
         "onboarding": "Salamlar",
-        "create_ssh_key": "SSH admin açarları",
-        "console": "Konsol",
-        "application_settings": "Tətbiq parametrləri",
-        "about_project": "SelfPrivacy haqqında",
-        "about_application": "Proqram haqqında"
+        "create_ssh_key": "SSH admin açarları"
     },
     "console_page": {
         "title": "Konsol",
@@ -91,9 +87,6 @@
         "page2_text": "SelfPrivacy yalnız seçdiyiniz xidmət təminatçıları ilə işləyir. Hesablarınız yoxdursa, onları yaratmağınıza kömək edəcəyik.",
         "page2_server_provider_text": "Server provayderi öz məlumat mərkəzində serverinizə xidmət göstərəcək. SelfPrivacy avtomatik olaraq ona qoşulacaq və sizin üçün server quracaq.",
         "page2_backup_provider_text": "Bəs serverə bir şey olarsa? Haker hücumu, xidmətdən imtina və ya sadəcə məlumatların təsadüfən silinməsi? Məlumatlarınız ehtiyat yaddaş provayderinizlə başqa yerdə təhlükəsiz olacaq. Onların hamısı təhlükəsiz şəkildə şifrələnib və siz serverinizi bərpa edə bilərsiniz."
-    },
-    "about_us_page": {
-        "title": "SelfPrivacy haqqında"
     },
     "resource_chart": {
         "month": "Ay",

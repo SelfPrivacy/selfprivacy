@@ -43,11 +43,7 @@
         "application_version_text": "Verze aplikace {}"
     },
     "more_page": {
-        "about_project": "O nás",
-        "about_application": "O příloze",
         "onboarding": "Pozdravy",
-        "console": "Konzole",
-        "application_settings": "Nastavení aplikace",
         "configuration_wizard": "Průvodce nastavením",
         "create_ssh_key": "Superuživatelské klíče SSH"
     },
@@ -204,9 +200,6 @@
         "select_provider_price_free": "Zdarma",
         "select_provider_payment_text_cloudflare": "Bankovní karty",
         "connect_to_dns_provider_text": "Pomocí rozhraní token API nakonfiguruje aplikace SelfPrivacy záznamy DNS"
-    },
-    "about_us_page": {
-        "title": "O nás"
     },
     "users": {
         "no_ssh_notice": "Pro tohoto uživatele jsou vytvořeny pouze účty e-mailu a SSH. Jednotné přihlašování pro všechny služby se chystá brzy.",

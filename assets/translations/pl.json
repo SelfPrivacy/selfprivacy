@@ -39,21 +39,14 @@
     "test": "pl-test",
     "locale": "pl",
     "more_page": {
-        "about_project": "O projekcie \"SelfPrivacy\"",
-        "about_application": "O aplikacji",
         "create_ssh_key": "SSH klucze administratora",
-        "console": "Konsola",
         "configuration_wizard": "Kreator konfiguracji",
-        "application_settings": "Ustawienia aplikacji",
         "onboarding": "Witamy"
     },
     "console_page": {
         "title": "Konsola",
         "waiting": "Oczekiwanie na inicjalizację…",
         "copy": "Kopia"
-    },
-    "about_us_page": {
-        "title": "O projekcie \"SelfPrivacy\""
     },
     "about_application_page": {
         "title": "O aplikacji",

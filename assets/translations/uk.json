@@ -63,21 +63,14 @@
         "input_label": "Публічний ED25519, ECDSA або RSA ключ"
     },
     "more_page": {
-        "about_project": "Про нас",
         "create_ssh_key": "SSH-ключі суперкористовача",
-        "console": "Консоль",
-        "application_settings": "Налаштування додатка",
         "configuration_wizard": "Майстер установки",
-        "about_application": "Про нас",
         "onboarding": "Адаптація"
     },
     "console_page": {
         "title": "Консоль",
         "waiting": "Очікування ініціалізації…",
         "copy": "Copie"
-    },
-    "about_us_page": {
-        "title": "Про нас"
     },
     "about_application_page": {
         "application_version_text": "Версія додатку {}",

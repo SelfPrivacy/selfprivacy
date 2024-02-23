@@ -88,10 +88,6 @@
     },
     "more_page": {
         "configuration_wizard": "Sprievodca nastavením",
-        "about_project": "O nás",
-        "about_application": "O apke",
-        "console": "Konzola",
-        "application_settings": "Nastavenia aplikácie",
         "onboarding": "Vitajte",
         "create_ssh_key": "SSH kľúče superužívateľa"
     },
@@ -99,9 +95,6 @@
         "title": "Konzola",
         "waiting": "Čakáme na inicializáciu…",
         "copy": "Kopírovať"
-    },
-    "about_us_page": {
-        "title": "O nás"
     },
     "about_application_page": {
         "title": "O apke",

@@ -37,11 +37,7 @@
         "alert": "Opozorilo"
     },
     "more_page": {
-        "about_application": "O prilogi",
-        "about_project": "O storitvi SelfPrivacy",
         "onboarding": "Pozdravi",
-        "console": "Konzola",
-        "application_settings": "Nastavitve aplikacije",
         "create_ssh_key": "Superuporabniški ključi SSH",
         "configuration_wizard": "Pomočnik za nastavitev"
     },
@@ -49,9 +45,6 @@
         "title": "Konzole",
         "waiting": "Čakanje na inicializacijo…",
         "copy": "Kopiraj"
-    },
-    "about_us_page": {
-        "title": "O storitvi SelfPrivacy"
     },
     "about_application_page": {
         "title": "O dodatku",

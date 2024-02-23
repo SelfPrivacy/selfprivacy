@@ -106,20 +106,13 @@
     },
     "more_page": {
         "configuration_wizard": "Seadistusviisard",
-        "about_project": "Meist",
-        "about_application": "Teave",
         "onboarding": "Sissejuhatus",
-        "create_ssh_key": "Superkasutaja SSH võtmed",
-        "console": "Konsool",
-        "application_settings": "Rakenduse seaded"
+        "create_ssh_key": "Superkasutaja SSH võtmed"
     },
     "console_page": {
         "title": "Konsool",
         "waiting": "Ootab initsialiseerimist…",
         "copy": "Kopeeri"
-    },
-    "about_us_page": {
-        "title": "Meist"
     },
     "about_application_page": {
         "title": "Teave",

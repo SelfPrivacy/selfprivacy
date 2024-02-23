@@ -244,12 +244,8 @@
     },
     "more_page": {
         "configuration_wizard": "Майстар наладкі",
-        "application_settings": "Налады праграмы",
-        "about_project": "Аб праекце SelfPrivacy",
-        "about_application": "Аб праграме",
         "onboarding": "Прівітанне",
-        "create_ssh_key": "SSH ключы адміністратара",
-        "console": "Кансоль"
+        "create_ssh_key": "SSH ключы адміністратара"
     },
     "about_application_page": {
         "application_version_text": "Версія праграмы {}",
@@ -392,9 +388,6 @@
         "title": "Кансоль",
         "waiting": "Чакаем ініцыялізацыі…",
         "copy": "Капіяваць"
-    },
-    "about_us_page": {
-        "title": "Аб праекце SelfPrivacy"
     },
     "resource_chart": {
         "month": "Месяц",

@@ -2,12 +2,8 @@
     "test": "he-test",
     "locale": "he",
     "more_page": {
-        "application_settings": "הגדרות יישום",
         "configuration_wizard": "אשף הקמה",
-        "about_project": "עלינו",
-        "about_application": "על אודות",
         "create_ssh_key": "מפתחות SSH למשתמשי על",
-        "console": "מסוף",
         "onboarding": "קבלת פנים"
     },
     "basis": {
@@ -84,9 +80,6 @@
         "title": "מסוף",
         "waiting": "בהמתנה לאתחול…",
         "copy": "העתקה"
-    },
-    "about_us_page": {
-        "title": "עלינו"
     },
     "application_settings": {
         "title": "הגדרות יישום",

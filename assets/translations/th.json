@@ -38,14 +38,7 @@
     "more_page": {
         "configuration_wizard": "การติดตั้งอย่างง่าย",
         "create_ssh_key": "กุญแจ SSH ของผู้ใช้ระดับสูงสุด",
-        "about_project": "เกี่ยวกับพวกเรา",
-        "about_application": "เกี่ยวกับ",
-        "onboarding": "ออนบอร์ด",
-        "console": "คอนโซล",
-        "application_settings": "การตั้งค่าของแอพลิเคชั่น"
-    },
-    "about_us_page": {
-        "title": "เกี่ยวกับพวกเรา"
+        "onboarding": "ออนบอร์ด"
     },
     "about_application_page": {
         "api_version_text": "API เซิฟเวอร์เวอร์ชั้น {}",

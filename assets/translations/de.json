@@ -40,20 +40,13 @@
     },
     "more_page": {
         "configuration_wizard": "Setup-Assistent",
-        "about_project": "Über uns",
-        "about_application": "Über",
         "onboarding": "Onboarding",
-        "create_ssh_key": "Superuser SSH Schlüssel",
-        "console": "Konsole",
-        "application_settings": "Anwendungseinstellungen"
+        "create_ssh_key": "Superuser SSH Schlüssel"
     },
     "console_page": {
         "title": "Konsole",
         "waiting": "Warten auf Initialisierung…",
         "copy": "Kopieren"
-    },
-    "about_us_page": {
-        "title": "Über uns"
     },
     "about_application_page": {
         "title": "Über",

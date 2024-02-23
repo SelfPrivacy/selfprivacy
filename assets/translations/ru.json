@@ -40,20 +40,13 @@
     },
     "more_page": {
         "configuration_wizard": "Мастер настройки",
-        "about_project": "О проекте SelfPrivacy",
-        "about_application": "О приложении",
         "onboarding": "Приветствие",
-        "console": "Консоль",
-        "create_ssh_key": "SSH ключи администратора",
-        "application_settings": "Настройки приложения"
+        "create_ssh_key": "SSH ключи администратора"
     },
     "console_page": {
         "title": "Консоль",
         "waiting": "Ждём инициализации…",
         "copy": "Копировать"
-    },
-    "about_us_page": {
-        "title": "О проекте SelfPrivacy"
     },
     "about_application_page": {
         "title": "О приложении",

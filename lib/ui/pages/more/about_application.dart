@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/ui/components/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
@@ -218,26 +219,6 @@ class AboutApplicationPage extends StatelessWidget {
 
     return apiVersion;
   }
-}
-
-class SectionTitle extends StatelessWidget {
-  const SectionTitle({
-    required this.title,
-    super.key,
-  });
-
-  final String title;
-
-  @override
-  Widget build(final BuildContext context) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-        ),
-      );
 }
 
 class LinkListTile extends StatelessWidget {

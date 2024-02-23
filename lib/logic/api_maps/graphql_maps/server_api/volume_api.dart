@@ -60,17 +60,18 @@ mixin VolumeApi on GraphQLApiMap {
 
   Future<GenericResult<String?>> migrateToBinds(
     final Map<String, String> serviceToDisk,
+    final String fallbackDrive,
   ) async {
     GenericResult<String?>? mutation;
 
     try {
       final GraphQLClient client = await getClient();
       final input = Input$MigrateToBindsInput(
-        bitwardenBlockDevice: serviceToDisk['bitwarden']!,
-        emailBlockDevice: serviceToDisk['mailserver']!,
-        giteaBlockDevice: serviceToDisk['gitea']!,
-        nextcloudBlockDevice: serviceToDisk['nextcloud']!,
-        pleromaBlockDevice: serviceToDisk['pleroma']!,
+        bitwardenBlockDevice: serviceToDisk['bitwarden'] ?? fallbackDrive,
+        emailBlockDevice: serviceToDisk['email'] ?? fallbackDrive,
+        giteaBlockDevice: serviceToDisk['gitea'] ?? fallbackDrive,
+        nextcloudBlockDevice: serviceToDisk['nextcloud'] ?? fallbackDrive,
+        pleromaBlockDevice: serviceToDisk['pleroma'] ?? fallbackDrive,
       );
       final variables = Variables$Mutation$MigrateToBinds(input: input);
       final migrateMutation =

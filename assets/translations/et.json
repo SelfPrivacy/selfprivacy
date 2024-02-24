@@ -102,7 +102,8 @@
         "continue": "Jätka",
         "alert": "Häire",
         "copied_to_clipboard": "Kopeeritud lõikelauale!",
-        "please_connect": "Palun ühendage oma server, domeen ja DNS teenuse pakkuja, et alustada!"
+        "please_connect": "Palun ühendage oma server, domeen ja DNS teenuse pakkuja, et alustada!",
+        "network_error": "Võrgu viga"
     },
     "more_page": {
         "configuration_wizard": "Seadistusviisard",
@@ -408,7 +409,11 @@
         "extending_volume_modal_description": "Uuendage {} plaanile {} kuus.",
         "size": "Suurus",
         "price": "Hind",
-        "data_migration_title": "Andmete migratsioon"
+        "data_migration_title": "Andmete migratsioon",
+        "extending_volume_started": "Mahtu laiendamine algas",
+        "extending_volume_provider_waiting": "Teenusepakkuja maht on muudetud, ootame 10 sekundit…",
+        "extending_volume_server_waiting": "Serveri maht on muudetud, ootame 20 sekundit…",
+        "extending_volume_rebooting": "Serveri taaskäivitamine…"
     },
     "service_page": {
         "nothing_here": "Midagi siin",
@@ -503,7 +508,8 @@
         "could_not_add_ssh_key": "SSH võtme lisamine ebaõnnestus",
         "username_rule": "Kasutajanimi võib sisaldada ainult väiketähti, numbreid ja allkriipse, ei tohi alata numbriga",
         "email_login": "E-posti sisselogimine",
-        "no_ssh_notice": "Sellele kasutajale luuakse ainult e-posti ja SSH kontod. Ühe sisselogimise lahendus kõikidele teenustele on varsti saadaval."
+        "no_ssh_notice": "Sellele kasutajale luuakse ainult e-posti ja SSH kontod. Ühe sisselogimise lahendus kõikidele teenustele on varsti saadaval.",
+        "user_already_exists": "Sama nimega kasutaja on juba olemas"
     },
     "devices": {
         "main_screen": {
@@ -572,7 +578,13 @@
         "run_jobs": "Käivita tööd",
         "reboot_success": "Server taaskäivitub",
         "reboot_failed": "Serverit ei õnnestunud taaskäivitada. Kontrollige rakenduse logisid.",
-        "config_pull_failed": "Konfiguratsiooni värskendust ei õnnestunud alla laadida. Tarkvara värskendamine algas siiski."
+        "config_pull_failed": "Konfiguratsiooni värskendust ei õnnestunud alla laadida. Tarkvara värskendamine algas siiski.",
+        "job_postponed": "Töö lisatud, kuid saate selle käivitada pärast praeguste tööde lõppu",
+        "job_removed": "Töö eemaldatud",
+        "rebuild_system": "Süsteemi ümberkorraldamine",
+        "start_server_upgrade": "Serveri värskenduse käivitamine",
+        "change_auto_upgrade_settings": "Automaatse värskenduse seadete muutmine",
+        "change_server_timezone": "Serveri ajavööndi muutmine"
     },
     "validations": {
         "required": "Nõutud",

@@ -35,7 +35,8 @@
         "connect": "Підключіться",
         "app_name": "SelfPrivacy",
         "copied_to_clipboard": "Скопійовано в буфер обміну!",
-        "please_connect": "Будь ласка, підключіть свій сервер, домен та провайдера DNS, щоб зануритися!"
+        "please_connect": "Будь ласка, підключіть свій сервер, домен та провайдера DNS, щоб зануритися!",
+        "network_error": "Помилка мережі"
     },
     "locale": "ua",
     "application_settings": {
@@ -145,7 +146,20 @@
         "one_more_restart": "Ще один перезапуск, щоб застосувати сертифікати безпеки.",
         "create_master_account": "Створити внутрішній рахунок",
         "finish": "Усе ініціалізовано",
-        "checks": "Перевірка була завершена\n{} з {}"
+        "checks": "Перевірка була завершена\n{} з {}",
+        "dns_provider_bad_key_error": "Невірний ключ API",
+        "steps": {
+            "dns_provider": "DNS провайдер",
+            "dns_setup": "Налаштування DNS",
+            "server_type": "Тип сервера",
+            "hosting": "Хостинг",
+            "domain": "Домен",
+            "server": "Сервер",
+            "nixos_installation": "Встановлення NixOS",
+            "server_reboot": "Перезапуск сервера",
+            "final_checks": "Фінальні перевірки"
+        },
+        "select_provider_price_free": "Безкоштовно"
     },
     "recovering": {
         "recovery_main_header": "З’ єднатися з існуючим сервером",
@@ -165,7 +179,7 @@
         "fallback_select_description": "Що у вас є? Виберіть перший доступний варіант:",
         "fallback_select_token_copy": "Копія токена автентифікації з іншої версії застосунку.",
         "fallback_select_root_ssh": "Root SSH доступ до сервера.",
-        "fallback_select_provider_console": "Доступ до серверної консолі мого продiвера.",
+        "fallback_select_provider_console": "Доступ до серверної консолі мого провайдера.",
         "authorization_failed": "Не можу авторизуватись за цим ключем",
         "fallback_select_provider_console_hint": "Наприклад: Hetzner.",
         "provider_connected": "Підключіться до {}",
@@ -365,7 +379,9 @@
         "status_ok": "Використання диска нормальне",
         "extending_volume_title": "Збільшення обсягу",
         "extending_volume_description": "Зміна обсягу дозволить зберігати більше даних на вашому сервері без розширення сервера. Обсяг може бути тільки збільшеним: зменшення неможливе.",
-        "data_migration_notice": "Під час переносу всі послуги будуть вимкнені."
+        "data_migration_notice": "Під час переносу всі послуги будуть вимкнені.",
+        "price": "Ціна",
+        "extending_volume_rebooting": "Перезапуск сервера…"
     },
     "not_ready_card": {
         "in_menu": "Сервер ще не налаштовано. Будь ласка, завершіть налаштування за допомогою майстра налаштування для подальшої роботи."
@@ -529,16 +545,35 @@
         "delete_ssh_key": "Видалити SSH-ключ для {}",
         "server_jobs": "Задачі на сервері",
         "reset_user_password": "Скинути пароль користувача",
-        "generic_error": "Не вдалося підключитись до сервера!"
+        "generic_error": "Не вдалося підключитись до сервера!",
+        "start_server_upgrade": "Запуск оновлення сервера",
+        "job_removed": "Завдання видалено",
+        "change_server_timezone": "Змінити часовий пояс сервера"
     },
     "validations": {
         "required": "Потрібно",
         "already_exist": "Вже існує",
         "invalid_format": "Неприпустимий формат",
-        "invalid_format_password": "Не повинен містити порожніх символів",
+        "invalid_format_password": "Пароль не має містити пробілів",
         "length_longer": "Довжина [] повинна бути коротшою або дорівнює {}",
         "invalid_format_ssh": "Повинен відповідати формату ключа SSH",
         "root_name": "Не може бути 'root'",
         "length_not_equal": "Довжина [], має бути {}"
+    },
+    "developer_settings": {
+        "allow_ssh_key_at_setup": "Дозволити налаштовувати ключі SSH користувача root під час установки",
+        "allow_ssh_key_at_setup_description": "Кнопка для додання ключа з'явиться на екрані підтвердження.",
+        "add_root_ssh_key": "Додати ключ SSH для root",
+        "root_ssh_key_added": "Ключ SSH для root встановлено і буде застосовано",
+        "ignore_tls": "Не перевіряти TLS сертифікати",
+        "title": "Налаштування розробника",
+        "subtitle": "Дані налаштування призначені лише для налагодження. Не змінюйте їх, якщо ви точно не знаєте, що робите.",
+        "server_setup": "Майстер встановлення сервера",
+        "use_staging_acme": "Використання тестового ACME сервера",
+        "use_staging_acme_description": "Використовується при налаштуванні нового сервера.",
+        "ignore_tls_description": "Програма не буде перевіряти TLS сертифікати при підключенні до сервера."
+    },
+    "support": {
+        "title": "Підтримка SelfPrivacy"
     }
 }

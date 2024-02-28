@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
+import 'package:selfprivacy/utils/platform_adapter.dart';
 
 @RoutePage()
 class ServicePage extends StatefulWidget {
@@ -62,17 +64,30 @@ class _ServicePageState extends State<ServicePage> {
         ServiceStatusCard(status: service.status),
         const SizedBox(height: 16),
         if (service.url != null)
-          ListTile(
-            iconColor: Theme.of(context).colorScheme.onBackground,
-            onTap: () => launchURL(service.url),
-            leading: const Icon(Icons.open_in_browser),
-            title: Text(
-              'service_page.open_in_browser'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            subtitle: Text(
-              service.url!.replaceAll('https://', ''),
-              style: Theme.of(context).textTheme.bodyMedium,
+          GestureDetector(
+            onLongPress: () {
+              PlatformAdapter.setClipboard(service.url!);
+              getIt<NavigationService>()
+                  .showSnackBar('basis.copied_to_clipboard'.tr());
+            },
+            onSecondaryTap: () {
+              PlatformAdapter.setClipboard(service.url!);
+              getIt<NavigationService>().showSnackBar(
+                'basis.copied_to_clipboard'.tr(),
+              );
+            },
+            child: ListTile(
+              iconColor: Theme.of(context).colorScheme.onBackground,
+              onTap: () => launchURL(service.url),
+              leading: const Icon(Icons.open_in_browser),
+              title: Text(
+                'service_page.open_in_browser'.tr(),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              subtitle: Text(
+                service.url!.replaceAll('https://', ''),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           ),
         const SizedBox(height: 8),

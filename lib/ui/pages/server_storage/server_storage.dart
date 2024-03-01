@@ -139,12 +139,12 @@ class ServerConsumptionListTile extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(8.0),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             child: ConsumptionListItem(
               title: service.displayName,
               icon: SvgPicture.string(
                 service.svgIcon,
-                width: 24.0,
+                width: 22.0,
                 height: 24.0,
                 colorFilter: ColorFilter.mode(
                   Theme.of(context).colorScheme.onBackground,

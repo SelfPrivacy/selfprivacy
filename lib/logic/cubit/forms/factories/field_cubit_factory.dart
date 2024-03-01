@@ -1,8 +1,8 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
-import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
 
 class FieldCubitFactory {
   FieldCubitFactory(this.context);
@@ -27,7 +27,7 @@ class FieldCubitFactory {
         ),
         ValidationModel(
           (final String login) =>
-              context.read<UsersCubit>().state.isLoginRegistered(login),
+              context.read<UsersBloc>().state.isLoginRegistered(login),
           'validations.already_exist'.tr(),
         ),
         RequiredStringValidation('validations.required'.tr()),

@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
@@ -40,7 +41,7 @@ extension BackupReasonExtension on Enum$BackupReason {
       };
 }
 
-class BackupConfiguration {
+class BackupConfiguration extends Equatable {
   BackupConfiguration.fromGraphQL(
     final Query$BackupConfiguration$backup$configuration configuration,
   ) : this(
@@ -58,7 +59,7 @@ class BackupConfiguration {
           ),
         );
 
-  BackupConfiguration({
+  const BackupConfiguration({
     required this.autobackupPeriod,
     required this.encryptionKey,
     required this.isInitialized,
@@ -75,9 +76,39 @@ class BackupConfiguration {
   final String? locationName;
   final BackupsProviderType provider;
   final AutobackupQuotas autobackupQuotas;
+
+  @override
+  List<Object?> get props => [
+        autobackupPeriod,
+        encryptionKey,
+        isInitialized,
+        locationId,
+        locationName,
+        provider,
+        autobackupQuotas,
+      ];
+
+  BackupConfiguration copyWith({
+    final Duration? autobackupPeriod,
+    final String? encryptionKey,
+    final bool? isInitialized,
+    final String? locationId,
+    final String? locationName,
+    final BackupsProviderType? provider,
+    final AutobackupQuotas? autobackupQuotas,
+  }) =>
+      BackupConfiguration(
+        autobackupPeriod: autobackupPeriod ?? this.autobackupPeriod,
+        encryptionKey: encryptionKey ?? this.encryptionKey,
+        isInitialized: isInitialized ?? this.isInitialized,
+        locationId: locationId ?? this.locationId,
+        locationName: locationName ?? this.locationName,
+        provider: provider ?? this.provider,
+        autobackupQuotas: autobackupQuotas ?? this.autobackupQuotas,
+      );
 }
 
-class AutobackupQuotas {
+class AutobackupQuotas extends Equatable {
   AutobackupQuotas.fromGraphQL(
     final Query$BackupConfiguration$backup$configuration$autobackupQuotas
         autobackupQuotas,
@@ -89,7 +120,7 @@ class AutobackupQuotas {
           yearly: autobackupQuotas.yearly,
         );
 
-  AutobackupQuotas({
+  const AutobackupQuotas({
     required this.last,
     required this.daily,
     required this.weekly,
@@ -117,6 +148,15 @@ class AutobackupQuotas {
         monthly: monthly ?? this.monthly,
         yearly: yearly ?? this.yearly,
       );
+
+  @override
+  List<Object?> get props => [
+        last,
+        daily,
+        weekly,
+        monthly,
+        yearly,
+      ];
 }
 
 enum BackupRestoreStrategy {

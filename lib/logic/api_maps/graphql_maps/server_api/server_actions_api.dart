@@ -29,7 +29,11 @@ mixin ServerActionsApi on GraphQLApiMap {
         print(response.exception.toString());
       }
       if (response.parsedData!.system.rebootSystem.success) {
-        time = DateTime.now().toUtc();
+        return GenericResult(
+          data: time,
+          success: true,
+          message: response.parsedData!.system.rebootSystem.message,
+        );
       }
     } catch (e) {
       print(e);
@@ -50,23 +54,94 @@ mixin ServerActionsApi on GraphQLApiMap {
     }
   }
 
-  Future<bool> upgrade() async {
+  Future<GenericResult<ServerJob?>> upgrade() async {
     try {
       final GraphQLClient client = await getClient();
-      return _commonBoolRequest(
-        () async => client.mutate$RunSystemUpgrade(),
-      );
+      final result = await client.mutate$RunSystemUpgrade();
+      if (result.hasException) {
+        final fallbackResult = await client.mutate$RunSystemUpgradeFallback();
+        if (fallbackResult.parsedData!.system.runSystemUpgrade.success) {
+          return GenericResult(
+            success: true,
+            data: null,
+            message: fallbackResult.parsedData!.system.runSystemUpgrade.message,
+          );
+        } else {
+          return GenericResult(
+            success: false,
+            message: fallbackResult.parsedData!.system.runSystemUpgrade.message,
+            data: null,
+          );
+        }
+      } else if (result.parsedData!.system.runSystemUpgrade.success &&
+          result.parsedData!.system.runSystemUpgrade.job != null) {
+        return GenericResult(
+          success: true,
+          data: ServerJob.fromGraphQL(
+            result.parsedData!.system.runSystemUpgrade.job!,
+          ),
+          message: result.parsedData!.system.runSystemUpgrade.message,
+        );
+      } else {
+        return GenericResult(
+          success: false,
+          message: result.parsedData!.system.runSystemUpgrade.message,
+          data: null,
+        );
+      }
     } catch (e) {
-      return false;
+      return GenericResult(
+        success: false,
+        message: e.toString(),
+        data: null,
+      );
     }
   }
 
-  Future<void> apply() async {
+  Future<GenericResult<ServerJob?>> apply() async {
     try {
       final GraphQLClient client = await getClient();
-      await client.mutate$RunSystemRebuild();
+      final result = await client.mutate$RunSystemRebuild();
+      if (result.hasException) {
+        final fallbackResult = await client.mutate$RunSystemRebuildFallback();
+        if (fallbackResult.parsedData!.system.runSystemRebuild.success) {
+          return GenericResult(
+            success: true,
+            data: null,
+            message: fallbackResult.parsedData!.system.runSystemRebuild.message,
+          );
+        } else {
+          return GenericResult(
+            success: false,
+            message: fallbackResult.parsedData!.system.runSystemRebuild.message,
+            data: null,
+          );
+        }
+      } else {
+        if (result.parsedData!.system.runSystemRebuild.success &&
+            result.parsedData!.system.runSystemRebuild.job != null) {
+          return GenericResult(
+            success: true,
+            data: ServerJob.fromGraphQL(
+              result.parsedData!.system.runSystemRebuild.job!,
+            ),
+            message: result.parsedData!.system.runSystemRebuild.message,
+          );
+        } else {
+          return GenericResult(
+            success: false,
+            message: result.parsedData!.system.runSystemRebuild.message,
+            data: null,
+          );
+        }
+      }
     } catch (e) {
       print(e);
+      return GenericResult(
+        success: false,
+        message: e.toString(),
+        data: null,
+      );
     }
   }
 }

@@ -233,7 +233,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         try {
           bucket = await BackblazeApi()
               .fetchBucket(backblazeCredential, configuration);
-          await getIt<ApiConfigModel>().storeBackblazeBucket(bucket!);
+          await getIt<ApiConfigModel>().setBackblazeBucket(bucket!);
         } catch (e) {
           print(e);
         }
@@ -484,6 +484,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       if (dkimCreated) {
         await repository.saveHasFinalChecked(true);
         emit(dataState.finish());
+        getIt<ApiConnectionRepository>().init();
       } else {
         runDelayed(
           finishCheckIfServerIsOkay,
@@ -724,7 +725,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ip4: server.ip,
       id: server.id,
       createTime: server.created,
-      volume: ServerVolume(
+      volume: ServerProviderVolume(
         id: 0,
         name: 'recovered_volume',
         sizeByte: 0,
@@ -802,6 +803,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       serverTypeIdentificator: serverType.data!.identifier,
     );
     emit(updatedState.finish());
+    getIt<ApiConnectionRepository>().init();
   }
 
   @override

@@ -94,35 +94,37 @@ abstract class ServerProvider {
   /// main server type pricing
   Future<GenericResult<AdditionalPricing?>> getAdditionalPricing();
 
-  /// Returns [ServerVolume] of all available volumes
+  /// Returns [ServerProviderVolume] of all available volumes
   /// assigned to the authorized user and attached to active machine.
-  Future<GenericResult<List<ServerVolume>>> getVolumes({final String? status});
+  Future<GenericResult<List<ServerProviderVolume>>> getVolumes({
+    final String? status,
+  });
 
-  /// Tries to create an empty unattached [ServerVolume].
+  /// Tries to create an empty unattached [ServerProviderVolume].
   ///
   /// If success, returns this volume information.
-  Future<GenericResult<ServerVolume?>> createVolume(final int gb);
+  Future<GenericResult<ServerProviderVolume?>> createVolume(final int gb);
 
-  /// Tries to delete the requested accessible [ServerVolume].
-  Future<GenericResult<void>> deleteVolume(final ServerVolume volume);
+  /// Tries to delete the requested accessible [ServerProviderVolume].
+  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume);
 
-  /// Tries to resize the requested accessible [ServerVolume]
+  /// Tries to resize the requested accessible [ServerProviderVolume]
   /// to the provided size **(not by!)**, must be greater than current size.
   Future<GenericResult<bool>> resizeVolume(
-    final ServerVolume volume,
+    final ServerProviderVolume volume,
     final DiskSize size,
   );
 
-  /// Tries to attach the requested accessible [ServerVolume]
+  /// Tries to attach the requested accessible [ServerProviderVolume]
   /// to an accessible machine by the provided identificator.
   Future<GenericResult<bool>> attachVolume(
-    final ServerVolume volume,
+    final ServerProviderVolume volume,
     final int serverId,
   );
 
-  /// Tries to attach the requested accessible [ServerVolume]
+  /// Tries to attach the requested accessible [ServerProviderVolume]
   /// from any machine.
-  Future<GenericResult<bool>> detachVolume(final ServerVolume volume);
+  Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume);
 
   /// Returns metedata of an accessible machine by the provided identificator
   /// to show on ServerDetailsScreen.

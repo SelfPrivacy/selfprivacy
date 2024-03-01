@@ -132,7 +132,7 @@ String getRouteTitle(final String routeName) {
     case 'DevicesRoute':
       return 'devices.main_screen.header';
     case 'AboutApplicationRoute':
-      return 'about_us_page.title';
+      return 'about_application_page.title';
     case 'ConsoleRoute':
       return 'console_page.title';
     case 'DeveloperSettingsRoute':

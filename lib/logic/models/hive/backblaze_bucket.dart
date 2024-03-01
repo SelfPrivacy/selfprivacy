@@ -29,4 +29,19 @@ class BackblazeBucket {
 
   @override
   String toString() => bucketName;
+
+  BackblazeBucket copyWith({
+    final String? bucketId,
+    final String? applicationKeyId,
+    final String? applicationKey,
+    final String? bucketName,
+    final String? encryptionKey,
+  }) =>
+      BackblazeBucket(
+        bucketId: bucketId ?? this.bucketId,
+        applicationKeyId: applicationKeyId ?? this.applicationKeyId,
+        applicationKey: applicationKey ?? this.applicationKey,
+        bucketName: bucketName ?? this.bucketName,
+        encryptionKey: encryptionKey ?? this.encryptionKey,
+      );
 }

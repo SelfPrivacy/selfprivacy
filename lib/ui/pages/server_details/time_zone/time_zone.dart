@@ -140,8 +140,10 @@ class _SelectTimezoneState extends State<SelectTimezone> {
           'GMT ${duration.toTimezoneOffsetFormat()} ${area.isNotEmpty ? '($area)' : ''}',
         ),
         onTap: () {
-          context.read<ServerDetailsCubit>().repository.setTimezone(
-                location.name,
+          context.read<JobsCubit>().addJob(
+                ChangeServerTimezoneJob(
+                  timezone: location.name,
+                ),
               );
           Navigator.of(context).pop();
         },

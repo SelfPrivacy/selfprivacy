@@ -982,6 +982,135 @@ class _CopyWithStubImpl$Input$RecoveryKeyLimitsInput<TRes>
       _res;
 }
 
+class Input$SSHSettingsInput {
+  factory Input$SSHSettingsInput({
+    required bool enable,
+    required bool passwordAuthentication,
+  }) =>
+      Input$SSHSettingsInput._({
+        r'enable': enable,
+        r'passwordAuthentication': passwordAuthentication,
+      });
+
+  Input$SSHSettingsInput._(this._$data);
+
+  factory Input$SSHSettingsInput.fromJson(Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$enable = data['enable'];
+    result$data['enable'] = (l$enable as bool);
+    final l$passwordAuthentication = data['passwordAuthentication'];
+    result$data['passwordAuthentication'] = (l$passwordAuthentication as bool);
+    return Input$SSHSettingsInput._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  bool get enable => (_$data['enable'] as bool);
+
+  bool get passwordAuthentication => (_$data['passwordAuthentication'] as bool);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$enable = enable;
+    result$data['enable'] = l$enable;
+    final l$passwordAuthentication = passwordAuthentication;
+    result$data['passwordAuthentication'] = l$passwordAuthentication;
+    return result$data;
+  }
+
+  CopyWith$Input$SSHSettingsInput<Input$SSHSettingsInput> get copyWith =>
+      CopyWith$Input$SSHSettingsInput(
+        this,
+        (i) => i,
+      );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Input$SSHSettingsInput) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$enable = enable;
+    final lOther$enable = other.enable;
+    if (l$enable != lOther$enable) {
+      return false;
+    }
+    final l$passwordAuthentication = passwordAuthentication;
+    final lOther$passwordAuthentication = other.passwordAuthentication;
+    if (l$passwordAuthentication != lOther$passwordAuthentication) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$enable = enable;
+    final l$passwordAuthentication = passwordAuthentication;
+    return Object.hashAll([
+      l$enable,
+      l$passwordAuthentication,
+    ]);
+  }
+}
+
+abstract class CopyWith$Input$SSHSettingsInput<TRes> {
+  factory CopyWith$Input$SSHSettingsInput(
+    Input$SSHSettingsInput instance,
+    TRes Function(Input$SSHSettingsInput) then,
+  ) = _CopyWithImpl$Input$SSHSettingsInput;
+
+  factory CopyWith$Input$SSHSettingsInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$SSHSettingsInput;
+
+  TRes call({
+    bool? enable,
+    bool? passwordAuthentication,
+  });
+}
+
+class _CopyWithImpl$Input$SSHSettingsInput<TRes>
+    implements CopyWith$Input$SSHSettingsInput<TRes> {
+  _CopyWithImpl$Input$SSHSettingsInput(
+    this._instance,
+    this._then,
+  );
+
+  final Input$SSHSettingsInput _instance;
+
+  final TRes Function(Input$SSHSettingsInput) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? enable = _undefined,
+    Object? passwordAuthentication = _undefined,
+  }) =>
+      _then(Input$SSHSettingsInput._({
+        ..._instance._$data,
+        if (enable != _undefined && enable != null) 'enable': (enable as bool),
+        if (passwordAuthentication != _undefined &&
+            passwordAuthentication != null)
+          'passwordAuthentication': (passwordAuthentication as bool),
+      }));
+}
+
+class _CopyWithStubImpl$Input$SSHSettingsInput<TRes>
+    implements CopyWith$Input$SSHSettingsInput<TRes> {
+  _CopyWithStubImpl$Input$SSHSettingsInput(this._res);
+
+  TRes _res;
+
+  call({
+    bool? enable,
+    bool? passwordAuthentication,
+  }) =>
+      _res;
+}
+
 class Input$SshMutationInput {
   factory Input$SshMutationInput({
     required String username,
@@ -1928,6 +2057,7 @@ const possibleTypesMap = <String, Set<String>>{
     'GenericBackupConfigReturn',
     'GenericJobMutationReturn',
     'GenericMutationReturn',
+    'SSHSettingsMutationReturn',
     'ServiceJobMutationReturn',
     'ServiceMutationReturn',
     'TimezoneMutationReturn',

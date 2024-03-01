@@ -20,7 +20,7 @@ class HiveConfig {
     Hive.registerAdapter(ServerDomainAdapter());
     Hive.registerAdapter(BackupsCredentialAdapter());
     Hive.registerAdapter(BackblazeBucketAdapter());
-    Hive.registerAdapter(ServerVolumeAdapter());
+    Hive.registerAdapter(ServerProviderVolumeAdapter());
     Hive.registerAdapter(UserTypeAdapter());
     Hive.registerAdapter(DnsProviderTypeAdapter());
     Hive.registerAdapter(ServerProviderTypeAdapter());

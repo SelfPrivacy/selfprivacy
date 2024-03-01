@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
@@ -20,9 +18,6 @@ class MorePage extends StatelessWidget {
   Widget build(final BuildContext context) {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-
-    final bool? usesBinds =
-        context.watch<ApiServerVolumeCubit>().state.usesBinds;
 
     return Scaffold(
       appBar: Breakpoints.small.isActive(context)
@@ -39,31 +34,6 @@ class MorePage extends StatelessWidget {
             padding: paddingH15V0,
             child: Column(
               children: [
-                if (isReady && usesBinds != null && !usesBinds)
-                  _MoreMenuItem(
-                    title: 'storage.start_migration_button'.tr(),
-                    iconData: Icons.drive_file_move_outline,
-                    goTo: () => ServicesMigrationRoute(
-                      diskStatus:
-                          context.read<ApiServerVolumeCubit>().state.diskStatus,
-                      services: context
-                          .read<ServicesCubit>()
-                          .state
-                          .services
-                          .where(
-                            (final service) =>
-                                service.id == 'bitwarden' ||
-                                service.id == 'gitea' ||
-                                service.id == 'pleroma' ||
-                                service.id == 'mailserver' ||
-                                service.id == 'nextcloud',
-                          )
-                          .toList(),
-                      isMigration: true,
-                    ),
-                    subtitle: 'storage.data_migration_notice'.tr(),
-                    accent: true,
-                  ),
                 if (!isReady)
                   _MoreMenuItem(
                     title: 'more_page.configuration_wizard'.tr(),
@@ -93,12 +63,12 @@ class MorePage extends StatelessWidget {
                     title: 'devices.main_screen.header'.tr(),
                   ),
                 _MoreMenuItem(
-                  title: 'more_page.application_settings'.tr(),
+                  title: 'application_settings.title'.tr(),
                   iconData: Icons.settings_outlined,
                   goTo: () => const AppSettingsRoute(),
                 ),
                 _MoreMenuItem(
-                  title: 'more_page.about_application'.tr(),
+                  title: 'about_application_page.title'.tr(),
                   iconData: BrandIcons.fire,
                   goTo: () => const AboutApplicationRoute(),
                   longGoTo: const DeveloperSettingsRoute(),
@@ -110,7 +80,7 @@ class MorePage extends StatelessWidget {
                     goTo: () => const OnboardingRoute(),
                   ),
                 _MoreMenuItem(
-                  title: 'more_page.console'.tr(),
+                  title: 'console_page.title'.tr(),
                   iconData: BrandIcons.terminal,
                   goTo: () => const ConsoleRoute(),
                 ),

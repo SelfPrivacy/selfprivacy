@@ -13,7 +13,7 @@ class RecoveryKeyReceiving extends StatelessWidget {
   Widget build(final BuildContext context) => BrandHeroScreen(
         heroTitle: 'recovery_key.key_main_header'.tr(),
         heroSubtitle: 'recovery_key.key_receiving_description'.tr(),
-        hasBackButton: true,
+        hasBackButton: false,
         hasFlashButton: false,
         children: [
           const Divider(),

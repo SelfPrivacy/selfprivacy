@@ -20,7 +20,7 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
       ip4: fields[0] as String,
       id: fields[1] as int,
       createTime: fields[3] as DateTime?,
-      volume: fields[4] as ServerVolume,
+      volume: fields[4] as ServerProviderVolume,
       apiToken: fields[5] as String,
       provider: fields[6] == null
           ? ServerProviderType.hetzner
@@ -60,17 +60,17 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
           typeId == other.typeId;
 }
 
-class ServerVolumeAdapter extends TypeAdapter<ServerVolume> {
+class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
   @override
   final int typeId = 5;
 
   @override
-  ServerVolume read(BinaryReader reader) {
+  ServerProviderVolume read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ServerVolume(
+    return ServerProviderVolume(
       id: fields[1] as int,
       name: fields[2] as String,
       sizeByte: fields[3] == null ? 10737418240 : fields[3] as int,
@@ -81,7 +81,7 @@ class ServerVolumeAdapter extends TypeAdapter<ServerVolume> {
   }
 
   @override
-  void write(BinaryWriter writer, ServerVolume obj) {
+  void write(BinaryWriter writer, ServerProviderVolume obj) {
     writer
       ..writeByte(6)
       ..writeByte(1)
@@ -104,7 +104,7 @@ class ServerVolumeAdapter extends TypeAdapter<ServerVolume> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ServerVolumeAdapter &&
+      other is ServerProviderVolumeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

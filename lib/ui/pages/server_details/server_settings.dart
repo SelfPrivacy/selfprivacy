@@ -30,24 +30,32 @@ class _ServerSettingsState extends State<_ServerSettings> {
           value: allowAutoUpgrade ?? false,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
-                  RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
-                );
-            context
-                .read<ServerDetailsCubit>()
-                .repository
-                .setAutoUpgradeSettings(
-                  AutoUpgradeSettings(
-                    enable: switched,
+                  ChangeAutoUpgradeSettingsJob(
                     allowReboot: rebootAfterUpgrade ?? false,
+                    enable: switched,
                   ),
                 );
             setState(() {
               allowAutoUpgrade = switched;
             });
           },
-          title: Text('server.allow_autoupgrade'.tr()),
+          title: Text(
+            'server.allow_autoupgrade'.tr(),
+            style: TextStyle(
+              fontStyle: allowAutoUpgrade !=
+                      serverDetailsState.autoUpgradeSettings.enable
+                  ? FontStyle.italic
+                  : FontStyle.normal,
+            ),
+          ),
           subtitle: Text(
             'server.allow_autoupgrade_hint'.tr(),
+            style: TextStyle(
+              fontStyle: allowAutoUpgrade !=
+                      serverDetailsState.autoUpgradeSettings.enable
+                  ? FontStyle.italic
+                  : FontStyle.normal,
+            ),
           ),
           activeColor: Theme.of(context).colorScheme.primary,
         ),
@@ -55,24 +63,32 @@ class _ServerSettingsState extends State<_ServerSettings> {
           value: rebootAfterUpgrade ?? false,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
-                  RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
-                );
-            context
-                .read<ServerDetailsCubit>()
-                .repository
-                .setAutoUpgradeSettings(
-                  AutoUpgradeSettings(
-                    enable: allowAutoUpgrade ?? false,
+                  ChangeAutoUpgradeSettingsJob(
                     allowReboot: switched,
+                    enable: allowAutoUpgrade ?? false,
                   ),
                 );
             setState(() {
               rebootAfterUpgrade = switched;
             });
           },
-          title: Text('server.reboot_after_upgrade'.tr()),
+          title: Text(
+            'server.reboot_after_upgrade'.tr(),
+            style: TextStyle(
+              fontStyle: rebootAfterUpgrade !=
+                      serverDetailsState.autoUpgradeSettings.allowReboot
+                  ? FontStyle.italic
+                  : FontStyle.normal,
+            ),
+          ),
           subtitle: Text(
             'server.reboot_after_upgrade_hint'.tr(),
+            style: TextStyle(
+              fontStyle: rebootAfterUpgrade !=
+                      serverDetailsState.autoUpgradeSettings.allowReboot
+                  ? FontStyle.italic
+                  : FontStyle.normal,
+            ),
           ),
           activeColor: Theme.of(context).colorScheme.primary,
         ),
@@ -82,9 +98,6 @@ class _ServerSettingsState extends State<_ServerSettings> {
             serverDetailsState.serverTimezone.toString(),
           ),
           onTap: () {
-            context.read<JobsCubit>().addJob(
-                  RebuildServerJob(title: 'jobs.upgrade_server'.tr()),
-                );
             Navigator.of(context).push(
               materialRoute(
                 const SelectTimezone(),

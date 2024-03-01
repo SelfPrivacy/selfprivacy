@@ -37,12 +37,21 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
     }
 
     final List<DnsRecord> allDnsRecords = await api.getDnsRecords();
-    allDnsRecords.removeWhere((final record) => record.type == 'AAAA');
     final foundRecords = await validateDnsRecords(
       domain,
       extractDkimRecord(allDnsRecords)?.content ?? '',
       allDnsRecords,
     );
+
+    if (!foundRecords.success && foundRecords.message == 'link-local') {
+      emit(
+        DnsRecordsState(
+          dnsState: DnsRecordsStatus.error,
+          dnsRecords: foundRecords.data,
+        ),
+      );
+      return;
+    }
 
     if (!foundRecords.success || foundRecords.data.isEmpty) {
       emit(const DnsRecordsState());
@@ -140,6 +149,17 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
         message: e.toString(),
       );
     }
+    // If providerDnsRecords contains a link-local ipv6 record, return an error
+    if (providerDnsRecords.any(
+      (final r) =>
+          r.type == 'AAAA' && (r.content?.trim().startsWith('fe80::') ?? false),
+    )) {
+      return GenericResult(
+        data: foundRecords,
+        success: false,
+        message: 'link-local',
+      );
+    }
     return GenericResult(
       data: foundRecords,
       success: true,
@@ -166,6 +186,28 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
     final List<DnsRecord> records = await api.getDnsRecords();
 
+    // If there are explicit link-local ipv6 records, remove them from the list
+    records.removeWhere(
+      (final r) =>
+          r.type == 'AAAA' && (r.content?.trim().startsWith('fe80::') ?? false),
+    );
+
+    // If there are no AAAA records, make empty copies of A records
+    if (!records.any((final r) => r.type == 'AAAA')) {
+      final recordsToAdd = records
+          .where((final r) => r.type == 'A')
+          .map(
+            (final r) => DnsRecord(
+              name: r.name,
+              type: 'AAAA',
+              content: null,
+            ),
+          )
+          .toList();
+      records.addAll(recordsToAdd);
+    }
+
+
     /// TODO: Error handling?
     final ServerDomain? domain = getIt<ApiConnectionRepository>().serverDomain;
     await ProvidersController.currentDnsProvider!.removeDomainRecords(
@@ -173,7 +215,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
       domain: domain!,
     );
     await ProvidersController.currentDnsProvider!.createDomainRecords(
-      records: records,
+      records: records.where((final r) => r.content != null).toList(),
       domain: domain,
     );
 

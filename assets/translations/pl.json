@@ -50,8 +50,8 @@
     },
     "about_application_page": {
         "title": "O aplikacji",
-        "application_version_text": "Wersja aplikacji {}",
-        "api_version_text": "Wersja API serwera {}",
+        "application_version_text": "Wersja aplikacji",
+        "api_version_text": "Wersja API serwera",
         "privacy_policy": "Polityka prywatności"
     },
     "application_settings": {

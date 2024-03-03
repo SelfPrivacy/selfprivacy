@@ -36,7 +36,8 @@
         "alert": "Уведомление",
         "copied_to_clipboard": "Скопировано в буфер обмена!",
         "app_name": "SelfPrivacy",
-        "please_connect": "Настройте ваш сервер и подключите домен для полного погружения!"
+        "please_connect": "Настройте ваш сервер и подключите домен для полного погружения!",
+        "network_error": "Ошибка сети"
     },
     "more_page": {
         "configuration_wizard": "Мастер настройки",
@@ -50,8 +51,8 @@
     },
     "about_application_page": {
         "title": "О приложении",
-        "application_version_text": "Версия приложения {}",
-        "api_version_text": "Версия API сервера {}",
+        "application_version_text": "Версия приложения",
+        "api_version_text": "Версия API сервера",
         "privacy_policy": "Политика конфиденциальности"
     },
     "application_settings": {
@@ -155,7 +156,8 @@
         "services_subtitle": "Записи типа “A” необходимые для работы сервисов.",
         "email_title": "Электронная почта",
         "email_subtitle": "Записи необходимые для безопасного обмена электронной почтой.",
-        "update_list": "Обновить список"
+        "update_list": "Обновить список",
+        "domain_validation_failure": "Мы не можем установить соединение с вашим доменом!"
     },
     "backup": {
         "card_title": "Резервное копирование",
@@ -304,7 +306,11 @@
         "migration_process": "Мигрируем…",
         "migration_done": "Завершить",
         "price": "Цена",
-        "extending_volume_modal_description": "Хранилище будет расширено до {}, новая стоимость {} в месяц."
+        "extending_volume_modal_description": "Хранилище будет расширено до {}, новая стоимость {} в месяц.",
+        "extending_volume_started": "Расширение хранилища началось",
+        "extending_volume_provider_waiting": "Хранилище расширено со стороны провайдера, ждём 10 секунд…",
+        "extending_volume_server_waiting": "Хранилище расширено со стороны сервера, ждём 20 секунд…",
+        "extending_volume_rebooting": "Перезагружаем сервер…"
     },
     "not_ready_card": {
         "in_menu": "Сервер ещё не настроен, воспользуйтесь мастером подключения."
@@ -382,7 +388,8 @@
         "username_rule": "Имя может содержать только маленькие латинские буквы, цифры, подчёркивания, не может начинаться с цифр",
         "email_login": "Авторизация по Email",
         "no_ssh_notice": "Для этого пользователя созданы только SSH и Email аккаунт. Единая авторизация для всех сервисов ещё не реализована.",
-        "details_title": "Пользователь"
+        "details_title": "Пользователь",
+        "user_already_exists": "Пользователь с таким именем уже существует"
     },
     "initializing": {
         "dns_provider_description": "Это позволит связать ваш домен с IP адресом:",
@@ -471,7 +478,7 @@
         "generic_error": "Ошибка проведения операции, попробуйте ещё раз.",
         "recovery_main_header": "Подключение к существующему серверу",
         "domain_recovery_description": "Введите домен, по которому вы хотите получить доступ к серверу:",
-        "domain_recover_placeholder": "Домен",
+        "domain_recover_placeholder": "Ваш домен",
         "domain_recover_error": "Не удалось найти сервер с таким доменом",
         "method_select_description": "Выберите способ входа:",
         "method_select_other_device": "У меня есть доступ на другом устройстве",
@@ -594,7 +601,13 @@
         "delete_ssh_key": "Удалить SSH ключ для {}",
         "server_jobs": "Задачи на сервере",
         "reset_user_password": "Сбросить пароль пользователя",
-        "generic_error": "Не удалось подключиться к серверу!"
+        "generic_error": "Не удалось подключиться к серверу!",
+        "job_postponed": "Задача добавлена, но вы сможете её запустить после завершения текущих задач",
+        "change_auto_upgrade_settings": "Изменить настройки автоматических обновлений",
+        "job_removed": "Задача удалена",
+        "rebuild_system": "Пересобрать систему",
+        "start_server_upgrade": "Начать обновление сервера",
+        "change_server_timezone": "Изменить часовой пояс сервера"
     },
     "validations": {
         "required": "Обязательное поле",

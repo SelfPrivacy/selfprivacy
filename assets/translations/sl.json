@@ -48,9 +48,9 @@
     },
     "about_application_page": {
         "title": "O dodatku",
-        "api_version_text": "Različica API strežnika {}",
+        "api_version_text": "Različica API strežnika",
         "privacy_policy": "Pravilnik o zasebnosti",
-        "application_version_text": "Različica aplikacije {}"
+        "application_version_text": "Različica aplikacije"
     },
     "application_settings": {
         "dark_theme_title": "Temna tema",

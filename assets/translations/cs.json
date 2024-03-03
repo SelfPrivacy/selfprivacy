@@ -39,8 +39,8 @@
     "about_application_page": {
         "title": "O příloze",
         "privacy_policy": "Zásady ochrany osobních údajů",
-        "api_version_text": "Verze API serveru {}",
-        "application_version_text": "Verze aplikace {}"
+        "api_version_text": "Verze API serveru",
+        "application_version_text": "Verze aplikace"
     },
     "more_page": {
         "onboarding": "Pozdravy",

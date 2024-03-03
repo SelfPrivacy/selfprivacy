@@ -46,8 +46,8 @@
     "about_application_page": {
         "privacy_policy": "מדיניות פרטיות",
         "title": "על אודות",
-        "application_version_text": "היישום בגרסה {}",
-        "api_version_text": "גרסת ה־API של השרת היא {}"
+        "application_version_text": "היישום בגרסה",
+        "api_version_text": "גרסת ה־API של השרת היא"
     },
     "ssh": {
         "root_subtitle": "בעלי המפתחות האלו יקבלו גישה מלאה לשרת ויוכלו לעשות איתו כל העולה על רוחם. יש להוסיף רק את המפתחות שלך לשרת.",

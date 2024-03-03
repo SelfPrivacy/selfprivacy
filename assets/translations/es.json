@@ -63,9 +63,9 @@
         "input_label": "Clave pública ED25519, ECDSA o RSA"
     },
     "about_application_page": {
-        "application_version_text": "Versión de la aplicación {}",
+        "application_version_text": "Versión de la aplicación",
         "title": "Sobre",
-        "api_version_text": "Versión API del servidor {}",
+        "api_version_text": "Versión API del servidor",
         "privacy_policy": "Política de privacidad"
     },
     "onboarding": {

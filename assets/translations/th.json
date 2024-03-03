@@ -41,9 +41,9 @@
         "onboarding": "ออนบอร์ด"
     },
     "about_application_page": {
-        "api_version_text": "API เซิฟเวอร์เวอร์ชั้น {}",
+        "api_version_text": "API เซิฟเวอร์เวอร์ชั้น",
         "title": "เกี่ยวกับ",
-        "application_version_text": "แอปพลิเคชั่น เวอร์ชั่น {}",
+        "application_version_text": "แอปพลิเคชั่น เวอร์ชั่น",
         "privacy_policy": "นโยบายความเป็นส่วนตัว"
     },
     "application_settings": {

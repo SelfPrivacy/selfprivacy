@@ -117,8 +117,8 @@
     },
     "about_application_page": {
         "title": "Teave",
-        "application_version_text": "Rakenduse versioon {}",
-        "api_version_text": "Serveri API versioon {}",
+        "application_version_text": "Rakenduse versioon",
+        "api_version_text": "Serveri API versioon",
         "privacy_policy": "Privaatsuspoliitika"
     },
     "resource_chart": {

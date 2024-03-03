@@ -74,8 +74,8 @@
         "copy": "Copie"
     },
     "about_application_page": {
-        "application_version_text": "Версія додатку {}",
-        "api_version_text": "Версія API сервера {}",
+        "application_version_text": "Версія додатку",
+        "api_version_text": "Версія API сервера",
         "privacy_policy": "Політика конфіденційності",
         "title": "Про нас"
     },

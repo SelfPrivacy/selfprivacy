@@ -47,8 +47,8 @@
         "copy": "Kopyalayın"
     },
     "about_application_page": {
-        "application_version_text": "Tətbiq versiyası {}",
-        "api_version_text": "Server API versiyası {}",
+        "application_version_text": "Tətbiq versiyası",
+        "api_version_text": "Server API versiyası",
         "privacy_policy": "Gizlilik Siyasəti",
         "title": "Tətbiq haqqında"
     },

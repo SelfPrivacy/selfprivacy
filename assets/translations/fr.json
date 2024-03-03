@@ -51,7 +51,7 @@
     "about_application_page": {
         "title": "À propos",
         "privacy_policy": "Politique de confidentialité",
-        "application_version_text": "Version de l'application {}"
+        "application_version_text": "Version de l'application"
     },
     "application_settings": {
         "title": "Paramètres de l'application",

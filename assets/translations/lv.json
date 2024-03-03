@@ -47,8 +47,8 @@
     },
     "about_application_page": {
         "title": "Par",
-        "application_version_text": "Aplikācijas versija {}",
-        "api_version_text": "Servera API versija {}",
+        "application_version_text": "Aplikācijas versija",
+        "api_version_text": "Servera API versija",
         "privacy_policy": "Privātuma politika"
     },
     "application_settings": {

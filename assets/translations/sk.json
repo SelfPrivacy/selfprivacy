@@ -98,8 +98,8 @@
     },
     "about_application_page": {
         "title": "O apke",
-        "application_version_text": "Verzia aplikácie {}",
-        "api_version_text": "Verzia servera {}",
+        "application_version_text": "Verzia aplikácie",
+        "api_version_text": "Verzia servera",
         "privacy_policy": "Zásady ochrany osobných údajov"
     },
     "application_settings": {

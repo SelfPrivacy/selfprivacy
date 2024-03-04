@@ -157,7 +157,7 @@ class _Card extends StatelessWidget {
                         const SizedBox(width: 8),
                         Text(
                           title,
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ],
                     ),

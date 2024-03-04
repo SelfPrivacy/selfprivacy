@@ -14,6 +14,7 @@ class BrandHeader extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => AppBar(
+        centerTitle: true,
         title: Padding(
           padding: const EdgeInsets.only(top: 4.0),
           child: Text(title),
@@ -25,8 +26,5 @@ class BrandHeader extends StatelessWidget {
                     onBackButtonPressed ?? () => Navigator.of(context).pop(),
               )
             : null,
-        actions: const [
-          SizedBox.shrink(),
-        ],
       );
 }

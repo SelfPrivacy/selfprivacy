@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/app_config_dependent/authentication_dependend_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
@@ -61,8 +61,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                               _firstValidServer(servers),
                               servers.length > 1,
                             ),
-                          if (servers.length > 1 &&
-                              (_isExtended || !_isServerFound(servers)))
+                          if (_isExtended || !_isServerFound(servers))
                             chooseServer(context, servers),
                         ],
                       ),

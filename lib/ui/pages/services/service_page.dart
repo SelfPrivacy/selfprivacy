@@ -2,9 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
@@ -26,7 +26,7 @@ class _ServicePageState extends State<ServicePage> {
   @override
   Widget build(final BuildContext context) {
     final Service? service =
-        context.watch<ServicesCubit>().state.getServiceById(widget.serviceId);
+        context.watch<ServicesBloc>().state.getServiceById(widget.serviceId);
 
     if (service == null) {
       return const BrandHeroScreen(
@@ -43,7 +43,7 @@ class _ServicePageState extends State<ServicePage> {
         service.status == ServiceStatus.off;
 
     final bool serviceLocked =
-        context.watch<ServicesCubit>().state.isServiceLocked(service.id);
+        context.watch<ServicesBloc>().state.isServiceLocked(service.id);
 
     return BrandHeroScreen(
       hasBackButton: true,
@@ -80,9 +80,8 @@ class _ServicePageState extends State<ServicePage> {
         const SizedBox(height: 8),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => {
-            context.read<ServicesCubit>().restart(service.id),
-          },
+          onTap: () =>
+              context.read<ServicesBloc>().add(ServiceRestart(service)),
           leading: const Icon(Icons.restart_alt_outlined),
           title: Text(
             'service_page.restart'.tr(),
@@ -92,14 +91,12 @@ class _ServicePageState extends State<ServicePage> {
         ),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => {
-            context.read<JobsCubit>().addJob(
-                  ServiceToggleJob(
-                    service: service,
-                    needToTurnOn: serviceDisabled,
-                  ),
+          onTap: () => context.read<JobsCubit>().addJob(
+                ServiceToggleJob(
+                  service: service,
+                  needToTurnOn: serviceDisabled,
                 ),
-          },
+              ),
           leading: const Icon(Icons.power_settings_new),
           title: Text(
             serviceDisabled
@@ -116,8 +113,7 @@ class _ServicePageState extends State<ServicePage> {
             onTap: () => context.pushRoute(
               ServicesMigrationRoute(
                 services: [service],
-                diskStatus:
-                    context.read<ApiServerVolumeCubit>().state.diskStatus,
+                diskStatus: context.read<VolumesBloc>().state.diskStatus,
                 isMigration: false,
               ),
             ),
@@ -131,7 +127,7 @@ class _ServicePageState extends State<ServicePage> {
                 namedArgs: {
                   'usage': service.storageUsage.used.toString(),
                   'volume': context
-                      .read<ApiServerVolumeCubit>()
+                      .read<VolumesBloc>()
                       .state
                       .getVolume(service.storageUsage.volume ?? '')
                       .displayName,
@@ -170,83 +166,54 @@ class ServiceStatusCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    late IconData icon;
+    late String buttonTitle;
+
     switch (status) {
       case ServiceStatus.active:
-        return FilledCard(
-          child: ListTile(
-            leading: const Icon(
-              Icons.check_circle_outline,
-              size: 24,
-            ),
-            title: Text('service_page.status.active'.tr()),
-          ),
-        );
+        icon = Icons.check_circle_outline;
+        buttonTitle = 'service_page.status.active';
+        break;
+
       case ServiceStatus.inactive:
-        return FilledCard(
-          tertiary: true,
-          child: ListTile(
-            leading: const Icon(
-              Icons.stop_circle_outlined,
-              size: 24,
-            ),
-            title: Text('service_page.status.inactive'.tr()),
-          ),
-        );
+        icon = Icons.stop_circle_outlined;
+        buttonTitle = 'service_page.status.inactive';
+        break;
+
       case ServiceStatus.failed:
-        return FilledCard(
-          error: true,
-          child: ListTile(
-            leading: const Icon(
-              Icons.error_outline,
-              size: 24,
-            ),
-            title: Text('service_page.status.failed'.tr()),
-          ),
-        );
+        icon = Icons.error_outline;
+        buttonTitle = 'service_page.status.failed';
+        break;
+
       case ServiceStatus.off:
-        return FilledCard(
-          tertiary: true,
-          child: ListTile(
-            leading: const Icon(
-              Icons.power_settings_new,
-              size: 24,
-            ),
-            title: Text('service_page.status.off'.tr()),
-          ),
-        );
+        icon = Icons.power_settings_new;
+        buttonTitle = 'service_page.status.off';
+        break;
+
       case ServiceStatus.activating:
-        return FilledCard(
-          tertiary: true,
-          child: ListTile(
-            leading: const Icon(
-              Icons.restart_alt_outlined,
-              size: 24,
-            ),
-            title: Text('service_page.status.activating'.tr()),
-          ),
-        );
+        icon = Icons.restart_alt_outlined;
+        buttonTitle = 'service_page.status.activating';
+        break;
+
       case ServiceStatus.deactivating:
-        return FilledCard(
-          tertiary: true,
-          child: ListTile(
-            leading: const Icon(
-              Icons.restart_alt_outlined,
-              size: 24,
-            ),
-            title: Text('service_page.status.deactivating'.tr()),
-          ),
-        );
+        icon = Icons.restart_alt_outlined;
+        buttonTitle = 'service_page.status.deactivating';
+        break;
+
       case ServiceStatus.reloading:
-        return FilledCard(
-          tertiary: true,
-          child: ListTile(
-            leading: const Icon(
-              Icons.restart_alt_outlined,
-              size: 24,
-            ),
-            title: Text('service_page.status.reloading'.tr()),
-          ),
-        );
+        icon = Icons.restart_alt_outlined;
+        buttonTitle = 'service_page.status.reloading';
     }
+
+    return FilledCard(
+      tertiary: true,
+      child: ListTile(
+        leading: Icon(
+          icon,
+          size: 24,
+        ),
+        title: Text(buttonTitle.tr()),
+      ),
+    );
   }
 }

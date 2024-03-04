@@ -16,7 +16,7 @@ class NewUserPage extends StatelessWidget {
         final jobCubit = context.read<JobsCubit>();
         final jobState = jobCubit.state;
         final users = <User>[];
-        users.addAll(context.read<UsersCubit>().state.users);
+        users.addAll(context.read<UsersBloc>().state.users);
         if (jobState is JobsStateWithJobs) {
           final jobs = jobState.clientJobList;
           for (final job in jobs) {
@@ -89,7 +89,6 @@ class NewUserPage extends StatelessWidget {
                               PlatformAdapter.setClipboard(currentPassword);
                               getIt<NavigationService>().showSnackBar(
                                 'basis.copied_to_clipboard'.tr(),
-                                behavior: SnackBarBehavior.floating,
                               );
                             },
                           ),

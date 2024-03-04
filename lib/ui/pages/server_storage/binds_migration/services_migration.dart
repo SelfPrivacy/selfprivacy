@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/services/services_cubit.dart';
+import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -176,15 +176,17 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                 child: Text('storage.start_migration_button'.tr()),
                 onPressed: () {
                   if (widget.isMigration) {
-                    context.read<ServerJobsCubit>().migrateToBinds(
+                    context.read<ServerJobsBloc>().migrateToBinds(
                           serviceToDisk,
                         );
                   } else {
                     for (final service in widget.services) {
                       if (serviceToDisk[service.id] != null) {
-                        context.read<ServicesCubit>().moveService(
-                              service.id,
-                              serviceToDisk[service.id]!,
+                        context.read<ServicesBloc>().add(
+                              ServiceMove(
+                                service,
+                                serviceToDisk[service.id]!,
+                              ),
                             );
                       }
                     }

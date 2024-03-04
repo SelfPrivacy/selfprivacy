@@ -15,7 +15,7 @@ class UserDetailsPage extends StatelessWidget {
 
     final String domainName = UiHelpers.getDomainName(config);
 
-    final User user = context.watch<UsersCubit>().state.users.firstWhere(
+    final User user = context.watch<UsersBloc>().state.users.firstWhere(
           (final User user) => user.login == login,
           orElse: () => const User(
             type: UserType.normal,
@@ -46,17 +46,15 @@ class UserDetailsPage extends StatelessWidget {
         const SizedBox(height: 8),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              useRootNavigator: true,
-              builder: (final BuildContext context) => Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: ResetPassword(user: user),
-              ),
+          onTap: () => showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            useRootNavigator: true,
+            builder: (final BuildContext context) => Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: ResetPassword(user: user),
             ),
-          },
+          ),
           leading: const Icon(Icons.lock_reset_outlined),
           title: Text(
             'users.reset_password'.tr(),
@@ -87,45 +85,43 @@ class _DeleteUserTile extends StatelessWidget {
   Widget build(final BuildContext context) => ListTile(
         iconColor: Theme.of(context).colorScheme.error,
         textColor: Theme.of(context).colorScheme.error,
-        onTap: () => {
-          showDialog(
-            context: context,
-            // useRootNavigator: false,
-            builder: (final BuildContext context) => AlertDialog(
-              title: Text('basis.confirmation'.tr()),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[
-                    Text(
-                      'users.delete_confirm_question'.tr(),
-                    ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('basis.cancel'.tr()),
-                  onPressed: () {
-                    context.router.pop();
-                  },
-                ),
-                TextButton(
-                  child: Text(
-                    'basis.delete'.tr(),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+        onTap: () => showDialog(
+          context: context,
+          // useRootNavigator: false,
+          builder: (final BuildContext context) => AlertDialog(
+            title: Text('basis.confirmation'.tr()),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    'users.delete_confirm_question'.tr(),
                   ),
-                  onPressed: () {
-                    context.read<JobsCubit>().addJob(DeleteUserJob(user: user));
-                    context.router.childControllers.first.pop();
-                    context.router.pop();
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('basis.cancel'.tr()),
+                onPressed: () {
+                  context.router.pop();
+                },
+              ),
+              TextButton(
+                child: Text(
+                  'basis.delete'.tr(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+                onPressed: () {
+                  context.read<JobsCubit>().addJob(DeleteUserJob(user: user));
+                  context.router.childControllers.first.pop();
+                  context.router.pop();
+                },
+              ),
+            ],
           ),
-        },
+        ),
         leading: const Icon(Icons.person_remove_outlined),
         title: Text(
           'users.delete_user'.tr(),
@@ -153,7 +149,6 @@ class _UserLogins extends StatelessWidget {
               PlatformAdapter.setClipboard(email);
               getIt<NavigationService>().showSnackBar(
                 'basis.copied_to_clipboard'.tr(),
-                behavior: SnackBarBehavior.floating,
               );
             },
             title: email,

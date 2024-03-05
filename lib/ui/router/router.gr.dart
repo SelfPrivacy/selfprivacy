@@ -132,6 +132,12 @@ abstract class _$RootRouter extends RootStackRouter {
         child: const ServerDetailsScreen(),
       );
     },
+    ServerSettingsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ServerSettingsScreen(),
+      );
+    },
     ServerStorageRoute.name: (routeData) {
       final args = routeData.argsAs<ServerStorageRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -490,6 +496,20 @@ class ServerDetailsRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ServerDetailsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ServerSettingsScreen]
+class ServerSettingsRoute extends PageRouteInfo<void> {
+  const ServerSettingsRoute({List<PageRouteInfo>? children})
+      : super(
+          ServerSettingsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ServerSettingsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

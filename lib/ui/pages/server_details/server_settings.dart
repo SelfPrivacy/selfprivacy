@@ -1,4 +1,4 @@
-part of 'server_details_screen.dart';
+part of 'server_settings_screen.dart';
 
 class _ServerSettings extends StatefulWidget {
   const _ServerSettings();

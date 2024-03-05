@@ -123,6 +123,7 @@
         "description": "All your services live here",
         "general_information": "General information",
         "resource_usage": "Resource usage",
+        "settings": "Server settings",
         "allow_autoupgrade": "Allow auto-upgrade",
         "allow_autoupgrade_hint": "Allow automatic packages upgrades on server",
         "reboot_after_upgrade": "Reboot after upgrade",

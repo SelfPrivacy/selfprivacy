@@ -34,7 +34,7 @@
         "connect_to_existing": "¡Ya tengo un servidor de SelfPrivacy!",
         "app_name": "SelfPrivacy",
         "please_connect": "¡Conecta tu servidor y dominio para sumergirte!",
-        "copied_to_clipboard": "¡Copiado al portapapeles!"
+        "copied_to_clipboard": "Copiado al portapapeles!"
     },
     "test": "es-test",
     "locale": "es",

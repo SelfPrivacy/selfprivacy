@@ -53,6 +53,9 @@ class JobsContent extends StatelessWidget {
     final bool hasRemovableJobs =
         context.watch<ServerJobsBloc>().state.hasRemovableJobs;
 
+    final bool hasBlockingJobs =
+        context.watch<ServerJobsBloc>().state.hasJobsBlockingRebuild;
+
     return BlocBuilder<JobsCubit, JobsState>(
       builder: (final context, final state) {
         late List<Widget> widgets;
@@ -422,7 +425,9 @@ class JobsContent extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             BrandButton.rised(
-              onPressed: () => context.read<JobsCubit>().applyAll(),
+              onPressed: hasBlockingJobs
+                  ? null
+                  : () => context.read<JobsCubit>().applyAll(),
               text: 'jobs.start'.tr(),
             ),
           ];

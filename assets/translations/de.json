@@ -23,7 +23,7 @@
         "username": "Benutzername",
         "loading": "Laden…",
         "later": "Überspringen und später einstellen",
-        "connect_to_existing": "Verbinde mit einem existierenden SelfPrivacy Server",
+        "connect_to_existing": "Verbinde mit einem existierenden SelfPrivacy Server!",
         "reset": "Zurücksetzen",
         "details": "Einzelheiten",
         "no_data": "Keine Daten",
@@ -36,7 +36,8 @@
         "apply": "Anwenden",
         "app_name": "SelfPrivacy",
         "copied_to_clipboard": "Zur Zwischenablage kopiert!",
-        "please_connect": "Bitte stellen sie eine Verbindung zu ihrem Server, Domain und DNS Betreiber her um zu beginnen!"
+        "please_connect": "Bitte stellen sie eine Verbindung zu ihrem Server, Domain und DNS Betreiber her um zu beginnen!",
+        "network_error": "Netzwerkfehler"
     },
     "more_page": {
         "configuration_wizard": "Setup-Assistent",

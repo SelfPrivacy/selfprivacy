@@ -16,6 +16,7 @@ import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 
 /// Repository for all API calls
@@ -214,6 +215,24 @@ class ApiConnectionRepository {
     final GenericResult result = await api.setTimezone(timezone);
     _apiData.settings.invalidate();
     if (result.success) {
+      return (true, result.message ?? 'basis.done'.tr());
+    } else {
+      return (false, result.message ?? 'jobs.generic_error'.tr());
+    }
+  }
+
+  Future<(bool, String)> setSshSettings(
+    final bool enable,
+    final bool passwordAuthentication,
+  ) async {
+    final GenericResult<SshSettings?> result = await api.setSshSettings(
+      SshSettings(
+        enable: enable,
+        passwordAuthentication: passwordAuthentication,
+      ),
+    );
+    _apiData.settings.invalidate();
+    if (result.data != null) {
       return (true, result.message ?? 'basis.done'.tr());
     } else {
       return (false, result.message ?? 'jobs.generic_error'.tr());

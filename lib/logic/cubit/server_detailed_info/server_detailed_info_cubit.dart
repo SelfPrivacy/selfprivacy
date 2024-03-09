@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
+import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
@@ -31,6 +32,7 @@ class ServerDetailsCubit
         metadata: state.metadata,
         serverTimezone: TimeZoneSettings.fromString(settings.timezone),
         autoUpgradeSettings: settings.autoUpgradeSettings,
+        sshSettings: settings.sshSettings,
       ),
     );
   }

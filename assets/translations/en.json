@@ -95,7 +95,8 @@
         "no_key_name": "Unnamed key",
         "root_title": "These are superuser keys",
         "root_subtitle": "Owners of these keys get full access to the server and can do anything on it. Only add your own keys to the server.",
-        "input_label": "Public ED25519, ECDSA or RSA key"
+        "input_label": "Public ED25519, ECDSA or RSA key",
+        "ssh_disabled_warning": "SSH is disabled. You can enable it in the server settings."
     },
     "onboarding": {
         "page1_title": "Digital independence, available to all of us",
@@ -130,6 +131,10 @@
         "reboot_after_upgrade_hint": "Reboot without prompt after applying changes on server",
         "server_timezone": "Server timezone",
         "select_timezone": "Select timezone",
+        "enable_ssh": "Enable SSH",
+        "enable_ssh_hint": "Allow SSH access to the server",
+        "allow_password_authentication": "Allow password authentication for SSH",
+        "allow_password_authentication_hint": "Allow users to log into your server's shell with a password (does not apply to root user)",
         "timezone_search_bar": "Timezone name or time shift value",
         "server_id": "Server ID",
         "status": "Status",
@@ -626,7 +631,8 @@
         "rebuild_system": "Rebuild system",
         "start_server_upgrade": "Start the server upgrade",
         "change_auto_upgrade_settings": "Change auto-upgrade settings",
-        "change_server_timezone": "Change server timezone"
+        "change_server_timezone": "Change server timezone",
+        "change_ssh_settings": "Change SSH settings"
     },
     "validations": {
         "required": "Required",

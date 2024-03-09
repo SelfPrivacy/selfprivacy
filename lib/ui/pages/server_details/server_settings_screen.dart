@@ -25,11 +25,11 @@ class ServerSettingsScreen extends StatefulWidget {
 class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
-      hasFlashButton: true,
-      heroIcon: Icons.settings_outlined,
-      heroTitle: 'server.settings'.tr(),
-      children: const [
-        _ServerSettings(),
-      ],
-    );
+        hasFlashButton: true,
+        heroIcon: Icons.settings_outlined,
+        heroTitle: 'server.settings'.tr(),
+        children: const [
+          _ServerSettings(),
+        ],
+      );
 }

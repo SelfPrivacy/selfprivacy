@@ -169,89 +169,110 @@ class _SshKeysCard extends StatelessWidget {
   final User user;
 
   @override
-  Widget build(final BuildContext context) => FilledCard(
-        child: Column(
-          children: [
-            ListTileOnSurfaceVariant(
-              title: 'ssh.title'.tr(),
-            ),
-            const Divider(height: 0),
-            ListTileOnSurfaceVariant(
-              title: 'ssh.create'.tr(),
-              leadingIcon: Icons.add_circle_outline,
-              onTap: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  useRootNavigator: true,
-                  builder: (final BuildContext context) => Padding(
-                    padding: MediaQuery.of(context).viewInsets,
-                    child: NewSshKey(user),
-                  ),
-                );
-              },
-            ),
-            Column(
-              children: user.sshKeys.map((final String key) {
-                final publicKey =
-                    key.split(' ').length > 1 ? key.split(' ')[1] : key;
-                final keyType = key.split(' ')[0];
-                final keyName = key.split(' ').length > 2
-                    ? key.split(' ')[2]
-                    : 'ssh.no_key_name'.tr();
-                return ListTileOnSurfaceVariant(
-                  title: '$keyName ($keyType)',
-                  disableSubtitleOverflow: true,
-                  // do not overflow text
-                  subtitle: publicKey,
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (final BuildContext context) => AlertDialog(
-                        title: Text('ssh.delete'.tr()),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: <Widget>[
-                              Text('ssh.delete_confirm_question'.tr()),
-                              Text('$keyName ($keyType)'),
-                              Text(publicKey),
-                            ],
-                          ),
+  Widget build(final BuildContext context) {
+    final serverDetailsState = context.watch<ServerDetailsCubit>().state;
+    final bool sshDisabled =
+        serverDetailsState is Loaded && !serverDetailsState.sshSettings.enable;
+
+    return FilledCard(
+      child: Column(
+        children: [
+          ListTileOnSurfaceVariant(
+            title: 'ssh.title'.tr(),
+          ),
+          const Divider(height: 0),
+          ListTileOnSurfaceVariant(
+            title: 'ssh.create'.tr(),
+            leadingIcon: Icons.add_circle_outline,
+            onTap: () {
+              showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                useRootNavigator: true,
+                builder: (final BuildContext context) => Padding(
+                  padding: MediaQuery.of(context).viewInsets,
+                  child: NewSshKey(user),
+                ),
+              );
+            },
+          ),
+          Column(
+            children: user.sshKeys.map((final String key) {
+              final publicKey =
+                  key.split(' ').length > 1 ? key.split(' ')[1] : key;
+              final keyType = key.split(' ')[0];
+              final keyName = key.split(' ').length > 2
+                  ? key.split(' ')[2]
+                  : 'ssh.no_key_name'.tr();
+              return ListTileOnSurfaceVariant(
+                title: '$keyName ($keyType)',
+                disableSubtitleOverflow: true,
+                // do not overflow text
+                subtitle: publicKey,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (final BuildContext context) => AlertDialog(
+                      title: Text('ssh.delete'.tr()),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            Text('ssh.delete_confirm_question'.tr()),
+                            Text('$keyName ($keyType)'),
+                            Text(publicKey),
+                          ],
                         ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('basis.cancel'.tr()),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'basis.delete'.tr(),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                            ),
-                            onPressed: () {
-                              context.read<JobsCubit>().addJob(
-                                    DeleteSSHKeyJob(
-                                      user: user,
-                                      publicKey: key,
-                                    ),
-                                  );
-                              context.popRoute();
-                            },
-                          ),
-                        ],
                       ),
-                    );
-                  },
-                );
-              }).toList(),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('basis.cancel'.tr()),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text(
+                            'basis.delete'.tr(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                          onPressed: () {
+                            context.read<JobsCubit>().addJob(
+                                  DeleteSSHKeyJob(
+                                    user: user,
+                                    publicKey: key,
+                                  ),
+                                );
+                            context.popRoute();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          ),
+          if (sshDisabled)
+            Column(
+              children: [
+                const Divider(height: 0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Expanded(
+                    child: InfoBox(
+                      text: 'ssh.ssh_disabled_warning'.tr(),
+                      isWarning: true,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      );
+        ],
+      ),
+    );
+  }
 }
 
 class NewSshKey extends StatelessWidget {

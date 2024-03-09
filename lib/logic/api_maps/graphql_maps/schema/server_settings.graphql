@@ -62,3 +62,13 @@ mutation ChangeAutoUpgradeSettings($settings: AutoUpgradeSettingsInput!) {
     }
   }
 }
+
+mutation ChangeSshSettings($settings: SSHSettingsInput!) {
+  system {
+    changeSshSettings(settings: $settings) {
+      ...basicMutationReturnFields
+      enable
+      passwordAuthentication
+    }
+  }
+}

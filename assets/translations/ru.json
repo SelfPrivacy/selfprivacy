@@ -50,10 +50,28 @@
         "copy": "Копировать"
     },
     "about_application_page": {
-        "title": "О приложении",
+        "title": "О приложении и поддержка",
         "application_version_text": "Версия приложения",
         "api_version_text": "Версия API сервера",
-        "privacy_policy": "Политика конфиденциальности"
+        "privacy_policy": "Политика конфиденциальности",
+        "versions": "Версии",
+        "matrix_channel": "Канал в Matrix",
+        "email_support": "Поддержка по электронной почте",
+        "bug_report_subtitle": "Из-за спама требуется ручное подтверждение аккаунта. Свяжитесь с нами в чате поддержки для активации аккаунта.",
+        "open_source_licenses": "Лицензии используемых библиотек",
+        "links": "Ссылки",
+        "website": "Наш сайт",
+        "documentation": "Документация",
+        "telegram_channel": "Канал в Telegram",
+        "get_support": "Получить помощь",
+        "matrix_support_chat": "Чат поддержки в Matrix",
+        "telegram_support_chat": "Чат поддержки в Telegram",
+        "contribute": "Внести вклад",
+        "source_code": "Исходный код",
+        "bug_report": "Сообщить о неполадке",
+        "help_translate": "Помочь с переводом",
+        "matrix_contributors_chat": "Чат разработчиков в Matrix",
+        "telegram_contributors_chat": "Чат разработчиков в Telegram"
     },
     "application_settings": {
         "title": "Настройки приложения",
@@ -77,7 +95,8 @@
         "no_key_name": "Безымянный ключ",
         "root_title": "Это ключи суперпользователя",
         "root_subtitle": "Владельцы указанных здесь ключей получают полный доступ к данным и настройкам сервера. Добавляйте исключительно свои ключи.",
-        "input_label": "Публичный ED25519, ECDSA или RSA ключ"
+        "input_label": "Публичный ED25519, ECDSA или RSA ключ",
+        "ssh_disabled_warning": "SSH отключен. Его можно включить в настройках сервера."
     },
     "onboarding": {
         "page1_title": "Цифровая независимость доступна каждому",
@@ -128,7 +147,12 @@
             "other": "{} ядер"
         },
         "server_provider": "Провайдер сервера",
-        "dns_provider": "Провайдер DNS"
+        "dns_provider": "Провайдер DNS",
+        "allow_password_authentication_hint": "Позволяет пользователям подключаться к серверу по SSH используя свой пароль (не применяется к суперпользователю)",
+        "allow_password_authentication": "Разрешить вход по SSH с использованием пароля",
+        "settings": "Настройки сервера",
+        "enable_ssh": "Включить SSH",
+        "enable_ssh_hint": "Разрешить доступ к серверу через SSH"
     },
     "record": {
         "root": "Корневой домен",
@@ -607,7 +631,8 @@
         "job_removed": "Задача удалена",
         "rebuild_system": "Пересобрать систему",
         "start_server_upgrade": "Начать обновление сервера",
-        "change_server_timezone": "Изменить часовой пояс сервера"
+        "change_server_timezone": "Изменить часовой пояс сервера",
+        "change_ssh_settings": "Изменить настройки SSH"
     },
     "validations": {
         "required": "Обязательное поле",

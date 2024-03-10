@@ -632,7 +632,9 @@
         "use_staging_acme_description": "Використовується при налаштуванні нового сервера.",
         "ignore_tls_description": "Програма не буде перевіряти TLS сертифікати при підключенні до сервера.",
         "routing": "Роутинг програми",
-        "reset_onboarding_description": "Повторно показати екран привітання"
+        "reset_onboarding_description": "Повторно показати екран привітання",
+        "reset_onboarding": "Скинути прапорець перегляду привітання",
+        "cubit_statuses": "Поточний стан кубітів завантаження"
     },
     "support": {
         "title": "Підтримка SelfPrivacy"

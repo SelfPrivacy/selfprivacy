@@ -318,7 +318,7 @@
     },
     "more_page": {
         "configuration_wizard": "معالج الإعداد",
-        "onboarding": "التهيئة",
+        "onboarding": "جاري الإعداد",
         "create_ssh_key": "مفاتيح SSH للمستخدم المميز"
     },
     "console_page": {
@@ -461,7 +461,7 @@
         "card_subtitle": "قم بإدارة النسخ الاحتياطية الخاصة بك",
         "reupload_key": "مفتاح إعادة التحميل الاضطراري",
         "reuploaded_key": "مفتاح إعادة التحميل",
-        "initialize": "البدء",
+        "initialize": "التهيئة",
         "waiting_for_rebuild": "ستتمكن من إنشاء نسختك الإحتياطية الأولى خلال بضع دقائق.",
         "refresh": "قم بتحديث الحالة",
         "refetch_backups": "قم بجلب قائمة النسخ الإحتياطي مرة أخرى",
@@ -629,7 +629,7 @@
         "uses": "استخدام {usage} على {volume}",
         "snapshots": "لقطات منسوخة احتياطاً",
         "status": {
-            "active": "تشغيل",
+            "active": "قيد التشغيل",
             "inactive": "إيقاف",
             "off": "غير نشط",
             "activating": "تنشيط",

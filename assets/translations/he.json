@@ -41,7 +41,8 @@
         "continue": "להמשיך",
         "alert": "התראה",
         "copied_to_clipboard": "הועתק ללוח הגזירים!",
-        "please_connect": "נא לחבר את השרת, שם התחום וספק ה־DNS שלך לפני שצוללים פנימה!"
+        "please_connect": "נא לחבר את השרת, שם התחום וספק ה־DNS שלך לפני שצוללים פנימה!",
+        "network_error": "שגיאת רשת"
     },
     "about_application_page": {
         "privacy_policy": "מדיניות פרטיות",
@@ -305,7 +306,11 @@
         "start_migration_button": "התחלת הסבה",
         "migration_process": "הסבה מתבצעת…",
         "migration_done": "הסתיימה",
-        "extending_volume_modal_description": "לשדרג ל־{} בתוכנית של {} לחודש."
+        "extending_volume_modal_description": "לשדרג ל־{} בתוכנית של {} לחודש.",
+        "extending_volume_started": "הרחבת כרך החלה",
+        "extending_volume_provider_waiting": "גודל כרך הספק השתנה, נמתין 10 שניות…",
+        "extending_volume_server_waiting": "גודל כרך השרת השתנה, נמתין 20 שניות…",
+        "extending_volume_rebooting": "השרת מופעל מחדש…"
     },
     "service_page": {
         "enable": "הפעלת שירות",
@@ -373,7 +378,8 @@
         "could_not_delete_user": "לא ניתן למחוק משתמש",
         "could_not_add_ssh_key": "לא ניתן להוסיף מפתח SSH",
         "email_login": "כניסה עם דוא״ל",
-        "username_rule": "שם המשתמש חייב להכיל אותיות לטיניות קטנות, ספרות וקווים תחתיים ואסור לו להתחיל בספרה"
+        "username_rule": "שם המשתמש חייב להכיל אותיות לטיניות קטנות, ספרות וקווים תחתיים ואסור לו להתחיל בספרה",
+        "user_already_exists": "כבר קיים משתמש עם שם המשתמש הזה"
     },
     "initializing": {
         "dns_provider_description": "שירות שמאפשר ל־IP שלך להצביע על שמות תחום:",
@@ -418,7 +424,7 @@
             "dns_setup": "הגדרת DNS",
             "nixos_installation": "התקנת NixOS",
             "final_checks": "בדיקות אחרונות",
-            "server_reboot": "השרת מופעל מחדש"
+            "server_reboot": "הפעלת השרת מחדש"
         },
         "select_provider_email_notice": "אירוח דוא״ל לא יהיה זמין ללקוחות חדשים. עם זאת, אפשרות זו תיפתח לאחר השלמת התשלום הראשון שלך.",
         "choose_server_type_text": "קיבולות משאבים שונות תומכות בשירותים שונים. אל חשש, אפשר להגדיל את השרת שלך בכל עת",
@@ -508,12 +514,12 @@
             "access_granted_on": "הוענקה גישה דרך {}"
         },
         "add_new_device_screen": {
-            "header": "אימות מכשיר חדש",
+            "header": "מכשיר חדש מאומת",
             "description": "נא לספק את המפתח במכשיר לאישור:",
             "please_wait": "נא להמתין",
             "tip": "המפתח תקף ל־10 דקות.",
             "expired": "תוקף המפתח פג.",
-            "get_new_key": "הנפקת מפתח חדש"
+            "get_new_key": "משיכת מפתח חדש"
         },
         "revoke_device_alert": {
             "header": "לשלול גישה?",
@@ -547,7 +553,7 @@
         "purge_all_keys": "למחוק לחלוטין את כל מפתחות האימות?",
         "try_again": "לנסות שוב?",
         "unexpected_error": "שגיאת פתע במהלך הצבה מצד הספק.",
-        "are_you_sure": "לנסות שוב?",
+        "are_you_sure": "להמשיך?",
         "destroy_server": "להשמיד את השרת וליצור אחד חדש?",
         "purge_all_keys_confirm": "כן, למחוק לחלוטין את כל האסימונים שלי",
         "delete_server_volume": "למחוק את השרת והכרך?",
@@ -562,7 +568,7 @@
         "no": "לא"
     },
     "jobs": {
-        "service_turn_off": "גיבוי",
+        "service_turn_off": "כיבוי",
         "service_turn_on": "הפעלה",
         "job_added": "נוספה משימה",
         "run_jobs": "הפעלת משימות",
@@ -582,7 +588,13 @@
         "server_jobs": "משימות בשרת",
         "reset_user_password": "איפוס סיסמת משתמש",
         "reboot_failed": "לא ניתן להפעיל את השרת מחדש. נא לעיין ביומני היישום.",
-        "config_pull_failed": "משיכת שדרוג ההגדרות נכשלה. שדרוג התוכנה החל בכל זאת."
+        "config_pull_failed": "משיכת שדרוג ההגדרות נכשלה. שדרוג התוכנה החל בכל זאת.",
+        "job_postponed": "נוספה משימה, אך לא תהיה לך אפשרות להפעיל אותה לאחר סיום המשימות הנוכחיות",
+        "job_removed": "משימה הוסרה",
+        "rebuild_system": "בניית המערכת מחדש",
+        "start_server_upgrade": "התחלת שדרוג השרת",
+        "change_auto_upgrade_settings": "שינוי הגדרות השדרוג האוטומטי",
+        "change_server_timezone": "שינוי אזור הזמן של השרת"
     },
     "validations": {
         "required": "נחוץ",

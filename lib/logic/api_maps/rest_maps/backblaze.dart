@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
-import 'package:selfprivacy/logic/api_maps/generic_result.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 

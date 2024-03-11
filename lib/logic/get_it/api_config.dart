@@ -42,47 +42,47 @@ class ApiConfigModel {
     _serverProvider = value;
   }
 
-  Future<void> storeDnsProviderType(final DnsProviderType value) async {
+  Future<void> setDnsProviderType(final DnsProviderType value) async {
     await _box.put(BNames.dnsProvider, value);
     _dnsProvider = value;
   }
 
-  Future<void> storeServerProviderKey(final String value) async {
+  Future<void> setServerProviderKey(final String value) async {
     await _box.put(BNames.hetznerKey, value);
     _serverProviderKey = value;
   }
 
-  Future<void> storeDnsProviderKey(final String value) async {
+  Future<void> setDnsProviderKey(final String value) async {
     await _box.put(BNames.cloudFlareKey, value);
     _dnsProviderKey = value;
   }
 
-  Future<void> storeServerTypeIdentifier(final String typeIdentifier) async {
+  Future<void> setServerTypeIdentifier(final String typeIdentifier) async {
     await _box.put(BNames.serverTypeIdentifier, typeIdentifier);
     _serverType = typeIdentifier;
   }
 
-  Future<void> storeServerLocation(final String serverLocation) async {
+  Future<void> setServerLocation(final String serverLocation) async {
     await _box.put(BNames.serverLocation, serverLocation);
     _serverLocation = serverLocation;
   }
 
-  Future<void> storeBackblazeCredential(final BackupsCredential value) async {
+  Future<void> setBackblazeCredential(final BackupsCredential value) async {
     await _box.put(BNames.backblazeCredential, value);
     _backblazeCredential = value;
   }
 
-  Future<void> storeServerDomain(final ServerDomain value) async {
+  Future<void> setServerDomain(final ServerDomain value) async {
     await _box.put(BNames.serverDomain, value);
     _serverDomain = value;
   }
 
-  Future<void> storeServerDetails(final ServerHostingDetails value) async {
+  Future<void> setServerDetails(final ServerHostingDetails value) async {
     await _box.put(BNames.serverDetails, value);
     _serverDetails = value;
   }
 
-  Future<void> storeBackblazeBucket(final BackblazeBucket value) async {
+  Future<void> setBackblazeBucket(final BackblazeBucket value) async {
     await _box.put(BNames.backblazeBucket, value);
     _backblazeBucket = value;
   }

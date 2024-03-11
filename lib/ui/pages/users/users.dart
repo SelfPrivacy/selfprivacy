@@ -4,32 +4,33 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
-import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
+import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/users/users_cubit.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
+import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
+import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
-import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
-import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
-import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
+import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 part 'new_user.dart';
+part 'reset_password.dart';
 part 'user.dart';
 part 'user_details.dart';
-part 'reset_password.dart';
 
 @RoutePage()
 class UsersPage extends StatelessWidget {
@@ -49,18 +50,18 @@ class UsersPage extends StatelessWidget {
         iconData: BrandIcons.users,
       );
     } else {
-      child = BlocBuilder<UsersCubit, UsersState>(
+      child = BlocBuilder<UsersBloc, UsersState>(
         builder: (final BuildContext context, final UsersState state) {
           final users = state.orderedUsers;
           if (users.isEmpty) {
-            if (state.isLoading) {
+            if (state is UsersRefreshing) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
             return RefreshIndicator(
               onRefresh: () async {
-                await context.read<UsersCubit>().refresh();
+                await context.read<UsersBloc>().refresh();
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -76,7 +77,7 @@ class UsersPage extends StatelessWidget {
                       const SizedBox(height: 18),
                       BrandOutlinedButton(
                         onPressed: () {
-                          context.read<UsersCubit>().refresh();
+                          context.read<UsersBloc>().refresh();
                         },
                         title: 'users.refresh_users'.tr(),
                       ),
@@ -88,7 +89,7 @@ class UsersPage extends StatelessWidget {
           }
           return RefreshIndicator(
             onRefresh: () async {
-              await context.read<UsersCubit>().refresh();
+              await context.read<UsersBloc>().refresh();
             },
             child: Column(
               children: [

@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
+import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
-import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
@@ -233,7 +233,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         try {
           bucket = await BackblazeApi()
               .fetchBucket(backblazeCredential, configuration);
-          await getIt<ApiConfigModel>().storeBackblazeBucket(bucket!);
+          await getIt<ApiConfigModel>().setBackblazeBucket(bucket!);
         } catch (e) {
           print(e);
         }
@@ -484,6 +484,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       if (dkimCreated) {
         await repository.saveHasFinalChecked(true);
         emit(dataState.finish());
+        getIt<ApiConnectionRepository>().init();
       } else {
         runDelayed(
           finishCheckIfServerIsOkay,
@@ -724,7 +725,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ip4: server.ip,
       id: server.id,
       createTime: server.created,
-      volume: ServerVolume(
+      volume: ServerProviderVolume(
         id: 0,
         name: 'recovered_volume',
         sizeByte: 0,
@@ -802,6 +803,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       serverTypeIdentificator: serverType.data!.identifier,
     );
     emit(updatedState.finish());
+    getIt<ApiConnectionRepository>().init();
   }
 
   @override

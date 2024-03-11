@@ -1,33 +1,24 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
-import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/buttons/segmented_buttons.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
-import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/components/brand_loader/brand_loader.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/cpu_chart.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/network_charts.dart';
 import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';
-import 'package:selfprivacy/utils/breakpoints.dart';
-import 'package:selfprivacy/utils/extensions/duration.dart';
-import 'package:selfprivacy/utils/route_transitions/basic.dart';
-import 'package:timezone/timezone.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 
 part 'charts/chart.dart';
-part 'server_settings.dart';
 part 'text_details.dart';
-part 'time_zone/time_zone.dart';
 
 var navigatorKey = GlobalKey<NavigatorState>();
 
@@ -81,10 +72,14 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
         heroSubtitle: 'server.description'.tr(),
         children: [
           StorageCard(
-            diskStatus: context.watch<ApiServerVolumeCubit>().state.diskStatus,
+            diskStatus: context.watch<VolumesBloc>().state.diskStatus,
           ),
           const SizedBox(height: 16),
-          const _ServerSettings(),
+          ListTile(
+            title: Text('server.settings'.tr()),
+            leading: const Icon(BrandIcons.settings),
+            onTap: () => context.pushRoute(const ServerSettingsRoute()),
+          ),
           const Divider(height: 32),
           Text(
             'server.resource_usage'.tr(),

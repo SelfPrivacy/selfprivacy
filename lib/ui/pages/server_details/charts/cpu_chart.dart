@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
-import 'package:intl/intl.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/bottom_title.dart';
 
 class CpuChart extends StatelessWidget {

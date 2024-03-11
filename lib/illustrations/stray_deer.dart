@@ -17,10 +17,6 @@ class StrayDeerPainter extends CustomPainter {
     final Color deerSkin =
         const Color(0xffe0ac9c).harmonizeWith(colorScheme.primary);
 
-    print('deerSkin: $deerSkin');
-    print('colorScheme.primary: ${colorScheme.primary}');
-    print('colorPalette.tertiary.get(10): ${colorPalette.tertiary.get(50)}');
-
     final Path path0 = Path();
     path0.moveTo(size.width * 0.6099773, size.height * 0.6719577);
     path0.lineTo(size.width * 0.6088435, size.height * 0.6719577);

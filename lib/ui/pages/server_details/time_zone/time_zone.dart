@@ -1,4 +1,4 @@
-part of '../server_details_screen.dart';
+part of '../server_settings_screen.dart';
 
 final List<Location> locations = timeZoneDatabase.locations.values.toList()
   ..sort(
@@ -140,8 +140,10 @@ class _SelectTimezoneState extends State<SelectTimezone> {
           'GMT ${duration.toTimezoneOffsetFormat()} ${area.isNotEmpty ? '($area)' : ''}',
         ),
         onTap: () {
-          context.read<ServerDetailsCubit>().repository.setTimezone(
-                location.name,
+          context.read<JobsCubit>().addJob(
+                ChangeServerTimezoneJob(
+                  timezone: location.name,
+                ),
               );
           Navigator.of(context).pop();
         },

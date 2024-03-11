@@ -1,6 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
-import 'package:intl/intl.dart';
 
 String bottomTitle(
   final int value,

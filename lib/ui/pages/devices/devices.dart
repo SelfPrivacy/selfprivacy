@@ -2,12 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/cubit/devices/devices_cubit.dart';
+import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
-import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/devices/new_device.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
@@ -22,12 +21,11 @@ class DevicesScreen extends StatefulWidget {
 class _DevicesScreenState extends State<DevicesScreen> {
   @override
   Widget build(final BuildContext context) {
-    final ApiDevicesState devicesStatus =
-        context.watch<ApiDevicesCubit>().state;
+    final DevicesState devicesStatus = context.watch<DevicesBloc>().state;
 
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<ApiDevicesCubit>().refresh();
+        await context.read<DevicesBloc>().refresh();
       },
       child: BrandHeroScreen(
         heroTitle: 'devices.main_screen.header'.tr(),
@@ -35,13 +33,13 @@ class _DevicesScreenState extends State<DevicesScreen> {
         hasBackButton: true,
         hasFlashButton: false,
         children: [
-          if (devicesStatus.status == LoadingStatus.uninitialized) ...[
+          if (devicesStatus is DevicesInitial) ...[
             const Center(
               heightFactor: 8,
               child: CircularProgressIndicator(),
             ),
           ],
-          if (devicesStatus.status != LoadingStatus.uninitialized) ...[
+          if (devicesStatus is! DevicesInitial) ...[
             _DevicesInfo(
               devicesStatus: devicesStatus,
             ),
@@ -70,7 +68,7 @@ class _DevicesInfo extends StatelessWidget {
     required this.devicesStatus,
   });
 
-  final ApiDevicesState devicesStatus;
+  final DevicesState devicesStatus;
 
   @override
   Widget build(final BuildContext context) => Column(
@@ -82,7 +80,9 @@ class _DevicesInfo extends StatelessWidget {
                   color: Theme.of(context).colorScheme.secondary,
                 ),
           ),
-          _DeviceTile(device: devicesStatus.thisDevice),
+          _DeviceTile(
+            device: devicesStatus.thisDevice,
+          ),
           const Divider(height: 1),
           const SizedBox(height: 16),
           Text(
@@ -91,14 +91,18 @@ class _DevicesInfo extends StatelessWidget {
                   color: Theme.of(context).colorScheme.secondary,
                 ),
           ),
-          if (devicesStatus.status == LoadingStatus.refreshing) ...[
+          if (devicesStatus is DevicesDeleting) ...[
             const Center(
               heightFactor: 4,
               child: CircularProgressIndicator(),
             ),
           ],
-          ...devicesStatus.otherDevices
-              .map((final device) => _DeviceTile(device: device)),
+          if (devicesStatus is! DevicesDeleting)
+            ...devicesStatus.otherDevices.map(
+              (final device) => _DeviceTile(
+                device: device,
+              ),
+            ),
         ],
       );
 }
@@ -110,7 +114,7 @@ class _DeviceTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+        contentPadding: EdgeInsets.zero,
         title: Text(device.name),
         subtitle: Text(
           'devices.main_screen.access_granted_on'
@@ -161,7 +165,7 @@ class _DeviceTile extends StatelessWidget {
             TextButton(
               child: Text('devices.revoke_device_alert.yes'.tr()),
               onPressed: () {
-                context.read<ApiDevicesCubit>().deleteDevice(device);
+                context.read<DevicesBloc>().add(DeleteDevice(device));
                 Navigator.of(context).pop();
               },
             ),

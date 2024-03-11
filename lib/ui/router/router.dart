@@ -17,6 +17,7 @@ import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
+import 'package:selfprivacy/ui/pages/server_details/server_settings_screen.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
 import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
 import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
@@ -100,6 +101,7 @@ class RootRouter extends _$RootRouter {
         AutoRoute(page: BackupsListRoute.page),
         AutoRoute(page: ServerStorageRoute.page),
         AutoRoute(page: ExtendingVolumeRoute.page),
+        AutoRoute(page: ServerSettingsRoute.page),
       ],
     ),
     AutoRoute(page: ServicesMigrationRoute.page),
@@ -132,7 +134,7 @@ String getRouteTitle(final String routeName) {
     case 'DevicesRoute':
       return 'devices.main_screen.header';
     case 'AboutApplicationRoute':
-      return 'about_us_page.title';
+      return 'about_application_page.title';
     case 'ConsoleRoute':
       return 'console_page.title';
     case 'DeveloperSettingsRoute':

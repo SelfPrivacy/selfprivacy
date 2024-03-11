@@ -1,8 +1,7 @@
 import 'package:graphql/client.dart';
 import 'package:intl/intl.dart';
 
-final DateFormat formatter = DateFormat('hh:mm');
-
+/// TODO(misterfourtytwo): add equality override
 class Message {
   Message({this.text, this.severity = MessageSeverity.normal})
       : time = DateTime.now();
@@ -13,7 +12,9 @@ class Message {
   final String? text;
   final DateTime time;
   final MessageSeverity severity;
-  String get timeString => formatter.format(time);
+
+  static final DateFormat _formatter = DateFormat('hh:mm');
+  String get timeString => _formatter.format(time);
 }
 
 enum MessageSeverity {

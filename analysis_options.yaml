@@ -37,6 +37,7 @@ linter:
     avoid_setters_without_getters: true
     collection_methods_unrelated_type: true
     combinators_ordering: true
+    directives_ordering: true
     eol_at_end_of_file: true
     no_adjacent_strings_in_list: true
     prefer_constructors_over_static_methods: true

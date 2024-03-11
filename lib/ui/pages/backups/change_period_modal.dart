@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_jobs/server_jobs_cubit.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
 
 class ChangeAutobackupsPeriodModal extends StatefulWidget {
@@ -34,13 +34,13 @@ class _ChangeAutobackupsPeriodModalState
   @override
   void initState() {
     super.initState();
-    selectedPeriod = context.read<BackupsCubit>().state.autobackupPeriod;
+    selectedPeriod = context.read<BackupsBloc>().state.autobackupPeriod;
   }
 
   @override
   Widget build(final BuildContext context) {
     final Duration? initialAutobackupPeriod =
-        context.watch<BackupsCubit>().state.autobackupPeriod;
+        context.watch<BackupsBloc>().state.autobackupPeriod;
     return ListView(
       controller: widget.scrollController,
       padding: const EdgeInsets.all(16),
@@ -91,8 +91,8 @@ class _ChangeAutobackupsPeriodModalState
               ? null
               : () {
                   context
-                      .read<BackupsCubit>()
-                      .setAutobackupPeriod(selectedPeriod);
+                      .read<BackupsBloc>()
+                      .add(SetAutobackupPeriod(selectedPeriod));
                   Navigator.of(context).pop();
                 },
           child: Text(

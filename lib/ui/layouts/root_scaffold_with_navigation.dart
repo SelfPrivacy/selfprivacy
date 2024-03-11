@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
 import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
+import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
 import 'package:selfprivacy/ui/router/root_destinations.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 
@@ -201,7 +201,7 @@ class _BottomBar extends StatelessWidget {
       ),
       child: NavigationBar(
         selectedIndex: prevActiveIndex == -1 ? 0 : prevActiveIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         onDestinationSelected: (final index) {
           context.router.replaceAll([destinations[index].route]);
         },

@@ -2,11 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
-import 'package:selfprivacy/logic/cubit/backups/backups_cubit.dart';
+import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
+import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
-import 'package:selfprivacy/logic/cubit/providers/providers_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_volumes/server_volume_cubit.dart';
+import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
@@ -30,11 +30,11 @@ class _ProvidersPageState extends State<ProvidersPage> {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
     final bool isBackupInitialized =
-        context.watch<BackupsCubit>().state.isInitialized;
+        context.watch<BackupsBloc>().state.isInitialized;
     final DnsRecordsStatus dnsStatus =
         context.watch<DnsRecordsCubit>().state.dnsState;
 
-    final diskStatus = context.watch<ApiServerVolumeCubit>().state.diskStatus;
+    final diskStatus = context.watch<VolumesBloc>().state.diskStatus;
 
     final ServerInstallationState appConfig =
         context.watch<ServerInstallationCubit>().state;
@@ -148,9 +148,18 @@ class _Card extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconStatusMask(
-                      status: state,
-                      icon: Icon(icon, size: 30, color: Colors.white),
+                    Row(
+                      children: [
+                        IconStatusMask(
+                          status: state,
+                          icon: Icon(icon, size: 30, color: Colors.white),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          title,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                      ],
                     ),
                     if (state != StateType.uninitialized)
                       IconStatusMask(
@@ -167,10 +176,6 @@ class _Card extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
                 if (state != StateType.uninitialized)
                   Text(
                     subtitle,

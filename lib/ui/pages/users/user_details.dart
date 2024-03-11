@@ -15,7 +15,7 @@ class UserDetailsPage extends StatelessWidget {
 
     final String domainName = UiHelpers.getDomainName(config);
 
-    final User user = context.watch<UsersCubit>().state.users.firstWhere(
+    final User user = context.watch<UsersBloc>().state.users.firstWhere(
           (final User user) => user.login == login,
           orElse: () => const User(
             type: UserType.normal,
@@ -46,17 +46,15 @@ class UserDetailsPage extends StatelessWidget {
         const SizedBox(height: 8),
         ListTile(
           iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              useRootNavigator: true,
-              builder: (final BuildContext context) => Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: ResetPassword(user: user),
-              ),
+          onTap: () => showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            useRootNavigator: true,
+            builder: (final BuildContext context) => Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: ResetPassword(user: user),
             ),
-          },
+          ),
           leading: const Icon(Icons.lock_reset_outlined),
           title: Text(
             'users.reset_password'.tr(),
@@ -87,45 +85,43 @@ class _DeleteUserTile extends StatelessWidget {
   Widget build(final BuildContext context) => ListTile(
         iconColor: Theme.of(context).colorScheme.error,
         textColor: Theme.of(context).colorScheme.error,
-        onTap: () => {
-          showDialog(
-            context: context,
-            // useRootNavigator: false,
-            builder: (final BuildContext context) => AlertDialog(
-              title: Text('basis.confirmation'.tr()),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[
-                    Text(
-                      'users.delete_confirm_question'.tr(),
-                    ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('basis.cancel'.tr()),
-                  onPressed: () {
-                    context.router.pop();
-                  },
-                ),
-                TextButton(
-                  child: Text(
-                    'basis.delete'.tr(),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+        onTap: () => showDialog(
+          context: context,
+          // useRootNavigator: false,
+          builder: (final BuildContext context) => AlertDialog(
+            title: Text('basis.confirmation'.tr()),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    'users.delete_confirm_question'.tr(),
                   ),
-                  onPressed: () {
-                    context.read<JobsCubit>().addJob(DeleteUserJob(user: user));
-                    context.router.childControllers.first.pop();
-                    context.router.pop();
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('basis.cancel'.tr()),
+                onPressed: () {
+                  context.router.pop();
+                },
+              ),
+              TextButton(
+                child: Text(
+                  'basis.delete'.tr(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+                onPressed: () {
+                  context.read<JobsCubit>().addJob(DeleteUserJob(user: user));
+                  context.router.childControllers.first.pop();
+                  context.router.pop();
+                },
+              ),
+            ],
           ),
-        },
+        ),
         leading: const Icon(Icons.person_remove_outlined),
         title: Text(
           'users.delete_user'.tr(),
@@ -153,7 +149,6 @@ class _UserLogins extends StatelessWidget {
               PlatformAdapter.setClipboard(email);
               getIt<NavigationService>().showSnackBar(
                 'basis.copied_to_clipboard'.tr(),
-                behavior: SnackBarBehavior.floating,
               );
             },
             title: email,
@@ -174,89 +169,110 @@ class _SshKeysCard extends StatelessWidget {
   final User user;
 
   @override
-  Widget build(final BuildContext context) => FilledCard(
-        child: Column(
-          children: [
-            ListTileOnSurfaceVariant(
-              title: 'ssh.title'.tr(),
-            ),
-            const Divider(height: 0),
-            ListTileOnSurfaceVariant(
-              title: 'ssh.create'.tr(),
-              leadingIcon: Icons.add_circle_outline,
-              onTap: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  useRootNavigator: true,
-                  builder: (final BuildContext context) => Padding(
-                    padding: MediaQuery.of(context).viewInsets,
-                    child: NewSshKey(user),
-                  ),
-                );
-              },
-            ),
-            Column(
-              children: user.sshKeys.map((final String key) {
-                final publicKey =
-                    key.split(' ').length > 1 ? key.split(' ')[1] : key;
-                final keyType = key.split(' ')[0];
-                final keyName = key.split(' ').length > 2
-                    ? key.split(' ')[2]
-                    : 'ssh.no_key_name'.tr();
-                return ListTileOnSurfaceVariant(
-                  title: '$keyName ($keyType)',
-                  disableSubtitleOverflow: true,
-                  // do not overflow text
-                  subtitle: publicKey,
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (final BuildContext context) => AlertDialog(
-                        title: Text('ssh.delete'.tr()),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: <Widget>[
-                              Text('ssh.delete_confirm_question'.tr()),
-                              Text('$keyName ($keyType)'),
-                              Text(publicKey),
-                            ],
-                          ),
+  Widget build(final BuildContext context) {
+    final serverDetailsState = context.watch<ServerDetailsCubit>().state;
+    final bool sshDisabled =
+        serverDetailsState is Loaded && !serverDetailsState.sshSettings.enable;
+
+    return FilledCard(
+      child: Column(
+        children: [
+          ListTileOnSurfaceVariant(
+            title: 'ssh.title'.tr(),
+          ),
+          const Divider(height: 0),
+          ListTileOnSurfaceVariant(
+            title: 'ssh.create'.tr(),
+            leadingIcon: Icons.add_circle_outline,
+            onTap: () {
+              showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                useRootNavigator: true,
+                builder: (final BuildContext context) => Padding(
+                  padding: MediaQuery.of(context).viewInsets,
+                  child: NewSshKey(user),
+                ),
+              );
+            },
+          ),
+          Column(
+            children: user.sshKeys.map((final String key) {
+              final publicKey =
+                  key.split(' ').length > 1 ? key.split(' ')[1] : key;
+              final keyType = key.split(' ')[0];
+              final keyName = key.split(' ').length > 2
+                  ? key.split(' ')[2]
+                  : 'ssh.no_key_name'.tr();
+              return ListTileOnSurfaceVariant(
+                title: '$keyName ($keyType)',
+                disableSubtitleOverflow: true,
+                // do not overflow text
+                subtitle: publicKey,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (final BuildContext context) => AlertDialog(
+                      title: Text('ssh.delete'.tr()),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            Text('ssh.delete_confirm_question'.tr()),
+                            Text('$keyName ($keyType)'),
+                            Text(publicKey),
+                          ],
                         ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('basis.cancel'.tr()),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'basis.delete'.tr(),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                            ),
-                            onPressed: () {
-                              context.read<JobsCubit>().addJob(
-                                    DeleteSSHKeyJob(
-                                      user: user,
-                                      publicKey: key,
-                                    ),
-                                  );
-                              context.popRoute();
-                            },
-                          ),
-                        ],
                       ),
-                    );
-                  },
-                );
-              }).toList(),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('basis.cancel'.tr()),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text(
+                            'basis.delete'.tr(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                          onPressed: () {
+                            context.read<JobsCubit>().addJob(
+                                  DeleteSSHKeyJob(
+                                    user: user,
+                                    publicKey: key,
+                                  ),
+                                );
+                            context.popRoute();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          ),
+          if (sshDisabled)
+            Column(
+              children: [
+                const Divider(height: 0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Expanded(
+                    child: InfoBox(
+                      text: 'ssh.ssh_disabled_warning'.tr(),
+                      isWarning: true,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      );
+        ],
+      ),
+    );
+  }
 }
 
 class NewSshKey extends StatelessWidget {

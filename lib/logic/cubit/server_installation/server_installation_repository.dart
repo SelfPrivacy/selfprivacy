@@ -6,8 +6,6 @@ import 'package:hive/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/logic/models/json/dns_records.dart';
-import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -16,8 +14,10 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
@@ -313,7 +313,7 @@ class ServerInstallationRepository {
     if (result.success) {
       return ServerHostingDetails(
         apiToken: result.data,
-        volume: ServerVolume(
+        volume: ServerProviderVolume(
           id: 0,
           name: '',
           sizeByte: 0,
@@ -350,7 +350,7 @@ class ServerInstallationRepository {
     if (result.success) {
       return ServerHostingDetails(
         apiToken: result.data,
-        volume: ServerVolume(
+        volume: ServerProviderVolume(
           id: 0,
           name: '',
           sizeByte: 0,
@@ -385,7 +385,7 @@ class ServerInstallationRepository {
       if (await serverApi.isHttpServerWorking()) {
         return ServerHostingDetails(
           apiToken: apiToken,
-          volume: ServerVolume(
+          volume: ServerProviderVolume(
             id: 0,
             name: '',
             serverId: 0,
@@ -416,7 +416,7 @@ class ServerInstallationRepository {
     if (result.success) {
       return ServerHostingDetails(
         apiToken: result.data,
-        volume: ServerVolume(
+        volume: ServerProviderVolume(
           id: 0,
           name: '',
           sizeByte: 0,
@@ -470,7 +470,7 @@ class ServerInstallationRepository {
   Future<void> saveServerDetails(
     final ServerHostingDetails serverDetails,
   ) async {
-    await getIt<ApiConfigModel>().storeServerDetails(serverDetails);
+    await getIt<ApiConfigModel>().setServerDetails(serverDetails);
   }
 
   Future<void> deleteServerDetails() async {
@@ -483,18 +483,18 @@ class ServerInstallationRepository {
   }
 
   Future<void> saveDnsProviderType(final DnsProviderType type) async {
-    await getIt<ApiConfigModel>().storeDnsProviderType(type);
+    await getIt<ApiConfigModel>().setDnsProviderType(type);
   }
 
   Future<void> saveServerProviderKey(final String key) async {
-    await getIt<ApiConfigModel>().storeServerProviderKey(key);
+    await getIt<ApiConfigModel>().setServerProviderKey(key);
   }
 
   Future<void> saveServerType(final ServerType serverType) async {
-    await getIt<ApiConfigModel>().storeServerTypeIdentifier(
+    await getIt<ApiConfigModel>().setServerTypeIdentifier(
       serverType.identifier,
     );
-    await getIt<ApiConfigModel>().storeServerLocation(
+    await getIt<ApiConfigModel>().setServerLocation(
       serverType.location.identifier,
     );
   }
@@ -507,7 +507,7 @@ class ServerInstallationRepository {
   Future<void> saveBackblazeKey(
     final BackupsCredential backblazeCredential,
   ) async {
-    await getIt<ApiConfigModel>().storeBackblazeCredential(backblazeCredential);
+    await getIt<ApiConfigModel>().setBackblazeCredential(backblazeCredential);
   }
 
   Future<void> deleteBackblazeKey() async {
@@ -516,7 +516,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> setDnsApiToken(final String key) async {
-    await getIt<ApiConfigModel>().storeDnsProviderKey(key);
+    await getIt<ApiConfigModel>().setDnsProviderKey(key);
   }
 
   Future<void> deleteDnsProviderKey() async {
@@ -525,7 +525,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> saveDomain(final ServerDomain serverDomain) async {
-    await getIt<ApiConfigModel>().storeServerDomain(serverDomain);
+    await getIt<ApiConfigModel>().setServerDomain(serverDomain);
   }
 
   Future<void> deleteDomain() async {

@@ -10,12 +10,12 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.g
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
+import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
-import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
@@ -27,12 +27,12 @@ import 'package:selfprivacy/logic/models/system_settings.dart';
 
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
+part 'backups_api.dart';
 part 'jobs_api.dart';
 part 'server_actions_api.dart';
 part 'services_api.dart';
 part 'users_api.dart';
 part 'volume_api.dart';
-part 'backups_api.dart';
 
 class ServerApi extends GraphQLApiMap
     with
@@ -132,24 +132,55 @@ class ServerApi extends GraphQLApiMap
     return usesBinds;
   }
 
-  Future<void> switchService(final String uid, final bool needTurnOn) async {
+  Future<GenericResult> switchService(
+    final String uid,
+    final bool needTurnOn,
+  ) async {
     try {
       final GraphQLClient client = await getClient();
       if (needTurnOn) {
         final variables = Variables$Mutation$EnableService(serviceId: uid);
         final mutation = Options$Mutation$EnableService(variables: variables);
-        await client.mutate$EnableService(mutation);
+        final result = await client.mutate$EnableService(mutation);
+        if (result.hasException) {
+          return GenericResult(
+            success: false,
+            message: result.exception.toString(),
+            data: null,
+          );
+        }
+        return GenericResult(
+          success: result.parsedData?.services.enableService.success ?? false,
+          message: result.parsedData?.services.enableService.message,
+          data: null,
+        );
       } else {
         final variables = Variables$Mutation$DisableService(serviceId: uid);
         final mutation = Options$Mutation$DisableService(variables: variables);
-        await client.mutate$DisableService(mutation);
+        final result = await client.mutate$DisableService(mutation);
+        if (result.hasException) {
+          return GenericResult(
+            success: false,
+            message: result.exception.toString(),
+            data: null,
+          );
+        }
+        return GenericResult(
+          success: result.parsedData?.services.disableService.success ?? false,
+          message: result.parsedData?.services.disableService.message,
+          data: null,
+        );
       }
     } catch (e) {
-      print(e);
+      return GenericResult(
+        success: false,
+        message: e.toString(),
+        data: null,
+      );
     }
   }
 
-  Future<void> setAutoUpgradeSettings(
+  Future<GenericResult<AutoUpgradeSettings?>> setAutoUpgradeSettings(
     final AutoUpgradeSettings settings,
   ) async {
     try {
@@ -164,13 +195,38 @@ class ServerApi extends GraphQLApiMap
       final mutation = Options$Mutation$ChangeAutoUpgradeSettings(
         variables: variables,
       );
-      await client.mutate$ChangeAutoUpgradeSettings(mutation);
+      final result = await client.mutate$ChangeAutoUpgradeSettings(mutation);
+      if (result.hasException) {
+        return GenericResult<AutoUpgradeSettings?>(
+          success: false,
+          message: result.exception.toString(),
+          data: null,
+        );
+      }
+      return GenericResult<AutoUpgradeSettings?>(
+        success: result.parsedData?.system.changeAutoUpgradeSettings.success ??
+            false,
+        message: result.parsedData?.system.changeAutoUpgradeSettings.message,
+        data: result.parsedData == null
+            ? null
+            : AutoUpgradeSettings(
+                allowReboot: result
+                    .parsedData!.system.changeAutoUpgradeSettings.allowReboot,
+                enable: result.parsedData!.system.changeAutoUpgradeSettings
+                    .enableAutoUpgrade,
+              ),
+      );
     } catch (e) {
       print(e);
+      return GenericResult<AutoUpgradeSettings?>(
+        success: false,
+        message: e.toString(),
+        data: null,
+      );
     }
   }
 
-  Future<void> setTimezone(final String timezone) async {
+  Future<GenericResult<String?>> setTimezone(final String timezone) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$ChangeTimezone(
@@ -179,9 +235,70 @@ class ServerApi extends GraphQLApiMap
       final mutation = Options$Mutation$ChangeTimezone(
         variables: variables,
       );
-      await client.mutate$ChangeTimezone(mutation);
+      final result = await client.mutate$ChangeTimezone(mutation);
+      if (result.hasException) {
+        return GenericResult<String>(
+          success: false,
+          message: result.exception.toString(),
+          data: '',
+        );
+      }
+      return GenericResult<String?>(
+        success: result.parsedData?.system.changeTimezone.success ?? false,
+        message: result.parsedData?.system.changeTimezone.message,
+        data: result.parsedData?.system.changeTimezone.timezone,
+      );
     } catch (e) {
       print(e);
+      return GenericResult<String?>(
+        success: false,
+        message: e.toString(),
+        data: '',
+      );
+    }
+  }
+
+  Future<GenericResult<SshSettings?>> setSshSettings(
+    final SshSettings settings,
+  ) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final input = Input$SSHSettingsInput(
+        enable: settings.enable,
+        passwordAuthentication: settings.passwordAuthentication,
+      );
+      final variables = Variables$Mutation$ChangeSshSettings(
+        settings: input,
+      );
+      final mutation = Options$Mutation$ChangeSshSettings(
+        variables: variables,
+      );
+      final result = await client.mutate$ChangeSshSettings(mutation);
+      if (result.hasException) {
+        return GenericResult<SshSettings?>(
+          success: false,
+          message: result.exception.toString(),
+          data: null,
+        );
+      }
+      return GenericResult<SshSettings?>(
+        success: result.parsedData?.system.changeSshSettings.success ?? false,
+        message: result.parsedData?.system.changeSshSettings.message,
+        data: result.parsedData == null
+            ? null
+            : SshSettings(
+                enable: result.parsedData!.system.changeSshSettings.enable,
+                passwordAuthentication: result.parsedData!.system
+                    .changeSshSettings.passwordAuthentication,
+              ),
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult<SshSettings?>(
+        success: false,
+        message: e.toString(),
+        data: null,
+      );
     }
   }
 

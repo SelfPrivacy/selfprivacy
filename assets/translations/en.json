@@ -36,29 +36,41 @@
         "continue": "Continue",
         "alert": "Alert",
         "copied_to_clipboard": "Copied to clipboard!",
-        "please_connect": "Please connect your server, domain and DNS provider to dive in!"
+        "please_connect": "Please connect your server, domain and DNS provider to dive in!",
+        "network_error": "Network error"
     },
     "more_page": {
         "configuration_wizard": "Setup wizard",
-        "about_project": "About us",
-        "about_application": "About",
         "onboarding": "Onboarding",
-        "create_ssh_key": "Superuser SSH keys",
-        "console": "Console",
-        "application_settings": "Application settings"
+        "create_ssh_key": "Superuser SSH keys"
     },
     "console_page": {
         "title": "Console",
         "waiting": "Waiting for initialization…",
         "copy": "Copy"
     },
-    "about_us_page": {
-        "title": "About us"
-    },
     "about_application_page": {
-        "title": "About",
-        "application_version_text": "Application version {}",
-        "api_version_text": "Server API version {}",
+        "title": "About & support",
+        "versions": "Versions",
+        "application_version_text": "Application version",
+        "api_version_text": "Server API version",
+        "open_source_licenses": "Open source licenses",
+        "links": "Links",
+        "website": "Our website",
+        "documentation": "Documentation",
+        "matrix_channel": "Matrix channel",
+        "telegram_channel": "Telegram channel",
+        "get_support": "Get support",
+        "matrix_support_chat": "Matrix support chat",
+        "telegram_support_chat": "Telegram support chat",
+        "email_support": "Email support",
+        "contribute": "Contribute",
+        "source_code": "Source code",
+        "bug_report": "Report a bug",
+        "bug_report_subtitle": "Due to spam, manual account confirmation is required. Contact us in the support chat to activate your account.",
+        "help_translate": "Help us translate",
+        "matrix_contributors_chat": "Matrix contributors chat",
+        "telegram_contributors_chat": "Telegram contributors chat",
         "privacy_policy": "Privacy policy"
     },
     "application_settings": {
@@ -83,7 +95,8 @@
         "no_key_name": "Unnamed key",
         "root_title": "These are superuser keys",
         "root_subtitle": "Owners of these keys get full access to the server and can do anything on it. Only add your own keys to the server.",
-        "input_label": "Public ED25519, ECDSA or RSA key"
+        "input_label": "Public ED25519, ECDSA or RSA key",
+        "ssh_disabled_warning": "SSH is disabled. You can enable it in the server settings."
     },
     "onboarding": {
         "page1_title": "Digital independence, available to all of us",
@@ -111,12 +124,17 @@
         "description": "All your services live here",
         "general_information": "General information",
         "resource_usage": "Resource usage",
+        "settings": "Server settings",
         "allow_autoupgrade": "Allow auto-upgrade",
         "allow_autoupgrade_hint": "Allow automatic packages upgrades on server",
         "reboot_after_upgrade": "Reboot after upgrade",
         "reboot_after_upgrade_hint": "Reboot without prompt after applying changes on server",
         "server_timezone": "Server timezone",
         "select_timezone": "Select timezone",
+        "enable_ssh": "Enable SSH",
+        "enable_ssh_hint": "Allow SSH access to the server",
+        "allow_password_authentication": "Allow password authentication for SSH",
+        "allow_password_authentication_hint": "Allow users to log into your server's shell with a password (does not apply to root user)",
         "timezone_search_bar": "Timezone name or time shift value",
         "server_id": "Server ID",
         "status": "Status",
@@ -305,6 +323,10 @@
         "extending_volume_description": "Resizing volume will allow you to store more data on your server without extending the server itself. Volume can only be extended: shrinking is not possible.",
         "extending_volume_price_info": "Price includes VAT and is estimated from pricing data provided by your server provider. Server will be rebooted after resizing.",
         "extending_volume_error": "Couldn't initialize volume extending.",
+        "extending_volume_started": "Volume extending started",
+        "extending_volume_provider_waiting": "Provider volume resized, waiting 10 seconds…",
+        "extending_volume_server_waiting": "Server volume resized, waiting 20 seconds…",
+        "extending_volume_rebooting": "Rebooting server…",
         "extending_volume_modal_description": "Upgrade to {} for {} plan per month.",
         "size": "Size",
         "price": "Price",
@@ -390,7 +412,8 @@
         "could_not_add_ssh_key": "Couldn't add SSH key",
         "username_rule": "Username must contain only lowercase latin letters, digits and underscores, should not start with a digit",
         "email_login": "Email login",
-        "no_ssh_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon."
+        "no_ssh_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon.",
+        "user_already_exists": "User with such username already exists"
     },
     "initializing": {
         "server_provider_description": "A place where your data and SelfPrivacy services will reside:",
@@ -590,6 +613,8 @@
         "service_turn_off": "Turn off",
         "service_turn_on": "Turn on",
         "job_added": "Job added",
+        "job_postponed": "Job added, but you will be able to launch it after current jobs are finished",
+        "job_removed": "Job removed",
         "run_jobs": "Run jobs",
         "reboot_success": "Server is rebooting",
         "reboot_failed": "Couldn't reboot the server. Check the app logs.",
@@ -602,7 +627,12 @@
         "delete_ssh_key": "Delete SSH key for {}",
         "server_jobs": "Jobs on the server",
         "reset_user_password": "Reset password of user",
-        "generic_error": "Couldn't connect to the server!"
+        "generic_error": "Couldn't connect to the server!",
+        "rebuild_system": "Rebuild system",
+        "start_server_upgrade": "Start the server upgrade",
+        "change_auto_upgrade_settings": "Change auto-upgrade settings",
+        "change_server_timezone": "Change server timezone",
+        "change_ssh_settings": "Change SSH settings"
     },
     "validations": {
         "required": "Required",

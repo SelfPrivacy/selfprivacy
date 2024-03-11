@@ -150,9 +150,9 @@ type DnsRecord {
   recordType: String!
   name: String!
   content: String!
-  displayName: String!
   ttl: Int!
   priority: Int
+  displayName: String!
 }
 
 type GenericBackupConfigReturn implements MutationReturnInterface {
@@ -270,6 +270,19 @@ input RecoveryKeyLimitsInput {
 enum RestoreStrategy {
   INPLACE
   DOWNLOAD_VERIFY_OVERWRITE
+}
+
+input SSHSettingsInput {
+  enable: Boolean!
+  passwordAuthentication: Boolean!
+}
+
+type SSHSettingsMutationReturn implements MutationReturnInterface {
+  success: Boolean!
+  message: String!
+  code: Int!
+  enable: Boolean!
+  passwordAuthentication: Boolean!
 }
 
 enum ServerProvider {
@@ -424,9 +437,10 @@ type SystemInfo {
 type SystemMutations {
   changeTimezone(timezone: String!): TimezoneMutationReturn!
   changeAutoUpgradeSettings(settings: AutoUpgradeSettingsInput!): AutoUpgradeSettingsMutationReturn!
-  runSystemRebuild: GenericMutationReturn!
+  changeSshSettings(settings: SSHSettingsInput!): SSHSettingsMutationReturn!
+  runSystemRebuild: GenericJobMutationReturn!
   runSystemRollback: GenericMutationReturn!
-  runSystemUpgrade: GenericMutationReturn!
+  runSystemUpgrade: GenericJobMutationReturn!
   rebootSystem: GenericMutationReturn!
   pullRepositoryChanges: GenericMutationReturn!
 }

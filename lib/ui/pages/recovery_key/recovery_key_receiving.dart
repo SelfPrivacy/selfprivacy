@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
-import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 
 class RecoveryKeyReceiving extends StatelessWidget {
   const RecoveryKeyReceiving({required this.recoveryKey, super.key});
@@ -13,7 +13,7 @@ class RecoveryKeyReceiving extends StatelessWidget {
   Widget build(final BuildContext context) => BrandHeroScreen(
         heroTitle: 'recovery_key.key_main_header'.tr(),
         heroSubtitle: 'recovery_key.key_receiving_description'.tr(),
-        hasBackButton: true,
+        hasBackButton: false,
         hasFlashButton: false,
         children: [
           const Divider(),

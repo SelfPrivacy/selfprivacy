@@ -39,7 +39,12 @@
             "few": "{} tuumi",
             "many": "{} tuumi",
             "other": "{} tuumi"
-        }
+        },
+        "settings": "Serveri seaded",
+        "enable_ssh": "SSH lubamine",
+        "allow_password_authentication": "Luba SSH-ga sisselogimine parooli kasutades",
+        "enable_ssh_hint": "Luba juurdepääs serverile SSH kaudu",
+        "allow_password_authentication_hint": "Võimaldab kasutajatel SSH kaudu serveriga ühenduda, kasutades oma parooli (ei kehti superkasutajale)"
     },
     "ssh": {
         "root_subtitle": "Nende võtmete omanikud saavad serverisse täieliku juurdepääsu ja saavad sellega teha mida iganes. Lisage serverisse ainult omaenda võtmed.",
@@ -51,7 +56,8 @@
         "subtitle_without_keys": "Võtmeid pole",
         "no_key_name": "Nimetu võti",
         "root_title": "Need on superkasutaja võtmed",
-        "input_label": "Avalik ED25519, ECDSA või RSA võti"
+        "input_label": "Avalik ED25519, ECDSA või RSA võti",
+        "ssh_disabled_warning": "SSH on välja lülitatud. Seda saab lubada serveri seadetes."
     },
     "onboarding": {
         "page2_dns_provider_text": "Teil on vaja domeeni, et olla Internetis olemas. Ja teil on vaja ka usaldusväärset DNS teenuse pakkujat, et domeen suunataks teie serverisse. Me soovitame teil valida toetatud DNS teenuse pakkuja, et võrguühenduse automaatselt seadistada.",
@@ -116,10 +122,28 @@
         "copy": "Kopeeri"
     },
     "about_application_page": {
-        "title": "Teave",
+        "title": "Teave ja klienditugi",
         "application_version_text": "Rakenduse versioon",
         "api_version_text": "Serveri API versioon",
-        "privacy_policy": "Privaatsuspoliitika"
+        "privacy_policy": "Privaatsuspoliitika",
+        "versions": "Versioonid",
+        "open_source_licenses": "Avaallika litsentsid",
+        "links": "Lingid",
+        "website": "Meie veebisait",
+        "documentation": "Dokumentatsioon",
+        "matrix_channel": "Kanal Matrix",
+        "telegram_channel": "Telegram kanal",
+        "get_support": "Abi saamine",
+        "matrix_support_chat": "Matrixi toetuse vestlus",
+        "telegram_support_chat": "Toetuse vestlus Telegram",
+        "email_support": "Toetus e-posti teel",
+        "contribute": "Kaasa aitama",
+        "help_translate": "Aidake meil tõlkida",
+        "source_code": "Lähtekood",
+        "bug_report": "Raporteeri vead",
+        "bug_report_subtitle": "Rämpsposti tõttu on vajalik käsitsi konto kinnitamine. Võtke meiega ühendust toe vestlusel oma konto aktiveerimiseks.",
+        "matrix_contributors_chat": "Arendajate vestlusruum Matrix",
+        "telegram_contributors_chat": "Arendajate vestlusruum Telegram"
     },
     "resource_chart": {
         "month": "Kuu",
@@ -154,7 +178,7 @@
         "uninitialized": "Andmeid pole veel kätte saadud",
         "services_title": "Teenused",
         "services_subtitle": "Iga teenuse jaoks on vajalikud \"A\" kirjed.",
-        "email_title": "E-post",
+        "email_title": "Elektrooniline post",
         "email_subtitle": "Kirjed turvaliseks e-kirja vahetamiseks vajalikud.",
         "update_list": "Värskenda nimekirja",
         "domain_validation_failure": "Me ei saa teie domeenile juurde!"
@@ -584,7 +608,8 @@
         "rebuild_system": "Süsteemi ümberkorraldamine",
         "start_server_upgrade": "Serveri värskenduse käivitamine",
         "change_auto_upgrade_settings": "Automaatse värskenduse seadete muutmine",
-        "change_server_timezone": "Serveri ajavööndi muutmine"
+        "change_server_timezone": "Serveri ajavööndi muutmine",
+        "change_ssh_settings": "Muuda SSH seadeid"
     },
     "validations": {
         "required": "Nõutud",

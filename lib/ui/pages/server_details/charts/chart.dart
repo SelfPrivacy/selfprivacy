@@ -48,23 +48,38 @@ class _Chart extends StatelessWidget {
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'resource_chart.network_title'.tr(),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
+                    Flexible(
+                      child: Text(
+                        'resource_chart.network_title'.tr(),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                ),
+                      ),
+                    ),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Wrap(
+                        spacing: 8.0,
+                        runSpacing: 8.0,
+                        alignment: WrapAlignment.end,
+                        runAlignment: WrapAlignment.end,
+                        children: [
+                          Legend(
+                            color: Theme.of(context).colorScheme.primary,
+                            text: 'resource_chart.in'.tr(),
                           ),
-                    ),
-                    const Spacer(),
-                    Legend(
-                      color: Theme.of(context).colorScheme.primary,
-                      text: 'resource_chart.in'.tr(),
-                    ),
-                    const SizedBox(width: 5),
-                    Legend(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      text: 'resource_chart.out'.tr(),
+                          Legend(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            text: 'resource_chart.out'.tr(),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -172,6 +187,7 @@ class Legend extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
         children: [
           _ColoredBox(color: color),
           const SizedBox(width: 5),

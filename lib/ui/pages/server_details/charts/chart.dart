@@ -156,7 +156,7 @@ class _GraphLoadingCardContent extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => const SizedBox(
         height: 200,
-        child: Center(child: CircularProgressIndicator()),
+        child: Center(child: CircularProgressIndicator.adaptive()),
       );
 }
 

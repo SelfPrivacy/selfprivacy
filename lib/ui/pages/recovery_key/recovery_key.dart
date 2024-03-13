@@ -32,7 +32,7 @@ class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
       case RecoveryKeyRefreshing():
         subtitle = 'recovery_key.key_synchronizing'.tr();
         widgets = [
-          const Center(child: CircularProgressIndicator()),
+          const Center(child: CircularProgressIndicator.adaptive()),
         ];
         break;
       case RecoveryKeyLoaded():
@@ -306,7 +306,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
 
     return Column(
       children: [
-        SwitchListTile(
+        SwitchListTile.adaptive(
           value: _isAmountToggled,
           title: Text('recovery_key.key_amount_toggle'.tr()),
           activeColor: Theme.of(context).colorScheme.primary,
@@ -346,7 +346,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
           ),
           secondChild: Container(),
         ),
-        SwitchListTile(
+        SwitchListTile.adaptive(
           value: _isExpirationToggled,
           title: Text('recovery_key.key_duedate_toggle'.tr()),
           activeColor: Theme.of(context).colorScheme.primary,

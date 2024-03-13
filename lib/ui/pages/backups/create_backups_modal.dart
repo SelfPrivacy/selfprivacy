@@ -71,7 +71,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
         ),
         const SizedBox(height: 16),
         // Select all services tile
-        CheckboxListTile(
+        CheckboxListTile.adaptive(
           onChanged: (final bool? value) {
             setState(() {
               if (value ?? true) {
@@ -103,7 +103,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
         ...widget.services.map(
           (final Service service) {
             final bool busy = busyServices.contains(service.id);
-            return CheckboxListTile(
+            return CheckboxListTile.adaptive(
               onChanged: !busy
                   ? (final bool? value) {
                       setState(() {

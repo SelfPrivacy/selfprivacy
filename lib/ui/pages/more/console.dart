@@ -96,7 +96,7 @@ class _ConsolePageState extends State<ConsolePage> {
                   children: [
                     Text('console_page.waiting'.tr()),
                     const Gap(16),
-                    const CircularProgressIndicator(),
+                    const CircularProgressIndicator.adaptive(),
                   ],
                 );
               }

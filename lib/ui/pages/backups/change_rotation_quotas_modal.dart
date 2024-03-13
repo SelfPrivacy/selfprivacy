@@ -232,7 +232,7 @@ class QuotaSelectionTile extends StatelessWidget {
         children: [
           // Discrete slider to select the new value
           if (value >= -1 && value <= max)
-            Slider(
+            Slider.adaptive(
               value: value == -1 ? max + 1 : value.toDouble(),
               min: min.toDouble(),
               max: (max + 1).toDouble(),

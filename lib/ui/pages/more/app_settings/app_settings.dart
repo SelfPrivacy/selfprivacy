@@ -31,7 +31,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
       bodyPadding: const EdgeInsets.symmetric(vertical: 16),
       heroTitle: 'application_settings.title'.tr(),
       children: [
-        SwitchListTile(
+        SwitchListTile.adaptive(
           title: Text('application_settings.system_dark_theme_title'.tr()),
           subtitle:
               Text('application_settings.system_dark_theme_description'.tr()),
@@ -40,7 +40,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
               .read<AppSettingsCubit>()
               .updateAutoDarkMode(isAutoDarkModeOn: !isSystemDarkModeOn),
         ),
-        SwitchListTile(
+        SwitchListTile.adaptive(
           title: Text('application_settings.dark_theme_title'.tr()),
           subtitle: Text('application_settings.dark_theme_description'.tr()),
           value: Theme.of(context).brightness == Brightness.dark,

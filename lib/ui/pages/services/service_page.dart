@@ -33,7 +33,7 @@ class _ServicePageState extends State<ServicePage> {
         hasBackButton: true,
         children: [
           Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator.adaptive(),
           ),
         ],
       );

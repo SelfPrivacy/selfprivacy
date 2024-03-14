@@ -152,19 +152,6 @@
             "other": "{} cores"
         }
     },
-    "record": {
-        "root": "Root domain",
-        "api": "SelfPrivacy API",
-        "cloud": "File cloud",
-        "git": "Git server",
-        "meet": "Video conference",
-        "social": "Social network",
-        "password": "Password manager",
-        "mx": "MX record",
-        "dmarc": "DMARC record",
-        "spf": "SPF record",
-        "dkim": "DKIM key"
-    },
     "domain": {
         "card_title": "Domain",
         "screen_title": "Domain and DNS",
@@ -183,6 +170,9 @@
         "card_title": "Backup",
         "card_subtitle": "Manage your backups",
         "description": "Will save your day in case of incident: hackers attack, server deletion, etc.",
+        "reupload_key": "Force reupload key",
+        "reuploaded_key": "Key reuploaded",
+        "reupload_key_subtitle": "Will instruct the server to initialize backup storage again. Use if something is broken.",
         "initialize": "Initialize",
         "restore": "Restore from backup",
         "no_backups": "There are no backups yet",
@@ -309,6 +299,7 @@
         "extending_volume_price_info": "Price includes VAT and is estimated from pricing data provided by your server provider. Server will be rebooted after resizing.",
         "extending_volume_error": "Couldn't initialize volume extending.",
         "extending_volume_started": "Volume extending started",
+        "extending_volume_provider_waiting": "Provider volume resized, waiting 10 seconds…",
         "extending_volume_server_waiting": "Server volume resized, waiting 20 seconds…",
         "extending_volume_rebooting": "Rebooting server…",
         "extending_volume_modal_description": "Upgrade to {} for {} plan per month.",
@@ -341,33 +332,21 @@
         }
     },
     "mail": {
-        "title": "E-Mail",
-        "subtitle": "E-Mail for company and family.",
         "login_info": "Use username and password from users tab. IMAP port is 143 with STARTTLS, SMTP port is 587 with STARTTLS."
     },
     "password_manager": {
-        "title": "Password Manager",
-        "subtitle": "Base of your security. Bitwarden will help you to create, store and move passwords between devices, as well as input them, when requested using autocompletion.",
         "login_info": "You will have to create an account on the website."
     },
     "video": {
-        "title": "Videomeet",
-        "subtitle": "Zoom and Google Meet are good, but Jitsi Meet is a worth alternative that also gives you confidence that you're not being listened.",
         "login_info": "No account needed."
     },
     "cloud": {
-        "title": "Cloud Storage",
-        "subtitle": "Do not allow cloud services to read your data by using NextCloud.",
         "login_info": "Login is admin, password is the same as with your main user. Create new accounts in Nextcloud interface."
     },
     "social_network": {
-        "title": "Social Network",
-        "subtitle": "It's hard to believe, but it became possible to create your own social network, with your own rules and target audience.",
         "login_info": "You will have to create an account on the website."
     },
     "git": {
-        "title": "Git Server",
-        "subtitle": "Private alternative to the Github, that belongs to you, but not a Microsoft.",
         "login_info": "You will have to create an account on the website. First user will become an admin."
     },
     "users": {

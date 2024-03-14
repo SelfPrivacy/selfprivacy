@@ -53,12 +53,9 @@
         "reupload_key": "强制重新上传密钥",
         "reuploaded_key": "密钥已重新上传",
         "initialize": "初始化",
-        "waiting_for_rebuild": "您将能在几分钟内创建您的第一个备份。",
         "restore": "从备份中恢复",
         "no_backups": "还没有任何备份",
         "create_new": "创建一个新的备份",
-        "creating": "创建一个新的备份:{}%",
-        "restoring": "正在从备份中恢复",
         "restore_alert": "您即将恢复备份，该备份创建于{}。所有当前数据将会丢失。您确定吗？",
         "refresh": "刷新状态",
         "refetch_backups": "刷新备份列表",
@@ -76,10 +73,7 @@
         "autobackup_period_never": "自动备份已禁用",
         "autobackup_period_every": "每{period}",
         "autobackup_period_disable": "禁用自动备份",
-        "autobackup_custom": "自定义",
-        "autobackup_custom_hint": "输入自定义时间间隔（分钟）",
         "autobackup_set_period": "设置周期",
-        "autobackup_period_set": "周期已设置",
         "backups_encryption_key": "加密密钥",
         "backups_encryption_key_subtitle": "请保管好。",
         "backups_encryption_key_copy": "复制加密密钥",
@@ -107,7 +101,6 @@
         },
         "set_rotation_quotas": "设置新的轮换配额",
         "rotation_quotas_title": "快照轮换设置",
-        "quotas_set": "新的备份轮换配额已设置",
         "quotas_only_applied_to_autobackups": "这些设置仅适用于自动备份。手动备份不会被删除。",
         "quota_titles": {
             "last": "保留最新备份数量",
@@ -121,8 +114,7 @@
         "description": "在发生意外的时候将节省你的时间：黑客攻击，服务器被删除等。",
         "backups_encryption_key_description": "这个密钥用于加密您的备份。如果丢失了它，您将无法恢复您的备份。请将其放在安全的地方，因为如果您需要手动从备份中恢复时，它将会很有用。",
         "snapshot_modal_download_verify_option_description": "风险较低，但需要更多的空间。将整个快照下载到临时存储中，验证后再替换当前数据。",
-        "snapshot_modal_service_not_found": "这是一个您的服务器上不再拥有的服务的快照。通常情况下，这不应该发生，我们无法进行自动恢复。您仍然可以下载快照并手动进行恢复。如果需要帮助，请联系SelfPrivacy支持团队。",
-        "error_pending": "服务器返回错误，请在下方检查"
+        "snapshot_modal_service_not_found": "这是一个您的服务器上不再拥有的服务的快照。通常情况下，这不应该发生，我们无法进行自动恢复。您仍然可以下载快照并手动进行恢复。如果需要帮助，请联系SelfPrivacy支持团队。"
     },
     "service_page": {
         "status": {
@@ -167,13 +159,9 @@
         "price": "价格",
         "data_migration_title": "数据迁移",
         "data_migration_notice": "在迁移期间，所有服务将被关闭。",
-        "start_migration_button": "开始迁移",
-        "migration_process": "正在迁移…",
-        "migration_done": "完成"
+        "start_migration_button": "开始迁移"
     },
     "cloud": {
-        "title": "云存储",
-        "subtitle": "使用 NextCloud时不允许云服务读取您的数据。",
         "login_info": "登录名为 admin，密码与您的主用户相同。在 Nextcloud 界面中创建新账户。"
     },
     "initializing": {
@@ -196,12 +184,8 @@
         "select_provider_email_notice": "新客户将无法使用电子邮件托管。然而，一旦完成首次付款，将解锁该功能。",
         "what": "这意味着什么？",
         "choose_server_type_text": "不同的资源大小支持不同的服务。别担心，您可以随时扩展您的服务器",
-        "no_server_types_found": "找不到可用的服务器类型。确保您的帐户可访问，并尝试更改服务器位置。",
-        "found_more_domains": "发现多于一个域名。出于安全考虑，请删除不必要的域名",
         "server_started": "服务器已启动。现在将进行验证并重新启动…",
         "one_more_restart": "还需一次重启以应用您的安全证书。",
-        "server_provider_description": "一个存放你的数据和 SelfPrivacy 服务的地方：",
-        "dns_provider_description": "一个让你的 IP 指向域名的服务：",
         "connect_to_server": "让我们从一个服务器开始。",
         "select_provider": "从以下列表中选择任何提供商，它们都支持 SelfPrivacy",
         "select_provider_notice": "我们所说的“相对较小”是指一个拥有 2 个 CPU 核心和 2GB RAM 的机器。",
@@ -213,7 +197,6 @@
         "select_provider_payment_title": "付款方式",
         "select_provider_payment_text_hetzner": "信用卡、SWIFT、SEPA、PayPal",
         "select_provider_payment_text_do": "信用卡、Google Pay、PayPal",
-        "select_provider_payment_text_cloudflare": "信用卡",
         "select_provider_site_button": "访问网站",
         "connect_to_server_provider": "现在登录 ",
         "connect_to_server_provider_text": "使用 API 令牌，SelfPrivacy 将能够租用一台机器并在其上设置您的服务器",
@@ -236,14 +219,11 @@
         "dns_provider_bad_key_error": "API 密钥无效",
         "backblaze_bad_key_error": "Backblaze 存储信息无效",
         "connect_to_dns": "连接 DNS 提供商",
-        "connect_to_dns_provider_text": "使用 API 令牌，SelfPrivacy 将管理所有 DNS 条目",
         "select_dns": "现在让我们选择一个 DNS 提供商",
-        "manage_domain_dns": "管理您域名的 DNS",
         "use_this_domain": "使用此域名？",
         "use_this_domain_text": "您提供的令牌可以访问以下域名",
         "multiple_domains_found": "找到多个域名",
         "multiple_domains_found_text": "您提供的令牌可以访问以下域名。请选择要使用的域名。出于对其他域名安全性的考虑，您应该将此令牌的访问权限限制为仅限于您想要与 SelfPrivacy 使用的域名。",
-        "connect_backblaze_storage": "连接 Backblaze 存储",
         "no_connected_domains": "目前没有连接的域名",
         "loading_domain_list": "加载域名列表中",
         "save_domain": "保存域名",
@@ -256,7 +236,6 @@
         "check": "检查",
         "create_master_account": "创建主账户",
         "enter_username_and_password": "输入用户名和强密码",
-        "finish": "一切都初始化完成",
         "checks": "检查已完成\n{} 个中的 {} 个"
     },
     "recovering": {
@@ -302,17 +281,12 @@
         "in_menu": "服务器尚未设置。请使用设置向导完成设置以进行进一步的工作。"
     },
     "mail": {
-        "login_info": "使用用户选项卡中的用户名和密码。IMAP端口为143，启用STARTTLS；SMTP端口为587，启用STARTTLS。",
-        "subtitle": "公司和家庭的电子邮件。",
-        "title": "电子邮件"
+        "login_info": "使用用户选项卡中的用户名和密码。IMAP端口为143，启用STARTTLS；SMTP端口为587，启用STARTTLS。"
     },
     "password_manager": {
-        "subtitle": "安全的基本保障。Bitwarden 将帮助你创建、存储和在设备之间移动密码，并在请求时使用自动完成输入它们。",
-        "title": "密码管理器",
         "login_info": "您将需要在网站上创建一个账户。"
     },
     "users": {
-        "send_registration_data": "共享登录凭据",
         "details_title": "用户详情",
         "add_new_user": "添加第一个用户",
         "new_user": "新用户",
@@ -335,8 +309,6 @@
         "user_already_exists": "已存在此用户名的用户"
     },
     "social_network": {
-        "subtitle": "你可能不相信，现在你可以按照你自己的规则和目标受众，创建你自己的社交网络了。",
-        "title": "社交网络",
         "login_info": "你需要在网站上创建一个账户。"
     },
     "recovery_key": {
@@ -361,7 +333,6 @@
         "generation_error": "无法生成恢复密钥。{}"
     },
     "modals": {
-        "you_cant_use_this_api": "您不能使用此 API 来处理具有此 TLD 的域名。",
         "volume_creation_error": "无法创建卷。",
         "unexpected_error": "提供商端在安置过程中出现意外错误。",
         "dns_removal_error": "无法移除 DNS 记录。",
@@ -519,8 +490,6 @@
         "title": "SSH密钥",
         "delete": "删除SSH密钥",
         "delete_confirm_question": "确定是否要删除SSH密钥？",
-        "subtitle_with_keys": "{} 密钥",
-        "subtitle_without_keys": "无密钥",
         "no_key_name": "未命名密钥",
         "root_title": "这些是超级用户密钥",
         "root_subtitle": "这些密钥的所有者拥有对服务器的完全访问权限，并可以在其上执行任何操作。请只添加您自己的密钥到服务器上。",
@@ -578,20 +547,6 @@
         "reboot_after_upgrade_hint": "在服务器应用更改后无需提示重新启动",
         "server_timezone": "服务器时区"
     },
-    "record": {
-        "root": "根域名",
-        "api": "SelfPrivacy API",
-        "cloud": "文件云",
-        "meet": "视频会议",
-        "social": "社交网络",
-        "password": "密码管理器",
-        "vpn": "VPN",
-        "mx": "MX 记录",
-        "dmarc": "DMARC 记录",
-        "spf": "SPF 记录",
-        "dkim": "DKIM 密钥",
-        "git": "Git服务器"
-    },
     "domain": {
         "card_title": "域名",
         "ok": "DNS记录全部正常",
@@ -603,23 +558,14 @@
         "email_title": "邮件",
         "email_subtitle": "安全交换电子邮件所需的记录。",
         "update_list": "升级列表",
-        "domain_validation_failure": "我们无法访问你的域名！",
         "screen_title": "域名和DNS",
         "error_subtitle": "点击此处以修复它们。这也将删除自定义记录。"
     },
     "video": {
-        "title": "视频会议",
-        "subtitle": "Zoom 和 Google Meet 都很好，但 Jitsi Meet 是一个更加值得的替代品，它更能让你放心你的对话不会被监听。",
         "login_info": "无需账户。"
     },
     "git": {
-        "title": "Git 服务器",
-        "subtitle": "这是 Github 的私有替代品，属于你自己，而不是微软的。",
         "login_info": "你需要在网站上创建一个账户。第一个用户将成为管理员。"
-    },
-    "vpn": {
-        "title": "VPN 服务器",
-        "subtitle": "私人 VPN 服务器"
     },
     "timer": {
         "sec": "{} 秒"

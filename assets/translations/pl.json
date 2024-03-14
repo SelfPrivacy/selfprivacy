@@ -69,8 +69,6 @@
     "ssh": {
         "title": "klucze SSH",
         "delete": "Usuń klucz SSH",
-        "subtitle_with_keys": "Klucze: {}",
-        "subtitle_without_keys": "Brak kluczy",
         "no_key_name": "Bezimienny klucz",
         "root_title": "To są klucze superużytkownika",
         "input_label": "Publiczny klucz ED25519, ECDSA lub RSA",
@@ -129,20 +127,6 @@
         "dns_provider": "Dostawca DNS",
         "pricing_error": "Nie udało się uzyskać cen dostawców"
     },
-    "record": {
-        "root": "Domena główna",
-        "cloud": "Chmura plików",
-        "git": "Git serwer",
-        "meet": "Wideokonferencje",
-        "social": "Serwis społecznościowy",
-        "password": "Menedżer haseł",
-        "vpn": "VPN",
-        "dmarc": "Zapisywanie rekord",
-        "spf": "Zapisywanie SPF",
-        "dkim": "DKIM klucz",
-        "api": "SelfPrivacy API",
-        "mx": "Zapisywanie MX"
-    },
     "domain": {
         "card_title": "Domena",
         "screen_title": "Domena i DNS",
@@ -155,8 +139,7 @@
         "update_list": "Zaktualizuj listę",
         "ok": "Zapisy są w porządku",
         "error_subtitle": "Stuknij tutaj, aby je naprawić. Spowoduje to również usunięcie niestandardowych rekordów.",
-        "email_subtitle": "Zapisy wymagane do bezpiecznej wymiany poczty elektronicznej.",
-        "domain_validation_failure": "Nie możemy osiągnąć twojej domeny!"
+        "email_subtitle": "Zapisy wymagane do bezpiecznej wymiany poczty elektronicznej."
     },
     "backup": {
         "card_title": "Utworzyć kopię zapasową",
@@ -167,10 +150,6 @@
         "restore": "Przywróć z kopii",
         "no_backups": "Nie ma jeszcze żadnych kopii zapasowych",
         "create_new": "Utwórz nową kopię",
-        "creating": "Tworzenie kopii: {}%",
-        "restoring": "Przywracanie z kopii",
-        "waiting_for_rebuild": "Po kilku minutach będziesz mógł utworzyć pierwszą kopię.",
-        "error_pending": "Serwer zwrócił błąd, sprawdź go poniżej",
         "refresh": "Odśwież status",
         "refetch_backups": "Ponownie pobierz listę kopii zapasowych",
         "refetching_list": "Za kilka minut lista zostanie zaktualizowana",
@@ -219,10 +198,7 @@
         "latest_snapshots": "Najnowsze zdjęcia",
         "autobackup_period_every": "Każdy {okres}",
         "autobackup_period_disable": "Wyłącz automatyczne tworzenie kopii zapasowych",
-        "autobackup_custom": "Niestandardowe",
-        "autobackup_custom_hint": "Wprowadź niestandardowy okres w minutach",
         "autobackup_set_period": "Ustawiony okres",
-        "autobackup_period_set": "Okres ustalony",
         "backups_encryption_key": "Klucz szyfrowania"
     },
     "storage": {
@@ -243,8 +219,6 @@
         "data_migration_title": "Migracja danych",
         "data_migration_notice": "Na czas migracji danych wszystkie usługi zostaną wyłączone.",
         "start_migration_button": "Rozpocznij migrację",
-        "migration_process": "Migracja…",
-        "migration_done": "Zakończyć",
         "extending_volume_description": "Zmiana rozmiaru pamięci masowej pozwoli na przechowywanie większej ilości danych na serwerze bez rozszerzenia serwera. Objętość można tylko zwiększyć, nie można jej zmniejszyć."
     },
     "service_page": {
@@ -265,38 +239,22 @@
         "uses": "Używa {usage} na {volume}"
     },
     "mail": {
-        "title": "E-mail",
-        "subtitle": "E-Mail dla firmy i rodziny.",
         "login_info": "Użyj nazwy użytkownika i hasła z listy użytkowników. Port IMAP: 143, STARTTLS. Port SMTP: 587, STARTTLS."
     },
     "password_manager": {
-        "title": "Menedżer haseł",
-        "subtitle": "To podstawa Twojego bezpieczeństwa. Bitwarden pomoże Ci tworzyć, przechowywać, kopiować hasła między urządzeniami i umieszczać je w formularzach.",
         "login_info": "Konto należy założyć na stronie internetowej."
     },
     "video": {
-        "title": "Wideokonferencja",
-        "subtitle": "Zoom i Google Meet są świetne, ale Jitsi Meet to dobra alternatywa, która daje pewność, że nie jesteś słuchany.",
         "login_info": "Konto nie jest potrzebne."
     },
     "cloud": {
-        "title": "Przechowywanie w chmurze",
-        "subtitle": "Nie zezwalaj usługom w chmurze na odczyt twoich danych, dla tego korzystaj z NextCloud.",
         "login_info": "Login jest admin, hasło jest takie samo jak w przypadku głównego użytkownika. Utwórz nowe konta w interfejsie Nextcloud."
     },
     "social_network": {
-        "title": "Serwis społecznościowy",
-        "subtitle": "Trudno w to uwierzyć, ale stało możliwe stworzenie własnego serwisu społecznościowego, z własnymi zasadami i publicznością.",
         "login_info": "Konto należy założyć na stronie."
     },
     "git": {
-        "login_info": "Konto należy założyć na stronie. Pierwszy zarejestrowany użytkownik zostaje administratorem.",
-        "title": "Git Serwer",
-        "subtitle": "Prywatna alternatywa dla Githuba, która należy do Ciebie, ale nie do Microsoftu."
-    },
-    "vpn": {
-        "title": "VPN Serwer",
-        "subtitle": "Prywatny serwer VPN"
+        "login_info": "Konto należy założyć na stronie. Pierwszy zarejestrowany użytkownik zostaje administratorem."
     },
     "users": {
         "add_new_user": "Dodaj pierwszego użytkownika",
@@ -308,7 +266,6 @@
         "delete_confirm_question": "Czy naprawdę chcesz usunąć konto?",
         "reset_password": "Zresetuj hasło",
         "account": "Konto",
-        "send_registration_data": "Udostępnij dane logowania",
         "could_not_fetch_users": "Nie udało się uzyskać użytkowników",
         "could_not_fetch_description": "Sprawdź połączenie internetowe i spróbuj ponownie",
         "refresh_users": "Odśwież listę użytkowników",
@@ -365,18 +322,14 @@
         "choose_location_type_text": "Wybór lokalizacji będzie determinował dostępne konfiguracje, ceny i prędkość połączenia z serwerem.",
         "choose_server_type_storage": "{} GB pamięci na diskie",
         "choose_server_type_payment_per_month": "{} miesięcznie",
-        "no_server_types_found": "Nie znaleziono dostępnych typów serwerów! Proszę upewnić się, że masz dostęp do dostawcy serwera...",
         "use_this_domain": "Kto używa ten domen?",
-        "connect_backblaze_storage": "Dodajcie Blackblaze",
         "no_connected_domains": "Niema podłączonych domenów",
         "what": "Co to znaczy?",
         "backblaze_bad_key_error": "Informacja o Blackbaze nieprawidłowa",
         "select_dns": "Teraz wybierz provajdera DNS",
-        "manage_domain_dns": "Aby zarządzać DNS domeny",
         "create_master_account": "Dodać konto administratora",
         "use_this_domain_text": "Podany token zapewnia kontrolę nad tą domeną",
         "loading_domain_list": "Ładowanie listy domen",
-        "found_more_domains": "Znaleziono więcej niż jedną domenę, dla własnego bezpieczeństwa usuń niepotrzebne domeny",
         "save_domain": "Zapisz domenę",
         "final": "Ostatni krok",
         "create_server": "Utwórz serwer",
@@ -387,7 +340,6 @@
         "check": "Sprawdź",
         "one_more_restart": "Teraz nastąpi dodatkowe ponowne uruchomienie komputera w celu aktywacji certyfikatów bezpieczeństwa.",
         "enter_username_and_password": "Wprowadź nazwę użytkownika i złożone hasło",
-        "finish": "Wszystko jest inicjalizowane",
         "checks": "Kontrole wykonane:\n{} / {}",
         "steps": {
             "hosting": "Hosting",
@@ -403,11 +355,7 @@
             "final_checks": "Kontrole końcowe"
         },
         "dns_provider_bad_key_error": "Klucz API jest nieprawidłowy",
-        "connect_to_dns_provider_text": "Za pomocą interfejsu API tokena aplikacja SelfPrivacy skonfiguruje rekordy DNS",
-        "server_provider_description": "Lokalizacja, w której będą znajdować się Twoje dane i usługi SelfPrivacy:",
-        "dns_provider_description": "Spowoduje to połączenie Twojej domeny z adresem IP:",
         "select_provider_price_free": "Za darmo",
-        "select_provider_payment_text_cloudflare": "Karty bankowe",
         "connect_to_dns": "Połącz dostawcę DNS"
     },
     "jobs": {
@@ -448,7 +396,6 @@
         "try_again": "Mam spróbować jeszcze raz?",
         "purge_all_keys_confirm": "Tak, wymazać wszystkie klucze",
         "delete_server_volume": "Usunąć serwer i pamięć masową?",
-        "you_cant_use_this_api": "Nie możesz użyć tego API dla domeny z podobnym TLD.",
         "volume_creation_error": "Nie udało się utworzyć woluminu."
     },
     "recovery_key": {

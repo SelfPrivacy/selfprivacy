@@ -52,8 +52,6 @@
         "create": "Loo SSH võti",
         "delete": "Kustuta SSH võti",
         "delete_confirm_question": "Kas olete kindel, et soovite SSH võtme kustutada?",
-        "subtitle_with_keys": "{} võtmed",
-        "subtitle_without_keys": "Võtmeid pole",
         "no_key_name": "Nimetu võti",
         "root_title": "Need on superkasutaja võtmed",
         "input_label": "Avalik ED25519, ECDSA või RSA võti",
@@ -154,20 +152,6 @@
         "in": "Sisse",
         "out": "Välja"
     },
-    "record": {
-        "root": "Juurdomeen",
-        "api": "SelfPrivacy API",
-        "cloud": "Failipilv",
-        "git": "Git server",
-        "meet": "Videokonverents",
-        "social": "Sotsiaalne võrgustik",
-        "password": "Paroolihaldur",
-        "vpn": "VPN",
-        "mx": "MX kirje",
-        "dmarc": "DMARC kirje",
-        "spf": "SPF kirje",
-        "dkim": "DKIM võti"
-    },
     "domain": {
         "card_title": "Domeen",
         "screen_title": "Domeen ja DNS",
@@ -180,8 +164,7 @@
         "services_subtitle": "Iga teenuse jaoks on vajalikud \"A\" kirjed.",
         "email_title": "Elektrooniline post",
         "email_subtitle": "Kirjed turvaliseks e-kirja vahetamiseks vajalikud.",
-        "update_list": "Värskenda nimekirja",
-        "domain_validation_failure": "Me ei saa teie domeenile juurde!"
+        "update_list": "Värskenda nimekirja"
     },
     "backup": {
         "quota_subtitles": {
@@ -238,13 +221,9 @@
         "reupload_key": "Võtme sunnitud lähtestamine",
         "reuploaded_key": "Võti laaditi uuesti",
         "initialize": "Initsialiseerimine",
-        "waiting_for_rebuild": "Mõne minuti pärast saate luua oma esimese varukoopia.",
         "restore": "Taasta varukoopiast",
         "no_backups": "Varukoopiaid pole veel olemas",
         "create_new": "Loo uus varukoopia",
-        "creating": "Uue varukoopia loomine: {}%",
-        "restoring": "Taastamine varukoopiast",
-        "error_pending": "Server tagastas vea, kontrollige seda allpool",
         "restore_alert": "Olete valmis taastama varukoopiast, mis loodi {} . Kõik praegused andmed lähevad kaotsi. Kas olete kindel?",
         "refresh": "Värskenda olekut",
         "refetch_backups": "Uuenda varukoopiate loendit",
@@ -263,10 +242,7 @@
         "autobackup_period_never": "Automaatne varundamine on keelatud",
         "autobackup_period_every": "iga {periood}",
         "autobackup_period_disable": "Keela automaatne varundamine",
-        "autobackup_custom": "Kohandatud",
-        "autobackup_custom_hint": "Sisestage kohandatud periood minutites",
         "autobackup_set_period": "Määra periood",
-        "autobackup_period_set": "Määratud periood",
         "backups_encryption_key": "Krüpteerimisvõti",
         "backups_encryption_key_subtitle": "Hoidke seda kindlas kohas.",
         "backups_encryption_key_copy": "Kopeerige krüpteerimisvõti",
@@ -305,15 +281,12 @@
         },
         "rotation_quotas_title": "Hetktõmmise pööramise Seaded",
         "set_rotation_quotas": "Määrake uued rotatsioonikvoodid",
-        "quotas_set": "Määrati uued varukoopiate pöörlemiskvoodid",
         "quotas_only_applied_to_autobackups": "Neid sätteid rakendatakse ainult automaatse varundamise korral. Käsitsi tehtud varukoopiaid ei kustutata."
     },
     "initializing": {
         "connect_to_server_provider_text": "API võtme abil saab SelfPrivacy rentida masina ja seadistada sellele oma serveri",
         "how": "Kuidas saada API võtit",
-        "connect_to_dns_provider_text": "API võtmega SelfPrivacy haldab kõiki DNS kirjeid",
         "select_dns": "Nüüd valime DNS teenusepakkuja",
-        "manage_domain_dns": "Oma domeeni DNS haldamiseks",
         "use_this_domain": "Kasutada seda domeeni?",
         "use_this_domain_text": "Esitatud võti annab juurdepääsu järgnevale domeenile",
         "select_provider_countries_title": "Saadaval olevad riigid",
@@ -326,7 +299,6 @@
         "select_provider_payment_title": "Maksemeetodid",
         "select_provider_payment_text_hetzner": "Krediitkaardid, SWIFT, SEPA, PayPal",
         "select_provider_payment_text_do": "Krediitkaardid, Google Pay, PayPal",
-        "select_provider_payment_text_cloudflare": "Krediitkaardid",
         "select_provider_email_notice": "E-posti majutust uutele klientidele ei pakuta. Siiski saab selle lukust avada niipea, kui teete oma esimese makse.",
         "select_provider_site_button": "Külasta saiti",
         "connect_to_server_provider": "Logi sisse ",
@@ -347,16 +319,13 @@
         "choose_server_type_payment_server": "{} serveri eest",
         "choose_server_type_payment_storage": "{} lisasalvestuse eest",
         "choose_server_type_payment_ip": "{} avaliku IPv4 aadressi eest",
-        "no_server_types_found": "Serveritüüpe ei leitud. Veenduge, et teie konto oleks ligipääsetav, ja proovige muuta oma serveri asukohta.",
         "dns_provider_bad_key_error": "API võti on kehtetu",
         "backblaze_bad_key_error": "Backblaze'i salvestusinfo on kehtetu",
         "connect_to_dns": "Ühendage DNS teenusepakkuja",
         "multiple_domains_found": "Leiti mitu domeeni",
         "multiple_domains_found_text": "Esitatud võti annab juurdepääsu järgmistele domeenidele. Palun valige see, mida soovite kasutada. Teiste domeenide turvalisuse tagamiseks peaksite piirama selle võtme juurdepääsu ainult domeeniga, mida soovite kasutada koos SelfPrivacy.",
-        "connect_backblaze_storage": "Ühendage Backblaze salvestusruum",
         "no_connected_domains": "Praegu pole ühtegi ühendatud domeeni",
         "loading_domain_list": "Laadib domeenide loendit",
-        "found_more_domains": "Leiti rohkem kui üks domeen. Teie enda turvalisuse tagamiseks palume kustutada mittevajalikud domeenid",
         "save_domain": "Salvesta domeen",
         "final": "Viimane samm",
         "create_server": "Looge server",
@@ -380,10 +349,7 @@
         },
         "create_master_account": "Loo põhikonto",
         "enter_username_and_password": "Sisesta kasutajanimi ja tugev parool",
-        "finish": "Kõik on initsialiseeritud",
         "checks": "Kontrollid on lõpetatud\n{} otsas {}",
-        "server_provider_description": "Koht, kus asuvad teie andmed ja SelfPrivacy teenused:",
-        "dns_provider_description": "Teenus, mis võimaldab teie IP suunata domeeninimedele:",
         "connect_to_server": "Alustame serveriga.",
         "select_provider": "Valige järgmisest loendist mis tahes pakkuja, need kõik toetavad SelfPrivacy",
         "select_provider_notice": "\"Suhteliselt väikese\" all peame silmas masinat, millel on 2 tuuma CPU ja 2 gigabaiti muutmälu.",
@@ -412,8 +378,6 @@
         "in_menu": "Server pole veel seadistatud. Palun lõpetage seadistamine kasutades seadistusviisardit edasiseks tööks."
     },
     "storage": {
-        "migration_process": "Migreerimine…",
-        "migration_done": "lõpetama",
         "start_migration_button": "Alusta migreerimist",
         "extending_volume_description": "Helitugevuse suuruse muutmine võimaldab teil salvestada serverisse rohkem andmeid ilma serverit ennast laiendamata. Helitugevust saab ainult pikendada: kokkutõmbumine pole võimalik.",
         "data_migration_notice": "Migratsiooni ajal lülitatakse kõik teenused välja.",
@@ -459,14 +423,10 @@
         }
     },
     "mail": {
-        "title": "E-post",
-        "login_info": "Kasutage kasutajanime ja parooli kasutajate vahekaardilt. IMAP port on 143 koos STARTTLS, SMTP port on 587 koos STARTTLS.",
-        "subtitle": "E-post ettevõttele ja perele."
+        "login_info": "Kasutage kasutajanime ja parooli kasutajate vahekaardilt. IMAP port on 143 koos STARTTLS, SMTP port on 587 koos STARTTLS."
     },
     "password_manager": {
-        "subtitle": "Teie turvalisuse alus. Bitwarden aitab teil luua, salvestada ja liigutada paroole seadmete vahel ning sisestada neid, kui neid küsitakse, kasutades automaatset täitmist.",
-        "login_info": "Teil tuleb luua konto veebisaidil.",
-        "title": "Paroolide haldur"
+        "login_info": "Teil tuleb luua konto veebisaidil."
     },
     "recovering": {
         "method_device_description": "Avage rakendus teises seadmes ja minge seadmete lehele. Oma märgi saamiseks vajutage nuppu \"Lisa seade\".",
@@ -508,8 +468,6 @@
         "modal_confirmation_ip_invalid": "IP ei ole sama, mis DNS kirjes"
     },
     "video": {
-        "subtitle": "Zoom ja Google Meet on head, kuid Jitsi Meet on väärt alternatiiv, mis annab teile kindlustunde, et teid ei kuulata.",
-        "title": "Videokoosolek",
         "login_info": "Konto pole vaja."
     },
     "users": {
@@ -525,7 +483,6 @@
         "delete_confirm_question": "Kas oled kindel?",
         "reset_password": "Parooli lähtestamine",
         "account": "Konto",
-        "send_registration_data": "Jagage sisselogimisandmeid",
         "could_not_fetch_description": "Palun kontrollige oma internetiühendust ja proovige uuesti",
         "could_not_create_user": "Kasutaja loomine ebaõnnestus",
         "could_not_delete_user": "Kasutaja kustutamine ebaõnnestus",
@@ -625,23 +582,13 @@
         "title": "SelfPrivacy tugi"
     },
     "cloud": {
-        "title": "Pilvesalvestus",
-        "subtitle": "Ärge lubage pilveteenustel teie andmeid lugeda, kasutades NextCloud.",
         "login_info": "Sisselogimine on admin, parool on sama mis teie põhikasutajal. Looge uusi kontosid Nextcloudi liideses."
     },
     "social_network": {
-        "title": "Sotsiaalvõrgustik",
-        "subtitle": "On raske uskuda, kuid nüüd on võimalik luua oma sotsiaalvõrgustik oma reeglite ja sihtrühmaga.",
         "login_info": "Teil tuleb luua konto veebisaidil."
     },
     "git": {
-        "title": "Git Server",
-        "subtitle": "Erakasutusel olev alternatiiv Github, mis kuulub teile, kuid mitte Microsoft.",
         "login_info": "Teil tuleb luua konto veebisaidil. Esimesest kasutajast saab administraator."
-    },
-    "vpn": {
-        "title": "VPN server",
-        "subtitle": "Eravõrgu VPN server"
     },
     "modals": {
         "dns_removal_error": "DNS kirjeid ei õnnestunud eemaldada.",
@@ -657,7 +604,6 @@
         "purge_all_keys_confirm": "Jah, kustuta kõik minu võtmed",
         "delete_server_volume": "Kustutada server ja maht?",
         "reboot": "Taaskäivitage",
-        "you_cant_use_this_api": "Te ei saa seda API kasutada domeenide puhul sellise TLD.",
         "yes": "Jah",
         "no": "Ei"
     },

@@ -69,8 +69,6 @@
         "create": "SSH açarı yaradın",
         "delete": "SSH açarını silin",
         "delete_confirm_question": "Növbəti SSH açarı silmək istədiyinizə əminsiniz?",
-        "subtitle_with_keys": "{} açarlar",
-        "subtitle_without_keys": "Açar yoxdur",
         "no_key_name": "Adsız açar",
         "root_title": "Bunlar super istifadəçi açarlarıdır",
         "input_label": "İctimai ED25519 və ya RSA açarı",
@@ -124,20 +122,6 @@
             "many": "{} nüvələr"
         }
     },
-    "record": {
-        "root": "Kök domen",
-        "api": "SelfPrivacy APİ",
-        "cloud": "Fayl buludu",
-        "git": "Git Server",
-        "meet": "Video konfrans",
-        "social": "Sosial Mediya",
-        "password": "Parol meneceri",
-        "vpn": "VPN",
-        "mx": "MX rekordu",
-        "spf": "SPF rekordu",
-        "dkim": "DKIM açarı",
-        "dmarc": "DMARC rekordu"
-    },
     "domain": {
         "card_title": "Domen",
         "screen_title": "Domain və DNS",
@@ -157,13 +141,9 @@
         "reupload_key": "Açar yeniləməsini məcbur edin",
         "reuploaded_key": "Server açarı yeniləndi",
         "initialize": "Qurunmaq",
-        "waiting_for_rebuild": "Bir neçə dəqiqədən sonra ilk nüsxəni yarada biləcəksiniz.",
         "restore": "Kopyadan bərpa edin",
         "no_backups": "Yedəkləmə hələ yoxdur",
         "create_new": "Yeni nüsxə yaradın",
-        "creating": "Surəti çıxarmaq: {}%",
-        "restoring": "Kopyadan bərpa edilir",
-        "error_pending": "Server xəta verdi: aşağıda yoxlayın",
         "restore_alert": "Siz {} tərəfindən yaradılmış nüsxədən bərpa etmək üzrəsiniz. Bütün cari məlumatlar itiriləcək. Sən əminsən?",
         "refresh": "Statusu yenilə",
         "refetch_backups": "Kopya siyahısını yeniləyin",
@@ -188,9 +168,7 @@
         "extending_volume_description": "Yaddaş ölçüsünün dəyişdirilməsi, serverin özünü genişləndirmədən serverinizdə daha çox məlumat saxlamağa imkan verəcəkdir. Həcmi yalnız artırmaq olar, onu azaltmaq olmaz.",
         "data_migration_title": "Məlumat miqrasiya",
         "data_migration_notice": "Məlumatların köçürülməsi zamanı bütün xidmətlər deaktiv ediləcək.",
-        "start_migration_button": "Miqrasiyaya başlayın",
-        "migration_process": "Köçür…",
-        "migration_done": "Tamamlayın"
+        "start_migration_button": "Miqrasiyaya başlayın"
     },
     "service_page": {
         "move": "Başqa sürücüyə keçin",
@@ -210,24 +188,16 @@
         }
     },
     "mail": {
-        "login_info": "İstifadəçilər sekmesinden istifadəçi adı və paroldan istifadə edin. IMAP portu: 143, STARTTLS. SMTP portu: 587, STARTTLS.",
-        "title": "E-poçt",
-        "subtitle": "Ailə və ya şirkət üçün e-poçt."
+        "login_info": "İstifadəçilər sekmesinden istifadəçi adı və paroldan istifadə edin. IMAP portu: 143, STARTTLS. SMTP portu: 587, STARTTLS."
     },
     "video": {
-        "subtitle": "Jitsi meet Zoom və Google meet-in əla analoqudur və bu, rahatlıqla yanaşı, yüksək keyfiyyətli video konfransların təhlükəsizliyini təmin edir.",
-        "title": "video konfrans",
         "login_info": "Hesab tələb olunmur."
     },
     "cloud": {
-        "login_info": "Administrator girişi: admin, parol əsas istifadəçi ilə eynidir. NextCloud admin interfeysində yeni istifadəçilər yaradın.",
-        "title": "Fayl bulud",
-        "subtitle": "Bulud xidmətlərinin məlumatlarınıza baxmasının qarşısını alın. NextCloud istifadə edin - bütün məlumatlarınız üçün təhlükəsiz ev."
+        "login_info": "Administrator girişi: admin, parol əsas istifadəçi ilə eynidir. NextCloud admin interfeysində yeni istifadəçilər yaradın."
     },
     "git": {
-        "login_info": "Saytda hesab yaradılmalıdır. İlk qeydiyyatdan keçmiş istifadəçi administrator olur.",
-        "title": "Git Server",
-        "subtitle": "Microsoft-a deyil, sizə məxsus şəxsi Github alternativi."
+        "login_info": "Saytda hesab yaradılmalıdır. İlk qeydiyyatdan keçmiş istifadəçi administrator olur."
     },
     "users": {
         "could_not_fetch_description": "İnternet bağlantısını yoxlayın və yenidən cəhd edin",
@@ -241,7 +211,6 @@
         "delete_confirm_question": "Hesabınızı silmək istədiyinizə əminsiniz?",
         "reset_password": "Parolu sıfırlayın",
         "account": "Hesab",
-        "send_registration_data": "Detalları paylaşın",
         "could_not_fetch_users": "İstifadəçiləri əldə etmək alınmadı",
         "refresh_users": "İstifadəçi siyahısını yeniləyin",
         "could_not_create_user": "İstifadəçi yaratmaq alınmadı",
@@ -257,7 +226,6 @@
         "connect_to_server_provider_text": "Token API-dən istifadə edərək SelfPrivacy proqramı sizin adınıza server sifariş edə və konfiqurasiya edə biləcək",
         "no_locations_found": "Heç bir məkan tapılmadı, lütfən, hesabınızın mövcud olduğundan əmin olun",
         "choose_server_type_text": "Server resursları hansı xidmətlərin başlaya biləcəyini müəyyənləşdirir. İstənilən vaxt serveri genişləndirə bilərsiniz",
-        "no_server_types_found": "Heç bir mövcud server növləri tapılmadı! Lütfən, server provayderinə girişinizin olduğundan əmin olun...",
         "server_rebooted": "Server yenidən başladıldı, son yoxlamanı gözləyirik…",
         "one_more_restart": "İndi təhlükəsizlik sertifikatlarını aktivləşdirmək üçün əlavə reboot olacaq.",
         "connect_to_server": "Serverdən başlayaq.",
@@ -288,13 +256,10 @@
         "choose_server_type_payment_per_month": "{} aylıq",
         "backblaze_bad_key_error": "Backblaze vault haqqında məlumat yanlışdır",
         "select_dns": "İndi DNS provayderini seçək",
-        "manage_domain_dns": "Domeninizin DNS-ni idarə etmək üçün",
         "use_this_domain": "Biz bu domendən istifadə edirik?",
         "use_this_domain_text": "Göstərdiyiniz token bu domen üzərində nəzarəti təmin edir",
-        "connect_backblaze_storage": "Backblaze bulud yaddaşınızı birləşdirin",
         "no_connected_domains": "Hazırda heç bir bağlı domen yoxdur",
         "loading_domain_list": "Domenlərin siyahısı yüklənir",
-        "found_more_domains": "Birdən çox domen tapıldı, təhlükəsizliyiniz üçün lazımsız domenləri silin",
         "save_domain": "Domeni yadda saxla",
         "final": "Son addım",
         "create_server": "Server yaradın",
@@ -305,7 +270,6 @@
         "check": "Yoxlanış",
         "create_master_account": "Əsas hesab yaradın",
         "enter_username_and_password": "İstifadəçi adı və mürəkkəb parol daxil edin",
-        "finish": "Hər şey işə salınıb",
         "checks": "Yoxlamalar aparıldı:. \n{} / {}",
         "steps": {
             "hosting": "Hostinq",
@@ -419,7 +383,6 @@
         "purge_all_keys_confirm": "Bəli, bütün düymələri silin",
         "delete_server_volume": "Server və yaddaş silinsin?",
         "reboot": "Yenidən yükləyin",
-        "you_cant_use_this_api": "Siz oxşar TLD ilə domen üçün bu API istifadə edə bilməzsiniz.",
         "yes": "Bəli",
         "no": "Yox"
     },
@@ -460,18 +423,10 @@
         "in_menu": "Server hələ konfiqurasiya edilməyib, əlaqə sihirbazından istifadə edin."
     },
     "password_manager": {
-        "title": "Parol Meneceri",
-        "subtitle": "Bu, təhlükəsizliyinizin əsasıdır. Bitwarden sizə cihazlar arasında parollar yaratmağa, saxlamağa, köçürməyə və onları formalara çevirməyə kömək edəcək.",
         "login_info": "Saytda hesab yaradılmalıdır."
     },
     "social_network": {
-        "title": "sosial Mediya",
-        "subtitle": "İnanmaq çətindir, lakin öz qaydaları və auditoriyası olan öz sosial şəbəkənizi yaratmaq mümkün oldu.",
         "login_info": "Аккаунт нужно создать на сайте."
-    },
-    "vpn": {
-        "title": "VPN server",
-        "subtitle": "Bağlı VPN serveri"
     },
     "timer": {
         "sec": "{} san"

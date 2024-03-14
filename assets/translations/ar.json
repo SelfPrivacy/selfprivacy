@@ -1,8 +1,4 @@
 {
-    "vpn": {
-        "title": "خادم VPN",
-        "subtitle": "خادم VPN المغلق"
-    },
     "users": {
         "login": "تسجيل الدخول",
         "could_not_fetch_description": "من فضلك، قم بتفحُّص اتصال الإنترنت وحاول مرة أخرى",
@@ -18,7 +14,6 @@
         "delete_confirm_question": "هل أنت متأكد؟",
         "reset_password": "تغيير كلمة المرور",
         "account": "الحساب",
-        "send_registration_data": "قم بمشاركة بيانات اعتماد تسجيل الدخول",
         "could_not_fetch_users": "لم نتمكن من إحضار قائمة المستخدمين",
         "refresh_users": "قم بتحديث قائمة المستخدمين",
         "could_not_create_user": "تعذر إنشاء المستخدم",
@@ -29,7 +24,6 @@
     "initializing": {
         "select_provider_price_text_hetzner": "يتطلب ذلك ٨ يورو شهريًا لخادم يعد صغير نسبيًا ومساحة تخزين القرص تقدّر بـ٥٠ جيجابايت",
         "select_provider_notice": "نعني بكلمة \"صغير نسبيًا\" جهازا يحتوي على ٢ من CPU (وحدة المعالجة المركزية)، و٢جيجابايت من RAM (ذاكرة الوصول العشوائي).",
-        "no_server_types_found": "لم يتم العثور على أنواع خوادم متاحة. تأكد من إمكانية الوصول إلى حسابك وحاول تغيير موقع الخادم الخاص بك.",
         "connect_to_server_provider_text": "باستخدام رمز API الخاص، ستقوم بتمكين SelfPrivacy من استئجار جهاز وإعداد الخادم الخاص بك عليها",
         "choose_server_type_payment_storage": "{} لمساحة تخزين إضافية",
         "choose_server_type_payment_ip": "{} لعنوان IPv4 العام",
@@ -37,7 +31,6 @@
         "select_provider": "اختر أي مزود من القائمة التالية. كل منهم يدعم SelfPrivacy",
         "connect_to_server_provider": "قم بتسجيل الدخول الآن ",
         "multiple_domains_found": "لقد وجدت نطاقات عديدة",
-        "found_more_domains": "لقد وجد أكثر من نطاق واحد. من أجل سلامتك، نرجو منك حذف النطاقات غير الضرورية",
         "steps": {
             "master_account": "الحساب الرئيسي",
             "server_reboot": "إعادة تشغيل الخادم",
@@ -58,8 +51,6 @@
         "server_rebooted": "تم إعادة تشغيل الخادم، انتظر حتى آخر عملية تحقق…",
         "server_created": "تم إنشاء الخادم، يتم الآن إجراء عدة تحققات لـDNS وتمهيد الخادم…",
         "enter_username_and_password": "قم بإدخال اسم المستخدم وكلمة مرور قوية",
-        "server_provider_description": "المكان الذي فيه بياناتك وخدمات SelfPrivacy الخاصة بك ستكون موجودة في:",
-        "dns_provider_description": "خدمة تتيح لعنوان IP الخاص بك بالإشارة إلى أسماء النطاقات:",
         "connect_to_server": "لنبدأ بالخادم.",
         "select_provider_countries_title": "الدول المتاح فيها",
         "select_provider_countries_text_hetzner": "ألمانيا، فنلندا، الولايات المتحدة الأمريكية",
@@ -68,7 +59,6 @@
         "select_provider_payment_title": "طريقة الدفع",
         "select_provider_payment_text_hetzner": "بطاقات الائتمان، سويفت(SWIFT)، سيبا(SEPA)، باي بال(PayPal)",
         "select_provider_payment_text_do": "بطاقات الائتمان، جوجل باي (Google Pay)، باي بال (PayPal)",
-        "select_provider_payment_text_cloudflare": "بطاقات الإئتمان",
         "select_provider_site_button": "قم بزيارة الموقع",
         "how": "كيف يمكنني الحصول على رمز API المميز",
         "provider_bad_key_error": "مزوّد مفتاح API غير صالح",
@@ -88,11 +78,8 @@
         "dns_provider_bad_key_error": "مفتاح API غير صالح",
         "backblaze_bad_key_error": "معلومات تخزين Backblaze غير صالحة",
         "connect_to_dns": "قم بالارتباط بمزود DNS",
-        "connect_to_dns_provider_text": "من خلال رمز API الخاص فإن SelfPrivacy ستدير كل مدخلات DNS",
         "select_dns": "دعنا الآن نختار مزود DNS",
-        "manage_domain_dns": "لإدارة DNS الخاص بنطاقك",
         "use_this_domain_text": "الرمز الخاص اللذي اعطيتنا إياه سيمنحنا إمكانية الوصول للنطاقات التالية",
-        "connect_backblaze_storage": "قم بالارتباط بتخزين Blackblaze",
         "no_connected_domains": "لا توجد نطاقات تم الارتباط بها في الوقت الحالي",
         "loading_domain_list": "جاري تحميل قائمة النطاقات",
         "save_domain": "احفظ النطاق",
@@ -105,18 +92,13 @@
         "check": "تحقق",
         "one_more_restart": "ستتم إعادة التشغيل مرة أخرى حتى يتم تطبيق شهادة الأمان الخاصة بك.",
         "create_master_account": "إنشاء الحساب الرئيسي",
-        "finish": "كل شيء قد تم تهيئته",
         "checks": "جميع إجراءات التحقق قد اكتملت.\n{} من أصل {}",
         "select_provider_price_free": "مجاني"
     },
     "cloud": {
-        "login_info": "تسجيل الدخول هو المشرف، أما كلمة المرور فهي نفس المستخدم الرئيسي الخاص بك. أنشئ حسابات جديدة على واجهة Nextcloud.",
-        "title": "تخزين السحابة",
-        "subtitle": "لا تسمح للخدمات السحابية بالإطلاع على بياناتك باستخدام Nextcloud."
+        "login_info": "تسجيل الدخول هو المشرف، أما كلمة المرور فهي نفس المستخدم الرئيسي الخاص بك. أنشئ حسابات جديدة على واجهة Nextcloud."
     },
     "git": {
-        "subtitle": "يوجد بديل خاص ومغلق عن منصة GitHub، اللتي بدورها تنتمي لك، لا لمايكروسوفت.",
-        "title": "خادم Git",
         "login_info": "سيتوجب عليك إنشاء حساب على صفحة الويب، وأول مستخدم سيصبح مشرفاً."
     },
     "recovering": {
@@ -193,7 +175,6 @@
         "purge_all_keys": "هل تريد محو جميع مفاتيح الّتي مُنحت الموافقة؟",
         "delete_server_volume": "هل تريد حذف الخادم ووحدة التخزين؟",
         "reboot": "قم بإعادة التشغيل",
-        "you_cant_use_this_api": "لن تتمكن من استخدام واجهة برمجة التطبيقات هذه (API) للنطاقات مثل TLD.",
         "yes": "نعم",
         "no": "لا"
     },
@@ -366,8 +347,6 @@
         "title": "مفاتيح SSH",
         "create": "قم بإنشاء مفتاح SSH",
         "delete": "قم بحذف مفتاح SSH",
-        "subtitle_with_keys": "{} مفاتيح",
-        "subtitle_without_keys": "لا توجد مفاتيح",
         "no_key_name": "مفتاح لم تتم تسميته",
         "root_title": "هذه مفاتيح المستخدم المميز",
         "delete_confirm_question": "هل أنت متأكد من رغبتك بإزالة مفتاح SSH؟",
@@ -425,26 +404,11 @@
         "reboot_after_upgrade_hint": "قم بإعادة التشغيل من دون طلب الإذن بعد أن تطبق التغييرات على الخادم",
         "reboot_after_upgrade": "قم بإعادة التشغيل بعد التحديث"
     },
-    "record": {
-        "root": "جذر النطاق",
-        "social": "شبكة اجتماعية",
-        "api": "الواجهة البرمجية API لتطبيق SelfPrivacy",
-        "cloud": "الملف على السحابة",
-        "git": "خادم البوابة",
-        "meet": "اجتماع بالفيديو",
-        "password": "إدارة كلمة المرور",
-        "vpn": "VPN",
-        "dmarc": "سجل DMARC",
-        "spf": "سجل SPF",
-        "dkim": "مفتاح DKIM",
-        "mx": "سجل MX"
-    },
     "domain": {
         "card_title": "نطاق",
         "screen_title": "النطاق وDNS",
         "ok": "السجلّات جيدة",
         "error": "توجد مشاكل",
-        "domain_validation_failure": "لا يمكننا الوصول لنطاقك!",
         "uninitialized": "لم يتم استرداد البيانات بعد",
         "services_title": "الخدمات",
         "refreshing": "جاري تحديث الحالة …",
@@ -455,14 +419,11 @@
         "error_subtitle": "اضغط هنا لإصلاحم، سيزيل هذا أيضاً السجل المخصص."
     },
     "backup": {
-        "creating": "يتم الآن إنشاء نسخة احتياطية جديدة {}%",
-        "restoring": "الاستعادة من النسخة الاحتياطية",
         "card_title": "نسخة احتياطية",
         "card_subtitle": "قم بإدارة النسخ الاحتياطية الخاصة بك",
         "reupload_key": "مفتاح إعادة التحميل الاضطراري",
         "reuploaded_key": "مفتاح إعادة التحميل",
         "initialize": "التهيئة",
-        "waiting_for_rebuild": "ستتمكن من إنشاء نسختك الإحتياطية الأولى خلال بضع دقائق.",
         "refresh": "قم بتحديث الحالة",
         "refetch_backups": "قم بجلب قائمة النسخ الإحتياطي مرة أخرى",
         "reupload_key_subtitle": "سيتم توجيه الخادم للبدء بتخزين النسخ الاحتياطي مرة ثانية. قم باستخدامه في حالة حصول عطل ما.",
@@ -477,10 +438,7 @@
         "autobackup_period_never": "النسخ الإحتياطي التلقائي غير نشط",
         "autobackup_period_every": "كل {period}",
         "autobackup_period_disable": "قم بإيقاف النسخ الإحتياطي التلقائي",
-        "autobackup_custom": "تخصيص",
-        "autobackup_custom_hint": "قم بإدخال مدة معينة تتكون من دقائق",
         "autobackup_set_period": "ضع مدة زمنية",
-        "autobackup_period_set": "المدة المحددة",
         "backups_encryption_key": "مفتاح التشفير",
         "backups_encryption_key_subtitle": "احفظه في مكان آمن.",
         "backups_encryption_key_copy": "قم بنسخ مفتاح التشفير",
@@ -506,7 +464,6 @@
         },
         "rotation_quotas_title": "إعدادات دوران اللقطات (من نقطة البداية للنهاية)",
         "set_rotation_quotas": "‏قم بتعيين أوقات جديدة للدوران",
-        "quotas_set": "وقت دوران النسخ الاحتياطي الجديد المخصص",
         "quota_titles": {
             "daily": "كم عدد النسخ الاحتياطية اليومية التي يجب حفظها",
             "last": "كم عدد النسخ الاحتياطية الحديثة التي يجب حفظها",
@@ -565,7 +522,6 @@
         "restore": "قم بالاسترجاع من النسخة الاحتياطية",
         "no_backups": "لا توجد نسخ احتياطية حتى الآن",
         "create_new": "قم بإنشاء نسخة احتياطية جديدة",
-        "error_pending": "حدث خطأ أثناء إعادة السيرفر، قم بالفحص أدناه",
         "restore_alert": "إنك على وشك استرجاع نسخة احتياطية أنشئت في {}، حيث أن كل البيانات الحالية ستفقد، هل أنت متأكد من ذلك؟",
         "service_busy": "توجد عملية نسخ احتياطي أخرى جارية الآن",
         "quotas_only_applied_to_autobackups": "هذه الإعدادات قابلة للتطبيق فقط على النسخ الإحتياطية التلقائية، أما النسخ الإحتياطية اليدوية فلن يتم حذفها.",
@@ -598,8 +554,6 @@
         "data_migration_title": "ترحيل البيانات",
         "data_migration_notice": "خلال القيام بترحيل البيانات سيتم إغلاق جميع الخدمات.",
         "start_migration_button": "إبدأ بالترحيل",
-        "migration_process": "يتم الترحيل…",
-        "migration_done": "انتهى",
         "status_ok": "استخدام القرص جيد",
         "gb": "{} جيجا بايت",
         "extending_volume_description": "إن تغيير سعة التخزين سيسمح لك بحفظ المزيد من البيانات من دون القيام بزيادة سعة الخادم نفسه. من الممكن زيادة سعة التخزين لكن لا يمكن تقليصها.",
@@ -608,13 +562,9 @@
         "extending_volume_modal_description": "الترقية إلى {} لأجل {} الخطة الشهرية."
     },
     "video": {
-        "title": "فيديو ميت (لقاء عبر الفيديو)",
-        "subtitle": "يعد كلا من برنامجي زوم وجوجل مييت (Google Meet & Zoom) خيارين جيدين، لكن Jitsi Meet يعد تطبيقاً جديراً بالإختيار، لأنه تطبيق آمن حيث أنه لن يتم التنصُّت عليك.",
         "login_info": "لا يوجد حساب مطلوب."
     },
     "social_network": {
-        "title": "الشبكةُ الاجتماعية",
-        "subtitle": "قد يبدو من الصعب تصديق ما أقول، لكن أصبح الآن بإمكانك إنشاء الشبكة الإجتماعية الخاصة بك،‌ بقوانينها وجمهورها المستهدفين.",
         "login_info": "سيتوجّب عليك أن تنشئ حساباً على صفحة الويب."
     },
     "not_ready_card": {
@@ -640,14 +590,10 @@
         "enable": "قم بتنشيط الخدمة"
     },
     "mail": {
-        "title": "البريد الإلكتروني",
-        "login_info": "استعمل اسم المستخدم وكلمة المرور من خلال علامة تبويب المستخدمين. منفذ IMAP هو 143 مع STARTTLS، ومنفذ SMTP هو 587 مع STARTTLS.",
-        "subtitle": "البريد الإلكتروني للشركة وللعائلة."
+        "login_info": "استعمل اسم المستخدم وكلمة المرور من خلال علامة تبويب المستخدمين. منفذ IMAP هو 143 مع STARTTLS، ومنفذ SMTP هو 587 مع STARTTLS."
     },
     "password_manager": {
-        "title": "مدير كلمة المرور",
-        "login_info": "سيتوجب عليك إنشاء حساب على صفحة الويب.",
-        "subtitle": "قاعدة الأمان الخاصة بك. سيساعدك Bitwarden بإنشاء كلمة المرور وتخزينها ونقلها بين الأجهزة، كذلك عند قيامك بإدخالهم حين يطلب منك إكمالهم بشكل تلقائي."
+        "login_info": "سيتوجب عليك إنشاء حساب على صفحة الويب."
     },
     "timer": {
         "sec": "{} ثانية"

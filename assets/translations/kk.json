@@ -50,8 +50,6 @@
         "delete": "SSH кілтін жою",
         "delete_confirm_question": "Жоюды растау сұрағы?",
         "root_subtitle": "Root сипаттамасы.",
-        "subtitle_with_keys": "Кілттері бар",
-        "subtitle_without_keys": "Кілтсіз",
         "no_key_name": "Кілт атауы жоқ",
         "root_title": "Root атауы",
         "input_label": "Енгізу жолағы"

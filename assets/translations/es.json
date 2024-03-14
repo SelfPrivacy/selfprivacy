@@ -56,8 +56,6 @@
         "title": "SSH Claves",
         "create": "Crear clave SSH",
         "delete": "Eliminar clave SSH",
-        "subtitle_with_keys": "{} claves",
-        "subtitle_without_keys": "Sin llaves",
         "no_key_name": "Clave sin nombre",
         "root_title": "Estas son las claves de superusuario",
         "input_label": "Clave pública ED25519, ECDSA o RSA"

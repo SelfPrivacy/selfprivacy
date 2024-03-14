@@ -56,8 +56,6 @@
         "create": "יצירת מפתח SSH",
         "delete": "מחיקת מפתח SSH",
         "delete_confirm_question": "למחוק את מפתח ה־SSH?",
-        "subtitle_with_keys": "{} מפתחות",
-        "subtitle_without_keys": "אין מפתחות",
         "no_key_name": "מפתח ללא שם",
         "root_title": "אלו מפתחות משתמש על",
         "input_label": "מפתח ED25519,‏ ECDSA או RSA ציבורי"
@@ -74,8 +72,7 @@
         "services_title": "שירותים",
         "services_subtitle": "רשומות מסוג „A” נחוצות לכל אחד מהשירותים.",
         "email_title": "דוא״ל",
-        "update_list": "עדכון הרשימה",
-        "domain_validation_failure": "לא הצלחנו להגיע לשם התחום שלך!"
+        "update_list": "עדכון הרשימה"
     },
     "console_page": {
         "title": "מסוף",
@@ -95,8 +92,6 @@
         "delete_server_description": "מסיר את השרת שלך. הוא לא יהיה זמין עוד."
     },
     "backup": {
-        "waiting_for_rebuild": "אפשר ליצור את הגיבוי הראשון שלך בעוד כמה דקות.",
-        "error_pending": "השרת החזיר שגיאה, היא מופיעה להלן",
         "create_new_select_heading": "לבחור מה לגבות",
         "autobackup_period_subtitle": "גיבויים נוצרים כל {period}",
         "autobackup_set_period": "הגדרת הפרש",
@@ -109,8 +104,6 @@
         "restore": "שחזור מגיבוי",
         "no_backups": "אין גיבויים עדיין",
         "create_new": "יצירת גיבוי חדש",
-        "creating": "גיבוי חדש נוצר: {}%",
-        "restoring": "גיבוי משוחזר",
         "refresh": "רענון מצב",
         "refetch_backups": "משיכת רשימת הגיבויים מחדש",
         "reupload_key": "אילוץ העלאת מפתח מחדש",
@@ -123,10 +116,7 @@
         "autobackup_period_never": "גיבויים אוטומטיים מושבתים",
         "autobackup_period_every": "כל {period}",
         "autobackup_period_disable": "השבתת גיבויים אוטומטיים",
-        "autobackup_custom": "התאמה אישית",
-        "autobackup_custom_hint": "נא למלא הפרשים מותאמים אישית בדקות",
         "backups_encryption_key": "מפתח הצפנה",
-        "autobackup_period_set": "הפרש הוגדר",
         "backups_encryption_key_subtitle": "יש לשמור עליו במקום בטוח.",
         "backups_encryption_key_copy": "העתקת מפתח ההצפנה",
         "reupload_key_subtitle": "ינחה את השרת להתחיל את אחסון הגיבוי שוב. כדאי להשתמש אם משהו לא תקין.",
@@ -210,7 +200,6 @@
         },
         "rotation_quotas_title": "הגדרות מחזוריות תמונות מצב",
         "set_rotation_quotas": "הגדרת מכסות מחזוריות חדשות",
-        "quotas_set": "הוגדרו מכסות מחזוריות גיבוי חדשות",
         "backups_encryption_key_description": "המפתח הזה משמש להצפנת הגיבויים שלך. אם יאבד, לא יהיה לך איך לשחזר את הגיבויים שלך. רצוי לשמור אותו במקום בטוח כיוון שהוא יועיל לך מאוד במקרה שצריך לשחזר גיבויים ידנית.",
         "backups_encryption_key_not_found": "מפתח ההצפנה לא נמצא, נא לנסות שוב מאוחר יותר.",
         "snapshot_modal_download_verify_option_title": "להוריד, לאמת ואז להחליף",
@@ -270,20 +259,6 @@
             "other": "{} ליבות"
         }
     },
-    "record": {
-        "root": "שם תחום על",
-        "api": "ה־API של SelfPrivacy",
-        "cloud": "ענן קבצים",
-        "git": "שרת Git",
-        "meet": "ועידת וידאו",
-        "social": "רשת חברתית",
-        "password": "מנהל סיסמאות",
-        "vpn": "VPN",
-        "mx": "רשומת MX",
-        "dmarc": "רשומת DMARC",
-        "spf": "רשומת SPF",
-        "dkim": "מפתח DKIM"
-    },
     "storage": {
         "card_title": "אחסון בשרת",
         "status_ok": "ניצולת הכונן תקינה",
@@ -304,8 +279,6 @@
         "size": "גודל",
         "data_migration_notice": "במהלך ההסבה כל השירותים ייכבו.",
         "start_migration_button": "התחלת הסבה",
-        "migration_process": "הסבה מתבצעת…",
-        "migration_done": "הסתיימה",
         "extending_volume_modal_description": "לשדרג ל־{} בתוכנית של {} לחודש.",
         "extending_volume_started": "הרחבת כרך החלה",
         "extending_volume_provider_waiting": "גודל כרך הספק השתנה, נמתין 10 שניות…",
@@ -335,28 +308,16 @@
         "in_menu": "השרת לא מוגדר עדיין. נא לסיים את ההגדרה באמצעות אשף ההקמה כדי להמשיך בהקמה."
     },
     "mail": {
-        "login_info": "להשתמש בשם המשתמש והסיסמה מלשונית המשתמשים. פתחת ה־IMAP היא 143 עם STARTTLS, פתחת ה־SMTP היא 587 עם STARTTLS.",
-        "subtitle": "דוא״ל לחברה ולמשפחה.",
-        "title": "דוא״ל"
+        "login_info": "להשתמש בשם המשתמש והסיסמה מלשונית המשתמשים. פתחת ה־IMAP היא 143 עם STARTTLS, פתחת ה־SMTP היא 587 עם STARTTLS."
     },
     "password_manager": {
-        "title": "מנהל סיסמאות",
-        "subtitle": "בסיס האטבחה שלך. Bitwarden יסייע לך ליצור, לאחסן ולעביר סיסמאות בין מכשירים ואף למלא אותן כשיש צורך בזה עם השלמה אוטומטית.",
         "login_info": "צריך ליצור חשבון באתר."
     },
     "video": {
-        "title": "ועידת וידאו",
-        "subtitle": "Zoom ו־Google Meet הם אחלה שירותים אבל Jitsi Meet הוא חלופה ראויה שגם מבטיחה שלא מאזינים לך.",
         "login_info": "לא צריך חשבון."
     },
-    "vpn": {
-        "subtitle": "שרת VPN פרטי",
-        "title": "שרת VPN"
-    },
     "git": {
-        "subtitle": "חלופה פרטית ל־GitHub ששייכת לך, אך לא ל־Microsoft.",
-        "login_info": "צריך ליצור חשבון באתר. המשתמש הראשון יהיה המנהל.",
-        "title": "שרת Git"
+        "login_info": "צריך ליצור חשבון באתר. המשתמש הראשון יהיה המנהל."
     },
     "users": {
         "login": "כניסה",
@@ -364,7 +325,6 @@
         "delete_confirm_question": "להמשיך?",
         "reset_password": "איפוס סיסמה",
         "account": "חשבון",
-        "send_registration_data": "שיתוף פרטי גישה",
         "no_ssh_notice": "למשתמש זה נוצרים רק חשבונות דוא״ל ו־SSH. כניסה אחודה לכל השירותים מגיעה בקרוב.",
         "details_title": "פרטי משתמש",
         "add_new_user": "הוספת המשתמש הראשון",
@@ -382,7 +342,6 @@
         "user_already_exists": "כבר קיים משתמש עם שם המשתמש הזה"
     },
     "initializing": {
-        "dns_provider_description": "שירות שמאפשר ל־IP שלך להצביע על שמות תחום:",
         "select_provider_countries_text_hetzner": "גרמניה, פינלנד, ארה״ב",
         "select_provider_countries_text_do": "ארה״ב, הולנד, סינגפור, אנגליה, גרמניה, קנדה, הודו, אוסטרליה",
         "select_provider": "יש לבחור ספק מהרשימה שלהלן, כולם תומכים ב־SelfPrivacy",
@@ -390,7 +349,6 @@
         "select_provider_countries_title": "מדינות זמינות",
         "select_provider_price_text_hetzner": "€‎8 לחודש לשרת קטן יחסית עם 50 ג״ב של כונן אחסון",
         "select_provider_payment_text_hetzner": "כרטיסי אשראי, העברה בנקאית, SEPA,‏ PayPal",
-        "select_provider_payment_text_cloudflare": "כרטיסי אשראי",
         "select_provider_price_text_do": "17$ לחודש לשרת קטן יחסית עם 50 ג״ב של כונן אחסון",
         "select_provider_payment_title": "שיטות תשלום",
         "select_provider_payment_text_do": "כרטיסי אשראי, Google Pay,‏ PayPal",
@@ -400,11 +358,9 @@
         "locations_not_found": "אופס!",
         "choose_location_type": "איפה להזמין את השרת שלך?",
         "connect_to_server_provider_text": "עם אסימון API יכול SelfPrivacy לשכור מכונה ולהקים את השרת שלך עליה",
-        "no_server_types_found": "לא נמצאו סוגי שרתים. נא לוודא שהחשבון שלך נגיש ולנסות לשנות את מקום השרת שלך.",
         "multiple_domains_found_text": "האסימון שסיפקת מעניק גישה לשמות התחום הבאים. נא לבחור את האחד לשימוש. כדי לשמור על אבטחת שאר שמות התחום שלך, כדאי להגביל את הגישה של האסימון הזה רק לשם התחום שמיועד לשימוש עם SelfPrivacy.",
         "use_this_domain_text": "האסימון שסיפקת מעניק גישה לשם התחום הבא",
         "multiple_domains_found": "נמצאו מגוון שמות תחום",
-        "connect_backblaze_storage": "חיבור אחסון של Backblaze",
         "no_connected_domains": "אין שמות תחום מחוברים כרגע",
         "one_more_restart": "הפעלה נוספת מחדש כדי להחיל את אישורי האבטחה שלך.",
         "what": "מה זה אומר?",
@@ -428,8 +384,6 @@
         },
         "select_provider_email_notice": "אירוח דוא״ל לא יהיה זמין ללקוחות חדשים. עם זאת, אפשרות זו תיפתח לאחר השלמת התשלום הראשון שלך.",
         "choose_server_type_text": "קיבולות משאבים שונות תומכות בשירותים שונים. אל חשש, אפשר להגדיל את השרת שלך בכל עת",
-        "found_more_domains": "נמצא יותר משם תחום אחד. מטעמי אבטחה, נבקש ממך למחוק שמות תחום שאינם נחוצים",
-        "server_provider_description": "מקום בו הנתונים ושירותי ה־SelfPrivacy שלך יאוחסנו:",
         "connect_to_server": "הבה נתחיל עם שרת.",
         "select_provider_price_title": "מחיר ממוצע",
         "select_provider_price_free": "חינם",
@@ -444,7 +398,6 @@
         "dns_provider_bad_key_error": "מפתח ה־API שגוי",
         "connect_to_dns": "חיבור לספק ה־DNS",
         "select_dns": "עכשיו נבחר ספק DNS",
-        "manage_domain_dns": "כדי לנהל את ה־DNS של שם התחום שלך",
         "use_this_domain": "להשתמש בשם התחום הזה?",
         "loading_domain_list": "רשימת שמות התחום נטענת",
         "choose_server_type": "איזה סוג של שרת נחוץ לך?",
@@ -454,12 +407,10 @@
         "choose_server_type_payment_server": "{} לשרת",
         "backblaze_bad_key_error": "פרטי האחסון שלך ב־Backblaze שגויים",
         "choose_server_type_notice": "הדברים החשובים לעקוב אחריהם הם המעבד והזיכרון. הנתונים של השירותים שלך יאוחסנו בכונן מעוגן שאפשר להגדיל בקלות והתשלום עליו נפרד.",
-        "connect_to_dns_provider_text": "עם מפתח API ינהל SelfPrivacy את כל רשומות ה־DNS שלו",
         "save_domain": "שמירת שם התחום",
         "final": "צעד אחרון",
         "create_server": "יצירת שרת",
         "enter_username_and_password": "נא למלא שם משתמש וסיסמה חזקה",
-        "finish": "הכול מאותחל",
         "create_master_account": "יצירת חשבון ראשי",
         "checks": "בדיקות הושלמו \n{} מתוך {}",
         "domain_critical_error": "לא הצלחנו להגיע לשם התחום הזה! נגיעה למידע נוסף…"
@@ -564,7 +515,6 @@
         "volume_creation_error": "לא ניתן ליצור כרך.",
         "server_validators_error": "לא ניתן למשוך את השרתים הזמינים.",
         "already_exists": "כבר קיים שרת כזה.",
-        "you_cant_use_this_api": "אי אפשר להשתמש ב־API הזה לשמות תחום עם TLD (סיומת על) שכזאת.",
         "no": "לא"
     },
     "jobs": {
@@ -624,14 +574,10 @@
         "root_ssh_key_added": "מפתח SSH למשתמש העל (root) הוגדר והוחל"
     },
     "cloud": {
-        "title": "אחסון בענן",
-        "subtitle": "לא לאפשר לשירותי ענן לקרוא את הנתונים שלך באמצעות Nextcloud.",
         "login_info": "שם המשתמש הוא admin, הסיסמה זהה לזאת של המשתמש הראשי שלך. אפשר ליצור חשבונות חדשים דרך המנשק של ה־Nextcloud שלך."
     },
     "social_network": {
-        "title": "רשת חברתית",
-        "login_info": "צריך ליצור חשבון באתר.",
-        "subtitle": "אומנם קשה להאמין אבל אפשר ליצור רשת חברתית משלך, עם כללים וקהל יעד משלך."
+        "login_info": "צריך ליצור חשבון באתר."
     },
     "timer": {
         "sec": "{} שנ׳"

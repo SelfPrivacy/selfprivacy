@@ -12,7 +12,6 @@
     "modals": {
         "no": "Nie",
         "are_you_sure": "Ste si istý?",
-        "you_cant_use_this_api": "Toto API nemôžete použiť pre doménu s podobnou TLD.",
         "yes": "Áno",
         "dns_removal_error": "Nie je možné odstrániť zápisy DNS.",
         "server_deletion_error": "Server nie je možné vymazať.",
@@ -119,8 +118,6 @@
         "create": "Vytvoriť kľúč SSH",
         "delete": "Zmazať kľúč SSH",
         "delete_confirm_question": "Ste si istí že chcete vymazať kľúč SSH?",
-        "subtitle_with_keys": "{} kľúče",
-        "subtitle_without_keys": "Žiadne kľúče",
         "no_key_name": "Kľúč bez mena",
         "root_title": "Toto sú kľúče superužívateľa",
         "input_label": "Verejný kľúč ED25519 alebo RSA",
@@ -174,20 +171,6 @@
             "other": "{} jadier"
         }
     },
-    "record": {
-        "root": "Koreňová doména",
-        "api": "SelfPrivacy API",
-        "cloud": "Súborový cloud",
-        "git": "Git server",
-        "meet": "Video konferencie",
-        "social": "Sociálna sieť",
-        "password": "Správca hesiel",
-        "vpn": "VPN",
-        "mx": "Zápis MX",
-        "dmarc": "Zápis DMARC",
-        "spf": "Zápis SPF",
-        "dkim": "Kľúč DKIM"
-    },
     "domain": {
         "screen_title": "Doména a DNS",
         "ok": "Zápise sú v poriadku",
@@ -228,13 +211,9 @@
         "restore": "Obnoviť zo zálohy",
         "no_backups": "Zatiaľ nemáte žiadne záložné kópie",
         "create_new": "Vytvoriť novú zálohu",
-        "creating": "Vytvorenie zálohy: {}%",
-        "restoring": "Obnovenie zo zálohy",
-        "error_pending": "Server vrátil chybu, pozrite ju nižšie",
         "refresh": "Obnoviť stav",
         "refetch_backups": "Obnoviť zoznam záloh",
         "refetching_list": "O pár minút zoznam bude aktualizovaný",
-        "waiting_for_rebuild": "O pár minút budete môcť vytvoriť svoju prvú zálohu.",
         "restore_alert": "Chystáte sa obnoviť zo zálohy vytvorenej {}. Všetky aktuálne údaje sa stratia. Ste si istý?"
     },
     "storage": {
@@ -254,8 +233,6 @@
         "data_migration_title": "Migrácia údajov",
         "data_migration_notice": "V čase migrácie údajov sa všetky služby vypnú.",
         "start_migration_button": "Spustiť migráciu",
-        "migration_process": "Migruje sa…",
-        "migration_done": "Dokončiť",
         "extending_volume_title": "Rozšírenie úložiska",
         "extending_volume_description": "Zmena veľkosti úložiska vám umožní uchovávať viac údajov na serveri bez rozšírenia samotného servera. Objem sa dá len zvýšiť: nemôžete znížiť."
     },
@@ -270,12 +247,9 @@
         "choose_location_type_text": "Rôzne miesta poskytujú rôzne konfigurácie serverov, ceny a rýchlosť pripojenia.",
         "choose_server_type_text": "Rôzne možnosti zdrojov podporujú rôzne služby. Nebojte sa, svoj server môžete kedykoľvek rozšíriť",
         "enter_username_and_password": "Zadajte používateľské meno a zložité heslo",
-        "finish": "Všetko je inicializované",
         "use_this_domain_text": "Token, ktorý ste poskytli, poskytuje prístup k nasledujúcej doméne",
-        "connect_backblaze_storage": "Pripojte svoje cloudové úložisko Backblaze",
         "no_connected_domains": "Momentálne nie sú pripojené žiadne domény",
         "loading_domain_list": "Načítava sa zoznam domén",
-        "found_more_domains": "Našlo sa viac ako jedna doména. Pre vašu vlastnú bezpečnosť vás požiadame o odstránenie nepotrebných domén",
         "save_domain": "Uložiť doménu",
         "final": "Posledný krok",
         "create_server": "Vytvoriť server",
@@ -311,10 +285,8 @@
         "choose_server_type_ram": "{} GB RAM",
         "choose_server_type_storage": "{} GB systémového úložiska",
         "choose_server_type_payment_per_month": "{} mesačne",
-        "no_server_types_found": "Nenašli sa žiadne dostupné typy serverov. Uistite sa, že je váš účet prístupný a skúste zmeniť umiestnenie servera.",
         "backblaze_bad_key_error": "Informácie o úložisku Backblaze sú neplatné",
         "select_dns": "Teraz vyberme poskytovateľa DNS",
-        "manage_domain_dns": "Na správu DNS vašej domény",
         "use_this_domain": "Chcete použiť túto doménu?",
         "create_master_account": "Vytvorte hlavný účet",
         "checks": "Kontroly boli ukončené\n{} z {}",
@@ -333,23 +305,15 @@
         }
     },
     "mail": {
-        "subtitle": "Email pre rodinu alebo spoločnosť.",
-        "title": "Email",
         "login_info": "Užívateľské meno a heslo z tabu používateľov. IMAP port je 143 so STARTTLS, SMTP port je 587 so STARTTLS."
     },
     "password_manager": {
-        "subtitle": "Toto je základ vašej bezpečnosti. Bitwarden vám pomôže vytvárať, ukladať, kopírovať heslá medzi zariadeniami a vkladať ich do formulárov.",
-        "title": "Správca hesiel",
         "login_info": "Musíte vytvoriť účet na webovej stránke."
     },
     "cloud": {
-        "subtitle": "Zabráňte cloudovým službám v prezeraní vašich údajov. Použite NextCloud – bezpečný domov pre všetky vaše dáta.",
-        "title": "Súborový cloud",
         "login_info": "Prihlásenie správcu: admin, heslo je rovnaké ako pre hlavného používateľa. Vytvorte nových používateľov v správcovskom rozhraní NextCloud."
     },
     "social_network": {
-        "subtitle": "Je ťažké tomu uveriť, ale bolo možné vytvoriť si vlastnú sociálnu sieť s vlastnými pravidlami a publikom.",
-        "title": "Sociálna sieť",
         "login_info": "Musíte vytvoriť účet na webovej stránke."
     },
     "users": {
@@ -366,7 +330,6 @@
         "delete_confirm_question": "Naozaj chcete odstrániť ten účet?",
         "reset_password": "Resetovať heslo",
         "account": "Účet",
-        "send_registration_data": "Zdieľať údaje účtu",
         "could_not_fetch_description": "Skontrolujte internetové pripojenie a skúste to znova",
         "refresh_users": "Aktualizovať zoznam používateľov",
         "could_not_create_user": "Nepodarilo sa vytvoriť účet",
@@ -463,18 +426,10 @@
         "sec": "{} sek"
     },
     "video": {
-        "title": "Video konferencia",
-        "subtitle": "Jitsi meet je výborný analog Zoom a Google meet, ktorý vám okrem pohodlia zaručí aj bezpečné videokonferencie vo vysokej kvalite.",
         "login_info": "Účet sa nevyžaduje."
     },
     "git": {
-        "title": "Git server",
-        "subtitle": "Súkromná alternatíva Github, ktorá patrí vám, nie spoločnosti Microsoft.",
         "login_info": "Na stránke musí byť vytvorený účet. Prvý registrovaný užívateľ sa stáva administrátorom."
-    },
-    "vpn": {
-        "title": "Server VPN",
-        "subtitle": "Súkromný server VPN"
     },
     "support": {
         "title": "Podpora SelfPrivacy"

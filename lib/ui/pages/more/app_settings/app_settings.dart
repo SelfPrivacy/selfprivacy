@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -61,59 +59,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           ),
         ),
         const _ResetAppTile(),
-        // const Divider(height: 0),
-        _deleteServer(context),
       ],
-    );
-  }
-
-  Widget _deleteServer(final BuildContext context) {
-    final bool isDisabled =
-        context.watch<ServerInstallationCubit>().state.serverDetails == null;
-    return ListTile(
-      title: Text('application_settings.delete_server_title'.tr()),
-      subtitle: Text('application_settings.delete_server_description'.tr()),
-      textColor: isDisabled
-          ? Theme.of(context).colorScheme.onBackground.withOpacity(0.5)
-          : Theme.of(context).colorScheme.onBackground,
-      onTap: isDisabled
-          ? null
-          : () {
-              showDialog(
-                context: context,
-                builder: (final _) => AlertDialog(
-                  title: Text('modals.are_you_sure'.tr()),
-                  content: Text('modals.delete_server_volume'.tr()),
-                  actions: [
-                    DialogActionButton(
-                      text: 'modals.yes'.tr(),
-                      isRed: true,
-                      onPressed: () async {
-                        unawaited(
-                          showDialog(
-                            context: context,
-                            builder: (final context) => Container(
-                              alignment: Alignment.center,
-                              child: const CircularProgressIndicator(),
-                            ),
-                          ),
-                        );
-                        await context
-                            .read<ServerInstallationCubit>()
-                            .serverDelete();
-                        if (!mounted) {
-                          return;
-                        }
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    DialogActionButton(
-                      text: 'basis.cancel'.tr(),
-                    ),
-                  ],
-                ),
-              );
-            },
     );
   }
 }

@@ -81,9 +81,7 @@
         "dark_theme_description": "Switch your application theme",
         "dangerous_settings": "Dangerous settings",
         "reset_config_title": "Reset application config",
-        "reset_config_description": "Resets API keys and root user.",
-        "delete_server_title": "Delete server",
-        "delete_server_description": "This removes your server. It will be no longer accessible."
+        "reset_config_description": "Resets API keys and root user."
     },
     "ssh": {
         "title": "SSH keys",
@@ -542,7 +540,6 @@
         "are_you_sure": "Are you sure?",
         "purge_all_keys": "Purge all authentication keys?",
         "purge_all_keys_confirm": "Yes, purge all my tokens",
-        "delete_server_volume": "Delete the server and volume?",
         "reboot": "Reboot",
         "yes": "Yes",
         "no": "No"

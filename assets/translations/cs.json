@@ -57,9 +57,7 @@
         "dark_theme_title": "Tmavé téma",
         "reset_config_title": "Obnovení konfigurace aplikace",
         "reset_config_description": "Obnovení klíčů API a uživatele root.",
-        "delete_server_title": "Odstranit server",
         "dark_theme_description": "Přepnutí tématu aplikace",
-        "delete_server_description": "Tím odstraníte svůj server. Nebude již přístupný.",
         "system_dark_theme_title": "Výchozí téma systému",
         "system_dark_theme_description": "Použití světlého nebo tmavého motivu v závislosti na nastavení systému",
         "dangerous_settings": "Nebezpečná nastavení"
@@ -429,7 +427,6 @@
         "are_you_sure": "Jste si jistý?",
         "purge_all_keys": "Vyčistit všechny ověřovací klíče?",
         "purge_all_keys_confirm": "Ano, vyčistěte všechny mé žetony",
-        "delete_server_volume": "Smazat server a svazek?",
         "reboot": "Restartovat",
         "yes": "Ano",
         "no": "Ne",

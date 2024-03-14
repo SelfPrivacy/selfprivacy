@@ -57,9 +57,7 @@
         "dark_theme_title": "Qaranlıq mövzu",
         "reset_config_title": "Tətbiq Sıfırlayın",
         "reset_config_description": "API və Super İstifadəçi Açarlarını sıfırlayın.",
-        "delete_server_title": "Serveri silin",
         "dark_theme_description": "Rəng mövzusunu dəyişdirin",
-        "delete_server_description": "Əməliyyat serveri siləcək. Bundan sonra o, əlçatmaz olacaq.",
         "system_dark_theme_title": "Defolt sistem mövzusu",
         "system_dark_theme_description": "Sistem parametrlərindən asılı olaraq açıq və ya qaranlıq mövzudan istifadə edin",
         "dangerous_settings": "Təhlükəli Parametrlər"
@@ -381,7 +379,6 @@
         "are_you_sure": "Sən əminsən?",
         "purge_all_keys": "Bütün avtorizasiya açarları silinsin?",
         "purge_all_keys_confirm": "Bəli, bütün düymələri silin",
-        "delete_server_volume": "Server və yaddaş silinsin?",
         "reboot": "Yenidən yükləyin",
         "yes": "Bəli",
         "no": "Yox"

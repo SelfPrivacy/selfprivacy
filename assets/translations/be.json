@@ -203,7 +203,6 @@
         "dns_removal_error": "Немагчыма выдаліць запісы DNS.",
         "server_deletion_error": "Немагчыма выдаліць сервер.",
         "unexpected_error": "Непрадбачаная памылка з боку правайдэра.",
-        "delete_server_volume": "Выдаліць сервер і сховішча?",
         "volume_creation_error": "Не ўдалося стварыць том."
     },
     "timer": {
@@ -245,12 +244,10 @@
     },
     "application_settings": {
         "reset_config_description": "Скінуць API ключы i суперкарыстальніка.",
-        "delete_server_description": "Дзеянне прывядзе да выдалення сервера. Пасля гэтага ён будзе недаступны.",
         "title": "Налады праграмы",
         "dark_theme_title": "Цёмная тэма",
         "dark_theme_description": "Змяніць каляровую тэму",
         "reset_config_title": "Скід налад",
-        "delete_server_title": "Выдаліць сервер",
         "system_dark_theme_title": "Сістэмная тэма па-змаўчанні",
         "system_dark_theme_description": "Выкарыстоўвайце светлую ці цёмную тэмы ў залежнасці ад сістэмных налад",
         "dangerous_settings": "Небяспечныя наладкі"

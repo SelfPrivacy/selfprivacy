@@ -37,11 +37,7 @@
         "alert": "Opozorilo"
     },
     "more_page": {
-        "about_application": "O prilogi",
-        "about_project": "O storitvi SelfPrivacy",
         "onboarding": "Pozdravi",
-        "console": "Konzola",
-        "application_settings": "Nastavitve aplikacije",
         "create_ssh_key": "Superuporabniški ključi SSH",
         "configuration_wizard": "Pomočnik za nastavitev"
     },
@@ -50,14 +46,11 @@
         "waiting": "Čakanje na inicializacijo…",
         "copy": "Kopiraj"
     },
-    "about_us_page": {
-        "title": "O storitvi SelfPrivacy"
-    },
     "about_application_page": {
         "title": "O dodatku",
-        "api_version_text": "Različica API strežnika {}",
+        "api_version_text": "Različica API strežnika",
         "privacy_policy": "Pravilnik o zasebnosti",
-        "application_version_text": "Različica aplikacije {}"
+        "application_version_text": "Različica aplikacije"
     },
     "application_settings": {
         "dark_theme_title": "Temna tema",
@@ -124,25 +117,9 @@
         "create": "Dodajanje ključa SSH",
         "delete": "Odstranitev ključa SSH",
         "delete_confirm_question": "Ali ste prepričani, da želite izbrisati naslednjo tipko?",
-        "subtitle_with_keys": "Ključi: {}",
-        "subtitle_without_keys": "Brez ključev",
         "no_key_name": "Ključ brez imena",
         "root_title": "To so ključi superuporabnika",
         "input_label": "Javni ključ ED25519 ali RSA"
-    },
-    "record": {
-        "cloud": "Oblak datotek",
-        "root": "Korenska domena",
-        "api": "SelfPrivacy API",
-        "git": "Git Strežnik",
-        "meet": "Videokonferenca",
-        "social": "Družabno omrežje",
-        "password": "Upravitelj gesel",
-        "vpn": "VPN",
-        "mx": "Zapis MX",
-        "dmarc": "DMARC zapis",
-        "spf": "SPF zapis",
-        "dkim": "DKIM ključ"
     },
     "domain": {
         "screen_title": "Domena in DNS",
@@ -166,29 +143,19 @@
         "reupload_key": "Prisilna posodobitev ključa",
         "reuploaded_key": "Ključ v strežniku je bil posodobljen",
         "initialize": "Inicializacija",
-        "waiting_for_rebuild": "Prvo varnostno kopijo boste lahko ustvarili v nekaj minutah.",
         "create_new": "Ustvarite novo varnostno kopijo",
-        "creating": "Ustvarjanje nove varnostne kopije: {}%",
-        "restoring": "Obnovitev iz varnostne kopije",
-        "error_pending": "Strežnik je vrnil napako, preverite spodaj",
         "restore_alert": "Obnavljate iz varnostne kopije, ustvarjene dne {}. Vsi trenutni podatki bodo izgubljeni. Ste prepričani?",
         "refresh": "Osvežitev stanja",
         "refetch_backups": "Ponovno pridobivanje seznama varnostnih kopij",
         "refetching_list": "V nekaj minutah bo seznam posodobljen"
     },
     "mail": {
-        "login_info": "Uporabite uporabniško ime in geslo iz zavihka uporabniki. Vrata IMAP: 143, STARTTLS. Vrata SMTP: 587, STARTTLS.",
-        "title": "E-naslov",
-        "subtitle": "E-pošta za družbo in družino."
+        "login_info": "Uporabite uporabniško ime in geslo iz zavihka uporabniki. Vrata IMAP: 143, STARTTLS. Vrata SMTP: 587, STARTTLS."
     },
     "password_manager": {
-        "title": "Upravitelj gesel",
-        "subtitle": "Osnova vaše varnosti. Bitwarden vam bo pomagal ustvarjati, shranjevati in prenašati gesla med napravami ter jih na zahtevo vnašati z uporabo samodejnega dopolnjevanja.",
         "login_info": "Na spletnem mestu boste morali ustvariti račun."
     },
     "video": {
-        "title": "Videokonferenca",
-        "subtitle": "Zoom in Google Meet sta dobra, vendar je Jitsi Meet vredna alternativa, ki vam daje tudi zagotovilo, da vam nihče ne prisluškuje.",
         "login_info": "Račun ni potreben."
     },
     "storage": {
@@ -209,9 +176,7 @@
         "extending_volume_error": "Ni uspelo zagnati razširitve shrambe.",
         "size": "Velikost",
         "data_migration_title": "Migracija podatkov",
-        "start_migration_button": "Začetek migracije",
-        "migration_process": "Selitev…",
-        "migration_done": "Zaključek"
+        "start_migration_button": "Začetek migracije"
     },
     "service_page": {
         "uses": "Uporablja {usage} na {volume}",
@@ -231,25 +196,15 @@
         "move": "Premik na drug zvezek"
     },
     "social_network": {
-        "subtitle": "Težko je verjeti, vendar je mogoče ustvariti lastno družbeno omrežje z lastnimi pravili in občinstvom.",
-        "title": "Družbeno omrežje",
         "login_info": "Na spletišču morate ustvariti račun."
     },
     "not_ready_card": {
         "in_menu": "Strežnik še ni bil nastavljen, uporabite čarovnika za povezavo."
     },
     "cloud": {
-        "title": "Shranjevanje v oblaku",
-        "subtitle": "Storitvam v oblaku ne dovolite vpogleda v svoje podatke. Uporabite NextCloud - varen dom za vse svoje podatke.",
         "login_info": "Prijava skrbnika: admin, geslo je enako geslu glavnega uporabnika. Ustvarite nove uporabnike v skrbniškem vmesniku NextCloud."
     },
     "git": {
-        "title": "Git Strežnik",
-        "subtitle": "Zasebna alternativa Githubu, ki pripada vam, ne pa Microsoftu.",
         "login_info": "Na spletnem mestu morate ustvariti račun. Prvi uporabnik bo postal administrator."
-    },
-    "vpn": {
-        "title": "VPN Strežnik",
-        "subtitle": "Zasebni strežnik VPN"
     }
 }

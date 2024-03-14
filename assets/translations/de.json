@@ -23,7 +23,7 @@
         "username": "Benutzername",
         "loading": "Laden…",
         "later": "Überspringen und später einstellen",
-        "connect_to_existing": "Verbinde mit einem existierenden SelfPrivacy Server",
+        "connect_to_existing": "Verbinde mit einem existierenden SelfPrivacy Server!",
         "reset": "Zurücksetzen",
         "details": "Einzelheiten",
         "no_data": "Keine Daten",
@@ -36,29 +36,23 @@
         "apply": "Anwenden",
         "app_name": "SelfPrivacy",
         "copied_to_clipboard": "Zur Zwischenablage kopiert!",
-        "please_connect": "Bitte stellen sie eine Verbindung zu ihrem Server, Domain und DNS Betreiber her um zu beginnen!"
+        "please_connect": "Bitte stellen sie eine Verbindung zu ihrem Server, Domain und DNS Betreiber her um zu beginnen!",
+        "network_error": "Netzwerkfehler"
     },
     "more_page": {
         "configuration_wizard": "Setup-Assistent",
-        "about_project": "Über uns",
-        "about_application": "Über",
         "onboarding": "Onboarding",
-        "create_ssh_key": "Superuser SSH Schlüssel",
-        "console": "Konsole",
-        "application_settings": "Anwendungseinstellungen"
+        "create_ssh_key": "Superuser SSH Schlüssel"
     },
     "console_page": {
         "title": "Konsole",
         "waiting": "Warten auf Initialisierung…",
         "copy": "Kopieren"
     },
-    "about_us_page": {
-        "title": "Über uns"
-    },
     "about_application_page": {
         "title": "Über",
-        "application_version_text": "Anwendungsversion {}",
-        "api_version_text": "Server API Version {}",
+        "application_version_text": "Anwendungsversion",
+        "api_version_text": "Server API Version",
         "privacy_policy": "Datenschutzerklärung"
     },
     "application_settings": {
@@ -78,8 +72,6 @@
         "create": "SSH Schlüssel erstellen",
         "delete": "SSH Schlüssel entfernen",
         "delete_confirm_question": "Sind Sie sicher, dass Sie SSH SChlüssel entfernen wollen?",
-        "subtitle_with_keys": "{} Schlüssel",
-        "subtitle_without_keys": "Keine Slüssel",
         "no_key_name": "Unbennanter Schlüssel",
         "root_title": "Das sind superuser Schlüsseln",
         "root_subtitle": "Besitzer dieser Schlüssel erhalten vollen Zugriff auf den Server und können alles darauf tun. Fügen Sie dem Server nur Ihre eigenen Schlüssel hinzu.",
@@ -136,23 +128,9 @@
         "dns_provider": "DNS-Provider",
         "pricing_error": "Konnte Providerpreise nicht abrufen"
     },
-    "record": {
-        "root": "Root Domain",
-        "api": "SelfPrivacy API",
-        "git": "Git Server",
-        "meet": "Videokonferenz",
-        "social": "Soziales Netzwerk",
-        "password": "Passwortmanager",
-        "vpn": "VPN",
-        "dkim": "DKIM Shlüssel",
-        "mx": "MX Eintrag",
-        "dmarc": "DMARC Eintrag",
-        "spf": "SPF Eintrag",
-        "cloud": "Datencloud"
-    },
     "domain": {
         "screen_title": "Domäne und DNS",
-        "ok": "Aufnahmen sind in Ordnung",
+        "ok": "Einträge sind in Ordnung",
         "error": "Probleme gefunden",
         "error_subtitle": "Tippen sie hier, um sie zu beheben. Dadurch werden auch benutzerdefinierte DNS-Einträge entfernt.",
         "uninitialized": "Daten sind noch nicht vorhanden",
@@ -161,29 +139,25 @@
         "email_subtitle": "Für sicheren E-Mail-Austauch benötigte Einträge.",
         "update_list": "Liste aktualisieren",
         "card_title": "Domäne",
-        "refreshing": "Statusaktualisierung…",
+        "refreshing": "Aktualisiere Status…",
         "services_subtitle": "Einträge vom Typ \"A\", die für jeden Dienst erfordelich sind."
     },
     "backup": {
         "card_title": "Backup",
         "description": "Retten Sie im Falle eines Hackerangriffs, Serverlöschung usw.",
-        "reupload_key": "Erneute Hochladung des Schlüssels erzwingen",
+        "reupload_key": "Erneutes hochladen des Schlüssels erzwingen",
         "reuploaded_key": "Schlüssel auf dem Server wurde Aktualisiert",
         "initialize": "Initialisieren",
         "restore": "Von der Sicherungskopie wiederherstellen",
         "no_backups": "Backups sind noch nicht vorhanden",
         "create_new": "Neuen Backup erstellen",
-        "creating": "Erstellung eines neuen Backups: {}%",
-        "restoring": "Wiederherstellung aus Backups",
         "restore_alert": "Sie sind dabei die am {} erstellten Backup wiederherzutellen. Alle aktuelle Daten gehen dabei verloren. Sind Sie sicher?",
         "refresh": "Status Aktualisieren",
         "refetch_backups": "Backupliste neuladen",
-        "waiting_for_rebuild": "In wenigen Minuten können Sie Ihren ersten Backup erstellen.",
-        "error_pending": "Server hat einen Fehler zurückgegeben, überprüfen Sie es unten",
         "refetching_list": "In wenigen Minuten wird die Liste neugeladen",
-        "card_subtitle": "Verwalte deine Backups",
+        "card_subtitle": "Backups verwalten",
         "refetch_backups_subtitle": "Cache überprüfen und Daten vom Speicherprovider neu abrufen. Könnte zusätzliche Kosten verursachen.",
-        "reupload_key_subtitle": "Weist den Server an, Backupseicher zu initialisieren. Benutze diese Option, wenn etwas kaputt ist.",
+        "reupload_key_subtitle": "Weist den Server an den Backup-Speicher neu zu initialisieren. Falls etwas kaputt ist",
         "select_all": "Alles backupen",
         "create_new_select_heading": "Wähle aus, was zum Backup dazugehören soll",
         "show_more": "Mehr anzeigen",
@@ -192,14 +166,11 @@
         "latest_snapshots": "Neuster Snapshot",
         "latest_snapshots_subtitle": "Zeige die letzten 15 Snapshots",
         "autobackup_period_title": "Automatische Backup-Zeitspanne",
-        "autobackup_period_subtitle": "Backups werden erstellt, jede {period}",
+        "autobackup_period_subtitle": "Backups werden jede {period} angelegt",
         "autobackup_period_never": "Automatische Backups sind deaktiviert",
         "autobackup_period_every": "Jede {period}",
-        "autobackup_period_disable": "Deaktiviere automatische Backups",
-        "autobackup_custom": "Eigene",
-        "autobackup_custom_hint": "Eigenen Zeitraum in Minuten eingeben",
+        "autobackup_period_disable": "Automatische Backups deaktivieren",
         "autobackup_set_period": "Setze Zeitraum",
-        "autobackup_period_set": "Zeitraum setzen",
         "backups_encryption_key": "Verschlüsselungsschlüssel",
         "backups_encryption_key_subtitle": "Bewahre es gut auf.",
         "backups_encryption_key_copy": "Kopiere den Verschlüselungsschlüssel",
@@ -212,7 +183,7 @@
         "snapshot_service_title": "Service",
         "snapshot_creation_time_title": "Zeit der Erstellung",
         "snapshot_id_title": "Snapshot ID",
-        "snapshot_modal_select_strategy": "Wählen sie die Art der Wiederherstellung",
+        "snapshot_modal_select_strategy": "Wähle die Wiederherstellungsstrategie",
         "snapshot_modal_download_verify_option_title": "Herunterladen, verifizieren und dann ersetzen",
         "backups_encryption_key_not_found": "Verschlüsselungscode noch nicht gefunden, bitte versuchen sie es später noch einmal.",
         "forget_snapshot": "Vergiss diesen Snapshot",
@@ -220,7 +191,13 @@
         "forget_snapshot_error": "Dieser Snapshot konnte nicht vergessen werden",
         "snapshot_modal_heading": "Snapshot Details",
         "snapshot_modal_inplace_option_title": "An Ort und Stelle ersetzen",
-        "snapshot_modal_inplace_option_description": "Weniger freier Speicherplatz benötigt, aber höheres Risiko. Ersetzt die vorhanden Daten, während dem Herunterladen, mit den Daten des Snapshots."
+        "snapshot_modal_inplace_option_description": "Weniger freier Speicherplatz benötigt, aber höheres Risiko. Ersetzt die vorhanden Daten, während dem Herunterladen, mit den Daten des Snapshots.",
+        "snapshot_reason_title": "Erzeugungsgrund",
+        "restore_started": "Wiederherstellung gestartet, prüfe den aktuellen Status der Jobliste",
+        "snapshot_reasons": {
+            "auto": "Automatisch erzeugt",
+            "unknown": "Unbekannt"
+        }
     },
     "storage": {
         "card_title": "Serverspeicher",
@@ -240,8 +217,6 @@
         "data_migration_title": "Datenmigration",
         "data_migration_notice": "Während der Migration werden alle Dienste ausgeschaltet.",
         "start_migration_button": "Migration starten",
-        "migration_process": "Migrieren…",
-        "migration_done": "Beenden",
         "extending_volume_price_info": "Der Preis enthält die gesetzliche Mehrwertsteuer und wird geschätzt nach den Preisangaben die ihr Serverbetreiber bereitstellt. Der Server wird nach der Größenänderung neu gestartet."
     },
     "not_ready_card": {
@@ -265,13 +240,9 @@
         "uses": "Belegt {usage} auf {volume}"
     },
     "mail": {
-        "login_info": "Verwenden Sie den Benutzernamen und das Passwort von dem Benutzertab. IMAP-Port ist 143 mit STARTTLS, SMTP-Port ist 587 mit STARTTLS.",
-        "title": "E-Mail",
-        "subtitle": "E-Mail für Familie und Unternehmen."
+        "login_info": "Verwenden Sie den Benutzernamen und das Passwort von dem Benutzertab. IMAP-Port ist 143 mit STARTTLS, SMTP-Port ist 587 mit STARTTLS."
     },
     "password_manager": {
-        "title": "Passwortmanager",
-        "subtitle": "Basis Ihrer Sicherheit. Bitwarden hilft Ihnen beim Erstellen, Speichern und Übertragung von Passwörtern zwischen Geräten sowie bei der Eingabe mithilfe der automatischen Vervollständigung.",
         "login_info": "Ihr Konto müssen Sie auf der Webseite erstellen."
     },
     "modals": {
@@ -287,7 +258,6 @@
         "purge_all_keys": "Alle Authentifizierungsschlüssel löschen?",
         "purge_all_keys_confirm": "Ja, alle meine Token löschen",
         "reboot": "Neustarten",
-        "you_cant_use_this_api": "Sie können diese API nicht für Domains mit einer solchen TLD verwenden.",
         "yes": "Ja",
         "no": "Nein",
         "volume_creation_error": "Volume konnte nicht erstellt werden."
@@ -319,13 +289,10 @@
         "locations_not_found": "Oops!",
         "backblaze_bad_key_error": "Die Backblaze-Speicherinformationen sind ungültig",
         "select_dns": "Lassen Sie uns nun einen DNS-Provider auswählen",
-        "manage_domain_dns": "Zum Verwalten des DNS Ihrer Domain",
         "use_this_domain": "Diese Domäne verwenden?",
         "use_this_domain_text": "Das von Ihnen bereitgestellte Token gewährt Zugriff auf die folgende Domäne",
-        "connect_backblaze_storage": "Backblaze-Speicher verbinden",
         "no_connected_domains": "Derzeit keine verbundenen Domains",
         "loading_domain_list": "Domänenliste wird geladen",
-        "found_more_domains": "Mehr als eine Domain gefunden. Zu Ihrer eigenen Sicherheit bitten wir Sie, nicht benötigte Domains zu löschen",
         "save_domain": "Domäne speichern",
         "final": "Letzter Schritt",
         "create_server": "Server erstellen",
@@ -334,7 +301,6 @@
         "connect_to_server_provider_text": "Mit dem API-Token kann SelfPrivacy eine Maschine mieten und Ihren Server darauf einrichten",
         "choose_location_type_text": "Unterschiedliche Standorte bieten unterschiedliche Serverkonfigurationen, Preise und Verbindungsgeschwindigkeiten.",
         "choose_server_type_text": "Unterschiedliche Ressourcenfunktionen unterstützen unterschiedliche Dienste. Keine Sorge, Sie können Ihren Server jederzeit erweitern",
-        "no_server_types_found": "Keine verfügbaren Servertypen gefunden. Stellen Sie sicher, dass auf Ihr Konto zugegriffen werden kann und versuchen Sie Ihren Serverstandort zu ändern.",
         "one_more_restart": "Noch ein Neustart, um Ihre Sicherheitszertifikate anzuwenden.",
         "checks": "Überprüfungen sind abgeschlossen \n{} aus {}",
         "connect_to_server": "Beginnen wir mit einem Server.",
@@ -370,7 +336,6 @@
         "check": "Überprüfung",
         "create_master_account": "Hauptkonto erstellen",
         "enter_username_and_password": "Geben Sie den Benutzernamen und ein gutes Passwort ein",
-        "finish": "Alles initialisiert",
         "steps": {
             "hosting": "Hosting",
             "server_type": "Server-Typ",
@@ -386,11 +351,7 @@
         },
         "dns_provider_bad_key_error": "Der API-Schlüssel ist ungültig",
         "connect_to_dns": "Verbinden Sie den DNS-Anbieter",
-        "connect_to_dns_provider_text": "Mithilfe der Token-API konfiguriert die SelfPrivacy-Anwendung DNS-Einträge",
-        "server_provider_description": "Der Ort, an dem sich Ihre Daten und SelfPrivacy-Dienste befinden:",
-        "dns_provider_description": "Dadurch wird Ihre Domain mit einer IP-Adresse verknüpft:",
-        "select_provider_price_free": "Kostenlos",
-        "select_provider_payment_text_cloudflare": "Bankkarten"
+        "select_provider_price_free": "Kostenlos"
     },
     "validations": {
         "length_not_equal": "Länge ist [], sollte {} sein",
@@ -417,7 +378,6 @@
         "delete_confirm_question": "Sind Sie sicher?",
         "reset_password": "Passwort zurücksetzen",
         "account": "Konto",
-        "send_registration_data": "Anmeldedaten teilen",
         "could_not_fetch_users": "Benutzerliste konnte nicht abgerufen werden",
         "could_not_fetch_description": "Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut",
         "refresh_users": "Benutzerliste aktualisieren",
@@ -510,28 +470,16 @@
         "key_receiving_description": "Notieren Sie sich diesen Schlüssel und bewahren Sie ihn an einem sicheren Ort auf. Es wird verwendet, um den vollen Zugriff auf Ihren Server wiederherzustellen:"
     },
     "video": {
-        "title": "Videokonferenz",
-        "subtitle": "Zoom und Google Meet sind gut, aber Jitsi Meet ist eine wertvolle Alternative, ber der Sie sicher sein können, das Ihre Gespräche nicht abgehört werden.",
         "login_info": "Kein Konto erforderlich."
     },
     "cloud": {
-        "title": "Cloud-Speicher",
-        "subtitle": "Erlauben Sie Cloud-Diensten nicht, Ihre Daten zu lesen, indem Sie NextCloud verwenden.",
         "login_info": "Login für den Administrator ist admin, Passwort ist dasselbe wie bei Ihrem Hauptbenutzer. Erstellen Sie neue Konten in der Nextcloud-Oberfläche."
     },
     "social_network": {
-        "title": "Soziales Netzwerk",
-        "subtitle": "Es ist schwer zu glauben, aber jetzt ist es möglich ein eigenes soziales Netzwerk mit Ihren eigenen Regeln und einer eigenen Zielgruppe zu erstellen.",
         "login_info": "Sie müssen ein Konto auf der Website erstellen."
     },
     "git": {
-        "title": "Git-Server",
-        "subtitle": "Private Alternative zum Github, die Ihnen und nicht Microsoft gehört.",
         "login_info": "Sie müssen ein Konto auf der Website erstellen. Der erste Benutzer wird zum Administrator."
-    },
-    "vpn": {
-        "title": "VPN-Server",
-        "subtitle": "Privater VPN-Server"
     },
     "timer": {
         "sec": "{} Sek"

@@ -98,9 +98,7 @@
         "system_dark_theme_description": "Системалық қараңғы тақырып сипаттамасы",
         "dark_theme_title": "Қараңғы тақырып",
         "dark_theme_description": "Қараңғы тақырып сипаттамасы",
-        "delete_server_title": "Серверді жою",
-        "reset_config_description": "Конфигурацияны қалпына келтіру сипаттамасы.",
-        "delete_server_description": "Серверді жою сипаттамасы."
+        "reset_config_description": "Конфигурацияны қалпына келтіру сипаттамасы."
     },
     "resource_chart": {
         "month": "Ай",

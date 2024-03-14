@@ -59,9 +59,7 @@
         "dark_theme_description": "Lietojumprogrammas dizaina pārslēgšana",
         "dangerous_settings": "Bīstamie iestatījumi",
         "reset_config_title": "Atiestatīt lietojumprogrammas konfigurāciju",
-        "reset_config_description": "Atiestatīt API atslēgas un saknes lietotāju.",
-        "delete_server_title": "Izdzēst serveri",
-        "delete_server_description": "Šis izdzēš jūsu serveri. Tas vairs nebūs pieejams."
+        "reset_config_description": "Atiestatīt API atslēgas un saknes lietotāju."
     },
     "locale": "lv",
     "ssh": {

@@ -87,9 +87,7 @@
         "dark_theme_description": "החלפת ערכת העיצוב של המערכת שלך",
         "dangerous_settings": "הגדרות מסוכנות",
         "reset_config_title": "איפוס הגדרות היישומון",
-        "reset_config_description": "איפוס מפתחות ה־API ומשתמש העל.",
-        "delete_server_title": "מחיקת שרת",
-        "delete_server_description": "מסיר את השרת שלך. הוא לא יהיה זמין עוד."
+        "reset_config_description": "איפוס מפתחות ה־API ומשתמש העל."
     },
     "backup": {
         "create_new_select_heading": "לבחור מה לגבות",
@@ -507,7 +505,6 @@
         "are_you_sure": "להמשיך?",
         "destroy_server": "להשמיד את השרת וליצור אחד חדש?",
         "purge_all_keys_confirm": "כן, למחוק לחלוטין את כל האסימונים שלי",
-        "delete_server_volume": "למחוק את השרת והכרך?",
         "reboot": "להפעיל מחדש",
         "yes": "כן",
         "dns_removal_error": "לא ניתן להסיר רשומת DNS.",

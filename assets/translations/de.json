@@ -61,8 +61,6 @@
         "dark_theme_description": "Ihr Anwendungsdesign wechseln",
         "reset_config_title": "Anwendungseinstellungen zurücksetzen",
         "reset_config_description": "API Sclüssel und root Benutzer zurücksetzen.",
-        "delete_server_title": "Server löschen",
-        "delete_server_description": "Das wird Ihren Server löschen. Es wird nicht mehr zugänglich sein.",
         "system_dark_theme_title": "Standard-Systemthema",
         "system_dark_theme_description": "Verwenden Sie je nach Systemeinstellungen ein helles oder dunkles Thema",
         "dangerous_settings": "Gefährliche Einstellungen"
@@ -247,7 +245,6 @@
     },
     "modals": {
         "unexpected_error": "Unerwarteter Fehler beim Platzieren von Seiten des Anbieters.",
-        "delete_server_volume": "Server und Speicher löschen?",
         "dns_removal_error": "DNS-Einträge konnten nicht entfernt werden.",
         "server_deletion_error": "Aktiver Server konnte nicht gelöscht werden.",
         "server_validators_error": "Verfügbare Server konnten nicht abgerufen werden.",

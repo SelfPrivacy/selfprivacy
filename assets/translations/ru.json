@@ -79,8 +79,6 @@
         "dark_theme_description": "Сменить цветовую тему",
         "reset_config_title": "Сброс настроек",
         "reset_config_description": "Сбросить API ключи и root пользователя.",
-        "delete_server_title": "Удалить сервер",
-        "delete_server_description": "Действие приведёт к удалению сервера. После этого он будет недоступен.",
         "system_dark_theme_title": "Системная тема",
         "system_dark_theme_description": "Будет использована светлая или тёмная тема в зависимости от системных настроек",
         "dangerous_settings": "Опасные настройки"
@@ -541,7 +539,6 @@
         "are_you_sure": "Вы уверены?",
         "purge_all_keys": "Стереть все ключи авторизации?",
         "purge_all_keys_confirm": "Да, стереть все ключи",
-        "delete_server_volume": "Удалить сервер и хранилище?",
         "reboot": "Перезагрузить",
         "yes": "Да",
         "no": "Нет",

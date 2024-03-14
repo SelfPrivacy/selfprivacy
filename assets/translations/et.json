@@ -1,15 +1,13 @@
 {
     "application_settings": {
         "system_dark_theme_description": "Kasutage valgus- või tumeteemat sõltuvalt süsteemi seadetest",
-        "delete_server_description": "See eemaldab teie serveri. Seda ei saa enam juurde pääseda.",
         "title": "Rakenduse seaded",
         "system_dark_theme_title": "Süsteemi vaiketeema",
         "dark_theme_title": "Tume teema",
         "dark_theme_description": "Vaheta oma rakenduse teemat",
         "dangerous_settings": "Ohtlikud seaded",
         "reset_config_title": "Lähtesta rakenduse konfiguratsioon",
-        "reset_config_description": "Lähtestab API võtmed ja juurkasutaja.",
-        "delete_server_title": "Kustuta server"
+        "reset_config_description": "Lähtestab API võtmed ja juurkasutaja."
     },
     "server": {
         "reboot_after_upgrade": "Taaskäivita pärast värskendust",
@@ -602,7 +600,6 @@
         "are_you_sure": "Kas olete kindel?",
         "purge_all_keys": "Kustutada kõik autentimisvõtmed?",
         "purge_all_keys_confirm": "Jah, kustuta kõik minu võtmed",
-        "delete_server_volume": "Kustutada server ja maht?",
         "reboot": "Taaskäivitage",
         "yes": "Jah",
         "no": "Ei"

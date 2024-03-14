@@ -173,7 +173,6 @@
         "destroy_server": "هل تريد إنهاء هذا الخادم وإنشاء واحد جديد؟",
         "try_again": "هل تريد المحاولة مرة أخرى؟",
         "purge_all_keys": "هل تريد محو جميع مفاتيح الّتي مُنحت الموافقة؟",
-        "delete_server_volume": "هل تريد حذف الخادم ووحدة التخزين؟",
         "reboot": "قم بإعادة التشغيل",
         "yes": "نعم",
         "no": "لا"
@@ -338,8 +337,6 @@
         "dark_theme_title": "الوضع الداكن",
         "dangerous_settings": "إعدادات خطرة",
         "reset_config_title": "قم بإعادة ضبط إعدادات التطبيق",
-        "delete_server_title": "قم بحذف الخادم",
-        "delete_server_description": "سيزيل هذا الخادم الخاص بك، حيث أنه لن تتمكن من الوصول إليه بعد ذلك.",
         "dark_theme_description": "قم بتبديل وضع التطبيق",
         "reset_config_description": "قم بإعادة ضبط مفاتيح API والمستخدم المميز."
     },

@@ -60,8 +60,6 @@
         "dark_theme_description": "Zmień kolor motywu aplikacji",
         "reset_config_title": "Resetowanie",
         "reset_config_description": "Zresetuj klucze API i użytkownika root.",
-        "delete_server_title": "Usuń serwer",
-        "delete_server_description": "Ta czynność usunie serwer. Po tym będzie niedostępny.",
         "system_dark_theme_description": "Użyj jasnego lub ciemnego motywu w zależności od ustawień systemu",
         "system_dark_theme_title": "Domyślny motyw systemowy",
         "dangerous_settings": "Niebezpieczne ustawienia"
@@ -395,7 +393,6 @@
         "destroy_server": "Zniszczyć serwer i stworzyć nowy?",
         "try_again": "Mam spróbować jeszcze raz?",
         "purge_all_keys_confirm": "Tak, wymazać wszystkie klucze",
-        "delete_server_volume": "Usunąć serwer i pamięć masową?",
         "volume_creation_error": "Nie udało się utworzyć woluminu."
     },
     "recovery_key": {

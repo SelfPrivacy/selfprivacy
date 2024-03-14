@@ -59,9 +59,7 @@
         "system_dark_theme_description": "Uporaba svetle ali temne teme glede na sistemske nastavitve",
         "dark_theme_description": "Spreminjanje barvne teme",
         "dangerous_settings": "Nevarne nastavitve",
-        "reset_config_title": "Ponastavitev konfiguracije aplikacije",
-        "delete_server_title": "Brisanje strežnika",
-        "delete_server_description": "To dejanje povzroči izbris strežnika. Nato bo nedosegljiv."
+        "reset_config_title": "Ponastavitev konfiguracije aplikacije"
     },
     "onboarding": {
         "page1_title": "Digitalna neodvisnost je na voljo vsem",

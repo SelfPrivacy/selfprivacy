@@ -67,6 +67,9 @@ class BackupsUnititialized extends BackupsState {
   List<Object> get props => [];
 
   @override
+  bool get preventActions => false;
+
+  @override
   BackupsUnititialized copyWith({
     final BackblazeBucket? backblazeBucket,
   }) =>

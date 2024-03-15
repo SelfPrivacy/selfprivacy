@@ -61,8 +61,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                               _firstValidServer(servers),
                               servers.length > 1,
                             ),
-                          if (servers.length > 1 &&
-                              (_isExtended || !_isServerFound(servers)))
+                          if (_isExtended || !_isServerFound(servers))
                             chooseServer(context, servers),
                         ],
                       ),
@@ -77,7 +76,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                 );
               } else {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator.adaptive(),
                 );
               }
             },

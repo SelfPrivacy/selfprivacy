@@ -59,21 +59,23 @@ class StorageCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'storage.card_title'.tr(),
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      if (state != StateType.uninitialized)
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          diskStatus.isDiskOkay
-                              ? 'storage.status_ok'.tr()
-                              : 'storage.status_error'.tr(),
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          'storage.card_title'.tr(),
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
-                    ],
+                        if (state != StateType.uninitialized)
+                          Text(
+                            diskStatus.isDiskOkay
+                                ? 'storage.status_ok'.tr()
+                                : 'storage.status_error'.tr(),
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                      ],
+                    ),
                   ),
                   if (state != StateType.uninitialized)
                     IconStatusMask(

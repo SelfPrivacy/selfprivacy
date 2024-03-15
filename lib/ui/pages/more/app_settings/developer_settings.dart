@@ -28,7 +28,7 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
         heroSubtitle: 'developer_settings.subtitle'.tr(),
         children: [
           SectionTitle(title: 'developer_settings.server_setup'.tr()),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text('developer_settings.use_staging_acme'.tr()),
             subtitle:
                 Text('developer_settings.use_staging_acme_description'.tr()),
@@ -37,7 +37,7 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
               () => TlsOptions.stagingAcme = value,
             ),
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text('developer_settings.ignore_tls'.tr()),
             subtitle: Text('developer_settings.ignore_tls_description'.tr()),
             value: !TlsOptions.verifyCertificate,
@@ -45,7 +45,7 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
               () => TlsOptions.verifyCertificate = !value,
             ),
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text('developer_settings.allow_ssh_key_at_setup'.tr()),
             subtitle: Text(
               'developer_settings.allow_ssh_key_at_setup_description'.tr(),

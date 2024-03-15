@@ -22,7 +22,7 @@
         "saving": "Zapisywanie…",
         "username": "Nazwa użytkownika",
         "loading": "Ładowanie…",
-        "connect_to_existing": "Podłącz do istniejącego serwera",
+        "connect_to_existing": "Mam już serwer SelfPrivacy!",
         "reset": "Zresetuj to",
         "details": "Dokładna informacja",
         "no_data": "Brak danych",
@@ -32,17 +32,15 @@
         "done": "Gotowe",
         "continue": "Kontynuować",
         "alert": "Powiadomienie",
-        "app_name": "SelfPrivacy"
+        "app_name": "SelfPrivacy",
+        "please_connect": "Połącz się z serwerem, aby rozpocząć grę!",
+        "copied_to_clipboard": "Skopiowane do schowka!"
     },
     "test": "pl-test",
     "locale": "pl",
     "more_page": {
-        "about_project": "O projekcie \"SelfPrivacy\"",
-        "about_application": "O aplikacji",
         "create_ssh_key": "SSH klucze administratora",
-        "console": "Konsola",
         "configuration_wizard": "Kreator konfiguracji",
-        "application_settings": "Ustawienia aplikacji",
         "onboarding": "Witamy"
     },
     "console_page": {
@@ -50,13 +48,10 @@
         "waiting": "Oczekiwanie na inicjalizację…",
         "copy": "Kopia"
     },
-    "about_us_page": {
-        "title": "O projekcie \"SelfPrivacy\""
-    },
     "about_application_page": {
         "title": "O aplikacji",
-        "application_version_text": "Wersja aplikacji {}",
-        "api_version_text": "Wersja API serwera {}",
+        "application_version_text": "Wersja aplikacji",
+        "api_version_text": "Wersja API serwera",
         "privacy_policy": "Polityka prywatności"
     },
     "application_settings": {
@@ -74,11 +69,9 @@
     "ssh": {
         "title": "klucze SSH",
         "delete": "Usuń klucz SSH",
-        "subtitle_with_keys": "Klucze: {}",
-        "subtitle_without_keys": "Brak kluczy",
         "no_key_name": "Bezimienny klucz",
         "root_title": "To są klucze superużytkownika",
-        "input_label": "Publiczny klucz ED25519 lub RSA",
+        "input_label": "Publiczny klucz ED25519, ECDSA lub RSA",
         "create": "Dodaj klucz SSH",
         "delete_confirm_question": "Czy na pewno chcesz usunąć następny klucz?",
         "root_subtitle": "Właściciele określonych tutaj kluczy uzyskują pełny dostęp do danych i ustawień serwera. Dodaj tylko swoje klucze."
@@ -129,21 +122,10 @@
         "allow_autoupgrade": "Zezwalaj na automatyczne aktualizacje",
         "reboot_after_upgrade_hint": "Automatycznie uruchom ponownie serwer po zastosowaniu aktualizacji",
         "select_timezone": "Wybierz swoją strefę czasową",
-        "timezone_search_bar": "Nazwa strefy czasowej lub znaczenie przesunięcia czasowego"
-    },
-    "record": {
-        "root": "Domena główna",
-        "cloud": "Chmura plików",
-        "git": "Git serwer",
-        "meet": "Wideokonferencje",
-        "social": "Serwis społecznościowy",
-        "password": "Menedżer haseł",
-        "vpn": "VPN",
-        "dmarc": "Zapisywanie rekord",
-        "spf": "Zapisywanie SPF",
-        "dkim": "DKIM klucz",
-        "api": "SelfPrivacy API",
-        "mx": "Zapisywanie MX"
+        "timezone_search_bar": "Nazwa strefy czasowej lub znaczenie przesunięcia czasowego",
+        "server_provider": "Provider serwera",
+        "dns_provider": "Dostawca DNS",
+        "pricing_error": "Nie udało się uzyskać cen dostawców"
     },
     "domain": {
         "card_title": "Domena",
@@ -156,7 +138,7 @@
         "email_title": "Email",
         "update_list": "Zaktualizuj listę",
         "ok": "Zapisy są w porządku",
-        "error_subtitle": "Kliknij tutaj, aby naprawić",
+        "error_subtitle": "Stuknij tutaj, aby je naprawić. Spowoduje to również usunięcie niestandardowych rekordów.",
         "email_subtitle": "Zapisy wymagane do bezpiecznej wymiany poczty elektronicznej."
     },
     "backup": {
@@ -168,14 +150,56 @@
         "restore": "Przywróć z kopii",
         "no_backups": "Nie ma jeszcze żadnych kopii zapasowych",
         "create_new": "Utwórz nową kopię",
-        "creating": "Tworzenie kopii: {}%",
-        "restoring": "Przywracanie z kopii",
-        "waiting_for_rebuild": "Po kilku minutach będziesz mógł utworzyć pierwszą kopię.",
-        "error_pending": "Serwer zwrócił błąd, sprawdź go poniżej",
         "refresh": "Odśwież status",
         "refetch_backups": "Ponownie pobierz listę kopii zapasowych",
         "refetching_list": "Za kilka minut lista zostanie zaktualizowana",
-        "restore_alert": "Za chwilę przywrócisz z kopii utworzonej przez {}. Wszystkie bieżące dane zostaną utracone. Jesteś pewny?"
+        "restore_alert": "Za chwilę przywrócisz z kopii utworzonej przez {}. Wszystkie bieżące dane zostaną utracone. Jesteś pewny?",
+        "backups_encryption_key_description": "Ten klucz służy do szyfrowania kopii zapasowych. Jeśli go zgubisz, nie będziesz w stanie przywrócić kopii zapasowych. Przechowuj go w bezpiecznym miejscu, ponieważ będzie przydatny, jeśli kiedykolwiek będziesz musiał ręcznie przywrócić dane z kopii zapasowych.",
+        "snapshot_modal_download_verify_option_description": "Less risk, but more free space needed. Downloads entire snapshot to the temporary storage, verifies it and then replaces the current data.",
+        "refetch_backups_subtitle": "Unieważnienie pamięci podręcznej i ponowne pobranie danych od dostawcy pamięci masowej. Może to spowodować naliczenie dodatkowych opłat.",
+        "snapshot_modal_service_not_found": "Jest to migawka usługi, której nie ma już na serwerze. Zwykle nie powinno się to zdarzyć i nie możemy wykonać automatycznego przywracania. Nadal możesz pobrać migawkę i przywrócić ją ręcznie. Skontaktuj się z pomocą techniczną SelfPrivacy, jeśli potrzebujesz pomocy.",
+        "backups_encryption_key_subtitle": "Przechowuj go w bezpiecznym miejscu.",
+        "quotas_only_applied_to_autobackups": "Te ustawienia są stosowane tylko do automatycznych kopii zapasowych. Ręczne kopie zapasowe nie zostaną usunięte.",
+        "card_subtitle": "Zarządzanie kopiami zapasowymi",
+        "latest_snapshots_subtitle": "Wyświetlanie ostatnich 15 migawek",
+        "show_more": "Pokaż więcej",
+        "autobackup_period_title": "Okres automatycznego tworzenia kopii zapasowych",
+        "autobackup_period_subtitle": "Kopie zapasowe tworzone co {okres}",
+        "autobackup_period_never": "Automatyczne kopie zapasowe są wyłączone",
+        "snapshot_reasons": {
+            "unknown": "Nieznany",
+            "auto": "Utworzony automatycznie",
+            "explicit": "Utworzone na wyraźne żądanie użytkownika",
+            "pre_restore": "Utworzony jako środek ostrożności przed ryzykownym przywracaniem"
+        },
+        "set_rotation_quotas": "Ustaw nowe limity rotacji",
+        "backups_encryption_key_not_found": "Nie znaleziono klucza szyfrowania, spróbuj ponownie później.",
+        "snapshots_title": "Lista migawek",
+        "reupload_key_subtitle": "Nakaże serwerowi ponowne zainicjowanie magazynu kopii zapasowych. Użyj, jeśli coś jest uszkodzone.",
+        "select_all": "Kopiuj wszystko",
+        "create_new_select_heading": "Wybór elementów do utworzenia kopii zapasowej",
+        "start": "Rozpocznij tworzenie kopii zapasowej",
+        "backups_encryption_key_copy": "Kopiowanie klucza szyfrowania",
+        "backups_encryption_key_show": "Pokaż klucz szyfrowania",
+        "pending_jobs": "Aktualnie uruchomione zadania tworzenia kopii zapasowych",
+        "forget_snapshot": "Zapomnij o migawce",
+        "forget_snapshot_alert": "Zamierzasz usunąć tę migawkę. Czy na pewno? Tej akcji zazwyczaj nie można cofnąć.",
+        "forget_snapshot_error": "Nie mogłem zapomnieć migawki",
+        "snapshot_modal_heading": "Szczegóły migawki",
+        "snapshot_service_title": "Usługa",
+        "snapshot_creation_time_title": "Czas tworzenia",
+        "snapshot_modal_select_strategy": "Wybierz strategię przywracania",
+        "snapshot_modal_download_verify_option_title": "Pobierz, zweryfikuj, a następnie wymień",
+        "snapshot_modal_inplace_option_title": "Zastąp w miejscu",
+        "snapshot_modal_inplace_option_description": "Mniej wolnego miejsca, ale większe ryzyko. Zastępuje bieżące dane danymi z migawki podczas pobierania.",
+        "restore_started": "Przywracanie rozpoczęte, sprawdź aktualny status na liście zadań.",
+        "snapshot_reason_title": "Przyczyna stworzenia",
+        "service_busy": "Trwa kolejna operacja tworzenia kopii zapasowej",
+        "latest_snapshots": "Najnowsze zdjęcia",
+        "autobackup_period_every": "Każdy {okres}",
+        "autobackup_period_disable": "Wyłącz automatyczne tworzenie kopii zapasowych",
+        "autobackup_set_period": "Ustawiony okres",
+        "backups_encryption_key": "Klucz szyfrowania"
     },
     "storage": {
         "card_title": "Pamięć serwera",
@@ -195,8 +219,6 @@
         "data_migration_title": "Migracja danych",
         "data_migration_notice": "Na czas migracji danych wszystkie usługi zostaną wyłączone.",
         "start_migration_button": "Rozpocznij migrację",
-        "migration_process": "Migracja…",
-        "migration_done": "Zakończyć",
         "extending_volume_description": "Zmiana rozmiaru pamięci masowej pozwoli na przechowywanie większej ilości danych na serwerze bez rozszerzenia serwera. Objętość można tylko zwiększyć, nie można jej zmniejszyć."
     },
     "service_page": {
@@ -217,38 +239,22 @@
         "uses": "Używa {usage} na {volume}"
     },
     "mail": {
-        "title": "E-mail",
-        "subtitle": "E-Mail dla firmy i rodziny.",
         "login_info": "Użyj nazwy użytkownika i hasła z listy użytkowników. Port IMAP: 143, STARTTLS. Port SMTP: 587, STARTTLS."
     },
     "password_manager": {
-        "title": "Menedżer haseł",
-        "subtitle": "To podstawa Twojego bezpieczeństwa. Bitwarden pomoże Ci tworzyć, przechowywać, kopiować hasła między urządzeniami i umieszczać je w formularzach.",
         "login_info": "Konto należy założyć na stronie internetowej."
     },
     "video": {
-        "title": "Wideokonferencja",
-        "subtitle": "Zoom i Google Meet są świetne, ale Jitsi Meet to dobra alternatywa, która daje pewność, że nie jesteś słuchany.",
         "login_info": "Konto nie jest potrzebne."
     },
     "cloud": {
-        "title": "Przechowywanie w chmurze",
-        "subtitle": "Nie zezwalaj usługom w chmurze na odczyt twoich danych, dla tego korzystaj z NextCloud.",
         "login_info": "Login jest admin, hasło jest takie samo jak w przypadku głównego użytkownika. Utwórz nowe konta w interfejsie Nextcloud."
     },
     "social_network": {
-        "title": "Serwis społecznościowy",
-        "subtitle": "Trudno w to uwierzyć, ale stało możliwe stworzenie własnego serwisu społecznościowego, z własnymi zasadami i publicznością.",
         "login_info": "Konto należy założyć na stronie."
     },
     "git": {
-        "login_info": "Konto należy założyć na stronie. Pierwszy zarejestrowany użytkownik zostaje administratorem.",
-        "title": "Git Serwer",
-        "subtitle": "Prywatna alternatywa dla Githuba, która należy do Ciebie, ale nie do Microsoftu."
-    },
-    "vpn": {
-        "title": "VPN Serwer",
-        "subtitle": "Prywatny serwer VPN"
+        "login_info": "Konto należy założyć na stronie. Pierwszy zarejestrowany użytkownik zostaje administratorem."
     },
     "users": {
         "add_new_user": "Dodaj pierwszego użytkownika",
@@ -260,7 +266,6 @@
         "delete_confirm_question": "Czy naprawdę chcesz usunąć konto?",
         "reset_password": "Zresetuj hasło",
         "account": "Konto",
-        "send_registration_data": "Udostępnij dane logowania",
         "could_not_fetch_users": "Nie udało się uzyskać użytkowników",
         "could_not_fetch_description": "Sprawdź połączenie internetowe i spróbuj ponownie",
         "refresh_users": "Odśwież listę użytkowników",
@@ -317,18 +322,14 @@
         "choose_location_type_text": "Wybór lokalizacji będzie determinował dostępne konfiguracje, ceny i prędkość połączenia z serwerem.",
         "choose_server_type_storage": "{} GB pamięci na diskie",
         "choose_server_type_payment_per_month": "{} miesięcznie",
-        "no_server_types_found": "Nie znaleziono dostępnych typów serwerów! Proszę upewnić się, że masz dostęp do dostawcy serwera...",
         "use_this_domain": "Kto używa ten domen?",
-        "connect_backblaze_storage": "Dodajcie Blackblaze",
         "no_connected_domains": "Niema podłączonych domenów",
         "what": "Co to znaczy?",
         "backblaze_bad_key_error": "Informacja o Blackbaze nieprawidłowa",
         "select_dns": "Teraz wybierz provajdera DNS",
-        "manage_domain_dns": "Aby zarządzać DNS domeny",
         "create_master_account": "Dodać konto administratora",
         "use_this_domain_text": "Podany token zapewnia kontrolę nad tą domeną",
         "loading_domain_list": "Ładowanie listy domen",
-        "found_more_domains": "Znaleziono więcej niż jedną domenę, dla własnego bezpieczeństwa usuń niepotrzebne domeny",
         "save_domain": "Zapisz domenę",
         "final": "Ostatni krok",
         "create_server": "Utwórz serwer",
@@ -339,7 +340,6 @@
         "check": "Sprawdź",
         "one_more_restart": "Teraz nastąpi dodatkowe ponowne uruchomienie komputera w celu aktywacji certyfikatów bezpieczeństwa.",
         "enter_username_and_password": "Wprowadź nazwę użytkownika i złożone hasło",
-        "finish": "Wszystko jest inicjalizowane",
         "checks": "Kontrole wykonane:\n{} / {}",
         "steps": {
             "hosting": "Hosting",
@@ -355,11 +355,7 @@
             "final_checks": "Kontrole końcowe"
         },
         "dns_provider_bad_key_error": "Klucz API jest nieprawidłowy",
-        "connect_to_dns_provider_text": "Za pomocą interfejsu API tokena aplikacja SelfPrivacy skonfiguruje rekordy DNS",
-        "server_provider_description": "Lokalizacja, w której będą znajdować się Twoje dane i usługi SelfPrivacy:",
-        "dns_provider_description": "Spowoduje to połączenie Twojej domeny z adresem IP:",
         "select_provider_price_free": "Za darmo",
-        "select_provider_payment_text_cloudflare": "Karty bankowe",
         "connect_to_dns": "Połącz dostawcę DNS"
     },
     "jobs": {
@@ -400,7 +396,6 @@
         "try_again": "Mam spróbować jeszcze raz?",
         "purge_all_keys_confirm": "Tak, wymazać wszystkie klucze",
         "delete_server_volume": "Usunąć serwer i pamięć masową?",
-        "you_cant_use_this_api": "Nie możesz użyć tego API dla domeny z podobnym TLD.",
         "volume_creation_error": "Nie udało się utworzyć woluminu."
     },
     "recovery_key": {

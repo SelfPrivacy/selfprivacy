@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -134,10 +135,12 @@ class _Card extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Text(
-                    service.displayName,
-                    style: Theme.of(context).textTheme.headlineMedium,
+                  const Gap(8),
+                  Expanded(
+                    child: Text(
+                      service.displayName,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ),
                 ],
               ),

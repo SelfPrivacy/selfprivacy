@@ -93,6 +93,10 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
     final List<DesiredDnsRecord> foundRecords = [];
     try {
       for (final DnsRecord pendingDnsRecord in pendingDnsRecords) {
+        if (pendingDnsRecord.type == 'AAAA' &&
+            (pendingDnsRecord.content?.startsWith('fe80::') ?? false)) {
+          continue;
+        }
         if (pendingDnsRecord.name == 'selector._domainkey') {
           final foundRecord = providerDnsRecords.firstWhere(
             (final r) =>
@@ -206,7 +210,6 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
           .toList();
       records.addAll(recordsToAdd);
     }
-
 
     /// TODO: Error handling?
     final ServerDomain? domain = getIt<ApiConnectionRepository>().serverDomain;

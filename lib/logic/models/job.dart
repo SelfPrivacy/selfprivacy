@@ -399,3 +399,47 @@ class ChangeServerTimezoneJob extends ReplaceableJob {
         id: id,
       );
 }
+
+class ChangeSshSettingsJob extends ReplaceableJob {
+  ChangeSshSettingsJob({
+    required this.enable,
+    required this.passwordAuthentication,
+    super.status,
+    super.message,
+    super.id,
+  }) : super(title: 'jobs.change_ssh_settings'.tr());
+
+  final bool enable;
+  final bool passwordAuthentication;
+
+  @override
+  Future<(bool, String)> execute() async => getIt<ApiConnectionRepository>()
+      .setSshSettings(enable, passwordAuthentication);
+
+  @override
+  bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
+    final currentSettings =
+        getIt<ApiConnectionRepository>().apiData.settings.data?.sshSettings;
+    if (currentSettings == null) {
+      return false;
+    }
+    return currentSettings.enable == enable &&
+        currentSettings.passwordAuthentication == passwordAuthentication;
+  }
+
+  @override
+  List<Object> get props => [...super.props, enable, passwordAuthentication];
+
+  @override
+  ChangeSshSettingsJob copyWithNewStatus({
+    required final JobStatusEnum status,
+    final String? message,
+  }) =>
+      ChangeSshSettingsJob(
+        enable: enable,
+        passwordAuthentication: passwordAuthentication,
+        status: status,
+        message: message,
+        id: id,
+      );
+}

@@ -1,4 +1,4 @@
-part of 'server_details_screen.dart';
+part of 'server_settings_screen.dart';
 
 class _ServerSettings extends StatefulWidget {
   const _ServerSettings();
@@ -10,6 +10,8 @@ class _ServerSettings extends StatefulWidget {
 class _ServerSettingsState extends State<_ServerSettings> {
   bool? allowAutoUpgrade;
   bool? rebootAfterUpgrade;
+  bool? enableSsh;
+  bool? allowPasswordAuthentication;
 
   @override
   Widget build(final BuildContext context) {
@@ -24,9 +26,15 @@ class _ServerSettingsState extends State<_ServerSettings> {
       rebootAfterUpgrade = serverDetailsState.autoUpgradeSettings.allowReboot;
     }
 
+    if (enableSsh == null || allowPasswordAuthentication == null) {
+      enableSsh = serverDetailsState.sshSettings.enable;
+      allowPasswordAuthentication =
+          serverDetailsState.sshSettings.passwordAuthentication;
+    }
+
     return Column(
       children: [
-        SwitchListTile(
+        SwitchListTile.adaptive(
           value: allowAutoUpgrade ?? false,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
@@ -59,7 +67,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
           ),
           activeColor: Theme.of(context).colorScheme.primary,
         ),
-        SwitchListTile(
+        SwitchListTile.adaptive(
           value: rebootAfterUpgrade ?? false,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
@@ -104,6 +112,71 @@ class _ServerSettingsState extends State<_ServerSettings> {
               ),
             );
           },
+        ),
+        SwitchListTile.adaptive(
+          value: enableSsh ?? true,
+          onChanged: (final switched) {
+            context.read<JobsCubit>().addJob(
+                  ChangeSshSettingsJob(
+                    enable: switched,
+                    passwordAuthentication:
+                        allowPasswordAuthentication ?? false,
+                  ),
+                );
+            setState(() {
+              enableSsh = switched;
+            });
+          },
+          title: Text(
+            'server.enable_ssh'.tr(),
+            style: TextStyle(
+              fontStyle: enableSsh != serverDetailsState.sshSettings.enable
+                  ? FontStyle.italic
+                  : FontStyle.normal,
+            ),
+          ),
+          subtitle: Text(
+            'server.enable_ssh_hint'.tr(),
+            style: TextStyle(
+              fontStyle: enableSsh != serverDetailsState.sshSettings.enable
+                  ? FontStyle.italic
+                  : FontStyle.normal,
+            ),
+          ),
+          activeColor: Theme.of(context).colorScheme.primary,
+        ),
+        SwitchListTile.adaptive(
+          value: allowPasswordAuthentication ?? false,
+          onChanged: (final switched) {
+            context.read<JobsCubit>().addJob(
+                  ChangeSshSettingsJob(
+                    enable: enableSsh ?? true,
+                    passwordAuthentication: switched,
+                  ),
+                );
+            setState(() {
+              allowPasswordAuthentication = switched;
+            });
+          },
+          title: Text(
+            'server.allow_password_authentication'.tr(),
+            style: TextStyle(
+              fontStyle: allowPasswordAuthentication !=
+                      serverDetailsState.sshSettings.passwordAuthentication
+                  ? FontStyle.italic
+                  : FontStyle.normal,
+            ),
+          ),
+          subtitle: Text(
+            'server.allow_password_authentication_hint'.tr(),
+            style: TextStyle(
+              fontStyle: allowPasswordAuthentication !=
+                      serverDetailsState.sshSettings.passwordAuthentication
+                  ? FontStyle.italic
+                  : FontStyle.normal,
+            ),
+          ),
+          activeColor: Theme.of(context).colorScheme.primary,
         ),
       ],
     );

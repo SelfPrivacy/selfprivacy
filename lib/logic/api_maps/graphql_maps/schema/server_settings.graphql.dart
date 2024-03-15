@@ -4123,3 +4123,783 @@ class _CopyWithStubImpl$Mutation$ChangeAutoUpgradeSettings$system$changeAutoUpgr
   }) =>
       _res;
 }
+
+class Variables$Mutation$ChangeSshSettings {
+  factory Variables$Mutation$ChangeSshSettings(
+          {required Input$SSHSettingsInput settings}) =>
+      Variables$Mutation$ChangeSshSettings._({
+        r'settings': settings,
+      });
+
+  Variables$Mutation$ChangeSshSettings._(this._$data);
+
+  factory Variables$Mutation$ChangeSshSettings.fromJson(
+      Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$settings = data['settings'];
+    result$data['settings'] =
+        Input$SSHSettingsInput.fromJson((l$settings as Map<String, dynamic>));
+    return Variables$Mutation$ChangeSshSettings._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  Input$SSHSettingsInput get settings =>
+      (_$data['settings'] as Input$SSHSettingsInput);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$settings = settings;
+    result$data['settings'] = l$settings.toJson();
+    return result$data;
+  }
+
+  CopyWith$Variables$Mutation$ChangeSshSettings<
+          Variables$Mutation$ChangeSshSettings>
+      get copyWith => CopyWith$Variables$Mutation$ChangeSshSettings(
+            this,
+            (i) => i,
+          );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Variables$Mutation$ChangeSshSettings) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$settings = settings;
+    final lOther$settings = other.settings;
+    if (l$settings != lOther$settings) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$settings = settings;
+    return Object.hashAll([l$settings]);
+  }
+}
+
+abstract class CopyWith$Variables$Mutation$ChangeSshSettings<TRes> {
+  factory CopyWith$Variables$Mutation$ChangeSshSettings(
+    Variables$Mutation$ChangeSshSettings instance,
+    TRes Function(Variables$Mutation$ChangeSshSettings) then,
+  ) = _CopyWithImpl$Variables$Mutation$ChangeSshSettings;
+
+  factory CopyWith$Variables$Mutation$ChangeSshSettings.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$ChangeSshSettings;
+
+  TRes call({Input$SSHSettingsInput? settings});
+}
+
+class _CopyWithImpl$Variables$Mutation$ChangeSshSettings<TRes>
+    implements CopyWith$Variables$Mutation$ChangeSshSettings<TRes> {
+  _CopyWithImpl$Variables$Mutation$ChangeSshSettings(
+    this._instance,
+    this._then,
+  );
+
+  final Variables$Mutation$ChangeSshSettings _instance;
+
+  final TRes Function(Variables$Mutation$ChangeSshSettings) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? settings = _undefined}) =>
+      _then(Variables$Mutation$ChangeSshSettings._({
+        ..._instance._$data,
+        if (settings != _undefined && settings != null)
+          'settings': (settings as Input$SSHSettingsInput),
+      }));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$ChangeSshSettings<TRes>
+    implements CopyWith$Variables$Mutation$ChangeSshSettings<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$ChangeSshSettings(this._res);
+
+  TRes _res;
+
+  call({Input$SSHSettingsInput? settings}) => _res;
+}
+
+class Mutation$ChangeSshSettings {
+  Mutation$ChangeSshSettings({
+    required this.system,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$ChangeSshSettings.fromJson(Map<String, dynamic> json) {
+    final l$system = json['system'];
+    final l$$__typename = json['__typename'];
+    return Mutation$ChangeSshSettings(
+      system: Mutation$ChangeSshSettings$system.fromJson(
+          (l$system as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$ChangeSshSettings$system system;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$system = system;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$system,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ChangeSshSettings) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ChangeSshSettings
+    on Mutation$ChangeSshSettings {
+  CopyWith$Mutation$ChangeSshSettings<Mutation$ChangeSshSettings>
+      get copyWith => CopyWith$Mutation$ChangeSshSettings(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$ChangeSshSettings<TRes> {
+  factory CopyWith$Mutation$ChangeSshSettings(
+    Mutation$ChangeSshSettings instance,
+    TRes Function(Mutation$ChangeSshSettings) then,
+  ) = _CopyWithImpl$Mutation$ChangeSshSettings;
+
+  factory CopyWith$Mutation$ChangeSshSettings.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeSshSettings;
+
+  TRes call({
+    Mutation$ChangeSshSettings$system? system,
+    String? $__typename,
+  });
+  CopyWith$Mutation$ChangeSshSettings$system<TRes> get system;
+}
+
+class _CopyWithImpl$Mutation$ChangeSshSettings<TRes>
+    implements CopyWith$Mutation$ChangeSshSettings<TRes> {
+  _CopyWithImpl$Mutation$ChangeSshSettings(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ChangeSshSettings _instance;
+
+  final TRes Function(Mutation$ChangeSshSettings) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? system = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$ChangeSshSettings(
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$ChangeSshSettings$system),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$ChangeSshSettings$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$ChangeSshSettings$system(
+        local$system, (e) => call(system: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ChangeSshSettings<TRes>
+    implements CopyWith$Mutation$ChangeSshSettings<TRes> {
+  _CopyWithStubImpl$Mutation$ChangeSshSettings(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$ChangeSshSettings$system? system,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$ChangeSshSettings$system<TRes> get system =>
+      CopyWith$Mutation$ChangeSshSettings$system.stub(_res);
+}
+
+const documentNodeMutationChangeSshSettings = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'ChangeSshSettings'),
+    variableDefinitions: [
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'settings')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'SSHSettingsInput'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(value: null),
+        directives: [],
+      )
+    ],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'system'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'changeSshSettings'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'settings'),
+                value: VariableNode(name: NameNode(value: 'settings')),
+              )
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'enable'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'passwordAuthentication'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitionbasicMutationReturnFields,
+]);
+Mutation$ChangeSshSettings _parserFn$Mutation$ChangeSshSettings(
+        Map<String, dynamic> data) =>
+    Mutation$ChangeSshSettings.fromJson(data);
+typedef OnMutationCompleted$Mutation$ChangeSshSettings = FutureOr<void>
+    Function(
+  Map<String, dynamic>?,
+  Mutation$ChangeSshSettings?,
+);
+
+class Options$Mutation$ChangeSshSettings
+    extends graphql.MutationOptions<Mutation$ChangeSshSettings> {
+  Options$Mutation$ChangeSshSettings({
+    String? operationName,
+    required Variables$Mutation$ChangeSshSettings variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$ChangeSshSettings? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$ChangeSshSettings? onCompleted,
+    graphql.OnMutationUpdate<Mutation$ChangeSshSettings>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$ChangeSshSettings(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationChangeSshSettings,
+          parserFn: _parserFn$Mutation$ChangeSshSettings,
+        );
+
+  final OnMutationCompleted$Mutation$ChangeSshSettings? onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$ChangeSshSettings
+    extends graphql.WatchQueryOptions<Mutation$ChangeSshSettings> {
+  WatchOptions$Mutation$ChangeSshSettings({
+    String? operationName,
+    required Variables$Mutation$ChangeSshSettings variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$ChangeSshSettings? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationChangeSshSettings,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$ChangeSshSettings,
+        );
+}
+
+extension ClientExtension$Mutation$ChangeSshSettings on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$ChangeSshSettings>>
+      mutate$ChangeSshSettings(
+              Options$Mutation$ChangeSshSettings options) async =>
+          await this.mutate(options);
+  graphql.ObservableQuery<Mutation$ChangeSshSettings>
+      watchMutation$ChangeSshSettings(
+              WatchOptions$Mutation$ChangeSshSettings options) =>
+          this.watchMutation(options);
+}
+
+class Mutation$ChangeSshSettings$system {
+  Mutation$ChangeSshSettings$system({
+    required this.changeSshSettings,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$ChangeSshSettings$system.fromJson(
+      Map<String, dynamic> json) {
+    final l$changeSshSettings = json['changeSshSettings'];
+    final l$$__typename = json['__typename'];
+    return Mutation$ChangeSshSettings$system(
+      changeSshSettings:
+          Mutation$ChangeSshSettings$system$changeSshSettings.fromJson(
+              (l$changeSshSettings as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$ChangeSshSettings$system$changeSshSettings changeSshSettings;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$changeSshSettings = changeSshSettings;
+    _resultData['changeSshSettings'] = l$changeSshSettings.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$changeSshSettings = changeSshSettings;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$changeSshSettings,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ChangeSshSettings$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$changeSshSettings = changeSshSettings;
+    final lOther$changeSshSettings = other.changeSshSettings;
+    if (l$changeSshSettings != lOther$changeSshSettings) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ChangeSshSettings$system
+    on Mutation$ChangeSshSettings$system {
+  CopyWith$Mutation$ChangeSshSettings$system<Mutation$ChangeSshSettings$system>
+      get copyWith => CopyWith$Mutation$ChangeSshSettings$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$ChangeSshSettings$system<TRes> {
+  factory CopyWith$Mutation$ChangeSshSettings$system(
+    Mutation$ChangeSshSettings$system instance,
+    TRes Function(Mutation$ChangeSshSettings$system) then,
+  ) = _CopyWithImpl$Mutation$ChangeSshSettings$system;
+
+  factory CopyWith$Mutation$ChangeSshSettings$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeSshSettings$system;
+
+  TRes call({
+    Mutation$ChangeSshSettings$system$changeSshSettings? changeSshSettings,
+    String? $__typename,
+  });
+  CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings<TRes>
+      get changeSshSettings;
+}
+
+class _CopyWithImpl$Mutation$ChangeSshSettings$system<TRes>
+    implements CopyWith$Mutation$ChangeSshSettings$system<TRes> {
+  _CopyWithImpl$Mutation$ChangeSshSettings$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ChangeSshSettings$system _instance;
+
+  final TRes Function(Mutation$ChangeSshSettings$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? changeSshSettings = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$ChangeSshSettings$system(
+        changeSshSettings:
+            changeSshSettings == _undefined || changeSshSettings == null
+                ? _instance.changeSshSettings
+                : (changeSshSettings
+                    as Mutation$ChangeSshSettings$system$changeSshSettings),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings<TRes>
+      get changeSshSettings {
+    final local$changeSshSettings = _instance.changeSshSettings;
+    return CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings(
+        local$changeSshSettings, (e) => call(changeSshSettings: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$ChangeSshSettings$system<TRes>
+    implements CopyWith$Mutation$ChangeSshSettings$system<TRes> {
+  _CopyWithStubImpl$Mutation$ChangeSshSettings$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$ChangeSshSettings$system$changeSshSettings? changeSshSettings,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings<TRes>
+      get changeSshSettings =>
+          CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings.stub(
+              _res);
+}
+
+class Mutation$ChangeSshSettings$system$changeSshSettings
+    implements Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn {
+  Mutation$ChangeSshSettings$system$changeSshSettings({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'SSHSettingsMutationReturn',
+    required this.enable,
+    required this.passwordAuthentication,
+  });
+
+  factory Mutation$ChangeSshSettings$system$changeSshSettings.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    final l$enable = json['enable'];
+    final l$passwordAuthentication = json['passwordAuthentication'];
+    return Mutation$ChangeSshSettings$system$changeSshSettings(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+      enable: (l$enable as bool),
+      passwordAuthentication: (l$passwordAuthentication as bool),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  final bool enable;
+
+  final bool passwordAuthentication;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    final l$enable = enable;
+    _resultData['enable'] = l$enable;
+    final l$passwordAuthentication = passwordAuthentication;
+    _resultData['passwordAuthentication'] = l$passwordAuthentication;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    final l$enable = enable;
+    final l$passwordAuthentication = passwordAuthentication;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+      l$enable,
+      l$passwordAuthentication,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$ChangeSshSettings$system$changeSshSettings) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    final l$enable = enable;
+    final lOther$enable = other.enable;
+    if (l$enable != lOther$enable) {
+      return false;
+    }
+    final l$passwordAuthentication = passwordAuthentication;
+    final lOther$passwordAuthentication = other.passwordAuthentication;
+    if (l$passwordAuthentication != lOther$passwordAuthentication) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$ChangeSshSettings$system$changeSshSettings
+    on Mutation$ChangeSshSettings$system$changeSshSettings {
+  CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings<
+          Mutation$ChangeSshSettings$system$changeSshSettings>
+      get copyWith =>
+          CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings<
+    TRes> {
+  factory CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings(
+    Mutation$ChangeSshSettings$system$changeSshSettings instance,
+    TRes Function(Mutation$ChangeSshSettings$system$changeSshSettings) then,
+  ) = _CopyWithImpl$Mutation$ChangeSshSettings$system$changeSshSettings;
+
+  factory CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$ChangeSshSettings$system$changeSshSettings;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    bool? enable,
+    bool? passwordAuthentication,
+  });
+}
+
+class _CopyWithImpl$Mutation$ChangeSshSettings$system$changeSshSettings<TRes>
+    implements
+        CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings<TRes> {
+  _CopyWithImpl$Mutation$ChangeSshSettings$system$changeSshSettings(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$ChangeSshSettings$system$changeSshSettings _instance;
+
+  final TRes Function(Mutation$ChangeSshSettings$system$changeSshSettings)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+    Object? enable = _undefined,
+    Object? passwordAuthentication = _undefined,
+  }) =>
+      _then(Mutation$ChangeSshSettings$system$changeSshSettings(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+        enable: enable == _undefined || enable == null
+            ? _instance.enable
+            : (enable as bool),
+        passwordAuthentication: passwordAuthentication == _undefined ||
+                passwordAuthentication == null
+            ? _instance.passwordAuthentication
+            : (passwordAuthentication as bool),
+      ));
+}
+
+class _CopyWithStubImpl$Mutation$ChangeSshSettings$system$changeSshSettings<
+        TRes>
+    implements
+        CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings<TRes> {
+  _CopyWithStubImpl$Mutation$ChangeSshSettings$system$changeSshSettings(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    bool? enable,
+    bool? passwordAuthentication,
+  }) =>
+      _res;
+}

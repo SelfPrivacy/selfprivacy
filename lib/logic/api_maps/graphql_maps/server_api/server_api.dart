@@ -258,6 +258,50 @@ class ServerApi extends GraphQLApiMap
     }
   }
 
+  Future<GenericResult<SshSettings?>> setSshSettings(
+    final SshSettings settings,
+  ) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final input = Input$SSHSettingsInput(
+        enable: settings.enable,
+        passwordAuthentication: settings.passwordAuthentication,
+      );
+      final variables = Variables$Mutation$ChangeSshSettings(
+        settings: input,
+      );
+      final mutation = Options$Mutation$ChangeSshSettings(
+        variables: variables,
+      );
+      final result = await client.mutate$ChangeSshSettings(mutation);
+      if (result.hasException) {
+        return GenericResult<SshSettings?>(
+          success: false,
+          message: result.exception.toString(),
+          data: null,
+        );
+      }
+      return GenericResult<SshSettings?>(
+        success: result.parsedData?.system.changeSshSettings.success ?? false,
+        message: result.parsedData?.system.changeSshSettings.message,
+        data: result.parsedData == null
+            ? null
+            : SshSettings(
+                enable: result.parsedData!.system.changeSshSettings.enable,
+                passwordAuthentication: result.parsedData!.system
+                    .changeSshSettings.passwordAuthentication,
+              ),
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult<SshSettings?>(
+        success: false,
+        message: e.toString(),
+        data: null,
+      );
+    }
+  }
+
   Future<SystemSettings> getSystemSettings() async {
     QueryResult<Query$SystemSettings> response;
     SystemSettings settings = SystemSettings(

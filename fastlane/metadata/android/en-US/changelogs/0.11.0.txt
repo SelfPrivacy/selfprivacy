@@ -1,0 +1,84 @@
+### Features
+
+- Enabled the following languages:
+  - Arabic
+  - Estonian
+  - Kazakh
+  - Chinese (Simplified)
+
+- **Server management**: Add ssh settings ([#477](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/477))
+- **UI**: Server settings is now a separate screen ([#477](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/477))
+- **UI**: The new About page now contains links to our support channels ([#464](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/464), resolves [#339](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/339) and [#170](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/170))
+- **Jobs**: Now you can track the result of jobs, and the progress of the server rebuilds and upgrades ([#440](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/440), resolves [#254](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/254))
+- **UI**: On iOS, use the Curpentino bottom navbar ([#483](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/483))
+- **UI**: Use Curpentino widgets where possible on iOS ([#483](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/483))
+- **Jobs**: Block starting client-side jobs when the server is rebuilding or moving a service ([#477](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/477))
+- **UI**: On the bottom bar, show all labels, not only the selected one ([#458](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/458), resolves [#454](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/454))
+- **UI**: Move provider card titles to the top row ([#449](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/449), resolves [#448](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/448))
+- Unified management of API connection to the server: the app should be now more reactive to changes ([#440](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/440))
+- **UI**: Onboarding page now looks better on big screens ([#444](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/444))
+
+
+### Bug Fixes
+
+- **UI**: Card titles no longer overflow on small screens ([#483](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/483), resolves [#476](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/476))
+- **DNS**: Detect the situation when we have faulty link-local IPv6 records ([#473](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/473))
+- **DNS**: Do not include faulty link-local DNS records in the list of found records ([#475](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/475))
+- **UI**: Fix the empty server confirmation screen during recovery ([#474](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/474))
+- **UI**: Fix the misleading value of "Do not verify TLS" ([#468](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/468))
+- **Jobs**: When you return the server settings value back, the job to change the setting is deleted ([#440](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/440), resolves [#166](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/166))
+- **Jobs**: When removing all completed jobs, optimistically delete them in UI first ([#440](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/440), resolves [#277](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/277))
+
+
+### Other
+- Binds migration screen is now in Developer settings, as it is no longer needed on API 3.0, but might still be helpful for stuck servers.
+- Remove the server deletion function ([#484](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/484))
+
+
+### Translation contributions
+
+
+* Kazakh
+
+    * TabithiS (133)
+
+* Chinese (Simplified)
+
+    * Nil (545)
+
+* Polish
+
+    * TabithiS (52)
+
+* Russian
+
+    * Inex Code (43)
+
+* Hebrew
+
+    * Yaron (17)
+
+* Estonian
+
+    * Dmitri B. (536)
+
+* Thai
+
+    * Inex Code (2)
+
+* German
+
+    * Inex Code (14)
+        * Based on anonymous suggestions
+
+* Ukrainian
+
+    * Nagibator Nagibuchiy (18)
+    * TabithiS (26)
+    * Meko (93)
+
+* Arabic
+
+    * Deem Alosili (656)
+
+

@@ -141,7 +141,7 @@ class SelectLocationPage extends StatelessWidget {
               ),
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator.adaptive());
           }
         },
       );
@@ -479,7 +479,7 @@ class SelectTypePage extends StatelessWidget {
                 InfoBox(text: 'initializing.choose_server_type_notice'.tr()),
           );
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator.adaptive());
         }
       },
     );

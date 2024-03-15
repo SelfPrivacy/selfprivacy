@@ -218,7 +218,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     }
 
     getIt<NavigationService>().showSnackBar(
-      'storage.extending_volume_waiting'.tr(),
+      'storage.extending_volume_provider_waiting'.tr(),
     );
 
     await Future.delayed(const Duration(seconds: 10));

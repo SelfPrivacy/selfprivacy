@@ -53,7 +53,7 @@ class _ChangeAutobackupsPeriodModalState
         ),
         const SizedBox(height: 16),
         // Select all services tile
-        RadioListTile<Duration?>(
+        RadioListTile<Duration?>.adaptive(
           onChanged: (final Duration? value) {
             setState(() {
               selectedPeriod = value;
@@ -69,7 +69,7 @@ class _ChangeAutobackupsPeriodModalState
           height: 1.0,
         ),
         ...autobackupPeriods.map(
-          (final Duration period) => RadioListTile<Duration?>(
+          (final Duration period) => RadioListTile<Duration?>.adaptive(
             onChanged: (final Duration? value) {
               setState(() {
                 selectedPeriod = value;

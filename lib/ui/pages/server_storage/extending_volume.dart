@@ -71,7 +71,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               children: const [
                 SizedBox(height: 16),
                 Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator.adaptive(),
                 ),
               ],
             );

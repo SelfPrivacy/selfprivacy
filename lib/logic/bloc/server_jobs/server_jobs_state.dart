@@ -36,6 +36,15 @@ sealed class ServerJobsState extends Equatable {
             job.status == JobStatusEnum.error,
       );
 
+  bool get hasJobsBlockingRebuild => serverJobList.any(
+        (final job) =>
+            (job.status == JobStatusEnum.running ||
+                job.status == JobStatusEnum.created) &&
+            (job.typeId.contains('system.nixos.rebuild') ||
+                job.typeId.contains('system.nixos.upgrade') ||
+                job.typeId.contains('move')),
+      );
+
   @override
   List<Object?> get props => [_hashCode];
 }

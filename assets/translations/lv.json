@@ -37,11 +37,7 @@
     },
     "more_page": {
         "configuration_wizard": "Iestatīšanas vednis",
-        "about_project": "Par mums",
-        "about_application": "Par",
         "onboarding": "Pievienošanās",
-        "console": "Konsole",
-        "application_settings": "Aplikācijas iestatījumi",
         "create_ssh_key": "Superlietotāja SSH atslēgas"
     },
     "console_page": {
@@ -49,13 +45,10 @@
         "copy": "Kopēt",
         "waiting": "Gaida inicializatīnu…"
     },
-    "about_us_page": {
-        "title": "Par mums"
-    },
     "about_application_page": {
         "title": "Par",
-        "application_version_text": "Aplikācijas versija {}",
-        "api_version_text": "Servera API versija {}",
+        "application_version_text": "Aplikācijas versija",
+        "api_version_text": "Servera API versija",
         "privacy_policy": "Privātuma politika"
     },
     "application_settings": {
@@ -75,8 +68,6 @@
         "title": "SSH atslēgas",
         "create": "Izveidot SSH atslēgu",
         "delete": "Izdzēst SSH atslēgu",
-        "subtitle_with_keys": "{} atslēgas",
-        "subtitle_without_keys": "Nav atslēgu",
         "no_key_name": "Nenosaukta atslēga",
         "root_title": "Šīs ir superlietotāja atslēgas",
         "input_label": "Publiska ED25519 vai RSA atslēga",
@@ -131,20 +122,6 @@
         "server_timezone": "Servera laika josla",
         "ram": "Atmiņa"
     },
-    "record": {
-        "root": "Saknes domēns",
-        "api": "SelfPrivacy API",
-        "cloud": "Failu mākonis",
-        "git": "Git serveris",
-        "meet": "Video konference",
-        "social": "Sociālais tīkls",
-        "password": "Paroļu pārvaldnieks",
-        "vpn": "VPN",
-        "mx": "MX ieraksts",
-        "spf": "SPF ieraksts",
-        "dkim": "DKIM atslēga",
-        "dmarc": "DMARC ieraksts"
-    },
     "domain": {
         "card_title": "Domēns",
         "screen_title": "Domēns un DNS",
@@ -167,13 +144,9 @@
         "restore": "Atjaunono dublējuma",
         "no_backups": "Vēl nav dublējumu",
         "create_new": "Jauna dublējuma izveide",
-        "creating": "Veido jaunu dublējumu: {}%",
-        "error_pending": "Servera atgrieztā kļūda, pārbaudiet to zemāk",
         "refresh": "Atsvaidzināšanas statuss",
         "reuploaded_key": "Atslēga atkārtoti ielādēta",
-        "waiting_for_rebuild": "Pirmo dublējumu varēsit izveidot dažu minūšu laikā.",
         "restore_alert": "Jūs gatavojaties atjaunot no dublējuma, kas izveidots {}. Visi pašreizējie dati tiks zaudēti. Vai esi pārliecināts?",
-        "restoring": "Atjaunošana no dublējuma",
         "refetch_backups": "Atkārtoti ielādēt dublējumkopiju sarakstu",
         "refetching_list": "Pēc dažām minūtēm saraksts tiks atjaunināts"
     },
@@ -207,9 +180,7 @@
         "extending_volume_error": "Nevarēja inicializēt skaļuma palielināšanu.",
         "size": "Lielums",
         "data_migration_title": "Datu migrācija",
-        "data_migration_notice": "Migrācijas laikā visi pakalpojumi tiks izslēgti.",
-        "migration_process": "Notiek migrēšana…",
-        "migration_done": "Pabeigt"
+        "data_migration_notice": "Migrācijas laikā visi pakalpojumi tiks izslēgti."
     },
     "not_ready_card": {
         "in_menu": "Serveris vēl nav iestatīts. Lūdzu, pabeidziet iestatīšanu, izmantojot iestatīšanas vedni, lai turpinātu darbu."

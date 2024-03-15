@@ -850,35 +850,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(const ServerInstallationEmpty());
   }
 
-  Future<void> serverDelete() async {
-    closeTimer();
-
-    if (state.serverDetails != null) {
-      final bool deletionResult =
-          await repository.deleteServer(state.serverDomain!);
-      if (!deletionResult) {
-        return;
-      }
-    }
-    await repository.deleteServerRelatedRecords();
-    emit(
-      ServerInstallationNotFinished(
-        providerApiToken: state.providerApiToken,
-        serverDomain: state.serverDomain,
-        dnsApiToken: state.dnsApiToken,
-        backblazeCredential: state.backblazeCredential,
-        rootUser: state.rootUser,
-        customSshKey: null,
-        serverDetails: null,
-        isServerStarted: false,
-        isServerResetedFirstTime: false,
-        isServerResetedSecondTime: false,
-        isLoading: false,
-        dnsMatches: null,
-      ),
-    );
-  }
-
   @override
   Future<void> close() {
     closeTimer();

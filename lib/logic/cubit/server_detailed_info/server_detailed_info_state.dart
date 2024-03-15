@@ -52,15 +52,18 @@ class Loaded extends ServerDetailsState {
     required super.metadata,
     required this.serverTimezone,
     required this.autoUpgradeSettings,
+    required this.sshSettings,
   });
   final TimeZoneSettings serverTimezone;
   final AutoUpgradeSettings autoUpgradeSettings;
+  final SshSettings sshSettings;
 
   @override
   List<Object> get props => [
         metadata,
         serverTimezone,
         autoUpgradeSettings,
+        sshSettings,
       ];
 
   @override
@@ -68,11 +71,12 @@ class Loaded extends ServerDetailsState {
     final List<ServerMetadataEntity>? metadata,
     final TimeZoneSettings? serverTimezone,
     final AutoUpgradeSettings? autoUpgradeSettings,
-    final DateTime? checkTime,
+    final SshSettings? sshSettings,
   }) =>
       Loaded(
         metadata: metadata ?? this.metadata,
         serverTimezone: serverTimezone ?? this.serverTimezone,
         autoUpgradeSettings: autoUpgradeSettings ?? this.autoUpgradeSettings,
+        sshSettings: sshSettings ?? this.sshSettings,
       );
 }

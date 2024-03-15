@@ -36,7 +36,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
           if (devicesStatus is DevicesInitial) ...[
             const Center(
               heightFactor: 8,
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator.adaptive(),
             ),
           ],
           if (devicesStatus is! DevicesInitial) ...[
@@ -94,7 +94,7 @@ class _DevicesInfo extends StatelessWidget {
           if (devicesStatus is DevicesDeleting) ...[
             const Center(
               heightFactor: 4,
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator.adaptive(),
             ),
           ],
           if (devicesStatus is! DevicesDeleting)

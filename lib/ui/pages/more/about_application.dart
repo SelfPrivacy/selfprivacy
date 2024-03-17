@@ -238,7 +238,17 @@ class LinkListTile extends StatelessWidget {
   final String? longPressText;
 
   @override
-  Widget build(final BuildContext context) => ListTile(
+  Widget build(final BuildContext context) {
+    return GestureDetector(
+      onSecondaryTap: () {
+        PlatformAdapter.setClipboard(
+          longPressText ?? uri,
+        );
+        getIt<NavigationService>().showSnackBar(
+          'basis.copied_to_clipboard'.tr(),
+        );
+      },
+      child: ListTile(
         title: Text(title),
         subtitle: Text(subtitle),
         onTap: () => launchUrl(
@@ -254,5 +264,7 @@ class LinkListTile extends StatelessWidget {
             'basis.copied_to_clipboard'.tr(),
           );
         },
-      );
+      ),
+    );
+  }
 }

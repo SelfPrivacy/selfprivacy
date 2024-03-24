@@ -1,10 +1,10 @@
-In the Hetzner server control panel, go to the **Rescue** tab. Then, click on **Enable rescue & power cycle**.
+Hetznerのサーバーコントロールパネルで **Rescue** タブを開いてください。その後 **Enable rescue & power cycle** をクリックしてください。
 
-In *Choose a Recue OS* select **linux64**, and in *SSH Key* select your key if it has been added to your Hetzner account.
+*Choose a Recue OS* で **linux64** を選択し、 *SSH Key* で、HetznerのアカウントにSSH鍵を登録している場合は、これを選択してください。
 
-Click **Enable rescue & power cycle** and wait for the server to reboot. The login and password will be displayed on the screen. Login to the root user using your login and password information.
+**Enable rescue & power cycle** をクリックして、サーバーが再起動するまでお待ちください。ログインとパスワードがスクリーンに表示されます。ログインとパスワード情報を使用して、ルートユーザーにログインしてください。
 
-Mount your server file system and see the contents of the token file:
+サーバーのファイルシステムをマウントして、トークンファイルの中身を確認してください。
 
 ```sh
 mount /dev/sda1 /mnt

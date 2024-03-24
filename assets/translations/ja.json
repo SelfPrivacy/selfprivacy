@@ -112,7 +112,10 @@
         "fallback_select_root_ssh": "ルート権限でのSSHによるサーバーへのアクセス。",
         "fallback_select_token_copy": "他のバージョンのアプリケーションから認証トークンをコピー。",
         "method_recovery_input_description": "復元鍵を入力してください",
-        "fallback_select_description": "具体的に何を持っていますか？最初に利用できるものを選択してください。"
+        "fallback_select_description": "具体的に何を持っていますか？最初に利用できるものを選択してください。",
+        "modal_confirmation_dns_invalid": "逆引きDNSが他のドメインを指しています",
+        "modal_confirmation_dns_valid": "逆引きDNSは有効です",
+        "provider_connected_placeholder": "{}のトークン"
     },
     "ssh": {
         "root_subtitle": "これらの鍵の所有者は、サーバーへの完全なアクセスを行い、全く自由にサーバーを操作することができます。あなた自身の鍵だけをサーバーに追加してください。",
@@ -131,14 +134,20 @@
         "page2_dns_provider_title": "DNSのサービス提供者",
         "page2_title": "SelfPrivacyはクラウドサービスではなく、あなたの個人用データセンターです",
         "page2_text": "SelfPrivacyは、あなたが選択するサービス提供者でのみ機能します。必要なアカウントを持っていない場合、私たちはアカウントの作成をお手伝いします。",
-        "page2_server_provider_title": "サーバーのプロバイダー"
+        "page2_server_provider_title": "サーバーのプロバイダー",
+        "page1_title": "デジタル環境の自主独立を、私たち皆の手に",
+        "page2_server_provider_text": "サーバーのサービス提供者は、自ら所有するデータセンターで、あなたのサーバーを管理します。SelfPrivacyは、自動的にサービス提供者に接続して、必要な事項を設定します。",
+        "page2_backup_provider_text": "サーバーに何かあった場合を考えてみましょう。ハッカーによる攻撃、サービス拒否攻撃が行われた場合、または、不慮の事故によってデータを削除してしまった場合を想像してみましょう。あなたのデータは、バックアップのサービス提供者に安全に保存されます。バックアップは安全に暗号化され、それを使えばいつでもサーバーを復元することができます。",
+        "page2_dns_provider_text": "インターネット上で場所をもつためにはドメインが必要です。また、ドメインをサーバーに向けるために、信頼できるDNSのサービス提供者も必要となります。サポートするDNSのサービス提供者を選択して、ネットワークを自動的に設定することをお勧めします。"
     },
     "resource_chart": {
         "month": "月",
         "network_title": "ネットワークの使用状況",
         "day": "日",
         "hour": "時間",
-        "cpu_title": "CPUの使用状況"
+        "cpu_title": "CPUの使用状況",
+        "in": "受信済",
+        "out": "送信済"
     },
     "domain": {
         "email_subtitle": "安全な電子メールの送受信に必要なレコードです。",
@@ -149,8 +158,10 @@
         "services_title": "サービス",
         "services_subtitle": "「A」タイプのレコードはそれぞれのサービスに必要となります。",
         "ok": "レコードに問題はありません",
-        "refreshing": "状態を更新しています…",
-        "error": "問題が見つかりました"
+        "refreshing": "状況を更新しています…",
+        "error": "問題が見つかりました",
+        "error_subtitle": "修正するには、ここをタップしてください。タップすると、カスタムのレコードも削除されます。",
+        "uninitialized": "データはまだ取得されていません"
     },
     "backup": {
         "backups_encryption_key_show": "暗号化鍵を表示",
@@ -184,17 +195,42 @@
             },
             "last_infinite": "全てのバックアップを保存",
             "daily": {
-                "zero": "ルールは無効です"
+                "zero": "ルールは無効です",
+                "one": "直近{}個の毎日のバックアップを保存します",
+                "two": "直近{}個の毎日のバックアップを保存します",
+                "other": "直近{}個の毎日のバックアップを保存します",
+                "few": "直近{}個の毎日のバックアップを保存します",
+                "many": "直近{}個の毎日のバックアップを保存します"
             },
             "weekly": {
-                "zero": "ルールは無効です"
+                "zero": "ルールは無効です",
+                "one": "直近{}個の毎週のバックアップを保存します",
+                "other": "直近{}個の毎週のバックアップを保存します",
+                "few": "直近{}個の毎週のバックアップを保存します",
+                "two": "直近{}個の毎週のバックアップを保存します",
+                "many": "直近{}個の毎週のバックアップを保存します"
             },
             "monthly": {
-                "zero": "ルールは無効です"
+                "zero": "ルールは無効です",
+                "one": "直近{}個の毎月のバックアップを保存します",
+                "two": "直近{}個の毎月のバックアップを保存します",
+                "few": "直近{}個の毎月のバックアップを保存します",
+                "many": "直近{}個の毎月のバックアップを保存します",
+                "other": "直近{}個の毎月のバックアップを保存します"
             },
             "yearly": {
-                "zero": "ルールは無効です"
-            }
+                "zero": "ルールは無効です",
+                "two": "直近{}個の毎年のバックアップを保存します",
+                "few": "直近{}個の毎年のバックアップを保存します",
+                "many": "直近{}個の毎年のバックアップを保存します",
+                "other": "直近{}個の毎年のバックアップを保存します",
+                "one": "直近{}個の毎年のバックアップを保存します"
+            },
+            "weekly_infinite": "毎週のバックアップを全て保存します",
+            "no_effect": "他のルールにより多くのバックアップがあるため、このルールは無効です",
+            "daily_infinite": "毎日のバックアップを全て保存します",
+            "monthly_infinite": "毎月のバックアップを全て保存します",
+            "yearly_infinite": "毎年のバックアップを全て保存します"
         },
         "autobackup_period_title": "自動バックアップの期間",
         "backups_encryption_key_copy": "暗号化鍵をコピー",
@@ -216,7 +252,33 @@
         "snapshot_creation_time_title": "作成日時",
         "snapshot_modal_select_strategy": "復元方針を選択してください",
         "snapshot_modal_download_verify_option_title": "ダウンロードし、検証後に置換",
-        "snapshot_modal_inplace_option_description": "必要な空き容量は比較的少ないですが、より多くのリスクがあります。ダウンロードを行いながら、現在のデータをスナップショットのデータと置き換えます。"
+        "snapshot_modal_inplace_option_description": "必要な空き容量は比較的少ないですが、より多くのリスクがあります。ダウンロードを行いながら、現在のデータをスナップショットのデータと置き換えます。",
+        "forget_snapshot_alert": "このスナップショットを削除しようとしています。よろしいですか？これは取り消せません。",
+        "forget_snapshot_error": "スナップショットを削除できませんでした",
+        "backups_encryption_key_description": "この鍵はバックアップの暗号化に用いられます。紛失した場合は、バックアップを復元することができなくなります。手動でバックアップを復元する際に必要となるので、安全な場所に保管してください。",
+        "reuploaded_key": "鍵を再度アップロードしました",
+        "restore_alert": "{}に作成したバックアップから復元しようとしています。現在のデータは全て失われます。よろしいですか？",
+        "reupload_key_subtitle": "バックアップの保存領域の初期化を行うようサーバーに支持します。何か問題が発生した場合に使用してください。",
+        "autobackup_period_never": "自動バックアップは無効になっています",
+        "autobackup_period_subtitle": "毎{period}に作成されたバックアップ",
+        "description": "ハッカーによる攻撃やサーバーの削除といった事故があった場合に、サービスを復元することができます。",
+        "refetch_backups": "バックアップの一覧を再取得",
+        "refresh": "状況を更新",
+        "restore_started": "復元を開始しました。現在の状況に関してはジョブ一覧を確認してください",
+        "snapshot_modal_service_not_found": "これはあなたのサーバーで既に運営されていないサービスのスナップショットです。これは通常は起こらず、自動復元を行うことはできません。スナップショットをダウンロードして、手動で復元することもできます。手助けが必要な場合は、SelfPrivacyのサポートに連絡してください。",
+        "quotas_only_applied_to_autobackups": "この設定は自動バックアップにのみ適用されます。手動バックアップは削除されません。",
+        "refetching_list": "数分で一覧が更新されます",
+        "refetch_backups_subtitle": "キャッシュを破棄して、保管領域のサービス提供者からデータを再度取得します。追加料金がかかる可能性があります。",
+        "quota_titles": {
+            "last": "保存する直近のバックアップの個数",
+            "weekly": "保存する毎週のバックアップの数",
+            "monthly": "保存する毎月のバックアップの数",
+            "yearly": "保存する毎年のバックアップの数",
+            "daily": "保存する毎日のバックアップの数"
+        },
+        "rotation_quotas_title": "スナップショットのローテーションの設定",
+        "set_rotation_quotas": "新しいローテーションの割り当てを設定",
+        "backups_encryption_key_not_found": "暗号化の鍵がまだ見つかりません。後ほど改めて試してください。"
     },
     "service_page": {
         "open_in_browser": "ブラウザーで開く",
@@ -233,7 +295,9 @@
         },
         "disable": "サービスを無効にする",
         "restart": "サービスを再起動",
-        "nothing_here": "何もありません"
+        "nothing_here": "何もありません",
+        "uses": "{volume}で{usage}使用",
+        "move": "別のボリュームに移動"
     },
     "users": {
         "could_not_fetch_users": "ユーザーの一覧を取得できませんでした",
@@ -253,7 +317,9 @@
         "delete_user": "ユーザーを削除",
         "login": "ログイン",
         "new_user_info_note": "新しいユーザーには、全てのサービスへのアクセス権限が与えられます",
-        "account": "アカウント"
+        "account": "アカウント",
+        "username_rule": "ユーザー名には小文字のラテンアルファベット、数字、アンダーバーのみを使用できます。数字を先頭に置くことは避けるべきです",
+        "no_ssh_notice": "このユーザーには電子メールとSSHのアカウントのみが作成されます。全てのサービスのシングルサインオンは近日中に実装されます。"
     },
     "devices": {
         "add_new_device_screen": {
@@ -265,13 +331,19 @@
             "please_wait": "お待ちください"
         },
         "revoke_device_alert": {
-            "no": "キャンセル"
+            "no": "キャンセル",
+            "header": "アクセス権を取り消しますか？",
+            "description": "端末 {} はサーバーにアクセスできなくなります。",
+            "yes": "取り消す"
         },
         "main_screen": {
             "header": "端末",
             "this_device": "この端末",
             "other_devices": "他の端末",
-            "authorize_new_device": "新しい端末を認証"
+            "authorize_new_device": "新しい端末を認証",
+            "tip": "端末を押すとアクセス権を取り消します。",
+            "access_granted_on": "{}にアクセス権が付与されました",
+            "description": "これらの端末は、SelfPrivacyのアプリを使用してサーバーに完全にアクセスすることができます。"
         }
     },
     "recovery_key": {
@@ -292,7 +364,8 @@
         "key_valid_for": "{}回有効",
         "key_creation_date": "{}に作成済",
         "key_receiving_done": "完了しました！",
-        "key_receive_button": "鍵を入手"
+        "key_receive_button": "鍵を入手",
+        "key_receiving_info": "この鍵は二度と表示されませんが、別の鍵と置き換えることはできます。"
     },
     "jobs": {
         "server_jobs": "サーバー上のジョブ",
@@ -318,7 +391,11 @@
         "upgrade_success": "サーバーのアップグレードを開始しました",
         "upgrade_failed": "サーバーをアップグレードできませんでした",
         "title": "ジョブの一覧",
-        "delete_user": "ユーザーを削除"
+        "delete_user": "ユーザーを削除",
+        "reboot_failed": "サーバーを再起動できませんでした。アプリのログを確認してください。",
+        "service_turn_on": "有効にする",
+        "config_pull_failed": "設定のアップグレードを行えませんでした。ソフトウェアのアップグレードを開始しました。",
+        "service_turn_off": "無効にする"
     },
     "validations": {
         "required": "必須",
@@ -326,7 +403,9 @@
         "invalid_format_password": "パスワードにスペースを含めることはできません",
         "already_exist": "既に存在しています",
         "invalid_format_ssh": "SSH鍵の形式に従う必要があります",
-        "root_name": "「root」は指定できません"
+        "root_name": "「root」は指定できません",
+        "length_not_equal": "長さは[]ですが、{}のはずです",
+        "length_longer": "長さは[]ですが、{}と等しいか、それよりも短いはずです"
     },
     "server": {
         "card_title": "サーバー",
@@ -350,7 +429,7 @@
         "allow_autoupgrade": "自動アップグレードを許可",
         "reboot_after_upgrade_hint": "サーバーで変更を適用後、自動的に再起動",
         "monthly_cost": "月コスト",
-        "location": "場所",
+        "location": "所在地",
         "pricing_error": "サーバーのサービス提供者の価格を取得できませんでした",
         "allow_password_authentication_hint": "ユーザーにパスワードでサーバーのシェルにログインすることを許可（ルートユーザーには適用されません）",
         "cpu": "CPU",
@@ -359,7 +438,9 @@
         "server_id": "サーバーのID",
         "status": "状況",
         "select_timezone": "タイムゾーンを選択",
-        "timezone_search_bar": "タイムゾーンの名称または時差"
+        "timezone_search_bar": "タイムゾーンの名称または時差",
+        "description": "このコンピューター上で全てのサービスが実行されます",
+        "disk": "ローカルディスク"
     },
     "initializing": {
         "select_provider_price_free": "無料",
@@ -411,7 +492,29 @@
         "create_server": "サーバーを作成",
         "one_more_restart": "最後にもう一度、セキュリティー証明書を適用するために再起動します。",
         "domain_critical_error": "このドメインに到達できません！タップすると詳細を表示します…",
-        "select_provider_countries_text_do": "アメリカ合衆国、オランダ、シンガポール、イギリス、ドイツ、カナダ、インド、オーストラリア"
+        "select_provider_countries_text_do": "アメリカ合衆国、オランダ、シンガポール、イギリス、ドイツ、カナダ、インド、オーストラリア",
+        "select_provider_notice": "「比較的小規模」という表現で、私たちは2個のCPUのコアと、2GBのRAMを備えたコンピューターのことを指しています。",
+        "select_provider": "以下の一覧からサービス提供者を選択してください。どのサービス提供者もSelfPrivacyをサポートしています",
+        "select_provider_countries_title": "利用可能な国",
+        "choose_location_type_text": "所在地に応じて、サーバーの設定、値段、接続速度などが異なります。",
+        "back_to_locations": "別のものを選択してください",
+        "choose_server_type_payment_per_month": "月額{}",
+        "no_locations_found": "利用できる所在地が見つかりませんでした。アカウントにアクセスできることを確認してください",
+        "final": "最終段階",
+        "until_the_next_check": "次の確認まで： ",
+        "choose_server_type_payment_storage": "追加の保存領域に{}",
+        "choose_server_type_payment_server": "サーバー用に{}",
+        "locations_not_found": "あら！",
+        "choose_server_type_payment_ip": "公開のIPv4アドレスに{}",
+        "use_this_domain_text": "指定されたトークンで、以下のドメインにアクセスできます",
+        "no_connected_domains": "現在、接続しているドメインはありません",
+        "checks": "確認が完了しました\n{}件/{}件中",
+        "what": "その意味を解説",
+        "choose_server_type_notice": "確認すべき項目はCPUとRAMです。あなたのサービスのデータは、簡単に拡張でき、別個に使用料金が請求されるマウント済のボリューム上に保存されます。",
+        "choose_server_type": "必要な種類のサーバー",
+        "locations_not_found_text": "借りられるサーバーがありません",
+        "choose_server_type_text": "異なるサービスには異なる性能のサーバーが必要です。なお、サーバーはいつでも拡張できます",
+        "multiple_domains_found_text": "指定されたトークンで、以下のドメインにアクセスできます。使用したいドメインを選択してください。他のドメインのセキュリティーの観点から、SelfPrivacyで使用したいドメインにだけ、このトークンのアクセスを制限してください。"
     },
     "modals": {
         "purge_all_keys_confirm": "はい、私の全てのトークンを消去してください",
@@ -423,7 +526,11 @@
         "are_you_sure": "よろしいですか？",
         "yes": "はい",
         "no": "いいえ",
-        "purge_all_keys": "全ての認証鍵を消去しますか？"
+        "purge_all_keys": "全ての認証鍵を消去しますか？",
+        "server_deletion_error": "動作中のサーバーを削除できませんでした。",
+        "already_exists": "そのサーバーは既に存在しています。",
+        "destroy_server": "サーバーを破棄して新しいサーバーを作成しますか？",
+        "unexpected_error": "プロバイダー側からの配置中に、予期しないエラーが発生しました。"
     },
     "storage": {
         "size": "サイズ",
@@ -446,7 +553,10 @@
         "price": "料金",
         "status_ok": "使用状況に問題はありません",
         "status_error": "空き領域が少なくなっています",
-        "bytes": "バイト"
+        "bytes": "バイト",
+        "disk_total": "全{} · {}",
+        "card_title": "サーバーの保存領域",
+        "disk_usage": "{}使用しています"
     },
     "password_manager": {
         "login_info": "ウェブサイトでアカウントを作成する必要があります。"
@@ -470,7 +580,18 @@
         "title": "開発者設定",
         "server_setup": "サーバーの設定",
         "add_root_ssh_key": "ルートSSH鍵を追加",
-        "allow_ssh_key_at_setup_description": "鍵を追加するためのボタンが確認画面に表示されます。"
+        "allow_ssh_key_at_setup_description": "鍵を追加するためのボタンが確認画面に表示されます。",
+        "allow_ssh_key_at_setup": "設定中にルートSSH鍵の設定を許可",
+        "use_staging_acme": "ACMEテストサーバーを使用",
+        "reset_onboarding_description": "初期設定のスイッチをリセットして、初期設定画面を再度表示",
+        "cubit_statuses": "Cubitの読み込みの状況",
+        "routing": "アプリのルーティング",
+        "reset_onboarding": "初期設定のスイッチをリセット",
+        "subtitle": "これらの設定はデバッグ用です。分からない場合は変更しないでください。",
+        "use_staging_acme_description": "新しいサーバーを設定する際に適用されます。",
+        "ignore_tls": "TLS証明書を検証しない",
+        "root_ssh_key_added": "ルートSSH鍵を設定しました。適用します",
+        "ignore_tls_description": "サーバーに接続する際にアプリはTLS証明書を検証しません。"
     },
     "support": {
         "title": "SelfPrivacyのサポート"
@@ -483,6 +604,7 @@
     },
     "more_page": {
         "configuration_wizard": "セットアップウィザード",
-        "create_ssh_key": "スーパーユーザーのSSH鍵"
+        "create_ssh_key": "スーパーユーザーのSSH鍵",
+        "onboarding": "初期設定"
     }
 }

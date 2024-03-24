@@ -1,23 +1,12 @@
-### How to get Hetzner API Token
-1.  Visit the following [link](https://console.hetzner.cloud/) and sign
-    into newly created account.
-2.  Enter into previously created project. If you haven't created one,
-    then please proceed.
-3.  Hover side panel with mouse cursor. Panel should expand and show us
-    a menu. We're interested in the last one — **Security** (icon of a
-    key).
-4.  Next, in the upper part of an interface, we can see approximately
-    the following: **SSH Keys, API Tokens, Certificates, Members.** You
-    need **API Tokens**. Click on it.
-5.  In the right part of the interface, there should be **Generate API
-    token** button. If you're using mobile version og a webpage, in the
-    lower right corner you'll see **red cross**. Push that button.
-6.  In the **Description** field, give our token a name (this can be any
-    name that you like. It doesn't influence the essence.
-7.  Under the **Description** field we can see a possibility to choose
-    **permissions**. Pick **Read & Write**.
-8.  Click **Generate API Token.**
-9.  After that, our key will be shown. Store it in the reliable place,
-    or in the password manager, which is better.
+### HetznerのAPIトークンの取得方法
+1.  [このリンク](https://console.hetzner.cloud/)を開き、新しく作成したアカウントにサインイン。
+2.  以前に作成したプロジェクトを開く。プロジェクトを作成していない場合は、作成してください。
+3.  マウスカーソルでサイドパネルをホバリング。パネルが開き、メニューが表示されるので、**Security** (鍵のアイコン)を選択。
+4. インターフェースの上部に、 **SSH Keys, API Tokens, Certificates, Members** とあるので、 **API Tokens** をクリック。
+5.  インターフェースの右側に、 **Generate API token** ボタンがあります。モバイル版のウェブページでは、右下の角に **赤い十字** が表示されるので、環境に応じていずれかをクリック。
+6.  **Description** の欄に、任意のトークン名を記入。
+7.  **Description** の欄の下に、 **permissions** があるので、 **Read & Write** を選択。
+8.  **Generate API Token** をクリック。
+9.  トークンが表示されるので、パスワードマネージャーなどの安全な場所に保管してください。
 
 ![Hetznerのトークンの設定](resource:assets/images/gifs/Hetzner.gif)

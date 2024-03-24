@@ -20,4 +20,4 @@
 9.  After that, our key will be shown. Store it in the reliable place,
     or in the password manager, which is better.
 
-![Hetzner token setup](resource:assets/images/gifs/Hetzner.gif)
+![Hetznerのトークンの設定](resource:assets/images/gifs/Hetzner.gif)

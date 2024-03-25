@@ -537,7 +537,7 @@
         "data_migration_title": "データの移行",
         "gb": "{}GB",
         "mb": "{}MB",
-        "extending_volume_modal_description": "月毎に{}を{}で使用するプランにアップグレード",
+        "extending_volume_modal_description": "月毎に{}を{}で使用するプランにアップグレード。",
         "extending_volume_price_info": "価格は内税表示で、サーバーのサービス提供者から提供された価格のデータを基に試算されたものです。サイズの変更後、サーバーは再起動します。",
         "extending_volume_title": "ボリュームを拡張",
         "extending_volume_error": "ボリュームの拡張を開始できませんでした。",

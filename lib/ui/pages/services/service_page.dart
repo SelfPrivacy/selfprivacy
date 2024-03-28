@@ -70,12 +70,6 @@ class _ServicePageState extends State<ServicePage> {
               getIt<NavigationService>()
                   .showSnackBar('basis.copied_to_clipboard'.tr());
             },
-            onSecondaryTap: () {
-              PlatformAdapter.setClipboard(service.url!);
-              getIt<NavigationService>().showSnackBar(
-                'basis.copied_to_clipboard'.tr(),
-              );
-            },
             child: ListTile(
               iconColor: Theme.of(context).colorScheme.onBackground,
               onTap: () => launchURL(service.url),

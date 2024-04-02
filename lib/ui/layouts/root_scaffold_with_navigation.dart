@@ -100,7 +100,7 @@ class _RootAppBar extends StatelessWidget {
         leading: context.router.pageCount > 1
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => context.router.pop(),
+                onPressed: () => context.router.maybePop(),
               )
             : null,
         actions: const [

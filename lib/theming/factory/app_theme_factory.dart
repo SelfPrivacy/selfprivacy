@@ -24,8 +24,10 @@ abstract class AppThemeFactory {
     final ColorScheme? dynamicColorsScheme =
         await _getDynamicColors(brightness);
 
+    final Color? accentColor = await _getAccentColor();
+
     final ColorScheme fallbackColorScheme = ColorScheme.fromSeed(
-      seedColor: fallbackColor,
+      seedColor: accentColor ?? fallbackColor,
       brightness: brightness,
     );
 
@@ -50,6 +52,14 @@ abstract class AppThemeFactory {
       return DynamicColorPlugin.getCorePalette().then(
         (final corePallet) => corePallet?.toColorScheme(brightness: brightness),
       );
+    } on PlatformException {
+      return Future.value(null);
+    }
+  }
+
+  static Future<Color?> _getAccentColor() {
+    try {
+      return DynamicColorPlugin.getAccentColor();
     } on PlatformException {
       return Future.value(null);
     }

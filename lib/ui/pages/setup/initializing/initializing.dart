@@ -130,7 +130,9 @@ class InitializingPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         if (cubit.state is ServerInstallationEmpty ||
-                            cubit.state is ServerInstallationNotFinished)
+                            cubit.state is ServerInstallationNotFinished &&
+                                cubit.state.progress ==
+                                    ServerSetupProgress.nothingYet)
                           Container(
                             alignment: Alignment.center,
                             child: BrandButton.filled(

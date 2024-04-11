@@ -43,8 +43,8 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
     return BrandHeroScreen(
       hasBackButton: true,
       heroTitle: 'storage.card_title'.tr(),
+      bodyPadding: const EdgeInsets.symmetric(vertical: 16.0),
       children: [
-        // ...sections,
         ...widget.diskStatus.diskVolumes.map(
           (final volume) => Column(
             mainAxisSize: MainAxisSize.min,
@@ -87,24 +87,35 @@ class ServerStorageSection extends StatelessWidget {
   Widget build(final BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ServerStorageListItem(
-            volume: volume,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ServerStorageListItem(
+              volume: volume,
+            ),
           ),
           const SizedBox(height: 16),
           ...services.map(
             (final service) => ServerConsumptionListTile(
               service: service,
               volume: volume,
+              onTap: () {
+                context.pushRoute(
+                  ServiceRoute(serviceId: service.id),
+                );
+              },
             ),
           ),
           if (volume.isResizable) ...[
             const SizedBox(height: 16),
-            BrandOutlinedButton(
-              title: 'storage.extend_volume_button.title'.tr(),
-              onPressed: () => context.pushRoute(
-                ExtendingVolumeRoute(
-                  diskVolumeToResize: volume,
-                  diskStatus: diskStatus,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: BrandOutlinedButton(
+                title: 'storage.extend_volume_button.title'.tr(),
+                onPressed: () => context.pushRoute(
+                  ExtendingVolumeRoute(
+                    diskVolumeToResize: volume,
+                    diskStatus: diskStatus,
+                  ),
                 ),
               ),
             ),
@@ -117,33 +128,38 @@ class ServerConsumptionListTile extends StatelessWidget {
   const ServerConsumptionListTile({
     required this.service,
     required this.volume,
+    required this.onTap,
     super.key,
   });
 
   final Service service;
   final DiskVolume volume;
+  final VoidCallback onTap;
 
   @override
-  Widget build(final BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: ConsumptionListItem(
-          title: service.displayName,
-          icon: SvgPicture.string(
-            service.svgIcon,
-            width: 24.0,
-            height: 24.0,
-            colorFilter: ColorFilter.mode(
-              Theme.of(context).colorScheme.onBackground,
-              BlendMode.srcIn,
+  Widget build(final BuildContext context) => InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: ConsumptionListItem(
+            title: service.displayName,
+            icon: SvgPicture.string(
+              service.svgIcon,
+              width: 22.0,
+              height: 24.0,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onBackground,
+                BlendMode.srcIn,
+              ),
             ),
+            rightSideText: service.storageUsage.used.toString(),
+            percentage: service.storageUsage.used.byte / volume.sizeTotal.byte,
+            color: volume.root
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.secondary,
+            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+            dense: true,
           ),
-          rightSideText: service.storageUsage.used.toString(),
-          percentage: service.storageUsage.used.byte / volume.sizeTotal.byte,
-          color: volume.root
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.secondary,
-          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-          dense: true,
         ),
       );
 }

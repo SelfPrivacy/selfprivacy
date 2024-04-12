@@ -49,11 +49,11 @@ abstract class ServerInstallationState extends Equatable {
   bool get isPrimaryUserFilled => rootUser != null;
   bool get isServerCreated => serverDetails != null;
 
-  bool get isFullyInitilized => _fulfilementList.every((final el) => el!);
+  bool get isFullyInitialized => _fulfillmentList.every((final el) => el!);
   ServerSetupProgress get progress => ServerSetupProgress
-      .values[_fulfilementList.where((final el) => el!).length];
+      .values[_fulfillmentList.where((final el) => el!).length];
 
-  int get porgressBar {
+  int get progressBar {
     if (progress.index < 6) {
       return progress.index;
     } else if (progress.index < 10) {
@@ -63,7 +63,7 @@ abstract class ServerInstallationState extends Equatable {
     }
   }
 
-  List<bool?> get _fulfilementList {
+  List<bool?> get _fulfillmentList {
     final List<bool> res = [
       isServerProviderApiKeyFilled,
       isServerTypeFilled,
@@ -118,7 +118,7 @@ class TimerState extends ServerInstallationNotFinished {
 enum ServerSetupProgress {
   nothingYet,
   serverProviderFilled,
-  servertTypeFilled,
+  serverTypeFilled,
   dnsProviderFilled,
   backblazeFilled,
   domainFilled,

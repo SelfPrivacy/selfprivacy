@@ -34,7 +34,6 @@ class ServerAuthorizationException implements Exception {
 
 class ServerInstallationRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
-  Box<User> usersBox = Hive.box(BNames.usersBox);
 
   Future<ServerInstallationState> load() async {
     final String? providerApiToken = getIt<ApiConfigModel>().serverProviderKey;
@@ -177,7 +176,6 @@ class ServerInstallationRepository {
 
   void clearAppConfig() {
     box.clear();
-    usersBox.clear();
   }
 
   Future<ServerHostingDetails> startServer(

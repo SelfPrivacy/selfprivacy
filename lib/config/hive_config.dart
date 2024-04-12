@@ -32,16 +32,6 @@ class HiveConfig {
       await getEncryptedKey(BNames.serverInstallationEncryptionKey),
     );
 
-    await Hive.openBox<User>(BNames.usersDeprecated);
-    await Hive.openBox<User>(BNames.usersBox, encryptionCipher: cipher);
-
-    final Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
-    if (deprecatedUsers.isNotEmpty) {
-      final Box<User> users = Hive.box<User>(BNames.usersBox);
-      await users.addAll(deprecatedUsers.values.toList());
-      await deprecatedUsers.clear();
-    }
-
     await Hive.openBox(BNames.serverInstallationBox, encryptionCipher: cipher);
   }
 
@@ -72,7 +62,7 @@ class BNames {
   /// A boolean field of [appSettingsBox] box.
   static String isOnboardingShowing = 'isOnboardingShowing';
 
-  /// Encryption key to decrypt [serverInstallationBox] and [usersBox] box.
+  /// Encryption key to decrypt [serverInstallationBox] box.
   static String serverInstallationEncryptionKey = 'key';
 
   /// Server installation box. Contains server details and provider tokens.
@@ -131,10 +121,4 @@ class BNames {
 
   /// A boolean field of [serverInstallationBox] box.
   static String isRecoveringServer = 'isRecoveringServer';
-
-  /// Deprecated users box as it is unencrypted
-  static String usersDeprecated = 'users';
-
-  /// Box with users
-  static String usersBox = 'usersEncrypted';
 }

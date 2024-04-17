@@ -57,7 +57,7 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
           providerCubit: widget.formCubit,
           providerInfo: const ProviderPageInfo(
             providerType: DnsProviderType.digitalOcean,
-            pathToHow: 'how_digital_ocean_dns',
+            pathToHow: 'how_digital_ocean',
           ),
         );
 

@@ -76,7 +76,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                 );
               } else {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator.adaptive(),
                 );
               }
             },

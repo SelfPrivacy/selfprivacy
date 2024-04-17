@@ -36,30 +36,42 @@
         "alert": "Уведомление",
         "copied_to_clipboard": "Скопировано в буфер обмена!",
         "app_name": "SelfPrivacy",
-        "please_connect": "Настройте ваш сервер и подключите домен для полного погружения!"
+        "please_connect": "Настройте ваш сервер и подключите домен для полного погружения!",
+        "network_error": "Ошибка сети"
     },
     "more_page": {
         "configuration_wizard": "Мастер настройки",
-        "about_project": "О проекте SelfPrivacy",
-        "about_application": "О приложении",
         "onboarding": "Приветствие",
-        "console": "Консоль",
-        "create_ssh_key": "SSH ключи администратора",
-        "application_settings": "Настройки приложения"
+        "create_ssh_key": "SSH ключи администратора"
     },
     "console_page": {
         "title": "Консоль",
         "waiting": "Ждём инициализации…",
         "copy": "Копировать"
     },
-    "about_us_page": {
-        "title": "О проекте SelfPrivacy"
-    },
     "about_application_page": {
-        "title": "О приложении",
-        "application_version_text": "Версия приложения {}",
-        "api_version_text": "Версия API сервера {}",
-        "privacy_policy": "Политика конфиденциальности"
+        "title": "О приложении и поддержка",
+        "application_version_text": "Версия приложения",
+        "api_version_text": "Версия API сервера",
+        "privacy_policy": "Политика конфиденциальности",
+        "versions": "Версии",
+        "matrix_channel": "Канал в Matrix",
+        "email_support": "Поддержка по электронной почте",
+        "bug_report_subtitle": "Из-за спама требуется ручное подтверждение аккаунта. Свяжитесь с нами в чате поддержки для активации аккаунта.",
+        "open_source_licenses": "Лицензии используемых библиотек",
+        "links": "Ссылки",
+        "website": "Наш сайт",
+        "documentation": "Документация",
+        "telegram_channel": "Канал в Telegram",
+        "get_support": "Получить помощь",
+        "matrix_support_chat": "Чат поддержки в Matrix",
+        "telegram_support_chat": "Чат поддержки в Telegram",
+        "contribute": "Внести вклад",
+        "source_code": "Исходный код",
+        "bug_report": "Сообщить о неполадке",
+        "help_translate": "Помочь с переводом",
+        "matrix_contributors_chat": "Чат разработчиков в Matrix",
+        "telegram_contributors_chat": "Чат разработчиков в Telegram"
     },
     "application_settings": {
         "title": "Настройки приложения",
@@ -78,12 +90,11 @@
         "create": "Добавить SSH ключ",
         "delete": "Удалить SSH ключ",
         "delete_confirm_question": "Вы уверены, что хотите удалить следующий ключ?",
-        "subtitle_with_keys": "Ключей: {}",
-        "subtitle_without_keys": "Ключей нет",
         "no_key_name": "Безымянный ключ",
         "root_title": "Это ключи суперпользователя",
         "root_subtitle": "Владельцы указанных здесь ключей получают полный доступ к данным и настройкам сервера. Добавляйте исключительно свои ключи.",
-        "input_label": "Публичный ED25519, ECDSA или RSA ключ"
+        "input_label": "Публичный ED25519, ECDSA или RSA ключ",
+        "ssh_disabled_warning": "SSH отключен. Его можно включить в настройках сервера."
     },
     "onboarding": {
         "page1_title": "Цифровая независимость доступна каждому",
@@ -134,21 +145,12 @@
             "other": "{} ядер"
         },
         "server_provider": "Провайдер сервера",
-        "dns_provider": "Провайдер DNS"
-    },
-    "record": {
-        "root": "Корневой домен",
-        "api": "SelfPrivacy API",
-        "cloud": "Файловое облако",
-        "git": "Git сервер",
-        "meet": "Видеоконференции",
-        "social": "Социальная сеть",
-        "password": "Менеджер паролей",
-        "vpn": "VPN",
-        "mx": "MX запись",
-        "dmarc": "DMARC запись",
-        "spf": "SPF запись",
-        "dkim": "DKIM ключ"
+        "dns_provider": "Провайдер DNS",
+        "allow_password_authentication_hint": "Позволяет пользователям подключаться к серверу по SSH используя свой пароль (не применяется к суперпользователю)",
+        "allow_password_authentication": "Разрешить вход по SSH с использованием пароля",
+        "settings": "Настройки сервера",
+        "enable_ssh": "Включить SSH",
+        "enable_ssh_hint": "Разрешить доступ к серверу через SSH"
     },
     "domain": {
         "card_title": "Домен",
@@ -170,13 +172,9 @@
         "reupload_key": "Принудительно обновить ключ",
         "reuploaded_key": "Ключ на сервере обновлён",
         "initialize": "Настроить",
-        "waiting_for_rebuild": "Через несколько минут можно будет создать первую копию.",
         "restore": "Восстановить из копии",
         "no_backups": "Резервных копий пока нет",
         "create_new": "Создать новую копию",
-        "creating": "Создание копии: {}%",
-        "restoring": "Восстановление из копии",
-        "error_pending": "Сервер вернул ошибку: проверьте её ниже",
         "restore_alert": "Вы собираетесь восстановить из копии созданной {}. Все текущие данные будут потеряны. Вы уверены?",
         "refresh": "Обновить статус",
         "refetch_backups": "Обновить список копий",
@@ -197,10 +195,7 @@
         "autobackup_period_subtitle": "Создание копий раз в {period}",
         "autobackup_period_every": "Раз в {period}",
         "autobackup_period_disable": "Отключить автоматические копирование",
-        "autobackup_custom": "Другое",
-        "autobackup_custom_hint": "Введите период в минутах",
         "autobackup_set_period": "Установить период",
-        "autobackup_period_set": "Период установлен",
         "backups_encryption_key": "Ключ шифрования",
         "snapshots_title": "Список снимков",
         "forget_snapshot_error": "Не удалось забыть снимок",
@@ -279,7 +274,6 @@
         },
         "rotation_quotas_title": "Настройки ротации снимков",
         "set_rotation_quotas": "Задать новые квоты ротации",
-        "quotas_set": "Новые квоты ротации резервных копий заданы",
         "quota_titles": {
             "last": "Сколько последних снимков сохранять",
             "daily": "Сколько ежедневных снимков сохранять",
@@ -308,10 +302,12 @@
         "data_migration_title": "Миграция данных",
         "data_migration_notice": "На время миграции данных все сервисы будут выключены.",
         "start_migration_button": "Начать миграцию",
-        "migration_process": "Мигрируем…",
-        "migration_done": "Завершить",
         "price": "Цена",
-        "extending_volume_modal_description": "Хранилище будет расширено до {}, новая стоимость {} в месяц."
+        "extending_volume_modal_description": "Хранилище будет расширено до {}, новая стоимость {} в месяц.",
+        "extending_volume_started": "Расширение хранилища началось",
+        "extending_volume_provider_waiting": "Хранилище расширено со стороны провайдера, ждём 10 секунд…",
+        "extending_volume_server_waiting": "Хранилище расширено со стороны сервера, ждём 20 секунд…",
+        "extending_volume_rebooting": "Перезагружаем сервер…"
     },
     "not_ready_card": {
         "in_menu": "Сервер ещё не настроен, воспользуйтесь мастером подключения."
@@ -336,38 +332,22 @@
         "nothing_here": "Здесь ничего нет"
     },
     "mail": {
-        "title": "Почта",
-        "subtitle": "Электронная почта для семьи или компании.",
         "login_info": "Используйте логин и пароль из вкладки пользователей. IMAP порт: 143, STARTTLS. SMTP порт: 587, STARTTLS."
     },
     "password_manager": {
-        "title": "Менеджер паролей",
-        "subtitle": "Это фундамент Вашей безопасности. Создавать, хранить, копировать пароли между устройствами и вбивать их в формы поможет Bitwarden.",
         "login_info": "Аккаунт нужно создать на сайте."
     },
     "video": {
-        "title": "Видеоконференция",
-        "subtitle": "Jitsi meet — отличный аналог Zoom и Google meet который помимо удобства ещё и гарантирует Вам защищённые высококачественные видеоконференции.",
         "login_info": "Аккаунт не требуется."
     },
     "cloud": {
-        "title": "Файловое облако",
-        "subtitle": "Не позволяйте облачным сервисам просматривать ваши данные. Используйте NextCloud — надёжный дом для всех Ваших данных.",
         "login_info": "Логин администратора: admin, пароль такой же как у основного пользователя. Создавайте новых пользователей в интерфейсе администратора NextCloud."
     },
     "social_network": {
-        "title": "Социальная сеть",
-        "subtitle": "Сложно поверить, но стало возможным создать свою собственную социальную сеть, со своими правилами и аудиторией.",
         "login_info": "Аккаунт нужно создать на сайте."
     },
     "git": {
-        "title": "Git-сервер",
-        "subtitle": "Приватная альтернатива Github, которая принадлежит вам, а не Microsoft.",
         "login_info": "Аккаунт нужно создать на сайте. Первый зарегистрированный пользователь становится администратором."
-    },
-    "vpn": {
-        "title": "VPN сервер",
-        "subtitle": "Закрытый VPN сервер"
     },
     "users": {
         "add_new_user": "Добавьте первого пользователя",
@@ -379,7 +359,6 @@
         "delete_confirm_question": "Вы действительно хотите удалить учетную запись?",
         "reset_password": "Сбросить пароль",
         "account": "Учетная запись",
-        "send_registration_data": "Поделиться реквизитами",
         "could_not_fetch_users": "Не удалось получить пользователей",
         "could_not_fetch_description": "Проверьте интернет соединение и попробуйте снова",
         "refresh_users": "Обновить список пользователей",
@@ -389,10 +368,10 @@
         "username_rule": "Имя может содержать только маленькие латинские буквы, цифры, подчёркивания, не может начинаться с цифр",
         "email_login": "Авторизация по Email",
         "no_ssh_notice": "Для этого пользователя созданы только SSH и Email аккаунт. Единая авторизация для всех сервисов ещё не реализована.",
-        "details_title": "Пользователь"
+        "details_title": "Пользователь",
+        "user_already_exists": "Пользователь с таким именем уже существует"
     },
     "initializing": {
-        "dns_provider_description": "Это позволит связать ваш домен с IP адресом:",
         "connect_to_server": "Начнём с сервера.",
         "select_provider": "Ниже подборка провайдеров, которых поддерживает SelfPrivacy",
         "select_provider_notice": "Под 'Небольшим сервером' имеется ввиду сервер с двумя потоками процессора и двумя гигабайтами оперативной памяти.",
@@ -405,7 +384,6 @@
         "select_provider_price_text_do": "$17 в месяц за небольшой сервер и 50GB места на диске",
         "select_provider_payment_title": "Методы оплаты",
         "select_provider_payment_text_hetzner": "Банковские карты, SWIFT, SEPA, PayPal",
-        "select_provider_payment_text_cloudflare": "Банковские карты",
         "select_provider_payment_text_do": "Банковские карты, Google Pay, PayPal",
         "select_provider_email_notice": "Хостинг электронной почты недоступен для новых клиентов. Разблокировать можно будет после первой оплаты.",
         "select_provider_site_button": "Посетить сайт",
@@ -429,18 +407,13 @@
         "choose_server_type_payment_server": "{} за сам сервер",
         "choose_server_type_payment_storage": "{} за расширяемое хранилище",
         "choose_server_type_payment_ip": "{} за публичный IPv4",
-        "no_server_types_found": "Не найдено доступных типов сервера! Пожалуйста, убедитесь, что у вас есть доступ к провайдеру сервера...",
         "dns_provider_bad_key_error": "API ключ неверен",
         "backblaze_bad_key_error": "Информация о Backblaze хранилище неверна",
         "connect_to_dns": "Подключите DNS провайдера",
-        "connect_to_dns_provider_text": "С помощью API токена приложение SelfPrivacy настроит DNS записи",
-        "manage_domain_dns": "Для управления DNS вашего домена",
         "use_this_domain": "Используем этот домен?",
         "use_this_domain_text": "Указанный вами токен даёт контроль над этим доменом",
-        "connect_backblaze_storage": "Подключите облачное хранилище Backblaze",
         "no_connected_domains": "На данный момент подлюченных доменов нет",
         "loading_domain_list": "Загружаем список доменов",
-        "found_more_domains": "Найдено больше одного домена, для вашей безопасности, просим Вам удалить ненужные домены",
         "save_domain": "Сохранить домен",
         "final": "Последний шаг",
         "create_server": "Создать сервер",
@@ -453,7 +426,6 @@
         "one_more_restart": "Сейчас будет дополнительная перезагрузка для активации сертификатов безопасности.",
         "create_master_account": "Создайте главную учетную запись",
         "enter_username_and_password": "Введите имя пользователя и сложный пароль",
-        "finish": "Всё инициализировано",
         "checks": "Проверок выполнено: \n{} / {}",
         "select_dns": "Сейчас выберите DNS провайдера",
         "steps": {
@@ -469,7 +441,6 @@
             "server_reboot": "Перезагрузка сервера",
             "final_checks": "Финальные проверки"
         },
-        "server_provider_description": "Место, где будут находиться ваши данные и сервисы SelfPrivacy:",
         "multiple_domains_found": "Найдено несколько доменов",
         "multiple_domains_found_text": "Предоставленный токен дает доступ к следующим доменам. Пожалуйста, выберите тот, который вы хотите использовать. Для обеспечения безопасности других доменов следует ограничить доступ этого токена только тем доменом, который вы хотите использовать с SelfPrivacy.",
         "domain_critical_error": "Не получается подключиться к домену! Нажмите для подробностей…"
@@ -478,7 +449,7 @@
         "generic_error": "Ошибка проведения операции, попробуйте ещё раз.",
         "recovery_main_header": "Подключение к существующему серверу",
         "domain_recovery_description": "Введите домен, по которому вы хотите получить доступ к серверу:",
-        "domain_recover_placeholder": "Домен",
+        "domain_recover_placeholder": "Ваш домен",
         "domain_recover_error": "Не удалось найти сервер с таким доменом",
         "method_select_description": "Выберите способ входа:",
         "method_select_other_device": "У меня есть доступ на другом устройстве",
@@ -572,7 +543,6 @@
         "purge_all_keys_confirm": "Да, стереть все ключи",
         "delete_server_volume": "Удалить сервер и хранилище?",
         "reboot": "Перезагрузить",
-        "you_cant_use_this_api": "Нельзя использовать этот API для доменом с подобным TLD.",
         "yes": "Да",
         "no": "Нет",
         "volume_creation_error": "Не удалось создать хранилище."
@@ -601,7 +571,14 @@
         "delete_ssh_key": "Удалить SSH ключ для {}",
         "server_jobs": "Задачи на сервере",
         "reset_user_password": "Сбросить пароль пользователя",
-        "generic_error": "Не удалось подключиться к серверу!"
+        "generic_error": "Не удалось подключиться к серверу!",
+        "job_postponed": "Задача добавлена, но вы сможете её запустить после завершения текущих задач",
+        "change_auto_upgrade_settings": "Изменить настройки автоматических обновлений",
+        "job_removed": "Задача удалена",
+        "rebuild_system": "Пересобрать систему",
+        "start_server_upgrade": "Начать обновление сервера",
+        "change_server_timezone": "Изменить часовой пояс сервера",
+        "change_ssh_settings": "Изменить настройки SSH"
     },
     "validations": {
         "required": "Обязательное поле",

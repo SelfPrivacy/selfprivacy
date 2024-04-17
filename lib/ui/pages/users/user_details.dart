@@ -103,7 +103,7 @@ class _DeleteUserTile extends StatelessWidget {
               TextButton(
                 child: Text('basis.cancel'.tr()),
                 onPressed: () {
-                  context.router.pop();
+                  context.router.maybePop();
                 },
               ),
               TextButton(
@@ -115,8 +115,8 @@ class _DeleteUserTile extends StatelessWidget {
                 ),
                 onPressed: () {
                   context.read<JobsCubit>().addJob(DeleteUserJob(user: user));
-                  context.router.childControllers.first.pop();
-                  context.router.pop();
+                  context.router.childControllers.first.maybePop();
+                  context.router.maybePop();
                 },
               ),
             ],
@@ -244,7 +244,7 @@ class _SshKeysCard extends StatelessWidget {
                                     publicKey: key,
                                   ),
                                 );
-                            context.popRoute();
+                            context.maybePop();
                           },
                         ),
                       ],

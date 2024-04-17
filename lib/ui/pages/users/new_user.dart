@@ -38,7 +38,7 @@ class NewUserPage extends StatelessWidget {
           return BlocListener<UserFormCubit, FormCubitState>(
             listener: (final BuildContext context, final FormCubitState state) {
               if (state.isSubmitted) {
-                context.router.pop();
+                context.router.maybePop();
               }
             },
             child: BrandHeroScreen(

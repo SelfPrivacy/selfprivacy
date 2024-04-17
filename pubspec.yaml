@@ -1,32 +1,31 @@
 name: selfprivacy
 description: selfprivacy.org
 publish_to: 'none'
-version: 0.10.1+21
+version: 0.11.0+22
 
 environment:
   sdk: '>=3.2.1 <4.0.0'
-  flutter: ">=3.19.0"
+  flutter: ">=3.19.5"
 
 dependencies:
   animations: ^2.0.11
-  auto_route: ^7.8.5
+  auto_route: ^8.0.3
   auto_size_text: ^3.0.0
-  bloc_concurrency: ^0.2.4
+  bloc_concurrency: ^0.2.5
   crypt: ^4.3.1
   collection: ^1.18.0
   cubit_form: ^2.0.1
-  device_info_plus: ^9.1.2
-  dio: ^5.4.1
+  device_info_plus: ^10.0.1
+  dio: ^5.4.2+1
   duration: ^3.0.13
   dynamic_color: ^1.7.0
   easy_localization: ^3.0.5
-  either_option: ^2.0.1-dev.1
   equatable: ^2.0.5
-  fl_chart: ^0.66.2
+  fl_chart: ^0.67.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.4
-  flutter_markdown: ^0.6.21
+  flutter_bloc: ^8.1.5
+  flutter_markdown: ^0.6.22
   flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.10+1
   gap: ^3.0.1
@@ -54,15 +53,14 @@ dependencies:
 #  wakelock: ^0.6.2
 
 dev_dependencies:
-  auto_route_generator: ^7.3.2
+  auto_route_generator: ^8.0.0
   flutter_test:
     sdk: flutter
-  graphql_codegen: ^0.13.11
-  build_runner: ^2.4.8
+  build_runner: ^2.4.9
   flutter_launcher_icons: ^0.13.1
   hive_generator: ^2.0.1
   json_serializable: ^6.7.1
-  flutter_lints: ^3.0.1
+  flutter_lints: ^3.0.2
 
 flutter_icons:
   android: "launcher_icon"

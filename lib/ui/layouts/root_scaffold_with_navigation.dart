@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
 import 'package:selfprivacy/ui/components/pre_styled_buttons/flash_fab.dart';
@@ -97,7 +100,7 @@ class _RootAppBar extends StatelessWidget {
         leading: context.router.pageCount > 1
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => context.router.pop(),
+                onPressed: () => context.router.maybePop(),
               )
             : null,
         actions: const [
@@ -199,21 +202,36 @@ class _BottomBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
       ),
-      child: NavigationBar(
-        selectedIndex: prevActiveIndex == -1 ? 0 : prevActiveIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-        onDestinationSelected: (final index) {
-          context.router.replaceAll([destinations[index].route]);
-        },
-        destinations: destinations
-            .map(
-              (final destination) => NavigationDestination(
-                icon: Icon(destination.icon),
-                label: destination.label,
-              ),
+      child: Platform.isIOS
+          ? CupertinoTabBar(
+              currentIndex: prevActiveIndex == -1 ? 0 : prevActiveIndex,
+              onTap: (final index) {
+                context.router.replaceAll([destinations[index].route]);
+              },
+              items: destinations
+                  .map(
+                    (final destination) => BottomNavigationBarItem(
+                      icon: Icon(destination.icon),
+                      label: destination.label,
+                    ),
+                  )
+                  .toList(),
             )
-            .toList(),
-      ),
+          : NavigationBar(
+              selectedIndex: prevActiveIndex == -1 ? 0 : prevActiveIndex,
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+              onDestinationSelected: (final index) {
+                context.router.replaceAll([destinations[index].route]);
+              },
+              destinations: destinations
+                  .map(
+                    (final destination) => NavigationDestination(
+                      icon: Icon(destination.icon),
+                      label: destination.label,
+                    ),
+                  )
+                  .toList(),
+            ),
     );
   }
 }

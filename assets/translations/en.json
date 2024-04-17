@@ -81,17 +81,13 @@
         "dark_theme_description": "Switch your application theme",
         "dangerous_settings": "Dangerous settings",
         "reset_config_title": "Reset application config",
-        "reset_config_description": "Resets API keys and root user.",
-        "delete_server_title": "Delete server",
-        "delete_server_description": "This removes your server. It will be no longer accessible."
+        "reset_config_description": "Resets API keys and root user."
     },
     "ssh": {
         "title": "SSH keys",
         "create": "Create SSH key",
         "delete": "Delete SSH key",
         "delete_confirm_question": "Are you sure you want to delete SSH key?",
-        "subtitle_with_keys": "{} keys",
-        "subtitle_without_keys": "No keys",
         "no_key_name": "Unnamed key",
         "root_title": "These are superuser keys",
         "root_subtitle": "Owners of these keys get full access to the server and can do anything on it. Only add your own keys to the server.",
@@ -154,20 +150,6 @@
             "other": "{} cores"
         }
     },
-    "record": {
-        "root": "Root domain",
-        "api": "SelfPrivacy API",
-        "cloud": "File cloud",
-        "git": "Git server",
-        "meet": "Video conference",
-        "social": "Social network",
-        "password": "Password manager",
-        "vpn": "VPN",
-        "mx": "MX record",
-        "dmarc": "DMARC record",
-        "spf": "SPF record",
-        "dkim": "DKIM key"
-    },
     "domain": {
         "card_title": "Domain",
         "screen_title": "Domain and DNS",
@@ -180,8 +162,7 @@
         "services_subtitle": "Type “A” records required for each service.",
         "email_title": "Email",
         "email_subtitle": "Records necessary for secure email exchange.",
-        "update_list": "Update list",
-        "domain_validation_failure": "We can't reach your domain!"
+        "update_list": "Update list"
     },
     "backup": {
         "card_title": "Backup",
@@ -189,19 +170,15 @@
         "description": "Will save your day in case of incident: hackers attack, server deletion, etc.",
         "reupload_key": "Force reupload key",
         "reuploaded_key": "Key reuploaded",
+        "reupload_key_subtitle": "Will instruct the server to initialize backup storage again. Use if something is broken.",
         "initialize": "Initialize",
-        "waiting_for_rebuild": "You will be able to create your first backup in a few minutes.",
         "restore": "Restore from backup",
         "no_backups": "There are no backups yet",
         "create_new": "Create a new backup",
-        "creating": "Creating a new backup: {}%",
-        "restoring": "Restoring from backup",
-        "error_pending": "Server returned error, check it below",
         "restore_alert": "You are about to restore from backup created on {}. All current data will be lost. Are you sure?",
         "refresh": "Refresh status",
         "refetch_backups": "Refetch backup list",
         "refetch_backups_subtitle": "Invalidate cache and refetch data from your storage provider. May cause additional charges.",
-        "reupload_key_subtitle": "Will instruct the server to initialize backup storage again. Use if something is broken.",
         "refetching_list": "In a few minutes list will be updated",
         "select_all": "Backup everything",
         "create_new_select_heading": "Select what to backup",
@@ -215,10 +192,7 @@
         "autobackup_period_never": "Automatic backups are disabled",
         "autobackup_period_every": "Every {period}",
         "autobackup_period_disable": "Disable automatic backups",
-        "autobackup_custom": "Custom",
-        "autobackup_custom_hint": "Enter custom period in minutes",
         "autobackup_set_period": "Set period",
-        "autobackup_period_set": "Period set",
         "backups_encryption_key": "Encryption key",
         "backups_encryption_key_subtitle": "Keep it in a safe place.",
         "backups_encryption_key_copy": "Copy the encryption key",
@@ -250,7 +224,6 @@
         },
         "rotation_quotas_title": "Snapshot rotation settings",
         "set_rotation_quotas": "Set new rotation quotas",
-        "quotas_set": "New backup rotation quotas set",
         "quotas_only_applied_to_autobackups": "These settings are only applied to automatic backups. Manual backups won't get deleted.",
         "quota_titles": {
             "last": "How many latest backups to keep",
@@ -332,9 +305,7 @@
         "price": "Price",
         "data_migration_title": "Data migration",
         "data_migration_notice": "During migration all services will be turned off.",
-        "start_migration_button": "Start migration",
-        "migration_process": "Migrating…",
-        "migration_done": "Finish"
+        "start_migration_button": "Start migration"
     },
     "not_ready_card": {
         "in_menu": "Server is not set up yet. Please finish setup using setup wizard for further work."
@@ -359,38 +330,22 @@
         }
     },
     "mail": {
-        "title": "E-Mail",
-        "subtitle": "E-Mail for company and family.",
         "login_info": "Use username and password from users tab. IMAP port is 143 with STARTTLS, SMTP port is 587 with STARTTLS."
     },
     "password_manager": {
-        "title": "Password Manager",
-        "subtitle": "Base of your security. Bitwarden will help you to create, store and move passwords between devices, as well as input them, when requested using autocompletion.",
         "login_info": "You will have to create an account on the website."
     },
     "video": {
-        "title": "Videomeet",
-        "subtitle": "Zoom and Google Meet are good, but Jitsi Meet is a worth alternative that also gives you confidence that you're not being listened.",
         "login_info": "No account needed."
     },
     "cloud": {
-        "title": "Cloud Storage",
-        "subtitle": "Do not allow cloud services to read your data by using NextCloud.",
         "login_info": "Login is admin, password is the same as with your main user. Create new accounts in Nextcloud interface."
     },
     "social_network": {
-        "title": "Social Network",
-        "subtitle": "It's hard to believe, but it became possible to create your own social network, with your own rules and target audience.",
         "login_info": "You will have to create an account on the website."
     },
     "git": {
-        "title": "Git Server",
-        "subtitle": "Private alternative to the Github, that belongs to you, but not a Microsoft.",
         "login_info": "You will have to create an account on the website. First user will become an admin."
-    },
-    "vpn": {
-        "title": "VPN Server",
-        "subtitle": "Private VPN server"
     },
     "users": {
         "details_title": "User details",
@@ -403,7 +358,6 @@
         "delete_confirm_question": "Are you sure?",
         "reset_password": "Reset password",
         "account": "Account",
-        "send_registration_data": "Share login credentials",
         "could_not_fetch_users": "Couldn't fetch users list",
         "could_not_fetch_description": "Please check your internet connection and try again",
         "refresh_users": "Refresh users list",
@@ -416,8 +370,6 @@
         "user_already_exists": "User with such username already exists"
     },
     "initializing": {
-        "server_provider_description": "A place where your data and SelfPrivacy services will reside:",
-        "dns_provider_description": "A service which lets your IP point towards domain names:",
         "connect_to_server": "Let's start with a server.",
         "select_provider": "Pick any provider from the following list, they all support SelfPrivacy",
         "select_provider_notice": "By 'Relatively small' we mean a machine with 2 cores of CPU and 2 gigabytes of RAM.",
@@ -431,7 +383,6 @@
         "select_provider_payment_title": "Payment methods",
         "select_provider_payment_text_hetzner": "Credit cards, SWIFT, SEPA, PayPal",
         "select_provider_payment_text_do": "Credit cards, Google Pay, PayPal",
-        "select_provider_payment_text_cloudflare": "Credit cards",
         "select_provider_email_notice": "E-mail hosting won't be available for new clients. Nevertheless it will be unlocked as soon as you complete your first payment.",
         "select_provider_site_button": "Visit site",
         "connect_to_server_provider": "Now log in ",
@@ -454,21 +405,16 @@
         "choose_server_type_payment_server": "{} for the server",
         "choose_server_type_payment_storage": "{} for additional storage",
         "choose_server_type_payment_ip": "{} for the public IPv4 address",
-        "no_server_types_found": "No available server types found. Make sure your account is accessible and try to change your server location.",
         "dns_provider_bad_key_error": "API key is invalid",
         "backblaze_bad_key_error": "Backblaze storage information is invalid",
         "connect_to_dns": "Connect the DNS provider",
-        "connect_to_dns_provider_text": "With API token SelfPrivacy will manage all DNS entries",
         "select_dns": "Now let's select a DNS provider",
-        "manage_domain_dns": "To manage your domain's DNS",
         "use_this_domain": "Use this domain?",
         "use_this_domain_text": "The token you provided gives access to the following domain",
         "multiple_domains_found": "Multiple domains found",
         "multiple_domains_found_text": "The token you provided gives access to the following domains. Please select the one you want to use. For the security of your other domains, you should restrict this token's access to only the domain you want to use with SelfPrivacy.",
-        "connect_backblaze_storage": "Connect Backblaze storage",
         "no_connected_domains": "No connected domains at the moment",
         "loading_domain_list": "Loading domain list",
-        "found_more_domains": "Found more than one domain. For your own security, please be asked to delete unnecessary domains",
         "save_domain": "Save domain",
         "final": "Final step",
         "create_server": "Create server",
@@ -482,7 +428,6 @@
         "one_more_restart": "One more restart to apply your security certificates.",
         "create_master_account": "Create master account",
         "enter_username_and_password": "Enter username and strong password",
-        "finish": "Everything is initialized",
         "checks": "Checks have been completed \n{} out of {}",
         "steps": {
             "hosting": "Hosting",
@@ -595,9 +540,7 @@
         "are_you_sure": "Are you sure?",
         "purge_all_keys": "Purge all authentication keys?",
         "purge_all_keys_confirm": "Yes, purge all my tokens",
-        "delete_server_volume": "Delete the server and volume?",
         "reboot": "Reboot",
-        "you_cant_use_this_api": "You cannot use this API for domains with such TLD.",
         "yes": "Yes",
         "no": "No"
     },

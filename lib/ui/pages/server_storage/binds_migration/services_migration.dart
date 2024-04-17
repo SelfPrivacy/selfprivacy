@@ -147,7 +147,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
             if (widget.services.isEmpty)
-              const Center(child: CircularProgressIndicator()),
+              const Center(child: CircularProgressIndicator.adaptive()),
             ...widget.services.map(
               (final service) => Column(
                 children: [

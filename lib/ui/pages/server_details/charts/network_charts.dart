@@ -38,7 +38,8 @@ class NetworkChart extends StatelessWidget {
           lineTouchData: LineTouchData(
             enabled: true,
             touchTooltipData: LineTouchTooltipData(
-              tooltipBgColor: Theme.of(context).colorScheme.surface,
+              getTooltipColor: (final LineBarSpot _) =>
+                  Theme.of(context).colorScheme.surface,
               tooltipPadding: const EdgeInsets.all(8),
               getTooltipItems: (final List<LineBarSpot> touchedBarSpots) {
                 final List<LineTooltipItem> res = [];

@@ -27,7 +27,9 @@ class NewDeviceScreen extends StatelessWidget {
                   newDeviceKey: snapshot.data.toString(),
                 );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
               }
             },
           ),

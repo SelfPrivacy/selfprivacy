@@ -56,7 +56,7 @@ class UsersPage extends StatelessWidget {
           if (users.isEmpty) {
             if (state is UsersRefreshing) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator.adaptive(),
               );
             }
             return RefreshIndicator(

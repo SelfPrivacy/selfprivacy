@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
@@ -164,6 +165,7 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
               color: isJobsListEmpty
                   ? Theme.of(context).colorScheme.onBackground
                   : Theme.of(context).colorScheme.primary,
+              tooltip: 'jobs.title'.tr(),
             ),
           ),
         const SizedBox.shrink(),

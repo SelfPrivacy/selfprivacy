@@ -39,12 +39,8 @@
         "copied_to_clipboard": "Copié dans le presse-papier !"
     },
     "more_page": {
-        "about_application": "À propos",
         "create_ssh_key": "Clés SSH du super utilisateur",
-        "console": "Console",
-        "application_settings": "Paramètres de l'application",
         "configuration_wizard": "Assistant de configuration",
-        "about_project": "À propos de nous",
         "onboarding": "Embarquement"
     },
     "console_page": {
@@ -52,13 +48,11 @@
         "waiting": "En attente de l'initialisation…",
         "copy": "Copier"
     },
-    "about_us_page": {
-        "title": "À propos de nous"
-    },
     "about_application_page": {
         "title": "À propos",
         "privacy_policy": "Politique de confidentialité",
-        "application_version_text": "Version de l'application {}"
+        "application_version_text": "Version de l'application",
+        "api_version_text": "Version de l'API du serveur {}"
     },
     "application_settings": {
         "title": "Paramètres de l'application",
@@ -67,15 +61,16 @@
         "delete_server_title": "Supprimer le serveur",
         "delete_server_description": "Cela va supprimer votre serveur. Celui-ci ne sera plus accessible.",
         "dark_theme_title": "Thème sombre",
-        "reset_config_description": "Réinitialiser les clés API et l'utilisateur root."
+        "reset_config_description": "Réinitialiser les clés API et l'utilisateur root.",
+        "system_dark_theme_title": "Thème par défaut du système",
+        "system_dark_theme_description": "Affichage de jour ou de nuit en fonction du paramétrage système",
+        "dangerous_settings": "Paramètres dangereux"
     },
     "ssh": {
         "title": "Clés SSH",
         "create": "Créer une clé SSH",
         "delete": "Supprimer une clé SSH",
         "delete_confirm_question": "Êtes-vous sûr de vouloir supprimer la clé SSH ?",
-        "subtitle_with_keys": "{} clés",
-        "subtitle_without_keys": "Pas de clés SSH",
         "no_key_name": "Clé sans nom",
         "input_label": "Clé RSA ou ED25519 publique",
         "root_title": "Ce sont les clés SSH du superutilisateur",
@@ -128,19 +123,6 @@
         "select_timezone": "Sélectionner le fuseau horaire",
         "description": "Tous vos services en direct ici"
     },
-    "record": {
-        "root": "Domaine racine",
-        "api": "API de SelfPrivacy",
-        "git": "Serveur Git",
-        "meet": "Conférence vidéo",
-        "social": "Réseau social",
-        "password": "Gestionnaire de mot de passe",
-        "vpn": "VPN",
-        "dmarc": "Enregistrement DMARC",
-        "spf": "Enregistrement SPF",
-        "dkim": "Clé DKIM",
-        "mx": "Enregistrement MX"
-    },
     "domain": {
         "card_title": "Domaine",
         "screen_title": "Domaines et DNS",
@@ -159,17 +141,13 @@
         "card_title": "Sauvegarde",
         "reuploaded_key": "Clés republiées",
         "initialize": "Initialise",
-        "waiting_for_rebuild": "Vous serez capable de créer votre première sauvegarde dans quelques instants.",
         "restore": "Restaurer depuis la sauvegarde",
         "create_new": "Créer une nouvelle sauvegarde",
-        "creating": "Création d'une nouvelle sauvegarde: {}%",
-        "restoring": "Restauration depuis la sauvegarde",
         "restore_alert": "Vous allez restaurer depuis la sauvegarde créée le {}. Toutes les données existantes vont être perdues. Êtes-vous sûr ?",
         "refresh": "Statut d'avancement",
         "refetching_list": "Dans quelques minutes, la liste sera mise à jour",
         "reupload_key": "Forcer la republication de la clé",
         "no_backups": "Il n'y a pour l'instant aucune sauvegarde",
-        "error_pending": "Le serveur a retourné une erreur, vérifier plus bas",
         "refetch_backups": "Récupérer la liste des mise à jour"
     },
     "storage": {
@@ -188,8 +166,6 @@
         "data_migration_title": "Migration de données",
         "data_migration_notice": "Durant la migration, tous les services ne seront plus accessibles.",
         "start_migration_button": "Démarrer la migration",
-        "migration_process": "Migration en cours…",
-        "migration_done": "Terminé",
         "extend_volume_button": "Étendre le volume",
         "extending_volume_description": "Redimensionner le volume va vous permettre de stocker davantage de données sur votre serveur sans étendre le serveur lui-même. Les volumes ne peuvent être qu'étendus, le shrinking n'est pas possible."
     },
@@ -211,9 +187,7 @@
         "uses": "Utilise {usage} du {volume}"
     },
     "mail": {
-        "title": "E-Mail",
-        "login_info": "Utiliser l'identifiant et le mot de passe de l'onglets utilisateurs. Le port IMAP est 143 avec STARTTLS, le port SMTP est 587 avec STARTTLS.",
-        "subtitle": "E-Mail pour des entreprises et la famille."
+        "login_info": "Utiliser l'identifiant et le mot de passe de l'onglets utilisateurs. Le port IMAP est 143 avec STARTTLS, le port SMTP est 587 avec STARTTLS."
     },
     "not_ready_card": {
         "in_menu": "Le serveur n'est pas encore configuré. Veuillez finir le paramétrage en utilisant l'assistant d'installation pour aller plus loin."
@@ -249,7 +223,6 @@
         "title": "Liste des jobs"
     },
     "modals": {
-        "you_cant_use_this_api": "Vous ne pouvez pas utiliser cette API pour un domaine avec cette extension.",
         "destroy_server": "Effacer le serveur et en créer un nouveau?",
         "no": "Non",
         "yes": "Oui",
@@ -261,35 +234,21 @@
         "try_again": "Essayer à nouveau?"
     },
     "password_manager": {
-        "title": "Gestionnaire de mot de passe",
-        "subtitle": "La base de votre sécurité. Bitwarden vous aidera à créer, stocker et déplacer les mots de passe entre appareils, ainsi qu'à les saisir, lorsque cela est demandé, en utilisant l'autocomplétion.",
         "login_info": "Vous devrez créer un compte sur le site web."
     },
     "timer": {
         "sec": "{} secondes"
     },
     "cloud": {
-        "title": "Stockage cloud",
-        "subtitle": "Ne permettez pas aux services cloud de lire vos données en utilisant NextCloud.",
         "login_info": "Le login est admin, le mot de passe est le même que votre utilisateur principal. Créer de nouveaux comptes via l'interface Nextcloud."
     },
     "video": {
-        "title": "Vidéoconférence",
-        "subtitle": "Zoom et Google Meet sont biens, mais Jitsi Meet est une alternative valable qui vous donne également l'assurance que vous n'êtes pas écouter.",
         "login_info": "Pas de compte nécessaire."
     },
     "social_network": {
-        "title": "Réseaux sociaux",
-        "subtitle": "C'est difficile à croire mais il devient possible de créer votre propre réseau social, avec vos propres règles et votre propre public cible.",
         "login_info": "Vous devrez créer un compte sur le site web."
     },
     "git": {
-        "title": "Serveur Git",
-        "subtitle": "Une alternative privée à Github, qui vous appartient et qui n'appartient pas à Microsoft.",
         "login_info": "Vous devrez créer un compte sur le site web. Le premier utilisateur deviendra admin."
-    },
-    "vpn": {
-        "title": "Serveur VPN",
-        "subtitle": "Serveur VPN privé"
     }
 }

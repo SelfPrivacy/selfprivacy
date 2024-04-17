@@ -34,7 +34,7 @@
         "connect_to_existing": "¡Ya tengo un servidor de SelfPrivacy!",
         "app_name": "SelfPrivacy",
         "please_connect": "¡Conecta tu servidor y dominio para sumergirte!",
-        "copied_to_clipboard": "¡Copiado al portapapeles!"
+        "copied_to_clipboard": "Copiado al portapapeles!"
     },
     "test": "es-test",
     "locale": "es",
@@ -56,16 +56,14 @@
         "title": "SSH Claves",
         "create": "Crear clave SSH",
         "delete": "Eliminar clave SSH",
-        "subtitle_with_keys": "{} claves",
-        "subtitle_without_keys": "Sin llaves",
         "no_key_name": "Clave sin nombre",
         "root_title": "Estas son las claves de superusuario",
         "input_label": "Clave pública ED25519, ECDSA o RSA"
     },
     "about_application_page": {
-        "application_version_text": "Versión de la aplicación {}",
+        "application_version_text": "Versión de la aplicación",
         "title": "Sobre",
-        "api_version_text": "Versión API del servidor {}",
+        "api_version_text": "Versión API del servidor",
         "privacy_policy": "Política de privacidad"
     },
     "onboarding": {
@@ -81,20 +79,13 @@
     },
     "more_page": {
         "configuration_wizard": "Asistente de configuración",
-        "about_project": "Sobre nosotros",
-        "about_application": "Sobre",
         "onboarding": "Incorporación",
-        "create_ssh_key": "Claves SSH de superusuario",
-        "console": "Consola",
-        "application_settings": "Ajustes de la aplicación"
+        "create_ssh_key": "Claves SSH de superusuario"
     },
     "console_page": {
         "title": "Consola",
         "waiting": "Esperando la inicialización…",
         "copy": "Copiar"
-    },
-    "about_us_page": {
-        "title": "Sobre nosotros"
     },
     "server": {
         "reboot_after_upgrade_hint": "Reinicio sin aviso después de aplicar cambios en el servidor",

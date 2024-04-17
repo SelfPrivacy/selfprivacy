@@ -39,15 +39,11 @@
     "about_application_page": {
         "title": "O příloze",
         "privacy_policy": "Zásady ochrany osobních údajů",
-        "api_version_text": "Verze API serveru {}",
-        "application_version_text": "Verze aplikace {}"
+        "api_version_text": "Verze API serveru",
+        "application_version_text": "Verze aplikace"
     },
     "more_page": {
-        "about_project": "O nás",
-        "about_application": "O příloze",
         "onboarding": "Pozdravy",
-        "console": "Konzole",
-        "application_settings": "Nastavení aplikace",
         "configuration_wizard": "Průvodce nastavením",
         "create_ssh_key": "Superuživatelské klíče SSH"
     },
@@ -73,8 +69,6 @@
         "create": "Vytvoření klíče SSH",
         "delete": "Odstranění klíče SSH",
         "delete_confirm_question": "Jste si jisti, že chcete odstranit klíč SSH?",
-        "subtitle_with_keys": "{} klíče",
-        "subtitle_without_keys": "Žádné klíče",
         "no_key_name": "Nejmenovaný klíč",
         "root_title": "Jedná se o klíče superuživatele",
         "input_label": "Veřejný klíč ED25519 nebo RSA",
@@ -137,13 +131,10 @@
         "select_provider_email_notice": "E-mailový hosting nebude pro nové klienty k dispozici. Nicméně bude odemčen, jakmile dokončíte první platbu.",
         "choose_location_type_text": "Různá místa poskytují různé konfigurace serverů, ceny a rychlosti připojení.",
         "choose_server_type_text": "Různé možnosti prostředků podporují různé služby. Nebojte se, svůj server můžete kdykoli rozšířit",
-        "manage_domain_dns": "Správa domény DNS",
         "use_this_domain_text": "Vámi zadaný token poskytuje přístup k následující doméně",
         "no_connected_domains": "V současné době nejsou připojeny žádné domény",
-        "found_more_domains": "Nalezeno více než jedna doména. V zájmu vlastní bezpečnosti vás prosíme o odstranění nepotřebných domén",
         "server_created": "Vytvořený server. Probíhá kontrola DNS a spouštění serveru…",
         "choose_server_type_notice": "Důležité je zaměřit se na procesor a paměť RAM. Data vašich služeb budou uložena na připojeném svazku, který lze snadno rozšířit a za který se platí zvlášť.",
-        "connect_backblaze_storage": "Připojení úložiště Backblaze",
         "save_domain": "Uložit doménu",
         "final": "Závěrečný krok",
         "create_server": "Vytvořit server",
@@ -171,7 +162,6 @@
         "choose_server_type_ram": "{} GB paměti RAM",
         "choose_server_type_storage": "{} GB systémového úložiště",
         "choose_server_type_payment_per_month": "{} měsíčně",
-        "no_server_types_found": "Nebyly nalezeny žádné dostupné typy serverů. Ujistěte se, že je váš účet přístupný, a zkuste změnit umístění serveru.",
         "backblaze_bad_key_error": "Informace o úložišti Backblaze jsou neplatné",
         "select_dns": "Nyní vybereme poskytovatele DNS",
         "use_this_domain": "Použít tuto doménu?",
@@ -182,7 +172,6 @@
         "create_master_account": "Vytvoření hlavního účtu",
         "loading_domain_list": "Načítání seznamu domén",
         "enter_username_and_password": "Zadejte uživatelské jméno a silné heslo",
-        "finish": "Vše je inicializováno",
         "checks": "Kontroly byly dokončeny\n{} z {}",
         "steps": {
             "server": "Server",
@@ -197,16 +186,9 @@
             "server_reboot": "Restartování serveru",
             "final_checks": "Závěrečné kontroly"
         },
-        "server_provider_description": "Místo, kde budou umístěna vaše data a služby SelfPrivacy:",
-        "dns_provider_description": "Toto propojí vaši doménu s IP adresou:",
         "dns_provider_bad_key_error": "Klíč API je neplatný",
         "connect_to_dns": "Připojte poskytovatele DNS",
-        "select_provider_price_free": "Zdarma",
-        "select_provider_payment_text_cloudflare": "Bankovní karty",
-        "connect_to_dns_provider_text": "Pomocí rozhraní token API nakonfiguruje aplikace SelfPrivacy záznamy DNS"
-    },
-    "about_us_page": {
-        "title": "O nás"
+        "select_provider_price_free": "Zdarma"
     },
     "users": {
         "no_ssh_notice": "Pro tohoto uživatele jsou vytvořeny pouze účty e-mailu a SSH. Jednotné přihlašování pro všechny služby se chystá brzy.",
@@ -218,7 +200,6 @@
         "delete_confirm_question": "Jste si jistý?",
         "reset_password": "Obnovení hesla",
         "account": "Účet",
-        "send_registration_data": "Sdílení přihlašovacích údajů",
         "could_not_fetch_users": "Nepodařilo se načíst seznam uživatelů",
         "could_not_fetch_description": "Zkontrolujte prosím své internetové připojení a zkuste to znovu",
         "refresh_users": "Obnovení seznamu uživatelů",
@@ -229,20 +210,6 @@
         "could_not_add_ssh_key": "Nepodařilo se přidat klíč SSH",
         "username_rule": "Uživatelské jméno musí obsahovat pouze malá písmena latinky, číslice a podtržítka, nesmí začínat číslicí",
         "details_title": "Údaje o uživateli"
-    },
-    "record": {
-        "root": "Kořenová doména",
-        "api": "API SelfPrivacy",
-        "cloud": "Oblak souborů",
-        "git": "Server Git",
-        "social": "Sociální síť",
-        "password": "Správce hesel",
-        "vpn": "VPN",
-        "mx": "Záznam MX",
-        "dmarc": "Záznam DMARC",
-        "spf": "Záznam SPF",
-        "dkim": "Klíč DKIM",
-        "meet": "Videokonference"
     },
     "domain": {
         "card_title": "Doména",
@@ -263,12 +230,8 @@
         "reupload_key": "Vynutit klíč k opětovnému nahrání",
         "reuploaded_key": "Znovu nahraný klíč",
         "initialize": "Inicializace",
-        "waiting_for_rebuild": "První zálohu budete moci vytvořit během několika minut.",
         "restore": "Obnovení ze zálohy",
         "no_backups": "Zatím nejsou k dispozici žádné zálohy",
-        "creating": "Vytvoření nové zálohy: {}%",
-        "restoring": "Obnovení ze zálohy",
-        "error_pending": "Server vrátil chybu, zkontrolujte ji níže",
         "refresh": "Stav obnovení",
         "refetch_backups": "Opětovné načtení seznamu záloh",
         "description": "Zachrání vás v případě incidentu: útoku hackerů, vymazání serveru atd.",
@@ -294,8 +257,6 @@
         "data_migration_title": "Migrace dat",
         "data_migration_notice": "Během migrace budou všechny služby vypnuty.",
         "start_migration_button": "Zahájení migrace",
-        "migration_process": "Migrace…",
-        "migration_done": "Dokončení",
         "extending_volume_description": "Změna velikosti svazku vám umožní uložit na server více dat, aniž byste museli rozšiřovat samotný server. Svazek lze pouze rozšířit: zmenšení není možné."
     },
     "service_page": {
@@ -316,38 +277,22 @@
         "uses": "Používá {usage} na {volume}"
     },
     "mail": {
-        "title": "E-mail",
-        "subtitle": "E-mail pro společnost a rodinu.",
         "login_info": "Použijte uživatelské jméno a heslo z karty uživatelů. Port IMAP je 143 se STARTTLS, port SMTP je 587 se STARTTLS."
     },
     "cloud": {
-        "title": "Cloudové úložiště",
-        "subtitle": "Nedovolte cloudovým službám číst vaše data pomocí služby NextCloud.",
         "login_info": "Přihlašovací jméno je admin, heslo je stejné jako u hlavního uživatele. Vytvoření nových účtů v rozhraní Nextcloud."
     },
     "password_manager": {
-        "title": "Správce hesel",
-        "login_info": "Na webových stránkách si musíte vytvořit účet.",
-        "subtitle": "Základna vašeho zabezpečení. Bitwarden vám pomůže vytvářet, ukládat a přesouvat hesla mezi zařízeními a také je zadávat na vyžádání pomocí automatického doplňování."
+        "login_info": "Na webových stránkách si musíte vytvořit účet."
     },
     "video": {
-        "title": "Video konference",
-        "subtitle": "Zoom a Google Meet jsou dobré, ale Jitsi Meet je hodnotná alternativa, která vám navíc dává jistotu, že vás nikdo neposlouchá.",
         "login_info": "Není potřeba žádný účet."
     },
     "social_network": {
-        "title": "Sociální síť",
-        "login_info": "Na webových stránkách si musíte vytvořit účet.",
-        "subtitle": "Je těžké tomu uvěřit, ale je možné vytvořit si vlastní sociální síť s vlastními pravidly a cílovou skupinou."
+        "login_info": "Na webových stránkách si musíte vytvořit účet."
     },
     "git": {
-        "title": "Server Git",
-        "subtitle": "Soukromá alternativa ke Githubu, která patří vám, ale ne Microsoftu.",
         "login_info": "Na webových stránkách si musíte vytvořit účet. První uživatel se stane administrátorem."
-    },
-    "vpn": {
-        "title": "Server VPN",
-        "subtitle": "Soukromý server VPN"
     },
     "recovering": {
         "recovery_main_header": "Připojení k existujícímu serveru",
@@ -486,7 +431,6 @@
         "purge_all_keys_confirm": "Ano, vyčistěte všechny mé žetony",
         "delete_server_volume": "Smazat server a svazek?",
         "reboot": "Restartovat",
-        "you_cant_use_this_api": "Toto rozhraní API nelze použít pro doménu s podobnou TLD.",
         "yes": "Ano",
         "no": "Ne",
         "volume_creation_error": "Svazek se nepodařilo vytvořit."

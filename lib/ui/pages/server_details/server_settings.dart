@@ -34,7 +34,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
 
     return Column(
       children: [
-        SwitchListTile(
+        SwitchListTile.adaptive(
           value: allowAutoUpgrade ?? false,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
@@ -67,7 +67,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
           ),
           activeColor: Theme.of(context).colorScheme.primary,
         ),
-        SwitchListTile(
+        SwitchListTile.adaptive(
           value: rebootAfterUpgrade ?? false,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
@@ -113,7 +113,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
             );
           },
         ),
-        SwitchListTile(
+        SwitchListTile.adaptive(
           value: enableSsh ?? true,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
@@ -145,7 +145,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
           ),
           activeColor: Theme.of(context).colorScheme.primary,
         ),
-        SwitchListTile(
+        SwitchListTile.adaptive(
           value: allowPasswordAuthentication ?? false,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(

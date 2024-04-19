@@ -38,9 +38,9 @@ class HetznerServerProvider extends ServerProvider {
   HetznerServerProvider() : _adapter = ApiAdapter();
   HetznerServerProvider.load(
     final String? location,
-    final bool isAuthotized,
+    final bool isAuthorized,
   ) : _adapter = ApiAdapter(
-          isWithToken: isAuthotized,
+          isWithToken: isAuthorized,
           region: location,
         );
 

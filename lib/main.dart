@@ -91,6 +91,9 @@ class SelfprivacyApp extends StatelessWidget {
                     : appSettings.isDarkModeOn
                         ? ThemeMode.dark
                         : ThemeMode.light,
+                scrollBehavior: const MaterialScrollBehavior().copyWith(
+                  scrollbars: false,
+                ),
                 builder: (final BuildContext context, final Widget? widget) {
                   Widget error =
                       const Center(child: Text('...rendering error...'));

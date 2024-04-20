@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/models/message.dart';
+import 'package:selfprivacy/logic/models/console_log.dart';
 
 abstract class RestApiMap {
   Future<Dio> getClient({final BaseOptions? customOptions}) async {
@@ -57,8 +57,8 @@ abstract class RestApiMap {
 }
 
 class ConsoleInterceptor extends InterceptorsWrapper {
-  void addMessage(final Message message) {
-    getIt.get<ConsoleModel>().addMessage(message);
+  void addConsoleLog(final ConsoleLog message) {
+    getIt.get<ConsoleModel>().log(message);
   }
 
   @override
@@ -66,8 +66,8 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     final RequestOptions options,
     final RequestInterceptorHandler handler,
   ) async {
-    addMessage(
-      RestApiRequestMessage(
+    addConsoleLog(
+      RestApiRequestConsoleLog(
         method: options.method,
         data: options.data.toString(),
         headers: options.headers,
@@ -82,8 +82,8 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     final Response response,
     final ResponseInterceptorHandler handler,
   ) async {
-    addMessage(
-      RestApiResponseMessage(
+    addConsoleLog(
+      RestApiResponseConsoleLog(
         method: response.requestOptions.method,
         statusCode: response.statusCode,
         data: response.data.toString(),
@@ -103,10 +103,12 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   ) async {
     final Response? response = err.response;
     log(err.toString());
-    addMessage(
-      Message.warn(
-        text:
-            'response-uri: ${response?.realUri}\ncode: ${response?.statusCode}\ndata: ${response?.toString()}\n',
+    addConsoleLog(
+      ManualConsoleLog.warning(
+        customTitle: 'RestAPI error',
+        content: 'response-uri: ${response?.realUri}\n'
+            'code: ${response?.statusCode}\n'
+            'data: ${response?.toString()}\n',
       ),
     );
     return super.onError(err, handler);

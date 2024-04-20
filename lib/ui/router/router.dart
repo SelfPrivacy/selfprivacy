@@ -10,7 +10,7 @@ import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/app_settings.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/developer_settings.dart';
-import 'package:selfprivacy/ui/pages/more/console.dart';
+import 'package:selfprivacy/ui/pages/more/console/console_page.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
@@ -53,6 +53,7 @@ class RootRouter extends _$RootRouter {
 
   @override
   RouteType get defaultRouteType => const RouteType.material();
+
   @override
   final List<AutoRoute> routes = [
     AutoRoute(page: OnboardingRoute.page),

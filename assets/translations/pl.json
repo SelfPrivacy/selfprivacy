@@ -33,7 +33,7 @@
         "continue": "Kontynuować",
         "alert": "Powiadomienie",
         "app_name": "SelfPrivacy",
-        "please_connect": "Połącz się z serwerem, aby rozpocząć grę!",
+        "please_connect": "Połącz się z serwerem, dodaj domen i usługodawca DNS, aby rozpocząć!",
         "copied_to_clipboard": "Skopiowane do schowka!"
     },
     "test": "pl-test",

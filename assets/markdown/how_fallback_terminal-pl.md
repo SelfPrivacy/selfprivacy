@@ -23,4 +23,4 @@ W tym pliku będzie podobny wzór:
         }
 ```
 
-Skopiuj token z pliku i wklej w kolejnym oknie.
+Copy the token from the file and paste it in the next window.

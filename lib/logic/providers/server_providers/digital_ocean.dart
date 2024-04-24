@@ -438,6 +438,7 @@ class DigitalOceanServerProvider extends ServerProvider {
           description: rawLocation.name,
           flag: rawLocation.flag,
           identifier: rawLocation.slug,
+          countryDisplayKey: rawLocation.countryDisplayKey,
         );
       } catch (e) {
         continue;

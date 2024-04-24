@@ -120,6 +120,14 @@ class SelectLocationPage extends StatelessWidget {
                                           .titleMedium,
                                     ),
                                     const SizedBox(height: 8),
+                                    Text(
+                                      location.countryDisplayKey.tr(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
+                                    if (location.description != null)
+                                      const SizedBox(height: 4),
                                     if (location.description != null)
                                       Text(
                                         location.description!,

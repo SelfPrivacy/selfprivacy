@@ -65,13 +65,58 @@ class DigitalOceanLocation {
         emoji = '🇮🇳';
         break;
 
+      case 'syd':
+        emoji = '🇦🇺';
+        break;
+
       case 'nyc':
       case 'sfo':
         emoji = '🇺🇸';
         break;
     }
-
     return emoji;
+  }
+
+  String get countryDisplayKey {
+    String displayKey = 'countries.';
+    switch (slug.substring(0, 3)) {
+      case 'fra':
+        displayKey += 'germany';
+        break;
+
+      case 'ams':
+        displayKey += 'netherlands';
+        break;
+
+      case 'sgp':
+        displayKey += 'singapore';
+        break;
+
+      case 'lon':
+        displayKey += 'united_kingdom';
+        break;
+
+      case 'tor':
+        displayKey += 'canada';
+        break;
+
+      case 'blr':
+        displayKey += 'india';
+        break;
+
+      case 'syd':
+        displayKey += 'australia';
+        break;
+
+      case 'nyc':
+      case 'sfo':
+        displayKey += 'united_states';
+        break;
+
+      default:
+        displayKey = slug;
+    }
+    return displayKey;
   }
 }
 

@@ -156,6 +156,7 @@ class HetznerServerProvider extends ServerProvider {
           description: server.location.description,
           flag: server.location.flag,
           identifier: server.location.name,
+          countryDisplayKey: server.location.countryDisplayKey,
         ),
       ),
     );
@@ -456,6 +457,7 @@ class HetznerServerProvider extends ServerProvider {
           description: rawLocation.description,
           flag: rawLocation.flag,
           identifier: rawLocation.name,
+          countryDisplayKey: rawLocation.countryDisplayKey,
         );
       } catch (e) {
         continue;

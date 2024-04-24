@@ -16,4 +16,4 @@ W tym pliku będzie podobny wzór:
         }
 ```
 
-Copy the token from the file and paste it in the next window.
+Skopiuj token z pliku i wklej w następnym oknie.

@@ -40,3 +40,9 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+# Flatpak
+.flatpak-builder/
+flatpak-build/
+flatpak-repo/
+*.flatpak

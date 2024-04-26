@@ -1,6 +1,6 @@
 app-id: org.selfprivacy.app
 runtime: org.freedesktop.Platform
-runtime-version: '22.08'
+runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
 command: selfprivacy
 finish-args:
@@ -11,6 +11,7 @@ finish-args:
   - "--share=network"
   - "--own-name=org.selfprivacy.app"
   - "--device=dri"
+  - "--talk-name=org.freedesktop.secrets"
 modules:
   - name: selfprivacy
     buildsystem: simple
@@ -35,7 +36,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.gnome.org/GNOME/libsecret.git
-        tag: 0.20.5
+        tag: 0.21.4
   - name: libjsoncpp
     buildsystem: meson
     config-opts:

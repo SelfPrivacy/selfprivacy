@@ -38,8 +38,14 @@ class BackupDetailsPage extends StatelessWidget {
         : StateType.uninitialized;
     final bool preventActions = backupsState.preventActions;
     final List<Backup> backups = backupsState.backups;
-    final List<Service> services =
-        context.watch<ServicesBloc>().state.servicesThatCanBeBackedUp;
+    final List<Service> services = context
+        .watch<ServicesBloc>()
+        .state
+        .servicesThatCanBeBackedUp
+        .where(
+          (final service) => service.isEnabled,
+        )
+        .toList();
     final Duration? autobackupPeriod = backupsState.autobackupPeriod;
     final List<ServerJob> backupJobs = context
         .watch<ServerJobsBloc>()

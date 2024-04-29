@@ -606,5 +606,16 @@
         "reset_onboarding": "Reset onboarding switch",
         "reset_onboarding_description": "Reset onboarding switch to show onboarding screen again",
         "cubit_statuses": "Cubit loading statuses"
+    },
+    "countries": {
+        "germany": "Germany",
+        "netherlands": "Netherlands",
+        "singapore": "Singapore",
+        "united_kingdom": "United Kingdom",
+        "canada": "Canada",
+        "india": "India",
+        "australia": "Australia",
+        "united_states": "United States",
+        "finland": "Finland"
     }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
+import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
@@ -103,6 +104,29 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
         ...widget.services.map(
           (final Service service) {
             final bool busy = busyServices.contains(service.id);
+            final List<Widget> descriptionWidgets = [];
+            if (busy) {
+              descriptionWidgets.add(Text('backup.service_busy'.tr()));
+            } else {
+              descriptionWidgets.add(
+                Text(
+                  'service_page.uses'.tr(
+                    namedArgs: {
+                      'usage': service.storageUsage.used.toString(),
+                      'volume': context
+                          .read<VolumesBloc>()
+                          .state
+                          .getVolume(service.storageUsage.volume ?? '')
+                          .displayName,
+                    },
+                  ),
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              );
+              descriptionWidgets.add(
+                Text(service.backupDescription),
+              );
+            }
             return CheckboxListTile.adaptive(
               onChanged: !busy
                   ? (final bool? value) {
@@ -122,8 +146,9 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
               title: Text(
                 service.displayName,
               ),
-              subtitle: Text(
-                busy ? 'backup.service_busy'.tr() : service.backupDescription,
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: descriptionWidgets,
               ),
               secondary: SvgPicture.string(
                 service.svgIcon,

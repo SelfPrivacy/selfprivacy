@@ -10,36 +10,35 @@ extension on ConsoleLog {
             if (log.uri != null) _KeyValueRow('uri', log.uri.toString()),
 
             // headers bloc
-            if (log.headers?.isNotEmpty ?? false) const _SectionRow('Headers'),
+            if (log.headers?.isNotEmpty ?? false)
+              const _SectionRow('console_page.headers'),
             ...?log.headers?.entries
                 .map((final entry) => _KeyValueRow(entry.key, entry.value)),
 
             // data bloc
-            const _SectionRow('Request data'),
+            const _SectionRow('console_page.data'),
             _DataRow(log.data?.toString()),
           ],
         (final RestApiResponseConsoleLog log) => [
             if (log.method != null) _KeyValueRow('method', log.method),
             if (log.uri != null) _KeyValueRow('uri', log.uri.toString()),
             if (log.statusCode != null)
-              _KeyValueRow(
-                'statusCode',
-                log.statusCode.toString(),
-              ),
+              _KeyValueRow('statusCode', log.statusCode.toString()),
 
             // data bloc
-            const _SectionRow('Response data'),
+            const _SectionRow('console_page.response_data'),
             _DataRow(log.data?.toString()),
           ],
         (final GraphQlRequestConsoleLog log) => [
             // context
-            const _SectionRow('Context'),
+            const _SectionRow('console_page.context'),
             _DataRow(log.context?.toString()),
             // data
-            if (log.operation != null) const _SectionRow('Operation'),
+            if (log.operation != null)
+              const _SectionRow('console_page.operation'),
             _DataRow(log.stringifiedOperation), // errors
             if (log.variables?.isNotEmpty ?? false)
-              const _SectionRow('Variables'),
+              const _SectionRow('console_page.variables'),
             ...?log.variables?.entries.map(
               (final entry) => _KeyValueRow(
                 entry.key,
@@ -49,10 +48,10 @@ extension on ConsoleLog {
           ],
         (final GraphQlResponseConsoleLog log) => [
             // context
-            const _SectionRow('Context'),
+            const _SectionRow('console_page.context'),
             _DataRow(log.context?.toString()),
             // data
-            if (log.data != null) const _SectionRow('Data'),
+            if (log.data != null) const _SectionRow('console_page.data'),
             ...?log.data?.entries.map(
               (final entry) => _KeyValueRow(
                 entry.key,
@@ -60,7 +59,8 @@ extension on ConsoleLog {
               ),
             ),
             // errors
-            if (log.errors?.isNotEmpty ?? false) const _SectionRow('Errors'),
+            if (log.errors?.isNotEmpty ?? false)
+              const _SectionRow('console_page.errors'),
             ...?log.errors?.map(
               (final entry) => _KeyValueRow(
                 entry.message,
@@ -94,8 +94,7 @@ class ConsoleItemDialog extends StatelessWidget {
         children: [
           Row(
             children: [
-              /// TODO(misterfourtytwo): maybe should add translations later
-              const Text('logged at: '),
+              Text('logged_at'.tr()),
               SelectableText(
                 log.timeString,
                 style: const TextStyle(
@@ -160,6 +159,7 @@ class _DataRow extends StatelessWidget {
 
 class _SectionRow extends StatelessWidget {
   const _SectionRow(this.title);
+
   final String title;
 
   @override
@@ -175,7 +175,7 @@ class _SectionRow extends StatelessWidget {
             ),
           ),
           child: SelectableText(
-            title,
+            title.tr(),
             style: const TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 20,

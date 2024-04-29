@@ -47,7 +47,23 @@
     "console_page": {
         "title": "Console",
         "waiting": "Waiting for initialization…",
-        "copy": "Copy"
+        "copy": "Copy",
+        "historyEmpty": "No data yet",
+        "error":"Error",
+        "log":"Log",
+        "rest_api_request":"Rest API Request",
+        "rest_api_response":"Rest API Response",
+        "graphql_request":"GraphQL Request",
+        "graphql_response":"GraphQL Response",
+        "logged_at": "logged at: ",
+        "data": "Data",
+        "erros":"Errors",
+        "request_data": "Request data",
+        "headers": "Headers",
+        "response_data": "Response data",
+        "context": "Context",
+        "operation": "Operation",
+        "variables": "Variables"
     },
     "about_application_page": {
         "title": "About & support",

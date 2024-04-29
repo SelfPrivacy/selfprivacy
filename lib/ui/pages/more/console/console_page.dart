@@ -78,12 +78,14 @@ class _ConsolePageState extends State<ConsolePage> {
                   final AsyncSnapshot<void> snapshot,
                 ) {
                   if (snapshot.hasData) {
-                    final List<ConsoleLog> messages =
+                    final List<ConsoleLog> logs =
                         getIt.get<ConsoleModel>().logs;
 
-                    return _ConsoleViewLoaded(
-                      logs: messages,
-                    );
+                    return logs.isEmpty
+                        ? const _ConsoleViewEmpty()
+                        : _ConsoleViewLoaded(
+                            logs: logs,
+                          );
                   }
 
                   return const _ConsoleViewLoading();
@@ -112,6 +114,16 @@ class _ConsoleViewLoading extends StatelessWidget {
             ),
           ),
         ],
+      );
+}
+
+class _ConsoleViewEmpty extends StatelessWidget {
+  const _ConsoleViewEmpty();
+
+  @override
+  Widget build(final BuildContext context) => Align(
+        alignment: Alignment.topCenter,
+        child: Text('console_page.historyEmpty'.tr()),
       );
 }
 

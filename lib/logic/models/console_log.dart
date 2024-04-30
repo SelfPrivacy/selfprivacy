@@ -33,7 +33,7 @@ sealed class ConsoleLog {
 
   /// data available for copy in dialog
   String? get shareableData => '$title\n'
-      '$content';
+      '{\n$content\n}';
 
   static final DateFormat _formatter = DateFormat('hh:mm:ss');
   String get timeString => _formatter.format(time);

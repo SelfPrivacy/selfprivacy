@@ -112,7 +112,7 @@ class ConsoleItemDialog extends StatelessWidget {
         // A button to copy the request to the clipboard
         if (log.shareableData?.isNotEmpty ?? false)
           TextButton(
-            onPressed: () => PlatformAdapter.setClipboard(log.content),
+            onPressed: () => PlatformAdapter.setClipboard(log.shareableData!),
             child: Text('console_page.copy'.tr()),
           ),
         // close dialog

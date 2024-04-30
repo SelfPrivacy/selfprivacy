@@ -42,11 +42,9 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
 
   runApp(
-    Localization(
-      child: SelfprivacyApp(
-        lightThemeData: lightThemeData,
-        darkThemeData: darkThemeData,
-      ),
+    SelfprivacyApp(
+      lightThemeData: lightThemeData,
+      darkThemeData: darkThemeData,
     ),
   );
 }

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/bloc_config.dart';
 import 'package:selfprivacy/config/bloc_observer.dart';
@@ -9,13 +10,20 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/config/localization.dart';
 import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/theming/factory/app_theme_factory.dart';
+import 'package:selfprivacy/ui/pages/errors/failed_to_init_secure_storage.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 // import 'package:wakelock/wakelock.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await HiveConfig.init();
+  try {
+    await HiveConfig.init();
+  } on PlatformException catch (e) {
+    runApp(
+      FailedToInitSecureStorageScreen(e: e),
+    );
+  }
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // try {

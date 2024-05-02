@@ -606,5 +606,16 @@
         "root_ssh_key_added": "SSH ключ суперпользователя задан и будет применён",
         "allow_ssh_key_at_setup": "Разрешить задавать SSH ключи суперпользователя во время установки",
         "allow_ssh_key_at_setup_description": "Кнопка для добавления ключа появится на экране подтверждения."
+    },
+    "countries": {
+        "netherlands": "Нидерланды",
+        "germany": "Германия",
+        "singapore": "Сингапур",
+        "united_kingdom": "Великобритания",
+        "canada": "Канада",
+        "india": "Индия",
+        "australia": "Австралия",
+        "united_states": "США",
+        "finland": "Финляндия"
     }
 }

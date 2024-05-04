@@ -606,5 +606,16 @@
     },
     "timer": {
         "sec": "{} sek"
+    },
+    "countries": {
+        "germany": "Saksamaa",
+        "netherlands": "Madalmaad",
+        "singapore": "Singapur",
+        "united_kingdom": "Ühendkuningriik",
+        "canada": "Kanada",
+        "india": "India",
+        "australia": "Austraalia",
+        "united_states": "Ameerika Ühendriigid",
+        "finland": "Soome"
     }
 }

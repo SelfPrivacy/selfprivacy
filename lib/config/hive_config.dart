@@ -60,17 +60,20 @@ class HiveConfig {
 
 /// Mappings for the different boxes and their keys
 class BNames {
-  /// App settings box. Contains app settings like [isDarkModeOn], [isOnboardingShowing]
+  /// App settings box. Contains app settings like [darkThemeModeOn], [shouldShowOnboarding]
   static String appSettingsBox = 'appSettings';
 
   /// A boolean field of [appSettingsBox] box.
-  static String isDarkModeOn = 'isDarkModeOn';
+  static String darkThemeModeOn = 'isDarkModeOn';
 
   /// A boolean field of [appSettingsBox] box.
-  static String isAutoDarkModeOn = 'isAutoDarkModeOn';
+  static String systemThemeModeOn = 'isAutoDarkModeOn';
 
   /// A boolean field of [appSettingsBox] box.
-  static String isOnboardingShowing = 'isOnboardingShowing';
+  static String shouldShowOnboarding = 'isOnboardingShowing';
+
+  /// A string field
+  static String appLocale = 'appLocale';
 
   /// Encryption key to decrypt [serverInstallationBox] and [usersBox] box.
   static String serverInstallationEncryptionKey = 'key';

@@ -1,11 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
-import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
 import 'package:selfprivacy/ui/components/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
@@ -60,17 +61,14 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
             title: Text('developer_settings.reset_onboarding'.tr()),
             subtitle:
                 Text('developer_settings.reset_onboarding_description'.tr()),
-            enabled:
-                !context.watch<AppSettingsCubit>().state.isOnboardingShowing,
-            onTap: () => context
-                .read<AppSettingsCubit>()
-                .turnOffOnboarding(isOnboardingShowing: true),
+            enabled: !InheritedAppController.of(context).shouldShowOnboarding,
+            onTap: () => InheritedAppController.of(context)
+                .setShouldShowOnboarding(true),
           ),
           ListTile(
             title: Text('storage.start_migration_button'.tr()),
             subtitle: Text('storage.data_migration_notice'.tr()),
-            enabled:
-                !context.watch<AppSettingsCubit>().state.isOnboardingShowing,
+            enabled: InheritedAppController.of(context).shouldShowOnboarding,
             onTap: () => context.pushRoute(
               ServicesMigrationRoute(
                 diskStatus: context.read<VolumesBloc>().state.diskStatus,

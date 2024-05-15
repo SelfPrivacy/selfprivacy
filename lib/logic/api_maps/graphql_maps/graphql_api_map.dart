@@ -4,6 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/io_client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/message.dart';
 
 void _logToAppConsole<T>(final T objectToLog) {
@@ -117,9 +118,9 @@ abstract class GraphQLApiMap {
 
   String get _token {
     String token = '';
-    final serverDetails = getIt<ApiConfigModel>().serverDetails;
+    final serverDetails = getIt<ResourcesModel>().serverDetails;
     if (serverDetails != null) {
-      token = getIt<ApiConfigModel>().serverDetails!.apiToken;
+      token = getIt<ResourcesModel>().serverDetails!.apiToken;
     }
     return token;
   }

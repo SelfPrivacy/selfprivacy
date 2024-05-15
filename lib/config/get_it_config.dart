@@ -3,6 +3,7 @@ import 'package:selfprivacy/logic/get_it/api_config.dart';
 import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 import 'package:selfprivacy/logic/get_it/console.dart';
 import 'package:selfprivacy/logic/get_it/navigation.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 
 export 'package:selfprivacy/logic/get_it/api_config.dart';
 export 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
@@ -15,6 +16,8 @@ Future<void> getItSetup() async {
   getIt.registerSingleton<NavigationService>(NavigationService());
 
   getIt.registerSingleton<ConsoleModel>(ConsoleModel());
+  getIt.registerSingleton<ResourcesModel>(ResourcesModel()..init());
+  getIt.registerSingleton<WizardDataModel>(WizardDataModel()..init());
   getIt.registerSingleton<ApiConfigModel>(ApiConfigModel()..init());
 
   getIt.registerSingleton<ApiConnectionRepository>(

@@ -5,6 +5,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
@@ -31,7 +32,7 @@ class HetznerApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      final String? token = getIt<ApiConfigModel>().serverProviderKey;
+      final String? token = getIt<ResourcesModel>().serverProviderKey;
       assert(token != null);
       options.headers = {'Authorization': 'Bearer $token'};
     }

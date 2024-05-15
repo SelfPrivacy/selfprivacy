@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -57,7 +58,7 @@ class ServerApi extends GraphQLApiMap
   String customToken;
   @override
   String? get rootAddress =>
-      overrideDomain ?? getIt<ApiConfigModel>().serverDomain?.domainName;
+      overrideDomain ?? getIt<ResourcesModel>().serverDomain?.domainName;
   String? overrideDomain;
 
   Future<String?> getApiVersion() async {

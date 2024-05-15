@@ -25,6 +25,8 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
       provider: fields[6] == null
           ? ServerProviderType.hetzner
           : fields[6] as ServerProviderType,
+      serverLocation: fields[7] as String?,
+      serverType: fields[8] as String?,
       startTime: fields[2] as DateTime?,
     );
   }
@@ -32,21 +34,25 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
   @override
   void write(BinaryWriter writer, ServerHostingDetails obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.ip4)
       ..writeByte(1)
       ..write(obj.id)
-      ..writeByte(3)
-      ..write(obj.createTime)
       ..writeByte(2)
       ..write(obj.startTime)
+      ..writeByte(3)
+      ..write(obj.createTime)
       ..writeByte(4)
       ..write(obj.volume)
       ..writeByte(5)
       ..write(obj.apiToken)
       ..writeByte(6)
-      ..write(obj.provider);
+      ..write(obj.provider)
+      ..writeByte(7)
+      ..write(obj.serverLocation)
+      ..writeByte(8)
+      ..write(obj.serverType);
   }
 
   @override

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
@@ -43,7 +44,7 @@ class ServerDetailsCubit
     final serverProviderApi = ProvidersController.currentServerProvider;
     final dnsProviderApi = ProvidersController.currentDnsProvider;
     if (serverProviderApi != null && dnsProviderApi != null) {
-      final serverId = getIt<ApiConfigModel>().serverDetails?.id ?? 0;
+      final serverId = getIt<ResourcesModel>().serverDetails?.id ?? 0;
       final metadataResult = await serverProviderApi.getMetadata(serverId);
       metadataResult.data.add(
         ServerMetadataEntity(
@@ -60,7 +61,7 @@ class ServerDetailsCubit
   }
 
   void check() async {
-    final bool isReadyToCheck = getIt<ApiConfigModel>().serverDetails != null;
+    final bool isReadyToCheck = getIt<ResourcesModel>().serverDetails != null;
     try {
       if (isReadyToCheck) {
         emit(const ServerDetailsLoading());

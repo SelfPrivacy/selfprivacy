@@ -37,11 +37,8 @@ class _ServicesPageState extends State<ServicesPage> {
 
     return Scaffold(
       appBar: Breakpoints.small.isActive(context)
-          ? PreferredSize(
-              preferredSize: const Size.fromHeight(52),
-              child: BrandHeader(
-                title: 'basis.services'.tr(),
-              ),
+          ? BrandHeader(
+              title: 'basis.services'.tr(),
             )
           : null,
       body: !isReady

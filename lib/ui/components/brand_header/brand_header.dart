@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
-class BrandHeader extends StatelessWidget {
+class BrandHeader extends StatelessWidget implements PreferredSizeWidget {
   const BrandHeader({
     super.key,
     this.title = '',
     this.hasBackButton = false,
     this.onBackButtonPressed,
   });
+
+  @override
+  Size get preferredSize => const Size.fromHeight(52.0);
 
   final String title;
   final bool hasBackButton;

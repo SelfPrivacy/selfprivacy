@@ -21,11 +21,8 @@ class MorePage extends StatelessWidget {
 
     return Scaffold(
       appBar: Breakpoints.small.isActive(context)
-          ? PreferredSize(
-              preferredSize: const Size.fromHeight(52),
-              child: BrandHeader(
-                title: 'basis.more'.tr(),
-              ),
+          ? BrandHeader(
+              title: 'basis.more'.tr(),
             )
           : null,
       body: ListView(

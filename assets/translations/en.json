@@ -91,10 +91,12 @@
     },
     "application_settings": {
         "title": "Application settings",
-        "system_dark_theme_title": "System default theme",
-        "system_dark_theme_description": "Use light or dark theme depending on system settings",
+        "system_theme_mode_title": "System default theme",
+        "system_theme_mode_description": "Use light or dark theme depending on system settings",
         "dark_theme_title": "Dark theme",
-        "dark_theme_description": "Switch your application theme",
+        "change_application_theme": "Switch your application theme",
+        "language": "Language",
+        "click_to_change_locale": "Click to open language list",
         "dangerous_settings": "Dangerous settings",
         "reset_config_title": "Reset application config",
         "reset_config_description": "Resets API keys and root user."

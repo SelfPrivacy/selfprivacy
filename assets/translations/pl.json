@@ -56,15 +56,13 @@
     },
     "application_settings": {
         "title": "Ustawienia aplikacji",
+        "system_theme_mode_description": "Użyj jasnego lub ciemnego motywu w zależności od ustawień systemu",
+        "system_theme_mode_title": "Domyślny motyw systemowy",
         "dark_theme_title": "Ciemny motyw aplikacji",
-        "dark_theme_description": "Zmień kolor motywu aplikacji",
+        "change_application_theme": "Zmień kolor motywu aplikacji",
+        "dangerous_settings": "Niebezpieczne ustawienia",
         "reset_config_title": "Resetowanie",
-        "reset_config_description": "Zresetuj klucze API i użytkownika root.",
-        "delete_server_title": "Usuń serwer",
-        "delete_server_description": "Ta czynność usunie serwer. Po tym będzie niedostępny.",
-        "system_dark_theme_description": "Użyj jasnego lub ciemnego motywu w zależności od ustawień systemu",
-        "system_dark_theme_title": "Domyślny motyw systemowy",
-        "dangerous_settings": "Niebezpieczne ustawienia"
+        "reset_config_description": "Zresetuj klucze API i użytkownika root."
     },
     "ssh": {
         "title": "klucze SSH",

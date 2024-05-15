@@ -54,15 +54,13 @@
     },
     "application_settings": {
         "title": "Nastavení aplikace",
+        "system_theme_mode_title": "Výchozí téma systému",
+        "system_theme_mode_description": "Použití světlého nebo tmavého motivu v závislosti na nastavení systému",
         "dark_theme_title": "Tmavé téma",
+        "change_application_theme": "Přepnutí tématu aplikace",
+        "dangerous_settings": "Nebezpečná nastavení",
         "reset_config_title": "Obnovení konfigurace aplikace",
-        "reset_config_description": "Obnovení klíčů API a uživatele root.",
-        "delete_server_title": "Odstranit server",
-        "dark_theme_description": "Přepnutí tématu aplikace",
-        "delete_server_description": "Tím odstraníte svůj server. Nebude již přístupný.",
-        "system_dark_theme_title": "Výchozí téma systému",
-        "system_dark_theme_description": "Použití světlého nebo tmavého motivu v závislosti na nastavení systému",
-        "dangerous_settings": "Nebezpečná nastavení"
+        "reset_config_description": "Obnovení klíčů API a uživatele root."
     },
     "ssh": {
         "title": "Klíče SSH",

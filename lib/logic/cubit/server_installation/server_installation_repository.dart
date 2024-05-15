@@ -222,7 +222,7 @@ class ServerInstallationRepository {
   }
 
   Future<ServerHostingDetails> restart() async {
-    final server = getIt<ResourcesModel>().serverDetails!;
+    final server = getIt<WizardDataModel>().serverInstallation!.serverDetails!;
 
     final result = await ServerApi(
       overrideDomain:

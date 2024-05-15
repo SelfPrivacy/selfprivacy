@@ -1,9 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/ui/layouts/root_scaffold_with_navigation.dart';
+import 'package:selfprivacy/ui/layouts/root_scaffold_with_subroute_selector/root_scaffold_with_subroute_selector.dart';
 import 'package:selfprivacy/ui/router/root_destinations.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
@@ -42,9 +41,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
         final isOtherRouterActive =
             context.router.root.current.name != RootRoute.name;
 
-        final routeName = getRouteTitle(context.router.current.name).tr();
-        return RootScaffoldWithNavigation(
-          title: routeName,
+        return RootScaffoldWithSubrouteSelector(
           destinations: rootDestinations,
           showBottomBar:
               !(currentDestinationIndex == -1 && !isOtherRouterActive),

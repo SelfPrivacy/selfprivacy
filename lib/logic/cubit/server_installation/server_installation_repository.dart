@@ -538,5 +538,6 @@ class ServerInstallationRepository {
     await getIt<ResourcesModel>().addBackupsCredential(
       wizardData.backupsCredential!,
     );
+    await getIt<WizardDataModel>().clearServerInstallation();
   }
 }

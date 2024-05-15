@@ -297,6 +297,11 @@ class WizardDataModel {
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
+  Future<void> clearServerInstallation() async {
+    _serverInstallation = null;
+    await _box.delete(BNames.serverInstallationWizardData);
+  }
+
   Future<void> clear() async {
     await _box.clear();
     await _box.compact();

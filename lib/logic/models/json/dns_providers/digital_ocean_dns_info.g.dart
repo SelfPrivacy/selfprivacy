@@ -9,7 +9,7 @@ part of 'digital_ocean_dns_info.dart';
 DigitalOceanDomain _$DigitalOceanDomainFromJson(Map<String, dynamic> json) =>
     DigitalOceanDomain(
       name: json['name'] as String,
-      ttl: json['ttl'] as int?,
+      ttl: (json['ttl'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$DigitalOceanDomainToJson(DigitalOceanDomain instance) =>
@@ -21,12 +21,12 @@ Map<String, dynamic> _$DigitalOceanDomainToJson(DigitalOceanDomain instance) =>
 DigitalOceanDnsRecord _$DigitalOceanDnsRecordFromJson(
         Map<String, dynamic> json) =>
     DigitalOceanDnsRecord(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String,
       type: json['type'] as String,
-      ttl: json['ttl'] as int,
+      ttl: (json['ttl'] as num).toInt(),
       data: json['data'] as String,
-      priority: json['priority'] as int?,
+      priority: (json['priority'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$DigitalOceanDnsRecordToJson(

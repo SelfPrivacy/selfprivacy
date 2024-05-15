@@ -42,6 +42,11 @@ abstract class AppThemeFactory {
       typography: appTypography,
       useMaterial3: true,
       scaffoldBackgroundColor: colorScheme.background,
+      listTileTheme: ListTileThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
     );
 
     return materialThemeData;

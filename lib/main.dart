@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
 import 'package:selfprivacy/config/bloc_config.dart';
@@ -10,6 +11,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/config/localization.dart';
 import 'package:selfprivacy/config/preferences_repository/datasources/preferences_hive_datasource.dart';
 import 'package:selfprivacy/config/preferences_repository/inherited_preferences_repository.dart';
+import 'package:selfprivacy/ui/pages/errors/failed_to_init_secure_storage.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -24,13 +26,19 @@ void main() async {
   //   print(e);
   // }
 
-  await Future.wait(
-    <Future<void>>[
-      HiveConfig.init(),
-      EasyLocalization.ensureInitialized(),
-    ],
-  );
-  await getItSetup();
+  try {
+    await Future.wait(
+      <Future<void>>[
+        HiveConfig.init(),
+        EasyLocalization.ensureInitialized(),
+      ],
+    );
+    await getItSetup();
+  } on PlatformException catch (e) {
+    runApp(
+      FailedToInitSecureStorageScreen(e: e),
+    );
+  }
 
   tz.initializeTimeZones();
 

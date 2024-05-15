@@ -127,7 +127,9 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
   Widget build(final BuildContext context) {
     final isMobile =
         widget.ignoreBreakpoints ? true : Breakpoints.small.isActive(context);
-    final isJobsListEmpty = context.watch<JobsCubit>().state is JobsStateEmpty;
+    final isJobsListEmpty = widget.hasFlashButton
+        ? context.watch<JobsCubit>().state is JobsStateEmpty
+        : true;
     return SliverAppBar(
       expandedHeight:
           widget.hasHeroIcon ? 148.0 + _size.height : 72.0 + _size.height,

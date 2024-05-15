@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
@@ -28,33 +28,47 @@ class HiveConfig {
 
     await Hive.openBox(BNames.appSettingsBox);
 
-    final HiveAesCipher cipher = HiveAesCipher(
-      await getEncryptedKey(BNames.serverInstallationEncryptionKey),
-    );
+    try {
+      final HiveAesCipher cipher = HiveAesCipher(
+        await getEncryptedKey(BNames.serverInstallationEncryptionKey),
+      );
 
-    await Hive.openBox<User>(BNames.usersDeprecated);
-    await Hive.openBox<User>(BNames.usersBox, encryptionCipher: cipher);
+      await Hive.openBox<User>(BNames.usersDeprecated);
+      await Hive.openBox<User>(BNames.usersBox, encryptionCipher: cipher);
 
-    final Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
-    if (deprecatedUsers.isNotEmpty) {
-      final Box<User> users = Hive.box<User>(BNames.usersBox);
-      await users.addAll(deprecatedUsers.values.toList());
-      await deprecatedUsers.clear();
+      final Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
+      if (deprecatedUsers.isNotEmpty) {
+        final Box<User> users = Hive.box<User>(BNames.usersBox);
+        await users.addAll(deprecatedUsers.values.toList());
+        await deprecatedUsers.clear();
+      }
+
+      await Hive.openBox(
+        BNames.serverInstallationBox,
+        encryptionCipher: cipher,
+      );
+    } on PlatformException catch (e) {
+      print('HiveConfig: Error while opening boxes: $e');
+      rethrow;
     }
-
-    await Hive.openBox(BNames.serverInstallationBox, encryptionCipher: cipher);
   }
 
   static Future<Uint8List> getEncryptedKey(final String encKey) async {
     const FlutterSecureStorage secureStorage = FlutterSecureStorage();
-    final bool hasEncryptionKey = await secureStorage.containsKey(key: encKey);
-    if (!hasEncryptionKey) {
-      final List<int> key = Hive.generateSecureKey();
-      await secureStorage.write(key: encKey, value: base64UrlEncode(key));
-    }
+    try {
+      final bool hasEncryptionKey =
+          await secureStorage.containsKey(key: encKey);
+      if (!hasEncryptionKey) {
+        final List<int> key = Hive.generateSecureKey();
+        await secureStorage.write(key: encKey, value: base64UrlEncode(key));
+      }
 
-    final String? string = await secureStorage.read(key: encKey);
-    return base64Url.decode(string!);
+      final String? string = await secureStorage.read(key: encKey);
+      return base64Url.decode(string!);
+    } on PlatformException catch (e) {
+      print('HiveConfig: Error while getting encryption key: $e');
+      rethrow;
+    }
   }
 }
 

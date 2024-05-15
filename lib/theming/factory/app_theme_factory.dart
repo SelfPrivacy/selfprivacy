@@ -50,7 +50,8 @@ abstract class AppThemeFactory {
   static Future<ColorScheme?> _getDynamicColors(final Brightness brightness) {
     try {
       return DynamicColorPlugin.getCorePalette().then(
-        (final corePallet) => corePallet?.toColorScheme(brightness: brightness),
+        (final corePallete) =>
+            corePallete?.toColorScheme(brightness: brightness),
       );
     } on PlatformException {
       return Future.value(null);

@@ -119,8 +119,9 @@ abstract class GraphQLApiMap {
     String token = '';
     final serverDetails = getIt<ApiConfigModel>().serverDetails;
     if (serverDetails != null) {
-      token = getIt<ApiConfigModel>().serverDetails!.apiToken;
+      token = serverDetails.apiToken;
     }
+
     return token;
   }
 

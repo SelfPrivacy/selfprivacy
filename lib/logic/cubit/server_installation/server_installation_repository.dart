@@ -475,7 +475,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteServerDetails() async {
     await box.delete(BNames.serverDetails);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveServerProviderType(final ServerProviderType type) async {

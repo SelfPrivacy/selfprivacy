@@ -88,7 +88,6 @@ class ApiConfigModel {
   }
 
   void clear() {
-    _localeCode = null;
     _serverProviderKey = null;
     _dnsProvider = null;
     _serverLocation = null;
@@ -101,7 +100,7 @@ class ApiConfigModel {
     _serverProvider = null;
   }
 
-  void init() {
+  Future<void> init() async {
     _localeCode = 'en';
     _serverProviderKey = _box.get(BNames.hetznerKey);
     _serverLocation = _box.get(BNames.serverLocation);

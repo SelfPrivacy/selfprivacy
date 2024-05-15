@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 
 class Localization extends StatelessWidget {
   const Localization({
+    required this.child,
     super.key,
-    this.child,
   });
 
-  final Widget? child;
+  final Widget child;
+
   @override
   Widget build(final BuildContext context) => EasyLocalization(
         supportedLocales: const [
@@ -37,6 +38,6 @@ class Localization extends StatelessWidget {
         useFallbackTranslations: true,
         saveLocale: false,
         useOnlyLangCode: false,
-        child: child!,
+        child: child,
       );
 }

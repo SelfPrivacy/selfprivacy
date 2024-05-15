@@ -14,17 +14,16 @@ class NewUserPage extends StatelessWidget {
     return BlocProvider(
       create: (final BuildContext context) {
         final jobCubit = context.read<JobsCubit>();
-        final jobState = jobCubit.state;
-        final users = <User>[];
-        users.addAll(context.read<UsersBloc>().state.users);
-        if (jobState is JobsStateWithJobs) {
-          final jobs = jobState.clientJobList;
-          for (final job in jobs) {
-            if (job is CreateUserJob) {
-              users.add(job.user);
-            }
-          }
-        }
+
+        // final jobsState = jobCubit.state;
+        // final users = <User>[
+        //   ...context.read<UsersBloc>().state.users,
+        //   if (jobsState is JobsStateWithJobs)
+        //     ...jobsState.clientJobList
+        //         .whereType<CreateUserJob>()
+        //         .map((final job) => job.user),
+        // ];
+
         return UserFormCubit(
           jobsCubit: jobCubit,
           fieldFactory: FieldCubitFactory(context),

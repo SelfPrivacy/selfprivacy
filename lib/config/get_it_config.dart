@@ -13,9 +13,11 @@ final GetIt getIt = GetIt.instance;
 
 Future<void> getItSetup() async {
   getIt.registerSingleton<NavigationService>(NavigationService());
-
   getIt.registerSingleton<ConsoleModel>(ConsoleModel());
-  getIt.registerSingleton<ApiConfigModel>(ApiConfigModel()..init());
+
+  final apiConfigModel = ApiConfigModel();
+  await apiConfigModel.init();
+  getIt.registerSingleton<ApiConfigModel>(apiConfigModel);
 
   getIt.registerSingleton<ApiConnectionRepository>(
     ApiConnectionRepository()..init(),

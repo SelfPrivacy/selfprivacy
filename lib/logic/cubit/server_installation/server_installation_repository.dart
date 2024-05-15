@@ -501,7 +501,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteServerProviderKey() async {
     await box.delete(BNames.hetznerKey);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveBackblazeKey(
@@ -512,7 +512,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteBackblazeKey() async {
     await box.delete(BNames.backblazeCredential);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> setDnsApiToken(final String key) async {
@@ -521,7 +521,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteDnsProviderKey() async {
     await box.delete(BNames.cloudFlareKey);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveDomain(final ServerDomain serverDomain) async {

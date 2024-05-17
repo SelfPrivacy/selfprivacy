@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
+import 'package:selfprivacy/config/localization.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/components/buttons/dialog_action_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';

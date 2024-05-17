@@ -63,8 +63,8 @@
         "change_application_theme": "Ihr Anwendungsdesign wechseln",
         "dangerous_settings": "Gefährliche Einstellungen",
         "reset_config_title": "Anwendungseinstellungen zurücksetzen",
-        "reset_config_description": "API Sclüssel und root Benutzer zurücksetzen.",
-        },
+        "reset_config_description": "API Sclüssel und root Benutzer zurücksetzen."
+    },
     "ssh": {
         "title": "SSH Schlüssel",
         "create": "SSH Schlüssel erstellen",

@@ -12,7 +12,7 @@ class _LanguagePicker extends StatelessWidget {
         trailing: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            context.locale.toString(),
+            Localization.getLanguageName(context.locale),
             style: Theme.of(context).textTheme.headlineSmall,
           ),
         ),
@@ -42,12 +42,18 @@ class _LanguagePickerDialog extends StatelessWidget {
           for (final locale
               in InheritedAppController.of(context).supportedLocales)
             ListTile(
-              // TODO: add locale to language name matcher
-              title: Text(locale.toString()),
+              title: Text(
+                Localization.getLanguageName(locale),
+                style: TextStyle(
+                  fontWeight: locale == context.locale
+                      ? FontWeight.w800
+                      : FontWeight.w400,
+                ),
+              ),
               onTap: () {
                 Navigator.of(context).pop(locale);
               },
-            )
+            ),
         ],
       );
 }

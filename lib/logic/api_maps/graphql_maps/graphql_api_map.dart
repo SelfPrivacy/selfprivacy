@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -17,9 +18,10 @@ class RequestLoggingLink extends Link {
   ]) async* {
     _addConsoleLog(
       GraphQlRequestConsoleLog(
+        // context: request.context,
+        operationType: request.type.name,
         operation: request.operation,
         variables: request.variables,
-        context: request.context,
       ),
     );
     yield* forward!(request);
@@ -32,9 +34,10 @@ class ResponseLoggingParser extends ResponseParser {
     final response = super.parseResponse(body);
     _addConsoleLog(
       GraphQlResponseConsoleLog(
+        // context: response.context,
         data: response.data,
         errors: response.errors,
-        context: response.context,
+        rawResponse: jsonEncode(response.response),
       ),
     );
     return response;

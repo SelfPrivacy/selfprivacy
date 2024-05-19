@@ -530,7 +530,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteDomain() async {
     await box.delete(BNames.serverDomain);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveIsServerStarted(final bool value) async {
@@ -604,6 +604,6 @@ class ServerInstallationRepository {
       BNames.hasFinalChecked,
       BNames.isLoading,
     ]);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 }

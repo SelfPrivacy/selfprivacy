@@ -1,5 +1,7 @@
-import 'package:gql/language.dart';
-import 'package:graphql/client.dart';
+import 'dart:convert';
+
+import 'package:gql/language.dart' as gql;
+import 'package:graphql/client.dart' as gql_client;
 import 'package:intl/intl.dart';
 
 enum ConsoleLogSeverity {
@@ -12,7 +14,6 @@ enum ConsoleLogSeverity {
 /// TODO(misterfourtytwo): should we add?
 ///
 /// * equality override
-/// * translations of theese strings
 sealed class ConsoleLog {
   ConsoleLog({
     final String? customTitle,
@@ -32,13 +33,23 @@ sealed class ConsoleLog {
   String get content;
 
   /// data available for copy in dialog
-  String? get shareableData => '$title\n'
-      '{\n$content\n}';
+  String? get shareableData => '{"title":"$title",\n'
+      '"timestamp": "$fullUTCString",\n'
+      '"data":{\n$content\n}'
+      '\n}';
 
   static final DateFormat _formatter = DateFormat('hh:mm:ss');
   String get timeString => _formatter.format(time);
+
+  String get fullUTCString => time.toUtc().toIso8601String();
 }
 
+abstract class LogWithRawResponse {
+  String get rawResponse;
+}
+
+/// entity for manually created logs, as opposed to automated ones coming
+/// from requests / responses
 class ManualConsoleLog extends ConsoleLog {
   ManualConsoleLog({
     required this.content,
@@ -72,8 +83,10 @@ class RestApiRequestConsoleLog extends ConsoleLog {
   @override
   String get title => 'Rest API Request';
   @override
-  String get content => 'method: $method\n'
-      'uri: $uri';
+  String get content => '"method": "$method",\n'
+      '"uri": "$uri",\n'
+      '"headers": ${jsonEncode(headers)},\n'
+      '"data": $data';
 }
 
 class RestApiResponseConsoleLog extends ConsoleLog {
@@ -93,49 +106,70 @@ class RestApiResponseConsoleLog extends ConsoleLog {
   @override
   String get title => 'Rest API Response';
   @override
-  String get content => 'method: $method | status code: $statusCode\n'
-      'uri: $uri';
+  String get content => '"method": "$method",\n'
+      '"status_code": $statusCode,\n'
+      '"uri": "$uri",\n'
+      '"data": $data';
 }
+
+/// there is no actual getter for context fields outside of its class
+/// one can extract unique entries by their type, which implements
+/// `ContextEntry` class, I'll leave the code here if in the future
+/// some entries will actually be needed.
+// extension ContextEncoder on gql_client.Context {
+//   String get encode {
+//     return '""';
+//   }
+// }
 
 class GraphQlRequestConsoleLog extends ConsoleLog {
   GraphQlRequestConsoleLog({
-    this.operation,
-    this.variables,
-    this.context,
+    required this.operationType,
+    required this.operation,
+    required this.variables,
+    // this.context,
     super.severity,
   });
 
-  final Context? context;
-  final Operation? operation;
+  // final gql_client.Context? context;
+  final String operationType;
+  final gql_client.Operation? operation;
+  String get operationDocument =>
+      operation != null ? gql.printNode(operation!.document) : 'null';
   final Map<String, dynamic>? variables;
 
   @override
   String get title => 'GraphQL Request';
   @override
-  String get content => 'name: ${operation?.operationName}\n'
-      'document: ${operation?.document != null ? printNode(operation!.document) : null}';
-  String get stringifiedOperation => operation == null
-      ? 'null'
-      : 'Operation{\n'
-          '\tname: ${operation?.operationName},\n'
-          '\tdocument: ${operation?.document != null ? printNode(operation!.document) : null}\n'
-          '}';
+  String get content =>
+      // '"context": ${context?.encode},\n'
+      '"variables": ${jsonEncode(variables)},\n'
+      '"type": "$operationType",\n'
+      '"name": "${operation?.operationName}",\n'
+      '"document": ${jsonEncode(operationDocument)}';
 }
 
-class GraphQlResponseConsoleLog extends ConsoleLog {
+class GraphQlResponseConsoleLog extends ConsoleLog
+    implements LogWithRawResponse {
   GraphQlResponseConsoleLog({
+    required this.rawResponse,
+    // this.context,
     this.data,
     this.errors,
-    this.context,
     super.severity,
   });
 
-  final Context? context;
+  @override
+  final String rawResponse;
+  // final gql_client.Context? context;
   final Map<String, dynamic>? data;
-  final List<GraphQLError>? errors;
+  final List<gql_client.GraphQLError>? errors;
 
   @override
   String get title => 'GraphQL Response';
   @override
-  String get content => 'data: $data';
+  String get content =>
+      // '"context": ${context?.encode},\n'
+      '"data": ${jsonEncode(data)},\n'
+      '"errors": $errors';
 }

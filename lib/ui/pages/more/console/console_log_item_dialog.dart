@@ -7,66 +7,92 @@ extension on ConsoleLog {
   List<Widget> unwrapContent(final BuildContext context) => switch (this) {
         (final RestApiRequestConsoleLog log) => [
             if (log.method != null) _KeyValueRow('method', log.method),
-            if (log.uri != null) _KeyValueRow('uri', log.uri.toString()),
+            if (log.uri != null) _KeyValueRow('uri', '${log.uri}'),
 
             // headers bloc
-            if (log.headers?.isNotEmpty ?? false)
+            if (log.headers?.isNotEmpty ?? false) ...[
               const _SectionRow('console_page.headers'),
-            ...?log.headers?.entries
-                .map((final entry) => _KeyValueRow(entry.key, entry.value)),
+              for (final entry in log.headers!.entries)
+                _KeyValueRow(entry.key, '${entry.value}'),
+            ],
 
-            // data bloc
+            // data
             const _SectionRow('console_page.data'),
-            _DataRow(log.data?.toString()),
+            _DataRow('${log.data}'),
           ],
         (final RestApiResponseConsoleLog log) => [
-            if (log.method != null) _KeyValueRow('method', log.method),
-            if (log.uri != null) _KeyValueRow('uri', log.uri.toString()),
+            if (log.method != null) _KeyValueRow('method', '${log.method}'),
+            if (log.uri != null) _KeyValueRow('uri', '${log.uri}'),
             if (log.statusCode != null)
-              _KeyValueRow('statusCode', log.statusCode.toString()),
+              _KeyValueRow('statusCode', '${log.statusCode}'),
 
-            // data bloc
+            // data
             const _SectionRow('console_page.response_data'),
-            _DataRow(log.data?.toString()),
+            _DataRow('${log.data}'),
           ],
         (final GraphQlRequestConsoleLog log) => [
-            // context
-            const _SectionRow('console_page.context'),
-            _DataRow(log.context?.toString()),
-            // data
-            if (log.operation != null)
-              const _SectionRow('console_page.operation'),
-            _DataRow(log.stringifiedOperation), // errors
-            if (log.variables?.isNotEmpty ?? false)
-              const _SectionRow('console_page.variables'),
-            ...?log.variables?.entries.map(
-              (final entry) => _KeyValueRow(
-                entry.key,
-                '${entry.value}',
+            // // context
+            // if (log.context != null) ...[
+            //   const _SectionRow('console_page.context'),
+            //   _DataRow('${log.context}'),
+            // ],
+
+            const _SectionRow('console_page.operation'),
+            if (log.operation != null) ...[
+              _KeyValueRow(
+                'console_page.operation_type'.tr(),
+                log.operationType,
               ),
-            ),
+              _KeyValueRow(
+                'console_page.operation_name'.tr(),
+                log.operation?.operationName,
+              ),
+              const Divider(),
+              // data
+              _DataRow(log.operationDocument),
+            ],
+            // preset variables
+            if (log.variables?.isNotEmpty ?? false) ...[
+              const _SectionRow('console_page.variables'),
+              for (final entry in log.variables!.entries)
+                _KeyValueRow(entry.key, '${entry.value}'),
+            ],
           ],
         (final GraphQlResponseConsoleLog log) => [
-            // context
-            const _SectionRow('console_page.context'),
-            _DataRow(log.context?.toString()),
+            // // context
+            // const _SectionRow('console_page.context'),
+            // _DataRow('${log.context}'),
             // data
-            if (log.data != null) const _SectionRow('console_page.data'),
-            ...?log.data?.entries.map(
-              (final entry) => _KeyValueRow(
-                entry.key,
-                '${entry.value}',
-              ),
-            ),
+            if (log.data != null) ...[
+              const _SectionRow('console_page.data'),
+              for (final entry in log.data!.entries)
+                _KeyValueRow(entry.key, '${entry.value}'),
+            ],
             // errors
-            if (log.errors?.isNotEmpty ?? false)
+            if (log.errors?.isNotEmpty ?? false) ...[
               const _SectionRow('console_page.errors'),
-            ...?log.errors?.map(
-              (final entry) => _KeyValueRow(
-                entry.message,
-                '${entry.locations}',
-              ),
-            ),
+              for (final entry in log.errors!) ...[
+                _KeyValueRow(
+                  '${'console_page.error_message'.tr()}: ',
+                  entry.message,
+                ),
+                _KeyValueRow(
+                  '${'console_page.error_path'.tr()}: ',
+                  '${entry.path}',
+                ),
+                if (entry.locations?.isNotEmpty ?? false)
+                  _KeyValueRow(
+                    '${'console_page.error_locations'.tr()}: ',
+                    '${entry.locations}',
+                  ),
+                if (entry.extensions?.isNotEmpty ?? false)
+                  _KeyValueRow(
+                    '${'console_page.error_extensions'.tr()}: ',
+                    '${entry.extensions}',
+                  ),
+                const Divider(),
+              ],
+            ],
           ],
         (final ManualConsoleLog log) => [
             _DataRow(log.content),
@@ -74,6 +100,7 @@ extension on ConsoleLog {
       };
 }
 
+/// dialog with detailed log content
 class ConsoleItemDialog extends StatelessWidget {
   const ConsoleItemDialog({
     required this.log,
@@ -83,80 +110,66 @@ class ConsoleItemDialog extends StatelessWidget {
   final ConsoleLog log;
 
   @override
-  Widget build(final BuildContext context) {
-    final content = log.unwrapContent(context);
-
-    return AlertDialog(
-      scrollable: true,
-      title: Text(log.title),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Text('logged_at'.tr()),
-              SelectableText(
-                log.timeString,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontFeatures: [FontFeature.tabularFigures()],
+  Widget build(final BuildContext context) => AlertDialog(
+        scrollable: true,
+        title: Text(log.title),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 12,
+        ),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SelectableText.rich(
+                TextSpan(
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '${'console_page.logged_at'.tr()}: ',
+                      style: const TextStyle(),
+                    ),
+                    TextSpan(
+                      text: '${log.timeString} (${log.fullUTCString})',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontFeatures: [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-          const Divider(),
-          ...content,
-        ],
-      ),
-      actions: [
-        // A button to copy the request to the clipboard
-        if (log.shareableData?.isNotEmpty ?? false)
-          TextButton(
-            onPressed: () => PlatformAdapter.setClipboard(log.shareableData!),
-            child: Text('console_page.copy'.tr()),
-          ),
-        // close dialog
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text('basis.close'.tr()),
-        ),
-      ],
-    );
-  }
-}
-
-class _KeyValueRow extends StatelessWidget {
-  const _KeyValueRow(this.title, this.value);
-
-  final String title;
-  final String? value;
-
-  @override
-  Widget build(final BuildContext context) => SelectableText.rich(
-        TextSpan(
-          style: DefaultTextStyle.of(context).style,
-          children: <TextSpan>[
-            TextSpan(
-              text: '$title: ',
-              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            TextSpan(text: value ?? ''),
+            const Divider(),
+            ...log.unwrapContent(context),
           ],
         ),
+        actions: [
+          if (log is LogWithRawResponse)
+            TextButton(
+              onPressed: () => PlatformAdapter.setClipboard(
+                (log as LogWithRawResponse).rawResponse,
+              ),
+              child: Text('console_page.copy_raw'.tr()),
+            ),
+          // A button to copy the request to the clipboard
+          if (log.shareableData?.isNotEmpty ?? false)
+            TextButton(
+              onPressed: () => PlatformAdapter.setClipboard(log.shareableData!),
+              child: Text('console_page.copy'.tr()),
+            ),
+          // close dialog
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('basis.close'.tr()),
+          ),
+        ],
       );
 }
 
-class _DataRow extends StatelessWidget {
-  const _DataRow(this.data);
-  final String? data;
-
-  @override
-  Widget build(final BuildContext context) => SelectableText(
-        data ?? 'null',
-        style: const TextStyle(fontWeight: FontWeight.w400),
-      );
-}
-
+/// different sections delimiter with `title`
 class _SectionRow extends StatelessWidget {
   const _SectionRow(this.title);
 
@@ -181,6 +194,47 @@ class _SectionRow extends StatelessWidget {
               fontSize: 20,
             ),
           ),
+        ),
+      );
+}
+
+/// data row with a {key: value} pair
+class _KeyValueRow extends StatelessWidget {
+  const _KeyValueRow(this.title, this.value);
+
+  final String title;
+  final String? value;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: SelectableText.rich(
+          TextSpan(
+            style: DefaultTextStyle.of(context).style,
+            children: <TextSpan>[
+              TextSpan(
+                text: '$title: ',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(text: value ?? ''),
+            ],
+          ),
+        ),
+      );
+}
+
+/// data row with only text
+class _DataRow extends StatelessWidget {
+  const _DataRow(this.data);
+
+  final String? data;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: SelectableText(
+          data ?? 'null',
+          style: const TextStyle(fontWeight: FontWeight.w400),
         ),
       );
 }

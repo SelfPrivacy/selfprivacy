@@ -16,8 +16,9 @@ class ConsolePage extends StatefulWidget {
 }
 
 class _ConsolePageState extends State<ConsolePage> {
+  ConsoleModel get console => getIt<ConsoleModel>();
+
   /// should freeze logs state to properly read logs
-  bool paused = false;
   late final Future<void> future;
 
   @override
@@ -25,12 +26,12 @@ class _ConsolePageState extends State<ConsolePage> {
     super.initState();
 
     future = getIt.allReady();
-    getIt<ConsoleModel>().addListener(update);
+    console.addListener(update);
   }
 
   @override
   void dispose() {
-    getIt<ConsoleModel>().removeListener(update);
+    console.removeListener(update);
 
     super.dispose();
   }
@@ -40,15 +41,10 @@ class _ConsolePageState extends State<ConsolePage> {
     /// unmounted or during frame build, adding as postframe callback ensures
     /// that element is marked for rebuild
     WidgetsBinding.instance.addPostFrameCallback((final _) {
-      if (!paused && mounted) {
+      if (mounted) {
         setState(() => {});
       }
     });
-  }
-
-  void togglePause() {
-    paused ^= true;
-    setState(() {});
   }
 
   @override
@@ -63,34 +59,31 @@ class _ConsolePageState extends State<ConsolePage> {
             actions: [
               IconButton(
                 icon: Icon(
-                  paused ? Icons.play_arrow_outlined : Icons.pause_outlined,
+                  console.paused
+                      ? Icons.play_arrow_outlined
+                      : Icons.pause_outlined,
                 ),
-                onPressed: togglePause,
+                onPressed: console.paused ? console.play : console.pause,
               ),
             ],
           ),
-          body: SelectionArea(
-            child: Scrollbar(
-              child: FutureBuilder(
-                future: future,
-                builder: (
-                  final BuildContext context,
-                  final AsyncSnapshot<void> snapshot,
-                ) {
-                  if (snapshot.hasData) {
-                    final List<ConsoleLog> logs =
-                        getIt.get<ConsoleModel>().logs;
+          body: Scrollbar(
+            child: FutureBuilder(
+              future: future,
+              builder: (
+                final BuildContext context,
+                final AsyncSnapshot<void> snapshot,
+              ) {
+                if (snapshot.hasData) {
+                  final List<ConsoleLog> logs = console.logs;
 
-                    return logs.isEmpty
-                        ? const _ConsoleViewEmpty()
-                        : _ConsoleViewLoaded(
-                            logs: logs,
-                          );
-                  }
+                  return logs.isEmpty
+                      ? const _ConsoleViewEmpty()
+                      : _ConsoleViewLoaded(logs: logs);
+                }
 
-                  return const _ConsoleViewLoading();
-                },
-              ),
+                return const _ConsoleViewLoading();
+              },
             ),
           ),
         ),
@@ -135,7 +128,7 @@ class _ConsoleViewLoaded extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => ListView.separated(
         primary: true,
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: logs.length,
         itemBuilder: (final BuildContext context, final int index) {
           final log = logs[logs.length - 1 - index];

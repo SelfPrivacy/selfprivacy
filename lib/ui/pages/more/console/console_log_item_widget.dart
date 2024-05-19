@@ -35,37 +35,41 @@ class ConsoleLogItemWidget extends StatelessWidget {
   final ConsoleLog log;
 
   @override
-  Widget build(final BuildContext context) => ListTile(
-        dense: true,
-        title: SelectableText.rich(
-          TextSpan(
-            style: DefaultTextStyle.of(context).style,
-            children: <TextSpan>[
-              TextSpan(
-                text: '${log.timeString}: ',
-                style: const TextStyle(
-                  fontFeatures: [FontFeature.tabularFigures()],
+  Widget build(final BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: ListTile(
+          dense: true,
+          title: Text.rich(
+            TextSpan(
+              style: DefaultTextStyle.of(context).style,
+              children: <TextSpan>[
+                TextSpan(
+                  text: '${log.timeString}: ',
+                  style: const TextStyle(
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
                 ),
-              ),
-              TextSpan(
-                text: log.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+                TextSpan(
+                  text: log.title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        subtitle: Text(
-          log.content,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 3,
-        ),
-        leading: Icon(log.resolveIcon()),
-        iconColor: log.resolveColor(context),
-        onTap: () => showDialog(
-          context: context,
-          builder: (final BuildContext context) => ConsoleItemDialog(log: log),
+          subtitle: Text(
+            log.content,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
+          ),
+          leading: Icon(log.resolveIcon()),
+          iconColor: log.resolveColor(context),
+          onTap: () => showDialog(
+            context: context,
+            builder: (final BuildContext context) =>
+                ConsoleItemDialog(log: log),
+          ),
         ),
       );
 }

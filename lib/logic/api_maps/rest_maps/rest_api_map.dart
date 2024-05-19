@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -68,10 +69,10 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   ) async {
     addConsoleLog(
       RestApiRequestConsoleLog(
-        method: options.method,
-        data: options.data.toString(),
-        headers: options.headers,
         uri: options.uri,
+        method: options.method,
+        headers: options.headers,
+        data: jsonEncode(options.data),
       ),
     );
     return super.onRequest(options, handler);
@@ -84,10 +85,10 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   ) async {
     addConsoleLog(
       RestApiResponseConsoleLog(
+        uri: response.realUri,
         method: response.requestOptions.method,
         statusCode: response.statusCode,
-        data: response.data.toString(),
-        uri: response.realUri,
+        data: jsonEncode(response.data),
       ),
     );
     return super.onResponse(
@@ -103,12 +104,13 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   ) async {
     final Response? response = err.response;
     log(err.toString());
+
     addConsoleLog(
       ManualConsoleLog.warning(
         customTitle: 'RestAPI error',
-        content: 'response-uri: ${response?.realUri}\n'
-            'code: ${response?.statusCode}\n'
-            'data: ${response?.toString()}\n',
+        content: '"uri": "${response?.realUri}",\n'
+            '"status_code": ${response?.statusCode},\n'
+            '"response": ${jsonEncode(response)}',
       ),
     );
     return super.onError(err, handler);

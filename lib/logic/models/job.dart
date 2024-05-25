@@ -62,6 +62,36 @@ class UpgradeServerJob extends ClientJob {
       );
 }
 
+class CollectNixGarbageJob extends ClientJob {
+  CollectNixGarbageJob({
+    super.status,
+    super.message,
+    super.id,
+  }) : super(title: 'jobs.collect_nix_garbage'.tr());
+
+  @override
+  bool canAddTo(final List<ClientJob> jobs) =>
+      !jobs.any((final job) => job is CollectNixGarbageJob);
+
+  @override
+  Future<(bool, String)> execute() async {
+    final result =
+        await getIt<ApiConnectionRepository>().api.collectNixGarbage();
+    return (result.success, result.message ?? '');
+  }
+
+  @override
+  CollectNixGarbageJob copyWithNewStatus({
+    required final JobStatusEnum status,
+    final String? message,
+  }) =>
+      CollectNixGarbageJob(
+        status: status,
+        message: message,
+        id: id,
+      );
+}
+
 class RebootServerJob extends ClientJob {
   RebootServerJob({
     super.status,

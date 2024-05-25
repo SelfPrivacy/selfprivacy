@@ -178,6 +178,45 @@ class JobsCubit extends Cubit<JobsState> {
     }
   }
 
+  Future<void> collectNixGarbage() async {
+    if (state is JobsStateEmpty) {
+      emit(
+        JobsStateLoading(
+          [CollectNixGarbageJob(status: JobStatusEnum.running)],
+          null,
+          const [],
+        ),
+      );
+      final result =
+          await getIt<ApiConnectionRepository>().api.collectNixGarbage();
+      if (result.success && result.data != null) {
+        emit(
+          JobsStateLoading(
+            [CollectNixGarbageJob(status: JobStatusEnum.finished)],
+            result.data!.uid,
+            const [],
+          ),
+        );
+      } else if (result.success) {
+        emit(
+          JobsStateFinished(
+            [CollectNixGarbageJob(status: JobStatusEnum.finished)],
+            null,
+            const [],
+          ),
+        );
+      } else {
+        emit(
+          JobsStateFinished(
+            [CollectNixGarbageJob(status: JobStatusEnum.error)],
+            null,
+            const [],
+          ),
+        );
+      }
+    }
+  }
+
   Future<void> acknowledgeFinished() async {
     if (state is! JobsStateFinished) {
       return;

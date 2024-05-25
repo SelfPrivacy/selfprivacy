@@ -565,6 +565,8 @@
         "upgrade_success": "Server upgrade started",
         "upgrade_failed": "Failed to upgrade server",
         "upgrade_server": "Upgrade server",
+        "collect_nix_garbage": "Collect system garbage",
+        "collect_nix_garbage_failed": "Failed to collect system garbage",
         "reboot_server": "Reboot server",
         "create_ssh_key": "Create SSH key for {}",
         "delete_ssh_key": "Delete SSH key for {}",

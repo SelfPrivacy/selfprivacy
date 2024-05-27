@@ -564,7 +564,9 @@
         "start_server_upgrade": "Serveri värskenduse käivitamine",
         "change_auto_upgrade_settings": "Automaatse värskenduse seadete muutmine",
         "change_server_timezone": "Serveri ajavööndi muutmine",
-        "change_ssh_settings": "Muuda SSH seadeid"
+        "change_ssh_settings": "Muuda SSH seadeid",
+        "collect_nix_garbage": "Koguge süsteemi prügi",
+        "collect_nix_garbage_failed": "Süsteemi prügi kogumine ebaõnnestus"
     },
     "validations": {
         "required": "Nõutud",

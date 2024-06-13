@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
@@ -63,7 +64,7 @@ class JobsContent extends StatelessWidget {
             context.read<ServerInstallationCubit>().state;
         if (state is JobsStateEmpty) {
           widgets = [
-            const SizedBox(height: 80),
+            const Gap(80),
             Center(
               child: Text(
                 'jobs.empty'.tr(),
@@ -75,12 +76,12 @@ class JobsContent extends StatelessWidget {
           if (installationState is ServerInstallationFinished) {
             widgets = [
               ...widgets,
-              const SizedBox(height: 80),
+              const Gap(80),
               BrandButton.rised(
                 onPressed: () => context.read<JobsCubit>().upgradeServer(),
                 text: 'jobs.upgrade_server'.tr(),
               ),
-              const SizedBox(height: 10),
+              const Gap(10),
               BrandButton.text(
                 title: 'jobs.reboot_server'.tr(),
                 onPressed: () {
@@ -189,7 +190,7 @@ class JobsContent extends StatelessWidget {
                                     style:
                                         Theme.of(context).textTheme.labelSmall,
                                   ),
-                                const SizedBox(height: 8),
+                                const Gap(8),
                                 LinearProgressIndicator(
                                   value: rebuildJob?.progress == null
                                       ? 0.0
@@ -206,7 +207,7 @@ class JobsContent extends StatelessWidget {
                                   minHeight: 7.0,
                                   borderRadius: BorderRadius.circular(7.0),
                                 ),
-                                const SizedBox(height: 8),
+                                const Gap(8),
                                 if (rebuildJob?.error != null ||
                                     rebuildJob?.result != null ||
                                     rebuildJob?.statusText != null)
@@ -282,7 +283,7 @@ class JobsContent extends StatelessWidget {
                     (final job) => job.uid == state.rebuildJobUid,
                   );
                   if (rebuildJob == null) {
-                    return const SizedBox();
+                    return const SizedBox.shrink();
                   }
                   return Row(
                     children: [
@@ -322,7 +323,7 @@ class JobsContent extends StatelessWidget {
                                   rebuildJob.description,
                                   style: Theme.of(context).textTheme.labelSmall,
                                 ),
-                                const SizedBox(height: 8),
+                                const Gap(8),
                                 LinearProgressIndicator(
                                   value: rebuildJob.progress == null
                                       ? 0.0
@@ -339,7 +340,7 @@ class JobsContent extends StatelessWidget {
                                   minHeight: 7.0,
                                   borderRadius: BorderRadius.circular(7.0),
                                 ),
-                                const SizedBox(height: 8),
+                                const Gap(8),
                                 if (rebuildJob.error != null ||
                                     rebuildJob.result != null ||
                                     rebuildJob.statusText != null)
@@ -360,7 +361,7 @@ class JobsContent extends StatelessWidget {
                   );
                 },
               ),
-            const SizedBox(height: 16),
+            const Gap(16),
             BrandButton.rised(
               onPressed: () => context.read<JobsCubit>().acknowledgeFinished(),
               text: 'basis.done'.tr(),
@@ -403,7 +404,7 @@ class JobsContent extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const Gap(8),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
@@ -423,7 +424,7 @@ class JobsContent extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const Gap(16),
             BrandButton.rised(
               onPressed: hasBlockingJobs
                   ? null
@@ -436,18 +437,18 @@ class JobsContent extends StatelessWidget {
           controller: controller,
           padding: paddingH15V0,
           children: [
-            const SizedBox(height: 16),
+            const Gap(16),
             Center(
               child: Text(
                 'jobs.title'.tr(),
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
-            const SizedBox(height: 20),
+            const Gap(20),
             ...widgets,
-            const SizedBox(height: 8),
+            const Gap(8),
             const Divider(height: 0),
-            const SizedBox(height: 8),
+            const Gap(8),
             if (serverJobs.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -489,7 +490,7 @@ class JobsContent extends StatelessWidget {
                     },
                   ),
                 ),
-            const SizedBox(height: 24),
+            const Gap(24),
           ],
         );
       },

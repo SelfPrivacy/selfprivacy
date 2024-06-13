@@ -7043,6 +7043,663 @@ class _CopyWithStubImpl$Mutation$RunSystemUpgrade$system$runSystemUpgrade<TRes>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }
 
+class Mutation$NixCollectGarbage {
+  Mutation$NixCollectGarbage({
+    required this.system,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$NixCollectGarbage.fromJson(Map<String, dynamic> json) {
+    final l$system = json['system'];
+    final l$$__typename = json['__typename'];
+    return Mutation$NixCollectGarbage(
+      system: Mutation$NixCollectGarbage$system.fromJson(
+          (l$system as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$NixCollectGarbage$system system;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$system = system;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$system,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$NixCollectGarbage) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$NixCollectGarbage
+    on Mutation$NixCollectGarbage {
+  CopyWith$Mutation$NixCollectGarbage<Mutation$NixCollectGarbage>
+      get copyWith => CopyWith$Mutation$NixCollectGarbage(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$NixCollectGarbage<TRes> {
+  factory CopyWith$Mutation$NixCollectGarbage(
+    Mutation$NixCollectGarbage instance,
+    TRes Function(Mutation$NixCollectGarbage) then,
+  ) = _CopyWithImpl$Mutation$NixCollectGarbage;
+
+  factory CopyWith$Mutation$NixCollectGarbage.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$NixCollectGarbage;
+
+  TRes call({
+    Mutation$NixCollectGarbage$system? system,
+    String? $__typename,
+  });
+  CopyWith$Mutation$NixCollectGarbage$system<TRes> get system;
+}
+
+class _CopyWithImpl$Mutation$NixCollectGarbage<TRes>
+    implements CopyWith$Mutation$NixCollectGarbage<TRes> {
+  _CopyWithImpl$Mutation$NixCollectGarbage(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$NixCollectGarbage _instance;
+
+  final TRes Function(Mutation$NixCollectGarbage) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? system = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$NixCollectGarbage(
+        system: system == _undefined || system == null
+            ? _instance.system
+            : (system as Mutation$NixCollectGarbage$system),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$NixCollectGarbage$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$NixCollectGarbage$system(
+        local$system, (e) => call(system: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$NixCollectGarbage<TRes>
+    implements CopyWith$Mutation$NixCollectGarbage<TRes> {
+  _CopyWithStubImpl$Mutation$NixCollectGarbage(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$NixCollectGarbage$system? system,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$NixCollectGarbage$system<TRes> get system =>
+      CopyWith$Mutation$NixCollectGarbage$system.stub(_res);
+}
+
+const documentNodeMutationNixCollectGarbage = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'NixCollectGarbage'),
+    variableDefinitions: [],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'system'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'nixCollectGarbage'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'job'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'basicApiJobsFields'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitionbasicMutationReturnFields,
+  fragmentDefinitionbasicApiJobsFields,
+]);
+Mutation$NixCollectGarbage _parserFn$Mutation$NixCollectGarbage(
+        Map<String, dynamic> data) =>
+    Mutation$NixCollectGarbage.fromJson(data);
+typedef OnMutationCompleted$Mutation$NixCollectGarbage = FutureOr<void>
+    Function(
+  Map<String, dynamic>?,
+  Mutation$NixCollectGarbage?,
+);
+
+class Options$Mutation$NixCollectGarbage
+    extends graphql.MutationOptions<Mutation$NixCollectGarbage> {
+  Options$Mutation$NixCollectGarbage({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$NixCollectGarbage? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$NixCollectGarbage? onCompleted,
+    graphql.OnMutationUpdate<Mutation$NixCollectGarbage>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$NixCollectGarbage(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationNixCollectGarbage,
+          parserFn: _parserFn$Mutation$NixCollectGarbage,
+        );
+
+  final OnMutationCompleted$Mutation$NixCollectGarbage? onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$NixCollectGarbage
+    extends graphql.WatchQueryOptions<Mutation$NixCollectGarbage> {
+  WatchOptions$Mutation$NixCollectGarbage({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$NixCollectGarbage? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationNixCollectGarbage,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$NixCollectGarbage,
+        );
+}
+
+extension ClientExtension$Mutation$NixCollectGarbage on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$NixCollectGarbage>>
+      mutate$NixCollectGarbage(
+              [Options$Mutation$NixCollectGarbage? options]) async =>
+          await this.mutate(options ?? Options$Mutation$NixCollectGarbage());
+  graphql.ObservableQuery<
+      Mutation$NixCollectGarbage> watchMutation$NixCollectGarbage(
+          [WatchOptions$Mutation$NixCollectGarbage? options]) =>
+      this.watchMutation(options ?? WatchOptions$Mutation$NixCollectGarbage());
+}
+
+class Mutation$NixCollectGarbage$system {
+  Mutation$NixCollectGarbage$system({
+    required this.nixCollectGarbage,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$NixCollectGarbage$system.fromJson(
+      Map<String, dynamic> json) {
+    final l$nixCollectGarbage = json['nixCollectGarbage'];
+    final l$$__typename = json['__typename'];
+    return Mutation$NixCollectGarbage$system(
+      nixCollectGarbage:
+          Mutation$NixCollectGarbage$system$nixCollectGarbage.fromJson(
+              (l$nixCollectGarbage as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$NixCollectGarbage$system$nixCollectGarbage nixCollectGarbage;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$nixCollectGarbage = nixCollectGarbage;
+    _resultData['nixCollectGarbage'] = l$nixCollectGarbage.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$nixCollectGarbage = nixCollectGarbage;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$nixCollectGarbage,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$NixCollectGarbage$system) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$nixCollectGarbage = nixCollectGarbage;
+    final lOther$nixCollectGarbage = other.nixCollectGarbage;
+    if (l$nixCollectGarbage != lOther$nixCollectGarbage) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$NixCollectGarbage$system
+    on Mutation$NixCollectGarbage$system {
+  CopyWith$Mutation$NixCollectGarbage$system<Mutation$NixCollectGarbage$system>
+      get copyWith => CopyWith$Mutation$NixCollectGarbage$system(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$NixCollectGarbage$system<TRes> {
+  factory CopyWith$Mutation$NixCollectGarbage$system(
+    Mutation$NixCollectGarbage$system instance,
+    TRes Function(Mutation$NixCollectGarbage$system) then,
+  ) = _CopyWithImpl$Mutation$NixCollectGarbage$system;
+
+  factory CopyWith$Mutation$NixCollectGarbage$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$NixCollectGarbage$system;
+
+  TRes call({
+    Mutation$NixCollectGarbage$system$nixCollectGarbage? nixCollectGarbage,
+    String? $__typename,
+  });
+  CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage<TRes>
+      get nixCollectGarbage;
+}
+
+class _CopyWithImpl$Mutation$NixCollectGarbage$system<TRes>
+    implements CopyWith$Mutation$NixCollectGarbage$system<TRes> {
+  _CopyWithImpl$Mutation$NixCollectGarbage$system(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$NixCollectGarbage$system _instance;
+
+  final TRes Function(Mutation$NixCollectGarbage$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? nixCollectGarbage = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$NixCollectGarbage$system(
+        nixCollectGarbage:
+            nixCollectGarbage == _undefined || nixCollectGarbage == null
+                ? _instance.nixCollectGarbage
+                : (nixCollectGarbage
+                    as Mutation$NixCollectGarbage$system$nixCollectGarbage),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage<TRes>
+      get nixCollectGarbage {
+    final local$nixCollectGarbage = _instance.nixCollectGarbage;
+    return CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage(
+        local$nixCollectGarbage, (e) => call(nixCollectGarbage: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$NixCollectGarbage$system<TRes>
+    implements CopyWith$Mutation$NixCollectGarbage$system<TRes> {
+  _CopyWithStubImpl$Mutation$NixCollectGarbage$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$NixCollectGarbage$system$nixCollectGarbage? nixCollectGarbage,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage<TRes>
+      get nixCollectGarbage =>
+          CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage.stub(
+              _res);
+}
+
+class Mutation$NixCollectGarbage$system$nixCollectGarbage
+    implements Fragment$basicMutationReturnFields$$GenericJobMutationReturn {
+  Mutation$NixCollectGarbage$system$nixCollectGarbage({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericJobMutationReturn',
+    this.job,
+  });
+
+  factory Mutation$NixCollectGarbage$system$nixCollectGarbage.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    final l$job = json['job'];
+    return Mutation$NixCollectGarbage$system$nixCollectGarbage(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+      job: l$job == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$job as Map<String, dynamic>)),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  final Fragment$basicApiJobsFields? job;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    final l$job = job;
+    _resultData['job'] = l$job?.toJson();
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    final l$job = job;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+      l$job,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$NixCollectGarbage$system$nixCollectGarbage) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    final l$job = job;
+    final lOther$job = other.job;
+    if (l$job != lOther$job) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$NixCollectGarbage$system$nixCollectGarbage
+    on Mutation$NixCollectGarbage$system$nixCollectGarbage {
+  CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage<
+          Mutation$NixCollectGarbage$system$nixCollectGarbage>
+      get copyWith =>
+          CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage<
+    TRes> {
+  factory CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage(
+    Mutation$NixCollectGarbage$system$nixCollectGarbage instance,
+    TRes Function(Mutation$NixCollectGarbage$system$nixCollectGarbage) then,
+  ) = _CopyWithImpl$Mutation$NixCollectGarbage$system$nixCollectGarbage;
+
+  factory CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$NixCollectGarbage$system$nixCollectGarbage;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    Fragment$basicApiJobsFields? job,
+  });
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job;
+}
+
+class _CopyWithImpl$Mutation$NixCollectGarbage$system$nixCollectGarbage<TRes>
+    implements
+        CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage<TRes> {
+  _CopyWithImpl$Mutation$NixCollectGarbage$system$nixCollectGarbage(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$NixCollectGarbage$system$nixCollectGarbage _instance;
+
+  final TRes Function(Mutation$NixCollectGarbage$system$nixCollectGarbage)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+    Object? job = _undefined,
+  }) =>
+      _then(Mutation$NixCollectGarbage$system$nixCollectGarbage(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+        job: job == _undefined
+            ? _instance.job
+            : (job as Fragment$basicApiJobsFields?),
+      ));
+
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job {
+    final local$job = _instance.job;
+    return local$job == null
+        ? CopyWith$Fragment$basicApiJobsFields.stub(_then(_instance))
+        : CopyWith$Fragment$basicApiJobsFields(local$job, (e) => call(job: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$NixCollectGarbage$system$nixCollectGarbage<
+        TRes>
+    implements
+        CopyWith$Mutation$NixCollectGarbage$system$nixCollectGarbage<TRes> {
+  _CopyWithStubImpl$Mutation$NixCollectGarbage$system$nixCollectGarbage(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    Fragment$basicApiJobsFields? job,
+  }) =>
+      _res;
+
+  CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
+      CopyWith$Fragment$basicApiJobsFields.stub(_res);
+}
+
 class Mutation$RunSystemUpgradeFallback {
   Mutation$RunSystemUpgradeFallback({
     required this.system,

@@ -443,6 +443,7 @@ type SystemMutations {
   runSystemUpgrade: GenericJobMutationReturn!
   rebootSystem: GenericMutationReturn!
   pullRepositoryChanges: GenericMutationReturn!
+  nixCollectGarbage: GenericJobMutationReturn!
 }
 
 type SystemProviderInfo {

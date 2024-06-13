@@ -144,4 +144,38 @@ mixin ServerActionsApi on GraphQLApiMap {
       );
     }
   }
+
+  Future<GenericResult<ServerJob?>> collectNixGarbage() async {
+    try {
+      final GraphQLClient client = await getClient();
+      final result = await client.mutate$NixCollectGarbage();
+      if (result.hasException) {
+        return GenericResult(
+          success: false,
+          data: null,
+        );
+      } else if (result.parsedData!.system.nixCollectGarbage.success &&
+          result.parsedData!.system.nixCollectGarbage.job != null) {
+        return GenericResult(
+          success: true,
+          data: ServerJob.fromGraphQL(
+            result.parsedData!.system.nixCollectGarbage.job!,
+          ),
+          message: result.parsedData!.system.nixCollectGarbage.message,
+        );
+      } else {
+        return GenericResult(
+          success: false,
+          message: result.parsedData!.system.nixCollectGarbage.message,
+          data: null,
+        );
+      }
+    } catch (e) {
+      return GenericResult(
+        success: false,
+        message: e.toString(),
+        data: null,
+      );
+    }
+  }
 }

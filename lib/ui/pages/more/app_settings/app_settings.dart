@@ -45,11 +45,12 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'application_settings.dangerous_settings'.tr(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
                     color: Theme.of(context).colorScheme.error,
                   ),
             ),
           ),
+          const Gap(4),
           _ResetAppTile(
             key: ValueKey('reset_app'.tr()),
           ),

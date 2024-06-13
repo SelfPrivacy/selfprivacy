@@ -13,7 +13,7 @@ class _LanguagePicker extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             Localization.getLanguageName(context.locale),
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         onTap: () async {
@@ -41,8 +41,10 @@ class _LanguagePickerDialog extends StatelessWidget {
         children: [
           for (final locale
               in InheritedAppController.of(context).supportedLocales)
-            ListTile(
-              title: Text(
+            RadioMenuButton(
+              groupValue: context.locale,
+              value: locale,
+              child: Text(
                 Localization.getLanguageName(locale),
                 style: TextStyle(
                   fontWeight: locale == context.locale
@@ -50,8 +52,8 @@ class _LanguagePickerDialog extends StatelessWidget {
                       : FontWeight.w400,
                 ),
               ),
-              onTap: () {
-                Navigator.of(context).pop(locale);
+              onChanged: (final newValue) {
+                Navigator.of(context).pop(newValue);
               },
             ),
         ],

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
@@ -202,23 +203,81 @@ class _SectionRow extends StatelessWidget {
 class _KeyValueRow extends StatelessWidget {
   const _KeyValueRow(this.title, this.value);
 
+  static const List<String> hideList = ['Authorization'];
+
   final String title;
   final String? value;
 
   @override
+  Widget build(final BuildContext context) => hideList.contains(title)
+      ? _ObscuredKeyValueRow(title, value)
+      : Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: SelectableText.rich(
+            TextSpan(
+              style: DefaultTextStyle.of(context).style,
+              children: <TextSpan>[
+                TextSpan(
+                  text: '$title: ',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(text: value ?? ''),
+              ],
+            ),
+          ),
+        );
+}
+
+class _ObscuredKeyValueRow extends StatefulWidget {
+  const _ObscuredKeyValueRow(this.title, this.value);
+
+  final String title;
+  final String? value;
+
+  @override
+  State<_ObscuredKeyValueRow> createState() => _ObscuredKeyValueRowState();
+}
+
+class _ObscuredKeyValueRowState extends State<_ObscuredKeyValueRow> {
+  static const obscuringCharacter = '•';
+  bool _obscureValue = true;
+
+  @override
   Widget build(final BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: SelectableText.rich(
-          TextSpan(
-            style: DefaultTextStyle.of(context).style,
-            children: <TextSpan>[
-              TextSpan(
-                text: '$title: ',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+        child: Row(
+          children: [
+            Expanded(
+              child: SelectableText.rich(
+                TextSpan(
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '${widget.title}: ',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(
+                      text: _obscureValue
+                          ? obscuringCharacter * (widget.value?.length ?? 4)
+                          : widget.value ?? '',
+                      style: const TextStyle(
+                        fontFeatures: [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              TextSpan(text: value ?? ''),
-            ],
-          ),
+            ),
+            IconButton(
+              icon: Icon(
+                _obscureValue ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
+              ),
+              onPressed: () {
+                _obscureValue ^= true; // toggle value
+                setState(() {});
+              },
+            ),
+          ],
         ),
       );
 }

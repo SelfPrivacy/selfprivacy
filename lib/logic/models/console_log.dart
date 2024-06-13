@@ -10,10 +10,6 @@ enum ConsoleLogSeverity {
 }
 
 /// Base entity for console logs.
-///
-/// TODO(misterfourtytwo): should we add?
-///
-/// * equality override
 sealed class ConsoleLog {
   ConsoleLog({
     final String? customTitle,
@@ -75,6 +71,8 @@ class RestApiRequestConsoleLog extends ConsoleLog {
     super.severity,
   });
 
+  static const blacklistedHeaders = ['Authorization'];
+
   final String? method;
   final Uri? uri;
   final Map<String, dynamic>? headers;
@@ -82,10 +80,18 @@ class RestApiRequestConsoleLog extends ConsoleLog {
 
   @override
   String get title => 'Rest API Request';
+
+  Map<String, dynamic> get filteredHeaders => Map.fromEntries(
+        headers?.entries.where(
+              (final entry) => !blacklistedHeaders.contains(entry.key),
+            ) ??
+            const [],
+      );
+
   @override
   String get content => '"method": "$method",\n'
       '"uri": "$uri",\n'
-      '"headers": ${jsonEncode(headers)},\n'
+      '"headers": ${jsonEncode(filteredHeaders)},\n' // censor header to not expose API keys
       '"data": $data';
 }
 

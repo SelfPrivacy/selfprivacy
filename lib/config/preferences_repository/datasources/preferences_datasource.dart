@@ -29,8 +29,5 @@ abstract class PreferencesDataSource {
   Future<String?> getLocale();
 
   /// locale, as set by user
-  ///
-  ///
-  /// when null, app takes system locale
-  Future<void> setLocale(final String newLocale);
+  Future<void> setLocale(final String? newLocale);
 }

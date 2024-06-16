@@ -6,9 +6,6 @@ class _ThemePicker extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final appController = InheritedAppController.of(context);
-    // final themeMode = appController.themeMode;
-    // final bool isSystemThemeModeEnabled = themeMode == ThemeMode.system;
-    // final bool isDarkModeOn = themeMode == ThemeMode.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -19,11 +16,6 @@ class _ThemePicker extends StatelessWidget {
               Text('application_settings.system_theme_mode_description'.tr()),
           value: appController.systemThemeModeActive,
           onChanged: appController.setSystemThemeModeFlag,
-          // onChanged: (final newValue) => appController.setThemeMode(
-          //   newValue
-          //       ? ThemeMode.system
-          //       : (isDarkModeOn ? ThemeMode.dark : ThemeMode.light),
-          // ),
         ),
         SwitchListTile.adaptive(
           title: Text('application_settings.dark_theme_title'.tr()),
@@ -32,11 +24,6 @@ class _ThemePicker extends StatelessWidget {
           onChanged: appController.systemThemeModeActive
               ? null
               : appController.setDarkThemeModeFlag,
-          // onChanged: isSystemThemeModeEnabled
-          //     ? null
-          //     : (final newValue) => appController.setThemeMode(
-          //           newValue ? ThemeMode.dark : ThemeMode.light,
-          //         ),
         ),
       ],
     );

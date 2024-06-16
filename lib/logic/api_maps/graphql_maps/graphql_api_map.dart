@@ -116,7 +116,7 @@ abstract class GraphQLApiMap {
     );
   }
 
-  String get _locale => getIt.get<ApiConfigModel>().localeCode ?? 'en';
+  String get _locale => getIt.get<ApiConfigModel>().localeCode;
 
   String get _token {
     String token = '';

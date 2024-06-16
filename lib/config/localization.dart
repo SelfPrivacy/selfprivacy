@@ -7,6 +7,9 @@ class Localization extends StatelessWidget {
     super.key,
   });
 
+  /// value for resetting locale in settings to system default
+  static const systemLocale = Locale('system');
+
   // when adding new locale, add corresponding native language name to mapper
   // below
   static const supportedLocales = [
@@ -34,6 +37,7 @@ class Localization extends StatelessWidget {
 
   // https://en.wikipedia.org/wiki/IETF_language_tag#List_of_common_primary_language_subtags
   static final _languageNames = {
+    systemLocale: 'System default',
     const Locale('ar'): 'العربية',
     const Locale('az'): 'Azərbaycan',
     const Locale('be'): 'беларуская',

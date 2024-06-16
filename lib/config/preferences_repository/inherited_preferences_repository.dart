@@ -50,6 +50,7 @@ class _InheritedPreferencesRepositoryState
     repo = PreferencesRepository(
       dataSource: widget.dataSource,
       setDelegateLocale: EasyLocalization.of(context)!.setLocale,
+      resetDelegateLocale: EasyLocalization.of(context)!.resetLocale,
       getDelegateLocale: () => EasyLocalization.of(context)!.locale,
       getSupportedLocales: () => EasyLocalization.of(context)!.supportedLocales,
     );

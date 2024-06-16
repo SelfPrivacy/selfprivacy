@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/localization.dart';
 import 'package:selfprivacy/config/preferences_repository/datasources/preferences_datasource.dart';
 
 class PreferencesRepository {
@@ -9,6 +10,7 @@ class PreferencesRepository {
     required this.getSupportedLocales,
     required this.getDelegateLocale,
     required this.setDelegateLocale,
+    required this.resetDelegateLocale,
   });
 
   final PreferencesDataSource dataSource;
@@ -18,6 +20,7 @@ class PreferencesRepository {
   /// containing needed functions, but perceive it as boilerplate, because we
   /// don't need additional encapsulation level here)
   final FutureOr<void> Function(Locale) setDelegateLocale;
+  final FutureOr<void> Function() resetDelegateLocale;
   final FutureOr<List<Locale>> Function() getSupportedLocales;
   final FutureOr<Locale> Function() getDelegateLocale;
 
@@ -36,13 +39,6 @@ class PreferencesRepository {
   Future<void> setSystemModeFlag(final bool newValue) async =>
       dataSource.setSystemThemeModeFlag(newValue);
 
-  // Future<ThemeMode> getThemeMode() async {
-  //   final themeMode = await dataSource.getThemeMode()?? ThemeMode.system;
-  // }
-  //
-  // Future<void> setThemeMode(final ThemeMode newThemeMode) =>
-  //     dataSource.setThemeMode(newThemeMode);
-
   Future<List<Locale>> supportedLocales() async => getSupportedLocales();
 
   Future<Locale> getActiveLocale() async {
@@ -54,13 +50,17 @@ class PreferencesRepository {
     }
 
     // when it's null fallback on delegate locale
-    chosenLocale ??= await getDelegateLocale();
+    chosenLocale ??= Localization.systemLocale;
 
     return chosenLocale;
   }
 
   Future<void> setActiveLocale(final Locale newLocale) async {
     await dataSource.setLocale(newLocale.toString());
+  }
+
+  Future<void> resetActiveLocale() async {
+    await dataSource.setLocale(null);
   }
 
   /// true when we need to show onboarding

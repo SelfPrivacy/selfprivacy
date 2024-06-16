@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart'
     as color_utils;
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/config/localization.dart';
 import 'package:selfprivacy/config/preferences_repository/preferences_repository.dart';
 
 /// A class that many Widgets can interact with to read current app
@@ -45,18 +46,10 @@ class AppController with ChangeNotifier {
       : darkThemeModeActive
           ? ThemeMode.dark
           : ThemeMode.light;
-  // // Make ThemeMode a private variable so it is not updated directly without
-  // // also persisting the changes with the repo..
-  // late ThemeMode _themeMode;
-  // // Allow Widgets to read the user's preferred ThemeMode.
-  // ThemeMode get themeMode => _themeMode;
 
   late bool _shouldShowOnboarding;
   bool get shouldShowOnboarding => _shouldShowOnboarding;
 
-  /// Load the user's settings from the SettingsService. It may load from a
-  /// local database or the internet. The controller only knows it can load the
-  /// settings from the service.
   Future<void> init({
     // required final AppPreferencesRepository repo,
     required final ThemeData lightThemeData,
@@ -68,12 +61,17 @@ class AppController with ChangeNotifier {
     await Future.wait(<Future>[
       // load locale
       () async {
-        _supportedLocales = await _repo.getSupportedLocales();
+        _supportedLocales = [
+          Localization.systemLocale,
+          ...await _repo.getSupportedLocales(),
+        ];
 
         _locale = await _repo.getActiveLocale();
-        // preset value to other state holders
-        await _apiConfigModel.setLocaleCode(_locale.languageCode);
-        await _repo.setDelegateLocale(_locale);
+        if (_locale != Localization.systemLocale) {
+          // preset value to other state holders
+          await _apiConfigModel.setLocaleCode(_locale.languageCode);
+          await _repo.setDelegateLocale(_locale);
+        }
       }(),
 
       // load theme mode && initialize theme
@@ -81,7 +79,6 @@ class AppController with ChangeNotifier {
         _lightTheme = lightThemeData;
         _darkTheme = darkThemeData;
         _corePalette = colorPalette;
-        // _themeMode = await _repo.getThemeMode();
         _darkThemeModeActive = await _repo.getDarkThemeModeFlag();
         _systemThemeModeActive = await _repo.getSystemThemeModeFlag();
       }(),
@@ -98,7 +95,6 @@ class AppController with ChangeNotifier {
   }
 
   // updateRepoReference
-
   Future<void> setShouldShowOnboarding(final bool newValue) async {
     // Do not perform any work if new and old flag values are identical
     if (newValue == shouldShowOnboarding) {
@@ -107,7 +103,6 @@ class AppController with ChangeNotifier {
 
     // Store the flag in memory
     _shouldShowOnboarding = newValue;
-
     notifyListeners();
 
     // Persist the change
@@ -146,23 +141,6 @@ class AppController with ChangeNotifier {
     await _repo.setDarkThemeModeFlag(newValue);
   }
 
-  // /// Update and persist the ThemeMode based on the user's selection.
-  // Future<void> setThemeMode(final ThemeMode newThemeMode) async {
-  //   // Do not perform any work if new and old ThemeMode are identical
-  //   if (newThemeMode == themeMode) {
-  //     return;
-  //   }
-
-  //   // Store the new ThemeMode in memory
-  //   _themeMode = newThemeMode;
-
-  //   // Inform listeners a change has occurred.
-  //   notifyListeners();
-
-  //   // Persist the change
-  //   await _repo.setThemeMode(newThemeMode);
-  // }
-
   Future<void> setLocale(final Locale newLocale) async {
     // Do not perform any work if new and old Locales are identical
     if (newLocale == _locale) {
@@ -172,6 +150,10 @@ class AppController with ChangeNotifier {
     // Store the new Locale in memory
     _locale = newLocale;
 
+    if (newLocale == Localization.systemLocale) {
+      return resetLocale();
+    }
+
     /// update locale delegate, which in turn should update deps
     await _repo.setDelegateLocale(newLocale);
 
@@ -179,5 +161,15 @@ class AppController with ChangeNotifier {
     await _repo.setActiveLocale(newLocale);
     // Update other locale holders
     await _apiConfigModel.setLocaleCode(newLocale.languageCode);
+  }
+
+  Future<void> resetLocale() async {
+    /// update locale delegate, which in turn should update deps
+    await _repo.resetDelegateLocale();
+
+    // Persist the change
+    await _repo.resetActiveLocale();
+    // Update other locale holders
+    await _apiConfigModel.resetLocaleCode();
   }
 }

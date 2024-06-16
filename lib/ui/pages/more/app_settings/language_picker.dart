@@ -36,26 +36,27 @@ class _LanguagePickerDialog extends StatelessWidget {
   static const routeSettings = RouteSettings(name: 'LanguagePickerDialog');
 
   @override
-  Widget build(final BuildContext context) => SimpleDialog(
-        title: Text('application_settings.language'.tr()),
-        children: [
-          for (final locale
-              in InheritedAppController.of(context).supportedLocales)
-            RadioMenuButton(
-              groupValue: context.locale,
-              value: locale,
-              child: Text(
-                Localization.getLanguageName(locale),
-                style: TextStyle(
-                  fontWeight: locale == context.locale
-                      ? FontWeight.w800
-                      : FontWeight.w400,
-                ),
+  Widget build(final BuildContext context) {
+    final appController = InheritedAppController.of(context);
+
+    return SimpleDialog(
+      title: Text('application_settings.language'.tr()),
+      children: [
+        for (final locale in appController.supportedLocales)
+          RadioMenuButton(
+            groupValue: appController.locale,
+            value: locale,
+            child: Text(
+              Localization.getLanguageName(locale),
+              style: TextStyle(
+                fontWeight: locale == appController.locale
+                    ? FontWeight.w800
+                    : FontWeight.w400,
               ),
-              onChanged: (final newValue) {
-                Navigator.of(context).pop(newValue);
-              },
             ),
-        ],
-      );
+            onChanged: (final newValue) => Navigator.of(context).pop(newValue),
+          ),
+      ],
+    );
+  }
 }

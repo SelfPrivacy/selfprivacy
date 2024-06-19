@@ -144,6 +144,8 @@ String getRouteTitle(final String routeName) {
       return 'domain.screen_title';
     case 'ServerDetailsRoute':
       return 'server.card_title';
+    case 'ServerSettingsRoute':
+      return 'server.settings';
     case 'BackupDetailsRoute':
       return 'backup.card_title';
     case 'BackupsListRoute':

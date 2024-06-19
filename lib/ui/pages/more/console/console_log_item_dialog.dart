@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
@@ -270,7 +269,9 @@ class _ObscuredKeyValueRowState extends State<_ObscuredKeyValueRow> {
             ),
             IconButton(
               icon: Icon(
-                _obscureValue ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
+                _obscureValue
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
               ),
               onPressed: () {
                 _obscureValue ^= true; // toggle value

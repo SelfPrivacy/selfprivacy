@@ -202,6 +202,10 @@ class _SectionRow extends StatelessWidget {
 class _KeyValueRow extends StatelessWidget {
   const _KeyValueRow(this.title, this.value);
 
+  /// headers thath should be hidden in screenshots, but still accessible for
+  /// user, as opposed to `[[ConsoleLog]]`
+  /// `RestApiRequestConsoleLog.blacklistedHeaders` which need to be filtered
+  /// out from clipboard content
   static const List<String> hideList = ['Authorization'];
 
   final String title;

@@ -71,6 +71,9 @@ class RestApiRequestConsoleLog extends ConsoleLog {
     super.severity,
   });
 
+  /// headers thath should not be included into clipboard buffer, as opposed to
+  /// `[[ConsoleLogItemDialog]]` `_KeyValueRow.hideList` which filters values,
+  /// that should be accessible from UI, but hidden in screenshots
   static const blacklistedHeaders = ['Authorization'];
 
   final String? method;

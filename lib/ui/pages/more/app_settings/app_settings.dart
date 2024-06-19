@@ -35,12 +35,10 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
           _ThemePicker(
             key: ValueKey('theme_picker'.tr()),
           ),
-          const Divider(height: 5, thickness: 0),
           _LanguagePicker(
             key: ValueKey('language_picker'.tr()),
           ),
-          const Divider(height: 5, thickness: 0),
-          const Gap(4),
+          const Gap(8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(

@@ -250,7 +250,7 @@
         "dark_theme_title": "Цёмная тэма",
         "change_application_theme": "Змяніць каляровую тэму",
         "language": "Мова",
-        "click_to_change_locale":"Націсніце, каб адчыніць меню выбару мовы", 
+        "click_to_change_locale": "Націсніце, каб адчыніць меню выбару мовы", 
         "dangerous_settings": "Небяспечныя налады",
         "reset_config_title": "Скід налад",
         "reset_config_description": "Скінуць API ключы i суперкарыстальніка."

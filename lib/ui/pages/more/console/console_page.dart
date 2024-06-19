@@ -116,7 +116,7 @@ class _ConsoleViewEmpty extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => Align(
         alignment: Alignment.topCenter,
-        child: Text('console_page.historyEmpty'.tr()),
+        child: Text('console_page.history_empty'.tr()),
       );
 }
 

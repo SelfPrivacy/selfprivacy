@@ -29,7 +29,7 @@ sealed class ConsoleLog {
   String get content;
 
   /// data available for copy in dialog
-  String? get shareableData => '{"title":"$title",\n'
+  String? get shareableData => '{"title": "$title",\n'
       '"timestamp": "$fullUTCString",\n'
       '"data":{\n$content\n}'
       '\n}';

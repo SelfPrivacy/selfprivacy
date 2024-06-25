@@ -19,7 +19,6 @@ Future<void> getItSetup() async {
   getIt.registerSingleton<WizardDataModel>(WizardDataModel()..init());
 
   final apiConfigModel = ApiConfigModel();
-  await apiConfigModel.init();
   getIt.registerSingleton<ApiConfigModel>(apiConfigModel);
 
   getIt.registerSingleton<ApiConnectionRepository>(

@@ -5,8 +5,6 @@ import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 class ApiConfigModel {
   final Box _box = Hive.box(BNames.serverInstallationBox);
 
-  String? get localeCode => _localeCode;
-
   static const localeCodeFallback = 'en';
   String? _localeCode;
 
@@ -16,13 +14,5 @@ class ApiConfigModel {
 
   Future<void> setBackblazeBucket(final BackblazeBucket value) async {
     await _box.put(BNames.backblazeBucket, value);
-  }
-
-  // TODO: Remove it
-  void clear() {
-  }
-
-  // TODO: Remove it
-  void init() {
   }
 }

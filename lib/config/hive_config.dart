@@ -41,45 +41,48 @@ class HiveConfig {
         await getEncryptedKey(BNames.serverInstallationEncryptionKey),
       );
 
-      await Hive.openBox(BNames.serverInstallationBox, encryptionCipher: cipher);
+      await Hive.openBox(BNames.serverInstallationBox,
+          encryptionCipher: cipher);
       await Hive.openBox(BNames.resourcesBox, encryptionCipher: cipher);
       await Hive.openBox(BNames.wizardDataBox, encryptionCipher: cipher);
 
       final Box resourcesBox = Hive.box(BNames.resourcesBox);
       if (resourcesBox.isEmpty) {
-        final Box serverInstallationBox = Hive.box(BNames.serverInstallationBox);
+        final Box serverInstallationBox =
+            Hive.box(BNames.serverInstallationBox);
 
         final String? serverProviderKey =
-        serverInstallationBox.get(BNames.hetznerKey);
+            serverInstallationBox.get(BNames.hetznerKey);
         final String? serverLocation =
-        serverInstallationBox.get(BNames.serverLocation);
+            serverInstallationBox.get(BNames.serverLocation);
         final String? dnsProviderKey =
-        serverInstallationBox.get(BNames.cloudFlareKey);
+            serverInstallationBox.get(BNames.cloudFlareKey);
         final BackupsCredential? backblazeCredential =
-        serverInstallationBox.get(BNames.backblazeCredential);
+            serverInstallationBox.get(BNames.backblazeCredential);
         final ServerDomain? serverDomain =
-        serverInstallationBox.get(BNames.serverDomain);
+            serverInstallationBox.get(BNames.serverDomain);
         final ServerHostingDetails? serverDetails =
-        serverInstallationBox.get(BNames.serverDetails);
+            serverInstallationBox.get(BNames.serverDetails);
         final BackblazeBucket? backblazeBucket =
-        serverInstallationBox.get(BNames.backblazeBucket);
+            serverInstallationBox.get(BNames.backblazeBucket);
         final String? serverType =
-        serverInstallationBox.get(BNames.serverTypeIdentifier);
+            serverInstallationBox.get(BNames.serverTypeIdentifier);
         final ServerProviderType? serverProvider =
-        serverInstallationBox.get(BNames.serverProvider);
+            serverInstallationBox.get(BNames.serverProvider);
         final DnsProviderType? dnsProvider =
-        serverInstallationBox.get(BNames.dnsProvider);
+            serverInstallationBox.get(BNames.dnsProvider);
 
         if (serverProviderKey != null &&
             (serverProvider != null ||
                 (serverDetails != null &&
                     serverDetails.provider != ServerProviderType.unknown))) {
           final ServerProviderCredential serverProviderCredential =
-          ServerProviderCredential(
+              ServerProviderCredential(
             tokenId: null,
             token: serverProviderKey,
             provider: serverProvider ?? serverDetails!.provider,
-            associatedServerIds: serverDetails != null ? [serverDetails.id] : [],
+            associatedServerIds:
+                serverDetails != null ? [serverDetails.id] : [],
           );
 
           await resourcesBox
@@ -91,12 +94,12 @@ class HiveConfig {
                 (serverDomain != null &&
                     serverDomain.provider != DnsProviderType.unknown))) {
           final DnsProviderCredential dnsProviderCredential =
-          DnsProviderCredential(
+              DnsProviderCredential(
             tokenId: null,
             token: dnsProviderKey,
             provider: dnsProvider ?? serverDomain!.provider,
             associatedDomainNames:
-            serverDomain != null ? [serverDomain.domainName] : [],
+                serverDomain != null ? [serverDomain.domainName] : [],
           );
 
           await resourcesBox
@@ -128,7 +131,6 @@ class HiveConfig {
       print('HiveConfig: Error while opening boxes: $e');
       rethrow;
     }
-
   }
 
   static Future<Uint8List> getEncryptedKey(final String encKey) async {

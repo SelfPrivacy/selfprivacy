@@ -2,7 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -44,6 +46,7 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
       hasBackButton: true,
       heroTitle: 'storage.card_title'.tr(),
       bodyPadding: const EdgeInsets.symmetric(vertical: 16.0),
+      hasFlashButton: true,
       children: [
         ...widget.diskStatus.diskVolumes.map(
           (final volume) => Column(
@@ -59,13 +62,20 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
                     )
                     .toList(),
               ),
-              const SizedBox(height: 16),
+              const Gap(16),
               const Divider(),
-              const SizedBox(height: 16),
+              const Gap(16),
             ],
           ),
         ),
-        const SizedBox(height: 8),
+        const Gap(8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: BrandOutlinedButton(
+            title: 'jobs.collect_nix_garbage'.tr(),
+            onPressed: context.read<JobsCubit>().collectNixGarbage,
+          ),
+        ),
       ],
     );
   }
@@ -93,7 +103,7 @@ class ServerStorageSection extends StatelessWidget {
               volume: volume,
             ),
           ),
-          const SizedBox(height: 16),
+          const Gap(16),
           ...services.map(
             (final service) => ServerConsumptionListTile(
               service: service,
@@ -106,7 +116,7 @@ class ServerStorageSection extends StatelessWidget {
             ),
           ),
           if (volume.isResizable) ...[
-            const SizedBox(height: 16),
+            const Gap(16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: BrandOutlinedButton(

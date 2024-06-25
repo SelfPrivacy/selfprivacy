@@ -7,21 +7,22 @@ class ApiConfigModel {
 
   String? get localeCode => _localeCode;
 
+  static const localeCodeFallback = 'en';
   String? _localeCode;
 
-  Future<void> setLocaleCode(final String value) async {
-    _localeCode = value;
-  }
+  String get localeCode => _localeCode ?? localeCodeFallback;
+  Future<void> setLocaleCode(final String value) async => _localeCode = value;
+  Future<void> resetLocaleCode() async => _localeCode = null;
 
   Future<void> setBackblazeBucket(final BackblazeBucket value) async {
     await _box.put(BNames.backblazeBucket, value);
   }
 
+  // TODO: Remove it
   void clear() {
-    _localeCode = null;
   }
 
+  // TODO: Remove it
   void init() {
-    _localeCode = 'en';
   }
 }

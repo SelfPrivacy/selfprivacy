@@ -38,9 +38,9 @@ class HetznerServerProvider extends ServerProvider {
   HetznerServerProvider() : _adapter = ApiAdapter();
   HetznerServerProvider.load(
     final String? location,
-    final bool isAuthotized,
+    final bool isAuthorized,
   ) : _adapter = ApiAdapter(
-          isWithToken: isAuthotized,
+          isWithToken: isAuthorized,
           region: location,
         );
 
@@ -156,6 +156,7 @@ class HetznerServerProvider extends ServerProvider {
           description: server.location.description,
           flag: server.location.flag,
           identifier: server.location.name,
+          countryDisplayKey: server.location.countryDisplayKey,
         ),
       ),
     );
@@ -456,6 +457,7 @@ class HetznerServerProvider extends ServerProvider {
           description: rawLocation.description,
           flag: rawLocation.flag,
           identifier: rawLocation.name,
+          countryDisplayKey: rawLocation.countryDisplayKey,
         );
       } catch (e) {
         continue;

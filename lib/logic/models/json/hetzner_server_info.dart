@@ -155,6 +155,27 @@ class HetznerLocation {
     }
     return emoji;
   }
+
+  String get countryDisplayKey {
+    String displayKey = 'countries.';
+    switch (country.substring(0, 2)) {
+      case 'DE':
+        displayKey += 'germany';
+        break;
+
+      case 'FI':
+        displayKey += 'finland';
+        break;
+
+      case 'US':
+        displayKey += 'united_states';
+        break;
+
+      default:
+        displayKey = country;
+    }
+    return displayKey;
+  }
 }
 
 /// A Volume is a highly-available, scalable, and SSD-based block storage for Servers.

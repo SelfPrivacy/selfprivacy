@@ -65,13 +65,33 @@ class DigitalOceanLocation {
         emoji = '🇮🇳';
         break;
 
+      case 'syd':
+        emoji = '🇦🇺';
+        break;
+
       case 'nyc':
       case 'sfo':
         emoji = '🇺🇸';
         break;
     }
-
     return emoji;
+  }
+
+  static const _townPrefixToCountryMap = {
+    'fra': 'germany',
+    'ams': 'netherlands',
+    'sgp': 'singapore',
+    'lon': 'united_kingdom',
+    'tor': 'canada',
+    'blr': 'india',
+    'syd': 'australia',
+    'nyc': 'united_states',
+    'sfo': 'united_states',
+  };
+
+  String get countryDisplayKey {
+    final countryName = _townPrefixToCountryMap[slug.substring(0, 3)] ?? slug;
+    return 'countries.$countryName';
   }
 }
 

@@ -49,7 +49,8 @@ abstract class ServerInstallationState extends Equatable {
   bool get isPrimaryUserFilled => rootUser != null;
   bool get isServerCreated => serverDetails != null;
 
-  bool get isFullyInitialized => _fulfillmentList.every((final el) => el!);
+  bool get isFullyInitialized =>
+      _fulfillmentList.every((final el) => el ?? false);
   ServerSetupProgress get progress => ServerSetupProgress
       .values[_fulfillmentList.where((final el) => el!).length];
 

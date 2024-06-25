@@ -39,6 +39,7 @@ class NewDeviceScreen extends StatelessWidget {
 
 class _KeyDisplay extends StatelessWidget {
   const _KeyDisplay({required this.newDeviceKey});
+
   final String newDeviceKey;
 
   @override
@@ -47,7 +48,7 @@ class _KeyDisplay extends StatelessWidget {
         children: [
           const Divider(),
           const SizedBox(height: 16),
-          Text(
+          SelectableText(
             newDeviceKey,
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   fontSize: 24,

@@ -15,7 +15,7 @@ ServerJob _$ServerJobFromJson(Map<String, dynamic> json) => ServerJob(
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       createdAt: DateTime.parse(json['createdAt'] as String),
       error: json['error'] as String?,
-      progress: json['progress'] as int?,
+      progress: (json['progress'] as num?)?.toInt(),
       result: json['result'] as String?,
       statusText: json['statusText'] as String?,
       finishedAt: json['finishedAt'] == null

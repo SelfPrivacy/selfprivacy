@@ -79,6 +79,17 @@ mutation RunSystemUpgrade {
   }
 }
 
+mutation NixCollectGarbage {
+  system {
+    nixCollectGarbage {
+      ...basicMutationReturnFields
+      job {
+        ...basicApiJobsFields
+      }
+    }
+  }
+}
+
 mutation RunSystemUpgradeFallback {
   system {
     runSystemUpgrade {

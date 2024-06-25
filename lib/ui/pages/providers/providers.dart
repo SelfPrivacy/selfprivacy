@@ -65,11 +65,8 @@ class _ProvidersPageState extends State<ProvidersPage> {
 
     return Scaffold(
       appBar: Breakpoints.small.isActive(context)
-          ? PreferredSize(
-              preferredSize: const Size.fromHeight(52),
-              child: BrandHeader(
-                title: 'basis.providers_title'.tr(),
-              ),
+          ? BrandHeader(
+              title: 'basis.providers_title'.tr(),
             )
           : null,
       body: ListView(

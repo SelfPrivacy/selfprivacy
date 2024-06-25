@@ -333,14 +333,12 @@
     },
     "application_settings": {
         "title": "إعدادات التطبيق",
-        "system_dark_theme_title": "الوضع الافتراضي للنظام",
-        "system_dark_theme_description": "قم بتطبيق الوضع الفاتح أو الداكن حسب إعدادات النظام",
+        "system_theme_mode_title": "الوضع الافتراضي للنظام",
+        "system_theme_mode_description": "قم بتطبيق الوضع الفاتح أو الداكن حسب إعدادات النظام",
         "dark_theme_title": "الوضع الداكن",
+        "change_application_theme": "قم بتبديل وضع التطبيق",
         "dangerous_settings": "إعدادات خطرة",
         "reset_config_title": "قم بإعادة ضبط إعدادات التطبيق",
-        "delete_server_title": "قم بحذف الخادم",
-        "delete_server_description": "سيزيل هذا الخادم الخاص بك، حيث أنه لن تتمكن من الوصول إليه بعد ذلك.",
-        "dark_theme_description": "قم بتبديل وضع التطبيق",
         "reset_config_description": "قم بإعادة ضبط مفاتيح API والمستخدم المميز."
     },
     "ssh": {

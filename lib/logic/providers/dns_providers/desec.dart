@@ -22,9 +22,9 @@ class ApiAdapter {
 class DesecDnsProvider extends DnsProvider {
   DesecDnsProvider() : _adapter = ApiAdapter();
   DesecDnsProvider.load(
-    final bool isAuthotized,
+    final bool isAuthorized,
   ) : _adapter = ApiAdapter(
-          isWithToken: isAuthotized,
+          isWithToken: isAuthorized,
         );
 
   ApiAdapter _adapter;

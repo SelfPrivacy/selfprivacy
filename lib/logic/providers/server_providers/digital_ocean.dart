@@ -38,9 +38,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   DigitalOceanServerProvider() : _adapter = ApiAdapter();
   DigitalOceanServerProvider.load(
     final String? location,
-    final bool isAuthotized,
+    final bool isAuthorized,
   ) : _adapter = ApiAdapter(
-          isWithToken: isAuthotized,
+          isWithToken: isAuthorized,
           region: location,
         );
 
@@ -438,6 +438,7 @@ class DigitalOceanServerProvider extends ServerProvider {
           description: rawLocation.name,
           flag: rawLocation.flag,
           identifier: rawLocation.slug,
+          countryDisplayKey: rawLocation.countryDisplayKey,
         );
       } catch (e) {
         continue;

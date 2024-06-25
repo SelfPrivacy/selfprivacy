@@ -1,3 +1,10 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -6,10 +13,6 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
@@ -21,14 +24,9 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-
 android {
-  namespace 'org.selfprivacy.app'
-
-  compileSdkVersion flutter.compileSdkVersion
+    namespace 'org.selfprivacy.app'
+    compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     sourceSets {
@@ -43,13 +41,16 @@ android {
     kotlinOptions {
       jvmTarget = '1.8'
     }
+    
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 
     lintOptions {
         disable 'InvalidPackage'
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "org.selfprivacy.app"
         minSdkVersion 21
         targetSdkVersion 34
@@ -57,31 +58,33 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+    
+    buildTypes {
+        debug {
 
-    flavorDimensions "default"
-    productFlavors {
-        fdroid {
-            applicationId "pro.kherel.selfprivacy"
         }
-        production {
-            applicationIdSuffix ""
+        profile {
+
         }
-        nightly {
-            applicationIdSuffix ".nightly"
-            versionCode project.getVersionCode()
-            versionName "nightly-" + project.getVersionCode()
+        release {
+         
         }
     }
+    buildFeatures {
+        flavorDimensions = ["default"]
+    }
 
-    flavorDimensions "default"
+
     productFlavors {
         fdroid {
+            dimension 'default'
             applicationId "pro.kherel.selfprivacy"
         }
         production {
-            applicationIdSuffix ""
+            dimension 'default'
         }
         nightly {
+            dimension 'default'
             applicationIdSuffix ".nightly"
             versionCode project.getVersionCode()
             versionName "nightly-" + project.getVersionCode()
@@ -93,6 +96,5 @@ flutter {
     source '../..'
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
+dependencies {}
+

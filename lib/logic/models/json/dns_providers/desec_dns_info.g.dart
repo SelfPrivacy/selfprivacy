@@ -8,7 +8,7 @@ part of 'desec_dns_info.dart';
 
 DesecDomain _$DesecDomainFromJson(Map<String, dynamic> json) => DesecDomain(
       name: json['name'] as String,
-      minimumTtl: json['minimum_ttl'] as int?,
+      minimumTtl: (json['minimum_ttl'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$DesecDomainToJson(DesecDomain instance) =>
@@ -21,7 +21,7 @@ DesecDnsRecord _$DesecDnsRecordFromJson(Map<String, dynamic> json) =>
     DesecDnsRecord(
       subname: json['subname'] as String,
       type: json['type'] as String,
-      ttl: json['ttl'] as int,
+      ttl: (json['ttl'] as num).toInt(),
       records:
           (json['records'] as List<dynamic>).map((e) => e as String).toList(),
     );

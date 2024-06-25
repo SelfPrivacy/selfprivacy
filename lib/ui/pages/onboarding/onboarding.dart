@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/app_settings/app_settings_cubit.dart';
+import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
 import 'package:selfprivacy/ui/pages/onboarding/views/views.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
@@ -37,7 +37,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ),
             OnboardingSecondView(
               onProceed: () {
-                context.read<AppSettingsCubit>().turnOffOnboarding();
+                InheritedAppController.of(context)
+                    .setShouldShowOnboarding(false);
                 context.router.replaceAll([
                   const RootRoute(),
                   const InitializingRoute(),

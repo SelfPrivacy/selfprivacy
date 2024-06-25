@@ -54,15 +54,15 @@
     },
     "application_settings": {
         "title": "Tətbiq parametrləri",
+        "system_theme_mode_title": "Defolt sistem mövzusu",
+        "system_theme_mode_description": "Sistem parametrlərindən asılı olaraq açıq və ya qaranlıq mövzudan istifadə edin",
         "dark_theme_title": "Qaranlıq mövzu",
+        "change_application_theme": "Rəng mövzusunu dəyişdirin",
+        "dangerous_settings": "Təhlükəli Parametrlər",
         "reset_config_title": "Tətbiq Sıfırlayın",
-        "reset_config_description": "API və Super İstifadəçi Açarlarını sıfırlayın.",
-        "delete_server_title": "Serveri silin",
-        "dark_theme_description": "Rəng mövzusunu dəyişdirin",
-        "delete_server_description": "Əməliyyat serveri siləcək. Bundan sonra o, əlçatmaz olacaq.",
-        "system_dark_theme_title": "Defolt sistem mövzusu",
-        "system_dark_theme_description": "Sistem parametrlərindən asılı olaraq açıq və ya qaranlıq mövzudan istifadə edin",
-        "dangerous_settings": "Təhlükəli Parametrlər"
+        "reset_config_description": "API və Super İstifadəçi Açarlarını sıfırlayın."
+        
+        
     },
     "ssh": {
         "title": "SSH açarları",

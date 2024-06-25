@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -6,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/models/message.dart';
+import 'package:selfprivacy/logic/models/console_log.dart';
 
 abstract class RestApiMap {
   Future<Dio> getClient({final BaseOptions? customOptions}) async {
@@ -57,8 +58,8 @@ abstract class RestApiMap {
 }
 
 class ConsoleInterceptor extends InterceptorsWrapper {
-  void addMessage(final Message message) {
-    getIt.get<ConsoleModel>().addMessage(message);
+  void addConsoleLog(final ConsoleLog message) {
+    getIt.get<ConsoleModel>().log(message);
   }
 
   @override
@@ -66,12 +67,12 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     final RequestOptions options,
     final RequestInterceptorHandler handler,
   ) async {
-    addMessage(
-      RestApiRequestMessage(
-        method: options.method,
-        data: options.data.toString(),
-        headers: options.headers,
+    addConsoleLog(
+      RestApiRequestConsoleLog(
         uri: options.uri,
+        method: options.method,
+        headers: options.headers,
+        data: jsonEncode(options.data),
       ),
     );
     return super.onRequest(options, handler);
@@ -82,12 +83,12 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     final Response response,
     final ResponseInterceptorHandler handler,
   ) async {
-    addMessage(
-      RestApiResponseMessage(
+    addConsoleLog(
+      RestApiResponseConsoleLog(
+        uri: response.realUri,
         method: response.requestOptions.method,
         statusCode: response.statusCode,
-        data: response.data.toString(),
-        uri: response.realUri,
+        data: jsonEncode(response.data),
       ),
     );
     return super.onResponse(
@@ -103,10 +104,13 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   ) async {
     final Response? response = err.response;
     log(err.toString());
-    addMessage(
-      Message.warn(
-        text:
-            'response-uri: ${response?.realUri}\ncode: ${response?.statusCode}\ndata: ${response?.toString()}\n',
+
+    addConsoleLog(
+      ManualConsoleLog.warning(
+        customTitle: 'RestAPI error',
+        content: '"uri": "${response?.realUri}",\n'
+            '"status_code": ${response?.statusCode},\n'
+            '"response": ${jsonEncode(response)}',
       ),
     );
     return super.onError(err, handler);

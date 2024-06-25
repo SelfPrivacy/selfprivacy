@@ -38,9 +38,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   DigitalOceanServerProvider() : _adapter = ApiAdapter();
   DigitalOceanServerProvider.load(
     final String? location,
-    final bool isAuthotized,
+    final bool isAuthorized,
   ) : _adapter = ApiAdapter(
-          isWithToken: isAuthotized,
+          isWithToken: isAuthorized,
           region: location,
         );
 

@@ -1,19 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+// import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 
 abstract class RestApiMap {
+  static final log = const AppLogger(name: 'rest_api_map').log;
+
   Future<Dio> getClient({final BaseOptions? customOptions}) async {
     final Dio dio = Dio(customOptions ?? (await options));
     if (hasLogger) {
-      dio.interceptors.add(PrettyDioLogger());
+      // dio.interceptors.add(
+      //   PrettyDioLogger(
+      // logPrint: (final object) => log('$object'),
+      //       ),
+      // );
     }
     dio.interceptors.add(ConsoleInterceptor());
     dio.httpClientAdapter = IOHttpClientAdapter(
@@ -29,11 +35,7 @@ abstract class RestApiMap {
     dio.interceptors.add(
       InterceptorsWrapper(
         onError: (final DioException e, final ErrorInterceptorHandler handler) {
-          print(e.requestOptions.path);
-          print(e.requestOptions.data);
-
-          print(e.message);
-          print(e.response);
+          log('got dio error', error: e);
 
           return handler.next(e);
         },
@@ -103,7 +105,6 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     final ErrorInterceptorHandler handler,
   ) async {
     final Response? response = err.response;
-    log(err.toString());
 
     addConsoleLog(
       ManualConsoleLog.warning(

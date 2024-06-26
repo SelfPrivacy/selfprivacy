@@ -47,7 +47,28 @@
     "console_page": {
         "title": "Консоль",
         "waiting": "Ждём инициализации…",
-        "copy": "Копировать"
+        "copy": "Копировать",
+        "copy_raw": "Сырой ответ",
+        "history_empty": "Данных ещё нет",
+        "error": "Ошибка",
+        "rest_api_request": "Запрос REST API",
+        "rest_api_response": "Ответ REST API",
+        "graphql_request": "Запрос GraphQL",
+        "graphql_response": "Ответ GraphQL",
+        "logged_at": "Произошло в",
+        "data": "Данные",
+        "errors": "Ошибки",
+        "error_path": "Путь",
+        "error_locations": "Места ошибок",
+        "error_extensions": "Расширения",
+        "request_data": "Данные запроса",
+        "headers": "Заголовки",
+        "response_data": "Данные ответа",
+        "context": "Контекст",
+        "operation": "Операция",
+        "operation_type": "Тип операции",
+        "operation_name": "Название операции",
+        "variables": "Переменные"
     },
     "about_application_page": {
         "title": "О приложении и поддержка",
@@ -577,7 +598,9 @@
         "rebuild_system": "Пересобрать систему",
         "start_server_upgrade": "Начать обновление сервера",
         "change_server_timezone": "Изменить часовой пояс сервера",
-        "change_ssh_settings": "Изменить настройки SSH"
+        "change_ssh_settings": "Изменить настройки SSH",
+        "collect_nix_garbage_failed": "Не удалось начать сбор системного мусора",
+        "collect_nix_garbage": "Провести сбор системного мусора"
     },
     "validations": {
         "required": "Обязательное поле",

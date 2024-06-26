@@ -1,19 +1,7 @@
-Zaloguj się jako użytkownik root na swoim serwerze i przejrzyj zawartość pliku `/etc/nixos/userdata/tokens.json`
+[Login as root user to your server](https://selfprivacy.org/docs/how-to-guides/root_ssh/) and enter this command:
 
 ```sh
-cat /etc/nixos/userdata/tokens.json
+sp-print-api-token
 ```
 
-W tym pliku będzie podobny wzór:
-
-`json
-{
-    { "tokens": [
-        {
-            { "token": "token_który_był_skopedowany",
-            { "name": "device_name",
-            { "data": "data"
-        }
-```
-
-Skopiuj token z pliku i wklej w następnym oknie.
+Copy the token from the terminal and paste it in the next window.

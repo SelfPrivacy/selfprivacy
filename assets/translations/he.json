@@ -505,7 +505,6 @@
         "are_you_sure": "להמשיך?",
         "destroy_server": "להשמיד את השרת וליצור אחד חדש?",
         "purge_all_keys_confirm": "כן, למחוק לחלוטין את כל האסימונים שלי",
-        "delete_server_volume": "למחוק את השרת והכרך?",
         "reboot": "להפעיל מחדש",
         "yes": "כן",
         "dns_removal_error": "לא ניתן להסיר רשומת DNS.",

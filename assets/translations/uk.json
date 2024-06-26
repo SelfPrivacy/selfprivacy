@@ -58,7 +58,8 @@
         "delete": "Видалити SSH-ключ",
         "no_key_name": "Безіменний ключ",
         "root_title": "Це ключі суперкористувача",
-        "input_label": "Публічний ED25519, ECDSA або RSA ключ"
+        "input_label": "Публічний ED25519, ECDSA або RSA ключ",
+        "ssh_disabled_warning": "SSH вимкнено. Його можна ввімкнути в налаштуваннях сервера."
     },
     "more_page": {
         "create_ssh_key": "SSH-ключі суперкористовача",
@@ -71,10 +72,28 @@
         "copy": "Copie"
     },
     "about_application_page": {
-        "application_version_text": "Версія додатку",
+        "application_version_text": "Версія програми",
         "api_version_text": "Версія API сервера",
         "privacy_policy": "Політика конфіденційності",
-        "title": "Про нас"
+        "title": "Про нас та підтримку",
+        "website": "Наш сайт",
+        "documentation": "Документація",
+        "matrix_channel": "Канал у Matrix",
+        "telegram_channel": "Канал у Telegram",
+        "get_support": "Отримати допомогу",
+        "versions": "Версії",
+        "open_source_licenses": "Ліцензії використовуваних бібліотек",
+        "links": "Посилання",
+        "matrix_support_chat": "Чат підтримки у Matrix",
+        "telegram_support_chat": "Чат підтримки у Telegram",
+        "email_support": "Підтримка по електронній пошті",
+        "contribute": "Внести внесок",
+        "source_code": "Вихідний код",
+        "bug_report": "Повідомити про неполадку",
+        "bug_report_subtitle": "Через спам потрібне ручне підтвердження акаунта. Зв'яжіться з нами в чаті підтримки для активації акаунта.",
+        "help_translate": "Допомогти з перекладом",
+        "matrix_contributors_chat": "Чат розробників у Matrix",
+        "telegram_contributors_chat": "Чат розробників у Telegram"
     },
     "onboarding": {
         "page1_title": "Цифрова незалежність, доступна кожному",
@@ -238,7 +257,12 @@
         "location": "Місцезнаходження",
         "server_provider": "Провайдер сервера",
         "dns_provider": "Провайдер DNS",
-        "pricing_error": "Не вдалося отримати ціни постачальника"
+        "pricing_error": "Не вдалося отримати ціни постачальника",
+        "enable_ssh": "Увімкнути SSH",
+        "enable_ssh_hint": "Дозволити доступ до сервера через SSH",
+        "allow_password_authentication": "Дозволити вхід по SSH з використанням пароля",
+        "allow_password_authentication_hint": "Дозволяє користувачам підключатися до сервера по SSH використовуючи свій пароль (не застосовується до суперкористувача)",
+        "settings": "Налаштування сервера"
     },
     "domain": {
         "card_title": "Домен",
@@ -516,7 +540,6 @@
         "are_you_sure": "Ви впевнені?",
         "purge_all_keys": "Очистити всі ключі автентифікації?",
         "purge_all_keys_confirm": "Так, очистити всі мої токени",
-        "delete_server_volume": "Видалити сервер і сховище?",
         "reboot": "Перезавантажити",
         "yes": "Так",
         "no": "Ні",
@@ -552,7 +575,8 @@
         "change_server_timezone": "Змінити часовий пояс сервера",
         "change_auto_upgrade_settings": "Зміна налаштувань автооновлення",
         "job_postponed": "Завдання додано, але ви не зможете його запустити після завершення поточних завдань",
-        "rebuild_system": "Перезібрати систему"
+        "rebuild_system": "Перезібрати систему",
+        "change_ssh_settings": "Змінити налаштування SSH"
     },
     "validations": {
         "required": "Потрібно",
@@ -583,5 +607,16 @@
     },
     "support": {
         "title": "Підтримка SelfPrivacy"
+    },
+    "countries": {
+        "germany": "Німеччина",
+        "united_kingdom": "Великобританія",
+        "netherlands": "Нідерланди",
+        "singapore": "Сінгапур",
+        "canada": "Канада",
+        "india": "Індія",
+        "australia": "Австралія",
+        "united_states": "США",
+        "finland": "Фінляндія"
     }
 }

@@ -61,8 +61,8 @@
         "dangerous_settings": "Təhlükəli Parametrlər",
         "reset_config_title": "Tətbiq Sıfırlayın",
         "reset_config_description": "API və Super İstifadəçi Açarlarını sıfırlayın."
-        
-        
+
+
     },
     "ssh": {
         "title": "SSH açarları",

@@ -245,7 +245,6 @@
     },
     "modals": {
         "unexpected_error": "Unerwarteter Fehler beim Platzieren von Seiten des Anbieters.",
-        "delete_server_volume": "Server und Speicher löschen?",
         "dns_removal_error": "DNS-Einträge konnten nicht entfernt werden.",
         "server_deletion_error": "Aktiver Server konnte nicht gelöscht werden.",
         "server_validators_error": "Verfügbare Server konnten nicht abgerufen werden.",

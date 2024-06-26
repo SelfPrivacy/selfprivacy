@@ -344,7 +344,6 @@
         "are_you_sure": "您确定吗？",
         "purge_all_keys": "清除所有身份验证密钥？",
         "purge_all_keys_confirm": "是的，清除我的所有令牌",
-        "delete_server_volume": "删除服务器和卷？",
         "reboot": "重启",
         "yes": "是",
         "no": "否"
@@ -482,7 +481,8 @@
         "change_application_theme": "切换应用主题",
         "dangerous_settings": "危险设置",
         "reset_config_title": "重置应用配置",
-        "delete_server_title": "删除服务器"
+        "delete_server_title": "删除服务器",
+        "reset_config_description": "重置API密钥和root用户。"
     },
     "ssh": {
         "title": "SSH密钥",

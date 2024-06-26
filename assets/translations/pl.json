@@ -33,7 +33,7 @@
         "continue": "Kontynuować",
         "alert": "Powiadomienie",
         "app_name": "SelfPrivacy",
-        "please_connect": "Połącz się z serwerem, aby rozpocząć grę!",
+        "please_connect": "Połącz się z serwerem, dodaj domen i usługodawca DNS, aby rozpocząć!",
         "copied_to_clipboard": "Skopiowane do schowka!"
     },
     "test": "pl-test",
@@ -393,7 +393,6 @@
         "destroy_server": "Zniszczyć serwer i stworzyć nowy?",
         "try_again": "Mam spróbować jeszcze raz?",
         "purge_all_keys_confirm": "Tak, wymazać wszystkie klucze",
-        "delete_server_volume": "Usunąć serwer i pamięć masową?",
         "volume_creation_error": "Nie udało się utworzyć woluminu."
     },
     "recovery_key": {

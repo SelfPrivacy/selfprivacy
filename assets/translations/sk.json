@@ -22,7 +22,6 @@
         "try_again": "Skúsiť ešte raz?",
         "purge_all_keys": "Vymazať všetky autorizačné kľúče?",
         "purge_all_keys_confirm": "Áno, vyčistiť všetky moje tokeny",
-        "delete_server_volume": "Odstrániť server a úložisko?",
         "reboot": "Reštartovať"
     },
     "jobs": {

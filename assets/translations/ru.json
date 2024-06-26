@@ -36,7 +36,7 @@
         "alert": "Уведомление",
         "copied_to_clipboard": "Скопировано в буфер обмена!",
         "app_name": "SelfPrivacy",
-        "please_connect": "Настройте ваш сервер и подключите домен для полного погружения!",
+        "please_connect": "Подключите ваш сервер, домен и провайдера DNS, чтобы начать!",
         "network_error": "Ошибка сети"
     },
     "more_page": {
@@ -541,7 +541,6 @@
         "are_you_sure": "Вы уверены?",
         "purge_all_keys": "Стереть все ключи авторизации?",
         "purge_all_keys_confirm": "Да, стереть все ключи",
-        "delete_server_volume": "Удалить сервер и хранилище?",
         "reboot": "Перезагрузить",
         "yes": "Да",
         "no": "Нет",
@@ -609,5 +608,16 @@
         "root_ssh_key_added": "SSH ключ суперпользователя задан и будет применён",
         "allow_ssh_key_at_setup": "Разрешить задавать SSH ключи суперпользователя во время установки",
         "allow_ssh_key_at_setup_description": "Кнопка для добавления ключа появится на экране подтверждения."
+    },
+    "countries": {
+        "netherlands": "Нидерланды",
+        "germany": "Германия",
+        "singapore": "Сингапур",
+        "united_kingdom": "Великобритания",
+        "canada": "Канада",
+        "india": "Индия",
+        "australia": "Австралия",
+        "united_states": "США",
+        "finland": "Финляндия"
     }
 }

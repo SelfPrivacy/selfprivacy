@@ -564,7 +564,9 @@
         "start_server_upgrade": "Serveri värskenduse käivitamine",
         "change_auto_upgrade_settings": "Automaatse värskenduse seadete muutmine",
         "change_server_timezone": "Serveri ajavööndi muutmine",
-        "change_ssh_settings": "Muuda SSH seadeid"
+        "change_ssh_settings": "Muuda SSH seadeid",
+        "collect_nix_garbage": "Koguge süsteemi prügi",
+        "collect_nix_garbage_failed": "Süsteemi prügi kogumine ebaõnnestus"
     },
     "validations": {
         "required": "Nõutud",
@@ -600,12 +602,22 @@
         "are_you_sure": "Kas olete kindel?",
         "purge_all_keys": "Kustutada kõik autentimisvõtmed?",
         "purge_all_keys_confirm": "Jah, kustuta kõik minu võtmed",
-        "delete_server_volume": "Kustutada server ja maht?",
         "reboot": "Taaskäivitage",
         "yes": "Jah",
         "no": "Ei"
     },
     "timer": {
         "sec": "{} sek"
+    },
+    "countries": {
+        "germany": "Saksamaa",
+        "netherlands": "Madalmaad",
+        "singapore": "Singapur",
+        "united_kingdom": "Ühendkuningriik",
+        "canada": "Kanada",
+        "india": "India",
+        "australia": "Austraalia",
+        "united_states": "Ameerika Ühendriigid",
+        "finland": "Soome"
     }
 }

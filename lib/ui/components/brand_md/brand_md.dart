@@ -39,6 +39,7 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
     return MarkdownBody(
       shrinkWrap: true,
       styleSheet: markdown,
+      selectable: true,
       onTapLink: (final String text, final String? href, final String title) {
         if (href != null) {
           canLaunchUrlString(href).then((final bool canLaunchURL) {

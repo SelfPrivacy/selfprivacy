@@ -51,7 +51,7 @@
         "connect_to_server_provider": "Аўтарызавацца ў ",
         "connect_to_server_provider_text": "З дапамогай API токена праграма SelfPrivacy зможа ад вашага імя замовіць і наладзіць сервер",
         "steps": {
-            "nixos_installation": "Ўстаноўка NixOS",
+            "nixos_installation": "Ўсталёўка NixOS",
             "hosting": "Хостынг",
             "server_type": "Тып сервера",
             "dns_provider": "DNS правайдэр",
@@ -59,7 +59,7 @@
             "domain": "Дамен",
             "master_account": "Майстар акаўнт",
             "server": "Сервер",
-            "dns_setup": "Устаноўка DNS",
+            "dns_setup": "Усталёўка DNS",
             "server_reboot": "Перазагрузка сервера",
             "final_checks": "Фінальныя праверкі"
         },
@@ -100,7 +100,7 @@
         "modal_confirmation_dns_invalid": "Зваротны DNS паказвае на іншы дамен",
         "modal_confirmation_ip_invalid": "IP не супадае з паказаным у DNS запісу",
         "fallback_select_provider_console": "Доступ да кансолі хостынгу.",
-        "provider_connected_description": "Сувязь устаноўлена. Увядзіце свой токен з доступам да {}:",
+        "provider_connected_description": "Сувязь наладжана. Увядзіце свой токен з доступам да {}:",
         "choose_server": "Выберыце сервер",
         "no_servers": "На вашым акаўнце няма даступных сэрвэраў.",
         "modal_confirmation_description": "Падлучэнне да няправільнага сервера можа прывесці да дэструктыўных наступстваў.",
@@ -114,7 +114,7 @@
             "authorize_new_device": "Аўтарызаваць новую прыладу",
             "access_granted_on": "Доступ выдадзены {}",
             "tip": "Націсніце на прыладу, каб адклікаць доступ.",
-            "description": "Гэтыя прылады маюць поўны доступ да кіравання серверам праз прыкладанне SelfPrivacy."
+            "description": "Гэтыя прылады маюць поўны доступ да кіравання серверам праз прыладу SelfPrivacy."
         },
         "add_new_device_screen": {
             "description": "Увядзіце гэты ключ на новай прыладзе:",
@@ -127,7 +127,7 @@
         "revoke_device_alert": {
             "header": "Адклікаць доступ?",
             "yes": "Адклікаць",
-            "no": "Адменіць",
+            "no": "Адхіліць",
             "description": "Прылада {} больш не зможа кіраваць серверам."
         }
     },
@@ -143,7 +143,7 @@
         "later": "Прапусціць і наладзіць потым",
         "no_data": "Няма дадзеных",
         "services": "Сэрвісы",
-        "users": "Ужыткоўнікі",
+        "users": "Карыстальнікі",
         "more": "Дадаткова",
         "got_it": "Зразумеў",
         "settings": "Налады",
@@ -205,6 +205,7 @@
         "dns_removal_error": "Немагчыма выдаліць запісы DNS.",
         "server_deletion_error": "Немагчыма выдаліць сервер.",
         "unexpected_error": "Непрадбачаная памылка з боку правайдэра.",
+        "delete_server_volume": "Выдаліць сервер і сховішча?",
         "volume_creation_error": "Не ўдалося стварыць том."
     },
     "timer": {
@@ -235,7 +236,7 @@
     },
     "more_page": {
         "configuration_wizard": "Майстар наладкі",
-        "onboarding": "Прівітанне",
+        "onboarding": "Прывітанне",
         "create_ssh_key": "SSH ключы адміністратара"
     },
     "about_application_page": {
@@ -265,12 +266,15 @@
     "application_settings": {
         "reset_config_description": "Скінуць API ключы i суперкарыстальніка.",
         "title": "Налады праграмы",
+        "system_theme_mode_title": "Сістэмная тэма па-змаўчанні",
+        "system_theme_mode_description": "Выкарыстоўвайце светлую ці цёмную тэмы ў залежнасці ад сістэмных налад",
         "dark_theme_title": "Цёмная тэма",
-        "dark_theme_description": "Змяніць каляровую тэму",
+        "change_application_theme": "Змяніць каляровую тэму",
+        "language": "Мова",
+        "click_to_change_locale": "Націсніце, каб адчыніць меню выбару мовы",
+        "dangerous_settings": "Небяспечныя налады",
         "reset_config_title": "Скід налад",
-        "system_dark_theme_title": "Сістэмная тэма па-змаўчанні",
-        "system_dark_theme_description": "Выкарыстоўвайце светлую ці цёмную тэмы ў залежнасці ад сістэмных налад",
-        "dangerous_settings": "Небяспечныя наладкі"
+        "reset_config_description": "Скінуць API ключы i суперкарыстальніка."
     },
     "ssh": {
         "root_subtitle": "Уладальнікі паказаных тут ключоў атрымліваюць поўны доступ да дадзеных і налад сервера. Дадавайце выключна свае ключы.",

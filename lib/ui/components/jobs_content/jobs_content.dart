@@ -283,7 +283,7 @@ class JobsContent extends StatelessWidget {
                     (final job) => job.uid == state.rebuildJobUid,
                   );
                   if (rebuildJob == null) {
-                    return const Gap(0);
+                    return const SizedBox.shrink();
                   }
                   return Row(
                     children: [

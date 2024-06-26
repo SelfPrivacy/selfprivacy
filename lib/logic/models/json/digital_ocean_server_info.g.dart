@@ -10,8 +10,10 @@ DigitalOceanVolume _$DigitalOceanVolumeFromJson(Map<String, dynamic> json) =>
     DigitalOceanVolume(
       json['id'] as String,
       json['name'] as String,
-      json['size_gigabytes'] as int,
-      (json['droplet_ids'] as List<dynamic>?)?.map((e) => e as int).toList(),
+      (json['size_gigabytes'] as num).toInt(),
+      (json['droplet_ids'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$DigitalOceanVolumeToJson(DigitalOceanVolume instance) =>
@@ -42,10 +44,10 @@ DigitalOceanServerType _$DigitalOceanServerTypeFromJson(
       (json['regions'] as List<dynamic>).map((e) => e as String).toList(),
       (json['memory'] as num).toDouble(),
       json['description'] as String,
-      json['disk'] as int,
+      (json['disk'] as num).toInt(),
       (json['price_monthly'] as num).toDouble(),
       json['slug'] as String,
-      json['vcpus'] as int,
+      (json['vcpus'] as num).toInt(),
     );
 
 Map<String, dynamic> _$DigitalOceanServerTypeToJson(

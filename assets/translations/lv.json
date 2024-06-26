@@ -52,11 +52,11 @@
         "privacy_policy": "Privātuma politika"
     },
     "application_settings": {
-        "system_dark_theme_title": "Sistēmas noklusējuma dizains",
-        "dark_theme_title": "Tumšs dizains",
         "title": "Aplikācijas iestatījumi",
-        "system_dark_theme_description": "Izmantojiet gaišu vai tumšu dizainu atkarībā no sistēmas iestatījumiem",
-        "dark_theme_description": "Lietojumprogrammas dizaina pārslēgšana",
+        "system_theme_mode_title": "Sistēmas noklusējuma dizains",
+        "system_theme_mode_description": "Izmantojiet gaišu vai tumšu dizainu atkarībā no sistēmas iestatījumiem",
+        "dark_theme_title": "Tumšs dizains",
+        "change_application_theme": "Lietojumprogrammas dizaina pārslēgšana",
         "dangerous_settings": "Bīstamie iestatījumi",
         "reset_config_title": "Atiestatīt lietojumprogrammas konfigurāciju",
         "reset_config_description": "Atiestatīt API atslēgas un saknes lietotāju."

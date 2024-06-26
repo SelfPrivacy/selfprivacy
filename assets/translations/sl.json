@@ -53,11 +53,11 @@
         "application_version_text": "Različica aplikacije"
     },
     "application_settings": {
-        "dark_theme_title": "Temna tema",
         "title": "Nastavitve aplikacije",
-        "system_dark_theme_title": "Privzeta tema sistema",
-        "system_dark_theme_description": "Uporaba svetle ali temne teme glede na sistemske nastavitve",
-        "dark_theme_description": "Spreminjanje barvne teme",
+        "system_theme_mode_title": "Privzeta tema sistema",
+        "system_theme_mode_description": "Uporaba svetle ali temne teme glede na sistemske nastavitve",
+        "dark_theme_title": "Temna tema",
+        "change_application_theme": "Spreminjanje barvne teme",
         "dangerous_settings": "Nevarne nastavitve",
         "reset_config_title": "Ponastavitev konfiguracije aplikacije"
     },

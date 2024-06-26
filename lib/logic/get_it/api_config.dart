@@ -9,7 +9,6 @@ class ApiConfigModel {
   final Box _box = Hive.box(BNames.serverInstallationBox);
 
   ServerHostingDetails? get serverDetails => _serverDetails;
-  String? get localeCode => _localeCode;
   String? get serverProviderKey => _serverProviderKey;
   String? get serverLocation => _serverLocation;
   String? get serverType => _serverType;
@@ -21,7 +20,12 @@ class ApiConfigModel {
   ServerDomain? get serverDomain => _serverDomain;
   BackblazeBucket? get backblazeBucket => _backblazeBucket;
 
+  static const localeCodeFallback = 'en';
   String? _localeCode;
+  String get localeCode => _localeCode ?? localeCodeFallback;
+  Future<void> setLocaleCode(final String value) async => _localeCode = value;
+  Future<void> resetLocaleCode() async => _localeCode = null;
+
   String? _serverProviderKey;
   String? _serverLocation;
   String? _dnsProviderKey;
@@ -32,10 +36,6 @@ class ApiConfigModel {
   BackupsCredential? _backblazeCredential;
   ServerDomain? _serverDomain;
   BackblazeBucket? _backblazeBucket;
-
-  Future<void> setLocaleCode(final String value) async {
-    _localeCode = value;
-  }
 
   Future<void> storeServerProviderType(final ServerProviderType value) async {
     await _box.put(BNames.serverProvider, value);
@@ -88,7 +88,6 @@ class ApiConfigModel {
   }
 
   void clear() {
-    _localeCode = null;
     _serverProviderKey = null;
     _dnsProvider = null;
     _serverLocation = null;
@@ -101,8 +100,7 @@ class ApiConfigModel {
     _serverProvider = null;
   }
 
-  void init() {
-    _localeCode = 'en';
+  Future<void> init() async {
     _serverProviderKey = _box.get(BNames.hetznerKey);
     _serverLocation = _box.get(BNames.serverLocation);
     _dnsProviderKey = _box.get(BNames.cloudFlareKey);

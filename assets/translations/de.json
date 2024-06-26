@@ -57,13 +57,13 @@
     },
     "application_settings": {
         "title": "Anwendungseinstellungen",
+        "system_theme_mode_title": "Standard-Systemthema",
+        "system_theme_mode_description": "Verwenden Sie je nach Systemeinstellungen ein helles oder dunkles Thema",
         "dark_theme_title": "Dunkles Thema",
-        "dark_theme_description": "Ihr Anwendungsdesign wechseln",
+        "change_application_theme": "Ihr Anwendungsdesign wechseln",
+        "dangerous_settings": "Gefährliche Einstellungen",
         "reset_config_title": "Anwendungseinstellungen zurücksetzen",
-        "reset_config_description": "API Sclüssel und root Benutzer zurücksetzen.",
-        "system_dark_theme_title": "Standard-Systemthema",
-        "system_dark_theme_description": "Verwenden Sie je nach Systemeinstellungen ein helles oder dunkles Thema",
-        "dangerous_settings": "Gefährliche Einstellungen"
+        "reset_config_description": "API Sclüssel und root Benutzer zurücksetzen."
     },
     "ssh": {
         "title": "SSH Schlüssel",

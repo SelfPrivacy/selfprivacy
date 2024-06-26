@@ -92,13 +92,13 @@
         "bug_report_subtitle": "Спамға байланысты есептік жазбаны қолмен растау қажет. Тіркелгіні белсендіру үшін Қолдау чатында бізге хабарласыңыз."
     },
     "application_settings": {
+        "title": "Қосымша параметрлері",
+        "system_theme_mode_title": "Системалық қараңғы тақырып",
+        "system_theme_mode_description": "Системалық қараңғы тақырып сипаттамасы",
+        "dark_theme_title": "Қараңғы тақырып",
+        "change_application_theme": "Қараңғы тақырып сипаттамасы",
         "dangerous_settings": "Қауіпті параметрлер",
         "reset_config_title": "Конфигурацияны қалпына келтіру",
-        "title": "Қосымша параметрлері",
-        "system_dark_theme_title": "Системалық қараңғы тақырып",
-        "system_dark_theme_description": "Системалық қараңғы тақырып сипаттамасы",
-        "dark_theme_title": "Қараңғы тақырып",
-        "dark_theme_description": "Қараңғы тақырып сипаттамасы",
         "reset_config_description": "Конфигурацияны қалпына келтіру сипаттамасы."
     },
     "resource_chart": {

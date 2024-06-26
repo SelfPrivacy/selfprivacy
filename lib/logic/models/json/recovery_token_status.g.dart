@@ -15,7 +15,7 @@ RecoveryKeyStatus _$RecoveryKeyStatusFromJson(Map<String, dynamic> json) =>
       expiration: json['expiration'] == null
           ? null
           : DateTime.parse(json['expiration'] as String),
-      usesLeft: json['uses_left'] as int?,
+      usesLeft: (json['uses_left'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$RecoveryKeyStatusToJson(RecoveryKeyStatus instance) =>

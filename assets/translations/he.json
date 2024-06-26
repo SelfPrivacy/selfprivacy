@@ -81,10 +81,10 @@
     },
     "application_settings": {
         "title": "הגדרות יישום",
-        "system_dark_theme_title": "ערכת העיצוב כברירת המחדל של המערכת",
-        "system_dark_theme_description": "להשתמש בערכות עיצוב בהירה או כהה בהתאם להגדרות המערכת שלך",
+        "system_theme_mode_title": "ערכת העיצוב כברירת המחדל של המערכת",
+        "system_theme_mode_description": "להשתמש בערכות עיצוב בהירה או כהה בהתאם להגדרות המערכת שלך",
         "dark_theme_title": "ערכת עיצוב כהה",
-        "dark_theme_description": "החלפת ערכת העיצוב של המערכת שלך",
+        "change_application_theme": "החלפת ערכת העיצוב של המערכת שלך",
         "dangerous_settings": "הגדרות מסוכנות",
         "reset_config_title": "איפוס הגדרות היישומון",
         "reset_config_description": "איפוס מפתחות ה־API ומשתמש העל."

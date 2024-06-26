@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/router/router.dart';
@@ -18,29 +17,29 @@ class RouteDestination {
   final String title;
 }
 
-final rootDestinations = [
+const List<RouteDestination> rootDestinations = [
   RouteDestination(
-    route: const ProvidersRoute(),
+    route: ProvidersRoute(),
     icon: BrandIcons.server,
-    label: 'basis.providers'.tr(),
-    title: 'basis.providers_title'.tr(),
+    label: 'basis.providers',
+    title: 'basis.providers_title',
   ),
   RouteDestination(
-    route: const ServicesRoute(),
+    route: ServicesRoute(),
     icon: BrandIcons.box,
-    label: 'basis.services'.tr(),
-    title: 'basis.services'.tr(),
+    label: 'basis.services',
+    title: 'basis.services',
   ),
   RouteDestination(
-    route: const UsersRoute(),
+    route: UsersRoute(),
     icon: BrandIcons.users,
-    label: 'basis.users'.tr(),
-    title: 'basis.users'.tr(),
+    label: 'basis.users',
+    title: 'basis.users',
   ),
   RouteDestination(
-    route: const MoreRoute(),
+    route: MoreRoute(),
     icon: Icons.menu_rounded,
-    label: 'basis.more'.tr(),
-    title: 'basis.more'.tr(),
+    label: 'basis.more',
+    title: 'basis.more',
   ),
 ];

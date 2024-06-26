@@ -102,13 +102,13 @@
     },
     "application_settings": {
         "title": "Nastavenia aplikácie",
+        "system_theme_mode_description": "Použitie svetlej alebo tmavej témy v závislosti od nastavení systému",
+        "system_theme_mode_title": "Systémová predvolená téma",
         "dark_theme_title": "Temná téma",
-        "dark_theme_description": "Zmeniť tému aplikácie",
+        "change_application_theme": "Zmeniť tému aplikácie",
+        "dangerous_settings": "Nebezpečné nastavenia",
         "reset_config_title": "Resetovať nastavenia aplikácie",
-        "reset_config_description": "Resetovať kľúče API a užívateľa root.",
-        "system_dark_theme_description": "Použitie svetlej alebo tmavej témy v závislosti od nastavení systému",
-        "system_dark_theme_title": "Systémová predvolená téma",
-        "dangerous_settings": "Nebezpečné nastavenia"
+        "reset_config_description": "Resetovať kľúče API a užívateľa root."
     },
     "ssh": {
         "title": "Kľúče SSH",

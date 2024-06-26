@@ -41,13 +41,14 @@
     "locale": "ua",
     "application_settings": {
         "title": "Налаштування додатка",
-        "reset_config_title": "Скинути налаштування",
+        "system_theme_mode_title": "Системна тема за замовчуванням",
+        "system_theme_mode_description": "Використовуйте світлу або темну теми залежно від системних налаштувань",
         "dark_theme_title": "Темна тема",
-        "dark_theme_description": "Змінити тему додатка",
-        "reset_config_description": "Скинути API ключі та root користувача.",
-        "system_dark_theme_title": "Системна тема за замовчуванням",
-        "system_dark_theme_description": "Використовуйте світлу або темну теми залежно від системних налаштувань",
-        "dangerous_settings": "Небезпечні налаштування"
+        "change_application_theme": "Змінити тему додатка",
+        "language": "Мова",
+        "dangerous_settings": "Небезпечні налаштування",
+        "reset_config_title": "Скинути налаштування",
+        "reset_config_description": "Скинути API ключі та root користувача."
     },
     "ssh": {
         "delete_confirm_question": "Ви впевнені, що хочете видалити SSH-ключ?",

@@ -47,9 +47,9 @@
         "privacy_policy": "นโยบายความเป็นส่วนตัว"
     },
     "application_settings": {
-        "dark_theme_description": "สลับธีมแอปพลิเคชั่นของคุณ",
         "title": "การตั้งค่าแอปพลิเคชัน",
         "dark_theme_title": "ธีมมืด",
+        "change_application_theme": "สลับธีมแอปพลิเคชั่นของคุณ",
         "reset_config_title": "รีเซ็ตค่าดั้งเดิมการตั้งค่าของแอปพลิเคชั่น",
         "reset_config_description": "รีเซ็ต API key และผู้ใช้งาน root"
     },

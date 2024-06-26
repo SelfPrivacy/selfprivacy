@@ -39,14 +39,14 @@
     "test": "es-test",
     "locale": "es",
     "application_settings": {
-        "reset_config_title": "Restablecer la configuración de la aplicación",
-        "dark_theme_description": "Cambia el tema de tu aplicación",
-        "reset_config_description": "Restablecer claves API y usuario root.",
         "title": "Ajustes de la aplicación",
+        "system_theme_mode_title": "Tema del sistema",
+        "system_theme_mode_description": "Utiliza un tema claro u oscuro de la configuración del sistema",
         "dark_theme_title": "Tema oscuro",
-        "system_dark_theme_title": "Tema del sistema",
-        "system_dark_theme_description": "Utiliza un tema claro u oscuro de la configuración del sistema",
-        "dangerous_settings": "Configuraciones peligrosas"
+        "change_application_theme": "Cambia el tema de tu aplicación",
+        "dangerous_settings": "Configuraciones peligrosas",
+        "reset_config_title": "Restablecer la configuración de la aplicación",
+        "reset_config_description": "Restablecer claves API y usuario root."
     },
     "ssh": {
         "delete_confirm_question": "¿Está seguro de que desea eliminar la clave SSH?",

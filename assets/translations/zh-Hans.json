@@ -475,12 +475,13 @@
     },
     "application_settings": {
         "title": "应用设置",
-        "system_dark_theme_title": "系统默认主题",
+        "system_theme_mode_title": "系统默认主题",
+        "system_theme_mode_description": "根据系统设置自动使用明亮或暗色主题",
         "dark_theme_title": "暗色主题",
-        "system_dark_theme_description": "根据系统设置自动使用明亮或暗色主题",
-        "dark_theme_description": "切换应用主题",
+        "change_application_theme": "切换应用主题",
         "dangerous_settings": "危险设置",
         "reset_config_title": "重置应用配置",
+        "delete_server_title": "删除服务器",
         "reset_config_description": "重置API密钥和root用户。"
     },
     "ssh": {

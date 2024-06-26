@@ -173,6 +173,7 @@
         "destroy_server": "هل تريد إنهاء هذا الخادم وإنشاء واحد جديد؟",
         "try_again": "هل تريد المحاولة مرة أخرى؟",
         "purge_all_keys": "هل تريد محو جميع مفاتيح الّتي مُنحت الموافقة؟",
+        "delete_server_volume": "هل تريد حذف الخادم ووحدة التخزين؟",
         "reboot": "قم بإعادة التشغيل",
         "yes": "نعم",
         "no": "لا"
@@ -332,12 +333,12 @@
     },
     "application_settings": {
         "title": "إعدادات التطبيق",
-        "system_dark_theme_title": "الوضع الافتراضي للنظام",
-        "system_dark_theme_description": "قم بتطبيق الوضع الفاتح أو الداكن حسب إعدادات النظام",
+        "system_theme_mode_title": "الوضع الافتراضي للنظام",
+        "system_theme_mode_description": "قم بتطبيق الوضع الفاتح أو الداكن حسب إعدادات النظام",
         "dark_theme_title": "الوضع الداكن",
+        "change_application_theme": "قم بتبديل وضع التطبيق",
         "dangerous_settings": "إعدادات خطرة",
         "reset_config_title": "قم بإعادة ضبط إعدادات التطبيق",
-        "dark_theme_description": "قم بتبديل وضع التطبيق",
         "reset_config_description": "قم بإعادة ضبط مفاتيح API والمستخدم المميز."
     },
     "ssh": {

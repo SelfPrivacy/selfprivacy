@@ -129,11 +129,8 @@ class UsersPage extends StatelessWidget {
 
     return Scaffold(
       appBar: Breakpoints.small.isActive(context)
-          ? PreferredSize(
-              preferredSize: const Size.fromHeight(52),
-              child: BrandHeader(
-                title: 'basis.users'.tr(),
-              ),
+          ? BrandHeader(
+              title: 'basis.users'.tr(),
             )
           : null,
       body: child,

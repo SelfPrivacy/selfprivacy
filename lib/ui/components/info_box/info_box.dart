@@ -11,15 +11,16 @@ class InfoBox extends StatelessWidget {
   final bool isWarning;
 
   @override
-  Widget build(final BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(final BuildContext context) => Wrap(
+        spacing: 8.0,
+        runSpacing: 16.0,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Icon(
             isWarning ? Icons.warning_amber_outlined : Icons.info_outline,
             size: 24,
             color: Theme.of(context).colorScheme.onBackground,
           ),
-          const SizedBox(height: 16),
           Text(
             text,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(

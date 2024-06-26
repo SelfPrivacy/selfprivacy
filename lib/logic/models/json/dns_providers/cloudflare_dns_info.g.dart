@@ -24,8 +24,8 @@ CloudflareDnsRecord _$CloudflareDnsRecordFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       content: json['content'] as String?,
       zoneName: json['zone_name'] as String,
-      ttl: json['ttl'] as int? ?? 3600,
-      priority: json['priority'] as int? ?? 10,
+      ttl: (json['ttl'] as num?)?.toInt() ?? 3600,
+      priority: (json['priority'] as num?)?.toInt() ?? 10,
       id: json['id'] as String?,
     );
 

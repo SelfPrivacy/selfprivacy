@@ -56,13 +56,13 @@
     },
     "application_settings": {
         "title": "Paramètres de l'application",
-        "dark_theme_description": "Changer le thème de l'application",
-        "reset_config_title": "Réinitialiser la configuration de l'application",
+        "system_theme_mode_title": "Thème par défaut du système",
+        "system_theme_mode_description": "Affichage de jour ou de nuit en fonction du paramétrage système",
         "dark_theme_title": "Thème sombre",
-        "reset_config_description": "Réinitialiser les clés API et l'utilisateur root.",
-        "system_dark_theme_title": "Thème par défaut du système",
-        "system_dark_theme_description": "Affichage de jour ou de nuit en fonction du paramétrage système",
-        "dangerous_settings": "Paramètres dangereux"
+        "change_application_theme": "Changer le thème de l'application",
+        "dangerous_settings": "Paramètres dangereux",
+        "reset_config_title": "Réinitialiser la configuration de l'application",
+        "reset_config_description": "Réinitialiser les clés API et l'utilisateur root."
     },
     "ssh": {
         "title": "Clés SSH",

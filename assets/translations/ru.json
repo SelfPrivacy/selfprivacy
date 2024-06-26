@@ -75,13 +75,15 @@
     },
     "application_settings": {
         "title": "Настройки приложения",
+        "system_theme_mode_title": "Системная тема",
+        "system_theme_mode_description": "Будет использована светлая или тёмная тема в зависимости от системных настроек",
         "dark_theme_title": "Тёмная тема",
-        "dark_theme_description": "Сменить цветовую тему",
+        "change_application_theme": "Сменить цветовую тему",
+        "language": "Язык",
+        "click_to_change_locale": "Нажмите, чтобы открыть список языков",
+        "dangerous_settings": "Опасные настройки",
         "reset_config_title": "Сброс настроек",
-        "reset_config_description": "Сбросить API ключи и root пользователя.",
-        "system_dark_theme_title": "Системная тема",
-        "system_dark_theme_description": "Будет использована светлая или тёмная тема в зависимости от системных настроек",
-        "dangerous_settings": "Опасные настройки"
+        "reset_config_description": "Сбросить API ключи и root пользователя."
     },
     "ssh": {
         "title": "SSH ключи",

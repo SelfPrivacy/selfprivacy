@@ -8,7 +8,7 @@ part of 'hetzner_server_info.dart';
 
 HetznerServerInfo _$HetznerServerInfoFromJson(Map<String, dynamic> json) =>
     HetznerServerInfo(
-      json['id'] as int,
+      (json['id'] as num).toInt(),
       json['name'] as String,
       $enumDecode(_$ServerStatusEnumMap, json['status']),
       DateTime.parse(json['created'] as String),
@@ -16,7 +16,9 @@ HetznerServerInfo _$HetznerServerInfoFromJson(Map<String, dynamic> json) =>
           json['server_type'] as Map<String, dynamic>),
       HetznerServerInfo.locationFromJson(json['datacenter'] as Map),
       HetznerPublicNetInfo.fromJson(json['public_net'] as Map<String, dynamic>),
-      (json['volumes'] as List<dynamic>).map((e) => e as int).toList(),
+      (json['volumes'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$HetznerServerInfoToJson(HetznerServerInfo instance) =>
@@ -58,7 +60,7 @@ Map<String, dynamic> _$HetznerPublicNetInfoToJson(
     };
 
 HetznerIp4 _$HetznerIp4FromJson(Map<String, dynamic> json) => HetznerIp4(
-      json['id'] as int,
+      (json['id'] as num).toInt(),
       json['ip'] as String,
       json['blocked'] as bool,
       json['dns_ptr'] as String,
@@ -75,9 +77,9 @@ Map<String, dynamic> _$HetznerIp4ToJson(HetznerIp4 instance) =>
 HetznerServerTypeInfo _$HetznerServerTypeInfoFromJson(
         Map<String, dynamic> json) =>
     HetznerServerTypeInfo(
-      json['cores'] as int,
+      (json['cores'] as num).toInt(),
       json['memory'] as num,
-      json['disk'] as int,
+      (json['disk'] as num).toInt(),
       (json['prices'] as List<dynamic>)
           .map((e) => HetznerPriceInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -132,9 +134,9 @@ Map<String, dynamic> _$HetznerLocationToJson(HetznerLocation instance) =>
 
 HetznerVolume _$HetznerVolumeFromJson(Map<String, dynamic> json) =>
     HetznerVolume(
-      json['id'] as int,
-      json['size'] as int,
-      json['serverId'] as int?,
+      (json['id'] as num).toInt(),
+      (json['size'] as num).toInt(),
+      (json['serverId'] as num?)?.toInt(),
       json['name'] as String,
       json['linux_device'] as String?,
     );

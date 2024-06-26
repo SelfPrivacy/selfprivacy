@@ -475,7 +475,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteServerDetails() async {
     await box.delete(BNames.serverDetails);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveServerProviderType(final ServerProviderType type) async {
@@ -501,7 +501,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteServerProviderKey() async {
     await box.delete(BNames.hetznerKey);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveBackblazeKey(
@@ -512,7 +512,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteBackblazeKey() async {
     await box.delete(BNames.backblazeCredential);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> setDnsApiToken(final String key) async {
@@ -521,7 +521,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteDnsProviderKey() async {
     await box.delete(BNames.cloudFlareKey);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveDomain(final ServerDomain serverDomain) async {
@@ -530,7 +530,7 @@ class ServerInstallationRepository {
 
   Future<void> deleteDomain() async {
     await box.delete(BNames.serverDomain);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 
   Future<void> saveIsServerStarted(final bool value) async {
@@ -604,6 +604,6 @@ class ServerInstallationRepository {
       BNames.hasFinalChecked,
       BNames.isLoading,
     ]);
-    getIt<ApiConfigModel>().init();
+    await getIt<ApiConfigModel>().init();
   }
 }

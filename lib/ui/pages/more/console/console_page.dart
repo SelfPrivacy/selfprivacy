@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/ui/pages/more/console/console_log_item_widget.dart';
@@ -18,21 +17,15 @@ class ConsolePage extends StatefulWidget {
 class _ConsolePageState extends State<ConsolePage> {
   ConsoleModel get console => getIt<ConsoleModel>();
 
-  /// should freeze logs state to properly read logs
-  late final Future<void> future;
-
   @override
   void initState() {
     super.initState();
-
-    future = getIt.allReady();
     console.addListener(update);
   }
 
   @override
   void dispose() {
     console.removeListener(update);
-
     super.dispose();
   }
 
@@ -48,66 +41,36 @@ class _ConsolePageState extends State<ConsolePage> {
   }
 
   @override
-  Widget build(final BuildContext context) => SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('console_page.title'.tr()),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).maybePop(),
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  console.paused
-                      ? Icons.play_arrow_outlined
-                      : Icons.pause_outlined,
-                ),
-                onPressed: console.paused ? console.play : console.pause,
+  Widget build(final BuildContext context) {
+    final List<ConsoleLog> logs = console.logs;
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('console_page.title'.tr()),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).maybePop(),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                console.paused
+                    ? Icons.play_arrow_outlined
+                    : Icons.pause_outlined,
               ),
-            ],
-          ),
-          body: Scrollbar(
-            child: FutureBuilder(
-              future: future,
-              builder: (
-                final BuildContext context,
-                final AsyncSnapshot<void> snapshot,
-              ) {
-                if (snapshot.hasData) {
-                  final List<ConsoleLog> logs = console.logs;
-
-                  return logs.isEmpty
-                      ? const _ConsoleViewEmpty()
-                      : _ConsoleViewLoaded(logs: logs);
-                }
-
-                return const _ConsoleViewLoading();
-              },
+              onPressed: console.paused ? console.play : console.pause,
             ),
-          ),
+          ],
         ),
-      );
-}
-
-class _ConsoleViewLoading extends StatelessWidget {
-  const _ConsoleViewLoading();
-
-  @override
-  Widget build(final BuildContext context) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text('console_page.waiting'.tr()),
-          const Gap(16),
-          const Expanded(
-            child: Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-          ),
-        ],
-      );
+        body: Scrollbar(
+          child: logs.isEmpty
+              ? const _ConsoleViewEmpty()
+              : _ConsoleViewLoaded(logs: logs),
+        ),
+      ),
+    );
+  }
 }
 
 class _ConsoleViewEmpty extends StatelessWidget {

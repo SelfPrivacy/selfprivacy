@@ -225,7 +225,6 @@
         "no": "Non",
         "yes": "Oui",
         "reboot": "Redémarrer",
-        "delete_server_volume": "Supprimer le serveur et le volume?",
         "purge_all_keys_confirm": "Oui, purger tous mes tokens",
         "purge_all_keys": "Purger toutes les clés d'authentification?",
         "are_you_sure": "Êtes-vous sûr?",

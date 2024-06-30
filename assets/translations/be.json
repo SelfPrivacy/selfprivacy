@@ -157,7 +157,7 @@
         "saving": "Захаванне…",
         "username": "Імя ўжыткоўніка",
         "loading": "Загрузка…",
-        "connect_to_existing": "Падключыцца да існуючага сервера",
+        "connect_to_existing": "У мяне ўжо ёсць сервер SelfPrivacy!",
         "reset": "Скінуць",
         "details": "Падрабязная інфармацыя",
         "wait": "Пачакайце",
@@ -166,7 +166,9 @@
         "done": "Гатова",
         "continue": "Працягнуць",
         "alert": "Паведамленне",
-        "app_name": "SelfPrivacy"
+        "app_name": "SelfPrivacy",
+        "copied_to_clipboard": "Скапіявана да буфэра абмену!",
+        "network_error": "Памылка ў сетцы"
     },
     "recovery_key": {
         "key_connection_error": "Не ўдалося злучыцца з серверам.",
@@ -239,18 +241,37 @@
     },
     "about_application_page": {
         "application_version_text": "Версія праграмы",
-        "title": "Аб праграме",
+        "title": "Інфармацыя & дапамога",
         "api_version_text": "Версія API сервера",
-        "privacy_policy": "Палітыка прыватнасці"
+        "privacy_policy": "Палітыка прыватнасці",
+        "telegram_channel": "Канал у Telegram",
+        "get_support": "Атрымаць дапамогу",
+        "versions": "Версіі",
+        "open_source_licenses": "FLOSS ліцэнзіі",
+        "links": "Спасылкі",
+        "website": "Наш вэб-сайт",
+        "documentation": "Дакументацыя",
+        "matrix_channel": "Канал у Matrix",
+        "matrix_support_chat": "Чат дапамогі ў Matrix",
+        "telegram_support_chat": "Чат дапамогі ў Telegram",
+        "email_support": "Падтрымка праз e-mail",
+        "contribute": "Дапамагчы",
+        "source_code": "Зыходны код",
+        "bug_report": "Паведаміць аб памылцы",
+        "bug_report_subtitle": "З прычыны спама патрабуецца ручное пацвярджэнне карыстальніка. Звяжыцеся з намі ў чаце падтрымкі для актывацыі карыстальніка.",
+        "help_translate": "Дапамагчы з перакладам",
+        "matrix_contributors_chat": "Чат распрацоўшчыкаў у Matrix",
+        "telegram_contributors_chat": "Чат распрацоўшчыкаў у Telegram"
     },
     "application_settings": {
+        "reset_config_description": "Скінуць API ключы i суперкарыстальніка.",
         "title": "Налады праграмы",
         "system_theme_mode_title": "Сістэмная тэма па-змаўчанні",
         "system_theme_mode_description": "Выкарыстоўвайце светлую ці цёмную тэмы ў залежнасці ад сістэмных налад",
         "dark_theme_title": "Цёмная тэма",
         "change_application_theme": "Змяніць каляровую тэму",
         "language": "Мова",
-        "click_to_change_locale": "Націсніце, каб адчыніць меню выбару мовы", 
+        "click_to_change_locale": "Націсніце, каб адчыніць меню выбару мовы",
         "dangerous_settings": "Небяспечныя налады",
         "reset_config_title": "Скід налад",
         "reset_config_description": "Скінуць API ключы i суперкарыстальніка."
@@ -263,7 +284,8 @@
         "delete_confirm_question": "Вы ўпэўненыя, што хочаце выдаліць наступны ключ?",
         "no_key_name": "Безназоўны ключ",
         "root_title": "Гэта ключы суперкарыстальніка",
-        "input_label": "Публічны ED25519 або RSA ключ"
+        "input_label": "Публічны ED25519, ECDSA або RSA ключ",
+        "ssh_disabled_warning": "SSH не ўключаны. Вы можаце ўключыць яго ў наладах сервера."
     },
     "onboarding": {
         "page1_title": "Лічбавая незалежнасць, даступная ўсім нам",
@@ -391,7 +413,11 @@
             "few": "{} ядра",
             "many": "{} ядраў",
             "other": "{} ядраў"
-        }
+        },
+        "settings": "Налады сервера",
+        "enable_ssh": "Уключыць SSH",
+        "enable_ssh_hint": "Дазволіць доступ да сервера цераз SSH",
+        "allow_password_authentication": "Дазволіць уваход цераз SSH з дапамогай пароля"
     },
     "not_ready_card": {
         "in_menu": "Сервер яшчэ не наладжаны. Калі ласка, завяршыце наладку з дапамогай майстра наладкі для далейшай працы."

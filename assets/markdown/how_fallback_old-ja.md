@@ -1,3 +1,3 @@
-In the next window, enter the token obtained from the console of the previous version of the application.
+次のウィンドウに、以前のバージョンのアプリケーションのコンソールから取得したトークンを入力してください。
 
-Enter it without the word *Bearer*.
+*Bearer* を外して入力してください。

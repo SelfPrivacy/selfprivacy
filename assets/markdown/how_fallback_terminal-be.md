@@ -11,7 +11,7 @@ mount /dev/sda1 /mnt
 cat /mnt/etc/nixos/userdata/tokens.json
 ```
 
-Гэты файл будзе мець падобную канструкцыю:
+Гэты файл будзе мець падобны змест:
 
 ```json
 {

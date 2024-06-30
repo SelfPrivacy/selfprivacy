@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/config.dart';
 
 class AppLogger {
   const AppLogger({required this.name});
+
   final String name;
 
   // TODO: research other possible options, which could support both
@@ -14,6 +15,7 @@ class AppLogger {
     final StackTrace? stackTrace,
   }) {
     if (config.shouldDebugPrint) {
+      // TODO: could probably add UI logging for console_page
       developer.log(
         message,
         error: error,

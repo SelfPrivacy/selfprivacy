@@ -118,3 +118,7 @@ enum ServerProviderType {
         unknown => 'Unknown',
       };
 }
+
+extension ServerProviderTypeIsSpecified on ServerProviderType? {
+  bool get isSpecified => this != null && this != ServerProviderType.unknown;
+}

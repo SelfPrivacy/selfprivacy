@@ -116,7 +116,7 @@ class HiveConfig {
         /// add new migrations here, like:
         /// if (version < 3) {...}, etc.
 
-        /// update saved version after successfull migraions
+        /// update saved version after successfull migrations
         await localSettingsBox.put(BNames.databaseVersion, version);
       }
     } catch (error, stackTrace) {
@@ -135,59 +135,81 @@ class HiveConfig {
     if (resourcesBox.isEmpty) {
       final Box serverInstallationBox = Hive.box(BNames.serverInstallationBox);
 
-      final String? serverProviderKey =
-          serverInstallationBox.get(BNames.hetznerKey);
-      final String? serverLocation =
-          serverInstallationBox.get(BNames.serverLocation);
-      final String? dnsProviderKey =
-          serverInstallationBox.get(BNames.cloudFlareKey);
-      final BackupsCredential? backblazeCredential =
-          serverInstallationBox.get(BNames.backblazeCredential);
-      final ServerDomain? serverDomain =
-          serverInstallationBox.get(BNames.serverDomain);
       final ServerHostingDetails? serverDetails =
           serverInstallationBox.get(BNames.serverDetails);
-      final BackblazeBucket? backblazeBucket =
-          serverInstallationBox.get(BNames.backblazeBucket);
-      final String? serverType =
-          serverInstallationBox.get(BNames.serverTypeIdentifier);
-      final ServerProviderType? serverProvider =
-          serverInstallationBox.get(BNames.serverProvider);
-      final DnsProviderType? dnsProvider =
-          serverInstallationBox.get(BNames.dnsProvider);
 
-      if (serverProviderKey != null &&
-          (serverProvider != null ||
-              (serverDetails != null &&
-                  serverDetails.provider != ServerProviderType.unknown))) {
+      // move server provider config
+
+      final ServerProviderType? serverProvider =
+          serverInstallationBox.get(BNames.serverProvider) ??
+              serverDetails?.provider;
+      final String? serverProviderKey =
+          serverInstallationBox.get(BNames.hetznerKey);
+
+      if (serverProviderKey != null && serverProvider.isSpecified) {
         final ServerProviderCredential serverProviderCredential =
             ServerProviderCredential(
           tokenId: null,
           token: serverProviderKey,
-          provider: serverProvider ?? serverDetails!.provider,
-          associatedServerIds: serverDetails != null ? [serverDetails.id] : [],
+          provider: serverProvider!,
+          associatedServerIds: [if (serverDetails != null) serverDetails.id],
         );
 
-        await resourcesBox
-            .put(BNames.serverProviderTokens, [serverProviderCredential]);
+        await resourcesBox.put(
+          BNames.serverProviderTokens,
+          [serverProviderCredential],
+        );
       }
 
-      if (dnsProviderKey != null &&
-          (dnsProvider != null ||
-              (serverDomain != null &&
-                  serverDomain.provider != DnsProviderType.unknown))) {
+      final String? serverLocation =
+          serverInstallationBox.get(BNames.serverLocation);
+      final String? serverType =
+          serverInstallationBox.get(BNames.serverTypeIdentifier);
+      final ServerDomain? serverDomain =
+          serverInstallationBox.get(BNames.serverDomain);
+
+      if (serverDetails != null && serverDomain != null) {
+        await resourcesBox.put(
+          BNames.servers,
+          [
+            Server(
+              domain: serverDomain,
+              hostingDetails: serverDetails.copyWith(
+                serverLocation: serverLocation,
+                serverType: serverType,
+              ),
+            ),
+          ],
+        );
+      }
+
+      // move dns config
+      final String? dnsProviderKey =
+          serverInstallationBox.get(BNames.cloudFlareKey);
+      final DnsProviderType? dnsProvider =
+          serverInstallationBox.get(BNames.dnsProvider) ??
+              serverDomain?.provider;
+
+      if (dnsProviderKey != null && dnsProvider.isSpecified) {
         final DnsProviderCredential dnsProviderCredential =
             DnsProviderCredential(
           tokenId: null,
           token: dnsProviderKey,
-          provider: dnsProvider ?? serverDomain!.provider,
-          associatedDomainNames:
-              serverDomain != null ? [serverDomain.domainName] : [],
+          provider: dnsProvider!,
+          associatedDomainNames: [
+            if (serverDomain != null) serverDomain.domainName,
+          ],
         );
 
         await resourcesBox
             .put(BNames.dnsProviderTokens, [dnsProviderCredential]);
       }
+
+      // move backblaze (backups) config
+      final BackupsCredential? backblazeCredential =
+          serverInstallationBox.get(BNames.backblazeCredential);
+      final BackblazeBucket? backblazeBucket =
+          serverInstallationBox.get(BNames.backblazeBucket);
 
       if (backblazeCredential != null) {
         await resourcesBox
@@ -197,20 +219,8 @@ class HiveConfig {
       if (backblazeBucket != null) {
         await resourcesBox.put(BNames.backblazeBucket, backblazeBucket);
       }
-
-      if (serverDetails != null && serverDomain != null) {
-        await resourcesBox.put(BNames.servers, [
-          Server(
-            domain: serverDomain,
-            hostingDetails: serverDetails.copyWith(
-              serverLocation: serverLocation,
-              serverType: serverType,
-            ),
-          ),
-        ]);
-      }
     }
-    log('successfully migration of db from 1 to 2 version');
+    log('successfully migrated db from 1 to 2 version');
   }
 }
 

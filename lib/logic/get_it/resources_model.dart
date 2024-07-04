@@ -78,6 +78,11 @@ class ResourcesModel {
   }
 
   Future<void> addDnsProviderToken(final DnsProviderCredential token) async {
+    // Check if this token already exists
+    if (_dnsProviderTokens
+        .any((final credential) => credential.token == token.token)) {
+      throw Exception('Token already exists');
+    }
     _dnsProviderTokens.add(token);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
   }
@@ -227,10 +232,33 @@ class WizardDataModel {
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
+  Future<void> moveServerTypeToServerDetails() async {
+    final details = _serverInstallation?.serverDetails;
+    if (details != null) {
+      if (_serverInstallation?.serverTypeIdentifier != null &&
+          _serverInstallation?.serverLocation != null) {
+        _serverInstallation = _serverInstallation?.copyWith(
+          serverDetails: () => details.copyWith(
+            serverType: _serverInstallation?.serverTypeIdentifier,
+            serverLocation: _serverInstallation?.serverLocation,
+          ),
+        );
+        await _box.put(
+          BNames.serverInstallationWizardData,
+          _serverInstallation,
+        );
+      }
+    }
+  }
+
   Future<void> setServerDetails(final ServerHostingDetails details) async {
+    final detailsWithServerType = details.copyWith(
+      serverLocation: _serverInstallation?.serverLocation,
+      serverType: _serverInstallation?.serverTypeIdentifier,
+    );
     _serverInstallation =
         (_serverInstallation ?? ServerInstallationWizardData.empty())
-            .copyWith(serverDetails: () => details);
+            .copyWith(serverDetails: () => detailsWithServerType);
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 

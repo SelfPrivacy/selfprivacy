@@ -115,10 +115,10 @@ class HiveConfig {
 
         /// add new migrations here, like:
         /// if (version < 3) {...}, etc.
-
-        /// update saved version after successfull migrations
-        await localSettingsBox.put(BNames.databaseVersion, version);
       }
+
+      /// update saved version after successfull migrations
+      await localSettingsBox.put(BNames.databaseVersion, version);
     } catch (error, stackTrace) {
       log(
         'error running db migrations',

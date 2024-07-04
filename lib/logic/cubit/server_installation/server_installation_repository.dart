@@ -182,6 +182,9 @@ class ServerInstallationRepository {
     if (!domainResult.success || domainResult.data.isEmpty) {
       return false;
     }
+    await getIt<ResourcesModel>().removeDnsProviderToken(
+      getIt<ResourcesModel>().dnsProviderCredentials.first,
+    );
 
     return domainResult.data.any(
       (final serverDomain) => serverDomain.domainName == domain,
@@ -519,6 +522,7 @@ class ServerInstallationRepository {
     // We are finished here. Time to save the state and finish the wizard
     // TODO: A lot of null checks are skipped here. Implication that every value exists might become false in the future.
     // TODO: We would actually want to handle token creation elsewhere.
+    await getIt<WizardDataModel>().moveServerTypeToServerDetails();
     final ServerInstallationWizardData wizardData =
         getIt<WizardDataModel>().serverInstallation!;
     await getIt<ResourcesModel>().addServer(

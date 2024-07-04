@@ -22,6 +22,18 @@ mixin JobsApi on GraphQLApiMap {
     return jobsList;
   }
 
+  Stream<List<ServerJob>> getServerJobsStream() async* {
+    final GraphQLClient client = await getSubscriptionClient();
+    final subscription = client.subscribe$JobUpdates();
+    await for (final response in subscription) {
+      final jobsList = response.parsedData?.jobUpdates
+              .map<ServerJob>((final job) => ServerJob.fromGraphQL(job))
+              .toList() ??
+          [];
+      yield jobsList;
+    }
+  }
+
   Future<GenericResult<bool>> removeApiJob(final String uid) async {
     try {
       final GraphQLClient client = await getClient();

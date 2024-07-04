@@ -101,7 +101,13 @@ abstract class GraphQLApiMap {
     final WebSocketLink webSocketLink = WebSocketLink(
       'ws://api.$rootAddress/graphql',
       config: SocketClientConfig(
+        // TODO: Figure out the keep alive pings, as the app disconnects after 30s of inactivity.
         autoReconnect: true,
+        initialPayload: _token.isEmpty
+            ? null
+            : {
+                'Authorization': 'Bearer $_token',
+              },
         headers: _token.isEmpty
             ? null
             : {

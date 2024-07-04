@@ -44,6 +44,8 @@ class ApiConnectionRepository {
 
   Timer? _timer;
 
+  StreamSubscription<List<ServerJob>>? _serverJobsStreamSubscription;
+
   Future<void> removeServerJob(final String uid) async {
     await api.removeApiJob(uid);
     _apiData.serverJobs.data
@@ -273,6 +275,12 @@ class ApiConnectionRepository {
     connectionStatus = ConnectionStatus.connected;
     _connectionStatusStream.add(connectionStatus);
 
+    _serverJobsStreamSubscription =
+        api.getServerJobsStream().listen((final List<ServerJob> jobs) {
+      _apiData.serverJobs.data = jobs;
+      _dataStream.add(_apiData);
+    });
+
     // Use timer to periodically check for new jobs
     _timer = Timer.periodic(
       const Duration(seconds: 10),
@@ -284,6 +292,7 @@ class ApiConnectionRepository {
     connectionStatus = ConnectionStatus.nonexistent;
     _connectionStatusStream.add(connectionStatus);
     _timer?.cancel();
+    await _serverJobsStreamSubscription?.cancel();
   }
 
   Future<void> _refetchEverything(final Version version) async {
@@ -338,7 +347,8 @@ class ApiData {
         ),
         serverJobs = ApiDataElement<List<ServerJob>>(
           fetchData: () async => api.getServerJobs(),
-          ttl: 10,
+          // TODO: Figure this out later, as ws keeps this updated
+          ttl: 10000,
         ),
         backupConfig = ApiDataElement<BackupConfiguration>(
           fetchData: () async => api.getBackupsConfiguration(),

@@ -3831,6 +3831,273 @@ class _CopyWithStubImpl$Query$GetApiJobs$jobs<TRes>
   getJobs(_fn) => _res;
 }
 
+class Subscription$JobUpdates {
+  Subscription$JobUpdates({
+    required this.jobUpdates,
+    this.$__typename = 'Subscription',
+  });
+
+  factory Subscription$JobUpdates.fromJson(Map<String, dynamic> json) {
+    final l$jobUpdates = json['jobUpdates'];
+    final l$$__typename = json['__typename'];
+    return Subscription$JobUpdates(
+      jobUpdates: (l$jobUpdates as List<dynamic>)
+          .map((e) =>
+              Fragment$basicApiJobsFields.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final List<Fragment$basicApiJobsFields> jobUpdates;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$jobUpdates = jobUpdates;
+    _resultData['jobUpdates'] = l$jobUpdates.map((e) => e.toJson()).toList();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$jobUpdates = jobUpdates;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      Object.hashAll(l$jobUpdates.map((v) => v)),
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Subscription$JobUpdates) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$jobUpdates = jobUpdates;
+    final lOther$jobUpdates = other.jobUpdates;
+    if (l$jobUpdates.length != lOther$jobUpdates.length) {
+      return false;
+    }
+    for (int i = 0; i < l$jobUpdates.length; i++) {
+      final l$jobUpdates$entry = l$jobUpdates[i];
+      final lOther$jobUpdates$entry = lOther$jobUpdates[i];
+      if (l$jobUpdates$entry != lOther$jobUpdates$entry) {
+        return false;
+      }
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Subscription$JobUpdates on Subscription$JobUpdates {
+  CopyWith$Subscription$JobUpdates<Subscription$JobUpdates> get copyWith =>
+      CopyWith$Subscription$JobUpdates(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Subscription$JobUpdates<TRes> {
+  factory CopyWith$Subscription$JobUpdates(
+    Subscription$JobUpdates instance,
+    TRes Function(Subscription$JobUpdates) then,
+  ) = _CopyWithImpl$Subscription$JobUpdates;
+
+  factory CopyWith$Subscription$JobUpdates.stub(TRes res) =
+      _CopyWithStubImpl$Subscription$JobUpdates;
+
+  TRes call({
+    List<Fragment$basicApiJobsFields>? jobUpdates,
+    String? $__typename,
+  });
+  TRes jobUpdates(
+      Iterable<Fragment$basicApiJobsFields> Function(
+              Iterable<
+                  CopyWith$Fragment$basicApiJobsFields<
+                      Fragment$basicApiJobsFields>>)
+          _fn);
+}
+
+class _CopyWithImpl$Subscription$JobUpdates<TRes>
+    implements CopyWith$Subscription$JobUpdates<TRes> {
+  _CopyWithImpl$Subscription$JobUpdates(
+    this._instance,
+    this._then,
+  );
+
+  final Subscription$JobUpdates _instance;
+
+  final TRes Function(Subscription$JobUpdates) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? jobUpdates = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Subscription$JobUpdates(
+        jobUpdates: jobUpdates == _undefined || jobUpdates == null
+            ? _instance.jobUpdates
+            : (jobUpdates as List<Fragment$basicApiJobsFields>),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  TRes jobUpdates(
+          Iterable<Fragment$basicApiJobsFields> Function(
+                  Iterable<
+                      CopyWith$Fragment$basicApiJobsFields<
+                          Fragment$basicApiJobsFields>>)
+              _fn) =>
+      call(
+          jobUpdates: _fn(_instance.jobUpdates
+              .map((e) => CopyWith$Fragment$basicApiJobsFields(
+                    e,
+                    (i) => i,
+                  ))).toList());
+}
+
+class _CopyWithStubImpl$Subscription$JobUpdates<TRes>
+    implements CopyWith$Subscription$JobUpdates<TRes> {
+  _CopyWithStubImpl$Subscription$JobUpdates(this._res);
+
+  TRes _res;
+
+  call({
+    List<Fragment$basicApiJobsFields>? jobUpdates,
+    String? $__typename,
+  }) =>
+      _res;
+
+  jobUpdates(_fn) => _res;
+}
+
+const documentNodeSubscriptionJobUpdates = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.subscription,
+    name: NameNode(value: 'JobUpdates'),
+    variableDefinitions: [],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'jobUpdates'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FragmentSpreadNode(
+            name: NameNode(value: 'basicApiJobsFields'),
+            directives: [],
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitionbasicApiJobsFields,
+]);
+Subscription$JobUpdates _parserFn$Subscription$JobUpdates(
+        Map<String, dynamic> data) =>
+    Subscription$JobUpdates.fromJson(data);
+
+class Options$Subscription$JobUpdates
+    extends graphql.SubscriptionOptions<Subscription$JobUpdates> {
+  Options$Subscription$JobUpdates({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Subscription$JobUpdates? typedOptimisticResult,
+    graphql.Context? context,
+  }) : super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeSubscriptionJobUpdates,
+          parserFn: _parserFn$Subscription$JobUpdates,
+        );
+}
+
+class WatchOptions$Subscription$JobUpdates
+    extends graphql.WatchQueryOptions<Subscription$JobUpdates> {
+  WatchOptions$Subscription$JobUpdates({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Subscription$JobUpdates? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeSubscriptionJobUpdates,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Subscription$JobUpdates,
+        );
+}
+
+class FetchMoreOptions$Subscription$JobUpdates
+    extends graphql.FetchMoreOptions {
+  FetchMoreOptions$Subscription$JobUpdates(
+      {required graphql.UpdateQuery updateQuery})
+      : super(
+          updateQuery: updateQuery,
+          document: documentNodeSubscriptionJobUpdates,
+        );
+}
+
+extension ClientExtension$Subscription$JobUpdates on graphql.GraphQLClient {
+  Stream<graphql.QueryResult<Subscription$JobUpdates>> subscribe$JobUpdates(
+          [Options$Subscription$JobUpdates? options]) =>
+      this.subscribe(options ?? Options$Subscription$JobUpdates());
+  graphql.ObservableQuery<Subscription$JobUpdates> watchSubscription$JobUpdates(
+          [WatchOptions$Subscription$JobUpdates? options]) =>
+      this.watchQuery(options ?? WatchOptions$Subscription$JobUpdates());
+}
+
 class Variables$Mutation$RemoveJob {
   factory Variables$Mutation$RemoveJob({required String jobId}) =>
       Variables$Mutation$RemoveJob._({

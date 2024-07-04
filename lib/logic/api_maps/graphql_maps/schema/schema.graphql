@@ -288,6 +288,7 @@ type SSHSettingsMutationReturn implements MutationReturnInterface {
 enum ServerProvider {
   HETZNER
   DIGITALOCEAN
+  OTHER
 }
 
 type Service {
@@ -408,7 +409,8 @@ type StorageVolume {
 }
 
 type Subscription {
-  count(target: Int! = 100): Int!
+  jobUpdates: [ApiJob!]!
+  count: Int!
 }
 
 type System {

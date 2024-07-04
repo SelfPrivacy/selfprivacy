@@ -1625,7 +1625,18 @@ class _CopyWithStubImpl$Input$UserMutationInput<TRes>
       _res;
 }
 
-enum Enum$BackupProvider { BACKBLAZE, NONE, MEMORY, FILE, $unknown }
+enum Enum$BackupProvider {
+  BACKBLAZE,
+  NONE,
+  MEMORY,
+  FILE,
+  $unknown;
+
+  factory Enum$BackupProvider.fromJson(String value) =>
+      fromJson$Enum$BackupProvider(value);
+
+  String toJson() => toJson$Enum$BackupProvider(this);
+}
 
 String toJson$Enum$BackupProvider(Enum$BackupProvider e) {
   switch (e) {
@@ -1657,7 +1668,17 @@ Enum$BackupProvider fromJson$Enum$BackupProvider(String value) {
   }
 }
 
-enum Enum$BackupReason { EXPLICIT, AUTO, PRE_RESTORE, $unknown }
+enum Enum$BackupReason {
+  EXPLICIT,
+  AUTO,
+  PRE_RESTORE,
+  $unknown;
+
+  factory Enum$BackupReason.fromJson(String value) =>
+      fromJson$Enum$BackupReason(value);
+
+  String toJson() => toJson$Enum$BackupReason(this);
+}
 
 String toJson$Enum$BackupReason(Enum$BackupReason e) {
   switch (e) {
@@ -1685,7 +1706,17 @@ Enum$BackupReason fromJson$Enum$BackupReason(String value) {
   }
 }
 
-enum Enum$DnsProvider { CLOUDFLARE, DIGITALOCEAN, DESEC, $unknown }
+enum Enum$DnsProvider {
+  CLOUDFLARE,
+  DIGITALOCEAN,
+  DESEC,
+  $unknown;
+
+  factory Enum$DnsProvider.fromJson(String value) =>
+      fromJson$Enum$DnsProvider(value);
+
+  String toJson() => toJson$Enum$DnsProvider(this);
+}
 
 String toJson$Enum$DnsProvider(Enum$DnsProvider e) {
   switch (e) {
@@ -1713,7 +1744,16 @@ Enum$DnsProvider fromJson$Enum$DnsProvider(String value) {
   }
 }
 
-enum Enum$RestoreStrategy { INPLACE, DOWNLOAD_VERIFY_OVERWRITE, $unknown }
+enum Enum$RestoreStrategy {
+  INPLACE,
+  DOWNLOAD_VERIFY_OVERWRITE,
+  $unknown;
+
+  factory Enum$RestoreStrategy.fromJson(String value) =>
+      fromJson$Enum$RestoreStrategy(value);
+
+  String toJson() => toJson$Enum$RestoreStrategy(this);
+}
 
 String toJson$Enum$RestoreStrategy(Enum$RestoreStrategy e) {
   switch (e) {
@@ -1737,7 +1777,17 @@ Enum$RestoreStrategy fromJson$Enum$RestoreStrategy(String value) {
   }
 }
 
-enum Enum$ServerProvider { HETZNER, DIGITALOCEAN, $unknown }
+enum Enum$ServerProvider {
+  HETZNER,
+  DIGITALOCEAN,
+  OTHER,
+  $unknown;
+
+  factory Enum$ServerProvider.fromJson(String value) =>
+      fromJson$Enum$ServerProvider(value);
+
+  String toJson() => toJson$Enum$ServerProvider(this);
+}
 
 String toJson$Enum$ServerProvider(Enum$ServerProvider e) {
   switch (e) {
@@ -1745,6 +1795,8 @@ String toJson$Enum$ServerProvider(Enum$ServerProvider e) {
       return r'HETZNER';
     case Enum$ServerProvider.DIGITALOCEAN:
       return r'DIGITALOCEAN';
+    case Enum$ServerProvider.OTHER:
+      return r'OTHER';
     case Enum$ServerProvider.$unknown:
       return r'$unknown';
   }
@@ -1756,6 +1808,8 @@ Enum$ServerProvider fromJson$Enum$ServerProvider(String value) {
       return Enum$ServerProvider.HETZNER;
     case r'DIGITALOCEAN':
       return Enum$ServerProvider.DIGITALOCEAN;
+    case r'OTHER':
+      return Enum$ServerProvider.OTHER;
     default:
       return Enum$ServerProvider.$unknown;
   }
@@ -1769,7 +1823,12 @@ enum Enum$ServiceStatusEnum {
   ACTIVATING,
   DEACTIVATING,
   OFF,
-  $unknown
+  $unknown;
+
+  factory Enum$ServiceStatusEnum.fromJson(String value) =>
+      fromJson$Enum$ServiceStatusEnum(value);
+
+  String toJson() => toJson$Enum$ServiceStatusEnum(this);
 }
 
 String toJson$Enum$ServiceStatusEnum(Enum$ServiceStatusEnum e) {
@@ -1814,7 +1873,18 @@ Enum$ServiceStatusEnum fromJson$Enum$ServiceStatusEnum(String value) {
   }
 }
 
-enum Enum$Severity { INFO, WARNING, ERROR, CRITICAL, SUCCESS, $unknown }
+enum Enum$Severity {
+  INFO,
+  WARNING,
+  ERROR,
+  CRITICAL,
+  SUCCESS,
+  $unknown;
+
+  factory Enum$Severity.fromJson(String value) => fromJson$Enum$Severity(value);
+
+  String toJson() => toJson$Enum$Severity(this);
+}
 
 String toJson$Enum$Severity(Enum$Severity e) {
   switch (e) {
@@ -1850,7 +1920,16 @@ Enum$Severity fromJson$Enum$Severity(String value) {
   }
 }
 
-enum Enum$UserType { NORMAL, PRIMARY, ROOT, $unknown }
+enum Enum$UserType {
+  NORMAL,
+  PRIMARY,
+  ROOT,
+  $unknown;
+
+  factory Enum$UserType.fromJson(String value) => fromJson$Enum$UserType(value);
+
+  String toJson() => toJson$Enum$UserType(this);
+}
 
 String toJson$Enum$UserType(Enum$UserType e) {
   switch (e) {
@@ -1887,7 +1966,12 @@ enum Enum$__TypeKind {
   INPUT_OBJECT,
   LIST,
   NON_NULL,
-  $unknown
+  $unknown;
+
+  factory Enum$__TypeKind.fromJson(String value) =>
+      fromJson$Enum$__TypeKind(value);
+
+  String toJson() => toJson$Enum$__TypeKind(this);
 }
 
 String toJson$Enum$__TypeKind(Enum$__TypeKind e) {
@@ -1956,7 +2040,12 @@ enum Enum$__DirectiveLocation {
   ENUM_VALUE,
   INPUT_OBJECT,
   INPUT_FIELD_DEFINITION,
-  $unknown
+  $unknown;
+
+  factory Enum$__DirectiveLocation.fromJson(String value) =>
+      fromJson$Enum$__DirectiveLocation(value);
+
+  String toJson() => toJson$Enum$__DirectiveLocation(this);
 }
 
 String toJson$Enum$__DirectiveLocation(Enum$__DirectiveLocation e) {

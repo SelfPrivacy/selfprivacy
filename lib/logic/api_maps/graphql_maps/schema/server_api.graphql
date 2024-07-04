@@ -33,6 +33,12 @@ query GetApiJobs {
   }
 }
 
+subscription JobUpdates {
+  jobUpdates {
+    ...basicApiJobsFields
+  }
+}
+
 mutation RemoveJob($jobId: String!) {
   jobs {
     removeJob(jobId: $jobId) {

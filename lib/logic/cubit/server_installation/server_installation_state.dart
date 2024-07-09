@@ -54,7 +54,7 @@ abstract class ServerInstallationState extends Equatable {
   ServerSetupProgress get progress => ServerSetupProgress
       .values[_fulfillmentList.where((final el) => el!).length];
 
-  int get porgressBar {
+  int get progressBar {
     if (progress.index < 6) {
       return progress.index;
     } else if (progress.index < 10) {
@@ -119,7 +119,7 @@ class TimerState extends ServerInstallationNotFinished {
 enum ServerSetupProgress {
   nothingYet,
   serverProviderFilled,
-  servertTypeFilled,
+  serverTypeFilled,
   dnsProviderFilled,
   backblazeFilled,
   domainFilled,
@@ -147,6 +147,26 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     super.serverDetails,
     super.installationDialoguePopUp,
   });
+
+  ServerInstallationNotFinished.fromWizardData(
+    final ServerInstallationWizardData data,
+  ) : this(
+          providerApiToken: data.serverProviderKey,
+          dnsApiToken: data.dnsProviderKey,
+          serverDomain: data.serverDomain,
+          serverTypeIdentificator: data.serverTypeIdentifier,
+          backblazeCredential: data.backupsCredential,
+          serverDetails: data.serverDetails,
+          rootUser: data.rootUser,
+          isServerStarted: data.isServerStarted,
+          isServerResetedFirstTime: data.isServerResetedFirstTime,
+          isServerResetedSecondTime: data.isServerResetedSecondTime,
+          isLoading: data.isLoading,
+          dnsMatches: null,
+          customSshKey: null,
+          installationDialoguePopUp: null,
+        );
+
   final bool isLoading;
   final Map<String, DnsRecordStatus>? dnsMatches;
   final String? customSshKey;
@@ -211,12 +231,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
         dnsApiToken: dnsApiToken!,
         backblazeCredential: backblazeCredential!,
         serverDomain: serverDomain!,
-        rootUser: rootUser!,
         serverDetails: serverDetails!,
-        isServerStarted: isServerStarted,
-        isServerResetedFirstTime: isServerResetedFirstTime,
-        isServerResetedSecondTime: isServerResetedSecondTime,
-        installationDialoguePopUp: installationDialoguePopUp,
       );
 }
 
@@ -247,13 +262,14 @@ class ServerInstallationFinished extends ServerInstallationState {
     required String super.dnsApiToken,
     required BackupsCredential super.backblazeCredential,
     required ServerDomain super.serverDomain,
-    required User super.rootUser,
     required ServerHostingDetails super.serverDetails,
-    required super.isServerStarted,
-    required super.isServerResetedFirstTime,
-    required super.isServerResetedSecondTime,
-    required super.installationDialoguePopUp,
-  });
+  }) : super(
+          rootUser: null,
+          isServerStarted: true,
+          isServerResetedFirstTime: true,
+          isServerResetedSecondTime: true,
+          installationDialoguePopUp: null,
+        );
 
   @override
   List<Object?> get props => [
@@ -302,9 +318,9 @@ class ServerInstallationRecovery extends ServerInstallationState {
     super.dnsApiToken,
     super.backblazeCredential,
     super.serverDomain,
-    super.rootUser,
     super.serverDetails,
   }) : super(
+          rootUser: null,
           isServerStarted: true,
           isServerResetedFirstTime: true,
           isServerResetedSecondTime: true,
@@ -334,7 +350,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
     final String? dnsApiToken,
     final BackupsCredential? backblazeCredential,
     final ServerDomain? serverDomain,
-    final User? rootUser,
     final ServerHostingDetails? serverDetails,
     final RecoveryStep? currentStep,
     final ServerRecoveryCapabilities? recoveryCapabilities,
@@ -346,7 +361,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
         dnsApiToken: dnsApiToken ?? this.dnsApiToken,
         backblazeCredential: backblazeCredential ?? this.backblazeCredential,
         serverDomain: serverDomain ?? this.serverDomain,
-        rootUser: rootUser ?? this.rootUser,
         serverDetails: serverDetails ?? this.serverDetails,
         currentStep: currentStep ?? this.currentStep,
         recoveryCapabilities: recoveryCapabilities ?? this.recoveryCapabilities,
@@ -358,11 +372,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
         dnsApiToken: dnsApiToken!,
         backblazeCredential: backblazeCredential!,
         serverDomain: serverDomain!,
-        rootUser: rootUser!,
         serverDetails: serverDetails!,
-        isServerStarted: true,
-        isServerResetedFirstTime: true,
-        isServerResetedSecondTime: true,
-        installationDialoguePopUp: null,
       );
 }

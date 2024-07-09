@@ -3,13 +3,19 @@
 1. User
 2. ServerHostingDetails
 3. ServerDomain
-4. BackblazeCredential
-5. ServerVolume
+4. BackupsCredential
+5. ServerProviderVolume
 6. BackblazeBucket
+7. ServerProviderCredential
+8. DnsProviderCredential
+9. Server
+
+## Wizards store
+60. ServerInstallationWizardData
 
 ## Enums
 
 100. DnsProvider
 101. ServerProvider
 102. UserType
-103. BackupsProvider
+103. BackupsProviderType

@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
@@ -108,7 +109,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final BackupsServerLoaded event,
     final Emitter<BackupsState> emit,
   ) async {
-    BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
+    BackblazeBucket? bucket = getIt<ResourcesModel>().backblazeBucket;
     final backups = getIt<ApiConnectionRepository>().apiData.backups;
     final backupConfig = getIt<ApiConnectionRepository>().apiData.backupConfig;
     if (backupConfig.data == null || backups.data == null) {
@@ -227,7 +228,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       emit(BackupsUnititialized());
       return;
     }
-    final BackblazeBucket? bucket = getIt<ApiConfigModel>().backblazeBucket;
+    final BackblazeBucket? bucket = getIt<ResourcesModel>().backblazeBucket;
     emit(
       BackupsInitialized(
         backblazeBucket: bucket,

@@ -57,3 +57,7 @@ enum DnsProviderType {
         unknown => 'Unknown',
       };
 }
+
+extension DnsProviderTypeIsSpecified on DnsProviderType? {
+  bool get isSpecified => this != null && this != DnsProviderType.unknown;
+}

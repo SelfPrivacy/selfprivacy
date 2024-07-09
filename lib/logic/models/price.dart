@@ -11,7 +11,7 @@ class Price {
 enum CurrencyType {
   eur,
   usd,
-  unkown,
+  unknown,
 }
 
 class Currency {

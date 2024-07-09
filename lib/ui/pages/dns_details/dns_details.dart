@@ -5,6 +5,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -86,7 +87,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
     final String domain =
-        getIt<ApiConfigModel>().serverDomain?.domainName ?? '';
+        getIt<ResourcesModel>().serverDomain?.domainName ?? '';
     final DnsRecordsState dnsCubit = context.watch<DnsRecordsCubit>().state;
 
     print(dnsCubit.dnsState);

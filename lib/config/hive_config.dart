@@ -1,74 +1,226 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
+import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
+import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
+import 'package:selfprivacy/utils/secure_storage.dart';
 
 class HiveConfig {
+  static final log = const AppLogger(name: 'hive_config').log;
+
+  /// bump on schema changes
+  static const version = 2;
+
   static Future<void> init() async {
     final String? storagePath = PlatformAdapter.storagePath;
-    print('HiveConfig: Custom storage path: $storagePath');
+    log('set custom storage path to: "$storagePath"');
+
     await Hive.initFlutter(storagePath);
-    Hive.registerAdapter(UserAdapter());
-    Hive.registerAdapter(ServerHostingDetailsAdapter());
-    Hive.registerAdapter(ServerDomainAdapter());
-    Hive.registerAdapter(BackupsCredentialAdapter());
-    Hive.registerAdapter(BackblazeBucketAdapter());
-    Hive.registerAdapter(ServerProviderVolumeAdapter());
-    Hive.registerAdapter(UserTypeAdapter());
-    Hive.registerAdapter(DnsProviderTypeAdapter());
-    Hive.registerAdapter(ServerProviderTypeAdapter());
-    Hive.registerAdapter(BackupsProviderTypeAdapter());
 
-    await Hive.openBox(BNames.appSettingsBox);
+    registerAdapters();
+    await decryptBoxes();
+    await performMigrations();
+  }
 
+  static void registerAdapters() {
     try {
-      final HiveAesCipher cipher = HiveAesCipher(
-        await getEncryptedKey(BNames.serverInstallationEncryptionKey),
+      Hive.registerAdapter(UserAdapter());
+      Hive.registerAdapter(ServerHostingDetailsAdapter());
+      Hive.registerAdapter(ServerDomainAdapter());
+      Hive.registerAdapter(BackupsCredentialAdapter());
+      Hive.registerAdapter(ServerProviderVolumeAdapter());
+      Hive.registerAdapter(BackblazeBucketAdapter());
+      Hive.registerAdapter(ServerProviderCredentialAdapter());
+      Hive.registerAdapter(DnsProviderCredentialAdapter());
+      Hive.registerAdapter(ServerAdapter());
+      Hive.registerAdapter(DnsProviderTypeAdapter());
+      Hive.registerAdapter(ServerProviderTypeAdapter());
+      Hive.registerAdapter(UserTypeAdapter());
+      Hive.registerAdapter(BackupsProviderTypeAdapter());
+      Hive.registerAdapter(ServerInstallationWizardDataAdapter());
+      log('successfully registered every adapter');
+    } catch (error, stackTrace) {
+      log(
+        'error registering adapters',
+        error: error,
+        stackTrace: stackTrace,
       );
+      rethrow;
+    }
+  }
 
-      await Hive.openBox<User>(BNames.usersDeprecated);
-      await Hive.openBox<User>(BNames.usersBox, encryptionCipher: cipher);
+  static Future<HiveAesCipher> getCipher() async {
+    List<int>? key = await SecureStorage.getKey();
+    if (key == null) {
+      key = Hive.generateSecureKey();
+      await SecureStorage.setKey(key);
+    }
+    return HiveAesCipher(key);
+  }
 
-      final Box<User> deprecatedUsers = Hive.box<User>(BNames.usersDeprecated);
-      if (deprecatedUsers.isNotEmpty) {
-        final Box<User> users = Hive.box<User>(BNames.usersBox);
-        await users.addAll(deprecatedUsers.values.toList());
-        await deprecatedUsers.clear();
-      }
+  static Future<void> decryptBoxes() async {
+    try {
+      // load encrypted boxes into memory
+      final HiveAesCipher cipher = await getCipher();
 
       await Hive.openBox(
         BNames.serverInstallationBox,
         encryptionCipher: cipher,
       );
-    } on PlatformException catch (e) {
-      print('HiveConfig: Error while opening boxes: $e');
+      await Hive.openBox(
+        BNames.resourcesBox,
+        encryptionCipher: cipher,
+      );
+      await Hive.openBox(
+        BNames.wizardDataBox,
+        encryptionCipher: cipher,
+      );
+      log('successfully decrypted boxes');
+    } catch (error, stackTrace) {
+      log(
+        'error initializing encrypted boxes',
+        error: error,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
 
-  static Future<Uint8List> getEncryptedKey(final String encKey) async {
-    const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  // migrations
+
+  static Future<void> performMigrations() async {
     try {
-      final bool hasEncryptionKey =
-          await secureStorage.containsKey(key: encKey);
-      if (!hasEncryptionKey) {
-        final List<int> key = Hive.generateSecureKey();
-        await secureStorage.write(key: encKey, value: base64UrlEncode(key));
+      // perform migration check
+      final localSettingsBox = await Hive.openBox(BNames.appSettingsBox);
+
+      // if it is an initial app launch, we do not need to perform any migrations
+      final savedVersion = localSettingsBox.isEmpty
+          ? version
+          // if box was initialized, but database version was not introduced in
+          // it yet, it means that we have initial value
+          : await localSettingsBox.get(BNames.databaseVersion, defaultValue: 1);
+
+      /// launch migrations based on version
+      if (savedVersion < version) {
+        if (savedVersion < 2) {
+          await migrateFrom1To2();
+        }
+
+        /// add new migrations here, like:
+        /// if (version < 3) {...}, etc.
       }
 
-      final String? string = await secureStorage.read(key: encKey);
-      return base64Url.decode(string!);
-    } on PlatformException catch (e) {
-      print('HiveConfig: Error while getting encryption key: $e');
+      /// update saved version after successfull migrations
+      await localSettingsBox.put(BNames.databaseVersion, version);
+    } catch (error, stackTrace) {
+      log(
+        'error running db migrations',
+        error: error,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
+  }
+
+  /// introduce and populate resourcesBox
+  static Future<void> migrateFrom1To2() async {
+    final Box resourcesBox = Hive.box(BNames.resourcesBox);
+    if (resourcesBox.isEmpty) {
+      final Box serverInstallationBox = Hive.box(BNames.serverInstallationBox);
+
+      final ServerHostingDetails? serverDetails =
+          serverInstallationBox.get(BNames.serverDetails);
+
+      // move server provider config
+
+      final ServerProviderType? serverProvider =
+          serverInstallationBox.get(BNames.serverProvider) ??
+              serverDetails?.provider;
+      final String? serverProviderKey =
+          serverInstallationBox.get(BNames.hetznerKey);
+
+      if (serverProviderKey != null && serverProvider.isSpecified) {
+        final ServerProviderCredential serverProviderCredential =
+            ServerProviderCredential(
+          tokenId: null,
+          token: serverProviderKey,
+          provider: serverProvider!,
+          associatedServerIds: [if (serverDetails != null) serverDetails.id],
+        );
+
+        await resourcesBox.put(
+          BNames.serverProviderTokens,
+          [serverProviderCredential],
+        );
+      }
+
+      final String? serverLocation =
+          serverInstallationBox.get(BNames.serverLocation);
+      final String? serverType =
+          serverInstallationBox.get(BNames.serverTypeIdentifier);
+      final ServerDomain? serverDomain =
+          serverInstallationBox.get(BNames.serverDomain);
+
+      if (serverDetails != null && serverDomain != null) {
+        await resourcesBox.put(
+          BNames.servers,
+          [
+            Server(
+              domain: serverDomain,
+              hostingDetails: serverDetails.copyWith(
+                serverLocation: serverLocation,
+                serverType: serverType,
+              ),
+            ),
+          ],
+        );
+      }
+
+      // move dns config
+      final String? dnsProviderKey =
+          serverInstallationBox.get(BNames.cloudFlareKey);
+      final DnsProviderType? dnsProvider =
+          serverInstallationBox.get(BNames.dnsProvider) ??
+              serverDomain?.provider;
+
+      if (dnsProviderKey != null && dnsProvider.isSpecified) {
+        final DnsProviderCredential dnsProviderCredential =
+            DnsProviderCredential(
+          tokenId: null,
+          token: dnsProviderKey,
+          provider: dnsProvider!,
+          associatedDomainNames: [
+            if (serverDomain != null) serverDomain.domainName,
+          ],
+        );
+
+        await resourcesBox
+            .put(BNames.dnsProviderTokens, [dnsProviderCredential]);
+      }
+
+      // move backblaze (backups) config
+      final BackupsCredential? backblazeCredential =
+          serverInstallationBox.get(BNames.backblazeCredential);
+      final BackblazeBucket? backblazeBucket =
+          serverInstallationBox.get(BNames.backblazeBucket);
+
+      if (backblazeCredential != null) {
+        await resourcesBox
+            .put(BNames.backupsProviderTokens, [backblazeCredential]);
+      }
+
+      if (backblazeBucket != null) {
+        await resourcesBox.put(BNames.backblazeBucket, backblazeBucket);
+      }
+    }
+    log('successfully migrated db from 1 to 2 version');
   }
 }
 
@@ -76,6 +228,9 @@ class HiveConfig {
 class BNames {
   /// App settings box. Contains app settings like [darkThemeModeOn], [shouldShowOnboarding]
   static String appSettingsBox = 'appSettings';
+
+  /// An integer with last saved version of the database
+  static String databaseVersion = 'databaseVersion';
 
   /// A boolean field of [appSettingsBox] box.
   static String darkThemeModeOn = 'isDarkModeOn';
@@ -88,9 +243,6 @@ class BNames {
 
   /// A string field
   static String appLocale = 'appLocale';
-
-  /// Encryption key to decrypt [serverInstallationBox] and [usersBox] box.
-  static String serverInstallationEncryptionKey = 'key';
 
   /// Server installation box. Contains server details and provider tokens.
   static String serverInstallationBox = 'appConfig';
@@ -122,7 +274,7 @@ class BNames {
   /// A String field of [serverInstallationBox] box.
   static String cloudFlareKey = 'cloudFlareKey';
 
-  /// A String field of [serverTypeIdentifier] box.
+  /// A String field of [serverInstallationBox] box.
   static String serverTypeIdentifier = 'serverTypeIdentifier';
 
   /// A [User] field of [serverInstallationBox] box.
@@ -149,9 +301,24 @@ class BNames {
   /// A boolean field of [serverInstallationBox] box.
   static String isRecoveringServer = 'isRecoveringServer';
 
-  /// Deprecated users box as it is unencrypted
-  static String usersDeprecated = 'users';
+  /// Resources and provider tokens box,
+  static String resourcesBox = 'resourcesBox';
 
-  /// Box with users
-  static String usersBox = 'usersEncrypted';
+  /// Server Provider Tokens of [resourcesBox] box.
+  static String serverProviderTokens = 'serverProviderTokens';
+
+  /// DNS Provider Tokens of [resourcesBox] box.
+  static String dnsProviderTokens = 'dnsProviderTokens';
+
+  /// Backups Provider Tokens of [resourcesBox] box.
+  static String backupsProviderTokens = 'backupsProviderTokens';
+
+  /// Servers of [resourcesBox] box.
+  static String servers = 'servers';
+
+  /// Wizard data box
+  static String wizardDataBox = 'wizardDataBox';
+
+  /// Server installation wizard data of [wizardDataBox] box.
+  static String serverInstallationWizardData = 'serverInstallationWizardData';
 }

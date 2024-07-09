@@ -15,6 +15,7 @@ import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
@@ -222,12 +223,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       provider: BackupsProviderType.backblaze,
     );
     final BackblazeBucket? bucket;
-    await repository.saveBackblazeKey(backblazeCredential);
+    await repository.saveBackupsCredential(backblazeCredential);
     if (state is ServerInstallationRecovery) {
       final configuration = await ServerApi(
         customToken:
             (state as ServerInstallationRecovery).serverDetails!.apiToken,
         isWithToken: true,
+        overrideDomain:
+            (state as ServerInstallationRecovery).serverDomain!.domainName,
       ).getBackupsConfiguration();
       if (configuration != null) {
         try {
@@ -401,7 +404,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       timer = Timer(pauseDuration, () async {
         final ServerHostingDetails serverDetails = await repository.restart();
-        await repository.saveIsServerResetedFirstTime(true);
+        await repository.saveIsServerRebootedFirstTime(true);
         await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
@@ -442,7 +445,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       timer = Timer(pauseDuration, () async {
         final ServerHostingDetails serverDetails = await repository.restart();
-        await repository.saveIsServerResetedSecondTime(true);
+        await repository.saveIsServerRebootedSecondTime(true);
         await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
@@ -577,10 +580,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       final ServerProviderType serverProvider = await ServerApi(
         customToken: serverDetails.apiToken,
         isWithToken: true,
+        overrideDomain: serverDomain.domainName,
       ).getServerProviderType();
       final dnsProvider = await ServerApi(
         customToken: serverDetails.apiToken,
         isWithToken: true,
+        overrideDomain: serverDomain.domainName,
       ).getDnsProviderType();
       if (serverProvider == ServerProviderType.unknown ||
           dnsProvider == DnsProviderType.unknown) {
@@ -762,6 +767,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final dnsProviderType = await ServerApi(
       customToken: dataState.serverDetails!.apiToken,
       isWithToken: true,
+      overrideDomain: serverDomain.domainName,
     ).getDnsProviderType();
     await repository.saveDomain(
       ServerDomain(
@@ -769,6 +775,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         provider: dnsProviderType,
       ),
     );
+    await repository.setDnsApiToken(token);
     emit(
       dataState.copyWith(
         serverDomain: ServerDomain(
@@ -785,21 +792,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final BackupsCredential backblazeCredential,
   ) async {
     await repository.saveIsServerStarted(true);
-    await repository.saveIsServerResetedFirstTime(true);
-    await repository.saveIsServerResetedSecondTime(true);
-    await repository.saveHasFinalChecked(true);
+    await repository.saveIsServerRebootedFirstTime(true);
+    await repository.saveIsServerRebootedSecondTime(true);
     await repository.saveIsRecoveringServer(false);
     final serverType = await ProvidersController.currentServerProvider!
         .getServerType(state.serverDetails!.id);
     await repository.saveServerType(serverType.data!);
     await ProvidersController.currentServerProvider!
         .trySetServerLocation(serverType.data!.location.identifier);
-    final User mainUser = await repository.getMainUser();
-    await repository.saveRootUser(mainUser);
+    await repository.saveHasFinalChecked(true);
     final ServerInstallationRecovery updatedState =
         (state as ServerInstallationRecovery).copyWith(
       backblazeCredential: backblazeCredential,
-      rootUser: mainUser,
       serverTypeIdentificator: serverType.data!.identifier,
     );
     emit(updatedState.finish());

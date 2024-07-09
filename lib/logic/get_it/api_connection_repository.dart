@@ -6,6 +6,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -246,14 +247,12 @@ class ApiConnectionRepository {
   }
 
   ServerHostingDetails? get serverDetails =>
-      getIt<ApiConfigModel>().serverDetails;
-  ServerDomain? get serverDomain => getIt<ApiConfigModel>().serverDomain;
+      getIt<ResourcesModel>().serverDetails;
+  ServerDomain? get serverDomain => getIt<ResourcesModel>().serverDomain;
 
   void init() async {
-    final serverDetails = getIt<ApiConfigModel>().serverDetails;
-    final hasFinalChecked =
-        box.get(BNames.hasFinalChecked, defaultValue: false);
-    if (serverDetails == null || !hasFinalChecked) {
+    final serverDetails = getIt<ResourcesModel>().serverDetails;
+    if (serverDetails == null) {
       return;
     }
     connectionStatus = ConnectionStatus.reconnecting;
@@ -281,6 +280,12 @@ class ApiConnectionRepository {
     );
   }
 
+  void clear() async {
+    connectionStatus = ConnectionStatus.nonexistent;
+    _connectionStatusStream.add(connectionStatus);
+    _timer?.cancel();
+  }
+
   Future<void> _refetchEverything(final Version version) async {
     await _apiData.serverJobs
         .refetchData(version, () => _dataStream.add(_apiData));
@@ -302,7 +307,7 @@ class ApiConnectionRepository {
   }
 
   Future<void> reload(final Timer? timer) async {
-    final serverDetails = getIt<ApiConfigModel>().serverDetails;
+    final serverDetails = getIt<ResourcesModel>().serverDetails;
     if (serverDetails == null) {
       return;
     }

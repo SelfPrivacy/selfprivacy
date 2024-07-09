@@ -2,6 +2,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 
 class MetricsLoadException implements Exception {
@@ -30,7 +31,7 @@ class MetricsRepository {
         break;
     }
 
-    final serverId = getIt<ApiConfigModel>().serverDetails!.id;
+    final serverId = getIt<ResourcesModel>().serverDetails!.id;
     final result = await ProvidersController.currentServerProvider!.getMetrics(
       serverId,
       start,

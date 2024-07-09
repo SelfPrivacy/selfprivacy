@@ -31,7 +31,7 @@
             ]
         },
         {
-            "name": "debug (production)",
+            "name": "debug (production flavor)",
             "request": "launch",
             "type": "dart",
             "args": [
@@ -41,7 +41,7 @@
         },
 
         {
-            "name": "debug (nightly)",
+            "name": "debug (nightly flavor)",
             "request": "launch",
             "type": "dart",
             "args": [

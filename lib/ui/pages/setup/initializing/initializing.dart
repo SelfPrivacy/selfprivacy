@@ -112,7 +112,7 @@ class InitializingPage extends StatelessWidget {
                           'Server',
                           'Installation',
                         ],
-                        activeIndex: cubit.state.porgressBar,
+                        activeIndex: cubit.state.progressBar,
                       ),
                     ),
                   ),

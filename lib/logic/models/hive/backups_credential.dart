@@ -5,6 +5,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.da
 
 part 'backups_credential.g.dart';
 
+// TODO: Make a constant type.
 @HiveType(typeId: 4)
 class BackupsCredential {
   BackupsCredential({

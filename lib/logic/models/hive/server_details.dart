@@ -12,6 +12,8 @@ class ServerHostingDetails {
     required this.volume,
     required this.apiToken,
     required this.provider,
+    this.serverLocation,
+    this.serverType,
     this.startTime,
   });
 
@@ -21,11 +23,12 @@ class ServerHostingDetails {
   @HiveField(1)
   final int id;
 
-  @HiveField(3)
-  final DateTime? createTime;
-
+  // TODO: Check if it is still needed
   @HiveField(2)
   final DateTime? startTime;
+
+  @HiveField(3)
+  final DateTime? createTime;
 
   // TODO: Check if it is still needed
   @HiveField(4)
@@ -37,9 +40,21 @@ class ServerHostingDetails {
   @HiveField(6, defaultValue: ServerProviderType.hetzner)
   final ServerProviderType provider;
 
-  ServerHostingDetails copyWith({final DateTime? startTime}) =>
+  @HiveField(7)
+  final String? serverLocation;
+
+  @HiveField(8)
+  final String? serverType;
+
+  ServerHostingDetails copyWith({
+    final DateTime? startTime,
+    final String? serverLocation,
+    final String? serverType,
+  }) =>
       ServerHostingDetails(
         startTime: startTime ?? this.startTime,
+        serverLocation: serverLocation ?? this.serverLocation,
+        serverType: serverType ?? this.serverType,
         createTime: createTime,
         id: id,
         ip4: ip4,
@@ -102,4 +117,8 @@ enum ServerProviderType {
         hetzner => 'Hetzner Cloud',
         unknown => 'Unknown',
       };
+}
+
+extension ServerProviderTypeIsSpecified on ServerProviderType? {
+  bool get isSpecified => this != null && this != ServerProviderType.unknown;
 }

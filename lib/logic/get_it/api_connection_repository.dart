@@ -275,11 +275,14 @@ class ApiConnectionRepository {
     connectionStatus = ConnectionStatus.connected;
     _connectionStatusStream.add(connectionStatus);
 
-    _serverJobsStreamSubscription =
-        api.getServerJobsStream().listen((final List<ServerJob> jobs) {
-      _apiData.serverJobs.data = jobs;
-      _dataStream.add(_apiData);
-    });
+    if (VersionConstraint.parse(wsJobsUpdatesSupportedVersion)
+        .allows(Version.parse(apiVersion))) {
+      _serverJobsStreamSubscription =
+          api.getServerJobsStream().listen((final List<ServerJob> jobs) {
+        _apiData.serverJobs.data = jobs;
+        _dataStream.add(_apiData);
+      });
+    }
 
     // Use timer to periodically check for new jobs
     _timer = Timer.periodic(
@@ -295,9 +298,14 @@ class ApiConnectionRepository {
     await _serverJobsStreamSubscription?.cancel();
   }
 
+  static const String wsJobsUpdatesSupportedVersion = '>=3.3.0';
+
   Future<void> _refetchEverything(final Version version) async {
-    await _apiData.serverJobs
-        .refetchData(version, () => _dataStream.add(_apiData));
+    if (_serverJobsStreamSubscription == null ||
+        _apiData.serverJobs.data == null) {
+      await _apiData.serverJobs
+          .refetchData(version, () => _dataStream.add(_apiData));
+    }
     await _apiData.backups
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.backupConfig
@@ -347,8 +355,7 @@ class ApiData {
         ),
         serverJobs = ApiDataElement<List<ServerJob>>(
           fetchData: () async => api.getServerJobs(),
-          // TODO: Figure this out later, as ws keeps this updated
-          ttl: 10000,
+          ttl: 10,
         ),
         backupConfig = ApiDataElement<BackupConfiguration>(
           fetchData: () async => api.getBackupsConfiguration(),

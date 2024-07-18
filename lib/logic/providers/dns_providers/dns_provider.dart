@@ -54,4 +54,14 @@ abstract class DnsProvider {
     final DnsRecord record,
     final ServerDomain domain,
   );
+
+  /// Tries to update existing domain records
+  ///
+  /// If [oldRecords] is provided, it will also remove the records that
+  /// are not in [newRecords
+  Future<GenericResult<void>> updateDnsRecords({
+    required final List<DnsRecord> newRecords,
+    required final ServerDomain domain,
+    final List<DnsRecord>? oldRecords,
+  });
 }

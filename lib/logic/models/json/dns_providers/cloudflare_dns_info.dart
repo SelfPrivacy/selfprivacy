@@ -43,6 +43,7 @@ class CloudflareDnsRecord {
     this.ttl = 3600,
     this.priority = 10,
     this.id,
+    this.comment = 'Created by SelfPrivacy app',
   });
 
   factory CloudflareDnsRecord.fromDnsRecord(
@@ -89,6 +90,9 @@ class CloudflareDnsRecord {
   ///
   /// `>= 0 <= 65535`
   final int priority;
+
+  /// Comments or notes about the DNS record. This field has no effect on DNS responses.
+  final String comment;
 
   static CloudflareDnsRecord fromJson(final Map<String, dynamic> json) =>
       _$CloudflareDnsRecordFromJson(json);

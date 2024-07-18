@@ -198,6 +198,94 @@ class CloudflareDnsProvider extends DnsProvider {
     );
   }
 
+  @override
+  Future<GenericResult<void>> updateDnsRecords({
+    required final List<DnsRecord> newRecords,
+    required final ServerDomain domain,
+    final List<DnsRecord>? oldRecords,
+  }) async {
+    final syncZoneIdResult = await syncZoneId(domain.domainName);
+    if (!syncZoneIdResult.success) {
+      return syncZoneIdResult;
+    }
+
+    final result = await _adapter.api().getDnsRecords(
+          zoneId: _adapter.cachedZoneId,
+        );
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: false,
+        data: null,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final List<CloudflareDnsRecord> newSelfprivacyRecords = newRecords
+        .map(
+          (final record) => CloudflareDnsRecord.fromDnsRecord(
+            record,
+            domain.domainName,
+          ),
+        )
+        .toList();
+
+    final List<CloudflareDnsRecord>? oldSelfprivacyRecords = oldRecords
+        ?.map(
+          (final record) => CloudflareDnsRecord.fromDnsRecord(
+            record,
+            domain.domainName,
+          ),
+        )
+        .toList();
+
+    final List<CloudflareDnsRecord> cloudflareRecords = result.data;
+
+    final List<CloudflareDnsRecord> recordsToDelete = newSelfprivacyRecords
+        .where(
+          (final newRecord) => cloudflareRecords.any(
+            (final oldRecord) =>
+                newRecord.type == oldRecord.type &&
+                newRecord.name == oldRecord.name,
+          ),
+        )
+        .toList();
+
+    if (oldSelfprivacyRecords != null) {
+      recordsToDelete.addAll(
+        oldSelfprivacyRecords
+            .where(
+              (final oldRecord) => !newSelfprivacyRecords.any(
+                (final newRecord) =>
+                    newRecord.type == oldRecord.type &&
+                    newRecord.name == oldRecord.name,
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    if (recordsToDelete.isNotEmpty) {
+      await _adapter.api().removeSimilarRecords(
+            records: cloudflareRecords
+                .where(
+                  (final record) => recordsToDelete.any(
+                    (final recordToDelete) =>
+                        recordToDelete.type == record.type &&
+                        recordToDelete.name == record.name,
+                  ),
+                )
+                .toList(),
+            zoneId: _adapter.cachedZoneId,
+          );
+    }
+
+    return _adapter.api().createMultipleDnsRecords(
+          zoneId: _adapter.cachedZoneId,
+          records: newSelfprivacyRecords,
+        );
+  }
+
   Future<GenericResult<void>> syncZoneId(final String domain) async {
     if (domain == _adapter.cachedDomain && _adapter.cachedZoneId.isNotEmpty) {
       return GenericResult(

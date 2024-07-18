@@ -108,7 +108,7 @@ List<DnsRecord> getProjectDnsRecords(
   final DnsRecord socialA = DnsRecord(type: 'A', name: 'social', content: ip4);
   final DnsRecord vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
 
-  final DnsRecord txt1 = DnsRecord(
+  const DnsRecord txt1 = DnsRecord(
     type: 'TXT',
     name: '_dmarc',
     content: 'v=DMARC1; p=none',
@@ -125,7 +125,7 @@ List<DnsRecord> getProjectDnsRecords(
   /// We never create this record!
   /// This declaration is only for removal
   /// as we need to compare by 'type' and 'name'
-  final DnsRecord txt3 = DnsRecord(
+  const DnsRecord txt3 = DnsRecord(
     type: 'TXT',
     name: 'selector._domainkey',
     content: 'v=DKIM1; k=rsa; p=none',

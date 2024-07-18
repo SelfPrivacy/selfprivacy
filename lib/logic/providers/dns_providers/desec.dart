@@ -112,7 +112,28 @@ class DesecDnsProvider extends DnsProvider {
       );
     }
 
-    return _adapter.api().removeSimilarRecords(
+    return _adapter.api().putRecords(
+          domainName: domain.domainName,
+          records: bulkRecords,
+        );
+  }
+
+  @override
+  Future<GenericResult<void>> updateDnsRecords({
+    required final List<DnsRecord> newRecords,
+    required final ServerDomain domain,
+    final List<DnsRecord>? oldRecords,
+  }) async {
+    if (oldRecords != null) {
+      await removeDomainRecords(records: oldRecords, domain: domain);
+    }
+
+    final List<DesecDnsRecord> bulkRecords = [];
+    for (final DnsRecord record in newRecords) {
+      bulkRecords.add(DesecDnsRecord.fromDnsRecord(record, domain.domainName));
+    }
+
+    return _adapter.api().putRecords(
           domainName: domain.domainName,
           records: bulkRecords,
         );

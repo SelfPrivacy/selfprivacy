@@ -27,6 +27,7 @@ CloudflareDnsRecord _$CloudflareDnsRecordFromJson(Map<String, dynamic> json) =>
       ttl: (json['ttl'] as num?)?.toInt() ?? 3600,
       priority: (json['priority'] as num?)?.toInt() ?? 10,
       id: json['id'] as String?,
+      comment: json['comment'] as String? ?? 'Created by SelfPrivacy app',
     );
 
 Map<String, dynamic> _$CloudflareDnsRecordToJson(
@@ -39,4 +40,5 @@ Map<String, dynamic> _$CloudflareDnsRecordToJson(
       'zone_name': instance.zoneName,
       'ttl': instance.ttl,
       'priority': instance.priority,
+      'comment': instance.comment,
     };

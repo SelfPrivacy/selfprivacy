@@ -129,6 +129,79 @@ class DigitalOceanDnsProvider extends DnsProvider {
   }
 
   @override
+  Future<GenericResult<void>> updateDnsRecords({
+    required final List<DnsRecord> newRecords,
+    required final ServerDomain domain,
+    final List<DnsRecord>? oldRecords,
+  }) async {
+    final result = await _adapter.api().getDnsRecords(domain.domainName);
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: null,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final List<DigitalOceanDnsRecord> newSelfprivacyRecords = newRecords
+        .map(
+          (final record) => DigitalOceanDnsRecord.fromDnsRecord(
+            record,
+            domain.domainName,
+          ),
+        )
+        .toList();
+
+    final List<DigitalOceanDnsRecord>? oldSelfprivacyRecords = oldRecords
+        ?.map(
+          (final record) => DigitalOceanDnsRecord.fromDnsRecord(
+            record,
+            domain.domainName,
+          ),
+        )
+        .toList();
+
+    final List<DigitalOceanDnsRecord> oceanRecords = result.data;
+
+    final List<DigitalOceanDnsRecord> recordsToDelete = newSelfprivacyRecords
+        .where(
+          (final newRecord) => oceanRecords.any(
+            (final oldRecord) =>
+                newRecord.type == oldRecord.type &&
+                newRecord.name == oldRecord.name,
+          ),
+        )
+        .toList();
+
+    if (oldSelfprivacyRecords != null) {
+      recordsToDelete.addAll(
+        oldSelfprivacyRecords
+            .where(
+              (final oldRecord) => !newSelfprivacyRecords.any(
+                (final newRecord) =>
+                    newRecord.type == oldRecord.type &&
+                    newRecord.name == oldRecord.name,
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    if (recordsToDelete.isNotEmpty) {
+      return _adapter.api().removeSimilarRecords(
+            domainName: domain.domainName,
+            records: recordsToDelete,
+          );
+    }
+
+    return _adapter.api().createMultipleDnsRecords(
+          domainName: domain.domainName,
+          records: newSelfprivacyRecords,
+        );
+  }
+
+  @override
   Future<GenericResult<List<DnsRecord>>> getDnsRecords({
     required final ServerDomain domain,
   }) async {

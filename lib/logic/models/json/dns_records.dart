@@ -1,11 +1,12 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 
 part 'dns_records.g.dart';
 
-@JsonSerializable(createToJson: true, createFactory: false)
-class DnsRecord {
-  DnsRecord({
+@JsonSerializable()
+class DnsRecord extends Equatable {
+  const DnsRecord({
     required this.type,
     required this.name,
     required this.content,
@@ -35,4 +36,14 @@ class DnsRecord {
   final bool proxied;
 
   Map<String, dynamic> toJson() => _$DnsRecordToJson(this);
+
+  @override
+  @JsonKey(includeToJson: false)
+  List<Object?> get props => [
+        type,
+        name,
+        content,
+        ttl,
+        priority,
+      ];
 }

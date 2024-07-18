@@ -155,7 +155,7 @@ class DesecApi extends RestApiMap {
     return GenericResult(success: true, data: null);
   }
 
-  Future<GenericResult<void>> removeSimilarRecords({
+  Future<GenericResult<void>> putRecords({
     required final String domainName,
     required final List<DesecDnsRecord> records,
   }) async {

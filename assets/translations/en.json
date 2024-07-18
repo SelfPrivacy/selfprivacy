@@ -599,7 +599,10 @@
         "start_server_upgrade": "Start the server upgrade",
         "change_auto_upgrade_settings": "Change auto-upgrade settings",
         "change_server_timezone": "Change server timezone",
-        "change_ssh_settings": "Change SSH settings"
+        "change_ssh_settings": "Change SSH settings",
+        "update_dns_records": "Update DNS records",
+        "dns_records_did_not_change": "No changes needed",
+        "dns_records_changed": "DNS records updated"
     },
     "validations": {
         "required": "Required",

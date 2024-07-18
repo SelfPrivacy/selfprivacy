@@ -5,8 +5,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 
 export 'package:provider/provider.dart';
 
@@ -130,11 +133,20 @@ class JobsCubit extends Cubit<JobsState> {
   Future<void> applyAll() async {
     if (state is JobsStateWithJobs) {
       final List<ClientJob> jobs = (state as JobsStateWithJobs).clientJobList;
+
+      final rebuildRequired = jobs.any((final job) => job.requiresRebuild);
+      final dnsUpdateRequired = jobs.any((final job) => job.requiresDnsUpdate);
+
+      if (dnsUpdateRequired) {
+        jobs.add(UpdateDnsRecordsJob(status: JobStatusEnum.created));
+      }
+
       emit(JobsStateLoading(jobs, null, const []));
 
       await Future<void>.delayed(Duration.zero);
 
-      final rebuildRequired = jobs.any((final job) => job.requiresRebuild);
+      final List<DnsRecord> oldDnsRecords =
+          await getIt<ApiConnectionRepository>().api.getDnsRecords();
 
       for (final ClientJob job in jobs) {
         emit(
@@ -154,6 +166,50 @@ class JobsCubit extends Cubit<JobsState> {
           emit(
             (state as JobsStateLoading)
                 .updateJobStatus(job.id, JobStatusEnum.error, message: message),
+          );
+        }
+      }
+
+      if (dnsUpdateRequired) {
+        emit(
+          (state as JobsStateLoading).updateJobStatus(
+            UpdateDnsRecordsJob.jobId,
+            JobStatusEnum.running,
+          ),
+        );
+        final List<DnsRecord> newDnsRecords =
+            await getIt<ApiConnectionRepository>().api.getDnsRecords();
+
+        if (const UnorderedIterableEquality()
+            .equals(oldDnsRecords, newDnsRecords)) {
+          emit(
+            (state as JobsStateLoading).updateJobStatus(
+              UpdateDnsRecordsJob.jobId,
+              JobStatusEnum.finished,
+              message: 'jobs.dns_records_did_not_change'.tr(),
+            ),
+          );
+        } else {
+          final ServerDomain? domain =
+              getIt<ApiConnectionRepository>().serverDomain;
+
+          final dnsCreateResult =
+              await ProvidersController.currentDnsProvider!.updateDnsRecords(
+            newRecords:
+                newDnsRecords.where((final r) => r.content != null).toList(),
+            oldRecords: oldDnsRecords,
+            domain: domain!,
+          );
+
+          emit(
+            (state as JobsStateLoading).updateJobStatus(
+              UpdateDnsRecordsJob.jobId,
+              dnsCreateResult.success
+                  ? JobStatusEnum.finished
+                  : JobStatusEnum.error,
+              message:
+                  dnsCreateResult.message ?? 'jobs.dns_records_changed'.tr(),
+            ),
           );
         }
       }

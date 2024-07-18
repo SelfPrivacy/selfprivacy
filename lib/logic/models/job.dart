@@ -14,12 +14,14 @@ abstract class ClientJob extends Equatable {
     final String? id,
     this.requiresRebuild = true,
     this.status = JobStatusEnum.created,
+    this.requiresDnsUpdate = false,
     this.message,
   }) : id = id ?? StringGenerators.simpleId();
 
   final String title;
   final String id;
   final bool requiresRebuild;
+  final bool requiresDnsUpdate;
 
   final JobStatusEnum status;
   final String? message;
@@ -59,6 +61,32 @@ class UpgradeServerJob extends ClientJob {
         status: status,
         message: message,
         id: id,
+      );
+}
+
+class UpdateDnsRecordsJob extends ClientJob {
+  UpdateDnsRecordsJob({
+    super.status,
+    super.message,
+  }) : super(title: 'jobs.update_dns_records'.tr(), id: jobId);
+
+  static String jobId = 'dns_update';
+
+  @override
+  bool canAddTo(final List<ClientJob> jobs) =>
+      !jobs.any((final job) => job is UpdateDnsRecordsJob);
+
+  @override
+  Future<(bool, String)> execute() async => (false, 'unimplemented');
+
+  @override
+  UpdateDnsRecordsJob copyWithNewStatus({
+    required final JobStatusEnum status,
+    final String? message,
+  }) =>
+      UpdateDnsRecordsJob(
+        status: status,
+        message: message,
       );
 }
 
@@ -223,6 +251,7 @@ class ServiceToggleJob extends ClientJob {
   }) : super(
           title:
               '${needToTurnOn ? "jobs.service_turn_on".tr() : "jobs.service_turn_off".tr()} ${service.displayName}',
+          requiresDnsUpdate: true,
         );
 
   final bool needToTurnOn;

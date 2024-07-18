@@ -27,6 +27,9 @@ class JobsStateWithJobs extends JobsState {
   bool get rebuildRequired =>
       clientJobList.any((final job) => job.requiresRebuild);
 
+  bool get dnsUpdateRequired =>
+      clientJobList.any((final job) => job.requiresDnsUpdate);
+
   JobsState removeById(final String id) {
     final List<ClientJob> newJobsList =
         clientJobList.where((final element) => element.id != id).toList();
@@ -73,6 +76,9 @@ class JobsStateLoading extends JobsState {
 
   bool get rebuildRequired =>
       clientJobList.any((final job) => job.requiresRebuild);
+
+  bool get dnsUpdateRequired =>
+      clientJobList.any((final job) => job.requiresDnsUpdate);
 
   final List<ClientJob> postponedJobs;
 
@@ -138,6 +144,9 @@ class JobsStateFinished extends JobsState {
 
   bool get rebuildRequired =>
       clientJobList.any((final job) => job.requiresRebuild);
+
+  bool get dnsUpdateRequired =>
+      clientJobList.any((final job) => job.requiresDnsUpdate);
 
   final List<ClientJob> postponedJobs;
 

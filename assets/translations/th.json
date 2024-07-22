@@ -64,8 +64,7 @@
         "input_label": "กุญแจสาธารณะของ ED25519 หรือ RSA"
     },
     "console_page": {
-        "title": "คอนโซล",
-        "waiting": "กำลังรอการเริ่มตั้น…"
+        "title": "คอนโซล"
     },
     "domain": {
         "services_subtitle": "ระเบียน A จำเป็นสำหรับแต่ละเซิร์ฟเวอร์",

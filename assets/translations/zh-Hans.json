@@ -446,8 +446,7 @@
     },
     "console_page": {
         "title": "控制台",
-        "copy": "复制",
-        "waiting": "等待初始化…"
+        "copy": "复制"
     },
     "about_application_page": {
         "title": "关于与支持",

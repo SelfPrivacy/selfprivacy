@@ -45,7 +45,6 @@
     },
     "console_page": {
         "title": "Console",
-        "waiting": "En attente de l'initialisation…",
         "copy": "Copier"
     },
     "about_application_page": {

@@ -42,8 +42,7 @@
     },
     "console_page": {
         "title": "Konsole",
-        "copy": "Kopēt",
-        "waiting": "Gaida inicializatīnu…"
+        "copy": "Kopēt"
     },
     "about_application_page": {
         "title": "Par",

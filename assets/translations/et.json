@@ -116,12 +116,10 @@
     },
     "console_page": {
         "title": "Konsool",
-        "waiting": "Ootab initsialiseerimist…",
         "copy": "Kopeeri",
         "copy_raw": "Toores vastus",
         "history_empty": "Andmeid veel pole",
         "error": "Viga",
-        "log": "sündmuste logi",
         "rest_api_request": "REST API Taotlus",
         "rest_api_response": "REST API Vastus",
         "graphql_request": "GraphQL Taotlus",

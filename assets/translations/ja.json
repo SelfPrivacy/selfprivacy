@@ -48,8 +48,7 @@
     },
     "console_page": {
         "copy": "コピー",
-        "title": "コンソール",
-        "waiting": "初期化を待機しています…"
+        "title": "コンソール"
     },
     "about_application_page": {
         "title": "概要とサポート",

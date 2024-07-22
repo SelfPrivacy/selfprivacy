@@ -242,6 +242,19 @@ class ApiConnectionRepository {
     }
   }
 
+  Future<(bool, String)> setServiceConfiguration(
+    final String serviceId,
+    final Map<String, dynamic> settings,
+  ) async {
+    final GenericResult result =
+        await api.setServiceConfiguration(serviceId, settings);
+    if (result.success) {
+      return (true, result.message ?? 'basis.done'.tr());
+    } else {
+      return (false, result.message ?? 'jobs.generic_error'.tr());
+    }
+  }
+
   void dispose() {
     _dataStream.close();
     _connectionStatusStream.close();

@@ -367,9 +367,12 @@ abstract class ReplaceableJob extends ClientJob {
     super.id,
     super.status,
     super.message,
+    super.requiresRebuild,
+    super.requiresDnsUpdate,
   });
 
   bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) => false;
+  bool get shouldReplaceOnlyIfSameId => false;
 }
 
 class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
@@ -500,5 +503,47 @@ class ChangeSshSettingsJob extends ReplaceableJob {
         status: status,
         message: message,
         id: id,
+      );
+}
+
+class ChangeServiceConfiguration extends ReplaceableJob {
+  ChangeServiceConfiguration({
+    required this.serviceId,
+    required this.serviceDisplayName,
+    required this.settings,
+    super.status,
+    super.message,
+  }) : super(
+          title: 'jobs.change_service_settings'.tr(args: [serviceDisplayName]),
+          id: 'change_settings_$serviceId',
+          requiresDnsUpdate: true,
+          requiresRebuild: true,
+        );
+
+  final String serviceId;
+  final String serviceDisplayName;
+  final Map<String, dynamic> settings;
+
+  @override
+  bool get shouldReplaceOnlyIfSameId => true;
+
+  @override
+  Future<(bool, String)> execute() async => getIt<ApiConnectionRepository>()
+      .setServiceConfiguration(serviceId, settings);
+
+  @override
+  List<Object> get props => [...super.props, serviceId, settings];
+
+  @override
+  ChangeServiceConfiguration copyWithNewStatus({
+    required final JobStatusEnum status,
+    final String? message,
+  }) =>
+      ChangeServiceConfiguration(
+        serviceId: serviceId,
+        serviceDisplayName: serviceDisplayName,
+        settings: settings,
+        status: status,
+        message: message,
       );
 }

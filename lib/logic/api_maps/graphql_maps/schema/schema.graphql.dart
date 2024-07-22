@@ -1111,6 +1111,138 @@ class _CopyWithStubImpl$Input$SSHSettingsInput<TRes>
       _res;
 }
 
+class Input$SetServiceConfigurationInput {
+  factory Input$SetServiceConfigurationInput({
+    required String serviceId,
+    required Map<String, dynamic> configuration,
+  }) =>
+      Input$SetServiceConfigurationInput._({
+        r'serviceId': serviceId,
+        r'configuration': configuration,
+      });
+
+  Input$SetServiceConfigurationInput._(this._$data);
+
+  factory Input$SetServiceConfigurationInput.fromJson(
+      Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$serviceId = data['serviceId'];
+    result$data['serviceId'] = (l$serviceId as String);
+    final l$configuration = data['configuration'];
+    result$data['configuration'] = (l$configuration as Map<String, dynamic>);
+    return Input$SetServiceConfigurationInput._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  String get serviceId => (_$data['serviceId'] as String);
+
+  Map<String, dynamic> get configuration =>
+      (_$data['configuration'] as Map<String, dynamic>);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$serviceId = serviceId;
+    result$data['serviceId'] = l$serviceId;
+    final l$configuration = configuration;
+    result$data['configuration'] = l$configuration;
+    return result$data;
+  }
+
+  CopyWith$Input$SetServiceConfigurationInput<
+          Input$SetServiceConfigurationInput>
+      get copyWith => CopyWith$Input$SetServiceConfigurationInput(
+            this,
+            (i) => i,
+          );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Input$SetServiceConfigurationInput) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$serviceId = serviceId;
+    final lOther$serviceId = other.serviceId;
+    if (l$serviceId != lOther$serviceId) {
+      return false;
+    }
+    final l$configuration = configuration;
+    final lOther$configuration = other.configuration;
+    if (l$configuration != lOther$configuration) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$serviceId = serviceId;
+    final l$configuration = configuration;
+    return Object.hashAll([
+      l$serviceId,
+      l$configuration,
+    ]);
+  }
+}
+
+abstract class CopyWith$Input$SetServiceConfigurationInput<TRes> {
+  factory CopyWith$Input$SetServiceConfigurationInput(
+    Input$SetServiceConfigurationInput instance,
+    TRes Function(Input$SetServiceConfigurationInput) then,
+  ) = _CopyWithImpl$Input$SetServiceConfigurationInput;
+
+  factory CopyWith$Input$SetServiceConfigurationInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$SetServiceConfigurationInput;
+
+  TRes call({
+    String? serviceId,
+    Map<String, dynamic>? configuration,
+  });
+}
+
+class _CopyWithImpl$Input$SetServiceConfigurationInput<TRes>
+    implements CopyWith$Input$SetServiceConfigurationInput<TRes> {
+  _CopyWithImpl$Input$SetServiceConfigurationInput(
+    this._instance,
+    this._then,
+  );
+
+  final Input$SetServiceConfigurationInput _instance;
+
+  final TRes Function(Input$SetServiceConfigurationInput) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? serviceId = _undefined,
+    Object? configuration = _undefined,
+  }) =>
+      _then(Input$SetServiceConfigurationInput._({
+        ..._instance._$data,
+        if (serviceId != _undefined && serviceId != null)
+          'serviceId': (serviceId as String),
+        if (configuration != _undefined && configuration != null)
+          'configuration': (configuration as Map<String, dynamic>),
+      }));
+}
+
+class _CopyWithStubImpl$Input$SetServiceConfigurationInput<TRes>
+    implements CopyWith$Input$SetServiceConfigurationInput<TRes> {
+  _CopyWithStubImpl$Input$SetServiceConfigurationInput(this._res);
+
+  TRes _res;
+
+  call({
+    String? serviceId,
+    Map<String, dynamic>? configuration,
+  }) =>
+      _res;
+}
+
 class Input$SshMutationInput {
   factory Input$SshMutationInput({
     required String username,
@@ -2151,6 +2283,11 @@ const possibleTypesMap = <String, Set<String>>{
     'ServiceMutationReturn',
     'TimezoneMutationReturn',
     'UserMutationReturn',
+  },
+  'ConfigItem': {
+    'BoolConfigItem',
+    'EnumConfigItem',
+    'StringConfigItem',
   },
   'StorageUsageInterface': {'ServiceStorageUsage'},
 };

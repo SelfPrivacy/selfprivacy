@@ -36,6 +36,16 @@ class Service extends Equatable {
                   .toList() ??
               [],
           url: service.url,
+          configuration: service.configuration
+                  ?.map(
+                    (
+                      final Query$AllServices$services$allServices$configuration
+                          configItem,
+                    ) =>
+                        ServiceConfigItem.fromGraphQL(configItem),
+                  )
+                  .toList() ??
+              [],
         );
   const Service({
     required this.id,
@@ -50,6 +60,7 @@ class Service extends Equatable {
     required this.storageUsage,
     required this.svgIcon,
     required this.dnsRecords,
+    required this.configuration,
     this.url,
   });
 
@@ -89,6 +100,7 @@ class Service extends Equatable {
     svgIcon: '',
     dnsRecords: [],
     url: '',
+    configuration: [],
   );
 
   final String id;
@@ -104,6 +116,7 @@ class Service extends Equatable {
   final String svgIcon;
   final String? url;
   final List<DnsRecord> dnsRecords;
+  final List<ServiceConfigItem> configuration;
 
   @override
   List<Object?> get props => [
@@ -120,6 +133,7 @@ class Service extends Equatable {
         svgIcon,
         dnsRecords,
         url,
+        configuration,
       ];
 }
 
@@ -165,4 +179,147 @@ enum ServiceStatus {
         return inactive;
     }
   }
+}
+
+sealed class ServiceConfigItem extends Equatable {
+  const ServiceConfigItem({
+    required this.id,
+    required this.description,
+    required this.widget,
+    required this.type,
+  });
+
+  factory ServiceConfigItem.fromGraphQL(
+    final Query$AllServices$services$allServices$configuration configItem,
+  ) =>
+      configItem.when<ServiceConfigItem>(
+        boolConfigItem: (final boolConfigItem) => BoolServiceConfigItem(
+          id: boolConfigItem.id,
+          description: boolConfigItem.description,
+          widget: boolConfigItem.widget,
+          type: boolConfigItem.type,
+          value: boolConfigItem.boolValue,
+          defaultValue: boolConfigItem.defaultBoolValue,
+        ),
+        enumConfigItem: (final enumConfigItem) => EnumServiceConfigItem(
+          id: enumConfigItem.id,
+          description: enumConfigItem.description,
+          widget: enumConfigItem.widget,
+          type: enumConfigItem.type,
+          value: enumConfigItem.stringValue,
+          defaultValue: enumConfigItem.defaultStringValue,
+          options: enumConfigItem.options,
+        ),
+        stringConfigItem: (final stringConfigItem) => StringServiceConfigItem(
+          id: stringConfigItem.id,
+          description: stringConfigItem.description,
+          widget: stringConfigItem.widget,
+          type: stringConfigItem.type,
+          value: stringConfigItem.stringValue,
+          defaultValue: stringConfigItem.defaultStringValue,
+          regex: stringConfigItem.regex,
+        ),
+        orElse: () => FallbackServiceConfigItem(
+          id: configItem.id,
+          description: configItem.description,
+          type: configItem.type,
+        ),
+      );
+
+  final String id;
+  final String description;
+  final String widget;
+  final String type;
+}
+
+class StringServiceConfigItem extends ServiceConfigItem {
+  const StringServiceConfigItem({
+    required super.id,
+    required super.description,
+    required super.widget,
+    required super.type,
+    required this.value,
+    required this.defaultValue,
+    this.regex,
+  });
+
+  final String value;
+  final String defaultValue;
+  final String? regex;
+
+  @override
+  List<Object?> get props =>
+      [id, description, widget, type, value, defaultValue, regex];
+}
+
+class BoolServiceConfigItem extends ServiceConfigItem {
+  const BoolServiceConfigItem({
+    required super.id,
+    required super.description,
+    required super.widget,
+    required super.type,
+    required this.value,
+    required this.defaultValue,
+  });
+
+  final bool value;
+  final bool defaultValue;
+
+  @override
+  List<Object?> get props =>
+      [id, description, widget, type, value, defaultValue];
+}
+
+class EnumServiceConfigItem extends ServiceConfigItem {
+  const EnumServiceConfigItem({
+    required super.id,
+    required super.description,
+    required super.widget,
+    required super.type,
+    required this.value,
+    required this.defaultValue,
+    required this.options,
+  });
+
+  final String value;
+  final String defaultValue;
+  final List<String> options;
+
+  @override
+  List<Object?> get props =>
+      [id, description, widget, type, value, defaultValue, options];
+}
+
+class FallbackServiceConfigItem extends ServiceConfigItem {
+  const FallbackServiceConfigItem({
+    required super.id,
+    required super.description,
+    required super.type,
+  }) : super(widget: 'fallback');
+
+  @override
+  List<Object?> get props => [id, description, widget, type];
+}
+
+// TODO: Not used yet by the API
+class IntServiceConfigItem extends ServiceConfigItem {
+  const IntServiceConfigItem({
+    required super.id,
+    required super.description,
+    required super.widget,
+    required super.type,
+    required this.value,
+    required this.defaultValue,
+    required this.min,
+    required this.max,
+  });
+
+  final int value;
+  final int defaultValue;
+  final int min;
+  final int max;
+
+  @override
+  List<Object?> get props =>
+      [id, description, widget, type, value, defaultValue, min, max];
 }

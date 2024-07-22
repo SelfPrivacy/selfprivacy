@@ -96,23 +96,36 @@ class _ServicePageState extends State<ServicePage> {
           ),
           enabled: !serviceDisabled && !serviceLocked,
         ),
-        ListTile(
-          iconColor: Theme.of(context).colorScheme.onBackground,
-          onTap: () => context.read<JobsCubit>().addJob(
-                ServiceToggleJob(
-                  service: service,
-                  needToTurnOn: serviceDisabled,
+        if (!service.isRequired)
+          ListTile(
+            iconColor: Theme.of(context).colorScheme.onBackground,
+            onTap: () => context.read<JobsCubit>().addJob(
+                  ServiceToggleJob(
+                    service: service,
+                    needToTurnOn: serviceDisabled,
+                  ),
                 ),
-              ),
-          leading: const Icon(Icons.power_settings_new),
-          title: Text(
-            serviceDisabled
-                ? 'service_page.enable'.tr()
-                : 'service_page.disable'.tr(),
-            style: Theme.of(context).textTheme.titleMedium,
+            leading: const Icon(Icons.power_settings_new),
+            title: Text(
+              serviceDisabled
+                  ? 'service_page.enable'.tr()
+                  : 'service_page.disable'.tr(),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            enabled: !serviceLocked,
           ),
-          enabled: !serviceLocked,
-        ),
+        if (service.configuration.isNotEmpty)
+          ListTile(
+            iconColor: Theme.of(context).colorScheme.onBackground,
+            onTap: () => context.pushRoute(
+              ServiceSettingsRoute(serviceId: service.id),
+            ),
+            leading: const Icon(Icons.settings_outlined),
+            title: Text(
+              'service_page.settings'.tr(),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
         if (service.isMovable)
           ListTile(
             iconColor: Theme.of(context).colorScheme.onBackground,

@@ -158,6 +158,16 @@ abstract class _$RootRouter extends RootStackRouter {
         ),
       );
     },
+    ServiceSettingsRoute.name: (routeData) {
+      final args = routeData.argsAs<ServiceSettingsRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ServiceSettingsPage(
+          serviceId: args.serviceId,
+          key: args.key,
+        ),
+      );
+    },
     ServicesMigrationRoute.name: (routeData) {
       final args = routeData.argsAs<ServicesMigrationRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -587,6 +597,44 @@ class ServiceRouteArgs {
   @override
   String toString() {
     return 'ServiceRouteArgs{serviceId: $serviceId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ServiceSettingsPage]
+class ServiceSettingsRoute extends PageRouteInfo<ServiceSettingsRouteArgs> {
+  ServiceSettingsRoute({
+    required String serviceId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ServiceSettingsRoute.name,
+          args: ServiceSettingsRouteArgs(
+            serviceId: serviceId,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ServiceSettingsRoute';
+
+  static const PageInfo<ServiceSettingsRouteArgs> page =
+      PageInfo<ServiceSettingsRouteArgs>(name);
+}
+
+class ServiceSettingsRouteArgs {
+  const ServiceSettingsRouteArgs({
+    required this.serviceId,
+    this.key,
+  });
+
+  final String serviceId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ServiceSettingsRouteArgs{serviceId: $serviceId, key: $key}';
   }
 }
 

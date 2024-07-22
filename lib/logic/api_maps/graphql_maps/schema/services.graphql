@@ -1,3 +1,32 @@
+fragment BoolConfigItem on BoolConfigItem {
+  id
+  description
+  type
+  boolValue: value
+  defaultBoolValue: defaultValue
+  widget
+}
+
+fragment EnumConfigItem on EnumConfigItem {
+  id
+  description
+  type
+  stringValue: value
+  defaultStringValue: defaultValue
+  options
+  widget
+}
+
+fragment StringConfigItem on StringConfigItem {
+  id
+  description
+  type
+  stringValue: value
+  defaultStringValue: defaultValue
+  regex
+  widget
+}
+
 query AllServices {
   services {
     allServices {
@@ -22,6 +51,14 @@ query AllServices {
       }
       svgIcon
       url
+      configuration {
+        id
+        description
+        type
+        ... BoolConfigItem
+        ... EnumConfigItem
+        ... StringConfigItem
+      }
     }
   }
 }
@@ -77,3 +114,10 @@ mutation MoveService($input: MoveServiceInput!) {
   }
 }
 
+mutation SetServiceConfiguration($input: SetServiceConfigurationInput!) {
+  services {
+    setServiceConfiguration(input: $input) {
+      ...basicMutationReturnFields
+    }
+  }
+}

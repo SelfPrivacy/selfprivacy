@@ -174,4 +174,38 @@ mixin ServicesApi on GraphQLApiMap {
       );
     }
   }
+
+  Future<GenericResult> setServiceConfiguration(
+    final String serviceId,
+    final Map<String, dynamic> settings,
+  ) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Mutation$SetServiceConfiguration(
+        input: Input$SetServiceConfigurationInput(
+          serviceId: serviceId,
+          configuration: settings,
+        ),
+      );
+      final mutation =
+          Options$Mutation$SetServiceConfiguration(variables: variables);
+      final response = await client.mutate$SetServiceConfiguration(mutation);
+      return GenericResult(
+        data: null,
+        success:
+            response.parsedData?.services.setServiceConfiguration.success ??
+                false,
+        code: response.parsedData?.services.setServiceConfiguration.code ?? 0,
+        message: response.parsedData?.services.setServiceConfiguration.message,
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        data: null,
+        success: false,
+        code: 0,
+        message: e.toString(),
+      );
+    }
+  }
 }

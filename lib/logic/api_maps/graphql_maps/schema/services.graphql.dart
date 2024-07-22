@@ -5,6 +5,1032 @@ import 'schema.graphql.dart';
 import 'server_api.graphql.dart';
 import 'server_settings.graphql.dart';
 
+class Fragment$BoolConfigItem {
+  Fragment$BoolConfigItem({
+    required this.id,
+    required this.description,
+    required this.type,
+    required this.boolValue,
+    required this.defaultBoolValue,
+    required this.widget,
+    this.$__typename = 'BoolConfigItem',
+  });
+
+  factory Fragment$BoolConfigItem.fromJson(Map<String, dynamic> json) {
+    final l$id = json['id'];
+    final l$description = json['description'];
+    final l$type = json['type'];
+    final l$boolValue = json['boolValue'];
+    final l$defaultBoolValue = json['defaultBoolValue'];
+    final l$widget = json['widget'];
+    final l$$__typename = json['__typename'];
+    return Fragment$BoolConfigItem(
+      id: (l$id as String),
+      description: (l$description as String),
+      type: (l$type as String),
+      boolValue: (l$boolValue as bool),
+      defaultBoolValue: (l$defaultBoolValue as bool),
+      widget: (l$widget as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String id;
+
+  final String description;
+
+  final String type;
+
+  final bool boolValue;
+
+  final bool defaultBoolValue;
+
+  final String widget;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$description = description;
+    _resultData['description'] = l$description;
+    final l$type = type;
+    _resultData['type'] = l$type;
+    final l$boolValue = boolValue;
+    _resultData['boolValue'] = l$boolValue;
+    final l$defaultBoolValue = defaultBoolValue;
+    _resultData['defaultBoolValue'] = l$defaultBoolValue;
+    final l$widget = widget;
+    _resultData['widget'] = l$widget;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$description = description;
+    final l$type = type;
+    final l$boolValue = boolValue;
+    final l$defaultBoolValue = defaultBoolValue;
+    final l$widget = widget;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$description,
+      l$type,
+      l$boolValue,
+      l$defaultBoolValue,
+      l$widget,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Fragment$BoolConfigItem) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) {
+      return false;
+    }
+    final l$type = type;
+    final lOther$type = other.type;
+    if (l$type != lOther$type) {
+      return false;
+    }
+    final l$boolValue = boolValue;
+    final lOther$boolValue = other.boolValue;
+    if (l$boolValue != lOther$boolValue) {
+      return false;
+    }
+    final l$defaultBoolValue = defaultBoolValue;
+    final lOther$defaultBoolValue = other.defaultBoolValue;
+    if (l$defaultBoolValue != lOther$defaultBoolValue) {
+      return false;
+    }
+    final l$widget = widget;
+    final lOther$widget = other.widget;
+    if (l$widget != lOther$widget) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$BoolConfigItem on Fragment$BoolConfigItem {
+  CopyWith$Fragment$BoolConfigItem<Fragment$BoolConfigItem> get copyWith =>
+      CopyWith$Fragment$BoolConfigItem(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Fragment$BoolConfigItem<TRes> {
+  factory CopyWith$Fragment$BoolConfigItem(
+    Fragment$BoolConfigItem instance,
+    TRes Function(Fragment$BoolConfigItem) then,
+  ) = _CopyWithImpl$Fragment$BoolConfigItem;
+
+  factory CopyWith$Fragment$BoolConfigItem.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$BoolConfigItem;
+
+  TRes call({
+    String? id,
+    String? description,
+    String? type,
+    bool? boolValue,
+    bool? defaultBoolValue,
+    String? widget,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$BoolConfigItem<TRes>
+    implements CopyWith$Fragment$BoolConfigItem<TRes> {
+  _CopyWithImpl$Fragment$BoolConfigItem(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$BoolConfigItem _instance;
+
+  final TRes Function(Fragment$BoolConfigItem) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? description = _undefined,
+    Object? type = _undefined,
+    Object? boolValue = _undefined,
+    Object? defaultBoolValue = _undefined,
+    Object? widget = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$BoolConfigItem(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
+        description: description == _undefined || description == null
+            ? _instance.description
+            : (description as String),
+        type: type == _undefined || type == null
+            ? _instance.type
+            : (type as String),
+        boolValue: boolValue == _undefined || boolValue == null
+            ? _instance.boolValue
+            : (boolValue as bool),
+        defaultBoolValue:
+            defaultBoolValue == _undefined || defaultBoolValue == null
+                ? _instance.defaultBoolValue
+                : (defaultBoolValue as bool),
+        widget: widget == _undefined || widget == null
+            ? _instance.widget
+            : (widget as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$BoolConfigItem<TRes>
+    implements CopyWith$Fragment$BoolConfigItem<TRes> {
+  _CopyWithStubImpl$Fragment$BoolConfigItem(this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    String? description,
+    String? type,
+    bool? boolValue,
+    bool? defaultBoolValue,
+    String? widget,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+const fragmentDefinitionBoolConfigItem = FragmentDefinitionNode(
+  name: NameNode(value: 'BoolConfigItem'),
+  typeCondition: TypeConditionNode(
+      on: NamedTypeNode(
+    name: NameNode(value: 'BoolConfigItem'),
+    isNonNull: false,
+  )),
+  directives: [],
+  selectionSet: SelectionSetNode(selections: [
+    FieldNode(
+      name: NameNode(value: 'id'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'description'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'type'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'value'),
+      alias: NameNode(value: 'boolValue'),
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'defaultValue'),
+      alias: NameNode(value: 'defaultBoolValue'),
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'widget'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: '__typename'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+  ]),
+);
+const documentNodeFragmentBoolConfigItem = DocumentNode(definitions: [
+  fragmentDefinitionBoolConfigItem,
+]);
+
+extension ClientExtension$Fragment$BoolConfigItem on graphql.GraphQLClient {
+  void writeFragment$BoolConfigItem({
+    required Fragment$BoolConfigItem data,
+    required Map<String, dynamic> idFields,
+    bool broadcast = true,
+  }) =>
+      this.writeFragment(
+        graphql.FragmentRequest(
+          idFields: idFields,
+          fragment: const graphql.Fragment(
+            fragmentName: 'BoolConfigItem',
+            document: documentNodeFragmentBoolConfigItem,
+          ),
+        ),
+        data: data.toJson(),
+        broadcast: broadcast,
+      );
+  Fragment$BoolConfigItem? readFragment$BoolConfigItem({
+    required Map<String, dynamic> idFields,
+    bool optimistic = true,
+  }) {
+    final result = this.readFragment(
+      graphql.FragmentRequest(
+        idFields: idFields,
+        fragment: const graphql.Fragment(
+          fragmentName: 'BoolConfigItem',
+          document: documentNodeFragmentBoolConfigItem,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null ? null : Fragment$BoolConfigItem.fromJson(result);
+  }
+}
+
+class Fragment$EnumConfigItem {
+  Fragment$EnumConfigItem({
+    required this.id,
+    required this.description,
+    required this.type,
+    required this.stringValue,
+    required this.defaultStringValue,
+    required this.options,
+    required this.widget,
+    this.$__typename = 'EnumConfigItem',
+  });
+
+  factory Fragment$EnumConfigItem.fromJson(Map<String, dynamic> json) {
+    final l$id = json['id'];
+    final l$description = json['description'];
+    final l$type = json['type'];
+    final l$stringValue = json['stringValue'];
+    final l$defaultStringValue = json['defaultStringValue'];
+    final l$options = json['options'];
+    final l$widget = json['widget'];
+    final l$$__typename = json['__typename'];
+    return Fragment$EnumConfigItem(
+      id: (l$id as String),
+      description: (l$description as String),
+      type: (l$type as String),
+      stringValue: (l$stringValue as String),
+      defaultStringValue: (l$defaultStringValue as String),
+      options: (l$options as List<dynamic>).map((e) => (e as String)).toList(),
+      widget: (l$widget as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String id;
+
+  final String description;
+
+  final String type;
+
+  final String stringValue;
+
+  final String defaultStringValue;
+
+  final List<String> options;
+
+  final String widget;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$description = description;
+    _resultData['description'] = l$description;
+    final l$type = type;
+    _resultData['type'] = l$type;
+    final l$stringValue = stringValue;
+    _resultData['stringValue'] = l$stringValue;
+    final l$defaultStringValue = defaultStringValue;
+    _resultData['defaultStringValue'] = l$defaultStringValue;
+    final l$options = options;
+    _resultData['options'] = l$options.map((e) => e).toList();
+    final l$widget = widget;
+    _resultData['widget'] = l$widget;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$description = description;
+    final l$type = type;
+    final l$stringValue = stringValue;
+    final l$defaultStringValue = defaultStringValue;
+    final l$options = options;
+    final l$widget = widget;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$description,
+      l$type,
+      l$stringValue,
+      l$defaultStringValue,
+      Object.hashAll(l$options.map((v) => v)),
+      l$widget,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Fragment$EnumConfigItem) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) {
+      return false;
+    }
+    final l$type = type;
+    final lOther$type = other.type;
+    if (l$type != lOther$type) {
+      return false;
+    }
+    final l$stringValue = stringValue;
+    final lOther$stringValue = other.stringValue;
+    if (l$stringValue != lOther$stringValue) {
+      return false;
+    }
+    final l$defaultStringValue = defaultStringValue;
+    final lOther$defaultStringValue = other.defaultStringValue;
+    if (l$defaultStringValue != lOther$defaultStringValue) {
+      return false;
+    }
+    final l$options = options;
+    final lOther$options = other.options;
+    if (l$options.length != lOther$options.length) {
+      return false;
+    }
+    for (int i = 0; i < l$options.length; i++) {
+      final l$options$entry = l$options[i];
+      final lOther$options$entry = lOther$options[i];
+      if (l$options$entry != lOther$options$entry) {
+        return false;
+      }
+    }
+    final l$widget = widget;
+    final lOther$widget = other.widget;
+    if (l$widget != lOther$widget) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$EnumConfigItem on Fragment$EnumConfigItem {
+  CopyWith$Fragment$EnumConfigItem<Fragment$EnumConfigItem> get copyWith =>
+      CopyWith$Fragment$EnumConfigItem(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Fragment$EnumConfigItem<TRes> {
+  factory CopyWith$Fragment$EnumConfigItem(
+    Fragment$EnumConfigItem instance,
+    TRes Function(Fragment$EnumConfigItem) then,
+  ) = _CopyWithImpl$Fragment$EnumConfigItem;
+
+  factory CopyWith$Fragment$EnumConfigItem.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$EnumConfigItem;
+
+  TRes call({
+    String? id,
+    String? description,
+    String? type,
+    String? stringValue,
+    String? defaultStringValue,
+    List<String>? options,
+    String? widget,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$EnumConfigItem<TRes>
+    implements CopyWith$Fragment$EnumConfigItem<TRes> {
+  _CopyWithImpl$Fragment$EnumConfigItem(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$EnumConfigItem _instance;
+
+  final TRes Function(Fragment$EnumConfigItem) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? description = _undefined,
+    Object? type = _undefined,
+    Object? stringValue = _undefined,
+    Object? defaultStringValue = _undefined,
+    Object? options = _undefined,
+    Object? widget = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$EnumConfigItem(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
+        description: description == _undefined || description == null
+            ? _instance.description
+            : (description as String),
+        type: type == _undefined || type == null
+            ? _instance.type
+            : (type as String),
+        stringValue: stringValue == _undefined || stringValue == null
+            ? _instance.stringValue
+            : (stringValue as String),
+        defaultStringValue:
+            defaultStringValue == _undefined || defaultStringValue == null
+                ? _instance.defaultStringValue
+                : (defaultStringValue as String),
+        options: options == _undefined || options == null
+            ? _instance.options
+            : (options as List<String>),
+        widget: widget == _undefined || widget == null
+            ? _instance.widget
+            : (widget as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$EnumConfigItem<TRes>
+    implements CopyWith$Fragment$EnumConfigItem<TRes> {
+  _CopyWithStubImpl$Fragment$EnumConfigItem(this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    String? description,
+    String? type,
+    String? stringValue,
+    String? defaultStringValue,
+    List<String>? options,
+    String? widget,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+const fragmentDefinitionEnumConfigItem = FragmentDefinitionNode(
+  name: NameNode(value: 'EnumConfigItem'),
+  typeCondition: TypeConditionNode(
+      on: NamedTypeNode(
+    name: NameNode(value: 'EnumConfigItem'),
+    isNonNull: false,
+  )),
+  directives: [],
+  selectionSet: SelectionSetNode(selections: [
+    FieldNode(
+      name: NameNode(value: 'id'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'description'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'type'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'value'),
+      alias: NameNode(value: 'stringValue'),
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'defaultValue'),
+      alias: NameNode(value: 'defaultStringValue'),
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'options'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'widget'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: '__typename'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+  ]),
+);
+const documentNodeFragmentEnumConfigItem = DocumentNode(definitions: [
+  fragmentDefinitionEnumConfigItem,
+]);
+
+extension ClientExtension$Fragment$EnumConfigItem on graphql.GraphQLClient {
+  void writeFragment$EnumConfigItem({
+    required Fragment$EnumConfigItem data,
+    required Map<String, dynamic> idFields,
+    bool broadcast = true,
+  }) =>
+      this.writeFragment(
+        graphql.FragmentRequest(
+          idFields: idFields,
+          fragment: const graphql.Fragment(
+            fragmentName: 'EnumConfigItem',
+            document: documentNodeFragmentEnumConfigItem,
+          ),
+        ),
+        data: data.toJson(),
+        broadcast: broadcast,
+      );
+  Fragment$EnumConfigItem? readFragment$EnumConfigItem({
+    required Map<String, dynamic> idFields,
+    bool optimistic = true,
+  }) {
+    final result = this.readFragment(
+      graphql.FragmentRequest(
+        idFields: idFields,
+        fragment: const graphql.Fragment(
+          fragmentName: 'EnumConfigItem',
+          document: documentNodeFragmentEnumConfigItem,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null ? null : Fragment$EnumConfigItem.fromJson(result);
+  }
+}
+
+class Fragment$StringConfigItem {
+  Fragment$StringConfigItem({
+    required this.id,
+    required this.description,
+    required this.type,
+    required this.stringValue,
+    required this.defaultStringValue,
+    this.regex,
+    required this.widget,
+    this.$__typename = 'StringConfigItem',
+  });
+
+  factory Fragment$StringConfigItem.fromJson(Map<String, dynamic> json) {
+    final l$id = json['id'];
+    final l$description = json['description'];
+    final l$type = json['type'];
+    final l$stringValue = json['stringValue'];
+    final l$defaultStringValue = json['defaultStringValue'];
+    final l$regex = json['regex'];
+    final l$widget = json['widget'];
+    final l$$__typename = json['__typename'];
+    return Fragment$StringConfigItem(
+      id: (l$id as String),
+      description: (l$description as String),
+      type: (l$type as String),
+      stringValue: (l$stringValue as String),
+      defaultStringValue: (l$defaultStringValue as String),
+      regex: (l$regex as String?),
+      widget: (l$widget as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String id;
+
+  final String description;
+
+  final String type;
+
+  final String stringValue;
+
+  final String defaultStringValue;
+
+  final String? regex;
+
+  final String widget;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$description = description;
+    _resultData['description'] = l$description;
+    final l$type = type;
+    _resultData['type'] = l$type;
+    final l$stringValue = stringValue;
+    _resultData['stringValue'] = l$stringValue;
+    final l$defaultStringValue = defaultStringValue;
+    _resultData['defaultStringValue'] = l$defaultStringValue;
+    final l$regex = regex;
+    _resultData['regex'] = l$regex;
+    final l$widget = widget;
+    _resultData['widget'] = l$widget;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$description = description;
+    final l$type = type;
+    final l$stringValue = stringValue;
+    final l$defaultStringValue = defaultStringValue;
+    final l$regex = regex;
+    final l$widget = widget;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$description,
+      l$type,
+      l$stringValue,
+      l$defaultStringValue,
+      l$regex,
+      l$widget,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Fragment$StringConfigItem) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) {
+      return false;
+    }
+    final l$type = type;
+    final lOther$type = other.type;
+    if (l$type != lOther$type) {
+      return false;
+    }
+    final l$stringValue = stringValue;
+    final lOther$stringValue = other.stringValue;
+    if (l$stringValue != lOther$stringValue) {
+      return false;
+    }
+    final l$defaultStringValue = defaultStringValue;
+    final lOther$defaultStringValue = other.defaultStringValue;
+    if (l$defaultStringValue != lOther$defaultStringValue) {
+      return false;
+    }
+    final l$regex = regex;
+    final lOther$regex = other.regex;
+    if (l$regex != lOther$regex) {
+      return false;
+    }
+    final l$widget = widget;
+    final lOther$widget = other.widget;
+    if (l$widget != lOther$widget) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$StringConfigItem
+    on Fragment$StringConfigItem {
+  CopyWith$Fragment$StringConfigItem<Fragment$StringConfigItem> get copyWith =>
+      CopyWith$Fragment$StringConfigItem(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Fragment$StringConfigItem<TRes> {
+  factory CopyWith$Fragment$StringConfigItem(
+    Fragment$StringConfigItem instance,
+    TRes Function(Fragment$StringConfigItem) then,
+  ) = _CopyWithImpl$Fragment$StringConfigItem;
+
+  factory CopyWith$Fragment$StringConfigItem.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$StringConfigItem;
+
+  TRes call({
+    String? id,
+    String? description,
+    String? type,
+    String? stringValue,
+    String? defaultStringValue,
+    String? regex,
+    String? widget,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$StringConfigItem<TRes>
+    implements CopyWith$Fragment$StringConfigItem<TRes> {
+  _CopyWithImpl$Fragment$StringConfigItem(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$StringConfigItem _instance;
+
+  final TRes Function(Fragment$StringConfigItem) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? description = _undefined,
+    Object? type = _undefined,
+    Object? stringValue = _undefined,
+    Object? defaultStringValue = _undefined,
+    Object? regex = _undefined,
+    Object? widget = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$StringConfigItem(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
+        description: description == _undefined || description == null
+            ? _instance.description
+            : (description as String),
+        type: type == _undefined || type == null
+            ? _instance.type
+            : (type as String),
+        stringValue: stringValue == _undefined || stringValue == null
+            ? _instance.stringValue
+            : (stringValue as String),
+        defaultStringValue:
+            defaultStringValue == _undefined || defaultStringValue == null
+                ? _instance.defaultStringValue
+                : (defaultStringValue as String),
+        regex: regex == _undefined ? _instance.regex : (regex as String?),
+        widget: widget == _undefined || widget == null
+            ? _instance.widget
+            : (widget as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$StringConfigItem<TRes>
+    implements CopyWith$Fragment$StringConfigItem<TRes> {
+  _CopyWithStubImpl$Fragment$StringConfigItem(this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    String? description,
+    String? type,
+    String? stringValue,
+    String? defaultStringValue,
+    String? regex,
+    String? widget,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+const fragmentDefinitionStringConfigItem = FragmentDefinitionNode(
+  name: NameNode(value: 'StringConfigItem'),
+  typeCondition: TypeConditionNode(
+      on: NamedTypeNode(
+    name: NameNode(value: 'StringConfigItem'),
+    isNonNull: false,
+  )),
+  directives: [],
+  selectionSet: SelectionSetNode(selections: [
+    FieldNode(
+      name: NameNode(value: 'id'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'description'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'type'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'value'),
+      alias: NameNode(value: 'stringValue'),
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'defaultValue'),
+      alias: NameNode(value: 'defaultStringValue'),
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'regex'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'widget'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: '__typename'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+  ]),
+);
+const documentNodeFragmentStringConfigItem = DocumentNode(definitions: [
+  fragmentDefinitionStringConfigItem,
+]);
+
+extension ClientExtension$Fragment$StringConfigItem on graphql.GraphQLClient {
+  void writeFragment$StringConfigItem({
+    required Fragment$StringConfigItem data,
+    required Map<String, dynamic> idFields,
+    bool broadcast = true,
+  }) =>
+      this.writeFragment(
+        graphql.FragmentRequest(
+          idFields: idFields,
+          fragment: const graphql.Fragment(
+            fragmentName: 'StringConfigItem',
+            document: documentNodeFragmentStringConfigItem,
+          ),
+        ),
+        data: data.toJson(),
+        broadcast: broadcast,
+      );
+  Fragment$StringConfigItem? readFragment$StringConfigItem({
+    required Map<String, dynamic> idFields,
+    bool optimistic = true,
+  }) {
+    final result = this.readFragment(
+      graphql.FragmentRequest(
+        idFields: idFields,
+        fragment: const graphql.Fragment(
+          fragmentName: 'StringConfigItem',
+          document: documentNodeFragmentStringConfigItem,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null ? null : Fragment$StringConfigItem.fromJson(result);
+  }
+}
+
 class Query$AllServices {
   Query$AllServices({
     required this.services,
@@ -306,6 +1332,54 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
                 selectionSet: null,
               ),
               FieldNode(
+                name: NameNode(value: 'configuration'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FieldNode(
+                    name: NameNode(value: 'id'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'description'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'type'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'BoolConfigItem'),
+                    directives: [],
+                  ),
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'EnumConfigItem'),
+                    directives: [],
+                  ),
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'StringConfigItem'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
+              ),
+              FieldNode(
                 name: NameNode(value: '__typename'),
                 alias: null,
                 arguments: [],
@@ -333,6 +1407,9 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
     ]),
   ),
   fragmentDefinitionfragmentDnsRecords,
+  fragmentDefinitionBoolConfigItem,
+  fragmentDefinitionEnumConfigItem,
+  fragmentDefinitionStringConfigItem,
 ]);
 Query$AllServices _parserFn$Query$AllServices(Map<String, dynamic> data) =>
     Query$AllServices.fromJson(data);
@@ -622,6 +1699,7 @@ class Query$AllServices$services$allServices {
     required this.storageUsage,
     required this.svgIcon,
     this.url,
+    this.configuration,
     this.$__typename = 'Service',
   });
 
@@ -640,6 +1718,7 @@ class Query$AllServices$services$allServices {
     final l$storageUsage = json['storageUsage'];
     final l$svgIcon = json['svgIcon'];
     final l$url = json['url'];
+    final l$configuration = json['configuration'];
     final l$$__typename = json['__typename'];
     return Query$AllServices$services$allServices(
       description: (l$description as String),
@@ -660,6 +1739,11 @@ class Query$AllServices$services$allServices {
               (l$storageUsage as Map<String, dynamic>)),
       svgIcon: (l$svgIcon as String),
       url: (l$url as String?),
+      configuration: (l$configuration as List<dynamic>?)
+          ?.map((e) =>
+              Query$AllServices$services$allServices$configuration.fromJson(
+                  (e as Map<String, dynamic>)))
+          .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -689,6 +1773,9 @@ class Query$AllServices$services$allServices {
   final String svgIcon;
 
   final String? url;
+
+  final List<Query$AllServices$services$allServices$configuration>?
+      configuration;
 
   final String $__typename;
 
@@ -720,6 +1807,9 @@ class Query$AllServices$services$allServices {
     _resultData['svgIcon'] = l$svgIcon;
     final l$url = url;
     _resultData['url'] = l$url;
+    final l$configuration = configuration;
+    _resultData['configuration'] =
+        l$configuration?.map((e) => e.toJson()).toList();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -740,6 +1830,7 @@ class Query$AllServices$services$allServices {
     final l$storageUsage = storageUsage;
     final l$svgIcon = svgIcon;
     final l$url = url;
+    final l$configuration = configuration;
     final l$$__typename = $__typename;
     return Object.hashAll([
       l$description,
@@ -755,6 +1846,9 @@ class Query$AllServices$services$allServices {
       l$storageUsage,
       l$svgIcon,
       l$url,
+      l$configuration == null
+          ? null
+          : Object.hashAll(l$configuration.map((v) => v)),
       l$$__typename,
     ]);
   }
@@ -844,6 +1938,22 @@ class Query$AllServices$services$allServices {
     if (l$url != lOther$url) {
       return false;
     }
+    final l$configuration = configuration;
+    final lOther$configuration = other.configuration;
+    if (l$configuration != null && lOther$configuration != null) {
+      if (l$configuration.length != lOther$configuration.length) {
+        return false;
+      }
+      for (int i = 0; i < l$configuration.length; i++) {
+        final l$configuration$entry = l$configuration[i];
+        final lOther$configuration$entry = lOther$configuration[i];
+        if (l$configuration$entry != lOther$configuration$entry) {
+          return false;
+        }
+      }
+    } else if (l$configuration != lOther$configuration) {
+      return false;
+    }
     final l$$__typename = $__typename;
     final lOther$$__typename = other.$__typename;
     if (l$$__typename != lOther$$__typename) {
@@ -886,6 +1996,7 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
     Query$AllServices$services$allServices$storageUsage? storageUsage,
     String? svgIcon,
     String? url,
+    List<Query$AllServices$services$allServices$configuration>? configuration,
     String? $__typename,
   });
   TRes dnsRecords(
@@ -896,6 +2007,12 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
           _fn);
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
       get storageUsage;
+  TRes configuration(
+      Iterable<Query$AllServices$services$allServices$configuration>? Function(
+              Iterable<
+                  CopyWith$Query$AllServices$services$allServices$configuration<
+                      Query$AllServices$services$allServices$configuration>>?)
+          _fn);
 }
 
 class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
@@ -925,6 +2042,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
     Object? storageUsage = _undefined,
     Object? svgIcon = _undefined,
     Object? url = _undefined,
+    Object? configuration = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Query$AllServices$services$allServices(
@@ -965,6 +2083,10 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
             ? _instance.svgIcon
             : (svgIcon as String),
         url: url == _undefined ? _instance.url : (url as String?),
+        configuration: configuration == _undefined
+            ? _instance.configuration
+            : (configuration
+                as List<Query$AllServices$services$allServices$configuration>?),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
@@ -989,6 +2111,19 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
     return CopyWith$Query$AllServices$services$allServices$storageUsage(
         local$storageUsage, (e) => call(storageUsage: e));
   }
+
+  TRes configuration(
+          Iterable<Query$AllServices$services$allServices$configuration>? Function(
+                  Iterable<
+                      CopyWith$Query$AllServices$services$allServices$configuration<
+                          Query$AllServices$services$allServices$configuration>>?)
+              _fn) =>
+      call(
+          configuration: _fn(_instance.configuration?.map((e) =>
+              CopyWith$Query$AllServices$services$allServices$configuration(
+                e,
+                (i) => i,
+              )))?.toList());
 }
 
 class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
@@ -1011,6 +2146,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
     Query$AllServices$services$allServices$storageUsage? storageUsage,
     String? svgIcon,
     String? url,
+    List<Query$AllServices$services$allServices$configuration>? configuration,
     String? $__typename,
   }) =>
       _res;
@@ -1021,6 +2157,8 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
       get storageUsage =>
           CopyWith$Query$AllServices$services$allServices$storageUsage.stub(
               _res);
+
+  configuration(_fn) => _res;
 }
 
 class Query$AllServices$services$allServices$storageUsage {
@@ -1354,6 +2492,1051 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volu
 
   call({
     String? name,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Query$AllServices$services$allServices$configuration {
+  Query$AllServices$services$allServices$configuration({
+    required this.id,
+    required this.description,
+    required this.type,
+    required this.$__typename,
+  });
+
+  factory Query$AllServices$services$allServices$configuration.fromJson(
+      Map<String, dynamic> json) {
+    switch (json["__typename"] as String) {
+      case "BoolConfigItem":
+        return Query$AllServices$services$allServices$configuration$$BoolConfigItem
+            .fromJson(json);
+
+      case "EnumConfigItem":
+        return Query$AllServices$services$allServices$configuration$$EnumConfigItem
+            .fromJson(json);
+
+      case "StringConfigItem":
+        return Query$AllServices$services$allServices$configuration$$StringConfigItem
+            .fromJson(json);
+
+      default:
+        final l$id = json['id'];
+        final l$description = json['description'];
+        final l$type = json['type'];
+        final l$$__typename = json['__typename'];
+        return Query$AllServices$services$allServices$configuration(
+          id: (l$id as String),
+          description: (l$description as String),
+          type: (l$type as String),
+          $__typename: (l$$__typename as String),
+        );
+    }
+  }
+
+  final String id;
+
+  final String description;
+
+  final String type;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$description = description;
+    _resultData['description'] = l$description;
+    final l$type = type;
+    _resultData['type'] = l$type;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$description = description;
+    final l$type = type;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$description,
+      l$type,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Query$AllServices$services$allServices$configuration) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) {
+      return false;
+    }
+    final l$type = type;
+    final lOther$type = other.type;
+    if (l$type != lOther$type) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$AllServices$services$allServices$configuration
+    on Query$AllServices$services$allServices$configuration {
+  CopyWith$Query$AllServices$services$allServices$configuration<
+          Query$AllServices$services$allServices$configuration>
+      get copyWith =>
+          CopyWith$Query$AllServices$services$allServices$configuration(
+            this,
+            (i) => i,
+          );
+  _T when<_T>({
+    required _T Function(
+            Query$AllServices$services$allServices$configuration$$BoolConfigItem)
+        boolConfigItem,
+    required _T Function(
+            Query$AllServices$services$allServices$configuration$$EnumConfigItem)
+        enumConfigItem,
+    required _T Function(
+            Query$AllServices$services$allServices$configuration$$StringConfigItem)
+        stringConfigItem,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "BoolConfigItem":
+        return boolConfigItem(this
+            as Query$AllServices$services$allServices$configuration$$BoolConfigItem);
+
+      case "EnumConfigItem":
+        return enumConfigItem(this
+            as Query$AllServices$services$allServices$configuration$$EnumConfigItem);
+
+      case "StringConfigItem":
+        return stringConfigItem(this
+            as Query$AllServices$services$allServices$configuration$$StringConfigItem);
+
+      default:
+        return orElse();
+    }
+  }
+
+  _T maybeWhen<_T>({
+    _T Function(
+            Query$AllServices$services$allServices$configuration$$BoolConfigItem)?
+        boolConfigItem,
+    _T Function(
+            Query$AllServices$services$allServices$configuration$$EnumConfigItem)?
+        enumConfigItem,
+    _T Function(
+            Query$AllServices$services$allServices$configuration$$StringConfigItem)?
+        stringConfigItem,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "BoolConfigItem":
+        if (boolConfigItem != null) {
+          return boolConfigItem(this
+              as Query$AllServices$services$allServices$configuration$$BoolConfigItem);
+        } else {
+          return orElse();
+        }
+
+      case "EnumConfigItem":
+        if (enumConfigItem != null) {
+          return enumConfigItem(this
+              as Query$AllServices$services$allServices$configuration$$EnumConfigItem);
+        } else {
+          return orElse();
+        }
+
+      case "StringConfigItem":
+        if (stringConfigItem != null) {
+          return stringConfigItem(this
+              as Query$AllServices$services$allServices$configuration$$StringConfigItem);
+        } else {
+          return orElse();
+        }
+
+      default:
+        return orElse();
+    }
+  }
+}
+
+abstract class CopyWith$Query$AllServices$services$allServices$configuration<
+    TRes> {
+  factory CopyWith$Query$AllServices$services$allServices$configuration(
+    Query$AllServices$services$allServices$configuration instance,
+    TRes Function(Query$AllServices$services$allServices$configuration) then,
+  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration;
+
+  factory CopyWith$Query$AllServices$services$allServices$configuration.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services$allServices$configuration;
+
+  TRes call({
+    String? id,
+    String? description,
+    String? type,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$AllServices$services$allServices$configuration<TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$configuration<TRes> {
+  _CopyWithImpl$Query$AllServices$services$allServices$configuration(
+    this._instance,
+    this._then,
+  );
+
+  final Query$AllServices$services$allServices$configuration _instance;
+
+  final TRes Function(Query$AllServices$services$allServices$configuration)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? description = _undefined,
+    Object? type = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Query$AllServices$services$allServices$configuration(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
+        description: description == _undefined || description == null
+            ? _instance.description
+            : (description as String),
+        type: type == _undefined || type == null
+            ? _instance.type
+            : (type as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$configuration<TRes> {
+  _CopyWithStubImpl$Query$AllServices$services$allServices$configuration(
+      this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    String? description,
+    String? type,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Query$AllServices$services$allServices$configuration$$BoolConfigItem
+    implements
+        Fragment$BoolConfigItem,
+        Query$AllServices$services$allServices$configuration {
+  Query$AllServices$services$allServices$configuration$$BoolConfigItem({
+    required this.id,
+    required this.description,
+    required this.type,
+    required this.boolValue,
+    required this.defaultBoolValue,
+    required this.widget,
+    this.$__typename = 'BoolConfigItem',
+  });
+
+  factory Query$AllServices$services$allServices$configuration$$BoolConfigItem.fromJson(
+      Map<String, dynamic> json) {
+    final l$id = json['id'];
+    final l$description = json['description'];
+    final l$type = json['type'];
+    final l$boolValue = json['boolValue'];
+    final l$defaultBoolValue = json['defaultBoolValue'];
+    final l$widget = json['widget'];
+    final l$$__typename = json['__typename'];
+    return Query$AllServices$services$allServices$configuration$$BoolConfigItem(
+      id: (l$id as String),
+      description: (l$description as String),
+      type: (l$type as String),
+      boolValue: (l$boolValue as bool),
+      defaultBoolValue: (l$defaultBoolValue as bool),
+      widget: (l$widget as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String id;
+
+  final String description;
+
+  final String type;
+
+  final bool boolValue;
+
+  final bool defaultBoolValue;
+
+  final String widget;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$description = description;
+    _resultData['description'] = l$description;
+    final l$type = type;
+    _resultData['type'] = l$type;
+    final l$boolValue = boolValue;
+    _resultData['boolValue'] = l$boolValue;
+    final l$defaultBoolValue = defaultBoolValue;
+    _resultData['defaultBoolValue'] = l$defaultBoolValue;
+    final l$widget = widget;
+    _resultData['widget'] = l$widget;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$description = description;
+    final l$type = type;
+    final l$boolValue = boolValue;
+    final l$defaultBoolValue = defaultBoolValue;
+    final l$widget = widget;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$description,
+      l$type,
+      l$boolValue,
+      l$defaultBoolValue,
+      l$widget,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Query$AllServices$services$allServices$configuration$$BoolConfigItem) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) {
+      return false;
+    }
+    final l$type = type;
+    final lOther$type = other.type;
+    if (l$type != lOther$type) {
+      return false;
+    }
+    final l$boolValue = boolValue;
+    final lOther$boolValue = other.boolValue;
+    if (l$boolValue != lOther$boolValue) {
+      return false;
+    }
+    final l$defaultBoolValue = defaultBoolValue;
+    final lOther$defaultBoolValue = other.defaultBoolValue;
+    if (l$defaultBoolValue != lOther$defaultBoolValue) {
+      return false;
+    }
+    final l$widget = widget;
+    final lOther$widget = other.widget;
+    if (l$widget != lOther$widget) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$AllServices$services$allServices$configuration$$BoolConfigItem
+    on Query$AllServices$services$allServices$configuration$$BoolConfigItem {
+  CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
+          Query$AllServices$services$allServices$configuration$$BoolConfigItem>
+      get copyWith =>
+          CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
+    TRes> {
+  factory CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem(
+    Query$AllServices$services$allServices$configuration$$BoolConfigItem
+        instance,
+    TRes Function(
+            Query$AllServices$services$allServices$configuration$$BoolConfigItem)
+        then,
+  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
+
+  factory CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
+
+  TRes call({
+    String? id,
+    String? description,
+    String? type,
+    bool? boolValue,
+    bool? defaultBoolValue,
+    String? widget,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
+            TRes> {
+  _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem(
+    this._instance,
+    this._then,
+  );
+
+  final Query$AllServices$services$allServices$configuration$$BoolConfigItem
+      _instance;
+
+  final TRes Function(
+          Query$AllServices$services$allServices$configuration$$BoolConfigItem)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? description = _undefined,
+    Object? type = _undefined,
+    Object? boolValue = _undefined,
+    Object? defaultBoolValue = _undefined,
+    Object? widget = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(
+          Query$AllServices$services$allServices$configuration$$BoolConfigItem(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
+        description: description == _undefined || description == null
+            ? _instance.description
+            : (description as String),
+        type: type == _undefined || type == null
+            ? _instance.type
+            : (type as String),
+        boolValue: boolValue == _undefined || boolValue == null
+            ? _instance.boolValue
+            : (boolValue as bool),
+        defaultBoolValue:
+            defaultBoolValue == _undefined || defaultBoolValue == null
+                ? _instance.defaultBoolValue
+                : (defaultBoolValue as bool),
+        widget: widget == _undefined || widget == null
+            ? _instance.widget
+            : (widget as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
+            TRes> {
+  _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem(
+      this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    String? description,
+    String? type,
+    bool? boolValue,
+    bool? defaultBoolValue,
+    String? widget,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Query$AllServices$services$allServices$configuration$$EnumConfigItem
+    implements
+        Fragment$EnumConfigItem,
+        Query$AllServices$services$allServices$configuration {
+  Query$AllServices$services$allServices$configuration$$EnumConfigItem({
+    required this.id,
+    required this.description,
+    required this.type,
+    required this.stringValue,
+    required this.defaultStringValue,
+    required this.options,
+    required this.widget,
+    this.$__typename = 'EnumConfigItem',
+  });
+
+  factory Query$AllServices$services$allServices$configuration$$EnumConfigItem.fromJson(
+      Map<String, dynamic> json) {
+    final l$id = json['id'];
+    final l$description = json['description'];
+    final l$type = json['type'];
+    final l$stringValue = json['stringValue'];
+    final l$defaultStringValue = json['defaultStringValue'];
+    final l$options = json['options'];
+    final l$widget = json['widget'];
+    final l$$__typename = json['__typename'];
+    return Query$AllServices$services$allServices$configuration$$EnumConfigItem(
+      id: (l$id as String),
+      description: (l$description as String),
+      type: (l$type as String),
+      stringValue: (l$stringValue as String),
+      defaultStringValue: (l$defaultStringValue as String),
+      options: (l$options as List<dynamic>).map((e) => (e as String)).toList(),
+      widget: (l$widget as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String id;
+
+  final String description;
+
+  final String type;
+
+  final String stringValue;
+
+  final String defaultStringValue;
+
+  final List<String> options;
+
+  final String widget;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$description = description;
+    _resultData['description'] = l$description;
+    final l$type = type;
+    _resultData['type'] = l$type;
+    final l$stringValue = stringValue;
+    _resultData['stringValue'] = l$stringValue;
+    final l$defaultStringValue = defaultStringValue;
+    _resultData['defaultStringValue'] = l$defaultStringValue;
+    final l$options = options;
+    _resultData['options'] = l$options.map((e) => e).toList();
+    final l$widget = widget;
+    _resultData['widget'] = l$widget;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$description = description;
+    final l$type = type;
+    final l$stringValue = stringValue;
+    final l$defaultStringValue = defaultStringValue;
+    final l$options = options;
+    final l$widget = widget;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$description,
+      l$type,
+      l$stringValue,
+      l$defaultStringValue,
+      Object.hashAll(l$options.map((v) => v)),
+      l$widget,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Query$AllServices$services$allServices$configuration$$EnumConfigItem) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) {
+      return false;
+    }
+    final l$type = type;
+    final lOther$type = other.type;
+    if (l$type != lOther$type) {
+      return false;
+    }
+    final l$stringValue = stringValue;
+    final lOther$stringValue = other.stringValue;
+    if (l$stringValue != lOther$stringValue) {
+      return false;
+    }
+    final l$defaultStringValue = defaultStringValue;
+    final lOther$defaultStringValue = other.defaultStringValue;
+    if (l$defaultStringValue != lOther$defaultStringValue) {
+      return false;
+    }
+    final l$options = options;
+    final lOther$options = other.options;
+    if (l$options.length != lOther$options.length) {
+      return false;
+    }
+    for (int i = 0; i < l$options.length; i++) {
+      final l$options$entry = l$options[i];
+      final lOther$options$entry = lOther$options[i];
+      if (l$options$entry != lOther$options$entry) {
+        return false;
+      }
+    }
+    final l$widget = widget;
+    final lOther$widget = other.widget;
+    if (l$widget != lOther$widget) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$AllServices$services$allServices$configuration$$EnumConfigItem
+    on Query$AllServices$services$allServices$configuration$$EnumConfigItem {
+  CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
+          Query$AllServices$services$allServices$configuration$$EnumConfigItem>
+      get copyWith =>
+          CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
+    TRes> {
+  factory CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem(
+    Query$AllServices$services$allServices$configuration$$EnumConfigItem
+        instance,
+    TRes Function(
+            Query$AllServices$services$allServices$configuration$$EnumConfigItem)
+        then,
+  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
+
+  factory CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
+
+  TRes call({
+    String? id,
+    String? description,
+    String? type,
+    String? stringValue,
+    String? defaultStringValue,
+    List<String>? options,
+    String? widget,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
+            TRes> {
+  _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem(
+    this._instance,
+    this._then,
+  );
+
+  final Query$AllServices$services$allServices$configuration$$EnumConfigItem
+      _instance;
+
+  final TRes Function(
+          Query$AllServices$services$allServices$configuration$$EnumConfigItem)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? description = _undefined,
+    Object? type = _undefined,
+    Object? stringValue = _undefined,
+    Object? defaultStringValue = _undefined,
+    Object? options = _undefined,
+    Object? widget = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(
+          Query$AllServices$services$allServices$configuration$$EnumConfigItem(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
+        description: description == _undefined || description == null
+            ? _instance.description
+            : (description as String),
+        type: type == _undefined || type == null
+            ? _instance.type
+            : (type as String),
+        stringValue: stringValue == _undefined || stringValue == null
+            ? _instance.stringValue
+            : (stringValue as String),
+        defaultStringValue:
+            defaultStringValue == _undefined || defaultStringValue == null
+                ? _instance.defaultStringValue
+                : (defaultStringValue as String),
+        options: options == _undefined || options == null
+            ? _instance.options
+            : (options as List<String>),
+        widget: widget == _undefined || widget == null
+            ? _instance.widget
+            : (widget as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
+            TRes> {
+  _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem(
+      this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    String? description,
+    String? type,
+    String? stringValue,
+    String? defaultStringValue,
+    List<String>? options,
+    String? widget,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Query$AllServices$services$allServices$configuration$$StringConfigItem
+    implements
+        Fragment$StringConfigItem,
+        Query$AllServices$services$allServices$configuration {
+  Query$AllServices$services$allServices$configuration$$StringConfigItem({
+    required this.id,
+    required this.description,
+    required this.type,
+    required this.stringValue,
+    required this.defaultStringValue,
+    this.regex,
+    required this.widget,
+    this.$__typename = 'StringConfigItem',
+  });
+
+  factory Query$AllServices$services$allServices$configuration$$StringConfigItem.fromJson(
+      Map<String, dynamic> json) {
+    final l$id = json['id'];
+    final l$description = json['description'];
+    final l$type = json['type'];
+    final l$stringValue = json['stringValue'];
+    final l$defaultStringValue = json['defaultStringValue'];
+    final l$regex = json['regex'];
+    final l$widget = json['widget'];
+    final l$$__typename = json['__typename'];
+    return Query$AllServices$services$allServices$configuration$$StringConfigItem(
+      id: (l$id as String),
+      description: (l$description as String),
+      type: (l$type as String),
+      stringValue: (l$stringValue as String),
+      defaultStringValue: (l$defaultStringValue as String),
+      regex: (l$regex as String?),
+      widget: (l$widget as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String id;
+
+  final String description;
+
+  final String type;
+
+  final String stringValue;
+
+  final String defaultStringValue;
+
+  final String? regex;
+
+  final String widget;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$description = description;
+    _resultData['description'] = l$description;
+    final l$type = type;
+    _resultData['type'] = l$type;
+    final l$stringValue = stringValue;
+    _resultData['stringValue'] = l$stringValue;
+    final l$defaultStringValue = defaultStringValue;
+    _resultData['defaultStringValue'] = l$defaultStringValue;
+    final l$regex = regex;
+    _resultData['regex'] = l$regex;
+    final l$widget = widget;
+    _resultData['widget'] = l$widget;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$description = description;
+    final l$type = type;
+    final l$stringValue = stringValue;
+    final l$defaultStringValue = defaultStringValue;
+    final l$regex = regex;
+    final l$widget = widget;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$description,
+      l$type,
+      l$stringValue,
+      l$defaultStringValue,
+      l$regex,
+      l$widget,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Query$AllServices$services$allServices$configuration$$StringConfigItem) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) {
+      return false;
+    }
+    final l$type = type;
+    final lOther$type = other.type;
+    if (l$type != lOther$type) {
+      return false;
+    }
+    final l$stringValue = stringValue;
+    final lOther$stringValue = other.stringValue;
+    if (l$stringValue != lOther$stringValue) {
+      return false;
+    }
+    final l$defaultStringValue = defaultStringValue;
+    final lOther$defaultStringValue = other.defaultStringValue;
+    if (l$defaultStringValue != lOther$defaultStringValue) {
+      return false;
+    }
+    final l$regex = regex;
+    final lOther$regex = other.regex;
+    if (l$regex != lOther$regex) {
+      return false;
+    }
+    final l$widget = widget;
+    final lOther$widget = other.widget;
+    if (l$widget != lOther$widget) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$AllServices$services$allServices$configuration$$StringConfigItem
+    on Query$AllServices$services$allServices$configuration$$StringConfigItem {
+  CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem<
+          Query$AllServices$services$allServices$configuration$$StringConfigItem>
+      get copyWith =>
+          CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem<
+    TRes> {
+  factory CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem(
+    Query$AllServices$services$allServices$configuration$$StringConfigItem
+        instance,
+    TRes Function(
+            Query$AllServices$services$allServices$configuration$$StringConfigItem)
+        then,
+  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
+
+  factory CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
+
+  TRes call({
+    String? id,
+    String? description,
+    String? type,
+    String? stringValue,
+    String? defaultStringValue,
+    String? regex,
+    String? widget,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem<
+            TRes> {
+  _CopyWithImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem(
+    this._instance,
+    this._then,
+  );
+
+  final Query$AllServices$services$allServices$configuration$$StringConfigItem
+      _instance;
+
+  final TRes Function(
+          Query$AllServices$services$allServices$configuration$$StringConfigItem)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? description = _undefined,
+    Object? type = _undefined,
+    Object? stringValue = _undefined,
+    Object? defaultStringValue = _undefined,
+    Object? regex = _undefined,
+    Object? widget = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(
+          Query$AllServices$services$allServices$configuration$$StringConfigItem(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
+        description: description == _undefined || description == null
+            ? _instance.description
+            : (description as String),
+        type: type == _undefined || type == null
+            ? _instance.type
+            : (type as String),
+        stringValue: stringValue == _undefined || stringValue == null
+            ? _instance.stringValue
+            : (stringValue as String),
+        defaultStringValue:
+            defaultStringValue == _undefined || defaultStringValue == null
+                ? _instance.defaultStringValue
+                : (defaultStringValue as String),
+        regex: regex == _undefined ? _instance.regex : (regex as String?),
+        widget: widget == _undefined || widget == null
+            ? _instance.widget
+            : (widget as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem<
+        TRes>
+    implements
+        CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem<
+            TRes> {
+  _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem(
+      this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    String? description,
+    String? type,
+    String? stringValue,
+    String? defaultStringValue,
+    String? regex,
+    String? widget,
     String? $__typename,
   }) =>
       _res;
@@ -5621,4 +7804,743 @@ class _CopyWithStubImpl$Mutation$MoveService$services$moveService<TRes>
 
   CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
+}
+
+class Variables$Mutation$SetServiceConfiguration {
+  factory Variables$Mutation$SetServiceConfiguration(
+          {required Input$SetServiceConfigurationInput input}) =>
+      Variables$Mutation$SetServiceConfiguration._({
+        r'input': input,
+      });
+
+  Variables$Mutation$SetServiceConfiguration._(this._$data);
+
+  factory Variables$Mutation$SetServiceConfiguration.fromJson(
+      Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$input = data['input'];
+    result$data['input'] = Input$SetServiceConfigurationInput.fromJson(
+        (l$input as Map<String, dynamic>));
+    return Variables$Mutation$SetServiceConfiguration._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  Input$SetServiceConfigurationInput get input =>
+      (_$data['input'] as Input$SetServiceConfigurationInput);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$input = input;
+    result$data['input'] = l$input.toJson();
+    return result$data;
+  }
+
+  CopyWith$Variables$Mutation$SetServiceConfiguration<
+          Variables$Mutation$SetServiceConfiguration>
+      get copyWith => CopyWith$Variables$Mutation$SetServiceConfiguration(
+            this,
+            (i) => i,
+          );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Variables$Mutation$SetServiceConfiguration) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$input = input;
+    final lOther$input = other.input;
+    if (l$input != lOther$input) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$input = input;
+    return Object.hashAll([l$input]);
+  }
+}
+
+abstract class CopyWith$Variables$Mutation$SetServiceConfiguration<TRes> {
+  factory CopyWith$Variables$Mutation$SetServiceConfiguration(
+    Variables$Mutation$SetServiceConfiguration instance,
+    TRes Function(Variables$Mutation$SetServiceConfiguration) then,
+  ) = _CopyWithImpl$Variables$Mutation$SetServiceConfiguration;
+
+  factory CopyWith$Variables$Mutation$SetServiceConfiguration.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$SetServiceConfiguration;
+
+  TRes call({Input$SetServiceConfigurationInput? input});
+}
+
+class _CopyWithImpl$Variables$Mutation$SetServiceConfiguration<TRes>
+    implements CopyWith$Variables$Mutation$SetServiceConfiguration<TRes> {
+  _CopyWithImpl$Variables$Mutation$SetServiceConfiguration(
+    this._instance,
+    this._then,
+  );
+
+  final Variables$Mutation$SetServiceConfiguration _instance;
+
+  final TRes Function(Variables$Mutation$SetServiceConfiguration) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? input = _undefined}) =>
+      _then(Variables$Mutation$SetServiceConfiguration._({
+        ..._instance._$data,
+        if (input != _undefined && input != null)
+          'input': (input as Input$SetServiceConfigurationInput),
+      }));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$SetServiceConfiguration<TRes>
+    implements CopyWith$Variables$Mutation$SetServiceConfiguration<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$SetServiceConfiguration(this._res);
+
+  TRes _res;
+
+  call({Input$SetServiceConfigurationInput? input}) => _res;
+}
+
+class Mutation$SetServiceConfiguration {
+  Mutation$SetServiceConfiguration({
+    required this.services,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$SetServiceConfiguration.fromJson(Map<String, dynamic> json) {
+    final l$services = json['services'];
+    final l$$__typename = json['__typename'];
+    return Mutation$SetServiceConfiguration(
+      services: Mutation$SetServiceConfiguration$services.fromJson(
+          (l$services as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$SetServiceConfiguration$services services;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$services = services;
+    _resultData['services'] = l$services.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$services = services;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$services,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$SetServiceConfiguration) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$services = services;
+    final lOther$services = other.services;
+    if (l$services != lOther$services) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetServiceConfiguration
+    on Mutation$SetServiceConfiguration {
+  CopyWith$Mutation$SetServiceConfiguration<Mutation$SetServiceConfiguration>
+      get copyWith => CopyWith$Mutation$SetServiceConfiguration(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$SetServiceConfiguration<TRes> {
+  factory CopyWith$Mutation$SetServiceConfiguration(
+    Mutation$SetServiceConfiguration instance,
+    TRes Function(Mutation$SetServiceConfiguration) then,
+  ) = _CopyWithImpl$Mutation$SetServiceConfiguration;
+
+  factory CopyWith$Mutation$SetServiceConfiguration.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$SetServiceConfiguration;
+
+  TRes call({
+    Mutation$SetServiceConfiguration$services? services,
+    String? $__typename,
+  });
+  CopyWith$Mutation$SetServiceConfiguration$services<TRes> get services;
+}
+
+class _CopyWithImpl$Mutation$SetServiceConfiguration<TRes>
+    implements CopyWith$Mutation$SetServiceConfiguration<TRes> {
+  _CopyWithImpl$Mutation$SetServiceConfiguration(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$SetServiceConfiguration _instance;
+
+  final TRes Function(Mutation$SetServiceConfiguration) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? services = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$SetServiceConfiguration(
+        services: services == _undefined || services == null
+            ? _instance.services
+            : (services as Mutation$SetServiceConfiguration$services),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$SetServiceConfiguration$services<TRes> get services {
+    final local$services = _instance.services;
+    return CopyWith$Mutation$SetServiceConfiguration$services(
+        local$services, (e) => call(services: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$SetServiceConfiguration<TRes>
+    implements CopyWith$Mutation$SetServiceConfiguration<TRes> {
+  _CopyWithStubImpl$Mutation$SetServiceConfiguration(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$SetServiceConfiguration$services? services,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$SetServiceConfiguration$services<TRes> get services =>
+      CopyWith$Mutation$SetServiceConfiguration$services.stub(_res);
+}
+
+const documentNodeMutationSetServiceConfiguration = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'SetServiceConfiguration'),
+    variableDefinitions: [
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'input')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'SetServiceConfigurationInput'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(value: null),
+        directives: [],
+      )
+    ],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'services'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'setServiceConfiguration'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'input'),
+                value: VariableNode(name: NameNode(value: 'input')),
+              )
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitionbasicMutationReturnFields,
+]);
+Mutation$SetServiceConfiguration _parserFn$Mutation$SetServiceConfiguration(
+        Map<String, dynamic> data) =>
+    Mutation$SetServiceConfiguration.fromJson(data);
+typedef OnMutationCompleted$Mutation$SetServiceConfiguration = FutureOr<void>
+    Function(
+  Map<String, dynamic>?,
+  Mutation$SetServiceConfiguration?,
+);
+
+class Options$Mutation$SetServiceConfiguration
+    extends graphql.MutationOptions<Mutation$SetServiceConfiguration> {
+  Options$Mutation$SetServiceConfiguration({
+    String? operationName,
+    required Variables$Mutation$SetServiceConfiguration variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$SetServiceConfiguration? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$SetServiceConfiguration? onCompleted,
+    graphql.OnMutationUpdate<Mutation$SetServiceConfiguration>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$SetServiceConfiguration(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationSetServiceConfiguration,
+          parserFn: _parserFn$Mutation$SetServiceConfiguration,
+        );
+
+  final OnMutationCompleted$Mutation$SetServiceConfiguration?
+      onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$SetServiceConfiguration
+    extends graphql.WatchQueryOptions<Mutation$SetServiceConfiguration> {
+  WatchOptions$Mutation$SetServiceConfiguration({
+    String? operationName,
+    required Variables$Mutation$SetServiceConfiguration variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$SetServiceConfiguration? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationSetServiceConfiguration,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$SetServiceConfiguration,
+        );
+}
+
+extension ClientExtension$Mutation$SetServiceConfiguration
+    on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$SetServiceConfiguration>>
+      mutate$SetServiceConfiguration(
+              Options$Mutation$SetServiceConfiguration options) async =>
+          await this.mutate(options);
+  graphql.ObservableQuery<Mutation$SetServiceConfiguration>
+      watchMutation$SetServiceConfiguration(
+              WatchOptions$Mutation$SetServiceConfiguration options) =>
+          this.watchMutation(options);
+}
+
+class Mutation$SetServiceConfiguration$services {
+  Mutation$SetServiceConfiguration$services({
+    required this.setServiceConfiguration,
+    this.$__typename = 'ServicesMutations',
+  });
+
+  factory Mutation$SetServiceConfiguration$services.fromJson(
+      Map<String, dynamic> json) {
+    final l$setServiceConfiguration = json['setServiceConfiguration'];
+    final l$$__typename = json['__typename'];
+    return Mutation$SetServiceConfiguration$services(
+      setServiceConfiguration:
+          Mutation$SetServiceConfiguration$services$setServiceConfiguration
+              .fromJson((l$setServiceConfiguration as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$SetServiceConfiguration$services$setServiceConfiguration
+      setServiceConfiguration;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$setServiceConfiguration = setServiceConfiguration;
+    _resultData['setServiceConfiguration'] = l$setServiceConfiguration.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$setServiceConfiguration = setServiceConfiguration;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$setServiceConfiguration,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$SetServiceConfiguration$services) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$setServiceConfiguration = setServiceConfiguration;
+    final lOther$setServiceConfiguration = other.setServiceConfiguration;
+    if (l$setServiceConfiguration != lOther$setServiceConfiguration) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetServiceConfiguration$services
+    on Mutation$SetServiceConfiguration$services {
+  CopyWith$Mutation$SetServiceConfiguration$services<
+          Mutation$SetServiceConfiguration$services>
+      get copyWith => CopyWith$Mutation$SetServiceConfiguration$services(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$SetServiceConfiguration$services<TRes> {
+  factory CopyWith$Mutation$SetServiceConfiguration$services(
+    Mutation$SetServiceConfiguration$services instance,
+    TRes Function(Mutation$SetServiceConfiguration$services) then,
+  ) = _CopyWithImpl$Mutation$SetServiceConfiguration$services;
+
+  factory CopyWith$Mutation$SetServiceConfiguration$services.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$SetServiceConfiguration$services;
+
+  TRes call({
+    Mutation$SetServiceConfiguration$services$setServiceConfiguration?
+        setServiceConfiguration,
+    String? $__typename,
+  });
+  CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
+      TRes> get setServiceConfiguration;
+}
+
+class _CopyWithImpl$Mutation$SetServiceConfiguration$services<TRes>
+    implements CopyWith$Mutation$SetServiceConfiguration$services<TRes> {
+  _CopyWithImpl$Mutation$SetServiceConfiguration$services(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$SetServiceConfiguration$services _instance;
+
+  final TRes Function(Mutation$SetServiceConfiguration$services) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? setServiceConfiguration = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$SetServiceConfiguration$services(
+        setServiceConfiguration: setServiceConfiguration == _undefined ||
+                setServiceConfiguration == null
+            ? _instance.setServiceConfiguration
+            : (setServiceConfiguration
+                as Mutation$SetServiceConfiguration$services$setServiceConfiguration),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
+      TRes> get setServiceConfiguration {
+    final local$setServiceConfiguration = _instance.setServiceConfiguration;
+    return CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
+        local$setServiceConfiguration, (e) => call(setServiceConfiguration: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$SetServiceConfiguration$services<TRes>
+    implements CopyWith$Mutation$SetServiceConfiguration$services<TRes> {
+  _CopyWithStubImpl$Mutation$SetServiceConfiguration$services(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$SetServiceConfiguration$services$setServiceConfiguration?
+        setServiceConfiguration,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
+          TRes>
+      get setServiceConfiguration =>
+          CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration
+              .stub(_res);
+}
+
+class Mutation$SetServiceConfiguration$services$setServiceConfiguration
+    implements Fragment$basicMutationReturnFields$$ServiceMutationReturn {
+  Mutation$SetServiceConfiguration$services$setServiceConfiguration({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'ServiceMutationReturn',
+  });
+
+  factory Mutation$SetServiceConfiguration$services$setServiceConfiguration.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Mutation$SetServiceConfiguration$services$setServiceConfiguration(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Mutation$SetServiceConfiguration$services$setServiceConfiguration) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetServiceConfiguration$services$setServiceConfiguration
+    on Mutation$SetServiceConfiguration$services$setServiceConfiguration {
+  CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
+          Mutation$SetServiceConfiguration$services$setServiceConfiguration>
+      get copyWith =>
+          CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
+    TRes> {
+  factory CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
+    Mutation$SetServiceConfiguration$services$setServiceConfiguration instance,
+    TRes Function(
+            Mutation$SetServiceConfiguration$services$setServiceConfiguration)
+        then,
+  ) = _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration;
+
+  factory CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
+        TRes>
+    implements
+        CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
+            TRes> {
+  _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$SetServiceConfiguration$services$setServiceConfiguration
+      _instance;
+
+  final TRes Function(
+      Mutation$SetServiceConfiguration$services$setServiceConfiguration) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$SetServiceConfiguration$services$setServiceConfiguration(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
+        TRes>
+    implements
+        CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
+            TRes> {
+  _CopyWithStubImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  }) =>
+      _res;
 }

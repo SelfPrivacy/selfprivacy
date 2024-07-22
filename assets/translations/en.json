@@ -349,7 +349,13 @@
             "activating": "Activating",
             "deactivating": "Deactivating",
             "reloading": "Restarting"
-        }
+        },
+        "settings": "Service settings",
+        "modified": "Modified",
+        "invalid_input": "Invalid input",
+        "create_job": "Create job",
+        "update_job": "Update job",
+        "wait_for_jobs": "Server is busy with other jobs. Please wait until they are finished."
     },
     "mail": {
         "login_info": "Use username and password from users tab. IMAP port is 143 with STARTTLS, SMTP port is 587 with STARTTLS."
@@ -602,7 +608,8 @@
         "change_ssh_settings": "Change SSH settings",
         "update_dns_records": "Update DNS records",
         "dns_records_did_not_change": "No changes needed",
-        "dns_records_changed": "DNS records updated"
+        "dns_records_changed": "DNS records updated",
+        "change_service_settings": "Change service settings for {}"
     },
     "validations": {
         "required": "Required",

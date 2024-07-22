@@ -22,6 +22,7 @@ import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_mig
 import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
 import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
 import 'package:selfprivacy/ui/pages/services/service_page.dart';
+import 'package:selfprivacy/ui/pages/services/service_settings_page.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
@@ -96,6 +97,7 @@ class RootRouter extends _$RootRouter {
         AutoRoute(page: AboutApplicationRoute.page),
         AutoRoute(page: DeveloperSettingsRoute.page),
         AutoRoute(page: ServiceRoute.page),
+        AutoRoute(page: ServiceSettingsRoute.page),
         AutoRoute(page: ServerDetailsRoute.page),
         AutoRoute(page: DnsDetailsRoute.page),
         AutoRoute(page: BackupDetailsRoute.page),
@@ -120,6 +122,8 @@ String getRouteTitle(final String routeName) {
     case 'ServicesRoute':
     case 'ServiceRoute':
       return 'basis.services';
+    case 'ServiceSettingsRoute':
+      return 'service_page.settings';
     case 'UsersRoute':
       return 'basis.users';
     case 'MoreRoute':

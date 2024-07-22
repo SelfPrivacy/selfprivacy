@@ -46,7 +46,11 @@ class JobsStateWithJobs extends JobsState {
   JobsState addJob(final ClientJob job) {
     if (job is ReplaceableJob) {
       final List<ClientJob> newJobsList = clientJobList
-          .where((final element) => element.runtimeType != job.runtimeType)
+          .where(
+            (final element) => job.shouldReplaceOnlyIfSameId
+                ? element.runtimeType != job.runtimeType || element.id != job.id
+                : element.runtimeType != job.runtimeType,
+          )
           .toList();
       if (job.shouldRemoveInsteadOfAdd(clientJobList)) {
         getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());

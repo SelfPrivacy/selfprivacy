@@ -9,6 +9,8 @@ targets:
               fromJsonFunctionName: dateTimeFromJson
               toJsonFunctionName: dateTimeToJson
               import: package:selfprivacy/utils/scalars.dart
+            JSON:
+              type: Map<String, dynamic>
           clients:
             - graphql
       json_serializable:

@@ -61,8 +61,6 @@
         "dangerous_settings": "Təhlükəli Parametrlər",
         "reset_config_title": "Tətbiq Sıfırlayın",
         "reset_config_description": "API və Super İstifadəçi Açarlarını sıfırlayın."
-
-
     },
     "ssh": {
         "title": "SSH açarları",
@@ -381,7 +379,6 @@
         "are_you_sure": "Sən əminsən?",
         "purge_all_keys": "Bütün avtorizasiya açarları silinsin?",
         "purge_all_keys_confirm": "Bəli, bütün düymələri silin",
-        "delete_server_volume": "Server və yaddaş silinsin?",
         "reboot": "Yenidən yükləyin",
         "yes": "Bəli",
         "no": "Yox"

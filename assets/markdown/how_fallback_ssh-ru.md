@@ -1,19 +1,7 @@
-Войдите как root пользователь на свой сервер и посмотрите содержимое файла `/etc/nixos/userdata/tokens.json`
+[Login as root user to your server](https://selfprivacy.org/docs/how-to-guides/root_ssh/) and enter this command:
 
 ```sh
-cat /etc/nixos/userdata/tokens.json
+sp-print-api-token
 ```
 
-В этом файле будет схожая конструкция:
-
-```json
-{
-    "tokens": [
-        {
-            "token": "токен_который_надо_скопировать",
-            "name": "имя_устройства",
-            "date": "дата"
-        }
-```
-
-Скопируйте токен из файла и вставьте в следующем окне.
+Copy the token from the terminal and paste it in the next window.

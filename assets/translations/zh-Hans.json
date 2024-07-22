@@ -481,7 +481,6 @@
         "change_application_theme": "切换应用主题",
         "dangerous_settings": "危险设置",
         "reset_config_title": "重置应用配置",
-        "delete_server_title": "删除服务器",
         "reset_config_description": "重置API密钥和root用户。"
     },
     "ssh": {

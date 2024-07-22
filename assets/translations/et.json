@@ -7,7 +7,9 @@
         "change_application_theme": "Vaheta oma rakenduse teemat",
         "dangerous_settings": "Ohtlikud seaded",
         "reset_config_title": "Lähtesta rakenduse konfiguratsioon",
-        "reset_config_description": "Lähtestab API võtmed ja juurkasutaja."
+        "reset_config_description": "Lähtestab API võtmed ja juurkasutaja.",
+        "language": "Keel",
+        "click_to_change_locale": "Klõpsake keelte loendi avamiseks"
     },
     "server": {
         "reboot_after_upgrade": "Taaskäivita pärast värskendust",
@@ -115,7 +117,29 @@
     "console_page": {
         "title": "Konsool",
         "waiting": "Ootab initsialiseerimist…",
-        "copy": "Kopeeri"
+        "copy": "Kopeeri",
+        "copy_raw": "Toores vastus",
+        "history_empty": "Andmeid veel pole",
+        "error": "Viga",
+        "log": "sündmuste logi",
+        "rest_api_request": "REST API Taotlus",
+        "rest_api_response": "REST API Vastus",
+        "graphql_request": "GraphQL Taotlus",
+        "graphql_response": "GraphQL Vastus",
+        "logged_at": "Juhtus sisse",
+        "data": "Andmeid",
+        "errors": "Vead",
+        "error_path": "Faili tee",
+        "response_data": "Vastuse andmed",
+        "context": "Kontekst",
+        "operation": "Operatsioon",
+        "operation_type": "Operatsiooni tüüp",
+        "operation_name": "Operatsiooni nimi",
+        "variables": "Muutujad",
+        "error_locations": "Vigade asukohad",
+        "error_extensions": "Laiendused",
+        "request_data": "Päringuandmed",
+        "headers": "Päised"
     },
     "about_application_page": {
         "title": "Teave ja klienditugi",

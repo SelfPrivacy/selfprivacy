@@ -44,10 +44,7 @@
         "title": "アプリケーションの設定",
         "dark_theme_title": "ダークテーマ",
         "dangerous_settings": "要注意の設定",
-        "reset_config_title": "アプリケーションの設定をリセット",
-        "system_dark_theme_title": "システムの既定色",
-        "system_dark_theme_description": "システムの設定に応じて、ライト・ダークテーマのどちらかを使用",
-        "dark_theme_description": "アプリケーションの色を切り替える"
+        "reset_config_title": "アプリケーションの設定をリセット"
     },
     "console_page": {
         "copy": "コピー",

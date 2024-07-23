@@ -194,7 +194,7 @@ sealed class ServiceConfigItem extends Equatable {
   ) =>
       configItem.when<ServiceConfigItem>(
         boolConfigItem: (final boolConfigItem) => BoolServiceConfigItem(
-          id: boolConfigItem.id,
+          id: boolConfigItem.fieldId,
           description: boolConfigItem.description,
           widget: boolConfigItem.widget,
           type: boolConfigItem.type,
@@ -202,7 +202,7 @@ sealed class ServiceConfigItem extends Equatable {
           defaultValue: boolConfigItem.defaultBoolValue,
         ),
         enumConfigItem: (final enumConfigItem) => EnumServiceConfigItem(
-          id: enumConfigItem.id,
+          id: enumConfigItem.fieldId,
           description: enumConfigItem.description,
           widget: enumConfigItem.widget,
           type: enumConfigItem.type,
@@ -211,7 +211,7 @@ sealed class ServiceConfigItem extends Equatable {
           options: enumConfigItem.options,
         ),
         stringConfigItem: (final stringConfigItem) => StringServiceConfigItem(
-          id: stringConfigItem.id,
+          id: stringConfigItem.fieldId,
           description: stringConfigItem.description,
           widget: stringConfigItem.widget,
           type: stringConfigItem.type,
@@ -220,7 +220,7 @@ sealed class ServiceConfigItem extends Equatable {
           regex: stringConfigItem.regex,
         ),
         orElse: () => FallbackServiceConfigItem(
-          id: configItem.id,
+          id: configItem.fieldId,
           description: configItem.description,
           type: configItem.type,
         ),

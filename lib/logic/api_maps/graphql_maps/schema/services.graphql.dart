@@ -7,7 +7,7 @@ import 'server_settings.graphql.dart';
 
 class Fragment$BoolConfigItem {
   Fragment$BoolConfigItem({
-    required this.id,
+    required this.fieldId,
     required this.description,
     required this.type,
     required this.boolValue,
@@ -17,7 +17,7 @@ class Fragment$BoolConfigItem {
   });
 
   factory Fragment$BoolConfigItem.fromJson(Map<String, dynamic> json) {
-    final l$id = json['id'];
+    final l$fieldId = json['fieldId'];
     final l$description = json['description'];
     final l$type = json['type'];
     final l$boolValue = json['boolValue'];
@@ -25,7 +25,7 @@ class Fragment$BoolConfigItem {
     final l$widget = json['widget'];
     final l$$__typename = json['__typename'];
     return Fragment$BoolConfigItem(
-      id: (l$id as String),
+      fieldId: (l$fieldId as String),
       description: (l$description as String),
       type: (l$type as String),
       boolValue: (l$boolValue as bool),
@@ -35,7 +35,7 @@ class Fragment$BoolConfigItem {
     );
   }
 
-  final String id;
+  final String fieldId;
 
   final String description;
 
@@ -51,8 +51,8 @@ class Fragment$BoolConfigItem {
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
+    final l$fieldId = fieldId;
+    _resultData['fieldId'] = l$fieldId;
     final l$description = description;
     _resultData['description'] = l$description;
     final l$type = type;
@@ -70,7 +70,7 @@ class Fragment$BoolConfigItem {
 
   @override
   int get hashCode {
-    final l$id = id;
+    final l$fieldId = fieldId;
     final l$description = description;
     final l$type = type;
     final l$boolValue = boolValue;
@@ -78,7 +78,7 @@ class Fragment$BoolConfigItem {
     final l$widget = widget;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
+      l$fieldId,
       l$description,
       l$type,
       l$boolValue,
@@ -97,9 +97,9 @@ class Fragment$BoolConfigItem {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
+    final l$fieldId = fieldId;
+    final lOther$fieldId = other.fieldId;
+    if (l$fieldId != lOther$fieldId) {
       return false;
     }
     final l$description = description;
@@ -154,7 +154,7 @@ abstract class CopyWith$Fragment$BoolConfigItem<TRes> {
       _CopyWithStubImpl$Fragment$BoolConfigItem;
 
   TRes call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     bool? boolValue,
@@ -178,7 +178,7 @@ class _CopyWithImpl$Fragment$BoolConfigItem<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
+    Object? fieldId = _undefined,
     Object? description = _undefined,
     Object? type = _undefined,
     Object? boolValue = _undefined,
@@ -187,7 +187,9 @@ class _CopyWithImpl$Fragment$BoolConfigItem<TRes>
     Object? $__typename = _undefined,
   }) =>
       _then(Fragment$BoolConfigItem(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
+        fieldId: fieldId == _undefined || fieldId == null
+            ? _instance.fieldId
+            : (fieldId as String),
         description: description == _undefined || description == null
             ? _instance.description
             : (description as String),
@@ -217,7 +219,7 @@ class _CopyWithStubImpl$Fragment$BoolConfigItem<TRes>
   TRes _res;
 
   call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     bool? boolValue,
@@ -238,7 +240,7 @@ const fragmentDefinitionBoolConfigItem = FragmentDefinitionNode(
   directives: [],
   selectionSet: SelectionSetNode(selections: [
     FieldNode(
-      name: NameNode(value: 'id'),
+      name: NameNode(value: 'fieldId'),
       alias: null,
       arguments: [],
       directives: [],
@@ -329,7 +331,7 @@ extension ClientExtension$Fragment$BoolConfigItem on graphql.GraphQLClient {
 
 class Fragment$EnumConfigItem {
   Fragment$EnumConfigItem({
-    required this.id,
+    required this.fieldId,
     required this.description,
     required this.type,
     required this.stringValue,
@@ -340,7 +342,7 @@ class Fragment$EnumConfigItem {
   });
 
   factory Fragment$EnumConfigItem.fromJson(Map<String, dynamic> json) {
-    final l$id = json['id'];
+    final l$fieldId = json['fieldId'];
     final l$description = json['description'];
     final l$type = json['type'];
     final l$stringValue = json['stringValue'];
@@ -349,7 +351,7 @@ class Fragment$EnumConfigItem {
     final l$widget = json['widget'];
     final l$$__typename = json['__typename'];
     return Fragment$EnumConfigItem(
-      id: (l$id as String),
+      fieldId: (l$fieldId as String),
       description: (l$description as String),
       type: (l$type as String),
       stringValue: (l$stringValue as String),
@@ -360,7 +362,7 @@ class Fragment$EnumConfigItem {
     );
   }
 
-  final String id;
+  final String fieldId;
 
   final String description;
 
@@ -378,8 +380,8 @@ class Fragment$EnumConfigItem {
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
+    final l$fieldId = fieldId;
+    _resultData['fieldId'] = l$fieldId;
     final l$description = description;
     _resultData['description'] = l$description;
     final l$type = type;
@@ -399,7 +401,7 @@ class Fragment$EnumConfigItem {
 
   @override
   int get hashCode {
-    final l$id = id;
+    final l$fieldId = fieldId;
     final l$description = description;
     final l$type = type;
     final l$stringValue = stringValue;
@@ -408,7 +410,7 @@ class Fragment$EnumConfigItem {
     final l$widget = widget;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
+      l$fieldId,
       l$description,
       l$type,
       l$stringValue,
@@ -428,9 +430,9 @@ class Fragment$EnumConfigItem {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
+    final l$fieldId = fieldId;
+    final lOther$fieldId = other.fieldId;
+    if (l$fieldId != lOther$fieldId) {
       return false;
     }
     final l$description = description;
@@ -497,7 +499,7 @@ abstract class CopyWith$Fragment$EnumConfigItem<TRes> {
       _CopyWithStubImpl$Fragment$EnumConfigItem;
 
   TRes call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? stringValue,
@@ -522,7 +524,7 @@ class _CopyWithImpl$Fragment$EnumConfigItem<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
+    Object? fieldId = _undefined,
     Object? description = _undefined,
     Object? type = _undefined,
     Object? stringValue = _undefined,
@@ -532,7 +534,9 @@ class _CopyWithImpl$Fragment$EnumConfigItem<TRes>
     Object? $__typename = _undefined,
   }) =>
       _then(Fragment$EnumConfigItem(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
+        fieldId: fieldId == _undefined || fieldId == null
+            ? _instance.fieldId
+            : (fieldId as String),
         description: description == _undefined || description == null
             ? _instance.description
             : (description as String),
@@ -565,7 +569,7 @@ class _CopyWithStubImpl$Fragment$EnumConfigItem<TRes>
   TRes _res;
 
   call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? stringValue,
@@ -587,7 +591,7 @@ const fragmentDefinitionEnumConfigItem = FragmentDefinitionNode(
   directives: [],
   selectionSet: SelectionSetNode(selections: [
     FieldNode(
-      name: NameNode(value: 'id'),
+      name: NameNode(value: 'fieldId'),
       alias: null,
       arguments: [],
       directives: [],
@@ -685,7 +689,7 @@ extension ClientExtension$Fragment$EnumConfigItem on graphql.GraphQLClient {
 
 class Fragment$StringConfigItem {
   Fragment$StringConfigItem({
-    required this.id,
+    required this.fieldId,
     required this.description,
     required this.type,
     required this.stringValue,
@@ -696,7 +700,7 @@ class Fragment$StringConfigItem {
   });
 
   factory Fragment$StringConfigItem.fromJson(Map<String, dynamic> json) {
-    final l$id = json['id'];
+    final l$fieldId = json['fieldId'];
     final l$description = json['description'];
     final l$type = json['type'];
     final l$stringValue = json['stringValue'];
@@ -705,7 +709,7 @@ class Fragment$StringConfigItem {
     final l$widget = json['widget'];
     final l$$__typename = json['__typename'];
     return Fragment$StringConfigItem(
-      id: (l$id as String),
+      fieldId: (l$fieldId as String),
       description: (l$description as String),
       type: (l$type as String),
       stringValue: (l$stringValue as String),
@@ -716,7 +720,7 @@ class Fragment$StringConfigItem {
     );
   }
 
-  final String id;
+  final String fieldId;
 
   final String description;
 
@@ -734,8 +738,8 @@ class Fragment$StringConfigItem {
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
+    final l$fieldId = fieldId;
+    _resultData['fieldId'] = l$fieldId;
     final l$description = description;
     _resultData['description'] = l$description;
     final l$type = type;
@@ -755,7 +759,7 @@ class Fragment$StringConfigItem {
 
   @override
   int get hashCode {
-    final l$id = id;
+    final l$fieldId = fieldId;
     final l$description = description;
     final l$type = type;
     final l$stringValue = stringValue;
@@ -764,7 +768,7 @@ class Fragment$StringConfigItem {
     final l$widget = widget;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
+      l$fieldId,
       l$description,
       l$type,
       l$stringValue,
@@ -784,9 +788,9 @@ class Fragment$StringConfigItem {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
+    final l$fieldId = fieldId;
+    final lOther$fieldId = other.fieldId;
+    if (l$fieldId != lOther$fieldId) {
       return false;
     }
     final l$description = description;
@@ -847,7 +851,7 @@ abstract class CopyWith$Fragment$StringConfigItem<TRes> {
       _CopyWithStubImpl$Fragment$StringConfigItem;
 
   TRes call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? stringValue,
@@ -872,7 +876,7 @@ class _CopyWithImpl$Fragment$StringConfigItem<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
+    Object? fieldId = _undefined,
     Object? description = _undefined,
     Object? type = _undefined,
     Object? stringValue = _undefined,
@@ -882,7 +886,9 @@ class _CopyWithImpl$Fragment$StringConfigItem<TRes>
     Object? $__typename = _undefined,
   }) =>
       _then(Fragment$StringConfigItem(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
+        fieldId: fieldId == _undefined || fieldId == null
+            ? _instance.fieldId
+            : (fieldId as String),
         description: description == _undefined || description == null
             ? _instance.description
             : (description as String),
@@ -913,7 +919,7 @@ class _CopyWithStubImpl$Fragment$StringConfigItem<TRes>
   TRes _res;
 
   call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? stringValue,
@@ -935,7 +941,7 @@ const fragmentDefinitionStringConfigItem = FragmentDefinitionNode(
   directives: [],
   selectionSet: SelectionSetNode(selections: [
     FieldNode(
-      name: NameNode(value: 'id'),
+      name: NameNode(value: 'fieldId'),
       alias: null,
       arguments: [],
       directives: [],
@@ -1338,7 +1344,7 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
                 directives: [],
                 selectionSet: SelectionSetNode(selections: [
                   FieldNode(
-                    name: NameNode(value: 'id'),
+                    name: NameNode(value: 'fieldId'),
                     alias: null,
                     arguments: [],
                     directives: [],
@@ -2499,7 +2505,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volu
 
 class Query$AllServices$services$allServices$configuration {
   Query$AllServices$services$allServices$configuration({
-    required this.id,
+    required this.fieldId,
     required this.description,
     required this.type,
     required this.$__typename,
@@ -2521,12 +2527,12 @@ class Query$AllServices$services$allServices$configuration {
             .fromJson(json);
 
       default:
-        final l$id = json['id'];
+        final l$fieldId = json['fieldId'];
         final l$description = json['description'];
         final l$type = json['type'];
         final l$$__typename = json['__typename'];
         return Query$AllServices$services$allServices$configuration(
-          id: (l$id as String),
+          fieldId: (l$fieldId as String),
           description: (l$description as String),
           type: (l$type as String),
           $__typename: (l$$__typename as String),
@@ -2534,7 +2540,7 @@ class Query$AllServices$services$allServices$configuration {
     }
   }
 
-  final String id;
+  final String fieldId;
 
   final String description;
 
@@ -2544,8 +2550,8 @@ class Query$AllServices$services$allServices$configuration {
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
+    final l$fieldId = fieldId;
+    _resultData['fieldId'] = l$fieldId;
     final l$description = description;
     _resultData['description'] = l$description;
     final l$type = type;
@@ -2557,12 +2563,12 @@ class Query$AllServices$services$allServices$configuration {
 
   @override
   int get hashCode {
-    final l$id = id;
+    final l$fieldId = fieldId;
     final l$description = description;
     final l$type = type;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
+      l$fieldId,
       l$description,
       l$type,
       l$$__typename,
@@ -2578,9 +2584,9 @@ class Query$AllServices$services$allServices$configuration {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
+    final l$fieldId = fieldId;
+    final lOther$fieldId = other.fieldId;
+    if (l$fieldId != lOther$fieldId) {
       return false;
     }
     final l$description = description;
@@ -2696,7 +2702,7 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration<
       _CopyWithStubImpl$Query$AllServices$services$allServices$configuration;
 
   TRes call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? $__typename,
@@ -2719,13 +2725,15 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
+    Object? fieldId = _undefined,
     Object? description = _undefined,
     Object? type = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Query$AllServices$services$allServices$configuration(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
+        fieldId: fieldId == _undefined || fieldId == null
+            ? _instance.fieldId
+            : (fieldId as String),
         description: description == _undefined || description == null
             ? _instance.description
             : (description as String),
@@ -2748,7 +2756,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration<
   TRes _res;
 
   call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? $__typename,
@@ -2761,7 +2769,7 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
         Fragment$BoolConfigItem,
         Query$AllServices$services$allServices$configuration {
   Query$AllServices$services$allServices$configuration$$BoolConfigItem({
-    required this.id,
+    required this.fieldId,
     required this.description,
     required this.type,
     required this.boolValue,
@@ -2772,7 +2780,7 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
 
   factory Query$AllServices$services$allServices$configuration$$BoolConfigItem.fromJson(
       Map<String, dynamic> json) {
-    final l$id = json['id'];
+    final l$fieldId = json['fieldId'];
     final l$description = json['description'];
     final l$type = json['type'];
     final l$boolValue = json['boolValue'];
@@ -2780,7 +2788,7 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
     final l$widget = json['widget'];
     final l$$__typename = json['__typename'];
     return Query$AllServices$services$allServices$configuration$$BoolConfigItem(
-      id: (l$id as String),
+      fieldId: (l$fieldId as String),
       description: (l$description as String),
       type: (l$type as String),
       boolValue: (l$boolValue as bool),
@@ -2790,7 +2798,7 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
     );
   }
 
-  final String id;
+  final String fieldId;
 
   final String description;
 
@@ -2806,8 +2814,8 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
+    final l$fieldId = fieldId;
+    _resultData['fieldId'] = l$fieldId;
     final l$description = description;
     _resultData['description'] = l$description;
     final l$type = type;
@@ -2825,7 +2833,7 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
 
   @override
   int get hashCode {
-    final l$id = id;
+    final l$fieldId = fieldId;
     final l$description = description;
     final l$type = type;
     final l$boolValue = boolValue;
@@ -2833,7 +2841,7 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
     final l$widget = widget;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
+      l$fieldId,
       l$description,
       l$type,
       l$boolValue,
@@ -2853,9 +2861,9 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
+    final l$fieldId = fieldId;
+    final lOther$fieldId = other.fieldId;
+    if (l$fieldId != lOther$fieldId) {
       return false;
     }
     final l$description = description;
@@ -2918,7 +2926,7 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration$$Bo
       _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
 
   TRes call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     bool? boolValue,
@@ -2948,7 +2956,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolCo
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
+    Object? fieldId = _undefined,
     Object? description = _undefined,
     Object? type = _undefined,
     Object? boolValue = _undefined,
@@ -2958,7 +2966,9 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolCo
   }) =>
       _then(
           Query$AllServices$services$allServices$configuration$$BoolConfigItem(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
+        fieldId: fieldId == _undefined || fieldId == null
+            ? _instance.fieldId
+            : (fieldId as String),
         description: description == _undefined || description == null
             ? _instance.description
             : (description as String),
@@ -2992,7 +3002,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$Bo
   TRes _res;
 
   call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     bool? boolValue,
@@ -3008,7 +3018,7 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
         Fragment$EnumConfigItem,
         Query$AllServices$services$allServices$configuration {
   Query$AllServices$services$allServices$configuration$$EnumConfigItem({
-    required this.id,
+    required this.fieldId,
     required this.description,
     required this.type,
     required this.stringValue,
@@ -3020,7 +3030,7 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
 
   factory Query$AllServices$services$allServices$configuration$$EnumConfigItem.fromJson(
       Map<String, dynamic> json) {
-    final l$id = json['id'];
+    final l$fieldId = json['fieldId'];
     final l$description = json['description'];
     final l$type = json['type'];
     final l$stringValue = json['stringValue'];
@@ -3029,7 +3039,7 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
     final l$widget = json['widget'];
     final l$$__typename = json['__typename'];
     return Query$AllServices$services$allServices$configuration$$EnumConfigItem(
-      id: (l$id as String),
+      fieldId: (l$fieldId as String),
       description: (l$description as String),
       type: (l$type as String),
       stringValue: (l$stringValue as String),
@@ -3040,7 +3050,7 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
     );
   }
 
-  final String id;
+  final String fieldId;
 
   final String description;
 
@@ -3058,8 +3068,8 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
+    final l$fieldId = fieldId;
+    _resultData['fieldId'] = l$fieldId;
     final l$description = description;
     _resultData['description'] = l$description;
     final l$type = type;
@@ -3079,7 +3089,7 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
 
   @override
   int get hashCode {
-    final l$id = id;
+    final l$fieldId = fieldId;
     final l$description = description;
     final l$type = type;
     final l$stringValue = stringValue;
@@ -3088,7 +3098,7 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
     final l$widget = widget;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
+      l$fieldId,
       l$description,
       l$type,
       l$stringValue,
@@ -3109,9 +3119,9 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
+    final l$fieldId = fieldId;
+    final lOther$fieldId = other.fieldId;
+    if (l$fieldId != lOther$fieldId) {
       return false;
     }
     final l$description = description;
@@ -3186,7 +3196,7 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration$$En
       _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
 
   TRes call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? stringValue,
@@ -3217,7 +3227,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumCo
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
+    Object? fieldId = _undefined,
     Object? description = _undefined,
     Object? type = _undefined,
     Object? stringValue = _undefined,
@@ -3228,7 +3238,9 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumCo
   }) =>
       _then(
           Query$AllServices$services$allServices$configuration$$EnumConfigItem(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
+        fieldId: fieldId == _undefined || fieldId == null
+            ? _instance.fieldId
+            : (fieldId as String),
         description: description == _undefined || description == null
             ? _instance.description
             : (description as String),
@@ -3265,7 +3277,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$En
   TRes _res;
 
   call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? stringValue,
@@ -3282,7 +3294,7 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
         Fragment$StringConfigItem,
         Query$AllServices$services$allServices$configuration {
   Query$AllServices$services$allServices$configuration$$StringConfigItem({
-    required this.id,
+    required this.fieldId,
     required this.description,
     required this.type,
     required this.stringValue,
@@ -3294,7 +3306,7 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
 
   factory Query$AllServices$services$allServices$configuration$$StringConfigItem.fromJson(
       Map<String, dynamic> json) {
-    final l$id = json['id'];
+    final l$fieldId = json['fieldId'];
     final l$description = json['description'];
     final l$type = json['type'];
     final l$stringValue = json['stringValue'];
@@ -3303,7 +3315,7 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
     final l$widget = json['widget'];
     final l$$__typename = json['__typename'];
     return Query$AllServices$services$allServices$configuration$$StringConfigItem(
-      id: (l$id as String),
+      fieldId: (l$fieldId as String),
       description: (l$description as String),
       type: (l$type as String),
       stringValue: (l$stringValue as String),
@@ -3314,7 +3326,7 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
     );
   }
 
-  final String id;
+  final String fieldId;
 
   final String description;
 
@@ -3332,8 +3344,8 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
+    final l$fieldId = fieldId;
+    _resultData['fieldId'] = l$fieldId;
     final l$description = description;
     _resultData['description'] = l$description;
     final l$type = type;
@@ -3353,7 +3365,7 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
 
   @override
   int get hashCode {
-    final l$id = id;
+    final l$fieldId = fieldId;
     final l$description = description;
     final l$type = type;
     final l$stringValue = stringValue;
@@ -3362,7 +3374,7 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
     final l$widget = widget;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
+      l$fieldId,
       l$description,
       l$type,
       l$stringValue,
@@ -3383,9 +3395,9 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
+    final l$fieldId = fieldId;
+    final lOther$fieldId = other.fieldId;
+    if (l$fieldId != lOther$fieldId) {
       return false;
     }
     final l$description = description;
@@ -3453,7 +3465,7 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration$$St
       _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
 
   TRes call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? stringValue,
@@ -3484,7 +3496,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$String
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
+    Object? fieldId = _undefined,
     Object? description = _undefined,
     Object? type = _undefined,
     Object? stringValue = _undefined,
@@ -3495,7 +3507,9 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$String
   }) =>
       _then(
           Query$AllServices$services$allServices$configuration$$StringConfigItem(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
+        fieldId: fieldId == _undefined || fieldId == null
+            ? _instance.fieldId
+            : (fieldId as String),
         description: description == _undefined || description == null
             ? _instance.description
             : (description as String),
@@ -3530,7 +3544,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$St
   TRes _res;
 
   call({
-    String? id,
+    String? fieldId,
     String? description,
     String? type,
     String? stringValue,

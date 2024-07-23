@@ -131,7 +131,7 @@ enum BackupReason {
 }
 
 type BoolConfigItem implements ConfigItem {
-  id: String!
+  fieldId: String!
   description: String!
   widget: String!
   type: String!
@@ -140,7 +140,7 @@ type BoolConfigItem implements ConfigItem {
 }
 
 interface ConfigItem {
-  id: String!
+  fieldId: String!
   description: String!
   widget: String!
   type: String!
@@ -172,7 +172,7 @@ type DnsRecord {
 }
 
 type EnumConfigItem implements ConfigItem {
-  id: String!
+  fieldId: String!
   description: String!
   widget: String!
   type: String!
@@ -474,7 +474,7 @@ type StorageVolume {
 }
 
 type StringConfigItem implements ConfigItem {
-  id: String!
+  fieldId: String!
   description: String!
   widget: String!
   type: String!

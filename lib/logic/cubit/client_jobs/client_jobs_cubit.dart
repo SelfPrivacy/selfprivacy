@@ -149,6 +149,10 @@ class JobsCubit extends Cubit<JobsState> {
           await getIt<ApiConnectionRepository>().api.getDnsRecords();
 
       for (final ClientJob job in jobs) {
+        if (job is UpdateDnsRecordsJob) {
+          continue;
+        }
+
         emit(
           (state as JobsStateLoading)
               .updateJobStatus(job.id, JobStatusEnum.running),
@@ -170,48 +174,30 @@ class JobsCubit extends Cubit<JobsState> {
         }
       }
 
-      if (dnsUpdateRequired) {
-        emit(
-          (state as JobsStateLoading).updateJobStatus(
-            UpdateDnsRecordsJob.jobId,
-            JobStatusEnum.running,
-          ),
-        );
-        final List<DnsRecord> newDnsRecords =
-            await getIt<ApiConnectionRepository>().api.getDnsRecords();
+      await Future<void>.delayed(Duration.zero);
 
-        if (const UnorderedIterableEquality()
-            .equals(oldDnsRecords, newDnsRecords)) {
+      // If all jobs failed, do not try to change DNS records or rebuild the server
+      if ((state as JobsStateLoading).clientJobList.every(
+            (final job) =>
+                (job.status == JobStatusEnum.error) ||
+                (job is UpdateDnsRecordsJob),
+          )) {
+        if (dnsUpdateRequired) {
           emit(
             (state as JobsStateLoading).updateJobStatus(
               UpdateDnsRecordsJob.jobId,
-              JobStatusEnum.finished,
-              message: 'jobs.dns_records_did_not_change'.tr(),
+              JobStatusEnum.error,
+              message: 'jobs.ignored_due_to_failures'.tr(),
             ),
           );
-        } else {
-          final ServerDomain? domain =
-              getIt<ApiConnectionRepository>().serverDomain;
-
-          final dnsCreateResult =
-              await ProvidersController.currentDnsProvider!.updateDnsRecords(
-            newRecords:
-                newDnsRecords.where((final r) => r.content != null).toList(),
-            oldRecords: oldDnsRecords,
-            domain: domain!,
-          );
-
-          emit(
-            (state as JobsStateLoading).updateJobStatus(
-              UpdateDnsRecordsJob.jobId,
-              dnsCreateResult.success
-                  ? JobStatusEnum.finished
-                  : JobStatusEnum.error,
-              message:
-                  dnsCreateResult.message ?? 'jobs.dns_records_changed'.tr(),
-            ),
-          );
+          await Future.delayed(Duration.zero);
         }
+        emit((state as JobsStateLoading).finished());
+        return;
+      }
+
+      if (dnsUpdateRequired) {
+        await updateDnsRecords(oldDnsRecords);
       }
 
       if (!rebuildRequired) {
@@ -231,6 +217,62 @@ class JobsCubit extends Cubit<JobsState> {
       } else {
         emit((state as JobsStateLoading).finished());
       }
+    }
+  }
+
+  Future<void> updateDnsRecords(final List<DnsRecord> oldDnsRecords) async {
+    emit(
+      (state as JobsStateLoading).updateJobStatus(
+        UpdateDnsRecordsJob.jobId,
+        JobStatusEnum.running,
+      ),
+    );
+    final List<DnsRecord> newDnsRecords =
+        await getIt<ApiConnectionRepository>().api.getDnsRecords();
+
+    // If any of the records have a null content, we don't want to update
+    // the DNS records
+    if (newDnsRecords.isEmpty || oldDnsRecords.isEmpty) {
+      emit(
+        (state as JobsStateLoading).updateJobStatus(
+          UpdateDnsRecordsJob.jobId,
+          JobStatusEnum.error,
+          message: 'jobs.failed_to_load_dns_records'.tr(),
+        ),
+      );
+      return;
+    }
+
+    if (const UnorderedIterableEquality()
+        .equals(oldDnsRecords, newDnsRecords)) {
+      emit(
+        (state as JobsStateLoading).updateJobStatus(
+          UpdateDnsRecordsJob.jobId,
+          JobStatusEnum.finished,
+          message: 'jobs.dns_records_did_not_change'.tr(),
+        ),
+      );
+    } else {
+      final ServerDomain? domain =
+          getIt<ApiConnectionRepository>().serverDomain;
+
+      final dnsCreateResult =
+          await ProvidersController.currentDnsProvider!.updateDnsRecords(
+        newRecords:
+            newDnsRecords.where((final r) => r.content != null).toList(),
+        oldRecords: oldDnsRecords,
+        domain: domain!,
+      );
+
+      emit(
+        (state as JobsStateLoading).updateJobStatus(
+          UpdateDnsRecordsJob.jobId,
+          dnsCreateResult.success
+              ? JobStatusEnum.finished
+              : JobStatusEnum.error,
+          message: dnsCreateResult.message ?? 'jobs.dns_records_changed'.tr(),
+        ),
+      );
     }
   }
 

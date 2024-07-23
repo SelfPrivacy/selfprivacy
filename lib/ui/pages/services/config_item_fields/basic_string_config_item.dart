@@ -28,7 +28,10 @@ class _BasicStringConfigItemState extends State<BasicStringConfigItem> {
       final String value = _controller.text;
       final bool isValid = _validateInput(value);
       if (isValid) {
-        widget.onChanged(value, isValid);
+        setState(() {
+          widget.onChanged(value, isValid);
+          _isValid = isValid;
+        });
       } else {
         setState(() {
           widget.onChanged(widget.newValue ?? widget.configItem.value, isValid);

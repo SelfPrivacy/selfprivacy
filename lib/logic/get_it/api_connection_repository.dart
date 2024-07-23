@@ -248,6 +248,7 @@ class ApiConnectionRepository {
   ) async {
     final GenericResult result =
         await api.setServiceConfiguration(serviceId, settings);
+    _apiData.services.invalidate();
     if (result.success) {
       return (true, result.message ?? 'basis.done'.tr());
     } else {

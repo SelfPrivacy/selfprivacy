@@ -609,6 +609,8 @@
         "update_dns_records": "Update DNS records",
         "dns_records_did_not_change": "No changes needed",
         "dns_records_changed": "DNS records updated",
+        "failed_to_load_dns_records": "Failed to load DNS records",
+        "ignored_due_to_failures": "Ignored due to previous failures",
         "change_service_settings": "Change service settings for {}"
     },
     "validations": {

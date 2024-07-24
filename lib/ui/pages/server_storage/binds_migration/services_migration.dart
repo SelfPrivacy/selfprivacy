@@ -105,10 +105,10 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
           listItemHeight * widget.diskStatus.diskVolumes.length +
           headerVerticalPadding * widget.diskStatus.diskVolumes.length,
     );
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: appBarHeight,
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: appBarHeight,
+        child: SafeArea(
           child: Column(
             children: [
               BrandHeader(
@@ -143,74 +143,74 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
             ],
           ),
         ),
-        body: ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: <Widget>[
-            if (widget.services.isEmpty)
-              const Center(child: CircularProgressIndicator.adaptive()),
-            ...widget.services.map(
-              (final service) => Column(
-                children: [
-                  const SizedBox(height: 8),
-                  ServiceMigrationListItem(
-                    service: service,
-                    diskStatus: widget.diskStatus,
-                    selectedVolume: serviceToDisk[service.id]!,
-                    onChange: onChange,
-                  ),
-                  const SizedBox(height: 4),
-                  const Divider(),
-                ],
-              ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16.0),
+        children: <Widget>[
+          if (widget.services.isEmpty)
+            const Center(child: CircularProgressIndicator.adaptive()),
+          ...widget.services.map(
+            (final service) => Column(
+              children: [
+                const SizedBox(height: 8),
+                ServiceMigrationListItem(
+                  service: service,
+                  diskStatus: widget.diskStatus,
+                  selectedVolume: serviceToDisk[service.id]!,
+                  onChange: onChange,
+                ),
+                const SizedBox(height: 4),
+                const Divider(),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: InfoBox(
-                text: 'storage.data_migration_notice'.tr(),
-                isWarning: true,
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InfoBox(
+              text: 'storage.data_migration_notice'.tr(),
+              isWarning: true,
             ),
-            const SizedBox(height: 16),
-            if (widget.isMigration || (!widget.isMigration && isVolumePicked))
-              BrandButton.filled(
-                child: Text('storage.start_migration_button'.tr()),
-                onPressed: () {
-                  if (widget.isMigration) {
-                    context.read<ServerJobsBloc>().migrateToBinds(
-                          serviceToDisk,
-                        );
-                  } else {
-                    for (final service in widget.services) {
-                      if (serviceToDisk[service.id] != null) {
-                        context.read<ServicesBloc>().add(
-                              ServiceMove(
-                                service,
-                                serviceToDisk[service.id]!,
-                              ),
-                            );
-                      }
+          ),
+          const SizedBox(height: 16),
+          if (widget.isMigration || (!widget.isMigration && isVolumePicked))
+            BrandButton.filled(
+              child: Text('storage.start_migration_button'.tr()),
+              onPressed: () {
+                if (widget.isMigration) {
+                  context.read<ServerJobsBloc>().migrateToBinds(
+                        serviceToDisk,
+                      );
+                } else {
+                  for (final service in widget.services) {
+                    if (serviceToDisk[service.id] != null) {
+                      context.read<ServicesBloc>().add(
+                            ServiceMove(
+                              service,
+                              serviceToDisk[service.id]!,
+                            ),
+                          );
                     }
                   }
-                  context.router.popUntilRoot();
-                  showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    isScrollControlled: true,
-                    builder: (final BuildContext context) =>
-                        DraggableScrollableSheet(
-                      expand: false,
-                      maxChildSize: 0.9,
-                      minChildSize: 0.4,
-                      initialChildSize: 0.6,
-                      builder: (final context, final scrollController) =>
-                          JobsContent(controller: scrollController),
-                    ),
-                  );
-                },
-              ),
-            const SizedBox(height: 32),
-          ],
-        ),
+                }
+                context.router.popUntilRoot();
+                showModalBottomSheet(
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  builder: (final BuildContext context) =>
+                      DraggableScrollableSheet(
+                    expand: false,
+                    maxChildSize: 0.9,
+                    minChildSize: 0.4,
+                    initialChildSize: 0.6,
+                    builder: (final context, final scrollController) =>
+                        JobsContent(controller: scrollController),
+                  ),
+                );
+              },
+            ),
+          const SizedBox(height: 32),
+        ],
       ),
     );
   }

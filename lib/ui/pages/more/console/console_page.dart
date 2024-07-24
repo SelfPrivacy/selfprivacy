@@ -44,30 +44,28 @@ class _ConsolePageState extends State<ConsolePage> {
   Widget build(final BuildContext context) {
     final List<ConsoleLog> logs = console.logs;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('console_page.title'.tr()),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).maybePop(),
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(
-                console.paused
-                    ? Icons.play_arrow_outlined
-                    : Icons.pause_outlined,
-              ),
-              onPressed: console.paused ? console.play : console.pause,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('console_page.title'.tr()),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              console.paused
+                  ? Icons.play_arrow_outlined
+                  : Icons.pause_outlined,
             ),
-          ],
-        ),
-        body: Scrollbar(
-          child: logs.isEmpty
-              ? const _ConsoleViewEmpty()
-              : _ConsoleViewLoaded(logs: logs),
-        ),
+            onPressed: console.paused ? console.play : console.pause,
+          ),
+        ],
+      ),
+      body: Scrollbar(
+        child: logs.isEmpty
+            ? const _ConsoleViewEmpty()
+            : _ConsoleViewLoaded(logs: logs),
       ),
     );
   }

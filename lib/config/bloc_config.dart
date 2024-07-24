@@ -5,6 +5,7 @@ import 'package:selfprivacy/logic/bloc/connection_status_bloc.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
@@ -36,6 +37,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final ConnectionStatusBloc connectionStatusBloc;
   late final ServerDetailsCubit serverDetailsCubit;
   late final VolumesBloc volumesBloc;
+  late final ServerLogsBloc serverLogsBloc;
 
   @override
   void initState() {
@@ -52,6 +54,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
     connectionStatusBloc = ConnectionStatusBloc();
     serverDetailsCubit = ServerDetailsCubit();
     volumesBloc = VolumesBloc();
+    serverLogsBloc = ServerLogsBloc();
   }
 
   @override
@@ -93,6 +96,9 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
           BlocProvider(create: (final _) => volumesBloc),
           BlocProvider(
             create: (final _) => JobsCubit(),
+          ),
+          BlocProvider(
+            create: (final _) => serverLogsBloc,
           ),
         ],
         child: widget.child,

@@ -1,0 +1,28 @@
+fragment LogEntry on LogEntry {
+  message
+  timestamp
+  priority
+  systemdUnit
+  systemdSlice
+  cursor
+}
+
+query Logs($limit: Int!, $upCursor: String, $downCursor: String) {
+  logs {
+    paginated(limit: $limit, upCursor: $upCursor, downCursor: $downCursor) {
+      pageMeta {
+        upCursor
+        downCursor
+      }
+      entries {
+        ...LogEntry
+      }
+    }
+  }
+}
+
+subscription LogEntries {
+  logEntries {
+    ...LogEntry
+  }
+}

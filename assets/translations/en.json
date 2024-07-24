@@ -170,6 +170,18 @@
             "few": "{} cores",
             "many": "{} cores",
             "other": "{} cores"
+        },
+        "logs": "Server logs",
+        "logs_empty": "No logs yet",
+        "filter_by_systemd_unit": "Filter by systemd unit",
+        "all_units": "All units",
+        "log_dialog": {
+            "metadata": "Metadata",
+            "cursor": "Cursor",
+            "priority": "Priority",
+            "systemd_unit": "Systemd unit",
+            "systemd_slice": "Systemd slice",
+            "message": "Message"
         }
     },
     "domain": {

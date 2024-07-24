@@ -80,6 +80,11 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
             leading: const Icon(BrandIcons.settings),
             onTap: () => context.pushRoute(const ServerSettingsRoute()),
           ),
+          ListTile(
+            title: Text('server.logs'.tr()),
+            leading: const Icon(Icons.manage_search_outlined),
+            onTap: () => context.pushRoute(const ServerLogsRoute()),
+          ),
           const Divider(height: 32),
           Text(
             'server.resource_usage'.tr(),

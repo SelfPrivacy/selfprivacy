@@ -54,9 +54,7 @@ class _ConsolePageState extends State<ConsolePage> {
         actions: [
           IconButton(
             icon: Icon(
-              console.paused
-                  ? Icons.play_arrow_outlined
-                  : Icons.pause_outlined,
+              console.paused ? Icons.play_arrow_outlined : Icons.pause_outlined,
             ),
             onPressed: console.paused ? console.play : console.pause,
           ),

@@ -39,6 +39,7 @@
         "please_connect": "Please connect your server, domain and DNS provider to dive in!",
         "network_error": "Network error",
         "feature_unsupported_on_api_version": "This feature is only supported on server version {versionConstraint}. Your server is on version {currentVersion}.",
+        "server_is_outdated": "This SelfPrivacy version requires API version {versionConstraint}, but your server is on version {currentVersion}. Some features won't work and errors might occur. Please upgrade your server.",
         "error": "Error"
     },
     "more_page": {

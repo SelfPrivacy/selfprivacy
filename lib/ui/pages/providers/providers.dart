@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
+import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
 import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
+import 'package:selfprivacy/ui/components/server_outdated_card/server_outdated_card.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 
@@ -39,6 +41,9 @@ class _ProvidersPageState extends State<ProvidersPage> {
 
     final ServerInstallationState appConfig =
         context.watch<ServerInstallationCubit>().state;
+
+    final OutdatedServerCheckerState outdatedServerCheckerState =
+        context.watch<OutdatedServerCheckerBloc>().state;
 
     StateType getServerStatus() {
       if (!isReady) {
@@ -74,6 +79,15 @@ class _ProvidersPageState extends State<ProvidersPage> {
         children: [
           if (!isReady) ...[
             const NotReadyCard(),
+            const SizedBox(height: 16),
+          ],
+          if (outdatedServerCheckerState is OutdatedServerCheckerOutdated) ...[
+            ServerOutdatedCard(
+              requiredVersion:
+                  outdatedServerCheckerState.requiredVersion.toString(),
+              currentVersion:
+                  outdatedServerCheckerState.currentVersion.toString(),
+            ),
             const SizedBox(height: 16),
           ],
           _Card(

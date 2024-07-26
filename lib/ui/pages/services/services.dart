@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -11,6 +12,7 @@ import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
 import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
+import 'package:selfprivacy/ui/components/server_outdated_card/server_outdated_card.dart';
 import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
@@ -30,6 +32,9 @@ class _ServicesPageState extends State<ServicesPage> {
   Widget build(final BuildContext context) {
     final isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
+
+    final OutdatedServerCheckerState outdatedServerCheckerState =
+        context.watch<OutdatedServerCheckerBloc>().state;
 
     final services = [...context.watch<ServicesBloc>().state.services];
     services
@@ -53,6 +58,16 @@ class _ServicesPageState extends State<ServicesPage> {
               child: ListView(
                 padding: paddingH15V0,
                 children: [
+                  if (outdatedServerCheckerState
+                      is OutdatedServerCheckerOutdated) ...[
+                    ServerOutdatedCard(
+                      requiredVersion:
+                          outdatedServerCheckerState.requiredVersion.toString(),
+                      currentVersion:
+                          outdatedServerCheckerState.currentVersion.toString(),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   Text(
                     'basis.services_title'.tr(),
                     style: Theme.of(context).textTheme.bodyLarge,

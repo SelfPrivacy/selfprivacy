@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/connection_status_bloc.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
+import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
@@ -38,6 +39,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final ServerDetailsCubit serverDetailsCubit;
   late final VolumesBloc volumesBloc;
   late final ServerLogsBloc serverLogsBloc;
+  late final OutdatedServerCheckerBloc outdatedServerCheckerBloc;
 
   @override
   void initState() {
@@ -55,6 +57,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
     serverDetailsCubit = ServerDetailsCubit();
     volumesBloc = VolumesBloc();
     serverLogsBloc = ServerLogsBloc();
+    outdatedServerCheckerBloc = OutdatedServerCheckerBloc();
   }
 
   @override
@@ -99,6 +102,9 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
           ),
           BlocProvider(
             create: (final _) => serverLogsBloc,
+          ),
+          BlocProvider(
+            create: (final _) => outdatedServerCheckerBloc,
           ),
         ],
         child: widget.child,

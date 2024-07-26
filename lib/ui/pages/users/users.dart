@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
@@ -20,6 +21,7 @@ import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
+import 'package:selfprivacy/ui/components/server_outdated_card/server_outdated_card.dart';
 import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
@@ -41,6 +43,9 @@ class UsersPage extends StatelessWidget {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
     Widget child;
+
+    final OutdatedServerCheckerState outdatedServerCheckerState =
+        context.watch<OutdatedServerCheckerBloc>().state;
 
     if (!isReady) {
       child = EmptyPagePlaceholder(
@@ -93,6 +98,18 @@ class UsersPage extends StatelessWidget {
             },
             child: Column(
               children: [
+                if (outdatedServerCheckerState
+                    is OutdatedServerCheckerOutdated) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ServerOutdatedCard(
+                      requiredVersion:
+                          outdatedServerCheckerState.requiredVersion.toString(),
+                      currentVersion:
+                          outdatedServerCheckerState.currentVersion.toString(),
+                    ),
+                  ),
+                ],
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FilledButton.tonal(

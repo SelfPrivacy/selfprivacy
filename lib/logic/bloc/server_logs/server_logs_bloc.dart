@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
 
@@ -74,6 +76,8 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     });
   }
 
+  static const String logsSupportedVersion = '>=3.3.0';
+
   Future<(List<ServerLogEntry>, ServerLogsPageMeta)> _getLogs({
     // No more than 50
     required final int limit,
@@ -82,12 +86,29 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     // All entries returned will be greater than this cursor. Sets lower bound on results.
     final String? downCursor,
     // Only one cursor can be set at a time.
-  }) =>
-      getIt<ApiConnectionRepository>().api.getServerLogs(
-            limit: limit,
-            upCursor: upCursor,
-            downCursor: downCursor,
-          );
+  }) {
+    final String? apiVersion =
+        getIt<ApiConnectionRepository>().apiData.apiVersion.data;
+    if (apiVersion == null) {
+      throw Exception('basis.network_error'.tr());
+    }
+    if (!VersionConstraint.parse(logsSupportedVersion)
+        .allows(Version.parse(apiVersion))) {
+      throw Exception(
+        'basis.feature_unsupported_on_api_version'.tr(
+          namedArgs: {
+            'versionConstraint': logsSupportedVersion,
+            'currentVersion': apiVersion,
+          },
+        ),
+      );
+    }
+    return getIt<ApiConnectionRepository>().api.getServerLogs(
+          limit: limit,
+          upCursor: upCursor,
+          downCursor: downCursor,
+        );
+  }
 
   @override
   Future<void> close() {

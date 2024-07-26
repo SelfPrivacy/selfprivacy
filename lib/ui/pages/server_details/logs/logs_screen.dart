@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
+import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 
 @RoutePage()
@@ -86,7 +87,8 @@ class _ServerLogsScreenState extends State<ServerLogsScreen> {
             if (state is ServerLogsLoaded) {
               return _buildDrawer(state.systemdUnits);
             }
-            return const SizedBox.shrink();
+            // Return an empty drawer if the state is not loaded
+            return const Drawer(child: SizedBox());
           },
         ),
         body: BlocBuilder<ServerLogsBloc, ServerLogsState>(
@@ -130,7 +132,11 @@ class _ServerLogsScreenState extends State<ServerLogsScreen> {
                 );
               }
             } else if (state is ServerLogsError) {
-              return Center(child: Text('Error: ${state.error}'));
+              return EmptyPagePlaceholder(
+                title: 'basis.error'.tr(),
+                iconData: Icons.error_outline,
+                description: state.error.toString(),
+              );
             }
             return Center(child: Text('server.no_logs'.tr()));
           },
@@ -240,13 +246,19 @@ class ServerLogEntryDialog extends StatelessWidget {
             _KeyValueRow('server.log_dialog.cursor'.tr(), log.cursor),
             if (log.priority != null)
               _KeyValueRow(
-                  'server.log_dialog.priority'.tr(), log.priority?.toString()),
+                'server.log_dialog.priority'.tr(),
+                log.priority?.toString(),
+              ),
             if (log.systemdSlice != null)
               _KeyValueRow(
-                  'server.log_dialog.systemd_slice'.tr(), log.systemdSlice),
+                'server.log_dialog.systemd_slice'.tr(),
+                log.systemdSlice,
+              ),
             if (log.systemdUnit != null)
               _KeyValueRow(
-                  'server.log_dialog.systemd_unit'.tr(), log.systemdUnit),
+                'server.log_dialog.systemd_unit'.tr(),
+                log.systemdUnit,
+              ),
             const Divider(),
             _SectionRow('server.log_dialog.message'.tr()),
             _DataRow(log.message),

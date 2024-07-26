@@ -37,7 +37,9 @@
         "alert": "Alert",
         "copied_to_clipboard": "Copied to clipboard!",
         "please_connect": "Please connect your server, domain and DNS provider to dive in!",
-        "network_error": "Network error"
+        "network_error": "Network error",
+        "feature_unsupported_on_api_version": "This feature is only supported on server version {versionConstraint}. Your server is on version {currentVersion}.",
+        "error": "Error"
     },
     "more_page": {
         "configuration_wizard": "Setup wizard",

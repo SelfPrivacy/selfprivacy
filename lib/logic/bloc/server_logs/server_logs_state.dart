@@ -15,30 +15,48 @@ final class ServerLogsLoading extends ServerLogsState {
 }
 
 final class ServerLogsLoaded extends ServerLogsState {
-  const ServerLogsLoaded(this.entries, this.meta, this.loadingMore);
+  ServerLogsLoaded(
+    this.oldEntries,
+    this.newEntries,
+    this.meta,
+    this.loadingMore,
+  ) : _lastCursor = newEntries.isEmpty ? '' : newEntries.first.cursor;
 
-  final List<ServerLogEntry> entries;
+  final List<ServerLogEntry> oldEntries;
+  final List<ServerLogEntry> newEntries;
   final ServerLogsPageMeta meta;
   final bool loadingMore;
+  final String _lastCursor;
 
-  List<String> get systemdUnits => entries
+  List<String> get systemdUnits => oldEntries
       .map((final entry) => entry.systemdUnit ?? 'kernel')
       .toSet()
       .toList();
 
-  (List<ServerLogEntry>, int) entriesForUnit(final String unit) {
+  List<ServerLogEntry> oldEntriesForUnit(final String unit) {
     if (unit == 'kernel') {
       final filteredEntries =
-          entries.where((final entry) => entry.systemdUnit == null).toList();
-      return (filteredEntries, filteredEntries.length);
+          oldEntries.where((final entry) => entry.systemdUnit == null).toList();
+      return filteredEntries;
     }
     final filteredEntries =
-        entries.where((final entry) => entry.systemdUnit == unit).toList();
-    return (filteredEntries, filteredEntries.length);
+        oldEntries.where((final entry) => entry.systemdUnit == unit).toList();
+    return filteredEntries;
+  }
+
+  List<ServerLogEntry> newEntriesForUnit(final String unit) {
+    if (unit == 'kernel') {
+      final filteredEntries =
+          newEntries.where((final entry) => entry.systemdUnit == null).toList();
+      return filteredEntries;
+    }
+    final filteredEntries =
+        newEntries.where((final entry) => entry.systemdUnit == unit).toList();
+    return filteredEntries;
   }
 
   @override
-  List<Object> get props => [entries, meta];
+  List<Object> get props => [oldEntries, newEntries, meta, _lastCursor];
 }
 
 final class ServerLogsError extends ServerLogsState {

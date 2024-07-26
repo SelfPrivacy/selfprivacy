@@ -78,70 +78,89 @@ class _ServerLogsScreenState extends State<ServerLogsScreen> {
       );
 
   @override
-  Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('server.logs'.tr()),
-        ),
-        endDrawer: BlocBuilder<ServerLogsBloc, ServerLogsState>(
-          builder: (final context, final state) {
-            if (state is ServerLogsLoaded) {
-              return _buildDrawer(state.systemdUnits);
-            }
-            // Return an empty drawer if the state is not loaded
-            return const Drawer(child: SizedBox());
-          },
-        ),
-        body: BlocBuilder<ServerLogsBloc, ServerLogsState>(
-          builder: (final context, final state) {
-            final isLoadingMore =
-                state is ServerLogsLoaded && state.loadingMore;
-            if (state is ServerLogsLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is ServerLogsLoaded) {
-              if (_selectedSystemdUnit == null) {
-                return ListView.builder(
-                  controller: _scrollController,
-                  itemCount: state.entries.length + (isLoadingMore ? 1 : 0),
-                  itemBuilder: (final context, final index) {
-                    if (isLoadingMore && index == state.entries.length) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    final logEntry = state.entries[index];
-                    return LogEntryWidget(
-                      logEntry: logEntry,
-                      key: ValueKey(logEntry.cursor),
-                    );
-                  },
-                );
-              } else {
-                final (filteredLogs, filteredLength) =
-                    state.entriesForUnit(_selectedSystemdUnit!);
-                return ListView.builder(
-                  controller: _scrollController,
-                  itemCount: filteredLength + (isLoadingMore ? 1 : 0),
-                  itemBuilder: (final context, final index) {
-                    if (isLoadingMore && index == filteredLength) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    final logEntry = filteredLogs[index];
-                    return LogEntryWidget(
-                      logEntry: logEntry,
-                      key: ValueKey(logEntry.cursor),
-                    );
-                  },
-                );
-              }
-            } else if (state is ServerLogsError) {
-              return EmptyPagePlaceholder(
-                title: 'basis.error'.tr(),
-                iconData: Icons.error_outline,
-                description: state.error.toString(),
-              );
-            }
-            return Center(child: Text('server.no_logs'.tr()));
-          },
-        ),
-      );
+  Widget build(final BuildContext context) {
+    const Key centerKey = ValueKey<String>('server-logs-center-key');
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('server.logs'.tr()),
+      ),
+      endDrawer: BlocBuilder<ServerLogsBloc, ServerLogsState>(
+        builder: (final context, final state) {
+          if (state is ServerLogsLoaded) {
+            return _buildDrawer(state.systemdUnits);
+          }
+          // Return an empty drawer if the state is not loaded
+          return const Drawer(child: SizedBox());
+        },
+      ),
+      body: BlocBuilder<ServerLogsBloc, ServerLogsState>(
+        builder: (final context, final state) {
+          final isLoadingMore = state is ServerLogsLoaded && state.loadingMore;
+          if (state is ServerLogsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ServerLogsLoaded) {
+            final List<ServerLogEntry> filteredNewLogs =
+                _selectedSystemdUnit == null
+                    ? state.newEntries
+                    : state.newEntriesForUnit(_selectedSystemdUnit!);
+            final List<ServerLogEntry> filteredOldLogs =
+                _selectedSystemdUnit == null
+                    ? state.oldEntries
+                    : state.oldEntriesForUnit(_selectedSystemdUnit!);
+            return CustomScrollView(
+              center: centerKey,
+              controller: _scrollController,
+              slivers: [
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (final context, final index) {
+                      final logEntry =
+                          filteredNewLogs[(filteredNewLogs.length - 1) - index];
+                      return LogEntryWidget(
+                        logEntry: logEntry,
+                        key: ValueKey(logEntry.cursor),
+                      );
+                    },
+                    childCount: filteredNewLogs.length,
+                  ),
+                ),
+                SliverList(
+                  key: centerKey,
+                  delegate: SliverChildBuilderDelegate(
+                    (final context, final index) {
+                      if (isLoadingMore && index == filteredOldLogs.length) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final logEntry = filteredOldLogs[index];
+                      return LogEntryWidget(
+                        logEntry: logEntry,
+                        key: ValueKey(logEntry.cursor),
+                      );
+                    },
+                    childCount:
+                        filteredOldLogs.length + (isLoadingMore ? 1 : 0),
+                  ),
+                ),
+                if (isLoadingMore)
+                  const SliverFillRemaining(
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+              ],
+            );
+          } else if (state is ServerLogsError) {
+            return EmptyPagePlaceholder(
+              title: 'basis.error'.tr(),
+              iconData: Icons.error_outline,
+              description: state.error.toString(),
+            );
+          }
+          return Center(child: Text('server.no_logs'.tr()));
+        },
+      ),
+    );
+  }
 }
 
 class LogEntryWidget extends StatelessWidget {

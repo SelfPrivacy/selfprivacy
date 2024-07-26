@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,16 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
       emit(ServerLogsLoading());
       try {
         final (logsData, meta) = await _getLogs(limit: 50);
-        emit(ServerLogsLoaded(logsData, meta, false));
+        emit(
+          ServerLogsLoaded(
+            logsData.sorted(
+              (final a, final b) => b.timestamp.compareTo(a.timestamp),
+            ),
+            List<ServerLogEntry>.empty(growable: true),
+            meta,
+            false,
+          ),
+        );
         if (_apiLogsSubscription != null) {
           await _apiLogsSubscription?.cancel();
         }
@@ -41,10 +51,17 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
         try {
           final (logsData, meta) =
               await _getLogs(limit: 50, downCursor: currentState.meta.upCursor);
-          final allEntries = currentState.entries
+          final allEntries = currentState.oldEntries
             ..addAll(logsData)
             ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
-          emit(ServerLogsLoaded(allEntries.toSet().toList(), meta, false));
+          emit(
+            ServerLogsLoaded(
+              allEntries.toSet().toList(),
+              currentState.newEntries,
+              meta,
+              false,
+            ),
+          );
         } catch (e) {
           emit(ServerLogsError(e.toString()));
         }
@@ -54,19 +71,19 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     on<ServerLogsGotNewEntry>((final event, final emit) {
       final currentState = state;
       if (currentState is ServerLogsLoaded) {
-        final entries = currentState.entries;
-        if (!entries.any((final entry) => entry.cursor == event.entry.cursor)) {
-          entries.add(event.entry);
-          entries
-              .sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
-          emit(
-            ServerLogsLoaded(
-              entries,
-              currentState.meta,
-              currentState.loadingMore,
-            ),
+        final allEntries = currentState.newEntries
+          ..add(event.entry)
+          ..sort(
+            (final a, final b) => b.timestamp.compareTo(a.timestamp),
           );
-        }
+        emit(
+          ServerLogsLoaded(
+            currentState.oldEntries,
+            allEntries.toSet().toList(),
+            currentState.meta,
+            currentState.loadingMore,
+          ),
+        );
       }
     });
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
@@ -10,8 +12,42 @@ import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
 
+sealed class ResourcesModelEvent {
+  const ResourcesModelEvent();
+}
+
+class ResourcesModelLoaded extends ResourcesModelEvent {
+  const ResourcesModelLoaded();
+}
+
+class ChangedServerProviderCredentials extends ResourcesModelEvent {
+  const ChangedServerProviderCredentials();
+}
+
+class ChangedDnsProviderCredentials extends ResourcesModelEvent {
+  const ChangedDnsProviderCredentials();
+}
+
+class ChangedBackupsCredentials extends ResourcesModelEvent {
+  const ChangedBackupsCredentials();
+}
+
+class ChangedServers extends ResourcesModelEvent {
+  const ChangedServers();
+}
+
+class ClearedModel extends ResourcesModelEvent {
+  const ClearedModel();
+}
+
 class ResourcesModel {
   final Box _box = Hive.box(BNames.resourcesBox);
+
+  final _statusStreamController =
+      StreamController<ResourcesModelEvent>.broadcast();
+
+  Stream<ResourcesModelEvent> get statusStream =>
+      _statusStreamController.stream;
 
   List<ServerProviderCredential> get serverProviderCredentials =>
       _serverProviderTokens;
@@ -55,6 +91,7 @@ class ResourcesModel {
   ) async {
     _serverProviderTokens.add(token);
     await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
+    _statusStreamController.add(const ChangedServerProviderCredentials());
   }
 
   Future<void> associateServerWithToken(
@@ -68,6 +105,7 @@ class ResourcesModel {
         .associatedServerIds
         .add(serverId);
     await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
+    _statusStreamController.add(const ChangedServerProviderCredentials());
   }
 
   Future<void> removeServerProviderToken(
@@ -75,6 +113,7 @@ class ResourcesModel {
   ) async {
     _serverProviderTokens.remove(token);
     await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
+    _statusStreamController.add(const ChangedServerProviderCredentials());
   }
 
   Future<void> addDnsProviderToken(final DnsProviderCredential token) async {
@@ -85,6 +124,7 @@ class ResourcesModel {
     }
     _dnsProviderTokens.add(token);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
+    _statusStreamController.add(const ChangedDnsProviderCredentials());
   }
 
   Future<void> associateDomainWithToken(
@@ -98,16 +138,19 @@ class ResourcesModel {
         .associatedDomainNames
         .add(domain);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
+    _statusStreamController.add(const ChangedDnsProviderCredentials());
   }
 
   Future<void> removeDnsProviderToken(final DnsProviderCredential token) async {
     _dnsProviderTokens.remove(token);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
+    _statusStreamController.add(const ChangedDnsProviderCredentials());
   }
 
   Future<void> addBackupsCredential(final BackupsCredential credential) async {
     _backupsCredentials.add(credential);
     await _box.put(BNames.backupsProviderTokens, _backupsCredentials);
+    _statusStreamController.add(const ChangedBackupsCredentials());
   }
 
   Future<void> removeBackupsCredential(
@@ -115,16 +158,19 @@ class ResourcesModel {
   ) async {
     _backupsCredentials.remove(credential);
     await _box.put(BNames.backupsProviderTokens, _backupsCredentials);
+    _statusStreamController.add(const ChangedBackupsCredentials());
   }
 
   Future<void> addServer(final Server server) async {
     _servers.add(server);
     await _box.put(BNames.servers, _servers);
+    _statusStreamController.add(const ChangedServers());
   }
 
   Future<void> removeServer(final Server server) async {
     _servers.remove(server);
     await _box.put(BNames.servers, _servers);
+    _statusStreamController.add(const ChangedServers());
   }
 
   Future<void> setBackblazeBucket(final BackblazeBucket bucket) async {
@@ -146,6 +192,12 @@ class ResourcesModel {
 
     _box.clear();
     _box.compact();
+
+    _statusStreamController.add(const ClearedModel());
+  }
+
+  void dispose() {
+    _statusStreamController.close();
   }
 
   void init() {
@@ -180,6 +232,8 @@ class ResourcesModel {
         .map<Server>((final e) => e as Server)
         .toList();
     _backblazeBucket = _box.get(BNames.backblazeBucket);
+
+    _statusStreamController.add(const ResourcesModelLoaded());
   }
 }
 

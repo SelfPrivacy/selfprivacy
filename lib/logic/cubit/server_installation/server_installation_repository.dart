@@ -66,6 +66,7 @@ class ServerInstallationRepository {
           provider: serverProvider ?? serverDetails!.provider,
           isAuthorized: providerApiToken != null,
           location: location,
+          token: providerApiToken,
         ),
       );
     }
@@ -77,6 +78,7 @@ class ServerInstallationRepository {
         DnsProviderSettings(
           isAuthorized: dnsApiToken != null,
           provider: dnsProvider ?? serverDomain!.provider,
+          token: dnsApiToken,
         ),
       );
     }
@@ -461,6 +463,14 @@ class ServerInstallationRepository {
         associatedServerIds: [],
       ),
     );
+    ProvidersController.initServerProvider(
+      ServerProviderSettings(
+        provider:
+            getIt<WizardDataModel>().serverInstallation!.serverProviderType!,
+        token: key,
+        isAuthorized: true,
+      ),
+    );
   }
 
   Future<void> saveServerType(final ServerType serverType) async {
@@ -486,6 +496,13 @@ class ServerInstallationRepository {
         token: key,
         provider: getIt<WizardDataModel>().serverInstallation!.dnsProviderType!,
         associatedDomainNames: [],
+      ),
+    );
+    ProvidersController.initDnsProvider(
+      DnsProviderSettings(
+        provider: getIt<WizardDataModel>().serverInstallation!.dnsProviderType!,
+        token: key,
+        isAuthorized: true,
       ),
     );
   }

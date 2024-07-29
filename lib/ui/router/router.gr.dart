@@ -192,6 +192,12 @@ abstract class _$RootRouter extends RootStackRouter {
         child: const ServicesPage(),
       );
     },
+    TokensRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const TokensPage(),
+      );
+    },
     UserDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<UserDetailsRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -716,6 +722,20 @@ class ServicesRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ServicesRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [TokensPage]
+class TokensRoute extends PageRouteInfo<void> {
+  const TokensRoute({List<PageRouteInfo>? children})
+      : super(
+          TokensRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TokensRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

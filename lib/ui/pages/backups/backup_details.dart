@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -54,6 +55,8 @@ class BackupDetailsPage extends StatelessWidget {
         .where((final job) => job.status != JobStatusEnum.finished)
         .toList();
 
+    final TokensState tokensState = context.watch<TokensBloc>().state;
+
     if (!isReady) {
       return BrandHeroScreen(
         heroIcon: BrandIcons.save,
@@ -69,7 +72,7 @@ class BackupDetailsPage extends StatelessWidget {
         heroTitle: 'backup.card_title'.tr(),
         heroSubtitle: 'backup.description'.tr(),
         children: [
-          if (preventActions)
+          if (preventActions || tokensState.backupsCredentials.isEmpty)
             const Center(
               child: Padding(
                 padding: EdgeInsets.all(16.0),
@@ -81,9 +84,11 @@ class BackupDetailsPage extends StatelessWidget {
               onPressed: preventActions
                   ? null
                   : () {
-                      context
-                          .read<BackupsBloc>()
-                          .add(const InitializeBackupsRepository());
+                      context.read<BackupsBloc>().add(
+                            InitializeBackupsRepository(
+                              tokensState.backupsCredentials.first.data,
+                            ),
+                          );
                     },
               text: 'backup.initialize'.tr(),
             ),

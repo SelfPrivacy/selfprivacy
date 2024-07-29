@@ -12,6 +12,7 @@ import 'package:selfprivacy/ui/pages/more/app_settings/app_settings.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/developer_settings.dart';
 import 'package:selfprivacy/ui/pages/more/console/console_page.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
+import 'package:selfprivacy/ui/pages/more/tokens/tokens_page.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
@@ -107,6 +108,7 @@ class RootRouter extends _$RootRouter {
         AutoRoute(page: ExtendingVolumeRoute.page),
         AutoRoute(page: ServerSettingsRoute.page),
         AutoRoute(page: ServerLogsRoute.page),
+        AutoRoute(page: TokensRoute.page),
       ],
     ),
     AutoRoute(page: ServicesMigrationRoute.page),
@@ -162,6 +164,8 @@ String getRouteTitle(final String routeName) {
       return 'storage.card_title';
     case 'ExtendingVolumeRoute':
       return 'storage.extending_volume_title';
+    case 'TokensRoute':
+      return 'tokens.title';
     default:
       return routeName;
   }

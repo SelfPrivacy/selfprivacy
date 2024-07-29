@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
@@ -13,15 +11,18 @@ import 'package:selfprivacy/utils/password_generator.dart';
 class DigitalOceanApi extends RestApiMap {
   DigitalOceanApi({
     required this.region,
+    this.token = '',
     this.hasLogger = true,
     this.isWithToken = true,
-  });
+  }) : assert(isWithToken ? token.isNotEmpty : true);
+
   @override
   bool hasLogger;
   @override
   bool isWithToken;
 
   final String? region;
+  final String token;
 
   @override
   BaseOptions get options {
@@ -31,8 +32,7 @@ class DigitalOceanApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      final String? token = getIt<ResourcesModel>().serverProviderKey;
-      assert(token != null);
+      assert(token.isNotEmpty);
       options.headers = {'Authorization': 'Bearer $token'};
     }
 

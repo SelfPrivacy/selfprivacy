@@ -18,10 +18,14 @@ import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
-  ApiAdapter({final String? region, final bool isWithToken = true})
-      : _api = DigitalOceanApi(
+  ApiAdapter({
+    final String? region,
+    final bool isWithToken = true,
+    final String? token,
+  }) : _api = DigitalOceanApi(
           region: region,
           isWithToken: isWithToken,
+          token: token ?? '',
         );
 
   DigitalOceanApi api({final bool getInitialized = true}) => getInitialized
@@ -39,9 +43,11 @@ class DigitalOceanServerProvider extends ServerProvider {
   DigitalOceanServerProvider.load(
     final String? location,
     final bool isAuthorized,
+    final String? token,
   ) : _adapter = ApiAdapter(
           isWithToken: isAuthorized,
           region: location,
+          token: token,
         );
 
   ApiAdapter _adapter;
@@ -408,10 +414,10 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    _adapter = ApiAdapter(
-      isWithToken: true,
-      region: location,
-    );
+    // _adapter = ApiAdapter(
+    //   isWithToken: true,
+    //   region: location,
+    // );
     return success;
   }
 

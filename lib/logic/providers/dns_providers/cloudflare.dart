@@ -7,10 +7,12 @@ import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 class ApiAdapter {
   ApiAdapter({
     final bool isWithToken = true,
+    final String? token,
     this.cachedDomain = '',
     this.cachedZoneId = '',
   }) : _api = CloudflareApi(
           isWithToken: isWithToken,
+          token: token ?? '',
         );
 
   CloudflareApi api({final bool getInitialized = true}) => getInitialized
@@ -28,8 +30,10 @@ class CloudflareDnsProvider extends DnsProvider {
   CloudflareDnsProvider() : _adapter = ApiAdapter();
   CloudflareDnsProvider.load(
     final bool isAuthorized,
+    final String? token,
   ) : _adapter = ApiAdapter(
           isWithToken: isAuthorized,
+          token: token,
         );
 
   ApiAdapter _adapter;
@@ -38,7 +42,7 @@ class CloudflareDnsProvider extends DnsProvider {
   DnsProviderType get type => DnsProviderType.cloudflare;
 
   @override
-  String get howToRegistar => 'how_fix_domain_cloudflare';
+  String get howToRegister => 'how_fix_domain_cloudflare';
 
   @override
   Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
@@ -47,8 +51,6 @@ class CloudflareDnsProvider extends DnsProvider {
     if (!result.data || !result.success) {
       return result;
     }
-
-    _adapter = ApiAdapter(isWithToken: true);
     return result;
   }
 
@@ -306,6 +308,7 @@ class CloudflareDnsProvider extends DnsProvider {
 
     _adapter = ApiAdapter(
       isWithToken: true,
+      token: _adapter.api().token,
       cachedDomain: domain,
       cachedZoneId: getZoneIdResult.data!,
     );

@@ -56,8 +56,6 @@ abstract class ServerProvider {
   ///
   /// To generate a token for your account follow instructions of your
   /// server provider respectfully.
-  ///
-  /// If success, saves it for future usage.
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
 
   /// Tries to assign the location shortcode for future usage.

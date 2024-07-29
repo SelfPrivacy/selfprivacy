@@ -8,6 +8,7 @@ import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
@@ -40,6 +41,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final VolumesBloc volumesBloc;
   late final ServerLogsBloc serverLogsBloc;
   late final OutdatedServerCheckerBloc outdatedServerCheckerBloc;
+  late final TokensBloc tokensBloc;
 
   @override
   void initState() {
@@ -58,6 +60,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
     volumesBloc = VolumesBloc();
     serverLogsBloc = ServerLogsBloc();
     outdatedServerCheckerBloc = OutdatedServerCheckerBloc();
+    tokensBloc = TokensBloc();
   }
 
   @override
@@ -105,6 +108,9 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
           ),
           BlocProvider(
             create: (final _) => outdatedServerCheckerBloc,
+          ),
+          BlocProvider(
+            create: (final _) => tokensBloc,
           ),
         ],
         child: widget.child,

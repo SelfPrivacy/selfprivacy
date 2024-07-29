@@ -1,23 +1,24 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/desec_dns_info.dart';
 
 class DesecApi extends RestApiMap {
   DesecApi({
+    this.token = '',
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
-  });
+  }) : assert(isWithToken ? token.isNotEmpty : true);
+
   @override
   final bool hasLogger;
   @override
   final bool isWithToken;
 
+  final String token;
   final String? customToken;
 
   @override
@@ -28,8 +29,7 @@ class DesecApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      final String? token = getIt<ResourcesModel>().dnsProviderKey;
-      assert(token != null);
+      assert(token.isNotEmpty);
       options.headers = {'Authorization': 'Token $token'};
     }
 

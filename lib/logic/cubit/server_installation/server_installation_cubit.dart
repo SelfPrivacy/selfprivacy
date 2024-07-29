@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
@@ -21,6 +20,7 @@ import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
@@ -234,8 +234,17 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ).getBackupsConfiguration();
       if (configuration != null) {
         try {
-          bucket = await BackblazeApi()
-              .fetchBucket(backblazeCredential, configuration);
+          final settings = BackupsProviderSettings(
+            provider: BackupsProviderType.backblaze,
+            tokenId: keyId,
+            token: applicationKey,
+            isAuthorized: true,
+          );
+          final provider =
+              BackupsProviderFactory.createBackupsProviderInterface(settings);
+          final result =
+              await provider.getStorage(backblazeCredential, configuration);
+          bucket = result.data;
           await getIt<ApiConfigModel>().setBackblazeBucket(bucket!);
         } catch (e) {
           print(e);

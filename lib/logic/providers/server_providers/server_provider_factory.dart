@@ -19,6 +19,7 @@ class ServerProviderFactory {
             ? HetznerServerProvider.load(
                 settings.location,
                 settings.isAuthorized,
+                settings.token,
               )
             : HetznerServerProvider();
       case ServerProviderType.digitalOcean:
@@ -26,6 +27,7 @@ class ServerProviderFactory {
             ? DigitalOceanServerProvider.load(
                 settings.location,
                 settings.isAuthorized,
+                settings.token,
               )
             : DigitalOceanServerProvider();
       case ServerProviderType.unknown:

@@ -10,14 +10,12 @@ abstract class DnsProvider {
 
   /// Returns a full url to a guide on how to setup
   /// DNS provider nameservers
-  String get howToRegistar;
+  String get howToRegister;
 
   /// Tries to access an account linked to the provided token.
   ///
   /// To generate a token for your account follow instructions of your
   /// DNS provider respectfully.
-  ///
-  /// If success, saves it for future usage.
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
 
   /// Returns list of all available domain entries assigned to the account.

@@ -18,10 +18,14 @@ import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
-  ApiAdapter({final String? region, final bool isWithToken = true})
-      : _api = HetznerApi(
+  ApiAdapter({
+    final String? region,
+    final bool isWithToken = true,
+    final String? token,
+  }) : _api = HetznerApi(
           region: region,
           isWithToken: isWithToken,
+          token: token ?? '',
         );
 
   HetznerApi api({final bool getInitialized = true}) => getInitialized
@@ -39,9 +43,11 @@ class HetznerServerProvider extends ServerProvider {
   HetznerServerProvider.load(
     final String? location,
     final bool isAuthorized,
+    final String? token,
   ) : _adapter = ApiAdapter(
           isWithToken: isAuthorized,
           region: location,
+          token: token,
         );
 
   ApiAdapter _adapter;
@@ -410,7 +416,7 @@ class HetznerServerProvider extends ServerProvider {
       return result;
     }
 
-    _adapter = ApiAdapter(region: api.region, isWithToken: true);
+    // _adapter = ApiAdapter(region: api.region, isWithToken: true);
     return result;
   }
 

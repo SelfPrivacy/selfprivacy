@@ -5,9 +5,10 @@ import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
 class ApiAdapter {
-  ApiAdapter({final bool isWithToken = true})
+  ApiAdapter({final bool isWithToken = true, final String? token})
       : _api = DigitalOceanDnsApi(
           isWithToken: isWithToken,
+          token: token ?? '',
         );
 
   DigitalOceanDnsApi api({final bool getInitialized = true}) => getInitialized
@@ -23,17 +24,19 @@ class DigitalOceanDnsProvider extends DnsProvider {
   DigitalOceanDnsProvider() : _adapter = ApiAdapter();
   DigitalOceanDnsProvider.load(
     final bool isAuthorized,
+    final String? token,
   ) : _adapter = ApiAdapter(
           isWithToken: isAuthorized,
+          token: token,
         );
 
-  ApiAdapter _adapter;
+  final ApiAdapter _adapter;
 
   @override
   DnsProviderType get type => DnsProviderType.digitalOcean;
 
   @override
-  String get howToRegistar => 'how_fix_domain_digital_ocean';
+  String get howToRegister => 'how_fix_domain_digital_ocean';
 
   @override
   Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
@@ -42,8 +45,6 @@ class DigitalOceanDnsProvider extends DnsProvider {
     if (!result.data || !result.success) {
       return result;
     }
-
-    _adapter = ApiAdapter(isWithToken: true);
     return result;
   }
 

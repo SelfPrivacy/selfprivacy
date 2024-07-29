@@ -29,7 +29,20 @@ class BackblazeApplicationKey {
 }
 
 class BackblazeApi extends RestApiMap {
-  BackblazeApi({this.hasLogger = false, this.isWithToken = true});
+  BackblazeApi({
+    this.token = '',
+    this.tokenId = '',
+    this.hasLogger = false,
+    this.isWithToken = true,
+  }) : assert(isWithToken ? token.isNotEmpty && tokenId.isNotEmpty : true);
+
+  @override
+  bool hasLogger;
+  @override
+  bool isWithToken;
+
+  final String token;
+  final String tokenId;
 
   @override
   BaseOptions get options {
@@ -39,10 +52,8 @@ class BackblazeApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      final BackupsCredential? backblazeCredential =
-          getIt<ResourcesModel>().backblazeCredential;
-      final String token = backblazeCredential!.applicationKey;
-      options.headers = {'Authorization': 'Basic $token'};
+      final encodedApiKey = encodedBackblazeKey(tokenId, token);
+      options.headers = {'Authorization': 'Basic $encodedApiKey'};
     }
 
     if (validateStatus != null) {
@@ -59,14 +70,12 @@ class BackblazeApi extends RestApiMap {
 
   Future<BackblazeApiAuth> getAuthorizationToken() async {
     final Dio client = await getClient();
-    final BackupsCredential? backblazeCredential =
-        getIt<ResourcesModel>().backblazeCredential;
-    if (backblazeCredential == null) {
+    if (token.isEmpty || tokenId.isEmpty) {
       throw Exception('Backblaze credential is null');
     }
     final String encodedApiKey = encodedBackblazeKey(
-      backblazeCredential.keyId,
-      backblazeCredential.applicationKey,
+      tokenId,
+      token,
     );
     final Response response = await client.get(
       'b2_authorize_account',
@@ -122,16 +131,14 @@ class BackblazeApi extends RestApiMap {
   }
 
   // Create bucket
-  Future<String> createBucket(final String bucketName) async {
+  Future<GenericResult<String>> createBucket(final String bucketName) async {
     final BackblazeApiAuth auth = await getAuthorizationToken();
-    final BackupsCredential? backblazeCredential =
-        getIt<ResourcesModel>().backblazeCredential;
     final Dio client = await getClient();
     client.options.baseUrl = auth.apiUrl;
     final Response response = await client.post(
       '$apiPrefix/b2_create_bucket',
       data: {
-        'accountId': backblazeCredential!.keyId,
+        'accountId': tokenId,
         'bucketName': bucketName,
         'bucketType': 'allPrivate',
         'lifecycleRules': [
@@ -148,14 +155,23 @@ class BackblazeApi extends RestApiMap {
     );
     close(client);
     if (response.statusCode == HttpStatus.ok) {
-      return response.data['bucketId'];
+      return GenericResult(
+        data: response.data['bucketId'],
+        success: true,
+      );
     } else {
-      throw Exception('code: ${response.statusCode}');
+      return GenericResult(
+        data: '',
+        success: false,
+        message: 'code: ${response.statusCode}, ${response.data}',
+      );
     }
   }
 
   // Create a limited capability key with access to the given bucket
-  Future<BackblazeApplicationKey> createKey(final String bucketId) async {
+  Future<GenericResult<BackblazeApplicationKey>> createKey(
+    final String bucketId,
+  ) async {
     final BackblazeApiAuth auth = await getAuthorizationToken();
     final Dio client = await getClient();
     client.options.baseUrl = auth.apiUrl;
@@ -173,16 +189,26 @@ class BackblazeApi extends RestApiMap {
     );
     close(client);
     if (response.statusCode == HttpStatus.ok) {
-      return BackblazeApplicationKey(
-        applicationKeyId: response.data['applicationKeyId'],
-        applicationKey: response.data['applicationKey'],
+      return GenericResult(
+        success: true,
+        data: BackblazeApplicationKey(
+          applicationKeyId: response.data['applicationKeyId'],
+          applicationKey: response.data['applicationKey'],
+        ),
       );
     } else {
-      throw Exception('code: ${response.statusCode}');
+      return GenericResult(
+        success: false,
+        data: BackblazeApplicationKey(
+          applicationKeyId: '',
+          applicationKey: '',
+        ),
+        message: 'code: ${response.statusCode}, ${response.data}',
+      );
     }
   }
 
-  Future<BackblazeBucket?> fetchBucket(
+  Future<GenericResult<BackblazeBucket?>> fetchBucket(
     final BackupsCredential credentials,
     final BackupConfiguration configuration,
   ) async {
@@ -212,15 +238,16 @@ class BackblazeApi extends RestApiMap {
           );
         }
       }
-      return bucket;
+      return GenericResult(
+        success: bucket != null,
+        data: bucket,
+      );
     } else {
-      throw Exception('code: ${response.statusCode}');
+      return GenericResult(
+        success: false,
+        data: null,
+        message: 'code: ${response.statusCode}, ${response.data}',
+      );
     }
   }
-
-  @override
-  bool hasLogger;
-
-  @override
-  bool isWithToken;
 }

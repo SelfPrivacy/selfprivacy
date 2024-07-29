@@ -19,7 +19,11 @@ class BackupsServerReset extends BackupsEvent {
 }
 
 class InitializeBackupsRepository extends BackupsEvent {
-  const InitializeBackupsRepository();
+  const InitializeBackupsRepository(
+    this.credential,
+  );
+
+  final BackupsCredential credential;
 
   @override
   List<Object?> get props => [];

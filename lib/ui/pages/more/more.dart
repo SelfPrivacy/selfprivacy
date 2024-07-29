@@ -60,6 +60,11 @@ class MorePage extends StatelessWidget {
                     title: 'devices.main_screen.header'.tr(),
                   ),
                 _MoreMenuItem(
+                  iconData: Icons.token_outlined,
+                  title: 'tokens.title'.tr(),
+                  goTo: () => const TokensRoute(),
+                ),
+                _MoreMenuItem(
                   title: 'application_settings.title'.tr(),
                   iconData: Icons.settings_outlined,
                   goTo: () => const AppSettingsRoute(),

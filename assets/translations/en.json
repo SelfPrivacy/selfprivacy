@@ -668,5 +668,19 @@
         "australia": "Australia",
         "united_states": "United States",
         "finland": "Finland"
+    },
+    "tokens": {
+        "title": "Provider tokens",
+        "description": "These tokens are stored on this device and are used to connect SelfPrivacy to your server provider, DNS provider, and backup storage provider.",
+        "server_provider_tokens": "Server provider tokens",
+        "dns_provider_tokens": "DNS provider tokens",
+        "backup_provider_tokens": "Backup storage provider tokens",
+        "valid": "Valid",
+        "invalid": "Invalid",
+        "no_access": "Has no access to associated resources",
+        "loading": "Loading token status",
+        "used_by": "Used for {servers}.",
+        "check_again": "Check again",
+        "no_tokens": "No tokens"
     }
 }

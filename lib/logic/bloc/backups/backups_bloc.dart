@@ -5,7 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
@@ -13,6 +12,9 @@ import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
+import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
+import 'package:selfprivacy/logic/providers/provider_settings.dart';
 
 part 'backups_event.dart';
 part 'backups_state.dart';
@@ -103,8 +105,6 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     }
   }
 
-  final BackblazeApi backblaze = BackblazeApi();
-
   Future<void> _loadState(
     final BackupsServerLoaded event,
     final Emitter<BackupsState> emit,
@@ -166,6 +166,14 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final BackblazeBucket bucket;
 
     if (state.backblazeBucket == null) {
+      final settings = BackupsProviderSettings(
+        provider: BackupsProviderType.backblaze,
+        tokenId: event.credential.keyId,
+        token: event.credential.applicationKey,
+        isAuthorized: true,
+      );
+      final provider =
+          BackupsProviderFactory.createBackupsProviderInterface(settings);
       final String domain = getIt<ApiConnectionRepository>()
           .serverDomain!
           .domainName
@@ -176,9 +184,30 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       if (bucketName.length > 49) {
         bucketName = bucketName.substring(0, 49);
       }
-      final String bucketId = await backblaze.createBucket(bucketName);
 
-      final BackblazeApplicationKey key = await backblaze.createKey(bucketId);
+      final createStorageResult = await provider.createStorage(bucketName);
+      if (createStorageResult.success == false ||
+          createStorageResult.data.isEmpty) {
+        getIt<NavigationService>().showSnackBar(
+          createStorageResult.message ??
+              "Couldn't create storage on your server.",
+        );
+        emit(BackupsUnititialized());
+        return;
+      }
+      final String bucketId = createStorageResult.data;
+
+      final BackupsApplicationKey? key =
+          (await provider.createApplicationKey(bucketId)).data;
+
+      if (key == null) {
+        getIt<NavigationService>().showSnackBar(
+          "Couldn't create application key on your server.",
+        );
+        emit(BackupsUnititialized());
+        return;
+      }
+
       bucket = BackblazeBucket(
         bucketId: bucketId,
         bucketName: bucketName,

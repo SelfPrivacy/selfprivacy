@@ -15,18 +15,20 @@ final class ServerLogsLoading extends ServerLogsState {
 }
 
 final class ServerLogsLoaded extends ServerLogsState {
-  ServerLogsLoaded(
-    this.oldEntries,
-    this.newEntries,
-    this.meta,
-    this.loadingMore,
-  ) : _lastCursor = newEntries.isEmpty ? '' : newEntries.first.cursor;
+  ServerLogsLoaded({
+    required this.oldEntries,
+    required this.newEntries,
+    required this.meta,
+    required this.loadingMore,
+    this.slice,
+  }) : _lastCursor = newEntries.isEmpty ? '' : newEntries.first.cursor;
 
   final List<ServerLogEntry> oldEntries;
   final List<ServerLogEntry> newEntries;
   final ServerLogsPageMeta meta;
   final bool loadingMore;
   final String _lastCursor;
+  final String? slice;
 
   List<String> get systemdUnits => oldEntries
       .map((final entry) => entry.systemdUnit ?? 'kernel')
@@ -56,7 +58,7 @@ final class ServerLogsLoaded extends ServerLogsState {
   }
 
   @override
-  List<Object> get props => [oldEntries, newEntries, meta, _lastCursor];
+  List<Object?> get props => [oldEntries, newEntries, meta, _lastCursor, slice];
 }
 
 final class ServerLogsError extends ServerLogsState {

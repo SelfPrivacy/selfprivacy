@@ -370,7 +370,8 @@
         "invalid_input": "Invalid input",
         "create_job": "Create job",
         "update_job": "Update job",
-        "wait_for_jobs": "Server is busy with other jobs. Please wait until they are finished."
+        "wait_for_jobs": "Server is busy with other jobs. Please wait until they are finished.",
+        "logs": "Service logs"
     },
     "mail": {
         "login_info": "Use username and password from users tab. IMAP port is 143 with STARTTLS, SMTP port is 587 with STARTTLS."

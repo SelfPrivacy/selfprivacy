@@ -146,6 +146,13 @@ interface ConfigItem {
   type: String!
 }
 
+type CpuMonitoring {
+  start: DateTime
+  end: DateTime
+  step: Int!
+  overallUsage: MonitoringValuesResult!
+}
+
 """Date with time (isoformat)"""
 scalar DateTime
 
@@ -154,6 +161,13 @@ type DeviceApiTokenMutationReturn implements MutationReturnInterface {
   message: String!
   code: Int!
   token: String
+}
+
+type DiskMonitoring {
+  start: DateTime
+  end: DateTime
+  step: Int!
+  overallUsage: MonitoringMetricsResult!
 }
 
 enum DnsProvider {
@@ -210,9 +224,9 @@ input InitializeRepositoryInput {
 }
 
 """
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](https://ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf).
 """
-scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+scalar JSON @specifiedBy(url: "https://ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf")
 
 type Job {
   getJobs: [ApiJob!]!
@@ -233,12 +247,21 @@ type LogEntry {
 }
 
 type Logs {
-  paginated(limit: Int! = 20, upCursor: String = null, downCursor: String = null): PaginatedEntries!
+  paginated(limit: Int! = 20, upCursor: String = null, downCursor: String = null, filterBySlice: String = null, filterByUnit: String = null): PaginatedEntries!
 }
 
 type LogsPageMeta {
   upCursor: String
   downCursor: String
+}
+
+type MemoryMonitoring {
+  start: DateTime
+  end: DateTime
+  step: Int!
+  overallUsage: MonitoringValuesResult!
+  averageUsageByService: MonitoringMetricsResult!
+  maxUsageByService: MonitoringMetricsResult!
 }
 
 input MigrateToBindsInput {
@@ -248,6 +271,39 @@ input MigrateToBindsInput {
   nextcloudBlockDevice: String!
   pleromaBlockDevice: String!
 }
+
+type Monitoring {
+  cpuUsage(start: DateTime = null, end: DateTime = null, step: Int! = 60): CpuMonitoring!
+  memoryUsage(start: DateTime = null, end: DateTime = null, step: Int! = 60): MemoryMonitoring!
+  diskUsage(start: DateTime = null, end: DateTime = null, step: Int! = 60): DiskMonitoring!
+  networkUsage(start: DateTime = null, end: DateTime = null, step: Int! = 60): NetworkMonitoring!
+}
+
+type MonitoringMetric {
+  id: String!
+  values: [MonitoringValue!]!
+}
+
+type MonitoringMetrics {
+  metrics: [MonitoringMetric!]!
+}
+
+union MonitoringMetricsResult = MonitoringMetrics | MonitoringQueryError
+
+type MonitoringQueryError {
+  error: String!
+}
+
+type MonitoringValue {
+  timestamp: DateTime!
+  value: String!
+}
+
+type MonitoringValues {
+  values: [MonitoringValue!]!
+}
+
+union MonitoringValuesResult = MonitoringValues | MonitoringQueryError
 
 input MoveServiceInput {
   serviceId: String!
@@ -301,6 +357,13 @@ interface MutationReturnInterface {
   code: Int!
 }
 
+type NetworkMonitoring {
+  start: DateTime
+  end: DateTime
+  step: Int!
+  overallUsage: MonitoringMetricsResult!
+}
+
 type PaginatedEntries {
   """Metadata to aid in pagination."""
   pageMeta: LogsPageMeta!
@@ -318,6 +381,7 @@ type Query {
   jobs: Job!
   services: Services!
   backup: Backup!
+  monitoring: Monitoring!
 }
 
 input RecoveryKeyLimitsInput {
@@ -357,6 +421,7 @@ type Service {
   isMovable: Boolean!
   isRequired: Boolean!
   isEnabled: Boolean!
+  isInstalled: Boolean!
   canBeBackedUp: Boolean!
   backupDescription: String!
   status: ServiceStatusEnum!

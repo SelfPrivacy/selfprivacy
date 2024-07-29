@@ -172,6 +172,17 @@ class _ServicePageState extends State<ServicePage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
+        ListTile(
+          iconColor: Theme.of(context).colorScheme.onBackground,
+          onTap: () => context.pushRoute(
+            ServerLogsRoute(serviceId: service.id),
+          ),
+          leading: const Icon(Icons.manage_search_outlined),
+          title: Text(
+            'service_page.logs'.tr(),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
       ],
     );
   }

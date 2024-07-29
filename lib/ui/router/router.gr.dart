@@ -133,9 +133,14 @@ abstract class _$RootRouter extends RootStackRouter {
       );
     },
     ServerLogsRoute.name: (routeData) {
+      final args = routeData.argsAs<ServerLogsRouteArgs>(
+          orElse: () => const ServerLogsRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ServerLogsScreen(),
+        child: ServerLogsScreen(
+          serviceId: args.serviceId,
+          key: args.key,
+        ),
       );
     },
     ServerSettingsRoute.name: (routeData) {
@@ -524,16 +529,40 @@ class ServerDetailsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ServerLogsScreen]
-class ServerLogsRoute extends PageRouteInfo<void> {
-  const ServerLogsRoute({List<PageRouteInfo>? children})
-      : super(
+class ServerLogsRoute extends PageRouteInfo<ServerLogsRouteArgs> {
+  ServerLogsRoute({
+    String? serviceId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
           ServerLogsRoute.name,
+          args: ServerLogsRouteArgs(
+            serviceId: serviceId,
+            key: key,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'ServerLogsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<ServerLogsRouteArgs> page =
+      PageInfo<ServerLogsRouteArgs>(name);
+}
+
+class ServerLogsRouteArgs {
+  const ServerLogsRouteArgs({
+    this.serviceId,
+    this.key,
+  });
+
+  final String? serviceId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ServerLogsRouteArgs{serviceId: $serviceId, key: $key}';
+  }
 }
 
 /// generated route for

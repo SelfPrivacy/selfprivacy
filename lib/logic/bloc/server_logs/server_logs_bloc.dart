@@ -15,16 +15,20 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
   ServerLogsBloc() : super(ServerLogsInitial()) {
     on<ServerLogsFetch>((final event, final emit) async {
       emit(ServerLogsLoading());
+      final String? slice = event.serviceId != null
+          ? '${event.serviceId?.replaceAll('-', '_')}.slice'
+          : null;
       try {
-        final (logsData, meta) = await _getLogs(limit: 50);
+        final (logsData, meta) = await _getLogs(limit: 50, slice: slice);
         emit(
           ServerLogsLoaded(
-            logsData.sorted(
+            oldEntries: logsData.sorted(
               (final a, final b) => b.timestamp.compareTo(a.timestamp),
             ),
-            List<ServerLogEntry>.empty(growable: true),
-            meta,
-            false,
+            newEntries: List<ServerLogEntry>.empty(growable: true),
+            meta: meta,
+            loadingMore: false,
+            slice: slice,
           ),
         );
         if (_apiLogsSubscription != null) {
@@ -49,17 +53,21 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
           !currentState.loadingMore &&
           currentState.meta.upCursor != null) {
         try {
-          final (logsData, meta) =
-              await _getLogs(limit: 50, downCursor: currentState.meta.upCursor);
+          final (logsData, meta) = await _getLogs(
+            limit: 50,
+            downCursor: currentState.meta.upCursor,
+            slice: currentState.slice,
+          );
           final allEntries = currentState.oldEntries
             ..addAll(logsData)
             ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
           emit(
             ServerLogsLoaded(
-              allEntries.toSet().toList(),
-              currentState.newEntries,
-              meta,
-              false,
+              oldEntries: allEntries.toSet().toList(),
+              newEntries: currentState.newEntries,
+              meta: meta,
+              loadingMore: false,
+              slice: currentState.slice,
             ),
           );
         } catch (e) {
@@ -71,6 +79,10 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     on<ServerLogsGotNewEntry>((final event, final emit) {
       final currentState = state;
       if (currentState is ServerLogsLoaded) {
+        if (currentState.slice != null &&
+            event.entry.systemdSlice != currentState.slice) {
+          return;
+        }
         final allEntries = currentState.newEntries
           ..add(event.entry)
           ..sort(
@@ -78,10 +90,11 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
           );
         emit(
           ServerLogsLoaded(
-            currentState.oldEntries,
-            allEntries.toSet().toList(),
-            currentState.meta,
-            currentState.loadingMore,
+            oldEntries: currentState.oldEntries,
+            newEntries: allEntries.toSet().toList(),
+            meta: currentState.meta,
+            loadingMore: currentState.loadingMore,
+            slice: currentState.slice,
           ),
         );
       }
@@ -103,6 +116,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     // All entries returned will be greater than this cursor. Sets lower bound on results.
     final String? downCursor,
     // Only one cursor can be set at a time.
+    final String? slice,
   }) {
     final String? apiVersion =
         getIt<ApiConnectionRepository>().apiData.apiVersion.data;
@@ -124,6 +138,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
           limit: limit,
           upCursor: upCursor,
           downCursor: downCursor,
+          slice: slice,
         );
   }
 

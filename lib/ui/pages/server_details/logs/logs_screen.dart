@@ -10,7 +10,9 @@ import 'package:selfprivacy/utils/platform_adapter.dart';
 
 @RoutePage()
 class ServerLogsScreen extends StatefulWidget {
-  const ServerLogsScreen({super.key});
+  const ServerLogsScreen({this.serviceId, super.key});
+
+  final String? serviceId;
 
   @override
   State<ServerLogsScreen> createState() => _ServerLogsScreenState();
@@ -27,7 +29,7 @@ class _ServerLogsScreenState extends State<ServerLogsScreen> {
     super.initState();
     _serverLogsBloc = BlocProvider.of<ServerLogsBloc>(context);
     _scrollController.addListener(_onScroll);
-    _serverLogsBloc.add(ServerLogsFetch());
+    _serverLogsBloc.add(ServerLogsFetch(serviceId: widget.serviceId));
   }
 
   @override
@@ -82,7 +84,7 @@ class _ServerLogsScreenState extends State<ServerLogsScreen> {
     const Key centerKey = ValueKey<String>('server-logs-center-key');
     return Scaffold(
       appBar: AppBar(
-        title: Text('server.logs'.tr()),
+        title: Text(widget.serviceId == null ? 'server.logs'.tr() : 'service_page.logs'.tr()),
       ),
       endDrawer: BlocBuilder<ServerLogsBloc, ServerLogsState>(
         builder: (final context, final state) {
@@ -107,6 +109,14 @@ class _ServerLogsScreenState extends State<ServerLogsScreen> {
                 _selectedSystemdUnit == null
                     ? state.oldEntries
                     : state.oldEntriesForUnit(_selectedSystemdUnit!);
+            if (filteredOldLogs.isEmpty && filteredNewLogs.isEmpty) {
+              return Center(
+                child: EmptyPagePlaceholder(
+                  title: 'server.logs_empty'.tr(),
+                  iconData: Icons.info_outline,
+                ),
+              );
+            }
             return CustomScrollView(
               center: centerKey,
               controller: _scrollController,

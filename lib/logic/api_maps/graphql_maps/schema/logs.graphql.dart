@@ -329,11 +329,13 @@ class Variables$Query$Logs {
     required int limit,
     String? upCursor,
     String? downCursor,
+    String? filterBySlice,
   }) =>
       Variables$Query$Logs._({
         r'limit': limit,
         if (upCursor != null) r'upCursor': upCursor,
         if (downCursor != null) r'downCursor': downCursor,
+        if (filterBySlice != null) r'filterBySlice': filterBySlice,
       });
 
   Variables$Query$Logs._(this._$data);
@@ -350,6 +352,10 @@ class Variables$Query$Logs {
       final l$downCursor = data['downCursor'];
       result$data['downCursor'] = (l$downCursor as String?);
     }
+    if (data.containsKey('filterBySlice')) {
+      final l$filterBySlice = data['filterBySlice'];
+      result$data['filterBySlice'] = (l$filterBySlice as String?);
+    }
     return Variables$Query$Logs._(result$data);
   }
 
@@ -360,6 +366,8 @@ class Variables$Query$Logs {
   String? get upCursor => (_$data['upCursor'] as String?);
 
   String? get downCursor => (_$data['downCursor'] as String?);
+
+  String? get filterBySlice => (_$data['filterBySlice'] as String?);
 
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
@@ -372,6 +380,10 @@ class Variables$Query$Logs {
     if (_$data.containsKey('downCursor')) {
       final l$downCursor = downCursor;
       result$data['downCursor'] = l$downCursor;
+    }
+    if (_$data.containsKey('filterBySlice')) {
+      final l$filterBySlice = filterBySlice;
+      result$data['filterBySlice'] = l$filterBySlice;
     }
     return result$data;
   }
@@ -413,6 +425,15 @@ class Variables$Query$Logs {
     if (l$downCursor != lOther$downCursor) {
       return false;
     }
+    final l$filterBySlice = filterBySlice;
+    final lOther$filterBySlice = other.filterBySlice;
+    if (_$data.containsKey('filterBySlice') !=
+        other._$data.containsKey('filterBySlice')) {
+      return false;
+    }
+    if (l$filterBySlice != lOther$filterBySlice) {
+      return false;
+    }
     return true;
   }
 
@@ -421,10 +442,12 @@ class Variables$Query$Logs {
     final l$limit = limit;
     final l$upCursor = upCursor;
     final l$downCursor = downCursor;
+    final l$filterBySlice = filterBySlice;
     return Object.hashAll([
       l$limit,
       _$data.containsKey('upCursor') ? l$upCursor : const {},
       _$data.containsKey('downCursor') ? l$downCursor : const {},
+      _$data.containsKey('filterBySlice') ? l$filterBySlice : const {},
     ]);
   }
 }
@@ -442,6 +465,7 @@ abstract class CopyWith$Variables$Query$Logs<TRes> {
     int? limit,
     String? upCursor,
     String? downCursor,
+    String? filterBySlice,
   });
 }
 
@@ -462,12 +486,15 @@ class _CopyWithImpl$Variables$Query$Logs<TRes>
     Object? limit = _undefined,
     Object? upCursor = _undefined,
     Object? downCursor = _undefined,
+    Object? filterBySlice = _undefined,
   }) =>
       _then(Variables$Query$Logs._({
         ..._instance._$data,
         if (limit != _undefined && limit != null) 'limit': (limit as int),
         if (upCursor != _undefined) 'upCursor': (upCursor as String?),
         if (downCursor != _undefined) 'downCursor': (downCursor as String?),
+        if (filterBySlice != _undefined)
+          'filterBySlice': (filterBySlice as String?),
       }));
 }
 
@@ -481,6 +508,7 @@ class _CopyWithStubImpl$Variables$Query$Logs<TRes>
     int? limit,
     String? upCursor,
     String? downCursor,
+    String? filterBySlice,
   }) =>
       _res;
 }
@@ -645,6 +673,15 @@ const documentNodeQueryLogs = DocumentNode(definitions: [
         defaultValue: DefaultValueNode(value: null),
         directives: [],
       ),
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'filterBySlice')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'String'),
+          isNonNull: false,
+        ),
+        defaultValue: DefaultValueNode(value: null),
+        directives: [],
+      ),
     ],
     directives: [],
     selectionSet: SelectionSetNode(selections: [
@@ -669,6 +706,10 @@ const documentNodeQueryLogs = DocumentNode(definitions: [
               ArgumentNode(
                 name: NameNode(value: 'downCursor'),
                 value: VariableNode(name: NameNode(value: 'downCursor')),
+              ),
+              ArgumentNode(
+                name: NameNode(value: 'filterBySlice'),
+                value: VariableNode(name: NameNode(value: 'filterBySlice')),
               ),
             ],
             directives: [],

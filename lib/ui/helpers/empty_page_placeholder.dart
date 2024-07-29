@@ -6,7 +6,7 @@ class EmptyPagePlaceholder extends StatelessWidget {
   const EmptyPagePlaceholder({
     required this.title,
     required this.iconData,
-    required this.description,
+    this.description,
     this.showReadyCard = false,
     super.key,
   });
@@ -14,7 +14,7 @@ class EmptyPagePlaceholder extends StatelessWidget {
   final bool showReadyCard;
   final IconData iconData;
   final String title;
-  final String description;
+  final String? description;
 
   @override
   Widget build(final BuildContext context) => showReadyCard
@@ -54,7 +54,7 @@ class _ContentWidget extends StatelessWidget {
 
   final IconData iconData;
   final String title;
-  final String description;
+  final String? description;
 
   @override
   Widget build(final BuildContext context) => Container(
@@ -76,14 +76,15 @@ class _ContentWidget extends StatelessWidget {
                   ),
               textAlign: TextAlign.center,
             ),
-            const Gap(8),
-            Text(
-              description,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
+            if (description != null) const Gap(8),
+            if (description != null)
+              Text(
+                description!,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
+              ),
           ],
         ),
       );

@@ -2289,5 +2289,13 @@ const possibleTypesMap = <String, Set<String>>{
     'EnumConfigItem',
     'StringConfigItem',
   },
+  'MonitoringMetricsResult': {
+    'MonitoringMetrics',
+    'MonitoringQueryError',
+  },
+  'MonitoringValuesResult': {
+    'MonitoringValues',
+    'MonitoringQueryError',
+  },
   'StorageUsageInterface': {'ServiceStorageUsage'},
 };

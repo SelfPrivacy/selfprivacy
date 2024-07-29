@@ -83,7 +83,7 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
           ListTile(
             title: Text('server.logs'.tr()),
             leading: const Icon(Icons.manage_search_outlined),
-            onTap: () => context.pushRoute(const ServerLogsRoute()),
+            onTap: () => context.pushRoute(ServerLogsRoute()),
           ),
           const Divider(height: 32),
           Text(

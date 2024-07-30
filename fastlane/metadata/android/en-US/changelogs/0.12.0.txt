@@ -1,0 +1,88 @@
+# 0.12.0 Changelog
+
+## Changes
+
+### Features
+
+- Enabled the following languages:
+  - Japanese ([#528](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/528))
+
+
+- **Monitoring**: You can now view CPU, Network and RAM stats from the server ([#532](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/532))
+- **Recovery**: You can now skip the server provider token during recovery ([#532](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/532), a step towards resolving [#450](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/450))
+- **Recovery**: Allow setting the provider token after the recovery ([#532](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/532))
+- **Providers**: You can now view the provider tokens status ([#532](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/532))
+- **UI**: Add a notification if the app doesn't support the server API version ([#531](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/531))
+- **Server**: Server logs screen ([#531](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/531), resolves [#521](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/521))
+- **Services**: Allow viewing service logs from the service screen ([#532](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/532))
+- **Services**: Service settings ([#531](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/531))
+- Update DNS records after actions that potentially require DNS changes ([#531](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/531), resolves [#523](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/523))
+- Use Websockets to update server jobs status ([#529](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/529), resolves [#522](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/522))
+- **UI**: Allow selecting text from Markdown articles ([#524](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/524), resolves [#470](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/470))
+- **Console**: Obscure auth headers from console logs ([#482](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/482))
+- **Jobs**: Implement NixOS garbage collection job ([#506](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/506))
+- **UI**: List Tiles now have a circular border. ([#482](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/482), resolves [#463](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/463))
+- **Settings**: Added language picker to the settings ([#482](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/482), resolves [#489](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/489))
+- **UI**: Show the error screen when secret storage fails to load ([#504](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/504))
+- **Console**: Added an empty view when there are no logs in console yet. ([#482](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/482), resolves [#492](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/492))
+- **Backups**: Show how much space a service uses on backup ([#500](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/500), resolves [#434](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/434))
+- **Installation**: Add country names to installation process ([#501](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/501), resolves [#494](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/494))
+- **Console**: Reworked app console. ([#482](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/482))
+- **UI**: Infobox draws itself in a single row if there is enough space. ([#482](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/482))
+- **Services**: You can now copy a link on the service page ([#461](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/461), resolves [#452](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/452))
+- **Services**: You can now open the service screen by tapping the service disk usage card [#446](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/446))
+- **Installation**: Remove the "I already have a server" button after starting the installation ([#497](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/497), resolves [#414](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/414))
+
+
+### Bug Fixes
+
+- **UI**: Remove black bars on top of some pages ([#531](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/531))
+- **UI**: Fix missing server settings page title ([#482](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/482), resolves [#510](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/510))
+- **Docs**: Update the manual on how to get token from the SSH ([#509](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/509), resolves [#471](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/471))
+- **Packaging**: Flatpak builds didn't work ([#504](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/504))
+- **Devices**: The new device key can now be selected and copied. ([#482](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/482))
+- **UI**: Fixed scrollbars on desktop builds. ([#482](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/482))
+- **Backups**: Filter disabled services from create backups screen ([#499](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/499), resolves [#433](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/433))
+- **UI**: Add a subtitle for the "Jobs list" button ([#462](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/462))
+- **Docs**: Digital Ocean DNS used wrong manual
+
+
+### Translation contributions
+
+
+* Polish
+
+    * Thary (3)
+
+
+* Ukrainian
+
+    * TabithiS (39)
+
+
+* Estonian
+
+    * Dmitri B. (35)
+
+
+* Japanese
+
+    * shirahara (566)
+
+
+* Kazakh
+
+    * TabithiS (509)
+
+
+* Russian
+
+    * Thary (2)
+    * NaiJi ✨ (10)
+    * Inex Code (82)
+
+
+* Belarusian
+
+    * Thary (33)
+    * misterfourtytwo (28)

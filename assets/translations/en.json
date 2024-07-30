@@ -373,6 +373,7 @@
         },
         "settings": "Service settings",
         "modified": "Modified",
+        "invalid_value_detected": "Invalid value detected. Please change it.",
         "invalid_input": "Invalid input",
         "create_job": "Create job",
         "update_job": "Update job",

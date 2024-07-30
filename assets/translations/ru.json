@@ -37,7 +37,10 @@
         "copied_to_clipboard": "Скопировано в буфер обмена!",
         "app_name": "SelfPrivacy",
         "please_connect": "Подключите ваш сервер, домен и провайдера DNS, чтобы начать!",
-        "network_error": "Ошибка сети"
+        "network_error": "Ошибка сети",
+        "feature_unsupported_on_api_version": "Эта функция поддерживается только на версии {versionConstraint}. Ваш сервер на версии {currentVersion}.",
+        "server_is_outdated": "Эта версия SelfPrivacy требует версию API {versionConstraint}, но ваш сервер на версии {currentVersion}. Некоторые функции не будут работать, и могут возникнуть ошибки. Пожалуйста, обновите свой сервер.",
+        "error": "Ошибка"
     },
     "more_page": {
         "configuration_wizard": "Мастер настройки",
@@ -135,7 +138,14 @@
         "cpu_title": "Использование процессора",
         "network_title": "Использование сети",
         "in": "Получено",
-        "out": "Отправлено"
+        "out": "Отправлено",
+        "unsupported": "Вы не можете просмотреть графики использования ресурсов без токена провайдера сервера.",
+        "failed_to_load_memory_metrics": "Не вышло загрузить данные об использовании оперативной памяти. Это могла быть ошибка сети, или данных пока недостаточно.",
+        "memory": "Использование оперативной памяти",
+        "view_usage_by_service": "Просмотр использования по сервисам",
+        "system": "Система",
+        "ssh_users": "Пользователи SSH",
+        "ram_usage": "Среднее использование: {average}. Максимальное: {max}."
     },
     "server": {
         "card_title": "Сервер",
@@ -170,7 +180,19 @@
         "allow_password_authentication": "Разрешить вход по SSH с использованием пароля",
         "settings": "Настройки сервера",
         "enable_ssh": "Включить SSH",
-        "enable_ssh_hint": "Разрешить доступ к серверу через SSH"
+        "enable_ssh_hint": "Разрешить доступ к серверу через SSH",
+        "log_dialog": {
+            "systemd_unit": "Юнит Systemd",
+            "metadata": "Метаданные",
+            "cursor": "Курсор",
+            "priority": "Приоритет",
+            "systemd_slice": "Слайс Systemd",
+            "message": "Сообщение"
+        },
+        "logs_empty": "Записей пока нет",
+        "filter_by_systemd_unit": "Отфильтровать по юниту systemd",
+        "all_units": "Все юниты",
+        "logs": "Журнал сервера"
     },
     "domain": {
         "card_title": "Домен",
@@ -349,7 +371,15 @@
             "reloading": "Перезапускается"
         },
         "snapshots": "Снимки резервных копий",
-        "nothing_here": "Здесь ничего нет"
+        "nothing_here": "Здесь ничего нет",
+        "settings": "Настройки сервиса",
+        "invalid_value_detected": "Обнаружено некорректное значение. Пожалуйста, измените его.",
+        "wait_for_jobs": "Сервер занят другими задачами. Пожалуйста, подождите их окончания.",
+        "modified": "Изменено",
+        "invalid_input": "Некорректный ввод",
+        "create_job": "Создать задачу",
+        "update_job": "Обновить задачу",
+        "logs": "Журнал сервиса"
     },
     "mail": {
         "login_info": "Используйте логин и пароль из вкладки пользователей. IMAP порт: 143, STARTTLS. SMTP порт: 587, STARTTLS."
@@ -502,7 +532,10 @@
         "modal_confirmation_ip_invalid": "IP не совпадает с указанным в DNS записи",
         "provider_connected": "Подключение к вашему {}",
         "provider_connected_description": "Связь установлена. Введите свой токен с доступом к {}:",
-        "provider_connected_placeholder": "{} Токен"
+        "provider_connected_placeholder": "{} Токен",
+        "login_later": "Войти позже",
+        "server_provider_unknown_description": "Ваш сервер-провайдер не опознан. Вы можете продолжить без ввода его API токена.",
+        "server_provider_unknown": "Неизвестный сервер-провайдер"
     },
     "devices": {
         "main_screen": {
@@ -599,7 +632,13 @@
         "change_server_timezone": "Изменить часовой пояс сервера",
         "change_ssh_settings": "Изменить настройки SSH",
         "collect_nix_garbage_failed": "Не удалось начать сбор системного мусора",
-        "collect_nix_garbage": "Провести сбор системного мусора"
+        "collect_nix_garbage": "Провести сбор системного мусора",
+        "failed_to_load_dns_records": "Не удалось загрузить DNS записи",
+        "update_dns_records": "Обновить DNS записи",
+        "dns_records_did_not_change": "Изменений не требовалось",
+        "dns_records_changed": "DNS записи обновлены",
+        "ignored_due_to_failures": "Пропущено из-за предыдущих ошибок",
+        "change_service_settings": "Изменить настройки сервиса {}"
     },
     "validations": {
         "required": "Обязательное поле",
@@ -641,5 +680,24 @@
         "australia": "Австралия",
         "united_states": "США",
         "finland": "Финляндия"
+    },
+    "tokens": {
+        "server_provider_unknown": "Неизвестный сервер-провайдер",
+        "loading": "Загружается статус токена",
+        "description": "Эти токены хранятся на этом устройстве и используются для взаимодействия с сервер-провайдером, DNS провайдером и провайдером хранилища резервных копий.",
+        "title": "Токены провайдеров",
+        "server_provider_tokens": "Токены сервер-провайдеров",
+        "dns_provider_tokens": "Токены DNS провайдеров",
+        "backup_provider_tokens": "Токены провайдеров хранилища резервных копий",
+        "valid": "Действителен",
+        "invalid": "Недействителен",
+        "no_access": "Нет доступа к связанным ресурсам",
+        "used_by": "Используется для {servers}.",
+        "check_again": "Проверить снова",
+        "no_tokens": "Нет токенов",
+        "server_without_token": "У {server_domain} нет токена от {provider}.",
+        "tap_to_add_token": "Нажмите здесь чтобы добавить токен",
+        "add_server_provider_token": "Добавить токен сервер-провайдера",
+        "server_provider_unknown_description": "Ваш сервер-провайдер не поддерживается этой версией приложения."
     }
 }

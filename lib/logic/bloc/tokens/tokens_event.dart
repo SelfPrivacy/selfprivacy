@@ -10,3 +10,27 @@ class RevalidateTokens extends TokensEvent {
   @override
   List<Object> get props => [];
 }
+
+class AddServerProviderToken extends TokensEvent {
+  const AddServerProviderToken(this.serverProviderCredential);
+
+  final ServerProviderCredential serverProviderCredential;
+
+  @override
+  List<Object> get props => [serverProviderCredential];
+}
+
+class ServerSelectedForProviderToken extends TokensEvent {
+  const ServerSelectedForProviderToken(
+    this.providerServer,
+    this.server,
+    this.serverProviderCredential,
+  );
+
+  final ServerBasicInfoWithValidators providerServer;
+  final Server server;
+  final ServerProviderCredential serverProviderCredential;
+
+  @override
+  List<Object> get props => [providerServer, server, serverProviderCredential];
+}

@@ -693,6 +693,11 @@
         "loading": "Loading token status",
         "used_by": "Used for {servers}.",
         "check_again": "Check again",
-        "no_tokens": "No tokens"
+        "no_tokens": "No tokens",
+        "server_without_token": "{server_domain} has no token for {provider}.",
+        "tap_to_add_token": "Tap here to add a token",
+        "add_server_provider_token": "Add server provider token",
+        "server_provider_unknown": "Unknown server provider",
+        "server_provider_unknown_description": "Your server provider is not supported by this app version."
     }
 }

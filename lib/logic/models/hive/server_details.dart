@@ -117,6 +117,12 @@ enum ServerProviderType {
         hetzner => 'Hetzner Cloud',
         unknown => 'Unknown',
       };
+
+  String get supportArticle => switch (this) {
+        digitalOcean => 'how_digital_ocean',
+        hetzner => 'how_hetzner',
+        unknown => '',
+      };
 }
 
 extension ServerProviderTypeIsSpecified on ServerProviderType? {

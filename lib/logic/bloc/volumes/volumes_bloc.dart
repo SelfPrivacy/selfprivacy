@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -68,10 +69,18 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
         }
       },
     );
+
+    _resourcesModelSubscription =
+        getIt<ResourcesModel>().statusStream.listen((final event) {
+      if (event is ChangedServerProviderCredentials) {
+        add(const VolumesServerLoaded());
+      }
+    });
   }
 
   late StreamSubscription _apiStatusSubscription;
   late StreamSubscription _apiDataSubscription;
+  late StreamSubscription _resourcesModelSubscription;
   bool isLoaded = false;
 
   Future<Price?> getPricePerGb() async {
@@ -145,6 +154,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   Future<void> close() async {
     await _apiStatusSubscription.cancel();
     await _apiDataSubscription.cancel();
+    await _resourcesModelSubscription.cancel();
     await super.close();
   }
 

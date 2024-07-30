@@ -8,10 +8,13 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
+import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
 
 part 'tokens_event.dart';
@@ -22,6 +25,12 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     on<RevalidateTokens>(
       validateTokens,
       transformer: droppable(),
+    );
+    on<AddServerProviderToken>(
+      addServerProviderCredential,
+    );
+    on<ServerSelectedForProviderToken>(
+      connectServerToProviderToken,
     );
 
     add(const RevalidateTokens());
@@ -152,6 +161,51 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       return TokenStatus.invalid;
     }
     return TokenStatus.valid;
+  }
+
+  Future<void> addServerProviderCredential(
+    final AddServerProviderToken event,
+    final Emitter<TokensState> emit,
+  ) async {
+    await getIt<ResourcesModel>()
+        .addServerProviderToken(event.serverProviderCredential);
+
+    final ServerProviderSettings settings = ServerProviderSettings(
+      provider: event.serverProviderCredential.provider,
+      token: event.serverProviderCredential.token,
+      isAuthorized: true,
+    );
+    ProvidersController.initServerProvider(settings);
+  }
+
+  Future<void> connectServerToProviderToken(
+    final ServerSelectedForProviderToken event,
+    final Emitter<TokensState> emit,
+  ) async {
+    await getIt<ResourcesModel>().associateServerWithToken(
+      event.providerServer.id,
+      event.serverProviderCredential.token,
+    );
+    final Server newServerData = Server(
+      domain: event.server.domain,
+      hostingDetails: ServerHostingDetails(
+        ip4: event.providerServer.ip,
+        id: event.providerServer.id,
+        createTime: event.providerServer.created,
+        volume: ServerProviderVolume(
+          id: 0,
+          name: 'recovered_volume',
+          sizeByte: 0,
+          serverId: event.providerServer.id,
+          linuxDevice: '',
+        ),
+        apiToken: event.server.hostingDetails.apiToken,
+        provider: event.serverProviderCredential.provider,
+        serverLocation: event.server.hostingDetails.serverLocation,
+        serverType: event.server.hostingDetails.serverType,
+      ),
+    );
+    await getIt<ResourcesModel>().updateServerByDomain(newServerData);
   }
 
   @override

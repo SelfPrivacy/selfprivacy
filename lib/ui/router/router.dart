@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
+import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/pages/backups/backup_details.dart';
 import 'package:selfprivacy/ui/pages/backups/backups_list.dart';
@@ -12,6 +13,7 @@ import 'package:selfprivacy/ui/pages/more/app_settings/app_settings.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/developer_settings.dart';
 import 'package:selfprivacy/ui/pages/more/console/console_page.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
+import 'package:selfprivacy/ui/pages/more/tokens/add_server_provider_token.dart';
 import 'package:selfprivacy/ui/pages/more/tokens/tokens_page.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
@@ -111,6 +113,7 @@ class RootRouter extends _$RootRouter {
         AutoRoute(page: ServerLogsRoute.page),
         AutoRoute(page: TokensRoute.page),
         AutoRoute(page: MemoryUsageByServiceRoute.page),
+        AutoRoute(page: AddServerProviderTokenRoute.page),
       ],
     ),
     AutoRoute(page: ServicesMigrationRoute.page),
@@ -170,6 +173,8 @@ String getRouteTitle(final String routeName) {
       return 'tokens.title';
     case 'MemoryUsageByServiceRoute':
       return 'resource_chart.memory';
+    case 'AddServerProviderTokenPage':
+      return 'tokens.add_server_provider_token';
     default:
       return routeName;
   }

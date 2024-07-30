@@ -21,6 +21,16 @@ abstract class _$RootRouter extends RootStackRouter {
         child: const AboutApplicationPage(),
       );
     },
+    AddServerProviderTokenRoute.name: (routeData) {
+      final args = routeData.argsAs<AddServerProviderTokenRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AddServerProviderTokenPage(
+          server: args.server,
+          key: args.key,
+        ),
+      );
+    },
     AppSettingsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -240,6 +250,45 @@ class AboutApplicationRoute extends PageRouteInfo<void> {
   static const String name = 'AboutApplicationRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AddServerProviderTokenPage]
+class AddServerProviderTokenRoute
+    extends PageRouteInfo<AddServerProviderTokenRouteArgs> {
+  AddServerProviderTokenRoute({
+    required Server server,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AddServerProviderTokenRoute.name,
+          args: AddServerProviderTokenRouteArgs(
+            server: server,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AddServerProviderTokenRoute';
+
+  static const PageInfo<AddServerProviderTokenRouteArgs> page =
+      PageInfo<AddServerProviderTokenRouteArgs>(name);
+}
+
+class AddServerProviderTokenRouteArgs {
+  const AddServerProviderTokenRouteArgs({
+    required this.server,
+    this.key,
+  });
+
+  final Server server;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'AddServerProviderTokenRouteArgs{server: $server, key: $key}';
+  }
 }
 
 /// generated route for

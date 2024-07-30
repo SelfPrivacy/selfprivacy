@@ -11,6 +11,7 @@ import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
+import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -708,29 +709,54 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  Future<List<ServerBasicInfoWithValidators>> getAvailableServers() async {
-    final ServerInstallationRecovery dataState =
-        state as ServerInstallationRecovery;
-    final List<ServerBasicInfo> servers =
-        await repository.getServersOnProviderAccount();
+  Future<List<ServerBasicInfoWithValidators>> getAvailableServers({
+    final Server? server,
+  }) async {
     List<ServerBasicInfoWithValidators> validatedList = [];
-    try {
-      final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
-        (final ServerBasicInfo server) =>
-            ServerBasicInfoWithValidators.fromServerBasicInfo(
-          serverBasicInfo: server,
-          isIpValid: server.ip == dataState.serverDetails?.ip4,
-          isReverseDnsValid:
-              server.reverseDns == dataState.serverDomain?.domainName ||
-                  server.reverseDns ==
-                      dataState.serverDomain?.domainName.split('.')[0],
-        ),
-      );
-      validatedList = validated.toList();
-    } catch (e) {
-      print(e);
-      getIt<NavigationService>()
-          .showSnackBar('modals.server_validators_error'.tr());
+    if (server != null) {
+      final List<ServerBasicInfo> servers =
+          await repository.getServersOnProviderAccount();
+      try {
+        final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
+          (final ServerBasicInfo hostingServer) =>
+              ServerBasicInfoWithValidators.fromServerBasicInfo(
+            serverBasicInfo: hostingServer,
+            isIpValid: hostingServer.ip == server.hostingDetails.ip4,
+            isReverseDnsValid:
+                hostingServer.reverseDns == server.domain.domainName ||
+                    hostingServer.reverseDns ==
+                        server.domain.domainName.split('.')[0],
+          ),
+        );
+        validatedList = validated.toList();
+      } catch (e) {
+        print(e);
+        getIt<NavigationService>()
+            .showSnackBar('modals.server_validators_error'.tr());
+      }
+    } else {
+      final ServerInstallationRecovery dataState =
+          state as ServerInstallationRecovery;
+      final List<ServerBasicInfo> servers =
+          await repository.getServersOnProviderAccount();
+      try {
+        final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
+          (final ServerBasicInfo server) =>
+              ServerBasicInfoWithValidators.fromServerBasicInfo(
+            serverBasicInfo: server,
+            isIpValid: server.ip == dataState.serverDetails?.ip4,
+            isReverseDnsValid:
+                server.reverseDns == dataState.serverDomain?.domainName ||
+                    server.reverseDns ==
+                        dataState.serverDomain?.domainName.split('.')[0],
+          ),
+        );
+        validatedList = validated.toList();
+      } catch (e) {
+        print(e);
+        getIt<NavigationService>()
+            .showSnackBar('modals.server_validators_error'.tr());
+      }
     }
 
     return validatedList;

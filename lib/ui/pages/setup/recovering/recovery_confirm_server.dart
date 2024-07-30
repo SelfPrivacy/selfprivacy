@@ -1,13 +1,25 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/models/hive/server.dart';
+import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 
 class RecoveryConfirmServer extends StatefulWidget {
-  const RecoveryConfirmServer({super.key});
+  const RecoveryConfirmServer({
+    this.server,
+    this.serverProviderCredential,
+    this.submitCallback,
+    super.key,
+  });
+
+  final Server? server;
+  final ServerProviderCredential? serverProviderCredential;
+  final Function? submitCallback;
 
   @override
   State<RecoveryConfirmServer> createState() => _RecoveryConfirmServerState();
@@ -45,8 +57,9 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
         hasFlashButton: false,
         children: [
           FutureBuilder<List<ServerBasicInfoWithValidators>>(
-            future:
-                context.read<ServerInstallationCubit>().getAvailableServers(),
+            future: context
+                .read<ServerInstallationCubit>()
+                .getAvailableServers(server: widget.server),
             builder: (final context, final snapshot) {
               if (snapshot.hasData) {
                 final servers = snapshot.data;
@@ -248,8 +261,21 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
             TextButton(
               child: Text('modals.yes'.tr()),
               onPressed: () {
-                context.read<ServerInstallationCubit>().setServerId(server);
-                Navigator.of(context).pop();
+                if (widget.server != null &&
+                    widget.serverProviderCredential != null) {
+                  context.read<TokensBloc>().add(
+                        ServerSelectedForProviderToken(
+                          server,
+                          widget.server!,
+                          widget.serverProviderCredential!,
+                        ),
+                      );
+                  Navigator.of(context).pop();
+                  widget.submitCallback?.call();
+                } else {
+                  context.read<ServerInstallationCubit>().setServerId(server);
+                  Navigator.of(context).pop();
+                }
               },
             ),
           ],

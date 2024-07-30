@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
 import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 
 @RoutePage()
 class TokensPage extends StatelessWidget {
@@ -29,10 +30,7 @@ class TokensPage extends StatelessWidget {
               ListTileOnSurfaceVariant(
                 title: 'tokens.server_provider_tokens'.tr(),
               ),
-              Divider(
-                height: 0,
-                color: Theme.of(context).colorScheme.outline,
-              ),
+              const Divider(height: 0),
               if (state.serverProviderCredentials.isEmpty)
                 ListTileOnSurfaceVariant(
                   title: 'tokens.no_tokens'.tr(),
@@ -48,6 +46,34 @@ class TokensPage extends StatelessWidget {
                     )
                     .toList(),
               ),
+              if (state.serversWithoutProviderCredentials.isNotEmpty)
+                Column(
+                  children: [
+                    const Divider(height: 0),
+                    Column(
+                      children: state.serversWithoutProviderCredentials
+                          .map(
+                            (final server) => ListTileOnSurfaceVariant(
+                              title: 'tokens.server_without_token'.tr(
+                                namedArgs: {
+                                  'server_domain': server.domain.domainName,
+                                  'provider': server
+                                      .hostingDetails.provider.displayName,
+                                },
+                              ),
+                              subtitle: 'tokens.tap_to_add_token'.tr(),
+                              leadingIcon: Icons.add_circle_outline,
+                              onTap: () => context.router.push(
+                                AddServerProviderTokenRoute(
+                                  server: server,
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),
@@ -58,10 +84,7 @@ class TokensPage extends StatelessWidget {
               ListTileOnSurfaceVariant(
                 title: 'tokens.dns_provider_tokens'.tr(),
               ),
-              Divider(
-                height: 0,
-                color: Theme.of(context).colorScheme.outline,
-              ),
+              const Divider(height: 0),
               if (state.dnsProviderCredentials.isEmpty)
                 ListTileOnSurfaceVariant(
                   title: 'tokens.no_tokens'.tr(),
@@ -86,10 +109,7 @@ class TokensPage extends StatelessWidget {
               ListTileOnSurfaceVariant(
                 title: 'tokens.backup_provider_tokens'.tr(),
               ),
-              Divider(
-                height: 0,
-                color: Theme.of(context).colorScheme.outline,
-              ),
+              const Divider(height: 0),
               if (state.backupsCredentials.isEmpty)
                 ListTileOnSurfaceVariant(
                   title: 'tokens.no_tokens'.tr(),

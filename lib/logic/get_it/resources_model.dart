@@ -173,6 +173,17 @@ class ResourcesModel {
     _statusStreamController.add(const ChangedServers());
   }
 
+  Future<void> updateServerByDomain(final Server server) async {
+    final index = _servers.indexWhere(
+      (final s) => s.domain.domainName == server.domain.domainName,
+    );
+    if (index != -1) {
+      _servers[index] = server;
+      await _box.put(BNames.servers, _servers);
+      _statusStreamController.add(const ChangedServers());
+    }
+  }
+
   Future<void> setBackblazeBucket(final BackblazeBucket bucket) async {
     _backblazeBucket = bucket;
     await _box.put(BNames.backblazeBucket, _backblazeBucket);

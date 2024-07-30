@@ -1,0 +1,68 @@
+fragment MonitoringMetrics on MonitoringMetrics {
+  metrics {
+    metricId
+    values {
+      timestamp
+      value
+    }
+  }
+}
+
+fragment MonitoringValues on MonitoringValues {
+  values {
+    value
+    timestamp
+  }
+}
+
+fragment MonitoringQueryError on MonitoringQueryError {
+  error
+}
+
+
+query GetOverallCpuAndNetworkMetrics($start: DateTime, $end: DateTime, $step: Int!) {
+  monitoring {
+    cpuUsage(start: $start, end: $end, step: $step) {
+      overallUsage {
+        ... MonitoringQueryError
+        ... MonitoringValues
+      }
+    }
+    networkUsage(start: $start, end: $end, step: $step) {
+      overallUsage {
+        ... MonitoringQueryError
+        ... MonitoringMetrics
+      }
+    }
+  }
+}
+
+query GetMemoryMetrics($start: DateTime, $end: DateTime, $step: Int!) {
+  monitoring {
+    memoryUsage(start: $start, end: $end, step: $step) {
+      overallUsage {
+        ... MonitoringQueryError
+        ... MonitoringValues
+      }
+      averageUsageByService {
+        ... MonitoringQueryError
+        ... MonitoringMetrics
+      }
+      maxUsageByService {
+        ... MonitoringQueryError
+        ... MonitoringMetrics
+      }
+    }
+  }
+}
+
+query GetDiskMetrics($start: DateTime, $end: DateTime, $step: Int!) {
+  monitoring {
+    diskUsage(start: $start, end: $end, step: $step) {
+      overallUsage {
+        ... MonitoringQueryError
+        ... MonitoringMetrics
+      }
+    }
+  }
+}

@@ -46,6 +46,50 @@ class _Chart extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'resource_chart.memory'.tr(),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+                const SizedBox(height: 16),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (state is MetricsLoaded && state.memoryMetrics != null)
+                      getMemoryChart(state),
+                    AnimatedOpacity(
+                      duration: const Duration(milliseconds: 200),
+                      opacity: state is MetricsLoading ? 1 : 0,
+                      child: const _GraphLoadingCardContent(),
+                    ),
+                  ],
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text('resource_chart.view_usage_by_service'.tr()),
+                  leading: Icon(
+                    Icons.area_chart_outlined,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  onTap: () {
+                    context.pushRoute(
+                      const MemoryUsageByServiceRoute(),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        FilledCard(
+          clipped: false,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
@@ -165,6 +209,23 @@ class _Chart extends StatelessWidget {
       height: 200,
       child: CpuChart(
         data: data,
+        period: state.period,
+        start: state.metrics.start,
+      ),
+    );
+  }
+
+  Widget getMemoryChart(final MetricsLoaded state) {
+    final data = state.memoryMetrics;
+
+    if (data == null) {
+      return const SizedBox();
+    }
+
+    return SizedBox(
+      height: 200,
+      child: MemoryChart(
+        data: data.overallMetrics,
         period: state.period,
         start: state.metrics.start,
       ),

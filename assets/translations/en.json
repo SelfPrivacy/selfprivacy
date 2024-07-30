@@ -139,7 +139,12 @@
         "network_title": "Network Usage",
         "in": "In",
         "out": "Out",
-        "unsupported": "You can't view resource usage charts without the server provider token."
+        "memory": "Memory usage",
+        "view_usage_by_service": "View usage by service",
+        "unsupported": "You can't view resource usage charts without the server provider token.",
+        "system": "System",
+        "ssh_users": "SSH users",
+        "ram_usage": "Average usage: {average}. Maximum: {max}."
     },
     "server": {
         "card_title": "Server",

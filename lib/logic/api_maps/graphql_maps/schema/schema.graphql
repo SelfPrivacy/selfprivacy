@@ -280,7 +280,7 @@ type Monitoring {
 }
 
 type MonitoringMetric {
-  id: String!
+  metricId: String!
   values: [MonitoringValue!]!
 }
 

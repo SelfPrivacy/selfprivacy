@@ -39,7 +39,16 @@ class MetricsCubit extends Cubit<MetricsState> {
 
   void load(final Period period) async {
     try {
-      final MetricsLoaded newState = await repository.getMetrics(period);
+      final MetricsLoaded newState = await repository.getServerMetrics(period);
+      timer = Timer(
+        Duration(seconds: newState.metrics.stepsInSecond.toInt()),
+        () => load(newState.period),
+      );
+      emit(newState);
+      return;
+    } catch (_) {}
+    try {
+      final MetricsLoaded newState = await repository.getLegacyMetrics(period);
       timer = Timer(
         Duration(seconds: newState.metrics.stepsInSecond.toInt()),
         () => load(newState.period),

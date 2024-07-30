@@ -13,6 +13,7 @@ import 'package:selfprivacy/ui/components/cards/filled_card.dart';
 import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/cpu_chart.dart';
+import 'package:selfprivacy/ui/pages/server_details/charts/memory_chart.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/network_charts.dart';
 import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';
 import 'package:selfprivacy/ui/router/router.dart';

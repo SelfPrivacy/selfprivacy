@@ -5,6 +5,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/logs.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/monitoring.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
@@ -23,6 +24,7 @@ import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
@@ -37,6 +39,7 @@ part 'services_api.dart';
 part 'users_api.dart';
 part 'volume_api.dart';
 part 'logs_api.dart';
+part 'monitoring_api.dart';
 
 class ServerApi extends GraphQLApiMap
     with
@@ -46,7 +49,8 @@ class ServerApi extends GraphQLApiMap
         ServicesApi,
         UsersApi,
         BackupsApi,
-        LogsApi {
+        LogsApi,
+        MonitoringApi {
   ServerApi({
     this.hasLogger = false,
     this.isWithToken = true,

@@ -84,6 +84,12 @@ abstract class _$RootRouter extends RootStackRouter {
         child: const InitializingPage(),
       );
     },
+    MemoryUsageByServiceRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const MemoryUsageByServiceScreen(),
+      );
+    },
     MoreRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -411,6 +417,20 @@ class InitializingRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'InitializingRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [MemoryUsageByServiceScreen]
+class MemoryUsageByServiceRoute extends PageRouteInfo<void> {
+  const MemoryUsageByServiceRoute({List<PageRouteInfo>? children})
+      : super(
+          MemoryUsageByServiceRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MemoryUsageByServiceRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

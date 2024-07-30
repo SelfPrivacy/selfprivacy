@@ -33,92 +33,97 @@ class _MemoryUsageByServiceContents extends StatelessWidget {
     final Period period = cubit.state.period;
     final MetricsState state = cubit.state;
 
+    final List<Widget> children = [];
+
     if (state is MetricsUnsupported ||
         (state is MetricsLoaded && state.memoryMetrics == null)) {
-      return BrandHeroScreen(
-        heroTitle: 'resource_chart.memory'.tr(),
-        children: [
-          Center(
-            child: Center(
+      children.addAll([
+        Center(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32.0),
               child: EmptyPagePlaceholder(
                 title: 'basis.error'.tr(),
+                description:
+                    'resource_chart.failed_to_load_memory_metrics'.tr(),
                 iconData: Icons.error_outline_outlined,
               ),
             ),
           ),
-        ],
-      );
+        ),
+      ]);
     }
     if (state is MetricsLoading) {
-      return BrandHeroScreen(
-        heroTitle: 'resource_chart.memory'.tr(),
-        children: const [
-          Center(
+      children.addAll([
+        const Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 32.0),
             child: CircularProgressIndicator(),
           ),
-        ],
-      );
+        ),
+      ]);
     }
 
-    final averageUsageByServices =
-        (state as MetricsLoaded).memoryMetrics!.averageMetricsByService;
-    final maxUsageByServices = state.memoryMetrics!.maxMetricsByService;
+    if (state is MetricsLoaded && state.memoryMetrics != null) {
+      final averageUsageByServices =
+          state.memoryMetrics!.averageMetricsByService;
+      final maxUsageByServices = state.memoryMetrics!.maxMetricsByService;
 
-    // For each service, gather average and max usages
-    final List<Widget> children = [];
-    for (final slice in averageUsageByServices.keys.sorted()) {
-      final DiskSize averageUsage =
-          DiskSize(byte: averageUsageByServices[slice]?.toInt() ?? 0);
-      final DiskSize maxUsage =
-          DiskSize(byte: maxUsageByServices[slice]?.toInt() ?? 0);
-      String? serviceName;
-      Widget? icon;
-      if (slice == 'system') {
-        serviceName = 'resource_chart.system'.tr();
-        icon = const Icon(BrandIcons.server);
-      } else if (slice == 'user') {
-        serviceName = 'resource_chart.ssh_users'.tr();
-        icon = const Icon(BrandIcons.terminal);
-      } else {
-        final service = context
-            .read<ServicesBloc>()
-            .state
-            .getServiceById(slice.replaceAll('_', '-'));
-        serviceName = service?.displayName ?? slice;
-        icon = service?.svgIcon != null
-            ? SvgPicture.string(
-                service!.svgIcon,
-                width: 22.0,
-                height: 24.0,
-                colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.onBackground,
-                  BlendMode.srcIn,
-                ),
-              )
-            : const Icon(BrandIcons.box);
-      }
+      // For each service, gather average and max usages
+      for (final slice in averageUsageByServices.keys.sorted()) {
+        final DiskSize averageUsage =
+            DiskSize(byte: averageUsageByServices[slice]?.toInt() ?? 0);
+        final DiskSize maxUsage =
+            DiskSize(byte: maxUsageByServices[slice]?.toInt() ?? 0);
+        String? serviceName;
+        Widget? icon;
+        if (slice == 'system') {
+          serviceName = 'resource_chart.system'.tr();
+          icon = const Icon(BrandIcons.server);
+        } else if (slice == 'user') {
+          serviceName = 'resource_chart.ssh_users'.tr();
+          icon = const Icon(BrandIcons.terminal);
+        } else {
+          final service = context
+              .read<ServicesBloc>()
+              .state
+              .getServiceById(slice.replaceAll('_', '-'));
+          serviceName = service?.displayName ?? slice;
+          icon = service?.svgIcon != null
+              ? SvgPicture.string(
+                  service!.svgIcon,
+                  width: 22.0,
+                  height: 24.0,
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.onBackground,
+                    BlendMode.srcIn,
+                  ),
+                )
+              : const Icon(BrandIcons.box);
+        }
 
-      if (serviceName == slice &&
-          averageUsage.byte == 0 &&
-          maxUsage.byte == 0) {
-        continue;
-      }
+        if (serviceName == slice &&
+            averageUsage.byte == 0 &&
+            maxUsage.byte == 0) {
+          continue;
+        }
 
-      children.add(
-        ListTile(
-          title: Text(serviceName),
-          subtitle: Text(
-            'resource_chart.ram_usage'.tr(
-              namedArgs: {
-                'average': averageUsage.toString(),
-                'max': maxUsage.toString(),
-              },
+        children.add(
+          ListTile(
+            title: Text(serviceName),
+            subtitle: Text(
+              'resource_chart.ram_usage'.tr(
+                namedArgs: {
+                  'average': averageUsage.toString(),
+                  'max': maxUsage.toString(),
+                },
+              ),
             ),
+            dense: true,
+            leading: icon,
           ),
-          dense: true,
-          leading: icon,
-        ),
-      );
+        );
+      }
     }
 
     return BrandHeroScreen(

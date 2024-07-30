@@ -144,7 +144,8 @@
         "unsupported": "You can't view resource usage charts without the server provider token.",
         "system": "System",
         "ssh_users": "SSH users",
-        "ram_usage": "Average usage: {average}. Maximum: {max}."
+        "ram_usage": "Average usage: {average}. Maximum: {max}.",
+        "failed_to_load_memory_metrics": "Couldn't load memory usage data. This might be a connection issue, or there is not enough data yet."
     },
     "server": {
         "card_title": "Server",

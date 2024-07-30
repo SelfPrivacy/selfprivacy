@@ -32,10 +32,12 @@ class _BasicEnumConfigItemState extends State<BasicEnumConfigItem> {
         DropdownMenuItem<String>(
           value: widget.configItem.value,
           enabled: false,
-          child: Text(widget.configItem.value,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.error.withOpacity(0.7),
-                  )),
+          child: Text(
+            widget.configItem.value,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.error.withOpacity(0.7),
+                ),
+          ),
         ),
       );
     }

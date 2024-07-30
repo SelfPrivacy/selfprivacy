@@ -1,9 +1,11 @@
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 
@@ -14,6 +16,27 @@ class RecoveryServerProviderConnected extends StatelessWidget {
   Widget build(final BuildContext context) {
     final ServerInstallationCubit appConfig =
         context.watch<ServerInstallationCubit>();
+
+    if (appConfig.state.serverDetails?.provider == ServerProviderType.unknown) {
+      return BrandHeroScreen(
+        heroTitle: 'recovering.server_provider_unknown'.tr(),
+        heroSubtitle: 'recovering.server_provider_unknown_description'.tr(),
+        hasBackButton: true,
+        hasFlashButton: false,
+        ignoreBreakpoints: true,
+        onBackButtonPressed: () {
+          Navigator.of(context).popUntil((final route) => route.isFirst);
+        },
+        children: [
+          BrandButton.filled(
+            text: 'basis.continue'.tr(),
+            onPressed: () => context
+                .read<ServerInstallationCubit>()
+                .skipSettingServerProviderKey(),
+          ),
+        ],
+      );
+    }
 
     return BlocProvider(
       create: (final BuildContext context) =>
@@ -50,13 +73,13 @@ class RecoveryServerProviderConnected extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const Gap(16),
             BrandButton.filled(
               onPressed: () =>
                   context.read<ServerProviderFormCubit>().trySubmit(),
               child: Text('basis.continue'.tr()),
             ),
-            const SizedBox(height: 16),
+            const Gap(16),
             Builder(
               builder: (final context) => BrandButton.text(
                 title: 'initializing.how'.tr(),
@@ -65,6 +88,13 @@ class RecoveryServerProviderConnected extends StatelessWidget {
                       context: context,
                     ),
               ),
+            ),
+            const Gap(16),
+            BrandButton.text(
+              title: 'recovering.login_later'.tr(),
+              onPressed: () => context
+                  .read<ServerInstallationCubit>()
+                  .skipSettingServerProviderKey(),
             ),
           ],
         ),

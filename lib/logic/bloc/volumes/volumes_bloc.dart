@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -74,7 +75,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   bool isLoaded = false;
 
   Future<Price?> getPricePerGb() async {
-    if (ProvidersController.currentServerProvider == null) {
+    if (!(ProvidersController.currentServerProvider?.isAuthorized ?? false)) {
       return null;
     }
     Price? price;
@@ -92,33 +93,36 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     final VolumesServerLoaded event,
     final Emitter<VolumesState> emit,
   ) async {
-    if (ProvidersController.currentServerProvider == null) {
+    if (getIt<ApiConnectionRepository>().currentConnectionStatus ==
+        ConnectionStatus.nonexistent) {
       return;
     }
-
     emit(VolumesLoading());
 
-    final volumesResult =
-        await ProvidersController.currentServerProvider!.getVolumes();
+    late final GenericResult<List<ServerProviderVolume>>? volumesResult;
 
-    if (!volumesResult.success || volumesResult.data.isEmpty) {
-      emit(VolumesInitial());
-      return;
+    if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
+      volumesResult =
+          await ProvidersController.currentServerProvider?.getVolumes();
+    } else {
+      volumesResult = null;
     }
 
     final serverVolumes = getIt<ApiConnectionRepository>().apiData.volumes.data;
 
-    if (serverVolumes == null) {
+    if (serverVolumes == null &&
+        volumesResult != null &&
+        volumesResult.data.isNotEmpty) {
       emit(VolumesLoading(providerVolumes: volumesResult.data));
       return;
-    } else {
+    } else if (serverVolumes != null) {
       emit(
         VolumesLoaded(
           diskStatus: DiskStatus.fromVolumes(
             serverVolumes,
-            volumesResult.data,
+            volumesResult?.data ?? [],
           ),
-          providerVolumes: volumesResult.data,
+          providerVolumes: volumesResult?.data ?? [],
           serverVolumesHashCode: Object.hashAll(serverVolumes),
         ),
       );
@@ -184,6 +188,9 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     final Emitter<VolumesState> emit,
   ) async {
     if (state is! VolumesLoaded) {
+      return;
+    }
+    if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
       return;
     }
     getIt<NavigationService>().showSnackBar(

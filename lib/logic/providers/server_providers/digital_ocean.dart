@@ -39,7 +39,7 @@ class ApiAdapter {
 }
 
 class DigitalOceanServerProvider extends ServerProvider {
-  DigitalOceanServerProvider() : _adapter = ApiAdapter();
+  DigitalOceanServerProvider() : _adapter = ApiAdapter(isWithToken: false);
   DigitalOceanServerProvider.load(
     final String? location,
     final bool isAuthorized,
@@ -52,6 +52,9 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.usd);
+
+  @override
+  bool get isAuthorized => _adapter.api().isWithToken;
 
   @override
   ServerProviderType get type => ServerProviderType.digitalOcean;

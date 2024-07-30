@@ -63,42 +63,39 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
       );
     }
 
-    return BlocProvider(
-      create: (final context) => context.read<ServerDetailsCubit>()..check(),
-      child: BrandHeroScreen(
-        hasFlashButton: true,
-        heroIcon: BrandIcons.server,
-        heroTitle: 'server.card_title'.tr(),
-        heroSubtitle: 'server.description'.tr(),
-        children: [
-          StorageCard(
-            diskStatus: context.watch<VolumesBloc>().state.diskStatus,
-          ),
-          const SizedBox(height: 16),
-          ListTile(
-            title: Text('server.settings'.tr()),
-            leading: const Icon(BrandIcons.settings),
-            onTap: () => context.pushRoute(const ServerSettingsRoute()),
-          ),
-          ListTile(
-            title: Text('server.logs'.tr()),
-            leading: const Icon(Icons.manage_search_outlined),
-            onTap: () => context.pushRoute(ServerLogsRoute()),
-          ),
-          const Divider(height: 32),
-          Text(
-            'server.resource_usage'.tr(),
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 8),
-          BlocProvider(
-            create: (final context) => MetricsCubit()..restart(),
-            child: _Chart(),
-          ),
-          const SizedBox(height: 8),
-          _TextDetails(),
-        ],
-      ),
+    return BrandHeroScreen(
+      hasFlashButton: true,
+      heroIcon: BrandIcons.server,
+      heroTitle: 'server.card_title'.tr(),
+      heroSubtitle: 'server.description'.tr(),
+      children: [
+        StorageCard(
+          diskStatus: context.watch<VolumesBloc>().state.diskStatus,
+        ),
+        const SizedBox(height: 16),
+        ListTile(
+          title: Text('server.settings'.tr()),
+          leading: const Icon(BrandIcons.settings),
+          onTap: () => context.pushRoute(const ServerSettingsRoute()),
+        ),
+        ListTile(
+          title: Text('server.logs'.tr()),
+          leading: const Icon(Icons.manage_search_outlined),
+          onTap: () => context.pushRoute(ServerLogsRoute()),
+        ),
+        const Divider(height: 32),
+        Text(
+          'server.resource_usage'.tr(),
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 8),
+        BlocProvider(
+          create: (final context) => MetricsCubit()..restart(),
+          child: _Chart(),
+        ),
+        const SizedBox(height: 8),
+        _TextDetails(),
+      ],
     );
   }
 }

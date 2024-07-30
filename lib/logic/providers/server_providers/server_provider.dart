@@ -18,6 +18,8 @@ abstract class ServerProvider {
   /// provider implements [ServerProvider] interface.
   ServerProviderType get type;
 
+  bool get isAuthorized;
+
   /// Returns [ServerBasicInfo] of all available machines
   /// assigned to the authorized user.
   ///

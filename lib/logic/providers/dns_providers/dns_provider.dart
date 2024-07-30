@@ -8,6 +8,8 @@ abstract class DnsProvider {
   /// provider implements [DnsProvider] interface.
   DnsProviderType get type;
 
+  bool get isAuthorized;
+
   /// Returns a full url to a guide on how to setup
   /// DNS provider nameservers
   String get howToRegister;

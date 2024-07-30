@@ -19,6 +19,8 @@ abstract class BackupsProvider {
   /// provider implements [BackupsProvider] interface.
   BackupsProviderType get type;
 
+  bool get isAuthorized;
+
   /// Returns a full url to a guide on how to setup
   /// backups provider
   String get howToRegister;

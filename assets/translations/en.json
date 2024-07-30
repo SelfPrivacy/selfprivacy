@@ -138,7 +138,8 @@
         "cpu_title": "CPU Usage",
         "network_title": "Network Usage",
         "in": "In",
-        "out": "Out"
+        "out": "Out",
+        "unsupported": "You can't view resource usage charts without the server provider token."
     },
     "server": {
         "card_title": "Server",
@@ -511,6 +512,9 @@
         "provider_connected": "Connect to {}",
         "provider_connected_description": "Enter your token with access to {}:",
         "provider_connected_placeholder": "{} token",
+        "login_later": "Log in later",
+        "server_provider_unknown": "Unknown server provider",
+        "server_provider_unknown_description": "Your server provider is not recognized. You can continue without entering its API token.",
         "confirm_server": "Confirm server",
         "confirm_server_description": "Found your server! Confirm it is the right one:",
         "confirm_server_accept": "Yes! That's it",

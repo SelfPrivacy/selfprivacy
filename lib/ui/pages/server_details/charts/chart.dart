@@ -100,37 +100,58 @@ class _Chart extends StatelessWidget {
           ),
         ),
       ];
+    } else if (state is MetricsUnsupported) {
+      charts = [
+        FilledCard(
+          clipped: false,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'resource_chart.unsupported'.tr(),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ];
     } else {
       throw 'wrong state';
     }
 
     return Column(
       children: [
-        SegmentedButtons(
-          isSelected: [
-            period == Period.month,
-            period == Period.day,
-            period == Period.hour,
-          ],
-          onPressed: (final index) {
-            switch (index) {
-              case 0:
-                cubit.changePeriod(Period.month);
-                break;
-              case 1:
-                cubit.changePeriod(Period.day);
-                break;
-              case 2:
-                cubit.changePeriod(Period.hour);
-                break;
-            }
-          },
-          titles: [
-            'resource_chart.month'.tr(),
-            'resource_chart.day'.tr(),
-            'resource_chart.hour'.tr(),
-          ],
-        ),
+        if (state is! MetricsUnsupported)
+          SegmentedButtons(
+            isSelected: [
+              period == Period.month,
+              period == Period.day,
+              period == Period.hour,
+            ],
+            onPressed: (final index) {
+              switch (index) {
+                case 0:
+                  cubit.changePeriod(Period.month);
+                  break;
+                case 1:
+                  cubit.changePeriod(Period.day);
+                  break;
+                case 2:
+                  cubit.changePeriod(Period.hour);
+                  break;
+              }
+            },
+            titles: [
+              'resource_chart.month'.tr(),
+              'resource_chart.day'.tr(),
+              'resource_chart.hour'.tr(),
+            ],
+          ),
         const SizedBox(height: 8),
         ...charts,
       ],

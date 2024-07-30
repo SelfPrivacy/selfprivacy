@@ -95,14 +95,38 @@ class ServerInstallationRepository {
         // We have a server set up, so we load it
         TlsOptions.verifyCertificate = true;
         return ServerInstallationFinished(
-          providerApiToken: providerApiToken!,
-          serverTypeIdentificator: serverTypeIdentificator!,
+          providerApiToken: providerApiToken,
+          serverTypeIdentificator: serverTypeIdentificator,
           dnsApiToken: dnsApiToken!,
           serverDomain: serverDomain!,
           backblazeCredential: backblazeCredential!,
           serverDetails: serverDetails!,
         );
       }
+    }
+
+    // If wizard data has info on the providers, init them
+    if (wizardData.serverProviderType != null &&
+        wizardData.serverProviderType != ServerProviderType.unknown) {
+      ProvidersController.initServerProvider(
+        ServerProviderSettings(
+          provider: wizardData.serverProviderType!,
+          isAuthorized: wizardData.serverProviderKey != null,
+          location: wizardData.serverLocation,
+          token: wizardData.serverProviderKey,
+        ),
+      );
+    }
+
+    if (wizardData.dnsProviderType != null &&
+        wizardData.dnsProviderType != DnsProviderType.unknown) {
+      ProvidersController.initDnsProvider(
+        DnsProviderSettings(
+          provider: wizardData.dnsProviderType!,
+          isAuthorized: wizardData.dnsProviderKey != null,
+          token: wizardData.dnsProviderKey,
+        ),
+      );
     }
 
     if (wizardData.isRecoveringServer && wizardData.serverDomain != null) {
@@ -548,17 +572,23 @@ class ServerInstallationRepository {
         domain: wizardData.serverDomain!,
       ),
     );
-    await getIt<ResourcesModel>().associateServerWithToken(
-      wizardData.serverDetails!.id,
-      wizardData.serverProviderKey!,
-    );
-    await getIt<ResourcesModel>().associateDomainWithToken(
-      wizardData.serverDomain!.domainName,
-      wizardData.dnsProviderKey!,
-    );
-    await getIt<ResourcesModel>().addBackupsCredential(
-      wizardData.backupsCredential!,
-    );
+    if (wizardData.serverProviderKey != null) {
+      await getIt<ResourcesModel>().associateServerWithToken(
+        wizardData.serverDetails!.id,
+        wizardData.serverProviderKey!,
+      );
+    }
+    if (wizardData.dnsProviderKey != null) {
+      await getIt<ResourcesModel>().associateDomainWithToken(
+        wizardData.serverDomain!.domainName,
+        wizardData.dnsProviderKey!,
+      );
+    }
+    if (wizardData.backupsCredential != null) {
+      await getIt<ResourcesModel>().addBackupsCredential(
+        wizardData.backupsCredential!,
+      );
+    }
     await getIt<WizardDataModel>().clearServerInstallation();
   }
 }

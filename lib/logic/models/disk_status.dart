@@ -12,7 +12,7 @@ class DiskVolume {
     this.providerVolume,
   });
 
-  DiskVolume.fromServerDiscVolume(
+  DiskVolume.fromServerAndDiskVolume(
     final ServerDiskVolume volume,
     final ServerProviderVolume? providerVolume,
   ) : this(
@@ -104,7 +104,7 @@ class DiskStatus {
       }
 
       final DiskVolume diskVolume =
-          DiskVolume.fromServerDiscVolume(volume, providerVolume);
+          DiskVolume.fromServerAndDiskVolume(volume, providerVolume);
 
       return diskVolume;
     }).toList();

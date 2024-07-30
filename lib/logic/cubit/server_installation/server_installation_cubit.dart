@@ -552,6 +552,34 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
+  void selectRecoveryMethod(final ServerRecoveryMethods method) {
+    final ServerInstallationRecovery dataState =
+        state as ServerInstallationRecovery;
+    switch (method) {
+      case ServerRecoveryMethods.newDeviceKey:
+        emit(
+          dataState.copyWith(
+            currentStep: RecoveryStep.newDeviceKey,
+          ),
+        );
+        break;
+      case ServerRecoveryMethods.recoveryKey:
+        emit(
+          dataState.copyWith(
+            currentStep: RecoveryStep.recoveryKey,
+          ),
+        );
+        break;
+      case ServerRecoveryMethods.oldToken:
+        emit(
+          dataState.copyWith(
+            currentStep: RecoveryStep.oldToken,
+          ),
+        );
+        break;
+    }
+  }
+
   void tryToRecover(
     final String token,
     final ServerRecoveryMethods method,
@@ -596,8 +624,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         isWithToken: true,
         overrideDomain: serverDomain.domainName,
       ).getDnsProviderType();
-      if (serverProvider == ServerProviderType.unknown ||
-          dnsProvider == DnsProviderType.unknown) {
+      if (dnsProvider == DnsProviderType.unknown) {
         getIt<NavigationService>()
             .showSnackBar('recovering.generic_error'.tr());
         return;
@@ -672,32 +699,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  void selectRecoveryMethod(final ServerRecoveryMethods method) {
-    final ServerInstallationRecovery dataState =
-        state as ServerInstallationRecovery;
-    switch (method) {
-      case ServerRecoveryMethods.newDeviceKey:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.newDeviceKey,
-          ),
-        );
-        break;
-      case ServerRecoveryMethods.recoveryKey:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.recoveryKey,
-          ),
-        );
-        break;
-      case ServerRecoveryMethods.oldToken:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.oldToken,
-          ),
-        );
-        break;
-    }
+  Future<void> skipSettingServerProviderKey() async {
+    emit(
+      (state as ServerInstallationRecovery).copyWith(
+        providerApiToken: null,
+        currentStep: RecoveryStep.dnsProviderToken,
+      ),
+    );
   }
 
   Future<List<ServerBasicInfoWithValidators>> getAvailableServers() async {
@@ -747,7 +755,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         linuxDevice: '',
       ),
       apiToken: dataState.serverDetails!.apiToken,
-      provider: ServerProviderType.hetzner,
+      provider: dataState.serverDetails!.provider,
     );
     await repository.saveDomain(serverDomain);
     await repository.saveServerDetails(serverDetails);
@@ -804,16 +812,23 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveIsServerRebootedFirstTime(true);
     await repository.saveIsServerRebootedSecondTime(true);
     await repository.saveIsRecoveringServer(false);
-    final serverType = await ProvidersController.currentServerProvider!
-        .getServerType(state.serverDetails!.id);
-    await repository.saveServerType(serverType.data!);
-    await ProvidersController.currentServerProvider!
-        .trySetServerLocation(serverType.data!.location.identifier);
+    late final GenericResult<ServerType?>? serverType;
+    if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
+      serverType = await ProvidersController.currentServerProvider
+          ?.getServerType(state.serverDetails!.id);
+      if (serverType != null) {
+        await repository.saveServerType(serverType.data!);
+        await ProvidersController.currentServerProvider!
+            .trySetServerLocation(serverType.data!.location.identifier);
+      }
+    } else {
+      serverType = null;
+    }
     await repository.saveHasFinalChecked(true);
     final ServerInstallationRecovery updatedState =
         (state as ServerInstallationRecovery).copyWith(
       backblazeCredential: backblazeCredential,
-      serverTypeIdentificator: serverType.data!.identifier,
+      serverTypeIdentificator: serverType?.data?.identifier,
     );
     emit(updatedState.finish());
     getIt<ApiConnectionRepository>().init();

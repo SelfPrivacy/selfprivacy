@@ -21,7 +21,7 @@ class ApiAdapter {
 }
 
 class DesecDnsProvider extends DnsProvider {
-  DesecDnsProvider() : _adapter = ApiAdapter();
+  DesecDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
   DesecDnsProvider.load(
     final bool isAuthorized,
     final String? token,
@@ -31,6 +31,9 @@ class DesecDnsProvider extends DnsProvider {
         );
 
   final ApiAdapter _adapter;
+
+  @override
+  bool get isAuthorized => _adapter.api().isWithToken;
 
   @override
   DnsProviderType get type => DnsProviderType.desec;

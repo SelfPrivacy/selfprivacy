@@ -39,7 +39,7 @@ class ApiAdapter {
 }
 
 class HetznerServerProvider extends ServerProvider {
-  HetznerServerProvider() : _adapter = ApiAdapter();
+  HetznerServerProvider() : _adapter = ApiAdapter(isWithToken: false);
   HetznerServerProvider.load(
     final String? location,
     final bool isAuthorized,
@@ -53,6 +53,9 @@ class HetznerServerProvider extends ServerProvider {
   ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.eur);
   int? cachedCoreAmount;
+
+  @override
+  bool get isAuthorized => _adapter.api().isWithToken;
 
   @override
   ServerProviderType get type => ServerProviderType.hetzner;

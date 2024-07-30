@@ -10,10 +10,15 @@ class MetricsLoadException implements Exception {
   final String message;
 }
 
+class MetricsUnsupportedException implements Exception {
+  MetricsUnsupportedException(this.message);
+  final String message;
+}
+
 class MetricsRepository {
   Future<MetricsLoaded> getMetrics(final Period period) async {
-    if (ProvidersController.currentServerProvider == null) {
-      throw MetricsLoadException('Server Provider data is null');
+    if (!(ProvidersController.currentServerProvider?.isAuthorized ?? false)) {
+      throw MetricsUnsupportedException('Server Provider data is null');
     }
 
     final DateTime end = DateTime.now();

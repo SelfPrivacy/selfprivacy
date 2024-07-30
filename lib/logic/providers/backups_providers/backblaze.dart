@@ -37,6 +37,9 @@ class BackblazeBackupsProvider extends BackupsProvider {
   final ApiAdapter _adapter;
 
   @override
+  bool get isAuthorized => _adapter.api().isWithToken;
+
+  @override
   BackupsProviderType get type => BackupsProviderType.backblaze;
 
   @override

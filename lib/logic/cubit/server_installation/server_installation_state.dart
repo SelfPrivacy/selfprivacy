@@ -226,8 +226,8 @@ class ServerInstallationNotFinished extends ServerInstallationState {
       );
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
-        providerApiToken: providerApiToken!,
-        serverTypeIdentificator: serverTypeIdentificator!,
+        providerApiToken: providerApiToken,
+        serverTypeIdentificator: serverTypeIdentificator,
         dnsApiToken: dnsApiToken!,
         backblazeCredential: backblazeCredential!,
         serverDomain: serverDomain!,
@@ -257,12 +257,12 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
 
 class ServerInstallationFinished extends ServerInstallationState {
   const ServerInstallationFinished({
-    required String super.providerApiToken,
-    required String super.serverTypeIdentificator,
     required String super.dnsApiToken,
     required BackupsCredential super.backblazeCredential,
     required ServerDomain super.serverDomain,
     required ServerHostingDetails super.serverDetails,
+    super.providerApiToken,
+    super.serverTypeIdentificator,
   }) : super(
           rootUser: null,
           isServerStarted: true,
@@ -367,8 +367,8 @@ class ServerInstallationRecovery extends ServerInstallationState {
       );
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
-        providerApiToken: providerApiToken!,
-        serverTypeIdentificator: serverTypeIdentificator!,
+        providerApiToken: providerApiToken,
+        serverTypeIdentificator: serverTypeIdentificator,
         dnsApiToken: dnsApiToken!,
         backblazeCredential: backblazeCredential!,
         serverDomain: serverDomain!,

@@ -84,7 +84,11 @@ class _ServerLogsScreenState extends State<ServerLogsScreen> {
     const Key centerKey = ValueKey<String>('server-logs-center-key');
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.serviceId == null ? 'server.logs'.tr() : 'service_page.logs'.tr()),
+        title: Text(
+          widget.serviceId == null
+              ? 'server.logs'.tr()
+              : 'service_page.logs'.tr(),
+        ),
       ),
       endDrawer: BlocBuilder<ServerLogsBloc, ServerLogsState>(
         builder: (final context, final state) {
@@ -160,10 +164,12 @@ class _ServerLogsScreenState extends State<ServerLogsScreen> {
               ],
             );
           } else if (state is ServerLogsError) {
-            return EmptyPagePlaceholder(
-              title: 'basis.error'.tr(),
-              iconData: Icons.error_outline,
-              description: state.error.toString(),
+            return Center(
+              child: EmptyPagePlaceholder(
+                title: 'basis.error'.tr(),
+                iconData: Icons.error_outline,
+                description: state.error.toString(),
+              ),
             );
           }
           return Center(child: Text('server.no_logs'.tr()));

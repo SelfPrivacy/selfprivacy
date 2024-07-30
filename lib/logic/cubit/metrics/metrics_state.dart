@@ -29,3 +29,12 @@ class MetricsLoaded extends MetricsState {
   @override
   List<Object?> get props => [period, metrics];
 }
+
+class MetricsUnsupported extends MetricsState {
+  const MetricsUnsupported(this.period);
+  @override
+  final Period period;
+
+  @override
+  List<Object?> get props => [period];
+}

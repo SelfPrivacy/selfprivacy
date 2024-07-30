@@ -27,7 +27,7 @@ class ApiAdapter {
 }
 
 class CloudflareDnsProvider extends DnsProvider {
-  CloudflareDnsProvider() : _adapter = ApiAdapter();
+  CloudflareDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
   CloudflareDnsProvider.load(
     final bool isAuthorized,
     final String? token,
@@ -37,6 +37,9 @@ class CloudflareDnsProvider extends DnsProvider {
         );
 
   ApiAdapter _adapter;
+
+  @override
+  bool get isAuthorized => _adapter.api().isWithToken;
 
   @override
   DnsProviderType get type => DnsProviderType.cloudflare;

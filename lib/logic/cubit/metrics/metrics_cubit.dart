@@ -52,6 +52,8 @@ class MetricsCubit extends Cubit<MetricsState> {
         Duration(seconds: state.period.stepPeriodInSeconds),
         () => load(state.period),
       );
+    } on MetricsUnsupportedException {
+      emit(MetricsUnsupported(period));
     }
   }
 }

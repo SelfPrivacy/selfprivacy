@@ -21,7 +21,7 @@ class ApiAdapter {
 }
 
 class DigitalOceanDnsProvider extends DnsProvider {
-  DigitalOceanDnsProvider() : _adapter = ApiAdapter();
+  DigitalOceanDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
   DigitalOceanDnsProvider.load(
     final bool isAuthorized,
     final String? token,
@@ -31,6 +31,9 @@ class DigitalOceanDnsProvider extends DnsProvider {
         );
 
   final ApiAdapter _adapter;
+
+  @override
+  bool get isAuthorized => _adapter.api().isWithToken;
 
   @override
   DnsProviderType get type => DnsProviderType.digitalOcean;

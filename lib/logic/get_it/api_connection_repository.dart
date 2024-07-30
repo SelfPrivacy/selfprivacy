@@ -320,20 +320,20 @@ class ApiConnectionRepository {
       await _apiData.serverJobs
           .refetchData(version, () => _dataStream.add(_apiData));
     }
-    await _apiData.backups
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.backupConfig
-        .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.services
         .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.users.refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.volumes
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.settings
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.recoveryKeyStatus
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.devices
         .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.users.refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.settings
+    await _apiData.backupConfig
+        .refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.backups
         .refetchData(version, () => _dataStream.add(_apiData));
   }
 

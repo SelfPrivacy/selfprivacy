@@ -47,7 +47,7 @@ class _TempMessage extends StatelessWidget {
   final String message;
   @override
   Widget build(final BuildContext context) => SizedBox(
-        height: MediaQuery.of(context).size.height - 100,
+        height: 200,
         child: Center(
           child: Text(
             message,

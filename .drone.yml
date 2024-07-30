@@ -65,6 +65,7 @@ steps:
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
       - ln -s /var/lib/drone-runner-exec/fdroid $HOME/fdroid
+      - ln -s /var/lib/drone-runner-exec/.config $HOME/.config
       - if podman volume exists release; then podman volume rm -f release; podman volume create release; else podman volume create release; fi
       - git config user.email "builder@selfprivacy.org"
       - git config user.name "Builder"

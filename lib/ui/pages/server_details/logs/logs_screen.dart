@@ -172,7 +172,7 @@ class _ServerLogsScreenState extends State<ServerLogsScreen> {
               ),
             );
           }
-          return Center(child: Text('server.no_logs'.tr()));
+          return Center(child: Text('server.logs_empty'.tr()));
         },
       ),
     );

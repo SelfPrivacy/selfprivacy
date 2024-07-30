@@ -162,6 +162,10 @@ steps:
       - git add -v *.AppImage *.AppImage.zsync *.flatpak *.apk *.apk.idsig *.aab *.tar.zstd
       - git commit -m Release
       - git archive --format=tar HEAD | podman volume import release -
+    when:
+      status:
+        - failure
+        - success
 
 trigger:
   event:

@@ -184,6 +184,7 @@ steps:
   - name: Prepare
     commands:
       - ln -s /var/lib/drone-runner-exec/.local $HOME/.local
+      - ln -s /var/lib/drone-runner-exec/.config $HOME/.config
       - podman unshare podman volume mount release
 
   - name: Deploy Artifacts to Gitea

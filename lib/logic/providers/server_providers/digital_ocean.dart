@@ -409,7 +409,9 @@ class DigitalOceanServerProvider extends ServerProvider {
     final String location,
   ) async {
     final bool apiInitialized = _adapter.api().isWithToken;
-    if (!apiInitialized) {
+    final String token = _adapter._api.token;
+
+    if (!apiInitialized || token.isEmpty) {
       return GenericResult(
         success: true,
         data: false,
@@ -417,10 +419,11 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    // _adapter = ApiAdapter(
-    //   isWithToken: true,
-    //   region: location,
-    // );
+    _adapter = ApiAdapter(
+      isWithToken: true,
+      region: location,
+      token: token,
+    );
     return success;
   }
 

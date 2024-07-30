@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:hive/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -264,7 +263,7 @@ class ServerInstallationRepository {
     if (result.success && result.data != null) {
       server.copyWith(startTime: result.data);
     } else {
-      getIt<NavigationService>().showSnackBar('jobs.reboot_failed'.tr());
+      // getIt<NavigationService>().showSnackBar('jobs.reboot_failed'.tr());
     }
 
     return server;

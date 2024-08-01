@@ -414,7 +414,8 @@
         "settings": "Налады сервера",
         "enable_ssh": "Уключыць SSH",
         "enable_ssh_hint": "Дазволіць доступ да сервера цераз SSH",
-        "allow_password_authentication": "Дазволіць уваход цераз SSH з дапамогай пароля"
+        "allow_password_authentication": "Дазволіць уваход цераз SSH з дапамогай пароля",
+        "filter_by_systemd_unit": ""
     },
     "not_ready_card": {
         "in_menu": "Сервер яшчэ не наладжаны. Калі ласка, завяршыце наладку з дапамогай майстра наладкі для далейшай працы."

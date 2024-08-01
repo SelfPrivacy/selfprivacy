@@ -44,7 +44,19 @@
         "enable_ssh": "SSH lubamine",
         "allow_password_authentication": "Luba SSH-ga sisselogimine parooli kasutades",
         "enable_ssh_hint": "Luba juurdepääs serverile SSH kaudu",
-        "allow_password_authentication_hint": "Võimaldab kasutajatel SSH kaudu serveriga ühenduda, kasutades oma parooli (ei kehti superkasutajale)"
+        "allow_password_authentication_hint": "Võimaldab kasutajatel SSH kaudu serveriga ühenduda, kasutades oma parooli (ei kehti superkasutajale)",
+        "logs": "Serveri logid",
+        "filter_by_systemd_unit": "Filtreeri systemd üksuse järgi",
+        "all_units": "Kõik üksused",
+        "logs_empty": "Logisid veel pole",
+        "log_dialog": {
+            "metadata": "Metaandmed",
+            "cursor": "Kursor",
+            "priority": "Prioriteet",
+            "systemd_unit": "Systemd üksus",
+            "systemd_slice": "Systemd lõik",
+            "message": "Sõnum"
+        }
     },
     "ssh": {
         "root_subtitle": "Nende võtmete omanikud saavad serverisse täieliku juurdepääsu ja saavad sellega teha mida iganes. Lisage serverisse ainult omaenda võtmed.",
@@ -107,7 +119,10 @@
         "alert": "Häire",
         "copied_to_clipboard": "Kopeeritud lõikelauale!",
         "please_connect": "Palun ühendage oma server, domeen ja DNS teenuse pakkuja, et alustada!",
-        "network_error": "Võrgu viga"
+        "network_error": "Võrgu viga",
+        "server_is_outdated": "See SelfPrivacy versioon nõuab API versiooni {versionConstraint}, kuid teie serveri versioon on {currentVersion}. Mõned funktsioonid ei tööta ja võivad ilmneda vead. Palun uuendage oma server.",
+        "error": "Viga",
+        "feature_unsupported_on_api_version": "See funktsioon on toetatud ainult serveri versioonis {versionConstraint}. Teie serveri versioon on {currentVersion}."
     },
     "more_page": {
         "configuration_wizard": "Seadistusviisard",
@@ -170,7 +185,14 @@
         "cpu_title": "CPU kasutus",
         "network_title": "Võrgu kasutus",
         "in": "Sisse",
-        "out": "Välja"
+        "out": "Välja",
+        "memory": "Mälu kasutamine",
+        "view_usage_by_service": "Vaadake kasutust teenuse järgi",
+        "unsupported": "Ressursikasutuse graafikuid ei saa vaadata ilma serveripakkuja märgita.",
+        "system": "Süsteem",
+        "ssh_users": "SSH kasutajad",
+        "ram_usage": "Keskmine kasutus: {average}. Maksimaalne: {max}.",
+        "failed_to_load_memory_metrics": "Mälu kasutusandmeid ei saanud laadida. See võib olla ühenduse probleem või pole veel piisavalt andmeid."
     },
     "domain": {
         "card_title": "Domeen",
@@ -440,7 +462,15 @@
             "activating": "Aktiveerimine",
             "deactivating": "Deaktiveerimine",
             "reloading": "Taaskäivitamine"
-        }
+        },
+        "invalid_value_detected": "Tuvastatud vale väärtus. Palun muutke see.",
+        "update_job": "Uuenda ülesanne",
+        "logs": "Teenuse logid",
+        "settings": "Teenuse seaded",
+        "modified": "Muutatud",
+        "invalid_input": "Vigane sisend",
+        "create_job": "Loo ülesanne",
+        "wait_for_jobs": "Server on hõivatud teiste ülesannetega. Palun oodake, kuni need on lõpetatud."
     },
     "mail": {
         "login_info": "Kasutage kasutajanime ja parooli kasutajate vahekaardilt. IMAP port on 143 koos STARTTLS, SMTP port on 587 koos STARTTLS."
@@ -485,7 +515,10 @@
         "modal_confirmation_dns_valid": "Vastupidine DNS on kehtiv",
         "modal_confirmation_dns_invalid": "Vastupidine DNS osutab teisele domeenile",
         "modal_confirmation_ip_valid": "IP on sama, mis DNS kirjes",
-        "modal_confirmation_ip_invalid": "IP ei ole sama, mis DNS kirjes"
+        "modal_confirmation_ip_invalid": "IP ei ole sama, mis DNS kirjes",
+        "login_later": "Logige hiljem sisse",
+        "server_provider_unknown": "Tundmatu serveri pakkuja",
+        "server_provider_unknown_description": "Teie serveri pakkujat ei tunta. Saate jätkata ilma API-tokensa sisestamata."
     },
     "video": {
         "login_info": "Konto pole vaja."
@@ -588,7 +621,13 @@
         "change_server_timezone": "Serveri ajavööndi muutmine",
         "change_ssh_settings": "Muuda SSH seadeid",
         "collect_nix_garbage": "Koguge süsteemi prügi",
-        "collect_nix_garbage_failed": "Süsteemi prügi kogumine ebaõnnestus"
+        "collect_nix_garbage_failed": "Süsteemi prügi kogumine ebaõnnestus",
+        "dns_records_changed": "DNS kirjed on uuendatud",
+        "failed_to_load_dns_records": "DNS kirjeid ei õnnestunud laadida",
+        "update_dns_records": "Uuenda DNS kirjeid",
+        "dns_records_did_not_change": "Muutusi pole vajalikud",
+        "ignored_due_to_failures": "Ebaõnnestumiste tõttu jäetud tähelepanuta",
+        "change_service_settings": "Muuda teenuse seadeid {}"
     },
     "validations": {
         "required": "Nõutud",
@@ -641,5 +680,24 @@
         "australia": "Austraalia",
         "united_states": "Ameerika Ühendriigid",
         "finland": "Soome"
+    },
+    "tokens": {
+        "title": "Pakkuja tokenid",
+        "description": "Need tokenid on salvestatud sellele seadmele ja neid kasutatakse SelfPrivacy ühendamiseks teie serveri pakkuja, DNS-pakkuja ja varundusteenuse pakkujaga.",
+        "server_provider_tokens": "Serveri pakkuja tokenid",
+        "dns_provider_tokens": "DNS pakkuja tokenid",
+        "backup_provider_tokens": "Varundusteenuse pakkuja tokenid",
+        "valid": "Kehtiv",
+        "invalid": "Kehtetu",
+        "no_access": "Ei oma ligipääsu seotud ressurssidele",
+        "loading": "Tokeni oleku laadimine",
+        "used_by": "Kasutatakse {servers}.",
+        "check_again": "Kontrollige uuesti",
+        "no_tokens": "Tokenid puuduvad",
+        "server_without_token": "{server_domain} ei oma tokenit {provider} jaoks.",
+        "tap_to_add_token": "Koputage siia, et lisada token",
+        "add_server_provider_token": "Lisa serveri pakkuja token",
+        "server_provider_unknown": "Tundmatu serveri pakkuja",
+        "server_provider_unknown_description": "Teie serveri pakkujat ei toetata selle rakenduse versioonis."
     }
 }

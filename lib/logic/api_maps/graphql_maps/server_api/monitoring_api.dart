@@ -119,4 +119,60 @@ mixin MonitoringApi on GraphQLApiMap {
       );
     }
   }
+
+  Future<GenericResult<DiskMetrics?>> getDiskMetrics({
+    required final int step,
+    required final DateTime start,
+    required final DateTime end,
+  }) async {
+    QueryResult<Query$GetDiskMetrics> response;
+
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Query$GetDiskMetrics(
+        step: step,
+        start: start,
+        end: end,
+      );
+      final query = Options$Query$GetDiskMetrics(variables: variables);
+      response = await client.query$GetDiskMetrics(query);
+      if (response.hasException) {
+        print(response.exception.toString());
+        return GenericResult<DiskMetrics?>(
+          success: false,
+          data: null,
+        );
+      }
+      if (response.parsedData == null) {
+        return GenericResult<DiskMetrics?>(
+          success: false,
+          data: null,
+        );
+      }
+      if (response.parsedData?.monitoring.diskUsage.overallUsage
+          is Fragment$MonitoringQueryError) {
+        return GenericResult<DiskMetrics?>(
+          success: false,
+          data: null,
+        );
+      }
+      final metrics = DiskMetrics.fromGraphQL(
+        data: response.parsedData!.monitoring,
+        stepsInSecond: step,
+        start: start,
+        end: end,
+      );
+      return GenericResult<DiskMetrics?>(
+        success: true,
+        data: metrics,
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult<DiskMetrics?>(
+        success: false,
+        data: null,
+        message: e.toString(),
+      );
+    }
+  }
 }

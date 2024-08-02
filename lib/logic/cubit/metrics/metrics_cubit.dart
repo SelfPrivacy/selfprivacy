@@ -39,30 +39,21 @@ class MetricsCubit extends Cubit<MetricsState> {
 
   void load(final Period period) async {
     try {
-      final MetricsLoaded newState = await repository.getServerMetrics(period);
+      final MetricsStateUpdate newStateUpdate =
+          await repository.getRelevantServerMetrics(period);
+
+      int duration = newStateUpdate.nextCheckInSeconds;
+      if (duration <= 0) {
+        duration = state.period.stepPeriodInSeconds;
+      }
       timer = Timer(
-        Duration(seconds: newState.metrics.stepsInSecond.toInt()),
-        () => load(newState.period),
+        Duration(seconds: duration),
+        () => load(period),
       );
-      emit(newState);
-      return;
-    } catch (_) {}
-    try {
-      final MetricsLoaded newState = await repository.getLegacyMetrics(period);
-      timer = Timer(
-        Duration(seconds: newState.metrics.stepsInSecond.toInt()),
-        () => load(newState.period),
-      );
-      emit(newState);
+
+      emit(newStateUpdate.newState);
     } on StateError {
       print('Tried to emit metrics when cubit is closed');
-    } on MetricsLoadException {
-      timer = Timer(
-        Duration(seconds: state.period.stepPeriodInSeconds),
-        () => load(state.period),
-      );
-    } on MetricsUnsupportedException {
-      emit(MetricsUnsupported(period));
     }
   }
 }

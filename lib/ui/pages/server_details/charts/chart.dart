@@ -145,6 +145,68 @@ class _Chart extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 8),
+        if (state is MetricsLoaded && state.diskMetrics != null)
+          FilledCard(
+            clipped: false,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'resource_chart.network_title'.tr(),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                        ),
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Wrap(
+                          spacing: 8.0,
+                          runSpacing: 8.0,
+                          alignment: WrapAlignment.end,
+                          runAlignment: WrapAlignment.end,
+                          children: [
+                            Legend(
+                              color: Theme.of(context).colorScheme.primary,
+                              text: 'resource_chart.in'.tr(),
+                            ),
+                            Legend(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              text: 'resource_chart.out'.tr(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      getDiskChart(state),
+                      AnimatedOpacity(
+                        duration: const Duration(milliseconds: 200),
+                        opacity: state is MetricsLoading ? 1 : 0,
+                        child: const _GraphLoadingCardContent(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
       ];
     } else if (state is MetricsUnsupported) {
       charts = [
@@ -247,6 +309,23 @@ class _Chart extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget getDiskChart(final MetricsLoaded state) {
+  final data = state.diskMetrics;
+
+  if (data == null) {
+    return const SizedBox();
+  }
+
+  return SizedBox(
+    height: 200,
+    child: DiskChart(
+      listData: data.diskMetrics.values.toList(),
+      period: state.period,
+      start: state.metrics.start,
+    ),
+  );
 }
 
 class _GraphLoadingCardContent extends StatelessWidget {

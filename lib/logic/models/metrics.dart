@@ -146,8 +146,36 @@ class DiskMetrics {
     required this.end,
   });
 
+  DiskMetrics.fromGraphQL({
+    required final Query$GetDiskMetrics$monitoring data,
+    required final int stepsInSecond,
+    required final DateTime start,
+    required final DateTime end,
+  }) : this(
+          stepsInSecond: stepsInSecond,
+          diskMetrics: Map.fromEntries(
+            (data.diskUsage.overallUsage as Fragment$MonitoringMetrics)
+                .metrics
+                .map(
+                  (final metric) => MapEntry(
+                    metric.metricId,
+                    metric.values
+                        .map(
+                          (final value) => TimeSeriesData(
+                            value.timestamp.millisecondsSinceEpoch ~/ 1000,
+                            double.parse(value.value),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+          ),
+          start: start,
+          end: end,
+        );
+
   final num stepsInSecond;
-  final List<TimeSeriesData> diskMetrics;
+  final Map<String, List<TimeSeriesData>> diskMetrics;
 
   final DateTime start;
   final DateTime end;

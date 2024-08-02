@@ -17,9 +17,50 @@ class MetricsUnsupportedException implements Exception {
   final String message;
 }
 
+class MetricsStateUpdate {
+  MetricsStateUpdate(this.newState, this.nextCheckInSeconds);
+  final MetricsState newState;
+  final int nextCheckInSeconds;
+}
+
 class MetricsRepository {
   static const String metricsSupportedVersion = '>=3.3.0';
-  Future<MetricsLoaded> getServerMetrics(final Period period) async {
+
+  Future<MetricsStateUpdate> getRelevantServerMetrics(
+    final Period period,
+  ) async {
+    MetricsLoaded? state;
+    int nextUpdate = 0;
+
+    try {
+      final stateLoaded = await _getServerMetrics(period);
+      nextUpdate = stateLoaded.metrics.stepsInSecond.toInt();
+      state = stateLoaded;
+    } catch (_) {}
+
+    const minAmountForRendering = 20;
+
+    if (state != null &&
+        state.metrics.cpu.length >= minAmountForRendering &&
+        state.metrics.bandwidthIn.length >= minAmountForRendering &&
+        state.metrics.bandwidthOut.length >= minAmountForRendering) {
+      return MetricsStateUpdate(state, nextUpdate);
+    }
+
+    try {
+      final stateLoaded = await _getLegacyMetrics(period);
+      nextUpdate = stateLoaded.metrics.stepsInSecond.toInt();
+      state = stateLoaded;
+    } catch (_) {}
+
+    if (state != null) {
+      return MetricsStateUpdate(state, nextUpdate);
+    }
+
+    return MetricsStateUpdate(MetricsUnsupported(period), nextUpdate);
+  }
+
+  Future<MetricsLoaded> _getServerMetrics(final Period period) async {
     final String? apiVersion =
         getIt<ApiConnectionRepository>().apiData.apiVersion.data;
     if (apiVersion == null) {
@@ -69,15 +110,23 @@ class MetricsRepository {
               step: end.difference(start).inSeconds ~/ 120,
             );
 
+    final diskResult =
+        await getIt<ApiConnectionRepository>().api.getDiskMetrics(
+              start: start,
+              end: end,
+              step: end.difference(start).inSeconds ~/ 120,
+            );
+
     return MetricsLoaded(
       period: period,
       metrics: result.data!,
       source: MetricsDataSource.server,
       memoryMetrics: memoryResult.data,
+      diskMetrics: diskResult.data,
     );
   }
 
-  Future<MetricsLoaded> getLegacyMetrics(final Period period) async {
+  Future<MetricsLoaded> _getLegacyMetrics(final Period period) async {
     if (!(ProvidersController.currentServerProvider?.isAuthorized ?? false)) {
       throw MetricsUnsupportedException('Server Provider data is null');
     }

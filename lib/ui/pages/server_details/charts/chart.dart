@@ -161,7 +161,7 @@ class _Chart extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          'resource_chart.network_title'.tr(),
+                          'resource_chart.disk_title'.tr(),
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: Theme.of(context)
@@ -177,16 +177,16 @@ class _Chart extends StatelessWidget {
                           runSpacing: 8.0,
                           alignment: WrapAlignment.end,
                           runAlignment: WrapAlignment.end,
-                          children: [
-                            Legend(
-                              color: Theme.of(context).colorScheme.primary,
-                              text: 'resource_chart.in'.tr(),
-                            ),
-                            Legend(
-                              color: Theme.of(context).colorScheme.tertiary,
-                              text: 'resource_chart.out'.tr(),
-                            ),
-                          ],
+                          children: state.diskMetrics?.diskMetrics.keys
+                                  .map<Widget>(
+                                    (final diskId) => Legend(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      text: diskId,
+                                    ),
+                                  )
+                                  .toList() ??
+                              [],
                         ),
                       ),
                     ],
@@ -321,7 +321,7 @@ Widget getDiskChart(final MetricsLoaded state) {
   return SizedBox(
     height: 200,
     child: DiskChart(
-      listData: data.diskMetrics.values.toList(),
+      diskData: data.diskMetrics,
       period: state.period,
       start: state.metrics.start,
     ),

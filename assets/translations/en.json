@@ -136,6 +136,7 @@
         "day": "Day",
         "hour": "Hour",
         "cpu_title": "CPU Usage",
+        "disk_title": "Disk Usage",
         "network_title": "Network Usage",
         "in": "In",
         "out": "Out",

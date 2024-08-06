@@ -29,8 +29,11 @@ class ServerLogEntry extends Equatable {
   final String? systemdUnit;
   final DateTime timestamp;
 
-  static final DateFormat _formatter = DateFormat('hh:mm:ss');
-  String get timeString => _formatter.format(timestamp);
+  static final DateFormat _formatter = DateFormat('HH:mm:ss');
+  String get utcTimeString => _formatter.format(timestamp);
+  String get localTimeString => _formatter.format(timestamp.toLocal());
+  String localDateString(final String locale) =>
+      DateFormat.yMMMMEEEEd(locale).format(timestamp.toLocal());
   String get fullUTCString => timestamp.toUtc().toIso8601String();
 
   @override

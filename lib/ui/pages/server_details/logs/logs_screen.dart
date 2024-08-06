@@ -203,7 +203,7 @@ class LogEntryWidget extends StatelessWidget {
             style: DefaultTextStyle.of(context).style,
             children: <TextSpan>[
               TextSpan(
-                text: '${logEntry.timeString}: ',
+                text: '${logEntry.localTimeString}: ',
                 style: TextStyle(
                   fontFeatures: const [FontFeature.tabularFigures()],
                   color: color,
@@ -246,7 +246,7 @@ class ServerLogEntryDialog extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => AlertDialog(
         scrollable: true,
-        title: Text(log.timeString),
+        title: Text(log.localTimeString),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 16,
           horizontal: 12,
@@ -255,27 +255,11 @@ class ServerLogEntryDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: SelectableText.rich(
-                TextSpan(
-                  style: DefaultTextStyle.of(context).style,
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: '${'console_page.logged_at'.tr()}: ',
-                      style: const TextStyle(),
-                    ),
-                    TextSpan(
-                      text: '${log.timeString} (${log.fullUTCString})',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontFeatures: [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            _KeyValueRow(
+              'console_page.logged_at'.tr(),
+              '${log.localTimeString} (${log.localDateString(context.locale.languageCode)})',
             ),
+            _KeyValueRow('UTC', log.fullUTCString),
             const Divider(),
             _SectionRow('server.log_dialog.metadata'.tr()),
             _KeyValueRow('server.log_dialog.cursor'.tr(), log.cursor),

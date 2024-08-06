@@ -45,6 +45,7 @@ class ApiConnectionRepository {
   Timer? _timer;
 
   StreamSubscription<List<ServerJob>>? _serverJobsStreamSubscription;
+  DateTime? _jobsStreamDisconnectTime;
 
   Future<void> removeServerJob(final String uid) async {
     await api.removeApiJob(uid);
@@ -291,10 +292,12 @@ class ApiConnectionRepository {
 
     if (VersionConstraint.parse(wsJobsUpdatesSupportedVersion)
         .allows(Version.parse(apiVersion))) {
-      _serverJobsStreamSubscription =
-          api.getServerJobsStream().listen((final List<ServerJob> jobs) {
+      _serverJobsStreamSubscription = api
+          .getServerJobsStream(onConnectionLost: _handleWebsocketDisconnect)
+          .listen((final List<ServerJob> jobs) {
         _apiData.serverJobs.data = jobs;
         _dataStream.add(_apiData);
+        _jobsStreamDisconnectTime = null;
       });
     }
 
@@ -314,9 +317,26 @@ class ApiConnectionRepository {
 
   static const String wsJobsUpdatesSupportedVersion = '>=3.3.0';
 
+  bool _isForceServerJobsRefetchRequired() {
+    if (_serverJobsStreamSubscription == null) {
+      return true;
+    }
+    return _apiData.serverJobs.data == null ||
+        (_jobsStreamDisconnectTime != null &&
+            DateTime.now().difference(_jobsStreamDisconnectTime!) <
+                const Duration(seconds: 120));
+  }
+
+  Future<Duration?>? _handleWebsocketDisconnect(
+    final int? code,
+    final String? reason,
+  ) {
+    _jobsStreamDisconnectTime = DateTime.now();
+    return null;
+  }
+
   Future<void> _refetchEverything(final Version version) async {
-    if (_serverJobsStreamSubscription == null ||
-        _apiData.serverJobs.data == null) {
+    if (_isForceServerJobsRefetchRequired()) {
       await _apiData.serverJobs
           .refetchData(version, () => _dataStream.add(_apiData));
     }

@@ -22,8 +22,12 @@ mixin JobsApi on GraphQLApiMap {
     return jobsList;
   }
 
-  Stream<List<ServerJob>> getServerJobsStream() async* {
-    final GraphQLClient client = await getSubscriptionClient();
+  Stream<List<ServerJob>> getServerJobsStream({
+    final Future<Duration?>? Function(int?, String?)? onConnectionLost,
+  }) async* {
+    final GraphQLClient client = await getSubscriptionClient(
+      onConnectionLost: onConnectionLost,
+    );
     final subscription = client.subscribe$JobUpdates();
     await for (final response in subscription) {
       final jobsList = response.parsedData?.jobUpdates

@@ -97,12 +97,15 @@ abstract class GraphQLApiMap {
     );
   }
 
-  Future<GraphQLClient> getSubscriptionClient() async {
+  Future<GraphQLClient> getSubscriptionClient({
+    final Future<Duration?>? Function(int?, String?)? onConnectionLost,
+  }) async {
     final WebSocketLink webSocketLink = WebSocketLink(
       'ws://api.$rootAddress/graphql',
       // Only [GraphQLProtocol.graphqlTransportWs] supports automatic pings, so we don't disconnect when nothing happens.
       subProtocol: GraphQLProtocol.graphqlTransportWs,
       config: SocketClientConfig(
+        onConnectionLost: onConnectionLost,
         autoReconnect: true,
         initialPayload: _token.isEmpty
             ? null

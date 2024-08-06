@@ -63,7 +63,7 @@ class _ServicePageState extends State<ServicePage> {
       children: [
         ServiceStatusCard(status: service.status),
         const SizedBox(height: 16),
-        if (service.url != null)
+        if (service.url != null && !serviceDisabled)
           ListTile(
             iconColor: Theme.of(context).colorScheme.onBackground,
             onTap: () => launchURL(service.url),

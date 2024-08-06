@@ -160,7 +160,9 @@ class _Card extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8),
-                  if (service.url != '' && service.url != null)
+                  if (service.url != '' &&
+                      service.url != null &&
+                      service.isEnabled)
                     Column(
                       children: [
                         _ServiceLink(

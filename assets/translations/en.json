@@ -136,16 +136,24 @@
         "day": "Day",
         "hour": "Hour",
         "cpu_title": "CPU Usage",
+        "cpu_chart_screen_reader_explanation": "This chart shows the CPU usage in last {period}. The last value is at {lastValue}%. The average usage is at {averageUsage}%. The maximal usage is at {maxUsage}% at {maxUsageTime}.",
         "disk_title": "Disk Usage",
+        "disk_chart_screen_reader_explanation": {
+            "beginning": "This chart shows the disk usage in last {period}. ",
+            "disk": "For {disk} the consumption went from {beginningValue}% to {endValue}%. "
+        },
         "network_title": "Network Usage",
+        "network_chart_screen_reader_explanation": "This chart shows the network usage in last {period}. The last value is at {lastValueIn} inbound and {lastValueOut} outbound. The average usage is at {averageUsageIn} inbound and {averageUsageOut} outbound. The maximal inbound usage is at {maxUsageIn} at {maxUsageTimeIn} and maximal outbound {maxUsageOut} at {maxUsageTimeOut} out.",
         "in": "In",
         "out": "Out",
         "memory": "Memory usage",
+        "memory_chart_screen_reader_explanation": "This chart shows the memory usage in last {period}. The last value is at {lastValue}%. The average usage is at {averageUsage}%. The maximal usage is at {maxUsage}% at {maxUsageTime}.",
         "view_usage_by_service": "View usage by service",
         "unsupported": "You can't view resource usage charts without the server provider token.",
         "system": "System",
         "ssh_users": "SSH users",
         "ram_usage": "Average usage: {average}. Maximum: {max}.",
+        "loading": "The chart is loading…",
         "failed_to_load_memory_metrics": "Couldn't load memory usage data. This might be a connection issue, or there is not enough data yet."
     },
     "server": {

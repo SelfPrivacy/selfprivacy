@@ -32,6 +32,36 @@ class DiskChart extends StatelessWidget {
     return res;
   }
 
+  String screenReaderDescription(final BuildContext context) {
+    final buffer = StringBuffer();
+    buffer.write(
+      'resource_chart.disk_chart_screen_reader_explanation.beginning'.tr(
+        namedArgs: {
+          'period': 'resource_chart.${period.name}'.tr(),
+        },
+      ),
+    );
+
+    for (final disk in diskData) {
+      final lastData = disk.diskData.last;
+      final lastValue = lastData.value;
+
+      final firstData = disk.diskData.first;
+      final firstValue = firstData.value;
+
+      buffer.write(
+        'resource_chart.disk_chart_screen_reader_explanation.disk'.tr(
+          namedArgs: {
+            'disk': disk.volume.displayName,
+            'beginningValue': firstValue.toStringAsFixed(1),
+            'endValue': lastValue.toStringAsFixed(1),
+          },
+        ),
+      );
+    }
+    return buffer.toString();
+  }
+
   @override
   Widget build(final BuildContext context) {
     final diskDataMax = [
@@ -39,142 +69,137 @@ class DiskChart extends StatelessWidget {
         (final disk) => disk.diskData.map((final e) => e.value).toList(),
       ),
     ].expand((final x) => x).reduce(max);
-    return LineChart(
-      LineChartData(
-        lineTouchData: LineTouchData(
-          enabled: true,
-          touchTooltipData: LineTouchTooltipData(
-            getTooltipColor: (final LineBarSpot _) =>
-                Theme.of(context).colorScheme.surface,
-            tooltipPadding: const EdgeInsets.all(8),
-            getTooltipItems: (final List<LineBarSpot> touchedBarSpots) {
-              final List<LineTooltipItem> res = [];
+    return Semantics(
+      label: screenReaderDescription(context),
+      child: LineChart(
+        LineChartData(
+          lineTouchData: LineTouchData(
+            enabled: true,
+            touchTooltipData: LineTouchTooltipData(
+              getTooltipColor: (final LineBarSpot _) =>
+                  Theme.of(context).colorScheme.surface,
+              tooltipPadding: const EdgeInsets.all(8),
+              getTooltipItems: (final List<LineBarSpot> touchedBarSpots) {
+                final List<LineTooltipItem> res = [];
 
-              bool timeShown = false;
-              for (final spot in touchedBarSpots) {
-                final value = spot.y;
-                final date = diskData.first.diskData[spot.x.toInt()].time;
+                bool timeShown = false;
+                for (final spot in touchedBarSpots) {
+                  final value = spot.y;
+                  final date = diskData.first.diskData[spot.x.toInt()].time;
 
-                res.add(
-                  LineTooltipItem(
-                    '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${diskData[spot.barIndex].volume.displayName} ${value.toInt()}%',
-                    TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontWeight: FontWeight.bold,
+                  res.add(
+                    LineTooltipItem(
+                      '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${diskData[spot.barIndex].volume.displayName} ${value.toInt()}%',
+                      TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+
+                  timeShown = true;
+                }
+
+                return res;
+              },
+            ),
+          ),
+          lineBarsData: diskData
+              .map<LineChartBarData>(
+                (final disk) => LineChartBarData(
+                  spots: getSpots(disk.diskData),
+                  isCurved: false,
+                  barWidth: 2,
+                  color: disk.color,
+                  dotData: const FlDotData(
+                    show: false,
+                  ),
+                  belowBarData: BarAreaData(
+                    show: true,
+                    gradient: LinearGradient(
+                      colors: [
+                        disk.color.withOpacity(0.5),
+                        disk.color.withOpacity(0.0),
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
                     ),
                   ),
-                );
-
-                timeShown = true;
-              }
-
-              return res;
-            },
-          ),
-        ),
-        lineBarsData: diskData
-            .map<LineChartBarData>(
-              (final disk) => LineChartBarData(
-                spots: getSpots(disk.diskData),
-                isCurved: false,
-                barWidth: 2,
-                color: disk.color,
-                dotData: const FlDotData(
-                  show: false,
                 ),
-                belowBarData: BarAreaData(
-                  show: true,
-                  gradient: LinearGradient(
-                    colors: [
-                      disk.color.withOpacity(0.5),
-                      disk.color.withOpacity(0.0),
-                    ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
+              )
+              .toList(),
+          minY: 0,
+          maxY: 100,
+          minX: 0,
+          titlesData: FlTitlesData(
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                interval: 40,
+                reservedSize: 30,
+                getTitlesWidget: (final value, final titleMeta) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ExcludeSemantics(
+                    child: Text(
+                      bottomTitle(
+                        value.toInt(),
+                        diskData.first.diskData,
+                        period,
+                      ),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                    ),
                   ),
                 ),
+                showTitles: true,
               ),
-            )
-            .toList(),
-        minY: 0,
-        maxY: 100,
-        minX: 0,
-        titlesData: FlTitlesData(
-          topTitles: const AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              interval: 40,
-              reservedSize: 30,
-              getTitlesWidget: (final value, final titleMeta) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  bottomTitle(
-                    value.toInt(),
-                    diskData.first.diskData,
-                    period,
-                  ),
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                ),
+            ),
+            leftTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            rightTitles: const AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: false,
               ),
-              showTitles: true,
             ),
           ),
-          leftTitles: const AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: true,
+            verticalInterval: 40,
+            horizontalInterval: diskDataMax * 2 / 6.5,
+            getDrawingHorizontalLine: (final value) => FlLine(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+              strokeWidth: 1,
+            ),
+            getDrawingVerticalLine: (final value) => FlLine(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+              strokeWidth: 1,
+            ),
           ),
-          rightTitles: AxisTitles(
-            sideTitles: SideTitles(
-              reservedSize: 50,
-              getTitlesWidget: (final value, final titleMeta) => Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: Text(
-                  '${value.toInt()}%',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                ),
+          borderData: FlBorderData(
+            show: true,
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                width: 1,
               ),
-              interval: diskDataMax * 2 / 6.5,
-              showTitles: true,
-            ),
-          ),
-        ),
-        gridData: FlGridData(
-          show: true,
-          drawVerticalLine: true,
-          verticalInterval: 40,
-          horizontalInterval: diskDataMax * 2 / 6.5,
-          getDrawingHorizontalLine: (final value) => FlLine(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-            strokeWidth: 1,
-          ),
-          getDrawingVerticalLine: (final value) => FlLine(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-            strokeWidth: 1,
-          ),
-        ),
-        borderData: FlBorderData(
-          show: true,
-          border: Border(
-            bottom: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-              width: 1,
-            ),
-            left: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-              width: 1,
-            ),
-            right: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-              width: 1,
-            ),
-            top: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-              width: 1,
+              left: BorderSide(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                width: 1,
+              ),
+              right: BorderSide(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                width: 1,
+              ),
+              top: BorderSide(
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                width: 1,
+              ),
             ),
           ),
         ),

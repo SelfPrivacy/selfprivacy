@@ -60,6 +60,7 @@ class _Chart extends StatelessWidget {
         if (!(state is MetricsLoaded && state.memoryMetrics == null))
           FilledCard(
             clipped: false,
+            mergeSemantics: false,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -110,42 +111,44 @@ class _Chart extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        'resource_chart.network_title'.tr(),
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                ),
+                ExcludeSemantics(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'resource_chart.network_title'.tr(),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Wrap(
-                        spacing: 8.0,
-                        runSpacing: 8.0,
-                        alignment: WrapAlignment.end,
-                        runAlignment: WrapAlignment.end,
-                        children: [
-                          Legend(
-                            color: Theme.of(context).colorScheme.primary,
-                            text: 'resource_chart.in'.tr(),
-                          ),
-                          Legend(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            text: 'resource_chart.out'.tr(),
-                          ),
-                        ],
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Wrap(
+                          spacing: 8.0,
+                          runSpacing: 8.0,
+                          alignment: WrapAlignment.end,
+                          runAlignment: WrapAlignment.end,
+                          children: [
+                            Legend(
+                              color: Theme.of(context).colorScheme.primary,
+                              text: 'resource_chart.in'.tr(),
+                            ),
+                            Legend(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              text: 'resource_chart.out'.tr(),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Stack(
@@ -205,42 +208,44 @@ class _Chart extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              'resource_chart.disk_title'.tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
-                            ),
-                          ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Wrap(
-                              spacing: 8.0,
-                              runSpacing: 8.0,
-                              alignment: WrapAlignment.end,
-                              runAlignment: WrapAlignment.end,
-                              children: disksGraphData
-                                  .map<Widget>(
-                                    (final disk) => Legend(
-                                      color: disk.color,
-                                      text: disk.volume.displayName,
+                      ExcludeSemantics(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                'resource_chart.disk_title'.tr(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
                                     ),
-                                  )
-                                  .toList(),
+                              ),
                             ),
-                          ),
-                        ],
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Wrap(
+                                spacing: 8.0,
+                                runSpacing: 8.0,
+                                alignment: WrapAlignment.end,
+                                runAlignment: WrapAlignment.end,
+                                children: disksGraphData
+                                    .map<Widget>(
+                                      (final disk) => Legend(
+                                        color: disk.color,
+                                        text: disk.volume.displayName,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Stack(
@@ -390,9 +395,12 @@ class _GraphLoadingCardContent extends StatelessWidget {
   const _GraphLoadingCardContent();
 
   @override
-  Widget build(final BuildContext context) => const SizedBox(
+  Widget build(final BuildContext context) => SizedBox(
         height: 200,
-        child: Center(child: CircularProgressIndicator.adaptive()),
+        child: Semantics(
+          label: 'resource_chart.loading'.tr(),
+          child: const Center(child: CircularProgressIndicator.adaptive()),
+        ),
       );
 }
 

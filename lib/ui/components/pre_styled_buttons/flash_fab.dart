@@ -75,6 +75,7 @@ class _BrandFabState extends State<BrandFab>
           );
         },
         isExtended: widget.extended,
+        tooltip: 'jobs.title'.tr(),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

@@ -7,6 +7,7 @@ class FilledCard extends StatelessWidget {
     this.tertiary = false,
     this.error = false,
     this.clipped = true,
+    this.mergeSemantics = true,
     super.key,
   });
 
@@ -15,6 +16,7 @@ class FilledCard extends StatelessWidget {
   final bool error;
   final bool clipped;
   final bool secondary;
+  final bool mergeSemantics;
   @override
   Widget build(final BuildContext context) => Card(
         elevation: 0.0,
@@ -29,6 +31,7 @@ class FilledCard extends StatelessWidget {
                 : tertiary
                     ? Theme.of(context).colorScheme.tertiaryContainer
                     : Theme.of(context).colorScheme.surfaceVariant,
+        semanticContainer: mergeSemantics,
         child: child,
       );
 }

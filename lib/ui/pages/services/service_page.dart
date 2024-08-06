@@ -47,6 +47,16 @@ class _ServicePageState extends State<ServicePage> {
     final bool serviceLocked =
         context.watch<ServicesBloc>().state.isServiceLocked(service.id);
 
+    final bool isRestartingEnabled = !serviceDisabled && !serviceLocked;
+    final bool isMovingEnabled = !serviceDisabled &&
+        !serviceLocked &&
+        service.storageUsage.volume != null;
+
+    final enabledTitleStyle = Theme.of(context).textTheme.titleMedium;
+    final disabledTitleStyle = enabledTitleStyle?.copyWith(
+      color: Theme.of(context).colorScheme.outline,
+    );
+
     return BrandHeroScreen(
       hasBackButton: true,
       hasFlashButton: true,
@@ -75,7 +85,7 @@ class _ServicePageState extends State<ServicePage> {
             leading: const Icon(Icons.open_in_browser),
             title: Text(
               'service_page.open_in_browser'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
+              style: enabledTitleStyle,
             ),
             subtitle: Text(
               service.url!.replaceAll('https://', ''),
@@ -92,9 +102,9 @@ class _ServicePageState extends State<ServicePage> {
           leading: const Icon(Icons.restart_alt_outlined),
           title: Text(
             'service_page.restart'.tr(),
-            style: Theme.of(context).textTheme.titleMedium,
+            style: isRestartingEnabled ? enabledTitleStyle : disabledTitleStyle,
           ),
-          enabled: !serviceDisabled && !serviceLocked,
+          enabled: isRestartingEnabled,
         ),
         if (!service.isRequired)
           ListTile(
@@ -110,7 +120,7 @@ class _ServicePageState extends State<ServicePage> {
               serviceDisabled
                   ? 'service_page.enable'.tr()
                   : 'service_page.disable'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
+              style: !serviceLocked ? enabledTitleStyle : disabledTitleStyle,
             ),
             enabled: !serviceLocked,
           ),
@@ -123,7 +133,7 @@ class _ServicePageState extends State<ServicePage> {
             leading: const Icon(Icons.settings_outlined),
             title: Text(
               'service_page.settings'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
+              style: enabledTitleStyle,
             ),
           ),
         if (service.isMovable)
@@ -140,7 +150,7 @@ class _ServicePageState extends State<ServicePage> {
             leading: const Icon(Icons.drive_file_move_outlined),
             title: Text(
               'service_page.move'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
+              style: isMovingEnabled ? enabledTitleStyle : disabledTitleStyle,
             ),
             subtitle: Text(
               'service_page.uses'.tr(
@@ -153,11 +163,12 @@ class _ServicePageState extends State<ServicePage> {
                       .displayName,
                 },
               ),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.outline),
             ),
-            enabled: !serviceDisabled &&
-                !serviceLocked &&
-                service.storageUsage.volume != null,
+            enabled: isMovingEnabled,
           ),
         if (service.canBeBackedUp)
           ListTile(
@@ -169,7 +180,7 @@ class _ServicePageState extends State<ServicePage> {
             leading: const Icon(Icons.settings_backup_restore_outlined),
             title: Text(
               'service_page.snapshots'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
+              style: enabledTitleStyle,
             ),
           ),
         ListTile(
@@ -180,7 +191,7 @@ class _ServicePageState extends State<ServicePage> {
           leading: const Icon(Icons.manage_search_outlined),
           title: Text(
             'service_page.logs'.tr(),
-            style: Theme.of(context).textTheme.titleMedium,
+            style: enabledTitleStyle,
           ),
         ),
       ],

@@ -34,7 +34,7 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
   @override
   Widget build(final BuildContext context) {
     final String? encryptionKey =
-        context.watch<BackupsBloc>().state.backblazeBucket?.encryptionKey;
+        context.watch<BackupsBloc>().state.encryptionKey;
     if (encryptionKey == null) {
       return ListView(
         controller: widget.scrollController,

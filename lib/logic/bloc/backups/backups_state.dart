@@ -24,6 +24,8 @@ sealed class BackupsState extends Equatable {
 
   AutobackupQuotas? get autobackupQuotas => null;
 
+  String? get encryptionKey => null;
+
   BackupsState copyWith({required final BackblazeBucket backblazeBucket});
 }
 
@@ -113,6 +115,9 @@ class BackupsInitialized extends BackupsState {
 
   @override
   AutobackupQuotas? get autobackupQuotas => _backupConfig?.autobackupQuotas;
+
+  @override
+  String? get encryptionKey => _backupConfig?.encryptionKey;
 
   @override
   Duration? get autobackupPeriod =>

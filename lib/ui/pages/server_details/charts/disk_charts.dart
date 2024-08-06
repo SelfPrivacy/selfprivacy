@@ -4,9 +4,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/bottom_title.dart';
+import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
 
 class DiskChart extends StatelessWidget {
   const DiskChart({
@@ -16,7 +16,7 @@ class DiskChart extends StatelessWidget {
     super.key,
   });
 
-  final Map<String, List<TimeSeriesData>> diskData;
+  final List<DiskGraphData> diskData;
   final Period period;
   final DateTime start;
 
@@ -34,10 +34,9 @@ class DiskChart extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final anyDiskId = diskData.keys.toList()[0];
     final diskDataMax = [
-      ...diskData.values.map<List<double>>(
-        (final timeData) => timeData.map((final e) => e.value).toList(),
+      ...diskData.map<List<double>>(
+        (final disk) => disk.diskData.map((final e) => e.value).toList(),
       ),
     ].expand((final x) => x).reduce(max);
     return LineChart(
@@ -54,11 +53,11 @@ class DiskChart extends StatelessWidget {
               bool timeShown = false;
               for (final spot in touchedBarSpots) {
                 final value = spot.y;
-                final date = diskData[anyDiskId]![spot.x.toInt()].time;
+                final date = diskData.first.diskData[spot.x.toInt()].time;
 
                 res.add(
                   LineTooltipItem(
-                    '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${diskData.keys.toList()[spot.barIndex]} ${value.toInt()}%',
+                    '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${diskData[spot.barIndex].volume.displayName} ${value.toInt()}%',
                     TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
@@ -73,14 +72,13 @@ class DiskChart extends StatelessWidget {
             },
           ),
         ),
-        lineBarsData: diskData.values
-            .toList()
+        lineBarsData: diskData
             .map<LineChartBarData>(
-              (final timeData) => LineChartBarData(
-                spots: getSpots(timeData),
+              (final disk) => LineChartBarData(
+                spots: getSpots(disk.diskData),
                 isCurved: false,
                 barWidth: 2,
-                color: Theme.of(context).colorScheme.primary,
+                color: disk.color,
                 dotData: const FlDotData(
                   show: false,
                 ),
@@ -88,8 +86,8 @@ class DiskChart extends StatelessWidget {
                   show: true,
                   gradient: LinearGradient(
                     colors: [
-                      Theme.of(context).colorScheme.primary.withOpacity(0.5),
-                      Theme.of(context).colorScheme.primary.withOpacity(0.0),
+                      disk.color.withOpacity(0.5),
+                      disk.color.withOpacity(0.0),
                     ],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
@@ -114,7 +112,7 @@ class DiskChart extends StatelessWidget {
                 child: Text(
                   bottomTitle(
                     value.toInt(),
-                    diskData[anyDiskId]!,
+                    diskData.first.diskData,
                     period,
                   ),
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(

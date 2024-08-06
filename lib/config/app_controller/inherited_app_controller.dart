@@ -5,7 +5,7 @@ import 'package:selfprivacy/config/app_controller/app_controller.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/preferences_repository/inherited_preferences_repository.dart';
 import 'package:selfprivacy/config/preferences_repository/preferences_repository.dart';
-import 'package:selfprivacy/theming/factory/app_theme_factory.dart';
+import 'package:selfprivacy/theming/app_theme_factory.dart';
 
 class _AppControllerInjector extends InheritedNotifier<AppController> {
   const _AppControllerInjector({

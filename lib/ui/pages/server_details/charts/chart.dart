@@ -7,6 +7,24 @@ class _Chart extends StatelessWidget {
     final Period period = cubit.state.period;
     final MetricsState state = cubit.state;
     List<Widget> charts;
+
+    List<Color> getGraphColors(final BuildContext context, final int length) {
+      final colors = [
+        Theme.of(context).colorScheme.primary,
+        Theme.of(context).colorScheme.tertiary,
+        Theme.of(context).colorScheme.secondary,
+        ...harmonizedBasicColors(context),
+      ];
+      if (length <= colors.length) {
+        return colors.sublist(0, length);
+      } else {
+        return List.generate(
+          length,
+          (final index) => colors[index % colors.length],
+        );
+      }
+    }
+
     if (state is MetricsLoaded || state is MetricsLoading) {
       charts = [
         FilledCard(
@@ -146,66 +164,103 @@ class _Chart extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        if (state is MetricsLoaded && state.diskMetrics != null)
-          FilledCard(
-            clipped: false,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        if (!(state is MetricsLoaded && state.diskMetrics == null))
+          Builder(
+            builder: (final context) {
+              List<DiskGraphData> getDisksGraphData(
+                final BuildContext context,
+              ) {
+                if (state is! MetricsLoaded) {
+                  return [];
+                }
+                final diskData = state.diskMetrics?.diskMetrics;
+                if (diskData == null) {
+                  return [];
+                }
+                final List<DiskGraphData> res = [];
+                final colors = getGraphColors(context, diskData.keys.length);
+                for (final entry in diskData.entries) {
+                  res.add(
+                    DiskGraphData(
+                      volume: context
+                          .read<VolumesBloc>()
+                          .state
+                          .getVolume(entry.key.split('/').last),
+                      color: colors[diskData.keys.toList().indexOf(entry.key)],
+                      diskData: entry.value,
+                      originalId: entry.key,
+                    ),
+                  );
+                }
+
+                return res;
+              }
+
+              final disksGraphData = getDisksGraphData(context);
+
+              return FilledCard(
+                clipped: false,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Flexible(
-                        child: Text(
-                          'resource_chart.disk_title'.tr(),
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              'resource_chart.disk_title'.tr(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurfaceVariant,
                                   ),
-                        ),
-                      ),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Wrap(
-                          spacing: 8.0,
-                          runSpacing: 8.0,
-                          alignment: WrapAlignment.end,
-                          runAlignment: WrapAlignment.end,
-                          children: state.diskMetrics?.diskMetrics.keys
+                            ),
+                          ),
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: Wrap(
+                              spacing: 8.0,
+                              runSpacing: 8.0,
+                              alignment: WrapAlignment.end,
+                              runAlignment: WrapAlignment.end,
+                              children: disksGraphData
                                   .map<Widget>(
-                                    (final diskId) => Legend(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      text: diskId,
+                                    (final disk) => Legend(
+                                      color: disk.color,
+                                      text: disk.volume.displayName,
                                     ),
                                   )
-                                  .toList() ??
-                              [],
-                        ),
+                                  .toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          if (state is MetricsLoaded &&
+                              state.diskMetrics != null)
+                            getDiskChart(state, disksGraphData),
+                          AnimatedOpacity(
+                            duration: const Duration(milliseconds: 200),
+                            opacity: state is MetricsLoading ? 1 : 0,
+                            child: const _GraphLoadingCardContent(),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      getDiskChart(state),
-                      AnimatedOpacity(
-                        duration: const Duration(milliseconds: 200),
-                        opacity: state is MetricsLoading ? 1 : 0,
-                        child: const _GraphLoadingCardContent(),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
       ];
     } else if (state is MetricsUnsupported) {
@@ -311,7 +366,10 @@ class _Chart extends StatelessWidget {
   }
 }
 
-Widget getDiskChart(final MetricsLoaded state) {
+Widget getDiskChart(
+  final MetricsLoaded state,
+  final List<DiskGraphData> diskData,
+) {
   final data = state.diskMetrics;
 
   if (data == null) {
@@ -321,7 +379,7 @@ Widget getDiskChart(final MetricsLoaded state) {
   return SizedBox(
     height: 200,
     child: DiskChart(
-      diskData: data.diskMetrics,
+      diskData: diskData,
       period: state.period,
       start: state.metrics.start,
     ),
@@ -382,4 +440,18 @@ class _ColoredBox extends StatelessWidget {
           ),
         ),
       );
+}
+
+class DiskGraphData {
+  DiskGraphData({
+    required this.volume,
+    required this.color,
+    required this.diskData,
+    required this.originalId,
+  });
+
+  final DiskVolume volume;
+  final Color color;
+  final List<TimeSeriesData> diskData;
+  final String originalId;
 }

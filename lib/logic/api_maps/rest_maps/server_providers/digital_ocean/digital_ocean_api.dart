@@ -147,7 +147,7 @@ class DigitalOceanApi extends RestApiMap {
   Future<GenericResult<bool>> isApiTokenValid(final String token) async {
     bool isValid = false;
     Response? response;
-    String message = '';
+    String? message;
     final Dio client = await getClient();
     try {
       response = await client.get(
@@ -175,9 +175,12 @@ class DigitalOceanApi extends RestApiMap {
       );
     }
 
+    message = response.statusMessage;
+
     if (response.statusCode == HttpStatus.ok) {
       isValid = true;
     } else if (response.statusCode == HttpStatus.unauthorized) {
+      message = 'initializing.provider_bad_key_error';
       isValid = false;
     } else {
       throw Exception('code: ${response.statusCode}');
@@ -186,7 +189,7 @@ class DigitalOceanApi extends RestApiMap {
     return GenericResult(
       data: isValid,
       success: true,
-      message: response.statusMessage,
+      message: message,
     );
   }
 

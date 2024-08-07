@@ -41,7 +41,7 @@ class DnsProviderFormCubit extends FormCubit {
     }
 
     if (!isKeyValid) {
-      apiKey.setError('initializing.dns_provider_bad_key_error'.tr());
+      apiKey.setError('initializing.provider_bad_key_error'.tr());
     }
 
     return isKeyValid;

@@ -92,9 +92,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
-        'initializing.could_not_connect'.tr(),
+        apiResponse.message ?? 'initializing.could_not_connect'.tr(),
       );
       return null;
+    }
+
+    if (!apiResponse.data) {
+      getIt<NavigationService>().showSnackBar(
+        (apiResponse.message ?? 'initializing.provider_bad_key_error').tr(),
+      );
     }
 
     return apiResponse.data;
@@ -110,9 +116,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
-        'initializing.could_not_connect'.tr(),
+        apiResponse.message ?? 'initializing.could_not_connect'.tr(),
       );
       return null;
+    }
+
+    if (!apiResponse.data) {
+      getIt<NavigationService>().showSnackBar(
+        (apiResponse.message ?? 'initializing.provider_bad_key_error').tr(),
+      );
     }
 
     return apiResponse.data;
@@ -800,11 +812,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     if (serverDomain == null) {
       return;
     }
-    final isTokenValid =
+    final isTokenValidResult =
         await repository.validateDnsToken(token, serverDomain.domainName);
-    if (!isTokenValid) {
-      getIt<NavigationService>()
-          .showSnackBar('recovering.domain_not_available_on_token'.tr());
+    if (!isTokenValidResult.success) {
+      getIt<NavigationService>().showSnackBar(
+        isTokenValidResult.message ??
+            'recovering.domain_not_available_on_token'.tr(),
+      );
       return;
     }
     final dnsProviderType = await ServerApi(

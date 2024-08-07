@@ -192,27 +192,34 @@ class ServerInstallationRepository {
     return server;
   }
 
-  Future<bool> validateDnsToken(
+  Future<GenericResult<bool>> validateDnsToken(
     final String token,
     final String domain,
   ) async {
     final result =
         await ProvidersController.currentDnsProvider!.tryInitApiByToken(token);
     if (!result.success) {
-      return false;
+      return result;
     }
     await setDnsApiToken(token);
     final domainResult =
         await ProvidersController.currentDnsProvider!.domainList();
     if (!domainResult.success || domainResult.data.isEmpty) {
-      return false;
+      return GenericResult(
+        success: false,
+        data: false,
+        message: domainResult.message,
+      );
     }
     await getIt<ResourcesModel>().removeDnsProviderToken(
       getIt<ResourcesModel>().dnsProviderCredentials.first,
     );
 
-    return domainResult.data.any(
-      (final serverDomain) => serverDomain.domainName == domain,
+    return GenericResult(
+      success: true,
+      data: domainResult.data.any(
+        (final serverDomain) => serverDomain.domainName == domain,
+      ),
     );
   }
 

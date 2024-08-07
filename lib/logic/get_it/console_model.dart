@@ -20,7 +20,7 @@ class ConsoleModel extends ChangeNotifier {
     if (paused) {
       _incomingQueue.add(newLog);
       if (_incomingQueue.length > incomingBufferBreakpoint) {
-        logs.removeRange(0, _incomingQueue.length - logBufferLimit);
+        _incomingQueue.removeRange(0, _incomingQueue.length - logBufferLimit);
       }
     } else {
       logs.add(newLog);

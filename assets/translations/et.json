@@ -81,7 +81,7 @@
         "page2_backup_provider_title": "Varundamisteenuse pakkuja",
         "page2_backup_provider_text": "Mis juhtub, kui midagi juhtub teie serveriga? Kujutage ette häkkerirünnakut, juhuslikku andmete kustutamist või teenuse keeldumist? Teie andmed hoitakse turvaliselt teie varundusteenuse pakkuja juures. Need on turvaliselt krüpteeritud ja igal ajal ligipääsetavad teie serveri taastamiseks."
     },
-    "test": "ee-katse",
+    "test": "ee-test",
     "locale": "ee",
     "basis": {
         "providers": "Pakkujad",
@@ -96,17 +96,17 @@
         "settings": "Seaded",
         "password": "Parool",
         "create": "Lisa uus",
-        "confirmation": "Kinnitus",
+        "confirmation": "Kinnitamine",
         "cancel": "Tühista",
         "delete": "Kustuta",
         "close": "Sulge",
-        "connect": "Ühendama",
+        "connect": "Ühenda",
         "domain": "Domeen",
         "saving": "Salvestamine…",
         "username": "Kasutajanimi",
         "loading": "Laadimine…",
         "app_name": "SelfPrivacy",
-        "later": "Jätka seadistamist hiljem",
+        "later": "Käivita seadistamine hiljem",
         "connect_to_existing": "Mul on juba SelfPrivacy server!",
         "reset": "Lähtesta",
         "details": "Detailid",
@@ -192,7 +192,16 @@
         "system": "Süsteem",
         "ssh_users": "SSH kasutajad",
         "ram_usage": "Keskmine kasutus: {average}. Maksimaalne: {max}.",
-        "failed_to_load_memory_metrics": "Mälu kasutusandmeid ei saanud laadida. See võib olla ühenduse probleem või pole veel piisavalt andmeid."
+        "failed_to_load_memory_metrics": "Mälu kasutusandmeid ei saanud laadida. See võib olla ühenduse probleem või pole veel piisavalt andmeid.",
+        "cpu_chart_screen_reader_explanation": "See diagramm näitab protsessori kasutust viimase {period} jooksul. Viimane väärtus on {lastValue}%. Keskmine kasutus on {averageUsage}%. Maksimaalne kasutus oli {maxUsage}% kell {maxUsageTime}.",
+        "disk_chart_screen_reader_explanation": {
+            "beginning": "See diagramm näitab kettakasutust viimase {period} jooksul. ",
+            "disk": "Ketta {disk} kasutamine läks {beginningValue}%-lt {endValue}%-ni. "
+        },
+        "network_chart_screen_reader_explanation": "See diagramm näitab võrgu kasutust viimase {period} jooksul. Viimane väärtus on {lastValueIn} sissetulevat ja {lastValueOut} väljuvat. Keskmine kasutus on {averageUsageIn} sissetulevat ja {averageUsageOut} väljuvat. Maksimaalne sissetulev kasutus oli {maxUsageIn} kell {maxUsageTimeIn} ja maksimaalne väljuv kasutus oli {maxUsageOut} kell {maxUsageTimeOut}.",
+        "memory_chart_screen_reader_explanation": "See diagramm näitab mälu kasutust viimase {period} jooksul. Viimane väärtus on {lastValue}%. Keskmine kasutus on {averageUsage}%. Maksimaalne kasutus oli {maxUsage}% kell {maxUsageTime}.",
+        "loading": "Diagramm laadib…",
+        "disk_title": "Ketta kasutus"
     },
     "domain": {
         "card_title": "Domeen",

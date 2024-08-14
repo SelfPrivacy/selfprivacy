@@ -12,6 +12,7 @@ import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
+import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 @RoutePage()
 class ServerStoragePage extends StatefulWidget {
@@ -73,7 +74,10 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: BrandOutlinedButton(
             title: 'jobs.collect_nix_garbage'.tr(),
-            onPressed: context.read<JobsCubit>().collectNixGarbage,
+            onPressed: () {
+              context.read<JobsCubit>().collectNixGarbage();
+              showModalJobsSheet(context: context);
+            },
           ),
         ),
       ],

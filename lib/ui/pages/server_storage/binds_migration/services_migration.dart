@@ -9,9 +9,9 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/components/info_box/info_box.dart';
-import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/components/storage_list_items/service_migration_list_item.dart';
+import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 @RoutePage()
 class ServicesMigrationPage extends StatefulWidget {
@@ -191,20 +191,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                   }
                 }
                 context.router.popUntilRoot();
-                showModalBottomSheet(
-                  context: context,
-                  useRootNavigator: true,
-                  isScrollControlled: true,
-                  builder: (final BuildContext context) =>
-                      DraggableScrollableSheet(
-                    expand: false,
-                    maxChildSize: 0.9,
-                    minChildSize: 0.4,
-                    initialChildSize: 0.6,
-                    builder: (final context, final scrollController) =>
-                        JobsContent(controller: scrollController),
-                  ),
-                );
+                showModalJobsSheet(context: context);
               },
             ),
           const SizedBox(height: 32),

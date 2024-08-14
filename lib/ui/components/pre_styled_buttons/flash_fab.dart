@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
+import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 class BrandFab extends StatefulWidget {
   const BrandFab({
@@ -60,19 +60,7 @@ class _BrandFabState extends State<BrandFab>
       child: FloatingActionButton(
         onPressed: () {
           // TODO: Make a hero animation to the screen
-          showModalBottomSheet(
-            context: context,
-            useRootNavigator: true,
-            isScrollControlled: true,
-            builder: (final BuildContext context) => DraggableScrollableSheet(
-              expand: false,
-              maxChildSize: 0.9,
-              minChildSize: 0.4,
-              initialChildSize: 0.6,
-              builder: (final context, final scrollController) =>
-                  JobsContent(controller: scrollController),
-            ),
-          );
+          showModalJobsSheet(context: context);
         },
         isExtended: widget.extended,
         tooltip: 'jobs.title'.tr(),

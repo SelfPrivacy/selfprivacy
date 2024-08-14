@@ -677,7 +677,16 @@
         "routing": "App routing",
         "reset_onboarding": "Reset onboarding switch",
         "reset_onboarding_description": "Reset onboarding switch to show onboarding screen again",
-        "cubit_statuses": "Cubit loading statuses"
+        "cubit_statuses": "Cubit loading statuses",
+        "servers": "Servers",
+        "tap_for_more_info": "Tap for more info",
+        "server_type": "Server type",
+        "server_volume_name": "Server volume name",
+        "server_volume_size": "Server volume size",
+        "server_volume_location": "Server volume location",
+        "server_ip": "Server IP",
+        "server_domain": "Server domain",
+        "unknown": "Unknown"
     },
     "countries": {
         "germany": "Germany",

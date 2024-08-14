@@ -7,6 +7,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/ui/components/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
@@ -68,7 +69,6 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
           ListTile(
             title: Text('storage.start_migration_button'.tr()),
             subtitle: Text('storage.data_migration_notice'.tr()),
-            enabled: InheritedAppController.of(context).shouldShowOnboarding,
             onTap: () => context.pushRoute(
               ServicesMigrationRoute(
                 diskStatus: context.read<VolumesBloc>().state.diskStatus,
@@ -98,6 +98,101 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
                   .toString(),
             ),
           ),
+          SectionTitle(title: 'developer_settings.servers'.tr()),
+          ...getIt<ResourcesModel>().servers.map(
+                (final server) => ListTile(
+                  title: Text(server.domain.domainName),
+                  subtitle: Text(
+                    'developer_settings.tap_for_more_info'.tr(),
+                  ),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      useRootNavigator: true,
+                      isScrollControlled: true,
+                      builder: (final BuildContext context) =>
+                          DraggableScrollableSheet(
+                        expand: false,
+                        maxChildSize: 0.9,
+                        minChildSize: 0.4,
+                        initialChildSize: 0.6,
+                        builder: (final context, final scrollController) =>
+                            ListView(
+                          controller: scrollController,
+                          children: [
+                            ListTile(
+                              title: Text('server.server_id'.tr()),
+                              subtitle:
+                                  Text(server.hostingDetails.id.toString()),
+                            ),
+                            ListTile(
+                              title: Text('server.location'.tr()),
+                              subtitle: Text(
+                                server.hostingDetails.serverLocation ??
+                                    'developer_settings.unknown'.tr(),
+                              ),
+                            ),
+                            ListTile(
+                              title: Text('server.server_provider'.tr()),
+                              subtitle: Text(
+                                server.hostingDetails.provider.displayName,
+                              ),
+                            ),
+                            ListTile(
+                              title:
+                                  Text('developer_settings.server_type'.tr()),
+                              subtitle: Text(
+                                server.hostingDetails.serverType ??
+                                    'developer_settings.unknown'.tr(),
+                              ),
+                            ),
+                            ListTile(
+                              title: Text(
+                                'developer_settings.server_volume_name'.tr(),
+                              ),
+                              subtitle: Text(server.hostingDetails.volume.name),
+                            ),
+                            ListTile(
+                              title: Text(
+                                'developer_settings.server_volume_size'.tr(),
+                              ),
+                              subtitle: Text(
+                                server.hostingDetails.volume.sizeByte
+                                    .toString(),
+                              ),
+                            ),
+                            ListTile(
+                              title: Text(
+                                'developer_settings.server_volume_location'
+                                    .tr(),
+                              ),
+                              subtitle: Text(
+                                server.hostingDetails.volume.location ??
+                                    'developer_settings.unknown'.tr(),
+                              ),
+                            ),
+                            ListTile(
+                              title: Text('developer_settings.server_ip'.tr()),
+                              subtitle: Text(server.hostingDetails.ip4),
+                            ),
+                            ListTile(
+                              title: Text(
+                                'developer_settings.server_domain'.tr(),
+                              ),
+                              subtitle: Text(server.domain.domainName),
+                            ),
+                            ListTile(
+                              title: Text('server.dns_provider'.tr()),
+                              subtitle:
+                                  Text(server.domain.provider.displayName),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
         ],
       );
 }

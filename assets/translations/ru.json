@@ -147,7 +147,14 @@
         "system": "Система",
         "ssh_users": "Пользователи SSH",
         "ram_usage": "Среднее использование: {average}. Максимальное: {max}.",
-        "disk_title": "Использование диска"
+        "disk_title": "Использование диска",
+        "disk_chart_screen_reader_explanation": {
+            "beginning": "Этот график показывает использование диска за полседний {period}. ",
+            "disk": "Для {disk} потребление изменилось с {beginningValue}% до {endValue}%. "
+        },
+        "network_chart_screen_reader_explanation": "Этот график показывает использование сети за последний {period}. Последнее значение составляет {lastValueIn} входящего трафика и {lastValueOut} исходящего трафика. Среднее потребление составляет {averageUsageIn} входящего и {averageUsageOut} исходящего трафика. Максимальное использование входящего трафика составило {maxUsageIn}, что произошло {maxUsageTimeIn}. Максимальное использование исходящего трафика составило {maxUsageOut}, что произошло {maxUsageTimeOut}.",
+        "memory_chart_screen_reader_explanation": "Этот график показывает использование оперативной памяти за последний {period}. Последнее значение составляет {lastValue}%. Среднее использование {averageUsage}%. Максимальное использование {maxUsage}%, что произошло {maxUsageTime}.",
+        "loading": "График загружается…"
     },
     "server": {
         "card_title": "Сервер",
@@ -670,7 +677,16 @@
         "add_root_ssh_key": "Добавить ключ суперпользователя",
         "root_ssh_key_added": "SSH ключ суперпользователя задан и будет применён",
         "allow_ssh_key_at_setup": "Разрешить задавать SSH ключи суперпользователя во время установки",
-        "allow_ssh_key_at_setup_description": "Кнопка для добавления ключа появится на экране подтверждения."
+        "allow_ssh_key_at_setup_description": "Кнопка для добавления ключа появится на экране подтверждения.",
+        "servers": "Серверы",
+        "tap_for_more_info": "Нажмите для подробностей",
+        "server_type": "Тип сервера",
+        "server_volume_name": "Имя хранилища",
+        "server_volume_size": "Размер хранилища",
+        "server_volume_location": "Местоположение хранилища",
+        "server_ip": "IP адрес сервера",
+        "unknown": "Неизвестно",
+        "server_domain": "Домен сервера"
     },
     "countries": {
         "netherlands": "Нидерланды",

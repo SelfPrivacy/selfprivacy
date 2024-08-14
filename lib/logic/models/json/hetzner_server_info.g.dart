@@ -139,6 +139,7 @@ HetznerVolume _$HetznerVolumeFromJson(Map<String, dynamic> json) =>
       (json['serverId'] as num?)?.toInt(),
       json['name'] as String,
       json['linux_device'] as String?,
+      HetznerLocation.fromJson(json['location'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$HetznerVolumeToJson(HetznerVolume instance) =>
@@ -148,4 +149,5 @@ Map<String, dynamic> _$HetznerVolumeToJson(HetznerVolume instance) =>
       'serverId': instance.serverId,
       'name': instance.name,
       'linux_device': instance.linuxDevice,
+      'location': instance.location,
     };

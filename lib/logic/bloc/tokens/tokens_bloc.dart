@@ -201,7 +201,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
         ),
         apiToken: event.server.hostingDetails.apiToken,
         provider: event.serverProviderCredential.provider,
-        serverLocation: event.server.hostingDetails.serverLocation,
+        serverLocation: event.providerServer.location,
         serverType: event.server.hostingDetails.serverType,
       ),
     );

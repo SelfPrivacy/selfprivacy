@@ -172,7 +172,7 @@ class SelectTypePage extends StatelessWidget {
     final Future<List<ServerType>> serverTypes =
         serverInstallationCubit.fetchAvailableTypesByLocation(location);
     final Future<AdditionalPricing?> prices =
-        serverInstallationCubit.fetchAvailableAdditionalPricing();
+        serverInstallationCubit.fetchAvailableAdditionalPricing(location);
     return FutureBuilder(
       future: Future.wait([
         serverTypes,

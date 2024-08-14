@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,14 +89,21 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       return null;
     }
     Price? price;
-    final pricingResult =
-        await ProvidersController.currentServerProvider!.getAdditionalPricing();
-    if (pricingResult.data == null || !pricingResult.success) {
+    final location = state.location;
+    if (location != null) {
+      final pricingResult = await ProvidersController.currentServerProvider!
+          .getAdditionalPricing(location);
+      if (pricingResult.data == null || !pricingResult.success) {
+        getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
+        return price;
+      }
+      price = pricingResult.data!.perVolumeGb;
+      return price;
+    } else {
+      await Future.delayed(Duration.zero);
       getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
       return price;
     }
-    price = pricingResult.data!.perVolumeGb;
-    return price;
   }
 
   Future<void> _loadState(

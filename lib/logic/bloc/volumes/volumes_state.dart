@@ -17,6 +17,11 @@ sealed class VolumesState extends Equatable {
         orElse: () => DiskVolume(),
       );
 
+  String? get location => volumes
+      .firstWhereOrNull((final volume) => volume.isResizable)
+      ?.providerVolume
+      ?.location;
+
   bool get isProviderVolumesLoaded => providerVolumes.isNotEmpty;
 
   VolumesState copyWith({

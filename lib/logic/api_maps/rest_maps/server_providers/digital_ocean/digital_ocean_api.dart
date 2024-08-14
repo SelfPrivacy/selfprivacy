@@ -10,7 +10,6 @@ import 'package:selfprivacy/utils/password_generator.dart';
 
 class DigitalOceanApi extends RestApiMap {
   DigitalOceanApi({
-    required this.region,
     this.token = '',
     this.hasLogger = true,
     this.isWithToken = true,
@@ -21,7 +20,6 @@ class DigitalOceanApi extends RestApiMap {
   @override
   bool isWithToken;
 
-  final String? region;
   final String token;
 
   @override
@@ -79,6 +77,7 @@ class DigitalOceanApi extends RestApiMap {
     required final String hostName,
     required final String serverType,
     required final String? customSshKey,
+    required final String region,
   }) async {
     final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
 
@@ -98,7 +97,7 @@ class DigitalOceanApi extends RestApiMap {
             "HOSTNAME=$hostName LUSER='${rootUser.login}' NIX_VERSION=2.18.1 PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' "
             "${customSshKey != null ? "SSH_AUTHORIZED_KEY='$customSshKey'" : ""} "
             'bash 2>&1 | tee /root/nixos-infect.log',
-        'region': region!,
+        'region': region,
       };
       print('Decoded data: $data');
 
@@ -326,7 +325,10 @@ class DigitalOceanApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<DigitalOceanVolume?>> createVolume(final int gb) async {
+  Future<GenericResult<DigitalOceanVolume?>> createVolume({
+    required final int gb,
+    required final String region,
+  }) async {
     DigitalOceanVolume? volume;
     Response? createVolumeResponse;
     final Dio client = await getClient();
@@ -363,10 +365,11 @@ class DigitalOceanApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<bool>> attachVolume(
-    final String name,
-    final int serverId,
-  ) async {
+  Future<GenericResult<bool>> attachVolume({
+    required final String name,
+    required final int serverId,
+    required final String region,
+  }) async {
     bool success = false;
 
     Response? attachVolumeResponse;
@@ -402,10 +405,11 @@ class DigitalOceanApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<bool>> detachVolume(
-    final String name,
-    final int serverId,
-  ) async {
+  Future<GenericResult<bool>> detachVolume({
+    required final String name,
+    required final int serverId,
+    required final String region,
+  }) async {
     bool success = false;
 
     final Response detachVolumeResponse;
@@ -460,10 +464,11 @@ class DigitalOceanApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<bool>> resizeVolume(
-    final String uuid,
-    final int gb,
-  ) async {
+  Future<GenericResult<bool>> resizeVolume({
+    required final String uuid,
+    required final int gb,
+    required final String region,
+  }) async {
     bool success = false;
 
     final Response resizeVolumeResponse;

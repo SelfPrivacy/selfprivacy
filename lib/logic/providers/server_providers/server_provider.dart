@@ -60,12 +60,6 @@ abstract class ServerProvider {
   /// server provider respectfully.
   Future<GenericResult<bool>> tryInitApiByToken(final String token);
 
-  /// Tries to assign the location shortcode for future usage.
-  ///
-  /// If API wasn't initialized with token by [tryInitApiByToken] beforehand,
-  /// returns 'Not authorized!' error.
-  Future<GenericResult<bool>> trySetServerLocation(final String location);
-
   /// Returns all available server locations
   /// of the authorized user's server provider.
   Future<GenericResult<List<ServerProviderLocation>>> getAvailableLocations();
@@ -92,7 +86,9 @@ abstract class ServerProvider {
 
   /// Returns [Price] information map of all additional resources, excluding
   /// main server type pricing
-  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing();
+  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing(
+    final String location,
+  );
 
   /// Returns [ServerProviderVolume] of all available volumes
   /// assigned to the authorized user and attached to active machine.
@@ -103,7 +99,10 @@ abstract class ServerProvider {
   /// Tries to create an empty unattached [ServerProviderVolume].
   ///
   /// If success, returns this volume information.
-  Future<GenericResult<ServerProviderVolume?>> createVolume(final int gb);
+  Future<GenericResult<ServerProviderVolume?>> createVolume(
+    final int gb,
+    final String location,
+  );
 
   /// Tries to delete the requested accessible [ServerProviderVolume].
   Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume);
@@ -126,10 +125,11 @@ abstract class ServerProvider {
   /// from any machine.
   Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume);
 
-  /// Returns metedata of an accessible machine by the provided identificator
+  /// Returns metadata of an accessible machine by the provided identificator
   /// to show on ServerDetailsScreen.
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
     final int serverId,
+    final String location,
   );
 
   /// Returns information about cpu and bandwidth load within the provided

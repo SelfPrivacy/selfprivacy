@@ -19,11 +19,9 @@ import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
   ApiAdapter({
-    final String? region,
     final bool isWithToken = true,
     final String? token,
   }) : _api = DigitalOceanApi(
-          region: region,
           isWithToken: isWithToken,
           token: token ?? '',
         );
@@ -31,7 +29,6 @@ class ApiAdapter {
   DigitalOceanApi api({final bool getInitialized = true}) => getInitialized
       ? _api
       : DigitalOceanApi(
-          region: _api.region,
           isWithToken: false,
         );
 
@@ -41,16 +38,14 @@ class ApiAdapter {
 class DigitalOceanServerProvider extends ServerProvider {
   DigitalOceanServerProvider() : _adapter = ApiAdapter(isWithToken: false);
   DigitalOceanServerProvider.load(
-    final String? location,
     final bool isAuthorized,
     final String? token,
   ) : _adapter = ApiAdapter(
           isWithToken: isAuthorized,
-          region: location,
           token: token,
         );
 
-  ApiAdapter _adapter;
+  final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.usd);
 
   @override
@@ -90,6 +85,7 @@ class DigitalOceanServerProvider extends ServerProvider {
           created: DateTime.now(),
           ip: ipv4,
           name: server['name'],
+          location: server['region']['slug'],
         );
       },
     ).toList();
@@ -238,6 +234,7 @@ class DigitalOceanServerProvider extends ServerProvider {
           databasePassword: StringGenerators.dbPassword(),
           serverApiToken: serverApiToken,
           customSshKey: installationData.customSshKey,
+          region: installationData.location,
         );
 
     if (!serverResult.success || serverResult.data == null) {
@@ -264,12 +261,15 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     try {
       final int dropletId = serverResult.data!;
-      final newVolume =
-          (await createVolume(installationData.storageSize.gibibyte.toInt()))
-              .data;
+      final newVolume = (await createVolume(
+        installationData.storageSize.gibibyte.toInt(),
+        installationData.location,
+      ))
+          .data;
       final bool attachedVolume = (await _adapter.api().attachVolume(
-                newVolume!.name,
-                dropletId,
+                name: newVolume!.name,
+                serverId: dropletId,
+                region: installationData.location,
               ))
           .data;
 
@@ -350,9 +350,14 @@ class DigitalOceanServerProvider extends ServerProvider {
         (final el) => el.serverId == foundServer!.id,
       );
 
+      if (volumeToRemove.location == null) {
+        throw Exception('Volume location is null!');
+      }
+
       await _adapter.api().detachVolume(
-            volumeToRemove.name,
-            volumeToRemove.serverId!,
+            name: volumeToRemove.name,
+            serverId: volumeToRemove.serverId!,
+            region: volumeToRemove.location!,
           );
 
       await Future.delayed(const Duration(seconds: 10));
@@ -400,31 +405,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       return result;
     }
 
-    _adapter = ApiAdapter(region: api.region, isWithToken: true);
     return result;
-  }
-
-  @override
-  Future<GenericResult<bool>> trySetServerLocation(
-    final String location,
-  ) async {
-    final bool apiInitialized = _adapter.api().isWithToken;
-    final String token = _adapter._api.token;
-
-    if (!apiInitialized || token.isEmpty) {
-      return GenericResult(
-        success: true,
-        data: false,
-        message: 'Not authorized!',
-      );
-    }
-
-    _adapter = ApiAdapter(
-      isWithToken: true,
-      region: location,
-      token: token,
-    );
-    return success;
   }
 
   @override
@@ -544,7 +525,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing() async =>
+  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing(
+    final String location,
+  ) async =>
       GenericResult(
         success: true,
         data: AdditionalPricing(
@@ -591,6 +574,7 @@ class DigitalOceanServerProvider extends ServerProvider {
                   : null,
           linuxDevice: 'scsi-0DO_Volume_$volumeName',
           uuid: rawVolume.id,
+          location: rawVolume.region.slug,
         );
         volumes.add(volume);
       }
@@ -612,10 +596,11 @@ class DigitalOceanServerProvider extends ServerProvider {
   @override
   Future<GenericResult<ServerProviderVolume?>> createVolume(
     final int gb,
+    final String location,
   ) async {
     ServerProviderVolume? volume;
 
-    final result = await _adapter.api().createVolume(gb);
+    final result = await _adapter.api().createVolume(gb: gb, region: location);
 
     if (!result.success || result.data == null) {
       return GenericResult(
@@ -687,8 +672,9 @@ class DigitalOceanServerProvider extends ServerProvider {
     final int serverId,
   ) async =>
       _adapter.api().attachVolume(
-            volume.name,
-            serverId,
+            name: volume.name,
+            serverId: serverId,
+            region: volume.location!,
           );
 
   @override
@@ -696,8 +682,9 @@ class DigitalOceanServerProvider extends ServerProvider {
     final ServerProviderVolume volume,
   ) async =>
       _adapter.api().detachVolume(
-            volume.name,
-            volume.serverId!,
+            name: volume.name,
+            serverId: volume.serverId!,
+            region: volume.location!,
           );
 
   @override
@@ -714,13 +701,15 @@ class DigitalOceanServerProvider extends ServerProvider {
     final DiskSize size,
   ) async =>
       _adapter.api().resizeVolume(
-            volume.uuid!,
-            size.gibibyte.toInt(),
+            uuid: volume.uuid!,
+            gb: size.gibibyte.toInt(),
+            region: volume.location!,
           );
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
     final int serverId,
+    final String location,
   ) async {
     List<ServerMetadataEntity> metadata = [];
     final result = await _adapter.api().getServers();
@@ -741,7 +730,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         message: resultVolumes.message,
       );
     }
-    final resultPricePerGb = await getAdditionalPricing();
+    final resultPricePerGb = await getAdditionalPricing(location);
     if (resultPricePerGb.data == null || !resultPricePerGb.success) {
       return GenericResult(
         success: false,

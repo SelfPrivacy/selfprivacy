@@ -9,6 +9,7 @@ class DigitalOceanVolume {
     this.name,
     this.sizeGigabytes,
     this.dropletIds,
+    this.region,
   );
 
   final String id;
@@ -19,6 +20,8 @@ class DigitalOceanVolume {
 
   @JsonKey(name: 'size_gigabytes')
   final int sizeGigabytes;
+
+  final DigitalOceanLocation region;
 
   static DigitalOceanVolume fromJson(final Map<String, dynamic> json) =>
       _$DigitalOceanVolumeFromJson(json);

@@ -14,6 +14,7 @@ class LaunchInstallationData {
     required this.successCallback,
     required this.storageSize,
     required this.customSshKey,
+    required this.location,
   });
 
   final User rootUser;
@@ -25,4 +26,5 @@ class LaunchInstallationData {
   final Function(ServerHostingDetails details) successCallback;
   final DiskSize storageSize;
   final String? customSshKey;
+  final String location;
 }

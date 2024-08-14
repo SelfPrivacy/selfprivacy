@@ -17,7 +17,6 @@ class ServerProviderFactory {
       case ServerProviderType.hetzner:
         return settings.isAuthorized
             ? HetznerServerProvider.load(
-                settings.location,
                 settings.isAuthorized,
                 settings.token,
               )
@@ -25,7 +24,6 @@ class ServerProviderFactory {
       case ServerProviderType.digitalOcean:
         return settings.isAuthorized
             ? DigitalOceanServerProvider.load(
-                settings.location,
                 settings.isAuthorized,
                 settings.token,
               )

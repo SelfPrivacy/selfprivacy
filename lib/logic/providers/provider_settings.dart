@@ -7,13 +7,11 @@ class ServerProviderSettings {
     required this.provider,
     this.token,
     this.isAuthorized = false,
-    this.location,
   });
 
   final bool isAuthorized;
   final ServerProviderType provider;
   final String? token;
-  final String? location;
 }
 
 class DnsProviderSettings {

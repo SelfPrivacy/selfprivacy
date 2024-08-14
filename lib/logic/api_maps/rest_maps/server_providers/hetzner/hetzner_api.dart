@@ -11,7 +11,6 @@ import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends RestApiMap {
   HetznerApi({
-    this.region,
     this.token = '',
     this.hasLogger = true,
     this.isWithToken = true,
@@ -22,7 +21,6 @@ class HetznerApi extends RestApiMap {
   @override
   bool isWithToken;
 
-  final String? region;
   final String token;
 
   @override
@@ -85,6 +83,7 @@ class HetznerApi extends RestApiMap {
     required final int volumeId,
     required final String serverType,
     required final String? customSshKey,
+    required final String region,
   }) async {
     final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
     Response? serverCreateResponse;
@@ -111,7 +110,7 @@ class HetznerApi extends RestApiMap {
             'bash 2>&1 | tee /root/nixos-infect.log',
         'labels': {},
         'automount': true,
-        'location': region!,
+        'location': region,
       };
       print('Decoded data: $data');
 
@@ -326,7 +325,9 @@ class HetznerApi extends RestApiMap {
     return GenericResult(success: true, data: null);
   }
 
-  Future<GenericResult<HetznerPricing?>> getPricing() async {
+  Future<GenericResult<HetznerPricing?>> getPricing({
+    required final String region,
+  }) async {
     HetznerPricing? pricing;
 
     final Response pricingResponse;
@@ -341,14 +342,14 @@ class HetznerApi extends RestApiMap {
       for (final primaryIp in primaryIps) {
         if (primaryIp['type'] == 'ipv4') {
           for (final primaryIpPrice in primaryIp['prices']) {
-            if (primaryIpPrice['location'] == region!) {
+            if (primaryIpPrice['location'] == region) {
               ipPrice = primaryIpPrice['price_monthly']['gross'];
             }
           }
         }
       }
       pricing = HetznerPricing(
-        region!,
+        region,
         double.parse(volumePrice),
         double.parse(ipPrice!),
       );
@@ -395,7 +396,10 @@ class HetznerApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<HetznerVolume?>> createVolume(final int gb) async {
+  Future<GenericResult<HetznerVolume?>> createVolume({
+    required final int gb,
+    required final String region,
+  }) async {
     Response? createVolumeResponse;
     HetznerVolume? volume;
     final Dio client = await getClient();

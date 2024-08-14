@@ -19,11 +19,9 @@ import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
   ApiAdapter({
-    final String? region,
     final bool isWithToken = true,
     final String? token,
   }) : _api = HetznerApi(
-          region: region,
           isWithToken: isWithToken,
           token: token ?? '',
         );
@@ -31,7 +29,6 @@ class ApiAdapter {
   HetznerApi api({final bool getInitialized = true}) => getInitialized
       ? _api
       : HetznerApi(
-          region: _api.region,
           isWithToken: false,
         );
 
@@ -41,16 +38,14 @@ class ApiAdapter {
 class HetznerServerProvider extends ServerProvider {
   HetznerServerProvider() : _adapter = ApiAdapter(isWithToken: false);
   HetznerServerProvider.load(
-    final String? location,
     final bool isAuthorized,
     final String? token,
   ) : _adapter = ApiAdapter(
           isWithToken: isAuthorized,
-          region: location,
           token: token,
         );
 
-  ApiAdapter _adapter;
+  final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.eur);
   int? cachedCoreAmount;
 
@@ -87,6 +82,7 @@ class HetznerServerProvider extends ServerProvider {
           ip: hetznerServer.publicNet.ipv4!.ip,
           reverseDns: hetznerServer.publicNet.ipv4!.reverseDns,
           created: hetznerServer.created,
+          location: hetznerServer.location.name,
         );
       } catch (e) {
         continue;
@@ -176,7 +172,8 @@ class HetznerServerProvider extends ServerProvider {
     final LaunchInstallationData installationData,
   ) async {
     final volumeResult = await _adapter.api().createVolume(
-          installationData.storageSize.gibibyte.toInt(),
+          gb: installationData.storageSize.gibibyte.toInt(),
+          region: installationData.location,
         );
 
     if (!volumeResult.success || volumeResult.data == null) {
@@ -222,6 +219,7 @@ class HetznerServerProvider extends ServerProvider {
           databasePassword: StringGenerators.dbPassword(),
           serverApiToken: serverApiToken,
           customSshKey: installationData.customSshKey,
+          region: installationData.location,
         );
 
     if (!serverResult.success || serverResult.data == null) {
@@ -419,31 +417,7 @@ class HetznerServerProvider extends ServerProvider {
       return result;
     }
 
-    // _adapter = ApiAdapter(region: api.region, isWithToken: true);
     return result;
-  }
-
-  @override
-  Future<GenericResult<bool>> trySetServerLocation(
-    final String location,
-  ) async {
-    final bool apiInitialized = _adapter.api().isWithToken;
-    final String token = _adapter._api.token;
-    if (!apiInitialized || token.isEmpty) {
-      return GenericResult(
-        success: true,
-        data: false,
-        message: 'Not authorized!',
-      );
-    }
-
-    _adapter = ApiAdapter(
-      isWithToken: true,
-      region: location,
-      token: token,
-    );
-
-    return success;
   }
 
   @override
@@ -566,8 +540,10 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing() async {
-    final result = await _adapter.api().getPricing();
+  Future<GenericResult<AdditionalPricing?>> getAdditionalPricing(
+    final String location,
+  ) async {
+    final result = await _adapter.api().getPricing(region: location);
 
     if (!result.success || result.data == null) {
       return GenericResult(
@@ -617,12 +593,14 @@ class HetznerServerProvider extends ServerProvider {
         final volumeServer = rawVolume.serverId;
         final String volumeName = rawVolume.name;
         final volumeDevice = rawVolume.linuxDevice;
+        final volumeLocation = rawVolume.location.name;
         final volume = ServerProviderVolume(
           id: volumeId,
           name: volumeName,
           sizeByte: volumeSize,
           serverId: volumeServer,
           linuxDevice: volumeDevice,
+          location: volumeLocation,
         );
         volumes.add(volume);
       }
@@ -645,10 +623,11 @@ class HetznerServerProvider extends ServerProvider {
   @override
   Future<GenericResult<ServerProviderVolume?>> createVolume(
     final int gb,
+    final String location,
   ) async {
     ServerProviderVolume? volume;
 
-    final result = await _adapter.api().createVolume(gb);
+    final result = await _adapter.api().createVolume(gb: gb, region: location);
 
     if (!result.success || result.data == null) {
       return GenericResult(
@@ -702,6 +681,7 @@ class HetznerServerProvider extends ServerProvider {
               volume.serverId,
               volume.name,
               volume.linuxDevice,
+              HetznerLocation.empty(),
             ),
             size,
           );
@@ -718,6 +698,7 @@ class HetznerServerProvider extends ServerProvider {
               volume.serverId,
               volume.name,
               volume.linuxDevice,
+              HetznerLocation.empty(),
             ),
             serverId,
           );
@@ -733,6 +714,7 @@ class HetznerServerProvider extends ServerProvider {
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
     final int serverId,
+    final String location,
   ) async {
     List<ServerMetadataEntity> metadata = [];
     final resultServers = await _adapter.api().getServers();
@@ -753,7 +735,7 @@ class HetznerServerProvider extends ServerProvider {
         message: resultVolumes.message,
       );
     }
-    final resultPricePerGb = await getAdditionalPricing();
+    final resultPricePerGb = await getAdditionalPricing(location);
     if (resultPricePerGb.data == null || !resultPricePerGb.success) {
       return GenericResult(
         success: false,

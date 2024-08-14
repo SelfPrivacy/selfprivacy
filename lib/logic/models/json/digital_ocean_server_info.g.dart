@@ -14,6 +14,7 @@ DigitalOceanVolume _$DigitalOceanVolumeFromJson(Map<String, dynamic> json) =>
       (json['droplet_ids'] as List<dynamic>?)
           ?.map((e) => (e as num).toInt())
           .toList(),
+      DigitalOceanLocation.fromJson(json['region'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$DigitalOceanVolumeToJson(DigitalOceanVolume instance) =>
@@ -22,6 +23,7 @@ Map<String, dynamic> _$DigitalOceanVolumeToJson(DigitalOceanVolume instance) =>
       'name': instance.name,
       'droplet_ids': instance.dropletIds,
       'size_gigabytes': instance.sizeGigabytes,
+      'region': instance.region,
     };
 
 DigitalOceanLocation _$DigitalOceanLocationFromJson(

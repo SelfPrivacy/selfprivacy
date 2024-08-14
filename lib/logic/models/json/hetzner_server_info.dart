@@ -127,6 +127,9 @@ class HetznerLocation {
     this.zone,
     this.name,
   );
+
+  HetznerLocation.empty() : this('', '', '', '', '');
+
   final String name;
   final String country;
   final String city;
@@ -192,6 +195,7 @@ class HetznerVolume {
     this.serverId,
     this.name,
     this.linuxDevice,
+    this.location,
   );
 
   /// ID of the Resource
@@ -209,6 +213,8 @@ class HetznerVolume {
   /// Device path on the file system for the Volume
   @JsonKey(name: 'linux_device')
   final String? linuxDevice;
+
+  final HetznerLocation location;
 
   static HetznerVolume fromJson(final Map<String, dynamic> json) =>
       _$HetznerVolumeFromJson(json);

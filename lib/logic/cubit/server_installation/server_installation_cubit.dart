@@ -168,10 +168,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     return apiResult.data;
   }
 
-  Future<AdditionalPricing?> fetchAvailableAdditionalPricing() async {
+  Future<AdditionalPricing?> fetchAvailableAdditionalPricing(
+    final ServerProviderLocation location,
+  ) async {
     AdditionalPricing? prices;
-    final pricingResult =
-        await ProvidersController.currentServerProvider!.getAdditionalPricing();
+    final pricingResult = await ProvidersController.currentServerProvider!
+        .getAdditionalPricing(location.identifier);
     if (pricingResult.data == null || !pricingResult.success) {
       getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
       return prices;
@@ -202,8 +204,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   Future<void> setLocationIdentifier(final String locationId) async {
-    await ProvidersController.currentServerProvider!
-        .trySetServerLocation(locationId);
+    emit(
+      (state as ServerInstallationNotFinished).copyWith(
+        serverLocation: locationId,
+      ),
+    );
   }
 
   void setServerType(final ServerType serverType) async {
@@ -212,6 +217,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(
       (state as ServerInstallationNotFinished).copyWith(
         serverTypeIdentificator: serverType.identifier,
+        serverLocation: serverType.location.identifier,
       ),
     );
   }
@@ -335,6 +341,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       successCallback: onCreateServerSuccess,
       storageSize: initialStorage,
       customSshKey: (state as ServerInstallationNotFinished).customSshKey,
+      location: state.serverLocation!,
     );
 
     final result =
@@ -794,12 +801,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ),
       apiToken: dataState.serverDetails!.apiToken,
       provider: dataState.serverDetails!.provider,
+      serverLocation: server.location,
     );
     await repository.saveDomain(serverDomain);
     await repository.saveServerDetails(serverDetails);
     emit(
       dataState.copyWith(
         serverDetails: serverDetails,
+        serverLocation: server.location,
         currentStep: RecoveryStep.dnsProviderToken,
       ),
     );
@@ -858,8 +867,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           ?.getServerType(state.serverDetails!.id);
       if (serverType != null) {
         await repository.saveServerType(serverType.data!);
-        await ProvidersController.currentServerProvider!
-            .trySetServerLocation(serverType.data!.location.identifier);
       }
     } else {
       serverType = null;

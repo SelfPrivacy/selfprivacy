@@ -45,17 +45,26 @@ class ServerDetailsCubit
   Future<List<ServerMetadataEntity>> get _metadata async {
     final List<ServerMetadataEntity> data = [];
 
+    final Server? server = getIt<ResourcesModel>().servers.firstOrNull;
+
+    if (server == null) {
+      return data;
+    }
+
     final serverProviderApi = ProvidersController.currentServerProvider;
     final dnsProviderApi = ProvidersController.currentDnsProvider;
-    if (serverProviderApi?.isAuthorized ?? false) {
-      final serverId = getIt<ResourcesModel>().serverDetails?.id ?? 0;
-      final metadataResult = await serverProviderApi?.getMetadata(serverId);
+    if (server.hostingDetails.serverLocation != null &&
+        (serverProviderApi?.isAuthorized ?? false)) {
+      final serverId = server.hostingDetails.id;
+      final metadataResult = await serverProviderApi?.getMetadata(
+        serverId,
+        server.hostingDetails.serverLocation!,
+      );
 
       data.addAll(metadataResult?.data ?? []);
     }
 
     if (serverProviderApi == null || !serverProviderApi.isAuthorized) {
-      final Server server = getIt<ResourcesModel>().servers.first;
       data.add(
         ServerMetadataEntity(
           type: MetadataType.other,
@@ -74,7 +83,6 @@ class ServerDetailsCubit
         ),
       );
     } else {
-      final Server server = getIt<ResourcesModel>().servers.first;
       data.add(
         ServerMetadataEntity(
           trId: 'server.dns_provider',

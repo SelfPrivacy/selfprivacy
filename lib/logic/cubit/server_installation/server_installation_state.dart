@@ -13,6 +13,7 @@ abstract class ServerInstallationState extends Equatable {
     required this.isServerResetedFirstTime,
     required this.isServerResetedSecondTime,
     required this.installationDialoguePopUp,
+    required this.serverLocation,
   });
 
   @override
@@ -27,11 +28,13 @@ abstract class ServerInstallationState extends Equatable {
         isServerStarted,
         isServerResetedFirstTime,
         installationDialoguePopUp,
+        serverLocation,
       ];
 
   final String? providerApiToken;
   final String? dnsApiToken;
   final String? serverTypeIdentificator;
+  final String? serverLocation;
   final BackupsCredential? backblazeCredential;
   final ServerDomain? serverDomain;
   final User? rootUser;
@@ -91,6 +94,7 @@ class TimerState extends ServerInstallationNotFinished {
   }) : super(
           providerApiToken: dataState.providerApiToken,
           serverTypeIdentificator: dataState.serverTypeIdentificator,
+          serverLocation: dataState.serverLocation,
           dnsApiToken: dataState.dnsApiToken,
           backblazeCredential: dataState.backblazeCredential,
           serverDomain: dataState.serverDomain,
@@ -139,6 +143,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     required this.dnsMatches,
     required this.customSshKey,
     super.providerApiToken,
+    super.serverLocation,
     super.serverTypeIdentificator,
     super.dnsApiToken,
     super.backblazeCredential,
@@ -155,6 +160,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
           dnsApiToken: data.dnsProviderKey,
           serverDomain: data.serverDomain,
           serverTypeIdentificator: data.serverTypeIdentifier,
+          serverLocation: data.serverLocation,
           backblazeCredential: data.backupsCredential,
           serverDetails: data.serverDetails,
           rootUser: data.rootUser,
@@ -175,6 +181,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
   List<Object?> get props => [
         providerApiToken,
         serverTypeIdentificator,
+        serverLocation,
         dnsApiToken,
         backblazeCredential,
         serverDomain,
@@ -190,6 +197,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
 
   ServerInstallationNotFinished copyWith({
     final String? providerApiToken,
+    final String? serverLocation,
     final String? serverTypeIdentificator,
     final String? dnsApiToken,
     final BackupsCredential? backblazeCredential,
@@ -206,6 +214,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
   }) =>
       ServerInstallationNotFinished(
         providerApiToken: providerApiToken ?? this.providerApiToken,
+        serverLocation: serverLocation ?? this.serverLocation,
         serverTypeIdentificator:
             serverTypeIdentificator ?? this.serverTypeIdentificator,
         dnsApiToken: dnsApiToken ?? this.dnsApiToken,
@@ -227,6 +236,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
         providerApiToken: providerApiToken,
+        serverLocation: serverLocation,
         serverTypeIdentificator: serverTypeIdentificator,
         dnsApiToken: dnsApiToken!,
         backblazeCredential: backblazeCredential!,
@@ -239,6 +249,7 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
   const ServerInstallationEmpty()
       : super(
           providerApiToken: null,
+          serverLocation: null,
           serverTypeIdentificator: null,
           dnsApiToken: null,
           backblazeCredential: null,
@@ -263,6 +274,7 @@ class ServerInstallationFinished extends ServerInstallationState {
     required ServerHostingDetails super.serverDetails,
     super.providerApiToken,
     super.serverTypeIdentificator,
+    super.serverLocation,
   }) : super(
           rootUser: null,
           isServerStarted: true,
@@ -275,6 +287,7 @@ class ServerInstallationFinished extends ServerInstallationState {
   List<Object?> get props => [
         providerApiToken,
         serverTypeIdentificator,
+        serverLocation,
         dnsApiToken,
         backblazeCredential,
         serverDomain,
@@ -315,6 +328,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     required this.recoveryCapabilities,
     super.providerApiToken,
     super.serverTypeIdentificator,
+    super.serverLocation,
     super.dnsApiToken,
     super.backblazeCredential,
     super.serverDomain,
@@ -333,6 +347,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
   List<Object?> get props => [
         providerApiToken,
         serverTypeIdentificator,
+        serverLocation,
         dnsApiToken,
         backblazeCredential,
         serverDomain,
@@ -346,6 +361,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
 
   ServerInstallationRecovery copyWith({
     final String? providerApiToken,
+    final String? serverLocation,
     final String? serverTypeIdentificator,
     final String? dnsApiToken,
     final BackupsCredential? backblazeCredential,
@@ -356,6 +372,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
   }) =>
       ServerInstallationRecovery(
         providerApiToken: providerApiToken ?? this.providerApiToken,
+        serverLocation: serverLocation ?? this.serverLocation,
         serverTypeIdentificator:
             serverTypeIdentificator ?? this.serverTypeIdentificator,
         dnsApiToken: dnsApiToken ?? this.dnsApiToken,
@@ -368,6 +385,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
         providerApiToken: providerApiToken,
+        serverLocation: serverLocation,
         serverTypeIdentificator: serverTypeIdentificator,
         dnsApiToken: dnsApiToken!,
         backblazeCredential: backblazeCredential!,

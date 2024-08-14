@@ -83,13 +83,14 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
       serverId: fields[4] as int?,
       linuxDevice: fields[5] as String?,
       uuid: fields[6] as String?,
+      location: fields[7] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ServerProviderVolume obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
@@ -101,7 +102,9 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
       ..writeByte(5)
       ..write(obj.linuxDevice)
       ..writeByte(6)
-      ..write(obj.uuid);
+      ..write(obj.uuid)
+      ..writeByte(7)
+      ..write(obj.location);
   }
 
   @override

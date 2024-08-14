@@ -64,7 +64,6 @@ class ServerInstallationRepository {
         ServerProviderSettings(
           provider: serverProvider ?? serverDetails!.provider,
           isAuthorized: providerApiToken != null,
-          location: location,
           token: providerApiToken,
         ),
       );
@@ -100,6 +99,7 @@ class ServerInstallationRepository {
           serverDomain: serverDomain!,
           backblazeCredential: backblazeCredential!,
           serverDetails: serverDetails!,
+          serverLocation: location,
         );
       }
     }
@@ -111,7 +111,6 @@ class ServerInstallationRepository {
         ServerProviderSettings(
           provider: wizardData.serverProviderType!,
           isAuthorized: wizardData.serverProviderKey != null,
-          location: wizardData.serverLocation,
           token: wizardData.serverProviderKey,
         ),
       );
@@ -134,6 +133,7 @@ class ServerInstallationRepository {
         dnsApiToken: wizardData.dnsProviderKey,
         serverDomain: wizardData.serverDomain,
         serverTypeIdentificator: wizardData.serverTypeIdentifier,
+        serverLocation: wizardData.serverLocation,
         backblazeCredential: wizardData.backupsCredential,
         serverDetails: wizardData.serverDetails,
         currentStep: _getCurrentRecoveryStep(

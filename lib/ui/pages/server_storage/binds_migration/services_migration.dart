@@ -108,40 +108,38 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: appBarHeight,
-        child: SafeArea(
-          child: Column(
-            children: [
-              BrandHeader(
-                title: 'storage.data_migration_title'.tr(),
-                hasBackButton: true,
+        child: Column(
+          children: [
+            BrandHeader(
+              title: 'storage.data_migration_title'.tr(),
+              hasBackButton: true,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: headerVerticalPadding,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: headerVerticalPadding,
-                ),
-                child: Column(
-                  children: [
-                    ...widget.diskStatus.diskVolumes.map(
-                      (final volume) => Column(
-                        children: [
-                          ServerStorageListItem(
-                            volume: recalculatedDiskUsages(
-                              volume,
-                              widget.services,
-                            ),
-                            dense: true,
+              child: Column(
+                children: [
+                  ...widget.diskStatus.diskVolumes.map(
+                    (final volume) => Column(
+                      children: [
+                        ServerStorageListItem(
+                          volume: recalculatedDiskUsages(
+                            volume,
+                            widget.services,
                           ),
-                          const SizedBox(height: headerVerticalPadding),
-                        ],
-                      ),
+                          dense: true,
+                        ),
+                        const SizedBox(height: headerVerticalPadding),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const Divider(height: 0),
-            ],
-          ),
+            ),
+            const Divider(height: 0),
+          ],
         ),
       ),
       body: ListView(

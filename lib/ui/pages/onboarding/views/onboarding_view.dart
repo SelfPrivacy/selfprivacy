@@ -22,30 +22,32 @@ class OnboardingView extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        body: Align(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 480),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: ListView(
-                    primary: true,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(15) +
-                        const EdgeInsets.only(top: 15),
-                    children: children,
+        body: SafeArea(
+          child: Align(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 480),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ListView(
+                      primary: true,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(15) +
+                          const EdgeInsets.only(top: 15),
+                      children: children,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15) +
-                      const EdgeInsets.only(bottom: 30),
-                  child: SPBrandButton.text(
-                    title: buttonTitle.tr(),
-                    onPressed: onProceed,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15) +
+                        const EdgeInsets.only(bottom: 30),
+                    child: SPBrandButton.text(
+                      title: buttonTitle.tr(),
+                      onPressed: onProceed,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

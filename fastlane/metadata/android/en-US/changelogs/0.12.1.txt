@@ -1,0 +1,35 @@
+# 0.12.1 Changelog
+
+## Changes
+
+### Features
+
+- **Accessibility**: Add screen reader descriptions for graphs ([#554](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/554))
+- **Jobs**: When Jobs websocket subscription disconnects, fall back to usual queries for two minutes ([#550](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/550), resolves [#542](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/542))
+- **Metrics**: Implement disk usage metrics ([#538](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/538))
+- **Developer settings**: Add server info to developer settings ([#560](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/560))
+
+### Bug fixes
+
+- **UI**: Disk chart had too many horizontal grid lines ([#560](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/560))
+- **UI**: Progress bar used the same shade of gray regardless of user preferences ([#560](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/560))
+- **UI**: Onboarding views were getting out of safe area ([#560](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/560))
+- **App console**: When app logs are paused, on incoming queue overflow, the main buffer was cleaned up instead ([#560](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/560))
+- **Installation wizard**: Implement better error messaging for providers token check ([#558](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/558), resolves [#508](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/508))
+- **Server logs**: Show server logs timestamps in a local timezone ([#552](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/552), resolves [#540](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/540))
+- **Backups**: Backups encryption key couldn't load ([#551](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/551), resolves [#543](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/543))
+- **Services**: Make text gray for disabled service options ([#549](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/549), resolves [#544](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/544))
+- **Services**: Do not show the service link for disabled services ([#548](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/548), resolves [#547](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/547))
+- **Jobs**: Open the jobs screen when starting the system garbage collection ([#560](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/560), resolves [#541](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/541))
+
+### Translation contributions
+
+* Russian
+
+    * NaiJi ✨ <NaiJi@udongein.xyz> (1)
+    * Inex Code <inex.code@selfprivacy.org> (70)
+
+
+* Estonian
+
+    * Dmitri B. <Dmitri@E-kiri.eu> (65)

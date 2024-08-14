@@ -27,7 +27,7 @@ class _ProgressBarState extends State<ProgressBar> {
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
-            color: const Color(0xFFDDDDDD),
+            color: Theme.of(context).colorScheme.surfaceVariant,
             borderRadius: BorderRadius.circular(5),
           ),
           child: LayoutBuilder(

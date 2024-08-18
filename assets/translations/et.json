@@ -423,7 +423,16 @@
         "routing": "Rakenduse marsruutimine",
         "reset_onboarding": "Lähtestage liitumislüliti",
         "reset_onboarding_description": "Alguskuva uuesti kuvamiseks lähtestage liitumislüliti",
-        "cubit_statuses": "laadimise olekud"
+        "cubit_statuses": "laadimise olekud",
+        "tap_for_more_info": "Üksikasjade vaatamiseks klõpsake",
+        "server_type": "Serveri tüüp",
+        "server_volume_size": "Serveri helitugevuse suurus",
+        "server_volume_location": "Ladustamiskoht",
+        "server_ip": "Serveri IP",
+        "server_domain": "Serveri domeen",
+        "unknown": "Tundmatu",
+        "servers": "Serverid",
+        "server_volume_name": "Serveri köite nimi"
     },
     "not_ready_card": {
         "in_menu": "Server pole veel seadistatud. Palun lõpetage seadistamine kasutades seadistusviisardit edasiseks tööks."

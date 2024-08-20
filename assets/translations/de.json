@@ -37,7 +37,10 @@
         "app_name": "SelfPrivacy",
         "copied_to_clipboard": "Zur Zwischenablage kopiert!",
         "please_connect": "Bitte stellen sie eine Verbindung zu ihrem Server, Domain und DNS Betreiber her um zu beginnen!",
-        "network_error": "Netzwerkfehler"
+        "network_error": "Netzwerkfehler",
+        "feature_unsupported_on_api_version": "Diese Funktionalität wird nur von der Serverversion {versionConstraint} unterstützt. Ihr Server hat die Version {currentVersion}.",
+        "server_is_outdated": "Diese SelfPrivacy-Version erfordert die API-Version {versionConstraint}, aber Ihr Server hat die Versionsnummer {currentVersion}. Einige Funktionen fluppen möglicherweise nicht und es können Fehler auftreten. Bitte aktualisieren Sie Ihren Server.",
+        "error": "Fehler"
     },
     "more_page": {
         "configuration_wizard": "Setup-Assistent",
@@ -46,7 +49,11 @@
     },
     "console_page": {
         "title": "Konsole",
-        "copy": "Kopieren"
+        "copy": "Kopieren",
+        "copy_raw": "Unformatierte Antwort",
+        "history_empty": "Noch keine Daten vorhanden",
+        "error": "Fehler",
+        "rest_api_request": "REST API Anforderung"
     },
     "about_application_page": {
         "title": "Über",

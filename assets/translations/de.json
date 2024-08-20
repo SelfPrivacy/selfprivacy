@@ -53,13 +53,26 @@
         "copy_raw": "Unformatierte Antwort",
         "history_empty": "Noch keine Daten vorhanden",
         "error": "Fehler",
-        "rest_api_request": "REST API Anforderung"
+        "rest_api_request": "REST API Anforderung",
+        "graphql_request": "GraphQL Anforderung",
+        "rest_api_response": "REST API Antwort",
+        "graphql_response": "GraphQL Antwort",
+        "operation_name": "Vorgangsname",
+        "context": "Kontext",
+        "operation": "Vorgang",
+        "operation_type": "Vorgangsart",
+        "variables": "Variablen"
     },
     "about_application_page": {
-        "title": "Über",
-        "application_version_text": "Anwendungsversion",
-        "api_version_text": "Server API Version",
-        "privacy_policy": "Datenschutzerklärung"
+        "title": "Über & Support",
+        "application_version_text": "Programmversion",
+        "api_version_text": "Server-API-Version",
+        "privacy_policy": "Datenschutzerklärung",
+        "versions": "Versionen",
+        "links": "Links",
+        "website": "Unsere Webseite",
+        "documentation": "Dokumentation",
+        "open_source_licenses": "Open-Source-Lizenzen"
     },
     "application_settings": {
         "title": "Anwendungseinstellungen",

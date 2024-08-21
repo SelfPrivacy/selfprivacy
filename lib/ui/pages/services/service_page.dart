@@ -65,7 +65,7 @@ class _ServicePageState extends State<ServicePage> {
         width: 48.0,
         height: 48.0,
         colorFilter: ColorFilter.mode(
-          Theme.of(context).colorScheme.onBackground,
+          Theme.of(context).colorScheme.onSurface,
           BlendMode.srcIn,
         ),
       ),
@@ -75,7 +75,7 @@ class _ServicePageState extends State<ServicePage> {
         const SizedBox(height: 16),
         if (service.url != null && !serviceDisabled)
           ListTile(
-            iconColor: Theme.of(context).colorScheme.onBackground,
+            iconColor: Theme.of(context).colorScheme.onSurface,
             onTap: () => launchURL(service.url),
             onLongPress: () {
               PlatformAdapter.setClipboard(service.url!);
@@ -96,7 +96,7 @@ class _ServicePageState extends State<ServicePage> {
         const Divider(),
         const SizedBox(height: 8),
         ListTile(
-          iconColor: Theme.of(context).colorScheme.onBackground,
+          iconColor: Theme.of(context).colorScheme.onSurface,
           onTap: () =>
               context.read<ServicesBloc>().add(ServiceRestart(service)),
           leading: const Icon(Icons.restart_alt_outlined),
@@ -108,7 +108,7 @@ class _ServicePageState extends State<ServicePage> {
         ),
         if (!service.isRequired)
           ListTile(
-            iconColor: Theme.of(context).colorScheme.onBackground,
+            iconColor: Theme.of(context).colorScheme.onSurface,
             onTap: () => context.read<JobsCubit>().addJob(
                   ServiceToggleJob(
                     service: service,
@@ -126,7 +126,7 @@ class _ServicePageState extends State<ServicePage> {
           ),
         if (service.configuration.isNotEmpty)
           ListTile(
-            iconColor: Theme.of(context).colorScheme.onBackground,
+            iconColor: Theme.of(context).colorScheme.onSurface,
             onTap: () => context.pushRoute(
               ServiceSettingsRoute(serviceId: service.id),
             ),
@@ -138,7 +138,7 @@ class _ServicePageState extends State<ServicePage> {
           ),
         if (service.isMovable)
           ListTile(
-            iconColor: Theme.of(context).colorScheme.onBackground,
+            iconColor: Theme.of(context).colorScheme.onSurface,
             // Open page ServicesMigrationPage
             onTap: () => context.pushRoute(
               ServicesMigrationRoute(
@@ -172,7 +172,7 @@ class _ServicePageState extends State<ServicePage> {
           ),
         if (service.canBeBackedUp)
           ListTile(
-            iconColor: Theme.of(context).colorScheme.onBackground,
+            iconColor: Theme.of(context).colorScheme.onSurface,
             // Open page ServicesMigrationPage
             onTap: () => context.pushRoute(
               BackupsListRoute(service: service),
@@ -184,7 +184,7 @@ class _ServicePageState extends State<ServicePage> {
             ),
           ),
         ListTile(
-          iconColor: Theme.of(context).colorScheme.onBackground,
+          iconColor: Theme.of(context).colorScheme.onSurface,
           onTap: () => context.pushRoute(
             ServerLogsRoute(serviceId: service.id),
           ),

@@ -162,7 +162,7 @@ class ServerConsumptionListTile extends StatelessWidget {
               width: 22.0,
               height: 24.0,
               colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.onBackground,
+                Theme.of(context).colorScheme.onSurface,
                 BlendMode.srcIn,
               ),
             ),
@@ -171,7 +171,8 @@ class ServerConsumptionListTile extends StatelessWidget {
             color: volume.root
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.secondary,
-            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+            backgroundColor:
+                Theme.of(context).colorScheme.surfaceContainerHighest,
             dense: true,
           ),
         ),

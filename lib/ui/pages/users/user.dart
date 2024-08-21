@@ -31,7 +31,7 @@ class _User extends StatelessWidget {
                 child: Text(
                   user.login,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                         decoration: isPrimaryUser
                             ? TextDecoration.underline
                             : user.isFoundOnServer

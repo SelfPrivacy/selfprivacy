@@ -20,7 +20,7 @@ class SPBrandButton extends StatelessWidget {
   Widget build(final BuildContext context) => FilledButton(
         // TODO(misterfourtytwo): move button styles to theme configuration
         style: const ButtonStyle(
-          minimumSize: MaterialStatePropertyAll(Size.fromHeight(48)),
+          minimumSize: WidgetStatePropertyAll(Size.fromHeight(48)),
         ),
         onPressed: onPressed,
         child: child,

@@ -41,7 +41,6 @@ abstract class AppThemeFactory {
       brightness: colorScheme.brightness,
       typography: appTypography,
       useMaterial3: true,
-      scaffoldBackgroundColor: colorScheme.background,
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -52,12 +51,48 @@ abstract class AppThemeFactory {
     return materialThemeData;
   }
 
-  static Future<ColorScheme?> _getDynamicColors(final Brightness brightness) {
+  static Future<ColorScheme?> _getDynamicColors(
+      final Brightness brightness) async {
+    List<Color> extractAdditionalColours(final ColorScheme scheme) => [
+          scheme.surface,
+          scheme.surfaceDim,
+          scheme.surfaceBright,
+          scheme.surfaceContainerLowest,
+          scheme.surfaceContainerLow,
+          scheme.surfaceContainer,
+          scheme.surfaceContainerHigh,
+          scheme.surfaceContainerHighest,
+        ];
+
+    ColorScheme insertAdditionalColours(
+            final ColorScheme scheme, final List<Color> additionalColours) =>
+        scheme.copyWith(
+          surface: additionalColours[0],
+          surfaceDim: additionalColours[1],
+          surfaceBright: additionalColours[2],
+          surfaceContainerLowest: additionalColours[3],
+          surfaceContainerLow: additionalColours[4],
+          surfaceContainer: additionalColours[5],
+          surfaceContainerHigh: additionalColours[6],
+          surfaceContainerHighest: additionalColours[7],
+        );
+
     try {
-      return DynamicColorPlugin.getCorePalette().then(
-        (final corePallete) =>
-            corePallete?.toColorScheme(brightness: brightness),
+      final ColorScheme? colorScheme =
+          await DynamicColorPlugin.getCorePalette().then(
+        (final corePalette) =>
+            corePalette?.toColorScheme(brightness: brightness),
       );
+      if (colorScheme == null) {
+        return Future.value(null);
+      }
+      // Workaround as dynamic_color doesn't add new color roles
+      final fromSeed = ColorScheme.fromSeed(
+          seedColor: colorScheme.primary, brightness: brightness);
+      final additionalColours = extractAdditionalColours(fromSeed);
+      final updatedColorScheme =
+          insertAdditionalColours(colorScheme, additionalColours);
+      return Future.value(updatedColorScheme);
     } on PlatformException {
       return Future.value(null);
     }

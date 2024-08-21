@@ -74,7 +74,7 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Theme.of(context).colorScheme.surfaceVariant,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
           ),
           padding: const EdgeInsets.all(16),
           child: Stack(
@@ -98,7 +98,8 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
                     duration: const Duration(milliseconds: 200),
                     opacity: isKeyVisible ? 0 : 1,
                     child: Container(
-                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,

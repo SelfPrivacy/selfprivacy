@@ -110,7 +110,8 @@ class JobsContent extends StatelessWidget {
                   ),
                   Expanded(
                     child: Card(
-                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15,
@@ -163,7 +164,9 @@ class JobsContent extends StatelessWidget {
                       ),
                       Expanded(
                         child: Card(
-                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 15,
@@ -203,7 +206,7 @@ class JobsContent extends StatelessWidget {
                                   ),
                                   backgroundColor: Theme.of(context)
                                       .colorScheme
-                                      .surfaceVariant,
+                                      .surfaceContainerHighest,
                                   minHeight: 7.0,
                                   borderRadius: BorderRadius.circular(7.0),
                                 ),
@@ -243,7 +246,8 @@ class JobsContent extends StatelessWidget {
                   ),
                   Expanded(
                     child: Card(
-                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15,
@@ -299,7 +303,9 @@ class JobsContent extends StatelessWidget {
                       ),
                       Expanded(
                         child: Card(
-                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 15,
@@ -336,7 +342,7 @@ class JobsContent extends StatelessWidget {
                                   ),
                                   backgroundColor: Theme.of(context)
                                       .colorScheme
-                                      .surfaceVariant,
+                                      .surfaceContainerHighest,
                                   minHeight: 7.0,
                                   borderRadius: BorderRadius.circular(7.0),
                                 ),
@@ -374,7 +380,8 @@ class JobsContent extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Card(
-                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15,
@@ -466,7 +473,7 @@ class JobsContent extends StatelessWidget {
                               .add(RemoveAllFinishedJobs())
                           : null,
                       icon: const Icon(Icons.clear_all),
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ],
                 ),

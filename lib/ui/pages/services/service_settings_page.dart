@@ -164,7 +164,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
           width: 48.0,
           height: 48.0,
           colorFilter: ColorFilter.mode(
-            Theme.of(context).colorScheme.onBackground,
+            Theme.of(context).colorScheme.onSurface,
             BlendMode.srcIn,
           ),
         ),
@@ -197,7 +197,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
         width: 48.0,
         height: 48.0,
         colorFilter: ColorFilter.mode(
-          Theme.of(context).colorScheme.onBackground,
+          Theme.of(context).colorScheme.onSurface,
           BlendMode.srcIn,
         ),
       ),

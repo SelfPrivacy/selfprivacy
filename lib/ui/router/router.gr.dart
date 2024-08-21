@@ -9,235 +9,6 @@
 
 part of 'router.dart';
 
-abstract class _$RootRouter extends RootStackRouter {
-  // ignore: unused_element
-  _$RootRouter({super.navigatorKey});
-
-  @override
-  final Map<String, PageFactory> pagesMap = {
-    AboutApplicationRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const AboutApplicationPage(),
-      );
-    },
-    AddServerProviderTokenRoute.name: (routeData) {
-      final args = routeData.argsAs<AddServerProviderTokenRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: AddServerProviderTokenPage(
-          server: args.server,
-          key: args.key,
-        ),
-      );
-    },
-    AppSettingsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const AppSettingsPage(),
-      );
-    },
-    BackupDetailsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const BackupDetailsPage(),
-      );
-    },
-    BackupsListRoute.name: (routeData) {
-      final args = routeData.argsAs<BackupsListRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: BackupsListPage(
-          service: args.service,
-          key: args.key,
-        ),
-      );
-    },
-    ConsoleRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ConsolePage(),
-      );
-    },
-    DeveloperSettingsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const DeveloperSettingsPage(),
-      );
-    },
-    DevicesRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const DevicesScreen(),
-      );
-    },
-    DnsDetailsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const DnsDetailsPage(),
-      );
-    },
-    ExtendingVolumeRoute.name: (routeData) {
-      final args = routeData.argsAs<ExtendingVolumeRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ExtendingVolumePage(
-          diskVolumeToResize: args.diskVolumeToResize,
-          diskStatus: args.diskStatus,
-          key: args.key,
-        ),
-      );
-    },
-    InitializingRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const InitializingPage(),
-      );
-    },
-    MemoryUsageByServiceRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const MemoryUsageByServiceScreen(),
-      );
-    },
-    MoreRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const MorePage(),
-      );
-    },
-    NewUserRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const NewUserPage(),
-      );
-    },
-    OnboardingRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const OnboardingPage(),
-      );
-    },
-    ProvidersRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ProvidersPage(),
-      );
-    },
-    RecoveryKeyRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const RecoveryKeyPage(),
-      );
-    },
-    RecoveryRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const RecoveryRouting(),
-      );
-    },
-    RootRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(child: const RootPage()),
-      );
-    },
-    ServerDetailsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ServerDetailsScreen(),
-      );
-    },
-    ServerLogsRoute.name: (routeData) {
-      final args = routeData.argsAs<ServerLogsRouteArgs>(
-          orElse: () => const ServerLogsRouteArgs());
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ServerLogsScreen(
-          serviceId: args.serviceId,
-          key: args.key,
-        ),
-      );
-    },
-    ServerSettingsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ServerSettingsScreen(),
-      );
-    },
-    ServerStorageRoute.name: (routeData) {
-      final args = routeData.argsAs<ServerStorageRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ServerStoragePage(
-          diskStatus: args.diskStatus,
-          key: args.key,
-        ),
-      );
-    },
-    ServiceRoute.name: (routeData) {
-      final args = routeData.argsAs<ServiceRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ServicePage(
-          serviceId: args.serviceId,
-          key: args.key,
-        ),
-      );
-    },
-    ServiceSettingsRoute.name: (routeData) {
-      final args = routeData.argsAs<ServiceSettingsRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ServiceSettingsPage(
-          serviceId: args.serviceId,
-          key: args.key,
-        ),
-      );
-    },
-    ServicesMigrationRoute.name: (routeData) {
-      final args = routeData.argsAs<ServicesMigrationRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ServicesMigrationPage(
-          services: args.services,
-          diskStatus: args.diskStatus,
-          isMigration: args.isMigration,
-          key: args.key,
-        ),
-      );
-    },
-    ServicesRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ServicesPage(),
-      );
-    },
-    TokensRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const TokensPage(),
-      );
-    },
-    UserDetailsRoute.name: (routeData) {
-      final args = routeData.argsAs<UserDetailsRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: UserDetailsPage(
-          login: args.login,
-          key: args.key,
-        ),
-      );
-    },
-    UsersRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const UsersPage(),
-      );
-    },
-  };
-}
-
 /// generated route for
 /// [AboutApplicationPage]
 class AboutApplicationRoute extends PageRouteInfo<void> {
@@ -249,7 +20,12 @@ class AboutApplicationRoute extends PageRouteInfo<void> {
 
   static const String name = 'AboutApplicationRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AboutApplicationPage();
+    },
+  );
 }
 
 /// generated route for
@@ -271,8 +47,16 @@ class AddServerProviderTokenRoute
 
   static const String name = 'AddServerProviderTokenRoute';
 
-  static const PageInfo<AddServerProviderTokenRouteArgs> page =
-      PageInfo<AddServerProviderTokenRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AddServerProviderTokenRouteArgs>();
+      return AddServerProviderTokenPage(
+        server: args.server,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class AddServerProviderTokenRouteArgs {
@@ -302,7 +86,12 @@ class AppSettingsRoute extends PageRouteInfo<void> {
 
   static const String name = 'AppSettingsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AppSettingsPage();
+    },
+  );
 }
 
 /// generated route for
@@ -316,7 +105,12 @@ class BackupDetailsRoute extends PageRouteInfo<void> {
 
   static const String name = 'BackupDetailsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BackupDetailsPage();
+    },
+  );
 }
 
 /// generated route for
@@ -337,8 +131,16 @@ class BackupsListRoute extends PageRouteInfo<BackupsListRouteArgs> {
 
   static const String name = 'BackupsListRoute';
 
-  static const PageInfo<BackupsListRouteArgs> page =
-      PageInfo<BackupsListRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<BackupsListRouteArgs>();
+      return BackupsListPage(
+        service: args.service,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class BackupsListRouteArgs {
@@ -368,7 +170,12 @@ class ConsoleRoute extends PageRouteInfo<void> {
 
   static const String name = 'ConsoleRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ConsolePage();
+    },
+  );
 }
 
 /// generated route for
@@ -382,7 +189,12 @@ class DeveloperSettingsRoute extends PageRouteInfo<void> {
 
   static const String name = 'DeveloperSettingsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DeveloperSettingsPage();
+    },
+  );
 }
 
 /// generated route for
@@ -396,7 +208,12 @@ class DevicesRoute extends PageRouteInfo<void> {
 
   static const String name = 'DevicesRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DevicesScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -410,7 +227,12 @@ class DnsDetailsRoute extends PageRouteInfo<void> {
 
   static const String name = 'DnsDetailsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DnsDetailsPage();
+    },
+  );
 }
 
 /// generated route for
@@ -433,8 +255,17 @@ class ExtendingVolumeRoute extends PageRouteInfo<ExtendingVolumeRouteArgs> {
 
   static const String name = 'ExtendingVolumeRoute';
 
-  static const PageInfo<ExtendingVolumeRouteArgs> page =
-      PageInfo<ExtendingVolumeRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ExtendingVolumeRouteArgs>();
+      return ExtendingVolumePage(
+        diskVolumeToResize: args.diskVolumeToResize,
+        diskStatus: args.diskStatus,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class ExtendingVolumeRouteArgs {
@@ -467,7 +298,12 @@ class InitializingRoute extends PageRouteInfo<void> {
 
   static const String name = 'InitializingRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const InitializingPage();
+    },
+  );
 }
 
 /// generated route for
@@ -481,7 +317,12 @@ class MemoryUsageByServiceRoute extends PageRouteInfo<void> {
 
   static const String name = 'MemoryUsageByServiceRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MemoryUsageByServiceScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -495,7 +336,12 @@ class MoreRoute extends PageRouteInfo<void> {
 
   static const String name = 'MoreRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MorePage();
+    },
+  );
 }
 
 /// generated route for
@@ -509,7 +355,12 @@ class NewUserRoute extends PageRouteInfo<void> {
 
   static const String name = 'NewUserRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NewUserPage();
+    },
+  );
 }
 
 /// generated route for
@@ -523,7 +374,12 @@ class OnboardingRoute extends PageRouteInfo<void> {
 
   static const String name = 'OnboardingRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const OnboardingPage();
+    },
+  );
 }
 
 /// generated route for
@@ -537,7 +393,12 @@ class ProvidersRoute extends PageRouteInfo<void> {
 
   static const String name = 'ProvidersRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ProvidersPage();
+    },
+  );
 }
 
 /// generated route for
@@ -551,7 +412,12 @@ class RecoveryKeyRoute extends PageRouteInfo<void> {
 
   static const String name = 'RecoveryKeyRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RecoveryKeyPage();
+    },
+  );
 }
 
 /// generated route for
@@ -565,7 +431,12 @@ class RecoveryRoute extends PageRouteInfo<void> {
 
   static const String name = 'RecoveryRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RecoveryRouting();
+    },
+  );
 }
 
 /// generated route for
@@ -579,7 +450,12 @@ class RootRoute extends PageRouteInfo<void> {
 
   static const String name = 'RootRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return WrappedRoute(child: const RootPage());
+    },
+  );
 }
 
 /// generated route for
@@ -593,7 +469,12 @@ class ServerDetailsRoute extends PageRouteInfo<void> {
 
   static const String name = 'ServerDetailsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ServerDetailsScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -614,8 +495,17 @@ class ServerLogsRoute extends PageRouteInfo<ServerLogsRouteArgs> {
 
   static const String name = 'ServerLogsRoute';
 
-  static const PageInfo<ServerLogsRouteArgs> page =
-      PageInfo<ServerLogsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ServerLogsRouteArgs>(
+          orElse: () => const ServerLogsRouteArgs());
+      return ServerLogsScreen(
+        serviceId: args.serviceId,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class ServerLogsRouteArgs {
@@ -645,7 +535,12 @@ class ServerSettingsRoute extends PageRouteInfo<void> {
 
   static const String name = 'ServerSettingsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ServerSettingsScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -666,8 +561,16 @@ class ServerStorageRoute extends PageRouteInfo<ServerStorageRouteArgs> {
 
   static const String name = 'ServerStorageRoute';
 
-  static const PageInfo<ServerStorageRouteArgs> page =
-      PageInfo<ServerStorageRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ServerStorageRouteArgs>();
+      return ServerStoragePage(
+        diskStatus: args.diskStatus,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class ServerStorageRouteArgs {
@@ -704,8 +607,16 @@ class ServiceRoute extends PageRouteInfo<ServiceRouteArgs> {
 
   static const String name = 'ServiceRoute';
 
-  static const PageInfo<ServiceRouteArgs> page =
-      PageInfo<ServiceRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ServiceRouteArgs>();
+      return ServicePage(
+        serviceId: args.serviceId,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class ServiceRouteArgs {
@@ -742,8 +653,16 @@ class ServiceSettingsRoute extends PageRouteInfo<ServiceSettingsRouteArgs> {
 
   static const String name = 'ServiceSettingsRoute';
 
-  static const PageInfo<ServiceSettingsRouteArgs> page =
-      PageInfo<ServiceSettingsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ServiceSettingsRouteArgs>();
+      return ServiceSettingsPage(
+        serviceId: args.serviceId,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class ServiceSettingsRouteArgs {
@@ -784,8 +703,18 @@ class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
 
   static const String name = 'ServicesMigrationRoute';
 
-  static const PageInfo<ServicesMigrationRouteArgs> page =
-      PageInfo<ServicesMigrationRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ServicesMigrationRouteArgs>();
+      return ServicesMigrationPage(
+        services: args.services,
+        diskStatus: args.diskStatus,
+        isMigration: args.isMigration,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class ServicesMigrationRouteArgs {
@@ -821,7 +750,12 @@ class ServicesRoute extends PageRouteInfo<void> {
 
   static const String name = 'ServicesRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ServicesPage();
+    },
+  );
 }
 
 /// generated route for
@@ -835,7 +769,12 @@ class TokensRoute extends PageRouteInfo<void> {
 
   static const String name = 'TokensRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TokensPage();
+    },
+  );
 }
 
 /// generated route for
@@ -856,8 +795,16 @@ class UserDetailsRoute extends PageRouteInfo<UserDetailsRouteArgs> {
 
   static const String name = 'UserDetailsRoute';
 
-  static const PageInfo<UserDetailsRouteArgs> page =
-      PageInfo<UserDetailsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserDetailsRouteArgs>();
+      return UserDetailsPage(
+        login: args.login,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class UserDetailsRouteArgs {
@@ -887,5 +834,10 @@ class UsersRoute extends PageRouteInfo<void> {
 
   static const String name = 'UsersRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const UsersPage();
+    },
+  );
 }

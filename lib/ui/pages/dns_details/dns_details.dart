@@ -102,9 +102,9 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       );
     }
 
-    final Color goodColor = Theme.of(context).colorScheme.onBackground;
+    final Color goodColor = Theme.of(context).colorScheme.onSurface;
     final Color errorColor = Theme.of(context).colorScheme.error;
-    final Color neutralColor = Theme.of(context).colorScheme.onBackground;
+    final Color neutralColor = Theme.of(context).colorScheme.onSurface;
 
     return BrandHeroScreen(
       hasBackButton: true,

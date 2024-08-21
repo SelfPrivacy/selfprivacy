@@ -64,7 +64,7 @@ class _KeyDisplay extends StatelessWidget {
             children: [
               Icon(
                 Icons.info_outline,
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               const SizedBox(height: 16),
               Text(

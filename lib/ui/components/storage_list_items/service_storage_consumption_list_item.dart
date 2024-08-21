@@ -44,7 +44,8 @@ class ServiceStorageConsumptionListItem extends StatelessWidget {
                 BrandLinearIndicator(
                   value: percentage,
                   color: color,
-                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.surfaceContainerHighest,
                   height: 7.0,
                 ),
               ],

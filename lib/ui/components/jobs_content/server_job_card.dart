@@ -75,7 +75,8 @@ class ServerJobCard extends StatelessWidget {
                     ? 0.0
                     : serverJob.progress! / 100.0,
                 color: color,
-                backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                backgroundColor:
+                    Theme.of(context).colorScheme.surfaceContainerHighest,
                 height: 7.0,
               ),
               const SizedBox(height: 8),

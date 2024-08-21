@@ -73,7 +73,7 @@ class ServiceConsumptionTitle extends StatelessWidget {
                   width: 24.0,
                   height: 24.0,
                   colorFilter: ColorFilter.mode(
-                    Theme.of(context).colorScheme.onBackground,
+                    Theme.of(context).colorScheme.onSurface,
                     BlendMode.srcIn,
                   ),
                 ),

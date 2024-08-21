@@ -373,9 +373,7 @@ class BackupDetailsPage extends StatelessWidget {
                                 width: 24,
                                 colorFilter: ColorFilter.mode(
                                   overrideColor ??
-                                      Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
+                                      Theme.of(context).colorScheme.onSurface,
                                   BlendMode.srcIn,
                                 ),
                               )

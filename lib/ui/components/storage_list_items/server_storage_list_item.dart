@@ -32,12 +32,12 @@ class ServerStorageListItem extends StatelessWidget {
         color: volume.root
             ? Theme.of(context).colorScheme.primary
             : Theme.of(context).colorScheme.secondary,
-        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         percentage: volume.percentage,
         icon: Icon(
           Icons.storage_outlined,
           size: 24,
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       );
 }

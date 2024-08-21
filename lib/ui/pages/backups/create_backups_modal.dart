@@ -157,7 +157,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
                 colorFilter: ColorFilter.mode(
                   busy
                       ? Theme.of(context).colorScheme.outlineVariant
-                      : Theme.of(context).colorScheme.onBackground,
+                      : Theme.of(context).colorScheme.onSurface,
                   BlendMode.srcIn,
                 ),
               ),

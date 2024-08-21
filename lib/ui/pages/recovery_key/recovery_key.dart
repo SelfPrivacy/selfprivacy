@@ -145,7 +145,7 @@ class RecoveryKeyStatusCard extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onErrorContainer,
                 ),
           tileColor: isValid
-              ? Theme.of(context).colorScheme.surfaceVariant
+              ? Theme.of(context).colorScheme.surfaceContainerHighest
               : Theme.of(context).colorScheme.errorContainer,
         ),
       );
@@ -175,7 +175,7 @@ class RecoveryKeyInformation extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: state.isInvalidBecauseExpired
                           ? Theme.of(context).colorScheme.error
-                          : Theme.of(context).colorScheme.onBackground,
+                          : Theme.of(context).colorScheme.onSurface,
                     ),
               ),
             ),
@@ -189,7 +189,7 @@ class RecoveryKeyInformation extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: state.isInvalidBecauseUsed
                           ? Theme.of(context).colorScheme.error
-                          : Theme.of(context).colorScheme.onBackground,
+                          : Theme.of(context).colorScheme.onSurface,
                     ),
               ),
             ),

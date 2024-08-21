@@ -92,7 +92,7 @@ class BackupsListPage extends StatelessWidget {
                         height: 24,
                         width: 24,
                         colorFilter: ColorFilter.mode(
-                          Theme.of(context).colorScheme.onBackground,
+                          Theme.of(context).colorScheme.onSurface,
                           BlendMode.srcIn,
                         ),
                       )

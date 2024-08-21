@@ -126,7 +126,7 @@ class _DomainPickerState extends State<DomainPicker> {
                   child: Text(
                     state.domain,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,

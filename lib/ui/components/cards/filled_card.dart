@@ -30,7 +30,7 @@ class FilledCard extends StatelessWidget {
                 ? Theme.of(context).colorScheme.secondaryContainer
                 : tertiary
                     ? Theme.of(context).colorScheme.tertiaryContainer
-                    : Theme.of(context).colorScheme.surfaceVariant,
+                    : Theme.of(context).colorScheme.surfaceContainerHigh,
         semanticContainer: mergeSemantics,
         child: child,
       );

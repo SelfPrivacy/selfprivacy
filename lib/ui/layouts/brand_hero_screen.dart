@@ -49,7 +49,7 @@ class BrandHeroScreen extends StatelessWidget {
         Icon(
           heroIcon ?? Icons.help,
           size: 48.0,
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
         );
     final bool hasHeroIcon = heroIcon != null || this.heroIconWidget != null;
 
@@ -78,7 +78,7 @@ class BrandHeroScreen extends StatelessWidget {
                   Text(
                     heroSubtitle!,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                     textAlign: hasHeroIcon ? TextAlign.center : TextAlign.start,
                   ),
@@ -152,7 +152,7 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
                 isJobsListEmpty ? Ionicons.flash_outline : Ionicons.flash,
               ),
               color: isJobsListEmpty
-                  ? Theme.of(context).colorScheme.onBackground
+                  ? Theme.of(context).colorScheme.onSurface
                   : Theme.of(context).colorScheme.primary,
               tooltip: 'jobs.title'.tr(),
             ),

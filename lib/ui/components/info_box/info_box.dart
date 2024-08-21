@@ -19,12 +19,12 @@ class InfoBox extends StatelessWidget {
           Icon(
             isWarning ? Icons.warning_amber_outlined : Icons.info_outline,
             size: 24,
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
           Text(
             text,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
           ),
         ],

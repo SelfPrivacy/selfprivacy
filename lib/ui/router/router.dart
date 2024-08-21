@@ -53,7 +53,7 @@ Widget fadeThroughTransition(
   // transitionsBuilder: fadeThroughTransition,
   replaceInRouteName: 'Page|Screen|Routing,Route',
 )
-class RootRouter extends _$RootRouter {
+class RootRouter extends RootStackRouter {
   RootRouter(final GlobalKey<NavigatorState> navigatorKey)
       : super(navigatorKey: navigatorKey);
 

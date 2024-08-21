@@ -45,7 +45,7 @@ class UserDetailsPage extends StatelessWidget {
         _SshKeysCard(user: user),
         const SizedBox(height: 8),
         ListTile(
-          iconColor: Theme.of(context).colorScheme.onBackground,
+          iconColor: Theme.of(context).colorScheme.onSurface,
           onTap: () => showModalBottomSheet(
             context: context,
             isScrollControlled: true,

@@ -208,7 +208,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     if (state is! VolumesLoaded) {
       return;
     }
-    if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
+    if (!(ProvidersController.currentServerProvider?.isAuthorized ?? false)) {
       return;
     }
     getIt<NavigationService>().showSnackBar(

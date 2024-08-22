@@ -56,6 +56,13 @@ enum DnsProviderType {
         desec => 'deSEC',
         unknown => 'Unknown',
       };
+
+  String get supportArticle => switch (this) {
+        digitalOcean => 'how_digital_ocean',
+        cloudflare => 'how_cloudflare',
+        desec => 'how_desec',
+        unknown => '',
+      };
 }
 
 extension DnsProviderTypeIsSpecified on DnsProviderType? {

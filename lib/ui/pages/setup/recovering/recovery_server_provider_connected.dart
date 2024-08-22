@@ -17,6 +17,12 @@ class RecoveryServerProviderConnected extends StatelessWidget {
     final ServerInstallationCubit appConfig =
         context.watch<ServerInstallationCubit>();
 
+    final displayName = appConfig.state.serverDetails?.provider.displayName ??
+        'Server Provider';
+
+    final supportArticle =
+        appConfig.state.serverDetails?.provider.supportArticle ?? '';
+
     if (appConfig.state.serverDetails?.provider == ServerProviderType.unknown) {
       return BrandHeroScreen(
         heroTitle: 'recovering.server_provider_unknown'.tr(),
@@ -45,8 +51,7 @@ class RecoveryServerProviderConnected extends StatelessWidget {
         builder: (final BuildContext context) => BrandHeroScreen(
           heroTitle: 'recovering.provider_connected'.tr(
             args: [
-              appConfig.state.serverDetails?.provider.displayName ??
-                  'Server Provider',
+              displayName,
             ],
           ),
           heroSubtitle: 'recovering.provider_connected_description'.tr(
@@ -67,8 +72,7 @@ class RecoveryServerProviderConnected extends StatelessWidget {
                 border: const OutlineInputBorder(),
                 labelText: 'recovering.provider_connected_placeholder'.tr(
                   args: [
-                    appConfig.state.serverDetails?.provider.displayName ??
-                        'Server Provider',
+                    displayName,
                   ],
                 ),
               ),
@@ -84,7 +88,7 @@ class RecoveryServerProviderConnected extends StatelessWidget {
               builder: (final context) => BrandButton.text(
                 title: 'initializing.how'.tr(),
                 onPressed: () => context.read<SupportSystemCubit>().showArticle(
-                      article: 'how_hetzner',
+                      article: supportArticle,
                       context: context,
                     ),
               ),

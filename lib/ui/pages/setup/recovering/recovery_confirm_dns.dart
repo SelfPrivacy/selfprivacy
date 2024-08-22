@@ -24,6 +24,8 @@ class RecoveryConfirmDns extends StatelessWidget {
           final String providerDisplayName =
               appConfig.state.serverDomain?.provider.displayName ??
                   'DNS Provider';
+          final String providerSupportArticle =
+              appConfig.state.serverDomain?.provider.supportArticle ?? '';
           return BrandHeroScreen(
             heroTitle: 'recovering.provider_connected'.tr(
               args: [providerDisplayName],
@@ -60,7 +62,7 @@ class RecoveryConfirmDns extends StatelessWidget {
                 builder: (final context) => BrandButton.text(
                   onPressed: () =>
                       context.read<SupportSystemCubit>().showArticle(
-                            article: 'how_cloudflare',
+                            article: providerSupportArticle,
                             context: context,
                           ),
                   title: 'initializing.how'.tr(),

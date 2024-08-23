@@ -5,6 +5,7 @@ version: 0.12.2+25
 
 environment:
   sdk: '>=3.5.0 <4.0.0'
+  # RECOMMENDED_FLUTTER_VERSION=3.24.0
   flutter: ">=3.24.0 <3.25.0"
 
 dependencies:

@@ -13,7 +13,6 @@
         "choose_server_type_payment_per_month": "{} у месяц",
         "backblaze_bad_key_error": "Інфармацыя аб Backblaze сховішча няслушная",
         "select_dns": "Цяпер давайце выберам DNS-правайдэра",
-        "what": "Што гэта значыць?",
         "server_rebooted": "Сервер перазагружаны, чакаем апошнюю праверку…",
         "server_created": "Сервер створаны. Ідзе праверка DNS адрасоў і запуск сервера…",
         "until_the_next_check": "Да наступнай праверкі: ",

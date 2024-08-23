@@ -249,7 +249,6 @@
         "save_domain": "Uložiť doménu",
         "final": "Posledný krok",
         "create_server": "Vytvoriť server",
-        "what": "Čo to znamená?",
         "server_rebooted": "Server bol reštartovaný. Čaká sa na posledné overenie…",
         "server_started": "Server spustený. Teraz bude overený a reštartovaný…",
         "server_created": "Server bol vytvorený. Prebieha kontrola DNS a spúšťanie servera…",

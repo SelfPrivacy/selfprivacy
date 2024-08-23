@@ -380,7 +380,6 @@
         "save_domain": "Salvesta domeen",
         "final": "Viimane samm",
         "create_server": "Looge server",
-        "what": "Mida see tähendab?",
         "server_started": "Server on käivitatud. Nüüd toimub selle kontroll ja taaskäivitamine…",
         "server_created": "Server on loodud. DNS kontroll ja serveri käivitamine on pooleli…",
         "domain_critical_error": "Me ei saa sellele domeenile ühendust! Puudutage lisateabe lugemiseks…",

@@ -135,7 +135,6 @@
         "save_domain": "Uložit doménu",
         "final": "Závěrečný krok",
         "create_server": "Vytvořit server",
-        "what": "Co to znamená?",
         "server_rebooted": "Server byl restartován. Čeká se na poslední ověření…",
         "select_provider_countries_title": "Dostupné země",
         "select_provider_countries_text_hetzner": "Německo, Finsko, USA",

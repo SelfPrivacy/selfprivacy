@@ -505,7 +505,6 @@
         "use_this_domain_text": "指定されたトークンで、以下のドメインにアクセスできます",
         "no_connected_domains": "現在、接続しているドメインはありません",
         "checks": "確認が完了しました\n{done}件/{total}件中",
-        "what": "その意味を解説",
         "choose_server_type_notice": "確認すべき項目はCPUとRAMです。あなたのサービスのデータは、簡単に拡張でき、別個に使用料金が請求されるマウント済のボリューム上に保存されます。",
         "choose_server_type": "必要な種類のサーバー",
         "locations_not_found_text": "借りられるサーバーがありません",

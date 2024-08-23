@@ -182,7 +182,6 @@
         "choose_location_type_text": "不同的位置提供不同的服务器配置、价格和连接速度。",
         "select_provider_price_text_hetzner": "每月 €8，提供一个相对较小的服务器和50GB的磁盘存储空间",
         "select_provider_email_notice": "新客户将无法使用电子邮件托管。然而，一旦完成首次付款，将解锁该功能。",
-        "what": "这意味着什么？",
         "choose_server_type_text": "不同的资源大小支持不同的服务。别担心，您可以随时扩展您的服务器",
         "server_started": "服务器已启动。现在将进行验证并重新启动…",
         "one_more_restart": "还需一次重启以应用您的安全证书。",

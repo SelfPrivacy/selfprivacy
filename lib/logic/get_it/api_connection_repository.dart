@@ -257,6 +257,16 @@ class ApiConnectionRepository {
     }
   }
 
+  Future<(bool, String)> refreshDeviceToken() async {
+    final GenericResult<String> result = await api.refreshDeviceApiToken();
+    _apiData.devices.invalidate();
+    if (result.success) {
+      return (true, result.data);
+    } else {
+      return (false, result.message ?? 'jobs.generic_error'.tr());
+    }
+  }
+
   void dispose() {
     _dataStream.close();
     _connectionStatusStream.close();

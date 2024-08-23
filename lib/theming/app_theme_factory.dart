@@ -52,7 +52,8 @@ abstract class AppThemeFactory {
   }
 
   static Future<ColorScheme?> _getDynamicColors(
-      final Brightness brightness) async {
+    final Brightness brightness,
+  ) async {
     List<Color> extractAdditionalColours(final ColorScheme scheme) => [
           scheme.surface,
           scheme.surfaceDim,
@@ -65,7 +66,9 @@ abstract class AppThemeFactory {
         ];
 
     ColorScheme insertAdditionalColours(
-            final ColorScheme scheme, final List<Color> additionalColours) =>
+      final ColorScheme scheme,
+      final List<Color> additionalColours,
+    ) =>
         scheme.copyWith(
           surface: additionalColours[0],
           surfaceDim: additionalColours[1],
@@ -88,7 +91,9 @@ abstract class AppThemeFactory {
       }
       // Workaround as dynamic_color doesn't add new color roles
       final fromSeed = ColorScheme.fromSeed(
-          seedColor: colorScheme.primary, brightness: brightness);
+        seedColor: colorScheme.primary,
+        brightness: brightness,
+      );
       final additionalColours = extractAdditionalColours(fromSeed);
       final updatedColorScheme =
           insertAdditionalColours(colorScheme, additionalColours);

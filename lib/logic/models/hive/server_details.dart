@@ -50,16 +50,17 @@ class ServerHostingDetails {
     final DateTime? startTime,
     final String? serverLocation,
     final String? serverType,
+    final String? apiToken,
   }) =>
       ServerHostingDetails(
         startTime: startTime ?? this.startTime,
         serverLocation: serverLocation ?? this.serverLocation,
         serverType: serverType ?? this.serverType,
+        apiToken: apiToken ?? this.apiToken,
         createTime: createTime,
         id: id,
         ip4: ip4,
         volume: volume,
-        apiToken: apiToken,
         provider: provider,
       );
 

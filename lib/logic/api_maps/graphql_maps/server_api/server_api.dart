@@ -550,6 +550,41 @@ class ServerApi extends GraphQLApiMap
     return token;
   }
 
+  Future<GenericResult<String>> refreshDeviceApiToken() async {
+    GenericResult<String> token;
+    QueryResult<Mutation$RefreshDeviceApiToken> response;
+
+    try {
+      final GraphQLClient client = await getClient();
+
+      final mutation = Options$Mutation$RefreshDeviceApiToken();
+      response = await client.mutate$RefreshDeviceApiToken(
+        mutation,
+      );
+      if (response.hasException) {
+        print(response.exception.toString());
+        token = GenericResult<String>(
+          success: false,
+          data: '',
+          message: response.exception.toString(),
+        );
+      }
+      token = GenericResult<String>(
+        success: true,
+        data: response.parsedData!.api.refreshDeviceApiToken.token!,
+      );
+    } catch (e) {
+      print(e);
+      token = GenericResult<String>(
+        success: false,
+        data: '',
+        message: e.toString(),
+      );
+    }
+
+    return token;
+  }
+
   Future<bool> isHttpServerWorking() async => (await getApiVersion()) != null;
 
   Future<GenericResult<String>> authorizeDevice(

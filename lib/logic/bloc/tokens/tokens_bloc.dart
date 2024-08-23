@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -31,6 +32,10 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     );
     on<ServerSelectedForProviderToken>(
       connectServerToProviderToken,
+    );
+    on<RefreshServerApiTokenEvent>(
+      refreshServerApiToken,
+      transformer: droppable(),
     );
 
     add(const RevalidateTokens());
@@ -206,6 +211,33 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       ),
     );
     await getIt<ResourcesModel>().updateServerByDomain(newServerData);
+  }
+
+  Future<void> refreshServerApiToken(
+    final RefreshServerApiTokenEvent event,
+    final Emitter<TokensState> emit,
+  ) async {
+    final (success, newToken) =
+        await getIt<ApiConnectionRepository>().refreshDeviceToken();
+    if (!success) {
+      getIt<NavigationService>().showSnackBar(
+        'devices.refresh_token_alert.failed_to_refresh_token'.tr(),
+      );
+      return;
+    }
+    final Server serverDetails = state.servers.first;
+    final hostingDetails = serverDetails.hostingDetails.copyWith(
+      apiToken: newToken,
+    );
+    await getIt<ResourcesModel>().updateServerByDomain(
+      Server(
+        hostingDetails: hostingDetails,
+        domain: serverDetails.domain,
+      ),
+    );
+    getIt<NavigationService>().showSnackBar(
+      'devices.refresh_token_alert.success_refresh_token'.tr(),
+    );
   }
 
   @override

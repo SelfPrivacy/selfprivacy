@@ -569,6 +569,14 @@
             "description": "The device {} will no longer have access to the server.",
             "yes": "Revoke",
             "no": "Cancel"
+        },
+        "refresh_token_alert": {
+            "header": "Refresh access token?",
+            "description": "A new token will be generated for this device to connect to the server.",
+            "yes": "Confirm",
+            "no": "Cancel",
+            "failed_to_refresh_token": "Couldn't refresh the token. Please try again.",
+            "success_refresh_token": "Token refreshed successfully."
         }
     },
     "recovery_key": {

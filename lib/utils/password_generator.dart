@@ -1,6 +1,6 @@
 import 'dart:math';
 
-Random _rnd = Random();
+Random _rnd = Random.secure();
 
 typedef StringGeneratorFunction = String Function();
 

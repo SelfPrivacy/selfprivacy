@@ -156,7 +156,7 @@
         "check": "Перевірка",
         "one_more_restart": "Ще один перезапуск, щоб застосувати сертифікати безпеки.",
         "create_master_account": "Створити внутрішній рахунок",
-        "checks": "Перевірка була завершена\n{} з {}",
+        "checks": "Перевірка була завершена\n{done} з {total}",
         "dns_provider_bad_key_error": "Невірний ключ API",
         "steps": {
             "dns_provider": "DNS провайдер",
@@ -398,7 +398,7 @@
         "card_title": "Серверне сховище",
         "status_error": "Мало місця на диску",
         "disk_usage": "{} використано",
-        "disk_total": "{} всього · {}",
+        "disk_total": "{sizeTotal} всього · {displayName}",
         "gb": "{} ГБ",
         "mb": "{} МБ",
         "kb": "{} КБ",
@@ -415,7 +415,7 @@
         "data_migration_notice": "Під час переносу всі послуги будуть вимкнені.",
         "price": "Ціна",
         "extending_volume_rebooting": "Перезапуск сервера…",
-        "extending_volume_modal_description": "Сховище буде розширено до {}, нова вартість {} в місяць.",
+        "extending_volume_modal_description": "Сховище буде розширено до {size}, нова вартість {price} в місяць.",
         "extending_volume_provider_waiting": "Сховище розширено зі сторони провайдера, очікуємо 10 секунд…",
         "extending_volume_started": "Розширення сховища розпочато",
         "extending_volume_server_waiting": "Сховище розширено зі сторони сервера, очікуємо 20 секунд…"

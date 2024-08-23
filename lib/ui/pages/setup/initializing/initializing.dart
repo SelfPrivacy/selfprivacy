@@ -511,7 +511,12 @@ class InitializingPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'initializing.checks'.tr(args: [doneCount.toString(), '4']),
+                'initializing.checks'.tr(
+                  namedArgs: {
+                    'done': doneCount.toString(),
+                    'total': '4',
+                  },
+                ),
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 16),

@@ -165,7 +165,7 @@
         "status_ok": "Diska lietojums ir kārtībā",
         "status_error": "Maz vietas diskā",
         "disk_usage": "{} izmantots",
-        "disk_total": "{} Kopā · {}",
+        "disk_total": "{sizeTotal} Kopā · {displayName}",
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",

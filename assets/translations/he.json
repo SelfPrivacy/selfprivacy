@@ -262,7 +262,7 @@
         "price": "מחיר",
         "status_error": "חסר מקום בכונן",
         "disk_usage": "{} מנוצלים",
-        "disk_total": "{} בסך הכול · {}",
+        "disk_total": "{sizeTotal} בסך הכול · {displayName}",
         "data_migration_title": "הסבת נתונים",
         "gb": "{} ג״ב",
         "mb": "{} מ״ב",
@@ -276,7 +276,7 @@
         "size": "גודל",
         "data_migration_notice": "במהלך ההסבה כל השירותים ייכבו.",
         "start_migration_button": "התחלת הסבה",
-        "extending_volume_modal_description": "לשדרג ל־{} בתוכנית של {} לחודש.",
+        "extending_volume_modal_description": "לשדרג ל־{size} בתוכנית של {price} לחודש.",
         "extending_volume_started": "הרחבת כרך החלה",
         "extending_volume_provider_waiting": "גודל כרך הספק השתנה, נמתין 10 שניות…",
         "extending_volume_server_waiting": "גודל כרך השרת השתנה, נמתין 20 שניות…",
@@ -409,7 +409,7 @@
         "create_server": "יצירת שרת",
         "enter_username_and_password": "נא למלא שם משתמש וסיסמה חזקה",
         "create_master_account": "יצירת חשבון ראשי",
-        "checks": "בדיקות הושלמו \n{} מתוך {}",
+        "checks": "בדיקות הושלמו \n{done} מתוך {total}",
         "domain_critical_error": "לא הצלחנו להגיע לשם התחום הזה! נגיעה למידע נוסף…"
     },
     "recovering": {

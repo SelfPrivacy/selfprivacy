@@ -217,7 +217,7 @@
         "status_ok": "Disk je v poriadku",
         "status_error": "Málo miesta na disku",
         "disk_usage": "Využité {}",
-        "disk_total": "{} celkove · {}",
+        "disk_total": "{sizeTotal} celkove · {displayName}",
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",
@@ -285,7 +285,7 @@
         "select_dns": "Teraz vyberme poskytovateľa DNS",
         "use_this_domain": "Chcete použiť túto doménu?",
         "create_master_account": "Vytvorte hlavný účet",
-        "checks": "Kontroly boli ukončené\n{} z {}",
+        "checks": "Kontroly boli ukončené\n{done} z {total}",
         "steps": {
             "nixos_installation": "Inštalácia NixOS",
             "hosting": "Hosting",

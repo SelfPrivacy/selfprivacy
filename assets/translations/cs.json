@@ -169,7 +169,7 @@
         "create_master_account": "Vytvoření hlavního účtu",
         "loading_domain_list": "Načítání seznamu domén",
         "enter_username_and_password": "Zadejte uživatelské jméno a silné heslo",
-        "checks": "Kontroly byly dokončeny\n{} z {}",
+        "checks": "Kontroly byly dokončeny\n{done} z {total}",
         "steps": {
             "server": "Server",
             "dns_setup": "Instalace služby DNS",
@@ -241,7 +241,7 @@
         "status_ok": "Využití disku je v pořádku",
         "status_error": "Málo místa na disku",
         "disk_usage": "{} použito",
-        "disk_total": "{} celkem - {}",
+        "disk_total": "{sizeTotal} celkem - {displayName}",
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",

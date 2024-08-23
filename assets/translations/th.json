@@ -148,7 +148,7 @@
         "status_error": "พื้นที่ว่างดิสก์ต่ำ",
         "disk_usage": "{} ใช้แล้ว",
         "extending_volume_title": "กำลังขยายความจุ",
-        "disk_total": "{} ทั้งหมด {}",
+        "disk_total": "{sizeTotal} ทั้งหมด {displayName}",
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",

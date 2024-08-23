@@ -162,7 +162,7 @@
         "status_ok": "Uporaba diska je v redu",
         "status_error": "Malo prostora na disku",
         "disk_usage": "{} uporablja se",
-        "disk_total": "{} skupaj - {}",
+        "disk_total": "{sizeTotal} skupaj - {displayName}",
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",

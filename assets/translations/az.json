@@ -152,7 +152,7 @@
         "status_ok": "Heç bir disk problemi tapılmadı",
         "status_error": "Disk sahəsi tükənir",
         "disk_usage": "{} istifadə olunur",
-        "disk_total": "{} ümumi · {}",
+        "disk_total": "{sizeTotal} ümumi · {displayName}",
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",
@@ -267,7 +267,7 @@
         "check": "Yoxlanış",
         "create_master_account": "Əsas hesab yaradın",
         "enter_username_and_password": "İstifadəçi adı və mürəkkəb parol daxil edin",
-        "checks": "Yoxlamalar aparıldı:. \n{} / {}",
+        "checks": "Yoxlamalar aparıldı:. \n{done} / {total}",
         "steps": {
             "hosting": "Hostinq",
             "server_type": "Server növü",

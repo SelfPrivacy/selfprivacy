@@ -300,7 +300,6 @@
     "storage": {
         "status_ok": "Статус: жақсы",
         "status_error": "Статус: қате",
-        "disk_total": "Жалпы диск",
         "mb": "МБ",
         "extending_volume_title": "Көлемді ұлғайту атауы",
         "extending_volume_description": "Көлемді ұлғайту сипаттамасы",
@@ -312,7 +311,6 @@
         "extending_volume_provider_waiting": "Провайдерді күту",
         "extending_volume_server_waiting": "Серверді күту",
         "extending_volume_rebooting": "Қайта жүктеу",
-        "extending_volume_modal_description": "Көлемді ұлғайту модалы сипаттамасы",
         "data_migration_title": "Деректерді көшіру атауы",
         "card_title": "Сақтау карточкасы",
         "extend_volume_button": "Көлемді ұлғайту",
@@ -437,7 +435,6 @@
         "select_provider_price_free": "Тегін",
         "choose_server_type_payment_server": "Сервер төлемі",
         "domain_critical_error": "Доменнің критикалық қатесі",
-        "checks": "Тексерулер",
         "use_this_domain_text": "Осы доменді пайдалану мәтіні",
         "use_this_domain": "Біз бұл доменді қолданамыз ба?"
     },

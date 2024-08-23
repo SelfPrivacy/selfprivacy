@@ -203,7 +203,7 @@
         "status_ok": "Użycie dysku jest OK",
         "status_error": "Mało miejsca na dysku",
         "disk_usage": "{} użyte",
-        "disk_total": "{} całkowity · {}",
+        "disk_total": "{sizeTotal} całkowity · {displayName}",
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",
@@ -337,7 +337,7 @@
         "check": "Sprawdź",
         "one_more_restart": "Teraz nastąpi dodatkowe ponowne uruchomienie komputera w celu aktywacji certyfikatów bezpieczeństwa.",
         "enter_username_and_password": "Wprowadź nazwę użytkownika i złożone hasło",
-        "checks": "Kontrole wykonane:\n{} / {}",
+        "checks": "Kontrole wykonane:\n{done} / {total}",
         "steps": {
             "hosting": "Hosting",
             "nixos_installation": "Instalacja NixOS",

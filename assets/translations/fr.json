@@ -152,7 +152,7 @@
         "status_ok": "L'utilisation du disque est OK",
         "status_error": "Faible espace disque",
         "disk_usage": "{} utilisé",
-        "disk_total": "{} total · {}",
+        "disk_total": "{sizeTotal} total · {displayName}",
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",

@@ -23,10 +23,10 @@ class ServerStorageListItem extends StatelessWidget {
           ],
         ),
         subtitle: 'storage.disk_total'.tr(
-          args: [
-            volume.sizeTotal.toString(),
-            volume.displayName,
-          ],
+          namedArgs: {
+            'sizeTotal': volume.sizeTotal.toString(),
+            'displayName': volume.displayName,
+          },
         ),
         dense: dense,
         color: volume.root

@@ -158,7 +158,10 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                           alertTitle: 'storage.extending_volume_title'.tr(),
                           description:
                               'storage.extending_volume_modal_description'.tr(
-                            args: [_sizeController.text, _priceController.text],
+                            namedArgs: {
+                              'size': _sizeController.text,
+                              'price': _priceController.text,
+                            },
                           ),
                           actionButtonTitle: 'basis.continue'.tr(),
                           actionButtonOnPressed: () {

@@ -137,12 +137,12 @@
     },
     "storage": {
         "extending_volume_description": "调整卷大小将允许您在服务器上存储更多数据，而无需扩展服务器本身。卷只能扩展：无法收缩。",
-        "extending_volume_modal_description": "升级到{}，每月{}的套餐。",
+        "extending_volume_modal_description": "升级到{size}，每月{price}的套餐。",
         "card_title": "服务器存储",
         "status_ok": "磁盘使用情况正常",
         "status_error": "磁盘空间不足",
         "disk_usage": "已使用 {}",
-        "disk_total": "{} 总共 · {}",
+        "disk_total": "{sizeTotal} 总共 · {displayName}",
         "gb": "{} GB",
         "mb": "{} MB",
         "kb": "{} KB",
@@ -236,7 +236,7 @@
         "check": "检查",
         "create_master_account": "创建主账户",
         "enter_username_and_password": "输入用户名和强密码",
-        "checks": "检查已完成\n{} 个中的 {} 个"
+        "checks": "检查已完成\n{done} 个中的 {total} 个"
     },
     "recovering": {
         "method_device_input_description": "输入您的授权令牌",

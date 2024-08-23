@@ -146,7 +146,7 @@
         "select_provider_payment_text_hetzner": "Kreditní karty, SWIFT, SEPA, PayPal",
         "select_provider_payment_text_do": "Kreditní karty, Google Pay, PayPal",
         "select_provider_site_button": "Navštivte stránku",
-        "connect_to_server_provider": "Nyní se přihlaste ",
+        "connect_to_server_provider": "Nyní se přihlaste {provider}",
         "connect_to_server_provider_text": "S tokenem API si SelfPrivacy bude moci pronajmout počítač a nastavit na něm svůj server",
         "how": "Jak získat token API",
         "provider_bad_key_error": "Klíč API poskytovatele je neplatný",

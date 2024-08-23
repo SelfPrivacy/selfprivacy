@@ -29,7 +29,7 @@
         "choose_server_type_payment_ip": "{} لعنوان IPv4 العام",
         "use_this_domain": "هل تريد استخدام هذا النطاق؟",
         "select_provider": "اختر أي مزود من القائمة التالية. كل منهم يدعم SelfPrivacy",
-        "connect_to_server_provider": "قم بتسجيل الدخول الآن ",
+        "connect_to_server_provider": "قم بتسجيل الدخول الآن {provider}",
         "multiple_domains_found": "لقد وجدت نطاقات عديدة",
         "steps": {
             "master_account": "الحساب الرئيسي",

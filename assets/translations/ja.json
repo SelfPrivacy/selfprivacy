@@ -448,7 +448,7 @@
         "select_provider_payment_text_hetzner": "クレジットカード、国際送金（SWIFT、SEPA）、PayPal",
         "select_provider_payment_text_do": "クレジットカード、Google Pay、PayPal",
         "select_provider_email_notice": "新規のクライアントは電子メールのホスティングを利用できません。最初の支払いが完了次第、利用可能となります。",
-        "connect_to_server_provider": "にログイン ",
+        "connect_to_server_provider": "にログイン {provider}",
         "how": "APIトークンを取得する方法について",
         "provider_bad_key_error": "サービス提供者のAPI鍵が不正です",
         "could_not_connect": "サービス提供者に接続できませんでした。",

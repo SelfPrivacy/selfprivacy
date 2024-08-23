@@ -225,7 +225,7 @@
         "select_provider_payment_text_hetzner": "บัตรเครดิต, SWIFT, SEPA, PayPal",
         "select_provider_payment_text_do": "บัตรเครดิต, Google Pay PayPal",
         "select_provider_site_button": "เยี่ยมชมเว็บไซต์",
-        "connect_to_server_provider": "เข้าสู่ระบบใน ",
+        "connect_to_server_provider": "เข้าสู่ระบบใน {provider}",
         "connect_to_server_provider_text": "ด้วยโทเค็น API SelfPrivacy จะสามารถเช่าเครื่องและตั้งค่าเซิร์ฟเวอร์ของคุณได้",
         "how": "วิธีรับโทเค็น API",
         "provider_bad_key_error": "คีย์ API ของผู้ให้บริการไม่ถูกต้อง"

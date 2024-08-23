@@ -237,7 +237,7 @@
         "select_provider_payment_text_do": "Bank kartları, Google Pay, PayPal",
         "select_provider_email_notice": "Yeni müştərilər üçün e-poçt hostinqi mövcud deyil. İlk ödənişdən sonra onu açmaq mümkün olacaq.",
         "select_provider_site_button": "Saytı ziyarət edin",
-        "connect_to_server_provider": "Giriş ",
+        "connect_to_server_provider": "Giriş {provider}",
         "how": "API Tokenini necə əldə etmək olar",
         "provider_bad_key_error": "Provayder API açarı yanlışdır",
         "could_not_connect": "Provayderə qoşulmaq alınmadı.",

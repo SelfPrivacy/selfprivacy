@@ -374,7 +374,7 @@
         "select_provider_payment_title": "Провайдер төлемін таңдау атауы",
         "select_provider_payment_text_hetzner": "Hetzner төлемі туралы мәтін",
         "select_provider_payment_text_do": "DigitalOcean төлемі туралы мәтін",
-        "connect_to_server_provider": "Сервер провайдеріне қосылу ",
+        "connect_to_server_provider": "Сервер провайдеріне қосылу {provider}",
         "connect_to_server_provider_text": "Сервер провайдеріне қосылу мәтіні",
         "choose_server_type_payment_per_month": "Айына төлем",
         "choose_server_type_payment_storage": "Сақтау төлемі",

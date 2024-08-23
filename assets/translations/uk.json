@@ -126,7 +126,7 @@
         "select_provider_payment_text_hetzner": "Картка, SWIFT, SEPA, PayPal",
         "select_provider_payment_text_do": "Картка, Google Pay, PayPal",
         "select_provider_site_button": "Відвідати сайт",
-        "connect_to_server_provider": "Авторизуйтеся зараз ",
+        "connect_to_server_provider": "Авторизуйтеся зараз {provider}",
         "locations_not_found_text": "Немає доступних серверів для оренди",
         "connect_to_server_provider_text": "З токеном API SelfPrivacy зможе орендувати техніку і налаштувати на неї ваш сервер",
         "how": "Як отримати токен API",

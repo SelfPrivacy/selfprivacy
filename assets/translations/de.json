@@ -331,7 +331,7 @@
         "select_provider_payment_text_do": "Kreditkarten, Google Pay, PayPal",
         "select_provider_email_notice": "E-Mail-Hosting ist für Neukunden nicht verfügbar. Es wird jedoch freigeschaltet, sobald Sie Ihre erste Zahlung abgeschlossen haben.",
         "select_provider_site_button": "Webseite besuchen",
-        "connect_to_server_provider": "Anmelden bei ",
+        "connect_to_server_provider": "Anmelden bei {provider}",
         "how": "So erhalten Sie ein API-Token",
         "provider_bad_key_error": "Der API-Schlüssel des Anbieters ist ungültig",
         "could_not_connect": "Es konnte keine Verbindung zum Anbieter hergestellt werden.",

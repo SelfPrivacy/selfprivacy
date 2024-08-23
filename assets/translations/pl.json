@@ -302,7 +302,7 @@
         "select_provider_price_text_do": "$17 miesięcznie za stosunkowo mały serwer i 50GB miejsca na dysku",
         "select_provider_payment_title": "Metody płatności",
         "select_provider_payment_text_hetzner": "Karty kredytowe, SWIFT, SEPA, PayPal",
-        "connect_to_server_provider": "Teraz zaloguj się przez ",
+        "connect_to_server_provider": "Teraz zaloguj się przez {provider}",
         "no_locations_found": "Nie znaleziono lokalizacji, upewnij się, że Twoje konto jest dostępne",
         "choose_server_type": "Jaki typ serwera powinienem wybrać?",
         "choose_server_type_ram": "{} GB pamięci RAM",

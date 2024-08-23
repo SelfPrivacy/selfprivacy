@@ -102,7 +102,9 @@ class ProviderInputDataPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${'initializing.connect_to_server_provider'.tr()}${providerInfo.providerType.displayName}",
+              'initializing.connect_to_server_provider'.tr(
+                namedArgs: {'provider': providerInfo.providerType.displayName},
+              ),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 16),

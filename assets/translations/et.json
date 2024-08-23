@@ -352,7 +352,7 @@
         "select_provider_payment_text_do": "Krediitkaardid, Google Pay, PayPal",
         "select_provider_email_notice": "E-posti majutust uutele klientidele ei pakuta. Siiski saab selle lukust avada niipea, kui teete oma esimese makse.",
         "select_provider_site_button": "Külasta saiti",
-        "connect_to_server_provider": "Logi sisse ",
+        "connect_to_server_provider": "Logi sisse {provider}",
         "provider_bad_key_error": "Pakkuja API võti on kehtetu",
         "could_not_connect": "Ühendust pakkuja juurde ei saanud.",
         "choose_location_type": "Kust soovite tellida oma serveri?",

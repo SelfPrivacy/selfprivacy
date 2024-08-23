@@ -385,7 +385,7 @@
         "select_provider_price_title": "מחיר ממוצע",
         "select_provider_price_free": "חינם",
         "select_provider_site_button": "ביקור באתר",
-        "connect_to_server_provider": "כעת יש להיכנס דרך ",
+        "connect_to_server_provider": "כעת יש להיכנס דרך {provider}",
         "choose_location_type_text": "מקומות שונים מציעים הגדרות, מחירים ומהירויות חיבור שונות לשרת.",
         "locations_not_found_text": "אין שרתים זמינים להשכרה",
         "back_to_locations": "נא לבחור משהו אחר",

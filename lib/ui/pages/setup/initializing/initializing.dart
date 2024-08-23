@@ -272,7 +272,11 @@ class InitializingPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${'initializing.connect_to_server_provider'.tr()}Backblaze',
+                    'initializing.connect_to_server_provider'.tr(
+                      namedArgs: {
+                        'provider': 'Backblaze',
+                      },
+                    ),
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ],

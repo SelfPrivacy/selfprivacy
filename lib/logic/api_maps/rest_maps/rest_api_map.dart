@@ -101,12 +101,19 @@ class ConsoleInterceptor extends InterceptorsWrapper {
   ) async {
     final Response? response = err.response;
 
+    String responseEncoded = '';
+    try {
+      responseEncoded = jsonEncode(response);
+    } catch (e) {
+      responseEncoded = response?.statusMessage ?? responseEncoded;
+    }
+
     addConsoleLog(
       ManualConsoleLog.warning(
         customTitle: 'RestAPI error',
         content: '"uri": "${response?.realUri}",\n'
             '"status_code": ${response?.statusCode},\n'
-            '"response": ${jsonEncode(response)}',
+            '"response": $responseEncoded',
       ),
     );
     return super.onError(err, handler);

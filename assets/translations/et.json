@@ -111,7 +111,7 @@
         "reset": "Lähtesta",
         "details": "Detailid",
         "no_data": "Andmed puuduvad",
-        "wait": "Oota",
+        "wait": "Laadimine",
         "remove": "Eemalda",
         "apply": "Rakenda",
         "done": "Tehtud",
@@ -354,7 +354,7 @@
         "select_provider_site_button": "Külasta saiti",
         "connect_to_server_provider": "Logi sisse {provider}",
         "provider_bad_key_error": "Pakkuja API võti on kehtetu",
-        "could_not_connect": "Ühendust pakkuja juurde ei saanud.",
+        "could_not_connect": "Pakkujaga ei saanud ühendust luua.",
         "choose_location_type": "Kust soovite tellida oma serveri?",
         "choose_location_type_text": "Erinevad asukohad pakuvad erinevaid serverikonfiguratsioone, hindu ja ühenduse kiirust.",
         "locations_not_found": "Oih!",
@@ -531,8 +531,8 @@
         "modal_confirmation_description": "Kui loote ühenduse vale serveriga, võite kaotada kõik oma andmed.",
         "modal_confirmation_dns_valid": "Vastupidine DNS on kehtiv",
         "modal_confirmation_dns_invalid": "Vastupidine DNS osutab teisele domeenile",
-        "modal_confirmation_ip_valid": "IP on sama, mis DNS kirjes",
-        "modal_confirmation_ip_invalid": "IP ei ole sama, mis DNS kirjes",
+        "modal_confirmation_ip_valid": "IP aadress ühtib DNS kirjes määratud aadressiga",
+        "modal_confirmation_ip_invalid": "IP aadress ei ühti DNS kirjes määratuga",
         "login_later": "Logige hiljem sisse",
         "server_provider_unknown": "Tundmatu serveri pakkuja",
         "server_provider_unknown_description": "Teie serveri pakkujat ei tunta. Saate jätkata ilma API-tokensa sisestamata."
@@ -585,6 +585,14 @@
             "description": "Seadmel {} ei ole enam serverile juurdepääsu.",
             "no": "Tühista",
             "yes": "Tühistama"
+        },
+        "refresh_token_alert": {
+            "yes": "Kinnita",
+            "header": "Juurdepääsutunnuse uuendamine?",
+            "failed_to_refresh_token": "Märki ei saanud värskendada. Palun proovi uuesti.",
+            "description": "Selle seadme jaoks luuakse serveriga ühenduse loomiseks uus tunnus.",
+            "no": "Tühista",
+            "success_refresh_token": "Märgi värskendamine õnnestus."
         }
     },
     "recovery_key": {

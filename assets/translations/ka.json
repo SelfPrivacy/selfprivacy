@@ -1,13 +1,13 @@
 {
     "devices": {
         "refresh_token_alert": {
-            "yes": "Kinnita",
-            "failed_to_refresh_token": "Märki ei saanud värskendada. Palun proovi uuesti.",
-            "no": "Tühista",
-            "success_refresh_token": "Märgi värskendamine õnnestus."
+            "yes": "",
+            "failed_to_refresh_token": "",
+            "no": "",
+            "success_refresh_token": ""
         }
     },
     "recovery_key": {
-        "key_connection_error": "Ühendust serveriga ei õnnestunud luua."
+        "key_connection_error": ""
     }
 }

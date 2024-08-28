@@ -37,7 +37,10 @@
         "connect": "Қосылу",
         "domain": "Домен",
         "copied_to_clipboard": "Буферге көшірілді!",
-        "please_connect": "Қосылуыңызды сұраймыз!"
+        "please_connect": "Қосылуыңызды сұраймыз!",
+        "feature_unsupported_on_api_version": "Бұл мүмкіндікке тек {versionConstraint} сервер нұсқасында қолдау көрсетіледі. Серверіңіз {currentVersion} нұсқасында.",
+        "server_is_outdated": "Бұл SelfPrivacy нұсқасы API {versionConstraint} нұсқасын қажет етеді, бірақ серверіңіз {currentVersion} нұсқасында. Кейбір мүмкіндіктер жұмыс істемейді және қателер орын алуы мүмкін. Серверіңізді жаңартыңыз.",
+        "error": "қате"
     },
     "more_page": {
         "onboarding": "Қосылу процессі",
@@ -147,7 +150,24 @@
     },
     "console_page": {
         "title": "Консоль",
-        "copy": "Көшіру"
+        "copy": "Көшіру",
+        "headers": "Тақырыптар",
+        "copy_raw": "Шикі жауап",
+        "error": "қате",
+        "history_empty": "Әзірге деректер жоқ",
+        "rest_api_request": "rest API сұрауы",
+        "rest_api_response": "REST API жауабы",
+        "graphql_request": "GraphQL сұранысы",
+        "graphql_response": "GraphQL жауабы",
+        "logged_at": "Жүйеге кірді",
+        "data": "деректер",
+        "errors": "Қателер",
+        "error_path": "Жол",
+        "error_locations": "Орындар",
+        "error_extensions": "Кеңейтімдер",
+        "request_data": "Деректерді сұрау",
+        "response_data": "Жауап деректері",
+        "context": "Контекст"
     },
     "developer_settings": {
         "allow_ssh_key_at_setup": "Баптау кезінде SSH кілтіне рұқсат беру",

@@ -24,7 +24,8 @@ class Localization extends StatelessWidget {
     Locale('fr'),
     Locale('he'),
     Locale('ja'),
-    Locale('kk'),
+    // Disabled due to poor translation quality
+    // Locale('kk'),
     Locale('lv'),
     Locale('mk'),
     Locale('pl'),

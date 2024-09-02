@@ -260,11 +260,9 @@ class _SshKeysCard extends StatelessWidget {
                 const Divider(height: 0),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Expanded(
-                    child: InfoBox(
-                      text: 'ssh.ssh_disabled_warning'.tr(),
-                      isWarning: true,
-                    ),
+                  child: InfoBox(
+                    text: 'ssh.ssh_disabled_warning'.tr(),
+                    isWarning: true,
                   ),
                 ),
               ],

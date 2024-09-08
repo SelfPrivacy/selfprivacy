@@ -156,19 +156,22 @@ class ServerInstallationRepository {
     final ServerDomain serverDomain,
     final ServerHostingDetails? serverDetails,
   ) {
-    if (serverDetails != null) {
-      if (serverProviderToken != null) {
-        if (serverDetails.provider != ServerProviderType.unknown) {
-          if (serverDomain.provider != DnsProviderType.unknown) {
-            return RecoveryStep.backblazeToken;
-          }
-          return RecoveryStep.dnsProviderToken;
-        }
-        return RecoveryStep.serverSelection;
-      }
+    if (serverDetails == null) {
+      return RecoveryStep.selecting;
+    }
+
+    if (serverProviderToken == null) {
       return RecoveryStep.serverProviderToken;
     }
-    return RecoveryStep.selecting;
+
+    /// We don't write anything to the database after .serverSelection
+    /// step, therefore we have to re-ask it again before prompting for
+    /// DNS token, if it wasn't provided yet.
+    if (dnsProviderToken == null) {
+      return RecoveryStep.serverSelection;
+    }
+
+    return RecoveryStep.backblazeToken;
   }
 
   void clearAppConfig() {

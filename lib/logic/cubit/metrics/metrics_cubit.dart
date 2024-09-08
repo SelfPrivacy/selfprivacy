@@ -28,9 +28,11 @@ class MetricsCubit extends Cubit<MetricsState> {
   }
 
   void changePeriod(final Period period) async {
-    closeTimer();
-    emit(MetricsLoading(period));
-    load(period);
+    if (state is! MetricsLoading) {
+      closeTimer();
+      emit(MetricsLoading(period));
+      load(period);
+    }
   }
 
   void restart() async {

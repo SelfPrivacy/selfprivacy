@@ -1,55 +1,31 @@
 {
   nixConfig.bash-prompt = "\[selfprivacy\]$ ";
 
-  inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/c1ce56e9c606b4cd31f0950768911b1171b8db51";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixgl.url = "github:guibou/nixGL";
 
-  outputs = { self, nixpkgs, flake-utils, nixgl }:
+  outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
+        lib = nixpkgs.lib;
+        
+        fromYAML = path: lib.importJSON (pkgs.runCommand "yml2json" { nativeBuildInputs = [pkgs.yq]; src = path; } ''cat $src | yq . > $out'');
+
+        pubSpec = fromYAML ./pubspec.yaml;
+
         pkgs = import nixpkgs {
           inherit system;
           config.allowUnfree = true;
           config.android_sdk.accept_license = true;
-          overlays = [ nixgl.overlay ];
         };
+
+        spFlutter = pkgs.flutter324;
 
         androidComposition = pkgs.androidenv.composeAndroidPackages {
           platformToolsVersion = "34.0.4";
           buildToolsVersions = [ "34.0.0" ];
           platformVersions = [ "34" "33" "32" "31" "30" ];
         };
-
-        spAndroidStudio = pkgs.symlinkJoin {
-           name = "spAndroidStudio";
-           paths = with pkgs; [
-             android-studio
-             flutter.unwrapped
-             # dart
-             gnumake
-             check
-             pkg-config
-             glibc
-             android-tools
-             jdk
-             git
-           ];
-
-           nativeBuildInputs = [ pkgs.makeWrapper ];
-           postBuild = ''
-             wrapProgram $out/bin/flutter \
-               --prefix ANDROID_SDK_ROOT=${androidComposition.androidsdk}/libexec/android-sdk \
-               --prefix ANDROID_HOME=${androidComposition.androidsdk}/libexec/android-sdk \
-               --prefix ANDROID_JAVA_HOME=${pkgs.jdk.home}
-
-             wrapProgram $out/bin/android-studio \
-               --prefix FLUTTER_SDK=${pkgs.flutter.unwrapped} \
-               --prefix ANDROID_SDKz_ROOT=${androidComposition.androidsdk}/libexec/android-sdk \
-               --prefix ANDROID_HOME=${androidComposition.androidsdk}/libexec/android-sdk \
-               --prefix ANDROID_JAVA_HOME=${pkgs.jdk.home}
-           '';
-         };
 
         buildDeps = with pkgs; [
           gtk3
@@ -74,10 +50,10 @@
         ];
 
         nativeBuildDeps = with pkgs; [
-          flutter.unwrapped
+          spFlutter
+          spFlutter.dart
           bash
           curl
-          flutter.dart
           git
           unzip
           which
@@ -90,15 +66,14 @@
           androidComposition.androidsdk
           openjdk11_headless
           clang
+          xdg-user-dirs
         ];
 
-        releaseDerivation = pkgs.flutter.mkFlutterApp rec {
-            pname = "selfprivacy";
-            version = "0.6.0";
+        releaseDerivation = spFlutter.buildFlutterApplication rec {
+            pname = pubSpec.name;
+            version = pubSpec.version;
 
-            vendorHash = "sha256-7cbiAyIlaz3HqEsZN/nZxaLZjseJv5CmiIHqsoGa4ZI=";
-
-            nativeBuildInputs = [ pkgs.nixgl.auto.nixGLDefault ];
+            autoPubspecLock = ./pubspec.lock;
 
             src = ./.;
 
@@ -109,9 +84,6 @@
             };
 
             postInstall = ''
-              rm $out/bin/$pname
-
-              printf "#!/bin/sh\n${pkgs.nixgl.auto.nixGLDefault}/bin/nixGL $out/app/${pname}" > $out/bin/$pname
               patchShebangs $out/bin/$pname
               chmod +x $out/bin/$pname
               wrapProgram $out/bin/$pname --set PATH ${pkgs.lib.makeBinPath [ pkgs.xdg-user-dirs ]}

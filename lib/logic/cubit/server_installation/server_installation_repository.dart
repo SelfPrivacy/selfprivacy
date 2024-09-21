@@ -164,11 +164,12 @@ class ServerInstallationRepository {
       return RecoveryStep.serverProviderToken;
     }
 
-    /// We don't write anything to the database after .serverSelection
-    /// step, therefore we have to re-ask it again before prompting for
-    /// DNS token, if it wasn't provided yet.
-    if (dnsProviderToken == null) {
+    if (serverDetails.serverLocation == null) {
       return RecoveryStep.serverSelection;
+    }
+
+    if (dnsProviderToken == null) {
+      return RecoveryStep.dnsProviderToken;
     }
 
     return RecoveryStep.backblazeToken;

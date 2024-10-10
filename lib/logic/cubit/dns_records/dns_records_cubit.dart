@@ -140,7 +140,9 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
               isSatisfied: foundMatch,
               category: pendingDnsRecord.type == 'A'
                   ? DnsRecordsCategory.services
-                  : DnsRecordsCategory.email,
+                  : (pendingDnsRecord.type == 'CAA'
+                      ? DnsRecordsCategory.other
+                      : DnsRecordsCategory.email),
             ),
           );
         }

@@ -10,7 +10,6 @@ class DesiredDnsRecord {
     required this.content,
     this.type = 'A',
     this.description = '',
-    this.category = DnsRecordsCategory.services,
     this.isSatisfied = false,
     this.displayName,
   });
@@ -20,8 +19,18 @@ class DesiredDnsRecord {
   final String content;
   final String description;
   final String? displayName;
-  final DnsRecordsCategory category;
   final bool isSatisfied;
+
+  DnsRecordsCategory get category {
+    switch (type) {
+      case 'A':
+        return DnsRecordsCategory.services;
+      case 'CAA':
+        return DnsRecordsCategory.other;
+      default:
+        return DnsRecordsCategory.email;
+    }
+  }
 
   DesiredDnsRecord copyWith({
     final String? name,
@@ -29,7 +38,6 @@ class DesiredDnsRecord {
     final String? content,
     final String? description,
     final String? displayName,
-    final DnsRecordsCategory? category,
     final bool? isSatisfied,
   }) =>
       DesiredDnsRecord(
@@ -37,7 +45,6 @@ class DesiredDnsRecord {
         type: type ?? this.type,
         content: content ?? this.content,
         description: description ?? this.description,
-        category: category ?? this.category,
         isSatisfied: isSatisfied ?? this.isSatisfied,
         displayName: displayName ?? this.displayName,
       );

@@ -27,7 +27,7 @@
         "connect_to_existing": "既にSelfPrivacyのサーバーを持っています！",
         "details": "詳細",
         "no_data": "データがありません",
-        "wait": "お待ちください",
+        "wait": "読み込んでいます",
         "remove": "削除",
         "apply": "適用",
         "done": "完了",
@@ -37,18 +37,47 @@
         "providers": "サービス提供者",
         "copied_to_clipboard": "クリップボードにコピーしました！",
         "please_connect": "開始するにはサーバー、ドメイン、DNSのサービス提供者を接続してください！",
-        "network_error": "ネットワークエラー"
+        "network_error": "ネットワークエラー",
+        "feature_unsupported_on_api_version": "この機能はサーバーのバージョン{versionConstraint}でのみサポートされています。あなたのサーバーのバージョンは{currentVersion}です。",
+        "server_is_outdated": "このSelfPrivacyのバージョンではAPIのバージョン{versionConstraint}が必要ですが、あなたのサーバーのバージョンは{currentVersion}です。一部の機能は適切に動作せずエラーが発生するおそれがあります。サーバーをアップグレードしてください。",
+        "error": "エラー"
     },
     "application_settings": {
         "reset_config_description": "APIとルートユーザーをリセット。",
         "title": "アプリケーションの設定",
         "dark_theme_title": "ダークテーマ",
         "dangerous_settings": "要注意の設定",
-        "reset_config_title": "アプリケーションの設定をリセット"
+        "reset_config_title": "アプリケーションの設定をリセット",
+        "change_application_theme": "アプリケーションのテーマを変更",
+        "language": "言語",
+        "click_to_change_locale": "クリックすると言語の一覧を開きます",
+        "system_theme_mode_title": "システムの既定のテーマ",
+        "system_theme_mode_description": "システムの設定に応じてライトまたはダークテーマを使用"
     },
     "console_page": {
         "copy": "コピー",
-        "title": "コンソール"
+        "title": "コンソール",
+        "copy_raw": "未フォーマットのレスポンス",
+        "error": "エラー",
+        "rest_api_request": "REST APIリクエスト",
+        "rest_api_response": "REST APIレスポンス",
+        "history_empty": "データはまだありません",
+        "graphql_request": "GraphQLリクエスト",
+        "graphql_response": "GraphQLレスポンス",
+        "logged_at": "ログイン済",
+        "data": "データ",
+        "operation_type": "操作の種類",
+        "operation_name": "操作の名称",
+        "variables": "変数",
+        "errors": "エラー",
+        "error_path": "パス",
+        "error_locations": "位置",
+        "error_extensions": "拡張機能",
+        "request_data": "リクエストのデータ",
+        "headers": "ヘッダー",
+        "response_data": "レスポンスのデータ",
+        "context": "コンテクスト",
+        "operation": "操作"
     },
     "about_application_page": {
         "title": "概要とサポート",
@@ -111,7 +140,10 @@
         "fallback_select_description": "具体的に何を持っていますか？最初に利用できるものを選択してください。",
         "modal_confirmation_dns_invalid": "逆引きDNSが他のドメインを指しています",
         "modal_confirmation_dns_valid": "逆引きDNSは有効です",
-        "provider_connected_placeholder": "{}のトークン"
+        "provider_connected_placeholder": "{}のトークン",
+        "login_later": "後でログイン",
+        "server_provider_unknown": "サーバーのサービス提供者が不明です",
+        "server_provider_unknown_description": "あなたのサーバーのサービス提供者が不明です。APIトークンを入力せずに続行できます。"
     },
     "ssh": {
         "root_subtitle": "これらの鍵の所有者は、サーバーへの完全なアクセスを行い、全く自由にサーバーを操作することができます。あなた自身の鍵だけをサーバーに追加してください。",
@@ -143,7 +175,23 @@
         "hour": "時間",
         "cpu_title": "CPUの使用状況",
         "in": "受信済",
-        "out": "送信済"
+        "out": "送信済",
+        "memory_chart_screen_reader_explanation": "この図では直近の{period}のメモリーの使用量を表示します。直近の値は{lastValue}%、平均的な使用量は{averageUsage}%で、最大の使用量は{maxUsageTime}の{maxUsage}%です。",
+        "cpu_chart_screen_reader_explanation": "この図では直近の{period}のCPUの使用量を表示します。直近の値は{lastValue}%、平均的な使用量は{averageUsage}%で、最大の使用量は{maxUsageTime}の{maxUsage}%です。",
+        "disk_chart_screen_reader_explanation": {
+            "beginning": "この図では直近の{period}の保存領域の使用量を表示します。 ",
+            "disk": "{disk}の使用量は{beginningValue}%から{endValue}%になりました。 "
+        },
+        "network_chart_screen_reader_explanation": "この図では直近の{period}のネットワーク回線の使用量を表示します。直近の使用量は、受信に関しては{lastValueIn}、送信に関しては {lastValueOut} 、平均的な使用量は、受信に関しては{averageUsageIn}、送信に関しては {averageUsageOut}で、最大の使用量は、受信に関しては{maxUsageTimeIn}の{maxUsageIn}、送信に関しては{maxUsageTimeOut}の{maxUsageOut}です。",
+        "loading": "図を読み込んでいます…",
+        "view_usage_by_service": "サービス毎の使用状況を表示",
+        "unsupported": "リソースの使用状況に関する図の表示にはサービス提供者のトークンが必要です。",
+        "system": "システム",
+        "memory": "メモリーの使用状況",
+        "ssh_users": "SSHユーザー",
+        "ram_usage": "平均的な使用状況: {average}. 最大: {max}.",
+        "disk_title": "保存領域の使用状況",
+        "failed_to_load_memory_metrics": "メモリーの使用状況を読み込めませんでした。回線の接続に問題があるか、十分なデータがまだありません。"
     },
     "domain": {
         "email_subtitle": "安全な電子メールの送受信に必要なレコードです。",
@@ -293,7 +341,15 @@
         "restart": "サービスを再起動",
         "nothing_here": "何もありません",
         "uses": "{volume}で{usage}使用",
-        "move": "別のボリュームに移動"
+        "move": "別のボリュームに移動",
+        "settings": "サービスの設定",
+        "invalid_value_detected": "不正な値が検知されました。変更してください。",
+        "invalid_input": "不正な入力です",
+        "create_job": "ジョブを作成",
+        "update_job": "ジョブを更新",
+        "wait_for_jobs": "サーバーは他のジョブを実行しています。ジョブが終了するまで待機してください。",
+        "logs": "サービスのログ",
+        "modified": "変更済"
     },
     "users": {
         "could_not_fetch_users": "ユーザーの一覧を取得できませんでした",
@@ -340,6 +396,14 @@
             "tip": "端末を押すとアクセス権を取り消します。",
             "access_granted_on": "{}にアクセス権が付与されました",
             "description": "これらの端末は、SelfPrivacyのアプリを使用してサーバーに完全にアクセスすることができます。"
+        },
+        "refresh_token_alert": {
+            "header": "アクセストークンを更新しますか？",
+            "description": "この端末からサーバーへの接続用トークンを再発行します。",
+            "yes": "承認",
+            "no": "キャンセル",
+            "failed_to_refresh_token": "トークンを更新できませんでした。後でもう一度やり直してください。",
+            "success_refresh_token": "トークンを更新しました。"
         }
     },
     "recovery_key": {
@@ -391,7 +455,15 @@
         "reboot_failed": "サーバーを再起動できませんでした。アプリのログを確認してください。",
         "service_turn_on": "有効にする",
         "config_pull_failed": "設定のアップグレードを行えませんでした。ソフトウェアのアップグレードを開始しました。",
-        "service_turn_off": "無効にする"
+        "service_turn_off": "無効にする",
+        "collect_nix_garbage": "システムのガベージコレクションを実行",
+        "failed_to_load_dns_records": "DNSのレコードを読み込めませんでした",
+        "ignored_due_to_failures": "以前実行できなかったため無視しました",
+        "change_service_settings": "{}のサービスの設定を変更",
+        "collect_nix_garbage_failed": "システムのガベージコレクションを実行できませんでした",
+        "update_dns_records": "DNSのレコードを更新",
+        "dns_records_did_not_change": "変更は不要です",
+        "dns_records_changed": "DNSのレコードを更新しました"
     },
     "validations": {
         "required": "必須",
@@ -436,7 +508,19 @@
         "select_timezone": "タイムゾーンを選択",
         "timezone_search_bar": "タイムゾーンの名称または時差",
         "description": "このコンピューター上で全てのサービスが実行されます",
-        "disk": "ローカルディスク"
+        "disk": "ローカルディスク",
+        "logs": "サーバーのログ",
+        "filter_by_systemd_unit": "systemdのユニットでフィルタリング",
+        "all_units": "全てのユニット",
+        "log_dialog": {
+            "systemd_slice": "Systemdのslice",
+            "message": "メッセージ",
+            "metadata": "メタデータ",
+            "cursor": "カーソル",
+            "priority": "優先度",
+            "systemd_unit": "Systemdのユニット"
+        },
+        "logs_empty": "ログはまだありません"
     },
     "initializing": {
         "select_provider_price_free": "無料",
@@ -491,7 +575,7 @@
         "select_provider_countries_text_do": "アメリカ合衆国、オランダ、シンガポール、イギリス、ドイツ、カナダ、インド、オーストラリア",
         "select_provider_notice": "「比較的小規模」という表現で、私たちは2個のCPUのコアと、2GBのRAMを備えたコンピューターのことを指しています。",
         "select_provider": "以下の一覧からサービス提供者を選択してください。どのサービス提供者もSelfPrivacyをサポートしています",
-        "select_provider_countries_title": "利用可能な国",
+        "select_provider_countries_title": "サーバーが提供されている国",
         "choose_location_type_text": "所在地に応じて、サーバーの設定、値段、接続速度などが異なります。",
         "back_to_locations": "別のものを選択してください",
         "choose_server_type_payment_per_month": "月額{}",
@@ -586,7 +670,16 @@
         "use_staging_acme_description": "新しいサーバーを設定する際に適用されます。",
         "ignore_tls": "TLS証明書を検証しない",
         "root_ssh_key_added": "ルートSSH鍵を設定しました。適用します",
-        "ignore_tls_description": "サーバーに接続する際にアプリはTLS証明書を検証しません。"
+        "ignore_tls_description": "サーバーに接続する際にアプリはTLS証明書を検証しません。",
+        "servers": "サーバー",
+        "tap_for_more_info": "タップすると詳細を表示",
+        "server_volume_name": "サーバーのボリュームの名称",
+        "server_volume_size": "サーバーのボリュームの大きさ",
+        "server_volume_location": "サーバーのボリュームの所在地",
+        "server_ip": "サーバーのIP",
+        "server_domain": "サーバーのドメイン",
+        "server_type": "サーバーの種類",
+        "unknown": "不明"
     },
     "support": {
         "title": "SelfPrivacyのサポート"
@@ -601,5 +694,35 @@
         "configuration_wizard": "セットアップウィザード",
         "create_ssh_key": "スーパーユーザーのSSH鍵",
         "onboarding": "初期設定"
+    },
+    "countries": {
+        "finland": "フィンランド",
+        "australia": "オーストラリア",
+        "united_kingdom": "英国",
+        "united_states": "米国",
+        "singapore": "シンガポール",
+        "canada": "カナダ",
+        "india": "インド",
+        "germany": "ドイツ",
+        "netherlands": "オランダ"
+    },
+    "tokens": {
+        "title": "サービス提供者のトークン",
+        "dns_provider_tokens": "DNSのサービス提供者のトークン",
+        "backup_provider_tokens": "バックアップ用保存領域のサービス提供者のトークン",
+        "valid": "有効",
+        "server_provider_tokens": "サーバーのサービス提供者のトークン",
+        "loading": "トークンの状況を読み込んでいます",
+        "invalid": "無効",
+        "no_access": "関連するリソースにアクセスできません",
+        "description": "このトークンは端末に保存され、SelfPrivacyでサーバー、DNS、バックアップ用保存領域のサービス提供者のそれぞれに接続するために使用されます。",
+        "used_by": "{servers}に使用。",
+        "check_again": "再度確認してください",
+        "no_tokens": "トークンがありません",
+        "server_without_token": "{server_domain}には{provider}用のトークンがありません。",
+        "tap_to_add_token": "ここをタップしてトークンを追加してください",
+        "add_server_provider_token": "サーバーのサービス提供者のトークンを追加",
+        "server_provider_unknown": "サーバーのサービス提供者が不明です",
+        "server_provider_unknown_description": "あなたのサーバーのサービス提供者はこのアプリのバージョンではサポートされていません。"
     }
 }

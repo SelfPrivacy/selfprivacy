@@ -59,7 +59,7 @@ dev_dependencies:
   auto_route_generator: ^9.0.0
   build_runner: ^2.4.9
   cupertino_icons: ^1.0.8
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.1
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
@@ -67,11 +67,16 @@ dev_dependencies:
   hive_generator: ^2.0.1
   json_serializable: ^6.8.0
 
-flutter_icons:
+flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path_android: "assets/images/icon/logo_android.png"
+  min_sdk_android: 21
+  adaptive_icon_foreground: "assets/images/icon/logo_android_adaptive_fg.png"
+  adaptive_icon_background: "#ffffff"
   image_path_ios: "assets/images/icon/logo_ios.png"
+  image_path: "assets/images/icon/logo_ios.png"
+  adaptive_icon_monochrome: "assets/images/icon/selfprivacy_dynamic.png"
 
 flutter:
   uses-material-design: true

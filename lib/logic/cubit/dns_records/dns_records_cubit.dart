@@ -122,7 +122,6 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
               content: pendingDnsRecord.content!,
               isSatisfied: isSatisfied,
               type: pendingDnsRecord.type,
-              category: DnsRecordsCategory.email,
             ),
           );
         } else {
@@ -138,9 +137,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
               displayName: pendingDnsRecord.displayName,
               content: pendingDnsRecord.content!,
               isSatisfied: foundMatch,
-              category: pendingDnsRecord.type == 'A'
-                  ? DnsRecordsCategory.services
-                  : DnsRecordsCategory.email,
+              type: pendingDnsRecord.type,
             ),
           );
         }

@@ -198,6 +198,46 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
                 ],
               ),
             ),
+        const SizedBox(height: 16.0),
+        ListTile(
+          title: Text(
+            'domain.other_title'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+          ),
+          subtitle: Text(
+            'domain.other_subtitle'.tr(),
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
+        ),
+        ...dnsCubit.dnsRecords
+            .where(
+              (final dnsRecord) =>
+                  dnsRecord.category == DnsRecordsCategory.other,
+            )
+            .map(
+              (final dnsRecord) => Column(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      dnsRecord.isSatisfied
+                          ? Icons.check_circle_outline
+                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
+                              ? Icons.refresh
+                              : Icons.error_outline,
+                      color: dnsRecord.isSatisfied
+                          ? goodColor
+                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
+                              ? neutralColor
+                              : errorColor,
+                    ),
+                    title: Text(dnsRecord.displayName ?? dnsRecord.name),
+                    subtitle: Text(dnsRecord.content),
+                  ),
+                ],
+              ),
+            ),
       ],
     );
   }

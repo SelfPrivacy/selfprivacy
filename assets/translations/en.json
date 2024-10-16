@@ -215,6 +215,8 @@
         "services_subtitle": "Type “A” records required for each service.",
         "email_title": "Email",
         "email_subtitle": "Records necessary for secure email exchange.",
+        "other_title": "Other",
+        "other_subtitle": "Other records needed for the work of the SelfPrivacy",
         "update_list": "Update list"
     },
     "backup": {

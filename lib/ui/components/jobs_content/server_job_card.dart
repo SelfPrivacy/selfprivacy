@@ -77,7 +77,7 @@ class ServerJobCard extends StatelessWidget {
                 color: color,
                 backgroundColor:
                     Theme.of(context).colorScheme.surfaceContainerHighest,
-                height: 7.0,
+                height: 8.0,
               ),
               const SizedBox(height: 8),
               if (statusString != null)

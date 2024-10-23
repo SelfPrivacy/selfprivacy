@@ -71,14 +71,14 @@ class MorePage extends StatelessWidget {
                 ),
                 _MoreMenuItem(
                   title: 'about_application_page.title'.tr(),
-                  iconData: BrandIcons.fire,
+                  iconData: Icons.info_outline,
                   goTo: () => const AboutApplicationRoute(),
                   longGoTo: const DeveloperSettingsRoute(),
                 ),
                 if (!isReady)
                   _MoreMenuItem(
                     title: 'more_page.onboarding'.tr(),
-                    iconData: BrandIcons.start,
+                    iconData: Icons.play_circle_outlined,
                     goTo: () => const OnboardingRoute(),
                   ),
                 _MoreMenuItem(

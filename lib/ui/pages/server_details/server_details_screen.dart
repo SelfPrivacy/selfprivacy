@@ -80,7 +80,7 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
         const SizedBox(height: 16),
         ListTile(
           title: Text('server.settings'.tr()),
-          leading: const Icon(BrandIcons.settings),
+          leading: const Icon(Icons.settings_outlined),
           onTap: () => context.pushRoute(const ServerSettingsRoute()),
         ),
         ListTile(

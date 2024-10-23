@@ -51,7 +51,7 @@ class ResetPassword extends StatelessWidget {
                               padding: const EdgeInsets.only(right: 8),
                               child: IconButton(
                                 icon: Icon(
-                                  BrandIcons.refresh,
+                                  Icons.refresh,
                                   color:
                                       Theme.of(context).colorScheme.secondary,
                                 ),

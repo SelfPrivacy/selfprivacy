@@ -18,10 +18,7 @@ class BrandHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(final BuildContext context) => AppBar(
         centerTitle: true,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 4.0),
-          child: Text(title),
-        ),
+        title: Text(title),
         leading: hasBackButton
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),

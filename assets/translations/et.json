@@ -215,7 +215,9 @@
         "services_subtitle": "Iga teenuse jaoks on vajalikud \"A\" kirjed.",
         "email_title": "Elektrooniline post",
         "email_subtitle": "Kirjed turvaliseks e-kirja vahetamiseks vajalikud.",
-        "update_list": "Värskenda nimekirja"
+        "update_list": "Värskenda nimekirja",
+        "other_title": "Muud",
+        "other_subtitle": "Muud kirjed, mis on vajalikud SelfPrivacy tööks"
     },
     "backup": {
         "quota_subtitles": {

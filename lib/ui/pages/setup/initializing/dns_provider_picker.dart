@@ -116,7 +116,7 @@ class ProviderInputDataPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          BrandButton.rised(
+          BrandButton.filled(
             text: 'basis.connect'.tr(),
             onPressed: () => providerCubit.trySubmit(),
           ),
@@ -197,7 +197,7 @@ class ProviderSelectionPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),
-                    BrandButton.rised(
+                    BrandButton.filled(
                       text: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
@@ -252,7 +252,7 @@ class ProviderSelectionPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),
-                    BrandButton.rised(
+                    BrandButton.filled(
                       text: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
@@ -308,7 +308,7 @@ class ProviderSelectionPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 16),
-                    BrandButton.rised(
+                    BrandButton.filled(
                       text: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit

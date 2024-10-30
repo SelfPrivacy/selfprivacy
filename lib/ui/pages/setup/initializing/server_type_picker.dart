@@ -211,7 +211,7 @@ class SelectTypePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                BrandButton.rised(
+                BrandButton.filled(
                   onPressed: () {
                     backToLocationPickingCallback();
                   },

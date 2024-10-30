@@ -63,7 +63,7 @@ class ResetPassword extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 30),
-                        BrandButton.rised(
+                        BrandButton.filled(
                           onPressed: formCubitState.isSubmitting
                               ? null
                               : () => context.read<UserFormCubit>().trySubmit(),

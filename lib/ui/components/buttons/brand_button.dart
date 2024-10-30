@@ -1,28 +1,6 @@
 import 'package:flutter/material.dart';
 
 class BrandButton {
-  static ConstrainedBox rised({
-    required final VoidCallback? onPressed,
-    final Key? key,
-    final String? text,
-    final Widget? child,
-  }) {
-    assert((text ?? child) != null, 'either title or child must not be empty');
-    assert(text != null || child != null, 'title or child must be provided');
-
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        minHeight: 48,
-        minWidth: double.infinity,
-      ),
-      child: FilledButton(
-        key: key,
-        onPressed: onPressed,
-        child: child ?? Text(text ?? ''),
-      ),
-    );
-  }
-
   static ConstrainedBox filled({
     required final VoidCallback? onPressed,
     final Key? key,

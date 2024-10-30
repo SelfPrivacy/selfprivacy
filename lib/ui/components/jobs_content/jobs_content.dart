@@ -77,7 +77,7 @@ class JobsContent extends StatelessWidget {
             widgets = [
               ...widgets,
               const Gap(80),
-              BrandButton.rised(
+              BrandButton.filled(
                 onPressed: () => context.read<JobsCubit>().upgradeServer(),
                 text: 'jobs.upgrade_server'.tr(),
               ),
@@ -368,7 +368,7 @@ class JobsContent extends StatelessWidget {
                 },
               ),
             const Gap(16),
-            BrandButton.rised(
+            BrandButton.filled(
               onPressed: () => context.read<JobsCubit>().acknowledgeFinished(),
               text: 'basis.done'.tr(),
             ),
@@ -432,7 +432,7 @@ class JobsContent extends StatelessWidget {
               ),
             ),
             const Gap(16),
-            BrandButton.rised(
+            BrandButton.filled(
               onPressed: hasBlockingJobs
                   ? null
                   : () => context.read<JobsCubit>().applyAll(),

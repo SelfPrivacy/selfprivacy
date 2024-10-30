@@ -80,7 +80,7 @@ class BackupDetailsPage extends StatelessWidget {
               ),
             ),
           if (!preventActions)
-            BrandButton.rised(
+            BrandButton.filled(
               onPressed: preventActions
                   ? null
                   : () {

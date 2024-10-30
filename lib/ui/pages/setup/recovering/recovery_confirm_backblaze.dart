@@ -53,7 +53,7 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              BrandButton.rised(
+              BrandButton.filled(
                 onPressed: formCubitState.isSubmitting
                     ? null
                     : () => context.read<BackblazeFormCubit>().trySubmit(),

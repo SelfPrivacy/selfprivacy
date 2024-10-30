@@ -304,7 +304,7 @@ class InitializingPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  BrandButton.rised(
+                  BrandButton.filled(
                     onPressed: formCubitState.isSubmitting
                         ? null
                         : () => context.read<BackblazeFormCubit>().trySubmit(),
@@ -624,7 +624,7 @@ class AddSshKey extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 30),
-                        BrandButton.rised(
+                        BrandButton.filled(
                           onPressed: formCubitState.isSubmitting
                               ? null
                               : () => context

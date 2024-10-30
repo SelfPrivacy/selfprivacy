@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/buttons/buttons.dart';
+import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
 
 // base widget for onboarding view
 class OnboardingView extends StatelessWidget {
@@ -41,8 +41,8 @@ class OnboardingView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15) +
                         const EdgeInsets.only(bottom: 30),
-                    child: SPBrandButton.text(
-                      title: buttonTitle.tr(),
+                    child: BrandButton.filled(
+                      text: buttonTitle.tr(),
                       onPressed: onProceed,
                     ),
                   ),

@@ -55,7 +55,7 @@ class RecoveryConfirmDns extends StatelessWidget {
                 onPressed: formCubitState.isSubmitting
                     ? null
                     : () => context.read<DnsProviderFormCubit>().trySubmit(),
-                text: 'basis.connect'.tr(),
+                title: 'basis.connect'.tr(),
               ),
               const SizedBox(height: 16),
               Builder(

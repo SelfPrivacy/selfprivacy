@@ -332,7 +332,7 @@ class NewSshKey extends StatelessWidget {
                           onPressed: formCubitState.isSubmitting
                               ? null
                               : () => context.read<SshFormCubit>().trySubmit(),
-                          text: 'ssh.create'.tr(),
+                          title: 'ssh.create'.tr(),
                         ),
                         const SizedBox(height: 30),
                       ],

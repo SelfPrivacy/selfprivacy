@@ -161,7 +161,7 @@ class _DomainPickerState extends State<DomainPicker> {
             BrandButton.filled(
               onPressed: () =>
                   context.read<DomainSetupCubit>().saveDomain(state.domain),
-              text: 'initializing.save_domain'.tr(),
+              title: 'initializing.save_domain'.tr(),
             ),
           ],
         ],

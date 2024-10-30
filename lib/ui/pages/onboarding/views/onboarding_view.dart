@@ -42,7 +42,7 @@ class OnboardingView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 15) +
                         const EdgeInsets.only(bottom: 30),
                     child: BrandButton.filled(
-                      text: buttonTitle.tr(),
+                      title: buttonTitle.tr(),
                       onPressed: onProceed,
                     ),
                   ),

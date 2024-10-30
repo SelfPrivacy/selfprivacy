@@ -35,7 +35,7 @@ class RecoveryServerProviderConnected extends StatelessWidget {
         },
         children: [
           BrandButton.filled(
-            text: 'basis.continue'.tr(),
+            title: 'basis.continue'.tr(),
             onPressed: () => context
                 .read<ServerInstallationCubit>()
                 .skipSettingServerProviderKey(),

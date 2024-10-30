@@ -67,7 +67,7 @@ class ResetPassword extends StatelessWidget {
                           onPressed: formCubitState.isSubmitting
                               ? null
                               : () => context.read<UserFormCubit>().trySubmit(),
-                          text: 'basis.apply'.tr(),
+                          title: 'basis.apply'.tr(),
                         ),
                         const SizedBox(height: 30),
                       ],

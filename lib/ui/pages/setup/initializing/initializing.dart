@@ -136,7 +136,7 @@ class InitializingPage extends StatelessWidget {
                           Container(
                             alignment: Alignment.center,
                             child: BrandButton.filled(
-                              text: 'basis.connect_to_existing'.tr(),
+                              title: 'basis.connect_to_existing'.tr(),
                               onPressed: () {
                                 context.router.replace(const RecoveryRoute());
                               },
@@ -308,7 +308,7 @@ class InitializingPage extends StatelessWidget {
                     onPressed: formCubitState.isSubmitting
                         ? null
                         : () => context.read<BackblazeFormCubit>().trySubmit(),
-                    text: 'basis.connect'.tr(),
+                    title: 'basis.connect'.tr(),
                   ),
                   const SizedBox(height: 10),
                   BrandButton.text(
@@ -416,7 +416,7 @@ class InitializingPage extends StatelessWidget {
                     onPressed: formCubitState.isSubmitting
                         ? null
                         : () => context.read<RootUserFormCubit>().trySubmit(),
-                    text: 'basis.connect'.tr(),
+                    title: 'basis.connect'.tr(),
                   ),
                 ],
               ),
@@ -453,7 +453,7 @@ class InitializingPage extends StatelessWidget {
               onPressed: isLoading
                   ? null
                   : appConfigCubit.createServerAndSetDnsRecords,
-              text: isLoading
+              title: isLoading
                   ? 'basis.loading'.tr()
                   : 'initializing.create_server'.tr(),
             ),
@@ -630,7 +630,7 @@ class AddSshKey extends StatelessWidget {
                               : () => context
                                   .read<JoblessSshFormCubit>()
                                   .trySubmit(),
-                          text: 'ssh.create'.tr(),
+                          title: 'ssh.create'.tr(),
                         ),
                         const SizedBox(height: 30),
                       ],

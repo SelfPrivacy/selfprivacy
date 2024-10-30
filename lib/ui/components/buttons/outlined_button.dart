@@ -6,13 +6,11 @@ class BrandOutlinedButton extends StatelessWidget {
     this.onPressed,
     this.title,
     this.child,
-    this.disabled = false,
   });
 
   final VoidCallback? onPressed;
   final String? title;
   final Widget? child;
-  final bool disabled;
 
   @override
   Widget build(final BuildContext context) => ConstrainedBox(

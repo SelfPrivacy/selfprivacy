@@ -76,7 +76,7 @@ class _AddServerProviderTokenPageState
         },
         children: [
           BrandButton.filled(
-            text: 'basis.close'.tr(),
+            title: 'basis.close'.tr(),
             onPressed: () =>
                 Navigator.of(context).popUntil((final route) => route.isFirst),
           ),

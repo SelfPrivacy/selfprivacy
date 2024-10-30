@@ -110,7 +110,7 @@ class NewUserPage extends StatelessWidget {
                   onPressed: formCubitState.isSubmitting
                       ? null
                       : () => context.read<UserFormCubit>().trySubmit(),
-                  text: 'basis.create'.tr(),
+                  title: 'basis.create'.tr(),
                 ),
                 const SizedBox(height: 40),
                 Text('users.new_user_info_note'.tr()),

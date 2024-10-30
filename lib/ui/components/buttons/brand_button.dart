@@ -4,11 +4,11 @@ class BrandButton {
   static ConstrainedBox filled({
     required final VoidCallback? onPressed,
     final Key? key,
-    final String? text,
+    final String? title,
     final Widget? child,
   }) {
-    assert((text ?? child) != null, 'either title or child must not be empty');
-    assert(text != null || child != null, 'title or child must be provided');
+    assert((title ?? child) != null, 'either title or child must not be empty');
+    assert(title != null || child != null, 'title or child must be provided');
 
     return ConstrainedBox(
       constraints: const BoxConstraints(
@@ -23,7 +23,7 @@ class BrandButton {
         ),
         child: child ??
             Text(
-              text ?? '',
+              title ?? '',
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
             ),

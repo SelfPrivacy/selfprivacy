@@ -57,7 +57,7 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                 onPressed: formCubitState.isSubmitting
                     ? null
                     : () => context.read<BackblazeFormCubit>().trySubmit(),
-                text: 'basis.connect'.tr(),
+                title: 'basis.connect'.tr(),
               ),
               const SizedBox(height: 16),
               Builder(

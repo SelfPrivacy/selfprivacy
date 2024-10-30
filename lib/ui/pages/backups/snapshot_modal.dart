@@ -163,7 +163,7 @@ class _SnapshotModalState extends State<SnapshotModal> {
                           getIt<NavigationService>()
                               .showSnackBar('backup.restore_started'.tr());
                         },
-                  text: 'backup.restore'.tr(),
+                  title: 'backup.restore'.tr(),
                 ),
               ],
             )

@@ -215,7 +215,7 @@ class SelectTypePage extends StatelessWidget {
                   onPressed: () {
                     backToLocationPickingCallback();
                   },
-                  text: 'initializing.back_to_locations'.tr(),
+                  title: 'initializing.back_to_locations'.tr(),
                 ),
               ],
             );

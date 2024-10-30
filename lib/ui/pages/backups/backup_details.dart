@@ -90,7 +90,7 @@ class BackupDetailsPage extends StatelessWidget {
                             ),
                           );
                     },
-              text: 'backup.initialize'.tr(),
+              title: 'backup.initialize'.tr(),
             ),
         ],
       );

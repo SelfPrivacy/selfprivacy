@@ -117,7 +117,7 @@ class ProviderInputDataPage extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           BrandButton.filled(
-            text: 'basis.connect'.tr(),
+            title: 'basis.connect'.tr(),
             onPressed: () => providerCubit.trySubmit(),
           ),
           const SizedBox(height: 10),
@@ -198,7 +198,7 @@ class ProviderSelectionPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     BrandButton.filled(
-                      text: 'basis.select'.tr(),
+                      title: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
                             .setDnsProviderType(DnsProviderType.desec);
@@ -253,7 +253,7 @@ class ProviderSelectionPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     BrandButton.filled(
-                      text: 'basis.select'.tr(),
+                      title: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
                             .setDnsProviderType(DnsProviderType.cloudflare);
@@ -309,7 +309,7 @@ class ProviderSelectionPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     BrandButton.filled(
-                      text: 'basis.select'.tr(),
+                      title: 'basis.select'.tr(),
                       onPressed: () {
                         serverInstallationCubit
                             .setDnsProviderType(DnsProviderType.digitalOcean);

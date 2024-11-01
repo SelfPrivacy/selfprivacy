@@ -12,7 +12,7 @@ class OutlinedCard extends StatelessWidget {
   final Color? borderColor;
   final double? borderWidth;
   @override
-  Widget build(final BuildContext context) => Card(
+  Widget build(final BuildContext context) => Card.outlined(
         elevation: 0.0,
         shape: RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(Radius.circular(12)),

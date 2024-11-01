@@ -25,39 +25,44 @@ class ProgressDrawer extends StatelessWidget {
         width: 300,
         height: constraints.maxHeight,
         child: Drawer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Flexible(
-                fit: FlexFit.tight,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ...steps.map((final step) {
-                        final index = steps.indexOf(step);
-                        return _StepIndicator(
-                          title: step.tr(),
-                          isCurrent: index == currentStep,
-                          isCompleted: index < currentStep,
-                        );
-                      }),
-                    ],
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 8.0, 8.0, 8.0),
+                    child: Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
                   ),
-                ),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ...steps.map((final step) {
+                            final index = steps.indexOf(step);
+                            return _StepIndicator(
+                              title: step.tr(),
+                              isCurrent: index == currentStep,
+                              isCompleted: index < currentStep,
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: trailing,
+                  ),
+                ],
               ),
-              // const Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: trailing,
-              ),
-            ],
+            ),
           ),
         ),
       );

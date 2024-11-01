@@ -247,11 +247,12 @@ class SelectTypePage extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: double.infinity,
-                        child: InkWell(
-                          onTap: () {
-                            serverInstallationCubit.setServerType(type);
-                          },
-                          child: Card(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () {
+                              serverInstallationCubit.setServerType(type);
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(

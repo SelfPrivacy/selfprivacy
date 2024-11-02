@@ -358,7 +358,7 @@ class BackupDetailsPage extends StatelessWidget {
                           style: TextStyle(
                             color: overrideColor,
                           ),
-                          '${MaterialLocalizations.of(context).formatShortDate(backup.time)} ${TimeOfDay.fromDateTime(backup.time).format(context)}',
+                          '${MaterialLocalizations.of(context).formatShortDate(backup.time.toLocal())} ${TimeOfDay.fromDateTime(backup.time.toLocal()).format(context)}',
                         ),
                         subtitle: Text(
                           style: TextStyle(

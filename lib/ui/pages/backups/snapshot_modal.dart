@@ -95,7 +95,7 @@ class _SnapshotModalState extends State<SnapshotModal> {
               'backup.snapshot_creation_time_title'.tr(),
             ),
             subtitle: Text(
-              '${MaterialLocalizations.of(context).formatShortDate(widget.snapshot.time)} ${TimeOfDay.fromDateTime(widget.snapshot.time).format(context)}',
+              '${MaterialLocalizations.of(context).formatShortDate(widget.snapshot.time.toLocal())} ${TimeOfDay.fromDateTime(widget.snapshot.time.toLocal()).format(context)}',
             ),
           ),
           SnapshotIdListTile(snapshotId: widget.snapshot.id),

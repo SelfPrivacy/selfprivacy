@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/ui/components/brand_linear_indicator/brand_linear_indicator.dart';
+import 'package:selfprivacy/ui/components/jobs_content/job_icon.dart';
 
 class ServerJobCard extends StatelessWidget {
   const ServerJobCard({
@@ -15,24 +16,8 @@ class ServerJobCard extends StatelessWidget {
     Color color;
     IconData icon;
 
-    switch (serverJob.status) {
-      case JobStatusEnum.created:
-        color = Theme.of(context).colorScheme.secondary;
-        icon = Icons.query_builder_outlined;
-        break;
-      case JobStatusEnum.running:
-        color = Theme.of(context).colorScheme.tertiary;
-        icon = Icons.pending_outlined;
-        break;
-      case JobStatusEnum.finished:
-        color = Theme.of(context).colorScheme.primary;
-        icon = Icons.check_circle_outline;
-        break;
-      case JobStatusEnum.error:
-        color = Theme.of(context).colorScheme.error;
-        icon = Icons.error_outline;
-        break;
-    }
+    color = getJobColor(serverJob.status, context);
+    icon = getJobIcon(serverJob.status);
 
     final String? statusString =
         serverJob.error ?? serverJob.result ?? serverJob.statusText;

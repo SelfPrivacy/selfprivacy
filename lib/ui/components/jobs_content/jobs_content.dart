@@ -7,8 +7,10 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/components/jobs_content/job_icon.dart';
 import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 
@@ -19,32 +21,6 @@ class JobsContent extends StatelessWidget {
   });
 
   final ScrollController controller;
-
-  IconData _getIcon(final JobStatusEnum status) {
-    switch (status) {
-      case JobStatusEnum.created:
-        return Icons.query_builder_outlined;
-      case JobStatusEnum.running:
-        return Icons.pending_outlined;
-      case JobStatusEnum.finished:
-        return Icons.check_circle_outline;
-      case JobStatusEnum.error:
-        return Icons.error_outline;
-    }
-  }
-
-  Color _getColor(final JobStatusEnum status, final BuildContext context) {
-    switch (status) {
-      case JobStatusEnum.created:
-        return Theme.of(context).colorScheme.secondary;
-      case JobStatusEnum.running:
-        return Theme.of(context).colorScheme.tertiary;
-      case JobStatusEnum.finished:
-        return Theme.of(context).colorScheme.primary;
-      case JobStatusEnum.error:
-        return Theme.of(context).colorScheme.error;
-    }
-  }
 
   @override
   Widget build(final BuildContext context) {
@@ -64,85 +40,17 @@ class JobsContent extends StatelessWidget {
             context.read<ServerInstallationCubit>().state;
         if (state is JobsStateEmpty) {
           widgets = [
-            const Gap(80),
-            Center(
-              child: Text(
-                'jobs.empty'.tr(),
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
+            const Gap(64),
+            const _JobsEmptyContent(),
+            const Gap(64),
+            if (installationState is ServerInstallationFinished)
+              const _JobsEmptyActions(),
           ];
-
-          if (installationState is ServerInstallationFinished) {
-            widgets = [
-              ...widgets,
-              const Gap(80),
-              BrandButton.filled(
-                onPressed: () => context.read<JobsCubit>().upgradeServer(),
-                title: 'jobs.upgrade_server'.tr(),
-              ),
-              const Gap(10),
-              BrandButton.text(
-                title: 'jobs.reboot_server'.tr(),
-                onPressed: () {
-                  showPopUpAlert(
-                    alertTitle: 'jobs.reboot_server'.tr(),
-                    description: 'modals.are_you_sure'.tr(),
-                    actionButtonTitle: 'modals.reboot'.tr(),
-                    actionButtonOnPressed: () =>
-                        {context.read<JobsCubit>().rebootServer()},
-                  );
-                },
-              ),
-            ];
-          }
         } else if (state is JobsStateLoading) {
           widgets = [
             ...state.clientJobList.map(
-              (final j) => Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      _getIcon(j.status),
-                      color: _getColor(j.status, context),
-                    ),
-                  ),
-                  Expanded(
-                    child: Card(
-                      color:
-                          Theme.of(context).colorScheme.surfaceContainerHighest,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 10,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              j.title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
-                            ),
-                            if (j.message != null)
-                              Text(
-                                j.message!,
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              (final j) =>
+                  _ClientJobStatusCard(clientJob: j, key: ValueKey(j.id)),
             ),
             if (state.rebuildRequired)
               Builder(
@@ -150,84 +58,8 @@ class JobsContent extends StatelessWidget {
                   final rebuildJob = serverJobs.firstWhereOrNull(
                     (final job) => job.uid == state.rebuildJobUid,
                   );
-                  return Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          _getIcon(rebuildJob?.status ?? JobStatusEnum.created),
-                          color: _getColor(
-                            rebuildJob?.status ?? JobStatusEnum.created,
-                            context,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Card(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 10,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  rebuildJob?.name ??
-                                      'jobs.rebuild_system'.tr(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                      ),
-                                ),
-                                if (rebuildJob?.description != null)
-                                  Text(
-                                    rebuildJob!.description,
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall,
-                                  ),
-                                const Gap(8),
-                                LinearProgressIndicator(
-                                  value: rebuildJob?.progress == null
-                                      ? 0.0
-                                      : ((rebuildJob!.progress ?? 0) < 1)
-                                          ? null
-                                          : rebuildJob.progress! / 100.0,
-                                  color: _getColor(
-                                    rebuildJob?.status ?? JobStatusEnum.created,
-                                    context,
-                                  ),
-                                  backgroundColor: Theme.of(context)
-                                      .colorScheme
-                                      .surfaceContainerHighest,
-                                  minHeight: 7.0,
-                                  borderRadius: BorderRadius.circular(7.0),
-                                ),
-                                const Gap(8),
-                                if (rebuildJob?.error != null ||
-                                    rebuildJob?.result != null ||
-                                    rebuildJob?.statusText != null)
-                                  Text(
-                                    rebuildJob?.error ??
-                                        rebuildJob?.result ??
-                                        rebuildJob?.statusText ??
-                                        '',
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall,
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  return _ServerJobStatusCardInClientJobs(
+                    serverJob: rebuildJob,
                   );
                 },
               ),
@@ -235,50 +67,7 @@ class JobsContent extends StatelessWidget {
         } else if (state is JobsStateFinished) {
           widgets = [
             ...state.clientJobList.map(
-              (final j) => Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      _getIcon(j.status),
-                      color: _getColor(j.status, context),
-                    ),
-                  ),
-                  Expanded(
-                    child: Card(
-                      color:
-                          Theme.of(context).colorScheme.surfaceContainerHighest,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 10,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              j.title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
-                            ),
-                            if (j.message != null)
-                              Text(
-                                j.message!,
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              (final j) => _ClientJobStatusCard(clientJob: j),
             ),
             if (state.rebuildRequired)
               Builder(
@@ -289,81 +78,8 @@ class JobsContent extends StatelessWidget {
                   if (rebuildJob == null) {
                     return const SizedBox.shrink();
                   }
-                  return Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          _getIcon(rebuildJob.status),
-                          color: _getColor(
-                            rebuildJob.status,
-                            context,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Card(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 10,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  rebuildJob.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                      ),
-                                ),
-                                Text(
-                                  rebuildJob.description,
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                                const Gap(8),
-                                LinearProgressIndicator(
-                                  value: rebuildJob.progress == null
-                                      ? 0.0
-                                      : ((rebuildJob.progress ?? 0) < 1)
-                                          ? null
-                                          : rebuildJob.progress! / 100.0,
-                                  color: _getColor(
-                                    rebuildJob.status,
-                                    context,
-                                  ),
-                                  backgroundColor: Theme.of(context)
-                                      .colorScheme
-                                      .surfaceContainerHighest,
-                                  minHeight: 7.0,
-                                  borderRadius: BorderRadius.circular(7.0),
-                                ),
-                                const Gap(8),
-                                if (rebuildJob.error != null ||
-                                    rebuildJob.result != null ||
-                                    rebuildJob.statusText != null)
-                                  Text(
-                                    rebuildJob.error ??
-                                        rebuildJob.result ??
-                                        rebuildJob.statusText ??
-                                        '',
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall,
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  return _ServerJobStatusCardInClientJobs(
+                    serverJob: rebuildJob,
                   );
                 },
               ),
@@ -376,59 +92,9 @@ class JobsContent extends StatelessWidget {
         } else if (state is JobsStateWithJobs) {
           widgets = [
             ...state.clientJobList.map(
-              (final j) => Row(
-                children: [
-                  Expanded(
-                    child: Card(
-                      color:
-                          Theme.of(context).colorScheme.surfaceContainerHighest,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 10,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              j.title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
-                            ),
-                            if (j.message != null)
-                              Text(
-                                j.message!,
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Gap(8),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.errorContainer,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () => context.read<JobsCubit>().removeJob(j.id),
-                    child: Text(
-                      'basis.remove'.tr(),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onErrorContainer,
-                      ),
-                    ),
-                  ),
-                ],
+              (final j) => _ClientJobStatusCard(
+                clientJob: j,
+                showRemoveButton: true,
               ),
             ),
             const Gap(16),
@@ -451,11 +117,11 @@ class JobsContent extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
-            const Gap(20),
+            const Gap(16),
             ...widgets,
-            const Gap(8),
+            const Gap(16),
             const Divider(height: 0),
-            const Gap(8),
+            const Gap(16),
             if (serverJobs.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -503,4 +169,195 @@ class JobsContent extends StatelessWidget {
       },
     );
   }
+}
+
+class _JobsEmptyContent extends StatelessWidget {
+  const _JobsEmptyContent();
+
+  @override
+  Widget build(final BuildContext context) => Center(
+        child: Text(
+          'jobs.empty'.tr(),
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      );
+}
+
+class _JobsEmptyActions extends StatelessWidget {
+  const _JobsEmptyActions();
+
+  @override
+  Widget build(final BuildContext context) => Column(
+        children: [
+          BrandButton.filled(
+            onPressed: () => context.read<JobsCubit>().upgradeServer(),
+            title: 'jobs.upgrade_server'.tr(),
+          ),
+          const Gap(8),
+          BrandButton.text(
+            title: 'jobs.reboot_server'.tr(),
+            onPressed: () {
+              showPopUpAlert(
+                alertTitle: 'jobs.reboot_server'.tr(),
+                description: 'modals.are_you_sure'.tr(),
+                actionButtonTitle: 'modals.reboot'.tr(),
+                actionButtonOnPressed: () =>
+                    {context.read<JobsCubit>().rebootServer()},
+              );
+            },
+          ),
+        ],
+      );
+}
+
+class _ClientJobStatusCard extends StatelessWidget {
+  const _ClientJobStatusCard({
+    required this.clientJob,
+    this.showRemoveButton = false,
+    super.key,
+  });
+
+  final ClientJob clientJob;
+  final bool showRemoveButton;
+
+  @override
+  Widget build(final BuildContext context) => Row(
+        children: [
+          if (!showRemoveButton)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                getJobIcon(
+                  clientJob.status,
+                ),
+                color: getJobColor(
+                  clientJob.status,
+                  context,
+                ),
+              ),
+            ),
+          Expanded(
+            child: Card(
+              color: Theme.of(context).colorScheme.surfaceContainerLow,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      clientJob.title,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                    ),
+                    if (clientJob.message != null)
+                      Text(
+                        clientJob.message!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          if (showRemoveButton) const Gap(8),
+          if (showRemoveButton)
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.errorContainer,
+              ),
+              onPressed: () =>
+                  context.read<JobsCubit>().removeJob(clientJob.id),
+              child: Text(
+                'basis.remove'.tr(),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onErrorContainer,
+                ),
+              ),
+            ),
+        ],
+      );
+}
+
+class _ServerJobStatusCardInClientJobs extends StatelessWidget {
+  const _ServerJobStatusCardInClientJobs({
+    this.serverJob,
+  });
+
+  final ServerJob? serverJob;
+
+  @override
+  Widget build(final BuildContext context) => Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(
+              getJobIcon(
+                serverJob?.status ?? JobStatusEnum.created,
+              ),
+              color: getJobColor(
+                serverJob?.status ?? JobStatusEnum.created,
+                context,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Card(
+              color: Theme.of(context).colorScheme.surfaceContainerLow,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      serverJob?.name ?? 'jobs.rebuild_system'.tr(),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                    ),
+                    if (serverJob?.description != null)
+                      Text(
+                        serverJob!.description,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    const Gap(8),
+                    LinearProgressIndicator(
+                      value: serverJob?.progress == null
+                          ? 0.0
+                          : ((serverJob?.progress ?? 0) < 1)
+                              ? null
+                              : serverJob!.progress! / 100.0,
+                      color: getJobColor(
+                        serverJob?.status ?? JobStatusEnum.created,
+                        context,
+                      ),
+                      backgroundColor:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
+                      minHeight: 8.0,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    const Gap(8),
+                    if (serverJob?.error != null ||
+                        serverJob?.result != null ||
+                        serverJob?.statusText != null)
+                      Text(
+                        serverJob?.error ??
+                            serverJob?.result ??
+                            serverJob?.statusText ??
+                            '',
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
 }

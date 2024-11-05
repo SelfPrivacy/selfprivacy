@@ -123,26 +123,8 @@ class JobsContent extends StatelessWidget {
             const Divider(height: 0),
             const Gap(16),
             if (serverJobs.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'jobs.server_jobs'.tr(),
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    IconButton(
-                      onPressed: hasRemovableJobs
-                          ? () => context
-                              .read<ServerJobsBloc>()
-                              .add(RemoveAllFinishedJobs())
-                          : null,
-                      icon: const Icon(Icons.clear_all),
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ],
-                ),
+              _ServerJobsListTitle(
+                hasRemovableJobs: hasRemovableJobs,
               ),
             ...serverJobs
                 .whereNot((final job) => job.uid == state.rebuildJobUid)
@@ -359,5 +341,36 @@ class _ServerJobStatusCardInClientJobs extends StatelessWidget {
             ),
           ),
         ],
+      );
+}
+
+class _ServerJobsListTitle extends StatelessWidget {
+  const _ServerJobsListTitle({
+    required this.hasRemovableJobs,
+  });
+
+  final bool hasRemovableJobs;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'jobs.server_jobs'.tr(),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            IconButton(
+              onPressed: hasRemovableJobs
+                  ? () => context
+                      .read<ServerJobsBloc>()
+                      .add(RemoveAllFinishedJobs())
+                  : null,
+              icon: const Icon(Icons.clear_all),
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ],
+        ),
       );
 }

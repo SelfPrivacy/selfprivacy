@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 
-
 IconData getJobIcon(final JobStatusEnum status) {
   switch (status) {
     case JobStatusEnum.created:

@@ -6,9 +6,9 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
-import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
-import 'package:selfprivacy/ui/components/info_box/info_box.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
+import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 class ServerTypePicker extends StatefulWidget {

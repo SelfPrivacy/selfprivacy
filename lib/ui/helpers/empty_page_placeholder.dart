@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
+import 'package:selfprivacy/ui/molecules/cards/not_ready_card.dart';
 
 class EmptyPagePlaceholder extends StatelessWidget {
   const EmptyPagePlaceholder({

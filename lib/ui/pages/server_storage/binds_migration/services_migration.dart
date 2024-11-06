@@ -6,11 +6,11 @@ import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
-import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
-import 'package:selfprivacy/ui/components/info_box/info_box.dart';
-import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
-import 'package:selfprivacy/ui/components/storage_list_items/service_migration_list_item.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
+import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
+import 'package:selfprivacy/ui/organisms/storage_list_items/server_storage_list_item.dart';
+import 'package:selfprivacy/ui/organisms/storage_list_items/service_migration_list_item.dart';
 import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 @RoutePage()

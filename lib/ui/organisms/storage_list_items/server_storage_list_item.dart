@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
-import 'package:selfprivacy/ui/components/brand_linear_indicator/brand_linear_indicator.dart';
+import 'package:selfprivacy/ui/atoms/progress_indicators/brand_linear_indicator.dart';
 
 class ServerStorageListItem extends StatelessWidget {
   const ServerStorageListItem({
@@ -34,11 +34,13 @@ class ServerStorageListItem extends StatelessWidget {
             : Theme.of(context).colorScheme.secondary,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         percentage: volume.percentage,
-        icon: Icon(
-          Icons.storage_outlined,
-          size: 24,
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
+        icon: showIcon
+            ? Icon(
+                Icons.storage_outlined,
+                size: 24,
+                color: Theme.of(context).colorScheme.onSurface,
+              )
+            : null,
       );
 }
 

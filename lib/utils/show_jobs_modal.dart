@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/jobs_content/jobs_content.dart';
+import 'package:selfprivacy/ui/organisms/jobs/jobs_content.dart';
 
 Future<T?> showModalJobsSheet<T>({
   required final BuildContext context,

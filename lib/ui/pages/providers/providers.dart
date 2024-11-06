@@ -9,11 +9,11 @@ import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
-import 'package:selfprivacy/ui/components/brand_header/brand_header.dart';
-import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
-import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
-import 'package:selfprivacy/ui/components/server_outdated_card/server_outdated_card.dart';
+import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
+import 'package:selfprivacy/ui/atoms/masks/icon_status_mask.dart';
+import 'package:selfprivacy/ui/molecules/cards/not_ready_card.dart';
+import 'package:selfprivacy/ui/molecules/cards/server_outdated_card.dart';
+import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 

@@ -8,8 +8,7 @@ class ProgressBar extends StatefulWidget {
   });
 
   final int activeIndex;
-
-  final List<String> steps;
+  final int steps;
 
   @override
   State<ProgressBar> createState() => _ProgressBarState();
@@ -18,8 +17,7 @@ class ProgressBar extends StatefulWidget {
 class _ProgressBarState extends State<ProgressBar> {
   @override
   Widget build(final BuildContext context) {
-    final double progress =
-        1 / widget.steps.length * (widget.activeIndex + 0.3);
+    final double progress = 1 / widget.steps * (widget.activeIndex + 0.3);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

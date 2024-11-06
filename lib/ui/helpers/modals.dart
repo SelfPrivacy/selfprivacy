@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/ui/components/buttons/dialog_action_button.dart';
+import 'package:selfprivacy/ui/atoms/buttons/dialog_action_button.dart';
 
 void showPopUpAlert({
   required final String description,

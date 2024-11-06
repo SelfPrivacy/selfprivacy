@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
-import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
+import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 
 enum ProviderType {
   server,

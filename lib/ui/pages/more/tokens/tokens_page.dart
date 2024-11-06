@@ -7,8 +7,8 @@ import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
-import 'package:selfprivacy/ui/components/cards/filled_card.dart';
-import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
+import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 

@@ -10,10 +10,10 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/theming/harmonized_basic_colors.dart';
-import 'package:selfprivacy/ui/components/brand_icons/brand_icons.dart';
-import 'package:selfprivacy/ui/components/buttons/segmented_buttons.dart';
-import 'package:selfprivacy/ui/components/cards/filled_card.dart';
-import 'package:selfprivacy/ui/components/list_tiles/list_tile_on_surface_variant.dart';
+import 'package:selfprivacy/ui/atoms/buttons/segmented_buttons.dart';
+import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
+import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/cpu_chart.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/disk_charts.dart';

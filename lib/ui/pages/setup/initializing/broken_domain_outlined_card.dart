@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
-import 'package:selfprivacy/ui/components/cards/filled_card.dart';
+import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 
 class BrokenDomainOutlinedCard extends StatelessWidget {
   const BrokenDomainOutlinedCard({

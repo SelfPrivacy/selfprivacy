@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
-import 'package:selfprivacy/ui/components/brand_md/brand_md.dart';
+import 'package:selfprivacy/ui/atoms/markdown/brand_md.dart';
 
 class SupportDrawer extends StatelessWidget {
   const SupportDrawer({

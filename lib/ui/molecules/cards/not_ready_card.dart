@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/cards/filled_card.dart';
+import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
 class NotReadyCard extends StatelessWidget {
@@ -22,7 +22,7 @@ class NotReadyCard extends StatelessWidget {
           ),
           trailing: Icon(
             Icons.arrow_forward_ios_outlined,
-            size: 16,
+            size: 24,
             color: Theme.of(context).colorScheme.onTertiaryContainer,
           ),
         ),

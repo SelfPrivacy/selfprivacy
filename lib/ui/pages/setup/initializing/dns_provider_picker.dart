@@ -6,9 +6,9 @@ import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_fo
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
-import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
-import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
+import 'package:selfprivacy/ui/atoms/cards/outlined_card.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DnsProviderPicker extends StatefulWidget {

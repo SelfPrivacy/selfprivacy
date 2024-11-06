@@ -13,13 +13,13 @@ import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
-import 'package:selfprivacy/ui/components/brand_timer/brand_timer.dart';
-import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
-import 'package:selfprivacy/ui/components/buttons/outlined_button.dart';
-import 'package:selfprivacy/ui/components/drawers/progress_drawer.dart';
-import 'package:selfprivacy/ui/components/drawers/support_drawer.dart';
-import 'package:selfprivacy/ui/components/progress_bar/progress_bar.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
+import 'package:selfprivacy/ui/atoms/progress_indicators/progress_bar.dart';
+import 'package:selfprivacy/ui/atoms/timer/brand_timer.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
+import 'package:selfprivacy/ui/organisms/drawers/progress_drawer.dart';
+import 'package:selfprivacy/ui/organisms/drawers/support_drawer.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/broken_domain_outlined_card.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/dns_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/domain_picker.dart';
@@ -102,16 +102,7 @@ class InitializingPage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: ProgressBar(
-                        steps: const [
-                          'Hosting',
-                          'Server Type',
-                          'DNS Provider',
-                          'Backblaze',
-                          'Domain',
-                          'User',
-                          'Server',
-                          'Installation',
-                        ],
+                        steps: 8,
                         activeIndex: cubit.state.progressBar,
                       ),
                     ),

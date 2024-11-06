@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
 import 'package:selfprivacy/config/localization.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/ui/components/buttons/dialog_action_button.dart';
-import 'package:selfprivacy/ui/components/list_tiles/section_title.dart';
+import 'package:selfprivacy/ui/atoms/buttons/dialog_action_button.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 

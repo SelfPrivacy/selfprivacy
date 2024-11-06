@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 
 // base widget for onboarding view
 class OnboardingView extends StatelessWidget {

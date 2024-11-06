@@ -8,9 +8,9 @@ import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
-import 'package:selfprivacy/ui/components/cards/outlined_card.dart';
-import 'package:selfprivacy/ui/components/info_box/info_box.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/atoms/cards/outlined_card.dart';
+import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
 import 'package:selfprivacy/ui/pages/backups/snapshot_id_list_tile.dart';
 
 class SnapshotModal extends StatefulWidget {

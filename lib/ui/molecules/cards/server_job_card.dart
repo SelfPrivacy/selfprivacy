@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/ui/components/brand_linear_indicator/brand_linear_indicator.dart';
-import 'package:selfprivacy/ui/components/jobs_content/job_icon.dart';
+import 'package:selfprivacy/ui/atoms/icons/job_icon.dart';
+import 'package:selfprivacy/ui/atoms/progress_indicators/brand_linear_indicator.dart';
 
 class ServerJobCard extends StatelessWidget {
   const ServerJobCard({

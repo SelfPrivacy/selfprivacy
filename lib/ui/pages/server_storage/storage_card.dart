@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
-import 'package:selfprivacy/ui/components/icon_status_mask/icon_status_mask.dart';
-import 'package:selfprivacy/ui/components/storage_list_items/server_storage_list_item.dart';
+import 'package:selfprivacy/ui/atoms/masks/icon_status_mask.dart';
+import 'package:selfprivacy/ui/organisms/storage_list_items/server_storage_list_item.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
 class StorageCard extends StatelessWidget {

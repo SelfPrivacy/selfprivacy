@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/components/cards/filled_card.dart';
+import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 
 class ServerOutdatedCard extends StatelessWidget {
   const ServerOutdatedCard({
@@ -31,7 +31,7 @@ class ServerOutdatedCard extends StatelessWidget {
           ),
           trailing: Icon(
             Icons.error_outline,
-            size: 16,
+            size: 24,
             color: Theme.of(context).colorScheme.onTertiaryContainer,
           ),
         ),

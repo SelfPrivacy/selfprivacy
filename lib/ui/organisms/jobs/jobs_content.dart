@@ -9,10 +9,10 @@ import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/ui/components/buttons/brand_button.dart';
-import 'package:selfprivacy/ui/components/jobs_content/job_icon.dart';
-import 'package:selfprivacy/ui/components/jobs_content/server_job_card.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/atoms/icons/job_icon.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
+import 'package:selfprivacy/ui/molecules/cards/server_job_card.dart';
 
 class JobsContent extends StatelessWidget {
   const JobsContent({

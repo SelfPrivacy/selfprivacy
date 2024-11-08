@@ -24,8 +24,8 @@ class EmptyPagePlaceholder extends StatelessWidget {
             if (showReadyCard)
               const Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 15,
+                  vertical: 16,
+                  horizontal: 16,
                 ),
                 child: NotReadyCard(),
               ),
@@ -58,14 +58,14 @@ class _ContentWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               iconData,
-              size: 50,
+              size: 48,
               color: Theme.of(context).colorScheme.onSurface,
             ),
             const Gap(16),

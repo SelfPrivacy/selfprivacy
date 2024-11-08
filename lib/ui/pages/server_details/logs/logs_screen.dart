@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
-import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
+import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 
 @RoutePage()

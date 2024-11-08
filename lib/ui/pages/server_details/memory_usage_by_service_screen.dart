@@ -10,7 +10,7 @@ import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/ui/atoms/buttons/segmented_buttons.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
-import 'package:selfprivacy/ui/helpers/empty_page_placeholder.dart';
+import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 
 @RoutePage()

@@ -183,12 +183,14 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
           bottom: 12.0,
           top: 16.0,
         ),
-        background: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 72.0),
-            if (widget.hasHeroIcon) widget.heroIconWidget,
-          ],
+        background: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 72.0),
+              if (widget.hasHeroIcon) widget.heroIconWidget,
+            ],
+          ),
         ),
       ),
     );

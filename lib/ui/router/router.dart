@@ -26,8 +26,8 @@ import 'package:selfprivacy/ui/pages/server_details/server_settings_screen.dart'
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
 import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
 import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
-import 'package:selfprivacy/ui/pages/services/service_page.dart';
-import 'package:selfprivacy/ui/pages/services/service_settings_page.dart';
+import 'package:selfprivacy/ui/pages/services/service.dart';
+import 'package:selfprivacy/ui/pages/services/service_settings.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';

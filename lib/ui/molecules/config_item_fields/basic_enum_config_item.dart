@@ -1,4 +1,6 @@
-part of '../service_settings_page.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 
 class BasicEnumConfigItem extends StatefulWidget {
   const BasicEnumConfigItem({

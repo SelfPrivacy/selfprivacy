@@ -4,18 +4,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-
-part 'config_item_fields/basic_string_config_item.dart';
-part 'config_item_fields/basic_bool_config_item.dart';
-part 'config_item_fields/basic_enum_config_item.dart';
-part 'config_item_fields/domain_string_config_item.dart';
+import 'package:selfprivacy/ui/molecules/config_item_fields/basic_bool_config_item.dart';
+import 'package:selfprivacy/ui/molecules/config_item_fields/basic_enum_config_item.dart';
+import 'package:selfprivacy/ui/molecules/config_item_fields/basic_string_config_item.dart';
+import 'package:selfprivacy/ui/molecules/config_item_fields/domain_string_config_item.dart';
 
 @RoutePage()
 class ServiceSettingsPage extends StatefulWidget {

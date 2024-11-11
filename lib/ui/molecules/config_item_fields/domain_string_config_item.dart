@@ -1,4 +1,9 @@
-part of '../service_settings_page.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 
 class DomainStringConfigItem extends StatefulWidget {
   const DomainStringConfigItem({

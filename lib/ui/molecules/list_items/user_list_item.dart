@@ -23,15 +23,17 @@ class UserListItem extends StatelessWidget {
             user.login[0].toUpperCase(),
           ),
         ),
+        trailing: isPrimaryUser
+            ? Icon(Icons.admin_panel_settings_outlined,
+                color: Theme.of(context).colorScheme.primary)
+            : null,
         title: Text(
           user.login,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
-                decoration: isPrimaryUser
-                    ? TextDecoration.underline
-                    : user.isFoundOnServer
-                        ? TextDecoration.none
-                        : TextDecoration.lineThrough,
+                decoration: user.isFoundOnServer
+                    ? TextDecoration.none
+                    : TextDecoration.lineThrough,
               ),
         ),
       );

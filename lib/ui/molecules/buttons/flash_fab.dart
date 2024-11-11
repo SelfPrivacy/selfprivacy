@@ -8,10 +8,12 @@ import 'package:selfprivacy/utils/show_jobs_modal.dart';
 class BrandFab extends StatefulWidget {
   const BrandFab({
     this.extended = false,
+    this.elevation,
     super.key,
   });
 
   final bool extended;
+  final double? elevation;
 
   @override
   State<BrandFab> createState() => _BrandFabState();
@@ -64,6 +66,7 @@ class _BrandFabState extends State<BrandFab>
         },
         isExtended: widget.extended,
         tooltip: 'jobs.title'.tr(),
+        elevation: widget.elevation,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

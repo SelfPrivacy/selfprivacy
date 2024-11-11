@@ -26,6 +26,7 @@ class _NavigationRail extends SubrouteSelector {
               leading: showFab
                   ? const BrandFab(
                       extended: false,
+                      elevation: 0.0,
                     )
                   : null,
               groupAlignment: 0.0,

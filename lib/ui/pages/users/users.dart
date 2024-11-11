@@ -92,7 +92,10 @@ class UsersPage extends StatelessWidget {
                   ),
                 ],
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
                   child: FilledButton.tonal(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -111,6 +114,7 @@ class UsersPage extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                     itemCount: users.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemBuilder:
                         (final BuildContext context, final int index) =>
                             UserListItem(

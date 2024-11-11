@@ -56,6 +56,12 @@ class UserDetailsPage extends StatelessWidget {
       hasBackButton: true,
       hasFlashButton: true,
       heroTitle: user.login,
+      heroIconWidget: CircleAvatar(
+        backgroundColor: user.color,
+        child: Text(
+          user.login[0].toUpperCase(),
+        ),
+      ),
       children: [
         _UserLogins(user: user, domainName: domainName),
         const SizedBox(height: 8),

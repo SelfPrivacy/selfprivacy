@@ -36,7 +36,7 @@ class ResetPassword extends StatelessWidget {
                   ),
                   const SizedBox(width: 14),
                   Padding(
-                    padding: paddingH15V0,
+                    padding: paddingH16V0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

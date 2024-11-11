@@ -14,7 +14,7 @@ class _User extends StatelessWidget {
           context.pushRoute(UserDetailsRoute(login: user.login));
         },
         child: Container(
-          padding: paddingH15V0,
+          padding: paddingH16V0,
           height: 48,
           child: Row(
             children: [

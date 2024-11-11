@@ -28,7 +28,7 @@ class MorePage extends StatelessWidget {
       body: ListView(
         children: [
           Padding(
-            padding: paddingH15V0,
+            padding: paddingH16V0,
             child: Column(
               children: [
                 if (!isReady)

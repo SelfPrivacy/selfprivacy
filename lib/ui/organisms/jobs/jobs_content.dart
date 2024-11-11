@@ -108,7 +108,7 @@ class JobsContent extends StatelessWidget {
         }
         return ListView(
           controller: controller,
-          padding: paddingH15V0,
+          padding: paddingH16V0,
           children: [
             const Gap(16),
             Center(

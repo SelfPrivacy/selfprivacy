@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
@@ -10,8 +9,8 @@ import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
-import 'package:selfprivacy/ui/atoms/masks/icon_status_mask.dart';
 import 'package:selfprivacy/ui/molecules/cards/not_ready_card.dart';
+import 'package:selfprivacy/ui/molecules/cards/provider_screen_card.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_outdated_card.dart';
 import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
@@ -75,7 +74,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
             )
           : null,
       body: ListView(
-        padding: paddingH15V0,
+        padding: paddingH16V0,
         children: [
           if (!isReady) ...[
             const NotReadyCard(),
@@ -90,7 +89,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
             ),
             const SizedBox(height: 16),
           ],
-          _Card(
+          ProviderScreenCard(
             state: getServerStatus(),
             icon: BrandIcons.server,
             title: 'server.card_title'.tr(),
@@ -102,7 +101,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 : null,
           ),
           const SizedBox(height: 16),
-          _Card(
+          ProviderScreenCard(
             state: getDnsStatus(),
             icon: BrandIcons.globe,
             title: 'domain.screen_title'.tr(),
@@ -114,7 +113,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 : null,
           ),
           const SizedBox(height: 16),
-          _Card(
+          ProviderScreenCard(
             state: isBackupInitialized
                 ? StateType.stable
                 : StateType.uninitialized,
@@ -129,71 +128,4 @@ class _ProvidersPageState extends State<ProvidersPage> {
       ),
     );
   }
-}
-
-class _Card extends StatelessWidget {
-  const _Card({
-    required this.state,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    this.onTap,
-  });
-
-  final Function()? onTap;
-  final StateType state;
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(final BuildContext context) => Card(
-        clipBehavior: Clip.antiAlias,
-        child: InkResponse(
-          highlightShape: BoxShape.rectangle,
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconStatusMask(
-                      status: state,
-                      icon: Icon(icon, size: 30, color: Colors.white),
-                    ),
-                    const Gap(8),
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                    ),
-                    if (state != StateType.uninitialized)
-                      IconStatusMask(
-                        status: state,
-                        icon: Icon(
-                          state == StateType.stable
-                              ? Icons.check_circle_outline
-                              : state == StateType.warning
-                                  ? Icons.warning_amber_outlined
-                                  : Icons.error_outline,
-                          color: Colors.white,
-                        ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                if (state != StateType.uninitialized)
-                  Text(
-                    subtitle,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-              ],
-            ),
-          ),
-        ),
-      );
 }

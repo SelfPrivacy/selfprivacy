@@ -1,9 +1,14 @@
-part of 'users.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 
-class _User extends StatelessWidget {
-  const _User({
+class UserListItem extends StatelessWidget {
+  const UserListItem({
     required this.user,
     required this.isPrimaryUser,
+    super.key,
   });
 
   final User user;

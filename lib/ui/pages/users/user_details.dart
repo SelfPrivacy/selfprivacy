@@ -1,4 +1,21 @@
-part of 'users.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/list_tile_on_surface_variant.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
+import 'package:selfprivacy/ui/organisms/modals/new_ssh_key_modal.dart';
+import 'package:selfprivacy/ui/organisms/modals/reset_password_modal.dart';
+import 'package:selfprivacy/utils/platform_adapter.dart';
+import 'package:selfprivacy/utils/ui_helpers.dart';
 
 @RoutePage()
 class UserDetailsPage extends StatelessWidget {
@@ -50,9 +67,16 @@ class UserDetailsPage extends StatelessWidget {
             context: context,
             isScrollControlled: true,
             useRootNavigator: true,
-            builder: (final BuildContext context) => Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: ResetPassword(user: user),
+            builder: (final BuildContext context) => DraggableScrollableSheet(
+              expand: false,
+              maxChildSize: 0.9,
+              minChildSize: 0.3,
+              initialChildSize: 0.5,
+              builder: (final context, final scrollController) =>
+                  ResetPasswordModal(
+                user: user,
+                scrollController: scrollController,
+              ),
             ),
           ),
           leading: const Icon(Icons.lock_reset_outlined),
@@ -185,13 +209,21 @@ class _SshKeysCard extends StatelessWidget {
             title: 'ssh.create'.tr(),
             leadingIcon: Icons.add_circle_outline,
             onTap: () {
-              showModalBottomSheet<void>(
+              showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
                 useRootNavigator: true,
-                builder: (final BuildContext context) => Padding(
-                  padding: MediaQuery.of(context).viewInsets,
-                  child: NewSshKey(user),
+                builder: (final BuildContext context) =>
+                    DraggableScrollableSheet(
+                  expand: false,
+                  maxChildSize: 0.9,
+                  minChildSize: 0.3,
+                  initialChildSize: 0.5,
+                  builder: (final context, final scrollController) =>
+                      NewSshKeyModal(
+                    user: user,
+                    scrollController: scrollController,
+                  ),
                 ),
               );
             },
@@ -271,77 +303,4 @@ class _SshKeysCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class NewSshKey extends StatelessWidget {
-  const NewSshKey(this.user, {super.key});
-  final User user;
-
-  @override
-  Widget build(final BuildContext context) => BlocProvider(
-        create: (final context) {
-          final jobCubit = context.read<JobsCubit>();
-          final jobState = jobCubit.state;
-          if (jobState is JobsStateWithJobs) {
-            final jobs = jobState.clientJobList;
-            for (final job in jobs) {
-              if (job is CreateSSHKeyJob && job.user.login == user.login) {
-                user.sshKeys.add(job.publicKey);
-              }
-            }
-          }
-          return SshFormCubit(
-            jobsCubit: jobCubit,
-            user: user,
-          );
-        },
-        child: Builder(
-          builder: (final context) {
-            final formCubitState = context.watch<SshFormCubit>().state;
-
-            return BlocListener<SshFormCubit, FormCubitState>(
-              listener: (final context, final state) {
-                if (state.isSubmitted) {
-                  Navigator.pop(context);
-                }
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  BrandHeader(
-                    title: user.login,
-                  ),
-                  const SizedBox(width: 14),
-                  Padding(
-                    padding: paddingH16V0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IntrinsicHeight(
-                          child: CubitFormTextField(
-                            autofocus: true,
-                            formFieldCubit: context.read<SshFormCubit>().key,
-                            decoration: InputDecoration(
-                              labelText: 'ssh.input_label'.tr(),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        BrandButton.filled(
-                          onPressed: formCubitState.isSubmitting
-                              ? null
-                              : () => context.read<SshFormCubit>().trySubmit(),
-                          title: 'ssh.create'.tr(),
-                        ),
-                        const SizedBox(height: 30),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      );
 }

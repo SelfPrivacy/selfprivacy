@@ -31,6 +31,8 @@ import 'package:selfprivacy/ui/pages/services/service_settings.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
+import 'package:selfprivacy/ui/pages/users/new_user.dart';
+import 'package:selfprivacy/ui/pages/users/user_details.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
 
 part 'router.gr.dart';

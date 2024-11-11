@@ -1,4 +1,16 @@
-part of 'users.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:cubit_form/cubit_form.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
+import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/utils/platform_adapter.dart';
+import 'package:selfprivacy/utils/ui_helpers.dart';
 
 @RoutePage()
 class NewUserPage extends StatelessWidget {

@@ -10,7 +10,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/molecules/cards/not_ready_card.dart';
-import 'package:selfprivacy/ui/molecules/cards/provider_screen_card.dart';
+import 'package:selfprivacy/ui/molecules/cards/providers_page_card.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_outdated_card.dart';
 import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
@@ -89,7 +89,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
             ),
             const SizedBox(height: 16),
           ],
-          ProviderScreenCard(
+          ProvidersPageCard(
             state: getServerStatus(),
             icon: BrandIcons.server,
             title: 'server.card_title'.tr(),
@@ -101,7 +101,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 : null,
           ),
           const SizedBox(height: 16),
-          ProviderScreenCard(
+          ProvidersPageCard(
             state: getDnsStatus(),
             icon: BrandIcons.globe,
             title: 'domain.screen_title'.tr(),
@@ -113,7 +113,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 : null,
           ),
           const SizedBox(height: 16),
-          ProviderScreenCard(
+          ProvidersPageCard(
             state: isBackupInitialized
                 ? StateType.stable
                 : StateType.uninitialized,

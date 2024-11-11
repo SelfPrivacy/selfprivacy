@@ -3,8 +3,8 @@ import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/masks/icon_status_mask.dart';
 
-class ProviderScreenCard extends StatelessWidget {
-  const ProviderScreenCard({
+class ProvidersPageCard extends StatelessWidget {
+  const ProvidersPageCard({
     required this.state,
     required this.icon,
     required this.title,

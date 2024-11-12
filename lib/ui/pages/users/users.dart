@@ -25,9 +25,6 @@ class UsersPage extends StatelessWidget {
         is ServerInstallationFinished;
     Widget child;
 
-    final OutdatedServerCheckerState outdatedServerCheckerState =
-        context.watch<OutdatedServerCheckerBloc>().state;
-
     if (!isReady) {
       child = EmptyPagePlaceholder(
         showReadyCard: true,
@@ -38,6 +35,9 @@ class UsersPage extends StatelessWidget {
     } else {
       child = BlocBuilder<UsersBloc, UsersState>(
         builder: (final BuildContext context, final UsersState state) {
+          final OutdatedServerCheckerState outdatedServerCheckerState =
+              context.watch<OutdatedServerCheckerBloc>().state;
+
           final users = state.orderedUsers;
           if (users.isEmpty) {
             if (state is UsersRefreshing) {
@@ -45,33 +45,7 @@ class UsersPage extends StatelessWidget {
                 child: CircularProgressIndicator.adaptive(),
               );
             }
-            return RefreshIndicator(
-              onRefresh: () async {
-                await context.read<UsersBloc>().refresh();
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      EmptyPagePlaceholder(
-                        title: 'users.could_not_fetch_users'.tr(),
-                        description: 'users.could_not_fetch_description'.tr(),
-                        iconData: BrandIcons.users,
-                      ),
-                      const SizedBox(height: 18),
-                      BrandOutlinedButton(
-                        onPressed: () {
-                          context.read<UsersBloc>().refresh();
-                        },
-                        title: 'users.refresh_users'.tr(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
+            return const _UsersNotLoaded();
           }
           return RefreshIndicator(
             onRefresh: () async {
@@ -139,4 +113,37 @@ class UsersPage extends StatelessWidget {
       body: child,
     );
   }
+}
+
+class _UsersNotLoaded extends StatelessWidget {
+  const _UsersNotLoaded();
+
+  @override
+  Widget build(final BuildContext context) => RefreshIndicator(
+        onRefresh: () async {
+          await context.read<UsersBloc>().refresh();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                EmptyPagePlaceholder(
+                  title: 'users.could_not_fetch_users'.tr(),
+                  description: 'users.could_not_fetch_description'.tr(),
+                  iconData: BrandIcons.users,
+                ),
+                const SizedBox(height: 16),
+                BrandOutlinedButton(
+                  onPressed: () {
+                    context.read<UsersBloc>().refresh();
+                  },
+                  title: 'users.refresh_users'.tr(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 }

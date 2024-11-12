@@ -12,6 +12,8 @@ class UserListItem extends StatelessWidget {
 
   final User user;
   final bool isPrimaryUser;
+
+  // TODO: Show user's display name and avatar when supported by backend
   @override
   Widget build(final BuildContext context) => ListTile(
         onTap: () {
@@ -24,8 +26,10 @@ class UserListItem extends StatelessWidget {
           ),
         ),
         trailing: isPrimaryUser
-            ? Icon(Icons.admin_panel_settings_outlined,
-                color: Theme.of(context).colorScheme.primary)
+            ? Icon(
+                Icons.admin_panel_settings_outlined,
+                color: Theme.of(context).colorScheme.primary,
+              )
             : null,
         title: Text(
           user.login,

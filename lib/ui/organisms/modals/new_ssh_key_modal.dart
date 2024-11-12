@@ -63,6 +63,7 @@ class NewSshKeyModal extends StatelessWidget {
                       formFieldCubit: context.read<SshFormCubit>().key,
                       decoration: InputDecoration(
                         labelText: 'ssh.input_label'.tr(),
+                        filled: true,
                       ),
                     ),
                   ),

@@ -54,6 +54,7 @@ class ResetPasswordModal extends StatelessWidget {
                     decoration: InputDecoration(
                       alignLabelWithHint: false,
                       labelText: 'basis.password'.tr(),
+                      filled: true,
                       suffixIcon: Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: IconButton(

@@ -437,7 +437,7 @@
         "select_provider": "Pick any provider from the following list, they all support SelfPrivacy",
         "select_provider_notice": "By 'Relatively small' we mean a machine with 2 cores of CPU and 2 gigabytes of RAM.",
         "select_provider_countries_title": "Available countries",
-        "select_provider_countries_text_hetzner": "Germany, Finland, USA",
+        "select_provider_countries_text_hetzner": "Germany, Finland, USA, Singapore",
         "select_provider_countries_text_do": "USA, Netherlands, Singapore, UK, Germany, Canada, India, Australia",
         "select_provider_price_title": "Average price",
         "select_provider_price_free": "Free",

@@ -1,11 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
+import 'package:selfprivacy/ui/molecules/list_items/more_menu_item.dart';
 import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
@@ -32,7 +31,7 @@ class MorePage extends StatelessWidget {
             child: Column(
               children: [
                 if (!isReady)
-                  _MoreMenuItem(
+                  MoreMenuItem(
                     title: 'more_page.configuration_wizard'.tr(),
                     iconData: Icons.change_history_outlined,
                     goTo: () => const InitializingRoute(),
@@ -40,48 +39,48 @@ class MorePage extends StatelessWidget {
                     accent: true,
                   ),
                 if (isReady)
-                  _MoreMenuItem(
+                  MoreMenuItem(
                     title: 'more_page.create_ssh_key'.tr(),
-                    iconData: Ionicons.key_outline,
+                    iconData: Icons.key_outlined,
                     goTo: () => UserDetailsRoute(
                       login: 'root',
                     ),
                   ),
                 if (isReady)
-                  _MoreMenuItem(
+                  MoreMenuItem(
                     iconData: Icons.password_outlined,
                     goTo: () => const RecoveryKeyRoute(),
                     title: 'recovery_key.key_main_header'.tr(),
                   ),
                 if (isReady)
-                  _MoreMenuItem(
+                  MoreMenuItem(
                     iconData: Icons.devices_outlined,
                     goTo: () => const DevicesRoute(),
                     title: 'devices.main_screen.header'.tr(),
                   ),
-                _MoreMenuItem(
+                MoreMenuItem(
                   iconData: Icons.token_outlined,
                   title: 'tokens.title'.tr(),
                   goTo: () => const TokensRoute(),
                 ),
-                _MoreMenuItem(
+                MoreMenuItem(
                   title: 'application_settings.title'.tr(),
                   iconData: Icons.settings_outlined,
                   goTo: () => const AppSettingsRoute(),
                 ),
-                _MoreMenuItem(
+                MoreMenuItem(
                   title: 'about_application_page.title'.tr(),
                   iconData: Icons.info_outline,
                   goTo: () => const AboutApplicationRoute(),
                   longGoTo: const DeveloperSettingsRoute(),
                 ),
                 if (!isReady)
-                  _MoreMenuItem(
+                  MoreMenuItem(
                     title: 'more_page.onboarding'.tr(),
                     iconData: Icons.play_circle_outlined,
                     goTo: () => const OnboardingRoute(),
                   ),
-                _MoreMenuItem(
+                MoreMenuItem(
                   title: 'console_page.title'.tr(),
                   iconData: BrandIcons.terminal,
                   goTo: () => const ConsoleRoute(),
@@ -90,59 +89,6 @@ class MorePage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _MoreMenuItem extends StatelessWidget {
-  const _MoreMenuItem({
-    required this.iconData,
-    required this.title,
-    required this.goTo,
-    this.subtitle,
-    this.longGoTo,
-    this.accent = false,
-  });
-
-  final IconData iconData;
-  final String title;
-  final PageRouteInfo Function() goTo;
-  final PageRouteInfo? longGoTo;
-  final String? subtitle;
-  final bool accent;
-
-  @override
-  Widget build(final BuildContext context) {
-    final Color color = accent
-        ? Theme.of(context).colorScheme.onTertiaryContainer
-        : Theme.of(context).colorScheme.onSurface;
-    return FilledCard(
-      tertiary: accent,
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        onTap: () => context.pushRoute(goTo()),
-        onLongPress:
-            longGoTo != null ? () => context.pushRoute(longGoTo!) : null,
-        leading: Icon(
-          iconData,
-          size: 24,
-          color: color,
-        ),
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: color,
-              ),
-        ),
-        subtitle: subtitle != null
-            ? Text(
-                subtitle!,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: color,
-                    ),
-              )
-            : null,
       ),
     );
   }

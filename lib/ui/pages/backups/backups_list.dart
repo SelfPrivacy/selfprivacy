@@ -9,7 +9,7 @@ import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/pages/backups/snapshot_modal.dart';
+import 'package:selfprivacy/ui/organisms/modals/backups/snapshot_modal.dart';
 
 @RoutePage()
 class BackupsListPage extends StatelessWidget {

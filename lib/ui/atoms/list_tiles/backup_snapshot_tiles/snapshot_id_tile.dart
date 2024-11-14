@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 
-class SnapshotIdListTile extends StatelessWidget {
-  const SnapshotIdListTile({
+class SnapshotIdTile extends StatelessWidget {
+  const SnapshotIdTile({
     required this.snapshotId,
     super.key,
   });

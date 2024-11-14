@@ -30,6 +30,15 @@ sealed class ServerJobsState extends Equatable {
       )
       .toList();
 
+  List<String> get busyServices => backupJobList
+      .where(
+        (final ServerJob job) =>
+            job.status == JobStatusEnum.running ||
+            job.status == JobStatusEnum.created,
+      )
+      .map((final ServerJob job) => job.typeId.split('.')[1])
+      .toList();
+
   bool get hasRemovableJobs => serverJobList.any(
         (final job) =>
             job.status == JobStatusEnum.finished ||

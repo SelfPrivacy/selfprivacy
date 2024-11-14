@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
-import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
 class CreateBackupsModal extends StatefulWidget {
@@ -29,17 +28,8 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
   @override
   void initState() {
     super.initState();
-    final List<String> busyServices = context
-        .read<ServerJobsBloc>()
-        .state
-        .backupJobList
-        .where(
-          (final ServerJob job) =>
-              job.status == JobStatusEnum.running ||
-              job.status == JobStatusEnum.created,
-        )
-        .map((final ServerJob job) => job.typeId.split('.')[1])
-        .toList();
+    final List<String> busyServices =
+        context.read<ServerJobsBloc>().state.busyServices;
     selectedServices.addAll(
       widget.services
           .where((final Service service) => !busyServices.contains(service.id)),
@@ -48,17 +38,8 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
 
   @override
   Widget build(final BuildContext context) {
-    final List<String> busyServices = context
-        .watch<ServerJobsBloc>()
-        .state
-        .backupJobList
-        .where(
-          (final ServerJob job) =>
-              job.status == JobStatusEnum.running ||
-              job.status == JobStatusEnum.created,
-        )
-        .map((final ServerJob job) => job.typeId.split('.')[1])
-        .toList();
+    final List<String> busyServices =
+        context.watch<ServerJobsBloc>().state.busyServices;
 
     return ListView(
       controller: widget.scrollController,

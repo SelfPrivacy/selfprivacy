@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
-import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/ui/molecules/list_items/create_backup_checkbox_item.dart';
 
 class CreateBackupsModal extends StatefulWidget {
   const CreateBackupsModal({
@@ -21,7 +20,7 @@ class CreateBackupsModal extends StatefulWidget {
 }
 
 class _CreateBackupsModalState extends State<CreateBackupsModal> {
-  // Store in state the selected services to backup
+  /// Store in state the selected services to backup
   List<Service> selectedServices = [];
 
   // Select all services on modal open
@@ -83,68 +82,24 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
           height: 1.0,
         ),
         ...widget.services.map(
-          (final Service service) {
-            final bool busy = busyServices.contains(service.id);
-            final List<Widget> descriptionWidgets = [];
-            if (busy) {
-              descriptionWidgets.add(Text('backup.service_busy'.tr()));
-            } else {
-              descriptionWidgets.add(
-                Text(
-                  'service_page.uses'.tr(
-                    namedArgs: {
-                      'usage': service.storageUsage.used.toString(),
-                      'volume': context
-                          .read<VolumesBloc>()
-                          .state
-                          .getVolume(service.storageUsage.volume ?? '')
-                          .displayName,
-                    },
-                  ),
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              );
-              descriptionWidgets.add(
-                Text(service.backupDescription),
-              );
-            }
-            return CheckboxListTile.adaptive(
-              onChanged: !busy
-                  ? (final bool? value) {
-                      setState(() {
-                        if (value ?? true) {
-                          setState(() {
-                            selectedServices.add(service);
-                          });
-                        } else {
-                          setState(() {
-                            selectedServices.remove(service);
-                          });
-                        }
-                      });
-                    }
-                  : null,
-              title: Text(
-                service.displayName,
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: descriptionWidgets,
-              ),
-              secondary: SvgPicture.string(
-                service.svgIcon,
-                height: 24,
-                width: 24,
-                colorFilter: ColorFilter.mode(
-                  busy
-                      ? Theme.of(context).colorScheme.outlineVariant
-                      : Theme.of(context).colorScheme.onSurface,
-                  BlendMode.srcIn,
-                ),
-              ),
-              value: selectedServices.contains(service),
-            );
-          },
+          (final Service service) => CreateBackupCheckboxItem(
+            service: service,
+            busy: busyServices.contains(service.id),
+            selected: selectedServices.contains(service),
+            onChanged: (final bool? value) {
+              setState(() {
+                if (value ?? true) {
+                  setState(() {
+                    selectedServices.add(service);
+                  });
+                } else {
+                  setState(() {
+                    selectedServices.remove(service);
+                  });
+                }
+              });
+            },
+          ),
         ),
         const SizedBox(height: 16),
         // Create backup button

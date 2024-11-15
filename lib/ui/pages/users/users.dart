@@ -75,7 +75,10 @@ class UsersPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.person_add_outlined),
+                        const Icon(
+                          Icons.person_add_outlined,
+                          size: 18.0,
+                        ),
                         const SizedBox(width: 8),
                         Text('users.new_user'.tr()),
                       ],

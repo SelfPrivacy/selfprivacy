@@ -243,7 +243,7 @@ class QuotaSelectionTile extends StatelessWidget {
           if (value < -1 || value > max)
             Text(
               'Manually set to $value',
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
         ],
       );

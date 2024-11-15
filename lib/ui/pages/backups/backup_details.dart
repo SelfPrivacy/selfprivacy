@@ -16,7 +16,7 @@ import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_job_card.dart';
-import 'package:selfprivacy/ui/pages/backups/change_period_modal.dart';
+import 'package:selfprivacy/ui/organisms/modals/backups/change_period_modal.dart';
 import 'package:selfprivacy/ui/organisms/modals/backups/change_rotation_quotas_modal.dart';
 import 'package:selfprivacy/ui/organisms/modals/backups/copy_encryption_key_modal.dart';
 import 'package:selfprivacy/ui/organisms/modals/backups/create_backups_modal.dart';

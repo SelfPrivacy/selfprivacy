@@ -16,6 +16,7 @@ import 'package:selfprivacy/ui/components/not_ready_card/not_ready_card.dart';
 import 'package:selfprivacy/ui/components/server_outdated_card/server_outdated_card.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:selfprivacy/utils/extensions/duration.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -33,7 +34,17 @@ class _ProvidersPageState extends State<ProvidersPage> {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
     final bool isBackupInitialized =
-        context.watch<BackupsBloc>().state.isInitialized;
+        context.watch<BackupsBloc>().state is BackupsInitialized;
+    String backupsSubtitle = '';
+    if (isBackupInitialized) {
+      final period = (context.watch<BackupsBloc>().state as BackupsInitialized)
+          .autobackupPeriod;
+      backupsSubtitle = (period == null)
+          ? 'backup.autobackup_period_never'.tr()
+          : backupsSubtitle = 'backup.autobackup_period_every'.tr(
+              namedArgs: {'period': period.toPrettyString(context.locale)},
+            );
+    }
     final DnsRecordsStatus dnsStatus =
         context.watch<DnsRecordsCubit>().state.dnsState;
 
@@ -120,7 +131,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 : StateType.uninitialized,
             icon: BrandIcons.save,
             title: 'backup.card_title'.tr(),
-            subtitle: isBackupInitialized ? 'backup.card_subtitle'.tr() : '',
+            subtitle: backupsSubtitle,
             onTap: isClickable()
                 ? () => context.pushRoute(const BackupDetailsRoute())
                 : null,

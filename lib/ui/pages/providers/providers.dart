@@ -41,7 +41,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
           .autobackupPeriod;
       backupsSubtitle = (period == null)
           ? 'backup.autobackup_period_never'.tr()
-          : backupsSubtitle = 'backup.autobackup_period_every'.tr(
+          : 'backup.autobackup_period_every'.tr(
               namedArgs: {'period': period.toPrettyString(context.locale)},
             );
     }

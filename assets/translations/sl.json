@@ -34,7 +34,8 @@
         "apply": "Uporabi",
         "done": "Končano",
         "continue": "Nadaljuj",
-        "alert": "Opozorilo"
+        "alert": "Opozorilo",
+        "error": "Napaka"
     },
     "more_page": {
         "onboarding": "Pozdravi",
@@ -43,13 +44,32 @@
     },
     "console_page": {
         "title": "Konzole",
-        "copy": "Kopiraj"
+        "copy": "Kopiraj",
+        "request_data": "Zahtevaj podatke",
+        "error": "Napaka",
+        "data": "Podatki",
+        "errors": "Napake",
+        "context": "Kontekst"
     },
     "about_application_page": {
-        "title": "O dodatku",
+        "title": "Več o aplikaciji in podpora",
         "api_version_text": "Različica API strežnika",
         "privacy_policy": "Pravilnik o zasebnosti",
-        "application_version_text": "Različica aplikacije"
+        "application_version_text": "Različica aplikacije",
+        "matrix_channel": "Matrix kanal",
+        "telegram_channel": "Telegram kanal",
+        "get_support": "Podpora",
+        "matrix_support_chat": "Matrix podporni kanal",
+        "telegram_support_chat": "Telegram podporni kanal",
+        "contribute": "Prispevaj",
+        "email_support": "Podpora preko elektronske pošte",
+        "bug_report": "Prijavi napako",
+        "help_translate": "Pomagaj nam prevesti",
+        "website": "Naša spletna stran",
+        "documentation": "Dokumentacija",
+        "versions": "Različice",
+        "open_source_licenses": "Odprtokodne licence",
+        "links": "Povezave"
     },
     "application_settings": {
         "title": "Nastavitve aplikacije",
@@ -58,7 +78,10 @@
         "dark_theme_title": "Temna tema",
         "change_application_theme": "Spreminjanje barvne teme",
         "dangerous_settings": "Nevarne nastavitve",
-        "reset_config_title": "Ponastavitev konfiguracije aplikacije"
+        "reset_config_title": "Ponastavitev konfiguracije aplikacije",
+        "language": "Jezik",
+        "click_to_change_locale": "Klikni za prikaz seznama jezikov",
+        "reset_config_description": "Ponastavi API ključe in root uporabnika."
     },
     "onboarding": {
         "page1_title": "Digitalna neodvisnost je na voljo vsem",
@@ -113,10 +136,10 @@
         "title": "Ključi SSH",
         "create": "Dodajanje ključa SSH",
         "delete": "Odstranitev ključa SSH",
-        "delete_confirm_question": "Ali ste prepričani, da želite izbrisati naslednjo tipko?",
+        "delete_confirm_question": "Ali ste prepričani, da želite izbrisati SSH ključ?",
         "no_key_name": "Ključ brez imena",
         "root_title": "To so ključi superuporabnika",
-        "input_label": "Javni ključ ED25519 ali RSA"
+        "input_label": "Javni ED25519, ECDSA ali RSA ključ"
     },
     "domain": {
         "screen_title": "Domena in DNS",

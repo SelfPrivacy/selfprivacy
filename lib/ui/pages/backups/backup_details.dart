@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
@@ -13,14 +12,14 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
-import 'package:selfprivacy/ui/helpers/modals.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/section_headline.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_job_card.dart';
+import 'package:selfprivacy/ui/molecules/list_items/snapshot_item.dart';
 import 'package:selfprivacy/ui/organisms/modals/backups/change_period_modal.dart';
 import 'package:selfprivacy/ui/organisms/modals/backups/change_rotation_quotas_modal.dart';
 import 'package:selfprivacy/ui/organisms/modals/backups/copy_encryption_key_modal.dart';
 import 'package:selfprivacy/ui/organisms/modals/backups/create_backups_modal.dart';
-import 'package:selfprivacy/ui/organisms/modals/backups/snapshot_modal.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
 
@@ -279,17 +278,9 @@ class BackupDetailsPage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                title: Text(
-                  'backup.latest_snapshots'.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                ),
-                subtitle: Text(
-                  'backup.latest_snapshots_subtitle'.tr(),
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
+              SectionHeadline(
+                title: 'backup.latest_snapshots'.tr(),
+                subtitle: 'backup.latest_snapshots_subtitle'.tr(),
               ),
               if (backups.isEmpty)
                 ListTile(
@@ -306,84 +297,16 @@ class BackupDetailsPage extends StatelessWidget {
                 ),
               if (backups.isNotEmpty)
                 Column(
-                  children: backups.take(15).map(
-                    (final Backup backup) {
-                      final service = context
-                          .read<ServicesBloc>()
-                          .state
-                          .getServiceById(backup.serviceId);
-                      return ListTile(
-                        onTap: preventActions
-                            ? null
-                            : () {
-                                showModalBottomSheet(
-                                  useRootNavigator: true,
-                                  context: context,
-                                  isScrollControlled: true,
-                                  builder: (final BuildContext context) =>
-                                      DraggableScrollableSheet(
-                                    expand: false,
-                                    maxChildSize: 0.9,
-                                    minChildSize: 0.5,
-                                    initialChildSize: 0.7,
-                                    builder: (
-                                      final context,
-                                      final scrollController,
-                                    ) =>
-                                        SnapshotModal(
-                                      snapshot: backup,
-                                      scrollController: scrollController,
-                                    ),
-                                  ),
-                                );
-                              },
-                        onLongPress: preventActions
-                            ? null
-                            : () {
-                                showPopUpAlert(
-                                  alertTitle: 'backup.forget_snapshot'.tr(),
-                                  description:
-                                      'backup.forget_snapshot_alert'.tr(),
-                                  actionButtonTitle:
-                                      'backup.forget_snapshot'.tr(),
-                                  actionButtonOnPressed: () =>
-                                      context.read<BackupsBloc>().add(
-                                            ForgetSnapshot(
-                                              backup.id,
-                                            ),
-                                          ),
-                                );
-                              },
-                        title: Text(
-                          style: TextStyle(
-                            color: overrideColor,
-                          ),
-                          '${MaterialLocalizations.of(context).formatShortDate(backup.time.toLocal())} ${TimeOfDay.fromDateTime(backup.time.toLocal()).format(context)}',
+                  children: backups
+                      .take(15)
+                      .map(
+                        (final Backup backup) => SnapshotItem(
+                          backup: backup,
+                          preventActions: preventActions,
+                          overrideColor: overrideColor,
                         ),
-                        subtitle: Text(
-                          style: TextStyle(
-                            color: overrideColor,
-                          ),
-                          service?.displayName ?? backup.fallbackServiceName,
-                        ),
-                        leading: service != null
-                            ? SvgPicture.string(
-                                service.svgIcon,
-                                height: 24,
-                                width: 24,
-                                colorFilter: ColorFilter.mode(
-                                  overrideColor ??
-                                      Theme.of(context).colorScheme.onSurface,
-                                  BlendMode.srcIn,
-                                ),
-                              )
-                            : Icon(
-                                Icons.question_mark_outlined,
-                                color: overrideColor,
-                              ),
-                      );
-                    },
-                  ).toList(),
+                      )
+                      .toList(),
                 ),
               if (backups.isNotEmpty && backups.length > 15)
                 ListTile(

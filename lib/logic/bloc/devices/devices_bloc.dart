@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:selfprivacy/utils/fake_data.dart';
 
 part 'devices_event.dart';
 part 'devices_state.dart';

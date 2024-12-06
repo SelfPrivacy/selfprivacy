@@ -9,6 +9,8 @@ import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
 import 'package:selfprivacy/ui/molecules/list_items/device_item.dart';
 import 'package:selfprivacy/ui/router/router.dart';
+import 'package:selfprivacy/utils/fake_data.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 @RoutePage()
 class DevicesPage extends StatefulWidget {
@@ -77,8 +79,12 @@ class _DevicesInfo extends StatelessWidget {
           SectionTitle(
             title: 'devices.main_screen.this_device'.tr(),
           ),
-          DeviceItem(
-            device: devicesStatus.thisDevice,
+          Skeletonizer(
+            enabled:
+                devicesStatus.thisDevice == FakeSelfPrivacyData.thisDeviceToken,
+            child: DeviceItem(
+              device: devicesStatus.thisDevice,
+            ),
           ),
           const SizedBox(height: 8),
           const Divider(height: 1),
@@ -92,7 +98,17 @@ class _DevicesInfo extends StatelessWidget {
               child: CircularProgressIndicator.adaptive(),
             ),
           ],
-          if (devicesStatus is! DevicesDeleting)
+          if (!devicesStatus.isLoaded)
+            ...List.generate(
+              3,
+              (final index) => Skeletonizer(
+                enabled: true,
+                child: DeviceItem(
+                  device: FakeSelfPrivacyData.otherDeviceToken,
+                ),
+              ),
+            ),
+          if (devicesStatus is! DevicesDeleting && devicesStatus.isLoaded)
             ...devicesStatus.otherDevices.map(
               (final device) => DeviceItem(
                 device: device,

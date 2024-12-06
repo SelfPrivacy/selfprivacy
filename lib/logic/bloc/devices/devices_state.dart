@@ -7,17 +7,15 @@ sealed class DevicesState extends Equatable {
 
   final int _hashCode;
 
+  bool get isLoaded => _devices.isNotEmpty;
+
   List<ApiToken> get _devices =>
       getIt<ApiConnectionRepository>().apiData.devices.data ?? const [];
 
   List<ApiToken> get devices => _devices;
   ApiToken get thisDevice => _devices.firstWhere(
         (final device) => device.isCaller,
-        orElse: () => ApiToken(
-          name: 'Error fetching device',
-          isCaller: true,
-          date: DateTime.now(),
-        ),
+        orElse: () => FakeSelfPrivacyData.thisDeviceToken,
       );
 
   List<ApiToken> get otherDevices =>

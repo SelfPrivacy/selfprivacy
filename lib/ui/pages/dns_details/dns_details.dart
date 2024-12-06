@@ -1,14 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/section_headline.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/molecules/cards/dns_state_card.dart';
+import 'package:selfprivacy/ui/molecules/list_items/dns_record_item.dart';
+import 'package:selfprivacy/utils/fake_data.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 @RoutePage()
 class DnsDetailsPage extends StatefulWidget {
@@ -19,69 +24,6 @@ class DnsDetailsPage extends StatefulWidget {
 }
 
 class _DnsDetailsPageState extends State<DnsDetailsPage> {
-  Widget _getStateCard(
-    final DnsRecordsStatus dnsState,
-    final Function fixCallback,
-  ) {
-    String description = '';
-    String subtitle = '';
-    Icon icon = const Icon(
-      Icons.check_circle_outline,
-      size: 24.0,
-    );
-    bool isError = false;
-    switch (dnsState) {
-      case DnsRecordsStatus.uninitialized:
-        description = 'domain.uninitialized'.tr();
-        icon = const Icon(
-          Icons.refresh,
-          size: 24.0,
-        );
-        isError = false;
-        break;
-      case DnsRecordsStatus.refreshing:
-        description = 'domain.refreshing'.tr();
-        icon = const Icon(
-          Icons.refresh,
-          size: 24.0,
-        );
-        isError = false;
-        break;
-      case DnsRecordsStatus.good:
-        description = 'domain.ok'.tr();
-        icon = const Icon(
-          Icons.check_circle_outline,
-          size: 24.0,
-        );
-        isError = false;
-        break;
-      case DnsRecordsStatus.error:
-        description = 'domain.error'.tr();
-        subtitle = 'domain.error_subtitle'.tr();
-        icon = const Icon(
-          Icons.error_outline,
-          size: 24.0,
-        );
-        isError = true;
-        break;
-    }
-    return FilledCard(
-      error: isError,
-      child: ListTile(
-        onTap: dnsState == DnsRecordsStatus.error ? () => fixCallback() : null,
-        leading: icon,
-        title: Text(description),
-        subtitle: subtitle != '' ? Text(subtitle) : null,
-        textColor: isError
-            ? Theme.of(context).colorScheme.error
-            : Theme.of(context).colorScheme.onSurfaceVariant,
-        iconColor: isError
-            ? Theme.of(context).colorScheme.error
-            : Theme.of(context).colorScheme.onSurfaceVariant,
-      ),
-    );
-  }
-
   @override
   Widget build(final BuildContext context) {
     final bool isReady = context.watch<ServerInstallationCubit>().state
@@ -89,6 +31,8 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
     final String domain =
         getIt<ResourcesModel>().serverDomain?.domainName ?? '';
     final DnsRecordsState dnsCubit = context.watch<DnsRecordsCubit>().state;
+    final List<DesiredDnsRecord> dnsRecords =
+        context.watch<DnsRecordsCubit>().state.dnsRecords;
 
     print(dnsCubit.dnsState);
 
@@ -102,9 +46,35 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       );
     }
 
-    final Color goodColor = Theme.of(context).colorScheme.onSurface;
-    final Color errorColor = Theme.of(context).colorScheme.error;
-    final Color neutralColor = Theme.of(context).colorScheme.onSurface;
+    final recordsToShow =
+        dnsRecords.isEmpty ? FakeSelfPrivacyData.desiredDnsRecords : dnsRecords;
+    final refreshing =
+        dnsCubit.dnsState == DnsRecordsStatus.refreshing || dnsRecords.isEmpty;
+
+    List<Widget> recordsSection(
+      final String title,
+      final String subtitle,
+      final DnsRecordsCategory category,
+    ) =>
+        [
+          SectionHeadline(
+            title: title,
+            subtitle: subtitle,
+          ),
+          ...recordsToShow
+              .where(
+                (final dnsRecord) => dnsRecord.category == category,
+              )
+              .map(
+                (final dnsRecord) => Skeletonizer(
+                  enabled: refreshing,
+                  child: DnsRecordItem(
+                    dnsRecord: dnsRecord,
+                    refreshing: refreshing,
+                  ),
+                ),
+              ),
+        ];
 
     return BrandHeroScreen(
       hasBackButton: true,
@@ -112,132 +82,30 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       heroIcon: BrandIcons.globe,
       heroTitle: 'domain.screen_title'.tr(),
       children: <Widget>[
-        _getStateCard(
-          dnsCubit.dnsState,
-          () {
+        DnsStateCard(
+          dnsState: dnsCubit.dnsState,
+          fixCallback: () {
             context.read<DnsRecordsCubit>().fix();
           },
         ),
-        const SizedBox(height: 16.0),
-        ListTile(
-          title: Text(
-            'domain.services_title'.tr(),
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
-          subtitle: Text(
-            'domain.services_subtitle'.tr(),
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
+        const Gap(8.0),
+        ...recordsSection(
+          'domain.services_title'.tr(),
+          'domain.services_subtitle'.tr(),
+          DnsRecordsCategory.services,
         ),
-        ...dnsCubit.dnsRecords
-            .where(
-              (final dnsRecord) =>
-                  dnsRecord.category == DnsRecordsCategory.services,
-            )
-            .map(
-              (final dnsRecord) => Column(
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      dnsRecord.isSatisfied
-                          ? Icons.check_circle_outline
-                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
-                              ? Icons.refresh
-                              : Icons.error_outline,
-                      color: dnsRecord.isSatisfied
-                          ? goodColor
-                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
-                              ? neutralColor
-                              : errorColor,
-                    ),
-                    title: Text(dnsRecord.displayName ?? dnsRecord.name),
-                    subtitle: Text(dnsRecord.content),
-                  ),
-                ],
-              ),
-            ),
-        const SizedBox(height: 16.0),
-        ListTile(
-          title: Text(
-            'domain.email_title'.tr(),
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
-          subtitle: Text(
-            'domain.email_subtitle'.tr(),
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
+        const Gap(8.0),
+        ...recordsSection(
+          'domain.email_title'.tr(),
+          'domain.email_subtitle'.tr(),
+          DnsRecordsCategory.email,
         ),
-        ...dnsCubit.dnsRecords
-            .where(
-              (final dnsRecord) =>
-                  dnsRecord.category == DnsRecordsCategory.email,
-            )
-            .map(
-              (final dnsRecord) => Column(
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      dnsRecord.isSatisfied
-                          ? Icons.check_circle_outline
-                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
-                              ? Icons.refresh
-                              : Icons.error_outline,
-                      color: dnsRecord.isSatisfied
-                          ? goodColor
-                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
-                              ? neutralColor
-                              : errorColor,
-                    ),
-                    title: Text(dnsRecord.displayName ?? dnsRecord.name),
-                    subtitle: Text(dnsRecord.name),
-                  ),
-                ],
-              ),
-            ),
-        const SizedBox(height: 16.0),
-        ListTile(
-          title: Text(
-            'domain.other_title'.tr(),
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
-          subtitle: Text(
-            'domain.other_subtitle'.tr(),
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
+        const Gap(8.0),
+        ...recordsSection(
+          'domain.other_title'.tr(),
+          'domain.other_subtitle'.tr(),
+          DnsRecordsCategory.other,
         ),
-        ...dnsCubit.dnsRecords
-            .where(
-              (final dnsRecord) =>
-                  dnsRecord.category == DnsRecordsCategory.other,
-            )
-            .map(
-              (final dnsRecord) => Column(
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      dnsRecord.isSatisfied
-                          ? Icons.check_circle_outline
-                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
-                              ? Icons.refresh
-                              : Icons.error_outline,
-                      color: dnsRecord.isSatisfied
-                          ? goodColor
-                          : dnsCubit.dnsState == DnsRecordsStatus.refreshing
-                              ? neutralColor
-                              : errorColor,
-                    ),
-                    title: Text(dnsRecord.displayName ?? dnsRecord.name),
-                    subtitle: Text(dnsRecord.content),
-                  ),
-                ],
-              ),
-            ),
       ],
     );
   }

@@ -38,8 +38,9 @@ class CloudflareDnsRecord {
   CloudflareDnsRecord({
     required this.type,
     required this.name,
-    required this.content,
     required this.zoneName,
+    this.content,
+    this.data,
     this.ttl = 3600,
     this.priority = 10,
     this.id,
@@ -74,6 +75,9 @@ class CloudflareDnsRecord {
   ///
   /// Example: A valid IPv4 address "198.51.100.4"
   final String? content;
+
+  /// Some record types require data object instead of the content.
+  final Map<String, dynamic>? data;
 
   /// The domain of the record.
   ///

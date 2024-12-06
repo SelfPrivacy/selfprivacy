@@ -44,6 +44,8 @@ class DigitalOceanDnsRecord {
     required this.ttl,
     required this.data,
     this.priority,
+    this.flags,
+    this.tag,
   });
 
   factory DigitalOceanDnsRecord.fromDnsRecord(
@@ -77,6 +79,12 @@ class DigitalOceanDnsRecord {
 
   /// The priority for SRV and MX records.
   final int? priority;
+
+  /// The flags for CAA records.
+  final int? flags;
+
+  /// The tag for CAA records.
+  final String? tag;
 
   static DigitalOceanDnsRecord fromJson(final Map<String, dynamic> json) =>
       _$DigitalOceanDnsRecordFromJson(json);

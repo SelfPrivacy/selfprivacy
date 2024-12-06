@@ -9,6 +9,26 @@ DigitalOceanDnsRecord _fromDnsRecord(
   String content = dnsRecord.content ?? '';
   name = convert(name);
   content = convert(content);
+
+  if (dnsRecord.type == 'CAA') {
+    // Split the content string into parts
+    // e.g. '0 issue "letsencrypt.org"' -> ['0', 'issue', 'letsencrypt.org']
+    final List<String> parts = dnsRecord.content!.split(' ');
+    if (parts.length != 3) {
+      throw ArgumentError('Invalid CAA record content: ${dnsRecord.content}');
+    }
+    return DigitalOceanDnsRecord(
+      name: name,
+      data: parts[2].replaceAll('"', ''),
+      ttl: dnsRecord.ttl,
+      type: dnsRecord.type,
+      priority: dnsRecord.priority,
+      id: null,
+      flags: int.parse(parts[0]),
+      tag: parts[1],
+    );
+  }
+
   return DigitalOceanDnsRecord(
     name: name,
     data: content,

@@ -27,6 +27,8 @@ DigitalOceanDnsRecord _$DigitalOceanDnsRecordFromJson(
       ttl: (json['ttl'] as num).toInt(),
       data: json['data'] as String,
       priority: (json['priority'] as num?)?.toInt(),
+      flags: (json['flags'] as num?)?.toInt(),
+      tag: json['tag'] as String?,
     );
 
 Map<String, dynamic> _$DigitalOceanDnsRecordToJson(
@@ -38,4 +40,6 @@ Map<String, dynamic> _$DigitalOceanDnsRecordToJson(
       'ttl': instance.ttl,
       'data': instance.data,
       'priority': instance.priority,
+      'flags': instance.flags,
+      'tag': instance.tag,
     };

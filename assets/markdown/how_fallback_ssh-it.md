@@ -1,7 +1,7 @@
-[Login as root user to your server](https://selfprivacy.org/docs/how-to-guides/root_ssh/) and enter this command:
+[Loggati come utente root sul tuo server](https://selfprivacy.org/docs/how-to-guides/root_ssh/) ed inserisci il seguente comando:
 
 ```sh
 sp-print-api-token
 ```
 
-Copy the token from the terminal and paste it in the next window.
+Copia il token dal terminale ed incollalo nella prossima schermata.

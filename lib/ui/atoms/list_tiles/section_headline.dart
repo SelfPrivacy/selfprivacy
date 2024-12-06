@@ -1,15 +1,14 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class SectionHeadline extends StatelessWidget {
   const SectionHeadline({
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     super.key,
   });
 
   final String title;
-  final String subtitle;
+  final String? subtitle;
 
   @override
   Widget build(final BuildContext context) => ListTile(
@@ -19,9 +18,11 @@ class SectionHeadline extends StatelessWidget {
                 color: Theme.of(context).colorScheme.secondary,
               ),
         ),
-        subtitle: Text(
-          subtitle,
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
+        subtitle: subtitle != null
+            ? Text(
+                subtitle!,
+                style: Theme.of(context).textTheme.labelMedium,
+              )
+            : null,
       );
 }

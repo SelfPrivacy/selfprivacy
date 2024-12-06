@@ -250,7 +250,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
       });
       await Navigator.of(context).push(
         materialRoute(
-          RecoveryKeyReceiving(recoveryKey: token),
+          NewRecoveryKeyPage(recoveryKey: token),
         ),
       );
     } on GenerationError catch (e) {

@@ -198,7 +198,7 @@ class DeveloperSettingsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [DevicesScreen]
+/// [DevicesPage]
 class DevicesRoute extends PageRouteInfo<void> {
   const DevicesRoute({List<PageRouteInfo>? children})
       : super(
@@ -211,7 +211,7 @@ class DevicesRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const DevicesScreen();
+      return const DevicesPage();
     },
   );
 }
@@ -340,6 +340,25 @@ class MoreRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const MorePage();
+    },
+  );
+}
+
+/// generated route for
+/// [NewDevicePage]
+class NewDeviceRoute extends PageRouteInfo<void> {
+  const NewDeviceRoute({List<PageRouteInfo>? children})
+      : super(
+          NewDeviceRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NewDeviceRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NewDevicePage();
     },
   );
 }

@@ -1,11 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
+import 'package:selfprivacy/ui/organisms/displays/key_display.dart';
 
-class RecoveryKeyReceiving extends StatelessWidget {
-  const RecoveryKeyReceiving({required this.recoveryKey, super.key});
+class NewRecoveryKeyPage extends StatelessWidget {
+  const NewRecoveryKeyPage({required this.recoveryKey, super.key});
 
   final String recoveryKey;
 
@@ -16,28 +15,10 @@ class RecoveryKeyReceiving extends StatelessWidget {
         hasBackButton: false,
         hasFlashButton: false,
         children: [
-          const Divider(),
-          const SizedBox(height: 16),
-          Text(
-            recoveryKey,
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontSize: 24,
-                  fontFamily: 'RobotoMono',
-                ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          const Divider(),
-          const SizedBox(height: 16),
-          InfoBox(
-            text: 'recovery_key.key_receiving_info'.tr(),
-          ),
-          const SizedBox(height: 16),
-          BrandButton.filled(
-            child: Text('recovery_key.key_receiving_done'.tr()),
-            onPressed: () {
-              Navigator.of(context).popUntil((final route) => route.isFirst);
-            },
+          KeyDisplay(
+            keyToDisplay: recoveryKey,
+            canCopy: false,
+            infoboxText: 'recovery_key.key_receiving_info'.tr(),
           ),
         ],
       );

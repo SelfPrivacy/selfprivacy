@@ -249,7 +249,7 @@
         "autobackup_period_disable": "Disable automatic backups",
         "autobackup_set_period": "Set period",
         "backups_encryption_key": "Encryption key",
-        "backups_encryption_key_subtitle": "Keep it in a safe place.",
+        "backups_encryption_key_subtitle": "Keep it in a safe place",
         "backups_encryption_key_copy": "Copy the encryption key",
         "backups_encryption_key_show": "Show the encryption key",
         "backups_encryption_key_description": "This key is used to encrypt your backups. If you lose it, you will not be able to restore your backups. Keep it in a safe place, as it will be useful if you ever need to restore from backups manually.",
@@ -598,7 +598,6 @@
         "key_replace_button": "Generate new key",
         "key_receiving_description": "Write down this key and put to a safe place. It is used to restore full access to your server:",
         "key_receiving_info": "The key will never ever be shown again, but you will be able to replace it with another one.",
-        "key_receiving_done": "Done!",
         "generation_error": "Couldn't generate a recovery key. {}"
     },
     "modals": {

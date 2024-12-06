@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/pages/backups/backup_details.dart';
 import 'package:selfprivacy/ui/pages/backups/backups_list.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
+import 'package:selfprivacy/ui/pages/devices/new_device.dart';
 import 'package:selfprivacy/ui/pages/dns_details/dns_details.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/app_settings.dart';
@@ -101,6 +102,7 @@ class RootRouter extends RootStackRouter {
         AutoRoute(page: NewUserRoute.page),
         AutoRoute(page: RecoveryKeyRoute.page),
         AutoRoute(page: DevicesRoute.page),
+        AutoRoute(page: NewDeviceRoute.page),
         AutoRoute(page: AboutApplicationRoute.page),
         AutoRoute(page: DeveloperSettingsRoute.page),
         AutoRoute(page: ServiceRoute.page),

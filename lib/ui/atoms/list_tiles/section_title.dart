@@ -12,7 +12,10 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8.0,
+        ),
         child: Text(
           title,
           style: Theme.of(context).textTheme.labelLarge!.copyWith(

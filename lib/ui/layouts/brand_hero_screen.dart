@@ -19,7 +19,10 @@ class BrandHeroScreen extends StatelessWidget {
     this.heroTitle = '',
     this.heroSubtitle,
     this.onBackButtonPressed,
-    this.bodyPadding = const EdgeInsets.all(16.0),
+    this.bodyPadding = const EdgeInsets.symmetric(
+      vertical: 16.0,
+      horizontal: 8.0,
+    ),
     this.ignoreBreakpoints = false,
     this.hasSupportDrawer = false,
   });
@@ -80,7 +83,7 @@ class BrandHeroScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
-                    textAlign: hasHeroIcon ? TextAlign.center : TextAlign.start,
+                    textAlign: TextAlign.center,
                   ),
                 ]),
               ),

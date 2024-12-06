@@ -25,7 +25,6 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
   Widget build(final BuildContext context) => BrandHeroScreen(
         hasBackButton: true,
         hasFlashButton: false,
-        bodyPadding: const EdgeInsets.symmetric(vertical: 16),
         heroTitle: 'developer_settings.title'.tr(),
         heroSubtitle: 'developer_settings.subtitle'.tr(),
         children: [

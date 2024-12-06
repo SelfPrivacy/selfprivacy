@@ -257,13 +257,8 @@ class BackupDetailsPage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                title: Text(
-                  'backup.pending_jobs'.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                ),
+              SectionHeadline(
+                title: 'backup.pending_jobs'.tr(),
               ),
               for (final job in backupJobs)
                 Padding(
@@ -312,7 +307,6 @@ class BackupDetailsPage extends StatelessWidget {
                 ListTile(
                   title: Text(
                     'backup.show_more'.tr(),
-                    style: Theme.of(context).textTheme.labelMedium,
                   ),
                   leading: const Icon(
                     Icons.arrow_drop_down,
@@ -345,6 +339,7 @@ class BackupDetailsPage extends StatelessWidget {
                   Icons.cached_outlined,
                   color: overrideColor,
                 ),
+                isThreeLine: true,
                 onTap: preventActions
                     ? null
                     : () => context

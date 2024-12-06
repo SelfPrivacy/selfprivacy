@@ -43,7 +43,6 @@ class AboutApplicationPage extends StatelessWidget {
       hasBackButton: true,
       hasFlashButton: false,
       heroTitle: 'about_application_page.title'.tr(),
-      bodyPadding: const EdgeInsets.symmetric(vertical: 16),
       children: [
         SectionTitle(title: 'about_application_page.versions'.tr()),
         FutureBuilder(

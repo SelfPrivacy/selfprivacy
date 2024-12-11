@@ -103,6 +103,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
           const SizedBox(height: 16),
           Skeletonizer(
             enabled: dnsStatus == DnsRecordsStatus.refreshing,
+            enableSwitchAnimation: true,
             child: ProvidersPageCard(
               state: getDnsStatus(),
               icon: BrandIcons.globe,
@@ -119,6 +120,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
           Skeletonizer(
             enabled: backupsState is BackupsLoading ||
                 backupsState is BackupsInitial,
+            enableSwitchAnimation: true,
             child: ProvidersPageCard(
               state: backupsState is BackupsInitialized
                   ? StateType.stable

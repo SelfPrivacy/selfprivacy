@@ -6,6 +6,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key_receiving.dart';
@@ -58,6 +59,7 @@ class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
         heroSubtitle: subtitle,
         hasBackButton: true,
         hasFlashButton: false,
+        heroIcon: Icons.password_outlined,
         children: widgets,
       ),
     );
@@ -92,7 +94,7 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
         ),
         const SizedBox(height: 16),
         if (!_isConfigurationVisible && keyStatus.isValid && keyStatus.exists)
-          BrandButton.text(
+          BrandOutlinedButton(
             title: 'recovery_key.key_replace_button'.tr(),
             onPressed: () {
               setState(() {
@@ -157,55 +159,44 @@ class RecoveryKeyInformation extends StatelessWidget {
   final RecoveryKeyState state;
 
   @override
-  Widget build(final BuildContext context) {
-    const EdgeInsets padding =
-        EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0);
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (state.expiresAt != null)
-            Padding(
-              padding: padding,
-              child: Text(
-                'recovery_key.key_valid_until'.tr(
-                  args: [DateFormat.yMMMMd().format(state.expiresAt!)],
+  Widget build(final BuildContext context) => SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (state.expiresAt != null)
+              ListTile(
+                title: Text(
+                  'recovery_key.key_valid_until'.tr(
+                    args: [DateFormat.yMMMMd().format(state.expiresAt!)],
+                  ),
                 ),
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: state.isInvalidBecauseExpired
-                          ? Theme.of(context).colorScheme.error
-                          : Theme.of(context).colorScheme.onSurface,
-                    ),
+                textColor: state.isInvalidBecauseExpired
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).colorScheme.onSurface,
               ),
-            ),
-          if (state.usesLeft != null)
-            Padding(
-              padding: padding,
-              child: Text(
-                'recovery_key.key_valid_for'.tr(
-                  args: [state.usesLeft!.toString()],
+            if (state.usesLeft != null)
+              ListTile(
+                title: Text(
+                  'recovery_key.key_valid_for'.tr(
+                    args: [state.usesLeft!.toString()],
+                  ),
                 ),
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: state.isInvalidBecauseUsed
-                          ? Theme.of(context).colorScheme.error
-                          : Theme.of(context).colorScheme.onSurface,
-                    ),
+                textColor: state.isInvalidBecauseUsed
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).colorScheme.onSurface,
               ),
-            ),
-          if (state.generatedAt != null)
-            Padding(
-              padding: padding,
-              child: Text(
-                'recovery_key.key_creation_date'.tr(
-                  args: [DateFormat.yMMMMd().format(state.generatedAt!)],
+            if (state.generatedAt != null)
+              ListTile(
+                title: Text(
+                  'recovery_key.key_creation_date'.tr(
+                    args: [DateFormat.yMMMMd().format(state.generatedAt!)],
+                  ),
                 ),
               ),
-            ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 class RecoveryKeyConfiguration extends StatefulWidget {

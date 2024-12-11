@@ -1,5 +1,8 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:selfprivacy/logic/models/server_metadata.dart';
 
 /// Fake data collections to fill skeletons
 class FakeSelfPrivacyData {
@@ -40,5 +43,19 @@ class FakeSelfPrivacyData {
     name: 'Error fetching device',
     isCaller: false,
     date: DateTime.now(),
+  );
+
+  static final DiskVolume fakeDiskVolume = DiskVolume(
+    name: 'fake_volume_name',
+    isResizable: false,
+    root: false,
+    sizeTotal: const DiskSize(byte: 350000000),
+    sizeUsed: const DiskSize(byte: 100000000),
+  );
+
+  static final ServerMetadataEntity fakeServerMetadataEntity =
+      ServerMetadataEntity(
+    trId: 'some_long_id',
+    value: 'some_interesting_value',
   );
 }

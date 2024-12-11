@@ -68,6 +68,7 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
               .map(
                 (final dnsRecord) => Skeletonizer(
                   enabled: refreshing,
+                  enableSwitchAnimation: true,
                   child: DnsRecordItem(
                     dnsRecord: dnsRecord,
                     refreshing: refreshing,

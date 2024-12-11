@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
@@ -13,17 +12,16 @@ import 'package:selfprivacy/theming/harmonized_basic_colors.dart';
 import 'package:selfprivacy/ui/atoms/buttons/segmented_buttons.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
-import 'package:selfprivacy/ui/atoms/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/molecules/cards/server_text_details_card.dart';
+import 'package:selfprivacy/ui/molecules/cards/storage_card.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/cpu_chart.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/disk_charts.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/memory_chart.dart';
 import 'package:selfprivacy/ui/pages/server_details/charts/network_charts.dart';
-import 'package:selfprivacy/ui/pages/server_storage/storage_card.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
 part 'charts/chart.dart';
-part 'text_details.dart';
 
 var navigatorKey = GlobalKey<NavigatorState>();
 
@@ -99,7 +97,7 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
           child: _Chart(),
         ),
         const SizedBox(height: 8),
-        _TextDetails(),
+        const ServerTextDetailsCard(),
       ],
     );
   }

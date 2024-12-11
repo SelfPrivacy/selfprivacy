@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class BrandLinearIndicator extends StatelessWidget {
   const BrandLinearIndicator({
@@ -16,29 +17,31 @@ class BrandLinearIndicator extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => LayoutBuilder(
-        builder: (final context, final constraints) => Container(
-          height: height,
-          width: constraints.maxWidth,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(height),
-          ),
-          alignment: Alignment.centerLeft,
-          child: AnimatedSlide(
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOutCubicEmphasized,
-            offset: Offset(
-              -(1 - value),
-              0,
+        builder: (final context, final constraints) => Skeleton.leaf(
+          child: Container(
+            height: height,
+            width: constraints.maxWidth,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(height),
             ),
-            child: AnimatedContainer(
+            alignment: Alignment.centerLeft,
+            child: AnimatedSlide(
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOutCubicEmphasized,
-              width: constraints.maxWidth,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(height),
+              offset: Offset(
+                -(1 - value),
+                0,
+              ),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOutCubicEmphasized,
+                width: constraints.maxWidth,
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(height),
+                ),
               ),
             ),
           ),

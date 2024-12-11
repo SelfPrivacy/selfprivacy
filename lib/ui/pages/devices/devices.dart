@@ -82,6 +82,7 @@ class _DevicesInfo extends StatelessWidget {
           Skeletonizer(
             enabled:
                 devicesStatus.thisDevice == FakeSelfPrivacyData.thisDeviceToken,
+            enableSwitchAnimation: true,
             child: DeviceItem(
               device: devicesStatus.thisDevice,
             ),
@@ -103,6 +104,7 @@ class _DevicesInfo extends StatelessWidget {
               3,
               (final index) => Skeletonizer(
                 enabled: true,
+                enableSwitchAnimation: true,
                 child: DeviceItem(
                   device: FakeSelfPrivacyData.otherDeviceToken,
                 ),

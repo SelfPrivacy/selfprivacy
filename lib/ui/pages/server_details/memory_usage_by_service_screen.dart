@@ -12,6 +12,8 @@ import 'package:selfprivacy/ui/atoms/buttons/segmented_buttons.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dart';
+import 'package:selfprivacy/ui/router/router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 @RoutePage()
 class MemoryUsageByServiceScreen extends StatelessWidget {
@@ -39,29 +41,42 @@ class _MemoryUsageByServiceContents extends StatelessWidget {
         (state is MetricsLoaded && state.memoryMetrics == null)) {
       children.addAll([
         Center(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
-              child: EmptyPagePlaceholder(
-                title: 'basis.error'.tr(),
-                description:
-                    'resource_chart.failed_to_load_memory_metrics'.tr(),
-                iconData: Icons.error_outline_outlined,
-              ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            child: EmptyPagePlaceholder(
+              title: 'basis.error'.tr(),
+              description: 'resource_chart.failed_to_load_memory_metrics'.tr(),
+              iconData: Icons.error_outline_outlined,
             ),
           ),
         ),
       ]);
     }
     if (state is MetricsLoading) {
-      children.addAll([
-        const Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 32.0),
-            child: CircularProgressIndicator(),
+      final servicesCount = context.read<ServicesBloc>().state.services.length;
+      if (servicesCount < 1) {
+        children.addAll([
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 32.0),
+              child: CircularProgressIndicator(),
+            ),
           ),
-        ),
-      ]);
+        ]);
+      } else {
+        children.addAll(
+          List.generate(
+            // We assume that every service has a slice, and there are also
+            // user and system slices
+            servicesCount + 2,
+            (final index) => const Skeletonizer(
+              enabled: true,
+              enableSwitchAnimation: true,
+              child: ServiceMemoryConsumptionTile.fake(),
+            ),
+          ),
+        );
+      }
     }
 
     if (state is MetricsLoaded && state.memoryMetrics != null) {
@@ -75,52 +90,12 @@ class _MemoryUsageByServiceContents extends StatelessWidget {
             DiskSize(byte: averageUsageByServices[slice]?.toInt() ?? 0);
         final DiskSize maxUsage =
             DiskSize(byte: maxUsageByServices[slice]?.toInt() ?? 0);
-        String? serviceName;
-        Widget? icon;
-        if (slice == 'system') {
-          serviceName = 'resource_chart.system'.tr();
-          icon = const Icon(BrandIcons.server);
-        } else if (slice == 'user') {
-          serviceName = 'resource_chart.ssh_users'.tr();
-          icon = const Icon(BrandIcons.terminal);
-        } else {
-          final service = context
-              .read<ServicesBloc>()
-              .state
-              .getServiceById(slice.replaceAll('_', '-'));
-          serviceName = service?.displayName ?? slice;
-          icon = service?.svgIcon != null
-              ? SvgPicture.string(
-                  service!.svgIcon,
-                  width: 22.0,
-                  height: 24.0,
-                  colorFilter: ColorFilter.mode(
-                    Theme.of(context).colorScheme.onSurface,
-                    BlendMode.srcIn,
-                  ),
-                )
-              : const Icon(BrandIcons.box);
-        }
-
-        if (serviceName == slice &&
-            averageUsage.byte == 0 &&
-            maxUsage.byte == 0) {
-          continue;
-        }
 
         children.add(
-          ListTile(
-            title: Text(serviceName),
-            subtitle: Text(
-              'resource_chart.ram_usage'.tr(
-                namedArgs: {
-                  'average': averageUsage.toString(),
-                  'max': maxUsage.toString(),
-                },
-              ),
-            ),
-            dense: true,
-            leading: icon,
+          ServiceMemoryConsumptionTile(
+            averageUsage: averageUsage,
+            maxUsage: maxUsage,
+            slice: slice,
           ),
         );
       }
@@ -156,6 +131,82 @@ class _MemoryUsageByServiceContents extends StatelessWidget {
         ),
         ...children,
       ],
+    );
+  }
+}
+
+class ServiceMemoryConsumptionTile extends StatelessWidget {
+  const ServiceMemoryConsumptionTile({
+    required this.averageUsage,
+    required this.maxUsage,
+    required this.slice,
+    super.key,
+  });
+
+  const ServiceMemoryConsumptionTile.fake({
+    super.key,
+    this.averageUsage = const DiskSize(byte: 10),
+    this.maxUsage = const DiskSize(byte: 10),
+    this.slice = 'system',
+  });
+
+  final DiskSize averageUsage;
+  final DiskSize maxUsage;
+  final String slice;
+
+  @override
+  Widget build(final BuildContext context) {
+    String? serviceName;
+    Widget? icon;
+    Function()? onTap;
+
+    if (slice == 'system') {
+      serviceName = 'resource_chart.system'.tr();
+      icon = const Icon(BrandIcons.server);
+    } else if (slice == 'user') {
+      serviceName = 'resource_chart.ssh_users'.tr();
+      icon = const Icon(BrandIcons.terminal);
+    } else {
+      final service = context
+          .read<ServicesBloc>()
+          .state
+          .getServiceById(slice.replaceAll('_', '-'));
+      serviceName = service?.displayName ?? slice;
+      if (service != null) {
+        onTap = () {
+          context.pushRoute(ServiceRoute(serviceId: service.id));
+        };
+      }
+      icon = service?.svgIcon != null
+          ? SvgPicture.string(
+              service!.svgIcon,
+              width: 22.0,
+              height: 24.0,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
+            )
+          : const Icon(BrandIcons.box);
+    }
+
+    if (serviceName == slice && averageUsage.byte == 0 && maxUsage.byte == 0) {
+      return const SizedBox.shrink();
+    }
+
+    return ListTile(
+      title: Text(serviceName),
+      subtitle: Text(
+        'resource_chart.ram_usage'.tr(
+          namedArgs: {
+            'average': averageUsage.toString(),
+            'max': maxUsage.toString(),
+          },
+        ),
+      ),
+      dense: true,
+      leading: icon,
+      onTap: onTap,
     );
   }
 }

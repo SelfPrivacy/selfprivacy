@@ -15,6 +15,7 @@ import 'package:selfprivacy/ui/molecules/cards/server_outdated_card.dart';
 import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -31,8 +32,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
   Widget build(final BuildContext context) {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
-    final bool isBackupInitialized =
-        context.watch<BackupsBloc>().state.isInitialized;
+    final BackupsState backupsState = context.watch<BackupsBloc>().state;
     final DnsRecordsStatus dnsStatus =
         context.watch<DnsRecordsCubit>().state.dnsState;
 
@@ -101,28 +101,40 @@ class _ProvidersPageState extends State<ProvidersPage> {
                 : null,
           ),
           const SizedBox(height: 16),
-          ProvidersPageCard(
-            state: getDnsStatus(),
-            icon: BrandIcons.globe,
-            title: 'domain.screen_title'.tr(),
-            subtitle: appConfig.isDomainSelected
-                ? appConfig.serverDomain!.domainName
-                : '',
-            onTap: isClickable()
-                ? () => context.pushRoute(const DnsDetailsRoute())
-                : null,
+          Skeletonizer(
+            enabled: dnsStatus == DnsRecordsStatus.refreshing,
+            child: ProvidersPageCard(
+              state: getDnsStatus(),
+              icon: BrandIcons.globe,
+              title: 'domain.screen_title'.tr(),
+              subtitle: appConfig.isDomainSelected
+                  ? appConfig.serverDomain!.domainName
+                  : '',
+              onTap: isClickable()
+                  ? () => context.pushRoute(const DnsDetailsRoute())
+                  : null,
+            ),
           ),
           const SizedBox(height: 16),
-          ProvidersPageCard(
-            state: isBackupInitialized
-                ? StateType.stable
-                : StateType.uninitialized,
-            icon: BrandIcons.save,
-            title: 'backup.card_title'.tr(),
-            subtitle: isBackupInitialized ? 'backup.card_subtitle'.tr() : '',
-            onTap: isClickable()
-                ? () => context.pushRoute(const BackupDetailsRoute())
-                : null,
+          Skeletonizer(
+            enabled: backupsState is BackupsLoading ||
+                backupsState is BackupsInitial,
+            child: ProvidersPageCard(
+              state: backupsState is BackupsInitialized
+                  ? StateType.stable
+                  : StateType.uninitialized,
+              icon: BrandIcons.save,
+              title: 'backup.card_title'.tr(),
+              subtitle: backupsState is BackupsInitialized
+                  ? 'backup.card_subtitle'.tr()
+                  : backupsState is BackupsLoading ||
+                          backupsState is BackupsInitial
+                      ? 'basis.loading'.tr()
+                      : '',
+              onTap: isClickable()
+                  ? () => context.pushRoute(const BackupDetailsRoute())
+                  : null,
+            ),
           ),
         ],
       ),

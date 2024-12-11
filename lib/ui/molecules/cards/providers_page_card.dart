@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/masks/icon_status_mask.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProvidersPageCard extends StatelessWidget {
   const ProvidersPageCard({
@@ -33,15 +34,19 @@ class ProvidersPageCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    IconStatusMask(
-                      status: state,
-                      icon: Icon(icon, size: 32, color: Colors.white),
+                    Skeleton.shade(
+                      child: IconStatusMask(
+                        status: state,
+                        icon: Icon(icon, size: 32, color: Colors.white),
+                      ),
                     ),
                     const Gap(8),
                     Expanded(
-                      child: Text(
-                        title,
-                        style: Theme.of(context).textTheme.headlineMedium,
+                      child: Skeleton.shade(
+                        child: Text(
+                          title,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                       ),
                     ),
                     if (state != StateType.uninitialized)

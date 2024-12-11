@@ -26,11 +26,8 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   Widget build(final BuildContext context) => BrandHeroScreen(
         hasBackButton: true,
         hasFlashButton: false,
-        bodyPadding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 16,
-        ),
         heroTitle: 'application_settings.title'.tr(),
+        heroIcon: Icons.settings_outlined,
         children: [
           _ThemePicker(
             key: ValueKey('theme_picker'.tr()),

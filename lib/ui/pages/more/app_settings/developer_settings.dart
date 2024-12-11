@@ -27,6 +27,7 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
         hasFlashButton: false,
         heroTitle: 'developer_settings.title'.tr(),
         heroSubtitle: 'developer_settings.subtitle'.tr(),
+        heroIcon: Icons.developer_mode_outlined,
         children: [
           SectionTitle(title: 'developer_settings.server_setup'.tr()),
           SwitchListTile.adaptive(

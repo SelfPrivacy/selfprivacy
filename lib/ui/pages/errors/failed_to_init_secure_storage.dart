@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/link_list_tile.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/pages/more/about_application.dart';
 
 class FailedToInitSecureStorageScreen extends StatelessWidget {
   const FailedToInitSecureStorageScreen({

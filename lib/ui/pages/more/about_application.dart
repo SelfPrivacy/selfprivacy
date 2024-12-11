@@ -5,11 +5,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/link_list_tile.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class AboutApplicationPage extends StatelessWidget {
@@ -43,6 +43,7 @@ class AboutApplicationPage extends StatelessWidget {
       hasBackButton: true,
       hasFlashButton: false,
       heroTitle: 'about_application_page.title'.tr(),
+      heroIcon: Icons.info_outline,
       children: [
         SectionTitle(title: 'about_application_page.versions'.tr()),
         FutureBuilder(
@@ -218,40 +219,4 @@ class AboutApplicationPage extends StatelessWidget {
 
     return apiVersion;
   }
-}
-
-class LinkListTile extends StatelessWidget {
-  const LinkListTile({
-    required this.title,
-    required this.subtitle,
-    required this.uri,
-    required this.icon,
-    this.longPressText,
-    super.key,
-  });
-
-  final String title;
-  final String subtitle;
-  final String uri;
-  final IconData icon;
-  final String? longPressText;
-
-  @override
-  Widget build(final BuildContext context) => ListTile(
-        title: Text(title),
-        subtitle: Text(subtitle),
-        onTap: () => launchUrl(
-          Uri.parse(uri),
-          mode: LaunchMode.externalApplication,
-        ),
-        leading: Icon(icon),
-        onLongPress: () {
-          PlatformAdapter.setClipboard(
-            longPressText ?? uri,
-          );
-          getIt<NavigationService>().showSnackBar(
-            'basis.copied_to_clipboard'.tr(),
-          );
-        },
-      );
 }

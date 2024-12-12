@@ -22,3 +22,20 @@ List<Color> harmonizedBasicColors(final BuildContext context) => [
       Colors.blueGrey.harmonizeWith(Theme.of(context).colorScheme.primary),
       Colors.grey.harmonizeWith(Theme.of(context).colorScheme.primary),
     ];
+
+List<Color> getGraphColors(final BuildContext context, final int length) {
+  final colors = [
+    Theme.of(context).colorScheme.primary,
+    Theme.of(context).colorScheme.tertiary,
+    Theme.of(context).colorScheme.secondary,
+    ...harmonizedBasicColors(context),
+  ];
+  if (length <= colors.length) {
+    return colors.sublist(0, length);
+  } else {
+    return List.generate(
+      length,
+      (final index) => colors[index % colors.length],
+    );
+  }
+}

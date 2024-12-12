@@ -8,23 +8,6 @@ class _Chart extends StatelessWidget {
     final MetricsState state = cubit.state;
     List<Widget> charts;
 
-    List<Color> getGraphColors(final BuildContext context, final int length) {
-      final colors = [
-        Theme.of(context).colorScheme.primary,
-        Theme.of(context).colorScheme.tertiary,
-        Theme.of(context).colorScheme.secondary,
-        ...harmonizedBasicColors(context),
-      ];
-      if (length <= colors.length) {
-        return colors.sublist(0, length);
-      } else {
-        return List.generate(
-          length,
-          (final index) => colors[index % colors.length],
-        );
-      }
-    }
-
     if (state is MetricsLoaded || state is MetricsLoading) {
       charts = [
         FilledCard(
@@ -332,7 +315,7 @@ class _Chart extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: CpuChart(
-        data: data,
+        data: [data],
         period: state.period,
         start: state.metrics.start,
       ),
@@ -349,7 +332,7 @@ class _Chart extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: MemoryChart(
-        data: data.overallMetrics,
+        data: [data.overallMetrics],
         period: state.period,
         start: state.metrics.start,
       ),
@@ -363,7 +346,7 @@ class _Chart extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: NetworkChart(
-        listData: [ppsIn, ppsOut],
+        data: [ppsIn, ppsOut],
         period: state.period,
         start: state.metrics.start,
       ),

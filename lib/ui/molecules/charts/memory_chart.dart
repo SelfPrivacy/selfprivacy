@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/ui/pages/server_details/charts/generic_chart.dart';
+import 'package:selfprivacy/ui/molecules/charts/generic_chart.dart';
 
 class MemoryChart extends GenericLineChart {
   const MemoryChart({

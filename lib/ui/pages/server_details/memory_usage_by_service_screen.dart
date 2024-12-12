@@ -8,9 +8,9 @@ import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
-import 'package:selfprivacy/ui/atoms/buttons/segmented_buttons.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/molecules/buttons/period_selector.dart';
 import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -104,30 +104,9 @@ class _MemoryUsageByServiceContents extends StatelessWidget {
     return BrandHeroScreen(
       heroTitle: 'resource_chart.memory'.tr(),
       children: [
-        SegmentedButtons(
-          isSelected: [
-            period == Period.month,
-            period == Period.day,
-            period == Period.hour,
-          ],
-          onPressed: (final index) {
-            switch (index) {
-              case 0:
-                cubit.changePeriod(Period.month);
-                break;
-              case 1:
-                cubit.changePeriod(Period.day);
-                break;
-              case 2:
-                cubit.changePeriod(Period.hour);
-                break;
-            }
-          },
-          titles: [
-            'resource_chart.month'.tr(),
-            'resource_chart.day'.tr(),
-            'resource_chart.hour'.tr(),
-          ],
+        PeriodSelector(
+          period: period,
+          onChange: cubit.changePeriod,
         ),
         ...children,
       ],

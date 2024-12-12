@@ -9,16 +9,18 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/theming/harmonized_basic_colors.dart';
-import 'package:selfprivacy/ui/atoms/buttons/segmented_buttons.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
+import 'package:selfprivacy/ui/atoms/chart_elements/legend.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/molecules/buttons/period_selector.dart';
+import 'package:selfprivacy/ui/molecules/cards/chart_card.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_text_details_card.dart';
 import 'package:selfprivacy/ui/molecules/cards/storage_card.dart';
-import 'package:selfprivacy/ui/pages/server_details/charts/cpu_chart.dart';
-import 'package:selfprivacy/ui/pages/server_details/charts/disk_charts.dart';
-import 'package:selfprivacy/ui/pages/server_details/charts/memory_chart.dart';
-import 'package:selfprivacy/ui/pages/server_details/charts/network_charts.dart';
+import 'package:selfprivacy/ui/molecules/charts/cpu_chart.dart';
+import 'package:selfprivacy/ui/molecules/charts/disk_charts.dart';
+import 'package:selfprivacy/ui/molecules/charts/memory_chart.dart';
+import 'package:selfprivacy/ui/molecules/charts/network_charts.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
 part 'charts/chart.dart';

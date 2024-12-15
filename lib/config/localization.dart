@@ -23,6 +23,7 @@ class Localization extends StatelessWidget {
     Locale('et'),
     Locale('fr'),
     Locale('he'),
+    Locale('it'),
     Locale('ja'),
     // Disabled due to poor translation quality
     // Locale('kk'),
@@ -50,6 +51,7 @@ class Localization extends StatelessWidget {
     const Locale('et'): 'eesti',
     const Locale('fr'): 'français',
     const Locale('he'): 'עברית',
+    const Locale('it'): 'italiano',
     const Locale('ja'): '日本語',
     const Locale('kk'): 'Қазақша',
     const Locale('lv'): 'latviešu',

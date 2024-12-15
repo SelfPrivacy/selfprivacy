@@ -27,7 +27,7 @@ if (flutterVersionName == null) {
 android {
     namespace 'org.selfprivacy.app'
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    ndkVersion = "25.1.8937393"
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -96,5 +96,8 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+  implementation 'com.google.errorprone:error_prone_annotations:2.36.0' // required by flutter_secure_storage
+  implementation 'com.github.spotbugs:spotbugs-annotations:4.8.6' // required by flutter_secure_storage
+}
 

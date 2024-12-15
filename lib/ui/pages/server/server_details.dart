@@ -3,39 +3,27 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
-import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/models/disk_status.dart';
-import 'package:selfprivacy/logic/models/metrics.dart';
-import 'package:selfprivacy/theming/harmonized_basic_colors.dart';
-import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
-import 'package:selfprivacy/ui/atoms/chart_elements/legend.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/section_headline.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/molecules/buttons/period_selector.dart';
-import 'package:selfprivacy/ui/molecules/cards/chart_card.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_text_details_card.dart';
 import 'package:selfprivacy/ui/molecules/cards/storage_card.dart';
-import 'package:selfprivacy/ui/molecules/charts/cpu_chart.dart';
-import 'package:selfprivacy/ui/molecules/charts/disk_charts.dart';
-import 'package:selfprivacy/ui/molecules/charts/memory_chart.dart';
-import 'package:selfprivacy/ui/molecules/charts/network_charts.dart';
+import 'package:selfprivacy/ui/organisms/charts/server_charts.dart';
 import 'package:selfprivacy/ui/router/router.dart';
-
-part 'charts/chart.dart';
 
 var navigatorKey = GlobalKey<NavigatorState>();
 
 @RoutePage()
-class ServerDetailsScreen extends StatefulWidget {
-  const ServerDetailsScreen({super.key});
+class ServerDetailsPage extends StatefulWidget {
+  const ServerDetailsPage({super.key});
 
   @override
-  State<ServerDetailsScreen> createState() => _ServerDetailsScreenState();
+  State<ServerDetailsPage> createState() => _ServerDetailsPageState();
 }
 
-class _ServerDetailsScreenState extends State<ServerDetailsScreen>
+class _ServerDetailsPageState extends State<ServerDetailsPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
 
@@ -89,14 +77,13 @@ class _ServerDetailsScreenState extends State<ServerDetailsScreen>
           onTap: () => context.pushRoute(ServerLogsRoute()),
         ),
         const Divider(height: 32),
-        Text(
-          'server.resource_usage'.tr(),
-          style: Theme.of(context).textTheme.titleLarge,
+        SectionHeadline(
+          title: 'server.resource_usage'.tr(),
         ),
         const SizedBox(height: 8),
         BlocProvider(
           create: (final context) => MetricsCubit()..restart(),
-          child: _Chart(),
+          child: const ServerCharts(),
         ),
         const SizedBox(height: 8),
         const ServerTextDetailsCard(),

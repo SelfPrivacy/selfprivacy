@@ -307,7 +307,7 @@ class InitializingRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [MemoryUsageByServiceScreen]
+/// [MemoryUsageByServicePage]
 class MemoryUsageByServiceRoute extends PageRouteInfo<void> {
   const MemoryUsageByServiceRoute({List<PageRouteInfo>? children})
       : super(
@@ -320,7 +320,7 @@ class MemoryUsageByServiceRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const MemoryUsageByServiceScreen();
+      return const MemoryUsageByServicePage();
     },
   );
 }
@@ -478,7 +478,26 @@ class RootRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ServerDetailsScreen]
+/// [SelectTimezonePage]
+class SelectTimezoneRoute extends PageRouteInfo<void> {
+  const SelectTimezoneRoute({List<PageRouteInfo>? children})
+      : super(
+          SelectTimezoneRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SelectTimezoneRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SelectTimezonePage();
+    },
+  );
+}
+
+/// generated route for
+/// [ServerDetailsPage]
 class ServerDetailsRoute extends PageRouteInfo<void> {
   const ServerDetailsRoute({List<PageRouteInfo>? children})
       : super(
@@ -491,13 +510,13 @@ class ServerDetailsRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ServerDetailsScreen();
+      return const ServerDetailsPage();
     },
   );
 }
 
 /// generated route for
-/// [ServerLogsScreen]
+/// [ServerLogsPage]
 class ServerLogsRoute extends PageRouteInfo<ServerLogsRouteArgs> {
   ServerLogsRoute({
     String? serviceId,
@@ -519,7 +538,7 @@ class ServerLogsRoute extends PageRouteInfo<ServerLogsRouteArgs> {
     builder: (data) {
       final args = data.argsAs<ServerLogsRouteArgs>(
           orElse: () => const ServerLogsRouteArgs());
-      return ServerLogsScreen(
+      return ServerLogsPage(
         serviceId: args.serviceId,
         key: args.key,
       );
@@ -544,7 +563,7 @@ class ServerLogsRouteArgs {
 }
 
 /// generated route for
-/// [ServerSettingsScreen]
+/// [ServerSettingsPage]
 class ServerSettingsRoute extends PageRouteInfo<void> {
   const ServerSettingsRoute({List<PageRouteInfo>? children})
       : super(
@@ -557,24 +576,17 @@ class ServerSettingsRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ServerSettingsScreen();
+      return const ServerSettingsPage();
     },
   );
 }
 
 /// generated route for
 /// [ServerStoragePage]
-class ServerStorageRoute extends PageRouteInfo<ServerStorageRouteArgs> {
-  ServerStorageRoute({
-    required DiskStatus diskStatus,
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class ServerStorageRoute extends PageRouteInfo<void> {
+  const ServerStorageRoute({List<PageRouteInfo>? children})
+      : super(
           ServerStorageRoute.name,
-          args: ServerStorageRouteArgs(
-            diskStatus: diskStatus,
-            key: key,
-          ),
           initialChildren: children,
         );
 
@@ -583,29 +595,9 @@ class ServerStorageRoute extends PageRouteInfo<ServerStorageRouteArgs> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<ServerStorageRouteArgs>();
-      return ServerStoragePage(
-        diskStatus: args.diskStatus,
-        key: args.key,
-      );
+      return const ServerStoragePage();
     },
   );
-}
-
-class ServerStorageRouteArgs {
-  const ServerStorageRouteArgs({
-    required this.diskStatus,
-    this.key,
-  });
-
-  final DiskStatus diskStatus;
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'ServerStorageRouteArgs{diskStatus: $diskStatus, key: $key}';
-  }
 }
 
 /// generated route for

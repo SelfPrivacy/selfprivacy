@@ -9,16 +9,16 @@ import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dar
 import 'package:selfprivacy/utils/platform_adapter.dart';
 
 @RoutePage()
-class ServerLogsScreen extends StatefulWidget {
-  const ServerLogsScreen({this.serviceId, super.key});
+class ServerLogsPage extends StatefulWidget {
+  const ServerLogsPage({this.serviceId, super.key});
 
   final String? serviceId;
 
   @override
-  State<ServerLogsScreen> createState() => _ServerLogsScreenState();
+  State<ServerLogsPage> createState() => _ServerLogsPageState();
 }
 
-class _ServerLogsScreenState extends State<ServerLogsScreen> {
+class _ServerLogsPageState extends State<ServerLogsPage> {
   final ScrollController _scrollController = ScrollController();
   late ServerLogsBloc _serverLogsBloc;
 

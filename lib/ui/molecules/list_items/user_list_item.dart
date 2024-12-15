@@ -20,7 +20,6 @@ class UserListItem extends StatelessWidget {
           context.pushRoute(UserDetailsRoute(login: user.login));
         },
         leading: CircleAvatar(
-          backgroundColor: user.color,
           child: Text(
             user.login[0].toUpperCase(),
           ),

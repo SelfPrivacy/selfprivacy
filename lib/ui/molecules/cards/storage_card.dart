@@ -67,7 +67,7 @@ class StorageCard extends StatelessWidget {
           highlightShape: BoxShape.rectangle,
           onTap: () => diskStatus.diskVolumes.isEmpty
               ? null
-              : context.pushRoute(ServerStorageRoute(diskStatus: diskStatus)),
+              : context.pushRoute(const ServerStorageRoute()),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

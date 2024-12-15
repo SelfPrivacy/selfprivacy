@@ -16,8 +16,8 @@ import 'package:selfprivacy/ui/router/router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 @RoutePage()
-class MemoryUsageByServiceScreen extends StatelessWidget {
-  const MemoryUsageByServiceScreen({super.key});
+class MemoryUsageByServicePage extends StatelessWidget {
+  const MemoryUsageByServicePage({super.key});
 
   @override
   Widget build(final BuildContext context) => BlocProvider(

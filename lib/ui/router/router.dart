@@ -20,10 +20,10 @@ import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
-import 'package:selfprivacy/ui/pages/server_details/logs/logs_screen.dart';
-import 'package:selfprivacy/ui/pages/server_details/memory_usage_by_service_screen.dart';
-import 'package:selfprivacy/ui/pages/server_details/server_details_screen.dart';
-import 'package:selfprivacy/ui/pages/server_details/server_settings_screen.dart';
+import 'package:selfprivacy/ui/pages/server/logs.dart';
+import 'package:selfprivacy/ui/pages/server/memory_usage_by_service.dart';
+import 'package:selfprivacy/ui/pages/server/server_details.dart';
+import 'package:selfprivacy/ui/pages/server/server_settings.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
 import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
 import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
@@ -108,6 +108,7 @@ class RootRouter extends RootStackRouter {
         AutoRoute(page: ServiceRoute.page),
         AutoRoute(page: ServiceSettingsRoute.page),
         AutoRoute(page: ServerDetailsRoute.page),
+        AutoRoute(page: SelectTimezoneRoute.page),
         AutoRoute(page: DnsDetailsRoute.page),
         AutoRoute(page: BackupDetailsRoute.page),
         AutoRoute(page: BackupsListRoute.page),

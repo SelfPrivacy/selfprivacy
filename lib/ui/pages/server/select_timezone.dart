@@ -1,4 +1,4 @@
-part of '../server_settings_screen.dart';
+part of 'server_settings.dart';
 
 final List<Location> locations = timeZoneDatabase.locations.values.toList()
   ..sort(
@@ -6,14 +6,15 @@ final List<Location> locations = timeZoneDatabase.locations.values.toList()
         l1.currentTimeZone.offset.compareTo(l2.currentTimeZone.offset),
   );
 
-class SelectTimezone extends StatefulWidget {
-  const SelectTimezone({super.key});
+@RoutePage()
+class SelectTimezonePage extends StatefulWidget {
+  const SelectTimezonePage({super.key});
 
   @override
-  State<SelectTimezone> createState() => _SelectTimezoneState();
+  State<SelectTimezonePage> createState() => _SelectTimezonePageState();
 }
 
-class _SelectTimezoneState extends State<SelectTimezone> {
+class _SelectTimezonePageState extends State<SelectTimezonePage> {
   final ScrollController scrollController = ScrollController();
   final TextEditingController searchController = TextEditingController();
 

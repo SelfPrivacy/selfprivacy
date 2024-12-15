@@ -1,4 +1,37 @@
-part of 'server_settings_screen.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
+import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/ui/atoms/progress_indicators/brand_loader.dart';
+import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/router/router.dart';
+import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:selfprivacy/utils/extensions/duration.dart';
+import 'package:timezone/timezone.dart';
+
+part 'select_timezone.dart';
+
+@RoutePage()
+class ServerSettingsPage extends StatefulWidget {
+  const ServerSettingsPage({super.key});
+
+  @override
+  State<ServerSettingsPage> createState() => _ServerSettingsPageState();
+}
+
+class _ServerSettingsPageState extends State<ServerSettingsPage> {
+  @override
+  Widget build(final BuildContext context) => BrandHeroScreen(
+        hasFlashButton: true,
+        heroIcon: Icons.settings_outlined,
+        heroTitle: 'server.settings'.tr(),
+        children: const [
+          _ServerSettings(),
+        ],
+      );
+}
 
 class _ServerSettings extends StatefulWidget {
   const _ServerSettings();
@@ -106,11 +139,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
             serverDetailsState.serverTimezone.toString(),
           ),
           onTap: () {
-            Navigator.of(context).push(
-              materialRoute(
-                const SelectTimezone(),
-              ),
-            );
+            context.pushRoute(const SelectTimezoneRoute());
           },
         ),
         SwitchListTile.adaptive(

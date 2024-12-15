@@ -16,7 +16,7 @@ class Legend extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ColoredCircle(color: color),
-          const SizedBox(width: 5),
+          const SizedBox(width: 4),
           Text(
             text,
             style: Theme.of(context).textTheme.labelSmall,

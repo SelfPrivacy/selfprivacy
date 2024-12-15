@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
@@ -17,11 +18,8 @@ import 'package:selfprivacy/utils/show_jobs_modal.dart';
 @RoutePage()
 class ServerStoragePage extends StatefulWidget {
   const ServerStoragePage({
-    required this.diskStatus,
     super.key,
   });
-
-  final DiskStatus diskStatus;
 
   @override
   State<ServerStoragePage> createState() => _ServerStoragePageState();
@@ -33,7 +31,7 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
 
-    final List<Service> services = context.watch<ServicesBloc>().state.services;
+    final DiskStatus diskStatus = context.watch<VolumesBloc>().state.diskStatus;
 
     if (!isReady) {
       return BrandHeroScreen(
@@ -49,24 +47,10 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
       bodyPadding: const EdgeInsets.symmetric(vertical: 16.0),
       hasFlashButton: true,
       children: [
-        ...widget.diskStatus.diskVolumes.map(
-          (final volume) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ServerStorageSection(
-                volume: volume,
-                diskStatus: widget.diskStatus,
-                services: services
-                    .where(
-                      (final service) =>
-                          service.storageUsage.volume == volume.name,
-                    )
-                    .toList(),
-              ),
-              const Gap(16),
-              const Divider(),
-              const Gap(16),
-            ],
+        ...diskStatus.diskVolumes.map(
+          (final volume) => DiskConsumptionOverview(
+            volume: volume,
+            diskStatus: diskStatus,
           ),
         ),
         const Gap(8),
@@ -80,6 +64,39 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
             },
           ),
         ),
+      ],
+    );
+  }
+}
+
+class DiskConsumptionOverview extends StatelessWidget {
+  const DiskConsumptionOverview({
+    required this.volume,
+    required this.diskStatus,
+    super.key,
+  });
+
+  final DiskVolume volume;
+  final DiskStatus diskStatus;
+
+  @override
+  Widget build(final BuildContext context) {
+    final List<Service> services = context.watch<ServicesBloc>().state.services;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ServerStorageSection(
+          volume: volume,
+          diskStatus: diskStatus,
+          services: services
+              .where(
+                (final service) => service.storageUsage.volume == volume.name,
+              )
+              .toList(),
+        ),
+        const Gap(16),
+        const Divider(),
+        const Gap(16),
       ],
     );
   }

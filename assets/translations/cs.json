@@ -360,7 +360,6 @@
     "recovery_key": {
         "key_connection_error": "Nepodařilo se připojit k serveru.",
         "key_synchronizing": "Synchronizace…",
-        "key_receiving_done": "Hotovo!",
         "generation_error": "Nepodařilo se vygenerovat klíč pro obnovení. {}",
         "key_main_header": "Klíč pro obnovu",
         "key_main_description": "Vyžaduje se pro autorizaci SelfPrivacy, pokud nejsou k dispozici autorizovaná zařízení.",

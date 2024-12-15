@@ -532,7 +532,6 @@
         "key_valid": "Кілт жарамды",
         "key_creation_date": "Кілт жасау күні",
         "key_synchronizing": "Кілт синхрондау",
-        "key_receiving_done": "Кілт қабылдау аяқталды",
         "key_receiving_description": "Бұл кілтті қауіпсіз жерге жазыңыз. Ол сіздің серверіңізге толық қол жеткізуді қамтамасыз етеді:",
         "key_amount_toggle": "Кілт саны ауыстыру",
         "key_invalid": "Кілт жарамсыз",

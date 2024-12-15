@@ -363,7 +363,6 @@
         "key_creation_date": "Yaradılıb {}",
         "key_replace_button": "Yeni açar yaradın",
         "key_receiving_info": "Bu açar artıq göstərilməyəcək, lakin siz onu yenisi ilə əvəz edə bilərsiniz.",
-        "key_receiving_done": "Hazır!",
         "generation_error": "Açar yaratmaq alınmadı. {}"
     },
     "modals": {

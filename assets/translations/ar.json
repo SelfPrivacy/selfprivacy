@@ -155,7 +155,6 @@
         "key_valid_until": "صالح حتى {}",
         "key_valid_for": "صالح حتى {} استخدامات",
         "key_creation_date": "تم إنشاءه في {}",
-        "key_receiving_done": "تم!",
         "key_replace_button": "قم بتوليد مفتاح جديد",
         "key_receiving_info": "لن يتم إظهار المفتاح مرة أخرى، لكن ستتمكن من استبداله بواحد آخر.",
         "generation_error": "لم نتمكن من توليد مفتاح الاسترجاع. {}"

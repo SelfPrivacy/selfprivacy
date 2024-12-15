@@ -396,7 +396,6 @@
     "recovery_key": {
         "key_main_header": "Klucz odzyskania",
         "key_synchronizing": "Synchronizacja…",
-        "key_receiving_done": "Zrobiono!",
         "key_replace_button": "Wytworzyć nowy klucz",
         "generation_error": "Nie otrzyma się zrobić klucz odzyskania. {}",
         "key_connection_error": "Nie udało się połączyć z serwerem.",

@@ -328,7 +328,6 @@
         "key_creation_date": "创建于 {}",
         "key_replace_button": "生成新密钥",
         "key_receiving_info": "密钥永远不会再次显示，但您可以将其替换为另一个密钥。",
-        "key_receiving_done": "完成！",
         "generation_error": "无法生成恢复密钥。{}"
     },
     "modals": {

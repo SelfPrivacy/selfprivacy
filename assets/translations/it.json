@@ -629,7 +629,6 @@
         "key_receiving_info": "La chiave non verrà mai più mostrata, ma sarà possibile sostituirla con un'altra.",
         "key_connection_error": "Impossibile connettersi al server.",
         "key_receiving_description": "Annota questa chiave e mettila in un luogo sicuro. Potrà essere utilizzata per ripristinare l'accesso completo al server:",
-        "key_receiving_done": "Fatto!",
         "key_amount_toggle": "Limita per numero di utilizzi",
         "key_amount_field_title": "Massimo numero di utilizzi",
         "key_synchronizing": "Sincronizzazione…",

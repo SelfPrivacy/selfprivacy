@@ -423,7 +423,6 @@
         "key_amount_toggle": "使用回数を制限",
         "key_valid_for": "{}回有効",
         "key_creation_date": "{}に作成済",
-        "key_receiving_done": "完了しました！",
         "key_receive_button": "鍵を入手",
         "key_receiving_info": "この鍵は二度と表示されませんが、別の鍵と置き換えることはできます。"
     },

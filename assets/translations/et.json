@@ -615,7 +615,6 @@
         "key_replace_button": "Genereeri uus võti",
         "key_receiving_description": "Kirjutage see võti üles ja asetage turvalisse kohta. Seda kasutatakse täieliku juurdepääsu taastamiseks teie serverile:",
         "key_receiving_info": "Võtit ei näidata kunagi enam, kuid teil on võimalus asendada see teisega.",
-        "key_receiving_done": "Valmis!",
         "generation_error": "Taastevõtit ei õnnestunud luua. {}"
     },
     "jobs": {

@@ -183,7 +183,6 @@
         "key_valid_until": "Дзейнічае да {}",
         "key_creation_date": "Створаны {}",
         "key_replace_button": "Згенераваць новы ключ",
-        "key_receiving_done": "Зроблена!",
         "generation_error": "Не ўдалося згенераваць ключ. {}",
         "key_main_description": "Неабходна для аўтарызацыі SelfPrivacy, калі аўтарызаваныя прылады недаступныя.",
         "key_valid_for": "Можна выкарыстоўваць яшчэ {} раз",

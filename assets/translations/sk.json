@@ -414,7 +414,6 @@
         "key_creation_date": "Vytvorený {}",
         "key_replace_button": "Vygenerovať nový kľúč",
         "key_receiving_info": "Tento kľúč sa už nebude zobrazovať, ale môžete ho nahradiť novým.",
-        "key_receiving_done": "Hotovo!",
         "generation_error": "Nepodarilo sa vygenerovať kľúč. {}"
     },
     "timer": {

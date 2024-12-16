@@ -34,7 +34,7 @@ sealed class ConsoleLog {
       '"data":{\n$content\n}'
       '\n}';
 
-  static final DateFormat _formatter = DateFormat('hh:mm:ss');
+  static final DateFormat _formatter = DateFormat('HH:mm:ss');
   String get timeString => _formatter.format(time);
 
   String get fullUTCString => time.toUtc().toIso8601String();

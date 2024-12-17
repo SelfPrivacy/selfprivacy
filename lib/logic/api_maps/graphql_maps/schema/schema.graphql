@@ -372,6 +372,13 @@ type PaginatedEntries {
   entries: [LogEntry!]!
 }
 
+type PasswordResetLinkReturn implements MutationReturnInterface {
+  success: Boolean!
+  message: String!
+  code: Int!
+  passwordResetLink: String
+}
+
 type Query {
   api: Api!
   system: System!
@@ -652,4 +659,5 @@ type UsersMutations {
   updateUser(user: UserMutationInput!): UserMutationReturn!
   addSshKey(sshInput: SshMutationInput!): UserMutationReturn!
   removeSshKey(sshInput: SshMutationInput!): UserMutationReturn!
+  generatePasswordResetLink(username: String!): PasswordResetLinkReturn!
 }

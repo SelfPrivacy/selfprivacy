@@ -5027,3 +5027,772 @@ class _CopyWithStubImpl$Mutation$RemoveSshKey$users$removeSshKey<TRes>
   CopyWith$Fragment$userFields<TRes> get user =>
       CopyWith$Fragment$userFields.stub(_res);
 }
+
+class Variables$Mutation$GeneratePasswordResetLink {
+  factory Variables$Mutation$GeneratePasswordResetLink(
+          {required String username}) =>
+      Variables$Mutation$GeneratePasswordResetLink._({
+        r'username': username,
+      });
+
+  Variables$Mutation$GeneratePasswordResetLink._(this._$data);
+
+  factory Variables$Mutation$GeneratePasswordResetLink.fromJson(
+      Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$username = data['username'];
+    result$data['username'] = (l$username as String);
+    return Variables$Mutation$GeneratePasswordResetLink._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  String get username => (_$data['username'] as String);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$username = username;
+    result$data['username'] = l$username;
+    return result$data;
+  }
+
+  CopyWith$Variables$Mutation$GeneratePasswordResetLink<
+          Variables$Mutation$GeneratePasswordResetLink>
+      get copyWith => CopyWith$Variables$Mutation$GeneratePasswordResetLink(
+            this,
+            (i) => i,
+          );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Variables$Mutation$GeneratePasswordResetLink) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$username = username;
+    final lOther$username = other.username;
+    if (l$username != lOther$username) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$username = username;
+    return Object.hashAll([l$username]);
+  }
+}
+
+abstract class CopyWith$Variables$Mutation$GeneratePasswordResetLink<TRes> {
+  factory CopyWith$Variables$Mutation$GeneratePasswordResetLink(
+    Variables$Mutation$GeneratePasswordResetLink instance,
+    TRes Function(Variables$Mutation$GeneratePasswordResetLink) then,
+  ) = _CopyWithImpl$Variables$Mutation$GeneratePasswordResetLink;
+
+  factory CopyWith$Variables$Mutation$GeneratePasswordResetLink.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$GeneratePasswordResetLink;
+
+  TRes call({String? username});
+}
+
+class _CopyWithImpl$Variables$Mutation$GeneratePasswordResetLink<TRes>
+    implements CopyWith$Variables$Mutation$GeneratePasswordResetLink<TRes> {
+  _CopyWithImpl$Variables$Mutation$GeneratePasswordResetLink(
+    this._instance,
+    this._then,
+  );
+
+  final Variables$Mutation$GeneratePasswordResetLink _instance;
+
+  final TRes Function(Variables$Mutation$GeneratePasswordResetLink) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? username = _undefined}) =>
+      _then(Variables$Mutation$GeneratePasswordResetLink._({
+        ..._instance._$data,
+        if (username != _undefined && username != null)
+          'username': (username as String),
+      }));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$GeneratePasswordResetLink<TRes>
+    implements CopyWith$Variables$Mutation$GeneratePasswordResetLink<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$GeneratePasswordResetLink(this._res);
+
+  TRes _res;
+
+  call({String? username}) => _res;
+}
+
+class Mutation$GeneratePasswordResetLink {
+  Mutation$GeneratePasswordResetLink({
+    required this.users,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$GeneratePasswordResetLink.fromJson(
+      Map<String, dynamic> json) {
+    final l$users = json['users'];
+    final l$$__typename = json['__typename'];
+    return Mutation$GeneratePasswordResetLink(
+      users: Mutation$GeneratePasswordResetLink$users.fromJson(
+          (l$users as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$GeneratePasswordResetLink$users users;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$users = users;
+    _resultData['users'] = l$users.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$users = users;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$users,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$GeneratePasswordResetLink) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$users = users;
+    final lOther$users = other.users;
+    if (l$users != lOther$users) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$GeneratePasswordResetLink
+    on Mutation$GeneratePasswordResetLink {
+  CopyWith$Mutation$GeneratePasswordResetLink<
+          Mutation$GeneratePasswordResetLink>
+      get copyWith => CopyWith$Mutation$GeneratePasswordResetLink(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$GeneratePasswordResetLink<TRes> {
+  factory CopyWith$Mutation$GeneratePasswordResetLink(
+    Mutation$GeneratePasswordResetLink instance,
+    TRes Function(Mutation$GeneratePasswordResetLink) then,
+  ) = _CopyWithImpl$Mutation$GeneratePasswordResetLink;
+
+  factory CopyWith$Mutation$GeneratePasswordResetLink.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$GeneratePasswordResetLink;
+
+  TRes call({
+    Mutation$GeneratePasswordResetLink$users? users,
+    String? $__typename,
+  });
+  CopyWith$Mutation$GeneratePasswordResetLink$users<TRes> get users;
+}
+
+class _CopyWithImpl$Mutation$GeneratePasswordResetLink<TRes>
+    implements CopyWith$Mutation$GeneratePasswordResetLink<TRes> {
+  _CopyWithImpl$Mutation$GeneratePasswordResetLink(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$GeneratePasswordResetLink _instance;
+
+  final TRes Function(Mutation$GeneratePasswordResetLink) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? users = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$GeneratePasswordResetLink(
+        users: users == _undefined || users == null
+            ? _instance.users
+            : (users as Mutation$GeneratePasswordResetLink$users),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$GeneratePasswordResetLink$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Mutation$GeneratePasswordResetLink$users(
+        local$users, (e) => call(users: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$GeneratePasswordResetLink<TRes>
+    implements CopyWith$Mutation$GeneratePasswordResetLink<TRes> {
+  _CopyWithStubImpl$Mutation$GeneratePasswordResetLink(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$GeneratePasswordResetLink$users? users,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$GeneratePasswordResetLink$users<TRes> get users =>
+      CopyWith$Mutation$GeneratePasswordResetLink$users.stub(_res);
+}
+
+const documentNodeMutationGeneratePasswordResetLink =
+    DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'GeneratePasswordResetLink'),
+    variableDefinitions: [
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'username')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'String'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(value: null),
+        directives: [],
+      )
+    ],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'users'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'generatePasswordResetLink'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'username'),
+                value: VariableNode(name: NameNode(value: 'username')),
+              )
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FragmentSpreadNode(
+                name: NameNode(value: 'basicMutationReturnFields'),
+                directives: [],
+              ),
+              FieldNode(
+                name: NameNode(value: 'passwordResetLink'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+  fragmentDefinitionbasicMutationReturnFields,
+]);
+Mutation$GeneratePasswordResetLink _parserFn$Mutation$GeneratePasswordResetLink(
+        Map<String, dynamic> data) =>
+    Mutation$GeneratePasswordResetLink.fromJson(data);
+typedef OnMutationCompleted$Mutation$GeneratePasswordResetLink = FutureOr<void>
+    Function(
+  Map<String, dynamic>?,
+  Mutation$GeneratePasswordResetLink?,
+);
+
+class Options$Mutation$GeneratePasswordResetLink
+    extends graphql.MutationOptions<Mutation$GeneratePasswordResetLink> {
+  Options$Mutation$GeneratePasswordResetLink({
+    String? operationName,
+    required Variables$Mutation$GeneratePasswordResetLink variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$GeneratePasswordResetLink? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$GeneratePasswordResetLink? onCompleted,
+    graphql.OnMutationUpdate<Mutation$GeneratePasswordResetLink>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$GeneratePasswordResetLink(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationGeneratePasswordResetLink,
+          parserFn: _parserFn$Mutation$GeneratePasswordResetLink,
+        );
+
+  final OnMutationCompleted$Mutation$GeneratePasswordResetLink?
+      onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$GeneratePasswordResetLink
+    extends graphql.WatchQueryOptions<Mutation$GeneratePasswordResetLink> {
+  WatchOptions$Mutation$GeneratePasswordResetLink({
+    String? operationName,
+    required Variables$Mutation$GeneratePasswordResetLink variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$GeneratePasswordResetLink? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationGeneratePasswordResetLink,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$GeneratePasswordResetLink,
+        );
+}
+
+extension ClientExtension$Mutation$GeneratePasswordResetLink
+    on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$GeneratePasswordResetLink>>
+      mutate$GeneratePasswordResetLink(
+              Options$Mutation$GeneratePasswordResetLink options) async =>
+          await this.mutate(options);
+  graphql.ObservableQuery<Mutation$GeneratePasswordResetLink>
+      watchMutation$GeneratePasswordResetLink(
+              WatchOptions$Mutation$GeneratePasswordResetLink options) =>
+          this.watchMutation(options);
+}
+
+class Mutation$GeneratePasswordResetLink$users {
+  Mutation$GeneratePasswordResetLink$users({
+    required this.generatePasswordResetLink,
+    this.$__typename = 'UsersMutations',
+  });
+
+  factory Mutation$GeneratePasswordResetLink$users.fromJson(
+      Map<String, dynamic> json) {
+    final l$generatePasswordResetLink = json['generatePasswordResetLink'];
+    final l$$__typename = json['__typename'];
+    return Mutation$GeneratePasswordResetLink$users(
+      generatePasswordResetLink:
+          Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink
+              .fromJson((l$generatePasswordResetLink as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink
+      generatePasswordResetLink;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$generatePasswordResetLink = generatePasswordResetLink;
+    _resultData['generatePasswordResetLink'] =
+        l$generatePasswordResetLink.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$generatePasswordResetLink = generatePasswordResetLink;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$generatePasswordResetLink,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$GeneratePasswordResetLink$users) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$generatePasswordResetLink = generatePasswordResetLink;
+    final lOther$generatePasswordResetLink = other.generatePasswordResetLink;
+    if (l$generatePasswordResetLink != lOther$generatePasswordResetLink) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$GeneratePasswordResetLink$users
+    on Mutation$GeneratePasswordResetLink$users {
+  CopyWith$Mutation$GeneratePasswordResetLink$users<
+          Mutation$GeneratePasswordResetLink$users>
+      get copyWith => CopyWith$Mutation$GeneratePasswordResetLink$users(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$GeneratePasswordResetLink$users<TRes> {
+  factory CopyWith$Mutation$GeneratePasswordResetLink$users(
+    Mutation$GeneratePasswordResetLink$users instance,
+    TRes Function(Mutation$GeneratePasswordResetLink$users) then,
+  ) = _CopyWithImpl$Mutation$GeneratePasswordResetLink$users;
+
+  factory CopyWith$Mutation$GeneratePasswordResetLink$users.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$GeneratePasswordResetLink$users;
+
+  TRes call({
+    Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink?
+        generatePasswordResetLink,
+    String? $__typename,
+  });
+  CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink<
+      TRes> get generatePasswordResetLink;
+}
+
+class _CopyWithImpl$Mutation$GeneratePasswordResetLink$users<TRes>
+    implements CopyWith$Mutation$GeneratePasswordResetLink$users<TRes> {
+  _CopyWithImpl$Mutation$GeneratePasswordResetLink$users(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$GeneratePasswordResetLink$users _instance;
+
+  final TRes Function(Mutation$GeneratePasswordResetLink$users) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? generatePasswordResetLink = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$GeneratePasswordResetLink$users(
+        generatePasswordResetLink: generatePasswordResetLink == _undefined ||
+                generatePasswordResetLink == null
+            ? _instance.generatePasswordResetLink
+            : (generatePasswordResetLink
+                as Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink<
+      TRes> get generatePasswordResetLink {
+    final local$generatePasswordResetLink = _instance.generatePasswordResetLink;
+    return CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink(
+        local$generatePasswordResetLink,
+        (e) => call(generatePasswordResetLink: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$GeneratePasswordResetLink$users<TRes>
+    implements CopyWith$Mutation$GeneratePasswordResetLink$users<TRes> {
+  _CopyWithStubImpl$Mutation$GeneratePasswordResetLink$users(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink?
+        generatePasswordResetLink,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink<
+          TRes>
+      get generatePasswordResetLink =>
+          CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink
+              .stub(_res);
+}
+
+class Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink
+    implements Fragment$basicMutationReturnFields$$PasswordResetLinkReturn {
+  Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'PasswordResetLinkReturn',
+    this.passwordResetLink,
+  });
+
+  factory Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    final l$passwordResetLink = json['passwordResetLink'];
+    return Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+      passwordResetLink: (l$passwordResetLink as String?),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  final String? passwordResetLink;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    final l$passwordResetLink = passwordResetLink;
+    _resultData['passwordResetLink'] = l$passwordResetLink;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    final l$passwordResetLink = passwordResetLink;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+      l$passwordResetLink,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    final l$passwordResetLink = passwordResetLink;
+    final lOther$passwordResetLink = other.passwordResetLink;
+    if (l$passwordResetLink != lOther$passwordResetLink) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink
+    on Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink {
+  CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink<
+          Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink>
+      get copyWith =>
+          CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink<
+    TRes> {
+  factory CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink(
+    Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink instance,
+    TRes Function(
+            Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink)
+        then,
+  ) = _CopyWithImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink;
+
+  factory CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    String? passwordResetLink,
+  });
+}
+
+class _CopyWithImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink<
+        TRes>
+    implements
+        CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink<
+            TRes> {
+  _CopyWithImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink
+      _instance;
+
+  final TRes Function(
+      Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+    Object? passwordResetLink = _undefined,
+  }) =>
+      _then(Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+        passwordResetLink: passwordResetLink == _undefined
+            ? _instance.passwordResetLink
+            : (passwordResetLink as String?),
+      ));
+}
+
+class _CopyWithStubImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink<
+        TRes>
+    implements
+        CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink<
+            TRes> {
+  _CopyWithStubImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    String? passwordResetLink,
+  }) =>
+      _res;
+}

@@ -2278,6 +2278,7 @@ const possibleTypesMap = <String, Set<String>>{
     'GenericBackupConfigReturn',
     'GenericJobMutationReturn',
     'GenericMutationReturn',
+    'PasswordResetLinkReturn',
     'SSHSettingsMutationReturn',
     'ServiceJobMutationReturn',
     'ServiceMutationReturn',

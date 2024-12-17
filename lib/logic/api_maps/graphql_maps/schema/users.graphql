@@ -74,3 +74,12 @@ mutation RemoveSshKey($sshInput: SshMutationInput!) {
     }
   }
 }
+
+mutation GeneratePasswordResetLink($username: String!) {
+  users {
+    generatePasswordResetLink(username: $username) {
+      ...basicMutationReturnFields
+      passwordResetLink
+    }
+  }
+}

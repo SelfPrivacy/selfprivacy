@@ -111,7 +111,7 @@ class ApiConnectionRepository {
     }
     // If user is primary or root, don't delete
     if (user.type != UserType.normal) {
-      return (false, 'users.could_not_delete_user'.tr());
+      return (false, 'users.user_delete_protected'.tr());
     }
     final GenericResult result = await api.deleteUser(user.login);
     if (result.success && result.data) {
@@ -126,25 +126,21 @@ class ApiConnectionRepository {
     return (true, result.message ?? 'basis.done'.tr());
   }
 
-  Future<(bool, String)> changeUserPassword(
+  Future<(bool, String)> generatePasswordResetLink(
     final User user,
-    final String newPassword,
   ) async {
+    String errorMessage = 'users.user_modify_protected'.tr();
     if (user.type == UserType.root) {
-      return (false, 'users.could_not_change_password'.tr());
+      return (false, errorMessage);
     }
-    final GenericResult<User?> result = await api.updateUser(
+    final GenericResult<String?> result = await api.generatePasswordResetLink(
       user.login,
-      newPassword,
     );
     if (result.data == null) {
-      getIt<NavigationService>().showSnackBar(
-        result.message ?? 'users.could_not_change_password'.tr(),
-      );
-      return (
-        false,
-        result.message ?? 'users.could_not_change_password'.tr(),
-      );
+      errorMessage =
+          result.message ?? 'users.could_not_generate_password_link'.tr();
+      getIt<NavigationService>().showSnackBar(errorMessage);
+      return (false, errorMessage);
     }
     return (true, result.message ?? 'basis.done'.tr());
   }

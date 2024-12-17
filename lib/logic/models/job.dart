@@ -187,8 +187,8 @@ class ResetUserPasswordJob extends ClientJob {
   final User user;
 
   @override
-  Future<(bool, String)> execute() async =>
-      getIt<ApiConnectionRepository>().changeUserPassword(user, user.password!);
+  Future<(bool, String)> execute() async => (false, '');
+  //getIt<ApiConnectionRepository>().changeUserPassword(user, user.password!);
 
   @override
   List<Object> get props => [...super.props, user];

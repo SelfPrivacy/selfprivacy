@@ -20,6 +20,8 @@ sealed class BackupsState extends Equatable {
 
   List<Backup> serviceBackups(final String serviceId) => [];
 
+  Duration? timeSinceLastBackup() => null;
+
   Duration? get autobackupPeriod => null;
 
   AutobackupQuotas? get autobackupQuotas => null;
@@ -124,6 +126,17 @@ class BackupsInitialized extends BackupsState {
       _backupConfig?.autobackupPeriod?.inMinutes == 0
           ? null
           : _backupConfig?.autobackupPeriod;
+
+  @override
+  Duration? timeSinceLastBackup() {
+    if (backups.isEmpty) {
+      return null;
+    }
+    final timeNow = DateTime.now();
+    final timeLastBackup = backups.first.time;
+    final delta = timeNow.difference(timeLastBackup);
+    return Duration(seconds: delta.inSeconds);
+  }
 
   @override
   @Deprecated('Infer the initializations status from state')

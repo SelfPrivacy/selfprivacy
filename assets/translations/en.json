@@ -221,7 +221,13 @@
     },
     "backup": {
         "card_title": "Backup",
-        "card_subtitle": "Manage your backups",
+        "card_subtitle": "Last backup was {numericValue}{measurement} ago",
+        "measurement": {
+            "seconds": "sec",
+            "minutes": "min",
+            "hours": "h",
+            "days": "d"
+        },
         "description": "Will save your day in case of incident: hackers attack, server deletion, etc.",
         "reupload_key": "Force reupload key",
         "reuploaded_key": "Key reuploaded",

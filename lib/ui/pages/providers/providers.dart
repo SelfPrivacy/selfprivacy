@@ -15,6 +15,7 @@ import 'package:selfprivacy/ui/molecules/cards/server_outdated_card.dart';
 import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:selfprivacy/utils/extensions/duration.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -33,6 +34,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
     final bool isReady = context.watch<ServerInstallationCubit>().state
         is ServerInstallationFinished;
     final BackupsState backupsState = context.watch<BackupsBloc>().state;
+
     final DnsRecordsStatus dnsStatus =
         context.watch<DnsRecordsCubit>().state.dnsState;
 
@@ -127,12 +129,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
                   : StateType.uninitialized,
               icon: BrandIcons.save,
               title: 'backup.card_title'.tr(),
-              subtitle: backupsState is BackupsInitialized
-                  ? 'backup.card_subtitle'.tr()
-                  : backupsState is BackupsLoading ||
-                          backupsState is BackupsInitial
-                      ? 'basis.loading'.tr()
-                      : '',
+              subtitle: _backupsCardSubtitle(backupsState),
               onTap: isClickable()
                   ? () => context.pushRoute(const BackupDetailsRoute())
                   : null,
@@ -141,5 +138,41 @@ class _ProvidersPageState extends State<ProvidersPage> {
         ],
       ),
     );
+  }
+
+  String _backupsCardSubtitle(final BackupsState backupsState) {
+    if (backupsState is BackupsInitialized) {
+      final timeSince = backupsState.timeSinceLastBackup();
+      if (timeSince == null) {
+        return '';
+      }
+
+      int numericValue = 0;
+      String measurement = 'backup.measurement.seconds'.tr();
+      if (timeSince.inMinutes < 1) {
+        numericValue = timeSince.inSeconds;
+      } else if (timeSince.inHours < 1) {
+        numericValue = timeSince.inMinutes;
+        measurement = 'backup.measurement.minutes'.tr();
+      } else if (timeSince.inDays < 1) {
+        numericValue = timeSince.inHours;
+        measurement = 'backup.measurement.hours'.tr();
+      } else {
+        numericValue = timeSince.inDays;
+        measurement = 'backup.measurement.days'.tr();
+      }
+
+      return 'backup.card_subtitle'.tr(
+        namedArgs: {
+          'numericValue': numericValue.toString(),
+          'measurement': measurement,
+        },
+      );
+    } else if (backupsState is BackupsLoading ||
+        backupsState is BackupsInitial) {
+      return 'basis.loading'.tr();
+    } else {
+      return '';
+    }
   }
 }

@@ -165,7 +165,7 @@
             "yearly_infinite": "Tutti i backup annuali saranno conservati",
             "monthly_infinite": "Tutti i backup mensili saranno conservati"
         },
-        "card_subtitle": "Gestisci i tuoi backups",
+        "card_subtitle": "L'ultimo backup risale a {numericValue}{measurement} fa",
         "reupload_key": "Forza il ricaricamento della chiave",
         "snapshot_modal_download_verify_option_description": "Meno rischi, ma più spazio libero necessario. Scarica l'intera istantanea nella memoria temporanea, la verifica e quindi sostituisce i dati correnti.",
         "restore_started": "Ripristino avviato, controllare l'elenco dei lavori per visualizzare lo stato attuale",
@@ -180,7 +180,7 @@
         "refresh": "Aggiorna lo stato",
         "description": "Ti sarà utile in caso di incidente: attacco di hacker, cancellazione del server, ecc.",
         "autobackup_period_disable": "Disabilita i backup automatici",
-        "backups_encryption_key_subtitle": "Conservala in un posto sicuro.",
+        "backups_encryption_key_subtitle": "Conservala in un posto sicuro",
         "backups_encryption_key_not_found": "La chiave di cifratura non è stata trovata, riprova più tardi.",
         "pending_jobs": "Backup in corso",
         "snapshots_title": "Lista delle immagini salvate",
@@ -222,7 +222,13 @@
         "set_rotation_quotas": "Impostare le nuove quote di rotazione",
         "autobackup_period_title": "Pianificazione backup automatico",
         "autobackup_period_subtitle": "Backup creato ogni {period}",
-        "autobackup_set_period": "Seleziona periodo"
+        "autobackup_set_period": "Seleziona periodo",
+        "measurement": {
+            "seconds": "sec",
+            "minutes": "min",
+            "hours": "ore",
+            "days": "g"
+        }
     },
     "jobs": {
         "failed_to_load_dns_records": "Errore nel caricamento dei record DNS",
@@ -363,7 +369,7 @@
         "create_server": "Crea il server",
         "server_rebooted": "Server riavviato. In attesa dell'ultima verifica…",
         "enter_username_and_password": "Inserisci username ed una password complicata",
-        "select_provider_countries_text_hetzner": "Germania, Finlandia, Stati Uniti",
+        "select_provider_countries_text_hetzner": "Germania, Finlandia, Stati Uniti, Singapore",
         "select_provider_countries_text_do": "Stati Uniti, Olanda, Singapore, Regno Unito, Germania, Canada, India, Australia",
         "select_provider_price_title": "Prezzo medio",
         "how": "Come ottenere un token API",
@@ -450,9 +456,9 @@
         "singapore": "Singapore"
     },
     "tokens": {
-        "backup_provider_tokens": "Tokens del provider del backup storage",
+        "backup_provider_tokens": "Token del provider di backup storage",
         "title": "Tokens del provider",
-        "dns_provider_tokens": "Tokens del provider DNS",
+        "dns_provider_tokens": "Token del provider DNS",
         "valid": "Valido",
         "loading": "Caricamento dello stato dei token",
         "used_by": "Usato per {servers}.",
@@ -460,7 +466,7 @@
         "no_tokens": "Nessun token",
         "server_provider_unknown_description": "Il tuo provider del server non è supportato da questa versione dell'app.",
         "description": "Questi token sono memorizzati su questo dispositivo e vengono utilizzati per connettere SelfPrivacy al provider del server, al provider DNS e al provider di storage dei backup.",
-        "server_provider_tokens": "Tokens del provider del server",
+        "server_provider_tokens": "Token del provider del server",
         "server_without_token": "{server_domain} non ha token per {provider}.",
         "invalid": "Non valido",
         "no_access": "Non ha accesso alle risorse associate",
@@ -512,7 +518,7 @@
             "other_devices": "Altri dispositivi",
             "this_device": "Questo dispositivo",
             "authorize_new_device": "Autorizza un nuovo dispositivo",
-            "access_granted_on": "Accesso consentito su {}",
+            "access_granted_on": "Accesso consentito il {}",
             "tip": "Clicca sul dispositivo per revocare l'accesso."
         },
         "add_new_device_screen": {
@@ -575,7 +581,7 @@
         "allow_password_authentication": "Abilita l'autenticazione con password per SSH",
         "filter_by_systemd_unit": "Filtro per unità systemd",
         "all_units": "Tutte le unità",
-        "card_title": "Server",
+        "card_title": "Fornitori",
         "description": "Tutti i tuoi servizi vivono qui",
         "allow_autoupgrade": "Consenti l'aggiornamento automatico",
         "status": "Stato",

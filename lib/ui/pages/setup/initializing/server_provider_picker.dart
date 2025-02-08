@@ -312,6 +312,11 @@ class ProviderSelectionPage extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       const SizedBox(height: 16),
+                      Text(
+                        'initializing.server_provider_email_unavailable'.tr(),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: 16),
                       BrandButton.filled(
                         child: Text('basis.select'.tr()),
                         onPressed: () {

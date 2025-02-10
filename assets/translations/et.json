@@ -269,7 +269,7 @@
             "yearly_infinite": "Kõik iga-aastased varukoopiad säilitatakse"
         },
         "card_title": "Varundus",
-        "card_subtitle": "Halda oma varukoopiad",
+        "card_subtitle": "Viimane varundus oli {numericValue}{measurement} tagasi",
         "description": "Päästab teie päeva juhul, kui juhtub intsident: häkkerirünnak, serveri kustutamine jne.",
         "reupload_key": "Võtme sunnitud lähtestamine",
         "reuploaded_key": "Võti laaditi uuesti",
@@ -297,7 +297,7 @@
         "autobackup_period_disable": "Keela automaatne varundamine",
         "autobackup_set_period": "Määra periood",
         "backups_encryption_key": "Krüpteerimisvõti",
-        "backups_encryption_key_subtitle": "Hoidke seda kindlas kohas.",
+        "backups_encryption_key_subtitle": "Hoidke see turvalises kohas",
         "backups_encryption_key_copy": "Kopeerige krüpteerimisvõti",
         "backups_encryption_key_show": "Näita krüpteerimisvõtit",
         "backups_encryption_key_description": "Seda võtit kasutatakse teie varukoopiate krüptimiseks. Kui kaotate selle, ei saa te varukoopiaid taastada. Hoidke seda kindlas kohas, sest see on kasulik, kui peate kunagi varukoopiatest käsitsi taastama.",
@@ -334,7 +334,13 @@
         },
         "rotation_quotas_title": "Hetktõmmise pööramise Seaded",
         "set_rotation_quotas": "Määrake uued rotatsioonikvoodid",
-        "quotas_only_applied_to_autobackups": "Neid sätteid rakendatakse ainult automaatse varundamise korral. Käsitsi tehtud varukoopiaid ei kustutata."
+        "quotas_only_applied_to_autobackups": "Neid sätteid rakendatakse ainult automaatse varundamise korral. Käsitsi tehtud varukoopiaid ei kustutata.",
+        "measurement": {
+            "seconds": "sek",
+            "minutes": "min",
+            "hours": "t",
+            "days": "p"
+        }
     },
     "initializing": {
         "connect_to_server_provider_text": "API võtme abil saab SelfPrivacy rentida masina ja seadistada sellele oma serveri",
@@ -343,7 +349,7 @@
         "use_this_domain": "Kasutada seda domeeni?",
         "use_this_domain_text": "Esitatud võti annab juurdepääsu järgnevale domeenile",
         "select_provider_countries_title": "Saadaval olevad riigid",
-        "select_provider_countries_text_hetzner": "Saksamaa, Soome, Ameerika Ühendriigid",
+        "select_provider_countries_text_hetzner": "Saksamaa, Soome, Ameerika Ühendriigid, Singapur",
         "select_provider_countries_text_do": "Ameerika Ühendriigid, Holland, Singapur, Suurbritannia, Saksamaa, Kanada, India, Austraalia",
         "select_provider_price_title": "Keskm hind",
         "select_provider_price_free": "Tasuta",
@@ -407,7 +413,8 @@
         "select_provider_notice": "\"Suhteliselt väikese\" all peame silmas masinat, millel on 2 tuuma CPU ja 2 gigabaiti muutmälu.",
         "until_the_next_check": "Kuni järgmise kontrollini: ",
         "check": "Kontrollima",
-        "one_more_restart": "Veel üks taaskäivitus turvasertifikaatide rakendamiseks."
+        "one_more_restart": "Veel üks taaskäivitus turvasertifikaatide rakendamiseks.",
+        "server_provider_email_unavailable": "E-post ei tööta selle teenusepakkujaga."
     },
     "developer_settings": {
         "ignore_tls_description": "Rakendus ei kontrolli TLS sertifikaate ühenduse loomisel serveriga.",

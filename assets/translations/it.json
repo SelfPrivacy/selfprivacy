@@ -400,7 +400,8 @@
         "select_dns": "Ora selezioniamo un provider DNS",
         "one_more_restart": "Ancora un riavvio per applicare i certificati di sicurezza.",
         "domain_critical_error": "Non riesco a raggiungere questo dominio! Tocca per leggere di più…",
-        "check": "Controllo"
+        "check": "Controllo",
+        "server_provider_email_unavailable": "L'e-mail non funzionerà con questo provider."
     },
     "recovering": {
         "fallback_select_provider_console": "Accesso alla console del server del mio provider.",

@@ -25,17 +25,18 @@
         "username": "Uporabniško ime",
         "loading": "Nalaganje…",
         "later": "Preskočite in prilagodite pozneje",
-        "connect_to_existing": "Preskočite in prilagodite pozneje",
+        "connect_to_existing": "Že imam SelfPrivacy strežnik!",
         "reset": "Ponastavitev",
         "details": "Podrobne informacije",
         "no_data": "Ni podatkov",
-        "wait": "Prenesi",
+        "wait": "Se prenaša",
         "remove": "Izbriši",
         "apply": "Uporabi",
         "done": "Končano",
         "continue": "Nadaljuj",
         "alert": "Opozorilo",
-        "error": "Napaka"
+        "error": "Napaka",
+        "network_error": "Omrežna napaka"
     },
     "more_page": {
         "onboarding": "Pozdravi",
@@ -49,7 +50,10 @@
         "error": "Napaka",
         "data": "Podatki",
         "errors": "Napake",
-        "context": "Kontekst"
+        "context": "Kontekst",
+        "history_empty": "Ni še podatkov",
+        "graphql_request": "GraphQL zahteva",
+        "rest_api_request": "REST API zahteva"
     },
     "about_application_page": {
         "title": "Več o aplikaciji in podpora",
@@ -226,5 +230,10 @@
     },
     "git": {
         "login_info": "Na spletnem mestu morate ustvariti račun. Prvi uporabnik bo postal administrator."
+    },
+    "initializing": {
+        "select_provider_site_button": "Obišči stran",
+        "connect_to_server_provider": "Zdaj se prijavi pri {provider}",
+        "server_provider_email_unavailable": "Elektronska pošta ne bo delovala s tem ponudnikom."
     }
 }

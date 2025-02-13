@@ -28,7 +28,6 @@ CloudflareDnsRecord _fromDnsRecord(
       content: null,
       name: name,
       type: type,
-      zoneName: rootDomain,
       id: null,
       ttl: dnsRecord.ttl,
       data: data,
@@ -38,7 +37,6 @@ CloudflareDnsRecord _fromDnsRecord(
     content: dnsRecord.content,
     name: name,
     type: type,
-    zoneName: rootDomain,
     id: null,
     ttl: dnsRecord.ttl,
   );

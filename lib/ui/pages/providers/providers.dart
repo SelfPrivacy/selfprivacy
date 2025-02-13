@@ -15,7 +15,6 @@ import 'package:selfprivacy/ui/molecules/cards/server_outdated_card.dart';
 import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
-import 'package:selfprivacy/utils/extensions/duration.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

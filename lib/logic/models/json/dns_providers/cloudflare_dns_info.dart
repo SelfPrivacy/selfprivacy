@@ -38,7 +38,6 @@ class CloudflareDnsRecord {
   CloudflareDnsRecord({
     required this.type,
     required this.name,
-    required this.zoneName,
     this.content,
     this.data,
     this.ttl = 3600,
@@ -78,12 +77,6 @@ class CloudflareDnsRecord {
 
   /// Some record types require data object instead of the content.
   final Map<String, dynamic>? data;
-
-  /// The domain of the record.
-  ///
-  /// Example: example.com
-  @JsonKey(name: 'zone_name')
-  final String zoneName;
 
   /// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
   ///

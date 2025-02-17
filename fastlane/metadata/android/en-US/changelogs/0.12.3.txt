@@ -1,0 +1,53 @@
+# 0.12.3 Changelog
+
+## Changes
+
+**Features**
+
+- Dynamic icons for Android ([#585](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/585), resolves [#584](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/584))
+- **DNS**: Handle CAA records ([#588](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/588), [#589](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/589))
+- **i18n**: Enable Italian ([#593](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/593))
+- Add new backups card descriptions ([#595](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/595), resolves [#587](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/587))
+- Added skeleton loaders to several screens ([#589](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/589))
+
+**Bug Fixes**
+
+- **recovery**: Check server location on the recovery of the server selection step
+- **ui**: Many different UI fixes ([#589](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/589))
+- **ui**: Backup timestamps are now in local timezone.
+- **ui**: Fix hero icon position on mobile screens with cutouts ([#589](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/589))
+- **ui**: Follow MD3 guidelines regarding FABs on NavigationRails ([#589](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/589))
+- Change console timestamps to 24h format ([#596](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/596), resolves [#571](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/571))
+- **ui**: Add a note regarding digital ocean email limitations. ([#600](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/600), resolves [#599](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/599))
+- Hotfix for Cloudflare API changes ([#604](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/604))
+- **ui**: Remove Expanded wrapper for the warning about disabled SSH ([#572](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/572), resolves [#568](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/568))
+- **logs**: Implement json encode error handling ([#570](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/570), resolves [#569](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/569))
+
+
+### Translation contributions
+
+
+* Estonian
+
+    * Dmitri B. (20)
+
+
+* Italian
+
+    * Genio (671)
+
+
+* Japanese
+
+    * shirahara (125)
+
+
+* Russian
+
+    * Inex Code (13)
+
+
+* Slovenian
+
+    * 22nds (39)
+

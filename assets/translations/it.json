@@ -1,7 +1,7 @@
 {
     "basis": {
         "please_connect": "Collega il tuo server, il tuo dominio e il tuo provider DNS per iniziare!",
-        "providers": "Servizi",
+        "providers": "Fornitori",
         "providers_title": "Il tuo Data Center",
         "users": "Utenti",
         "more": "Altro",
@@ -582,7 +582,7 @@
         "allow_password_authentication": "Abilita l'autenticazione con password per SSH",
         "filter_by_systemd_unit": "Filtro per unità systemd",
         "all_units": "Tutte le unità",
-        "card_title": "Fornitori",
+        "card_title": "Server",
         "description": "Tutti i tuoi servizi vivono qui",
         "allow_autoupgrade": "Consenti l'aggiornamento automatico",
         "status": "Stato",

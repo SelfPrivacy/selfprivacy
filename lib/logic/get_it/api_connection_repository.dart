@@ -87,13 +87,10 @@ class ApiConnectionRepository {
         .any((final User u) => u.login == user.login && u.isFoundOnServer)) {
       return (false, 'users.user_already_exists'.tr());
     }
-    final String? password = user.password;
-    if (password == null) {
-      return (false, 'users.could_not_create_user'.tr());
-    }
+
     // If API returned error, do nothing
-    final GenericResult<User?> result =
-        await api.createUser(user.login, password);
+    final GenericResult<User?> result = await api.createUser(user.login);
+
     if (result.data == null) {
       return (false, result.message ?? 'users.could_not_create_user'.tr());
     }
@@ -126,23 +123,26 @@ class ApiConnectionRepository {
     return (true, result.message ?? 'basis.done'.tr());
   }
 
-  Future<(bool, String)> generatePasswordResetLink(
+  // url and error message
+  Future<(Uri?, String)> generatePasswordResetLink(
     final User user,
   ) async {
     String errorMessage = 'users.user_modify_protected'.tr();
     if (user.type == UserType.root) {
-      return (false, errorMessage);
+      return (null, errorMessage);
     }
-    final GenericResult<String?> result = await api.generatePasswordResetLink(
-      user.login,
-    );
-    if (result.data == null) {
+    final GenericResult<String?> result =
+        await api.generatePasswordResetLink(user.login);
+
+    // check if got valid url
+    final uri = Uri.tryParse(result.data ?? '');
+    if (uri == null) {
       errorMessage =
           result.message ?? 'users.could_not_generate_password_link'.tr();
-      getIt<NavigationService>().showSnackBar(errorMessage);
-      return (false, errorMessage);
+      return (null, errorMessage);
     }
-    return (true, result.message ?? 'basis.done'.tr());
+
+    return (uri, result.message ?? 'basis.done'.tr());
   }
 
   Future<(bool, String)> addSshKey(

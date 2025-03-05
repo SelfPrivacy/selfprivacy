@@ -46,7 +46,14 @@ class User extends Equatable {
   final UserType type;
 
   @override
-  List<Object?> get props => [login, password, sshKeys, isFoundOnServer, note];
+  List<Object?> get props => [
+        login,
+        password,
+        sshKeys,
+        isFoundOnServer,
+        note,
+        type,
+      ];
 
   Color get color => stringToColor(login);
 

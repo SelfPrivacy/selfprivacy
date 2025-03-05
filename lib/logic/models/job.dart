@@ -146,66 +146,6 @@ class RebootServerJob extends ClientJob {
       );
 }
 
-class CreateUserJob extends ClientJob {
-  CreateUserJob({
-    required this.user,
-    super.status,
-    super.message,
-    super.id,
-  }) : super(title: '${"jobs.create_user".tr()} ${user.login}');
-
-  final User user;
-
-  @override
-  Future<(bool, String)> execute() async =>
-      getIt<ApiConnectionRepository>().createUser(user);
-
-  @override
-  List<Object> get props => [...super.props, user];
-
-  @override
-  CreateUserJob copyWithNewStatus({
-    required final JobStatusEnum status,
-    final String? message,
-  }) =>
-      CreateUserJob(
-        user: user,
-        status: status,
-        message: message,
-        id: id,
-      );
-}
-
-class ResetUserPasswordJob extends ClientJob {
-  ResetUserPasswordJob({
-    required this.user,
-    super.status,
-    super.message,
-    super.id,
-  }) : super(title: '${"jobs.reset_user_password".tr()} ${user.login}');
-
-  final User user;
-
-  @override
-  Future<(bool, String)> execute() async => (false, '');
-  //getIt<ApiConnectionRepository>().changeUserPassword(user, user.password!);
-
-  @override
-  List<Object> get props => [...super.props, user];
-
-  @override
-  ResetUserPasswordJob copyWithNewStatus({
-    required final JobStatusEnum status,
-    final String? message,
-  }) =>
-      ResetUserPasswordJob(
-        user: user,
-        status: status,
-        message: message,
-        id: id,
-      );
-}
-
 class DeleteUserJob extends ClientJob {
   DeleteUserJob({
     required this.user,

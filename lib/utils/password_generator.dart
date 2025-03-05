@@ -5,88 +5,90 @@ Random _rnd = Random.secure();
 typedef StringGeneratorFunction = String Function();
 
 class StringGenerators {
-  static const String letters = 'abcdefghijklmnopqrstuvwxyz';
-  static const String numbers = '1234567890';
-  static const String symbols = '_';
+  static final List<String> letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  static final List<String> upperCaseLetters =
+      'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
+  static final List<String> numbers = '1234567890'.split('');
+  static const List<String> symbols = ['_'];
 
   static String getRandomString(
     final int length, {
-    final hasLowercaseLetters = false,
-    final hasUppercaseLetters = false,
-    final hasNumbers = false,
-    final hasSymbols = false,
+    hasLowercaseLetters = false,
+    hasUppercaseLetters = false,
+    hasNumbers = false,
+    hasSymbols = false,
     final isStrict = false,
   }) {
-    String chars = '';
-
-    if (hasLowercaseLetters) {
-      chars += letters;
-    }
-
-    if (hasUppercaseLetters) {
-      chars += letters.toUpperCase();
-    }
-
-    if (hasNumbers) {
-      chars += numbers;
-    }
-
-    if (hasSymbols) {
-      chars += symbols;
-    }
+    final List<String> chars = [
+      if (hasLowercaseLetters) ...letters,
+      if (hasUppercaseLetters) ...upperCaseLetters,
+      if (hasNumbers) ...numbers,
+      if (hasSymbols) ...symbols,
+    ];
 
     assert(chars.isNotEmpty, 'chart empty');
+    late List<String> res;
 
     if (!isStrict) {
-      return genString(length, chars);
-    }
+      res = genString(length, chars);
+    } else {
+      int sum = (hasLowercaseLetters ? 1 : 0) +
+          (hasUppercaseLetters ? 1 : 0) +
+          (hasNumbers ? 1 : 0) +
+          (hasSymbols ? 1 : 0);
 
-    String res = '';
-    int loose = length;
-    if (hasLowercaseLetters) {
-      loose -= 1;
-      res += genString(1, letters);
-    }
-    if (hasUppercaseLetters) {
-      loose -= 1;
-      res += genString(1, letters.toUpperCase());
-    }
-    if (hasNumbers) {
-      loose -= 1;
-      res += genString(1, numbers.toUpperCase());
-    }
-    if (hasSymbols) {
-      loose -= 1;
-      res += genString(1, symbols);
-    }
-    res += genString(loose, chars);
+      /// disable flags one by one when the len of generated string is less
+      /// than count of flags
+      /// so we wouldn't generate 4 len string when we need 2 or 3 symbols
+      while (sum > length) {
+        final int step = _rnd.nextInt(4);
 
-    final List<String> shuffledlist = res.split('')..shuffle();
-    return shuffledlist.join();
+        switch (step) {
+          case 0:
+            if (hasLowercaseLetters) {
+              hasLowercaseLetters = false;
+              sum--;
+              continue;
+            }
+          case 1:
+            if (hasUppercaseLetters) {
+              hasUppercaseLetters = false;
+              sum--;
+              continue;
+            }
+          case 2:
+            if (hasNumbers) {
+              hasNumbers = false;
+              sum--;
+              continue;
+            }
+          case 3: // symbols
+            if (hasSymbols) {
+              hasSymbols = false;
+              sum--;
+              continue;
+            }
+        }
+      }
+
+      res = [
+        if (hasLowercaseLetters) ...genString(1, letters),
+        if (hasUppercaseLetters) ...genString(1, upperCaseLetters),
+        if (hasNumbers) ...genString(1, numbers),
+        if (hasSymbols) ...genString(1, symbols),
+        ...genString(
+          length - sum,
+          chars,
+        ),
+      ];
+    }
+    res.shuffle();
+    return res.join();
   }
 
-  static String genString(final int length, final String chars) =>
-      String.fromCharCodes(
-        Iterable.generate(
-          length,
-          (final _) => chars.codeUnitAt(
-            _rnd.nextInt(chars.length),
-          ),
-        ),
-      );
-
-  static StringGeneratorFunction userPassword = () => getRandomString(
-        8,
-        hasLowercaseLetters: true,
-        hasUppercaseLetters: true,
-        hasNumbers: true,
-        isStrict: true,
-      );
-
-  static StringGeneratorFunction passwordSalt = () => getRandomString(
-        8,
-        hasLowercaseLetters: true,
-      );
+  static List<String> genString(final int length, final List<String> chars) => [
+        for (int i = 0; i < length; i++) chars[_rnd.nextInt(chars.length)],
+      ];
 
   static StringGeneratorFunction simpleId = () => getRandomString(
         5,

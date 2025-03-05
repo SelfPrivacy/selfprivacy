@@ -45,14 +45,11 @@ mixin UsersApi on GraphQLApiMap {
     return user;
   }
 
-  Future<GenericResult<User?>> createUser(
-    final String username,
-    final String password,
-  ) async {
+  Future<GenericResult<User?>> createUser(final String username) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$CreateUser(
-        user: Input$UserMutationInput(username: username, password: password),
+        user: Input$UserMutationInput(username: username),
       );
       final mutation = Options$Mutation$CreateUser(variables: variables);
       final response = await client.mutate$CreateUser(mutation);
@@ -95,36 +92,6 @@ mixin UsersApi on GraphQLApiMap {
         data: false,
         success: false,
         code: 500,
-        message: e.toString(),
-      );
-    }
-  }
-
-  Future<GenericResult<User?>> updateUser(
-    final String username,
-    final String password,
-  ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$UpdateUser(
-        user: Input$UserMutationInput(username: username, password: password),
-      );
-      final mutation = Options$Mutation$UpdateUser(variables: variables);
-      final response = await client.mutate$UpdateUser(mutation);
-      return GenericResult(
-        success: true,
-        code: response.parsedData?.users.updateUser.code ?? 500,
-        message: response.parsedData?.users.updateUser.message,
-        data: response.parsedData?.users.updateUser.user != null
-            ? User.fromGraphQL(response.parsedData!.users.updateUser.user!)
-            : null,
-      );
-    } catch (e) {
-      print(e);
-      return GenericResult(
-        data: null,
-        success: false,
-        code: 0,
         message: e.toString(),
       );
     }

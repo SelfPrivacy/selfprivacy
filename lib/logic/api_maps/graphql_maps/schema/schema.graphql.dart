@@ -1629,13 +1629,9 @@ class _CopyWithStubImpl$Input$UseRecoveryKeyInput<TRes>
 }
 
 class Input$UserMutationInput {
-  factory Input$UserMutationInput({
-    required String username,
-    required String password,
-  }) =>
+  factory Input$UserMutationInput({required String username}) =>
       Input$UserMutationInput._({
         r'username': username,
-        r'password': password,
       });
 
   Input$UserMutationInput._(this._$data);
@@ -1644,8 +1640,6 @@ class Input$UserMutationInput {
     final result$data = <String, dynamic>{};
     final l$username = data['username'];
     result$data['username'] = (l$username as String);
-    final l$password = data['password'];
-    result$data['password'] = (l$password as String);
     return Input$UserMutationInput._(result$data);
   }
 
@@ -1653,14 +1647,10 @@ class Input$UserMutationInput {
 
   String get username => (_$data['username'] as String);
 
-  String get password => (_$data['password'] as String);
-
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$username = username;
     result$data['username'] = l$username;
-    final l$password = password;
-    result$data['password'] = l$password;
     return result$data;
   }
 
@@ -1684,22 +1674,13 @@ class Input$UserMutationInput {
     if (l$username != lOther$username) {
       return false;
     }
-    final l$password = password;
-    final lOther$password = other.password;
-    if (l$password != lOther$password) {
-      return false;
-    }
     return true;
   }
 
   @override
   int get hashCode {
     final l$username = username;
-    final l$password = password;
-    return Object.hashAll([
-      l$username,
-      l$password,
-    ]);
+    return Object.hashAll([l$username]);
   }
 }
 
@@ -1712,10 +1693,7 @@ abstract class CopyWith$Input$UserMutationInput<TRes> {
   factory CopyWith$Input$UserMutationInput.stub(TRes res) =
       _CopyWithStubImpl$Input$UserMutationInput;
 
-  TRes call({
-    String? username,
-    String? password,
-  });
+  TRes call({String? username});
 }
 
 class _CopyWithImpl$Input$UserMutationInput<TRes>
@@ -1731,16 +1709,11 @@ class _CopyWithImpl$Input$UserMutationInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? username = _undefined,
-    Object? password = _undefined,
-  }) =>
+  TRes call({Object? username = _undefined}) =>
       _then(Input$UserMutationInput._({
         ..._instance._$data,
         if (username != _undefined && username != null)
           'username': (username as String),
-        if (password != _undefined && password != null)
-          'password': (password as String),
       }));
 }
 
@@ -1750,11 +1723,7 @@ class _CopyWithStubImpl$Input$UserMutationInput<TRes>
 
   TRes _res;
 
-  call({
-    String? username,
-    String? password,
-  }) =>
-      _res;
+  call({String? username}) => _res;
 }
 
 enum Enum$BackupProvider {

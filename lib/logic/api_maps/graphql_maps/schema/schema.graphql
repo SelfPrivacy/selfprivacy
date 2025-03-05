@@ -632,7 +632,6 @@ type User {
 
 input UserMutationInput {
   username: String!
-  password: String!
 }
 
 type UserMutationReturn implements MutationReturnInterface {

@@ -288,7 +288,58 @@
         "set_rotation_quotas": "Neue Rotationsquoten festlegen",
         "quota_titles": {
             "last": "Wie viele der letzten Sicherungen sollen aufbewahrt werden?",
-            "daily": "Wie viele tägliche Sicherungen sollten aufbewahrt werden?"
+            "daily": "Wie viele tägliche Sicherungen sollten aufbewahrt werden?",
+            "weekly": "Wie viele wöchentliche Sicherungen sollten aufbewahrt werden?",
+            "monthly": "Wie viele monatliche Sicherungen sollten aufbewahrt werden?",
+            "yearly": "Wie viele jährliche Sicherungen sollten aufbewahrt werden?"
+        },
+        "quota_subtitles": {
+            "monthly": {
+                "other": "Letzte {} monatliche Sicherungen werden behalten",
+                "few": "Letzte {} monatliche Sicherungen werden behalten",
+                "two": "Letzte {} monatliche Sicherungen werden behalten",
+                "many": "Letzte {} monatliche Sicherungen werden behalten",
+                "zero": "Regel ist deaktiviert",
+                "one": "Letzte {} monatliche Sicherung wird behalten"
+            },
+            "monthly_infinite": "Alle monatliche Sicherungen werden behalten",
+            "yearly": {
+                "other": "Letzte {} jährliche Sicherungen werden behalten",
+                "zero": "Regel ist deaktiviert",
+                "few": "Letzte {} jährliche Sicherungen werden behalten",
+                "many": "Letzte {} jährliche Sicherungen werden behalten",
+                "two": "Letzte {} jährliche Sicherungen werden behalten",
+                "one": "Letzte {} jährliche Sicherung wird behalten"
+            },
+            "yearly_infinite": "Alle jährliche Sicherungen werden behalten",
+            "daily": {
+                "other": "Letzte {} tägliche Sicherungen werden behalten",
+                "one": "Letzte {} tägliche Sicherung wird behalten",
+                "zero": "Regel ist deaktiviert",
+                "two": "Letzte {} tägliche Sicherungen werden behalten",
+                "few": "Letzte {} tägliche Sicherungen werden behalten",
+                "many": "Letzte {} tägliche Sicherungen werden behalten"
+            },
+            "weekly": {
+                "two": "Letzte {} wöchentliche Sicherungen werden behalten",
+                "one": "Letzte {} wöchentliche Sicherung wird behalten",
+                "other": "Letzte {} wöchentliche Sicherungen werden behalten",
+                "few": "Letzte {} wöchentliche Sicherungen werden behalten",
+                "many": "Letzte {} wöchentliche Sicherungen werden behalten",
+                "zero": "Regel ist deaktiviert"
+            },
+            "last": {
+                "two": "Letzte {} Sicherungen werden unabhängig vom Alter behalten",
+                "zero": "Regel ist deaktiviert",
+                "few": "Letzte {} Sicherungen werden unabhängig vom Alter behalten",
+                "one": "Letzte {} Sicherung wird unabhängig vom Alter behalten",
+                "many": "Letzte {} Sicherungen werden unabhängig vom Alter behalten",
+                "other": "Letzte {} Sicherungen werden unabhängig vom Alter behalten"
+            },
+            "no_effect": "Diese Regel hat keine Auswirkung, weil eine andere Regel mehr Sicherungen behalten wird",
+            "last_infinite": "Alle Sicherungen werden behalten",
+            "daily_infinite": "Alle tägliche Sicherungen werden behalten",
+            "weekly_infinite": "Alle wöchentliche Sicherungen werden behalten"
         }
     },
     "storage": {
@@ -309,7 +360,12 @@
         "data_migration_title": "Datenmigration",
         "data_migration_notice": "Während der Migration werden alle Dienste ausgeschaltet.",
         "start_migration_button": "Migration starten",
-        "extending_volume_price_info": "Der Preis enthält die gesetzliche Mehrwertsteuer und wird geschätzt nach den Preisangaben die ihr Serverbetreiber bereitstellt. Der Server wird nach der Größenänderung neu gestartet."
+        "extending_volume_price_info": "Der Preis enthält die gesetzliche Mehrwertsteuer und wird geschätzt nach den Preisangaben die ihr Serverbetreiber bereitstellt. Der Server wird nach der Größenänderung neu gestartet.",
+        "extending_volume_started": "Speichererweiterung begonnen",
+        "extending_volume_provider_waiting": "Anbieter-Speicher erweitert, warte 10 Sekunden…",
+        "price": "Preis",
+        "extending_volume_server_waiting": "Server-Speicher erweitert, warte 20 Sekunden…",
+        "extending_volume_rebooting": "Server neustarten…"
     },
     "not_ready_card": {
         "in_menu": "Server ist noch nicht eingerichtet. Bitte beenden Sie die Einrichtung mit dem Einrichtungsassistenten, um fortzufahren."
@@ -329,7 +385,16 @@
         "restart": "Dienst neustarten",
         "disable": "Dienst ausschalten",
         "move": "Zu einer anderen Festplatte wechseln",
-        "uses": "Belegt {usage} auf {volume}"
+        "uses": "Belegt {usage} auf {volume}",
+        "settings": "Diensteinstellungen",
+        "snapshots": "Sicherungen",
+        "invalid_value_detected": "Ungültiger Wert erkannt. Bitte ändern Sie ihn ab.",
+        "logs": "Dienst-Logdateien",
+        "create_job": "Aufgabe erstellen",
+        "invalid_input": "Ungültige Eingabe",
+        "modified": "Geändert",
+        "update_job": "Aufgabe aktualisieren",
+        "wait_for_jobs": "Der Server ist mit anderen Aufgaben beschäftigt. Bitte warten Sie, bis diese beendet sind."
     },
     "mail": {
         "login_info": "Verwenden Sie den Benutzernamen und das Passwort von dem Benutzertab. IMAP-Port ist 143 mit STARTTLS, SMTP-Port ist 587 mit STARTTLS."
@@ -398,7 +463,7 @@
         "select_provider": "Wählen Sie einen beliebigen Anbieter aus der folgenden Liste aus, sie alle unterstützen SelfPrivacy",
         "select_provider_notice": "Mit „relativ klein“ meinen wir eine Maschine mit 2 CPU-Kernen und 2 Gigabyte RAM.",
         "select_provider_countries_title": "verfügbare Länder",
-        "select_provider_countries_text_hetzner": "Deutschland, Finnland, USA",
+        "select_provider_countries_text_hetzner": "Deutschland, Finnland, USA, Singapur",
         "select_provider_price_title": "Durchschnittspreis",
         "select_provider_price_text_hetzner": "8 Euro pro Monat für einen relativ kleinen Server und 50 GB Festplattenspeicher",
         "select_provider_payment_title": "Zahlungsarten",
@@ -441,7 +506,14 @@
         },
         "dns_provider_bad_key_error": "Der API-Schlüssel ist ungültig",
         "connect_to_dns": "Verbinden Sie den DNS-Anbieter",
-        "select_provider_price_free": "Kostenlos"
+        "select_provider_price_free": "Kostenlos",
+        "choose_server_type_payment_ip": "{} für die öffentliche IPv4-Adresse",
+        "choose_server_type_payment_storage": "{} für zusätzlichen Speicherplatz",
+        "multiple_domains_found_text": "Das von Ihnen angegebene Token ermöglicht den Zugriff auf die folgenden Domains. Bitte wählen Sie die Domäne aus, die Sie verwenden möchten. Um die Sicherheit Ihrer anderen Domains zu gewährleisten, sollten Sie den Zugriff dieses Tokens auf die Domain beschränken, die Sie mit SelfPrivacy nutzen möchten.",
+        "server_provider_email_unavailable": "E-Mail funktioniert bei diesem Anbieter nicht.",
+        "choose_server_type_payment_server": "{} für den Server",
+        "multiple_domains_found": "Mehrere Domains gefunden",
+        "domain_critical_error": "Wir können diese Domain nicht erreichen! Tippen, um mehr zu lesen…"
     },
     "validations": {
         "length_not_equal": "Länge ist [], sollte {} sein",
@@ -472,7 +544,8 @@
         "could_not_fetch_description": "Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut",
         "refresh_users": "Benutzerliste aktualisieren",
         "email_login": "E-Mail-Anmeldung",
-        "details_title": "Angaben zum Benutzer"
+        "details_title": "Angaben zum Benutzer",
+        "user_already_exists": "Ein Benutzer mit diesem Benutzernamen existiert bereits"
     },
     "devices": {
         "main_screen": {
@@ -536,7 +609,8 @@
         "modal_confirmation_description": "Wenn Sie sich mit einem falschen Server verbinden, können Sie alle Ihre Daten verlieren.",
         "modal_confirmation_dns_valid": "Reverse DNS ist gültig",
         "modal_confirmation_ip_valid": "Die IP ist die gleiche wie im DNS-Eintrag",
-        "modal_confirmation_ip_invalid": "Die IP ist nicht dieselbe wie im DNS-Eintrag"
+        "modal_confirmation_ip_invalid": "Die IP ist nicht dieselbe wie im DNS-Eintrag",
+        "login_later": "Später einloggen"
     },
     "recovery_key": {
         "key_connection_error": "Es konnte keine Verbindung zum Server hergestellt werden.",

@@ -29,40 +29,19 @@ class UserFormCubit extends FormCubit {
           await getIt<ApiConnectionRepository>().createUser(user);
 
       if (result) {
-        initialUser = user;
         userCreated = true;
         userCreationMessage = message;
         errorMessage = '';
       } else {
         errorMessage = message;
-        getIt<NavigationService>().showSnackBar(errorMessage);
-      }
-    } else {
-      /// We got request to reset password
-      final User user = User(
-        login: initialUser?.login ?? login.state.value,
-        type: initialUser?.type ?? UserType.normal,
-      );
-      final (link, message) = await getIt<ApiConnectionRepository>()
-          .generatePasswordResetLink(user);
-
-      if (link != null) {
-        passwordResetLink = link;
-        passwordResetMessage = message;
-      } else {
-        passwordResetMessage = message;
-        getIt<NavigationService>().showSnackBar(passwordResetMessage);
       }
     }
   }
 
   late FieldCubit<String> login;
-  User? initialUser;
 
   bool userCreated;
   String? userCreationMessage = '';
   String errorMessage = '';
-
-  Uri? passwordResetLink;
-  String passwordResetMessage = '';
+  final User? initialUser;
 }

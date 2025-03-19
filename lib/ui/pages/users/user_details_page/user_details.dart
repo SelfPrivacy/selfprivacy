@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
+import 'package:selfprivacy/ui/pages/users/reset_password/reset_password_tile.dart';
 import 'package:selfprivacy/ui/pages/users/user_details_page/widgets/widgets.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 

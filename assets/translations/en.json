@@ -18,6 +18,7 @@
         "confirmation": "Confirmation",
         "cancel": "Cancel",
         "delete": "Delete",
+        "copy": "Copy",
         "close": "Close",
         "connect": "Connect",
         "domain": "Domain",
@@ -439,7 +440,10 @@
         "username_rule": "Username must contain only lowercase latin letters, digits and underscores, should not start with a digit",
         "email_login": "Email login",
         "no_ssh_notice": "Only email and SSH accounts are created for this user. Single Sign On for all services is coming soon.",
-        "user_already_exists": "User with such username already exists"
+        "user_already_exists": "User with such username already exists",
+        "request_password_reset_link": "Request password reset link",
+        "creating_password_reset_link": "Creating password reset link",
+        "password_reset_link": "Password reset link"
     },
     "initializing": {
         "connect_to_server": "Let's start with a server.",

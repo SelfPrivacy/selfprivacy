@@ -3,11 +3,13 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 @RoutePage()
@@ -25,8 +27,23 @@ class NewUserPage extends StatelessWidget {
             final BuildContext context,
             final FormCubitState state,
           ) {
+            final formCubit = context.read<UserFormCubit>();
             if (state.isSubmitted) {
-              context.router.maybePop();
+              if (formCubit.userCreationMessage?.isNotEmpty ?? false) {
+                getIt<NavigationService>()
+                    .showSnackBar(formCubit.userCreationMessage!.tr());
+              }
+              context.router.replace(
+                UserDetailsRoute(
+                  login: formCubit.login.state.value,
+                ),
+              );
+            }
+            if (state.isErrorShown) {
+              final errorMessage = formCubit.errorMessage;
+              if (errorMessage.isNotEmpty) {
+                getIt<NavigationService>().showSnackBar(errorMessage);
+              }
             }
           },
           builder: (
@@ -48,6 +65,7 @@ class NewUserScreen extends StatelessWidget {
         context.watch<ServerInstallationCubit>().state;
 
     final String domainName = UiHelpers.getDomainName(config);
+    final formCubit = context.read<UserFormCubit>();
 
     return BrandHeroScreen(
       heroTitle: 'users.new_user'.tr(),
@@ -65,22 +83,16 @@ class NewUserScreen extends StatelessWidget {
           child: CubitFormTextField(
             /// should make this read-only when the user is created
             autofocus: true,
-            formFieldCubit: context.read<UserFormCubit>().login,
+            formFieldCubit: formCubit.login,
             decoration: InputDecoration(
               labelText: 'users.login'.tr(),
               suffixText: '@$domainName',
             ),
           ),
         ),
-        // if (state.userCreated) ...[
-        //   const Gap(20),
-        //   Text('users.generate_password_reset_link'.tr()),
-        // ],
         const Gap(30),
         BrandButton.filled(
-          onPressed: state.isSubmitting
-              ? null
-              : () => context.read<UserFormCubit>().trySubmit(),
+          onPressed: state.isSubmitting ? null : () => formCubit.trySubmit(),
           title: 'basis.create'.tr(),
         ),
         const SizedBox(height: 40),

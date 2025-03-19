@@ -136,7 +136,7 @@ class ApiConnectionRepository {
 
     // check if got valid url
     final uri = Uri.tryParse(result.data ?? '');
-    if (uri == null) {
+    if (uri == null || uri.scheme.isEmpty) {
       errorMessage =
           result.message ?? 'users.could_not_generate_password_link'.tr();
       return (null, errorMessage);

@@ -1,11 +1,9 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/reset_password_bloc.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/utils/platform_adapter.dart';
+import 'package:selfprivacy/ui/pages/users/reset_password/reset_password_link_dialog.dart';
 
 class ResetPasswordTile extends StatelessWidget {
   const ResetPasswordTile({required this.user, super.key});
@@ -18,56 +16,25 @@ class ResetPasswordTile extends StatelessWidget {
         child: BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
           listener:
               (final BuildContext context, final ResetPasswordState state) {
-            /// check on error
-            if (state.errorMessage != '') {
-              getIt<NavigationService>().showSnackBar(state.errorMessage);
-            }
+            final bloc = context.read<ResetPasswordBloc>();
 
             /// check on success
-            if (state.passwordResetLink != null) {
+            if (state.isLoading) {
               showDialog(
                 context: context,
                 builder: (final BuildContext context) =>
-                    _ResetPasswordLinkDialog(state: state),
+                    ResetPasswordLinkDialog(
+                  bloc: bloc,
+                ),
               );
             }
           },
-          builder:
-              (final BuildContext context, final ResetPasswordState state) =>
-                  _Tile(state: state),
+          builder: (
+            final BuildContext context,
+            final ResetPasswordState state,
+          ) =>
+              _Tile(state: state),
         ),
-      );
-}
-
-class _ResetPasswordLinkDialog extends StatelessWidget {
-  const _ResetPasswordLinkDialog({required this.state});
-  final ResetPasswordState state;
-
-  @override
-  Widget build(final BuildContext context) => AlertDialog(
-        title: Text(state.passwordResetMessage),
-        content: Text(
-          state.passwordResetLink.toString(),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text('basis.copy'.tr()),
-            onPressed: () {
-              PlatformAdapter.setClipboard(state.passwordResetLink.toString());
-              getIt<NavigationService>().showSnackBar(
-                'basis.copied_to_clipboard'.tr(),
-              );
-            },
-          ),
-          TextButton(
-            child: Text(
-              'basis.close'.tr(),
-            ),
-            onPressed: () {
-              context.router.maybePop();
-            },
-          ),
-        ],
       );
 }
 
@@ -86,7 +53,6 @@ class _Tile extends StatelessWidget {
                     .add(const RequestNewPassword());
               },
         leading: const Icon(Icons.lock_reset_outlined),
-        trailing: state.isLoading ? const CircularProgressIndicator() : null,
         title: Text(
           'users.request_password_reset_link'.tr(),
         ),

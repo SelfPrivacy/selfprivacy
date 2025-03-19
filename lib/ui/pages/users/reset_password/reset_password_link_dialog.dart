@@ -25,7 +25,6 @@ class ResetPasswordLinkDialog extends StatelessWidget {
                   : 'users.creating_password_reset_link'.tr();
 
           late final Widget content;
-          late final List<Widget> actions;
 
           if (state.errorMessage.isNotEmpty) {
             content = Text(
@@ -36,31 +35,11 @@ class ResetPasswordLinkDialog extends StatelessWidget {
                 color: Theme.of(context).colorScheme.error,
               ),
             );
-            actions = <Widget>[
-              TextButton(
-                key: const ValueKey('close_button'),
-                child: Text(
-                  'basis.close'.tr(),
-                ),
-                onPressed: () {
-                  context.router.maybePop();
-                },
-              ),
-            ];
           } else if (state.isLoading) {
             content = const SizedBox(
-                height: 52, child: Center(child: CircularProgressIndicator()));
-            actions = <Widget>[
-              TextButton(
-                key: const ValueKey('close_button'),
-                child: Text(
-                  'basis.close'.tr(),
-                ),
-                onPressed: () {
-                  context.router.maybePop();
-                },
-              ),
-            ];
+              height: 52,
+              child: Center(child: CircularProgressIndicator()),
+            );
           } else {
             content = ListTile(
               onTap: () {
@@ -81,27 +60,6 @@ class ResetPasswordLinkDialog extends StatelessWidget {
                 ),
               ),
             );
-            actions = <Widget>[
-              TextButton(
-                child: Text('basis.copy'.tr()),
-                onPressed: () {
-                  PlatformAdapter.setClipboard(
-                      state.passwordResetLink.toString());
-                  getIt<NavigationService>().showSnackBar(
-                    'basis.copied_to_clipboard'.tr(),
-                  );
-                },
-              ),
-              TextButton(
-                key: const ValueKey('close_button'),
-                child: Text(
-                  'basis.close'.tr(),
-                ),
-                onPressed: () {
-                  context.router.maybePop();
-                },
-              ),
-            ];
           }
 
           return AlertDialog(
@@ -112,8 +70,36 @@ class ResetPasswordLinkDialog extends StatelessWidget {
               duration: const Duration(milliseconds: 300),
               child: content,
             ),
-            actions: actions,
+            actions: [
+              if (state.isLinkValid)
+                TextButton(
+                  child: Text('basis.copy'.tr()),
+                  onPressed: () {
+                    PlatformAdapter.setClipboard(
+                        state.passwordResetLink.toString());
+                    getIt<NavigationService>().showSnackBar(
+                      'basis.copied_to_clipboard'.tr(),
+                    );
+                  },
+                ),
+              const _CloseButton(),
+            ],
           );
         }),
+      );
+}
+
+class _CloseButton extends StatelessWidget {
+  const _CloseButton() : super(key: const ValueKey('close_button'));
+
+  @override
+  Widget build(final BuildContext context) => TextButton(
+        key: const ValueKey('close_button'),
+        child: Text(
+          'basis.close'.tr(),
+        ),
+        onPressed: () {
+          context.router.maybePop();
+        },
       );
 }

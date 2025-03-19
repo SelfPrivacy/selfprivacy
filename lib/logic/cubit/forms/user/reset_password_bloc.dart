@@ -78,6 +78,7 @@ class ResetPasswordState extends Equatable {
   });
 
   final Uri? passwordResetLink;
+  bool get isLinkValid => passwordResetLink != null;
   final bool isLoading;
   final String passwordResetMessage;
   final String errorMessage;

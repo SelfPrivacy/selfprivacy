@@ -5,21 +5,25 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
+final _log = const AppLogger(name: 'ResetPasswordBloc').log;
+
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   ResetPasswordBloc({
     required this.user,
   }) : super(
           const ResetPasswordState(),
         ) {
-    log('ResetPasswordBloc created for user: ${user.login}');
+    _log('ResetPasswordBloc created for user: ${user.login}');
 
     on<RequestNewPassword>(
       _mapResetPasswordRequestedToState,
+      transformer: restartable(),
+    );
+    on<CancelNewPasswordRequest>(
+      _mapCancelResetPasswordRequestedToState,
       transformer: droppable(),
     );
   }
-
-  static final log = const AppLogger(name: 'ResetPasswordBloc').log;
 
   final User user;
 
@@ -27,7 +31,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     final RequestNewPassword event,
     final Emitter<ResetPasswordState> emit,
   ) async {
-    log('Reset password requested for user: ${user.login}');
+    _log('Reset password requested for user: ${user.login}');
     if (state.isLoading) {
       return;
     }
@@ -39,22 +43,38 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       ),
     );
 
-    log('Load start');
+    _log('Load start');
     final (link, message) =
         await getIt<ApiConnectionRepository>().generatePasswordResetLink(user);
 
-    log('Got link: $link, message: $message');
+    _log('Got link: $link, message: $message');
+    if (state.isLoading) {
+      emit(
+        link != null
+            ? ResetPasswordState(
+                passwordResetLink: link,
+                passwordResetMessage: message,
+              )
+            : ResetPasswordState(
+                errorMessage: message,
+              ),
+      );
+    }
+  }
 
-    emit(
-      link != null
-          ? ResetPasswordState(
-              passwordResetLink: link,
-              passwordResetMessage: message,
-            )
-          : ResetPasswordState(
-              errorMessage: message,
-            ),
-    );
+  Future<void> _mapCancelResetPasswordRequestedToState(
+    final CancelNewPasswordRequest event,
+    final Emitter<ResetPasswordState> emit,
+  ) async {
+    _log('Reset password request cancelled');
+    if (state.isLoading) {
+      emit(
+        const ResetPasswordState(
+          passwordResetLink: null,
+          isLoading: false,
+        ),
+      );
+    }
   }
 }
 
@@ -67,6 +87,10 @@ sealed class ResetPasswordEvent extends Equatable {
 
 class RequestNewPassword extends ResetPasswordEvent {
   const RequestNewPassword();
+}
+
+class CancelNewPasswordRequest extends ResetPasswordEvent {
+  const CancelNewPasswordRequest();
 }
 
 class ResetPasswordState extends Equatable {

@@ -33,25 +33,20 @@ class ResetPasswordTile extends StatelessWidget {
             final BuildContext context,
             final ResetPasswordState state,
           ) =>
-              _Tile(state: state),
+              _Tile(isLoading: state.isLoading),
         ),
       );
 }
 
 class _Tile extends StatelessWidget {
-  const _Tile({required this.state});
-  final ResetPasswordState state;
+  const _Tile({required this.isLoading});
+  final bool isLoading;
 
   @override
   Widget build(final BuildContext context) => ListTile(
         iconColor: Theme.of(context).colorScheme.onSurface,
-        onTap: state.isLoading
-            ? null
-            : () {
-                context
-                    .read<ResetPasswordBloc>()
-                    .add(const RequestNewPassword());
-              },
+        onTap: () =>
+            context.read<ResetPasswordBloc>().add(const RequestNewPassword()),
         leading: const Icon(Icons.lock_reset_outlined),
         title: Text(
           'users.request_password_reset_link'.tr(),

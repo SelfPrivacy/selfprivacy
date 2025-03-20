@@ -4,10 +4,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/reset_password_bloc.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _key = ValueKey('reset_password_link_dialog');
+
+final _log = const AppLogger(name: 'ResetPasswordLinkDialog').log;
 
 class ResetPasswordLinkDialog extends StatelessWidget {
   const ResetPasswordLinkDialog({required this.bloc, super.key});
@@ -18,12 +21,6 @@ class ResetPasswordLinkDialog extends StatelessWidget {
         value: bloc,
         child: BlocBuilder<ResetPasswordBloc, ResetPasswordState>(builder:
             (final BuildContext context, final ResetPasswordState state) {
-          final String title = state.errorMessage.isNotEmpty
-              ? 'basis.error'.tr()
-              : state.passwordResetMessage.isNotEmpty
-                  ? state.passwordResetMessage.tr()
-                  : 'users.creating_password_reset_link'.tr();
-
           late final Widget content;
 
           if (state.errorMessage.isNotEmpty) {
@@ -62,28 +59,45 @@ class ResetPasswordLinkDialog extends StatelessWidget {
             );
           }
 
-          return AlertDialog(
-            key: _key,
-            title: Text(title),
-            content: AnimatedSize(
-              key: const ValueKey('animatedSize'),
-              duration: const Duration(milliseconds: 300),
-              child: content,
+          return PopScope(
+            onPopInvokedWithResult: (final bool isPopped, final _) {
+              _log('Pop scope: isPopped: $isPopped');
+
+              _log('Pop scope: cancel reset password ');
+              context.read<ResetPasswordBloc>().add(
+                    const CancelNewPasswordRequest(),
+                  );
+            },
+            child: AlertDialog(
+              key: _key,
+              title: Text(
+                (state.errorMessage.isNotEmpty
+                        ? 'basis.error'
+                        : state.passwordResetMessage.isNotEmpty
+                            ? state.passwordResetMessage
+                            : 'users.creating_password_reset_link')
+                    .tr(),
+              ),
+              content: AnimatedSize(
+                key: const ValueKey('animatedSize'),
+                duration: const Duration(milliseconds: 300),
+                child: content,
+              ),
+              actions: [
+                if (state.isLinkValid)
+                  TextButton(
+                    child: Text('basis.copy'.tr()),
+                    onPressed: () {
+                      PlatformAdapter.setClipboard(
+                          state.passwordResetLink.toString());
+                      getIt<NavigationService>().showSnackBar(
+                        'basis.copied_to_clipboard'.tr(),
+                      );
+                    },
+                  ),
+                const _CloseButton(),
+              ],
             ),
-            actions: [
-              if (state.isLinkValid)
-                TextButton(
-                  child: Text('basis.copy'.tr()),
-                  onPressed: () {
-                    PlatformAdapter.setClipboard(
-                        state.passwordResetLink.toString());
-                    getIt<NavigationService>().showSnackBar(
-                      'basis.copied_to_clipboard'.tr(),
-                    );
-                  },
-                ),
-              const _CloseButton(),
-            ],
           );
         }),
       );
@@ -95,11 +109,7 @@ class _CloseButton extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => TextButton(
         key: const ValueKey('close_button'),
-        child: Text(
-          'basis.close'.tr(),
-        ),
-        onPressed: () {
-          context.router.maybePop();
-        },
+        onPressed: context.router.maybePop,
+        child: Text('basis.close'.tr()),
       );
 }

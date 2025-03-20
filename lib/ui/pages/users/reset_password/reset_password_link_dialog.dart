@@ -22,22 +22,7 @@ class ResetPasswordLinkDialog extends StatelessWidget {
         child: BlocBuilder<ResetPasswordBloc, ResetPasswordState>(builder:
             (final BuildContext context, final ResetPasswordState state) {
           late final Widget content;
-
-          if (state.errorMessage.isNotEmpty) {
-            content = Text(
-              state.errorMessage,
-              style: TextStyle(
-                fontSize: 21,
-                fontWeight: FontWeight.normal,
-                color: Theme.of(context).colorScheme.error,
-              ),
-            );
-          } else if (state.isLoading) {
-            content = const SizedBox(
-              height: 52,
-              child: Center(child: CircularProgressIndicator()),
-            );
-          } else {
+          if (state.passwordResetMessage.isNotEmpty) {
             content = ListTile(
               onTap: () {
                 launchUrl(
@@ -57,6 +42,21 @@ class ResetPasswordLinkDialog extends StatelessWidget {
                 ),
               ),
             );
+          } else if (state.errorMessage.isNotEmpty) {
+            content = Text(
+              state.errorMessage,
+              style: TextStyle(
+                fontSize: 21,
+                fontWeight: FontWeight.normal,
+                color: Theme.of(context).colorScheme.error,
+              ),
+            );
+          } else {
+            // loading state
+            content = const SizedBox(
+              height: 52,
+              child: Center(child: CircularProgressIndicator()),
+            );
           }
 
           return PopScope(
@@ -64,9 +64,11 @@ class ResetPasswordLinkDialog extends StatelessWidget {
               _log('Pop scope: isPopped: $isPopped');
 
               _log('Pop scope: cancel reset password ');
-              context.read<ResetPasswordBloc>().add(
-                    const CancelNewPasswordRequest(),
-                  );
+              if (state.isLoading) {
+                context.read<ResetPasswordBloc>().add(
+                      const CancelNewPasswordRequest(),
+                    );
+              }
             },
             child: AlertDialog(
               key: _key,

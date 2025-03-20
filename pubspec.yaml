@@ -1,7 +1,7 @@
 name: selfprivacy
 description: selfprivacy.org
 publish_to: 'none'
-version: 0.12.3+26
+version: 0.12.3+28
 
 environment:
   sdk: '>=3.5.0 <4.0.0'
@@ -45,7 +45,6 @@ dependencies:
   local_auth: ^2.3.0
   material_color_utilities: ^0.11.0
   modal_bottom_sheet: ^3.0.0-pre
-  nanoid: ^1.0.0
   package_info_plus: ^8.0.0
   pretty_dio_logger: ^1.4.0
   provider: ^6.1.2

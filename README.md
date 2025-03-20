@@ -35,9 +35,11 @@ Install [Flutter](https://docs.flutter.dev/get-started/install/linux) and [Andro
 flutter pub get
 
 # Build .APK for Android
-flutter build --flavor production apk
+flutter build apk --flavor production
+# Build nightly .APK for Android
+flutter build apk --flavor production
 # Build AAB bundle for Google Play
-flutter build --flavor production aab
+flutter build aab --flavor production
 # Build Linux binaries
 flutter build linux
 # Build Windows binaries

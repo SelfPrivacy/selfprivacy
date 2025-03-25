@@ -8,7 +8,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 part 'outdated_server_checker_event.dart';
 part 'outdated_server_checker_state.dart';
 
-const String requiredServerVersion = '>=3.3.0';
+const String requiredServerVersion = '>=3.5.0';
 
 class OutdatedServerCheckerBloc
     extends Bloc<OutdatedServerCheckerEvent, OutdatedServerCheckerState> {

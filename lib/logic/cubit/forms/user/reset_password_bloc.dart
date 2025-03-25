@@ -1,6 +1,8 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
@@ -25,6 +27,8 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     );
   }
 
+  static const String ssoSupportedVersion = '>=3.5.0';
+
   final User user;
 
   Future<void> _mapResetPasswordRequestedToState(
@@ -42,6 +46,26 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
         isLoading: true,
       ),
     );
+
+    final String? apiVersion =
+        getIt<ApiConnectionRepository>().apiData.apiVersion.data;
+    if (apiVersion == null) {
+      throw Exception('basis.network_error'.tr());
+    }
+    if (!VersionConstraint.parse(ssoSupportedVersion)
+        .allows(Version.parse(apiVersion))) {
+      emit(
+        ResetPasswordUnsupported(
+          errorMessage: 'basis.feature_unsupported_on_api_version'.tr(
+            namedArgs: {
+              'versionConstraint': ssoSupportedVersion,
+              'currentVersion': apiVersion,
+            },
+          ),
+        ),
+      );
+      return;
+    }
 
     _log('Load start');
     final (link, message) =
@@ -110,4 +134,10 @@ class ResetPasswordState extends Equatable {
   @override
   List<Object?> get props =>
       [passwordResetMessage, isLoading, passwordResetLink, errorMessage];
+}
+
+class ResetPasswordUnsupported extends ResetPasswordState {
+  const ResetPasswordUnsupported({
+    super.errorMessage,
+  }) : super();
 }

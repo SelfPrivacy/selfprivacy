@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
+import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/pages/users/reset_password/reset_password_tile.dart';
 import 'package:selfprivacy/ui/pages/users/user_details_page/widgets/widgets.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
@@ -32,8 +32,28 @@ class UserDetailsPage extends StatelessWidget {
           orElse: () => const User(
             type: UserType.normal,
             login: 'error',
+            note: 'ERROR',
           ),
         );
+
+    if (user.note == 'ERROR') {
+      return BrandHeroScreen(
+        hasBackButton: true,
+        hasFlashButton: true,
+        heroTitle: 'basis.error'.tr(),
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32.0),
+              child: EmptyPagePlaceholder(
+                title: 'users.could_not_load_user'.tr(),
+                iconData: Icons.error_outline_outlined,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
 
     if (user.type == UserType.root) {
       return BrandHeroScreen(
@@ -52,7 +72,6 @@ class UserDetailsPage extends StatelessWidget {
       hasFlashButton: true,
       heroTitle: user.login,
       heroIconWidget: CircleAvatar(
-        backgroundColor: user.color,
         child: Text(
           user.login[0].toUpperCase(),
         ),
@@ -65,14 +84,6 @@ class UserDetailsPage extends StatelessWidget {
         ResetPasswordTile(user: user),
         const Gap(8),
         if (user.type == UserType.normal) DeleteUserTile(user: user),
-        const Divider(height: 8),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: InfoBox(
-            text: 'users.no_ssh_notice'.tr(),
-            isWarning: true,
-          ),
-        ),
       ],
     );
   }

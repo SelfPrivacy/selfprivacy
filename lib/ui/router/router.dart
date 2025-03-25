@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/pages/backups/backup_details.dart';
 import 'package:selfprivacy/ui/pages/backups/backups_list.dart';
@@ -33,6 +34,7 @@ import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/pages/users/new_user.dart';
+import 'package:selfprivacy/ui/pages/users/reset_password/reset_password_page.dart';
 import 'package:selfprivacy/ui/pages/users/user_details_page/user_details.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
 
@@ -100,6 +102,7 @@ class RootRouter extends RootStackRouter {
         AutoRoute(page: AppSettingsRoute.page),
         AutoRoute(page: UserDetailsRoute.page),
         AutoRoute(page: NewUserRoute.page),
+        AutoRoute(page: ResetPasswordRoute.page),
         AutoRoute(page: RecoveryKeyRoute.page),
         AutoRoute(page: DevicesRoute.page),
         AutoRoute(page: NewDeviceRoute.page),

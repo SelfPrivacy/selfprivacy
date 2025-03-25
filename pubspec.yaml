@@ -49,6 +49,8 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   provider: ^6.1.2
   pub_semver: ^2.1.4
+  qr_flutter: ^4.1.0
+  share_plus: ^10.1.4
   skeletonizer: ^1.4.2
   timezone: ^0.9.4
   url_launcher: ^6.3.0

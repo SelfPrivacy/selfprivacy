@@ -41,7 +41,10 @@
         "network_error": "Network error",
         "feature_unsupported_on_api_version": "This feature is only supported on server version {versionConstraint}. Your server is on version {currentVersion}.",
         "server_is_outdated": "This SelfPrivacy version requires API version {versionConstraint}, but your server is on version {currentVersion}. Some features won't work and errors might occur. Please upgrade your server.",
-        "error": "Error"
+        "error": "Error",
+        "show_qr_code": "Show QR code",
+        "qr_code": "QR code",
+        "share_link": "Share link"
     },
     "more_page": {
         "configuration_wizard": "Setup wizard",
@@ -434,6 +437,7 @@
         "could_not_create_user": "Couldn't create user",
         "could_not_delete_user": "Couldn't delete user",
         "could_not_add_ssh_key": "Couldn't add SSH key",
+        "could_not_load_user": "Couldn't load user",
         "could_not_generate_password_link": "Couldn't generate password reset link",
         "user_modify_protected": "This user is protected and cannot be modified",
         "user_delete_protected": "This user is protected and cannot be deleted",
@@ -443,7 +447,8 @@
         "user_already_exists": "User with such username already exists",
         "request_password_reset_link": "Request password reset link",
         "creating_password_reset_link": "Creating password reset link",
-        "password_reset_link": "Password reset link"
+        "password_reset_link": "Password reset link",
+        "password_reset_link_description": "Send this link to {username} so they can set a passkey or a password for their account. The link is valid for 1 hour."
     },
     "initializing": {
         "connect_to_server": "Let's start with a server.",

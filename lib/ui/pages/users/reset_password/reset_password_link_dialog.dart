@@ -16,11 +16,15 @@ class ResetPasswordLinkDialog extends StatelessWidget {
   const ResetPasswordLinkDialog({required this.bloc, super.key});
   final ResetPasswordBloc bloc;
 
+  static const _resizeDuration = Duration(milliseconds: 300);
+
   @override
   Widget build(final BuildContext context) => BlocProvider.value(
         value: bloc,
-        child: BlocBuilder<ResetPasswordBloc, ResetPasswordState>(builder:
-            (final BuildContext context, final ResetPasswordState state) {
+        child: BlocBuilder<ResetPasswordBloc, ResetPasswordState>(builder: (
+          final BuildContext context,
+          final ResetPasswordState state,
+        ) {
           late final Widget content;
           if (state.passwordResetMessage.isNotEmpty) {
             content = ListTile(
@@ -72,17 +76,19 @@ class ResetPasswordLinkDialog extends StatelessWidget {
             },
             child: AlertDialog(
               key: _key,
-              title: Text(
-                (state.errorMessage.isNotEmpty
-                        ? 'basis.error'
-                        : state.passwordResetMessage.isNotEmpty
-                            ? state.passwordResetMessage
-                            : 'users.creating_password_reset_link')
-                    .tr(),
+              title: AnimatedSize(
+                duration: _resizeDuration,
+                child: Text(
+                  (state.errorMessage.isNotEmpty
+                          ? 'basis.error'
+                          : state.passwordResetMessage.isNotEmpty
+                              ? state.passwordResetMessage
+                              : 'users.creating_password_reset_link')
+                      .tr(),
+                ),
               ),
               content: AnimatedSize(
-                key: const ValueKey('animatedSize'),
-                duration: const Duration(milliseconds: 300),
+                duration: _resizeDuration,
                 child: content,
               ),
               actions: [
@@ -91,7 +97,8 @@ class ResetPasswordLinkDialog extends StatelessWidget {
                     child: Text('basis.copy'.tr()),
                     onPressed: () {
                       PlatformAdapter.setClipboard(
-                          state.passwordResetLink.toString());
+                        state.passwordResetLink.toString(),
+                      );
                       getIt<NavigationService>().showSnackBar(
                         'basis.copied_to_clipboard'.tr(),
                       );

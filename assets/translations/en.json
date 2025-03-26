@@ -174,8 +174,6 @@
         "select_timezone": "Select timezone",
         "enable_ssh": "Enable SSH",
         "enable_ssh_hint": "Allow SSH access to the server",
-        "allow_password_authentication": "Allow password authentication for SSH",
-        "allow_password_authentication_hint": "Allow users to log into your server's shell with a password (does not apply to root user)",
         "timezone_search_bar": "Timezone name or time shift value",
         "server_id": "Server ID",
         "status": "Status",

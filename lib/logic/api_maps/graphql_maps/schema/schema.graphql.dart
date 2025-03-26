@@ -336,6 +336,7 @@ class Input$InitializeRepositoryInput {
     required String locationName,
     required String login,
     required String password,
+    String? localSecret,
   }) =>
       Input$InitializeRepositoryInput._({
         r'provider': provider,
@@ -343,6 +344,7 @@ class Input$InitializeRepositoryInput {
         r'locationName': locationName,
         r'login': login,
         r'password': password,
+        if (localSecret != null) r'localSecret': localSecret,
       });
 
   Input$InitializeRepositoryInput._(this._$data);
@@ -360,6 +362,10 @@ class Input$InitializeRepositoryInput {
     result$data['login'] = (l$login as String);
     final l$password = data['password'];
     result$data['password'] = (l$password as String);
+    if (data.containsKey('localSecret')) {
+      final l$localSecret = data['localSecret'];
+      result$data['localSecret'] = (l$localSecret as String?);
+    }
     return Input$InitializeRepositoryInput._(result$data);
   }
 
@@ -376,6 +382,8 @@ class Input$InitializeRepositoryInput {
 
   String get password => (_$data['password'] as String);
 
+  String? get localSecret => (_$data['localSecret'] as String?);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$provider = provider;
@@ -388,6 +396,10 @@ class Input$InitializeRepositoryInput {
     result$data['login'] = l$login;
     final l$password = password;
     result$data['password'] = l$password;
+    if (_$data.containsKey('localSecret')) {
+      final l$localSecret = localSecret;
+      result$data['localSecret'] = l$localSecret;
+    }
     return result$data;
   }
 
@@ -431,6 +443,15 @@ class Input$InitializeRepositoryInput {
     if (l$password != lOther$password) {
       return false;
     }
+    final l$localSecret = localSecret;
+    final lOther$localSecret = other.localSecret;
+    if (_$data.containsKey('localSecret') !=
+        other._$data.containsKey('localSecret')) {
+      return false;
+    }
+    if (l$localSecret != lOther$localSecret) {
+      return false;
+    }
     return true;
   }
 
@@ -441,12 +462,14 @@ class Input$InitializeRepositoryInput {
     final l$locationName = locationName;
     final l$login = login;
     final l$password = password;
+    final l$localSecret = localSecret;
     return Object.hashAll([
       l$provider,
       l$locationId,
       l$locationName,
       l$login,
       l$password,
+      _$data.containsKey('localSecret') ? l$localSecret : const {},
     ]);
   }
 }
@@ -466,6 +489,7 @@ abstract class CopyWith$Input$InitializeRepositoryInput<TRes> {
     String? locationName,
     String? login,
     String? password,
+    String? localSecret,
   });
 }
 
@@ -488,6 +512,7 @@ class _CopyWithImpl$Input$InitializeRepositoryInput<TRes>
     Object? locationName = _undefined,
     Object? login = _undefined,
     Object? password = _undefined,
+    Object? localSecret = _undefined,
   }) =>
       _then(Input$InitializeRepositoryInput._({
         ..._instance._$data,
@@ -500,6 +525,7 @@ class _CopyWithImpl$Input$InitializeRepositoryInput<TRes>
         if (login != _undefined && login != null) 'login': (login as String),
         if (password != _undefined && password != null)
           'password': (password as String),
+        if (localSecret != _undefined) 'localSecret': (localSecret as String?),
       }));
 }
 
@@ -515,6 +541,7 @@ class _CopyWithStubImpl$Input$InitializeRepositoryInput<TRes>
     String? locationName,
     String? login,
     String? password,
+    String? localSecret,
   }) =>
       _res;
 }
@@ -985,11 +1012,12 @@ class _CopyWithStubImpl$Input$RecoveryKeyLimitsInput<TRes>
 class Input$SSHSettingsInput {
   factory Input$SSHSettingsInput({
     required bool enable,
-    required bool passwordAuthentication,
+    bool? passwordAuthentication,
   }) =>
       Input$SSHSettingsInput._({
         r'enable': enable,
-        r'passwordAuthentication': passwordAuthentication,
+        if (passwordAuthentication != null)
+          r'passwordAuthentication': passwordAuthentication,
       });
 
   Input$SSHSettingsInput._(this._$data);
@@ -998,8 +1026,11 @@ class Input$SSHSettingsInput {
     final result$data = <String, dynamic>{};
     final l$enable = data['enable'];
     result$data['enable'] = (l$enable as bool);
-    final l$passwordAuthentication = data['passwordAuthentication'];
-    result$data['passwordAuthentication'] = (l$passwordAuthentication as bool);
+    if (data.containsKey('passwordAuthentication')) {
+      final l$passwordAuthentication = data['passwordAuthentication'];
+      result$data['passwordAuthentication'] =
+          (l$passwordAuthentication as bool?);
+    }
     return Input$SSHSettingsInput._(result$data);
   }
 
@@ -1007,14 +1038,17 @@ class Input$SSHSettingsInput {
 
   bool get enable => (_$data['enable'] as bool);
 
-  bool get passwordAuthentication => (_$data['passwordAuthentication'] as bool);
+  bool? get passwordAuthentication =>
+      (_$data['passwordAuthentication'] as bool?);
 
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$enable = enable;
     result$data['enable'] = l$enable;
-    final l$passwordAuthentication = passwordAuthentication;
-    result$data['passwordAuthentication'] = l$passwordAuthentication;
+    if (_$data.containsKey('passwordAuthentication')) {
+      final l$passwordAuthentication = passwordAuthentication;
+      result$data['passwordAuthentication'] = l$passwordAuthentication;
+    }
     return result$data;
   }
 
@@ -1040,6 +1074,10 @@ class Input$SSHSettingsInput {
     }
     final l$passwordAuthentication = passwordAuthentication;
     final lOther$passwordAuthentication = other.passwordAuthentication;
+    if (_$data.containsKey('passwordAuthentication') !=
+        other._$data.containsKey('passwordAuthentication')) {
+      return false;
+    }
     if (l$passwordAuthentication != lOther$passwordAuthentication) {
       return false;
     }
@@ -1052,7 +1090,9 @@ class Input$SSHSettingsInput {
     final l$passwordAuthentication = passwordAuthentication;
     return Object.hashAll([
       l$enable,
-      l$passwordAuthentication,
+      _$data.containsKey('passwordAuthentication')
+          ? l$passwordAuthentication
+          : const {},
     ]);
   }
 }
@@ -1092,9 +1132,8 @@ class _CopyWithImpl$Input$SSHSettingsInput<TRes>
       _then(Input$SSHSettingsInput._({
         ..._instance._$data,
         if (enable != _undefined && enable != null) 'enable': (enable as bool),
-        if (passwordAuthentication != _undefined &&
-            passwordAuthentication != null)
-          'passwordAuthentication': (passwordAuthentication as bool),
+        if (passwordAuthentication != _undefined)
+          'passwordAuthentication': (passwordAuthentication as bool?),
       }));
 }
 
@@ -1107,6 +1146,135 @@ class _CopyWithStubImpl$Input$SSHSettingsInput<TRes>
   call({
     bool? enable,
     bool? passwordAuthentication,
+  }) =>
+      _res;
+}
+
+class Input$SetDnsProviderInput {
+  factory Input$SetDnsProviderInput({
+    required Enum$DnsProvider provider,
+    required String apiToken,
+  }) =>
+      Input$SetDnsProviderInput._({
+        r'provider': provider,
+        r'apiToken': apiToken,
+      });
+
+  Input$SetDnsProviderInput._(this._$data);
+
+  factory Input$SetDnsProviderInput.fromJson(Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$provider = data['provider'];
+    result$data['provider'] = fromJson$Enum$DnsProvider((l$provider as String));
+    final l$apiToken = data['apiToken'];
+    result$data['apiToken'] = (l$apiToken as String);
+    return Input$SetDnsProviderInput._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  Enum$DnsProvider get provider => (_$data['provider'] as Enum$DnsProvider);
+
+  String get apiToken => (_$data['apiToken'] as String);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$provider = provider;
+    result$data['provider'] = toJson$Enum$DnsProvider(l$provider);
+    final l$apiToken = apiToken;
+    result$data['apiToken'] = l$apiToken;
+    return result$data;
+  }
+
+  CopyWith$Input$SetDnsProviderInput<Input$SetDnsProviderInput> get copyWith =>
+      CopyWith$Input$SetDnsProviderInput(
+        this,
+        (i) => i,
+      );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Input$SetDnsProviderInput) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$provider = provider;
+    final lOther$provider = other.provider;
+    if (l$provider != lOther$provider) {
+      return false;
+    }
+    final l$apiToken = apiToken;
+    final lOther$apiToken = other.apiToken;
+    if (l$apiToken != lOther$apiToken) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$provider = provider;
+    final l$apiToken = apiToken;
+    return Object.hashAll([
+      l$provider,
+      l$apiToken,
+    ]);
+  }
+}
+
+abstract class CopyWith$Input$SetDnsProviderInput<TRes> {
+  factory CopyWith$Input$SetDnsProviderInput(
+    Input$SetDnsProviderInput instance,
+    TRes Function(Input$SetDnsProviderInput) then,
+  ) = _CopyWithImpl$Input$SetDnsProviderInput;
+
+  factory CopyWith$Input$SetDnsProviderInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$SetDnsProviderInput;
+
+  TRes call({
+    Enum$DnsProvider? provider,
+    String? apiToken,
+  });
+}
+
+class _CopyWithImpl$Input$SetDnsProviderInput<TRes>
+    implements CopyWith$Input$SetDnsProviderInput<TRes> {
+  _CopyWithImpl$Input$SetDnsProviderInput(
+    this._instance,
+    this._then,
+  );
+
+  final Input$SetDnsProviderInput _instance;
+
+  final TRes Function(Input$SetDnsProviderInput) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? provider = _undefined,
+    Object? apiToken = _undefined,
+  }) =>
+      _then(Input$SetDnsProviderInput._({
+        ..._instance._$data,
+        if (provider != _undefined && provider != null)
+          'provider': (provider as Enum$DnsProvider),
+        if (apiToken != _undefined && apiToken != null)
+          'apiToken': (apiToken as String),
+      }));
+}
+
+class _CopyWithStubImpl$Input$SetDnsProviderInput<TRes>
+    implements CopyWith$Input$SetDnsProviderInput<TRes> {
+  _CopyWithStubImpl$Input$SetDnsProviderInput(this._res);
+
+  TRes _res;
+
+  call({
+    Enum$DnsProvider? provider,
+    String? apiToken,
   }) =>
       _res;
 }
@@ -1629,9 +1797,17 @@ class _CopyWithStubImpl$Input$UseRecoveryKeyInput<TRes>
 }
 
 class Input$UserMutationInput {
-  factory Input$UserMutationInput({required String username}) =>
+  factory Input$UserMutationInput({
+    required String username,
+    List<String>? directmemberof,
+    String? password,
+    String? displayname,
+  }) =>
       Input$UserMutationInput._({
         r'username': username,
+        if (directmemberof != null) r'directmemberof': directmemberof,
+        if (password != null) r'password': password,
+        if (displayname != null) r'displayname': displayname,
       });
 
   Input$UserMutationInput._(this._$data);
@@ -1640,6 +1816,20 @@ class Input$UserMutationInput {
     final result$data = <String, dynamic>{};
     final l$username = data['username'];
     result$data['username'] = (l$username as String);
+    if (data.containsKey('directmemberof')) {
+      final l$directmemberof = data['directmemberof'];
+      result$data['directmemberof'] = (l$directmemberof as List<dynamic>?)
+          ?.map((e) => (e as String))
+          .toList();
+    }
+    if (data.containsKey('password')) {
+      final l$password = data['password'];
+      result$data['password'] = (l$password as String?);
+    }
+    if (data.containsKey('displayname')) {
+      final l$displayname = data['displayname'];
+      result$data['displayname'] = (l$displayname as String?);
+    }
     return Input$UserMutationInput._(result$data);
   }
 
@@ -1647,10 +1837,29 @@ class Input$UserMutationInput {
 
   String get username => (_$data['username'] as String);
 
+  List<String>? get directmemberof =>
+      (_$data['directmemberof'] as List<String>?);
+
+  String? get password => (_$data['password'] as String?);
+
+  String? get displayname => (_$data['displayname'] as String?);
+
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$username = username;
     result$data['username'] = l$username;
+    if (_$data.containsKey('directmemberof')) {
+      final l$directmemberof = directmemberof;
+      result$data['directmemberof'] = l$directmemberof?.map((e) => e).toList();
+    }
+    if (_$data.containsKey('password')) {
+      final l$password = password;
+      result$data['password'] = l$password;
+    }
+    if (_$data.containsKey('displayname')) {
+      final l$displayname = displayname;
+      result$data['displayname'] = l$displayname;
+    }
     return result$data;
   }
 
@@ -1674,13 +1883,63 @@ class Input$UserMutationInput {
     if (l$username != lOther$username) {
       return false;
     }
+    final l$directmemberof = directmemberof;
+    final lOther$directmemberof = other.directmemberof;
+    if (_$data.containsKey('directmemberof') !=
+        other._$data.containsKey('directmemberof')) {
+      return false;
+    }
+    if (l$directmemberof != null && lOther$directmemberof != null) {
+      if (l$directmemberof.length != lOther$directmemberof.length) {
+        return false;
+      }
+      for (int i = 0; i < l$directmemberof.length; i++) {
+        final l$directmemberof$entry = l$directmemberof[i];
+        final lOther$directmemberof$entry = lOther$directmemberof[i];
+        if (l$directmemberof$entry != lOther$directmemberof$entry) {
+          return false;
+        }
+      }
+    } else if (l$directmemberof != lOther$directmemberof) {
+      return false;
+    }
+    final l$password = password;
+    final lOther$password = other.password;
+    if (_$data.containsKey('password') !=
+        other._$data.containsKey('password')) {
+      return false;
+    }
+    if (l$password != lOther$password) {
+      return false;
+    }
+    final l$displayname = displayname;
+    final lOther$displayname = other.displayname;
+    if (_$data.containsKey('displayname') !=
+        other._$data.containsKey('displayname')) {
+      return false;
+    }
+    if (l$displayname != lOther$displayname) {
+      return false;
+    }
     return true;
   }
 
   @override
   int get hashCode {
     final l$username = username;
-    return Object.hashAll([l$username]);
+    final l$directmemberof = directmemberof;
+    final l$password = password;
+    final l$displayname = displayname;
+    return Object.hashAll([
+      l$username,
+      _$data.containsKey('directmemberof')
+          ? l$directmemberof == null
+              ? null
+              : Object.hashAll(l$directmemberof.map((v) => v))
+          : const {},
+      _$data.containsKey('password') ? l$password : const {},
+      _$data.containsKey('displayname') ? l$displayname : const {},
+    ]);
   }
 }
 
@@ -1693,7 +1952,12 @@ abstract class CopyWith$Input$UserMutationInput<TRes> {
   factory CopyWith$Input$UserMutationInput.stub(TRes res) =
       _CopyWithStubImpl$Input$UserMutationInput;
 
-  TRes call({String? username});
+  TRes call({
+    String? username,
+    List<String>? directmemberof,
+    String? password,
+    String? displayname,
+  });
 }
 
 class _CopyWithImpl$Input$UserMutationInput<TRes>
@@ -1709,11 +1973,20 @@ class _CopyWithImpl$Input$UserMutationInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? username = _undefined}) =>
+  TRes call({
+    Object? username = _undefined,
+    Object? directmemberof = _undefined,
+    Object? password = _undefined,
+    Object? displayname = _undefined,
+  }) =>
       _then(Input$UserMutationInput._({
         ..._instance._$data,
         if (username != _undefined && username != null)
           'username': (username as String),
+        if (directmemberof != _undefined)
+          'directmemberof': (directmemberof as List<String>?),
+        if (password != _undefined) 'password': (password as String?),
+        if (displayname != _undefined) 'displayname': (displayname as String?),
       }));
 }
 
@@ -1723,7 +1996,13 @@ class _CopyWithStubImpl$Input$UserMutationInput<TRes>
 
   TRes _res;
 
-  call({String? username}) => _res;
+  call({
+    String? username,
+    List<String>? directmemberof,
+    String? password,
+    String? displayname,
+  }) =>
+      _res;
 }
 
 enum Enum$BackupProvider {
@@ -2018,6 +2297,54 @@ Enum$Severity fromJson$Enum$Severity(String value) {
       return Enum$Severity.SUCCESS;
     default:
       return Enum$Severity.$unknown;
+  }
+}
+
+enum Enum$SupportLevelEnum {
+  NORMAL,
+  EXPERIMENTAL,
+  DEPRECATED,
+  COMMUNITY,
+  UNKNOWN,
+  $unknown;
+
+  factory Enum$SupportLevelEnum.fromJson(String value) =>
+      fromJson$Enum$SupportLevelEnum(value);
+
+  String toJson() => toJson$Enum$SupportLevelEnum(this);
+}
+
+String toJson$Enum$SupportLevelEnum(Enum$SupportLevelEnum e) {
+  switch (e) {
+    case Enum$SupportLevelEnum.NORMAL:
+      return r'NORMAL';
+    case Enum$SupportLevelEnum.EXPERIMENTAL:
+      return r'EXPERIMENTAL';
+    case Enum$SupportLevelEnum.DEPRECATED:
+      return r'DEPRECATED';
+    case Enum$SupportLevelEnum.COMMUNITY:
+      return r'COMMUNITY';
+    case Enum$SupportLevelEnum.UNKNOWN:
+      return r'UNKNOWN';
+    case Enum$SupportLevelEnum.$unknown:
+      return r'$unknown';
+  }
+}
+
+Enum$SupportLevelEnum fromJson$Enum$SupportLevelEnum(String value) {
+  switch (value) {
+    case r'NORMAL':
+      return Enum$SupportLevelEnum.NORMAL;
+    case r'EXPERIMENTAL':
+      return Enum$SupportLevelEnum.EXPERIMENTAL;
+    case r'DEPRECATED':
+      return Enum$SupportLevelEnum.DEPRECATED;
+    case r'COMMUNITY':
+      return Enum$SupportLevelEnum.COMMUNITY;
+    case r'UNKNOWN':
+      return Enum$SupportLevelEnum.UNKNOWN;
+    default:
+      return Enum$SupportLevelEnum.$unknown;
   }
 }
 

@@ -8,7 +8,7 @@ class Fragment$userFields {
   Fragment$userFields({
     required this.username,
     required this.userType,
-    required this.sshKeys,
+    this.sshKeys,
     this.$__typename = 'User',
   });
 
@@ -20,7 +20,8 @@ class Fragment$userFields {
     return Fragment$userFields(
       username: (l$username as String),
       userType: fromJson$Enum$UserType((l$userType as String)),
-      sshKeys: (l$sshKeys as List<dynamic>).map((e) => (e as String)).toList(),
+      sshKeys:
+          (l$sshKeys as List<dynamic>?)?.map((e) => (e as String)).toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -29,7 +30,7 @@ class Fragment$userFields {
 
   final Enum$UserType userType;
 
-  final List<String> sshKeys;
+  final List<String>? sshKeys;
 
   final String $__typename;
 
@@ -40,7 +41,7 @@ class Fragment$userFields {
     final l$userType = userType;
     _resultData['userType'] = toJson$Enum$UserType(l$userType);
     final l$sshKeys = sshKeys;
-    _resultData['sshKeys'] = l$sshKeys.map((e) => e).toList();
+    _resultData['sshKeys'] = l$sshKeys?.map((e) => e).toList();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -55,7 +56,7 @@ class Fragment$userFields {
     return Object.hashAll([
       l$username,
       l$userType,
-      Object.hashAll(l$sshKeys.map((v) => v)),
+      l$sshKeys == null ? null : Object.hashAll(l$sshKeys.map((v) => v)),
       l$$__typename,
     ]);
   }
@@ -80,15 +81,19 @@ class Fragment$userFields {
     }
     final l$sshKeys = sshKeys;
     final lOther$sshKeys = other.sshKeys;
-    if (l$sshKeys.length != lOther$sshKeys.length) {
-      return false;
-    }
-    for (int i = 0; i < l$sshKeys.length; i++) {
-      final l$sshKeys$entry = l$sshKeys[i];
-      final lOther$sshKeys$entry = lOther$sshKeys[i];
-      if (l$sshKeys$entry != lOther$sshKeys$entry) {
+    if (l$sshKeys != null && lOther$sshKeys != null) {
+      if (l$sshKeys.length != lOther$sshKeys.length) {
         return false;
       }
+      for (int i = 0; i < l$sshKeys.length; i++) {
+        final l$sshKeys$entry = l$sshKeys[i];
+        final lOther$sshKeys$entry = lOther$sshKeys[i];
+        if (l$sshKeys$entry != lOther$sshKeys$entry) {
+          return false;
+        }
+      }
+    } else if (l$sshKeys != lOther$sshKeys) {
+      return false;
     }
     final l$$__typename = $__typename;
     final lOther$$__typename = other.$__typename;
@@ -150,9 +155,9 @@ class _CopyWithImpl$Fragment$userFields<TRes>
         userType: userType == _undefined || userType == null
             ? _instance.userType
             : (userType as Enum$UserType),
-        sshKeys: sshKeys == _undefined || sshKeys == null
+        sshKeys: sshKeys == _undefined
             ? _instance.sshKeys
-            : (sshKeys as List<String>),
+            : (sshKeys as List<String>?),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),

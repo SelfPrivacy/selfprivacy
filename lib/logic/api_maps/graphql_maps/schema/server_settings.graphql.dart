@@ -521,13 +521,6 @@ const documentNodeQuerySystemSettings = DocumentNode(definitions: [
                     selectionSet: null,
                   ),
                   FieldNode(
-                    name: NameNode(value: 'passwordAuthentication'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
                     name: NameNode(value: '__typename'),
                     alias: null,
                     arguments: [],
@@ -1170,25 +1163,20 @@ class _CopyWithStubImpl$Query$SystemSettings$system$settings$autoUpgrade<TRes>
 class Query$SystemSettings$system$settings$ssh {
   Query$SystemSettings$system$settings$ssh({
     required this.enable,
-    required this.passwordAuthentication,
     this.$__typename = 'SshSettings',
   });
 
   factory Query$SystemSettings$system$settings$ssh.fromJson(
       Map<String, dynamic> json) {
     final l$enable = json['enable'];
-    final l$passwordAuthentication = json['passwordAuthentication'];
     final l$$__typename = json['__typename'];
     return Query$SystemSettings$system$settings$ssh(
       enable: (l$enable as bool),
-      passwordAuthentication: (l$passwordAuthentication as bool),
       $__typename: (l$$__typename as String),
     );
   }
 
   final bool enable;
-
-  final bool passwordAuthentication;
 
   final String $__typename;
 
@@ -1196,8 +1184,6 @@ class Query$SystemSettings$system$settings$ssh {
     final _resultData = <String, dynamic>{};
     final l$enable = enable;
     _resultData['enable'] = l$enable;
-    final l$passwordAuthentication = passwordAuthentication;
-    _resultData['passwordAuthentication'] = l$passwordAuthentication;
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -1206,11 +1192,9 @@ class Query$SystemSettings$system$settings$ssh {
   @override
   int get hashCode {
     final l$enable = enable;
-    final l$passwordAuthentication = passwordAuthentication;
     final l$$__typename = $__typename;
     return Object.hashAll([
       l$enable,
-      l$passwordAuthentication,
       l$$__typename,
     ]);
   }
@@ -1227,11 +1211,6 @@ class Query$SystemSettings$system$settings$ssh {
     final l$enable = enable;
     final lOther$enable = other.enable;
     if (l$enable != lOther$enable) {
-      return false;
-    }
-    final l$passwordAuthentication = passwordAuthentication;
-    final lOther$passwordAuthentication = other.passwordAuthentication;
-    if (l$passwordAuthentication != lOther$passwordAuthentication) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -1264,7 +1243,6 @@ abstract class CopyWith$Query$SystemSettings$system$settings$ssh<TRes> {
 
   TRes call({
     bool? enable,
-    bool? passwordAuthentication,
     String? $__typename,
   });
 }
@@ -1284,17 +1262,12 @@ class _CopyWithImpl$Query$SystemSettings$system$settings$ssh<TRes>
 
   TRes call({
     Object? enable = _undefined,
-    Object? passwordAuthentication = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Query$SystemSettings$system$settings$ssh(
         enable: enable == _undefined || enable == null
             ? _instance.enable
             : (enable as bool),
-        passwordAuthentication: passwordAuthentication == _undefined ||
-                passwordAuthentication == null
-            ? _instance.passwordAuthentication
-            : (passwordAuthentication as bool),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
@@ -1309,7 +1282,6 @@ class _CopyWithStubImpl$Query$SystemSettings$system$settings$ssh<TRes>
 
   call({
     bool? enable,
-    bool? passwordAuthentication,
     String? $__typename,
   }) =>
       _res;
@@ -4409,13 +4381,6 @@ const documentNodeMutationChangeSshSettings = DocumentNode(definitions: [
                 selectionSet: null,
               ),
               FieldNode(
-                name: NameNode(value: 'passwordAuthentication'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
                 name: NameNode(value: '__typename'),
                 alias: null,
                 arguments: [],
@@ -4696,7 +4661,6 @@ class Mutation$ChangeSshSettings$system$changeSshSettings
     required this.success,
     this.$__typename = 'SSHSettingsMutationReturn',
     required this.enable,
-    required this.passwordAuthentication,
   });
 
   factory Mutation$ChangeSshSettings$system$changeSshSettings.fromJson(
@@ -4706,14 +4670,12 @@ class Mutation$ChangeSshSettings$system$changeSshSettings
     final l$success = json['success'];
     final l$$__typename = json['__typename'];
     final l$enable = json['enable'];
-    final l$passwordAuthentication = json['passwordAuthentication'];
     return Mutation$ChangeSshSettings$system$changeSshSettings(
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
       enable: (l$enable as bool),
-      passwordAuthentication: (l$passwordAuthentication as bool),
     );
   }
 
@@ -4727,8 +4689,6 @@ class Mutation$ChangeSshSettings$system$changeSshSettings
 
   final bool enable;
 
-  final bool passwordAuthentication;
-
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
     final l$code = code;
@@ -4741,8 +4701,6 @@ class Mutation$ChangeSshSettings$system$changeSshSettings
     _resultData['__typename'] = l$$__typename;
     final l$enable = enable;
     _resultData['enable'] = l$enable;
-    final l$passwordAuthentication = passwordAuthentication;
-    _resultData['passwordAuthentication'] = l$passwordAuthentication;
     return _resultData;
   }
 
@@ -4753,14 +4711,12 @@ class Mutation$ChangeSshSettings$system$changeSshSettings
     final l$success = success;
     final l$$__typename = $__typename;
     final l$enable = enable;
-    final l$passwordAuthentication = passwordAuthentication;
     return Object.hashAll([
       l$code,
       l$message,
       l$success,
       l$$__typename,
       l$enable,
-      l$passwordAuthentication,
     ]);
   }
 
@@ -4798,11 +4754,6 @@ class Mutation$ChangeSshSettings$system$changeSshSettings
     if (l$enable != lOther$enable) {
       return false;
     }
-    final l$passwordAuthentication = passwordAuthentication;
-    final lOther$passwordAuthentication = other.passwordAuthentication;
-    if (l$passwordAuthentication != lOther$passwordAuthentication) {
-      return false;
-    }
     return true;
   }
 }
@@ -4835,7 +4786,6 @@ abstract class CopyWith$Mutation$ChangeSshSettings$system$changeSshSettings<
     bool? success,
     String? $__typename,
     bool? enable,
-    bool? passwordAuthentication,
   });
 }
 
@@ -4860,7 +4810,6 @@ class _CopyWithImpl$Mutation$ChangeSshSettings$system$changeSshSettings<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
     Object? enable = _undefined,
-    Object? passwordAuthentication = _undefined,
   }) =>
       _then(Mutation$ChangeSshSettings$system$changeSshSettings(
         code:
@@ -4877,10 +4826,6 @@ class _CopyWithImpl$Mutation$ChangeSshSettings$system$changeSshSettings<TRes>
         enable: enable == _undefined || enable == null
             ? _instance.enable
             : (enable as bool),
-        passwordAuthentication: passwordAuthentication == _undefined ||
-                passwordAuthentication == null
-            ? _instance.passwordAuthentication
-            : (passwordAuthentication as bool),
       ));
 }
 
@@ -4899,7 +4844,6 @@ class _CopyWithStubImpl$Mutation$ChangeSshSettings$system$changeSshSettings<
     bool? success,
     String? $__typename,
     bool? enable,
-    bool? passwordAuthentication,
   }) =>
       _res;
 }

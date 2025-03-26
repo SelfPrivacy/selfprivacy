@@ -44,7 +44,6 @@ class _ServerSettingsState extends State<_ServerSettings> {
   bool? allowAutoUpgrade;
   bool? rebootAfterUpgrade;
   bool? enableSsh;
-  bool? allowPasswordAuthentication;
 
   @override
   Widget build(final BuildContext context) {
@@ -59,11 +58,7 @@ class _ServerSettingsState extends State<_ServerSettings> {
       rebootAfterUpgrade = serverDetailsState.autoUpgradeSettings.allowReboot;
     }
 
-    if (enableSsh == null || allowPasswordAuthentication == null) {
-      enableSsh = serverDetailsState.sshSettings.enable;
-      allowPasswordAuthentication =
-          serverDetailsState.sshSettings.passwordAuthentication;
-    }
+    enableSsh ??= serverDetailsState.sshSettings.enable;
 
     return Column(
       children: [
@@ -148,8 +143,6 @@ class _ServerSettingsState extends State<_ServerSettings> {
             context.read<JobsCubit>().addJob(
                   ChangeSshSettingsJob(
                     enable: switched,
-                    passwordAuthentication:
-                        allowPasswordAuthentication ?? false,
                   ),
                 );
             setState(() {
@@ -168,39 +161,6 @@ class _ServerSettingsState extends State<_ServerSettings> {
             'server.enable_ssh_hint'.tr(),
             style: TextStyle(
               fontStyle: enableSsh != serverDetailsState.sshSettings.enable
-                  ? FontStyle.italic
-                  : FontStyle.normal,
-            ),
-          ),
-          activeColor: Theme.of(context).colorScheme.primary,
-        ),
-        SwitchListTile.adaptive(
-          value: allowPasswordAuthentication ?? false,
-          onChanged: (final switched) {
-            context.read<JobsCubit>().addJob(
-                  ChangeSshSettingsJob(
-                    enable: enableSsh ?? true,
-                    passwordAuthentication: switched,
-                  ),
-                );
-            setState(() {
-              allowPasswordAuthentication = switched;
-            });
-          },
-          title: Text(
-            'server.allow_password_authentication'.tr(),
-            style: TextStyle(
-              fontStyle: allowPasswordAuthentication !=
-                      serverDetailsState.sshSettings.passwordAuthentication
-                  ? FontStyle.italic
-                  : FontStyle.normal,
-            ),
-          ),
-          subtitle: Text(
-            'server.allow_password_authentication_hint'.tr(),
-            style: TextStyle(
-              fontStyle: allowPasswordAuthentication !=
-                      serverDetailsState.sshSettings.passwordAuthentication
                   ? FontStyle.italic
                   : FontStyle.normal,
             ),

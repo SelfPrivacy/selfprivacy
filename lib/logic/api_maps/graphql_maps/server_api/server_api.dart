@@ -274,7 +274,6 @@ class ServerApi extends GraphQLApiMap
       final GraphQLClient client = await getClient();
       final input = Input$SSHSettingsInput(
         enable: settings.enable,
-        passwordAuthentication: settings.passwordAuthentication,
       );
       final variables = Variables$Mutation$ChangeSshSettings(
         settings: input,
@@ -297,8 +296,6 @@ class ServerApi extends GraphQLApiMap
             ? null
             : SshSettings(
                 enable: result.parsedData!.system.changeSshSettings.enable,
-                passwordAuthentication: result.parsedData!.system
-                    .changeSshSettings.passwordAuthentication,
               ),
       );
     } catch (e) {
@@ -320,7 +317,6 @@ class ServerApi extends GraphQLApiMap
       ),
       sshSettings: SshSettings(
         enable: false,
-        passwordAuthentication: false,
       ),
       timezone: 'Unknown',
     );

@@ -7,7 +7,6 @@ query SystemSettings {
       }
       ssh {
         enable
-        passwordAuthentication
       }
       timezone
     }
@@ -68,7 +67,6 @@ mutation ChangeSshSettings($settings: SSHSettingsInput!) {
     changeSshSettings(settings: $settings) {
       ...basicMutationReturnFields
       enable
-      passwordAuthentication
     }
   }
 }

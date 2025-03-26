@@ -94,6 +94,7 @@ input AutobackupQuotasInput {
 type Backup {
   configuration: BackupConfiguration!
   allSnapshots: [SnapshotInfo!]!
+  lastSlice: [SnapshotInfo!]!
 }
 
 type BackupConfiguration {
@@ -112,6 +113,8 @@ type BackupMutations {
   setAutobackupPeriod(period: Int = null): GenericBackupConfigReturn!
   setAutobackupQuotas(quotas: AutobackupQuotasInput!): GenericBackupConfigReturn!
   startBackup(serviceId: String!): GenericJobMutationReturn!
+  totalBackup: GenericJobMutationReturn!
+  restoreAll: GenericJobMutationReturn!
   restoreBackup(snapshotId: String!, strategy: RestoreStrategy! = DOWNLOAD_VERIFY_OVERWRITE): GenericJobMutationReturn!
   forgetSnapshot(snapshotId: String!): GenericMutationReturn!
   forceSnapshotsReload: GenericMutationReturn!
@@ -185,6 +188,18 @@ type DnsRecord {
   displayName: String!
 }
 
+type EmailPasswordMetadata {
+  uuid: String!
+  displayName: String!
+  createdAt: DateTime
+  expiresAt: DateTime
+  lastUsed: DateTime
+}
+
+type EmailPasswordsMetadataMutations {
+  deleteEmailPassword(username: String!, uuid: String!): GenericMutationReturn!
+}
+
 type EnumConfigItem implements ConfigItem {
   fieldId: String!
   description: String!
@@ -215,12 +230,27 @@ type GenericMutationReturn implements MutationReturnInterface {
   code: Int!
 }
 
+type Group {
+  name: String!
+  groupClass: [String!]
+  member: [String!]
+  memberof: [String!]
+  directmemberof: [String!]
+  spn: String
+  description: String
+}
+
+type Groups {
+  allGroups: [Group!]!
+}
+
 input InitializeRepositoryInput {
   provider: BackupProvider!
   locationId: String!
   locationName: String!
   login: String!
   password: String!
+  localSecret: String = null
 }
 
 """
@@ -235,6 +265,16 @@ type Job {
 
 type JobMutations {
   removeJob(jobId: String!): GenericMutationReturn!
+}
+
+type LicenseType {
+  deprecated: Boolean!
+  free: Boolean!
+  fullName: String!
+  redistributable: Boolean!
+  shortName: String!
+  spdxId: String!
+  url: String!
 }
 
 type LogEntry {
@@ -260,6 +300,7 @@ type MemoryMonitoring {
   end: DateTime
   step: Int!
   overallUsage: MonitoringValuesResult!
+  swapUsageOverall: MonitoringValuesResult!
   averageUsageByService: MonitoringMetricsResult!
   maxUsageByService: MonitoringMetricsResult!
 }
@@ -325,6 +366,7 @@ type Mutation {
   runSystemUpgrade: GenericMutationReturn! @deprecated(reason: "Use `system.run_system_upgrade` instead")
   rebootSystem: GenericMutationReturn! @deprecated(reason: "Use `system.reboot_system` instead")
   pullRepositoryChanges: GenericMutationReturn! @deprecated(reason: "Use `system.pull_repository_changes` instead")
+  setSshSettings(settings: SSHSettingsInput!): GenericMutationReturn! @deprecated(reason: "Use `system.change_ssh_settings` instead")
   createUser(user: UserMutationInput!): UserMutationReturn! @deprecated(reason: "Use `users.create_user` instead")
   deleteUser(username: String!): GenericMutationReturn! @deprecated(reason: "Use `users.delete_user` instead")
   updateUser(user: UserMutationInput!): UserMutationReturn! @deprecated(reason: "Use `users.update_user` instead")
@@ -345,6 +387,7 @@ type Mutation {
   system: SystemMutations!
   users: UsersMutations!
   storage: StorageMutations!
+  emailPasswordMetadataMutations: EmailPasswordsMetadataMutations!
   services: ServicesMutations!
   jobs: JobMutations!
   backup: BackupMutations!
@@ -384,6 +427,7 @@ type Query {
   system: System!
   logs: Logs!
   users: Users!
+  groups: Groups!
   storage: Storage!
   jobs: Job!
   services: Services!
@@ -403,7 +447,7 @@ enum RestoreStrategy {
 
 input SSHSettingsInput {
   enable: Boolean!
-  passwordAuthentication: Boolean!
+  passwordAuthentication: Boolean = null
 }
 
 type SSHSettingsMutationReturn implements MutationReturnInterface {
@@ -429,10 +473,15 @@ type Service {
   isRequired: Boolean!
   isEnabled: Boolean!
   isInstalled: Boolean!
+  isSystemService: Boolean!
   canBeBackedUp: Boolean!
   backupDescription: String!
   status: ServiceStatusEnum!
   url: String
+  license: [LicenseType!]!
+  homepage: String
+  sourcePage: String
+  supportLevel: SupportLevelEnum!
   dnsRecords: [DnsRecord!]
   storageUsage: ServiceStorageUsage!
   configuration: [ConfigItem!]
@@ -485,6 +534,11 @@ type ServicesMutations {
   moveService(input: MoveServiceInput!): ServiceJobMutationReturn!
 }
 
+input SetDnsProviderInput {
+  provider: DnsProvider!
+  apiToken: String!
+}
+
 input SetServiceConfigurationInput {
   serviceId: String!
   configuration: JSON!
@@ -512,7 +566,7 @@ input SshMutationInput {
 
 type SshSettings {
   enable: Boolean!
-  passwordAuthentication: Boolean!
+  passwordAuthentication: Boolean! @deprecated(reason: "For security reasons, password authentication is no longer supported. Please use SSH keys.")
   rootSshKeys: [String!]!
 }
 
@@ -561,6 +615,14 @@ type Subscription {
   logEntries: LogEntry!
 }
 
+enum SupportLevelEnum {
+  NORMAL
+  EXPERIMENTAL
+  DEPRECATED
+  COMMUNITY
+  UNKNOWN
+}
+
 type System {
   status: Alert!
   domainInfo: SystemDomainInfo!
@@ -594,6 +656,7 @@ type SystemMutations {
   rebootSystem: GenericMutationReturn!
   pullRepositoryChanges: GenericMutationReturn!
   nixCollectGarbage: GenericJobMutationReturn!
+  setDnsProvider(input: SetDnsProviderInput!): GenericMutationReturn!
 }
 
 type SystemProviderInfo {
@@ -625,13 +688,21 @@ input UseRecoveryKeyInput {
 }
 
 type User {
-  userType: UserType!
   username: String!
-  sshKeys: [String!]!
+  userType: UserType!
+  sshKeys: [String!]
+  directmemberof: [String!]
+  memberof: [String!]
+  displayname: String
+  email: String
+  emailPasswordMetadata: [EmailPasswordMetadata!]
 }
 
 input UserMutationInput {
   username: String!
+  directmemberof: [String!] = []
+  password: String = null
+  displayname: String = null
 }
 
 type UserMutationReturn implements MutationReturnInterface {

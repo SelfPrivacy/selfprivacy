@@ -223,12 +223,10 @@ class ApiConnectionRepository {
 
   Future<(bool, String)> setSshSettings(
     final bool enable,
-    final bool passwordAuthentication,
   ) async {
     final GenericResult<SshSettings?> result = await api.setSshSettings(
       SshSettings(
         enable: enable,
-        passwordAuthentication: passwordAuthentication,
       ),
     );
     _apiData.settings.invalidate();

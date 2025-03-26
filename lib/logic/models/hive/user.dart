@@ -23,7 +23,7 @@ class User extends Equatable {
       : this(
           login: user.username,
           type: UserType.fromGraphQL(user.userType),
-          sshKeys: user.sshKeys,
+          sshKeys: user.sshKeys ?? const [],
           isFoundOnServer: true,
         );
 

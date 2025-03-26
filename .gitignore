@@ -46,6 +46,8 @@ app.*.map.json
 flatpak-build/
 flatpak-repo/
 
-# Direnv & Nix related 
+# Direnv & Nix related
 .direnv
 result/
+
+result

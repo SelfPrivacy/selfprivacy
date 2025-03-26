@@ -14,6 +14,7 @@ import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dar
 import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 @RoutePage()
 class UsersPage extends StatelessWidget {
@@ -39,12 +40,11 @@ class UsersPage extends StatelessWidget {
               context.watch<OutdatedServerCheckerBloc>().state;
 
           final users = state.orderedUsers;
-          if (users.isEmpty) {
-            if (state is UsersRefreshing) {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            }
+          final isLoading = users.isEmpty &&
+              (state is UsersRefreshing || state is UsersInitial);
+          final fakeUsers =
+              List.generate(7, (final int index) => const User.fake());
+          if (users.isEmpty && !isLoading) {
             return const _UsersNotLoaded();
           }
           return RefreshIndicator(
@@ -70,33 +70,43 @@ class UsersPage extends StatelessWidget {
                     horizontal: 16.0,
                     vertical: 8.0,
                   ),
-                  child: FilledButton.tonal(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.person_add_outlined,
-                          size: 18.0,
-                        ),
-                        const SizedBox(width: 8),
-                        Text('users.new_user'.tr()),
-                      ],
+                  child: Skeletonizer(
+                    enabled: isLoading,
+                    enableSwitchAnimation: true,
+                    child: FilledButton.tonal(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.person_add_outlined,
+                            size: 18.0,
+                          ),
+                          const SizedBox(width: 8),
+                          Text('users.new_user'.tr()),
+                        ],
+                      ),
+                      onPressed: () {
+                        context.pushRoute(const NewUserRoute());
+                      },
                     ),
-                    onPressed: () {
-                      context.pushRoute(const NewUserRoute());
-                    },
                   ),
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: users.length,
+                    itemCount: isLoading ? fakeUsers.length : users.length,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemBuilder:
                         (final BuildContext context, final int index) =>
-                            UserListItem(
-                      user: users[index],
-                      isPrimaryUser: users[index].type == UserType.primary,
+                            Skeletonizer(
+                      enabled: isLoading,
+                      enableSwitchAnimation: true,
+                      child: UserListItem(
+                        user: isLoading ? fakeUsers[index] : users[index],
+                        isPrimaryUser: isLoading
+                            ? index == 0
+                            : users[index].type == UserType.primary,
+                      ),
                     ),
                   ),
                 ),

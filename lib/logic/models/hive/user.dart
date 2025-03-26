@@ -27,6 +27,15 @@ class User extends Equatable {
           isFoundOnServer: true,
         );
 
+  const User.fake({
+    this.login = 'fake_username',
+    this.type = UserType.normal,
+    this.password = 'fake',
+    this.sshKeys = const [],
+    this.isFoundOnServer = true,
+    this.note,
+  });
+
   @HiveField(0)
   final String login;
 

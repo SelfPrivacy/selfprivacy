@@ -77,11 +77,11 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       case ConnectionStatus.nonexistent:
         emit(UsersInitial());
         break;
+      case ConnectionStatus.reconnecting:
       case ConnectionStatus.connected:
         if (state is! UsersLoaded) {
           emit(UsersRefreshing(users: state.users));
         }
-      case ConnectionStatus.reconnecting:
       case ConnectionStatus.offline:
       case ConnectionStatus.unauthorized:
         break;

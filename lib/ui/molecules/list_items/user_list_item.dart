@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/router/router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class UserListItem extends StatelessWidget {
   const UserListItem({
@@ -19,9 +20,11 @@ class UserListItem extends StatelessWidget {
         onTap: () {
           context.pushRoute(UserDetailsRoute(login: user.login));
         },
-        leading: CircleAvatar(
-          child: Text(
-            user.login[0].toUpperCase(),
+        leading: Skeleton.leaf(
+          child: CircleAvatar(
+            child: Text(
+              user.login[0].toUpperCase(),
+            ),
           ),
         ),
         trailing: isPrimaryUser

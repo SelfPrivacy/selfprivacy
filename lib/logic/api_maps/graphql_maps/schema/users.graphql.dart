@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
+import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
 import 'server_api.graphql.dart';
 
@@ -9,6 +10,11 @@ class Fragment$userFields {
     required this.username,
     required this.userType,
     this.sshKeys,
+    this.directmemberof,
+    this.displayName,
+    this.memberof,
+    this.email,
+    this.emailPasswordMetadata,
     this.$__typename = 'User',
   });
 
@@ -16,12 +22,28 @@ class Fragment$userFields {
     final l$username = json['username'];
     final l$userType = json['userType'];
     final l$sshKeys = json['sshKeys'];
+    final l$directmemberof = json['directmemberof'];
+    final l$displayName = json['displayName'];
+    final l$memberof = json['memberof'];
+    final l$email = json['email'];
+    final l$emailPasswordMetadata = json['emailPasswordMetadata'];
     final l$$__typename = json['__typename'];
     return Fragment$userFields(
       username: (l$username as String),
       userType: fromJson$Enum$UserType((l$userType as String)),
       sshKeys:
           (l$sshKeys as List<dynamic>?)?.map((e) => (e as String)).toList(),
+      directmemberof: (l$directmemberof as List<dynamic>?)
+          ?.map((e) => (e as String))
+          .toList(),
+      displayName: (l$displayName as String?),
+      memberof:
+          (l$memberof as List<dynamic>?)?.map((e) => (e as String)).toList(),
+      email: (l$email as String?),
+      emailPasswordMetadata: (l$emailPasswordMetadata as List<dynamic>?)
+          ?.map((e) => Fragment$userFields$emailPasswordMetadata.fromJson(
+              (e as Map<String, dynamic>)))
+          .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -31,6 +53,16 @@ class Fragment$userFields {
   final Enum$UserType userType;
 
   final List<String>? sshKeys;
+
+  final List<String>? directmemberof;
+
+  final String? displayName;
+
+  final List<String>? memberof;
+
+  final String? email;
+
+  final List<Fragment$userFields$emailPasswordMetadata>? emailPasswordMetadata;
 
   final String $__typename;
 
@@ -42,6 +74,17 @@ class Fragment$userFields {
     _resultData['userType'] = toJson$Enum$UserType(l$userType);
     final l$sshKeys = sshKeys;
     _resultData['sshKeys'] = l$sshKeys?.map((e) => e).toList();
+    final l$directmemberof = directmemberof;
+    _resultData['directmemberof'] = l$directmemberof?.map((e) => e).toList();
+    final l$displayName = displayName;
+    _resultData['displayName'] = l$displayName;
+    final l$memberof = memberof;
+    _resultData['memberof'] = l$memberof?.map((e) => e).toList();
+    final l$email = email;
+    _resultData['email'] = l$email;
+    final l$emailPasswordMetadata = emailPasswordMetadata;
+    _resultData['emailPasswordMetadata'] =
+        l$emailPasswordMetadata?.map((e) => e.toJson()).toList();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -52,11 +95,25 @@ class Fragment$userFields {
     final l$username = username;
     final l$userType = userType;
     final l$sshKeys = sshKeys;
+    final l$directmemberof = directmemberof;
+    final l$displayName = displayName;
+    final l$memberof = memberof;
+    final l$email = email;
+    final l$emailPasswordMetadata = emailPasswordMetadata;
     final l$$__typename = $__typename;
     return Object.hashAll([
       l$username,
       l$userType,
       l$sshKeys == null ? null : Object.hashAll(l$sshKeys.map((v) => v)),
+      l$directmemberof == null
+          ? null
+          : Object.hashAll(l$directmemberof.map((v) => v)),
+      l$displayName,
+      l$memberof == null ? null : Object.hashAll(l$memberof.map((v) => v)),
+      l$email,
+      l$emailPasswordMetadata == null
+          ? null
+          : Object.hashAll(l$emailPasswordMetadata.map((v) => v)),
       l$$__typename,
     ]);
   }
@@ -95,6 +152,68 @@ class Fragment$userFields {
     } else if (l$sshKeys != lOther$sshKeys) {
       return false;
     }
+    final l$directmemberof = directmemberof;
+    final lOther$directmemberof = other.directmemberof;
+    if (l$directmemberof != null && lOther$directmemberof != null) {
+      if (l$directmemberof.length != lOther$directmemberof.length) {
+        return false;
+      }
+      for (int i = 0; i < l$directmemberof.length; i++) {
+        final l$directmemberof$entry = l$directmemberof[i];
+        final lOther$directmemberof$entry = lOther$directmemberof[i];
+        if (l$directmemberof$entry != lOther$directmemberof$entry) {
+          return false;
+        }
+      }
+    } else if (l$directmemberof != lOther$directmemberof) {
+      return false;
+    }
+    final l$displayName = displayName;
+    final lOther$displayName = other.displayName;
+    if (l$displayName != lOther$displayName) {
+      return false;
+    }
+    final l$memberof = memberof;
+    final lOther$memberof = other.memberof;
+    if (l$memberof != null && lOther$memberof != null) {
+      if (l$memberof.length != lOther$memberof.length) {
+        return false;
+      }
+      for (int i = 0; i < l$memberof.length; i++) {
+        final l$memberof$entry = l$memberof[i];
+        final lOther$memberof$entry = lOther$memberof[i];
+        if (l$memberof$entry != lOther$memberof$entry) {
+          return false;
+        }
+      }
+    } else if (l$memberof != lOther$memberof) {
+      return false;
+    }
+    final l$email = email;
+    final lOther$email = other.email;
+    if (l$email != lOther$email) {
+      return false;
+    }
+    final l$emailPasswordMetadata = emailPasswordMetadata;
+    final lOther$emailPasswordMetadata = other.emailPasswordMetadata;
+    if (l$emailPasswordMetadata != null &&
+        lOther$emailPasswordMetadata != null) {
+      if (l$emailPasswordMetadata.length !=
+          lOther$emailPasswordMetadata.length) {
+        return false;
+      }
+      for (int i = 0; i < l$emailPasswordMetadata.length; i++) {
+        final l$emailPasswordMetadata$entry = l$emailPasswordMetadata[i];
+        final lOther$emailPasswordMetadata$entry =
+            lOther$emailPasswordMetadata[i];
+        if (l$emailPasswordMetadata$entry !=
+            lOther$emailPasswordMetadata$entry) {
+          return false;
+        }
+      }
+    } else if (l$emailPasswordMetadata != lOther$emailPasswordMetadata) {
+      return false;
+    }
     final l$$__typename = $__typename;
     final lOther$$__typename = other.$__typename;
     if (l$$__typename != lOther$$__typename) {
@@ -125,8 +244,19 @@ abstract class CopyWith$Fragment$userFields<TRes> {
     String? username,
     Enum$UserType? userType,
     List<String>? sshKeys,
+    List<String>? directmemberof,
+    String? displayName,
+    List<String>? memberof,
+    String? email,
+    List<Fragment$userFields$emailPasswordMetadata>? emailPasswordMetadata,
     String? $__typename,
   });
+  TRes emailPasswordMetadata(
+      Iterable<Fragment$userFields$emailPasswordMetadata>? Function(
+              Iterable<
+                  CopyWith$Fragment$userFields$emailPasswordMetadata<
+                      Fragment$userFields$emailPasswordMetadata>>?)
+          _fn);
 }
 
 class _CopyWithImpl$Fragment$userFields<TRes>
@@ -146,6 +276,11 @@ class _CopyWithImpl$Fragment$userFields<TRes>
     Object? username = _undefined,
     Object? userType = _undefined,
     Object? sshKeys = _undefined,
+    Object? directmemberof = _undefined,
+    Object? displayName = _undefined,
+    Object? memberof = _undefined,
+    Object? email = _undefined,
+    Object? emailPasswordMetadata = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Fragment$userFields(
@@ -158,10 +293,37 @@ class _CopyWithImpl$Fragment$userFields<TRes>
         sshKeys: sshKeys == _undefined
             ? _instance.sshKeys
             : (sshKeys as List<String>?),
+        directmemberof: directmemberof == _undefined
+            ? _instance.directmemberof
+            : (directmemberof as List<String>?),
+        displayName: displayName == _undefined
+            ? _instance.displayName
+            : (displayName as String?),
+        memberof: memberof == _undefined
+            ? _instance.memberof
+            : (memberof as List<String>?),
+        email: email == _undefined ? _instance.email : (email as String?),
+        emailPasswordMetadata: emailPasswordMetadata == _undefined
+            ? _instance.emailPasswordMetadata
+            : (emailPasswordMetadata
+                as List<Fragment$userFields$emailPasswordMetadata>?),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
+
+  TRes emailPasswordMetadata(
+          Iterable<Fragment$userFields$emailPasswordMetadata>? Function(
+                  Iterable<
+                      CopyWith$Fragment$userFields$emailPasswordMetadata<
+                          Fragment$userFields$emailPasswordMetadata>>?)
+              _fn) =>
+      call(
+          emailPasswordMetadata: _fn(_instance.emailPasswordMetadata
+              ?.map((e) => CopyWith$Fragment$userFields$emailPasswordMetadata(
+                    e,
+                    (i) => i,
+                  )))?.toList());
 }
 
 class _CopyWithStubImpl$Fragment$userFields<TRes>
@@ -174,9 +336,16 @@ class _CopyWithStubImpl$Fragment$userFields<TRes>
     String? username,
     Enum$UserType? userType,
     List<String>? sshKeys,
+    List<String>? directmemberof,
+    String? displayName,
+    List<String>? memberof,
+    String? email,
+    List<Fragment$userFields$emailPasswordMetadata>? emailPasswordMetadata,
     String? $__typename,
   }) =>
       _res;
+
+  emailPasswordMetadata(_fn) => _res;
 }
 
 const fragmentDefinitionuserFields = FragmentDefinitionNode(
@@ -208,6 +377,84 @@ const fragmentDefinitionuserFields = FragmentDefinitionNode(
       arguments: [],
       directives: [],
       selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'directmemberof'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'displayName'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'memberof'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'email'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: null,
+    ),
+    FieldNode(
+      name: NameNode(value: 'emailPasswordMetadata'),
+      alias: null,
+      arguments: [],
+      directives: [],
+      selectionSet: SelectionSetNode(selections: [
+        FieldNode(
+          name: NameNode(value: 'createdAt'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null,
+        ),
+        FieldNode(
+          name: NameNode(value: 'displayName'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null,
+        ),
+        FieldNode(
+          name: NameNode(value: 'expiresAt'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null,
+        ),
+        FieldNode(
+          name: NameNode(value: 'lastUsed'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null,
+        ),
+        FieldNode(
+          name: NameNode(value: 'uuid'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null,
+        ),
+        FieldNode(
+          name: NameNode(value: '__typename'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: null,
+        ),
+      ]),
     ),
     FieldNode(
       name: NameNode(value: '__typename'),
@@ -255,6 +502,216 @@ extension ClientExtension$Fragment$userFields on graphql.GraphQLClient {
     );
     return result == null ? null : Fragment$userFields.fromJson(result);
   }
+}
+
+class Fragment$userFields$emailPasswordMetadata {
+  Fragment$userFields$emailPasswordMetadata({
+    this.createdAt,
+    required this.displayName,
+    this.expiresAt,
+    this.lastUsed,
+    required this.uuid,
+    this.$__typename = 'EmailPasswordMetadata',
+  });
+
+  factory Fragment$userFields$emailPasswordMetadata.fromJson(
+      Map<String, dynamic> json) {
+    final l$createdAt = json['createdAt'];
+    final l$displayName = json['displayName'];
+    final l$expiresAt = json['expiresAt'];
+    final l$lastUsed = json['lastUsed'];
+    final l$uuid = json['uuid'];
+    final l$$__typename = json['__typename'];
+    return Fragment$userFields$emailPasswordMetadata(
+      createdAt: l$createdAt == null ? null : dateTimeFromJson(l$createdAt),
+      displayName: (l$displayName as String),
+      expiresAt: l$expiresAt == null ? null : dateTimeFromJson(l$expiresAt),
+      lastUsed: l$lastUsed == null ? null : dateTimeFromJson(l$lastUsed),
+      uuid: (l$uuid as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final DateTime? createdAt;
+
+  final String displayName;
+
+  final DateTime? expiresAt;
+
+  final DateTime? lastUsed;
+
+  final String uuid;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$createdAt = createdAt;
+    _resultData['createdAt'] =
+        l$createdAt == null ? null : dateTimeToJson(l$createdAt);
+    final l$displayName = displayName;
+    _resultData['displayName'] = l$displayName;
+    final l$expiresAt = expiresAt;
+    _resultData['expiresAt'] =
+        l$expiresAt == null ? null : dateTimeToJson(l$expiresAt);
+    final l$lastUsed = lastUsed;
+    _resultData['lastUsed'] =
+        l$lastUsed == null ? null : dateTimeToJson(l$lastUsed);
+    final l$uuid = uuid;
+    _resultData['uuid'] = l$uuid;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$createdAt = createdAt;
+    final l$displayName = displayName;
+    final l$expiresAt = expiresAt;
+    final l$lastUsed = lastUsed;
+    final l$uuid = uuid;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$createdAt,
+      l$displayName,
+      l$expiresAt,
+      l$lastUsed,
+      l$uuid,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Fragment$userFields$emailPasswordMetadata) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$createdAt = createdAt;
+    final lOther$createdAt = other.createdAt;
+    if (l$createdAt != lOther$createdAt) {
+      return false;
+    }
+    final l$displayName = displayName;
+    final lOther$displayName = other.displayName;
+    if (l$displayName != lOther$displayName) {
+      return false;
+    }
+    final l$expiresAt = expiresAt;
+    final lOther$expiresAt = other.expiresAt;
+    if (l$expiresAt != lOther$expiresAt) {
+      return false;
+    }
+    final l$lastUsed = lastUsed;
+    final lOther$lastUsed = other.lastUsed;
+    if (l$lastUsed != lOther$lastUsed) {
+      return false;
+    }
+    final l$uuid = uuid;
+    final lOther$uuid = other.uuid;
+    if (l$uuid != lOther$uuid) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$userFields$emailPasswordMetadata
+    on Fragment$userFields$emailPasswordMetadata {
+  CopyWith$Fragment$userFields$emailPasswordMetadata<
+          Fragment$userFields$emailPasswordMetadata>
+      get copyWith => CopyWith$Fragment$userFields$emailPasswordMetadata(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Fragment$userFields$emailPasswordMetadata<TRes> {
+  factory CopyWith$Fragment$userFields$emailPasswordMetadata(
+    Fragment$userFields$emailPasswordMetadata instance,
+    TRes Function(Fragment$userFields$emailPasswordMetadata) then,
+  ) = _CopyWithImpl$Fragment$userFields$emailPasswordMetadata;
+
+  factory CopyWith$Fragment$userFields$emailPasswordMetadata.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$userFields$emailPasswordMetadata;
+
+  TRes call({
+    DateTime? createdAt,
+    String? displayName,
+    DateTime? expiresAt,
+    DateTime? lastUsed,
+    String? uuid,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$userFields$emailPasswordMetadata<TRes>
+    implements CopyWith$Fragment$userFields$emailPasswordMetadata<TRes> {
+  _CopyWithImpl$Fragment$userFields$emailPasswordMetadata(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$userFields$emailPasswordMetadata _instance;
+
+  final TRes Function(Fragment$userFields$emailPasswordMetadata) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? createdAt = _undefined,
+    Object? displayName = _undefined,
+    Object? expiresAt = _undefined,
+    Object? lastUsed = _undefined,
+    Object? uuid = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Fragment$userFields$emailPasswordMetadata(
+        createdAt: createdAt == _undefined
+            ? _instance.createdAt
+            : (createdAt as DateTime?),
+        displayName: displayName == _undefined || displayName == null
+            ? _instance.displayName
+            : (displayName as String),
+        expiresAt: expiresAt == _undefined
+            ? _instance.expiresAt
+            : (expiresAt as DateTime?),
+        lastUsed: lastUsed == _undefined
+            ? _instance.lastUsed
+            : (lastUsed as DateTime?),
+        uuid: uuid == _undefined || uuid == null
+            ? _instance.uuid
+            : (uuid as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Fragment$userFields$emailPasswordMetadata<TRes>
+    implements CopyWith$Fragment$userFields$emailPasswordMetadata<TRes> {
+  _CopyWithStubImpl$Fragment$userFields$emailPasswordMetadata(this._res);
+
+  TRes _res;
+
+  call({
+    DateTime? createdAt,
+    String? displayName,
+    DateTime? expiresAt,
+    DateTime? lastUsed,
+    String? uuid,
+    String? $__typename,
+  }) =>
+      _res;
 }
 
 class Query$AllUsers {

@@ -89,7 +89,11 @@ class ApiConnectionRepository {
     }
 
     // If API returned error, do nothing
-    final GenericResult<User?> result = await api.createUser(user.login);
+    final GenericResult<User?> result = await api.createUser(
+      user.login,
+      user.displayName,
+      user.directmemberof,
+    );
 
     if (result.data == null) {
       return (false, result.message ?? 'users.could_not_create_user'.tr());

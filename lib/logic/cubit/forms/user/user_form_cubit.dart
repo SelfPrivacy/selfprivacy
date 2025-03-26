@@ -15,7 +15,10 @@ class UserFormCubit extends FormCubit {
         : fieldFactory.createRequiredStringField();
     login.setValue(initialUser?.login ?? '');
 
-    super.addFields([login]);
+    displayName = fieldFactory.createUserDisplayNameField();
+    displayName.setValue(initialUser?.displayName ?? '');
+
+    super.addFields([login, displayName]);
   }
 
   @override
@@ -24,6 +27,8 @@ class UserFormCubit extends FormCubit {
       final User user = User(
         login: login.state.value,
         type: UserType.normal,
+        displayName:
+            displayName.state.value == '' ? null : displayName.state.value,
       );
       final (result, message) =
           await getIt<ApiConnectionRepository>().createUser(user);
@@ -39,6 +44,7 @@ class UserFormCubit extends FormCubit {
   }
 
   late FieldCubit<String> login;
+  late FieldCubit<String> displayName;
 
   bool userCreated;
   String? userCreationMessage = '';

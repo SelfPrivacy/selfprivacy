@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
+import 'package:selfprivacy/logic/models/hive/email_password_metadata.dart';
 import 'package:selfprivacy/utils/color_utils.dart';
 
 part 'user.g.dart';
@@ -17,6 +18,11 @@ class User extends Equatable {
     this.sshKeys = const [],
     this.isFoundOnServer = true,
     this.note,
+    this.email,
+    this.displayName,
+    this.directmemberof,
+    this.memberof,
+    this.emailPasswordMetadata,
   });
 
   User.fromGraphQL(final Fragment$userFields user)
@@ -25,6 +31,16 @@ class User extends Equatable {
           type: UserType.fromGraphQL(user.userType),
           sshKeys: user.sshKeys ?? const [],
           isFoundOnServer: true,
+          directmemberof: user.directmemberof,
+          memberof: user.memberof,
+          emailPasswordMetadata: user.emailPasswordMetadata
+              ?.map(
+                (final Fragment$userFields$emailPasswordMetadata metadata) =>
+                    EmailPasswordMetadata.fromGraphQL(metadata),
+              )
+              .toList(),
+          displayName: user.displayName,
+          email: user.email,
         );
 
   const User.fake({
@@ -34,6 +50,11 @@ class User extends Equatable {
     this.sshKeys = const [],
     this.isFoundOnServer = true,
     this.note,
+    this.email,
+    this.displayName,
+    this.directmemberof,
+    this.memberof,
+    this.emailPasswordMetadata,
   });
 
   @HiveField(0)
@@ -53,6 +74,21 @@ class User extends Equatable {
 
   @HiveField(5, defaultValue: UserType.normal)
   final UserType type;
+
+  @HiveField(6)
+  final String? email;
+
+  @HiveField(7)
+  final String? displayName;
+
+  @HiveField(8)
+  final List<String>? directmemberof;
+
+  @HiveField(9)
+  final List<String>? memberof;
+
+  @HiveField(10)
+  final List<EmailPasswordMetadata>? emailPasswordMetadata;
 
   @override
   List<Object?> get props => [

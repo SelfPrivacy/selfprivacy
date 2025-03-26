@@ -425,6 +425,7 @@
         "delete_user": "Delete user",
         "nobody_here": "Nobody here",
         "login": "Login",
+        "display_name": "Display name",
         "new_user_info_note": "New user will automatically be granted an access to all of the services",
         "delete_confirm_question": "Are you sure?",
         "reset_password": "Reset password",

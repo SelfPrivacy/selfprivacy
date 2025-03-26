@@ -78,7 +78,7 @@ class NewUserScreen extends StatelessWidget {
               color: Theme.of(context).colorScheme.error,
             ),
           ),
-        const Gap(14),
+        const Gap(16),
         IntrinsicHeight(
           child: CubitFormTextField(
             /// should make this read-only when the user is created
@@ -90,14 +90,23 @@ class NewUserScreen extends StatelessWidget {
             ),
           ),
         ),
-        const Gap(30),
+        const Gap(32),
+        IntrinsicHeight(
+          child: CubitFormTextField(
+            formFieldCubit: formCubit.displayName,
+            decoration: InputDecoration(
+              labelText: 'users.display_name'.tr(),
+            ),
+          ),
+        ),
+        const Gap(32),
         BrandButton.filled(
           onPressed: state.isSubmitting ? null : () => formCubit.trySubmit(),
           title: 'basis.create'.tr(),
         ),
-        const SizedBox(height: 40),
+        const SizedBox(height: 32),
         Text('users.new_user_info_note'.tr()),
-        const SizedBox(height: 30),
+        const SizedBox(height: 32),
       ],
     );
   }

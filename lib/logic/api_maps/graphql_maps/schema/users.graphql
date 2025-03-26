@@ -2,6 +2,18 @@ fragment userFields on User{
   username
   userType
   sshKeys
+  directmemberof
+  displayName
+  memberof
+  email
+  emailPasswordMetadata {
+    createdAt
+    displayName
+    expiresAt
+    lastUsed
+    uuid
+  }
+
 }
 
 query AllUsers {

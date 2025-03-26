@@ -9,6 +9,7 @@
 7. ServerProviderCredential
 8. DnsProviderCredential
 9. Server
+10. EmailPasswordMetadata
 
 ## Wizards store
 60. ServerInstallationWizardData

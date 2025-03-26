@@ -70,7 +70,10 @@ class UserDetailsPage extends StatelessWidget {
     return BrandHeroScreen(
       hasBackButton: true,
       hasFlashButton: true,
-      heroTitle: user.login,
+      heroTitle: user.displayName ?? user.login,
+      heroSubtitle: user.displayName != null && user.displayName != user.login
+          ? user.login
+          : null,
       heroIconWidget: CircleAvatar(
         child: Text(
           user.login[0].toUpperCase(),

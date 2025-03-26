@@ -34,7 +34,7 @@ class UserListItem extends StatelessWidget {
               )
             : null,
         title: Text(
-          user.login,
+          user.displayName ?? user.login,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
                 decoration: user.isFoundOnServer
@@ -42,5 +42,8 @@ class UserListItem extends StatelessWidget {
                     : TextDecoration.lineThrough,
               ),
         ),
+        subtitle: user.displayName != null && user.displayName != user.login
+            ? Text(user.login)
+            : null,
       );
 }

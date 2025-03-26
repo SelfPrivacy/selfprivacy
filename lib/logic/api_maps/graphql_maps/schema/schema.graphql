@@ -693,7 +693,7 @@ type User {
   sshKeys: [String!]
   directmemberof: [String!]
   memberof: [String!]
-  displayname: String
+  displayName: String
   email: String
   emailPasswordMetadata: [EmailPasswordMetadata!]
 }
@@ -702,7 +702,7 @@ input UserMutationInput {
   username: String!
   directmemberof: [String!] = []
   password: String = null
-  displayname: String = null
+  displayName: String = null
 }
 
 type UserMutationReturn implements MutationReturnInterface {

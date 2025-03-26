@@ -1801,13 +1801,13 @@ class Input$UserMutationInput {
     required String username,
     List<String>? directmemberof,
     String? password,
-    String? displayname,
+    String? displayName,
   }) =>
       Input$UserMutationInput._({
         r'username': username,
         if (directmemberof != null) r'directmemberof': directmemberof,
         if (password != null) r'password': password,
-        if (displayname != null) r'displayname': displayname,
+        if (displayName != null) r'displayName': displayName,
       });
 
   Input$UserMutationInput._(this._$data);
@@ -1826,9 +1826,9 @@ class Input$UserMutationInput {
       final l$password = data['password'];
       result$data['password'] = (l$password as String?);
     }
-    if (data.containsKey('displayname')) {
-      final l$displayname = data['displayname'];
-      result$data['displayname'] = (l$displayname as String?);
+    if (data.containsKey('displayName')) {
+      final l$displayName = data['displayName'];
+      result$data['displayName'] = (l$displayName as String?);
     }
     return Input$UserMutationInput._(result$data);
   }
@@ -1842,7 +1842,7 @@ class Input$UserMutationInput {
 
   String? get password => (_$data['password'] as String?);
 
-  String? get displayname => (_$data['displayname'] as String?);
+  String? get displayName => (_$data['displayName'] as String?);
 
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
@@ -1856,9 +1856,9 @@ class Input$UserMutationInput {
       final l$password = password;
       result$data['password'] = l$password;
     }
-    if (_$data.containsKey('displayname')) {
-      final l$displayname = displayname;
-      result$data['displayname'] = l$displayname;
+    if (_$data.containsKey('displayName')) {
+      final l$displayName = displayName;
+      result$data['displayName'] = l$displayName;
     }
     return result$data;
   }
@@ -1912,13 +1912,13 @@ class Input$UserMutationInput {
     if (l$password != lOther$password) {
       return false;
     }
-    final l$displayname = displayname;
-    final lOther$displayname = other.displayname;
-    if (_$data.containsKey('displayname') !=
-        other._$data.containsKey('displayname')) {
+    final l$displayName = displayName;
+    final lOther$displayName = other.displayName;
+    if (_$data.containsKey('displayName') !=
+        other._$data.containsKey('displayName')) {
       return false;
     }
-    if (l$displayname != lOther$displayname) {
+    if (l$displayName != lOther$displayName) {
       return false;
     }
     return true;
@@ -1929,7 +1929,7 @@ class Input$UserMutationInput {
     final l$username = username;
     final l$directmemberof = directmemberof;
     final l$password = password;
-    final l$displayname = displayname;
+    final l$displayName = displayName;
     return Object.hashAll([
       l$username,
       _$data.containsKey('directmemberof')
@@ -1938,7 +1938,7 @@ class Input$UserMutationInput {
               : Object.hashAll(l$directmemberof.map((v) => v))
           : const {},
       _$data.containsKey('password') ? l$password : const {},
-      _$data.containsKey('displayname') ? l$displayname : const {},
+      _$data.containsKey('displayName') ? l$displayName : const {},
     ]);
   }
 }
@@ -1956,7 +1956,7 @@ abstract class CopyWith$Input$UserMutationInput<TRes> {
     String? username,
     List<String>? directmemberof,
     String? password,
-    String? displayname,
+    String? displayName,
   });
 }
 
@@ -1977,7 +1977,7 @@ class _CopyWithImpl$Input$UserMutationInput<TRes>
     Object? username = _undefined,
     Object? directmemberof = _undefined,
     Object? password = _undefined,
-    Object? displayname = _undefined,
+    Object? displayName = _undefined,
   }) =>
       _then(Input$UserMutationInput._({
         ..._instance._$data,
@@ -1986,7 +1986,7 @@ class _CopyWithImpl$Input$UserMutationInput<TRes>
         if (directmemberof != _undefined)
           'directmemberof': (directmemberof as List<String>?),
         if (password != _undefined) 'password': (password as String?),
-        if (displayname != _undefined) 'displayname': (displayname as String?),
+        if (displayName != _undefined) 'displayName': (displayName as String?),
       }));
 }
 
@@ -2000,7 +2000,7 @@ class _CopyWithStubImpl$Input$UserMutationInput<TRes>
     String? username,
     List<String>? directmemberof,
     String? password,
-    String? displayname,
+    String? displayName,
   }) =>
       _res;
 }

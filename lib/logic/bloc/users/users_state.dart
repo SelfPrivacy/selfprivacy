@@ -24,11 +24,11 @@ sealed class UsersState extends Equatable {
   ///
   /// If found a 'root' user, it doesn't get copied into the result
   List<User> get orderedUsers {
-    User? primaryUser;
     final List<User> normalUsers = [];
+    final List<User> primaryUsers = [];
     for (final User user in users) {
       if (user.type == UserType.primary) {
-        primaryUser = user;
+        primaryUsers.add(user);
         continue;
       }
       if (user.type == UserType.root) {
@@ -42,7 +42,15 @@ sealed class UsersState extends Equatable {
           a.login.toLowerCase().compareTo(b.login.toLowerCase()),
     );
 
-    return primaryUser == null ? normalUsers : [primaryUser] + normalUsers;
+    primaryUsers.sort(
+      (final User a, final User b) =>
+          a.login.toLowerCase().compareTo(b.login.toLowerCase()),
+    );
+
+    return [
+      ...primaryUsers,
+      ...normalUsers,
+    ];
   }
 
   bool isLoginRegistered(final String login) =>

@@ -40,6 +40,19 @@ class FieldCubitFactory {
     );
   }
 
+  /// A common user display name field.
+  ///
+  /// - Must not be more than 255 characters
+  FieldCubit<String> createUserDisplayNameField() {
+    const int displayNameMaxLength = 255;
+    return FieldCubit(
+      initalValue: '',
+      validations: [
+        LengthStringLongerValidation(displayNameMaxLength),
+      ],
+    );
+  }
+
   /// A common user password field.
   ///
   /// - Must fail on the regural expression of invalid matches: [\n\r\s]+

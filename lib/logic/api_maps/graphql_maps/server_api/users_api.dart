@@ -45,11 +45,19 @@ mixin UsersApi on GraphQLApiMap {
     return user;
   }
 
-  Future<GenericResult<User?>> createUser(final String username) async {
+  Future<GenericResult<User?>> createUser(
+    final String username,
+    final String? displayName,
+    final List<String>? directmemberof,
+  ) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$CreateUser(
-        user: Input$UserMutationInput(username: username),
+        user: Input$UserMutationInput(
+          username: username,
+          displayName: displayName,
+          directmemberof: directmemberof,
+        ),
       );
       final mutation = Options$Mutation$CreateUser(variables: variables);
       final response = await client.mutate$CreateUser(mutation);

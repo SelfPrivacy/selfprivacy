@@ -1223,6 +1223,589 @@ class _CopyWithStubImpl$Query$AllUsers$users<TRes>
       CopyWith$Fragment$userFields.stub(_res);
 }
 
+class Query$AllGroups {
+  Query$AllGroups({
+    required this.groups,
+    this.$__typename = 'Query',
+  });
+
+  factory Query$AllGroups.fromJson(Map<String, dynamic> json) {
+    final l$groups = json['groups'];
+    final l$$__typename = json['__typename'];
+    return Query$AllGroups(
+      groups:
+          Query$AllGroups$groups.fromJson((l$groups as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Query$AllGroups$groups groups;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$groups = groups;
+    _resultData['groups'] = l$groups.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$groups = groups;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$groups,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Query$AllGroups) || runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$groups = groups;
+    final lOther$groups = other.groups;
+    if (l$groups != lOther$groups) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$AllGroups on Query$AllGroups {
+  CopyWith$Query$AllGroups<Query$AllGroups> get copyWith =>
+      CopyWith$Query$AllGroups(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Query$AllGroups<TRes> {
+  factory CopyWith$Query$AllGroups(
+    Query$AllGroups instance,
+    TRes Function(Query$AllGroups) then,
+  ) = _CopyWithImpl$Query$AllGroups;
+
+  factory CopyWith$Query$AllGroups.stub(TRes res) =
+      _CopyWithStubImpl$Query$AllGroups;
+
+  TRes call({
+    Query$AllGroups$groups? groups,
+    String? $__typename,
+  });
+  CopyWith$Query$AllGroups$groups<TRes> get groups;
+}
+
+class _CopyWithImpl$Query$AllGroups<TRes>
+    implements CopyWith$Query$AllGroups<TRes> {
+  _CopyWithImpl$Query$AllGroups(
+    this._instance,
+    this._then,
+  );
+
+  final Query$AllGroups _instance;
+
+  final TRes Function(Query$AllGroups) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? groups = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Query$AllGroups(
+        groups: groups == _undefined || groups == null
+            ? _instance.groups
+            : (groups as Query$AllGroups$groups),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Query$AllGroups$groups<TRes> get groups {
+    final local$groups = _instance.groups;
+    return CopyWith$Query$AllGroups$groups(
+        local$groups, (e) => call(groups: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$AllGroups<TRes>
+    implements CopyWith$Query$AllGroups<TRes> {
+  _CopyWithStubImpl$Query$AllGroups(this._res);
+
+  TRes _res;
+
+  call({
+    Query$AllGroups$groups? groups,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Query$AllGroups$groups<TRes> get groups =>
+      CopyWith$Query$AllGroups$groups.stub(_res);
+}
+
+const documentNodeQueryAllGroups = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.query,
+    name: NameNode(value: 'AllGroups'),
+    variableDefinitions: [],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'groups'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'allGroups'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FieldNode(
+                name: NameNode(value: 'name'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+]);
+Query$AllGroups _parserFn$Query$AllGroups(Map<String, dynamic> data) =>
+    Query$AllGroups.fromJson(data);
+typedef OnQueryComplete$Query$AllGroups = FutureOr<void> Function(
+  Map<String, dynamic>?,
+  Query$AllGroups?,
+);
+
+class Options$Query$AllGroups extends graphql.QueryOptions<Query$AllGroups> {
+  Options$Query$AllGroups({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Query$AllGroups? typedOptimisticResult,
+    Duration? pollInterval,
+    graphql.Context? context,
+    OnQueryComplete$Query$AllGroups? onComplete,
+    graphql.OnQueryError? onError,
+  })  : onCompleteWithParsed = onComplete,
+        super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          pollInterval: pollInterval,
+          context: context,
+          onComplete: onComplete == null
+              ? null
+              : (data) => onComplete(
+                    data,
+                    data == null ? null : _parserFn$Query$AllGroups(data),
+                  ),
+          onError: onError,
+          document: documentNodeQueryAllGroups,
+          parserFn: _parserFn$Query$AllGroups,
+        );
+
+  final OnQueryComplete$Query$AllGroups? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onComplete == null
+            ? super.properties
+            : super.properties.where((property) => property != onComplete),
+        onCompleteWithParsed,
+      ];
+}
+
+class WatchOptions$Query$AllGroups
+    extends graphql.WatchQueryOptions<Query$AllGroups> {
+  WatchOptions$Query$AllGroups({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Query$AllGroups? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeQueryAllGroups,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Query$AllGroups,
+        );
+}
+
+class FetchMoreOptions$Query$AllGroups extends graphql.FetchMoreOptions {
+  FetchMoreOptions$Query$AllGroups({required graphql.UpdateQuery updateQuery})
+      : super(
+          updateQuery: updateQuery,
+          document: documentNodeQueryAllGroups,
+        );
+}
+
+extension ClientExtension$Query$AllGroups on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Query$AllGroups>> query$AllGroups(
+          [Options$Query$AllGroups? options]) async =>
+      await this.query(options ?? Options$Query$AllGroups());
+  graphql.ObservableQuery<Query$AllGroups> watchQuery$AllGroups(
+          [WatchOptions$Query$AllGroups? options]) =>
+      this.watchQuery(options ?? WatchOptions$Query$AllGroups());
+  void writeQuery$AllGroups({
+    required Query$AllGroups data,
+    bool broadcast = true,
+  }) =>
+      this.writeQuery(
+        graphql.Request(
+            operation: graphql.Operation(document: documentNodeQueryAllGroups)),
+        data: data.toJson(),
+        broadcast: broadcast,
+      );
+  Query$AllGroups? readQuery$AllGroups({bool optimistic = true}) {
+    final result = this.readQuery(
+      graphql.Request(
+          operation: graphql.Operation(document: documentNodeQueryAllGroups)),
+      optimistic: optimistic,
+    );
+    return result == null ? null : Query$AllGroups.fromJson(result);
+  }
+}
+
+class Query$AllGroups$groups {
+  Query$AllGroups$groups({
+    required this.allGroups,
+    this.$__typename = 'Groups',
+  });
+
+  factory Query$AllGroups$groups.fromJson(Map<String, dynamic> json) {
+    final l$allGroups = json['allGroups'];
+    final l$$__typename = json['__typename'];
+    return Query$AllGroups$groups(
+      allGroups: (l$allGroups as List<dynamic>)
+          .map((e) => Query$AllGroups$groups$allGroups.fromJson(
+              (e as Map<String, dynamic>)))
+          .toList(),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final List<Query$AllGroups$groups$allGroups> allGroups;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$allGroups = allGroups;
+    _resultData['allGroups'] = l$allGroups.map((e) => e.toJson()).toList();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$allGroups = allGroups;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      Object.hashAll(l$allGroups.map((v) => v)),
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Query$AllGroups$groups) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$allGroups = allGroups;
+    final lOther$allGroups = other.allGroups;
+    if (l$allGroups.length != lOther$allGroups.length) {
+      return false;
+    }
+    for (int i = 0; i < l$allGroups.length; i++) {
+      final l$allGroups$entry = l$allGroups[i];
+      final lOther$allGroups$entry = lOther$allGroups[i];
+      if (l$allGroups$entry != lOther$allGroups$entry) {
+        return false;
+      }
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$AllGroups$groups on Query$AllGroups$groups {
+  CopyWith$Query$AllGroups$groups<Query$AllGroups$groups> get copyWith =>
+      CopyWith$Query$AllGroups$groups(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Query$AllGroups$groups<TRes> {
+  factory CopyWith$Query$AllGroups$groups(
+    Query$AllGroups$groups instance,
+    TRes Function(Query$AllGroups$groups) then,
+  ) = _CopyWithImpl$Query$AllGroups$groups;
+
+  factory CopyWith$Query$AllGroups$groups.stub(TRes res) =
+      _CopyWithStubImpl$Query$AllGroups$groups;
+
+  TRes call({
+    List<Query$AllGroups$groups$allGroups>? allGroups,
+    String? $__typename,
+  });
+  TRes allGroups(
+      Iterable<Query$AllGroups$groups$allGroups> Function(
+              Iterable<
+                  CopyWith$Query$AllGroups$groups$allGroups<
+                      Query$AllGroups$groups$allGroups>>)
+          _fn);
+}
+
+class _CopyWithImpl$Query$AllGroups$groups<TRes>
+    implements CopyWith$Query$AllGroups$groups<TRes> {
+  _CopyWithImpl$Query$AllGroups$groups(
+    this._instance,
+    this._then,
+  );
+
+  final Query$AllGroups$groups _instance;
+
+  final TRes Function(Query$AllGroups$groups) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? allGroups = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Query$AllGroups$groups(
+        allGroups: allGroups == _undefined || allGroups == null
+            ? _instance.allGroups
+            : (allGroups as List<Query$AllGroups$groups$allGroups>),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  TRes allGroups(
+          Iterable<Query$AllGroups$groups$allGroups> Function(
+                  Iterable<
+                      CopyWith$Query$AllGroups$groups$allGroups<
+                          Query$AllGroups$groups$allGroups>>)
+              _fn) =>
+      call(
+          allGroups: _fn(_instance.allGroups
+              .map((e) => CopyWith$Query$AllGroups$groups$allGroups(
+                    e,
+                    (i) => i,
+                  ))).toList());
+}
+
+class _CopyWithStubImpl$Query$AllGroups$groups<TRes>
+    implements CopyWith$Query$AllGroups$groups<TRes> {
+  _CopyWithStubImpl$Query$AllGroups$groups(this._res);
+
+  TRes _res;
+
+  call({
+    List<Query$AllGroups$groups$allGroups>? allGroups,
+    String? $__typename,
+  }) =>
+      _res;
+
+  allGroups(_fn) => _res;
+}
+
+class Query$AllGroups$groups$allGroups {
+  Query$AllGroups$groups$allGroups({
+    required this.name,
+    this.$__typename = 'Group',
+  });
+
+  factory Query$AllGroups$groups$allGroups.fromJson(Map<String, dynamic> json) {
+    final l$name = json['name'];
+    final l$$__typename = json['__typename'];
+    return Query$AllGroups$groups$allGroups(
+      name: (l$name as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String name;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$name = name;
+    _resultData['name'] = l$name;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$name = name;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$name,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Query$AllGroups$groups$allGroups) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$name = name;
+    final lOther$name = other.name;
+    if (l$name != lOther$name) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$AllGroups$groups$allGroups
+    on Query$AllGroups$groups$allGroups {
+  CopyWith$Query$AllGroups$groups$allGroups<Query$AllGroups$groups$allGroups>
+      get copyWith => CopyWith$Query$AllGroups$groups$allGroups(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$AllGroups$groups$allGroups<TRes> {
+  factory CopyWith$Query$AllGroups$groups$allGroups(
+    Query$AllGroups$groups$allGroups instance,
+    TRes Function(Query$AllGroups$groups$allGroups) then,
+  ) = _CopyWithImpl$Query$AllGroups$groups$allGroups;
+
+  factory CopyWith$Query$AllGroups$groups$allGroups.stub(TRes res) =
+      _CopyWithStubImpl$Query$AllGroups$groups$allGroups;
+
+  TRes call({
+    String? name,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$AllGroups$groups$allGroups<TRes>
+    implements CopyWith$Query$AllGroups$groups$allGroups<TRes> {
+  _CopyWithImpl$Query$AllGroups$groups$allGroups(
+    this._instance,
+    this._then,
+  );
+
+  final Query$AllGroups$groups$allGroups _instance;
+
+  final TRes Function(Query$AllGroups$groups$allGroups) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? name = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Query$AllGroups$groups$allGroups(
+        name: name == _undefined || name == null
+            ? _instance.name
+            : (name as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Query$AllGroups$groups$allGroups<TRes>
+    implements CopyWith$Query$AllGroups$groups$allGroups<TRes> {
+  _CopyWithStubImpl$Query$AllGroups$groups$allGroups(this._res);
+
+  TRes _res;
+
+  call({
+    String? name,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
 class Variables$Query$GetUser {
   factory Variables$Query$GetUser({required String username}) =>
       Variables$Query$GetUser._({

@@ -24,6 +24,25 @@ mixin UsersApi on GraphQLApiMap {
     return users;
   }
 
+  Future<List<String>> getAllGroups() async {
+    QueryResult<Query$AllGroups> response;
+    List<String> groups = [];
+    try {
+      final GraphQLClient client = await getClient();
+      response = await client.query$AllGroups();
+      if (response.hasException) {
+        print(response.exception.toString());
+      }
+      groups = response.parsedData?.groups.allGroups
+              .map<String>((final group) => group.name)
+              .toList() ??
+          [];
+    } catch (e) {
+      print(e);
+    }
+    return groups;
+  }
+
   Future<User?> getUser(final String login) async {
     QueryResult<Query$GetUser> response;
     User? user;

@@ -27,6 +27,14 @@ query AllUsers {
   }
 }
 
+query AllGroups {
+  groups {
+    allGroups {
+      name
+    }
+  }
+}
+
 query GetUser($username: String!) {
   users {
     getUser(username: $username) {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/connection_status_bloc.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
+import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
@@ -30,6 +31,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final ServerInstallationCubit serverInstallationCubit;
   late final SupportSystemCubit supportSystemCubit;
   late final UsersBloc usersBloc;
+  late final GroupsBloc groupsBloc;
   late final ServicesBloc servicesBloc;
   late final BackupsBloc backupsBloc;
   late final DnsRecordsCubit dnsRecordsCubit;
@@ -49,6 +51,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
     serverInstallationCubit = ServerInstallationCubit()..load();
     supportSystemCubit = SupportSystemCubit();
     usersBloc = UsersBloc();
+    groupsBloc = GroupsBloc();
     servicesBloc = ServicesBloc();
     backupsBloc = BackupsBloc();
     dnsRecordsCubit = DnsRecordsCubit();
@@ -76,6 +79,9 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
           BlocProvider(
             create: (final _) => usersBloc,
             lazy: false,
+          ),
+          BlocProvider(
+            create: (final _) => groupsBloc,
           ),
           BlocProvider(
             create: (final _) => servicesBloc,

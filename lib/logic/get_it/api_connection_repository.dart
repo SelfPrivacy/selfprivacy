@@ -486,6 +486,10 @@ class ApiData {
         users = ApiDataElement<List<User>>(
           fetchData: () async => api.getAllUsers(),
         ),
+        groups = ApiDataElement<List<String>>(
+          fetchData: () async => api.getAllGroups(),
+          requiredApiVersion: '>=3.5.0',
+        ),
         settings = ApiDataElement<SystemSettings>(
           fetchData: () async => api.getSystemSettings(),
           ttl: 600,
@@ -500,6 +504,7 @@ class ApiData {
   ApiDataElement<RecoveryKeyStatus> recoveryKeyStatus;
   ApiDataElement<List<ApiToken>> devices;
   ApiDataElement<List<User>> users;
+  ApiDataElement<List<String>> groups;
   ApiDataElement<SystemSettings> settings;
 }
 

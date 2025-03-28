@@ -318,7 +318,6 @@
     },
     "users": {
         "login": "כניסה",
-        "new_user_info_note": "למשתמש חדש תוענק אוטומטית גישה לכל השירותים",
         "delete_confirm_question": "להמשיך?",
         "reset_password": "איפוס סיסמה",
         "account": "חשבון",

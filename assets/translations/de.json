@@ -188,8 +188,6 @@
         "filter_by_systemd_unit": "Nach systemd units filtern",
         "logs": "Server-Logdateien",
         "logs_empty": "Noch keine Logs",
-        "allow_password_authentication_hint": "Benutzern erlauben, sich mit einem Passwort in die Konsole Ihres Servers einzuloggen (gilt nicht für den Root-Benutzer)",
-        "allow_password_authentication": "Passwortauthentifizierung für SSH zulassen",
         "log_dialog": {
             "cursor": "Cursor",
             "priority": "Priorität",
@@ -536,7 +534,6 @@
         "delete_user": "Benutzer löschen",
         "nobody_here": "Hier werden Benutzer angezeigt",
         "login": "Login",
-        "new_user_info_note": "Neuen Benutzern wird automatisch Zugang zu allen Diensten gewährt",
         "delete_confirm_question": "Sind Sie sicher?",
         "reset_password": "Passwort zurücksetzen",
         "account": "Konto",

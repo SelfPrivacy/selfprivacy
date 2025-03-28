@@ -78,5 +78,9 @@ class FieldCubitFactory {
         ],
       );
 
+  FieldCubit<List<String>> createGroupsField() => FieldCubit(
+        initalValue: const [],
+      );
+
   final BuildContext context;
 }

@@ -411,6 +411,7 @@ class ApiConnectionRepository {
     await _apiData.services
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.users.refetchData(version, () => _dataStream.add(_apiData));
+    await _apiData.groups.refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.volumes
         .refetchData(version, () => _dataStream.add(_apiData));
     await _apiData.settings

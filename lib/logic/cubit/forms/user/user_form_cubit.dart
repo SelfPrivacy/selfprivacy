@@ -18,21 +18,34 @@ class UserFormCubit extends FormCubit {
     displayName = fieldFactory.createUserDisplayNameField();
     displayName.setValue(initialUser?.displayName ?? '');
 
+    groups = fieldFactory.createGroupsField();
+    groups.setValue(initialUser?.directmemberof ?? ['sp.full_users']);
+
     super.addFields([login, displayName]);
   }
 
   @override
   FutureOr<void> onSubmit() async {
+    final User user = User(
+      login: initialUser?.login ?? login.state.value,
+      type: UserType.normal,
+      displayName:
+          displayName.state.value == '' ? null : displayName.state.value,
+      directmemberof: groups.state.value,
+    );
     if (!userCreated) {
-      final User user = User(
-        login: login.state.value,
-        type: UserType.normal,
-        displayName:
-            displayName.state.value == '' ? null : displayName.state.value,
-      );
       final (result, message) =
           await getIt<ApiConnectionRepository>().createUser(user);
-
+      if (result) {
+        userCreated = true;
+        userCreationMessage = message;
+        errorMessage = '';
+      } else {
+        errorMessage = message;
+      }
+    } else {
+      final (result, message) =
+          await getIt<ApiConnectionRepository>().updateUser(user);
       if (result) {
         userCreated = true;
         userCreationMessage = message;
@@ -45,6 +58,7 @@ class UserFormCubit extends FormCubit {
 
   late FieldCubit<String> login;
   late FieldCubit<String> displayName;
+  late FieldCubit<List<String>> groups;
 
   bool userCreated;
   String? userCreationMessage = '';

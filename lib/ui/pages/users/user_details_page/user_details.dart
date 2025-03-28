@@ -8,6 +8,8 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/pages/users/reset_password/reset_password_tile.dart';
+import 'package:selfprivacy/ui/pages/users/user_details_page/widgets/edit_user_tile.dart';
+import 'package:selfprivacy/ui/pages/users/user_details_page/widgets/permissions_card.dart';
 import 'package:selfprivacy/ui/pages/users/user_details_page/widgets/widgets.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
@@ -82,11 +84,15 @@ class UserDetailsPage extends StatelessWidget {
       children: [
         UserLoginTile(user: user, domainName: domainName),
         const Gap(8),
+        PermissionsCard(user: user),
+        const Gap(8),
         SshKeysCard(user: user),
+        const Gap(8),
+        EditUserTile(user: user),
         const Gap(8),
         ResetPasswordTile(user: user),
         const Gap(8),
-        if (user.type == UserType.normal) DeleteUserTile(user: user),
+        DeleteUserTile(user: user),
       ],
     );
   }

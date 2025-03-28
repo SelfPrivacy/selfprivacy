@@ -87,7 +87,7 @@ class UsersPage extends StatelessWidget {
                         ],
                       ),
                       onPressed: () {
-                        context.pushRoute(const NewUserRoute());
+                        context.pushRoute(NewUserRoute());
                       },
                     ),
                   ),

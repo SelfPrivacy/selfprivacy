@@ -365,10 +365,17 @@ class NewDeviceRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [NewUserPage]
-class NewUserRoute extends PageRouteInfo<void> {
-  const NewUserRoute({List<PageRouteInfo>? children})
-      : super(
+class NewUserRoute extends PageRouteInfo<NewUserRouteArgs> {
+  NewUserRoute({
+    User? user,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
           NewUserRoute.name,
+          args: NewUserRouteArgs(
+            user: user,
+            key: key,
+          ),
           initialChildren: children,
         );
 
@@ -377,9 +384,30 @@ class NewUserRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const NewUserPage();
+      final args =
+          data.argsAs<NewUserRouteArgs>(orElse: () => const NewUserRouteArgs());
+      return NewUserPage(
+        user: args.user,
+        key: args.key,
+      );
     },
   );
+}
+
+class NewUserRouteArgs {
+  const NewUserRouteArgs({
+    this.user,
+    this.key,
+  });
+
+  final User? user;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'NewUserRouteArgs{user: $user, key: $key}';
+  }
 }
 
 /// generated route for

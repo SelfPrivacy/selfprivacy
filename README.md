@@ -37,7 +37,7 @@ flutter pub get
 # Build .APK for Android
 flutter build apk --flavor production
 # Build nightly .APK for Android
-flutter build apk --flavor production
+flutter build apk --flavor nightly
 # Build AAB bundle for Google Play
 flutter build aab --flavor production
 # Build Linux binaries

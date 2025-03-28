@@ -292,9 +292,14 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                     ),
                     const Divider(height: 0),
                     if (serviceGroups.isEmpty && unrecognizedGroups.isEmpty)
-                      EmptyPagePlaceholder(
-                        title: 'basis.network_error'.tr(),
-                        iconData: Icons.error_outline_outlined,
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24.0),
+                          child: EmptyPagePlaceholder(
+                            title: 'basis.network_error'.tr(),
+                            iconData: Icons.error_outline_outlined,
+                          ),
+                        ),
                       ),
                     ...serviceGroups.entries.map(
                       (final serviceEntry) {

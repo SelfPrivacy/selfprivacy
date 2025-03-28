@@ -292,7 +292,6 @@
         "delete_user": "删除用户",
         "nobody_here": "暂无用户",
         "login": "登录",
-        "new_user_info_note": "新用户将自动获得对所有服务的访问权限",
         "delete_confirm_question": "您确定吗？",
         "reset_password": "重置密码",
         "account": "账户",

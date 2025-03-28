@@ -404,26 +404,22 @@ class ApiConnectionRepository {
   }
 
   Future<void> _refetchEverything(final Version version) async {
-    if (_isForceServerJobsRefetchRequired()) {
-      await _apiData.serverJobs
-          .refetchData(version, () => _dataStream.add(_apiData));
-    }
-    await _apiData.services
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.users.refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.groups.refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.volumes
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.settings
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.recoveryKeyStatus
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.devices
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.backupConfig
-        .refetchData(version, () => _dataStream.add(_apiData));
-    await _apiData.backups
-        .refetchData(version, () => _dataStream.add(_apiData));
+    await Future.wait([
+      if (_isForceServerJobsRefetchRequired())
+        _apiData.serverJobs
+            .refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.services.refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.users.refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.groups.refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.volumes.refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.settings.refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.recoveryKeyStatus
+          .refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.devices.refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.backupConfig
+          .refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.backups.refetchData(version, () => _dataStream.add(_apiData)),
+    ]);
   }
 
   Future<void> reload(final Timer? timer) async {

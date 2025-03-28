@@ -14,6 +14,8 @@ sealed class GroupsState extends Equatable {
 
   String get adminsGroup => 'sp.admins';
 
+  bool get isEmpty => groups.isEmpty;
+
   Map<String, Map<String, String>> get serviceGroups {
     final Map<String, Map<String, String>> serviceGroups = {};
     for (final String group in groups.sorted()) {

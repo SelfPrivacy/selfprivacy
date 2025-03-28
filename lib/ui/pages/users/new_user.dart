@@ -238,7 +238,7 @@ class _GroupsSelectorState extends State<GroupsSelector> {
           final serviceGroups = context.watch<GroupsBloc>().state.serviceGroups;
           final unrecognizedGroups =
               context.watch<GroupsBloc>().state.unrecognizedGroups;
-
+          final isGroupsEmpty = context.watch<GroupsBloc>().state.isEmpty;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -291,13 +291,25 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                       subtitle: 'users.explicit_permissions_subtitle'.tr(),
                     ),
                     const Divider(height: 0),
-                    if (serviceGroups.isEmpty && unrecognizedGroups.isEmpty)
+                    if (isGroupsEmpty)
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 24.0),
                           child: EmptyPagePlaceholder(
                             title: 'basis.network_error'.tr(),
                             iconData: Icons.error_outline_outlined,
+                          ),
+                        ),
+                      ),
+                    if (!isGroupsEmpty &&
+                        (serviceGroups.isEmpty && unrecognizedGroups.isEmpty))
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24.0),
+                          child: EmptyPagePlaceholder(
+                            title: 'users.no_groups'.tr(),
+                            description: 'users.no_groups_subtitle'.tr(),
+                            iconData: Icons.group_remove_outlined,
                           ),
                         ),
                       ),

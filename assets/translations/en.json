@@ -434,6 +434,7 @@
         "could_not_fetch_description": "Please check your internet connection and try again",
         "refresh_users": "Refresh users list",
         "could_not_create_user": "Couldn't create user",
+        "could_not_update_user": "Couldn't update user",
         "could_not_delete_user": "Couldn't delete user",
         "could_not_add_ssh_key": "Couldn't add SSH key",
         "could_not_load_user": "Couldn't load user",

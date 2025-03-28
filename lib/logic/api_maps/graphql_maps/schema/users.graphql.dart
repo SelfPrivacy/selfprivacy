@@ -6258,3 +6258,829 @@ class _CopyWithStubImpl$Mutation$GeneratePasswordResetLink$users$generatePasswor
   }) =>
       _res;
 }
+
+class Variables$Mutation$DeleteEmailPassword {
+  factory Variables$Mutation$DeleteEmailPassword({
+    required String username,
+    required String uuid,
+  }) =>
+      Variables$Mutation$DeleteEmailPassword._({
+        r'username': username,
+        r'uuid': uuid,
+      });
+
+  Variables$Mutation$DeleteEmailPassword._(this._$data);
+
+  factory Variables$Mutation$DeleteEmailPassword.fromJson(
+      Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$username = data['username'];
+    result$data['username'] = (l$username as String);
+    final l$uuid = data['uuid'];
+    result$data['uuid'] = (l$uuid as String);
+    return Variables$Mutation$DeleteEmailPassword._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  String get username => (_$data['username'] as String);
+
+  String get uuid => (_$data['uuid'] as String);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$username = username;
+    result$data['username'] = l$username;
+    final l$uuid = uuid;
+    result$data['uuid'] = l$uuid;
+    return result$data;
+  }
+
+  CopyWith$Variables$Mutation$DeleteEmailPassword<
+          Variables$Mutation$DeleteEmailPassword>
+      get copyWith => CopyWith$Variables$Mutation$DeleteEmailPassword(
+            this,
+            (i) => i,
+          );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Variables$Mutation$DeleteEmailPassword) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$username = username;
+    final lOther$username = other.username;
+    if (l$username != lOther$username) {
+      return false;
+    }
+    final l$uuid = uuid;
+    final lOther$uuid = other.uuid;
+    if (l$uuid != lOther$uuid) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$username = username;
+    final l$uuid = uuid;
+    return Object.hashAll([
+      l$username,
+      l$uuid,
+    ]);
+  }
+}
+
+abstract class CopyWith$Variables$Mutation$DeleteEmailPassword<TRes> {
+  factory CopyWith$Variables$Mutation$DeleteEmailPassword(
+    Variables$Mutation$DeleteEmailPassword instance,
+    TRes Function(Variables$Mutation$DeleteEmailPassword) then,
+  ) = _CopyWithImpl$Variables$Mutation$DeleteEmailPassword;
+
+  factory CopyWith$Variables$Mutation$DeleteEmailPassword.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$DeleteEmailPassword;
+
+  TRes call({
+    String? username,
+    String? uuid,
+  });
+}
+
+class _CopyWithImpl$Variables$Mutation$DeleteEmailPassword<TRes>
+    implements CopyWith$Variables$Mutation$DeleteEmailPassword<TRes> {
+  _CopyWithImpl$Variables$Mutation$DeleteEmailPassword(
+    this._instance,
+    this._then,
+  );
+
+  final Variables$Mutation$DeleteEmailPassword _instance;
+
+  final TRes Function(Variables$Mutation$DeleteEmailPassword) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? username = _undefined,
+    Object? uuid = _undefined,
+  }) =>
+      _then(Variables$Mutation$DeleteEmailPassword._({
+        ..._instance._$data,
+        if (username != _undefined && username != null)
+          'username': (username as String),
+        if (uuid != _undefined && uuid != null) 'uuid': (uuid as String),
+      }));
+}
+
+class _CopyWithStubImpl$Variables$Mutation$DeleteEmailPassword<TRes>
+    implements CopyWith$Variables$Mutation$DeleteEmailPassword<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$DeleteEmailPassword(this._res);
+
+  TRes _res;
+
+  call({
+    String? username,
+    String? uuid,
+  }) =>
+      _res;
+}
+
+class Mutation$DeleteEmailPassword {
+  Mutation$DeleteEmailPassword({
+    required this.emailPasswordMetadataMutations,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$DeleteEmailPassword.fromJson(Map<String, dynamic> json) {
+    final l$emailPasswordMetadataMutations =
+        json['emailPasswordMetadataMutations'];
+    final l$$__typename = json['__typename'];
+    return Mutation$DeleteEmailPassword(
+      emailPasswordMetadataMutations:
+          Mutation$DeleteEmailPassword$emailPasswordMetadataMutations.fromJson(
+              (l$emailPasswordMetadataMutations as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$DeleteEmailPassword$emailPasswordMetadataMutations
+      emailPasswordMetadataMutations;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$emailPasswordMetadataMutations = emailPasswordMetadataMutations;
+    _resultData['emailPasswordMetadataMutations'] =
+        l$emailPasswordMetadataMutations.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$emailPasswordMetadataMutations = emailPasswordMetadataMutations;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$emailPasswordMetadataMutations,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Mutation$DeleteEmailPassword) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$emailPasswordMetadataMutations = emailPasswordMetadataMutations;
+    final lOther$emailPasswordMetadataMutations =
+        other.emailPasswordMetadataMutations;
+    if (l$emailPasswordMetadataMutations !=
+        lOther$emailPasswordMetadataMutations) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$DeleteEmailPassword
+    on Mutation$DeleteEmailPassword {
+  CopyWith$Mutation$DeleteEmailPassword<Mutation$DeleteEmailPassword>
+      get copyWith => CopyWith$Mutation$DeleteEmailPassword(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$DeleteEmailPassword<TRes> {
+  factory CopyWith$Mutation$DeleteEmailPassword(
+    Mutation$DeleteEmailPassword instance,
+    TRes Function(Mutation$DeleteEmailPassword) then,
+  ) = _CopyWithImpl$Mutation$DeleteEmailPassword;
+
+  factory CopyWith$Mutation$DeleteEmailPassword.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteEmailPassword;
+
+  TRes call({
+    Mutation$DeleteEmailPassword$emailPasswordMetadataMutations?
+        emailPasswordMetadataMutations,
+    String? $__typename,
+  });
+  CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<TRes>
+      get emailPasswordMetadataMutations;
+}
+
+class _CopyWithImpl$Mutation$DeleteEmailPassword<TRes>
+    implements CopyWith$Mutation$DeleteEmailPassword<TRes> {
+  _CopyWithImpl$Mutation$DeleteEmailPassword(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$DeleteEmailPassword _instance;
+
+  final TRes Function(Mutation$DeleteEmailPassword) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? emailPasswordMetadataMutations = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$DeleteEmailPassword(
+        emailPasswordMetadataMutations: emailPasswordMetadataMutations ==
+                    _undefined ||
+                emailPasswordMetadataMutations == null
+            ? _instance.emailPasswordMetadataMutations
+            : (emailPasswordMetadataMutations
+                as Mutation$DeleteEmailPassword$emailPasswordMetadataMutations),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<TRes>
+      get emailPasswordMetadataMutations {
+    final local$emailPasswordMetadataMutations =
+        _instance.emailPasswordMetadataMutations;
+    return CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations(
+        local$emailPasswordMetadataMutations,
+        (e) => call(emailPasswordMetadataMutations: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$DeleteEmailPassword<TRes>
+    implements CopyWith$Mutation$DeleteEmailPassword<TRes> {
+  _CopyWithStubImpl$Mutation$DeleteEmailPassword(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$DeleteEmailPassword$emailPasswordMetadataMutations?
+        emailPasswordMetadataMutations,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<TRes>
+      get emailPasswordMetadataMutations =>
+          CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations
+              .stub(_res);
+}
+
+const documentNodeMutationDeleteEmailPassword = DocumentNode(definitions: [
+  OperationDefinitionNode(
+    type: OperationType.mutation,
+    name: NameNode(value: 'DeleteEmailPassword'),
+    variableDefinitions: [
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'username')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'String'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(value: null),
+        directives: [],
+      ),
+      VariableDefinitionNode(
+        variable: VariableNode(name: NameNode(value: 'uuid')),
+        type: NamedTypeNode(
+          name: NameNode(value: 'String'),
+          isNonNull: true,
+        ),
+        defaultValue: DefaultValueNode(value: null),
+        directives: [],
+      ),
+    ],
+    directives: [],
+    selectionSet: SelectionSetNode(selections: [
+      FieldNode(
+        name: NameNode(value: 'emailPasswordMetadataMutations'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(selections: [
+          FieldNode(
+            name: NameNode(value: 'deleteEmailPassword'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                name: NameNode(value: 'username'),
+                value: VariableNode(name: NameNode(value: 'username')),
+              ),
+              ArgumentNode(
+                name: NameNode(value: 'uuid'),
+                value: VariableNode(name: NameNode(value: 'uuid')),
+              ),
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FieldNode(
+                name: NameNode(value: 'code'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'message'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'success'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: '__typename'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+            ]),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ]),
+  ),
+]);
+Mutation$DeleteEmailPassword _parserFn$Mutation$DeleteEmailPassword(
+        Map<String, dynamic> data) =>
+    Mutation$DeleteEmailPassword.fromJson(data);
+typedef OnMutationCompleted$Mutation$DeleteEmailPassword = FutureOr<void>
+    Function(
+  Map<String, dynamic>?,
+  Mutation$DeleteEmailPassword?,
+);
+
+class Options$Mutation$DeleteEmailPassword
+    extends graphql.MutationOptions<Mutation$DeleteEmailPassword> {
+  Options$Mutation$DeleteEmailPassword({
+    String? operationName,
+    required Variables$Mutation$DeleteEmailPassword variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$DeleteEmailPassword? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$DeleteEmailPassword? onCompleted,
+    graphql.OnMutationUpdate<Mutation$DeleteEmailPassword>? update,
+    graphql.OnError? onError,
+  })  : onCompletedWithParsed = onCompleted,
+        super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          onCompleted: onCompleted == null
+              ? null
+              : (data) => onCompleted(
+                    data,
+                    data == null
+                        ? null
+                        : _parserFn$Mutation$DeleteEmailPassword(data),
+                  ),
+          update: update,
+          onError: onError,
+          document: documentNodeMutationDeleteEmailPassword,
+          parserFn: _parserFn$Mutation$DeleteEmailPassword,
+        );
+
+  final OnMutationCompleted$Mutation$DeleteEmailPassword? onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+        ...super.onCompleted == null
+            ? super.properties
+            : super.properties.where((property) => property != onCompleted),
+        onCompletedWithParsed,
+      ];
+}
+
+class WatchOptions$Mutation$DeleteEmailPassword
+    extends graphql.WatchQueryOptions<Mutation$DeleteEmailPassword> {
+  WatchOptions$Mutation$DeleteEmailPassword({
+    String? operationName,
+    required Variables$Mutation$DeleteEmailPassword variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$DeleteEmailPassword? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+          variables: variables.toJson(),
+          operationName: operationName,
+          fetchPolicy: fetchPolicy,
+          errorPolicy: errorPolicy,
+          cacheRereadPolicy: cacheRereadPolicy,
+          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+          context: context,
+          document: documentNodeMutationDeleteEmailPassword,
+          pollInterval: pollInterval,
+          eagerlyFetchResults: eagerlyFetchResults,
+          carryForwardDataOnException: carryForwardDataOnException,
+          fetchResults: fetchResults,
+          parserFn: _parserFn$Mutation$DeleteEmailPassword,
+        );
+}
+
+extension ClientExtension$Mutation$DeleteEmailPassword
+    on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$DeleteEmailPassword>>
+      mutate$DeleteEmailPassword(
+              Options$Mutation$DeleteEmailPassword options) async =>
+          await this.mutate(options);
+  graphql.ObservableQuery<Mutation$DeleteEmailPassword>
+      watchMutation$DeleteEmailPassword(
+              WatchOptions$Mutation$DeleteEmailPassword options) =>
+          this.watchMutation(options);
+}
+
+class Mutation$DeleteEmailPassword$emailPasswordMetadataMutations {
+  Mutation$DeleteEmailPassword$emailPasswordMetadataMutations({
+    required this.deleteEmailPassword,
+    this.$__typename = 'EmailPasswordsMetadataMutations',
+  });
+
+  factory Mutation$DeleteEmailPassword$emailPasswordMetadataMutations.fromJson(
+      Map<String, dynamic> json) {
+    final l$deleteEmailPassword = json['deleteEmailPassword'];
+    final l$$__typename = json['__typename'];
+    return Mutation$DeleteEmailPassword$emailPasswordMetadataMutations(
+      deleteEmailPassword:
+          Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword
+              .fromJson((l$deleteEmailPassword as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword
+      deleteEmailPassword;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$deleteEmailPassword = deleteEmailPassword;
+    _resultData['deleteEmailPassword'] = l$deleteEmailPassword.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$deleteEmailPassword = deleteEmailPassword;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$deleteEmailPassword,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Mutation$DeleteEmailPassword$emailPasswordMetadataMutations) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$deleteEmailPassword = deleteEmailPassword;
+    final lOther$deleteEmailPassword = other.deleteEmailPassword;
+    if (l$deleteEmailPassword != lOther$deleteEmailPassword) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations
+    on Mutation$DeleteEmailPassword$emailPasswordMetadataMutations {
+  CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<
+          Mutation$DeleteEmailPassword$emailPasswordMetadataMutations>
+      get copyWith =>
+          CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<
+    TRes> {
+  factory CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations(
+    Mutation$DeleteEmailPassword$emailPasswordMetadataMutations instance,
+    TRes Function(Mutation$DeleteEmailPassword$emailPasswordMetadataMutations)
+        then,
+  ) = _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations;
+
+  factory CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations;
+
+  TRes call({
+    Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword?
+        deleteEmailPassword,
+    String? $__typename,
+  });
+  CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword<
+      TRes> get deleteEmailPassword;
+}
+
+class _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<
+        TRes>
+    implements
+        CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<
+            TRes> {
+  _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$DeleteEmailPassword$emailPasswordMetadataMutations _instance;
+
+  final TRes Function(
+      Mutation$DeleteEmailPassword$emailPasswordMetadataMutations) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? deleteEmailPassword = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Mutation$DeleteEmailPassword$emailPasswordMetadataMutations(
+        deleteEmailPassword: deleteEmailPassword == _undefined ||
+                deleteEmailPassword == null
+            ? _instance.deleteEmailPassword
+            : (deleteEmailPassword
+                as Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword<
+      TRes> get deleteEmailPassword {
+    final local$deleteEmailPassword = _instance.deleteEmailPassword;
+    return CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword(
+        local$deleteEmailPassword, (e) => call(deleteEmailPassword: e));
+  }
+}
+
+class _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<
+        TRes>
+    implements
+        CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<
+            TRes> {
+  _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations(
+      this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword?
+        deleteEmailPassword,
+    String? $__typename,
+  }) =>
+      _res;
+
+  CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword<
+          TRes>
+      get deleteEmailPassword =>
+          CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword
+              .stub(_res);
+}
+
+class Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword {
+  Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericMutationReturn',
+  });
+
+  factory Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword.fromJson(
+      Map<String, dynamic> json) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword
+    on Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword {
+  CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword<
+          Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword>
+      get copyWith =>
+          CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword<
+    TRes> {
+  factory CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword(
+    Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword
+        instance,
+    TRes Function(
+            Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword)
+        then,
+  ) = _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword;
+
+  factory CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword.stub(
+          TRes res) =
+      _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword<
+        TRes>
+    implements
+        CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword<
+            TRes> {
+  _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword
+      _instance;
+
+  final TRes Function(
+          Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(
+          Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword(
+        code:
+            code == _undefined || code == null ? _instance.code : (code as int),
+        message: message == _undefined || message == null
+            ? _instance.message
+            : (message as String),
+        success: success == _undefined || success == null
+            ? _instance.success
+            : (success as bool),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword<
+        TRes>
+    implements
+        CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword<
+            TRes> {
+  _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword(
+      this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+  }) =>
+      _res;
+}

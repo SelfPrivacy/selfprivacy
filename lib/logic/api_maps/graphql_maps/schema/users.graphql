@@ -95,3 +95,14 @@ mutation GeneratePasswordResetLink($username: String!) {
     }
   }
 }
+
+
+mutation DeleteEmailPassword($username: String!, $uuid: String!) {
+  emailPasswordMetadataMutations {
+    deleteEmailPassword(username: $username, uuid: $uuid) {
+      code
+      message
+      success
+    }
+  }
+}

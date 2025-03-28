@@ -105,6 +105,34 @@ class User extends Equatable {
   @override
   String toString() =>
       '$login, ${isFoundOnServer ? 'found' : 'not found'}, ${sshKeys.length} ssh keys, note: $note';
+
+  User copyWith({
+    final String? login,
+    final String? password,
+    final List<String>? sshKeys,
+    final bool? isFoundOnServer,
+    final String? note,
+    final UserType? type,
+    final String? email,
+    final String? displayName,
+    final List<String>? directmemberof,
+    final List<String>? memberof,
+    final List<EmailPasswordMetadata>? emailPasswordMetadata,
+  }) =>
+      User(
+        login: login ?? this.login,
+        password: password ?? this.password,
+        sshKeys: sshKeys ?? this.sshKeys,
+        isFoundOnServer: isFoundOnServer ?? this.isFoundOnServer,
+        note: note ?? this.note,
+        type: type ?? this.type,
+        email: email ?? this.email,
+        displayName: displayName ?? this.displayName,
+        directmemberof: directmemberof ?? this.directmemberof,
+        memberof: memberof ?? this.memberof,
+        emailPasswordMetadata:
+            emailPasswordMetadata ?? this.emailPasswordMetadata,
+      );
 }
 
 @HiveType(typeId: 102)

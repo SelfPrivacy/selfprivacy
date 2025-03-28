@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/hive/email_password_metadata.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -105,6 +106,31 @@ class ApiConnectionRepository {
     return (true, result.message ?? 'basis.done'.tr());
   }
 
+  Future<(bool, String)> updateUser(final User user) async {
+    final List<User>? loadedUsers = _apiData.users.data;
+    if (loadedUsers == null) {
+      return (false, 'basis.network_error'.tr());
+    }
+
+    final GenericResult<User?> result = await api.updateUser(
+      user.login,
+      user.displayName,
+      user.directmemberof,
+    );
+
+    if (result.data == null) {
+      return (false, result.message ?? 'users.could_not_update_user');
+    }
+
+    // Update the user instance in the cache
+    final int index =
+        loadedUsers.indexWhere((final User u) => u.login == user.login);
+    loadedUsers[index] = result.data!;
+    _apiData.users.invalidate();
+
+    return (true, result.message ?? 'basis.done'.tr());
+  }
+
   Future<(bool, String)> deleteUser(final User user) async {
     final List<User>? loadedUsers = _apiData.users.data;
     if (loadedUsers == null) {
@@ -147,6 +173,40 @@ class ApiConnectionRepository {
     }
 
     return (uri, result.message ?? 'basis.done'.tr());
+  }
+
+  Future<(bool, String)> deleteEmailPassword(
+    final User user,
+    final String uuid,
+  ) async {
+    final GenericResult<bool> result = await api.deleteEmailPassword(
+      user.login,
+      uuid,
+    );
+    if (result.success && result.data) {
+      // Find a user and delete the email password with a given uuid
+      final List<User>? loadedUsers = _apiData.users.data;
+      if (loadedUsers != null) {
+        final int index =
+            loadedUsers.indexWhere((final User u) => u.login == user.login);
+        if (index != -1) {
+          final User updatedUser = loadedUsers[index].copyWith(
+            emailPasswordMetadata: loadedUsers[index]
+                .emailPasswordMetadata
+                ?.where(
+                  (final EmailPasswordMetadata metadata) =>
+                      metadata.uuid != uuid,
+                )
+                .toList(),
+          );
+          loadedUsers[index] = updatedUser;
+        }
+      }
+      _apiData.users.invalidate();
+      return (true, result.message ?? 'basis.done'.tr());
+    } else {
+      return (false, result.message ?? 'jobs.generic_error'.tr());
+    }
   }
 
   Future<(bool, String)> addSshKey(

@@ -80,6 +80,41 @@ mixin UsersApi on GraphQLApiMap {
     }
   }
 
+  Future<GenericResult<User?>> updateUser(
+    final String username,
+    final String? displayName,
+    final List<String>? directmemberof,
+  ) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Mutation$UpdateUser(
+        user: Input$UserMutationInput(
+          username: username,
+          displayName: displayName,
+          directmemberof: directmemberof,
+        ),
+      );
+      final mutation = Options$Mutation$UpdateUser(variables: variables);
+      final response = await client.mutate$UpdateUser(mutation);
+      return GenericResult(
+        success: true,
+        code: response.parsedData?.users.updateUser.code ?? 500,
+        message: response.parsedData?.users.updateUser.message,
+        data: response.parsedData?.users.updateUser.user != null
+            ? User.fromGraphQL(response.parsedData!.users.updateUser.user!)
+            : null,
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        success: false,
+        code: 0,
+        message: e.toString(),
+        data: null,
+      );
+    }
+  }
+
   Future<GenericResult<bool>> deleteUser(
     final String username,
   ) async {
@@ -196,6 +231,41 @@ mixin UsersApi on GraphQLApiMap {
       print(e);
       return GenericResult(
         data: null,
+        success: false,
+        code: 0,
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<GenericResult<bool>> deleteEmailPassword(
+    final String username,
+    final String uuid,
+  ) async {
+    try {
+      final GraphQLClient client = await getClient();
+      final variables = Variables$Mutation$DeleteEmailPassword(
+        username: username,
+        uuid: uuid,
+      );
+      final mutation = Options$Mutation$DeleteEmailPassword(
+        variables: variables,
+      );
+      final response = await client.mutate$DeleteEmailPassword(
+        mutation,
+      );
+      final parsed = response
+          .parsedData?.emailPasswordMetadataMutations.deleteEmailPassword;
+      return GenericResult(
+        success: parsed?.success ?? false,
+        code: parsed?.code ?? 500,
+        message: parsed?.message,
+        data: parsed?.success ?? false,
+      );
+    } catch (e) {
+      print(e);
+      return GenericResult(
+        data: false,
         success: false,
         code: 0,
         message: e.toString(),

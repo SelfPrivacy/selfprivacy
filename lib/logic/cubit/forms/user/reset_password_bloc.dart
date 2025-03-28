@@ -27,7 +27,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     );
   }
 
-  static const String ssoSupportedVersion = '>=3.5.0';
+  static const String ssoSupportedVersion = '>=3.6.0';
 
   final User user;
 

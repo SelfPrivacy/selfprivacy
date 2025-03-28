@@ -485,7 +485,7 @@ class ApiData {
         ),
         groups = ApiDataElement<List<String>>(
           fetchData: () async => api.getAllGroups(),
-          requiredApiVersion: '>=3.5.0',
+          requiredApiVersion: '>=3.6.0',
         ),
         settings = ApiDataElement<SystemSettings>(
           fetchData: () async => api.getSystemSettings(),

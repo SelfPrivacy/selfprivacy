@@ -368,7 +368,6 @@
         "add_new_user": "最初のユーザーを追加",
         "delete_user": "ユーザーを削除",
         "login": "ログイン",
-        "new_user_info_note": "新しいユーザーには、全てのサービスへのアクセス権限が与えられます",
         "account": "アカウント",
         "username_rule": "ユーザー名には小文字のラテンアルファベット、数字、アンダーバーのみを使用できます。数字を先頭に置くことは避けるべきです",
         "no_ssh_notice": "このユーザーには電子メールとSSHのアカウントのみが作成されます。全てのサービスのシングルサインオンは近日中に実装されます。"
@@ -489,7 +488,6 @@
         "dns_provider": "DNSのサービス提供者",
         "allow_autoupgrade_hint": "サーバーでパッケージの自動アップグレードを許可",
         "enable_ssh_hint": "サーバーへのSSHアクセスを許可",
-        "allow_password_authentication": "SSHのパスワード認証を許可",
         "server_timezone": "サーバーのタイムゾーン",
         "enable_ssh": "SSHを許可",
         "reboot_after_upgrade": "アップグレード後に再起動",
@@ -498,7 +496,6 @@
         "monthly_cost": "月コスト",
         "location": "所在地",
         "pricing_error": "サーバーのサービス提供者の価格を取得できませんでした",
-        "allow_password_authentication_hint": "ユーザーにパスワードでサーバーのシェルにログインすることを許可（ルートユーザーには適用されません）",
         "cpu": "CPU",
         "ram": "メモリー",
         "resource_usage": "リソースの使用状況",

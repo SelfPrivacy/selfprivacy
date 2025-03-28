@@ -579,7 +579,6 @@
             "priority": "Priorità"
         },
         "server_id": "ID server",
-        "allow_password_authentication": "Abilita l'autenticazione con password per SSH",
         "filter_by_systemd_unit": "Filtro per unità systemd",
         "all_units": "Tutte le unità",
         "card_title": "Server",
@@ -589,7 +588,6 @@
         "allow_autoupgrade_hint": "Consenti l'aggiornamento automatico dei pacchetti sul server",
         "reboot_after_upgrade": "Riavvia dopo l'aggiornamento",
         "reboot_after_upgrade_hint": "Riavvio senza conferma dopo l'applicazione delle modifiche al server",
-        "allow_password_authentication_hint": "Consentire agli utenti di accedere alla shell del server con una password (non si applica all'utente root)",
         "ram": "Memoria",
         "resource_usage": "Utilizzo risorse",
         "general_information": "informazioni generali",
@@ -611,7 +609,6 @@
     "users": {
         "nobody_here": "Non c'è nessuno qui",
         "refresh_users": "Aggiorna la lista degli utenti",
-        "new_user_info_note": "Al nuovo utente verrà automaticamente concesso l'accesso a tutti i servizi",
         "delete_confirm_question": "Sei sicuro?",
         "reset_password": "Reset password",
         "account": "Account",

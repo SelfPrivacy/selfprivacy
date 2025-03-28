@@ -321,7 +321,6 @@
         "delete_user": "Vymazať používateľa",
         "nobody_here": "Tu sa zobrazia používatelia",
         "login": "Užívateľské meno",
-        "new_user_info_note": "Nový používateľ bude mať automaticky prístup ku všetkým službám",
         "delete_confirm_question": "Naozaj chcete odstrániť ten účet?",
         "reset_password": "Resetovať heslo",
         "account": "Účet",

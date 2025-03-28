@@ -259,7 +259,6 @@
         "delete_user": "Usuń użytkownika",
         "nobody_here": "Tu będą pojawią się użytkownicy",
         "login": "Login",
-        "new_user_info_note": "Nowy użytkownik automatycznie otrzyma dostęp do wszystkich serwisów",
         "delete_confirm_question": "Czy naprawdę chcesz usunąć konto?",
         "reset_password": "Zresetuj hasło",
         "account": "Konto",

@@ -91,6 +91,7 @@ class ResourcesModel {
   ) async {
     _serverProviderTokens.add(token);
     await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
+    await _box.flush();
     _statusStreamController.add(const ChangedServerProviderCredentials());
   }
 
@@ -105,6 +106,7 @@ class ResourcesModel {
         .associatedServerIds
         .add(serverId);
     await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
+    await _box.flush();
     _statusStreamController.add(const ChangedServerProviderCredentials());
   }
 
@@ -113,6 +115,7 @@ class ResourcesModel {
   ) async {
     _serverProviderTokens.remove(token);
     await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
+    await _box.flush();
     _statusStreamController.add(const ChangedServerProviderCredentials());
   }
 
@@ -124,6 +127,7 @@ class ResourcesModel {
     }
     _dnsProviderTokens.add(token);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
+    await _box.flush();
     _statusStreamController.add(const ChangedDnsProviderCredentials());
   }
 
@@ -138,18 +142,21 @@ class ResourcesModel {
         .associatedDomainNames
         .add(domain);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
+    await _box.flush();
     _statusStreamController.add(const ChangedDnsProviderCredentials());
   }
 
   Future<void> removeDnsProviderToken(final DnsProviderCredential token) async {
     _dnsProviderTokens.remove(token);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
+    await _box.flush();
     _statusStreamController.add(const ChangedDnsProviderCredentials());
   }
 
   Future<void> addBackupsCredential(final BackupsCredential credential) async {
     _backupsCredentials.add(credential);
     await _box.put(BNames.backupsProviderTokens, _backupsCredentials);
+    await _box.flush();
     _statusStreamController.add(const ChangedBackupsCredentials());
   }
 
@@ -158,18 +165,21 @@ class ResourcesModel {
   ) async {
     _backupsCredentials.remove(credential);
     await _box.put(BNames.backupsProviderTokens, _backupsCredentials);
+    await _box.flush();
     _statusStreamController.add(const ChangedBackupsCredentials());
   }
 
   Future<void> addServer(final Server server) async {
     _servers.add(server);
     await _box.put(BNames.servers, _servers);
+    await _box.flush();
     _statusStreamController.add(const ChangedServers());
   }
 
   Future<void> removeServer(final Server server) async {
     _servers.remove(server);
     await _box.put(BNames.servers, _servers);
+    await _box.flush();
     _statusStreamController.add(const ChangedServers());
   }
 
@@ -180,6 +190,7 @@ class ResourcesModel {
     if (index != -1) {
       _servers[index] = server;
       await _box.put(BNames.servers, _servers);
+      await _box.flush();
       _statusStreamController.add(const ChangedServers());
     }
   }
@@ -187,11 +198,13 @@ class ResourcesModel {
   Future<void> setBackblazeBucket(final BackblazeBucket bucket) async {
     _backblazeBucket = bucket;
     await _box.put(BNames.backblazeBucket, _backblazeBucket);
+    await _box.flush();
   }
 
   Future<void> removeBackblazeBucket() async {
     _backblazeBucket = null;
     await _box.delete(BNames.backblazeBucket);
+    await _box.flush();
   }
 
   void clear() {

@@ -151,6 +151,8 @@ String getRouteTitle(final String routeName) {
       return 'users.details_title';
     case 'NewUserRoute':
       return 'users.new_user';
+    case 'ResetPasswordRoute':
+      return 'users.reset_password';
     case 'RecoveryKeyRoute':
       return 'recovery_key.key_main_header';
     case 'DevicesRoute':

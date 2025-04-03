@@ -115,6 +115,14 @@ class NewUserScreen extends StatelessWidget {
             /// should make this read-only when the user is created
             autofocus: true,
             formFieldCubit: formCubit.login,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: user != null
+                      ? Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.38)
+                      : Theme.of(context).colorScheme.onSurface,
+                ),
             decoration: InputDecoration(
               labelText: 'users.login'.tr(),
               suffixText: '@$domainName',

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +7,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/list_tile_on_surface_variant.dart';
+import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 class PermissionsCard extends StatelessWidget {
@@ -25,12 +27,23 @@ class PermissionsCard extends StatelessWidget {
               title: 'users.permissions'.tr(),
             ),
             const Divider(height: 0),
-            ...user.directmemberof?.map(
-                  (final String group) => ExplicitPermissionTile(
-                    group: group,
-                  ),
-                ) ??
-                [],
+            InkResponse(
+              highlightShape: BoxShape.rectangle,
+              onTap: () => context.pushRoute(
+                NewUserRoute(user: user),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ...user.directmemberof?.map(
+                        (final String group) => ExplicitPermissionTile(
+                          group: group,
+                        ),
+                      ) ??
+                      [],
+                ],
+              ),
+            ),
           ],
         ),
       );

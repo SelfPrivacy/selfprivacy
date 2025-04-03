@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/theming/harmonized_basic_colors.dart';
 
-class GenericLineChart extends StatelessWidget {
+abstract class GenericLineChart extends StatelessWidget {
   const GenericLineChart({
     required this.data,
     required this.period,
@@ -49,8 +49,8 @@ class GenericLineChart extends StatelessWidget {
     return finalValue - finalValue.floor() == 0;
   }
 
-  String screenReaderDescription(final BuildContext context) =>
-      'Overrite this function';
+  /// Now needs explicit override
+  String screenReaderDescription(final BuildContext context);
 
   LineTooltipItem generateTooltipItem({
     required final bool timeShown,

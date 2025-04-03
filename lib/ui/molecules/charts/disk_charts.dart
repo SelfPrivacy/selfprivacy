@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/ui/molecules/charts/generic_chart.dart';
-import 'package:selfprivacy/ui/organisms/charts/server_charts.dart';
 
 class DiskChart extends GenericLineChart {
   DiskChart({

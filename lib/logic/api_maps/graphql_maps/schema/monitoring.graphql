@@ -44,6 +44,10 @@ query GetMemoryMetrics($start: DateTime, $end: DateTime, $step: Int!) {
         ... MonitoringQueryError
         ... MonitoringValues
       }
+      swapUsageOverall {
+        ... MonitoringQueryError
+        ... MonitoringValues
+      }
       averageUsageByService {
         ... MonitoringQueryError
         ... MonitoringMetrics

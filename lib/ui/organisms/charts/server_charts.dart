@@ -2,11 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/theming/harmonized_basic_colors.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
@@ -35,14 +35,14 @@ class ServerCharts extends StatelessWidget {
       charts = [
         ChartCard(
           title: 'resource_chart.cpu_title'.tr(),
-          chart: metricsLoaded ? getCpuChart(state) : null,
+          chart: ServerCpuChart(state: metricsLoaded ? state : null),
           isLoading: !metricsLoaded,
         ),
-        const SizedBox(height: 8),
-        if (!(metricsLoaded && state.memoryMetrics == null))
+        const Gap(8),
+        if (!(metricsLoaded && state.memoryMetrics == null)) ...[
           ChartCard(
             title: 'resource_chart.memory'.tr(),
-            chart: metricsLoaded ? getMemoryChart(state) : null,
+            chart: ServerMemoryChart(state: metricsLoaded ? state : null),
             isLoading: !metricsLoaded,
             trailing: [
               ListTile(
@@ -60,10 +60,19 @@ class ServerCharts extends StatelessWidget {
               ),
             ],
           ),
-        const SizedBox(height: 8),
+          const Gap(8),
+        ],
+        if (!(metricsLoaded && state.memoryMetrics == null)) ...[
+          ChartCard(
+            title: 'resource_chart.swap_usage'.tr(),
+            chart: ServerSwapChart(state: metricsLoaded ? state : null),
+            isLoading: !metricsLoaded,
+          ),
+          const Gap(8),
+        ],
         ChartCard(
           title: 'resource_chart.network_title'.tr(),
-          chart: metricsLoaded ? getBandwidthChart(state) : null,
+          chart: ServerBandwidthChart(state: metricsLoaded ? state : null),
           isLoading: !metricsLoaded,
           legendItems: [
             Legend(
@@ -76,7 +85,7 @@ class ServerCharts extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const Gap(8),
         if (!(metricsLoaded && state.diskMetrics == null))
           Builder(
             builder: (final context) {
@@ -113,18 +122,19 @@ class ServerCharts extends StatelessWidget {
 
               return ChartCard(
                 title: 'resource_chart.disk_title'.tr(),
-                chart: (metricsLoaded && state.diskMetrics != null)
-                    ? getDiskChart(state, disksGraphData)
-                    : null,
                 isLoading: !metricsLoaded,
-                legendItems: disksGraphData
-                    .map<Widget>(
-                      (final disk) => Legend(
-                        color: disk.color,
-                        text: disk.volume.displayName,
-                      ),
-                    )
-                    .toList(),
+                chart: ServerDiskChart(
+                  state: metricsLoaded ? state : null,
+                  diskData: disksGraphData,
+                ),
+                legendItems: [
+                  ...disksGraphData.map(
+                    (final disk) => Legend(
+                      color: disk.color,
+                      text: disk.volume.displayName,
+                    ),
+                  ),
+                ],
               );
             },
           ),
@@ -160,87 +170,133 @@ class ServerCharts extends StatelessWidget {
             period: period,
             onChange: cubit.changePeriod,
           ),
-        const SizedBox(height: 8),
+        const Gap(8),
         ...charts,
       ],
     );
   }
+}
 
-  Widget getCpuChart(final MetricsLoaded state) {
-    final data = state.metrics.cpu;
+class ServerCpuChart extends StatelessWidget {
+  const ServerCpuChart({
+    required this.state,
+    super.key,
+  });
+  final MetricsLoaded? state;
 
+  @override
+  Widget build(final BuildContext context) {
+    if (state == null) {
+      return const SizedBox();
+    }
     return SizedBox(
       height: 200,
       child: CpuChart(
-        data: [data],
-        period: state.period,
-        start: state.metrics.start,
+        data: [state!.metrics.cpu],
+        period: state!.period,
+        start: state!.metrics.start,
       ),
     );
   }
+}
 
-  Widget getMemoryChart(final MetricsLoaded state) {
-    final data = state.memoryMetrics;
+class ServerDiskChart extends StatelessWidget {
+  const ServerDiskChart({
+    required this.state,
+    required this.diskData,
+    super.key,
+  });
+  final List<DiskGraphData> diskData;
+  final MetricsLoaded? state;
 
-    if (data == null) {
+  @override
+  Widget build(final BuildContext context) {
+    if (state == null) {
+      return const SizedBox();
+    }
+
+    return SizedBox(
+      height: 200,
+      child: DiskChart(
+        diskData: diskData,
+        period: state!.period,
+        start: state!.metrics.start,
+      ),
+    );
+  }
+}
+
+class ServerMemoryChart extends StatelessWidget {
+  const ServerMemoryChart({
+    required this.state,
+    super.key,
+  });
+  final MetricsLoaded? state;
+
+  @override
+  Widget build(final BuildContext context) {
+    if (state?.memoryMetrics == null) {
       return const SizedBox();
     }
 
     return SizedBox(
       height: 200,
       child: MemoryChart(
-        data: [data.overallMetrics],
-        period: state.period,
-        start: state.metrics.start,
+        data: [state!.memoryMetrics!.overallMetrics],
+        period: state!.period,
+        start: state!.metrics.start,
       ),
     );
   }
+}
 
-  Widget getBandwidthChart(final MetricsLoaded state) {
-    final ppsIn = state.metrics.bandwidthIn;
-    final ppsOut = state.metrics.bandwidthOut;
+class ServerSwapChart extends StatelessWidget {
+  const ServerSwapChart({
+    required this.state,
+    super.key,
+  });
+  final MetricsLoaded? state;
+
+  @override
+  Widget build(final BuildContext context) {
+    if (state?.memoryMetrics == null) {
+      return const SizedBox();
+    }
+
+    return SizedBox(
+      height: 200,
+      child: MemoryChart(
+        data: [state!.memoryMetrics!.swapMetrics],
+        period: state!.period,
+        start: state!.metrics.start,
+      ),
+    );
+  }
+}
+
+class ServerBandwidthChart extends StatelessWidget {
+  const ServerBandwidthChart({
+    required this.state,
+    super.key,
+  });
+  final MetricsLoaded? state;
+
+  @override
+  Widget build(final BuildContext context) {
+    if (state == null) {
+      return const SizedBox();
+    }
+
+    final ppsIn = state!.metrics.bandwidthIn;
+    final ppsOut = state!.metrics.bandwidthOut;
 
     return SizedBox(
       height: 200,
       child: NetworkChart(
         data: [ppsIn, ppsOut],
-        period: state.period,
-        start: state.metrics.start,
+        period: state!.period,
+        start: state!.metrics.start,
       ),
     );
   }
-}
-
-Widget getDiskChart(
-  final MetricsLoaded state,
-  final List<DiskGraphData> diskData,
-) {
-  final data = state.diskMetrics;
-
-  if (data == null) {
-    return const SizedBox();
-  }
-
-  return SizedBox(
-    height: 200,
-    child: DiskChart(
-      diskData: diskData,
-      period: state.period,
-      start: state.metrics.start,
-    ),
-  );
-}
-
-class DiskGraphData {
-  DiskGraphData({
-    required this.volume,
-    required this.color,
-    required this.diskData,
-    required this.originalId,
-  });
-
-  final DiskVolume volume;
-  final Color color;
-  final List<TimeSeriesData> diskData;
-  final String originalId;
 }

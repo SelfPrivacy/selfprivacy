@@ -1,4 +1,6 @@
+import 'package:flutter/services.dart' show Color;
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/monitoring.graphql.dart';
+import 'package:selfprivacy/logic/models/disk_status.dart';
 
 class TimeSeriesData {
   TimeSeriesData(
@@ -10,6 +12,20 @@ class TimeSeriesData {
   DateTime get time =>
       DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000);
   final double value;
+}
+
+class DiskGraphData {
+  DiskGraphData({
+    required this.volume,
+    required this.color,
+    required this.diskData,
+    required this.originalId,
+  });
+
+  final DiskVolume volume;
+  final Color color;
+  final List<TimeSeriesData> diskData;
+  final String originalId;
 }
 
 class ServerMetrics {
@@ -81,6 +97,7 @@ class MemoryMetrics {
   MemoryMetrics({
     required this.stepsInSecond,
     required this.overallMetrics,
+    required this.swapMetrics,
     required this.averageMetricsByService,
     required this.maxMetricsByService,
     required this.start,
@@ -96,6 +113,16 @@ class MemoryMetrics {
           stepsInSecond: stepsInSecond,
           overallMetrics:
               (data.memoryUsage.overallUsage as Fragment$MonitoringValues)
+                  .values
+                  .map(
+                    (final metric) => TimeSeriesData(
+                      metric.timestamp.millisecondsSinceEpoch ~/ 1000,
+                      double.parse(metric.value),
+                    ),
+                  )
+                  .toList(),
+          swapMetrics:
+              (data.memoryUsage.swapUsageOverall as Fragment$MonitoringValues)
                   .values
                   .map(
                     (final metric) => TimeSeriesData(
@@ -131,6 +158,7 @@ class MemoryMetrics {
 
   final num stepsInSecond;
   final List<TimeSeriesData> overallMetrics;
+  final List<TimeSeriesData> swapMetrics;
   final Map<String, double> averageMetricsByService;
   final Map<String, double> maxMetricsByService;
 

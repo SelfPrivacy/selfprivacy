@@ -4221,6 +4221,29 @@ const documentNodeQueryGetMemoryMetrics = DocumentNode(definitions: [
                 ]),
               ),
               FieldNode(
+                name: NameNode(value: 'swapUsageOverall'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'MonitoringQueryError'),
+                    directives: [],
+                  ),
+                  FragmentSpreadNode(
+                    name: NameNode(value: 'MonitoringValues'),
+                    directives: [],
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
+              ),
+              FieldNode(
                 name: NameNode(value: 'averageUsageByService'),
                 alias: null,
                 arguments: [],
@@ -4574,6 +4597,7 @@ class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring<TRes>
 class Query$GetMemoryMetrics$monitoring$memoryUsage {
   Query$GetMemoryMetrics$monitoring$memoryUsage({
     required this.overallUsage,
+    required this.swapUsageOverall,
     required this.averageUsageByService,
     required this.maxUsageByService,
     this.$__typename = 'MemoryMonitoring',
@@ -4582,6 +4606,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
   factory Query$GetMemoryMetrics$monitoring$memoryUsage.fromJson(
       Map<String, dynamic> json) {
     final l$overallUsage = json['overallUsage'];
+    final l$swapUsageOverall = json['swapUsageOverall'];
     final l$averageUsageByService = json['averageUsageByService'];
     final l$maxUsageByService = json['maxUsageByService'];
     final l$$__typename = json['__typename'];
@@ -4589,6 +4614,9 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
       overallUsage:
           Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage.fromJson(
               (l$overallUsage as Map<String, dynamic>)),
+      swapUsageOverall:
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
+              .fromJson((l$swapUsageOverall as Map<String, dynamic>)),
       averageUsageByService:
           Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService
               .fromJson((l$averageUsageByService as Map<String, dynamic>)),
@@ -4600,6 +4628,9 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
   }
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage overallUsage;
+
+  final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
+      swapUsageOverall;
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService
       averageUsageByService;
@@ -4613,6 +4644,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
     final _resultData = <String, dynamic>{};
     final l$overallUsage = overallUsage;
     _resultData['overallUsage'] = l$overallUsage.toJson();
+    final l$swapUsageOverall = swapUsageOverall;
+    _resultData['swapUsageOverall'] = l$swapUsageOverall.toJson();
     final l$averageUsageByService = averageUsageByService;
     _resultData['averageUsageByService'] = l$averageUsageByService.toJson();
     final l$maxUsageByService = maxUsageByService;
@@ -4625,11 +4658,13 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
   @override
   int get hashCode {
     final l$overallUsage = overallUsage;
+    final l$swapUsageOverall = swapUsageOverall;
     final l$averageUsageByService = averageUsageByService;
     final l$maxUsageByService = maxUsageByService;
     final l$$__typename = $__typename;
     return Object.hashAll([
       l$overallUsage,
+      l$swapUsageOverall,
       l$averageUsageByService,
       l$maxUsageByService,
       l$$__typename,
@@ -4648,6 +4683,11 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
     final l$overallUsage = overallUsage;
     final lOther$overallUsage = other.overallUsage;
     if (l$overallUsage != lOther$overallUsage) {
+      return false;
+    }
+    final l$swapUsageOverall = swapUsageOverall;
+    final lOther$swapUsageOverall = other.swapUsageOverall;
+    if (l$swapUsageOverall != lOther$swapUsageOverall) {
       return false;
     }
     final l$averageUsageByService = averageUsageByService;
@@ -4691,6 +4731,8 @@ abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes> {
 
   TRes call({
     Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage? overallUsage,
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall?
+        swapUsageOverall,
     Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService?
         averageUsageByService,
     Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService?
@@ -4699,6 +4741,8 @@ abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes> {
   });
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<TRes>
       get overallUsage;
+  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<TRes>
+      get swapUsageOverall;
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
       TRes> get averageUsageByService;
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<TRes>
@@ -4720,6 +4764,7 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes>
 
   TRes call({
     Object? overallUsage = _undefined,
+    Object? swapUsageOverall = _undefined,
     Object? averageUsageByService = _undefined,
     Object? maxUsageByService = _undefined,
     Object? $__typename = _undefined,
@@ -4729,6 +4774,11 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes>
             ? _instance.overallUsage
             : (overallUsage
                 as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage),
+        swapUsageOverall: swapUsageOverall == _undefined ||
+                swapUsageOverall == null
+            ? _instance.swapUsageOverall
+            : (swapUsageOverall
+                as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall),
         averageUsageByService: averageUsageByService == _undefined ||
                 averageUsageByService == null
             ? _instance.averageUsageByService
@@ -4749,6 +4799,13 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes>
     final local$overallUsage = _instance.overallUsage;
     return CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
         local$overallUsage, (e) => call(overallUsage: e));
+  }
+
+  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<TRes>
+      get swapUsageOverall {
+    final local$swapUsageOverall = _instance.swapUsageOverall;
+    return CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+        local$swapUsageOverall, (e) => call(swapUsageOverall: e));
   }
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
@@ -4774,6 +4831,8 @@ class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes>
 
   call({
     Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage? overallUsage,
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall?
+        swapUsageOverall,
     Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService?
         averageUsageByService,
     Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService?
@@ -4785,6 +4844,11 @@ class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes>
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<TRes>
       get overallUsage =>
           CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage
+              .stub(_res);
+
+  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<TRes>
+      get swapUsageOverall =>
+          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
               .stub(_res);
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
@@ -5459,6 +5523,679 @@ class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsa
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError<
             TRes> {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError(
+      this._res);
+
+  TRes _res;
+
+  call({
+    String? error,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall {
+  Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+      {required this.$__typename});
+
+  factory Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall.fromJson(
+      Map<String, dynamic> json) {
+    switch (json["__typename"] as String) {
+      case "MonitoringValues":
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
+            .fromJson(json);
+
+      case "MonitoringQueryError":
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
+            .fromJson(json);
+
+      default:
+        final l$$__typename = json['__typename'];
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+            $__typename: (l$$__typename as String));
+    }
+  }
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
+    on Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall {
+  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall>
+      get copyWith =>
+          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+            this,
+            (i) => i,
+          );
+  _T when<_T>({
+    required _T Function(
+            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues)
+        monitoringValues,
+    required _T Function(
+            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError)
+        monitoringQueryError,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "MonitoringValues":
+        return monitoringValues(this
+            as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues);
+
+      case "MonitoringQueryError":
+        return monitoringQueryError(this
+            as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError);
+
+      default:
+        return orElse();
+    }
+  }
+
+  _T maybeWhen<_T>({
+    _T Function(
+            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues)?
+        monitoringValues,
+    _T Function(
+            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError)?
+        monitoringQueryError,
+    required _T Function() orElse,
+  }) {
+    switch ($__typename) {
+      case "MonitoringValues":
+        if (monitoringValues != null) {
+          return monitoringValues(this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues);
+        } else {
+          return orElse();
+        }
+
+      case "MonitoringQueryError":
+        if (monitoringQueryError != null) {
+          return monitoringQueryError(this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError);
+        } else {
+          return orElse();
+        }
+
+      default:
+        return orElse();
+    }
+  }
+}
+
+abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
+    TRes> {
+  factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall instance,
+    TRes Function(
+            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall)
+        then,
+  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall;
+
+  factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall;
+
+  TRes call({String? $__typename});
+}
+
+class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
+        TRes>
+    implements
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
+            TRes> {
+  _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+    this._instance,
+    this._then,
+  );
+
+  final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
+      _instance;
+
+  final TRes Function(
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? $__typename = _undefined}) =>
+      _then(Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String)));
+}
+
+class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
+        TRes>
+    implements
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
+            TRes> {
+  _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+      this._res);
+
+  TRes _res;
+
+  call({String? $__typename}) => _res;
+}
+
+class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
+    implements
+        Fragment$MonitoringValues,
+        Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall {
+  Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues({
+    required this.values,
+    this.$__typename = 'MonitoringValues',
+  });
+
+  factory Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues.fromJson(
+      Map<String, dynamic> json) {
+    final l$values = json['values'];
+    final l$$__typename = json['__typename'];
+    return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
+      values: (l$values as List<dynamic>)
+          .map((e) =>
+              Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+                  .fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final List<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>
+      values;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$values = values;
+    _resultData['values'] = l$values.map((e) => e.toJson()).toList();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$values = values;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      Object.hashAll(l$values.map((v) => v)),
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$values = values;
+    final lOther$values = other.values;
+    if (l$values.length != lOther$values.length) {
+      return false;
+    }
+    for (int i = 0; i < l$values.length; i++) {
+      final l$values$entry = l$values[i];
+      final lOther$values$entry = lOther$values[i];
+      if (l$values$entry != lOther$values$entry) {
+        return false;
+      }
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
+    on Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues {
+  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues>
+      get copyWith =>
+          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
+    TRes> {
+  factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
+        instance,
+    TRes Function(
+            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues)
+        then,
+  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues;
+
+  factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues;
+
+  TRes call({
+    List<Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>?
+        values,
+    String? $__typename,
+  });
+  TRes values(
+      Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values> Function(
+              Iterable<
+                  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+                      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>>)
+          _fn);
+}
+
+class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
+        TRes>
+    implements
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
+            TRes> {
+  _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
+    this._instance,
+    this._then,
+  );
+
+  final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
+      _instance;
+
+  final TRes Function(
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? values = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
+        values: values == _undefined || values == null
+            ? _instance.values
+            : (values as List<
+                Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+
+  TRes values(
+          Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values> Function(
+                  Iterable<
+                      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+                          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>>)
+              _fn) =>
+      call(
+          values: _fn(_instance.values.map((e) =>
+              CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+                e,
+                (i) => i,
+              ))).toList());
+}
+
+class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
+        TRes>
+    implements
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
+            TRes> {
+  _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
+      this._res);
+
+  TRes _res;
+
+  call({
+    List<Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>?
+        values,
+    String? $__typename,
+  }) =>
+      _res;
+
+  values(_fn) => _res;
+}
+
+class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+    implements Fragment$MonitoringValues$values {
+  Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values({
+    required this.value,
+    required this.timestamp,
+    this.$__typename = 'MonitoringValue',
+  });
+
+  factory Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values.fromJson(
+      Map<String, dynamic> json) {
+    final l$value = json['value'];
+    final l$timestamp = json['timestamp'];
+    final l$$__typename = json['__typename'];
+    return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+      value: (l$value as String),
+      timestamp: dateTimeFromJson(l$timestamp),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String value;
+
+  final DateTime timestamp;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$value = value;
+    _resultData['value'] = l$value;
+    final l$timestamp = timestamp;
+    _resultData['timestamp'] = dateTimeToJson(l$timestamp);
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$value = value;
+    final l$timestamp = timestamp;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$value,
+      l$timestamp,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$value = value;
+    final lOther$value = other.value;
+    if (l$value != lOther$value) {
+      return false;
+    }
+    final l$timestamp = timestamp;
+    final lOther$timestamp = other.timestamp;
+    if (l$timestamp != lOther$timestamp) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+    on Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values {
+  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>
+      get copyWith =>
+          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+    TRes> {
+  factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+        instance,
+    TRes Function(
+            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values)
+        then,
+  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values;
+
+  factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values;
+
+  TRes call({
+    String? value,
+    DateTime? timestamp,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+        TRes>
+    implements
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+            TRes> {
+  _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+    this._instance,
+    this._then,
+  );
+
+  final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+      _instance;
+
+  final TRes Function(
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? value = _undefined,
+    Object? timestamp = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+        value: value == _undefined || value == null
+            ? _instance.value
+            : (value as String),
+        timestamp: timestamp == _undefined || timestamp == null
+            ? _instance.timestamp
+            : (timestamp as DateTime),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+        TRes>
+    implements
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+            TRes> {
+  _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+      this._res);
+
+  TRes _res;
+
+  call({
+    String? value,
+    DateTime? timestamp,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
+    implements
+        Fragment$MonitoringQueryError,
+        Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall {
+  Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError({
+    required this.error,
+    this.$__typename = 'MonitoringQueryError',
+  });
+
+  factory Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError.fromJson(
+      Map<String, dynamic> json) {
+    final l$error = json['error'];
+    final l$$__typename = json['__typename'];
+    return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
+      error: (l$error as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String error;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$error = error;
+    _resultData['error'] = l$error;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$error = error;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$error,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other
+            is Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$error = error;
+    final lOther$error = other.error;
+    if (l$error != lOther$error) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
+    on Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError {
+  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError>
+      get copyWith =>
+          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
+    TRes> {
+  factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
+        instance,
+    TRes Function(
+            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError)
+        then,
+  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError;
+
+  factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError;
+
+  TRes call({
+    String? error,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
+        TRes>
+    implements
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
+            TRes> {
+  _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
+    this._instance,
+    this._then,
+  );
+
+  final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
+      _instance;
+
+  final TRes Function(
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError)
+      _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? error = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
+        error: error == _undefined || error == null
+            ? _instance.error
+            : (error as String),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
+        TRes>
+    implements
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
+            TRes> {
+  _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
       this._res);
 
   TRes _res;

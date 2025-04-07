@@ -7,8 +7,11 @@ class MemoryChart extends GenericLineChart {
     required super.data,
     required super.period,
     required super.start,
+    this.isSwap = false,
     super.key,
   });
+
+  final bool isSwap;
 
   @override
   String screenReaderDescription(final BuildContext context) {
@@ -25,7 +28,11 @@ class MemoryChart extends GenericLineChart {
     final maxUsageTime =
         data.first.firstWhere((final e) => e.value == maxUsage).time;
 
-    final label = 'resource_chart.memory_chart_screen_reader_explanation'.tr(
+    final labelKey = isSwap
+        ? 'resource_chart.swap_chart_screen_reader_explanation'
+        : 'resource_chart.memory_chart_screen_reader_explanation';
+
+    final label = labelKey.tr(
       namedArgs: {
         'period': 'resource_chart.${period.name}'.tr(),
         'lastValue': lastValue.toStringAsFixed(1),

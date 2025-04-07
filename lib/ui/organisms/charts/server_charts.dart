@@ -269,6 +269,7 @@ class ServerSwapChart extends StatelessWidget {
         data: [state!.memoryMetrics!.swapMetrics],
         period: state!.period,
         start: state!.metrics.start,
+        isSwap: true,
       ),
     );
   }

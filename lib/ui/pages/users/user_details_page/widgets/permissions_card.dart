@@ -41,6 +41,13 @@ class PermissionsCard extends StatelessWidget {
                         ),
                       ) ??
                       [],
+                  ...user.directmemberof?.isEmpty ?? false
+                      ? [
+                          const ExplicitPermissionTile(
+                            group: 'sp.only_email',
+                          ),
+                        ]
+                      : [],
                 ],
               ),
             ),
@@ -79,6 +86,17 @@ class ExplicitPermissionTile extends StatelessWidget {
         textColor: Theme.of(context).colorScheme.primary,
         title: Text('users.groups_admin_title'.tr()),
         subtitle: Text('users.groups_admin_short_description'.tr()),
+      );
+    }
+    if (group == 'sp.only_email') {
+      return ListTile(
+        leading: Icon(
+          Icons.email_outlined,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+        title: Text('users.groups_only_email_title'.tr()),
+        subtitle: Text('users.groups_only_email_short_description'.tr()),
       );
     }
 

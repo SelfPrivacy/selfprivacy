@@ -1238,6 +1238,13 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
                 selectionSet: null,
               ),
               FieldNode(
+                name: NameNode(value: 'isInstalled'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
                 name: NameNode(value: 'isMovable'),
                 alias: null,
                 arguments: [],
@@ -1246,6 +1253,13 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
               ),
               FieldNode(
                 name: NameNode(value: 'isRequired'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'isSystemService'),
                 alias: null,
                 arguments: [],
                 directives: [],
@@ -1332,6 +1346,77 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
               ),
               FieldNode(
                 name: NameNode(value: 'url'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'homepage'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'sourcePage'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: null,
+              ),
+              FieldNode(
+                name: NameNode(value: 'license'),
+                alias: null,
+                arguments: [],
+                directives: [],
+                selectionSet: SelectionSetNode(selections: [
+                  FieldNode(
+                    name: NameNode(value: 'free'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'fullName'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'redistributable'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'shortName'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'url'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ]),
+              ),
+              FieldNode(
+                name: NameNode(value: 'supportLevel'),
                 alias: null,
                 arguments: [],
                 directives: [],
@@ -1697,14 +1782,20 @@ class Query$AllServices$services$allServices {
     this.dnsRecords,
     required this.id,
     required this.isEnabled,
+    required this.isInstalled,
     required this.isMovable,
     required this.isRequired,
+    required this.isSystemService,
     required this.canBeBackedUp,
     required this.backupDescription,
     required this.status,
     required this.storageUsage,
     required this.svgIcon,
     this.url,
+    this.homepage,
+    this.sourcePage,
+    required this.license,
+    required this.supportLevel,
     this.configuration,
     this.$__typename = 'Service',
   });
@@ -1716,14 +1807,20 @@ class Query$AllServices$services$allServices {
     final l$dnsRecords = json['dnsRecords'];
     final l$id = json['id'];
     final l$isEnabled = json['isEnabled'];
+    final l$isInstalled = json['isInstalled'];
     final l$isMovable = json['isMovable'];
     final l$isRequired = json['isRequired'];
+    final l$isSystemService = json['isSystemService'];
     final l$canBeBackedUp = json['canBeBackedUp'];
     final l$backupDescription = json['backupDescription'];
     final l$status = json['status'];
     final l$storageUsage = json['storageUsage'];
     final l$svgIcon = json['svgIcon'];
     final l$url = json['url'];
+    final l$homepage = json['homepage'];
+    final l$sourcePage = json['sourcePage'];
+    final l$license = json['license'];
+    final l$supportLevel = json['supportLevel'];
     final l$configuration = json['configuration'];
     final l$$__typename = json['__typename'];
     return Query$AllServices$services$allServices(
@@ -1735,8 +1832,10 @@ class Query$AllServices$services$allServices {
           .toList(),
       id: (l$id as String),
       isEnabled: (l$isEnabled as bool),
+      isInstalled: (l$isInstalled as bool),
       isMovable: (l$isMovable as bool),
       isRequired: (l$isRequired as bool),
+      isSystemService: (l$isSystemService as bool),
       canBeBackedUp: (l$canBeBackedUp as bool),
       backupDescription: (l$backupDescription as String),
       status: fromJson$Enum$ServiceStatusEnum((l$status as String)),
@@ -1745,6 +1844,13 @@ class Query$AllServices$services$allServices {
               (l$storageUsage as Map<String, dynamic>)),
       svgIcon: (l$svgIcon as String),
       url: (l$url as String?),
+      homepage: (l$homepage as String?),
+      sourcePage: (l$sourcePage as String?),
+      license: (l$license as List<dynamic>)
+          .map((e) => Query$AllServices$services$allServices$license.fromJson(
+              (e as Map<String, dynamic>)))
+          .toList(),
+      supportLevel: fromJson$Enum$SupportLevelEnum((l$supportLevel as String)),
       configuration: (l$configuration as List<dynamic>?)
           ?.map((e) =>
               Query$AllServices$services$allServices$configuration.fromJson(
@@ -1764,9 +1870,13 @@ class Query$AllServices$services$allServices {
 
   final bool isEnabled;
 
+  final bool isInstalled;
+
   final bool isMovable;
 
   final bool isRequired;
+
+  final bool isSystemService;
 
   final bool canBeBackedUp;
 
@@ -1779,6 +1889,14 @@ class Query$AllServices$services$allServices {
   final String svgIcon;
 
   final String? url;
+
+  final String? homepage;
+
+  final String? sourcePage;
+
+  final List<Query$AllServices$services$allServices$license> license;
+
+  final Enum$SupportLevelEnum supportLevel;
 
   final List<Query$AllServices$services$allServices$configuration>?
       configuration;
@@ -1797,10 +1915,14 @@ class Query$AllServices$services$allServices {
     _resultData['id'] = l$id;
     final l$isEnabled = isEnabled;
     _resultData['isEnabled'] = l$isEnabled;
+    final l$isInstalled = isInstalled;
+    _resultData['isInstalled'] = l$isInstalled;
     final l$isMovable = isMovable;
     _resultData['isMovable'] = l$isMovable;
     final l$isRequired = isRequired;
     _resultData['isRequired'] = l$isRequired;
+    final l$isSystemService = isSystemService;
+    _resultData['isSystemService'] = l$isSystemService;
     final l$canBeBackedUp = canBeBackedUp;
     _resultData['canBeBackedUp'] = l$canBeBackedUp;
     final l$backupDescription = backupDescription;
@@ -1813,6 +1935,14 @@ class Query$AllServices$services$allServices {
     _resultData['svgIcon'] = l$svgIcon;
     final l$url = url;
     _resultData['url'] = l$url;
+    final l$homepage = homepage;
+    _resultData['homepage'] = l$homepage;
+    final l$sourcePage = sourcePage;
+    _resultData['sourcePage'] = l$sourcePage;
+    final l$license = license;
+    _resultData['license'] = l$license.map((e) => e.toJson()).toList();
+    final l$supportLevel = supportLevel;
+    _resultData['supportLevel'] = toJson$Enum$SupportLevelEnum(l$supportLevel);
     final l$configuration = configuration;
     _resultData['configuration'] =
         l$configuration?.map((e) => e.toJson()).toList();
@@ -1828,14 +1958,20 @@ class Query$AllServices$services$allServices {
     final l$dnsRecords = dnsRecords;
     final l$id = id;
     final l$isEnabled = isEnabled;
+    final l$isInstalled = isInstalled;
     final l$isMovable = isMovable;
     final l$isRequired = isRequired;
+    final l$isSystemService = isSystemService;
     final l$canBeBackedUp = canBeBackedUp;
     final l$backupDescription = backupDescription;
     final l$status = status;
     final l$storageUsage = storageUsage;
     final l$svgIcon = svgIcon;
     final l$url = url;
+    final l$homepage = homepage;
+    final l$sourcePage = sourcePage;
+    final l$license = license;
+    final l$supportLevel = supportLevel;
     final l$configuration = configuration;
     final l$$__typename = $__typename;
     return Object.hashAll([
@@ -1844,14 +1980,20 @@ class Query$AllServices$services$allServices {
       l$dnsRecords == null ? null : Object.hashAll(l$dnsRecords.map((v) => v)),
       l$id,
       l$isEnabled,
+      l$isInstalled,
       l$isMovable,
       l$isRequired,
+      l$isSystemService,
       l$canBeBackedUp,
       l$backupDescription,
       l$status,
       l$storageUsage,
       l$svgIcon,
       l$url,
+      l$homepage,
+      l$sourcePage,
+      Object.hashAll(l$license.map((v) => v)),
+      l$supportLevel,
       l$configuration == null
           ? null
           : Object.hashAll(l$configuration.map((v) => v)),
@@ -1904,6 +2046,11 @@ class Query$AllServices$services$allServices {
     if (l$isEnabled != lOther$isEnabled) {
       return false;
     }
+    final l$isInstalled = isInstalled;
+    final lOther$isInstalled = other.isInstalled;
+    if (l$isInstalled != lOther$isInstalled) {
+      return false;
+    }
     final l$isMovable = isMovable;
     final lOther$isMovable = other.isMovable;
     if (l$isMovable != lOther$isMovable) {
@@ -1912,6 +2059,11 @@ class Query$AllServices$services$allServices {
     final l$isRequired = isRequired;
     final lOther$isRequired = other.isRequired;
     if (l$isRequired != lOther$isRequired) {
+      return false;
+    }
+    final l$isSystemService = isSystemService;
+    final lOther$isSystemService = other.isSystemService;
+    if (l$isSystemService != lOther$isSystemService) {
       return false;
     }
     final l$canBeBackedUp = canBeBackedUp;
@@ -1942,6 +2094,33 @@ class Query$AllServices$services$allServices {
     final l$url = url;
     final lOther$url = other.url;
     if (l$url != lOther$url) {
+      return false;
+    }
+    final l$homepage = homepage;
+    final lOther$homepage = other.homepage;
+    if (l$homepage != lOther$homepage) {
+      return false;
+    }
+    final l$sourcePage = sourcePage;
+    final lOther$sourcePage = other.sourcePage;
+    if (l$sourcePage != lOther$sourcePage) {
+      return false;
+    }
+    final l$license = license;
+    final lOther$license = other.license;
+    if (l$license.length != lOther$license.length) {
+      return false;
+    }
+    for (int i = 0; i < l$license.length; i++) {
+      final l$license$entry = l$license[i];
+      final lOther$license$entry = lOther$license[i];
+      if (l$license$entry != lOther$license$entry) {
+        return false;
+      }
+    }
+    final l$supportLevel = supportLevel;
+    final lOther$supportLevel = other.supportLevel;
+    if (l$supportLevel != lOther$supportLevel) {
       return false;
     }
     final l$configuration = configuration;
@@ -1994,14 +2173,20 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
     List<Fragment$fragmentDnsRecords>? dnsRecords,
     String? id,
     bool? isEnabled,
+    bool? isInstalled,
     bool? isMovable,
     bool? isRequired,
+    bool? isSystemService,
     bool? canBeBackedUp,
     String? backupDescription,
     Enum$ServiceStatusEnum? status,
     Query$AllServices$services$allServices$storageUsage? storageUsage,
     String? svgIcon,
     String? url,
+    String? homepage,
+    String? sourcePage,
+    List<Query$AllServices$services$allServices$license>? license,
+    Enum$SupportLevelEnum? supportLevel,
     List<Query$AllServices$services$allServices$configuration>? configuration,
     String? $__typename,
   });
@@ -2013,6 +2198,12 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
           _fn);
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
       get storageUsage;
+  TRes license(
+      Iterable<Query$AllServices$services$allServices$license> Function(
+              Iterable<
+                  CopyWith$Query$AllServices$services$allServices$license<
+                      Query$AllServices$services$allServices$license>>)
+          _fn);
   TRes configuration(
       Iterable<Query$AllServices$services$allServices$configuration>? Function(
               Iterable<
@@ -2040,14 +2231,20 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
     Object? dnsRecords = _undefined,
     Object? id = _undefined,
     Object? isEnabled = _undefined,
+    Object? isInstalled = _undefined,
     Object? isMovable = _undefined,
     Object? isRequired = _undefined,
+    Object? isSystemService = _undefined,
     Object? canBeBackedUp = _undefined,
     Object? backupDescription = _undefined,
     Object? status = _undefined,
     Object? storageUsage = _undefined,
     Object? svgIcon = _undefined,
     Object? url = _undefined,
+    Object? homepage = _undefined,
+    Object? sourcePage = _undefined,
+    Object? license = _undefined,
+    Object? supportLevel = _undefined,
     Object? configuration = _undefined,
     Object? $__typename = _undefined,
   }) =>
@@ -2065,12 +2262,19 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
         isEnabled: isEnabled == _undefined || isEnabled == null
             ? _instance.isEnabled
             : (isEnabled as bool),
+        isInstalled: isInstalled == _undefined || isInstalled == null
+            ? _instance.isInstalled
+            : (isInstalled as bool),
         isMovable: isMovable == _undefined || isMovable == null
             ? _instance.isMovable
             : (isMovable as bool),
         isRequired: isRequired == _undefined || isRequired == null
             ? _instance.isRequired
             : (isRequired as bool),
+        isSystemService:
+            isSystemService == _undefined || isSystemService == null
+                ? _instance.isSystemService
+                : (isSystemService as bool),
         canBeBackedUp: canBeBackedUp == _undefined || canBeBackedUp == null
             ? _instance.canBeBackedUp
             : (canBeBackedUp as bool),
@@ -2089,6 +2293,17 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
             ? _instance.svgIcon
             : (svgIcon as String),
         url: url == _undefined ? _instance.url : (url as String?),
+        homepage:
+            homepage == _undefined ? _instance.homepage : (homepage as String?),
+        sourcePage: sourcePage == _undefined
+            ? _instance.sourcePage
+            : (sourcePage as String?),
+        license: license == _undefined || license == null
+            ? _instance.license
+            : (license as List<Query$AllServices$services$allServices$license>),
+        supportLevel: supportLevel == _undefined || supportLevel == null
+            ? _instance.supportLevel
+            : (supportLevel as Enum$SupportLevelEnum),
         configuration: configuration == _undefined
             ? _instance.configuration
             : (configuration
@@ -2118,6 +2333,19 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
         local$storageUsage, (e) => call(storageUsage: e));
   }
 
+  TRes license(
+          Iterable<Query$AllServices$services$allServices$license> Function(
+                  Iterable<
+                      CopyWith$Query$AllServices$services$allServices$license<
+                          Query$AllServices$services$allServices$license>>)
+              _fn) =>
+      call(
+          license: _fn(_instance.license.map(
+              (e) => CopyWith$Query$AllServices$services$allServices$license(
+                    e,
+                    (i) => i,
+                  ))).toList());
+
   TRes configuration(
           Iterable<Query$AllServices$services$allServices$configuration>? Function(
                   Iterable<
@@ -2144,14 +2372,20 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
     List<Fragment$fragmentDnsRecords>? dnsRecords,
     String? id,
     bool? isEnabled,
+    bool? isInstalled,
     bool? isMovable,
     bool? isRequired,
+    bool? isSystemService,
     bool? canBeBackedUp,
     String? backupDescription,
     Enum$ServiceStatusEnum? status,
     Query$AllServices$services$allServices$storageUsage? storageUsage,
     String? svgIcon,
     String? url,
+    String? homepage,
+    String? sourcePage,
+    List<Query$AllServices$services$allServices$license>? license,
+    Enum$SupportLevelEnum? supportLevel,
     List<Query$AllServices$services$allServices$configuration>? configuration,
     String? $__typename,
   }) =>
@@ -2163,6 +2397,8 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
       get storageUsage =>
           CopyWith$Query$AllServices$services$allServices$storageUsage.stub(
               _res);
+
+  license(_fn) => _res;
 
   configuration(_fn) => _res;
 }
@@ -2498,6 +2734,213 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volu
 
   call({
     String? name,
+    String? $__typename,
+  }) =>
+      _res;
+}
+
+class Query$AllServices$services$allServices$license {
+  Query$AllServices$services$allServices$license({
+    required this.free,
+    required this.fullName,
+    required this.redistributable,
+    required this.shortName,
+    this.url,
+    this.$__typename = 'LicenseType',
+  });
+
+  factory Query$AllServices$services$allServices$license.fromJson(
+      Map<String, dynamic> json) {
+    final l$free = json['free'];
+    final l$fullName = json['fullName'];
+    final l$redistributable = json['redistributable'];
+    final l$shortName = json['shortName'];
+    final l$url = json['url'];
+    final l$$__typename = json['__typename'];
+    return Query$AllServices$services$allServices$license(
+      free: (l$free as bool),
+      fullName: (l$fullName as String),
+      redistributable: (l$redistributable as bool),
+      shortName: (l$shortName as String),
+      url: (l$url as String?),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final bool free;
+
+  final String fullName;
+
+  final bool redistributable;
+
+  final String shortName;
+
+  final String? url;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$free = free;
+    _resultData['free'] = l$free;
+    final l$fullName = fullName;
+    _resultData['fullName'] = l$fullName;
+    final l$redistributable = redistributable;
+    _resultData['redistributable'] = l$redistributable;
+    final l$shortName = shortName;
+    _resultData['shortName'] = l$shortName;
+    final l$url = url;
+    _resultData['url'] = l$url;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$free = free;
+    final l$fullName = fullName;
+    final l$redistributable = redistributable;
+    final l$shortName = shortName;
+    final l$url = url;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$free,
+      l$fullName,
+      l$redistributable,
+      l$shortName,
+      l$url,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (!(other is Query$AllServices$services$allServices$license) ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$free = free;
+    final lOther$free = other.free;
+    if (l$free != lOther$free) {
+      return false;
+    }
+    final l$fullName = fullName;
+    final lOther$fullName = other.fullName;
+    if (l$fullName != lOther$fullName) {
+      return false;
+    }
+    final l$redistributable = redistributable;
+    final lOther$redistributable = other.redistributable;
+    if (l$redistributable != lOther$redistributable) {
+      return false;
+    }
+    final l$shortName = shortName;
+    final lOther$shortName = other.shortName;
+    if (l$shortName != lOther$shortName) {
+      return false;
+    }
+    final l$url = url;
+    final lOther$url = other.url;
+    if (l$url != lOther$url) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$AllServices$services$allServices$license
+    on Query$AllServices$services$allServices$license {
+  CopyWith$Query$AllServices$services$allServices$license<
+          Query$AllServices$services$allServices$license>
+      get copyWith => CopyWith$Query$AllServices$services$allServices$license(
+            this,
+            (i) => i,
+          );
+}
+
+abstract class CopyWith$Query$AllServices$services$allServices$license<TRes> {
+  factory CopyWith$Query$AllServices$services$allServices$license(
+    Query$AllServices$services$allServices$license instance,
+    TRes Function(Query$AllServices$services$allServices$license) then,
+  ) = _CopyWithImpl$Query$AllServices$services$allServices$license;
+
+  factory CopyWith$Query$AllServices$services$allServices$license.stub(
+          TRes res) =
+      _CopyWithStubImpl$Query$AllServices$services$allServices$license;
+
+  TRes call({
+    bool? free,
+    String? fullName,
+    bool? redistributable,
+    String? shortName,
+    String? url,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$AllServices$services$allServices$license<TRes>
+    implements CopyWith$Query$AllServices$services$allServices$license<TRes> {
+  _CopyWithImpl$Query$AllServices$services$allServices$license(
+    this._instance,
+    this._then,
+  );
+
+  final Query$AllServices$services$allServices$license _instance;
+
+  final TRes Function(Query$AllServices$services$allServices$license) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? free = _undefined,
+    Object? fullName = _undefined,
+    Object? redistributable = _undefined,
+    Object? shortName = _undefined,
+    Object? url = _undefined,
+    Object? $__typename = _undefined,
+  }) =>
+      _then(Query$AllServices$services$allServices$license(
+        free: free == _undefined || free == null
+            ? _instance.free
+            : (free as bool),
+        fullName: fullName == _undefined || fullName == null
+            ? _instance.fullName
+            : (fullName as String),
+        redistributable:
+            redistributable == _undefined || redistributable == null
+                ? _instance.redistributable
+                : (redistributable as bool),
+        shortName: shortName == _undefined || shortName == null
+            ? _instance.shortName
+            : (shortName as String),
+        url: url == _undefined ? _instance.url : (url as String?),
+        $__typename: $__typename == _undefined || $__typename == null
+            ? _instance.$__typename
+            : ($__typename as String),
+      ));
+}
+
+class _CopyWithStubImpl$Query$AllServices$services$allServices$license<TRes>
+    implements CopyWith$Query$AllServices$services$allServices$license<TRes> {
+  _CopyWithStubImpl$Query$AllServices$services$allServices$license(this._res);
+
+  TRes _res;
+
+  call({
+    bool? free,
+    String? fullName,
+    bool? redistributable,
+    String? shortName,
+    String? url,
     String? $__typename,
   }) =>
       _res;

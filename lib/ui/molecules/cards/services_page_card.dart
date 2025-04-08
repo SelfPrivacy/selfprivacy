@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/masks/icon_status_mask.dart';
+import 'package:selfprivacy/ui/molecules/chips/support_level_chip.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
@@ -107,14 +108,21 @@ class ServicesPageCard extends StatelessWidget {
                     service.description,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
+                  if (service.loginInfo != '') ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      service.loginInfo,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                    ),
+                  ],
                   const SizedBox(height: 8),
-                  Text(
-                    service.loginInfo,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
+                  if (service.supportLevel != SupportLevel.normal)
+                    SupportLevelChip(
+                      supportLevel: service.supportLevel,
+                      dense: true,
+                    ),
                 ],
               ),
             ],

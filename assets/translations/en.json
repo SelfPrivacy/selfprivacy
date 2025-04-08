@@ -400,7 +400,22 @@
         "create_job": "Create job",
         "update_job": "Update job",
         "wait_for_jobs": "Server is busy with other jobs. Please wait until they are finished.",
-        "logs": "Service logs"
+        "logs": "Service logs",
+        "homepage": "Project homepage",
+        "source_code": "Source code",
+        "license": "License",
+        "support_levels": {
+            "normal": "Supported",
+            "normal_description": "This SelfPrivacy module is supported by the SelfPrivacy team as usual. If you encounter any issues with this module, feel free to contact us.",
+            "experimental": "Experimental",
+            "experimental_description": "This SelfPrivacy module is experimental. It might not work as intended yet.",
+            "deprecated": "Deprecated",
+            "deprecated_description": "This SelfPrivacy module is deprecated. We no longer provide support for this service and it might not work as intended.",
+            "community": "Community",
+            "community_description": "This SelfPrivacy module is supported by the community. SelfPrivacy team might not be able to provide support.",
+            "unknown": "Unknown",
+            "unknown_description": "Support level for this SelfPrivacy module is unknown. Maybe, it is your own module and you forgot to set the support level field?"
+        }
     },
     "mail": {
         "login_info": "Use username and password from users tab. IMAP port is 143 with STARTTLS, SMTP port is 587 with STARTTLS."

@@ -8,15 +8,15 @@ class LinkListTile extends StatelessWidget {
   const LinkListTile({
     required this.title,
     required this.subtitle,
-    required this.uri,
     required this.icon,
+    this.uri,
     this.longPressText,
     super.key,
   });
 
   final String title;
   final String subtitle;
-  final String uri;
+  final String? uri;
   final IconData icon;
   final String? longPressText;
 
@@ -24,18 +24,22 @@ class LinkListTile extends StatelessWidget {
   Widget build(final BuildContext context) => ListTile(
         title: Text(title),
         subtitle: Text(subtitle),
-        onTap: () => launchUrl(
-          Uri.parse(uri),
-          mode: LaunchMode.externalApplication,
-        ),
+        onTap: uri != null
+            ? () => launchUrl(
+                  Uri.parse(uri!),
+                  mode: LaunchMode.externalApplication,
+                )
+            : null,
         leading: Icon(icon),
-        onLongPress: () {
-          PlatformAdapter.setClipboard(
-            longPressText ?? uri,
-          );
-          getIt<NavigationService>().showSnackBar(
-            'basis.copied_to_clipboard'.tr(),
-          );
-        },
+        onLongPress: uri != null
+            ? () {
+                PlatformAdapter.setClipboard(
+                  longPressText ?? uri!,
+                );
+                getIt<NavigationService>().showSnackBar(
+                  'basis.copied_to_clipboard'.tr(),
+                );
+              }
+            : null,
       );
 }

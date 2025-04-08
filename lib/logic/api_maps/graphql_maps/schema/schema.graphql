@@ -273,8 +273,8 @@ type LicenseType {
   fullName: String!
   redistributable: Boolean!
   shortName: String!
-  spdxId: String!
-  url: String!
+  spdxId: String
+  url: String
 }
 
 type LogEntry {

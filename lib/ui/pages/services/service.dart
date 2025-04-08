@@ -8,8 +8,10 @@ import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/link_list_tile.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/cards/service_status.dart';
+import 'package:selfprivacy/ui/molecules/chips/support_level_chip.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
@@ -71,9 +73,11 @@ class _ServicePageState extends State<ServicePage> {
       ),
       heroTitle: service.displayName,
       children: [
+        if (service.supportLevel != SupportLevel.normal)
+          SupportLevelChip(supportLevel: service.supportLevel),
         ServiceStatusCard(status: service.status),
         const SizedBox(height: 16),
-        if (service.url != null && !serviceDisabled)
+        if (service.url != null && !serviceDisabled) ...[
           ListTile(
             iconColor: Theme.of(context).colorScheme.onSurface,
             onTap: () => launchURL(service.url),
@@ -92,9 +96,10 @@ class _ServicePageState extends State<ServicePage> {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
-        const SizedBox(height: 8),
-        const Divider(),
-        const SizedBox(height: 8),
+          const SizedBox(height: 8),
+          const Divider(),
+          const SizedBox(height: 8),
+        ],
         ListTile(
           iconColor: Theme.of(context).colorScheme.onSurface,
           onTap: () =>
@@ -192,6 +197,31 @@ class _ServicePageState extends State<ServicePage> {
           title: Text(
             'service_page.logs'.tr(),
             style: enabledTitleStyle,
+          ),
+        ),
+        const SizedBox(height: 8),
+        const Divider(),
+        const SizedBox(height: 8),
+        if (service.homepage != null)
+          LinkListTile(
+            title: 'service_page.homepage'.tr(),
+            subtitle: service.homepage!.replaceFirst('https://', ''),
+            uri: service.homepage,
+            icon: Icons.language_outlined,
+          ),
+        if (service.sourcePage != null)
+          LinkListTile(
+            title: 'service_page.source_code'.tr(),
+            subtitle: service.sourcePage!.replaceFirst('https://', ''),
+            uri: service.sourcePage,
+            icon: Icons.code_outlined,
+          ),
+        ...service.license.map(
+          (final license) => LinkListTile(
+            title: 'service_page.license'.tr(),
+            subtitle: license.fullName,
+            uri: license.url,
+            icon: Icons.copyright_outlined,
           ),
         ),
       ],

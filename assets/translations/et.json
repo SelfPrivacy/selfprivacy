@@ -201,7 +201,7 @@
             "disk": "Ketta {disk} kasutamine läks {beginningValue}%-lt {endValue}%-ni. "
         },
         "network_chart_screen_reader_explanation": "See diagramm näitab võrgu kasutust viimase {period} jooksul. Viimane väärtus on {lastValueIn} sissetulevat ja {lastValueOut} väljuvat. Keskmine kasutus on {averageUsageIn} sissetulevat ja {averageUsageOut} väljuvat. Maksimaalne sissetulev kasutus oli {maxUsageIn} kell {maxUsageTimeIn} ja maksimaalne väljuv kasutus oli {maxUsageOut} kell {maxUsageTimeOut}.",
-        "memory_chart_screen_reader_explanation": "See diagramm näitab vahetusmälu kasutust viimase {period} jooksul. Viimane väärtus on {lastValue}%. Keskmine kasutus on {averageUsage}%. Maksimaalne kasutus oli {maxUsage}% kell {maxUsageTime}.",
+        "memory_chart_screen_reader_explanation": "See diagramm näitab mälu kasutust viimase {period} jooksul. Viimane väärtus on {lastValue}%. Keskmine kasutus on {averageUsage}%. Maksimaalne kasutus oli {maxUsage}% kell {maxUsageTime}.",
         "loading": "Diagramm laadib…",
         "disk_title": "Ketta kasutus",
         "swap_usage": "Vahetusmälu kasutus",

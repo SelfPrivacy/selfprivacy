@@ -204,7 +204,8 @@
         "memory_chart_screen_reader_explanation": "See diagramm näitab vahetusmälu kasutust viimase {period} jooksul. Viimane väärtus on {lastValue}%. Keskmine kasutus on {averageUsage}%. Maksimaalne kasutus oli {maxUsage}% kell {maxUsageTime}.",
         "loading": "Diagramm laadib…",
         "disk_title": "Ketta kasutus",
-        "swap_usage": "Vahetusmälu kasutus"
+        "swap_usage": "Vahetusmälu kasutus",
+        "swap_chart_screen_reader_explanation": "See diagramm näitab vahetusmälu kasutust viimase {period} jooksul. Viimane väärtus on {lastValue}%. Keskmine kasutus on {averageUsage}%. Maksimaalne kasutus oli {maxUsage}% kell {maxUsageTime}."
     },
     "domain": {
         "card_title": "Domeen",

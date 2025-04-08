@@ -6,7 +6,6 @@ import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
-import 'package:selfprivacy/ui/atoms/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
@@ -23,8 +22,14 @@ class PermissionsCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ListTileOnSurfaceVariant(
-              title: 'users.permissions'.tr(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'users.permissions'.tr(),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+              ),
             ),
             const Divider(height: 0),
             InkResponse(

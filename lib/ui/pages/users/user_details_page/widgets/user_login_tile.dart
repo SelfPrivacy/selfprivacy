@@ -6,8 +6,8 @@ import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 
-class UserLoginTile extends StatelessWidget {
-  const UserLoginTile({
+class UserEmailLoginCard extends StatelessWidget {
+  const UserEmailLoginCard({
     required this.user,
     required this.domainName,
     super.key,

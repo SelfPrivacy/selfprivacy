@@ -725,12 +725,14 @@ class ServiceRouteArgs {
 class ServiceSettingsRoute extends PageRouteInfo<ServiceSettingsRouteArgs> {
   ServiceSettingsRoute({
     required String serviceId,
+    bool isInstalling = false,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ServiceSettingsRoute.name,
           args: ServiceSettingsRouteArgs(
             serviceId: serviceId,
+            isInstalling: isInstalling,
             key: key,
           ),
           initialChildren: children,
@@ -744,6 +746,7 @@ class ServiceSettingsRoute extends PageRouteInfo<ServiceSettingsRouteArgs> {
       final args = data.argsAs<ServiceSettingsRouteArgs>();
       return ServiceSettingsPage(
         serviceId: args.serviceId,
+        isInstalling: args.isInstalling,
         key: args.key,
       );
     },
@@ -753,16 +756,19 @@ class ServiceSettingsRoute extends PageRouteInfo<ServiceSettingsRouteArgs> {
 class ServiceSettingsRouteArgs {
   const ServiceSettingsRouteArgs({
     required this.serviceId,
+    this.isInstalling = false,
     this.key,
   });
 
   final String serviceId;
 
+  final bool isInstalling;
+
   final Key? key;
 
   @override
   String toString() {
-    return 'ServiceSettingsRouteArgs{serviceId: $serviceId, key: $key}';
+    return 'ServiceSettingsRouteArgs{serviceId: $serviceId, isInstalling: $isInstalling, key: $key}';
   }
 }
 

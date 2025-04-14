@@ -7,6 +7,7 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_outdated_card.dart';
@@ -15,6 +16,7 @@ import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dar
 import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 @RoutePage()
 class ServicesPage extends StatefulWidget {
@@ -50,8 +52,8 @@ class _ServicesPageState extends State<ServicesPage> {
 
     final systemServices = context.watch<ServicesBloc>().state.systemServices;
 
-    final availableServices =
-        context.watch<ServicesBloc>().state.availableServices;
+    final isLoading = isReady && services.isEmpty && systemServices.isEmpty;
+    final fakeServices = List.generate(7, (final int index) => Service.empty);
 
     void toggleSystemServices() {
       setState(() {
@@ -105,8 +107,10 @@ class _ServicesPageState extends State<ServicesPage> {
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   const Gap(16),
-                  if (availableServices.isNotEmpty)
-                    FilledButton.tonal(
+                  Skeletonizer(
+                    enabled: isLoading,
+                    enableSwitchAnimation: true,
+                    child: FilledButton.tonal(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -123,13 +127,31 @@ class _ServicesPageState extends State<ServicesPage> {
                         context.pushRoute(const ServicesCatalogRoute());
                       },
                     ),
+                  ),
                   const Gap(16),
-                  ...services.map(
-                    (final service) => Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 16,
+                  if (isLoading)
+                    ...fakeServices.map(
+                      (final service) => Skeletonizer(
+                        enabled: isLoading,
+                        enableSwitchAnimation: true,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 16,
+                          ),
+                          child: ServicesPageCard(service: service),
+                        ),
                       ),
-                      child: ServicesPageCard(service: service),
+                    ),
+                  ...services.map(
+                    (final service) => Skeletonizer(
+                      enabled: isLoading,
+                      enableSwitchAnimation: true,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 16,
+                        ),
+                        child: ServicesPageCard(service: service),
+                      ),
                     ),
                   ),
                   AnimatedSize(

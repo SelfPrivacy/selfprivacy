@@ -16,8 +16,13 @@ import 'package:selfprivacy/ui/molecules/config_item_fields/domain_string_config
 
 @RoutePage()
 class ServiceSettingsPage extends StatefulWidget {
-  const ServiceSettingsPage({required this.serviceId, super.key});
+  const ServiceSettingsPage({
+    required this.serviceId,
+    this.isInstalling = false,
+    super.key,
+  });
 
+  final bool isInstalling;
   final String serviceId;
 
   @override
@@ -210,8 +215,16 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: FilledButton(
-            onPressed: (isModified && isFormValid)
+            onPressed: ((widget.isInstalling || isModified) && isFormValid)
                 ? () {
+                    if (widget.isInstalling) {
+                      context.read<JobsCubit>().addJob(
+                            ServiceToggleJob(
+                              service: service,
+                              needToTurnOn: true,
+                            ),
+                          );
+                    }
                     context.read<JobsCubit>().addJob(
                           ChangeServiceConfiguration(
                             serviceId: service.id,
@@ -219,7 +232,11 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
                             settings: settings,
                           ),
                         );
-                    context.router.maybePop();
+                    if (widget.isInstalling) {
+                      context.router.popUntilRoot();
+                    } else {
+                      context.router.maybePop();
+                    }
                   }
                 : null,
             child: Text(

@@ -97,8 +97,9 @@ class Service extends Equatable {
 
   static Service empty = const Service(
     id: 'empty',
-    displayName: '',
-    description: '',
+    displayName: 'Empty service',
+    description:
+        "Couldn't load the service. You shouldn't be able to see this. If you see this, please report it to SelfPrivacy support.",
     isEnabled: false,
     isRequired: false,
     isMovable: false,
@@ -111,7 +112,7 @@ class Service extends Equatable {
     ),
     svgIcon: '',
     dnsRecords: [],
-    url: '',
+    url: 'https://example.org/',
     configuration: [],
     isInstalled: false,
     isSystemService: false,

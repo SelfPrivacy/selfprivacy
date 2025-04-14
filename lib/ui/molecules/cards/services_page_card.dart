@@ -10,6 +10,7 @@ import 'package:selfprivacy/ui/molecules/chips/support_level_chip.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ServicesPageCard extends StatelessWidget {
   const ServicesPageCard({required this.service, super.key});
@@ -58,17 +59,24 @@ class ServicesPageCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  IconStatusMask(
-                    status: getStatus(service.status),
-                    icon: SvgPicture.string(
-                      service.svgIcon,
-                      width: 32.0,
-                      height: 32.0,
-                      colorFilter: const ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.srcIn,
-                      ),
-                    ),
+                  Skeleton.leaf(
+                    child: service.svgIcon == ''
+                        ? const Icon(
+                            Icons.question_mark_outlined,
+                            size: 32.0,
+                          )
+                        : IconStatusMask(
+                            status: getStatus(service.status),
+                            icon: SvgPicture.string(
+                              service.svgIcon,
+                              width: 32.0,
+                              height: 32.0,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
                   ),
                   const Gap(8),
                   Expanded(
@@ -118,17 +126,18 @@ class ServicesPageCard extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      if (service.supportLevel != SupportLevel.normal)
-                        SupportLevelChip(
-                          supportLevel: service.supportLevel,
-                          dense: true,
-                        ),
-                      if (service.isSystemService)
-                        const SystemServiceChip(dense: true),
-                    ],
-                  ),
+                  if (service.isInstalled)
+                    Row(
+                      children: [
+                        if (service.supportLevel != SupportLevel.normal)
+                          SupportLevelChip(
+                            supportLevel: service.supportLevel,
+                            dense: true,
+                          ),
+                        if (service.isSystemService)
+                          const SystemServiceChip(dense: true),
+                      ],
+                    ),
                 ],
               ),
             ],

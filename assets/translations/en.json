@@ -422,7 +422,10 @@
         "hide_system_services": "Hide system services"
     },
     "services_catalog": {
-        "title": "Services catalog"
+        "title": "Services catalog",
+        "empty_title": "No services to install",
+        "empty_subtitle": "You've installed everything. Check back later.",
+        "install": "Install"
     },
     "mail": {
         "login_info": "Use username and password from users tab. IMAP port is 143 with STARTTLS, SMTP port is 587 with STARTTLS."

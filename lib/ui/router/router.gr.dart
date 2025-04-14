@@ -767,6 +767,25 @@ class ServiceSettingsRouteArgs {
 }
 
 /// generated route for
+/// [ServicesCatalogPage]
+class ServicesCatalogRoute extends PageRouteInfo<void> {
+  const ServicesCatalogRoute({List<PageRouteInfo>? children})
+      : super(
+          ServicesCatalogRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ServicesCatalogRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ServicesCatalogPage();
+    },
+  );
+}
+
+/// generated route for
 /// [ServicesMigrationPage]
 class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
   ServicesMigrationRoute({

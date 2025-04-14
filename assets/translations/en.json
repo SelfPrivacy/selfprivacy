@@ -417,7 +417,12 @@
             "unknown_description": "Support level for this SelfPrivacy module is unknown. Maybe, it is your own module and you forgot to set the support level field?",
             "system": "System",
             "system_description": "This SelfPrivacy module is an essential system module. It is required for SelfPrivacy to work properly. If you encounter any issues with this module, please contact us."
-        }
+        },
+        "show_system_services": "Show system services",
+        "hide_system_services": "Hide system services"
+    },
+    "services_catalog": {
+        "title": "Services catalog"
     },
     "mail": {
         "login_info": "Use username and password from users tab. IMAP port is 143 with STARTTLS, SMTP port is 587 with STARTTLS."

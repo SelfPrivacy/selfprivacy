@@ -11,6 +11,28 @@ sealed class ServicesState extends Equatable {
       .map((final lock) => lock.serviceId)
       .toList();
 
+  List<Service> get installedServices => services
+      .where(
+        (final service) =>
+            service.isInstalled &&
+            (!service.isSystemService ||
+                (service.isSystemService &&
+                    service.status != ServiceStatus.active)),
+      )
+      .toList();
+
+  List<Service> get systemServices => services
+      .where(
+        (final service) => service.isSystemService,
+      )
+      .toList();
+
+  List<Service> get availableServices => services
+      .where(
+        (final service) => !service.isInstalled,
+      )
+      .toList();
+
   List<Service> get servicesThatCanBeBackedUp => services
       .where(
         (final service) => service.canBeBackedUp,

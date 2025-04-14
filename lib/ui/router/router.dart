@@ -31,6 +31,7 @@ import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
 import 'package:selfprivacy/ui/pages/services/service.dart';
 import 'package:selfprivacy/ui/pages/services/service_settings.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
+import 'package:selfprivacy/ui/pages/services/services_catalog.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/initializing.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/pages/users/new_user.dart';
@@ -110,6 +111,7 @@ class RootRouter extends RootStackRouter {
         AutoRoute(page: DeveloperSettingsRoute.page),
         AutoRoute(page: ServiceRoute.page),
         AutoRoute(page: ServiceSettingsRoute.page),
+        AutoRoute(page: ServicesCatalogRoute.page),
         AutoRoute(page: ServerDetailsRoute.page),
         AutoRoute(page: SelectTimezoneRoute.page),
         AutoRoute(page: DnsDetailsRoute.page),
@@ -141,6 +143,8 @@ String getRouteTitle(final String routeName) {
       return 'basis.services';
     case 'ServiceSettingsRoute':
       return 'service_page.settings';
+    case 'ServicesCatalogRoute':
+      return 'services_catalog.title';
     case 'UsersRoute':
       return 'basis.users';
     case 'MoreRoute':

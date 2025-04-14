@@ -32,8 +32,9 @@ class SupportLevelChip extends StatelessWidget {
               context: context,
               builder: (final BuildContext context) => _SupportLevelDialog(
                 icon: Icons.check_circle_outline_outlined,
-                title: 'service_page.support_levels.deprecated'.tr(),
-                description: 'service_page.support_levels.normal'.tr(),
+                title: 'service_page.support_levels.normal'.tr(),
+                description:
+                    'service_page.support_levels.normal_description'.tr(),
               ),
             );
           },
@@ -149,6 +150,44 @@ class SupportLevelChip extends StatelessWidget {
           padding: dense ? const EdgeInsets.all(4.0) : null,
         );
     }
+  }
+}
+
+class SystemServiceChip extends StatelessWidget {
+  const SystemServiceChip({
+    this.dense = false,
+    super.key,
+  });
+
+  final bool dense;
+
+  @override
+  Widget build(final BuildContext context) {
+    final baseTextTheme = dense
+        ? Theme.of(context).textTheme.labelSmall
+        : Theme.of(context).textTheme.labelLarge;
+
+    return ActionChip(
+      avatar: const Icon(
+        Icons.miscellaneous_services_outlined,
+      ),
+      label: Text(
+        'service_page.support_levels.system'.tr(),
+        style: baseTextTheme,
+      ),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (final BuildContext context) => _SupportLevelDialog(
+            icon: Icons.miscellaneous_services_outlined,
+            title: 'service_page.support_levels.system'.tr(),
+            description: 'service_page.support_levels.system_description'.tr(),
+          ),
+        );
+      },
+      visualDensity: dense ? VisualDensity.compact : null,
+      padding: dense ? const EdgeInsets.all(4.0) : null,
+    );
   }
 }
 

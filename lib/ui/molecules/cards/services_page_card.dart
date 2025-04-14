@@ -118,11 +118,17 @@ class ServicesPageCard extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: 8),
-                  if (service.supportLevel != SupportLevel.normal)
-                    SupportLevelChip(
-                      supportLevel: service.supportLevel,
-                      dense: true,
-                    ),
+                  Row(
+                    children: [
+                      if (service.supportLevel != SupportLevel.normal)
+                        SupportLevelChip(
+                          supportLevel: service.supportLevel,
+                          dense: true,
+                        ),
+                      if (service.isSystemService)
+                        const SystemServiceChip(dense: true),
+                    ],
+                  ),
                 ],
               ),
             ],

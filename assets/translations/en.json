@@ -414,7 +414,9 @@
             "community": "Community",
             "community_description": "This SelfPrivacy module is supported by the community. SelfPrivacy team might not be able to provide support.",
             "unknown": "Unknown",
-            "unknown_description": "Support level for this SelfPrivacy module is unknown. Maybe, it is your own module and you forgot to set the support level field?"
+            "unknown_description": "Support level for this SelfPrivacy module is unknown. Maybe, it is your own module and you forgot to set the support level field?",
+            "system": "System",
+            "system_description": "This SelfPrivacy module is an essential system module. It is required for SelfPrivacy to work properly. If you encounter any issues with this module, please contact us."
         }
     },
     "mail": {

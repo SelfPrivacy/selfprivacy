@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
@@ -73,8 +74,17 @@ class _ServicePageState extends State<ServicePage> {
       ),
       heroTitle: service.displayName,
       children: [
-        if (service.supportLevel != SupportLevel.normal)
-          SupportLevelChip(supportLevel: service.supportLevel),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (service.supportLevel != SupportLevel.normal)
+              SupportLevelChip(supportLevel: service.supportLevel),
+            if (service.isSystemService) const SystemServiceChip(),
+          ],
+        ),
+        if (service.supportLevel != SupportLevel.normal ||
+            service.isSystemService)
+          const Gap(8.0),
         ServiceStatusCard(status: service.status),
         const SizedBox(height: 16),
         if (service.url != null && !serviceDisabled) ...[

@@ -59,8 +59,8 @@
     "ssh": {
         "root_subtitle": "Nende võtmete omanikud saavad serverisse täieliku juurdepääsu ja saavad sellega teha mida iganes. Lisage serverisse ainult omaenda võtmed.",
         "title": "SSH võtmed",
-        "create": "Loo SSH võti",
-        "delete": "Kustuta SSH võti",
+        "create": "Lisage SSH võti",
+        "delete": "Kas kustutada SSH võti?",
         "delete_confirm_question": "Kas olete kindel, et soovite SSH võtme kustutada?",
         "no_key_name": "Nimetu võti",
         "root_title": "Need on superkasutaja võtmed",
@@ -83,7 +83,7 @@
     "locale": "ee",
     "basis": {
         "providers": "Pakkujad",
-        "providers_title": "Teie andmehoidla",
+        "providers_title": "Teie andmekeskus",
         "select": "Valige",
         "services": "Teenused",
         "services_title": "Teie isiklikud, privaatsed ja sõltumatud teenused.",
@@ -116,20 +116,20 @@
         "continue": "Jätka",
         "alert": "Häire",
         "copied_to_clipboard": "Kopeeritud lõikelauale!",
-        "please_connect": "Palun ühendage oma server, domeen ja DNS teenuse pakkuja, et alustada!",
+        "please_connect": "Palun ühendage oma server, domeen ja DNS-teenuse pakkuja, et alustada!",
         "network_error": "Võrgu viga",
         "server_is_outdated": "See SelfPrivacy versioon nõuab API versiooni {versionConstraint}, kuid teie serveri versioon on {currentVersion}. Mõned funktsioonid ei tööta ja võivad ilmneda vead. Palun uuendage oma server.",
         "error": "Viga",
         "feature_unsupported_on_api_version": "See funktsioon on toetatud ainult serveri versioonis {versionConstraint}. Teie serveri versioon on {currentVersion}.",
         "copy": "Kopeeri",
-        "show_qr_code": "Kuva QR kood",
-        "qr_code": "QR kood",
+        "show_qr_code": "Kuva QR-kood",
+        "qr_code": "QR-code",
         "share_link": "Jaga linki"
     },
     "more_page": {
         "configuration_wizard": "Seadistusviisard",
         "onboarding": "Sissejuhatus",
-        "create_ssh_key": "Superkasutaja SSH võtmed"
+        "create_ssh_key": "Superkasutaja SSH-võtmed"
     },
     "console_page": {
         "title": "Konsool",
@@ -147,9 +147,9 @@
         "error_path": "Faili tee",
         "response_data": "Vastuse andmed",
         "context": "Kontekst",
-        "operation": "Operatsioon",
-        "operation_type": "Operatsiooni tüüp",
-        "operation_name": "Operatsiooni nimi",
+        "operation": "Tegevus",
+        "operation_type": "Tegevuse tüüp",
+        "operation_name": "Tegevuse nimi",
         "variables": "Muutujad",
         "error_locations": "Vigade asukohad",
         "error_extensions": "Laiendused",
@@ -166,10 +166,10 @@
         "links": "Lingid",
         "website": "Meie veebisait",
         "documentation": "Dokumentatsioon",
-        "matrix_channel": "Kanal Matrix",
+        "matrix_channel": "Matrix kanal",
         "telegram_channel": "Telegram kanal",
-        "get_support": "Abi saamine",
-        "matrix_support_chat": "Matrixi toetuse vestlus",
+        "get_support": "Saada abi",
+        "matrix_support_chat": "Matrix toetuse vestlus",
         "telegram_support_chat": "Toetuse vestlus Telegram",
         "email_support": "Toetus e-posti teel",
         "contribute": "Kaasa aitama",
@@ -500,7 +500,26 @@
         "modified": "Muutatud",
         "invalid_input": "Vigane sisend",
         "create_job": "Loo ülesanne",
-        "wait_for_jobs": "Server on hõivatud teiste ülesannetega. Palun oodake, kuni need on lõpetatud."
+        "wait_for_jobs": "Server on hõivatud teiste ülesannetega. Palun oodake, kuni need on lõpetatud.",
+        "homepage": "Projekti koduleht",
+        "source_code": "Lähtekood",
+        "license": "Litsents",
+        "support_levels": {
+            "normal": "Toetatud",
+            "normal_description": "See SelfPrivacy moodul on tavapäraselt toetatud SelfPrivacy meeskonna poolt. Kui teil tekib selle mooduliga probleeme, võtke meiega julgelt ühendust.",
+            "experimental": "Eksperimentaalne",
+            "experimental_description": "See SelfPrivacy moodul on eksperimentaalne. See ei pruugi veel töötada ettenähtud viisil.",
+            "deprecated": "Aegunud",
+            "deprecated_description": "See SelfPrivacy moodul on aegunud. Me ei paku enam selle teenuse tuge ja see ei pruugi töötada ettenähtud viisil.",
+            "community": "Kogukond",
+            "community_description": "See SelfPrivacy moodul on kogukonna poolt toetatud. SelfPrivacy meeskond ei pruugi olla võimeline tuge pakkuma.",
+            "unknown": "Tundmatu",
+            "unknown_description": "Selle SelfPrivacy mooduli tugitase on teadmata. Võib-olla on see teie enda loodud moodul ja te unustasite määrata tugitaseme välja?",
+            "system": "Süsteem",
+            "system_description": "See SelfPrivacy moodul on oluline süsteemi moodul. See on vajalik, et SelfPrivacy töötaks korralikult. Kui teil tekib selle mooduliga probleeme, võtke meiega ühendust."
+        },
+        "show_system_services": "Kuva süsteemi teenused",
+        "hide_system_services": "Peida süsteemi teenused"
     },
     "mail": {
         "login_info": "Kasutage kasutajanime ja parooli kasutajate vahekaardilt. IMAP port on 143 koos STARTTLS, SMTP port on 587 koos STARTTLS."
@@ -601,7 +620,8 @@
         "user_delete_protected": "Sellel kasutajal on kaitse ja teda ei saa kustutada",
         "request_password_reset_link": "Taotle parooli lähtestamise linki",
         "password_reset_link": "Parooli lähtestamise link",
-        "creating_password_reset_link": "Lähtestamise lingi loomine"
+        "creating_password_reset_link": "Lähtestamise lingi loomine",
+        "groups_only_email_short_description": "Omab juurdepääsu ainult E-postile"
     },
     "devices": {
         "main_screen": {
@@ -663,7 +683,7 @@
         "upgrade_failed": "Serveri värskendamine ebaõnnestus",
         "upgrade_server": "Värskenda serverit",
         "reboot_server": "Taaskäivita server",
-        "create_ssh_key": "Looge SSH võti {} jaoks",
+        "create_ssh_key": "Lisa SSH-võti jaoks {}",
         "generic_error": "Ei õnnestunud ühendust serveriga luua!",
         "delete_ssh_key": "Kustutage SSH võti {} jaoks",
         "server_jobs": "Tööd serveris",
@@ -764,5 +784,11 @@
         "add_server_provider_token": "Lisa serveri pakkuja token",
         "server_provider_unknown": "Tundmatu serveri pakkuja",
         "server_provider_unknown_description": "Teie serveri pakkujat ei toetata selle rakenduse versioonis."
+    },
+    "services_catalog": {
+        "title": "Teenuste kataloog",
+        "empty_title": "Pole teenuseid, mida installida",
+        "empty_subtitle": "Olete kõik installinud. Kontrollige hiljem.",
+        "install": "Installi"
     }
 }

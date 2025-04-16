@@ -86,10 +86,26 @@ class Service extends Equatable {
       case 'jitsi-meet':
         return 'video.login_info'.tr();
       case 'nextcloud':
+        if (configuration.any(
+          (final configItem) =>
+              configItem is BoolServiceConfigItem &&
+              configItem.id == 'enableSso' &&
+              configItem.value == true,
+        )) {
+          return '';
+        }
         return 'cloud.login_info'.tr();
       case 'pleroma':
         return 'social_network.login_info'.tr();
       case 'gitea':
+        if (configuration.any(
+          (final configItem) =>
+              configItem is BoolServiceConfigItem &&
+              configItem.id == 'enableSso' &&
+              configItem.value == true,
+        )) {
+          return '';
+        }
         return 'git.login_info'.tr();
     }
     return '';

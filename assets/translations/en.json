@@ -428,7 +428,7 @@
         "install": "Install"
     },
     "mail": {
-        "login_info": "Use username and password from users tab. IMAP port is 143 with STARTTLS, SMTP port is 587 with STARTTLS."
+        "login_info": "Your users can visit Self-service portal at a link above to get a password with connection instructions."
     },
     "password_manager": {
         "login_info": "You will have to create an account on the website."

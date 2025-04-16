@@ -106,8 +106,7 @@ class ServicesPageCard extends StatelessWidget {
                     Column(
                       children: [
                         _ServiceLink(
-                          url: domainName,
-                          isActive: false,
+                          url: 'https://api.$domainName/user',
                         ),
                         const SizedBox(height: 8),
                       ],
@@ -151,19 +150,14 @@ class ServicesPageCard extends StatelessWidget {
 class _ServiceLink extends StatelessWidget {
   const _ServiceLink({
     required this.url,
-    this.isActive = true,
   });
 
   final String url;
-  final bool isActive;
-
   @override
   Widget build(final BuildContext context) => GestureDetector(
-        onTap: isActive
-            ? () => launchURL(
-                  url,
-                )
-            : null,
+        onTap: () => launchURL(
+          url,
+        ),
         child: Text(
           url,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(

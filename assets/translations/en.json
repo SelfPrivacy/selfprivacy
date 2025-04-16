@@ -365,7 +365,7 @@
         "extending_volume_provider_waiting": "Provider volume resized, waiting 10 seconds…",
         "extending_volume_server_waiting": "Server volume resized, waiting 20 seconds…",
         "extending_volume_rebooting": "Rebooting server…",
-        "extending_volume_modal_description": "Upgrade to {size} for {price} plan per month.",
+        "extending_volume_modal_description": "Upgrade to {size} for {price} per month.",
         "size": "Size",
         "price": "Price",
         "data_migration_title": "Data migration",

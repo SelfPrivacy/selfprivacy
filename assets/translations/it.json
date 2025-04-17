@@ -85,7 +85,26 @@
         "create_job": "Crea lavoro",
         "update_job": "Aggiorna lavoro",
         "enable": "Abilita il servizio",
-        "uses": "Utilizzati {usage} su {volume}"
+        "uses": "Utilizzati {usage} su {volume}",
+        "homepage": "Home page del progetto",
+        "source_code": "Codice sorgente",
+        "license": "Licenza",
+        "support_levels": {
+            "normal": "Supportato",
+            "normal_description": "Questo modulo SelfPrivacy è supportato dal team SelfPrivacy normalmente. Se riscontri problemi con questo modulo, non esitare a contattarci.",
+            "experimental": "Sperimentale",
+            "experimental_description": "Questo modulo SelfPrivacy è sperimentale. Potrebbe non funzionare come previsto.",
+            "deprecated": "Deprecato",
+            "deprecated_description": "Questo modulo SelfPrivacy è deprecato. Non forniamo più supporto per questo servizio e potrebbe non funzionare come previsto.",
+            "community": "Comunità",
+            "community_description": "Questo modulo SelfPrivacy è supportato dalla comunità. Il team di SelfPrivacy potrebbe non essere in grado di fornire supporto.",
+            "unknown": "Sconosciuto",
+            "unknown_description": "Il livello di supporto per questo modulo SelfPrivacy è sconosciuto. Forse, è un tuo modulo e hai dimenticato di impostare il campo del livello di supporto?",
+            "system": "Sistema",
+            "system_description": "Questo modulo SelfPrivacy è un modulo di sistema essenziale. È necessario che SelfPrivacy funzioni correttamente. Se riscontri problemi con questo modulo, ti preghiamo di contattarci."
+        },
+        "show_system_services": "Mostra i servizi di sistema",
+        "hide_system_services": "Nascondi i servizi di sistema"
     },
     "about_application_page": {
         "source_code": "Codice sorgente",
@@ -254,7 +273,7 @@
         "upgrade_failed": "Impossibile aggiornare il server",
         "collect_nix_garbage_failed": "Impossibile raccogliere i files da eliminare",
         "reboot_server": "Riavvia il server",
-        "create_ssh_key": "Creare la chiave SSH per {}",
+        "create_ssh_key": "Aggiungi chiave SSH per {}",
         "change_server_timezone": "Cambia il fuso orario del server",
         "dns_records_did_not_change": "Nessuna modifica necessaria",
         "dns_records_changed": "Records DNS aggiornati",
@@ -295,7 +314,9 @@
         "disk_title": "Utilizzo disco",
         "ssh_users": "Utenti SSH",
         "ram_usage": "Utilizzo medio: {average}. Massimo: {max}.",
-        "failed_to_load_memory_metrics": "Impossibile caricare i dati sull'utilizzo della memoria. Potrebbe trattarsi di un problema di connessione, oppure i dati non sono ancora sufficienti."
+        "failed_to_load_memory_metrics": "Impossibile caricare i dati sull'utilizzo della memoria. Potrebbe trattarsi di un problema di connessione, oppure i dati non sono ancora sufficienti.",
+        "swap_chart_screen_reader_explanation": "Questo grafico mostra l'utilizzo della memoria di swap nell'ultimo periodo: {period}. L'ultimo valore è il {lastValue}%. L'utilizzo massimo è il {maxUsage}% a {maxUsageTime}.",
+        "swap_usage": "Utilizzo swap"
     },
     "validations": {
         "length_longer": "La lunghezza è [], deve essere minore o uguale a {}",
@@ -608,7 +629,7 @@
     },
     "locale": "it",
     "mail": {
-        "login_info": "Utilizzare il nome utente e la password dalla scheda Utenti. La porta IMAP è 143 con STARTTLS, la porta SMTP è 587 con STARTTLS."
+        "login_info": "I tuoi utenti possono visitare il portale Self-service aprendo il link qui sopra per ottenere una password e le istruzioni di connessione."
     },
     "users": {
         "nobody_here": "Non c'è nessuno qui",
@@ -658,7 +679,8 @@
         "no_groups": "Non ci sono ancora gruppi",
         "no_groups_subtitle": "Sembra che tu non abbia ancora servizi con SSO abilitato",
         "user_modify_protected": "Questo utente è protetto e non può essere modificato",
-        "user_delete_protected": "Questo utente è protetto e non può essere cancellato"
+        "user_delete_protected": "Questo utente è protetto e non può essere cancellato",
+        "groups_only_email_short_description": "Ha accesso solo alla Email"
     },
     "recovery_key": {
         "key_duedate_toggle": "Limita per tempo",
@@ -762,5 +784,11 @@
         "dangerous_settings": "Impostazioni pericolose",
         "title": "Impostazioni applicazione",
         "dark_theme_title": "Tema scuro"
+    },
+    "services_catalog": {
+        "title": "Catalogo servizi",
+        "empty_title": "Nessun servizio da installare",
+        "empty_subtitle": "Hai installato tutto. Riprova più tardi.",
+        "install": "Installa"
     }
 }

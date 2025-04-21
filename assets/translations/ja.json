@@ -6,7 +6,7 @@
         "providers_title": "あなたのデータセンター",
         "select": "選択",
         "services": "サービス",
-        "services_title": "あなたのプライベートで、独立した、個人用のサービスです。",
+        "services_title": "あなた自身のプライベートで個人用のサービスです。",
         "users": "ユーザー",
         "more": "詳細",
         "next": "次へ",
@@ -36,14 +36,18 @@
         "reset": "リセット",
         "providers": "サービス提供者",
         "copied_to_clipboard": "クリップボードにコピーしました！",
-        "please_connect": "開始するにはサーバー、ドメイン、DNSのサービス提供者を接続してください！",
+        "please_connect": "始めるにはサーバー、ドメイン、DNSのサービス提供者を接続してください！",
         "network_error": "ネットワークエラー",
         "feature_unsupported_on_api_version": "この機能はサーバーのバージョン{versionConstraint}でのみサポートされています。あなたのサーバーのバージョンは{currentVersion}です。",
         "server_is_outdated": "このSelfPrivacyのバージョンではAPIのバージョン{versionConstraint}が必要ですが、あなたのサーバーのバージョンは{currentVersion}です。一部の機能は適切に動作せずエラーが発生するおそれがあります。サーバーをアップグレードしてください。",
-        "error": "エラー"
+        "error": "エラー",
+        "copy": "コピー",
+        "show_qr_code": "QRコードを表示",
+        "qr_code": "QRコード",
+        "share_link": "リンクを共有"
     },
     "application_settings": {
-        "reset_config_description": "APIとルートユーザーをリセット。",
+        "reset_config_description": "APIとルートユーザーをリセットします。",
         "title": "アプリケーションの設定",
         "dark_theme_title": "ダークテーマ",
         "dangerous_settings": "要注意の設定",
@@ -61,7 +65,7 @@
         "error": "エラー",
         "rest_api_request": "REST APIリクエスト",
         "rest_api_response": "REST APIレスポンス",
-        "history_empty": "データはまだありません",
+        "history_empty": "まだデータがありません",
         "graphql_request": "GraphQLリクエスト",
         "graphql_response": "GraphQLレスポンス",
         "logged_at": "ログイン済",
@@ -146,12 +150,12 @@
         "server_provider_unknown_description": "あなたのサーバーのサービス提供者が不明です。APIトークンを入力せずに続行できます。"
     },
     "ssh": {
-        "root_subtitle": "これらの鍵の所有者は、サーバーへの完全なアクセスを行い、全く自由にサーバーを操作することができます。あなた自身の鍵だけをサーバーに追加してください。",
+        "root_subtitle": "これらの鍵の所有者は、サーバーへの完全なアクセスを行い、全く自由にサーバーを操作できます。あなたの鍵だけをサーバーに追加してください。",
         "ssh_disabled_warning": "SSHは無効になっています。サーバーの設定から有効にできます。",
-        "title": "SSH鍵",
-        "create": "SSH鍵を作成",
-        "delete": "SSH鍵を削除",
-        "delete_confirm_question": "SSH鍵を削除してよろしいですか？",
+        "title": "SSHの鍵",
+        "create": "SSHの鍵を追加",
+        "delete": "SSHの鍵を削除しますか？",
+        "delete_confirm_question": "SSHの鍵を削除してよろしいですか？",
         "no_key_name": "無名の鍵",
         "root_title": "これらはスーパーユーザーの鍵です",
         "input_label": "Public ED25519、ECDSA、またはRSA鍵"
@@ -161,10 +165,10 @@
         "page2_backup_provider_title": "バックアップのサービス提供者",
         "page2_dns_provider_title": "DNSのサービス提供者",
         "page2_title": "SelfPrivacyはクラウドサービスではなく、あなたの個人用データセンターです",
-        "page2_text": "SelfPrivacyは、あなたが選択するサービス提供者でのみ機能します。必要なアカウントを持っていない場合、私たちはアカウントの作成をお手伝いします。",
+        "page2_text": "SelfPrivacyは、あなたが選ぶサービス提供者でのみ機能します。必要なアカウントを持っていなければ、アカウントの作成をお手伝いします。",
         "page2_server_provider_title": "サーバーのプロバイダー",
         "page1_title": "デジタル環境の自主独立を、私たち皆の手に",
-        "page2_server_provider_text": "サーバーのサービス提供者は、自ら所有するデータセンターで、あなたのサーバーを管理します。SelfPrivacyは、自動的にサービス提供者に接続して、必要な事項を設定します。",
+        "page2_server_provider_text": "サーバーのサービス提供者は、自ら所有するデータセンターで、あなたのサーバーを管理します。SelfPrivacyは、自動的にサービス提供者に接続して、必要な項目を設定します。",
         "page2_backup_provider_text": "サーバーに何かあった場合を考えてみましょう。ハッカーによる攻撃、サービス拒否攻撃が行われた場合、または、不慮の事故によってデータを削除してしまった場合を想像してみましょう。あなたのデータは、バックアップのサービス提供者に安全に保存されます。バックアップは安全に暗号化され、それを使えばいつでもサーバーを復元することができます。",
         "page2_dns_provider_text": "インターネット上で場所をもつためにはドメインが必要です。また、ドメインをサーバーに向けるために、信頼できるDNSのサービス提供者も必要となります。サポートするDNSのサービス提供者を選択して、ネットワークを自動的に設定することをお勧めします。"
     },
@@ -191,7 +195,8 @@
         "ssh_users": "SSHユーザー",
         "ram_usage": "平均的な使用状況: {average}. 最大: {max}.",
         "disk_title": "保存領域の使用状況",
-        "failed_to_load_memory_metrics": "メモリーの使用状況を読み込めませんでした。回線の接続に問題があるか、十分なデータがまだありません。"
+        "failed_to_load_memory_metrics": "メモリーの使用状況を読み込めませんでした。回線の接続に問題があるか、十分なデータがまだありません。",
+        "swap_usage": "スワップの使用状況"
     },
     "domain": {
         "email_subtitle": "安全な電子メールの送受信に必要なレコードです。",
@@ -205,17 +210,19 @@
         "refreshing": "状況を更新しています…",
         "error": "問題が見つかりました",
         "error_subtitle": "修正するには、ここをタップしてください。タップすると、カスタムのレコードも削除されます。",
-        "uninitialized": "データはまだ取得されていません"
+        "uninitialized": "データはまだ取得されていません",
+        "other_title": "その他",
+        "other_subtitle": "SelfPrivacyが機能するために必要なその他のレコード"
     },
     "backup": {
         "backups_encryption_key_show": "暗号化鍵を表示",
         "backups_encryption_key": "暗号化鍵",
-        "backups_encryption_key_subtitle": "安全な場所に保管してください。",
+        "backups_encryption_key_subtitle": "安全な場所に保管してください",
         "autobackup_set_period": "期間を設定",
         "snapshots_title": "スナップショットの一覧",
         "pending_jobs": "現在実行中のバックアップのジョブ",
         "reupload_key": "鍵を強制的に再アップロード",
-        "card_subtitle": "バックアップを管理",
+        "card_subtitle": "直近のバックアップは{numericValue}{measurement}前です",
         "initialize": "初期化",
         "start": "バックアップを開始",
         "latest_snapshots": "最近のスナップショット",
@@ -235,11 +242,11 @@
                 "two": "最新の{}個のバックアップを作成日時によらず保存",
                 "few": "最新の{}個のバックアップを作成日時によらず保存",
                 "one": "最新の{}個のバックアップを作成日時によらず保存",
-                "zero": "ルールは無効です"
+                "zero": "ルールは無効に設定されています"
             },
             "last_infinite": "全てのバックアップを保存",
             "daily": {
-                "zero": "ルールは無効です",
+                "zero": "ルールは無効に設定されています",
                 "one": "直近{}個の毎日のバックアップを保存します",
                 "two": "直近{}個の毎日のバックアップを保存します",
                 "other": "直近{}個の毎日のバックアップを保存します",
@@ -247,7 +254,7 @@
                 "many": "直近{}個の毎日のバックアップを保存します"
             },
             "weekly": {
-                "zero": "ルールは無効です",
+                "zero": "ルールは無効に設定されています",
                 "one": "直近{}個の毎週のバックアップを保存します",
                 "other": "直近{}個の毎週のバックアップを保存します",
                 "few": "直近{}個の毎週のバックアップを保存します",
@@ -255,7 +262,7 @@
                 "many": "直近{}個の毎週のバックアップを保存します"
             },
             "monthly": {
-                "zero": "ルールは無効です",
+                "zero": "ルールは無効に設定されています",
                 "one": "直近{}個の毎月のバックアップを保存します",
                 "two": "直近{}個の毎月のバックアップを保存します",
                 "few": "直近{}個の毎月のバックアップを保存します",
@@ -263,7 +270,7 @@
                 "other": "直近{}個の毎月のバックアップを保存します"
             },
             "yearly": {
-                "zero": "ルールは無効です",
+                "zero": "ルールは無効に設定されています",
                 "two": "直近{}個の毎年のバックアップを保存します",
                 "few": "直近{}個の毎年のバックアップを保存します",
                 "many": "直近{}個の毎年のバックアップを保存します",
@@ -309,7 +316,7 @@
         "refetch_backups": "バックアップの一覧を再取得",
         "refresh": "状況を更新",
         "restore_started": "復元を開始しました。現在の状況に関してはジョブ一覧を確認してください",
-        "snapshot_modal_service_not_found": "これはあなたのサーバーで既に運営されていないサービスのスナップショットです。これは通常は起こらず、自動復元を行うことはできません。スナップショットをダウンロードして、手動で復元することもできます。手助けが必要な場合は、SelfPrivacyのサポートに連絡してください。",
+        "snapshot_modal_service_not_found": "これはあなたのサーバーで既に運用されていないサービスのスナップショットです。これは通常は起こらず、自動復元を行うことはできません。スナップショットをダウンロードして、手動で復元することもできます。手助けが必要な場合は、SelfPrivacyのサポートに連絡してください。",
         "quotas_only_applied_to_autobackups": "この設定は自動バックアップにのみ適用されます。手動バックアップは削除されません。",
         "refetching_list": "数分で一覧が更新されます",
         "refetch_backups_subtitle": "キャッシュを破棄して、保管領域のサービス提供者からデータを再度取得します。追加料金がかかる可能性があります。",
@@ -322,7 +329,13 @@
         },
         "rotation_quotas_title": "スナップショットのローテーションの設定",
         "set_rotation_quotas": "新しいローテーションの割り当てを設定",
-        "backups_encryption_key_not_found": "暗号化の鍵がまだ見つかりません。後ほど改めて試してください。"
+        "backups_encryption_key_not_found": "暗号化の鍵がまだ見つかりません。後ほど改めて試してください。",
+        "measurement": {
+            "seconds": "秒",
+            "hours": "時",
+            "days": "日",
+            "minutes": "分"
+        }
     },
     "service_page": {
         "open_in_browser": "ブラウザーで開く",
@@ -359,7 +372,7 @@
         "could_not_fetch_description": "インターネット接続を確認して、再度試してください",
         "could_not_create_user": "ユーザーを作成できませんでした",
         "could_not_delete_user": "ユーザーを削除できませんでした",
-        "could_not_add_ssh_key": "SSH鍵を追加できませんでした",
+        "could_not_add_ssh_key": "SSHの鍵を追加できませんでした",
         "email_login": "電子メールによるログイン",
         "user_already_exists": "同じユーザー名のユーザーが既に存在しています",
         "delete_confirm_question": "よろしいですか？",
@@ -369,8 +382,23 @@
         "delete_user": "ユーザーを削除",
         "login": "ログイン",
         "account": "アカウント",
-        "username_rule": "ユーザー名には小文字のラテンアルファベット、数字、アンダーバーのみを使用できます。数字を先頭に置くことは避けるべきです",
-        "no_ssh_notice": "このユーザーには電子メールとSSHのアカウントのみが作成されます。全てのサービスのシングルサインオンは近日中に実装されます。"
+        "username_rule": "ユーザー名には小文字のラテンアルファベット、数字、アンダーバーのみを使用できます。数字を先頭に置くことは避けてください",
+        "no_ssh_notice": "このユーザーには電子メールとSSHのアカウントのみが作成されます。全てのサービスのシングルサインオンは近日中に実装されます。",
+        "group": "グループ",
+        "permissions": "権限",
+        "groups_only_email_title": "電子メールのみ",
+        "groups_admin_title": "管理者",
+        "permission_description_admin_access": "{serviceName}の管理者権限",
+        "could_not_update_user": "ユーザーを更新できませんでした",
+        "add_explicit_permissions": "その他の権限を追加",
+        "password_reset_link": "パスワードのリセット用のリンク",
+        "request_password_reset_link": "パスワードのリセット用のリンクを要求",
+        "could_not_load_user": "ユーザーを読み込めませんでした",
+        "creating_password_reset_link": "パスワードのリセット用のリンクを作成しています",
+        "no_groups": "グループがありません",
+        "user_delete_protected": "このユーザーは保護されており削除できません",
+        "could_not_generate_password_link": "パスワードのリセット用のリンクを作成できませんでした",
+        "user_modify_protected": "このユーザーは保護されており変更できません"
     },
     "devices": {
         "add_new_device_screen": {
@@ -428,7 +456,7 @@
     "jobs": {
         "server_jobs": "サーバー上のジョブ",
         "delete_ssh_key": "{}用のSSH鍵を削除",
-        "create_ssh_key": "{}用のSSH鍵を作成",
+        "create_ssh_key": "{}用のSSH鍵を追加",
         "change_server_timezone": "サーバーのタイムゾーンを変更",
         "change_auto_upgrade_settings": "自動アップグレードの設定を変更",
         "job_removed": "ジョブを削除しました",
@@ -521,7 +549,7 @@
     "initializing": {
         "select_provider_price_free": "無料",
         "connect_to_server": "サーバーの選択から始めましょう。",
-        "select_provider_countries_text_hetzner": "ドイツ、フィンランド、アメリカ合衆国",
+        "select_provider_countries_text_hetzner": "ドイツ、フィンランド、アメリカ合衆国、シンガポール",
         "select_provider_payment_title": "支払方法",
         "select_provider_price_text_hetzner": "比較的小規模なサーバーと50GBのディスク容量で、月額8ユーロ",
         "select_provider_price_text_do": "比較的小規模なサーバーと50GBのディスク容量で、月額17ユーロ",
@@ -637,7 +665,7 @@
         "login_info": "ウェブサイトでアカウントを作成する必要があります。"
     },
     "mail": {
-        "login_info": "ユーザータブのユーザー名とパスワードを使用してください。IMAPのポート番号は143、SMTPのポート番号は587となります。両方ともSTARTTLSを指定してください。"
+        "login_info": "ユーザーは、リンク先のセルフサービスポータルで、接続に関する設定とパスワードを入手できます。"
     },
     "video": {
         "login_info": "アカウントは不要です。"

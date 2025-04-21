@@ -466,7 +466,7 @@
         "extend_volume_button": "Laiendage helitugevust",
         "extending_volume_price_info": "Hind sisaldab käibemaksu ja on prognoositud teie serveripakkuja esitatud hinnaandmete põhjal. Server taaskäivitatakse pärast suuruse muutmist.",
         "extending_volume_error": "Helitugevuse suurendamist ei saanud lähtestada.",
-        "extending_volume_modal_description": "Uuendage {size} plaanile {price} kuus.",
+        "extending_volume_modal_description": "Uuenda paketile {size}, hind {price} kuus.",
         "size": "Suurus",
         "price": "Hind",
         "data_migration_title": "Andmete migratsioon",
@@ -522,7 +522,7 @@
         "hide_system_services": "Peida süsteemi teenused"
     },
     "mail": {
-        "login_info": "Kasutage kasutajanime ja parooli kasutajate vahekaardilt. IMAP port on 143 koos STARTTLS, SMTP port on 587 koos STARTTLS."
+        "login_info": "Teie kasutajad saavad külastada iseteenindusportaali ülaltoodud lingi kaudu, et saada parool koos ühendusjuhistega."
     },
     "password_manager": {
         "login_info": "Teil tuleb luua konto veebisaidil."

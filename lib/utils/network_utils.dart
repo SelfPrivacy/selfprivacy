@@ -100,13 +100,8 @@ List<DnsRecord> getProjectDnsRecords(
 
   final DnsRecord mx = DnsRecord(type: 'MX', name: '@', content: domainName);
   final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);
+  final DnsRecord kanidmA = DnsRecord(type: 'A', name: 'auth', content: ip4);
   final DnsRecord cloudA = DnsRecord(type: 'A', name: 'cloud', content: ip4);
-  final DnsRecord gitA = DnsRecord(type: 'A', name: 'git', content: ip4);
-  final DnsRecord meetA = DnsRecord(type: 'A', name: 'meet', content: ip4);
-  final DnsRecord passwordA =
-      DnsRecord(type: 'A', name: 'password', content: ip4);
-  final DnsRecord socialA = DnsRecord(type: 'A', name: 'social', content: ip4);
-  final DnsRecord vpn = DnsRecord(type: 'A', name: 'vpn', content: ip4);
 
   const DnsRecord txt1 = DnsRecord(
     type: 'TXT',
@@ -135,15 +130,11 @@ List<DnsRecord> getProjectDnsRecords(
   return <DnsRecord>[
     domainA,
     apiA,
+    kanidmA,
     cloudA,
-    gitA,
-    meetA,
-    passwordA,
-    socialA,
     mx,
     txt1,
     txt2,
     if (!isCreating) txt3,
-    vpn,
   ];
 }

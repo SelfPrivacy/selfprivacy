@@ -34,7 +34,7 @@
 
 * Estonian
 
-    * Dmitri B. (72)
+    * Dmitri B. (74)
 
 * German
 
@@ -43,10 +43,13 @@
 
 * Italian
 
-    * Genio (38)
+    * Genio (67)
+
+* Japanese
+
+    * shirahara (55)
 
 * Russian
 
     * Inex Code (73)
-
 

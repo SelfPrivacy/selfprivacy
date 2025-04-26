@@ -508,7 +508,7 @@
         "ssh_disabled_warning": "SSH è disabilitato. Puoi abilitarlo nelle impostazioni del server.",
         "create": "Crea una chiave SSH",
         "title": "Chiavi SSH",
-        "delete": "Cancella la chiave SSH",
+        "delete": "Cancello la chiave SSH?",
         "delete_confirm_question": "Sei sicuro di voler cancellare la chiave SSH?"
     },
     "storage": {
@@ -519,7 +519,7 @@
         "extending_volume_server_waiting": "Volume del server ridimensionato, attendi 20 secondi…",
         "extending_volume_rebooting": "Riavvio del server…",
         "mb": "{} MB",
-        "extending_volume_modal_description": "Aggiornamento a {size} per {price}, costo piano mensile.",
+        "extending_volume_modal_description": "Aggiornamento a {size} per {price}, mensili.",
         "extending_volume_price_info": "Il prezzo include l'IVA ed è stimato in base ai dati sui prezzi forniti dal provider del server. Il server verrà riavviato dopo il ridimensionamento.",
         "extending_volume_description": "Il ridimensionamento del volume consente di archiviare più dati sul server senza espandere il server stesso. Il volume può essere solo esteso: la riduzione non è possibile.",
         "extending_volume_provider_waiting": "Ridimensionamento del volume del provider, attendi 10 secondi…",

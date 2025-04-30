@@ -37,8 +37,10 @@ query AllServices {
       }
       id
       isEnabled
+      isInstalled
       isMovable
       isRequired
+      isSystemService
       canBeBackedUp
       backupDescription
       status
@@ -51,6 +53,16 @@ query AllServices {
       }
       svgIcon
       url
+      homepage
+      sourcePage
+      license {
+        free
+        fullName
+        redistributable
+        shortName
+        url
+      }
+      supportLevel
       configuration {
         fieldId
         description

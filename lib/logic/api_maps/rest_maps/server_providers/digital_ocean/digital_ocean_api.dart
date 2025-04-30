@@ -92,9 +92,9 @@ class DigitalOceanApi extends RestApiMap {
         'user_data': '#cloud-config\n'
             'runcmd:\n'
             '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | '
-            "API_TOKEN=$serverApiToken CONFIG_URL='https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-template/archive/master.tar.gz' "
-            "DNS_PROVIDER_TOKEN=$dnsApiToken DNS_PROVIDER_TYPE=$dnsProviderType DOMAIN='$domainName' ENCODED_PASSWORD='$base64Password' "
-            "HOSTNAME=$hostName LUSER='${rootUser.login}' NIX_VERSION=2.18.1 PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' "
+            "API_TOKEN=$serverApiToken ENCODED_PASSWORD='$base64Password' "
+            "DNS_PROVIDER_TOKEN=$dnsApiToken DNS_PROVIDER_TYPE=$dnsProviderType DOMAIN='$domainName' "
+            "HOSTNAME=$hostName LUSER='${rootUser.login}' PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' "
             "${customSshKey != null ? "SSH_AUTHORIZED_KEY='$customSshKey'" : ""} "
             'bash 2>&1 | tee /root/nixos-infect.log',
         'region': region,

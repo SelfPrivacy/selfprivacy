@@ -412,7 +412,6 @@
         "settings": "Налады сервера",
         "enable_ssh": "Уключыць SSH",
         "enable_ssh_hint": "Дазволіць доступ да сервера цераз SSH",
-        "allow_password_authentication": "Дазволіць уваход цераз SSH з дапамогай пароля",
         "filter_by_systemd_unit": "Адфільтраваць па юніты systemd"
     },
     "not_ready_card": {
@@ -442,7 +441,6 @@
         "delete_user": "Выдаліць карыстальніка",
         "nobody_here": "Тут будуць адлюстроўвацца карыстальнікі",
         "login": "Логін",
-        "new_user_info_note": "Новы карыстальнік аўтаматычна атрымае доступ да ўсіх сэрвісаў",
         "delete_confirm_question": "Вы напраўда хочаце выдаліць уліковы запіс?",
         "reset_password": "Скінуць пароль",
         "account": "Уліковы запіс",

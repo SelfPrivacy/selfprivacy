@@ -1,0 +1,55 @@
+# 0.13.0 Changelog
+
+## Changes
+
+**Features**
+
+- **Support for Single Sign On**
+- Support for password reset links ([#606](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/606))
+- Allow sharing password reset link or showing it as a QR code ([#606](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/606))
+- Show skeleton animations during users load ([#607](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/607))
+- Handle users' display names ([#607](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/607))
+- Add a screen to update the user ([#607](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/607))
+- Groups support ([#607](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/607))
+- Swap memory metrics graph in server info ([#610](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/610), resolves [#608](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/608))
+- Show additional service metadata ([#613](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/613))
+- **Basic SelfPrivacy catalog implementation** ([#613](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/613))
+- Add indicators for services' support level ([#613](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/613))
+- Hide system services behind a button ([#613](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/613))
+
+**Bug Fixes**
+
+- Flush changes to disk during every step of installation ([#609](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/609), probably resolves [#583](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/583))
+
+**Refactor**
+
+- Remove "allow password auth for SSH" option (For better security, this option is always disabled now, use SSH keys instead)
+- Launch initial sync requests in parallel ([#607](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/607), speeds up initial data load)
+- Do not show irrelevant login instructions when SSO is enabled
+
+
+
+
+### Translation contributions
+
+* Estonian
+
+    * Dmitri B. (74)
+
+* German
+
+    * Sebastian Wallroth (141)
+    * Owen (71)
+
+* Italian
+
+    * Genio (67)
+
+* Japanese
+
+    * shirahara (55)
+
+* Russian
+
+    * Inex Code (73)
+

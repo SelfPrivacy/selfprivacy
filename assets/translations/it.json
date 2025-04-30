@@ -38,7 +38,11 @@
         "network_error": "Errore di rete",
         "feature_unsupported_on_api_version": "Questa funzionalità è supportata solo dalla versione del server {versionConstraint}. Il tuo server è alla versione {currentVersion}.",
         "server_is_outdated": "Questa versione di SelfPrivacy richiede la versione API {versionConstraint}, ma il tuo server utilizza la versione {currentVersion}. Alcune funzioni non potranno essere eseguite e potrebbero verificarsi degli errori. Aggiornare il server.",
-        "error": "Errore"
+        "error": "Errore",
+        "copy": "Copia",
+        "show_qr_code": "Mostra il codice QR",
+        "qr_code": "Codice QR",
+        "share_link": "Condividi il link"
     },
     "domain": {
         "update_list": "Aggiorna elenco",
@@ -81,7 +85,26 @@
         "create_job": "Crea lavoro",
         "update_job": "Aggiorna lavoro",
         "enable": "Abilita il servizio",
-        "uses": "Utilizzati {usage} su {volume}"
+        "uses": "Utilizzati {usage} su {volume}",
+        "homepage": "Home page del progetto",
+        "source_code": "Codice sorgente",
+        "license": "Licenza",
+        "support_levels": {
+            "normal": "Supportato",
+            "normal_description": "Questo modulo SelfPrivacy è supportato dal team SelfPrivacy normalmente. Se riscontri problemi con questo modulo, non esitare a contattarci.",
+            "experimental": "Sperimentale",
+            "experimental_description": "Questo modulo SelfPrivacy è sperimentale. Potrebbe non funzionare come previsto.",
+            "deprecated": "Deprecato",
+            "deprecated_description": "Questo modulo SelfPrivacy è deprecato. Non forniamo più supporto per questo servizio e potrebbe non funzionare come previsto.",
+            "community": "Comunità",
+            "community_description": "Questo modulo SelfPrivacy è supportato dalla comunità. Il team di SelfPrivacy potrebbe non essere in grado di fornire supporto.",
+            "unknown": "Sconosciuto",
+            "unknown_description": "Il livello di supporto per questo modulo SelfPrivacy è sconosciuto. Forse, è un tuo modulo e hai dimenticato di impostare il campo del livello di supporto?",
+            "system": "Sistema",
+            "system_description": "Questo modulo SelfPrivacy è un modulo di sistema essenziale. È necessario che SelfPrivacy funzioni correttamente. Se riscontri problemi con questo modulo, ti preghiamo di contattarci."
+        },
+        "show_system_services": "Mostra i servizi di sistema",
+        "hide_system_services": "Nascondi i servizi di sistema"
     },
     "about_application_page": {
         "source_code": "Codice sorgente",
@@ -250,7 +273,7 @@
         "upgrade_failed": "Impossibile aggiornare il server",
         "collect_nix_garbage_failed": "Impossibile raccogliere i files da eliminare",
         "reboot_server": "Riavvia il server",
-        "create_ssh_key": "Creare la chiave SSH per {}",
+        "create_ssh_key": "Aggiungi chiave SSH per {}",
         "change_server_timezone": "Cambia il fuso orario del server",
         "dns_records_did_not_change": "Nessuna modifica necessaria",
         "dns_records_changed": "Records DNS aggiornati",
@@ -291,7 +314,9 @@
         "disk_title": "Utilizzo disco",
         "ssh_users": "Utenti SSH",
         "ram_usage": "Utilizzo medio: {average}. Massimo: {max}.",
-        "failed_to_load_memory_metrics": "Impossibile caricare i dati sull'utilizzo della memoria. Potrebbe trattarsi di un problema di connessione, oppure i dati non sono ancora sufficienti."
+        "failed_to_load_memory_metrics": "Impossibile caricare i dati sull'utilizzo della memoria. Potrebbe trattarsi di un problema di connessione, oppure i dati non sono ancora sufficienti.",
+        "swap_chart_screen_reader_explanation": "Questo grafico mostra l'utilizzo della memoria di swap nell'ultimo periodo: {period}. L'ultimo valore è il {lastValue}%. L'utilizzo massimo è il {maxUsage}% a {maxUsageTime}.",
+        "swap_usage": "Utilizzo swap"
     },
     "validations": {
         "length_longer": "La lunghezza è [], deve essere minore o uguale a {}",
@@ -579,7 +604,6 @@
             "priority": "Priorità"
         },
         "server_id": "ID server",
-        "allow_password_authentication": "Abilita l'autenticazione con password per SSH",
         "filter_by_systemd_unit": "Filtro per unità systemd",
         "all_units": "Tutte le unità",
         "card_title": "Server",
@@ -589,7 +613,6 @@
         "allow_autoupgrade_hint": "Consenti l'aggiornamento automatico dei pacchetti sul server",
         "reboot_after_upgrade": "Riavvia dopo l'aggiornamento",
         "reboot_after_upgrade_hint": "Riavvio senza conferma dopo l'applicazione delle modifiche al server",
-        "allow_password_authentication_hint": "Consentire agli utenti di accedere alla shell del server con una password (non si applica all'utente root)",
         "ram": "Memoria",
         "resource_usage": "Utilizzo risorse",
         "general_information": "informazioni generali",
@@ -606,12 +629,11 @@
     },
     "locale": "it",
     "mail": {
-        "login_info": "Utilizzare il nome utente e la password dalla scheda Utenti. La porta IMAP è 143 con STARTTLS, la porta SMTP è 587 con STARTTLS."
+        "login_info": "I tuoi utenti possono visitare il portale Self-service aprendo il link qui sopra per ottenere una password e le istruzioni di connessione."
     },
     "users": {
         "nobody_here": "Non c'è nessuno qui",
         "refresh_users": "Aggiorna la lista degli utenti",
-        "new_user_info_note": "Al nuovo utente verrà automaticamente concesso l'accesso a tutti i servizi",
         "delete_confirm_question": "Sei sicuro?",
         "reset_password": "Reset password",
         "account": "Account",
@@ -628,7 +650,37 @@
         "user_already_exists": "Esiste già un utente con questo nome",
         "no_ssh_notice": "Per questo utente vengono creati solo gli account e-mail e SSH. Il Single Sign On per tutti i servizi è in arrivo.",
         "delete_user": "Cancella utente",
-        "login": "Login"
+        "login": "Login",
+        "could_not_generate_password_link": "Impossibile generare il link di reimpostazione della password",
+        "edit_user": "Modifica utente",
+        "display_name": "Mostra il nome",
+        "permissions": "Permessi",
+        "group": "Gruppo",
+        "groups_only_email_title": "Solo E-mail",
+        "groups_only_email_subtitle": "Questo utente ha accesso unicamente alla mail per impostazione predefinita. Puoi garantirgli ulteriori permessi selezionandoli esplicitamente.",
+        "groups_full_user_title": "Utente completo",
+        "groups_full_user_subtitle": "Questo utente ha accesso a tutti i servizi per impostazione predefinita. Puoi elevare i suoi privilegi ad amministratore di un servizio specifico selezionando i relativi permessi.",
+        "groups_full_user_short_description": "Ha accesso a tutti i servizi per impostazione predefinita",
+        "groups_admin_title": "Amministratore",
+        "groups_admin_subtitle": "Questo utente avrà accesso a ogni servizio per impostazione predefinita e avrà privilegi di amministratore per ogni servizio in cui è possibile.",
+        "groups_admin_short_description": "Ha privilegi di amministratore per tutti i servizi per impostazione predefinita",
+        "explicit_permissions_title": "Permessi espliciti",
+        "explicit_permissions_subtitle": "Questo utente avrà queste autorizzazioni indipendentemente dal gruppo selezionato sopra",
+        "add_explicit_permissions": "Aggiungi altri permessi",
+        "permission_description_admin_access": "Privilegi di amministratore a {serviceName}",
+        "permission_description_fallback": "Permesso {permissionType} a {serviceName}",
+        "permission_description_user_access": "Accesso dell'utente a {serviceName}",
+        "could_not_update_user": "Impossibile aggiornare l'utente",
+        "could_not_load_user": "Impossibile caricare l'utente",
+        "request_password_reset_link": "Richiedi il link di reimpostazione della password",
+        "creating_password_reset_link": "Creazione del link di reimpostazione della password",
+        "password_reset_link": "Link di reimpostazione della password",
+        "password_reset_link_description": "Invia questo link a {username} in modo che possa impostare una passkey o una password per il proprio account. Il link è valido per 1 ora.",
+        "no_groups": "Non ci sono ancora gruppi",
+        "no_groups_subtitle": "Sembra che tu non abbia ancora servizi con SSO abilitato",
+        "user_modify_protected": "Questo utente è protetto e non può essere modificato",
+        "user_delete_protected": "Questo utente è protetto e non può essere cancellato",
+        "groups_only_email_short_description": "Ha accesso solo alla Email"
     },
     "recovery_key": {
         "key_duedate_toggle": "Limita per tempo",
@@ -732,5 +784,11 @@
         "dangerous_settings": "Impostazioni pericolose",
         "title": "Impostazioni applicazione",
         "dark_theme_title": "Tema scuro"
+    },
+    "services_catalog": {
+        "title": "Catalogo servizi",
+        "empty_title": "Nessun servizio da installare",
+        "empty_subtitle": "Hai installato tutto. Riprova più tardi.",
+        "install": "Installa"
     }
 }

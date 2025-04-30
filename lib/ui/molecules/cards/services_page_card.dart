@@ -6,9 +6,11 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/masks/icon_status_mask.dart';
+import 'package:selfprivacy/ui/molecules/chips/support_level_chip.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ServicesPageCard extends StatelessWidget {
   const ServicesPageCard({required this.service, super.key});
@@ -57,17 +59,24 @@ class ServicesPageCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  IconStatusMask(
-                    status: getStatus(service.status),
-                    icon: SvgPicture.string(
-                      service.svgIcon,
-                      width: 32.0,
-                      height: 32.0,
-                      colorFilter: const ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.srcIn,
-                      ),
-                    ),
+                  Skeleton.leaf(
+                    child: service.svgIcon == ''
+                        ? const Icon(
+                            Icons.question_mark_outlined,
+                            size: 32.0,
+                          )
+                        : IconStatusMask(
+                            status: getStatus(service.status),
+                            icon: SvgPicture.string(
+                              service.svgIcon,
+                              width: 32.0,
+                              height: 32.0,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
                   ),
                   const Gap(8),
                   Expanded(
@@ -97,8 +106,7 @@ class ServicesPageCard extends StatelessWidget {
                     Column(
                       children: [
                         _ServiceLink(
-                          url: domainName,
-                          isActive: false,
+                          url: 'https://api.$domainName/user',
                         ),
                         const SizedBox(height: 8),
                       ],
@@ -107,14 +115,28 @@ class ServicesPageCard extends StatelessWidget {
                     service.description,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
+                  if (service.loginInfo != '') ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      service.loginInfo,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                    ),
+                  ],
                   const SizedBox(height: 8),
-                  Text(
-                    service.loginInfo,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
+                  if (service.isInstalled)
+                    Row(
+                      children: [
+                        if (service.supportLevel != SupportLevel.normal)
+                          SupportLevelChip(
+                            supportLevel: service.supportLevel,
+                            dense: true,
+                          ),
+                        if (service.isSystemService)
+                          const SystemServiceChip(dense: true),
+                      ],
+                    ),
                 ],
               ),
             ],
@@ -128,19 +150,14 @@ class ServicesPageCard extends StatelessWidget {
 class _ServiceLink extends StatelessWidget {
   const _ServiceLink({
     required this.url,
-    this.isActive = true,
   });
 
   final String url;
-  final bool isActive;
-
   @override
   Widget build(final BuildContext context) => GestureDetector(
-        onTap: isActive
-            ? () => launchURL(
-                  url,
-                )
-            : null,
+        onTap: () => launchURL(
+          url,
+        ),
         child: Text(
           url,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(

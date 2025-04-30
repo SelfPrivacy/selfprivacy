@@ -15,7 +15,9 @@ class Service extends Equatable {
           displayName: service.displayName,
           description: service.description,
           isEnabled: service.isEnabled,
+          isInstalled: service.isInstalled,
           isRequired: service.isRequired,
+          isSystemService: service.isSystemService,
           isMovable: service.isMovable,
           canBeBackedUp: service.canBeBackedUp,
           backupDescription: service.backupDescription,
@@ -26,6 +28,8 @@ class Service extends Equatable {
           ),
           // Decode the base64 encoded svg icon to text.
           svgIcon: utf8.decode(base64.decode(service.svgIcon)),
+          license: service.license.map(LicenseType.fromGraphQL).toList(),
+          supportLevel: SupportLevel.fromGraphQL(service.supportLevel),
           dnsRecords: service.dnsRecords
                   ?.map(
                     (
@@ -36,6 +40,8 @@ class Service extends Equatable {
                   .toList() ??
               [],
           url: service.url,
+          homepage: service.homepage,
+          sourcePage: service.sourcePage,
           configuration: service.configuration
                   ?.map(
                     (
@@ -52,16 +58,22 @@ class Service extends Equatable {
     required this.displayName,
     required this.description,
     required this.isEnabled,
+    required this.isInstalled,
     required this.isRequired,
+    required this.isSystemService,
     required this.isMovable,
     required this.canBeBackedUp,
     required this.backupDescription,
     required this.status,
     required this.storageUsage,
     required this.svgIcon,
+    required this.license,
+    required this.supportLevel,
     required this.dnsRecords,
     required this.configuration,
     this.url,
+    this.homepage,
+    this.sourcePage,
   });
 
   /// TODO Turn loginInfo into dynamic data, not static!
@@ -74,10 +86,26 @@ class Service extends Equatable {
       case 'jitsi-meet':
         return 'video.login_info'.tr();
       case 'nextcloud':
+        if (configuration.any(
+          (final configItem) =>
+              configItem is BoolServiceConfigItem &&
+              configItem.id == 'enableSso' &&
+              configItem.value == true,
+        )) {
+          return '';
+        }
         return 'cloud.login_info'.tr();
       case 'pleroma':
         return 'social_network.login_info'.tr();
       case 'gitea':
+        if (configuration.any(
+          (final configItem) =>
+              configItem is BoolServiceConfigItem &&
+              configItem.id == 'enableSso' &&
+              configItem.value == true,
+        )) {
+          return '';
+        }
         return 'git.login_info'.tr();
     }
     return '';
@@ -85,8 +113,9 @@ class Service extends Equatable {
 
   static Service empty = const Service(
     id: 'empty',
-    displayName: '',
-    description: '',
+    displayName: 'Empty service',
+    description:
+        "Couldn't load the service. You shouldn't be able to see this. If you see this, please report it to SelfPrivacy support.",
     isEnabled: false,
     isRequired: false,
     isMovable: false,
@@ -99,15 +128,21 @@ class Service extends Equatable {
     ),
     svgIcon: '',
     dnsRecords: [],
-    url: '',
+    url: 'https://example.org/',
     configuration: [],
+    isInstalled: false,
+    isSystemService: false,
+    license: [],
+    supportLevel: SupportLevel.unknown,
   );
 
   final String id;
   final String displayName;
   final String description;
   final bool isEnabled;
+  final bool isInstalled;
   final bool isRequired;
+  final bool isSystemService;
   final bool isMovable;
   final bool canBeBackedUp;
   final String backupDescription;
@@ -115,6 +150,10 @@ class Service extends Equatable {
   final ServiceStorageUsage storageUsage;
   final String svgIcon;
   final String? url;
+  final String? homepage;
+  final String? sourcePage;
+  final List<LicenseType> license;
+  final SupportLevel supportLevel;
   final List<DnsRecord> dnsRecords;
   final List<ServiceConfigItem> configuration;
 
@@ -135,6 +174,35 @@ class Service extends Equatable {
         url,
         configuration,
       ];
+}
+
+class LicenseType extends Equatable {
+  const LicenseType({
+    required this.free,
+    required this.redistributable,
+    required this.fullName,
+    required this.shortName,
+    this.url,
+  });
+
+  LicenseType.fromGraphQL(
+    final Query$AllServices$services$allServices$license license,
+  ) : this(
+          free: license.free,
+          redistributable: license.redistributable,
+          fullName: license.fullName,
+          shortName: license.shortName,
+          url: license.url,
+        );
+
+  final bool free;
+  final bool redistributable;
+  final String fullName;
+  final String shortName;
+  final String? url;
+
+  @override
+  List<Object> get props => [free, redistributable, fullName, shortName];
 }
 
 class ServiceStorageUsage extends Equatable {
@@ -177,6 +245,30 @@ enum ServiceStatus {
         return reloading;
       case Enum$ServiceStatusEnum.$unknown:
         return inactive;
+    }
+  }
+}
+
+enum SupportLevel {
+  normal,
+  experimental,
+  deprecated,
+  community,
+  unknown;
+
+  factory SupportLevel.fromGraphQL(final Enum$SupportLevelEnum graphQL) {
+    switch (graphQL) {
+      case Enum$SupportLevelEnum.NORMAL:
+        return normal;
+      case Enum$SupportLevelEnum.EXPERIMENTAL:
+        return experimental;
+      case Enum$SupportLevelEnum.DEPRECATED:
+        return deprecated;
+      case Enum$SupportLevelEnum.COMMUNITY:
+        return community;
+      case Enum$SupportLevelEnum.UNKNOWN:
+      case Enum$SupportLevelEnum.$unknown:
+        return unknown;
     }
   }
 }

@@ -2,14 +2,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/atoms/list_tiles/link_list_tile.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/cards/service_status.dart';
+import 'package:selfprivacy/ui/molecules/chips/support_level_chip.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
@@ -70,128 +74,180 @@ class _ServicePageState extends State<ServicePage> {
         ),
       ),
       heroTitle: service.displayName,
+      heroSubtitle: service.isInstalled ? null : service.description,
       children: [
-        ServiceStatusCard(status: service.status),
-        const SizedBox(height: 16),
-        if (service.url != null && !serviceDisabled)
-          ListTile(
-            iconColor: Theme.of(context).colorScheme.onSurface,
-            onTap: () => launchURL(service.url),
-            onLongPress: () {
-              PlatformAdapter.setClipboard(service.url!);
-              getIt<NavigationService>()
-                  .showSnackBar('basis.copied_to_clipboard'.tr());
-            },
-            leading: const Icon(Icons.open_in_browser),
-            title: Text(
-              'service_page.open_in_browser'.tr(),
-              style: enabledTitleStyle,
-            ),
-            subtitle: Text(
-              service.url!.replaceAll('https://', ''),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-        const SizedBox(height: 8),
-        const Divider(),
-        const SizedBox(height: 8),
-        ListTile(
-          iconColor: Theme.of(context).colorScheme.onSurface,
-          onTap: () =>
-              context.read<ServicesBloc>().add(ServiceRestart(service)),
-          leading: const Icon(Icons.restart_alt_outlined),
-          title: Text(
-            'service_page.restart'.tr(),
-            style: isRestartingEnabled ? enabledTitleStyle : disabledTitleStyle,
-          ),
-          enabled: isRestartingEnabled,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (service.supportLevel != SupportLevel.normal)
+              SupportLevelChip(supportLevel: service.supportLevel),
+            if (service.isSystemService) const SystemServiceChip(),
+          ],
         ),
-        if (!service.isRequired)
+        if (service.supportLevel != SupportLevel.normal ||
+            service.isSystemService)
+          const Gap(8.0),
+        if (!service.isInstalled) ...[
+          BrandButton.filled(
+            title: 'services_catalog.install'.tr(),
+            onPressed: () => context.pushRoute(
+              ServiceSettingsRoute(
+                serviceId: service.id,
+                isInstalling: true,
+              ),
+            ),
+          ),
+        ],
+        if (service.isInstalled) ...[
+          ServiceStatusCard(status: service.status),
+          const SizedBox(height: 16),
+          if (service.url != null && !serviceDisabled) ...[
+            ListTile(
+              iconColor: Theme.of(context).colorScheme.onSurface,
+              onTap: () => launchURL(service.url),
+              onLongPress: () {
+                PlatformAdapter.setClipboard(service.url!);
+                getIt<NavigationService>()
+                    .showSnackBar('basis.copied_to_clipboard'.tr());
+              },
+              leading: const Icon(Icons.open_in_browser),
+              title: Text(
+                'service_page.open_in_browser'.tr(),
+                style: enabledTitleStyle,
+              ),
+              subtitle: Text(
+                service.url!.replaceAll('https://', ''),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Divider(),
+            const SizedBox(height: 8),
+          ],
           ListTile(
             iconColor: Theme.of(context).colorScheme.onSurface,
-            onTap: () => context.read<JobsCubit>().addJob(
-                  ServiceToggleJob(
-                    service: service,
-                    needToTurnOn: serviceDisabled,
+            onTap: () =>
+                context.read<ServicesBloc>().add(ServiceRestart(service)),
+            leading: const Icon(Icons.restart_alt_outlined),
+            title: Text(
+              'service_page.restart'.tr(),
+              style:
+                  isRestartingEnabled ? enabledTitleStyle : disabledTitleStyle,
+            ),
+            enabled: isRestartingEnabled,
+          ),
+          if (!service.isRequired)
+            ListTile(
+              iconColor: Theme.of(context).colorScheme.onSurface,
+              onTap: () => context.read<JobsCubit>().addJob(
+                    ServiceToggleJob(
+                      service: service,
+                      needToTurnOn: serviceDisabled,
+                    ),
                   ),
+              leading: const Icon(Icons.power_settings_new),
+              title: Text(
+                serviceDisabled
+                    ? 'service_page.enable'.tr()
+                    : 'service_page.disable'.tr(),
+                style: !serviceLocked ? enabledTitleStyle : disabledTitleStyle,
+              ),
+              enabled: !serviceLocked,
+            ),
+          if (service.configuration.isNotEmpty)
+            ListTile(
+              iconColor: Theme.of(context).colorScheme.onSurface,
+              onTap: () => context.pushRoute(
+                ServiceSettingsRoute(serviceId: service.id),
+              ),
+              leading: const Icon(Icons.settings_outlined),
+              title: Text(
+                'service_page.settings'.tr(),
+                style: enabledTitleStyle,
+              ),
+            ),
+          if (service.isMovable)
+            ListTile(
+              iconColor: Theme.of(context).colorScheme.onSurface,
+              // Open page ServicesMigrationPage
+              onTap: () => context.pushRoute(
+                ServicesMigrationRoute(
+                  services: [service],
+                  diskStatus: context.read<VolumesBloc>().state.diskStatus,
+                  isMigration: false,
                 ),
-            leading: const Icon(Icons.power_settings_new),
-            title: Text(
-              serviceDisabled
-                  ? 'service_page.enable'.tr()
-                  : 'service_page.disable'.tr(),
-              style: !serviceLocked ? enabledTitleStyle : disabledTitleStyle,
+              ),
+              leading: const Icon(Icons.drive_file_move_outlined),
+              title: Text(
+                'service_page.move'.tr(),
+                style: isMovingEnabled ? enabledTitleStyle : disabledTitleStyle,
+              ),
+              subtitle: Text(
+                'service_page.uses'.tr(
+                  namedArgs: {
+                    'usage': service.storageUsage.used.toString(),
+                    'volume': context
+                        .read<VolumesBloc>()
+                        .state
+                        .getVolume(service.storageUsage.volume ?? '')
+                        .displayName,
+                  },
+                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Theme.of(context).colorScheme.outline),
+              ),
+              enabled: isMovingEnabled,
             ),
-            enabled: !serviceLocked,
-          ),
-        if (service.configuration.isNotEmpty)
+          if (service.canBeBackedUp)
+            ListTile(
+              iconColor: Theme.of(context).colorScheme.onSurface,
+              // Open page ServicesMigrationPage
+              onTap: () => context.pushRoute(
+                BackupsListRoute(service: service),
+              ),
+              leading: const Icon(Icons.settings_backup_restore_outlined),
+              title: Text(
+                'service_page.snapshots'.tr(),
+                style: enabledTitleStyle,
+              ),
+            ),
           ListTile(
             iconColor: Theme.of(context).colorScheme.onSurface,
             onTap: () => context.pushRoute(
-              ServiceSettingsRoute(serviceId: service.id),
+              ServerLogsRoute(serviceId: service.id),
             ),
-            leading: const Icon(Icons.settings_outlined),
+            leading: const Icon(Icons.manage_search_outlined),
             title: Text(
-              'service_page.settings'.tr(),
+              'service_page.logs'.tr(),
               style: enabledTitleStyle,
             ),
           ),
-        if (service.isMovable)
-          ListTile(
-            iconColor: Theme.of(context).colorScheme.onSurface,
-            // Open page ServicesMigrationPage
-            onTap: () => context.pushRoute(
-              ServicesMigrationRoute(
-                services: [service],
-                diskStatus: context.read<VolumesBloc>().state.diskStatus,
-                isMigration: false,
-              ),
-            ),
-            leading: const Icon(Icons.drive_file_move_outlined),
-            title: Text(
-              'service_page.move'.tr(),
-              style: isMovingEnabled ? enabledTitleStyle : disabledTitleStyle,
-            ),
-            subtitle: Text(
-              'service_page.uses'.tr(
-                namedArgs: {
-                  'usage': service.storageUsage.used.toString(),
-                  'volume': context
-                      .read<VolumesBloc>()
-                      .state
-                      .getVolume(service.storageUsage.volume ?? '')
-                      .displayName,
-                },
-              ),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.outline),
-            ),
-            enabled: isMovingEnabled,
+          const SizedBox(height: 8),
+          const Divider(),
+        ],
+        const SizedBox(height: 8),
+        if (service.homepage != null)
+          LinkListTile(
+            title: 'service_page.homepage'.tr(),
+            subtitle: service.homepage!.replaceFirst('https://', ''),
+            uri: service.homepage,
+            icon: Icons.language_outlined,
           ),
-        if (service.canBeBackedUp)
-          ListTile(
-            iconColor: Theme.of(context).colorScheme.onSurface,
-            // Open page ServicesMigrationPage
-            onTap: () => context.pushRoute(
-              BackupsListRoute(service: service),
-            ),
-            leading: const Icon(Icons.settings_backup_restore_outlined),
-            title: Text(
-              'service_page.snapshots'.tr(),
-              style: enabledTitleStyle,
-            ),
+        if (service.sourcePage != null)
+          LinkListTile(
+            title: 'service_page.source_code'.tr(),
+            subtitle: service.sourcePage!.replaceFirst('https://', ''),
+            uri: service.sourcePage,
+            icon: Icons.code_outlined,
           ),
-        ListTile(
-          iconColor: Theme.of(context).colorScheme.onSurface,
-          onTap: () => context.pushRoute(
-            ServerLogsRoute(serviceId: service.id),
-          ),
-          leading: const Icon(Icons.manage_search_outlined),
-          title: Text(
-            'service_page.logs'.tr(),
-            style: enabledTitleStyle,
+        ...service.license.map(
+          (final license) => LinkListTile(
+            title: 'service_page.license'.tr(),
+            subtitle: license.fullName,
+            uri: license.url,
+            icon: Icons.copyright_outlined,
           ),
         ),
       ],

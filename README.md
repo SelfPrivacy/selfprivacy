@@ -30,7 +30,7 @@ After the setup, you will have a NixOS operating system installed on your server
 * [Bitwarden](https://selfprivacy.org/docs/services/bitwarden/)
 * [Mumble](https://forum.selfprivacy.org/t/mumble-murmur/88)
 
-If a service you need is not listed, you can add it yourself using [SelfPrivacy modules](https://selfprivacy.org/docs/theory/selfprivacy_modules/).
+If the service you need is not listed, [suggest adding it on the forum](https://forum.selfprivacy.org/c/feature-requests/service-suggestions/7) or add it yourself using [SelfPrivacy modules](https://selfprivacy.org/docs/theory/selfprivacy_modules/).
 
 ## Building
 

@@ -4033,44 +4033,30 @@ class _CopyWithStubImpl$Query$GetApiJobs$jobs<TRes>
 }
 
 class Subscription$JobUpdates {
-  Subscription$JobUpdates({
-    required this.jobUpdates,
-    this.$__typename = 'Subscription',
-  });
+  Subscription$JobUpdates({required this.jobUpdates});
 
   factory Subscription$JobUpdates.fromJson(Map<String, dynamic> json) {
     final l$jobUpdates = json['jobUpdates'];
-    final l$$__typename = json['__typename'];
     return Subscription$JobUpdates(
-      jobUpdates: (l$jobUpdates as List<dynamic>)
-          .map((e) =>
-              Fragment$basicApiJobsFields.fromJson((e as Map<String, dynamic>)))
-          .toList(),
-      $__typename: (l$$__typename as String),
-    );
+        jobUpdates: (l$jobUpdates as List<dynamic>)
+            .map((e) => Fragment$basicApiJobsFields.fromJson(
+                (e as Map<String, dynamic>)))
+            .toList());
   }
 
   final List<Fragment$basicApiJobsFields> jobUpdates;
-
-  final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
     final l$jobUpdates = jobUpdates;
     _resultData['jobUpdates'] = l$jobUpdates.map((e) => e.toJson()).toList();
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
     return _resultData;
   }
 
   @override
   int get hashCode {
     final l$jobUpdates = jobUpdates;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      Object.hashAll(l$jobUpdates.map((v) => v)),
-      l$$__typename,
-    ]);
+    return Object.hashAll([Object.hashAll(l$jobUpdates.map((v) => v))]);
   }
 
   @override
@@ -4094,11 +4080,6 @@ class Subscription$JobUpdates {
         return false;
       }
     }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
     return true;
   }
 }
@@ -4120,10 +4101,7 @@ abstract class CopyWith$Subscription$JobUpdates<TRes> {
   factory CopyWith$Subscription$JobUpdates.stub(TRes res) =
       _CopyWithStubImpl$Subscription$JobUpdates;
 
-  TRes call({
-    List<Fragment$basicApiJobsFields>? jobUpdates,
-    String? $__typename,
-  });
+  TRes call({List<Fragment$basicApiJobsFields>? jobUpdates});
   TRes jobUpdates(
       Iterable<Fragment$basicApiJobsFields> Function(
               Iterable<
@@ -4145,18 +4123,10 @@ class _CopyWithImpl$Subscription$JobUpdates<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? jobUpdates = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Subscription$JobUpdates(
-        jobUpdates: jobUpdates == _undefined || jobUpdates == null
-            ? _instance.jobUpdates
-            : (jobUpdates as List<Fragment$basicApiJobsFields>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  TRes call({Object? jobUpdates = _undefined}) => _then(Subscription$JobUpdates(
+      jobUpdates: jobUpdates == _undefined || jobUpdates == null
+          ? _instance.jobUpdates
+          : (jobUpdates as List<Fragment$basicApiJobsFields>)));
 
   TRes jobUpdates(
           Iterable<Fragment$basicApiJobsFields> Function(
@@ -4178,11 +4148,7 @@ class _CopyWithStubImpl$Subscription$JobUpdates<TRes>
 
   TRes _res;
 
-  call({
-    List<Fragment$basicApiJobsFields>? jobUpdates,
-    String? $__typename,
-  }) =>
-      _res;
+  call({List<Fragment$basicApiJobsFields>? jobUpdates}) => _res;
 
   jobUpdates(_fn) => _res;
 }
@@ -4212,14 +4178,7 @@ const documentNodeSubscriptionJobUpdates = DocumentNode(definitions: [
             selectionSet: null,
           ),
         ]),
-      ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
+      )
     ]),
   ),
   fragmentDefinitionbasicApiJobsFields,

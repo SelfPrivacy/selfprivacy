@@ -395,7 +395,7 @@
         "wait_for_jobs": "Der Server ist mit anderen Aufgaben beschäftigt. Bitte warten Sie, bis diese beendet sind."
     },
     "mail": {
-        "login_info": "Verwenden Sie den Benutzernamen und das Passwort von dem Benutzertab. IMAP-Port ist 143 mit STARTTLS, SMTP-Port ist 587 mit STARTTLS."
+        "login_info": "Verwenden Sie das Self-service Portal über den obrigen Link, um ein Passwort und Verbindungsinformationen zu erhalten."
     },
     "password_manager": {
         "login_info": "Ihr Konto müssen Sie auf der Webseite erstellen."

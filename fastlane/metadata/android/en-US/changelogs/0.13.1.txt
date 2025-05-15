@@ -1,0 +1,7 @@
+# 0.13.1 Changelog
+
+## Changes
+
+### Bug fixes
+
+- Fixed out-of-spec behavior of GraphQL subscription, that causes problems with the next major server-side update

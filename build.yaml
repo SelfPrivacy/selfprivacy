@@ -13,6 +13,8 @@ targets:
               type: Map<String, dynamic>
           clients:
             - graphql
+          addTypenameExcludedPaths:
+            - subscription
       json_serializable:
         options:
           create_factory: true

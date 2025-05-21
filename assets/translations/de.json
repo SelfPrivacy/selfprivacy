@@ -150,7 +150,7 @@
         "ssh_users": "SSH-Benutzer",
         "memory": "Arbeitsspeicher-Auslastung",
         "view_usage_by_service": "Auslastung nach Service anzeigen",
-        "ram_usage": "Durchschnittliche Auslastung: {avarage}. Maximum: {max}.",
+        "ram_usage": "Durchschnittliche Auslastung: {average}. Maximum: {max}.",
         "failed_to_load_memory_metrics": "Die Daten zur Auslastung des Speichers konnten nicht geladen werden. Dies kann an einem Verbindungsproblem liegen oder daran, dass noch nicht genügend Daten vorhanden sind.",
         "disk_title": "Festplatten-Auslastung",
         "cpu_chart_screen_reader_explanation": "Diese Grafik zeigt die CPU-Auslastung im letzten {period}. Der letzte Wert liegt bei {lastValue} %. Die durchschnittliche Auslastung liegt bei {averageUsage} %. Die maximale Auslastung liegt bei {maxUsage} % bei {maxUsageTime}.",

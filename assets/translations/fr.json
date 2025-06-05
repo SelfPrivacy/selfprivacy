@@ -24,7 +24,7 @@
         "username": "Nom d'utilisateur",
         "loading": "Chargement…",
         "later": "Passer à la configuration plus tard",
-        "connect_to_existing": "Se connecter à un serveur SelfPrivacy existant",
+        "connect_to_existing": "J'ai déjà un serveur SelfPrivacy !",
         "reset": "Réinitialiser",
         "details": "Détails",
         "no_data": "Pas de données",
@@ -36,7 +36,14 @@
         "done": "Effectué",
         "app_name": "SelfPrivacy",
         "please_connect": "Veuillez connecter votre serveur, domaine et fournisseur DNS pour vous lancer dans le bain !",
-        "copied_to_clipboard": "Copié dans le presse-papier !"
+        "copied_to_clipboard": "Copié dans le presse-papier !",
+        "copy": "Copier",
+        "qr_code": "Code QR",
+        "share_link": "Partager le lien",
+        "network_error": "Erreur du réseau",
+        "feature_unsupported_on_api_version": "Cette fonctionnalité n'est disponible qu'avec la version du serveur {versionConstraint}. Votre serveur fonctionne avec la version {currentVersion}.",
+        "error": "Erreur",
+        "server_is_outdated": "Cette version de l'appli utilise la version {versionConstraint} de l'API, mais votre serveur est en version {currentVersion}. Quelques fonctionnalités ne seraient pas disponibles et il pourrait y avoir des erreurs. Veuillez mettre à jour votre serveur."
     },
     "more_page": {
         "create_ssh_key": "Clés SSH du super utilisateur",
@@ -45,7 +52,15 @@
     },
     "console_page": {
         "title": "Console",
-        "copy": "Copier"
+        "copy": "Copier",
+        "copy_raw": "Réponse brut",
+        "history_empty": "Aucun des donnes",
+        "rest_api_request": "Requête de l'API REST",
+        "error": "Erreur",
+        "rest_api_response": "Réponse de l'API REST",
+        "graphql_request": "Requête GraphQL",
+        "graphql_response": "Réponse GraphQL",
+        "errors": "Erreurs"
     },
     "about_application_page": {
         "title": "À propos",

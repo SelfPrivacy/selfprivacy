@@ -1382,42 +1382,28 @@ class _CopyWithStubImpl$Query$Logs$logs$paginated$pageMeta<TRes>
 }
 
 class Subscription$LogEntries {
-  Subscription$LogEntries({
-    required this.logEntries,
-    this.$__typename = 'Subscription',
-  });
+  Subscription$LogEntries({required this.logEntries});
 
   factory Subscription$LogEntries.fromJson(Map<String, dynamic> json) {
     final l$logEntries = json['logEntries'];
-    final l$$__typename = json['__typename'];
     return Subscription$LogEntries(
-      logEntries:
-          Fragment$LogEntry.fromJson((l$logEntries as Map<String, dynamic>)),
-      $__typename: (l$$__typename as String),
-    );
+        logEntries:
+            Fragment$LogEntry.fromJson((l$logEntries as Map<String, dynamic>)));
   }
 
   final Fragment$LogEntry logEntries;
-
-  final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
     final l$logEntries = logEntries;
     _resultData['logEntries'] = l$logEntries.toJson();
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
     return _resultData;
   }
 
   @override
   int get hashCode {
     final l$logEntries = logEntries;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$logEntries,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$logEntries]);
   }
 
   @override
@@ -1432,11 +1418,6 @@ class Subscription$LogEntries {
     final l$logEntries = logEntries;
     final lOther$logEntries = other.logEntries;
     if (l$logEntries != lOther$logEntries) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
       return false;
     }
     return true;
@@ -1460,10 +1441,7 @@ abstract class CopyWith$Subscription$LogEntries<TRes> {
   factory CopyWith$Subscription$LogEntries.stub(TRes res) =
       _CopyWithStubImpl$Subscription$LogEntries;
 
-  TRes call({
-    Fragment$LogEntry? logEntries,
-    String? $__typename,
-  });
+  TRes call({Fragment$LogEntry? logEntries});
   CopyWith$Fragment$LogEntry<TRes> get logEntries;
 }
 
@@ -1480,18 +1458,10 @@ class _CopyWithImpl$Subscription$LogEntries<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? logEntries = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Subscription$LogEntries(
-        logEntries: logEntries == _undefined || logEntries == null
-            ? _instance.logEntries
-            : (logEntries as Fragment$LogEntry),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  TRes call({Object? logEntries = _undefined}) => _then(Subscription$LogEntries(
+      logEntries: logEntries == _undefined || logEntries == null
+          ? _instance.logEntries
+          : (logEntries as Fragment$LogEntry)));
 
   CopyWith$Fragment$LogEntry<TRes> get logEntries {
     final local$logEntries = _instance.logEntries;
@@ -1506,11 +1476,7 @@ class _CopyWithStubImpl$Subscription$LogEntries<TRes>
 
   TRes _res;
 
-  call({
-    Fragment$LogEntry? logEntries,
-    String? $__typename,
-  }) =>
-      _res;
+  call({Fragment$LogEntry? logEntries}) => _res;
 
   CopyWith$Fragment$LogEntry<TRes> get logEntries =>
       CopyWith$Fragment$LogEntry.stub(_res);
@@ -1541,14 +1507,7 @@ const documentNodeSubscriptionLogEntries = DocumentNode(definitions: [
             selectionSet: null,
           ),
         ]),
-      ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
+      )
     ]),
   ),
   fragmentDefinitionLogEntry,

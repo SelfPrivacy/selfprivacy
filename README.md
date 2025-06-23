@@ -13,8 +13,15 @@ SelfPrivacy is an app for deploying and managing private self-hosted services.
 - [Translation status](#translation-status)
 
 ## How it works
-Usually you would configure your server and services manually in multiple different places. With this app, you can now manage everything from one simple interface.
-SelfPrivacy automates interaction between hosting and DNS providers using [SelfPrivacy API](https://git.selfprivacy.org/SelfPrivacy/selfprivacy-rest-api).
+
+Usually you would manage your server and services manually. With this app, you can now manage everything from simple interface.
+
+- An app interacts with providers' API using API tokens you enter and store in the app.
+- Hetzner or Digital Ocean servers come with some preinstalled Linux distribution. We turn it into NixOS with [our own nixos-infect](https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect), which installs [selfprivacy-api](https://git.selfprivacy.org/SelfPrivacy/selfprivacy-rest-api).
+- With selfprivacy-api you can now manage your server directly from the app. This connection is secured with TLS.
+- An app creates one admin user. [Kanidm](https://kanidm.com/) then creates service profiles and adds SSO support.
+- [Prometheus](https://prometheus.io/) sends server metrics to the app and the app renders them.
+
 
 ## Setup guide
 [The setup guide is available on our website!](https://selfprivacy.org/docs/getting-started/)

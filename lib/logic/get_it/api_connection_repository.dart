@@ -136,8 +136,8 @@ class ApiConnectionRepository {
     if (loadedUsers == null) {
       return (false, 'basis.network_error'.tr());
     }
-    // If user is primary or root, don't delete
-    if (user.type != UserType.normal) {
+    // If user is root, don't delete
+    if (user.type == UserType.root) {
       return (false, 'users.user_delete_protected'.tr());
     }
     final GenericResult result = await api.deleteUser(user.login);

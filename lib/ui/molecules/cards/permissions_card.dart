@@ -20,7 +20,7 @@ class PermissionsCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Text(
             'users.permissions'.tr(),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -102,8 +102,8 @@ class ExplicitPermissionTile extends StatelessWidget {
             service != null
                 ? SvgPicture.string(
                   service.svgIcon,
-                  width: 24.0,
-                  height: 24.0,
+                  width: 24,
+                  height: 24,
                   colorFilter: ColorFilter.mode(
                     Theme.of(context).colorScheme.onSurfaceVariant,
                     BlendMode.srcIn,

@@ -24,7 +24,7 @@ class ChartCard extends StatelessWidget {
     clipped: false,
     mergeSemantics: trailing.isEmpty,
     child: Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,8 +45,8 @@ class ChartCard extends StatelessWidget {
                 Flexible(
                   fit: FlexFit.loose,
                   child: Wrap(
-                    spacing: 8.0,
-                    runSpacing: 8.0,
+                    spacing: 8,
+                    runSpacing: 8,
                     alignment: WrapAlignment.end,
                     runAlignment: WrapAlignment.end,
                     children: legendItems,

@@ -125,7 +125,7 @@ class ProviderInputDataPage extends StatelessWidget {
         const SizedBox(height: 32),
         BrandButton.filled(
           child: Text('basis.connect'.tr()),
-          onPressed: () => providerCubit.trySubmit(),
+          onPressed: providerCubit.trySubmit,
         ),
         const SizedBox(height: 10),
         BrandOutlinedButton(
@@ -149,7 +149,7 @@ class ProviderSelectionPage extends StatelessWidget {
     super.key,
   });
 
-  final Function callback;
+  final Function(ServerProviderType) callback;
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
@@ -174,7 +174,7 @@ class ProviderSelectionPage extends StatelessWidget {
         children: [
           OutlinedCard(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -234,8 +234,8 @@ class ProviderSelectionPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   BrandButton.filled(
                     child: Text('basis.select'.tr()),
-                    onPressed: () {
-                      serverInstallationCubit.setServerProviderType(
+                    onPressed: () async {
+                      await serverInstallationCubit.setServerProviderType(
                         ServerProviderType.hetzner,
                       );
                       callback(ServerProviderType.hetzner);
@@ -253,7 +253,7 @@ class ProviderSelectionPage extends StatelessWidget {
           const SizedBox(height: 16),
           OutlinedCard(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -313,8 +313,8 @@ class ProviderSelectionPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   BrandButton.filled(
                     child: Text('basis.select'.tr()),
-                    onPressed: () {
-                      serverInstallationCubit.setServerProviderType(
+                    onPressed: () async {
+                      await serverInstallationCubit.setServerProviderType(
                         ServerProviderType.digitalOcean,
                       );
                       callback(ServerProviderType.digitalOcean);

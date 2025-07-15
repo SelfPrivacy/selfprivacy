@@ -33,14 +33,14 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
           case ConnectionStatus.nonexistent:
             add(const VolumesServerReset());
             isLoaded = false;
-            break;
           case ConnectionStatus.connected:
             if (!isLoaded) {
               add(const VolumesServerLoaded());
               isLoaded = true;
             }
-            break;
-          default:
+          case ConnectionStatus.reconnecting:
+          case ConnectionStatus.offline:
+          case ConnectionStatus.unauthorized:
             break;
         }
       },
@@ -83,8 +83,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
         getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
         return price;
       }
-      price = pricingResult.data!.perVolumeGb;
-      return price;
+      return pricingResult.data!.perVolumeGb;
     } else {
       await Future.delayed(Duration.zero);
       getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());

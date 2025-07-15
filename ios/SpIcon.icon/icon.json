@@ -85,7 +85,15 @@
       "layers" : [
         {
           "blend-mode" : "normal",
-          "glass" : true,
+          "glass-specializations" : [
+            {
+              "value" : true
+            },
+            {
+              "appearance" : "tinted",
+              "value" : true
+            }
+          ],
           "image-name" : "2.svg",
           "name" : "2",
           "position" : {

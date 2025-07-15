@@ -8,7 +8,7 @@ class _LanguagePicker extends StatelessWidget {
     title: Text('application_settings.language'.tr()),
     subtitle: Text('application_settings.click_to_change_locale'.tr()),
     trailing: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Text(
         Localization.getLanguageName(context.locale),
         style: Theme.of(context).textTheme.labelSmall?.copyWith(

@@ -82,7 +82,7 @@ class NetworkChart extends GenericLineChart {
     required final LineBarSpot spot,
     required final BuildContext context,
   }) => LineTooltipItem(
-    '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${spot.barIndex == 0 ? 'resource_chart.in'.tr() : 'resource_chart.out'.tr()} ${DiskSize(byte: value.toInt()).toString()}',
+    '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${spot.barIndex == 0 ? 'resource_chart.in'.tr() : 'resource_chart.out'.tr()} ${DiskSize(byte: value.toInt())}',
     TextStyle(
       color: Theme.of(context).colorScheme.onSurface,
       fontWeight: FontWeight.bold,

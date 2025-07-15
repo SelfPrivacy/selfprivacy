@@ -8,11 +8,14 @@ mixin UsersApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       response = await client.query$AllUsers();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL GetAllUsers request: ${response.exception}',
+          error: response.exception,
+        );
       }
       users =
           response.parsedData?.users.allUsers
-              .map<User>((final user) => User.fromGraphQL(user))
+              .map<User>(User.fromGraphQL)
               .toList() ??
           [];
       final rootUser = response.parsedData?.users.rootUser;
@@ -20,7 +23,7 @@ mixin UsersApi on GraphQLApiMap {
         users.add(User.fromGraphQL(rootUser));
       }
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetAllUsers request: $e', error: e);
     }
     return users;
   }
@@ -32,7 +35,10 @@ mixin UsersApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       response = await client.query$AllGroups();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL GetAllGroups request: ${response.exception}',
+          error: response.exception,
+        );
       }
       groups =
           response.parsedData?.groups.allGroups
@@ -40,7 +46,7 @@ mixin UsersApi on GraphQLApiMap {
               .toList() ??
           [];
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetAllGroups request: $e', error: e);
     }
     return groups;
   }
@@ -55,14 +61,17 @@ mixin UsersApi on GraphQLApiMap {
         Options$Query$GetUser(variables: variables),
       );
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL GetUser request: ${response.exception}',
+          error: response.exception,
+        );
       }
       final responseUser = response.parsedData?.users.getUser;
       if (responseUser != null) {
         user = User.fromGraphQL(responseUser);
       }
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetUser request: $e', error: e);
     }
     return user;
   }
@@ -70,7 +79,7 @@ mixin UsersApi on GraphQLApiMap {
   Future<GenericResult<User?>> createUser(
     final String username,
     final String? displayName,
-    final List<String>? directmemberof,
+    final List<String>? directMemberOf,
   ) async {
     try {
       final GraphQLClient client = await getClient();
@@ -78,7 +87,7 @@ mixin UsersApi on GraphQLApiMap {
         user: Input$UserMutationInput(
           username: username,
           displayName: displayName,
-          directmemberof: directmemberof,
+          directmemberof: directMemberOf,
         ),
       );
       final mutation = Options$Mutation$CreateUser(variables: variables);
@@ -93,7 +102,7 @@ mixin UsersApi on GraphQLApiMap {
                 : null,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL CreateUser request: $e', error: e);
       return GenericResult(
         success: false,
         code: 0,
@@ -106,7 +115,7 @@ mixin UsersApi on GraphQLApiMap {
   Future<GenericResult<User?>> updateUser(
     final String username,
     final String? displayName,
-    final List<String>? directmemberof,
+    final List<String>? directMemberOf,
   ) async {
     try {
       final GraphQLClient client = await getClient();
@@ -114,7 +123,7 @@ mixin UsersApi on GraphQLApiMap {
         user: Input$UserMutationInput(
           username: username,
           displayName: displayName,
-          directmemberof: directmemberof,
+          directmemberof: directMemberOf,
         ),
       );
       final mutation = Options$Mutation$UpdateUser(variables: variables);
@@ -129,7 +138,7 @@ mixin UsersApi on GraphQLApiMap {
                 : null,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL UpdateUser request: $e', error: e);
       return GenericResult(
         success: false,
         code: 0,
@@ -152,7 +161,7 @@ mixin UsersApi on GraphQLApiMap {
         message: response.parsedData?.users.deleteUser.message,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL DeleteUser request: $e', error: e);
       return GenericResult(
         data: false,
         success: false,
@@ -183,7 +192,7 @@ mixin UsersApi on GraphQLApiMap {
                 : null,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL AddSshKey request: $e', error: e);
       return GenericResult(
         data: null,
         success: false,
@@ -216,7 +225,7 @@ mixin UsersApi on GraphQLApiMap {
                 : null,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL RemoveSshKey request: $e', error: e);
       return GenericResult(
         data: null,
         success: false,
@@ -246,7 +255,10 @@ mixin UsersApi on GraphQLApiMap {
         data: parsed?.passwordResetLink,
       );
     } catch (e) {
-      print(e);
+      logger(
+        'Error in GraphQL GeneratePasswordResetLink request: $e',
+        error: e,
+      );
       return GenericResult(
         data: null,
         success: false,
@@ -282,7 +294,7 @@ mixin UsersApi on GraphQLApiMap {
         data: parsed?.success ?? false,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL DeleteEmailPassword request: $e', error: e);
       return GenericResult(
         data: false,
         success: false,

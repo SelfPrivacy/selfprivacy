@@ -26,11 +26,11 @@ class _ResetAppDialog extends StatelessWidget {
       DialogActionButton(
         text: 'modals.purge_all_keys_confirm'.tr(),
         isRed: true,
-        onPressed: () {
-          context.read<ServerInstallationCubit>().clearAppConfig();
+        onPressed: () async {
+          unawaited(context.read<ServerInstallationCubit>().clearAppConfig());
 
-          context.router.maybePop([const RootRoute()]);
-          context.resetLocale();
+          unawaited(context.router.maybePop([const RootRoute()]));
+          await context.resetLocale();
         },
       ),
       DialogActionButton(text: 'basis.cancel'.tr()),

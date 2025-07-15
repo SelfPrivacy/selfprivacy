@@ -35,10 +35,7 @@ class User extends Equatable {
         memberof: user.memberof,
         emailPasswordMetadata:
             user.emailPasswordMetadata
-                ?.map(
-                  (final Fragment$userFields$emailPasswordMetadata metadata) =>
-                      EmailPasswordMetadata.fromGraphQL(metadata),
-                )
+                ?.map(EmailPasswordMetadata.fromGraphQL)
                 .toList(),
         displayName: user.displayName,
         email: user.email,

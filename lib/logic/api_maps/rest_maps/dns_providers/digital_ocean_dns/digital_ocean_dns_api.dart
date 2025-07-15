@@ -1,9 +1,12 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/digital_ocean_dns_info.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 
 class DigitalOceanDnsApi extends RestApiMap {
   DigitalOceanDnsApi({
@@ -11,7 +14,10 @@ class DigitalOceanDnsApi extends RestApiMap {
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
-  }) : assert(isWithToken ? token.isNotEmpty : true);
+  }) : assert(
+         !isWithToken || token.isNotEmpty,
+         'DigitalOcean API requires a token to be set when isWithToken is true.',
+       );
 
   @override
   final bool hasLogger;
@@ -21,6 +27,8 @@ class DigitalOceanDnsApi extends RestApiMap {
   final String token;
   final String? customToken;
 
+  static final logger = const AppLogger(name: 'digital_ocean_dns_api_map').log;
+
   @override
   BaseOptions get options {
     final BaseOptions options = BaseOptions(
@@ -29,7 +37,10 @@ class DigitalOceanDnsApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      assert(token.isNotEmpty);
+      assert(
+        token.isNotEmpty,
+        'DigitalOcean API requires a token to be set when isWithToken is true.',
+      );
       options.headers = {'Authorization': 'Bearer $token'};
     }
 
@@ -63,7 +74,7 @@ class DigitalOceanDnsApi extends RestApiMap {
         ),
       );
     } catch (e) {
-      print(e);
+      logger('Error validating DigitalOcean DNS API token', error: e);
       isValid = false;
       message = e.toString();
     } finally {
@@ -97,11 +108,12 @@ class DigitalOceanDnsApi extends RestApiMap {
       domains =
           response.data['domains']!
               .map<DigitalOceanDomain>(
+                // ignore: unnecessary_lambdas
                 (final e) => DigitalOceanDomain.fromJson(e),
               )
               .toList();
     } catch (e) {
-      print(e);
+      logger('Error fetching DigitalOcean domains', error: e);
       return GenericResult(
         data: domains,
         success: false,
@@ -129,10 +141,10 @@ class DigitalOceanDnsApi extends RestApiMap {
       }
       await Future.wait(allCreateFutures);
     } on DioException catch (e) {
-      print(e.message);
+      logger('DioException while creating multiple DNS records', error: e);
       rethrow;
     } catch (e) {
-      print(e);
+      logger('Error creating multiple DNS records', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -155,7 +167,7 @@ class DigitalOceanDnsApi extends RestApiMap {
       }
       await Future.wait(allDeleteFutures);
     } catch (e) {
-      print(e);
+      logger('Error removing similar DNS records', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -183,12 +195,13 @@ class DigitalOceanDnsApi extends RestApiMap {
       allRecords =
           response.data['domain_records']
               .map<DigitalOceanDnsRecord>(
+                // ignore: unnecessary_lambdas
                 (final e) => DigitalOceanDnsRecord.fromJson(e),
               )
               .toList() ??
           [];
     } catch (e) {
-      print(e);
+      logger('Error fetching DNS records for $domainName', error: e);
       GenericResult(data: allRecords, success: false, message: e.toString());
     } finally {
       close(client);

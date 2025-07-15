@@ -24,8 +24,8 @@ class ResetPasswordPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => BlocProvider(
     create: (final BuildContext context) {
-      final bloc = ResetPasswordBloc(user: user);
-      bloc.add(const RequestNewPassword());
+      final bloc = ResetPasswordBloc(user: user)
+        ..add(const RequestNewPassword());
       return bloc;
     },
     child: BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
@@ -35,7 +35,7 @@ class ResetPasswordPage extends StatelessWidget {
         if (state is ResetPasswordUnsupported) {
           content = Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
+              padding: const EdgeInsets.symmetric(vertical: 32),
               child: EmptyPagePlaceholder(
                 title: 'basis.error'.tr(),
                 description: state.errorMessage,
@@ -67,12 +67,12 @@ class ResetPasswordPage extends StatelessWidget {
                           maxLines: 2,
                         ),
                       ),
-                      const Gap(8.0),
+                      const Gap(8),
                       IconButton(
                         icon: const Icon(Icons.copy),
                         color: Theme.of(context).colorScheme.onSurface,
-                        onPressed: () {
-                          PlatformAdapter.setClipboard(
+                        onPressed: () async {
+                          await PlatformAdapter.setClipboard(
                             state.passwordResetLink.toString(),
                           );
                           getIt<NavigationService>().showSnackBar(
@@ -83,10 +83,10 @@ class ResetPasswordPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Gap(16.0),
+                const Gap(16),
                 BrandOutlinedButton(
-                  onPressed: () {
-                    showModalBottomSheet(
+                  onPressed: () async {
+                    await showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
                       useRootNavigator: true,
@@ -115,35 +115,37 @@ class ResetPasswordPage extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.qr_code_outlined,
-                        size: 18.0,
+                        size: 18,
                         color: Theme.of(context).colorScheme.primary,
                       ),
-                      const Gap(8.0),
+                      const Gap(8),
                       Text('basis.show_qr_code'.tr()),
                     ],
                   ),
                 ),
-                const Gap(8.0),
+                const Gap(8),
                 BrandButton.filled(
-                  onPressed: () {
-                    Share.share(state.passwordResetLink.toString());
+                  onPressed: () async {
+                    await SharePlus.instance.share(
+                      ShareParams(uri: state.passwordResetLink),
+                    );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         Icons.share_outlined,
-                        size: 18.0,
+                        size: 18,
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      const Gap(8.0),
+                      const Gap(8),
                       Text('basis.share_link'.tr()),
                     ],
                   ),
                 ),
-                const Gap(16.0),
+                const Gap(16),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: InfoBox(
                     text: 'users.password_reset_link_description'.tr(
                       namedArgs: {'username': user.login},
@@ -155,7 +157,7 @@ class ResetPasswordPage extends StatelessWidget {
           } else if (state.errorMessage.isNotEmpty) {
             content = Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 32.0),
+                padding: const EdgeInsets.symmetric(vertical: 32),
                 child: EmptyPagePlaceholder(
                   title: 'basis.error'.tr(),
                   description: state.errorMessage,
@@ -169,7 +171,7 @@ class ResetPasswordPage extends StatelessWidget {
               child: Column(
                 children: [
                   const CircularProgressIndicator(),
-                  const Gap(8.0),
+                  const Gap(8),
                   Text('users.creating_password_reset_link'.tr()),
                 ],
               ),

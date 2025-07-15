@@ -36,7 +36,7 @@ class _BasicEnumConfigItemState extends State<BasicEnumConfigItem> {
           child: Text(
             widget.configItem.value,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: Theme.of(context).colorScheme.error.withOpacity(0.7),
+              color: Theme.of(context).colorScheme.error.withAlpha(178),
             ),
           ),
         ),

@@ -76,7 +76,7 @@ class BackupDetailsPage extends StatelessWidget {
           if (preventActions || tokensState.backupsCredentials.isEmpty)
             const Center(
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(16),
                 child: CircularProgressIndicator.adaptive(),
               ),
             ),
@@ -110,8 +110,8 @@ class BackupDetailsPage extends StatelessWidget {
           onTap:
               preventActions
                   ? null
-                  : () {
-                    showModalBottomSheet(
+                  : () async {
+                    await showModalBottomSheet(
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,
@@ -141,8 +141,8 @@ class BackupDetailsPage extends StatelessWidget {
           onTap:
               preventActions
                   ? null
-                  : () {
-                    showModalBottomSheet(
+                  : () async {
+                    await showModalBottomSheet(
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,
@@ -181,8 +181,8 @@ class BackupDetailsPage extends StatelessWidget {
           onTap:
               preventActions
                   ? null
-                  : () {
-                    showModalBottomSheet(
+                  : () async {
+                    await showModalBottomSheet(
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,
@@ -211,8 +211,8 @@ class BackupDetailsPage extends StatelessWidget {
           onTap:
               preventActions
                   ? null
-                  : () {
-                    showModalBottomSheet(
+                  : () async {
+                    await showModalBottomSheet(
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,
@@ -319,7 +319,6 @@ class BackupDetailsPage extends StatelessWidget {
                           const ForceSnapshotListUpdate(),
                         ),
               ),
-              // TODO: Return reupload key button in some form
             ],
           ),
       ],

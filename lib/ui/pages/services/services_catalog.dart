@@ -27,7 +27,7 @@ class ServicesCatalogPage extends StatelessWidget {
         heroIcon: Icons.menu_book_outlined,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 64.0),
+            padding: const EdgeInsets.symmetric(vertical: 64),
             child: EmptyPagePlaceholder(
               title: 'services_catalog.empty_title'.tr(),
               description: 'services_catalog.empty_subtitle'.tr(),
@@ -65,7 +65,7 @@ class _ServicesCatalogPageCard extends StatelessWidget {
       highlightShape: BoxShape.rectangle,
       onTap: () => context.pushRoute(ServiceRoute(serviceId: service.id)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -75,8 +75,8 @@ class _ServicesCatalogPageCard extends StatelessWidget {
                   status: StateType.stable,
                   icon: SvgPicture.string(
                     service.svgIcon,
-                    width: 32.0,
-                    height: 32.0,
+                    width: 32,
+                    height: 32,
                     colorFilter: const ColorFilter.mode(
                       Colors.white,
                       BlendMode.srcIn,

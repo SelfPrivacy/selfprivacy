@@ -7,11 +7,11 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
-final _log = const AppLogger(name: 'ResetPasswordBloc').log;
+final _logger = const AppLogger(name: 'ResetPasswordBloc').log;
 
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   ResetPasswordBloc({required this.user}) : super(const ResetPasswordState()) {
-    _log('ResetPasswordBloc created for user: ${user.login}');
+    _logger('ResetPasswordBloc created for user: ${user.login}');
 
     on<RequestNewPassword>(
       _mapResetPasswordRequestedToState,
@@ -31,7 +31,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     final RequestNewPassword event,
     final Emitter<ResetPasswordState> emit,
   ) async {
-    _log('Reset password requested for user: ${user.login}');
+    _logger('Reset password requested for user: ${user.login}');
     if (state.isLoading) {
       return;
     }
@@ -59,11 +59,11 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       return;
     }
 
-    _log('Load start');
+    _logger('Load start');
     final (link, message) = await getIt<ApiConnectionRepository>()
         .generatePasswordResetLink(user);
 
-    _log('Got link: $link, message: $message');
+    _logger('Got link: $link, message: $message');
     if (state.isLoading) {
       emit(
         link != null
@@ -80,7 +80,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     final CancelNewPasswordRequest event,
     final Emitter<ResetPasswordState> emit,
   ) async {
-    _log('Reset password request cancelled');
+    _logger('Reset password request cancelled');
     if (state.isLoading) {
       emit(const ResetPasswordState(passwordResetLink: null, isLoading: false));
     }

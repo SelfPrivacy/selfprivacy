@@ -22,8 +22,10 @@ class ApiAdapter {
 
 class CloudflareDnsProvider extends DnsProvider {
   CloudflareDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
-  CloudflareDnsProvider.load(final bool isAuthorized, final String? token)
-    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+  CloudflareDnsProvider.load({
+    required final bool isAuthorized,
+    final String? token,
+  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   ApiAdapter _adapter;
 
@@ -119,17 +121,17 @@ class CloudflareDnsProvider extends DnsProvider {
             )
             .toList();
 
-    final List<CloudflareDnsRecord> cloudflareRecords = result.data;
-
-    /// Remove all records that do not match with SelfPrivacy
-    cloudflareRecords.removeWhere(
-      (final cloudflareRecord) =>
-          !selfprivacyRecords.any(
-            (final selfprivacyRecord) =>
-                selfprivacyRecord.type == cloudflareRecord.type &&
-                selfprivacyRecord.name == cloudflareRecord.name,
-          ),
-    );
+    final List<CloudflareDnsRecord> cloudflareRecords =
+        result.data
+          /// Remove all records that do not match with SelfPrivacy
+          ..removeWhere(
+            (final cloudflareRecord) =>
+                !selfprivacyRecords.any(
+                  (final selfprivacyRecord) =>
+                      selfprivacyRecord.type == cloudflareRecord.type &&
+                      selfprivacyRecord.name == cloudflareRecord.name,
+                ),
+          );
 
     return _adapter.api().removeSimilarRecords(
       zoneId: _adapter.cachedZoneId,

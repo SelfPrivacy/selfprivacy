@@ -14,11 +14,11 @@ class StringGenerators {
 
   static String getRandomString(
     final int length, {
-    hasLowercaseLetters = false,
-    hasUppercaseLetters = false,
-    hasNumbers = false,
-    hasSymbols = false,
-    final isStrict = false,
+    final bool hasLowercaseLetters = false,
+    final bool hasUppercaseLetters = false,
+    final bool hasNumbers = false,
+    final bool hasSymbols = false,
+    final bool isStrict = false,
   }) {
     final List<String> chars = [
       if (hasLowercaseLetters) ...letters,
@@ -39,6 +39,11 @@ class StringGenerators {
           (hasNumbers ? 1 : 0) +
           (hasSymbols ? 1 : 0);
 
+      bool needsLowercaseLetters = hasLowercaseLetters;
+      bool needsUppercaseLetters = hasUppercaseLetters;
+      bool needsNumbers = hasNumbers;
+      bool needsSymbols = hasSymbols;
+
       /// disable flags one by one when the len of generated string is less
       /// than count of flags
       /// so we wouldn't generate 4 len string when we need 2 or 3 symbols
@@ -47,26 +52,26 @@ class StringGenerators {
 
         switch (step) {
           case 0:
-            if (hasLowercaseLetters) {
-              hasLowercaseLetters = false;
+            if (needsLowercaseLetters) {
+              needsLowercaseLetters = false;
               sum--;
               continue;
             }
           case 1:
-            if (hasUppercaseLetters) {
-              hasUppercaseLetters = false;
+            if (needsUppercaseLetters) {
+              needsUppercaseLetters = false;
               sum--;
               continue;
             }
           case 2:
-            if (hasNumbers) {
-              hasNumbers = false;
+            if (needsNumbers) {
+              needsNumbers = false;
               sum--;
               continue;
             }
           case 3: // symbols
-            if (hasSymbols) {
-              hasSymbols = false;
+            if (needsSymbols) {
+              needsSymbols = false;
               sum--;
               continue;
             }
@@ -74,10 +79,10 @@ class StringGenerators {
       }
 
       res = [
-        if (hasLowercaseLetters) ...genString(1, letters),
-        if (hasUppercaseLetters) ...genString(1, upperCaseLetters),
-        if (hasNumbers) ...genString(1, numbers),
-        if (hasSymbols) ...genString(1, symbols),
+        if (needsLowercaseLetters) ...genString(1, letters),
+        if (needsUppercaseLetters) ...genString(1, upperCaseLetters),
+        if (needsNumbers) ...genString(1, numbers),
+        if (needsSymbols) ...genString(1, symbols),
         ...genString(length - sum, chars),
       ];
     }

@@ -16,12 +16,12 @@ class DiskChart extends GenericLineChart {
 
   @override
   String screenReaderDescription(final BuildContext context) {
-    final buffer = StringBuffer();
-    buffer.write(
-      'resource_chart.disk_chart_screen_reader_explanation.beginning'.tr(
-        namedArgs: {'period': 'resource_chart.${period.name}'.tr()},
-      ),
-    );
+    final buffer =
+        StringBuffer()..write(
+          'resource_chart.disk_chart_screen_reader_explanation.beginning'.tr(
+            namedArgs: {'period': 'resource_chart.${period.name}'.tr()},
+          ),
+        );
 
     for (final disk in diskData) {
       final lastData = disk.diskData.last;

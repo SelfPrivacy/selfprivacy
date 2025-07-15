@@ -129,7 +129,7 @@ class DeleteUserJob extends ClientJob {
       );
 
   @override
-  Future<(bool, String)> execute() async =>
+  Future<(bool, String)> execute() =>
       getIt<ApiConnectionRepository>().deleteUser(user);
 
   @override
@@ -167,8 +167,8 @@ class ServiceToggleJob extends ClientJob {
   @override
   Future<(bool, String)> execute() async {
     final result = await getIt<ApiConnectionRepository>().api.switchService(
-      service.id,
-      needToTurnOn,
+      serviceId: service.id,
+      needTurnOn: needToTurnOn,
     );
     return (result.success, result.message ?? 'jobs.generic_error'.tr());
   }
@@ -202,7 +202,7 @@ class CreateSSHKeyJob extends ClientJob {
   final String publicKey;
 
   @override
-  Future<(bool, String)> execute() async =>
+  Future<(bool, String)> execute() =>
       getIt<ApiConnectionRepository>().addSshKey(user, publicKey);
 
   @override
@@ -243,7 +243,7 @@ class DeleteSSHKeyJob extends ClientJob {
       );
 
   @override
-  Future<(bool, String)> execute() async =>
+  Future<(bool, String)> execute() =>
       getIt<ApiConnectionRepository>().deleteSshKey(user, publicKey);
 
   @override
@@ -289,8 +289,8 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
   final bool allowReboot;
 
   @override
-  Future<(bool, String)> execute() async => getIt<ApiConnectionRepository>()
-      .setAutoUpgradeSettings(enable, allowReboot);
+  Future<(bool, String)> execute() => getIt<ApiConnectionRepository>()
+      .setAutoUpgradeSettings(enable: enable, allowReboot: allowReboot);
 
   @override
   bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
@@ -334,7 +334,7 @@ class ChangeServerTimezoneJob extends ReplaceableJob {
   final String timezone;
 
   @override
-  Future<(bool, String)> execute() async =>
+  Future<(bool, String)> execute() =>
       getIt<ApiConnectionRepository>().setServerTimezone(timezone);
 
   @override
@@ -373,8 +373,8 @@ class ChangeSshSettingsJob extends ReplaceableJob {
   final bool enable;
 
   @override
-  Future<(bool, String)> execute() async =>
-      getIt<ApiConnectionRepository>().setSshSettings(enable);
+  Future<(bool, String)> execute() =>
+      getIt<ApiConnectionRepository>().setSshSettings(enable: enable);
 
   @override
   bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
@@ -423,7 +423,7 @@ class ChangeServiceConfiguration extends ReplaceableJob {
   bool get shouldReplaceOnlyIfSameId => true;
 
   @override
-  Future<(bool, String)> execute() async => getIt<ApiConnectionRepository>()
+  Future<(bool, String)> execute() => getIt<ApiConnectionRepository>()
       .setServiceConfiguration(serviceId, settings);
 
   @override

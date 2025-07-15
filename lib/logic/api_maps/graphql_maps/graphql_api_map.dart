@@ -7,6 +7,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 
 void _addConsoleLog(final ConsoleLog message) =>
     getIt.get<ConsoleModel>().log(message);
@@ -58,12 +59,16 @@ class ResponseLoggingParser extends ResponseParser {
 }
 
 abstract class GraphQLApiMap {
+  void Function(String, {Object? error, StackTrace? stackTrace}) get logger =>
+      const AppLogger(name: 'graphql_map').log;
+
   Future<GraphQLClient> getClient() async {
     IOClient? ioClient;
     if (TlsOptions.stagingAcme || !TlsOptions.verifyCertificate) {
-      final HttpClient httpClient = HttpClient();
-      httpClient.badCertificateCallback =
-          (final cert, final host, final port) => true;
+      final HttpClient httpClient =
+          HttpClient()
+            ..badCertificateCallback =
+                (final cert, final host, final port) => true;
       ioClient = IOClient(httpClient);
     }
 
@@ -77,8 +82,7 @@ abstract class GraphQLApiMap {
     final Link graphQLLink = RequestLoggingLink().concat(
       isWithToken
           ? AuthLink(
-            getToken:
-                () async => customToken == '' ? 'Bearer $_token' : customToken,
+            getToken: () => customToken == '' ? 'Bearer $_token' : customToken,
           ).concat(httpLink)
           : httpLink,
     );

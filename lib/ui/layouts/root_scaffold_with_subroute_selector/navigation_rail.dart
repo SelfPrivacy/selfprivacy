@@ -24,9 +24,9 @@ class _NavigationRail extends SubrouteSelector {
                   extended: isExtended,
                   leading:
                       showFab
-                          ? const BrandFab(extended: false, elevation: 0.0)
+                          ? const BrandFab(extended: false, elevation: 0)
                           : null,
-                  groupAlignment: 0.0,
+                  groupAlignment: 0,
                   destinations: [
                     for (final destination in subroutes)
                       NavigationRailDestination(

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -13,6 +15,7 @@ import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
@@ -29,12 +32,16 @@ class ApiAdapter {
 
 class HetznerServerProvider extends ServerProvider {
   HetznerServerProvider() : _adapter = ApiAdapter(isWithToken: false);
-  HetznerServerProvider.load(final bool isAuthorized, final String? token)
-    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+  HetznerServerProvider.load({
+    required final bool isAuthorized,
+    final String? token,
+  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.eur);
   int? cachedCoreAmount;
+
+  static final logger = const AppLogger(name: 'hetzner').log;
 
   @override
   bool get isAuthorized => _adapter.api().isWithToken;
@@ -106,7 +113,7 @@ class HetznerServerProvider extends ServerProvider {
 
     if (server == null) {
       const String msg = 'getServerType: no server!';
-      print(msg);
+      logger(msg);
       return GenericResult(success: false, data: serverType, message: msg);
     }
 
@@ -119,7 +126,7 @@ class HetznerServerProvider extends ServerProvider {
 
     if (priceValue == null) {
       const String msg = 'getServerType: no price!';
-      print(msg);
+      logger(msg);
       return GenericResult(success: false, data: serverType, message: msg);
     }
 
@@ -162,7 +169,7 @@ class HetznerServerProvider extends ServerProvider {
             ),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
-              callback: () async => launchInstallation(installationData),
+              callback: () => launchInstallation(installationData),
             ),
           ],
           description:
@@ -246,7 +253,7 @@ class HetznerServerProvider extends ServerProvider {
               ),
               CallbackDialogueChoice(
                 title: 'modals.try_again'.tr(),
-                callback: () async => launchInstallation(installationData),
+                callback: () => launchInstallation(installationData),
               ),
             ],
             description:
@@ -355,7 +362,7 @@ class HetznerServerProvider extends ServerProvider {
 
       await Future.wait(laterFutures);
     } catch (e) {
-      print(e);
+      logger(e.toString());
       return GenericResult(
         success: false,
         data: CallbackDialogueBranching(
@@ -601,7 +608,7 @@ class HetznerServerProvider extends ServerProvider {
         linuxDevice: result.data!.linuxDevice,
       );
     } catch (e) {
-      print(e);
+      logger(e.toString());
       return GenericResult(data: null, success: false, message: e.toString());
     }
 
@@ -614,15 +621,14 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<void>> deleteVolume(
-    final ServerProviderVolume volume,
-  ) async => _adapter.api().deleteVolume(volume.id);
+  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) =>
+      _adapter.api().deleteVolume(volume.id);
 
   @override
   Future<GenericResult<bool>> resizeVolume(
     final ServerProviderVolume volume,
     final DiskSize size,
-  ) async => _adapter.api().resizeVolume(
+  ) => _adapter.api().resizeVolume(
     HetznerVolume(
       volume.id,
       volume.sizeByte,
@@ -638,7 +644,7 @@ class HetznerServerProvider extends ServerProvider {
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
     final int serverId,
-  ) async => _adapter.api().attachVolume(
+  ) => _adapter.api().attachVolume(
     HetznerVolume(
       volume.id,
       volume.sizeByte,
@@ -651,9 +657,8 @@ class HetznerServerProvider extends ServerProvider {
   );
 
   @override
-  Future<GenericResult<bool>> detachVolume(
-    final ServerProviderVolume volume,
-  ) async => _adapter.api().detachVolume(volume.id);
+  Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume) =>
+      _adapter.api().detachVolume(volume.id);
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
@@ -721,13 +726,13 @@ class HetznerServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.ram,
           trId: 'server.ram',
-          value: '${server.serverType.memory.toString()} GB',
+          value: '${server.serverType.memory} GB',
         ),
         ServerMetadataEntity(
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
           value:
-              // TODO: Make more descriptive
+              // TODO(NaiJi): Make more descriptive
               '${server.serverType.prices[1].monthly.toStringAsFixed(2)} + ${(volume.size * pricePerGb.value).toStringAsFixed(2)} + ${pricePerIp.value.toStringAsFixed(2)} ${currency.shortcode}',
         ),
         ServerMetadataEntity(

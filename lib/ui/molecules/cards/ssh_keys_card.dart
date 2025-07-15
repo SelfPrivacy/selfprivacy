@@ -27,7 +27,7 @@ class SshKeysCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Text(
               'ssh.title'.tr(),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -39,8 +39,8 @@ class SshKeysCard extends StatelessWidget {
           ListTileOnSurfaceVariant(
             title: 'ssh.create'.tr(),
             leadingIcon: Icons.add_circle_outline,
-            onTap: () {
-              showModalBottomSheet(
+            onTap: () async {
+              await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
                 useRootNavigator: true,
@@ -76,8 +76,8 @@ class SshKeysCard extends StatelessWidget {
                     disableSubtitleOverflow: true,
                     // do not overflow text
                     subtitle: publicKey,
-                    onTap: () {
-                      showDialog(
+                    onTap: () async {
+                      await showDialog(
                         context: context,
                         builder:
                             (final BuildContext context) =>
@@ -98,7 +98,7 @@ class SshKeysCard extends StatelessWidget {
               children: [
                 const Divider(height: 0),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   child: InfoBox(
                     text: 'ssh.ssh_disabled_warning'.tr(),
                     isWarning: true,
@@ -148,7 +148,7 @@ class _DeleteSshKeyConfirmationDialog extends StatelessWidget {
             'ssh.delete_confirm_question'.tr(),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          const Gap(8.0),
+          const Gap(8),
           Text('$keyName ($keyType)'),
           Text(
             publicKey,
@@ -173,11 +173,11 @@ class _DeleteSshKeyConfirmationDialog extends StatelessWidget {
             color: Theme.of(context).colorScheme.error,
           ),
         ),
-        onPressed: () {
+        onPressed: () async {
           context.read<JobsCubit>().addJob(
             DeleteSSHKeyJob(user: user, publicKey: fullKey),
           );
-          context.maybePop();
+          await context.maybePop();
         },
       ),
     ],

@@ -2,22 +2,25 @@ part of 'server_api.dart';
 
 mixin VolumeApi on GraphQLApiMap {
   Future<List<ServerDiskVolume>> getServerDiskVolumes() async {
-    QueryResult response;
+    QueryResult<Query$GetServerDiskVolumes> response;
     List<ServerDiskVolume> volumes = [];
 
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$GetServerDiskVolumes();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL GetServerDiskVolumes request: ${response.exception}',
+          error: response.exception,
+        );
       }
-      // TODO: Rewrite to use fromGraphQL
       volumes =
-          response.data!['storage']['volumes']
-              .map<ServerDiskVolume>((final e) => ServerDiskVolume.fromJson(e))
-              .toList();
+          response.parsedData?.storage.volumes
+              .map<ServerDiskVolume>(ServerDiskVolume.fromGraphQL)
+              .toList() ??
+          [];
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetServerDiskVolumes request: $e', error: e);
     }
 
     return volumes;
@@ -32,7 +35,7 @@ mixin VolumeApi on GraphQLApiMap {
       );
       await client.mutate$MountVolume(mountVolumeMutation);
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL MountVolume request: $e', error: e);
     }
   }
 
@@ -45,7 +48,7 @@ mixin VolumeApi on GraphQLApiMap {
       );
       await client.mutate$UnmountVolume(unmountVolumeMutation);
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL UnmountVolume request: $e', error: e);
     }
   }
 
@@ -58,7 +61,7 @@ mixin VolumeApi on GraphQLApiMap {
       );
       await client.mutate$ResizeVolume(resizeVolumeMutation);
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL ResizeVolume request: $e', error: e);
     }
   }
 
@@ -91,7 +94,7 @@ mixin VolumeApi on GraphQLApiMap {
             data: result.parsedData!.storage.migrateToBinds.job?.uid,
           );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL MigrateToBinds request: $e', error: e);
       mutation = GenericResult(
         success: false,
         code: 0,

@@ -31,8 +31,8 @@ class SnapshotItem extends StatelessWidget {
       onTap:
           preventActions
               ? null
-              : () {
-                showModalBottomSheet(
+              : () async {
+                await showModalBottomSheet(
                   useRootNavigator: true,
                   context: context,
                   isScrollControlled: true,

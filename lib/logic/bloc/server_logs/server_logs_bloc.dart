@@ -38,8 +38,6 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
         _apiLogsSubscription = getIt<ApiConnectionRepository>().api
             .getServerLogsStream()
             .listen((final ServerLogEntry logEntry) {
-              print('Got new log entry');
-              print(logEntry);
               add(ServerLogsGotNewEntry(logEntry));
             });
       } catch (e) {
@@ -102,8 +100,8 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
       }
     });
 
-    on<ServerLogsDisconnect>((final event, final emit) {
-      _apiLogsSubscription?.cancel();
+    on<ServerLogsDisconnect>((final event, final emit) async {
+      await _apiLogsSubscription?.cancel();
       emit(ServerLogsInitial());
     });
   }
@@ -146,8 +144,8 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
   }
 
   @override
-  Future<void> close() {
-    _apiLogsSubscription?.cancel();
+  Future<void> close() async {
+    await _apiLogsSubscription?.cancel();
     return super.close();
   }
 

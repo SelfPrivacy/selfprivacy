@@ -16,8 +16,10 @@ class ApiAdapter {
 
 class DigitalOceanDnsProvider extends DnsProvider {
   DigitalOceanDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
-  DigitalOceanDnsProvider.load(final bool isAuthorized, final String? token)
-    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+  DigitalOceanDnsProvider.load({
+    required final bool isAuthorized,
+    final String? token,
+  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
 
@@ -65,7 +67,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
   Future<GenericResult<void>> createDomainRecords({
     required final List<DnsRecord> records,
     required final ServerDomain domain,
-  }) async => _adapter.api().createMultipleDnsRecords(
+  }) => _adapter.api().createMultipleDnsRecords(
     domainName: domain.domainName,
     records:
         records
@@ -101,17 +103,17 @@ class DigitalOceanDnsProvider extends DnsProvider {
             )
             .toList();
 
-    final List<DigitalOceanDnsRecord> oceanRecords = result.data;
-
-    /// Remove all records that do not match with SelfPrivacy
-    oceanRecords.removeWhere(
-      (final oceanRecord) =>
-          !selfprivacyRecords.any(
-            (final selfprivacyRecord) =>
-                selfprivacyRecord.type == oceanRecord.type &&
-                selfprivacyRecord.name == oceanRecord.name,
-          ),
-    );
+    final List<DigitalOceanDnsRecord> oceanRecords =
+        result.data
+          /// Remove all records that do not match with SelfPrivacy
+          ..removeWhere(
+            (final oceanRecord) =>
+                !selfprivacyRecords.any(
+                  (final selfprivacyRecord) =>
+                      selfprivacyRecord.type == oceanRecord.type &&
+                      selfprivacyRecord.name == oceanRecord.name,
+                ),
+          );
 
     return _adapter.api().removeSimilarRecords(
       domainName: domain.domainName,
@@ -222,7 +224,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
   Future<GenericResult<void>> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
-  ) async => _adapter.api().createMultipleDnsRecords(
+  ) => _adapter.api().createMultipleDnsRecords(
     domainName: domain.domainName,
     records: [DigitalOceanDnsRecord.fromDnsRecord(record, domain.domainName)],
   );

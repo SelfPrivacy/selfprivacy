@@ -121,10 +121,9 @@ class _ProvidersPageState extends State<ProvidersPage> {
           const SizedBox(height: 16),
           Skeletonizer(
             enabled:
-                isReady
-                    ? backupsState is BackupsLoading ||
-                        backupsState is BackupsInitial
-                    : false,
+                isReady &&
+                (backupsState is BackupsLoading ||
+                    backupsState is BackupsInitial),
             enableSwitchAnimation: true,
             child: ProvidersPageCard(
               state:

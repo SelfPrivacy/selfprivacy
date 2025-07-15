@@ -8,8 +8,8 @@ class InfoBox extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Wrap(
-    spacing: 8.0,
-    runSpacing: 16.0,
+    spacing: 8,
+    runSpacing: 16,
     crossAxisAlignment: WrapCrossAlignment.center,
     children: [
       Icon(

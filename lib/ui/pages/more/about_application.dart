@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -55,8 +56,8 @@ class AboutApplicationPage extends StatelessWidget {
                 ),
                 subtitle: Text(snapshot.data.toString()),
                 leading: Icon(deviceIcon),
-                onLongPress: () {
-                  PlatformAdapter.setClipboard(snapshot.data.toString());
+                onLongPress: () async {
+                  await PlatformAdapter.setClipboard(snapshot.data.toString());
                   getIt<NavigationService>().showSnackBar(
                     'basis.copied_to_clipboard'.tr(),
                   );
@@ -71,8 +72,10 @@ class AboutApplicationPage extends StatelessWidget {
                   title: Text('about_application_page.api_version_text'.tr()),
                   subtitle: Text(snapshot.data.toString()),
                   leading: const Icon(Icons.api_outlined),
-                  onLongPress: () {
-                    PlatformAdapter.setClipboard(snapshot.data.toString());
+                  onLongPress: () async {
+                    await PlatformAdapter.setClipboard(
+                      snapshot.data.toString(),
+                    );
                     getIt<NavigationService>().showSnackBar(
                       'basis.copied_to_clipboard'.tr(),
                     );
@@ -193,7 +196,9 @@ class AboutApplicationPage extends StatelessWidget {
       final PackageInfo packageInfo = await PackageInfo.fromPlatform();
       packageVersion = '${packageInfo.version} (${packageInfo.buildNumber})';
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
 
     return packageVersion;

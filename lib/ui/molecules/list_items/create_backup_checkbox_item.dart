@@ -17,6 +17,7 @@ class CreateBackupCheckboxItem extends StatelessWidget {
   final Service service;
   final bool busy;
   final bool selected;
+  // ignore: avoid_positional_boolean_parameters
   final void Function(bool?) onChanged;
 
   @override
@@ -25,25 +26,26 @@ class CreateBackupCheckboxItem extends StatelessWidget {
     if (busy) {
       descriptionWidgets.add(Text('backup.service_busy'.tr()));
     } else {
-      descriptionWidgets.add(
-        Text(
-          'service_page.uses'.tr(
-            namedArgs: {
-              'usage': service.storageUsage.used.toString(),
-              'volume':
-                  context
-                      .read<VolumesBloc>()
-                      .state
-                      .getVolume(service.storageUsage.volume ?? '')
-                      .displayName,
-            },
+      descriptionWidgets
+        ..add(
+          Text(
+            'service_page.uses'.tr(
+              namedArgs: {
+                'usage': service.storageUsage.used.toString(),
+                'volume':
+                    context
+                        .read<VolumesBloc>()
+                        .state
+                        .getVolume(service.storageUsage.volume ?? '')
+                        .displayName,
+              },
+            ),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        ),
-      );
-      descriptionWidgets.add(Text(service.backupDescription));
+        )
+        ..add(Text(service.backupDescription));
     }
     return CheckboxListTile.adaptive(
       onChanged: !busy ? onChanged : null,
@@ -54,7 +56,7 @@ class CreateBackupCheckboxItem extends StatelessWidget {
       ),
       isThreeLine: true,
       secondary: Padding(
-        padding: const EdgeInsets.only(top: 4.0),
+        padding: const EdgeInsets.only(top: 4),
         child: SvgPicture.string(
           service.svgIcon,
           height: 24,

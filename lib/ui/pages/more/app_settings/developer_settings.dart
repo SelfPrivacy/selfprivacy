@@ -64,7 +64,7 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
         onTap:
             () => InheritedAppController.of(
               context,
-            ).setShouldShowOnboarding(true),
+            ).setShouldShowOnboarding(shouldOnboard: true),
       ),
       ListTile(
         title: Text('storage.start_migration_button'.tr()),
@@ -103,8 +103,8 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
         (final server) => ListTile(
           title: Text(server.domain.domainName),
           subtitle: Text('developer_settings.tap_for_more_info'.tr()),
-          onTap: () {
-            showModalBottomSheet(
+          onTap: () async {
+            await showModalBottomSheet(
               context: context,
               useRootNavigator: true,
               isScrollControlled: true,

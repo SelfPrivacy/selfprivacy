@@ -3,6 +3,15 @@ import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/logs.graphql.dart';
 
 class ServerLogEntry extends Equatable {
+  const ServerLogEntry({
+    required this.message,
+    required this.cursor,
+    required this.priority,
+    required this.systemdSlice,
+    required this.systemdUnit,
+    required this.timestamp,
+  });
+
   ServerLogEntry.fromGraphQL(final Fragment$LogEntry log)
     : this(
         message: log.message,
@@ -12,15 +21,6 @@ class ServerLogEntry extends Equatable {
         systemdUnit: log.systemdUnit,
         timestamp: log.timestamp,
       );
-
-  const ServerLogEntry({
-    required this.message,
-    required this.cursor,
-    required this.priority,
-    required this.systemdSlice,
-    required this.systemdUnit,
-    required this.timestamp,
-  });
 
   final String message;
   final String cursor;
@@ -48,10 +48,10 @@ class ServerLogEntry extends Equatable {
 }
 
 class ServerLogsPageMeta extends Equatable {
+  const ServerLogsPageMeta({required this.downCursor, required this.upCursor});
+
   ServerLogsPageMeta.fromGraphQL(final Query$Logs$logs$paginated$pageMeta meta)
     : this(downCursor: meta.downCursor, upCursor: meta.upCursor);
-
-  const ServerLogsPageMeta({required this.downCursor, required this.upCursor});
 
   final String? downCursor;
   final String? upCursor;

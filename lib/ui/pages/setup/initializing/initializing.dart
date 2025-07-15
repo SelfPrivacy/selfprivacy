@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -39,7 +41,7 @@ class InitializingPage extends StatelessWidget {
     final cubit = context.watch<ServerInstallationCubit>();
 
     if (cubit.state is ServerInstallationRecovery) {
-      return const RecoveryRouting();
+      return const RecoveryRoutingPage();
     } else {
       Widget? actualInitializingPage;
       if (cubit.state is! ServerInstallationFinished) {
@@ -129,9 +131,9 @@ class InitializingPage extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: BrandButton.filled(
                                   title: 'basis.connect_to_existing'.tr(),
-                                  onPressed: () {
-                                    context.router.replace(
-                                      const RecoveryRoute(),
+                                  onPressed: () async {
+                                    await context.router.replace(
+                                      const RecoveryRoutingRoute(),
                                     );
                                   },
                                 ),
@@ -162,13 +164,8 @@ class InitializingPage extends StatelessWidget {
                             Padding(
                               padding:
                                   Breakpoints.large.isActive(context)
-                                      ? const EdgeInsets.all(16.0)
-                                      : const EdgeInsets.fromLTRB(
-                                        16.0,
-                                        0,
-                                        16.0,
-                                        0.0,
-                                      ),
+                                      ? const EdgeInsets.all(16)
+                                      : const EdgeInsets.fromLTRB(16, 0, 16, 0),
                               child: AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 300),
                                 child: actualInitializingPage,
@@ -198,9 +195,9 @@ class InitializingPage extends StatelessWidget {
                                       alignment: Alignment.center,
                                       child: BrandButton.text(
                                         title: 'basis.connect_to_existing'.tr(),
-                                        onPressed: () {
-                                          context.router.replace(
-                                            const RecoveryRoute(),
+                                        onPressed: () async {
+                                          await context.router.replace(
+                                            const RecoveryRoutingRoute(),
                                           );
                                         },
                                       ),
@@ -328,7 +325,11 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepDomain(final ServerInstallationCubit initializingCubit) =>
       BlocProvider(
-        create: (final context) => DomainSetupCubit(initializingCubit)..load(),
+        create: (final context) {
+          final cubit = DomainSetupCubit(initializingCubit);
+          unawaited(cubit.load());
+          return cubit;
+        },
         child: const DomainPicker(),
       );
 
@@ -463,8 +464,8 @@ class InitializingPage extends StatelessWidget {
                             hasSshKey
                                 ? 'developer_settings.root_ssh_key_added'.tr()
                                 : 'developer_settings.add_root_ssh_key'.tr(),
-                        onPressed: () {
-                          showModalBottomSheet<String?>(
+                        onPressed: () async {
+                          await showModalBottomSheet<String?>(
                             context: context,
                             isScrollControlled: true,
                             useRootNavigator: true,

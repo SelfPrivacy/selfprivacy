@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
@@ -19,7 +21,7 @@ class RecoveryConfirmServer extends StatefulWidget {
 
   final Server? server;
   final ServerProviderCredential? serverProviderCredential;
-  final Function? submitCallback;
+  final Function()? submitCallback;
 
   @override
   State<RecoveryConfirmServer> createState() => _RecoveryConfirmServerState();
@@ -72,9 +74,9 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                     children: [
                       if (!_isExtended && _isServerFound(servers))
                         confirmServer(
-                          context,
-                          _firstValidServer(servers),
-                          servers.length > 1,
+                          context: context,
+                          server: _firstValidServer(servers),
+                          showMoreServersButton: servers.length > 1,
                         ),
                       if (_isExtended || !_isServerFound(servers))
                         chooseServer(context, servers),
@@ -97,11 +99,11 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     ],
   );
 
-  Widget confirmServer(
-    final BuildContext context,
-    final ServerBasicInfoWithValidators server,
-    final bool showMoreServersButton,
-  ) => Column(
+  Widget confirmServer({
+    required final BuildContext context,
+    required final ServerBasicInfoWithValidators server,
+    required final bool showMoreServersButton,
+  }) => Column(
     children: [
       serverCard(context: context, server: server),
       const SizedBox(height: 16),
@@ -125,7 +127,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     children: [
       for (final server in servers)
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: serverCard(
             context: context,
             server: server,
@@ -266,7 +268,9 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                   Navigator.of(context).pop();
                   widget.submitCallback?.call();
                 } else {
-                  context.read<ServerInstallationCubit>().setServerId(server);
+                  unawaited(
+                    context.read<ServerInstallationCubit>().setServerId(server),
+                  );
                   Navigator.of(context).pop();
                 }
               },

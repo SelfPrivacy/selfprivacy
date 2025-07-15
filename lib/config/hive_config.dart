@@ -13,14 +13,14 @@ import 'package:selfprivacy/utils/platform_adapter.dart';
 import 'package:selfprivacy/utils/secure_storage.dart';
 
 class HiveConfig {
-  static final log = const AppLogger(name: 'hive_config').log;
+  static final logger = const AppLogger(name: 'hive_config').log;
 
   /// bump on schema changes
   static const version = 2;
 
   static Future<void> init() async {
     final String? storagePath = PlatformAdapter.storagePath;
-    log('set custom storage path to: "$storagePath"');
+    logger('set custom storage path to: "$storagePath"');
 
     await Hive.initFlutter(storagePath);
 
@@ -31,23 +31,28 @@ class HiveConfig {
 
   static void registerAdapters() {
     try {
-      Hive.registerAdapter(UserAdapter());
-      Hive.registerAdapter(ServerHostingDetailsAdapter());
-      Hive.registerAdapter(ServerDomainAdapter());
-      Hive.registerAdapter(BackupsCredentialAdapter());
-      Hive.registerAdapter(ServerProviderVolumeAdapter());
-      Hive.registerAdapter(BackblazeBucketAdapter());
-      Hive.registerAdapter(ServerProviderCredentialAdapter());
-      Hive.registerAdapter(DnsProviderCredentialAdapter());
-      Hive.registerAdapter(ServerAdapter());
-      Hive.registerAdapter(DnsProviderTypeAdapter());
-      Hive.registerAdapter(ServerProviderTypeAdapter());
-      Hive.registerAdapter(UserTypeAdapter());
-      Hive.registerAdapter(BackupsProviderTypeAdapter());
-      Hive.registerAdapter(ServerInstallationWizardDataAdapter());
-      log('successfully registered every adapter');
+      Hive
+        ..registerAdapter(UserAdapter())
+        ..registerAdapter(ServerHostingDetailsAdapter())
+        ..registerAdapter(ServerDomainAdapter())
+        ..registerAdapter(BackupsCredentialAdapter())
+        ..registerAdapter(ServerProviderVolumeAdapter())
+        ..registerAdapter(BackblazeBucketAdapter())
+        ..registerAdapter(ServerProviderCredentialAdapter())
+        ..registerAdapter(DnsProviderCredentialAdapter())
+        ..registerAdapter(ServerAdapter())
+        ..registerAdapter(DnsProviderTypeAdapter())
+        ..registerAdapter(ServerProviderTypeAdapter())
+        ..registerAdapter(UserTypeAdapter())
+        ..registerAdapter(BackupsProviderTypeAdapter())
+        ..registerAdapter(ServerInstallationWizardDataAdapter());
+      logger('successfully registered every adapter');
     } catch (error, stackTrace) {
-      log('error registering adapters', error: error, stackTrace: stackTrace);
+      logger(
+        'error registering adapters',
+        error: error,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -72,9 +77,9 @@ class HiveConfig {
       );
       await Hive.openBox(BNames.resourcesBox, encryptionCipher: cipher);
       await Hive.openBox(BNames.wizardDataBox, encryptionCipher: cipher);
-      log('successfully decrypted boxes');
+      logger('successfully decrypted boxes');
     } catch (error, stackTrace) {
-      log(
+      logger(
         'error initializing encrypted boxes',
         error: error,
         stackTrace: stackTrace,
@@ -91,7 +96,8 @@ class HiveConfig {
       final localSettingsBox = await Hive.openBox(BNames.appSettingsBox);
 
       // if it is an initial app launch, we do not need to perform any migrations
-      final savedVersion =
+      final int
+      savedVersion =
           localSettingsBox.isEmpty
               ? version
               // if box was initialized, but database version was not introduced in
@@ -114,7 +120,11 @@ class HiveConfig {
       /// update saved version after successfull migrations
       await localSettingsBox.put(BNames.databaseVersion, version);
     } catch (error, stackTrace) {
-      log('error running db migrations', error: error, stackTrace: stackTrace);
+      logger(
+        'error running db migrations',
+        error: error,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -218,7 +228,7 @@ class HiveConfig {
         await resourcesBox.put(BNames.backblazeBucket, backblazeBucket);
       }
     }
-    log('successfully migrated db from 1 to 2 version');
+    logger('successfully migrated db from 1 to 2 version');
   }
 }
 
@@ -245,7 +255,7 @@ class BNames {
   /// Server installation box. Contains server details and provider tokens.
   static String serverInstallationBox = 'appConfig';
 
-  /// A List<String> field of [serverInstallationBox] box.
+  /// A `List<String>` field of [serverInstallationBox] box.
   static String rootKeys = 'rootKeys';
 
   /// A boolean field of [serverInstallationBox] box.

@@ -16,10 +16,7 @@ class _RootAppBar extends StatelessWidget implements PreferredSizeWidget {
           (final Widget child, final Animation<double> animation) =>
               SlideTransition(
                 position: animation.drive(
-                  Tween<Offset>(
-                    begin: const Offset(0.0, 0.2),
-                    end: Offset.zero,
-                  ),
+                  Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero),
                 ),
                 child: FadeTransition(opacity: animation, child: child),
               ),

@@ -41,6 +41,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
   ) {
     switch (configItem) {
       case StringServiceConfigItem():
+        // ignore: avoid_positional_boolean_parameters
         void onChanged(final String value, final bool isFieldValid) {
           if (isFieldValid) {
             setState(() {
@@ -70,6 +71,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
           onChanged: onChanged,
         );
       case BoolServiceConfigItem():
+        // ignore: avoid_positional_boolean_parameters
         void onChanged(final bool value) {
           setState(() {
             if (value == configItem.value) {
@@ -161,8 +163,8 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
         hasFlashButton: true,
         heroIconWidget: SvgPicture.string(
           service.svgIcon,
-          width: 48.0,
-          height: 48.0,
+          width: 48,
+          height: 48,
           colorFilter: ColorFilter.mode(
             Theme.of(context).colorScheme.onSurface,
             BlendMode.srcIn,
@@ -178,7 +180,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
                   'service_page.wait_for_jobs'.tr(),
                   textAlign: TextAlign.center,
                 ),
-                const Gap(16.0),
+                const Gap(16),
                 const CircularProgressIndicator.adaptive(),
               ],
             ),
@@ -194,8 +196,8 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
       hasFlashButton: true,
       heroIconWidget: SvgPicture.string(
         service.svgIcon,
-        width: 48.0,
-        height: 48.0,
+        width: 48,
+        height: 48,
         colorFilter: ColorFilter.mode(
           Theme.of(context).colorScheme.onSurface,
           BlendMode.srcIn,
@@ -206,16 +208,16 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
       children: [
         ...service.configuration.map(
           (final ServiceConfigItem configItem) => Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: const EdgeInsets.only(bottom: 16),
             child: configurationItemToWidget(context, configItem, settings),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 16.0),
+          padding: const EdgeInsets.only(top: 16),
           child: FilledButton(
             onPressed:
                 ((widget.isInstalling || isModified) && isFormValid)
-                    ? () {
+                    ? () async {
                       if (widget.isInstalling) {
                         context.read<JobsCubit>().addJob(
                           ServiceToggleJob(
@@ -234,7 +236,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
                       if (widget.isInstalling) {
                         context.router.popUntilRoot();
                       } else {
-                        context.router.maybePop();
+                        await context.router.maybePop();
                       }
                     }
                     : null,
